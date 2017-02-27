@@ -7,11 +7,13 @@
     "require": {
         "acquia/blt": "^8.3",
         "acquia/lightning": "2.0.3",
+        "drupal/address": "^1.0-rc4",
         "drupal/acquia_connector": "^1.5.0",
         "drupal/acsf": "^1.32.0",
         "drupal/cog": "^1.0.0",
         "drupal/core": "^8.0",
         "drupal/features": "^3.0.0",
+        "drupal/key_value_field": "^1.0-beta1",
         "drupal/memcache": "2.x-dev",
         "drupal/seckit": "^1.0.0-alpha2",
         "drupal/security_review": "*",
