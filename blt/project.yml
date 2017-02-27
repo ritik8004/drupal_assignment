@@ -8,8 +8,9 @@ project:
     protocol: http
     hostname: 'local.${project.machine_name}.com'
 git:
-  default_branch: master
-  remotes: {  }
+  default_branch: develop
+  remotes:
+    - alshayasde@svn-6182.devcloud.hosting.acquia.com:alshayasde.git
 drush:
   aliases:
     remote: '${project.machine_name}.test'
