@@ -1,0 +1,11 @@
+name: Acquia Commerce Cart
+type: module
+description: This module provides cart functionality to the Acquia Commerce Connector.
+core: 8.x
+package: Commerce
+dependencies:
+  - acq_commerce
+  - acq_checkout
+  - acq_sku
+  - address
+  - key_value_field

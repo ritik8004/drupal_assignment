@@ -1,0 +1,37 @@
+uuid: ad67dfe2-07f6-4195-8f9f-fb5bee3dfc49
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.thumbnail
+  module:
+    - acq_sku
+    - image
+id: acq_sku.simple.teaser
+targetEntityType: acq_sku
+bundle: simple
+mode: teaser
+content:
+  image:
+    label: hidden
+    type: image
+    weight: 0
+    settings:
+      image_style: thumbnail
+      image_link: ''
+    third_party_settings: {  }
+  name:
+    label: hidden
+    type: string
+    weight: 2
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  price:
+    label: hidden
+    type: string
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  sku: true

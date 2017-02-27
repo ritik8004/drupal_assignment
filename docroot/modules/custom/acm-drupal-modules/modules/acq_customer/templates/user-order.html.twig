@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ *
+ * Default user order template.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - order: Order information recieved from conductor.
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes }}>
+    <h3>
+        {% trans %}
+            {{ order.firstname }} {{ order.lastname }}'s order for {{ order.totals.grand }}
+        {% endtrans %}
+    </h3>
+
+    <span class="label">{{ "Status"|t }}:</span>
+    <span>{{ order.status }}</span>
+
+    <table>
+        <thead>
+            <td>Item</td>
+            <td>SKU</td>
+            <td>Price</td>
+        </thead>
+
+        <tbody>
+            {% for item in order.items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.sku }}</td>
+                    <td>{{ item.price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

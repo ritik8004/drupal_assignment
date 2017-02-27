@@ -1,0 +1,18 @@
+uuid: 2b49d8b9-64cd-4b7d-80e1-4497b57f7abf
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+    - serialization
+    - user
+id: acq_categorysync
+plugin_id: acq_categorysync
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+      - xml
+    supported_auth:
+      - cookie

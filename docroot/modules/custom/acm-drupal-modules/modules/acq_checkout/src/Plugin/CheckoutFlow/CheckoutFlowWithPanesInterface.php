@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesInterface.
+ */
+
+namespace Drupal\acq_checkout\Plugin\CheckoutFlow;
+
+/**
+ * Defines the interface for checkout flows which have panes.
+ */
+interface CheckoutFlowWithPanesInterface extends CheckoutFlowInterface {
+
+  /**
+   * Gets the checkout flow's panes.
+   *
+   * @param string $step_id
+   *   (Optional) The step ID to filter on.
+   *
+   * @return \Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface[]
+   *   The panes, keyed by pane id, ordered by weight.
+   */
+  public function getPanes($step_id = NULL);
+
+}

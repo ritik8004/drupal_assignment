@@ -1,0 +1,12 @@
+services:
+  acq_commerce.client_factory:
+    class: Drupal\acq_commerce\Conductor\ClientFactory
+    arguments: ['@http_client_factory', '@config.factory']
+
+  acq_commerce.api:
+    class: Drupal\acq_commerce\Conductor\APIWrapper
+    arguments: ['@acq_commerce.client_factory']
+
+  acq_commerce.ingest_api:
+    class: Drupal\acq_commerce\Conductor\IngestAPIWrapper
+    arguments: ['@acq_commerce.client_factory', '@logger.factory']
