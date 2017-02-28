@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya sites.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to further customize the site after Lightning has been
+ * installed. This module is automatically enabled via the lightning.extend.yml
+ * file.
+ *
+ * @see system_install()
+ */
+function alshaya_custom_install() {
+  // Enable and set alshaya_white_label as default theme.
+  \Drupal::service('theme_installer')->install(array('alshaya_white_label'), TRUE);
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'alshaya_white_label')->save(TRUE);
+}

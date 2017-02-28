@@ -13,7 +13,8 @@ lightning_extensions:
   # - lightning_preview
 
 # List of additional modules to enable after Lightning is installed.
-modules: []
+modules:
+  - alshaya_custom
 
 # In the components key of their info file, Lightning components may list
 # additional sub-components to be installed. To override this behavior, you can
