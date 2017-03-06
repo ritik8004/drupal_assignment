@@ -16,6 +16,7 @@ lightning_extensions:
 modules:
   - acsf
   - alshaya_custom
+  - syslog
 
 # In the components key of their info file, Lightning components may list
 # additional sub-components to be installed. To override this behavior, you can
