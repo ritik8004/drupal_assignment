@@ -15,6 +15,7 @@
         "drupal/features": "^3.0.0",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/memcache": "2.x-dev",
+        "drupal/restui": "^1.13",
         "drupal/seckit": "^1.0.0-alpha2",
         "drupal/security_review": "*",
         "drupal/shield": "^1.0.0",
