@@ -57,4 +57,7 @@ To prepare your local env:
 * Install Virtualbox and Vagrant.
 * Install Ansible: `brew install ansible`
 * Run:
-  * `...`
+  * `composer install`
+  * `blt vm`
+  * `blt local:setup`
+  * `drush @alshaya.local uli`
