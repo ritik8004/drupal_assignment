@@ -1,6 +1,6 @@
 project:
   machine_name: alshaya
-  prefix: MMCSP
+  prefix: MMCP
   human_name: 'Alshaya'
   profile:
     name: lightning
