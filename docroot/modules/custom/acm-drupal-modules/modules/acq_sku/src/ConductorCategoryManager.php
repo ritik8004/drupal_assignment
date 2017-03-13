@@ -99,6 +99,20 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   /**
    * {@inheritDoc}
    */
+  public function synchronizeTreeOffline($vocabulary, array $categories)
+  {
+    $this->resetResults();
+    $this->loadVocabulary($vocabulary);
+
+    // Recurse the category tree and create / update nodes.
+    $this->syncCategory($categories, NULL);
+
+    return($this->results);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public function synchronizeCategory($vocabulary, array $categories)
   {
     $this->resetResults();

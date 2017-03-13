@@ -1,0 +1,686 @@
+<?php
+
+global $alshaya_acm_categories;
+
+$alshaya_acm_categories = array (
+  0 => 
+  array (
+    'category_id' => 2,
+    'parent_id' => 1,
+    'name' => 'Default Category',
+    'position' => 1,
+    'level' => 1,
+    'product_ids' => 
+    array (
+    ),
+    'children' => 
+    array (
+      0 => 
+      array (
+        'category_id' => 39,
+        'parent_id' => 2,
+        'name' => 'What\'s New',
+        'position' => 1,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      1 => 
+      array (
+        'category_id' => 21,
+        'parent_id' => 2,
+        'name' => 'Women',
+        'position' => 2,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 22,
+            'parent_id' => 21,
+            'name' => 'Tops',
+            'position' => 1,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 24,
+                'parent_id' => 22,
+                'name' => 'Jackets',
+                'position' => 1,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 25,
+                'parent_id' => 22,
+                'name' => 'Hoodies & Sweatshirts',
+                'position' => 2,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 26,
+                'parent_id' => 22,
+                'name' => 'Tees',
+                'position' => 3,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 27,
+                'parent_id' => 22,
+                'name' => 'Bras & Tanks',
+                'position' => 4,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 23,
+            'parent_id' => 21,
+            'name' => 'Bottoms',
+            'position' => 2,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 28,
+                'parent_id' => 23,
+                'name' => 'Pants',
+                'position' => 1,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 29,
+                'parent_id' => 23,
+                'name' => 'Shorts',
+                'position' => 2,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      2 => 
+      array (
+        'category_id' => 12,
+        'parent_id' => 2,
+        'name' => 'Men',
+        'position' => 3,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 13,
+            'parent_id' => 12,
+            'name' => 'Tops',
+            'position' => 1,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 15,
+                'parent_id' => 13,
+                'name' => 'Jackets',
+                'position' => 1,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 16,
+                'parent_id' => 13,
+                'name' => 'Hoodies & Sweatshirts',
+                'position' => 2,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 17,
+                'parent_id' => 13,
+                'name' => 'Tees',
+                'position' => 3,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 18,
+                'parent_id' => 13,
+                'name' => 'Tanks',
+                'position' => 4,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 14,
+            'parent_id' => 12,
+            'name' => 'Bottoms',
+            'position' => 2,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 19,
+                'parent_id' => 14,
+                'name' => 'Pants',
+                'position' => 1,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 20,
+                'parent_id' => 14,
+                'name' => 'Shorts',
+                'position' => 2,
+                'level' => 4,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      3 => 
+      array (
+        'category_id' => 3,
+        'parent_id' => 2,
+        'name' => 'Gear',
+        'position' => 4,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 4,
+            'parent_id' => 3,
+            'name' => 'Bags',
+            'position' => 1,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 5,
+            'parent_id' => 3,
+            'name' => 'Fitness Equipment',
+            'position' => 2,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 6,
+            'parent_id' => 3,
+            'name' => 'Watches',
+            'position' => 3,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      4 => 
+      array (
+        'category_id' => 9,
+        'parent_id' => 2,
+        'name' => 'Training',
+        'position' => 5,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 10,
+            'parent_id' => 9,
+            'name' => 'Video Download',
+            'position' => 1,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      5 => 
+      array (
+        'category_id' => 7,
+        'parent_id' => 2,
+        'name' => 'Collections',
+        'position' => 5,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 8,
+            'parent_id' => 7,
+            'name' => 'New Luma Yoga Collection',
+            'position' => 1,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 35,
+            'parent_id' => 7,
+            'name' => 'Erin Recommends',
+            'position' => 2,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 36,
+            'parent_id' => 7,
+            'name' => 'Performance Fabrics',
+            'position' => 3,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          3 => 
+          array (
+            'category_id' => 37,
+            'parent_id' => 7,
+            'name' => 'Eco Friendly',
+            'position' => 4,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          4 => 
+          array (
+            'category_id' => 40,
+            'parent_id' => 7,
+            'name' => 'Performance Sportswear New',
+            'position' => 5,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          5 => 
+          array (
+            'category_id' => 41,
+            'parent_id' => 7,
+            'name' => 'Eco Collection New',
+            'position' => 6,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      6 => 
+      array (
+        'category_id' => 38,
+        'parent_id' => 2,
+        'name' => 'Sale',
+        'position' => 6,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      7 => 
+      array (
+        'category_id' => 11,
+        'parent_id' => 2,
+        'name' => 'Gift Cards',
+        'position' => 7,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      8 => 
+      array (
+        'category_id' => 30,
+        'parent_id' => 2,
+        'name' => 'Promotions',
+        'position' => 8,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 31,
+            'parent_id' => 30,
+            'name' => 'Women Sale',
+            'position' => 1,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 32,
+            'parent_id' => 30,
+            'name' => 'Men Sale',
+            'position' => 2,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 33,
+            'parent_id' => 30,
+            'name' => 'Pants',
+            'position' => 3,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          3 => 
+          array (
+            'category_id' => 34,
+            'parent_id' => 30,
+            'name' => 'Tees',
+            'position' => 4,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+    ),
+    'extension' => 
+    array (
+    ),
+  ),
+);

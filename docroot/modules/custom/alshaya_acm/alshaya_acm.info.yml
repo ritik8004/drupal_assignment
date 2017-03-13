@@ -1,0 +1,13 @@
+name: 'Alshaya ACM'
+type: module
+description: 'Custom work around Acquia Commerce Middleware'
+package: 'Custom'
+core: 8.x
+
+dependencies:
+  - acq_sku
+  - acq_commerce
+  - acq_customer
+  - acq_cart
+  - acq_checkout
+  - acq_payment

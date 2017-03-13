@@ -61,3 +61,8 @@ To prepare your local env:
   * `blt vm`
   * `blt local:setup`
   * `drush @alshaya.local uli`
+* Load commerce content:
+  * `drush @alshaya.local alshaya-acm-offline-categories-sync`
+  * `drush @alshaya.local alshaya-acm-offline-products-sync`
+
+Next builds can be done using: `blt local:drupal:install`

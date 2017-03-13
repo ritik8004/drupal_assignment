@@ -16,6 +16,7 @@ lightning_extensions:
 modules:
   - acsf
   - alshaya_custom
+  - alshaya_acm
   - syslog
 
 # In the components key of their info file, Lightning components may list
