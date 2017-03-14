@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "386d4fcc8e0b56a1304f6e1eb31a7863",
+    "content-hash": "0f770f6a70f63937da30af89da260546",
     "packages": [
         {
             "name": "acquia/blt",
@@ -972,7 +972,7 @@
                 "dot",
                 "notation"
             ],
-            "time": "2017-01-20T21:14:22+00:00"
+            "time": "2017-01-20 21:14:22"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1981,17 +1981,17 @@
         },
         {
             "name": "drupal/cog",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/cog",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cog-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "3752d23d777ae5977d408e839fa57f4794eba96f"
+                "url": "https://ftp.drupal.org/files/projects/cog-8.x-1.6.zip",
+                "reference": null,
+                "shasum": "0a8ce758e432c9727597171ecad4ad0a7e31a7bd"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -2002,8 +2002,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1487099883"
+                    "version": "8.x-1.6",
+                    "datestamp": "1489502883"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2951,7 +2951,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/features-8.x-3.5.zip",
-                "reference": null,
+                "reference": "8.x-3.5",
                 "shasum": "546b34387018f9adbe742b6992c4d473f9447c41"
             },
             "require": {
@@ -4111,7 +4111,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/restui-8.x-1.13.zip",
-                "reference": null,
+                "reference": "8.x-1.13",
                 "shasum": "808fc735bd9f80069fe1353b7b0f8390d294ff28"
             },
             "require": {
@@ -5961,7 +5961,7 @@
             "keywords": [
                 "instagram"
             ],
-            "time": "2013-11-13T23:10:03+00:00"
+            "time": "2013-11-13 23:10:03"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -6649,7 +6649,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Library used to find lowest common ancestor in graphs.",
-            "time": "2016-08-03T08:34:39+00:00"
+            "time": "2016-08-03 08:34:39"
         },
         {
             "name": "sebastian/comparator",
@@ -9886,7 +9886,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/devel-8.x-1.0-rc1.zip",
-                "reference": "8.x-1.0-rc1",
+                "reference": null,
                 "shasum": "04a01f50d508eca70e065b7eba38cd6c83a436c0"
             },
             "require": {
