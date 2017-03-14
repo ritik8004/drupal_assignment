@@ -1,0 +1,20 @@
+acq_commerce.admin_commerce:
+  title: 'Commerce'
+  route_name: 'acq_commerce.commerce'
+  parent: 'system.admin'
+  description: 'Administer your commerce data and configuration.'
+  weight: -9
+
+acq_commerce.configuration:
+  title: 'Configuration'
+  route_name: 'acq_commerce.configuration'
+  parent: 'acq_commerce.admin_commerce'
+  description: 'Configure your store and Commerce module settings.'
+  weight: -99
+
+acq_commerce.configuration.conductor:
+  title: 'Conductor Settings'
+  route_name: 'acq_commerce.configuration.conductor'
+  parent: 'acq_commerce.configuration'
+  description: 'Configure your Acquia Commerce Conductor settings.'
+  weight: 20

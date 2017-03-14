@@ -1,0 +1,19 @@
+uuid: fd2f37d9-c25e-40ef-9b86-0f1b9e9088a5
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+id: acq_sku.field_configurable_attributes
+field_name: field_configurable_attributes
+entity_type: acq_sku
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Provides base hooks to the base Acquia Commerce connector.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function acq_commerce_page_attachments(array &$attachments) {
+  // Add CSS for the Commerce icon in the toolbar if the user has access to it.
+  $can_view_commerce_admin = \Drupal::currentUser()->hasPermission('access commerce administration pages');
+  $can_view_toolbar = \Drupal::currentUser()->hasPermission('access toolbar');
+  if ($can_view_commerce_admin && $can_view_toolbar) {
+    $attachments['#attached']['library'][] = 'acq_commerce/drupal.acq_commerce.toolbar';
+  }
+}

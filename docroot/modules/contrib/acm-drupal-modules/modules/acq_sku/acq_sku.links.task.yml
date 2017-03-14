@@ -1,0 +1,20 @@
+acq_sku.configuration:
+  route_name: acq_sku.configuration
+  base_route: acq_sku.configuration
+  title: Settings
+
+entity.acq_sku.canonical:
+  route_name: entity.acq_sku.canonical
+  base_route: entity.acq_sku.canonical
+  title: View
+
+entity.acq_sku.edit_form:
+  route_name: entity.acq_sku.edit_form
+  base_route: entity.acq_sku.canonical
+  title: Edit
+
+entity.acq_sku.delete_form:
+  route_name: entity.acq_sku.delete_form
+  base_route: entity.acq_sku.canonical
+  title: Delete
+  weight: 10
