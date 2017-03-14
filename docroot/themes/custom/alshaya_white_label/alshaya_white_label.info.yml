@@ -1,19 +1,19 @@
-name: Cog alshaya_white_label
+name: Alshaya White Label
 type: theme
-description: 'Acquia D8 starter theme'
+description: 'Base theme for Alshaya brands.'
 core: 8.x
 base theme: cog
 libraries:
-  - alshaya_white_label/fonts
-  - alshaya_white_label/fontawesome
   - alshaya_white_label/global_styles
 regions:
-  branding: Branding
+  menu_primary: 'Menu Primary'
+  menu_secondary: 'Menu Secondary'
   header: Header
+  breadcrumb: Breadcrumb
   pre_content: 'Pre content'
   content: Content
   sidebar_first: 'Sidebar first'
   sidebar_second: 'Sidebar second'
   post_content: 'Post content'
-  footer: Footer
-
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
