@@ -1,0 +1,23 @@
+uuid: 99e5cff9-3e7d-432e-9398-0cdbf96dde23
+langcode: en
+status: true
+dependencies:
+  config:
+    - acq_sku.type.configurable
+    - field.storage.acq_sku.field_configured_skus
+  module:
+    - acq_sku
+id: acq_sku.configurable.field_configured_skus
+field_name: field_configured_skus
+entity_type: acq_sku
+bundle: configurable
+label: 'Configured SKUs'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: sku

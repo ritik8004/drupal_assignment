@@ -1,0 +1,21 @@
+uuid: ae2f2d40-2c3f-4ee0-965a-b23694c02f39
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+id: acq_sku.field_configured_skus
+field_name: field_configured_skus
+entity_type: acq_sku
+type: sku
+settings:
+  max_length: '255'
+  is_ascii: false
+  case_sensitive: false
+module: acq_sku
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,20 @@
+uuid: 8e74dc74-39c4-4610-b8df-99559e7a6491
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_commerce_id
+field_name: field_commerce_id
+entity_type: taxonomy_term
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

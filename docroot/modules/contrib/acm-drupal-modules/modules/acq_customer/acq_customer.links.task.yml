@@ -1,0 +1,4 @@
+acq_customer.orders:
+  route_name: acq_customer.orders
+  base_route: entity.user.canonical
+  title: 'Orders'

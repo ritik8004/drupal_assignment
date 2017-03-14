@@ -5,10 +5,8 @@
  * Provides Drush commands for Acquia Commerce Middleware related activities.
  */
 
-use Drupal\acq_sku\Plugin\rest\resource\ProductSyncResource;
-
 /**
- * Implements hook_drush_command()
+ * Implements hook_drush_command().
  */
 function alshaya_acm_drush_command() {
   $commands = array();
@@ -33,10 +31,10 @@ function drush_alshaya_acm_offline_categories_sync() {
   drush_print(dt('Synchronizing all commerce categories, please wait...'));
   $container = \Drupal::getContainer();
 
-  module_load_include('inc', 'alshaya_acm', 'includes/categories');
-  global $alshaya_acm_categories;
+  module_load_include('data', 'alshaya_acm', 'includes/categories');
+  global $_alshaya_acm_categories;
 
-  $container->get('acq_sku.category_manager')->synchronizeTreeOffline('acq_product_category', $alshaya_acm_categories);
+  $container->get('acq_sku.category_manager')->synchronizeTreeOffline('acq_product_category', $_alshaya_acm_categories);
   drush_print(dt('Done.'));
 }
 
@@ -50,9 +48,9 @@ function drush_alshaya_acm_offline_products_sync() {
   $resource_config = $resource_storage->load('acq_productsync');
   $resource = $resource_config->getResourcePlugin();
 
-  module_load_include('inc', 'alshaya_acm', 'includes/products');
-  global $alshaya_acm_products;
+  module_load_include('data', 'alshaya_acm', 'includes/products');
+  global $_alshaya_acm_products;
 
-  $resource->post($alshaya_acm_products);
+  $resource->post($_alshaya_acm_products);
   drush_print(dt('Done.'));
 }
