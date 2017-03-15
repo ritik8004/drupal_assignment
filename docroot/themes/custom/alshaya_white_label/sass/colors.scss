@@ -1,0 +1,24 @@
+@import "config";
+
+/* ---------- Color Module Styles ----------- */
+
+body {
+  color: $black-two;
+}
+
+a,
+.link {
+  color: $peacock-blue;
+}
+
+a:hover,
+a:focus,
+.link:hover,
+.link:focus {
+  color: $peacock-blue;
+}
+
+a:active,
+.link:active {
+  color: $peacock-blue;
+}

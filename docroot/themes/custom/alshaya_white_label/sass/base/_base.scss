@@ -68,11 +68,9 @@ a,
 a:link,
 a:visited {
   text-decoration: none;
-  color: $link;
   cursor: inherit;
 
   &:hover {
-    color: $dark-gray;
     text-decoration: underline;
   }
 }

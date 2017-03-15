@@ -105,7 +105,7 @@ var options = {
 
   sass: {
     files: paths.styles.source + '**/*.scss',
-    file: paths.styles.source + 'styles.scss',
+    file: paths.styles.source + '*.scss',
     destination: paths.styles.destination
   },
 

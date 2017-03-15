@@ -3,3 +3,4 @@ global_styles:
   css:
     theme:
       css/styles.css: {}
+      css/colors.css: {}
