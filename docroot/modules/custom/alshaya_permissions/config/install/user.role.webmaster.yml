@@ -5,4 +5,10 @@ id: webmaster
 label: Webmaster
 weight: 11
 is_admin: null
-permissions: {  }
+permissions:
+  - 'create page content'
+  - 'delete any page content'
+  - 'delete own page content'
+  - 'edit any page content'
+  - 'edit own page content'
+  - 'view the administration theme'
