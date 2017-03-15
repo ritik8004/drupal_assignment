@@ -1,0 +1,5 @@
+name: 'Alshaya Permissions'
+type: module
+description: 'Custom permissions around Alshaya'
+package: 'Custom'
+core: 8.x
