@@ -19,6 +19,7 @@ modules:
   - alshaya_acm
   - alshaya_menus
   - alshaya_permissions
+  - color
   - syslog
 
 # In the components key of their info file, Lightning components may list

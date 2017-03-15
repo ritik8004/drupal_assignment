@@ -17,7 +17,7 @@ module.exports = function (gulp, plugins, options) {
   gulp.task('watch:sass', function () {
     return gulp.watch([
       options.sass.files
-    ], ['compile:sass', 'minify:css']);
+    ], ['compile:sass-dev', 'minify:css']);
   });
 
   gulp.task('watch:styleguide', function () {

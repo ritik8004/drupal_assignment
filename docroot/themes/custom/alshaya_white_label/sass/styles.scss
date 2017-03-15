@@ -10,6 +10,8 @@
   Config file that contains centralized variables
 */
 @import "config";
+@import "mixins";
+@import "placeholders";
 
 // Base
 //
@@ -45,6 +47,6 @@
 // States
 //
 // States are variations that are usually applied via js, such as `.is-active`.
-// 
+//
 // Style guide: states
 @import "state/**/*";
