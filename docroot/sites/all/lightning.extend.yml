@@ -17,6 +17,7 @@ modules:
   - acsf
   - alshaya_custom
   - alshaya_acm
+  - alshaya_menus
   - alshaya_permissions
   - syslog
 

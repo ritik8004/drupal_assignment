@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: about-brand
+label: 'about brand'
+description: 'Alshaya about brand'
+locked: false
