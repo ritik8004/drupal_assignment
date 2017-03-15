@@ -51,4 +51,7 @@ modules:
   prod:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
-
+behat:
+  paths:
+    - '${repo.root}/tests/behat'
+  tags: '~ajax&&~experimental&&~lightningextension&&~example'
