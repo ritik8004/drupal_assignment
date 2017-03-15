@@ -18,4 +18,28 @@ function alshaya_custom_install() {
   // Enable and set alshaya_white_label as default theme.
   \Drupal::service('theme_installer')->install(array('alshaya_white_label'), TRUE);
   \Drupal::configFactory()->getEditable('system.theme')->set('default', 'alshaya_white_label')->save(TRUE);
+
+  // Remove all roles created by Lightning.
+  $coreRoles = [
+    'anonymous',
+    'authenticated',
+    'administrator',
+  ];
+  foreach (user_roles() as $role) {
+    if (!in_array($role->id(), $coreRoles)) {
+      $role->delete();
+    }
+  }
+
+  // Stop lightning from creating user roles in future.
+  \Drupal::configFactory()->getEditable('lightning_core.settings')->setData([
+    'content_roles' => [
+      'creator' => [
+        'enabled' => FALSE,
+      ],
+      'reviewer' => [
+        'enabled' => FALSE,
+      ],
+    ],
+  ])->save();
 }

@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya site permissions.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_permissions_uninstall() {
+  \Drupal::configFactory()->getEditable('user.role.webmaster')->delete();
+}
