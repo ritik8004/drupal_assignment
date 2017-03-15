@@ -2,22 +2,22 @@ langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.about-mothercare
+    - system.menu.about-brand
   module:
     - system
   theme:
     - alshaya_white_label
-id: aboutmothercare
+id: aboutbrand
 theme: alshaya_white_label
 region: footer_primary
 weight: 0
 provider: null
-plugin: 'system_menu_block:about-mothercare'
+plugin: 'system_menu_block:about-brand'
 settings:
-  id: 'system_menu_block:about-mothercare'
-  label: 'about mothercare'
+  id: 'system_menu_block:about-brand'
+  label: 'about brand'
   provider: system
-  label_display: visible
+  label_display: '0'
   level: 1
   depth: 0
 visibility: {  }
