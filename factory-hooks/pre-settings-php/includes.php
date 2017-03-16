@@ -11,3 +11,6 @@
 // $settings['hash_salt'] = '';
 
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
+
+$settings['alshaya_custom_shield_default_user'] = 'alshaya_shield';
+$settings['alshaya_custom_shield_default_pass'] = 'AS_S';

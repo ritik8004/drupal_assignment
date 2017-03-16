@@ -5,6 +5,8 @@
  * Custom installation for Alshaya sites.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_install().
  *
@@ -42,4 +44,16 @@ function alshaya_custom_install() {
       ],
     ],
   ])->save();
+
+  // Enable shield where needed.
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['shield']);
+    \Drupal::getContainer()->get('config.factory')
+      ->getEditable('shield.settings')
+      ->set('allow_cli', TRUE)
+      ->set('user', Settings::get('alshaya_custom_shield_default_user'))
+      ->set('pass', Settings::get('alshaya_custom_shield_default_pass'))
+      ->set('print', '')
+      ->save();
+  }
 }

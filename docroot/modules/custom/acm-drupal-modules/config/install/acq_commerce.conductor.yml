@@ -1,5 +1,0 @@
-url_agent: ''
-url_ingest: ''
-timeout: 30
-verify_ssl: true
-product_page_size: 50

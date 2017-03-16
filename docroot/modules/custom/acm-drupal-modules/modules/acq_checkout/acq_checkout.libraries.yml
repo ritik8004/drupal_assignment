@@ -1,5 +1,0 @@
-checkout_progress:
-  version: VERSION
-  css:
-    theme:
-      css/acq_checkout.progress.css: {}

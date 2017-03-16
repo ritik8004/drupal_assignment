@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: banner_full_width
+label: 'Banner - full width'
+behavior_plugins: {  }

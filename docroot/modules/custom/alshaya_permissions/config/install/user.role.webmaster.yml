@@ -6,12 +6,13 @@ label: Webmaster
 weight: 11
 is_admin: null
 permissions:
-  - 'create page content'
-  - 'delete any page content'
-  - 'delete own page content'
-  - 'edit any page content'
-  - 'edit own page content'
   - 'view the administration theme'
   - 'administer help menu items'
   - 'administer about-brand menu items'
   - 'administer footer-logos menu items'
+  - 'create advanced_page content'
+  - 'delete any advanced_page content'
+  - 'delete own advanced_page content'
+  - 'edit any advanced_page content'
+  - 'edit own advanced_page content'
+  - 'use text format rich_text'
