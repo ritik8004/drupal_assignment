@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: footer-logo
+label: 'Footer logo'
+description: 'Alshaya footer logo'
+locked: false
