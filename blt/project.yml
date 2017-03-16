@@ -52,6 +52,11 @@ modules:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
 behat:
+  # If true, Selenium standalone server will be launched with Behat.
+  launch-selenium: false
+  # If true, PhantomJS GhostDriver will be launched with Behat.
+  launch-phantomjs: true
+  # An array of paths with behat tests that should be executed.
   paths:
     - '${repo.root}/tests/behat'
   tags: '~ajax&&~experimental&&~lightningextension&&~example'
