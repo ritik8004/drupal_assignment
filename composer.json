@@ -34,12 +34,17 @@
         "se/selenium-server-standalone": "^2.53",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "geerlingguy/drupal-vm": "~4.2",
-        "bex/behat-screenshot": "^1.2"
+        "bex/behat-screenshot": "^1.2",
+        "drupal/acq_commerce": "dev-8.x-1.x"
     },
     "repositories": {
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        "0": {
+            "url": "https://github.com/acquia/acm-drupal-modules.git",
+            "type": "git"
         }
     },
     "autoload-dev": {
@@ -89,6 +94,12 @@
             "drush/contrib/{$name}": [
                 "type:drupal-drush"
             ]
+        },
+        "patches": {
+            "drupal/acq_commerce": {
+                "Offline products sync": "patches/acq_commerce/allow_offline_sync_of_products.patch",
+                "Remove panelizer dependency": "patches/acq_commerce/remove_panelizer_dependency.patch"
+            }
         }
     },
     "scripts": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "72ec52a5debfb74301882096d7bbc34f",
+    "content-hash": "dd6e8636e02f54de574dacd8bf2a3ecd",
     "packages": [
         {
             "name": "acquia/blt",
@@ -972,7 +972,7 @@
                 "dot",
                 "notation"
             ],
-            "time": "2017-01-20 21:14:22"
+            "time": "2017-01-20T21:14:22+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1588,17 +1588,17 @@
         },
         {
             "name": "drupal/acsf",
-            "version": "1.34.0",
+            "version": "1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/acsf",
-                "reference": "8.x-1.34"
+                "reference": "8.x-1.35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-1.34.zip",
-                "reference": "8.x-1.34",
-                "shasum": "b854e1b61cd72b26cf2215ed7a57f2eced15d27c"
+                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-1.35.zip",
+                "reference": null,
+                "shasum": "a2443e886d2abd50507114b442ed4a0c316d62d4"
             },
             "require": {
                 "drupal/acsf_duplication": "*",
@@ -1608,7 +1608,7 @@
             },
             "require-dev": {
                 "drupal/acsf_variables": "*",
-                "drupal/samlauth": "^2",
+                "drupal/samlauth": "^2.0.0-alpha1",
                 "mockery/mockery": "dev-master",
                 "phpunit/phpunit": "~5.3"
             },
@@ -1618,8 +1618,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.34",
-                    "datestamp": "1482323883"
+                    "version": "8.x-1.35",
+                    "datestamp": "1489664583"
                 }
             },
             "autoload": {
@@ -1682,7 +1682,7 @@
         },
         {
             "name": "drupal/acsf_duplication",
-            "version": "1.34.0",
+            "version": "1.35.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "~8.0"
@@ -1693,8 +1693,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.34",
-                    "datestamp": "1482323883"
+                    "version": "8.x-1.35",
+                    "datestamp": "1489664583"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1751,7 +1751,7 @@
         },
         {
             "name": "drupal/acsf_theme",
-            "version": "1.34.0",
+            "version": "1.35.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/acsf_variables": "*",
@@ -1763,8 +1763,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.34",
-                    "datestamp": "1482323883"
+                    "version": "8.x-1.35",
+                    "datestamp": "1489664583"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1821,7 +1821,7 @@
         },
         {
             "name": "drupal/acsf_variables",
-            "version": "1.34.0",
+            "version": "1.35.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "~8.0"
@@ -1832,8 +1832,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.34",
-                    "datestamp": "1482323883"
+                    "version": "8.x-1.35",
+                    "datestamp": "1489664583"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2354,6 +2354,12 @@
                 "symfony/css-selector": "~2.8"
             },
             "type": "drupal-core",
+            "extra": {
+                "patches_applied": {
+                    "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-28.patch",
+                    "2765525 - Add AJAX command to add style sheets to CKEditor instances": "https://www.drupal.org/files/issues/2765525-30-8.2.x.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Drupal\\Core\\": "lib/Drupal/Core",
@@ -6002,7 +6008,7 @@
             "keywords": [
                 "instagram"
             ],
-            "time": "2013-11-13 23:10:03"
+            "time": "2013-11-13T23:10:03+00:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -6690,7 +6696,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Library used to find lowest common ancestor in graphs.",
-            "time": "2016-08-03 08:34:39"
+            "time": "2016-08-03T08:34:39+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -9779,6 +9785,26 @@
             "time": "2012-10-28T21:08:28+00:00"
         },
         {
+            "name": "drupal/acq_commerce",
+            "version": "dev-8.x-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acm-drupal-modules.git",
+                "reference": "f1fef5ae53caee5d721be0015972b225093ad5ec"
+            },
+            "require": {
+                "commerceguys/intl": "~0.7",
+                "drupal/address": "~1.0",
+                "drupal/key_value_field": "~1.0"
+            },
+            "type": "drupal-module",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "This project provides the ability to use the Acquia Commerce Connector.",
+            "time": "2017-02-17T17:19:02+00:00"
+        },
+        {
             "name": "drupal/console",
             "version": "1.0.0-rc16",
             "source": {
@@ -10913,7 +10939,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/memcache": 20,
-        "drupal/menu_admin_per_menu": 5
+        "drupal/menu_admin_per_menu": 5,
+        "drupal/acq_commerce": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

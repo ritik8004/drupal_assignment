@@ -1,4 +1,0 @@
-services:
-  acq_cart.cart_storage:
-    class: Drupal\acq_cart\CartSessionStorage
-    arguments: ['@session']
