@@ -1,11 +1,11 @@
-<div {{ attributes.setAttribute('id', 'pg__c') }}>
+<div>
 
   <!-- ______________________ MENU SECONDARY _______________________ -->
 
   {% if page.menu_secondary %}
-    <div id="menu-secondary">
-      <div class="cog--mq mq-menu-secondary">
-        <div id="menu-secondary-region">
+    <div class="c-menu-secondary">
+      <div class="l-container">
+        <div class="c-menu-secondary__region">
           {{ page.menu_secondary }}
         </div>
       </div>
@@ -16,9 +16,9 @@
   <!-- ______________________ HEADER _______________________ -->
 
   {% if page.header %}
-    <header id="header">
-      <div class="cog--mq mq-header">
-        <div id="header-region">
+    <header class="c-header">
+      <div class="l-container">
+        <div class="c-header__region">
           {{ page.header }}
         </div>
       </div>
@@ -29,9 +29,9 @@
   <!-- ______________________ MENU PRIMARY _______________________ -->
 
   {% if page.menu_primary %}
-    <div id="menu-primary">
-      <div class="cog--mq mq-menu-primary">
-        <div id="menu-primary-region">
+    <div class="c-menu-primary">
+      <div class="l-container">
+        <div id="c-menu-primary__region">
           {{ page.menu_primary }}
         </div>
       </div>
@@ -42,9 +42,9 @@
   <!-- ______________________ BREADCRUMB _______________________ -->
 
   {% if page.breadcrumb %}
-    <div id="breadcrumb">
-      <div class="cog--mq mq-breadcrumb">
-        <div id="breadcrumb-region">
+    <div class="c-breadcrumb">
+      <div class="l-container">
+        <div class="c-breadcrumb__region">
           {{ page.breadcrumb }}
         </div>
       </div>
@@ -54,38 +54,46 @@
 
   <!-- ______________________ Pre content _______________________ -->
   {% if page.pre_content %}
-    <div class="clearfix pre-content" id="pre-content">
-      <div class="cog--mq mq-precontent">
-        {{ page.pre_content }}
+    <div class="c-pre-content">
+      <div class="l-container">
+        <div class="c-pre-content__region">
+          {{ page.pre_content }}
+        </div>
       </div>
     </div>
   {% endif %}
 
   <!-- ______________________ MAIN _______________________ -->
 
-  <div class="clearfix" id="main">
-    <div class="cog--mq mq-main">
+  <div class="clearfix">
+    <div class="l-container">
 
       {% if page.sidebar_first %}
-        <aside class="sidebar-first sidebars" id="sidebar-first">
-          {{ page.sidebar_first }}
+        <aside class="c-sidebar-first">
+          <div class="c-sidebar-first__region">
+            {{ page.sidebar_first }}
+          </div>
         </aside>
       {% endif %}
       <!-- /sidebar-first -->
 
-      <section id="content">
+      <main>
 
         {% if title or messages or tabs or action_links %}
-          <div id="content-header">
+          <div class="c-content__header">
 
             {% if page.highlighted %}
-              <div id="highlighted">{{ page.highlighted }}</div>
+              <div class="c-content__highlighted">
+                {{ page.highlighted }}
+              </div>
             {% endif %}
 
             {{ title_prefix }}
 
             {% if title %}
-              <h1 class="title">{{ title }}</h1>
+              <h1 class="c-content__title">
+                {{ title }}
+              </h1>
             {% endif %}
 
             {{ title_suffix }}
@@ -93,44 +101,49 @@
             {{ page.help }}
 
             {% if tabs %}
-              <div class="tabs">{{ tabs }}</div>
+              <div class="c-content__tabs">{{ tabs }}</div>
             {% endif %}
 
             {% if action_links %}
-              <ul class="action-links">{{ action_links }}</ul>
+              <ul class="c-content__action-links">{{ action_links }}</ul>
             {% endif %}
 
           </div>
           <!-- /#content-header -->
         {% endif %}
 
-        <div id="content-area">
-          {{ page.content }}
+        <div class="c-content">
+          <div class="c-content__region">
+            {{ page.content }}
+          </div>
         </div>
 
         {{ feed_icons }}
 
-      </section>
+      </main>
       <!-- /content-inner /content -->
 
       {% if page.sidebar_second %}
-        <aside class="sidebar-second sidebars" id="sidebar-second">
-          {{ page.sidebar_second }}
+        <aside class="c-sidebar-second">
+          <div class="c-sidebar-second__region">
+            {{ page.sidebar_second }}
+          </div>
         </aside>
       {% endif %}
       <!-- /sidebar-first -->
 
     </div>
-    <!-- /cog--mq -->
   </div>
   <!-- /main -->
 
   <!-- ______________________ Post content _______________________ -->
 
   {% if page.post_content %}
-    <div class="clearfix post-content" id="post-content">
-      <div class="cog--mq mq-postcontent">
-        {{ page.post_content }}
+    <div class="c-post-content">
+      <div class="l-container">
+        <div class="c-post-content__region">
+          {{ page.post_content }}
+        </div>
       </div>
     </div>
   {% endif %}
@@ -138,9 +151,11 @@
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
 
   {% if page.footer_primary %}
-    <div id="footer-primary">
-      <div class="cog--mq mq-footer-primary">
-        {{ page.footer_primary }}
+    <div class="c-footer-primary">
+      <div class="l-container">
+        <div class="c-footer-primary__region">
+          {{ page.footer_primary }}
+        </div>
       </div>
     </div>
     <!-- /footer-primary -->
@@ -149,9 +164,11 @@
   <!-- ______________________ FOOTER SECONDARY _______________________ -->
 
   {% if page.footer_secondary %}
-    <div id="footer-secondary">
-      <div class="cog--mq mq-footer-secondary">
-        {{ page.footer_secondary }}
+    <div class="c-footer-secondary">
+      <div class="l-container">
+        <div class="c-footer-secondary__region">
+          {{ page.footer_secondary }}
+        </div>
       </div>
     </div>
     <!-- /footer-secondary -->

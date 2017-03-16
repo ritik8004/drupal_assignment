@@ -1,0 +1,18 @@
+alshaya_white_label.mobile:
+  label: mobile
+  mediaQuery: '(min-width: 0em)'
+  weight: 0
+  multipliers:
+    - 1x
+alshaya_white_label.tablet:
+  label: tablet
+  mediaQuery: 'all and (min-width: 768px)'
+  weight: 1
+  multipliers:
+    - 1x
+alshaya_white_label.desktop:
+  label: desktop
+  mediaQuery: 'all and (min-width: 1284px)'
+  weight: 2
+  multipliers:
+    - 1x
