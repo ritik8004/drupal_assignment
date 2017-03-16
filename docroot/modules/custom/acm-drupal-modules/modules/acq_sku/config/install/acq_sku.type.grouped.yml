@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies:
-  module:
-    - acq_sku
-id: grouped
-label: Grouped
