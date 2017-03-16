@@ -2,20 +2,20 @@ langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.footer-logo
+    - system.menu.footer-logos
   module:
     - system
   theme:
     - alshaya_white_label
-id: footerlogo
+id: footerlogos
 theme: alshaya_white_label
 region: footer_secondary
 weight: 0
 provider: null
-plugin: 'system_menu_block:footer-logo'
+plugin: 'system_menu_block:footer-logos'
 settings:
-  id: 'system_menu_block:footer-logo'
-  label: 'Footer logo'
+  id: 'system_menu_block:footer-logos'
+  label: 'Footer logos'
   provider: system
   label_display: '0'
   level: 1

@@ -14,3 +14,4 @@ permissions:
   - 'view the administration theme'
   - 'administer help menu items'
   - 'administer about-brand menu items'
+  - 'administer footer-logos menu items'

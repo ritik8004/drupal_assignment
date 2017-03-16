@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "72ec52a5debfb74301882096d7bbc34f",
+    "content-hash": "284a921fbb64dc1491ed9f9e50748851",
     "packages": [
         {
             "name": "acquia/blt",
@@ -3592,7 +3592,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/menu_admin_per_menu-8.x-1.0-rc1.zip",
-                "reference": null,
+                "reference": "8.x-1.0-rc1",
                 "shasum": "9cb136b0d33ac570101f3c5e17f605ca711f208d"
             },
             "require": {
@@ -3626,6 +3626,53 @@
             "homepage": "https://www.drupal.org/project/menu_admin_per_menu",
             "support": {
                 "source": "http://cgit.drupalcode.org/menu_admin_per_menu"
+            }
+        },
+        {
+            "name": "drupal/menu_link_attributes",
+            "version": "1.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/menu_link_attributes",
+                "reference": "8.x-1.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/menu_link_attributes-8.x-1.0-beta3.zip",
+                "reference": null,
+                "shasum": "60dbace4eca093fddf00c185396251b95d865fa0"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta3",
+                    "datestamp": "1467719639"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "yannickoo",
+                    "homepage": "https://www.drupal.org/user/531118"
+                }
+            ],
+            "description": "Allows you to add attributes to menu links.",
+            "homepage": "http://drupal.org/project/menu_link_attributes",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/menu_link_attributes",
+                "issues": "http://drupal.org/project/issues/menu_link_attributes"
             }
         },
         {
@@ -10913,7 +10960,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/memcache": 20,
-        "drupal/menu_admin_per_menu": 5
+        "drupal/menu_admin_per_menu": 5,
+        "drupal/menu_link_attributes": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
