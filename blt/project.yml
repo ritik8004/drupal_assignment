@@ -56,3 +56,6 @@ behat:
     - '${repo.root}/tests/behat'
   tags: '~ajax&&~experimental&&~lightningextension&&~example'
 
+multisite:
+  name:
+    - g
