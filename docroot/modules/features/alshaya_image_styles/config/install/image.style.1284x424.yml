@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 1284x424
+label: 1284x424
+effects:
+  2e08d867-2582-4bdb-91ae-66c2d4922cbd:
+    uuid: 2e08d867-2582-4bdb-91ae-66c2d4922cbd
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1284
+      height: 424

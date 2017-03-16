@@ -1,0 +1,19 @@
+name: 'Advanced Page'
+type: module
+core: 8.x
+dependencies:
+  - alshaya_paragraphs
+  - block
+  - entity_reference_revisions
+  - field
+  - menu_ui
+  - node
+  - paragraphs
+  - path
+  - system
+  - text
+  - user
+  - views
+  - workbench_moderation
+version: 8.x-1.0
+package: Alshaya
