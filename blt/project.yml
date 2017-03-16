@@ -1,7 +1,7 @@
 project:
   machine_name: alshaya
   prefix: MMCPA
-  human_name: 'Alshaya'
+  human_name: Alshaya
   profile:
     name: lightning
   local:
@@ -10,8 +10,8 @@ project:
 git:
   default_branch: develop
   remotes:
-    - alshayasde@svn-6182.devcloud.hosting.acquia.com:alshayasde.git
-    - alshayaec@svn-25.enterprise-g1.hosting.acquia.com:alshayaec.git
+    - 'alshayasde@svn-6182.devcloud.hosting.acquia.com:alshayasde.git'
+    - 'alshayaec@svn-25.enterprise-g1.hosting.acquia.com:alshayaec.git'
 drush:
   aliases:
     remote: '${project.machine_name}.test'
@@ -55,3 +55,4 @@ behat:
   paths:
     - '${repo.root}/tests/behat'
   tags: '~ajax&&~experimental&&~lightningextension&&~example'
+
