@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 420x192
+label: 420x192
+effects:
+  11b78ad5-6948-466c-92bd-f9e1c1d19472:
+    uuid: 11b78ad5-6948-466c-92bd-f9e1c1d19472
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 420
+      height: 192
