@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dff9dd48d0b015e37e2ce3ee8197e08c",
+    "content-hash": "72ec52a5debfb74301882096d7bbc34f",
     "packages": [
         {
             "name": "acquia/blt",
@@ -972,7 +972,7 @@
                 "dot",
                 "notation"
             ],
-            "time": "2017-01-20T21:14:22+00:00"
+            "time": "2017-01-20 21:14:22"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -3582,6 +3582,53 @@
             "time": "2016-09-28 08:38:34"
         },
         {
+            "name": "drupal/menu_admin_per_menu",
+            "version": "1.0.0-rc1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/menu_admin_per_menu",
+                "reference": "8.x-1.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/menu_admin_per_menu-8.x-1.0-rc1.zip",
+                "reference": null,
+                "shasum": "9cb136b0d33ac570101f3c5e17f605ca711f208d"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-rc1",
+                    "datestamp": "1471605539"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "anrikun",
+                    "homepage": "https://www.drupal.org/user/410199"
+                },
+                {
+                    "name": "mkdok",
+                    "homepage": "https://www.drupal.org/user/3308753"
+                }
+            ],
+            "description": "Allows to give roles per menu admin permissions without giving them full administer menu permission.",
+            "homepage": "https://www.drupal.org/project/menu_admin_per_menu",
+            "support": {
+                "source": "http://cgit.drupalcode.org/menu_admin_per_menu"
+            }
+        },
+        {
             "name": "drupal/metatag",
             "version": "1.0.0",
             "source": {
@@ -5955,7 +6002,7 @@
             "keywords": [
                 "instagram"
             ],
-            "time": "2013-11-13T23:10:03+00:00"
+            "time": "2013-11-13 23:10:03"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -6643,7 +6690,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Library used to find lowest common ancestor in graphs.",
-            "time": "2016-08-03T08:34:39+00:00"
+            "time": "2016-08-03 08:34:39"
         },
         {
             "name": "sebastian/comparator",
@@ -10865,7 +10912,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/memcache": 20
+        "drupal/memcache": 20,
+        "drupal/menu_admin_per_menu": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -12,3 +12,5 @@ permissions:
   - 'edit any page content'
   - 'edit own page content'
   - 'view the administration theme'
+  - 'administer help menu items'
+  - 'administer about-brand menu items'
