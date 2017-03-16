@@ -1,42 +1,41 @@
 // Colors ///////////////
-// common colors
-$white: #fff;
-$red: #ee696c;
-$yellow: #e8ed57;
-// b&w colors as placeholders
-$blk: #000;
-$dark-gray: lighten($blk, 20%);
-$med-gray: lighten($blk, 40%);
-$light-gray: lighten($blk, 70%);
-$lighter-gray: lighten($blk, 90%);
-$off-white: lighten($blk, 97%);
-// Alshaya White Label
+$black: #000000;
 $black-two: #333333;
-$peacock-blue: #0060aa;
-$very-light-blue: #d9efff;
+$brownish-grey: #666666;
+$white-three: #ebebeb;
+$white-four: #f7f7f7;
+$cobalt-blue: #001b96;
+$off-blue: #5482ab;
+$white-five: #ffffff;
+$tealish: #3ad6c5;
+$greyish: #adadad;
+$white-two: #e5e5e5;
+$white: #dddddd;
+$slime-green: #94d400;
 $pumpkin-orange: #ff6d22;
-
-// Utility color variables ///////////////
-$heading: $dark-gray;
-$link: $med-gray;
+$maize: #f3cf45;
+$rosy-pink: #f36682;
+$deep-pink: #c90062;
+$cherry: #c60c30;
+$soft-blue: #6aade4;
+$cerulean: #0080ce;
+$dark-sand: #ac8e54;
+$peacock-blue: #0060aa;
+$windows-blue: #3680cb;
+$very-light-blue: #d9efff;
 
 // Fonts ///////////////
-$opensans: 'Open Sans';
-$poppins: 'Poppins';
-$heading_font: $opensans;
-$body_font: $poppins;
+$arial: 'arialmt';
+$body_font: $arial;
 
-// Susy config ///////////////
-$susy: (
-  columns: 12, // The number of columns in your grid
-  gutters: 1/4, // The size of a gutter in relation to a single column
-);
-
-// Breakpoints & MQ's ///////////////
+// Breakpoints ///////////////
 $screen: "only screen" !default;
-$small-max: 767px !default;
-$medium-max: 1023px !default;
-$small: $screen max-width $small-max;
-$up-sm: $screen $small-max + 1;
-$medium: $screen $small-max + 1 $medium-max;
-$large: $screen $medium-max + 1;
+$mobile: 320px !default;
+$tablet: 768px !default;
+$desktop: 1284px !default;
+
+// Grid config ///////////////
+$susy: (
+  columns: 12,
+  gutters: 1/4,
+);
