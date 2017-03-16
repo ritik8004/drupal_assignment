@@ -8,7 +8,7 @@
 # installation, comment out the following lines.
 lightning_extensions:
   - lightning_workflow
-  - lightning_layout
+  # - lightning_layout
   - lightning_media
   # - lightning_preview
 

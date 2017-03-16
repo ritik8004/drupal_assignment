@@ -8,15 +8,9 @@ dependencies:
     - field.field.node.acq_product.field_skus
     - node.type.acq_product
   module:
-    - panelizer
     - text
     - user
-third_party_settings:
-  panelizer:
-    enable: false
-    custom: false
-    allow: false
-    default: default
+third_party_settings: {  }
 _core:
   default_config_hash: R6cygDJSOJoFs0DBtWeRqiVlsI2LaXQxj4zALZpv-Fg
 id: node.acq_product.default
