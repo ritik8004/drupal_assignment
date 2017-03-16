@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: related_info_one_column
+label: 'Related info - one column'
+behavior_plugins: {  }
