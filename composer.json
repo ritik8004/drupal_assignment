@@ -8,6 +8,7 @@
         "acquia/blt": "^8.3",
         "acquia/lightning": "2.0.3",
         "drupal/address": "^1.0-rc4",
+        "drupal/acq_commerce": "dev-8.x-1.x",
         "drupal/acquia_connector": "^1.5.0",
         "drupal/acsf": "^1.33.0",
         "drupal/cog": "^1.0.0",
@@ -36,8 +37,7 @@
         "se/selenium-server-standalone": "^2.53",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "geerlingguy/drupal-vm": "~4.2",
-        "bex/behat-screenshot": "^1.2",
-        "drupal/acq_commerce": "dev-8.x-1.x"
+        "bex/behat-screenshot": "^1.2"
     },
     "repositories": {
         "drupal": {
