@@ -1,0 +1,7 @@
+name: 'Alshaya Arabic'
+type: module
+description: 'Custom module to enable Arabic language and configure related settings.'
+package: 'Custom'
+core: 8.x
+dependencies:
+  - language
