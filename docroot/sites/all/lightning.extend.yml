@@ -22,6 +22,7 @@ modules:
   - alshaya_permissions
   - color
   - syslog
+  - alshaya_master
 
 # In the components key of their info file, Lightning components may list
 # additional sub-components to be installed. To override this behavior, you can
