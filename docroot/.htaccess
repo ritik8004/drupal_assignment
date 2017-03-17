@@ -122,8 +122,7 @@ AddEncoding gzip svgz
   # uncomment the following line:
   # RewriteBase /
 
-  # Redirect HTTP to HTTPS on cloud
-  RewriteCond %{ENV:AH_SITE_ENVIRONMENT} !^$
+  # Redirect HTTP to HTTPS on cloud and even in local
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
