@@ -4,6 +4,8 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.advanced_page.body
+    - field.field.node.advanced_page.field_banner
+    - field.field.node.advanced_page.field_related_info
     - node.type.advanced_page
   module:
     - text
@@ -22,4 +24,7 @@ content:
     third_party_settings: {  }
   links:
     weight: 100
-hidden: {  }
+hidden:
+  field_banner: true
+  field_related_info: true
+  langcode: true
