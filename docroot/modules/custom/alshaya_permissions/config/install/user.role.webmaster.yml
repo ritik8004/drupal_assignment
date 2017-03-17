@@ -10,6 +10,7 @@ permissions:
   - 'administer help menu items'
   - 'administer about-brand menu items'
   - 'administer footer-logos menu items'
+  - 'administer social-links menu items'
   - 'create advanced_page content'
   - 'delete any advanced_page content'
   - 'delete own advanced_page content'
