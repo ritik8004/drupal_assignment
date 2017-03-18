@@ -3,3 +3,8 @@ type: module
 description: 'Custom install for Alshaya sites'
 package: 'Custom'
 core: 8.x
+dependencies:
+  - block
+  - search_api_solr
+  - system
+  - views
