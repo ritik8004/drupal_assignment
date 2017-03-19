@@ -16,6 +16,7 @@ lightning_extensions:
 modules:
   - acsf
   - alshaya_advanced_page
+  - alshaya_arabic
   - alshaya_custom
   - alshaya_acm
   - alshaya_menus
