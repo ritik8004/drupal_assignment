@@ -19,6 +19,7 @@ modules:
   - alshaya_arabic
   - alshaya_custom
   - alshaya_acm
+  - alshaya_i18n
   - alshaya_menus
   - alshaya_permissions
   - color
