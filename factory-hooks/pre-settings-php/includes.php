@@ -22,3 +22,8 @@ if (empty($config_directories)) {
 // Default credentials.
 $settings['alshaya_custom_shield_default_user'] = 'alshaya_shield';
 $settings['alshaya_custom_shield_default_pass'] = 'AS_S';
+
+// Conductor settings.
+$config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.acm.acquia.io/';
+$config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.acm.acquia.io/';
+$config['acq_commerce.conductor']['verify_ssl'] = FALSE;
