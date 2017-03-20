@@ -8,3 +8,4 @@ dependencies:
   - system
   - views
 version: 8.x-1.0
+package: Alshaya
