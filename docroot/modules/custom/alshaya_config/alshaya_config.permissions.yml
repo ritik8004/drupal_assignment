@@ -1,0 +1,3 @@
+administer alshaya config:
+  title: 'Administer Alshaya configuration'
+  description: 'View and enable/disable features for current site.'
