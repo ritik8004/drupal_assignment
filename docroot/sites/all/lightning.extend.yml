@@ -16,10 +16,11 @@ lightning_extensions:
 modules:
   - acsf
   - alshaya_advanced_page
+  - alshaya_acm
   - alshaya_arabic
   - alshaya_custom
-  - alshaya_acm
   - alshaya_i18n
+  - alshaya_master
   - alshaya_menus
   - alshaya_permissions
   - color
