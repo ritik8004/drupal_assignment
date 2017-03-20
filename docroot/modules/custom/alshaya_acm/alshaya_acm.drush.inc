@@ -9,7 +9,7 @@
  * Implements hook_drush_command().
  */
 function alshaya_acm_drush_command() {
-  $commands = array();
+  $commands = [];
 
   $commands['alshaya-acm-offline-categories-sync'] = [
     'description' => 'Imports commerce product categories from the codebase.',
