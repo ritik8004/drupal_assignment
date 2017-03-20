@@ -8,7 +8,6 @@
         "acquia/blt": "^8.3",
         "acquia/lightning": "2.0.3",
         "drupal/address": "^1.0-rc4",
-        "drupal/acq_commerce": "dev-8.x-1.x",
         "drupal/acquia_connector": "^1.5.0",
         "drupal/acsf": "^1.33.0",
         "drupal/cog": "^1.0.0",
@@ -43,10 +42,6 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        "0": {
-            "url": "https://github.com/acquia/acm-drupal-modules.git",
-            "type": "git"
         }
     },
     "autoload-dev": {
@@ -107,6 +102,9 @@
     "scripts": {
         "blt-alias": "blt install-alias -Dcreate_alias=true",
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "post-drupal-scaffold-cmd": [
+            "cd docroot && patch -p1 <../patches/htaccess-ssl.patch"
+        ],
         "nuke": [
             "rm -rf vendor composer.lock",
             "@composer clearcache",

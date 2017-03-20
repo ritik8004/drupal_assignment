@@ -1,0 +1,13 @@
+acq_customer.configuration:
+  title: 'Customer Settings'
+  route_name: 'acq_customer.configuration'
+  parent: 'acq_commerce.configuration'
+  description: 'Change Customer settings.'
+  weight: 10
+
+acq_customer.list:
+  title: 'Customers'
+  route_name: 'acq_customer.admin'
+  parent: 'acq_commerce.admin_commerce'
+  description: 'Access stored customer data.'
+  weight: 10

@@ -1,0 +1,23 @@
+acq_customer.admin:
+  path: '/admin/commerce/customers'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Customers'
+  requirements:
+    _permission: 'access commerce administration pages'
+acq_customer.configuration:
+  path: '/admin/commerce/config/customer'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Customer Settings'
+  requirements:
+    _permission: 'access commerce administration pages'
+acq_customer.orders:
+  path: '/user/{user}/orders'
+  defaults:
+    _controller: '\Drupal\acq_customer\Controller\CustomerController::ordersPage'
+    _title: 'Orders'
+  requirements:
+    _custom_access: '\Drupal\acq_customer\Controller\CustomerController::checkAccess'
+  options:
+    user: \d+

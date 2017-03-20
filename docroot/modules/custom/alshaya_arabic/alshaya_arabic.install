@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_arabic module.
+ */
+
+use Drupal\language\Entity\ConfigurableLanguage;
+
+/**
+ * Implements hook_install().
+ *
+ * Enable Arabic language.
+ */
+function alshaya_arabic_install() {
+  ConfigurableLanguage::createFromLangcode('ar')->save();
+}

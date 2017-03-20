@@ -1,0 +1,7 @@
+acq_cart.cart:
+  path: '/cart'
+  defaults:
+    _form: '\Drupal\acq_cart\Form\CustomerCartForm'
+    _title: 'Cart'
+  requirements:
+    _permission: 'access cart page'
