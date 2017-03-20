@@ -1,0 +1,8 @@
+uuid: f37a048a-0ee0-42bc-9fa1-534258f1ad62
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+id: simple
+label: Simple

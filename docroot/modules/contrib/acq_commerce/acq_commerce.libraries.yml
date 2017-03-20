@@ -1,0 +1,5 @@
+drupal.acq_commerce.toolbar:
+  version: 1.x
+  css:
+    theme:
+      css/acq_commerce.icons.css: {}
