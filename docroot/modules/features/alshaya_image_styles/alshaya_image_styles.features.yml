@@ -1,4 +1,0 @@
-bundle: alshaya
-excluded:
-  - block.block.views_block__products_products_block
-required: true
