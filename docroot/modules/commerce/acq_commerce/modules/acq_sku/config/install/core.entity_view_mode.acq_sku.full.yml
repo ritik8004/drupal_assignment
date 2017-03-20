@@ -1,0 +1,10 @@
+uuid: 6b8e1bf0-2b37-45c7-be16-b0ca9b64ff69
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+id: acq_sku.full
+label: Full
+targetEntityType: acq_sku
+cache: true

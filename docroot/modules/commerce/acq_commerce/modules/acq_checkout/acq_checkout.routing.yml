@@ -1,0 +1,8 @@
+acq_checkout.form:
+  path: '/cart/checkout/{step}'
+  defaults:
+    _controller: '\Drupal\acq_checkout\Controller\CheckoutController::formPage'
+    _title: 'Checkout'
+    step: null
+  requirements:
+    _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'

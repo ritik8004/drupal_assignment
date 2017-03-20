@@ -1,0 +1,10 @@
+uuid: a1e4f0d7-1151-42dd-8449-150b9985afef
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+id: acq_sku.teaser
+label: Teaser
+targetEntityType: acq_sku
+cache: true

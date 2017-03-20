@@ -1,0 +1,23 @@
+uuid: 14b25e2c-7cc2-407b-a139-1445bdb1ebd0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_commerce_id
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_commerce_id
+field_name: field_commerce_id
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Commerce Backend ID'
+description: 'Commerce Backend Unique Entity ID'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
