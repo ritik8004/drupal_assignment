@@ -57,3 +57,14 @@ function alshaya_custom_install() {
       ->save();
   }
 }
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_custom_modules_installed($modules) {
+  // Set the 'header' region.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')->set('region', 'header')->save();
+
+  // Uninstall 'search_api_db' module.
+  \Drupal::service('module_installer')->uninstall(['search_api_db']);
+}
