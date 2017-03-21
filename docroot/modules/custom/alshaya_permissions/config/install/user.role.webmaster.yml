@@ -19,4 +19,7 @@ permissions:
   - 'edit any advanced_page content'
   - 'edit own advanced_page content'
   - 'use text format rich_text'
+  - 'create url aliases'
+  - 'administer url aliases'
+  - 'administer pathauto'
   - 'view the administration theme'
