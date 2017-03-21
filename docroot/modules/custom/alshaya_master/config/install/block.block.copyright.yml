@@ -10,7 +10,7 @@ dependencies:
 id: copyright
 theme: alshaya_white_label
 region: footer_secondary
-weight: -8
+weight: -10
 provider: null
 plugin: 'block_content:340b823b-e16c-457a-bc03-4a096f8ae171'
 settings:
