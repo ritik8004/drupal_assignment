@@ -20,3 +20,4 @@ permissions:
   - 'edit own advanced_page content'
   - 'use text format rich_text'
   - 'view the administration theme'
+  - 'edit terms in acq_product_category'
