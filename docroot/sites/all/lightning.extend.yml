@@ -21,6 +21,7 @@ modules:
   - alshaya_custom
   - alshaya_i18n
   - alshaya_menus
+  - alshaya_newsletter
   - alshaya_permissions
   - color
   - syslog
