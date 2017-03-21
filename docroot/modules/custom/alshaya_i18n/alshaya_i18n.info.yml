@@ -10,3 +10,5 @@ dependencies:
   - system
   - views
 version: 8.x-1.0
+interface translation project: alshaya_i18n
+interface translation server pattern: modules/custom/alshaya_i18n/translations/en.po
