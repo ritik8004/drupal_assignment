@@ -64,3 +64,5 @@ behat:
 multisite:
   name:
     - g
+
+import: '${repo.root}/blt/setup.local.xml'
