@@ -65,10 +65,10 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
     $cart = $this->cartStorage->getCart();
     $totals = $cart->totals();
 
-    // The grand total including discounts and taxes.
-    // @todo: Where to get the currency prefix from, the totals() is not
-    // returning currency;
+    // @todo: Where to get the currency prefix.
     $currency_format = 'KWD';
+
+    // The grand total including discounts and taxes.
     $grand_total = $totals['grand'] >= 0 ? $totals['grand'] : 0;
 
     // The number of items in cart.
