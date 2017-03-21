@@ -1,0 +1,73 @@
+{
+  "_links": {
+    "self": {
+      "href": "http:\/\/local.alshaya.com\/block\/1?_format=hal_json"
+    },
+    "type": {
+      "href": "http:\/\/drupal.org\/rest\/type\/block_content\/basic"
+    }
+  },
+  "id": [
+    {
+      "value": "1"
+    }
+  ],
+  "uuid": [
+    {
+      "value": "340b823b-e16c-457a-bc03-4a096f8ae171"
+    }
+  ],
+  "revision_id": [
+    {
+      "value": "1"
+    }
+  ],
+  "langcode": [
+    {
+      "value": "en",
+      "lang": "en"
+    }
+  ],
+  "type": [
+    {
+      "target_id": "basic"
+    }
+  ],
+  "info": [
+    {
+      "value": "Copyright",
+      "lang": "en"
+    }
+  ],
+  "changed": [
+    {
+      "value": "1490069505",
+      "lang": "en"
+    }
+  ],
+  "revision_created": [
+    {
+      "value": "1490018860"
+    }
+  ],
+  "revision_translation_affected": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "default_langcode": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "body": [
+    {
+      "value": "<p>\u00a9 M. H. Alshaya Co. W.L.L. | P.O. Box 181 Safat, 13002 | Kuwait<\/p>\r\n",
+      "format": "rich_text",
+      "summary": "",
+      "lang": "en"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+name: alshaya_newsletter
+type: module
+description: 'Alshaya newsletter module.'
+package: Custom
+core: 8.x
+version: 8.x-1.0
+dependencies:
+  - block
+  - system
+  - views

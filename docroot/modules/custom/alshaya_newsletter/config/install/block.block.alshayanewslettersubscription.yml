@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_newsletter
+  theme:
+    - alshaya_white_label
+id: alshayanewslettersubscription
+theme: alshaya_white_label
+region: footer_primary
+weight: -6
+provider: null
+plugin: alshaya_newsletter_subscription
+settings:
+  id: alshaya_newsletter_subscription
+  label: 'Alshaya Newsletter'
+  provider: alshaya_newsletter
+  label_display: '0'
+  post_to_link: ''
+visibility: {  }
