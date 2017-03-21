@@ -51,11 +51,13 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
 
     // @TODO: Below is just an example of type variable. It is not fully
     // functional as of now.
-    $config['home_banner'] = [
-      'type' => 'variable',
-      'description' => t('Show the home page hero banner'),
-      'default_value' => empty($storedConfig->get('home_banner')) ? 0 : 1,
-    ];
+    //  @codingStandardsIgnoreStart
+    //  $config['home_banner'] = [
+    //   'type' => 'variable',
+    //   'description' => t('Show the home page hero banner'),
+    //   'default_value' => empty($storedConfig->get('home_banner')) ? 0 : 1,
+    // ];
+    // @codingStandardsIgnoreEnd
 
     return $config;
   }
