@@ -17,6 +17,7 @@ modules:
   - acsf
   - alshaya_advanced_page
   - alshaya_acm
+  - alshaya_admin
   - alshaya_arabic
   - alshaya_custom
   - alshaya_default_content
