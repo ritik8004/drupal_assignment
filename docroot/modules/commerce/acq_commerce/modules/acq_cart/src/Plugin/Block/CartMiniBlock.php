@@ -66,7 +66,7 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
       ->get('currency_code');
 
     // The grand total including discounts and taxes.
-    $grand_total = $totals['grand'] >= 0 ? $totals['grand'] : 0;
+    $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
 
     // The number of items in cart.
     $items = $this->cartStorage->getCart()->items();
