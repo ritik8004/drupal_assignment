@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 501x600
+label: 501x600
+effects:
+  8f190f6a-6623-4db4-b4a3-9576a15d4680:
+    uuid: 8f190f6a-6623-4db4-b4a3-9576a15d4680
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 501
+      height: 600
