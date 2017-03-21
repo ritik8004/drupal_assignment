@@ -1,0 +1,17 @@
+name: alshaya_stores_finder
+type: module
+core: 8.x
+dependencies:
+  - alshaya_stores_finder
+  - block
+  - field
+  - language
+  - menu_ui
+  - node
+  - path
+  - system
+  - text
+  - user
+  - views
+  - workbench_moderation
+version: 8.x-1.0
