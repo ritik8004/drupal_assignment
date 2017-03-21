@@ -56,6 +56,9 @@ function alshaya_custom_install() {
       ->set('print', '')
       ->save();
   }
+
+  // Set interface translation to English.
+  \Drupal::configFactory()->getEditable('locale.settings')->set('translate_english', 1)->save();
 }
 
 /**
@@ -76,9 +79,6 @@ function alshaya_custom_modules_installed($modules) {
 
   // Set visitor user registration.
   \Drupal::configFactory()->getEditable('user.settings')->set('register', 'visitors')->save();
-
-  // Set interface translation to English.
-  \Drupal::configFactory()->getEditable('locale.settings')->set('translate_english', 1)->save();
 
   // Set the 'header' region for user menu.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_account_menu')->set('region', 'header')->save();
