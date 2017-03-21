@@ -16,7 +16,7 @@ mode: default
 content:
   field_banner:
     weight: 0
-    label: above
+    label: hidden
     settings:
       image_style: 420x192
       image_link: ''
@@ -24,13 +24,13 @@ content:
     type: image
   field_body:
     weight: 2
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     type: basic_string
   field_title:
     weight: 1
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
