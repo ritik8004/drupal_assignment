@@ -1,0 +1,17 @@
+.c-content__title {
+  @extend %page-title;
+  border-bottom: 1px solid $white;
+  margin-bottom: 0.75rem;
+  margin-top: 0;
+  padding-bottom: 0.75rem;
+}
+
+.c-content__body {
+  font-size: 14px;
+  line-height: 2.29;
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+}
