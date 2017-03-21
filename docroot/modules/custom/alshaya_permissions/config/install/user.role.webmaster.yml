@@ -7,6 +7,7 @@ weight: 11
 is_admin: null
 permissions:
   - 'access content overview'
+  - 'access toolbar'
   - 'administer about-brand menu items'
   - 'administer footer-logos menu items'
   - 'administer help menu items'
