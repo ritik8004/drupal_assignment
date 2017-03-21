@@ -4,15 +4,17 @@ dependencies:
   config:
     - field.storage.paragraph.field_body
     - paragraphs.paragraphs_type.related_info_one_column
+  module:
+    - text
 id: paragraph.related_info_one_column.field_body
 field_name: field_body
 entity_type: paragraph
 bundle: related_info_one_column
-label: Body
+label: body
 description: ''
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: string_long
+field_type: text_long

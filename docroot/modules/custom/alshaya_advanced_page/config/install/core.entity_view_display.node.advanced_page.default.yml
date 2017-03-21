@@ -5,6 +5,7 @@ dependencies:
     - field.field.node.advanced_page.body
     - field.field.node.advanced_page.field_banner
     - field.field.node.advanced_page.field_related_info
+    - field.field.node.advanced_page.field_slider
     - node.type.advanced_page
   module:
     - entity_reference_revisions
@@ -24,7 +25,7 @@ content:
   field_banner:
     type: entity_reference_revisions_entity_view
     weight: 102
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
@@ -37,6 +38,15 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
+  field_slider:
+    type: entity_reference_revisions_entity_view
+    weight: 104
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
   links:
     weight: 100
-hidden: {  }
+hidden:
+  langcode: true

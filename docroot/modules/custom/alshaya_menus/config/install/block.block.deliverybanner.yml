@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.delivery-banner
+  module:
+    - system
+  theme:
+    - alshaya_white_label
+id: deliverybanner
+theme: alshaya_white_label
+region: pre_content
+weight: 0
+provider: null
+plugin: 'system_menu_block:delivery-banner'
+settings:
+  id: 'system_menu_block:delivery-banner'
+  label: 'Delivery Banner'
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 0
+visibility: {  }

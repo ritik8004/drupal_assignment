@@ -7,6 +7,7 @@ dependencies:
   - field
   - file
   - image
+  - link
   - paragraphs
   - system
   - views
