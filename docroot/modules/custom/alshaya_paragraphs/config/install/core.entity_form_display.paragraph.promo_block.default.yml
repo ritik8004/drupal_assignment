@@ -1,0 +1,51 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.promo_block.field_banner
+    - field.field.paragraph.promo_block.field_link
+    - field.field.paragraph.promo_block.field_subtitle
+    - field.field.paragraph.promo_block.field_title
+    - image.style.thumbnail
+    - paragraphs.paragraphs_type.promo_block
+  module:
+    - image
+    - link
+    - workbench_moderation
+id: paragraph.promo_block.default
+targetEntityType: paragraph
+bundle: promo_block
+mode: default
+content:
+  field_banner:
+    weight: 0
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+  field_link:
+    weight: 2
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+  field_subtitle:
+    weight: 3
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+  field_title:
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+hidden:
+  created: true
+  status: true
+  uid: true

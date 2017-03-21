@@ -1,0 +1,51 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_promo_blocks
+    - node.type.advanced_page
+    - paragraphs.paragraphs_type.1_row_1_col
+    - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
+    - paragraphs.paragraphs_type.1_row_3_col
+  module:
+    - entity_reference_revisions
+id: node.advanced_page.field_promo_blocks
+field_name: field_promo_blocks
+entity_type: node
+bundle: advanced_page
+label: 'Promo Blocks'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      1_row_1st_col_2_row_2nd_col: 1_row_1st_col_2_row_2nd_col
+      1_row_1_col: 1_row_1_col
+      1_row_3_col: 1_row_3_col
+    target_bundles_drag_drop:
+      1_row_1st_col_2_row_2nd_col:
+        enabled: true
+        weight: 8
+      1_row_1_col:
+        enabled: true
+        weight: 9
+      1_row_3_col:
+        enabled: true
+        weight: 10
+      banner:
+        weight: 11
+        enabled: false
+      banner_full_width:
+        weight: 12
+        enabled: false
+      promo_block:
+        weight: 13
+        enabled: false
+      related_info_one_column:
+        weight: 14
+        enabled: false
+field_type: entity_reference_revisions
