@@ -1,0 +1,43 @@
+<project name="custom" default="setup">
+  <target name="refresh:local"
+          description="Refresh local dev environment."
+          depends="setup:build, setup:drupal:install, install-alias">
+    <echo>Allow editing settings.php file.</echo>
+    <chmod mode="0755" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
+    <chmod mode="0644" file="${docroot}/sites/${multisite.name}/settings.php" failonerror="false"/>
+
+    <echo>Revert settings.php file to avoid GIT issues.</echo>
+    <exec dir="${repo.root}" command="git checkout docroot/sites/${multisite.name}/settings.php" logoutput="true" checkreturn="true" level="${blt.exec_level}" passthru="true" />
+
+    <echo>Revert file permissions for settings.php file.</echo>
+    <chmod mode="0544" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
+    <chmod mode="0444" file="${docroot}/sites/${multisite.name}/settings.php" failonerror="false"/>
+
+    <echo>Sync the categories.</echo>
+    <drush command="alshaya-acm-offline-categories-sync" assume="yes" alias="${drush.alias}" passthru="false" />
+
+    <echo>Sync the products.</echo>
+    <drush command="alshaya-acm-offline-products-sync" assume="yes" alias="${drush.alias}" passthru="false" />
+  </target>
+
+  <target name="refresh:local:drupal"
+          description="Refresh local dev environment."
+          depends="local:drupal:install">
+    <echo>Allow editing settings.php file.</echo>
+    <chmod mode="0755" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
+    <chmod mode="0644" file="${docroot}/sites/${multisite.name}/settings.php" failonerror="false"/>
+
+    <echo>Revert settings.php file to avoid GIT issues.</echo>
+    <exec dir="${repo.root}" command="git checkout docroot/sites/${multisite.name}/settings.php" logoutput="true" checkreturn="true" level="${blt.exec_level}" passthru="true" />
+
+    <echo>Revert file permissions for settings.php file.</echo>
+    <chmod mode="0544" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
+    <chmod mode="0444" file="${docroot}/sites/${multisite.name}/settings.php" failonerror="false"/>
+
+    <echo>Sync the categories.</echo>
+    <drush command="alshaya-acm-offline-categories-sync" assume="yes" alias="${drush.alias}" passthru="false" />
+
+    <echo>Sync the products.</echo>
+    <drush command="alshaya-acm-offline-products-sync" assume="yes" alias="${drush.alias}" passthru="false" />
+  </target>
+</project>
