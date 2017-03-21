@@ -21,3 +21,11 @@ acq_commerce.configuration.conductor:
     _title: 'Conductor Settings'
   requirements:
     _permission: 'access commerce administration pages'
+
+acq_commerce.configuration.currency:
+  path: '/admin/commerce/config/currency-settings'
+  defaults:
+    _form: '\Drupal\acq_commerce\Form\CurrencySettingsForm'
+    _title: 'Currency Settings'
+  requirements:
+    _permission: 'access commerce administration pages'
