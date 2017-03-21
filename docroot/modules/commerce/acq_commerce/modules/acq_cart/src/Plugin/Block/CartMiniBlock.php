@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_cart\Plugin\Block\CartBlock.
- */
-
 namespace Drupal\acq_cart\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
@@ -65,8 +60,10 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
     $cart = $this->cartStorage->getCart();
     $totals = $cart->totals();
 
-    // @todo: Where to get the currency prefix.
-    $currency_format = 'KWD';
+    // Fetch the currency format from the config factor.
+    $currency_format = \Drupal::configFactory()
+      ->getEditable('acq_commerce.currency')
+      ->get('currency_code');
 
     // The grand total including discounts and taxes.
     $grand_total = $totals['grand'] >= 0 ? $totals['grand'] : 0;
