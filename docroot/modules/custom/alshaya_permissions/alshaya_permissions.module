@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_permissions.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_permissions_form_node_acq_product_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Disable the access to SKU field while creating product for webmasters.
+  // We are not restricting access based on role but create access to entity.
+  $form['field_skus']['#access'] = \Drupal::entityTypeManager()->getAccessControlHandler('acq_sku')->createAccess();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_permissions_form_node_acq_product_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Show the data in edit but disable them as disabled for webmaster.
+  // We are not restricting access based on role but create access to entity.
+  if (!\Drupal::entityTypeManager()->getAccessControlHandler('acq_sku')->createAccess()) {
+    foreach (Element::children($form['field_skus']['widget']) as $index) {
+      if (is_numeric($index)) {
+        $form['field_skus']['widget'][$index]['#disabled'] = TRUE;
+      }
+      else {
+        $form['field_skus']['widget'][$index]['#access'] = FALSE;
+      }
+    }
+  }
+}
