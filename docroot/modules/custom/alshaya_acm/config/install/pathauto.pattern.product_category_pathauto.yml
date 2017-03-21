@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - ctools
+    - language
+    - taxonomy
+id: product_category_pathauto
+label: 'Product category pathauto'
+type: 'canonical_entities:taxonomy_term'
+pattern: '/[term:parents:join-path]/[term:name]'
+selection_criteria:
+  3cc6c843-5f9b-4492-8c76-f588b845c99c:
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      acq_product_category: acq_product_category
+    negate: false
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    uuid: 3cc6c843-5f9b-4492-8c76-f588b845c99c
+  5b606706-2bbe-45fd-8a90-9379e096e28d:
+    id: language
+    langcodes:
+      ar: ar
+      en: en
+    negate: false
+    context_mapping:
+      language: 'taxonomy_term:langcode:language'
+    uuid: 5b606706-2bbe-45fd-8a90-9379e096e28d
+selection_logic: and
+weight: -10
+relationships:
+  'taxonomy_term:langcode:language':
+    label: Language

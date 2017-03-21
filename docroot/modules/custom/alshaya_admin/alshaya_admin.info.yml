@@ -1,0 +1,11 @@
+name: 'Alshaya Admin'
+description: 'Administration related customization for Alshaya.'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - node
+  - system
+  - user
+  - views
+version: 8.x-1.0
