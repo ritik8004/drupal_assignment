@@ -57,29 +57,14 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public function build() {
-    $cart = $this->cartStorage->getCart();
-    $totals = $cart->totals();
-
-    // Fetch the currency format from the config factor.
-    $currency_format = \Drupal::configFactory()
-      ->getEditable('acq_commerce.currency')
-      ->get('currency_code');
-
-    // The grand total including discounts and taxes.
-    $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
-
-    // The number of items in cart.
-    $items = $this->cartStorage->getCart()->items();
-    $quantity = 0;
-    foreach ($items as $item) {
-      $quantity += $item['qty'];
-    }
-
-    return([
-      '#theme' => 'acq_cart_mini_cart',
-      '#quantity' => $quantity,
-      '#total' => $grand_total,
-      '#currency_format' => $currency_format,
-    ]);
+    // Something to show till we get the AJAX response back.
+    $loading_message = 'Loading ..';
+    $output = [
+      '#markup' => '<div id="mini-cart-wrapper">' . $loading_message . '</div>',
+      '#attached' => [
+        'library' => 'acq_cart/acq-cart-custom-js'
+        ]
+    ];
+    return $output;
   }
 }
