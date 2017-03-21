@@ -26,7 +26,6 @@ modules:
   - alshaya_newsletter
   - alshaya_permissions
   - alshaya_stores_finder
-  - alshaya_user
   - color
   - syslog
 

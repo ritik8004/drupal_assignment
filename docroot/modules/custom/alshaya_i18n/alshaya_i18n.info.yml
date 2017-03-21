@@ -11,4 +11,4 @@ dependencies:
   - views
 version: 8.x-1.0
 interface translation project: alshaya_i18n
-interface translation server pattern: modules/custom/alshaya_i18n/translations/en.po
+interface translation server pattern: modules/custom/alshaya_i18n/translations/alshaya_i18n-8.x-1.0.en.po
