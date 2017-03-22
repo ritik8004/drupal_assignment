@@ -11,7 +11,7 @@ id: node.advanced_page.field_related_info
 field_name: field_related_info
 entity_type: node
 bundle: advanced_page
-label: 'Related Info'
+label: 'Related'
 description: ''
 required: false
 translatable: false

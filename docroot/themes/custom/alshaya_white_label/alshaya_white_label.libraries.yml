@@ -14,7 +14,7 @@ color_styles:
   version: VERSION
   css:
     theme:
-      css/components/colors/colors.css: {}
+      css/colors.css: {}
 
 slider_banner:
   version: VERSION
