@@ -13,5 +13,6 @@ function alshaya_acm_install() {
   \Drupal::configFactory()
     ->getEditable('acq_commerce.currency')
     ->set('currency_code', 'KWD')
+    ->set('currency_code_position', 'before')
     ->save();
 }

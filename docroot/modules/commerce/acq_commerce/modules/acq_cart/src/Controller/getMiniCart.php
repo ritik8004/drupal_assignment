@@ -45,10 +45,15 @@ class getMiniCart extends ControllerBase {
     $cart = $this->cartStorage->getCart();
     $totals = $cart->totals();
 
+    // Fetch the config.
+    $config = \Drupal::configFactory()
+      ->getEditable('acq_commerce.currency');
+
     // Fetch the currency format from the config factor.
-    $currency_format = \Drupal::configFactory()
-      ->getEditable('acq_commerce.currency')
-      ->get('currency_code');
+    $currency_format = $config->get('currency_code');
+
+    // Fetch the currency code position.
+    $currency_code_position = $config->get('currency_code_position');
 
     // The grand total including discounts and taxes.
     $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
@@ -66,6 +71,7 @@ class getMiniCart extends ControllerBase {
       '#quantity' => $quantity,
       '#total' => $grand_total,
       '#currency_format' => $this->t($currency_format),
+      '#currency_code_position' => $currency_code_position,
     ];
 
     return new JsonResponse(drupal_render($output)->jsonSerialize());
