@@ -7,6 +7,7 @@
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
 use Drupal\acq_sku\CategoryRepositoryInterface;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -190,6 +191,12 @@ class ProductSyncResource extends ResourceBase {
         $sku->price->value = $product['price'];
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
+        // Update upsell linked SKUs.
+        $this->updateLinkedSkus('upsell', $sku, $product['linked']);
+
+        // Update crossell linked SKUs.
+        $this->updateLinkedSkus('crossell', $sku, $product['linked']);
+
         $this->logger->info(
           'Updating product SKU @sku.',
           array('@sku' => $product['sku'])
@@ -204,6 +211,12 @@ class ProductSyncResource extends ResourceBase {
           'price'      => $product['price'],
           'attributes' => $this->formatProductAttributes($product['attributes']),
         ));
+
+        // Update upsell linked SKUs.
+        $this->updateLinkedSkus('upsell', $sku, $product['linked']);
+
+        // Update crosssell linked SKUs.
+        $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
 
         $display = $this->createDisplayNode($product);
 
@@ -344,4 +357,47 @@ class ProductSyncResource extends ResourceBase {
       }
     }
   }
+
+  /**
+   * updateLinkedSkus
+   *
+   * Prepare the field value for linked type (upsell, crosssell, etc.).
+   * Get the position based on the position coming from API.
+   *
+   * @param string $type
+   * @param SKU $sku
+   * @param array $linked
+   *
+   * @return void
+   */
+  private function updateLinkedSkus($type, SKU &$sku, array $linked) {
+    // Reset the upsell skus to null.
+    $sku->{$type}->setValue([]);
+
+    $fieldData = [];
+
+    foreach ($linked as $link) {
+      if ($link['type'] != $type) {
+        continue;
+      }
+
+      $fieldData[$link['position']] = $link['linked_sku'];
+    }
+
+    // If there is no upsell skus to link, we simply return from here.
+    if (empty($fieldData)) {
+      return;
+    }
+
+    // Sort them based on position.
+    ksort($fieldData);
+
+    // Update the index to sequential values so we can set in field.
+    $fieldData = array_values($fieldData);
+
+    foreach ($fieldData as $delta => $value) {
+      $sku->{$type}->set($delta, $value);
+    }
+  }
+
 }
