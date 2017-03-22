@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Alshaya i18n module.
+ */
+
+/**
+ * Function to import custom initial translations.
+ */
+function alshaya_i18n_save_translations($strings) {
+  // Loop through each string for translation.
+  foreach ($strings as $source => $translations) {
+    // First create the translation source entry.
+    \Drupal::service('locale.storage')->createString(['source' => $source])->save();
+
+    // Loop through all translations and save them.
+    foreach ($translations as $langcode => $translation) {
+      $conditions = ['source' => $source];
+      $options = ['translated' => FALSE, 'untranslated' => TRUE];
+
+      // Look for existing translation sources.
+      $data = \Drupal::service('locale.storage')->getTranslations($conditions, $options);
+      foreach ($data as $key => $value) {
+        if (isset($value->source) && $value->source == $source) {
+          // Save translation.
+          $target = \Drupal::service('locale.storage')->createTranslation(['lid' => $value->lid, 'language' => $langcode]);
+          $target->setPlurals([$translation])
+            ->setCustomized()
+            ->save();
+        }
+      }
+    }
+  }
+}

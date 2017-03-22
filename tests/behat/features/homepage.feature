@@ -6,8 +6,8 @@ Feature: Homepage
   @javascript
   Scenario: Load a page with Javascript
     Given I am on "/"
-    Then I should see the text "Log in"
+    Then I should see the text "Sign in"
 
   Scenario: Load a page without Javascript
     Given I am on "/"
-    Then I should see the text "Log in"
+    Then I should see the text "Sign in"
