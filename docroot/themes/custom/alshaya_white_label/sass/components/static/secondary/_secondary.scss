@@ -1,7 +1,8 @@
 .c-content__secondary {
-  .field__label {
+  .c-related-info__label {
     @extend %page-title;
 
     margin-bottom: 0.75rem;
+    text-align: $left;
   }
 }

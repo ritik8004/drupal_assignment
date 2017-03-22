@@ -34,7 +34,7 @@
 
   @include breakpoint($tablet) {
     float: $left;
-    margin-#{$right}: 3rem;
+    margin-#{$right}: 1.5rem;
   }
 
   @include breakpoint($only-mobile) {
@@ -47,16 +47,14 @@
     @extend %list--horizontal;
   }
 
-  li:not(#{$last-child}) {
+  li:not(:last-child) {
     margin-#{$right}: 1.875rem;
   }
 }
 
-.c-footer__logo {
-  border: 0;
-  font: 0/0 a;
-  text-shadow: none;
-  color: transparent;
+[class^="c-footer__logo"] {
+  @extend %u-image-replacement;
+
   display: inline-block;
   vertical-align: middle;
 }

@@ -1,5 +1,5 @@
 .c-delivery-menu {
-  @include container($desktop);
+  @include container(1284px);
 
   background: $soft-blue;
   padding: 0;
@@ -11,7 +11,7 @@
   list-style: none;
   padding: 1px 0;
   width: 100%;
-  display: inline-block;
+  float: #{$left};
 
   @include breakpoint($only-mobile) {
     &:nth-child(n + 2) {
@@ -22,11 +22,11 @@
   @include breakpoint($only-tablet) {
     width: 49.7%;
 
-    &#{$first-child} {
+    &:first-child {
       border-#{$right}: 1px solid $white-five;
     }
 
-    &#{$last-child} {
+    &:last-child {
       display: none;
     }
   }

@@ -7,16 +7,16 @@
 @import "reset";
 
 /**
-  Import helpers from directional.scss
-*/
-@import "directional";
-
-/**
   Config file that contains centralized variables
 */
 @import "config";
 @import "mixins";
 @import "utils";
+
+/**
+  Import helpers from directional.scss
+*/
+@import "directional";
 
 // Base
 //
