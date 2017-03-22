@@ -98,7 +98,8 @@
         "patches": {
             "drupal/acq_commerce": {
                 "Offline products sync": "patches/acq_commerce/allow_offline_sync_of_products.patch",
-                "Remove panelizer dependency": "patches/acq_commerce/remove_panelizer_dependency.patch"
+                "Remove panelizer dependency": "patches/acq_commerce/remove_panelizer_dependency.patch",
+                "Add up/cross sell fields": "patches/acq_commerce/add_up_cross_sell_fields_MMCPA-363"
             }
         }
     },

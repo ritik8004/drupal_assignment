@@ -145,10 +145,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
   /**
    * {@inheritdoc}
    */
-  public function getChangedTimeAcrossTranslations()  {
+  public function getChangedTimeAcrossTranslations() {
     $changed = $this->getUntranslated()->getChangedTime();
-    foreach ($this->getTranslationLanguages(FALSE) as $language)    {
-      $translation_changed = $this->getTranslation($language->getId())->getChangedTime();
+    foreach ($this->getTranslationLanguages(FALSE) as $language) {
+      $translation_changed = $this->getTranslation($language->getId())
+        ->getChangedTime();
       $changed = max($translation_changed, $changed);
     }
     return $changed;
@@ -264,6 +265,38 @@ class SKU extends ContentEntityBase implements SKUInterface {
         'type' => 'string_textfield',
         'weight' => -6,
       ))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['crosssell'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Cross sell SKU'))
+      ->setDescription(t('Reference to all Cross sell SKUs.'))
+      ->setDisplayOptions('view', array(
+        'label' => 'above',
+        'type' => 'string',
+        'weight' => 5,
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 5,
+      ))
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['upsell'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Up sell SKU'))
+      ->setDescription(t('Reference to all up sell SKUs.'))
+      ->setDisplayOptions('view', array(
+        'label' => 'above',
+        'type' => 'string',
+        'weight' => 6,
+      ))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 6,
+      ))
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
