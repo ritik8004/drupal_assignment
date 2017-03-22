@@ -32,11 +32,16 @@
     {% for item in items %}
 
       {% set linkText %}
-        {{ item.title }} <div class="c-delivery-menu__description"> {{ item.url.getOption('attributes').title }} </div>
+        {{ item.title }}
+        <div class="c-delivery-menu__description">
+          {{ item.url.getOption("attributes").title }}
+        </div>
       {% endset %}
 
-      <li{{ item.attributes.addClass('c-delivery-menu__tab') }}>
-        <div class="c-delivery-menu__title"> <div class="c-delivery-menu__link"> {{ link(linkText, item.url) }} </div> </div>
+      <li{{ item.attributes.addClass("c-delivery-menu__tab") }}>
+        <div class="c-delivery-menu__title">
+          {{ link(linkText, item.url, { "class": ["c-delivery-menu__link"]}) }}
+        </div>
         {% if item.below %}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
         {% endif %}
