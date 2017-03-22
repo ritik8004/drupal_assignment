@@ -70,4 +70,10 @@ function alshaya_custom_modules_installed($modules) {
     ->set('settings.use_site_name', FALSE)
     ->set('settings.use_site_slogan', FALSE)
     ->save();
+
+  // Set visitor user registration.
+  \Drupal::configFactory()->getEditable('user.settings')->set('register', 'visitors')->save();
+
+  // Set the 'header' region for user menu.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_account_menu')->set('region', 'header')->save();
 }
