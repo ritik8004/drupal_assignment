@@ -29,7 +29,7 @@ modules:
   - alshaya_stores_finder
   - color
   - syslog
-  - features_ui
+  - features
 
 # In the components key of their info file, Lightning components may list
 # additional sub-components to be installed. To override this behavior, you can
