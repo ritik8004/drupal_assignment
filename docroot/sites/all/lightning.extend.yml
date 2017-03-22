@@ -28,6 +28,7 @@ modules:
   - alshaya_permissions
   - alshaya_stores_finder
   - color
+  - features
   - syslog
 
 # In the components key of their info file, Lightning components may list

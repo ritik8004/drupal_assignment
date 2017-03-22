@@ -9,7 +9,7 @@ label: 'content pathauto'
 type: 'canonical_entities:node'
 pattern: '[node:title]'
 selection_criteria:
-  b89e8fd8-fc67-4a32-a766-ae6c85cbdb0d:
+  211aac69-8aa6-42c6-8e5d-e3cfb90c1dc8:
     id: node_type
     bundles:
       acq_product: acq_product
@@ -17,16 +17,16 @@ selection_criteria:
     negate: false
     context_mapping:
       node: node
-    uuid: b89e8fd8-fc67-4a32-a766-ae6c85cbdb0d
-  246bdc8e-60eb-445b-960c-00edc4f2d283:
+    uuid: 211aac69-8aa6-42c6-8e5d-e3cfb90c1dc8
+  a7c47c28-e189-45de-80ed-bd6b5484b53d:
     id: language
     langcodes:
-      ar: ar
       en: en
+      ar: ar
     negate: false
     context_mapping:
       language: 'node:langcode:language'
-    uuid: 246bdc8e-60eb-445b-960c-00edc4f2d283
+    uuid: a7c47c28-e189-45de-80ed-bd6b5484b53d
 selection_logic: and
 weight: -5
 relationships:
