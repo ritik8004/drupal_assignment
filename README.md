@@ -55,14 +55,15 @@ as possible to the configuration of the Prod env.
 
 To prepare your local env:
 * Install Virtualbox and Vagrant.
+* Install Yarn `npm i -g yarn`.
 * Install Ansible: `brew install ansible`
 * Run:
   * `composer install`
   * `blt vm`
-  * `blt local:setup`
+  * `blt refresh:local`
   * `drush @alshaya.local uli`
-* Load commerce content:
+* Load commerce content (already included in refresh:local and refresh:local:drupal):
   * `drush @alshaya.local alshaya-acm-offline-categories-sync`
   * `drush @alshaya.local alshaya-acm-offline-products-sync`
 
-Next builds can be done using: `blt local:drupal:install`
+Next builds can be done using: `blt refresh:local:drupal`

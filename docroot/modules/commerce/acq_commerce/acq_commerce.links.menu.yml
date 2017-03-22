@@ -18,3 +18,10 @@ acq_commerce.configuration.conductor:
   parent: 'acq_commerce.configuration'
   description: 'Configure your Acquia Commerce Conductor settings.'
   weight: 20
+
+acq_commerce.configuration.currency:
+  title: 'Currency Settings'
+  route_name: 'acq_commerce.configuration.currency'
+  parent: 'acq_commerce.configuration'
+  description: 'Configure your Acquia Commerce Currency settings.'
+  weight: 21

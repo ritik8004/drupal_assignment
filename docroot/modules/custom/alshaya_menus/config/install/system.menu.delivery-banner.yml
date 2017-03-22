@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: delivery-banner
+label: 'Delivery Banner'
+description: ''
+locked: false

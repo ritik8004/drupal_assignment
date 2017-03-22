@@ -1,0 +1,86 @@
+$cdm: c-delivery-menu;
+
+.#{$cdm} {
+  @include container($desktop);
+
+  background: $soft-blue;
+  padding: 0;
+
+  &__tab {
+    text-align: center;
+    list-style: none;
+    padding: 1px 0;
+    width: 100%;
+    display: inline-block;
+
+    &:nth-child(n + 2) {
+      display: none;
+    }
+
+    @include breakpoint($tablet) {
+      width: 49.7%;
+
+      &:first-child {
+        border-right: 1px solid $white-five;
+      }
+
+      &:nth-child(n + 2) {
+        display: inline-block;
+      }
+
+      &:last-child {
+        display: none;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 425px;
+      width: 100%;
+
+      &:first-child {
+        border-right: 0 none;
+      }
+
+      &:last-child {
+        display: inline-block;
+      }
+
+      &:nth-child(2) {
+        border-right: 1px solid $white-five;
+        border-left: 1px solid $white-five;
+      }
+    }
+  }
+
+  &__title {
+    text-transform: lowercase;
+  }
+
+  &__link a {
+    color: $white-five;
+    display: block;
+    padding: 6px 0;
+    text-decoration: none;
+  }
+
+  &__description {
+    font-size: 14px;
+  }
+}
+
+html[dir="rtl"] .#{$cdm} {
+  &__tab {
+    @include breakpoint($tablet) {
+      &:first-child {
+        border-left: 1px solid $white-five;
+        border-right: 0 none;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      &:first-child {
+        border-left: 0 none;
+      }
+    }
+  }
+}

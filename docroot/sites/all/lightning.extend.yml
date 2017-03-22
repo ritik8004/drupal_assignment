@@ -17,11 +17,16 @@ modules:
   - acsf
   - alshaya_advanced_page
   - alshaya_acm
+  - alshaya_admin
   - alshaya_arabic
   - alshaya_custom
+  - alshaya_default_content
   - alshaya_i18n
+  - alshaya_master
   - alshaya_menus
+  - alshaya_newsletter
   - alshaya_permissions
+  - alshaya_stores_finder
   - color
   - syslog
 

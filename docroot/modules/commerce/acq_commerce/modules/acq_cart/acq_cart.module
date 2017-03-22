@@ -18,3 +18,19 @@ function acq_cart_preprocess_acq_sku(&$variables) {
   // we provide a hook that's only called if this module is enabled on display.
   \Drupal::moduleHandler()->alter('add_to_cart_display', $variables);
 }
+
+/**
+ * Implements hook_theme().
+ */
+function acq_cart_theme($existing, $type, $theme, $path) {
+  return array(
+    'acq_cart_mini_cart' => array(
+      'variables' => array(
+        'quantity' => 0,
+        'total' => NULL,
+        'currency_format' => NULL
+      ),
+      'template' => 'block--acqminicart',
+    ),
+  );
+}

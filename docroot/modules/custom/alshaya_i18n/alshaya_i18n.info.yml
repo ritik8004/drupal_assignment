@@ -9,4 +9,5 @@ dependencies:
   - language
   - system
   - views
+  - alshaya_custom
 version: 8.x-1.0

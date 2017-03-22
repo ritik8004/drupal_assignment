@@ -1,0 +1,99 @@
+// Footer
+//
+// Markup: footer-secondary.twig
+//
+// Style guide: component.footer-secondary
+
+.c-footer-secondary {
+  background: $white-four;
+  font-size: 0.6875rem;
+  line-height: 4.375rem;
+
+  @include breakpoint($tablet) {
+    height: 4.375rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+
+  .l-container {
+    @extend %l-container--full;
+  }
+}
+
+.c-footer-secondary__region {
+  @include breakpoint($tablet) {
+    max-width: 42.1875rem;
+    float: $left;
+  }
+}
+
+.c-footer__logos {
+  padding: 0 1.5rem;
+
+  @include breakpoint($tablet) {
+    float: $left;
+    margin-#{$right}: 3rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    background: white;
+    padding: 0 1.5rem;
+  }
+
+  ul {
+    @extend %list-clear;
+    @extend %list--horizontal;
+  }
+
+  li:not(#{$last-child}) {
+    margin-#{$right}: 1.875rem;
+  }
+}
+
+.c-footer__logo {
+  border: 0;
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.c-footer__logo--verisign {
+  background-image: url("../imgs/cards/card-verisign.png");
+  height: 34px;
+  width: 68px;
+}
+
+.c-footer__logo--visa {
+  background-image: url("../imgs/cards/card-visa.png");
+  height: 25px;
+  width: 60px;
+}
+
+.c-footer__logo--mastercard {
+  background-image: url("../imgs/cards/card-mastercard.png");
+  height: 24px;
+  width: 66px;
+}
+
+.c-footer__copy {
+  color: $black-two;
+
+  @include breakpoint($tablet) {
+    float: $right;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-top: 1.625rem;
+    padding-bottom: 1.625rem;
+    line-height: 1.5;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

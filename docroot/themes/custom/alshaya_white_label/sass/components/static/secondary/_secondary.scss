@@ -1,0 +1,7 @@
+.c-content__secondary {
+  .field__label {
+    @extend %page-title;
+
+    margin-bottom: 0.75rem;
+  }
+}
