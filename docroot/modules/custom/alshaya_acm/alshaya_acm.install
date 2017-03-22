@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya sites.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_install() {
+  // Initialize the currency format variable during install.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('currency_code', 'KWD')
+    ->save();
+}
