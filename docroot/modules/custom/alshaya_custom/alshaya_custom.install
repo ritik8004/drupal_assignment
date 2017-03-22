@@ -56,9 +56,6 @@ function alshaya_custom_install() {
       ->set('print', '')
       ->save();
   }
-
-  // Set interface translation to English.
-  \Drupal::configFactory()->getEditable('locale.settings')->set('translate_english', 1)->save();
 }
 
 /**
