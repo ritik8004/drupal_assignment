@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 501x288
+label: 501x288
+effects:
+  7335a6bf-d1fa-4f85-9c23-0c7deceda75b:
+    uuid: 7335a6bf-d1fa-4f85-9c23-0c7deceda75b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 501
+      height: 288

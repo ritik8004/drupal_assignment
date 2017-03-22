@@ -4,12 +4,16 @@ core: 8.x
 dependencies:
   - alshaya_image_styles
   - block
+  - content_translation
+  - entity_reference_revisions
   - field
   - file
   - image
+  - lightning_core
   - link
   - paragraphs
   - system
+  - text
   - views
   - workbench_moderation
 version: 8.x-1.0

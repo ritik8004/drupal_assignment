@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 1026x288
+label: 1026x288
+effects:
+  5f3b591b-3908-4433-a329-31a0f103551b:
+    uuid: 5f3b591b-3908-4433-a329-31a0f103551b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1026
+      height: 288

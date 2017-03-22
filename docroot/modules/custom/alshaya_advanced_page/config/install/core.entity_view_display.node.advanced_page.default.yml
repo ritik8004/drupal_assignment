@@ -4,6 +4,8 @@ dependencies:
   config:
     - field.field.node.advanced_page.body
     - field.field.node.advanced_page.field_banner
+    - field.field.node.advanced_page.field_promo_banner_full_width
+    - field.field.node.advanced_page.field_promo_blocks
     - field.field.node.advanced_page.field_related_info
     - field.field.node.advanced_page.field_slider
     - node.type.advanced_page
@@ -30,6 +32,22 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
+  field_promo_banner_full_width:
+    type: entity_reference_revisions_entity_view
+    weight: 105
+    label: above
+    settings:
+      view_mode: 1026x288
+      link: ''
+    third_party_settings: {  }
+  field_promo_blocks:
+    type: entity_reference_revisions_entity_view
+    weight: 106
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
   field_related_info:
     type: entity_reference_revisions_entity_view
     weight: 103
@@ -48,5 +66,11 @@ content:
     third_party_settings: {  }
   links:
     weight: 100
+    settings: {  }
+    third_party_settings: {  }
+  workbench_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   langcode: true

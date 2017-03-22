@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_core
+    - paragraphs
+third_party_settings:
+  lightning_core:
+    description: 'This view mode will render the banner image in 1026x288 image style.'
+id: paragraph.1026x288
+label: 1026x288
+targetEntityType: paragraph
+cache: true

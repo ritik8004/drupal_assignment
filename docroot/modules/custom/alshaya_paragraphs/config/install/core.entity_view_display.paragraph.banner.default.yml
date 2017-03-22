@@ -16,7 +16,7 @@ mode: default
 content:
   field_banner:
     weight: 0
-    label: above
+    label: hidden
     settings:
       image_style: 1284x424
       image_link: ''
@@ -24,7 +24,7 @@ content:
     type: image
   field_link:
     weight: 1
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false

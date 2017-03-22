@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: promo_block
+label: 'Promo Block'
+behavior_plugins: {  }
