@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.main_menu_highlight.field_highlight_image
+    - paragraphs.paragraphs_type.main_menu_highlight
+  module:
+    - image
+id: paragraph.main_menu_highlight.default
+targetEntityType: paragraph
+bundle: main_menu_highlight
+mode: default
+content:
+  field_highlight_image:
+    weight: 0
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+hidden: {  }

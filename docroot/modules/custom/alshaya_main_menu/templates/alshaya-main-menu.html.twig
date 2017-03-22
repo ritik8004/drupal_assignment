@@ -1,0 +1,41 @@
+<div>
+    <ul>
+        {% for key1, level1 in term_tree %}
+            <li>
+                <div> {{ level1.label }} </div>
+                {% if level1.child is not empty %}
+                    <ul>
+                        {% for key2, level2 in level1.child %}
+                            <li>
+                                <div>{{ level2.label }}</div>
+                                <div>
+                                    {% if level2.description is not empty %}
+                                        <div>{{ level2.description }}</div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if level2.child is not empty %}
+                                        <ul>
+                                            {% for key3, level3 in level2.child %}
+                                                <li>
+                                                    {{ level3.label }}
+                                                    {% if level3.child is not empty %}
+                                                        <ul>
+                                                            {% for key4, level4 in level3.child %}
+                                                                <li>{{ level4.label }}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>

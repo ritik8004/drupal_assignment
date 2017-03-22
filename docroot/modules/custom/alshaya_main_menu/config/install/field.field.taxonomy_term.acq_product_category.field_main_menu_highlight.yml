@@ -1,0 +1,50 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_main_menu_highlight
+    - paragraphs.paragraphs_type.main_menu_highlight
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - entity_reference_revisions
+id: taxonomy_term.acq_product_category.field_main_menu_highlight
+field_name: field_main_menu_highlight
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Main menu highlight'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      main_menu_highlight: main_menu_highlight
+    target_bundles_drag_drop:
+      main_menu_highlight:
+        enabled: true
+        weight: 9
+      1_row_1_col:
+        weight: 10
+        enabled: false
+      1_row_1st_col_2_row_2nd_col:
+        weight: 11
+        enabled: false
+      1_row_3_col:
+        weight: 12
+        enabled: false
+      banner:
+        weight: 13
+        enabled: false
+      banner_full_width:
+        weight: 14
+        enabled: false
+      promo_block:
+        weight: 15
+        enabled: false
+      related_info_one_column:
+        weight: 16
+        enabled: false
+field_type: entity_reference_revisions

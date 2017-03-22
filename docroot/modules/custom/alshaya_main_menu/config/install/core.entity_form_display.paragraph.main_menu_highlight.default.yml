@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - entity_browser.browser.image_browser
+    - field.field.paragraph.main_menu_highlight.field_highlight_image
+    - paragraphs.paragraphs_type.main_menu_highlight
+  module:
+    - entity_browser
+    - workbench_moderation
+id: paragraph.main_menu_highlight.default
+targetEntityType: paragraph
+bundle: main_menu_highlight
+mode: default
+content:
+  field_highlight_image:
+    type: entity_browser_file
+    weight: 6
+    settings:
+      entity_browser: image_browser
+      field_widget_edit: true
+      field_widget_remove: true
+      view_mode: default
+      preview_image_style: thumbnail
+      open: true
+      selection_mode: selection_append
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
+  uid: true
