@@ -1,5 +1,5 @@
 <div class="acq-mini-cart">
-  {% if currency_code_position == before %}
+  {% if currency_code_position == 'before' %}
     <span class="total"><span class="prefix">{{ currency_format }}</span>{{ total }}</span>
   {% else %}
     <span class="total">{{ total }}<span class="prefix">{{ currency_format }}</span></span>
