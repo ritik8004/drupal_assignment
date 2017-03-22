@@ -18,11 +18,13 @@
                                         <ul>
                                             {% for key3, level3 in level2.child %}
                                                 <li>
-                                                    {{ level3.label }}
+                                                    <div>{{ level3.label }}</div>
                                                     {% if level3.child is not empty %}
                                                         <ul>
                                                             {% for key4, level4 in level3.child %}
-                                                                <li>{{ level4.label }}</li>
+                                                                <li>
+                                                                    <div>{{ level4.label }}</div>
+                                                                </li>
                                                             {% endfor %}
                                                         </ul>
                                                     {% endif %}

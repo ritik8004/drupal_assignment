@@ -62,6 +62,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   public function build() {
     $term_data = $this->getChildTerms();
 
+    // If no data, no need to render the block.
+    if (empty($term_data)) {
+      return [
+        '#markup' => '',
+      ];
+    }
+
     // Removes the first term 'default category' as its not required.
     $key = key($term_data);
     $term_data = $term_data[$key]['child'];
@@ -116,6 +123,12 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $highlight_images = [];
 
     if ($highlight_field = $term->get('field_main_menu_highlight')) {
+
+      // If no data in paragraph referenced field.
+      if (empty($highlight_field->getValue())) {
+        return $highlight_images;
+      }
+
       $paragraph_id = $highlight_field->getValue()[0]['target_id'];
 
       // Load paragraph entity.
