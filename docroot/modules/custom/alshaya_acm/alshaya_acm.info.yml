@@ -10,6 +10,8 @@ dependencies:
   - acq_customer
   - acq_payment
   - acq_sku
+  - alshaya_advanced_page
+  - content_translation
   - ctools
   - language
   - node
