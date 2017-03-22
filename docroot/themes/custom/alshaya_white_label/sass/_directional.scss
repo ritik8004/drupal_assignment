@@ -1,3 +1,5 @@
+/* stylelint-disable */
+
 // directional-scss | Author: Tyson Matanich (http://matanich.com), 2013 | License: MIT
 $dir: ltr !default;
 
@@ -10,6 +12,7 @@ $dir: ltr !default;
   @if $dir != rtl {
     @return $if;
   }
+
   @else {
     @return $else;
   }
@@ -27,6 +30,7 @@ $right: if-ltr(right, left);
     // Reorder right and left positions in list
     @return nth($values, 1) nth($values, 4) nth($values, 3) nth($values, 2);
   }
+
   @else {
     @return $values;
   }
