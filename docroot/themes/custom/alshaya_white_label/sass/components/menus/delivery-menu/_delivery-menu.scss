@@ -1,5 +1,5 @@
 .c-delivery-menu {
-  @include container(1284px);
+  @extend %l-container--full;
 
   background: $soft-blue;
   padding: 0;
@@ -20,7 +20,7 @@
   }
 
   @include breakpoint($only-tablet) {
-    width: 49.7%;
+    width: 50%;
 
     &:first-child {
       border-#{$right}: 1px solid $white-five;

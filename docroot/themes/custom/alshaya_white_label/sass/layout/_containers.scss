@@ -1,5 +1,5 @@
 %l-container--full {
-  @include container(1284px);
+  @include container($desktop-wide);
 }
 
 %l-container--center {
