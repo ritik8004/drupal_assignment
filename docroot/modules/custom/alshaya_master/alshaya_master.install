@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_master module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_master_install() {
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'Log in' => [
+      'en' => 'Sign in',
+    ],
+    'Log out' => [
+      'en' => 'Sign out',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
