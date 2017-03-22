@@ -7,8 +7,8 @@ dependencies:
     - alshaya_white_label
 id: alshayastoresfinder
 theme: alshaya_white_label
-region: header
-weight: -9
+region: menu_secondary
+weight: -10
 provider: null
 plugin: alshaya_stores_finder
 settings:
