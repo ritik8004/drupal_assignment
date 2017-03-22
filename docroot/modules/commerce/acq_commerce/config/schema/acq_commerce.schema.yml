@@ -7,3 +7,6 @@ acq_commerce.currency:
     currency_code:
       type: label
       label: 'Currency Code'
+    currency_code_position:
+      type: label
+      label: 'Currency Code Position'
