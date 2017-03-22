@@ -47,7 +47,7 @@ class getMiniCart extends ControllerBase {
 
     // Fetch the config.
     $config = \Drupal::configFactory()
-      ->getEditable('acq_commerce.currency');
+      ->get('acq_commerce.currency');
 
     // Fetch the currency format from the config factor.
     $currency_format = $config->get('currency_code');
