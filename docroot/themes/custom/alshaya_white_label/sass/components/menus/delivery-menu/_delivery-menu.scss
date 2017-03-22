@@ -2,6 +2,7 @@ $cdm: c-delivery-menu;
 
 .#{$cdm} {
   @include container($desktop);
+
   background: $soft-blue;
   padding: 0;
 
