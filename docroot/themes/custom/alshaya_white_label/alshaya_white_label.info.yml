@@ -4,7 +4,7 @@ description: 'Base theme for Alshaya brands.'
 core: 8.x
 base theme: cog
 libraries:
-  - alshaya_white_label/global_styles
+  - alshaya_white_label/color_styles
 regions:
   menu_primary: 'Menu Primary'
   menu_secondary: 'Menu Secondary'

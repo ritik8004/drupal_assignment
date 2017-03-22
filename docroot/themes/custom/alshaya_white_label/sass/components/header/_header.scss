@@ -3,3 +3,113 @@
 // Markup: header.twig
 //
 // Style guide: component.header
+
+/*
+	SITE HEADER
+*/
+
+header {
+  border-bottom: 1px solid $white;
+
+  a {
+    color: $brownish-grey;
+  }
+
+  .c-header__region {
+    text-align: $right;
+    padding: 6.5px 0;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+    display: inline-block;
+    padding-#{$left}: 16px;
+    padding-#{$right}: 35px;
+    position: relative;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      color: $peacock-blue;
+    }
+  }
+
+  nav#block-alshaya-white-label-account-menu,
+  #block-languageswitcher,
+  .block-alshaya-stores-finder {
+    display: inline-block;
+
+    a {
+      font-size: 0.75rem;
+      padding-bottom: 1px;
+    }
+  }
+
+  .menu,
+  .block-alshaya-stores-finder {
+    a {
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        top: 2px;
+        right: -10px;
+        left: -10px;
+      }
+    }
+
+    .register-link::before {
+      background: url('../imgs/assets/register.svg') no-repeat;
+    }
+
+    li:last-child a::before {
+      background: url('../imgs/assets/sign-in.svg') no-repeat;
+    }
+
+    a.stores-finder::before {
+      background: url('../imgs/assets/find-us.svg') no-repeat;
+    }
+  }
+
+  .block-alshaya-stores-finder {
+    display: inline-block;
+    padding-#{$left}: 16px;
+    padding-#{$right}: 35px;
+    position: relative;
+
+    a {
+      color: $peacock-blue;
+    }
+  }
+
+  #block-languageswitcher {
+    position: relative;
+
+    ul {
+      &::before {
+        content: '';
+        background: url('../imgs/assets/lang.svg') no-repeat;
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        top: 2px;
+        right: -10px;
+        left: -10px;
+      }
+
+      .is-active {
+        display: none;
+      }
+    }
+  }
+}

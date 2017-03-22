@@ -1,3 +1,11 @@
+<!-- CONDITIONAL CSS -->
+
+{% if html_attributes["dir"] == "ltr" %}
+  {{ attach_library('alshaya_white_label/global_styles') }}
+{% elseif html_attributes["dir"] == "rtl" %}
+  {{ attach_library('alshaya_white_label/rtl_styles') }}
+{% endif %}
+
 <!DOCTYPE html>
 <html{{ html_attributes }}>
 <head>

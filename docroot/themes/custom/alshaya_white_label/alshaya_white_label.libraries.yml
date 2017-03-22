@@ -4,3 +4,15 @@ global_styles:
     theme:
       css/styles.css: {}
       css/colors.css: {}
+
+rtl_styles:
+  version: VERSION
+  css:
+    theme:
+      css/rtl.css: {}
+
+color_styles:
+  version: VERSION
+  css:
+    theme:
+      css/colors.css: {}
