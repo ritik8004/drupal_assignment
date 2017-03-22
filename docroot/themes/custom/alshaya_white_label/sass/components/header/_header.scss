@@ -5,17 +5,17 @@
 // Style guide: component.header
 
 /*
-	SITE HEADER
+	SITE HEADER - TOP LEVEL MENU
 */
 
-header {
+.c-menu-secondary {
   border-bottom: 1px solid $white;
 
   a {
     color: $brownish-grey;
   }
 
-  .c-header__region {
+  .c-menu-secondary__region {
     text-align: $right;
     padding: 6.5px 0;
   }
@@ -110,6 +110,61 @@ header {
       .is-active {
         display: none;
       }
+    }
+  }
+}
+
+/*
+	SITE HEADER - BRANDING
+*/
+
+header {
+  .c-header__region {
+    margin: 15px 25px;
+  }
+
+  .block-system-branding-block {
+    float: $left;
+  }
+
+  .block-cart-mini-block {
+    float: $right;
+  }
+
+  .block-cart-mini-block {
+    font-size: 0.875rem;
+
+    .total {
+      font-weight: bold;
+      margin-#{$right}: 20px;
+
+      .prefix {
+        font-weight: normal;
+        vertical-align: bottom;
+        margin-#{$right}: 6px;
+      }
+    }
+
+    .cart-link {
+      background: url('../imgs/assets/cart.svg') no-repeat;
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      position: relative;
+      margin-bottom: -2px;
+    }
+
+    .quantity {
+      position: absolute;
+      background: url('../imgs/assets/indicator-shape.svg') no-repeat;
+      color: $white-five;
+      text-align: center;
+      width: 24px;
+      height: 24px;
+      bottom: -8px;
+      left: 4px;
+      border-radius: 50%;
+      padding: 5px;
     }
   }
 }
