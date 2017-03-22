@@ -3,10 +3,11 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
-
 
 // Base HTML Elements.
 html,

@@ -10,7 +10,7 @@ dependencies:
 id: footerlogos
 theme: alshaya_white_label
 region: footer_secondary
-weight: 0
+weight: -9
 provider: null
 plugin: 'system_menu_block:footer-logos'
 settings:

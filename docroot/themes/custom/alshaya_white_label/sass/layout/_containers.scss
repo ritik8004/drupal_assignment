@@ -6,7 +6,7 @@
   @include container(65.625rem);
 }
 
-// One Colummn
+// One Column
 .l-column--one {
   &.l-container {
     @extend %l-container--center;
