@@ -23,12 +23,23 @@ function acq_cart_preprocess_acq_sku(&$variables) {
  * Implements hook_theme().
  */
 function acq_cart_theme($existing, $type, $theme, $path) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()
+    ->get('acq_commerce.currency');
+
+  // Fetch the currency format from the config factor.
+  $currency_format = $config->get('currency_code');
+
+  // Fetch the currency code position.
+  $currency_code_position = $config->get('currency_code_position');
+
   return array(
     'acq_cart_mini_cart' => array(
       'variables' => array(
         'quantity' => 0,
         'total' => NULL,
-        'currency_format' => NULL
+        'currency_format' => $currency_format,
+        'currency_code_position' => $currency_code_position
       ),
       'template' => 'block--acqminicart',
     ),
