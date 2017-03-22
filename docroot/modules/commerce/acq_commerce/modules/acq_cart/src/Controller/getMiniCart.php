@@ -8,10 +8,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Class getMiniCartRender
+ * Class getMiniCart
  * @package Drupal\acq_cart\Controller
  */
-class getMiniCartRender extends ControllerBase {
+class getMiniCart extends ControllerBase {
   /**
    * Drupal\acq_cart\CartStorageInterface definition.
    *
@@ -65,7 +65,7 @@ class getMiniCartRender extends ControllerBase {
       '#theme' => 'acq_cart_mini_cart',
       '#quantity' => $quantity,
       '#total' => $grand_total,
-      '#currency_format' => $currency_format,
+      '#currency_format' => $this->t($currency_format),
     ];
 
     return new JsonResponse(drupal_render($output)->jsonSerialize());

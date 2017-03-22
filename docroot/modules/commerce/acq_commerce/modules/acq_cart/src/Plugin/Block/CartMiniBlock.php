@@ -2,7 +2,6 @@
 
 namespace Drupal\acq_cart\Plugin\Block;
 
-use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -18,13 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Drupal\acq_cart\CartStorageInterface definition.
-   *
-   * @var \Drupal\acq_cart\CartStorageInterface
-   */
-  protected $cartStorage;
-
-  /**
    * Constructor.
    *
    * @param array $configuration
@@ -33,12 +25,9 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
    *   The plugin_id for the plugin instance.
    * @param string $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
-   *   The cart session.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->cartStorage = $cart_storage;
   }
 
   /**
@@ -48,8 +37,7 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
     return new static(
       $configuration,
       $plugin_id,
-      $plugin_definition,
-      $container->get('acq_cart.cart_storage')
+      $plugin_definition
     );
   }
 
@@ -58,7 +46,7 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
    */
   public function build() {
     // Something to show till we get the AJAX response back.
-    $loading_message = 'Loading ..';
+    $loading_message = $this->t('Loading ...');
     $output = [
       '#markup' => '<div id="mini-cart-wrapper">' . $loading_message . '</div>',
       '#attached' => [
