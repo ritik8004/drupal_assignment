@@ -9,9 +9,17 @@
 <article {{ attributes.addClass(classes) }}>
   <div class="c-content">
     <div class="l-container {{ content.field_related_info | render ? 'l-column--two' : 'l-column--one' }}">
-      <div class="c-content__banner">
-        {{ content.field_banner }}
-      </div>
+      {% if content.field_banner %}
+        <div class="c-content__banner">
+          {{ content.field_banner }}
+        </div>
+      {% endif %}
+
+      {% if content.field_slider %}
+        <div class="c-content__slider">
+          {{ content.field_slider }}
+        </div>
+      {% endif %}
 
       <div class="c-content__container clearfix">
         <div class="c-content__primary">

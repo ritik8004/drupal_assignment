@@ -25,6 +25,9 @@ $dir: ltr !default;
 $left: if-ltr(left, right);
 $right: if-ltr(right, left);
 
+$first-child: if-ltr(":first-child", ":last-child");
+$last-child: if-ltr(":last-child", ":first-child");
+
 @function side-values($values) {
   @if $dir == rtl and length($values) >= 4 {
     // Reorder right and left positions in list

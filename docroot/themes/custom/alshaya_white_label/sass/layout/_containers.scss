@@ -1,5 +1,5 @@
 %l-container--full {
-  @include container($desktop);
+  @include container(1284px);
 }
 
 %l-container--center {
@@ -30,6 +30,7 @@
   .c-content__primary {
     @include breakpoint($desktop) {
       max-width: 735px;
+      width: 57.24%;
       float: $left;
     }
   }
@@ -37,6 +38,7 @@
   .c-content__secondary {
     @include breakpoint($desktop) {
       max-width: 420px;
+      width: 32.71%;
       float: $right;
     }
   }

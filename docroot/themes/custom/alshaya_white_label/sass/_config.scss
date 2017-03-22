@@ -32,7 +32,7 @@ $body_font: $arial;
 $screen: "only screen" !default;
 $mobile: 320px !default;
 $tablet: 768px !default;
-$desktop: 1284px !default;
+$desktop: 1024px !default;
 
 $upto-tablet: max-width $tablet - 1;
 $upto-desktop: max-width $desktop - 1;
@@ -45,9 +45,3 @@ $susy: (
   columns: 12,
   gutters: 1/4,
 );
-
-// Direction config ///////////////
-$left: left;
-$right: right;
-$first-child: ':first-child';
-$last-child: ':last-child';
