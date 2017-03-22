@@ -1,0 +1,9 @@
+# Schema for the configuration files of the Acquia Commerce module.
+
+acq_commerce.currency:
+  type: config_object
+  label: 'Currency Settings'
+  mapping:
+    currency_code:
+      type: label
+      label: 'Currency Code'
