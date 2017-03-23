@@ -30,4 +30,4 @@ slider_banner:
 owlcarousel:
   version: VERSION
   js:
-    js/vendor/owlcarousel.min.js: {}
+    libs/owlcarousel.min.js: {}
