@@ -101,7 +101,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $term_data = $term_data[$key]['child'];
 
     return [
-      '#theme' => 'alshaya_main_menu',
+      '#theme' => 'alshaya_main_menu_level1',
       '#term_tree' => $term_data,
     ];
   }

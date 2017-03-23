@@ -10,10 +10,28 @@
  */
 function alshaya_main_menu_theme($existing, $type, $theme, $path) {
   return [
-    'alshaya_main_menu' => [
-      'template' => 'alshaya-main-menu',
+    'alshaya_main_menu_level1' => [
+      'template' => 'alshaya-main-menu-level1',
       'variables' => [
         'term_tree' => NULL,
+      ],
+    ],
+    'alshaya_main_menu_level2' => [
+      'template' => 'alshaya-main-menu-level2',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+    'alshaya_main_menu_level3' => [
+      'template' => 'alshaya-main-menu-level3',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+    'alshaya_main_menu_level4' => [
+      'template' => 'alshaya-main-menu-level4',
+      'variables' => [
+        'data' => NULL,
       ],
     ],
   ];

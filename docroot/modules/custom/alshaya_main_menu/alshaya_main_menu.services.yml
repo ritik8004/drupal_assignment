@@ -1,0 +1,5 @@
+services:
+    alshaya_main_menu.twig.alshaya_main_menu_extensions:
+        class: Drupal\alshaya_main_menu\Twig\AlshayaMainMenuTwigExtension
+        tags:
+          - { name: twig.extension }
