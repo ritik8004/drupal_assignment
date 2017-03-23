@@ -173,7 +173,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
         if (!empty($images)) {
           foreach ($images as $image) {
             $file = File::load($image['target_id']);
-            $highlighted_images[] = file_create_url($file->getFileUri());
+            $highlight_images[] = file_create_url($file->getFileUri());
           }
         }
       }
