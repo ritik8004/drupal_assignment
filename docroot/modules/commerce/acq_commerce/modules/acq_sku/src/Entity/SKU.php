@@ -334,6 +334,57 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'));
 
+    // Get all the fields added by other modules and add them as base fields.
+    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+
+    // Check if we have additional fields to be added as base fields.
+    if (!empty($additionalFields) && is_array($additionalFields)) {
+      foreach ($additionalFields as $field_info) {
+        // Initialise the field variable.
+        $field = NULL;
+
+        // Showing the fields at the bottom.
+        $weight = 20 + count($fields);
+
+        switch ($field_info['type']) {
+          case 'string':
+            $field = BaseFieldDefinition::create('string');
+            $field->setDisplayOptions('view', [
+              'label' => 'above',
+              'type' => 'string',
+              'weight' => $weight,
+            ]);
+            $field->setDisplayOptions('form', [
+              'type' => 'string_textfield',
+              'weight' => $weight,
+            ]);
+            break;
+        }
+
+        // Check if we don't have the field type defined yet.
+        if (empty($field)) {
+          throw new \RuntimeException('Field type not defined yet, please contact TA.');
+        }
+
+        $field->setLabel(t($field_info['label']));
+
+        // Update cardinality with default value if empty.
+        $field_info['description'] = empty($field_info['description']) ? 1 : $field_info['description'];
+        $field->setDescription(t($field_info['description']));
+
+        // Update cardinality with default value if empty.
+        $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];
+        $field->setCardinality($field_info['cardinality']);
+
+
+        $field->setDisplayConfigurable('form', TRUE);
+        $field->setDisplayConfigurable('view', TRUE);
+
+        // We will use attr prefix to avoid conflicts with default base fields.
+        $fields['attr_' . $field_info['machine_name']] = $field;
+      }
+    }
+
     return $fields;
   }
 }

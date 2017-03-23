@@ -191,6 +191,9 @@ class ProductSyncResource extends ResourceBase {
         $sku->price->value = $product['price'];
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
+        // Update the fields based on the values from attributes.
+        $this->updateAttributeFields($sku, $product['attributes']);
+
         // Update upsell linked SKUs.
         $this->updateLinkedSkus('upsell', $sku, $product['linked']);
 
@@ -211,6 +214,9 @@ class ProductSyncResource extends ResourceBase {
           'price'      => $product['price'],
           'attributes' => $this->formatProductAttributes($product['attributes']),
         ));
+
+        // Update the fields based on the values from attributes.
+        $this->updateAttributeFields($sku, $product['attributes']);
 
         // Update upsell linked SKUs.
         $this->updateLinkedSkus('upsell', $sku, $product['linked']);
@@ -397,6 +403,31 @@ class ProductSyncResource extends ResourceBase {
 
     foreach ($fieldData as $delta => $value) {
       $sku->{$type}->set($delta, $value);
+    }
+  }
+
+  /**
+   * updateAttributeFields
+   *
+   * Update the fields based on the values from attributes.
+   *
+   * @param SKU $sku
+   * @param array $attributes
+   */
+  private function updateAttributeFields(SKU $sku, array $attributes) {
+    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+
+    // Loop through all the attributes available for this particular SKU.
+    foreach ($attributes as $key => $value) {
+      // Check if attribute is required by us.
+      if (isset($additionalFields[$key])) {
+        $field = $additionalFields[$key];
+
+        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+
+        $field_key = 'attr_' . $key;
+        $sku->{$field_key}->setValue($value);
+      }
     }
   }
 
