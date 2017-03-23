@@ -6,6 +6,7 @@
     transform: translate(-50%, 0);
     min-width: 240px;
   }
+
   @include breakpoint($tablet) {
     float: right;
     clear: right;
@@ -13,10 +14,12 @@
     margin-top: 1rem;
     min-width: 316px;
   }
+
   @include breakpoint($desktop) {
     max-width: 537px;
     width: 100%;
   }
+
   ul {
     @extend %list-clear;
   }

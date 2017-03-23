@@ -13,6 +13,7 @@
   @include breakpoint($tablet) {
     padding: 1.625rem 8px;
   }
+
   @include breakpoint($only-mobile) {
     position: relative;
   }
@@ -37,8 +38,8 @@
   }
 }
 
-.menu--about-brand,
-.menu--help {
+.c-footer-menu--about,
+.c-footer-menu--help {
   display: inline-block;
   margin-#{$right}: 1.625rem;
   vertical-align: top;
@@ -98,6 +99,7 @@
       line-height: 1.36;
       display: inline-block;
       width: 100%;
+
       @include breakpoint($only-mobile) {
         text-align: center;
       }

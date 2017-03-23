@@ -9,7 +9,7 @@
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
       $('.region__footer-primary').accordion({
-        header: 'h2'
+        header: '.is-accordion'
       });
     }
   };
