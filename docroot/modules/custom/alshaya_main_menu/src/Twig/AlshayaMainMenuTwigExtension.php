@@ -2,10 +2,29 @@
 
 namespace Drupal\alshaya_main_menu\Twig;
 
+use Drupal\Core\Render\RendererInterface;
+
 /**
  * Class AlshayaMainMenuTwigExtension.
  */
 class AlshayaMainMenuTwigExtension extends \Twig_Extension {
+
+  /**
+   * Renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * AlshayaMainMenuTwigExtension constructor.
+   *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Renderer service.
+   */
+  public function __construct(RendererInterface $renderer) {
+    $this->renderer = $renderer;
+  }
 
   /**
    * Alshaya 'alshaya_main_menu()' for twig.
@@ -23,7 +42,8 @@ class AlshayaMainMenuTwigExtension extends \Twig_Extension {
       '#theme' => $theme_name,
       '#data' => $data,
     ];
-    return \Drupal::service('renderer')->render($themable_data);
+
+    return $this->renderer->render($themable_data);
   }
 
   /**

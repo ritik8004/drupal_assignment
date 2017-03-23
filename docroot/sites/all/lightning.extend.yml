@@ -22,6 +22,7 @@ modules:
   - alshaya_custom
   - alshaya_default_content
   - alshaya_i18n
+  - alshaya_main_menu
   - alshaya_master
   - alshaya_menus
   - alshaya_newsletter
