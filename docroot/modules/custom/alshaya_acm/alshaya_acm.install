@@ -21,10 +21,17 @@ function alshaya_acm_install() {
       'type' => 'string',
     ],
     [
-      'machine_name' => 'material',
-      'label' => 'Material',
-      'description' => 'Molor attribute for the product.',
-      'cardinality' => BaseFieldDefinition::CARDINALITY_UNLIMITED,
+      'machine_name' => 'size',
+      'label' => 'Size',
+      'description' => 'Size attribute for the product.',
+      'cardinality' => 1,
+      'type' => 'string',
+    ],
+    [
+      'machine_name' => 'special_price',
+      'label' => 'Special price',
+      'description' => 'Special price attribute for the product.',
+      'cardinality' => 1,
       'type' => 'string',
     ],
   ];
