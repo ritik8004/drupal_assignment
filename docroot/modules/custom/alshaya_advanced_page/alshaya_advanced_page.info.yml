@@ -1,6 +1,7 @@
-name: 'Advanced Page'
+name: 'Alshaya Advanced Page'
 type: module
 core: 8.x
+description: 'Advanced Page CT and related settings.'
 dependencies:
   - alshaya_paragraphs
   - block

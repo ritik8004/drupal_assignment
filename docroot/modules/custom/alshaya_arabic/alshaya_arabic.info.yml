@@ -2,7 +2,7 @@ name: 'Alshaya Arabic'
 description: 'Enables Arabic language in the site.'
 type: module
 core: 8.x
-package: 'Custom'
+package: 'Alshaya'
 dependencies:
   - block
   - language
