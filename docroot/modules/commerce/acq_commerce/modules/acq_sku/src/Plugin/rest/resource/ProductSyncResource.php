@@ -191,15 +191,6 @@ class ProductSyncResource extends ResourceBase {
         $sku->price->value = $product['price'];
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
-        // Update the fields based on the values from attributes.
-        $this->updateAttributeFields($sku, $product['attributes']);
-
-        // Update upsell linked SKUs.
-        $this->updateLinkedSkus('upsell', $sku, $product['linked']);
-
-        // Update crosssell linked SKUs.
-        $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
-
         $this->logger->info(
           'Updating product SKU @sku.',
           array('@sku' => $product['sku'])
@@ -215,15 +206,6 @@ class ProductSyncResource extends ResourceBase {
           'attributes' => $this->formatProductAttributes($product['attributes']),
         ));
 
-        // Update the fields based on the values from attributes.
-        $this->updateAttributeFields($sku, $product['attributes']);
-
-        // Update upsell linked SKUs.
-        $this->updateLinkedSkus('upsell', $sku, $product['linked']);
-
-        // Update crosssell linked SKUs.
-        $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
-
         $display = $this->createDisplayNode($product);
 
         $this->logger->info(
@@ -233,6 +215,15 @@ class ProductSyncResource extends ResourceBase {
 
         $created++;
       }
+
+      // Update the fields based on the values from attributes.
+      $this->updateAttributeFields($sku, $product['attributes']);
+
+      // Update upsell linked SKUs.
+      $this->updateLinkedSkus('upsell', $sku, $product['linked']);
+
+      // Update crosssell linked SKUs.
+      $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
 
       $plugin_manager = \Drupal::service('plugin.manager.sku');
       $plugin_definition = $plugin_manager->pluginFromSKU($sku);
