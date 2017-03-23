@@ -3,10 +3,12 @@ status: false
 dependencies:
   config:
     - core.entity_view_mode.paragraph.326x288
+    - field.field.paragraph.1_row_3_col.field_1_row_promo_block
     - paragraphs.paragraphs_type.1_row_3_col
 id: paragraph.1_row_3_col.326x288
 targetEntityType: paragraph
 bundle: 1_row_3_col
 mode: 326x288
 content: {  }
-hidden: {  }
+hidden:
+  field_1_row_promo_block: true

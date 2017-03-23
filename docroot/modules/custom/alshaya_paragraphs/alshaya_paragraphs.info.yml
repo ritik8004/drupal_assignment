@@ -2,6 +2,7 @@ name: Paragraphs
 type: module
 core: 8.x
 dependencies:
+  - alshaya_advanced_page
   - alshaya_image_styles
   - block
   - content_translation
@@ -12,8 +13,10 @@ dependencies:
   - lightning_core
   - link
   - paragraphs
+  - path
   - system
   - text
+  - user
   - views
   - workbench_moderation
 version: 8.x-1.0

@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.department_page.body
+    - field.field.node.department_page.field_promo_blocks
+    - node.type.department_page
+  module:
+    - entity_reference_revisions
+    - text
+    - user
+id: node.department_page.default
+targetEntityType: node
+bundle: department_page
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+  field_promo_blocks:
+    weight: 102
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    type: entity_reference_revisions_entity_view
+  links:
+    weight: 100
+hidden:
+  langcode: true
