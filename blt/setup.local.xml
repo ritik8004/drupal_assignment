@@ -1,7 +1,7 @@
 <project name="custom" default="setup">
   <target name="refresh:local"
-          description="Refresh local dev environment."
-          depends="setup:build, setup:drupal:install, install-alias">
+          description="Setup local dev environment."
+          depends="local:setup">
     <echo>Allow editing settings.php file.</echo>
     <chmod mode="0755" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
     <chmod mode="0644" file="${docroot}/sites/${multisite.name}/settings.php" failonerror="false"/>
@@ -21,8 +21,8 @@
   </target>
 
   <target name="refresh:local:drupal"
-          description="Refresh local dev environment."
-          depends="local:drupal:install">
+          description="Reinstall local dev environment."
+          depends="setup:composer:install, local:drupal:install">
     <echo>Allow editing settings.php file.</echo>
     <chmod mode="0755" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
     <chmod mode="0644" file="${docroot}/sites/${multisite.name}/settings.php" failonerror="false"/>
