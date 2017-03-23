@@ -1,4 +1,25 @@
 .c-social-links {
+  @include breakpoint($only-mobile) {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+    min-width: 240px;
+  }
+
+  @include breakpoint($tablet) {
+    float: right;
+    clear: right;
+    text-align: right;
+    margin-top: 1rem;
+    min-width: 316px;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 537px;
+    width: 100%;
+  }
+
   ul {
     @extend %list-clear;
   }

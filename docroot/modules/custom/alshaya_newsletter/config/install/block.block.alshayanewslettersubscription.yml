@@ -13,8 +13,9 @@ provider: null
 plugin: alshaya_newsletter_subscription
 settings:
   id: alshaya_newsletter_subscription
-  label: 'Alshaya Newsletter'
+  label: 'Connect with us'
   provider: alshaya_newsletter
-  label_display: '0'
+  label_display: visible
   post_to_link: ''
+  subscription_post_url: ''
 visibility: {  }
