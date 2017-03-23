@@ -101,6 +101,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
           'label' => $term->label(),
           'description' => $term->getDescription(),
           'id' => $term->id(),
+          'path' => $term->get('path')->getValue()[0]['alias'],
           'highlight_image' => $this->getHighlightImage($term),
         ];
         $data[$term->id()]['child'] = $this->getChildTerms($term->id());
