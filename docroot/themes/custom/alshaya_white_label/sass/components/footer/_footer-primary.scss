@@ -10,6 +10,9 @@
   padding-bottom: 1.625rem;
   margin-top: 1.625rem;
 
+  @include breakpoint($tablet) {
+    padding: 1.625rem 8px;
+  }
   .l-container {
     @extend %l-container--full;
   }
@@ -17,6 +20,10 @@
 
 .c-footer-menu {
   @extend %list-clear;
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
 
   &__link {
     font-size: 0.875rem;
@@ -35,5 +42,64 @@
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
+
+    @include breakpoint($only-mobile) {
+      margin: 15px 0;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    width: 100%;
+    border-top: 1px solid $white;
+    margin: 0;
+    padding: 0 0.75em;
+    text-align: left;
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  margin: 0 8px 2.5rem;
+  display: inline-block;
+  @include breakpoint($tablet) {
+    float: right;
+    width: 42%;
+    margin: 0;
+  }
+  h2 {
+    font-size: 0.875rem;
+    color: $peacock-blue;
+    text-align: center;
+
+    @include breakpoint($tablet) {
+      text-align: left;
+    }
+  }
+  form {
+    position: relative;
+  }
+  .form-item {
+    font-size: 14px;
+    color: $brownish-grey;
+    label {
+      line-height: 1.36;
+      display: inline-block;
+      text-align: center;
+    }
+  }
+  #edit-email {
+    border-bottom: 1px solid $brownish-grey; ;
+    border-width: 0 0 1px 0;
+    margin-top: 1.6rem;
+    width: 100%;
+    height: 37px;
+  }
+  #edit-submit {
+    background: $windows-blue;
+    color: $white-five;
+    padding: 10px 22px;
+    border: 0;
+    position: absolute;
+    right: 0;
+    bottom: 1px;
   }
 }
