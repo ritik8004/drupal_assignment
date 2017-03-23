@@ -1,7 +1,7 @@
 name: 'Alshaya Custom'
 type: module
 description: 'Custom install for Alshaya sites'
-package: 'Custom'
+package: 'Alshaya'
 core: 8.x
 dependencies:
   - block

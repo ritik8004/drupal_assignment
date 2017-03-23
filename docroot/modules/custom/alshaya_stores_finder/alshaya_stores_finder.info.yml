@@ -1,6 +1,8 @@
-name: alshaya_stores_finder
+name: 'Alshaya Stores Finder'
 type: module
 core: 8.x
+package: 'Alshaya'
+description: 'Alshaya stores CT and related settings.'
 dependencies:
   - alshaya_stores_finder
   - block
