@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya sites.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_install() {
+  // Add fields to store the values from attributes as fields.
+  $fields = [
+    [
+      'machine_name' => 'color',
+      'label' => 'Color',
+      'description' => 'Color attribute for the product.',
+      'cardinality' => 1,
+      'type' => 'string',
+    ],
+    [
+      'machine_name' => 'size',
+      'label' => 'Size',
+      'description' => 'Size attribute for the product.',
+      'cardinality' => 1,
+      'type' => 'string',
+    ],
+    [
+      'machine_name' => 'special_price',
+      'label' => 'Special price',
+      'description' => 'Special price attribute for the product.',
+      'cardinality' => 1,
+      'type' => 'string',
+    ],
+  ];
+
+  // Call the helper function to add the base fields in acq_sku entity.
+  acq_sku_add_base_fields($fields);
+}

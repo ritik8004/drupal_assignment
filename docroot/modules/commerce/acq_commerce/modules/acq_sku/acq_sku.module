@@ -33,3 +33,45 @@ function acq_sku_preprocess_acq_sku(&$variables) {
   }
 
 }
+
+/**
+ * Function to allow custom modules to add base fields for acq_sku entity type.
+ *
+ * @param array $fields
+ *   An associative array containing fields, each field must have:
+ *   - machine_name: This must be the same as the attribute key.
+ *   - label: Label to be used for admin forms and display.
+ *   - description: Description of the field to be used in admin forms.
+ *   - cardinality: Number of values allowed to be stored.
+ *   - type: Type of the field.
+ *   - weight: Default weight of the field in form and display.
+ */
+function acq_sku_add_base_fields(array $fields) {
+  // Get the fields from config.
+  $configFactory = \Drupal::configFactory()->getEditable('acq_sku.base_field_additions');
+  $additionalFields = $configFactory->getRawData();
+
+  // Initialise with array if required.
+  $additionalFields = empty($additionalFields) || !is_array($additionalFields) ? [] : $additionalFields;
+
+  foreach ($fields as $field) {
+    // Confirm we have minimum required data available to create the fields.
+    if (empty($field['machine_name']) || empty($field['label'])) {
+      throw new \Exception('Fields machine name and Label cannot be empty.');
+    }
+
+    // Check if the field is already available in config.
+    if (isset($additionalFields[$field['machine_name']])) {
+      throw new \Exception('Field machine name used already.');
+    }
+
+    // Add the field to storedFields so we store them to config.
+    $additionalFields[$field['machine_name']] = $field;
+  }
+
+  // Store the fields in config.
+  $configFactory->setData($additionalFields)->save();
+
+  // Apply entity updates.
+  \Drupal::service("entity.definition_update_manager")->applyUpdates();
+}
