@@ -12,6 +12,7 @@ $info = [
     'primary' => t('Primary color'),
     'secondary' => t('Secondary color'),
     'tertiary' => t('Tertiary color'),
+    'delivery' => t('Delivery Menu'),
   ],
   'schemes' => [
     'default' => [
@@ -22,6 +23,7 @@ $info = [
         'primary' => '#0060aa',
         'secondary' => '#d9efff',
         'tertiary' => '#ff6d22',
+        'delivery' => '#6aade4',
       ],
     ],
   ],
