@@ -194,8 +194,8 @@ class ProductSyncResource extends ResourceBase {
         // Update upsell linked SKUs.
         $this->updateLinkedSkus('upsell', $sku, $product['linked']);
 
-        // Update crossell linked SKUs.
-        $this->updateLinkedSkus('crossell', $sku, $product['linked']);
+        // Update crosssell linked SKUs.
+        $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
 
         $this->logger->info(
           'Updating product SKU @sku.',
