@@ -67,3 +67,4 @@ To prepare your local env:
   * `drush @alshaya.local alshaya-acm-offline-products-sync`
 
 Next builds can be done using: `blt refresh:local:drupal`
+Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
