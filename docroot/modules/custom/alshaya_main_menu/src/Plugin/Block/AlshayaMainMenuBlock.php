@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\file\Entity\File;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,6 +29,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $entityManager;
 
   /**
+   * The entity repository service.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * AlshayaMegaMenuBlock constructor.
    *
    * @param array $configuration
@@ -38,10 +46,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Plugin defination.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityManager = $entity_manager;
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -52,7 +63,8 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('entity.repository')
     );
   }
 
@@ -97,6 +109,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $terms = $this->entityManager->getStorage('taxonomy_term')->loadTree('acq_product_category', $parent_tid, $depth, TRUE);
     if ($terms) {
       foreach ($terms as $term) {
+        $term = $this->entityRepository->getTranslationFromContext($term);
         $data[$term->id()] = [
           'label' => $term->label(),
           'description' => $term->getDescription(),
