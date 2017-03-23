@@ -337,6 +337,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Get all the fields added by other modules and add them as base fields.
     $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
 
+    // Get the default weight increment value from variables.
+    $defaultWeightIncrement = \Drupal::state()->get('acq_sku.base_field_weight_increment', 20);
+
     // Check if we have additional fields to be added as base fields.
     if (!empty($additionalFields) && is_array($additionalFields)) {
       foreach ($additionalFields as $field_info) {
@@ -344,7 +347,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $field = NULL;
 
         // Showing the fields at the bottom.
-        $weight = 20 + count($fields);
+        $weight = $defaultWeightIncrement + count($fields);
 
         switch ($field_info['type']) {
           case 'string':
