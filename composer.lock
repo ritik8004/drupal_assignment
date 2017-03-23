@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "12a076b6f879c4993b34af7731b2e395",
-    "content-hash": "041d48b86a112c26b7e366812876fccf",
+    "hash": "7f3576d2d312ec7f22b5e70ea9356adb",
+    "content-hash": "f34bc0475b43113920b74753baa97c08",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1512,7 +1512,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.8.zip",
-                "reference": null,
+                "reference": "8.x-1.8",
                 "shasum": "457e44a9a9411c4d54dfd7284a1b55e6ed5a4ed3"
             },
             "require": {
@@ -4273,11 +4273,17 @@
         },
         {
             "name": "drupal/password_policy",
-            "version": "dev-3.x",
+            "version": "3.0.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/password_policy",
-                "reference": "8ee51e4e58b1b9493867c43ddfecbdac20e04b0c"
+                "reference": "8.x-3.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/password_policy-8.x-3.0-alpha3.zip",
+                "reference": null,
+                "shasum": "efe3ac404276ab2274b29393e55f6a4b7fb58681"
             },
             "require": {
                 "drupal/core": "*",
@@ -4289,8 +4295,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha3+3-dev",
-                    "datestamp": "1488167584"
+                    "version": "8.x-3.0-alpha3",
+                    "datestamp": "1488135183"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4323,8 +4329,7 @@
             "homepage": "https://www.drupal.org/project/password_policy",
             "support": {
                 "source": "http://cgit.drupalcode.org/password_policy"
-            },
-            "time": "2017-02-27 15:47:09"
+            }
         },
         {
             "name": "drupal/pathauto",
@@ -9132,7 +9137,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-02-27 00:07:03"
+            "time": "2017-03-22 15:40:09"
         },
         {
             "name": "vierbergenlars/php-semver",
@@ -10509,7 +10514,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/devel-8.x-1.0-rc1.zip",
-                "reference": null,
+                "reference": "8.x-1.0-rc1",
                 "shasum": "04a01f50d508eca70e065b7eba38cd6c83a436c0"
             },
             "require": {
@@ -11382,8 +11387,7 @@
         "drupal/menu_admin_per_menu": 5,
         "drupal/menu_link_attributes": 10,
         "drupal/search_api_solr": 10,
-        "drupal/default_content": 15,
-        "drupal/password_policy": 20
+        "drupal/default_content": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
