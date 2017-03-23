@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\file\Entity\File;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -34,6 +35,20 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
    */
   protected $entityRepository;
+
+  /**
+   * Vocabulary processed data.
+   *
+   * @var array
+   */
+  protected $termData = [];
+
+  /**
+   * Array of terms for cache bubbling up.
+   *
+   * @var array
+   */
+  protected $cacheTags = [];
 
   /**
    * AlshayaMegaMenuBlock constructor.
@@ -72,7 +87,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
-    $term_data = $this->getChildTerms();
+    $term_data = $this->termData;
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
@@ -109,7 +124,12 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $terms = $this->entityManager->getStorage('taxonomy_term')->loadTree('acq_product_category', $parent_tid, $depth, TRUE);
     if ($terms) {
       foreach ($terms as $term) {
+        // For language specific data.
         $term = $this->entityRepository->getTranslationFromContext($term);
+
+        // For cache tag bubbling up.
+        $this->cacheTags[] = 'taxonomy_term:' . $term->id();
+
         $data[$term->id()] = [
           'label' => $term->label(),
           'description' => $term->getDescription(),
@@ -160,6 +180,19 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     return $highlight_images;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    // Processed vocabulary data.
+    $this->termData = $this->getChildTerms();
+
+    return Cache::mergeTags(
+      parent::getCacheTags(),
+      $this->cacheTags
+    );
   }
 
 }
