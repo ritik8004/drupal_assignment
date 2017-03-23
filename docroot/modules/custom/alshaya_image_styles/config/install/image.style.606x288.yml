@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 606x288
+label: 606x288
+effects:
+  d71da8b7-8ad8-4bb0-80ca-f5ecb5bacba3:
+    uuid: d71da8b7-8ad8-4bb0-80ca-f5ecb5bacba3
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 606
+      height: 288

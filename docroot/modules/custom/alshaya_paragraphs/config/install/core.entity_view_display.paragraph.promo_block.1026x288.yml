@@ -7,6 +7,7 @@ dependencies:
     - field.field.paragraph.promo_block.field_link
     - field.field.paragraph.promo_block.field_subtitle
     - field.field.paragraph.promo_block.field_title
+    - image.style.1026x288
     - paragraphs.paragraphs_type.promo_block
   module:
     - image
@@ -20,7 +21,7 @@ content:
     weight: 0
     label: above
     settings:
-      image_style: ''
+      image_style: 1026x288
       image_link: ''
     third_party_settings: {  }
     type: image

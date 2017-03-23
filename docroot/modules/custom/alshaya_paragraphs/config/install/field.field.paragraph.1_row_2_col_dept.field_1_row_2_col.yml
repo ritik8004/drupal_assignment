@@ -1,0 +1,56 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_1_row_2_col
+    - paragraphs.paragraphs_type.1_row_2_col_dept
+    - paragraphs.paragraphs_type.promo_block
+  module:
+    - entity_reference_revisions
+id: paragraph.1_row_2_col_dept.field_1_row_2_col
+field_name: field_1_row_2_col
+entity_type: paragraph
+bundle: 1_row_2_col_dept
+label: '1 row 2 col'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      promo_block: promo_block
+    target_bundles_drag_drop:
+      1_row_2_col_dept:
+        weight: 11
+        enabled: false
+      1_row_1_col:
+        weight: 12
+        enabled: false
+      1_row_1_col_dept:
+        weight: 13
+        enabled: false
+      1_row_1st_col_2_row_2nd_col:
+        weight: 14
+        enabled: false
+      1_row_3_col:
+        weight: 15
+        enabled: false
+      1_row_3_col_dept:
+        weight: 16
+        enabled: false
+      banner:
+        weight: 17
+        enabled: false
+      banner_full_width:
+        weight: 18
+        enabled: false
+      promo_block:
+        enabled: true
+        weight: 19
+      related_info_one_column:
+        weight: 20
+        enabled: false
+field_type: entity_reference_revisions
