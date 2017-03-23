@@ -1,0 +1,66 @@
+@import "../../config";
+@import "../../utils";
+@import "owl.carousel";
+
+.c-slider__paragraph {
+  position: relative;
+
+  a {
+    @extend %u-overlay-content;
+    @extend %u-image-replacement;
+  }
+}
+
+.c-slider__items {
+  position: relative;
+}
+
+.owl-nav {
+  .disabled {
+    @extend %is-hidden;
+  }
+}
+
+.owl-prev,
+.owl-next {
+  @extend %u-image-replacement;
+
+  background-color: rgba(255, 255, 255, 0.25);
+  background-image: url("../imgs/icons/icon-chevron-next.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 100%;
+  height: 2.25rem;
+  position: absolute;
+  top: calc(50% - 1.125rem); // 50% - (2.25rem / 2)
+  width: 2.25rem;
+}
+
+.owl-prev {
+  float: left;
+  left: 1.65rem;
+  transform: rotate(-180deg);
+}
+
+.owl-next {
+  float: left;
+  right: 1.65rem;
+}
+
+.owl-dots {
+  text-align: center;
+}
+
+.owl-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 100%;
+  color: $peacock-blue;
+  border: 1px solid currentColor;
+  display: inline-block;
+  margin: 1.75rem 1rem;
+
+  &.active {
+    background: currentColor;
+  }
+}

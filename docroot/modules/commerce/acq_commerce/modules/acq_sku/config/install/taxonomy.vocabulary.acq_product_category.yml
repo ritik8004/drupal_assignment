@@ -1,0 +1,9 @@
+uuid: e5657a47-40ed-4023-989c-101e95213472
+langcode: en
+status: true
+dependencies: {  }
+name: 'Product Category'
+vid: acq_product_category
+description: 'Product categories used to sort products.'
+hierarchy: 0
+weight: 0

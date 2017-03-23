@@ -1,0 +1,21 @@
+// Image Replacement
+%u-image-replacement {
+  border: 0;
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+}
+
+// Overlay Content
+%u-overlay-content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+// is-
+%is-hidden {
+  display: none;
+}

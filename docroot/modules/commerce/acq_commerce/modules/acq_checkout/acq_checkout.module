@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Contains acq_checkout.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function acq_checkout_theme() {
+  $theme = [
+    'acq_checkout_progress' => [
+      'variables' => [
+        'steps' => [],
+      ],
+    ],
+  ];
+
+  return $theme;
+}

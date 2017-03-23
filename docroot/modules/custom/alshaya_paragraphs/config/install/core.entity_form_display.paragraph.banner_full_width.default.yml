@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.banner_full_width.field_banner
+    - image.style.thumbnail
+    - paragraphs.paragraphs_type.banner_full_width
+  module:
+    - image
+    - workbench_moderation
+id: paragraph.banner_full_width.default
+targetEntityType: paragraph
+bundle: banner_full_width
+mode: default
+content:
+  field_banner:
+    weight: 6
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+hidden:
+  created: true
+  status: true
+  uid: true

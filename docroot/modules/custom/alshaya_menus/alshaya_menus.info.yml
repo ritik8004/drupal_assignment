@@ -1,0 +1,11 @@
+name: alshaya_menus
+type: module
+core: 8.x
+dependencies:
+  - block
+  - menu_admin_per_menu
+  - menu_link_attributes
+  - system
+  - views
+version: 8.x-1.0
+package: Alshaya

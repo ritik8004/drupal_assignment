@@ -1,4 +1,5 @@
 # Update the hostname to the local development environment hostname
+vagrant_ip: 192.168.25.74
 vagrant_hostname: local.alshaya.com
 vagrant_machine_name: alshaya
 
@@ -37,9 +38,9 @@ install_site: false
 configure_drush_aliases: false
 
 # This is required for front-end building tools.
-nodejs_version: "4.x"
+nodejs_version: "6.x"
 nodejs_npm_global_packages:
-  - name: bower
+  - name: yarn
   - name: gulp-cli
 nodejs_install_npm_user: "{{ drupalvm_user }}"
 npm_config_prefix: "/home/{{ drupalvm_user }}/.npm-global"
@@ -72,3 +73,11 @@ php_xdebug_remote_port: "9000"
 post_provision_tasks_dir: "../../../acquia/blt/scripts/drupal-vm/post-provision.yml"
 post_provision_scripts:
   - "../../../acquia/blt/scripts/drupal-vm/post-provision.sh"
+
+apache_vhosts_ssl:
+  - servername: "{{ drupal_domain }}"
+    documentroot: "{{ drupal_core_path }}"
+    certificate_file: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+    certificate_key_file: "/etc/ssl/private/ssl-cert-snakeoil.key"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ drupal_core_path }}"

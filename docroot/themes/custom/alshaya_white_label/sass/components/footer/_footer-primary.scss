@@ -1,0 +1,39 @@
+// Footer
+//
+// Markup: footer-primary.twig
+//
+// Style guide: component.footer-primary
+
+.c-footer-primary {
+  border-top: 2px solid $peacock-blue;
+  padding-top: 1.625rem;
+  padding-bottom: 1.625rem;
+  margin-top: 1.625rem;
+
+  .l-container {
+    @extend %l-container--full;
+  }
+}
+
+.c-footer-menu {
+  @extend %list-clear;
+
+  &__link {
+    font-size: 0.875rem;
+    color: $brownish-grey;
+    line-height: 2.14;
+    text-decoration: none;
+  }
+}
+
+.menu--about-brand,
+.menu--help {
+  display: inline-block;
+  margin-#{$right}: 1.625rem;
+  vertical-align: top;
+
+  h2 {
+    font-size: 0.875rem;
+    color: $peacock-blue;
+  }
+}

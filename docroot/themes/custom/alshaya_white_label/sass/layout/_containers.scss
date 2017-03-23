@@ -1,0 +1,45 @@
+%l-container--full {
+  @include container($desktop-wide);
+}
+
+%l-container--center {
+  @include container(65.625rem);
+}
+
+// One Column
+.l-column--one {
+  &.l-container {
+    @extend %l-container--center;
+  }
+}
+
+// Two Column
+.l-column--two {
+  &.l-container {
+    @extend %l-container--full;
+  }
+
+  .c-content__container {
+    padding: 0 0.5rem;
+
+    @include breakpoint($desktop) {
+      padding: 0 1.5rem;
+    }
+  }
+
+  .c-content__primary {
+    @include breakpoint($desktop) {
+      max-width: 735px;
+      width: 57.24%;
+      float: $left;
+    }
+  }
+
+  .c-content__secondary {
+    @include breakpoint($desktop) {
+      max-width: 420px;
+      width: 32.71%;
+      float: $right;
+    }
+  }
+}

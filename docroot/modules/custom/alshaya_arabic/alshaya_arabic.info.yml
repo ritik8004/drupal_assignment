@@ -1,0 +1,11 @@
+name: 'Alshaya Arabic'
+description: 'Enables Arabic language in the site.'
+type: module
+core: 8.x
+package: 'Custom'
+dependencies:
+  - block
+  - language
+  - system
+  - views
+version: 8.x-1.0

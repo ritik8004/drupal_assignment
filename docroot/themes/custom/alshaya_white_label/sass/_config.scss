@@ -1,0 +1,48 @@
+// Colors ///////////////
+$black: #000;
+$black-two: #333;
+$brownish-grey: #666;
+$white-three: #ebebeb;
+$white-four: #f7f7f7;
+$cobalt-blue: #001b96;
+$off-blue: #5482ab;
+$white-five: #fff;
+$tealish: #3ad6c5;
+$greyish: #adadad;
+$white-two: #e5e5e5;
+$white: #ddd;
+$slime-green: #94d400;
+$pumpkin-orange: #ff6d22;
+$maize: #f3cf45;
+$rosy-pink: #f36682;
+$deep-pink: #c90062;
+$cherry: #c60c30;
+$soft-blue: #6aade4;
+$cerulean: #0080ce;
+$dark-sand: #ac8e54;
+$peacock-blue: #0060aa;
+$windows-blue: #3680cb;
+$very-light-blue: #d9efff;
+
+// Fonts ///////////////
+$arial: 'arialmt';
+$body_font: $arial;
+
+// Breakpoints ///////////////
+$screen: "only screen" !default;
+$mobile: 320px !default;
+$tablet: 768px !default;
+$desktop: 1025px !default;
+$desktop-wide: 1284px !default;
+
+$upto-tablet: max-width $tablet - 1;
+$upto-desktop: max-width $desktop - 1;
+
+$only-mobile: 0 $tablet - 1;
+$only-tablet: $tablet $desktop - 1;
+
+// Grid config ///////////////
+$susy: (
+  columns: 12,
+  gutters: 1/4,
+);

@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.1_row_3_col.field_1_row_promo_block
+    - paragraphs.paragraphs_type.1_row_3_col
+  module:
+    - paragraphs
+    - workbench_moderation
+id: paragraph.1_row_3_col.default
+targetEntityType: paragraph
+bundle: 1_row_3_col
+mode: default
+content:
+  field_1_row_promo_block:
+    type: entity_reference_paragraphs
+    weight: 6
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
+  uid: true

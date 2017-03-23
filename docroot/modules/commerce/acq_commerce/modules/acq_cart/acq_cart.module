@@ -1,0 +1,47 @@
+<?php
+
+use Drupal\acq_cart\Entity\Order;
+use Drupal\acq_cart\Entity\LineItem;
+use Drupal\acq_product\Entity\Product;
+
+/**
+ * @file
+ * Provides base hooks to the cart functionality of Acquia Commerce connector.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function acq_cart_preprocess_acq_sku(&$variables) {
+  // We would rather allow modules to implement the preprocess hook directly,
+  // however the main issue there is that we can't disable cart separately so
+  // we provide a hook that's only called if this module is enabled on display.
+  \Drupal::moduleHandler()->alter('add_to_cart_display', $variables);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function acq_cart_theme($existing, $type, $theme, $path) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()
+    ->get('acq_commerce.currency');
+
+  // Fetch the currency format from the config factor.
+  $currency_format = $config->get('currency_code');
+
+  // Fetch the currency code position.
+  $currency_code_position = $config->get('currency_code_position');
+
+  return array(
+    'acq_cart_mini_cart' => array(
+      'variables' => array(
+        'quantity' => 0,
+        'total' => NULL,
+        'currency_format' => $currency_format,
+        'currency_code_position' => $currency_code_position
+      ),
+      'template' => 'block--acqminicart',
+    ),
+  );
+}

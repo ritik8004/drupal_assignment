@@ -1,0 +1,33 @@
+global_styles:
+  version: VERSION
+  css:
+    theme:
+      css/styles.css: {}
+
+rtl_styles:
+  version: VERSION
+  css:
+    theme:
+      css/rtl.css: {}
+
+color_styles:
+  version: VERSION
+  css:
+    theme:
+      css/colors.css: {}
+
+slider_banner:
+  version: VERSION
+  css:
+  theme:
+    css/components/slider/slider-banner.css: {}
+  js:
+    js/slider.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_white_label/owlcarousel
+
+owlcarousel:
+  version: VERSION
+  js:
+    js/vendor/owlcarousel.min.js: {}

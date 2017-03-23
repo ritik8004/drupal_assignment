@@ -1,0 +1,11 @@
+name: 'Alshaya master'
+type: module
+core: 8.x
+dependencies:
+  - acq_cart
+  - alshaya_i18n
+  - block
+  - block_content
+  - system
+  - views
+version: 8.x-1.0

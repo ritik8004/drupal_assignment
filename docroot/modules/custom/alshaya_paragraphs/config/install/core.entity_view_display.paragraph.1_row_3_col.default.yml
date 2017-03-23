@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.1_row_3_col.field_1_row_promo_block
+    - paragraphs.paragraphs_type.1_row_3_col
+  module:
+    - entity_reference_revisions
+id: paragraph.1_row_3_col.default
+targetEntityType: paragraph
+bundle: 1_row_3_col
+mode: default
+content:
+  field_1_row_promo_block:
+    type: entity_reference_revisions_entity_view
+    weight: 0
+    label: above
+    settings:
+      view_mode: 326x288
+      link: ''
+    third_party_settings: {  }
+hidden: {  }

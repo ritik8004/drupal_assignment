@@ -1,0 +1,170 @@
+// Header
+//
+// Markup: header.twig
+//
+// Style guide: component.header
+
+/*
+	SITE HEADER - TOP LEVEL MENU
+*/
+
+.c-menu-secondary {
+  border-bottom: 1px solid $white;
+
+  a {
+    color: $brownish-grey;
+  }
+
+  .c-menu-secondary__region {
+    text-align: $right;
+    padding: 6.5px 0;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+    display: inline-block;
+    padding-#{$left}: 16px;
+    padding-#{$right}: 35px;
+    position: relative;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      color: $peacock-blue;
+    }
+  }
+
+  nav#block-alshaya-white-label-account-menu,
+  #block-languageswitcher,
+  .block-alshaya-stores-finder {
+    display: inline-block;
+
+    a {
+      font-size: 0.75rem;
+      padding-bottom: 1px;
+    }
+  }
+
+  .menu,
+  .block-alshaya-stores-finder {
+    a {
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        top: 2px;
+        right: -10px;
+        left: -10px;
+      }
+    }
+
+    .register-link::before {
+      background: url('../imgs/assets/register.svg') no-repeat;
+    }
+
+    li:last-child a::before {
+      background: url('../imgs/assets/sign-in.svg') no-repeat;
+    }
+
+    a.stores-finder::before {
+      background: url('../imgs/assets/find-us.svg') no-repeat;
+    }
+  }
+
+  .block-alshaya-stores-finder {
+    display: inline-block;
+    padding-#{$left}: 16px;
+    padding-#{$right}: 35px;
+    position: relative;
+
+    a {
+      color: $peacock-blue;
+    }
+  }
+
+  #block-languageswitcher {
+    position: relative;
+
+    ul {
+      &::before {
+        content: '';
+        background: url('../imgs/assets/lang.svg') no-repeat;
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        top: 2px;
+        right: -10px;
+        left: -10px;
+      }
+
+      .is-active {
+        display: none;
+      }
+    }
+  }
+}
+
+/*
+	SITE HEADER - BRANDING
+*/
+
+header {
+  .c-header__region {
+    margin: 15px 25px;
+  }
+
+  .block-system-branding-block {
+    float: $left;
+  }
+
+  .block-cart-mini-block {
+    float: $right;
+  }
+
+  .block-cart-mini-block {
+    font-size: 0.875rem;
+
+    .total {
+      font-weight: bold;
+      margin-#{$right}: 20px;
+
+      .prefix {
+        font-weight: normal;
+        vertical-align: bottom;
+        margin-#{$right}: 6px;
+      }
+    }
+
+    .cart-link {
+      background: url('../imgs/assets/cart.svg') no-repeat;
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      position: relative;
+      margin-bottom: -2px;
+    }
+
+    .quantity {
+      position: absolute;
+      background: url('../imgs/assets/indicator-shape.svg') no-repeat;
+      color: $white-five;
+      text-align: center;
+      width: 24px;
+      height: 24px;
+      bottom: -8px;
+      left: 4px;
+      border-radius: 50%;
+      padding: 5px;
+    }
+  }
+}

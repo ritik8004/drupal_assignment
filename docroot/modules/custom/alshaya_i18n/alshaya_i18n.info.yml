@@ -1,0 +1,13 @@
+name: alshaya_i18n
+type: module
+core: 8.x
+dependencies:
+  - block
+  - content_translation
+  - config_translation
+  - locale
+  - language
+  - system
+  - views
+  - alshaya_custom
+version: 8.x-1.0

@@ -1,0 +1,8 @@
+name: 'Alshaya default content'
+type: module
+package: 'Custom'
+core: 8.x
+dependencies:
+  - alshaya_master
+  - alshaya_menus
+  - default_content

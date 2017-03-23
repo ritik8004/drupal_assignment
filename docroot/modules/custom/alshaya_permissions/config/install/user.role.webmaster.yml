@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies: {  }
+id: webmaster
+label: Webmaster
+weight: 11
+is_admin: null
+permissions:
+  - 'access content overview'
+  - 'access toolbar'
+  - 'administer about-brand menu items'
+  - 'administer footer-logos menu items'
+  - 'administer help menu items'
+  - 'administer social-links menu items'
+  - 'create advanced_page content'
+  - 'delete any advanced_page content'
+  - 'delete own advanced_page content'
+  - 'edit any acq_product content'
+  - 'edit any advanced_page content'
+  - 'edit own advanced_page content'
+  - 'use text format rich_text'
+  - 'create url aliases'
+  - 'administer url aliases'
+  - 'administer pathauto'
+  - 'view the administration theme'
+  - 'edit terms in acq_product_category'

@@ -1,7 +1,7 @@
 project:
   machine_name: alshaya
-  prefix: MMCSP
-  human_name: 'Alshaya'
+  prefix: MMCPA
+  human_name: Alshaya
   profile:
     name: lightning
   local:
@@ -10,7 +10,8 @@ project:
 git:
   default_branch: develop
   remotes:
-    - alshayasde@svn-6182.devcloud.hosting.acquia.com:alshayasde.git
+#    - 'alshayasde@svn-6182.devcloud.hosting.acquia.com:alshayasde.git'
+    - 'alshayaec@svn-25.enterprise-g1.hosting.acquia.com:alshayaec.git'
 drush:
   aliases:
     remote: '${project.machine_name}.test'
@@ -19,11 +20,11 @@ drush:
   default_alias: '${drush.aliases.local}'
 target-hooks:
   frontend-setup:
-    dir: '${docroot}'
-    command: 'echo ''No frontend-setup configured.'''
+    dir: '${docroot}/themes/custom/alshaya_white_label'
+    command: 'npm run install-tools'
   frontend-build:
-    dir: '${docroot}'
-    command: 'echo ''No frontend-build configured.'''
+    dir: '${docroot}/themes/custom/alshaya_white_label'
+    command: 'npm run build'
   pre-config-import:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
@@ -50,4 +51,18 @@ modules:
   prod:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
+behat:
+  # If true, Selenium standalone server will be launched with Behat.
+  launch-selenium: false
+  # If true, PhantomJS GhostDriver will be launched with Behat.
+  launch-phantomjs: true
+  # An array of paths with behat tests that should be executed.
+  paths:
+    - '${repo.root}/tests/behat'
+  tags: '~ajax&&~experimental&&~lightningextension&&~example'
 
+multisite:
+  name:
+    - g
+
+import: '${repo.root}/blt/setup.local.xml'

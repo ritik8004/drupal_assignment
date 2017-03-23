@@ -1,0 +1,54 @@
+.c-delivery-menu {
+  @extend %l-container--full;
+
+  background: $soft-blue;
+  padding: 0;
+  text-transform: lowercase;
+}
+
+.c-delivery-menu__tab {
+  text-align: center;
+  list-style: none;
+  padding: 1px 0;
+  width: 100%;
+  float: #{$left};
+
+  @include breakpoint($only-mobile) {
+    &:nth-child(n + 2) {
+      display: none;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    width: 50%;
+
+    &:first-child {
+      border-#{$right}: 1px solid $white-five;
+    }
+
+    &:last-child {
+      display: none;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 26.5625rem;
+    width: 33.33%;
+
+    &:nth-child(2) {
+      border-#{$right}: 1px solid $white-five;
+      border-#{$left}: 1px solid $white-five;
+    }
+  }
+}
+
+.c-delivery-menu__link {
+  color: $white-five;
+  display: block;
+  padding: 0.375rem 0;
+  text-decoration: none;
+}
+
+.c-delivery-menu__description {
+  font-size: 0.875rem;
+}

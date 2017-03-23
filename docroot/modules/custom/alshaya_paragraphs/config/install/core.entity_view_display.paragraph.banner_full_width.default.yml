@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.banner_full_width.field_banner
+    - image.style.1284x424
+    - paragraphs.paragraphs_type.banner_full_width
+  module:
+    - image
+id: paragraph.banner_full_width.default
+targetEntityType: paragraph
+bundle: banner_full_width
+mode: default
+content:
+  field_banner:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: 1284x424
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+hidden: {  }

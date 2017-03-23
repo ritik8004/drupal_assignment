@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.advanced_page.body
+    - field.field.node.advanced_page.field_banner
+    - field.field.node.advanced_page.field_related_info
+    - field.field.node.advanced_page.field_slider
+    - node.type.advanced_page
+  module:
+    - text
+    - user
+id: node.advanced_page.teaser
+targetEntityType: node
+bundle: advanced_page
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+  links:
+    weight: 100
+  workbench_moderation_control:
+    weight: -20
+hidden:
+  field_banner: true
+  field_related_info: true
+  field_slider: true
+  langcode: true

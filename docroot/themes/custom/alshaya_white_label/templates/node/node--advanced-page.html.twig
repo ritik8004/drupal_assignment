@@ -1,0 +1,72 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+
+<article {{ attributes.addClass(classes) }}>
+  <div class="c-content">
+    <div class="l-container {{ content.field_related_info | render ? 'l-column--two' : 'l-column--one' }}">
+      {% if content.field_banner %}
+        <div class="c-content__banner">
+          {{ content.field_banner }}
+        </div>
+      {% endif %}
+
+      {% if content.field_slider %}
+        <div class="c-content__slider">
+          {{ content.field_slider }}
+        </div>
+      {% endif %}
+
+      <div class="c-content__container clearfix">
+        <div class="c-content__primary">
+          {% if title_prefix or title_suffix or display_submitted or unpublished or page is empty and label %}
+            <header>
+              {{ title_prefix }}
+              {% if label %}
+                <h2{{ title_attributes.addClass("c-content__title") }}>
+                  <a href="{{ url }}">{{ label }}</a>
+                </h2>
+              {% endif %}
+              {{ title_suffix }}
+
+              {% if unpublished %}
+                <p class="unpublished">{{ 'Unpublished'|t }}</p>
+              {% endif %}
+            </header>
+          {% endif %}
+          <div class="c-content__body">
+            {{ content.body }}
+          </div>
+        </div>
+
+        {% if content.field_related_info | render %}
+          <div class="c-content__secondary c-related-info">
+            {{ content.field_related_info }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <!-- /content -->
+
+  {% if content.links.terms %}
+    <div class="terms">
+      {{ content.links.terms }}
+    </div>
+    <!-- /terms -->
+  {% endif %}
+
+  {% if content.links %}
+    <div class="links">
+      {{ content.links }}
+    </div>
+    <!-- /links -->
+  {% endif %}
+
+  {{ content.comment }}
+</article>
+<!-- /article #node -->

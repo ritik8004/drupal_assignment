@@ -35,7 +35,8 @@ cache:
 
 addons:
   ssh_known_hosts:
-  # - svn-4786.devcloud.hosting.acquia.com
+  - svn-6182.devcloud.hosting.acquia.com
+  - svn-25.enterprise-g1.hosting.acquia.com
 
 # @see https://docs.travis-ci.com/user/notifications
 notifications:
@@ -52,6 +53,8 @@ before_install:
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
   - source $BLT_DIR/scripts/travis/setup_project
+  - nvm install 6.10.0
+  - nvm use 6.10.0
 
 script:
   - source $BLT_DIR/scripts/travis/run_tests
