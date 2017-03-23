@@ -65,6 +65,9 @@ function alshaya_custom_modules_installed($modules) {
   // Set the 'header' region.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')->set('region', 'header')->save();
 
+  // Set search block to available on all pages.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')->set('visibility', [])->save();
+
   // Set the block configuration settings for system branding block.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_branding')
     ->set('settings.use_site_name', FALSE)
