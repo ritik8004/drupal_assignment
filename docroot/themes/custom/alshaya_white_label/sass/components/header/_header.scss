@@ -8,8 +8,16 @@
 	SITE HEADER - TOP LEVEL MENU
 */
 
+.no--display {
+  @extend %is-hidden;
+}
+
 .c-menu-secondary {
   border-bottom: 1px solid $white;
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
 
   a {
     color: $brownish-grey;
@@ -119,29 +127,92 @@
 */
 
 header {
+  position: relative;
+
   .c-header__region {
     margin: 15px 25px;
   }
 
-  .block-system-branding-block {
-    float: $left;
+  .region__header {
+    display: flex;
+
+    > div {
+      flex: 1;
+      vertical-align: middle;
+    }
   }
 
+  form,
   .block-cart-mini-block {
-    float: $right;
+    margin-top: 20px;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+    }
+  }
+
+  #block-alshaya-white-label-search {
+    text-align: center;
+
+    @include breakpoint($only-tablet) {
+      position: absolute;
+      bottom: -60px;
+      left: 35%;
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+
+    .form-item-keywords,
+    .form-actions {
+      display: inline-block;
+    }
+
+    input[type="text"] {
+      padding: 7.5px;
+      vertical-align: middle;
+
+      &::placeholder {
+        font-size: 12px;
+      }
+    }
+
+    #edit-submit-search {
+      background: url('../imgs/assets/search.svg') 10px 6px no-repeat;
+      border: none;
+      background-color: $peacock-blue;
+      text-indent: -9999px;
+      width: 42px;
+      height: 35px;
+      text-align: center;
+      margin-#{$left}: -5px;
+    }
+
+    label {
+      display: none;
+    }
   }
 
   .block-cart-mini-block {
     font-size: 0.875rem;
+    text-align: $right;
 
     .total {
       font-weight: bold;
+      display: inline-block;
       margin-#{$right}: 20px;
 
       .prefix {
         font-weight: normal;
+        float: left;
+        display: inline-block;
         vertical-align: bottom;
-        margin-#{$right}: 6px;
+        margin-right: 6px;
+      }
+
+      .total--amount {
+        float: right;
       }
     }
 
@@ -165,6 +236,45 @@ header {
       left: 4px;
       border-radius: 50%;
       padding: 5px;
+    }
+  }
+}
+
+/*
+	SITE MAIN MENU
+*/
+
+.c-menu-primary {
+  .region__menu-primary {
+    margin: 15px 25px;
+  }
+
+  .block-system-menublock {
+    float: $right;
+
+    .store {
+      text-decoration: none;
+
+      &::before {
+        content: '';
+        background: url('../imgs/assets/store--big.svg') no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 24px;
+        position: absolute;
+        top: -3px;
+        right: -23px;
+        left: -23px;
+      }
+    }
+
+    ul {
+      padding: 0;
+    }
+
+    li {
+      position: relative;
+      list-style: none;
     }
   }
 }

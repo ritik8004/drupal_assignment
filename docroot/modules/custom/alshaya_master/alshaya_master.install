@@ -20,4 +20,13 @@ function alshaya_master_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
+  \Drupal::getContainer()->get('config.factory')
+    ->getEditable('alshaya_white_label.settings')
+    ->setData([
+      'logo' => [
+        'path' => 'themes/custom/alshaya_white_label/logo.png',
+      ],
+    ])
+    ->save();
 }
