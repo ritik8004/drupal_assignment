@@ -15,12 +15,12 @@
                 {% endif %}
                 <div>
                     {% if level2.highlight_image is not empty %}
-                        <div>Highlight</div>
+                        <div>{{ 'Highlight' | t }}</div>
                         {% for highlight_image in level2.highlight_image %}
                             <div><img src="{{ highlight_image }}"/></div>
                         {% endfor %}
                     {% elseif data.highlight_image is not empty %}
-                        <div>Highlight</div>
+                        <div>{{ 'Highlight' | t }}</div>
                         {% for highlight_image in data.highlight_image %}
                             <div><img src="{{ highlight_image }}"/></div>
                         {% endfor %}
