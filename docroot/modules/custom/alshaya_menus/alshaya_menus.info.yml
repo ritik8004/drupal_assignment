@@ -7,6 +7,9 @@ dependencies:
   - menu_admin_per_menu
   - menu_link_attributes
   - system
+  - taxonomy_term_depth
+  - user
+  - views
   - views
 version: 8.x-1.0
 package: Alshaya
