@@ -80,6 +80,10 @@ function alshaya_custom_modules_installed($modules) {
   // Set visitor user registration.
   \Drupal::configFactory()->getEditable('user.settings')->set('register', 'visitors')->save();
 
+  // Set email verification to false to make password field visible on
+  // registration.
+  \Drupal::configFactory()->getEditable('user.settings')->set('verify_mail', FALSE)->save();
+
   // Set the 'header' region for user menu.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_account_menu')
     ->set('region', 'menu_secondary')

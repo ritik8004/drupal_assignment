@@ -27,6 +27,7 @@ modules:
   - alshaya_master
   - alshaya_menus
   - alshaya_newsletter
+  - alshaya_password_policy
   - alshaya_permissions
   - alshaya_stores_finder
   - color
