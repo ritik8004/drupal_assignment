@@ -22,7 +22,7 @@
 
   <target name="refresh:local:drupal"
           description="Reinstall local dev environment."
-          depends="setup:composer:install, local:drupal:install">
+          depends="setup:composer:install, frontend:build, local:drupal:install">
     <echo>Allow editing settings.php file.</echo>
     <chmod mode="0755" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
     <chmod mode="0644" file="${docroot}/sites/${multisite.name}/settings.php" failonerror="false"/>
