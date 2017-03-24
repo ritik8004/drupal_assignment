@@ -1,0 +1,11 @@
+<div>
+    <ul>
+        {% for key, level4 in data %}
+            <li>
+                <div>
+                    <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level4.id}) }}">{{ level4.label }}</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

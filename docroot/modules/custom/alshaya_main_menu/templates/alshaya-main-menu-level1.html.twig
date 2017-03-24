@@ -1,0 +1,14 @@
+<div>
+    <ul>
+        {% for key1, level1 in term_tree %}
+            <li>
+                <div>
+                    <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level1.id}) }}">{{ level1.label }}</a>
+                </div>
+                {% if level1.child is not empty %}
+                    <div>{{ alshaya_main_menu('alshaya_main_menu_level2', level1) }}</div>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
