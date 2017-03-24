@@ -10,6 +10,7 @@ dependencies:
   - file
   - image
   - lightning_media_image
+  - link
   - paragraphs
   - path
   - system
@@ -17,3 +18,4 @@ dependencies:
   - text
   - views
   - workbench_moderation
+version: 8.x-1.0

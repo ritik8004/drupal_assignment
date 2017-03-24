@@ -12,7 +12,7 @@ entity_type: paragraph
 bundle: main_menu_highlight
 label: 'Highlight image'
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

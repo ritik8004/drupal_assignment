@@ -22,7 +22,7 @@ settings:
   display_default: false
 module: image
 locked: false
-cardinality: 2
+cardinality: 1
 translatable: false
 indexes: {  }
 persist_with_no_fields: false
