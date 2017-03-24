@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7f3576d2d312ec7f22b5e70ea9356adb",
-    "content-hash": "f34bc0475b43113920b74753baa97c08",
+    "hash": "94bcb86a3f13127f885a9028734109f0",
+    "content-hash": "3fd4c926b89a861bcf18202500a89af4",
     "packages": [
         {
             "name": "acquia/blt",
@@ -4282,7 +4282,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/password_policy-8.x-3.0-alpha3.zip",
-                "reference": null,
+                "reference": "8.x-3.0-alpha3",
                 "shasum": "efe3ac404276ab2274b29393e55f6a4b7fb58681"
             },
             "require": {
@@ -4882,6 +4882,44 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_access_fix"
             }
+        },
+        {
+            "name": "drupal/taxonomy_term_depth",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/taxonomy_term_depth",
+                "reference": "94def9d21d76ea23e9a0373481aa4470f30a6ee7"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.x-dev",
+                    "datestamp": "1486726083"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Cadila",
+                    "homepage": "https://www.drupal.org/user/2669241"
+                }
+            ],
+            "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
+            "homepage": "https://www.drupal.org/project/taxonomy_term_depth",
+            "support": {
+                "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
+            },
+            "time": "2017-02-10 12:17:57"
         },
         {
             "name": "drupal/token",
@@ -11387,7 +11425,8 @@
         "drupal/menu_admin_per_menu": 5,
         "drupal/menu_link_attributes": 10,
         "drupal/search_api_solr": 10,
-        "drupal/default_content": 15
+        "drupal/default_content": 15,
+        "drupal/taxonomy_term_depth": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

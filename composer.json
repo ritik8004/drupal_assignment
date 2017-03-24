@@ -26,7 +26,8 @@
         "drupal/search_api_solr": "^1.0@beta",
         "drupal/default_content": "^1.0@alpha",
         "drupal/taxonomy_access_fix": "^2.1",
-        "drupal/password_policy": "^3.0"
+        "drupal/password_policy": "^3.0",
+        "drupal/taxonomy_term_depth": "1.x-dev"
     },
     "require-dev": {
         "behat/behat": "^3.1",
@@ -67,6 +68,11 @@
             ]
         },
         "enable-patching": true,
+        "patches": {
+            "drupal/taxonomy_term_depth": {
+                "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-issue-2863541-5.patch"
+            }
+        },
         "installer-paths": {
             "docroot/core": [
                 "type:drupal-core"
