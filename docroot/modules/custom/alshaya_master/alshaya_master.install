@@ -21,7 +21,8 @@ function alshaya_master_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
-  \Drupal::getContainer()->get('config.factory')
+  $conf_factory = \Drupal::configFactory();
+  $conf_factory
     ->getEditable('alshaya_white_label.settings')
     ->setData([
       'logo' => [
@@ -29,4 +30,8 @@ function alshaya_master_install() {
       ],
     ])
     ->save();
+
+  $site_config = $conf_factory->getEditable('system.site')->get();
+  $site_config['page']['front'] = '/home';
+  $conf_factory->getEditable('system.site')->setData($site_config)->save();
 }
