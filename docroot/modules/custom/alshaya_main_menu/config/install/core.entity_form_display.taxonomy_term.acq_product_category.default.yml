@@ -49,5 +49,7 @@ content:
     weight: 30
     settings: {  }
     third_party_settings: {  }
+  translation:
+    weight: 10
 hidden:
   field_commerce_id: true
