@@ -18,9 +18,6 @@ function alshaya_master_install() {
     'Log out' => [
       'en' => 'Sign out',
     ],
-    'Find Store' => [
-      'ar' => 'البحث عن محلاتنا',
-    ],
   ];
   alshaya_i18n_save_translations($strings);
 
