@@ -76,15 +76,15 @@
     }
 
     .register-link::before {
-      background: url('../imgs/assets/register.svg') no-repeat;
+      background: url('../imgs/icons/register.svg') no-repeat;
     }
 
     li:last-child a::before {
-      background: url('../imgs/assets/sign-in.svg') no-repeat;
+      background: url('../imgs/icons/sign-in.svg') no-repeat;
     }
 
     a.stores-finder::before {
-      background: url('../imgs/assets/find-us.svg') no-repeat;
+      background: url('../imgs/icons/find-us.svg') no-repeat;
     }
   }
 
@@ -105,7 +105,7 @@
     ul {
       &::before {
         content: '';
-        background: url('../imgs/assets/lang.svg') no-repeat;
+        background: url('../imgs/icons/lang.svg') no-repeat;
         display: inline-block;
         width: 15px;
         height: 15px;
@@ -217,7 +217,7 @@ header {
     }
 
     .cart-link {
-      background: url('../imgs/assets/cart.svg') no-repeat;
+      background: url('../imgs/icons/cart.svg') no-repeat;
       display: inline-block;
       width: 32px;
       height: 32px;
@@ -227,7 +227,7 @@ header {
 
     .quantity {
       position: absolute;
-      background: url('../imgs/assets/indicator-shape.svg') no-repeat;
+      background: url('../imgs/icons/indicator-shape.svg') no-repeat;
       color: $white-five;
       text-align: center;
       width: 24px;
