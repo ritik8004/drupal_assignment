@@ -70,7 +70,7 @@
         "enable-patching": true,
         "patches": {
             "drupal/taxonomy_term_depth": {
-                "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-issue-2863541-5.patch"
+                "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
             }
         },
         "installer-paths": {
