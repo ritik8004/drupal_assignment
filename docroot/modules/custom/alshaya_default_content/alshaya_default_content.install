@@ -15,6 +15,9 @@ function alshaya_default_content_install() {
     'Find Store' => [
       'ar' => 'البحث عن محلاتنا',
     ],
+    'KWD' => [
+      'ar' => 'د٠ك٠',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
