@@ -18,6 +18,9 @@ function alshaya_master_install() {
     'Log out' => [
       'en' => 'Sign out',
     ],
+    'KWD' => [
+      'ar' => 'د٠ك٠',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
