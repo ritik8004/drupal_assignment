@@ -7,7 +7,6 @@
 .c-footer-secondary {
   background: $white-four;
   font-size: 0.6875rem;
-  line-height: 4.375rem;
 
   @include breakpoint($tablet) {
     height: 4.375rem;
@@ -24,13 +23,13 @@
 
 .c-footer-secondary__region {
   @include breakpoint($tablet) {
-    max-width: 42.1875rem;
     float: $left;
   }
 }
 
 .c-footer__logos {
   padding: 0 1.5rem;
+  line-height: 4.375rem;
 
   @include breakpoint($tablet) {
     float: $left;
@@ -40,6 +39,10 @@
   @include breakpoint($only-mobile) {
     background: white;
     padding: 0 1.5rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-#{$right}: 0;
   }
 
   ul {
@@ -79,8 +82,15 @@
 
 .c-footer__copy {
   color: $black-two;
+  line-height: 2;
+
+  @include breakpoint($only-tablet) {
+    max-width: 59%;
+  }
 
   @include breakpoint($tablet) {
+    height: 4.375rem;
+    display: table;
     float: $right;
   }
 
@@ -93,5 +103,12 @@
   p {
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  .field--name-body {
+    @include breakpoint($tablet) {
+      display: table-cell;
+      vertical-align: middle;
+    }
   }
 }
