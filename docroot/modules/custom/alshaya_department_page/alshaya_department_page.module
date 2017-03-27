@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Constains hooks and alters for Alshaya Department page.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_department_page_form_node_department_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  array_unshift($form['#validate'], '_validate_unique_department_page');
+}
+
+/**
+ * Validate handler.
+ *
+ * To ensure 1-1 mapping of 1st level Category and Department pages.
+ */
+function _validate_unique_department_page(&$form, FormStateInterface $form_state) {
+  $product_category = $form_state->getValue('field_product_category');
+  $product_category_id = $product_category[0]['target_id'];
+
+  // Check if we already have a department page linked to the same category.
+  $query = \Drupal::database()->select('node__field_product_category', 'nfpc');
+  $query->addField('nfpc', 'entity_id');
+  $query->condition('nfpc.field_product_category_target_id', $product_category_id);
+  $query->range(0, 1);
+  $nid = $query->execute()->fetchField();
+
+  // If we did not find any nid for depaertment page, this means we don't yet
+  // have a page for the category.
+  if ($nid) {
+    $form_state->setErrorByName(
+      'field_product_category', t('A Department page linked to this category 
+      already exists.')
+    );
+  }
+}
