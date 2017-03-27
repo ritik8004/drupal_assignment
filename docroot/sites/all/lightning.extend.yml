@@ -19,6 +19,7 @@ modules:
   - alshaya_acm
   - alshaya_admin
   - alshaya_arabic
+  - alshaya_cart_notification
   - alshaya_custom
   - alshaya_default_content
   - alshaya_department_page
