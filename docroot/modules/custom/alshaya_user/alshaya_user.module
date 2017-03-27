@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_user.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Change submit button text.
+  $form['actions']['submit']['#value'] = t('Create');
+
+  // Reset help text for the fields.
+  $form['account']['mail']['#description'] = '';
+  $form['account']['name']['#description'] = '';
+  $form['account']['pass']['#description'] = '';
+}

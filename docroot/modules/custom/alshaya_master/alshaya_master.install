@@ -18,6 +18,9 @@ function alshaya_master_install() {
     'Log out' => [
       'en' => 'Sign out',
     ],
+    'Create new account' => [
+      'en' => 'Create an account',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
