@@ -22,7 +22,10 @@
       var options = {
         items: 1,
         dots: true,
-        nav: true
+        nav: true,
+        autoplay: true,
+        autoplayTimeout: 5000,
+        autoplayHoverPause: true
       };
 
       if (isRTL()) {
