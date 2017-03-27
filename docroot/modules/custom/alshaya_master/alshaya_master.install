@@ -21,7 +21,10 @@ function alshaya_master_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
-  \Drupal::getContainer()->get('config.factory')
+  // Get config factory object.
+  $config_factory = \Drupal::configFactory();
+
+  $config_factory
     ->getEditable('alshaya_white_label.settings')
     ->setData([
       'logo' => [
@@ -29,4 +32,9 @@ function alshaya_master_install() {
       ],
     ])
     ->save();
+
+  // Set /home page as site front page.
+  $site_config = $config_factory->getEditable('system.site')->get();
+  $site_config['page']['front'] = '/home';
+  $config_factory->getEditable('system.site')->setData($site_config)->save();
 }
