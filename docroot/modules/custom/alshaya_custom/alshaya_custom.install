@@ -68,6 +68,11 @@ function alshaya_custom_modules_installed($modules) {
     ->set('weight', 6)
     ->save();
 
+  // Unset the Block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_powered')
+    ->set('region', '-1')
+    ->save();
+
   // Set search block to available on all pages.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')->set('visibility', [])->save();
 
