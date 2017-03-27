@@ -14,6 +14,9 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   // Change submit button text.
   $form['actions']['submit']['#value'] = t('Create');
 
+  // Change email label.
+  $form['account']['mail']['#title'] = t('Email address');
+
   // Reset help text for the fields.
   $form['account']['mail']['#description'] = '';
   $form['account']['name']['#description'] = '';
