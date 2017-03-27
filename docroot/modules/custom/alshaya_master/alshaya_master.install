@@ -21,6 +21,9 @@ function alshaya_master_install() {
     'Create new account' => [
       'en' => 'Create an account',
     ],
+    'E-mail' => [
+      'en' => 'Email address',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
