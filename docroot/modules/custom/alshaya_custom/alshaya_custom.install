@@ -94,4 +94,9 @@ function alshaya_custom_modules_installed($modules) {
     ->set('region', 'menu_secondary')
     ->set('weight', -11)
     ->save();
+
+  // Unset the Main Navigation Block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
+    ->set('region', '-1')
+    ->save();
 }
