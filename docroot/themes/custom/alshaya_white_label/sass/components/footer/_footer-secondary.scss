@@ -55,7 +55,7 @@
   }
 }
 
-[class^="c-footer__logo"] {
+[class^="c-footer__logo--"] {
   @extend %u-image-replacement;
 
   display: inline-block;
@@ -82,7 +82,7 @@
 
 .c-footer__copy {
   color: $black-two;
-  line-height: 2;
+  line-height: 1.5;
 
   @include breakpoint($only-tablet) {
     max-width: 59%;
