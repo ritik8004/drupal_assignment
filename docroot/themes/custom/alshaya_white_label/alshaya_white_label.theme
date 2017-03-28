@@ -82,6 +82,8 @@ function alshaya_white_label_preprocess_node(&$variables) {
   }
   if ($variables['node']->bundle() == 'advanced_page') {
     $node = $variables['node']->toArray();
+    // Check and set the "show_right_sidebar" variable, to show or hide sidebar.
+    // This is a workaround, because of https://www.drupal.org/node/2864220.
     if (count($node['field_related_info']) === 1) {
       $paragraph = Paragraph::load($node['field_related_info'][0]['target_id'])->toArray();
       if (!empty($paragraph['field_banner']) || !empty($paragraph['field_body']) || !empty($paragraph['field_title'])) {

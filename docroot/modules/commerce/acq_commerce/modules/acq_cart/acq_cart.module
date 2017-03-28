@@ -3,7 +3,6 @@
 use Drupal\acq_cart\Entity\Order;
 use Drupal\acq_cart\Entity\LineItem;
 use Drupal\acq_product\Entity\Product;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * @file
@@ -45,16 +44,4 @@ function acq_cart_theme($existing, $type, $theme, $path) {
       'template' => 'block--acqminicart',
     ),
   );
-}
-
-/**
- * Implements hook_form_FORM_ID_alter
- */
-function acq_cart_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
-  foreach ($form['cart'] as $id => $items) {
-    if (isset($item['quantity'])) {
-      $form['cart'][$id]['quantity']['#type'] = 'select';
-      $form['cart'][$id]['quantity']['#options'] = range(0, \Drupal::config('acq_cart.config')->get('max_cart_qty'));
-    }
-  }
 }

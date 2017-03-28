@@ -1,6 +1,6 @@
-acq_cart.configuration:
+alshaya_acm.cart_configuration:
   title: 'Cart Configuration'
-  route_name: 'acq_cart.cart_config'
+  route_name: 'alshaya_acm.cart_config'
   parent: 'acq_commerce.configuration'
   description: 'Configure your Acquia Commerce Cart settings.'
   weight: 22
