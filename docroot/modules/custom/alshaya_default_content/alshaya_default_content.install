@@ -23,6 +23,12 @@ function alshaya_default_content_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_default_content_modules_installed($modules) {
   // Disable "Cart" menu item.
   $store_link = MenuLinkContent::load(2);
   $store_link->set('enabled', FALSE)->save();
