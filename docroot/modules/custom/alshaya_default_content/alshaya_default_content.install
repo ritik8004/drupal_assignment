@@ -20,4 +20,5 @@ function alshaya_default_content_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
 }
