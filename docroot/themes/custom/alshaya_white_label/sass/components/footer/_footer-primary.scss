@@ -9,13 +9,10 @@
   padding-top: 1.625rem;
   padding-bottom: 1.625rem;
   margin-top: 1.625rem;
+  position: relative;
 
   @include breakpoint($tablet) {
     padding: 1.5rem 1.25rem;
-  }
-
-  @include breakpoint($only-mobile) {
-    position: relative;
   }
 
   .l-container {
@@ -26,11 +23,18 @@
 .c-footer-menu {
   @extend %list-clear;
 
+  @include breakpoint($desktop) {
+    margin-#{$right}: 6rem;
+    display: inline-block;
+    vertical-align: top;
+  }
+
   @include breakpoint($only-mobile) {
     display: none;
   }
 
-  &__link {
+  &__link,
+  &__tab a {
     font-size: 0.875rem;
     color: $brownish-grey;
     line-height: 2.14;
@@ -39,14 +43,9 @@
 }
 
 .c-footer-menu--about,
-.c-footer-menu--help {
+.c-footer-menu--help,
+.c-footer-menu--category {
   display: inline-block;
-  margin-#{$right}: 1.625rem;
-  vertical-align: top;
-
-  @include breakpoint($tablet) {
-    margin-#{$right}: 3.5rem;
-  }
 
   h2 {
     font-size: 0.875rem;
@@ -142,9 +141,26 @@
   }
 }
 
-#block-help {
+.c-footer-menu--help {
   @include breakpoint($only-mobile) {
     margin-bottom: 4em;
     border-bottom: 1px solid $white;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin: 11em -8.5em;
+    vertical-align: top;
+  }
+}
+
+.c-footer-menu--about {
+  @include breakpoint($only-tablet) {
+    vertical-align: top;
+  }
+}
+
+.c-footer-menu--category {
+  @include breakpoint($only-tablet) {
+    margin-right: 3em;
   }
 }

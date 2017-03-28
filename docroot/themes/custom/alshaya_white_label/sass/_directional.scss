@@ -25,6 +25,9 @@ $dir: ltr !default;
 $left: if-ltr(left, right);
 $right: if-ltr(right, left);
 
+$top: if-ltr(top, bottom);
+$bottom: if-ltr(bottom, top);
+
 $first-child: if-ltr(":first-child", ":last-child");
 $last-child: if-ltr(":last-child", ":first-child");
 

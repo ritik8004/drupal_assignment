@@ -7,17 +7,20 @@
     min-width: 15rem;
   }
 
-  @include breakpoint($tablet) {
-    float: right;
-    clear: right;
-    text-align: right;
-    margin-top: 1rem;
+  @include breakpoint($only-tablet) {
     min-width: 22.31rem;
+    position: absolute;
+    top: 33%;
+    right: 2.5%;
   }
 
   @include breakpoint($desktop) {
     max-width: 22.31rem;
     width: 100%;
+    float: right;
+    clear: right;
+    text-align: right;
+    margin-#{$top}: -4.2em;
   }
 
   ul {
