@@ -1,0 +1,6 @@
+acq_cart.configuration:
+  title: 'Cart Configuration'
+  route_name: 'acq_cart.cart_config'
+  parent: 'acq_commerce.configuration'
+  description: 'Configure your Acquia Commerce Cart settings.'
+  weight: 22
