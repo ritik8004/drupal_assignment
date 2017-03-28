@@ -1,36 +1,32 @@
-<div>
-    <ul>
-        {% for key, level2 in data.child %}
-            <li>
-                <div>
-                    <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
-                </div>
-                <div>
-                    {% if level2.description is not empty %}
-                        <div>{{ level2.description }}</div>
-                    {% endif %}
-                </div>
-                {% if level2.child is not empty %}
-                    <div> {{ alshaya_main_menu('alshaya_main_menu_level3', level2.child) }}</div>
-                {% endif %}
-                <div>
-                    {% if level2.highlight_image is not empty %}
-                        <div>{{ 'Highlight' | t }}</div>
-                        {% for highlight_image in level2.highlight_image %}
-                            <div>
-                                <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
-                            </div>
-                        {% endfor %}
-                    {% elseif data.highlight_image is not empty %}
-                        <div>{{ 'Highlight' | t }}</div>
-                        {% for highlight_image in data.highlight_image %}
-                            <div>
-                                <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+<ul class="child--first">
+  {% for key, level2 in data.child %}
+    <li class="level--one">
+      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
+      <div>
+        {% if level2.description is not empty %}
+          <div>{{ level2.description }}</div>
+        {% endif %}
+      </div>
+      {% if level2.child is not empty %}
+        <div> {{ alshaya_main_menu('alshaya_main_menu_level3', level2.child) }}</div>
+      {% endif %}
+        <div>
+        {% if level2.highlight_image is not empty %}
+            <div>{{ 'Highlight' | t }}</div>
+          {% for highlight_image in level2.highlight_image %}
+            <div>
+              <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
+            </div>
+          {% endfor %}
+          {% elseif data.highlight_image is not empty %}
+            <div>{{ 'Highlight' | t }}</div>
+          {% for highlight_image in data.highlight_image %}
+            <div>
+              <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </li>
+  {% endfor %}
+</ul>

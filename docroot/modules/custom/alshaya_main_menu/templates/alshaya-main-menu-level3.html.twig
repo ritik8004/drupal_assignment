@@ -1,14 +1,10 @@
-<div>
-    <ul>
-        {% for key, level3 in data %}
-            <li>
-                <div>
-                    <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
-                </div>
-                {% if level3.child is not empty %}
-                    <div> {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}</div>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+<ul class="child--two">
+  {% for key, level3 in data %}
+    <li>
+      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
+      {% if level3.child is not empty %}
+        <div> {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}</div>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
