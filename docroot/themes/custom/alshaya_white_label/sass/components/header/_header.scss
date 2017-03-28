@@ -278,3 +278,33 @@ header {
     }
   }
 }
+
+/*
+	SITE HEADER - TOP LEVEL MENU
+*/
+
+.block-alshaya-main-menu {
+  ul {
+    padding: 0;
+    display: flex;
+  }
+
+  li.parent--level {
+    flex: 1;
+    vertical-align: top;
+    background-color: $very-light-blue;
+    list-style: none;
+    text-align: center;
+    padding: 10px;
+
+    a {
+      font-size: 0.75rem;
+      color: $peacock-blue;
+      text-decoration: none;
+    }
+
+    ul {
+      display: none;
+    }
+  }
+}
