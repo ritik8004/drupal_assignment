@@ -36,3 +36,13 @@ function alshaya_user_form_user_login_form_alter(&$form, FormStateInterface $for
   // Change submit button text.
   $form['actions']['submit']['#value'] = t('Submit');
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_user_form_user_pass_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['forgot_text'] = [
+    '#markup' => t('Please enter your email address.') . '</br>' . t('We will send you an email with a password reminder.'),
+    '#weight' => -10,
+  ];
+}
