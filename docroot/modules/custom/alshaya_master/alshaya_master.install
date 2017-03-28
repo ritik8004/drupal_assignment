@@ -24,6 +24,9 @@ function alshaya_master_install() {
     'E-mail' => [
       'en' => 'Email address',
     ],
+    'Reset your password' => [
+      'en' => 'Forgot password',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
