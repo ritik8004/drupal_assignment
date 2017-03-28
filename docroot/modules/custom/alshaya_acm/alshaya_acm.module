@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  foreach ($form['cart'] as $id => $item) {
+    if (is_array($item) && isset($item['quantity'])) {
+      $form['cart'][$id]['quantity']['#type'] = 'select';
+      $form['cart'][$id]['quantity']['#options'] = range(0, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
+    }
+  }
+}
