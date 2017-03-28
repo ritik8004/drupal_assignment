@@ -36,3 +36,8 @@ permissions:
   - 'use draft_needs_review transition'
   - 'use needs_review_draft transition'
   - 'use archived_published transition'
+  - 'create department_page content'
+  - 'delete any department_page content'
+  - 'delete own department_page content'
+  - 'edit any department_page content'
+  - 'edit own department_page content'
