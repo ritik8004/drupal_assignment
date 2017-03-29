@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_captcha_modules_installed($modules) {
+  $config_factory = \Drupal::configFactory();
+  // Set captcha setting.
+  $config_factory->getEditable('captcha.settings')->set('default_challenge', 'recaptcha/reCAPTCHA')->save();
+  // Set re-captcha settings.
+  $config_factory->getEditable('recaptcha.settings')->set('site_key', '6LdbnBoUAAAAAN6hotxhW76WHbBNj3fEOE8CXKeL')->save();
+  $config_factory->getEditable('recaptcha.settings')->set('secret_key', '6LdbnBoUAAAAAMm-_nSUCHJBCQ29kXMmrwGylryn')->save();
+  // Set captcha-point setting.
+  $config_factory->getEditable('captcha.captcha_point.user_register_form')->set('status', TRUE)->save();
+}
