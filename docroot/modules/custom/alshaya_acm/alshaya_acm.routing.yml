@@ -1,0 +1,7 @@
+alshaya_acm.cart_config:
+  path: '/admin/commerce/config/cart'
+  defaults:
+    _form: '\Drupal\alshaya_acm\Form\CartConfigForm'
+    _title: 'Cart Configuration'
+  requirements:
+    _permission: 'access commerce administration pages'

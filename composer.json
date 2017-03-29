@@ -28,7 +28,8 @@
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/password_policy": "^3.0",
         "drupal/taxonomy_term_depth": "1.x-dev",
-        "drupal/views_field_view": "1.0-beta2"
+        "drupal/views_field_view": "1.0-beta2",
+        "drupal/email_registration": "^1.0"
     },
     "require-dev": {
         "behat/behat": "^3.1",
@@ -71,7 +72,7 @@
         "enable-patching": true,
         "patches": {
             "drupal/taxonomy_term_depth": {
-                "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-issue-2863541-5.patch"
+                "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
             }
         },
         "installer-paths": {

@@ -30,6 +30,7 @@ modules:
   - alshaya_password_policy
   - alshaya_permissions
   - alshaya_stores_finder
+  - alshaya_user
   - alshaya_views
   - color
   - features
