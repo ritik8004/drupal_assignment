@@ -18,6 +18,11 @@
   .l-container {
     @extend %l-container--full;
   }
+
+  &__region {
+    position: relative;
+    min-height: 260px;
+  }
 }
 
 .c-footer-menu {
@@ -75,7 +80,7 @@
   display: inline-block;
 
   @include breakpoint($tablet) {
-    float: right;
+    float: $right;
     max-width: 22.31rem;
     margin: 0;
   }
