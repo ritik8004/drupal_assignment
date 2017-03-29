@@ -11,31 +11,41 @@ use Drupal\Core\Form\FormStateInterface;
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_department_page_form_node_department_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  array_unshift($form['#validate'], '_validate_unique_department_page');
+  // We will show only those categories who don't have a department page yet.
+  $tids = array_keys($form['field_product_category']['widget']['#options']);
+
+  foreach ($tids as $tid) {
+    $page_exists = _check_existance_of_department_page($tid);
+    if ($page_exists) {
+      // Unset the value.
+      unset($form['field_product_category']['widget']['#options'][$tid]);
+    }
+  }
 }
 
 /**
- * Validate handler.
+ * Helper function which checks for existance of a department page.
  *
- * To ensure 1-1 mapping of 1st level Category and Department pages.
+ * @param int $tid
+ *   tid of the Category.
+ *
+ * @return bool
+ *   Returns FALSE if page not found, else returns the $node_id of the page.
  */
-function _validate_unique_department_page(&$form, FormStateInterface $form_state) {
-  $product_category = $form_state->getValue('field_product_category');
-  $product_category_id = $product_category[0]['target_id'];
-
+function _check_existance_of_department_page($tid) {
   // Check if we already have a department page linked to the same category.
   $query = \Drupal::database()->select('node__field_product_category', 'nfpc');
   $query->addField('nfpc', 'entity_id');
-  $query->condition('nfpc.field_product_category_target_id', $product_category_id);
+  $query->condition('nfpc.field_product_category_target_id', $tid);
   $query->range(0, 1);
   $nid = $query->execute()->fetchField();
 
-  // If we did not find any nid for depaertment page, this means we don't yet
+  // If we did not find any nid for department page, this means we don't yet
   // have a page for the category.
   if ($nid) {
-    $form_state->setErrorByName(
-      'field_product_category', t('A Department page linked to this category 
-      already exists.')
-    );
+    return $nid;
+  }
+  else {
+    return FALSE;
   }
 }
