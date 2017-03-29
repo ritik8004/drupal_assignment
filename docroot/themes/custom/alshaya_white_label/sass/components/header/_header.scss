@@ -8,8 +8,10 @@
 	SITE HEADER - TOP LEVEL MENU
 */
 
-.no--display {
-  @extend %is-hidden;
+@include breakpoint($desktop) {
+  .no--desktop {
+    display: none;
+  }
 }
 
 .c-menu-secondary {
@@ -39,6 +41,12 @@
     padding-#{$left}: 16px;
     padding-#{$right}: 35px;
     position: relative;
+  }
+
+  .language-switcher-language-url {
+    li {
+      padding-#{$right}: 1.5625rem;
+    }
   }
 
   a {
@@ -130,7 +138,7 @@ header {
   position: relative;
 
   .c-header__region {
-    margin: 0.375px 0.5rem;
+    margin: 1.875rem 1.5625rem;
   }
 
   .region__header {
@@ -138,14 +146,12 @@ header {
 
     > div {
       flex: 1;
-      vertical-align: middle;
+      align-self: center;
     }
   }
 
   form,
   .block-cart-mini-block {
-    margin-top: 20px;
-
     @include breakpoint($only-mobile) {
       margin-top: 0;
     }
@@ -172,6 +178,7 @@ header {
     input[type="text"] {
       padding: 7.5px;
       vertical-align: middle;
+      height: 40px;
 
       &::placeholder {
         font-size: 12px;
@@ -184,7 +191,7 @@ header {
       background-color: $peacock-blue;
       text-indent: -9999px;
       width: 42px;
-      height: 35px;
+      height: 40px;
       text-align: center;
       margin-#{$left}: -5px;
     }
@@ -246,28 +253,10 @@ header {
 
 .c-menu-primary {
   .region__menu-primary {
-    margin: 15px 25px;
+    margin-top: 0.9375rem;
   }
 
   .block-system-menublock {
-    float: $right;
-
-    .store {
-      text-decoration: none;
-
-      &::before {
-        content: '';
-        background: url('../imgs/assets/store--big.svg') no-repeat;
-        display: inline-block;
-        width: 16px;
-        height: 24px;
-        position: absolute;
-        top: -3px;
-        right: -23px;
-        left: -23px;
-      }
-    }
-
     ul {
       padding: 0;
     }
@@ -280,13 +269,150 @@ header {
 }
 
 /*
-	SITE HEADER - TOP LEVEL MENU
+	SITE HEADER - MOBILE MENU
 */
 
+.c-menu-primary {
+  display: none;
+
+  #block-exposedformsearchpage {
+    display: none;
+
+    label {
+      display: none;
+    }
+
+    .form-item,
+    input {
+      width: 100%;
+    }
+
+    input {
+      padding: 1.0625rem !important;
+      border: 0;
+    }
+
+    #edit-actions {
+      display: none;
+    }
+
+    form {
+      background: $peacock-blue;
+      padding: 0.625rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    .mobile--search {
+      display: none;
+    }
+
+    .store {
+      float: $right;
+      margin-#{$right}: 1.5625rem;
+    }
+
+    .mobile--menu {
+      float: $left;
+      margin-#{$left}: 1.5625rem;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    display: block;
+
+    a {
+      text-decoration: none;
+      color: $peacock-blue;
+
+      &::before {
+        content: ' ';
+        display: inline-block;
+        vertical-align: middle;
+        margin-#{$right}: 10px;
+      }
+    }
+
+    .store {
+      &::before {
+        background: url('../imgs/icons/store--big.svg') no-repeat;
+        width: 16px;
+        height: 23px;
+      }
+    }
+
+    .mobile--menu {
+      &::before {
+        background: url('../imgs/icons/mobile-menu.svg') no-repeat;
+        width: 24px;
+        height: 13px;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    display: block;
+
+    ul.menu {
+      display: flex;
+      margin: 0;
+    }
+
+    li {
+      flex: 1;
+      display: inline-block;
+      background-color: $very-light-blue;
+      text-align: center;
+      padding: 0.9375rem 0;
+
+      &:hover {
+        background-color: $peacock-blue;
+
+        a {
+          color: $white-five;
+        }
+      }
+
+      &:nth-child(2) {
+        border-right: 2px solid $white-five;
+        border-left: 2px solid $white-five;
+      }
+
+      .mobile--search {
+        &::before {
+          background: url('../imgs/icons/mobile.svg') no-repeat;
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+  }
+}
+
+/*
+	SITE HEADER - MAIN NAVIGATION
+*/
+
+.mobile--menu {
+  font-size: 0.75rem;
+  color: $black-two;
+}
+
 .block-alshaya-main-menu {
+  @include breakpoint($upto-desktop) {
+    .main--menu {
+      display: none;
+    }
+  }
+
+  li {
+    list-style: none;
+  }
+
   ul {
-    padding: 0;
     display: flex;
+    margin: 0;
+    padding: 0;
   }
 
   li.parent--level {
@@ -296,6 +422,14 @@ header {
     list-style: none;
     text-align: center;
     padding: 10px;
+
+    &:hover {
+      background: $peacock-blue;
+
+      a {
+        color: $white-five;
+      }
+    }
 
     a {
       font-size: 0.75rem;
