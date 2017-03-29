@@ -1,3 +1,4 @@
+uuid: 708dd8a4-2d94-4007-9451-0949eddaf36b
 langcode: en
 status: true
 dependencies:
@@ -6,6 +7,8 @@ dependencies:
   module:
     - taxonomy
     - user
+_core:
+  default_config_hash: _ONRigvTo1FJsJ2-j0Hd1b4iQ1o2WM0IqKLTCsMs0rM
 id: footer_categories
 label: 'shop by'
 module: views
@@ -185,6 +188,46 @@ display:
           entity_type: taxonomy_term
           entity_field: langcode
           plugin_id: language
+        depth_level:
+          id: depth_level
+          table: taxonomy_term_field_data
+          field: depth_level
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: '3'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: taxonomy_term
+          plugin_id: numeric
       sorts: {  }
       title: 'shop by'
       header: {  }
