@@ -13,6 +13,7 @@ dependencies:
   - paragraphs
   - path
   - system
+  - taxonomy
   - text
   - user
   - views
