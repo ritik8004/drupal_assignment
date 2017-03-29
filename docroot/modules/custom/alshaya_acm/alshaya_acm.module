@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -34,4 +35,17 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   $form['quantity']['#type'] = 'select';
   $form['quantity']['#options'] = $cartQuantityOptions;
   unset($form['quantity']['#size']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_form_multistep_default_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Create the cart page link.
+  $url = Url::fromRoute('acq_cart.cart');
+  $link = \Drupal::l('Back to Basket', $url)->getGeneratedLink();
+  $form['back_to_cart'] = [
+    '#markup' => $link,
+    '#weight' => -5,
+  ];
 }
