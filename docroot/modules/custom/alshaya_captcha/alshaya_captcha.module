@@ -1,0 +1,113 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\captcha\Entity\CaptchaPoint;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_captcha_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    $group = $implementations['alshaya_captcha'];
+    unset($implementations['alshaya_captcha']);
+    $implementations['alshaya_captcha'] = $group;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_captcha_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Add/Editing form of 'captcha_point' entity.
+  if ($form_id == 'captcha_point_edit_form' || $form_id == 'captcha_point_add_form') {
+    /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
+    $captcha_point = $form_state->getFormObject()->getEntity();
+    $form['captcha_delay_attempts'] = [
+      '#type' => 'number',
+      '#title' => t('Delay attempts'),
+      '#description' => t('Number of attempts after which captcha will show up. This setting will not work if value is empty or 0.'),
+      '#default_value' => $captcha_point->getThirdPartySetting('alshaya_captcha', 'captcha_delay_attempts') ?: 0,
+    ];
+
+    $form['#entity_builders'][] = 'alshaya_captcha_form_captcha_point_add_form_builder';
+  }
+
+  // Whether captcha enabled on form on not.
+  $captcha = isset($form['captcha'])?: FALSE;
+
+  // If captcha enabled on form.
+  if ($captcha) {
+
+    /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
+    $captcha_point = \Drupal::entityTypeManager()
+      ->getStorage('captcha_point')
+      ->load($form_id);
+
+    // Flood threshold value for the form.
+    $flood_threshold = $captcha_point->getThirdPartySetting('alshaya_captcha', 'captcha_delay_attempts');
+
+    // If there is threshold value mentioned in field.
+    if (!empty($flood_threshold) && $flood_threshold > 0) {
+      // Temporary store captcha element.
+      $form_state->set('temp_captcha_element', $form['captcha']);
+
+      // Flood event name.
+      $flood_event = 'alshaya_captcha_' . $form['#id'];
+
+      // Set flood variable.
+      $flood = $form_state->get('flood') ?: \Drupal::flood();
+      if (!$form_state->get('flood')) {
+        $form_state->set('flood', $flood);
+      }
+
+      // If flood exceeds threshold.
+      if (!$flood->isAllowed($flood_event, $flood_threshold)) {
+        $form['captcha'] = $form_state->get('temp_captcha_element');
+      }
+      else {
+        unset($form['captcha']);
+        $form['#validate'][] = '_alshaya_captcha_form_validate';
+      }
+
+      $form['#submit'][] = '_alshaya_captcha_form_submit';
+    }
+  }
+}
+
+/**
+ * Entity builder for the captcha point configuration entity.
+ */
+function alshaya_captcha_form_captcha_point_add_form_builder($entity_type, CaptchaPoint $captcha_point, &$form, FormStateInterface $form_state) {
+  // Save the captcha delay attempts value for the field.
+  if ($form_state->getValue('captcha_delay_attempts')) {
+    $captcha_point->setThirdPartySetting('alshaya_captcha', 'captcha_delay_attempts', $form_state->getValue('captcha_delay_attempts'));
+    return;
+  }
+
+  $captcha_point->unsetThirdPartySetting('alshaya_captcha', 'captcha_delay_attempts');
+}
+
+/**
+ * Form validation handler to fill the flood.
+ */
+function _alshaya_captcha_form_validate(&$form, FormStateInterface $form_state) {
+  // If there is any error, then register flood.
+  if ($form_state->getErrors()) {
+    $flood = $form_state->get('flood');
+    $flood->register('alshaya_captcha_' . $form['#id']);
+  }
+}
+
+/**
+ * Form submit handler to clear the flood.
+ */
+function _alshaya_captcha_form_submit(&$form, FormStateInterface $form_state) {
+  // If successful, clear flood.
+  $flood = $form_state->get('flood');
+  $flood->clear('alshaya_captcha_' . $form['#id']);
+}
