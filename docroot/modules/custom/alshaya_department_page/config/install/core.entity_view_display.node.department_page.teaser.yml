@@ -4,6 +4,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.department_page.body
+    - field.field.node.department_page.field_product_category
     - field.field.node.department_page.field_promo_blocks
     - node.type.department_page
   module:
@@ -24,5 +25,6 @@ content:
   links:
     weight: 100
 hidden:
+  field_product_category: true
   field_promo_blocks: true
   langcode: true

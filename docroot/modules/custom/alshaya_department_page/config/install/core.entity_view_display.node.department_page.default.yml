@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.node.department_page.body
+    - field.field.node.department_page.field_product_category
     - field.field.node.department_page.field_promo_blocks
     - node.type.department_page
   module:
@@ -21,6 +22,13 @@ content:
     settings:
       trim_length: 600
     third_party_settings: {  }
+  field_product_category:
+    weight: 3
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
   field_promo_blocks:
     type: entity_reference_revisions_entity_view
     weight: 1
