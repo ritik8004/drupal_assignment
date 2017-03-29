@@ -27,7 +27,7 @@ function alshaya_cart_notification_form_alter(&$form, FormStateInterface $form_s
     ];
 
     $form['add_to_cart']['#ajax'] = [
-      'callback' => '_submit_the_form',
+      'callback' => 'alshaya_cart_notification_form_submit',
       'wrapper' => 'cart_notification',
     ];
 
@@ -41,7 +41,7 @@ function alshaya_cart_notification_form_alter(&$form, FormStateInterface $form_s
 /**
  * AJAX callback for the add to cart submit button.
  */
-function _submit_the_form(&$form, FormStateInterface $form_state) {
+function alshaya_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
 
   // Product name.
   $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
@@ -52,24 +52,44 @@ function _submit_the_form(&$form, FormStateInterface $form_state) {
   $quantity = $form_state->getValue('quantity');
 
   // Generating cart link.
-  $url = Url::fromRoute('acq_cart.cart');
-  $internal_link = \Drupal::l(t('View Cart'), $url)->getGeneratedLink();
+  $url = Url::fromRoute('acq_cart.cart')->toString();
 
   // Product Image.
   // @todo: Add correct image for notification once MMCPA-365 is over.
   // Adding a dummy image for now.
-  $image = '<img src="http://media.laredoute.com/products1/72by72/2/8/5/500775662_1008_CO_1_1200.jpg"/>';
+  $image = 'http://media.laredoute.com/products1/72by72/2/8/5/500775662_1008_CO_1_1200.jpg';
 
-  $html = '<div class ="notification"><div class="1-col">';
-  $html .= $image . 'Qty: <span class = "qty">' . $quantity . '</span></div>';
-  $html .= '<div class="2-col"><span class ="name">' . $product_name . '</span>';
-  $html .= ' has been added to your cart.';
-  $html .= $internal_link;
-  $html .= '</div></div>';
+  // Use the template to render the HTML.
+  $output = [
+    '#theme' => 'cart_notitification',
+    '#quantity' => $quantity,
+    '#image' => $image,
+    '#product_name' => $product_name,
+    '#link' => $url,
+  ];
+
+  $html = drupal_render($output);
 
   // Ajax Response.
   $response = new AjaxResponse();
   $response->addCommand(new HtmlCommand('#cart_notification', $html));
 
   return $response;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_cart_notification_theme($existing, $type, $theme, $path) {
+  return [
+    'cart_notitification' => [
+      'variables' => [
+        'quantity' => 0,
+        'image' => '',
+        'product_name' => '',
+        'link' => '',
+      ],
+      'template' => 'cart-notification',
+    ],
+  ];
 }
