@@ -342,7 +342,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Check if we have additional fields to be added as base fields.
     if (!empty($additionalFields) && is_array($additionalFields)) {
-      foreach ($additionalFields as $field_info) {
+      foreach ($additionalFields as $machine_name => $field_info) {
         // Initialise the field variable.
         $field = NULL;
 
@@ -384,7 +384,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $field->setDisplayConfigurable('view', TRUE);
 
         // We will use attr prefix to avoid conflicts with default base fields.
-        $fields['attr_' . $field_info['machine_name']] = $field;
+        $fields['attr_' . $machine_name] = $field;
       }
     }
 
