@@ -1,0 +1,12 @@
+name: 'Alshaya Views'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - system
+  - taxonomy
+  - user
+  - views
+  - views_field_view
+version: 8.x-1.0
+package: Alshaya
