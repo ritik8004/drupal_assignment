@@ -17,6 +17,7 @@ dependencies:
   - text
   - user
   - views
+  - views_field_view
   - workbench_moderation
 version: 8.x-1.0
 package: Alshaya

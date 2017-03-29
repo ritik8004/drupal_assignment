@@ -34,6 +34,7 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
  */
 function alshaya_department_page_page_exists($tid) {
   // Check if we already have a department page linked to the same category.
+  // @todo: Performance improvement by using caching.
   $query = \Drupal::database()->select('node__field_product_category', 'nfpc');
   $query->addField('nfpc', 'entity_id');
   $query->condition('nfpc.field_product_category_target_id', $tid);
