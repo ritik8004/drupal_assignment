@@ -28,7 +28,9 @@
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/password_policy": "^3.0",
         "drupal/taxonomy_term_depth": "1.x-dev",
-        "drupal/email_registration": "^1.0"
+        "drupal/email_registration": "^1.0",
+        "drupal/captcha": "^1.0@beta",
+        "drupal/recaptcha": "^2.2"
     },
     "require-dev": {
         "behat/behat": "^3.1",
