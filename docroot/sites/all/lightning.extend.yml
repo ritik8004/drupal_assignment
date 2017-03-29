@@ -20,6 +20,7 @@ modules:
   - alshaya_acm_product
   - alshaya_admin
   - alshaya_arabic
+  - alshaya_captcha
   - alshaya_custom
   - alshaya_default_content
   - alshaya_department_page
