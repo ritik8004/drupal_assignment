@@ -59,6 +59,11 @@ class ProductSyncResource extends ResourceBase {
   private $queryFactory;
 
   /**
+   * @var DownloadImagesQueue $downloadImagesQueueManager
+   */
+  private $downloadImagesQueueManager = NULL;
+
+  /**
    * Construct
    *
    * @param array $configuration
@@ -235,6 +240,9 @@ class ProductSyncResource extends ResourceBase {
       }
 
       $sku->save();
+
+      // Queue the images for download.
+      $this->queueImages($sku, $product['attributes']);
 
       if ($display) {
         $display->save();
@@ -419,6 +427,26 @@ class ProductSyncResource extends ResourceBase {
         $field_key = 'attr_' . $key;
         $sku->{$field_key}->setValue($value);
       }
+    }
+  }
+
+  /**
+   * queueImages
+   *
+   * @param SKU $sku
+   * @param array $attributes
+   */
+  private function queueImages(SKU $sku, array $attributes) {
+    // @TODO: For now we are directly accessing the image attribute value.
+    // @TODO: Once we finalise the field to use, we need to add conditions
+    // for existing value check.
+    if (isset($attributes['image'])) {
+      // Initialise queue manager if not already done.
+      if (empty($this->downloadImagesQueueManager)) {
+        $this->downloadImagesQueueManager = \Drupal::service('acq_sku.download_images_queue');
+      }
+
+      $this->downloadImagesQueueManager->addItem($sku->id(), $attributes['image']);
     }
   }
 

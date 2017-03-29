@@ -67,6 +67,13 @@ class ConductorSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('url_ingest'),
     );
 
+    $form['media_base_url'] = array(
+      '#type' => 'url',
+      '#title' => $this->t('Base URL for media files'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('media_base_url'),
+    );
+
     $form['timeout'] = array(
       '#type' => 'number',
       '#title' => $this->t('Conductor Connection Timeout'),
