@@ -8,6 +8,15 @@
   img {
     vertical-align: middle;
   }
+
+  .paragraph {
+    position: relative;
+  }
+
+  .field--type-link a {
+    @extend %u-image-replacement;
+    @extend %u-overlay-content;
+  }
 }
 
 .c-promo__item {
@@ -23,7 +32,6 @@
   float: $left;
   line-height: 1;
   text-align: center;
-  position: relative;
 
   @include breakpoint($only-mobile) {
     width: calc(50% - 0.5rem);
@@ -44,11 +52,6 @@
     &:nth-child(2) {
       margin: 0 1.5rem;
     }
-  }
-
-  .field--type-link a {
-    @extend %u-image-replacement;
-    @extend %u-overlay-content;
   }
 
   .field--name-field-title {
