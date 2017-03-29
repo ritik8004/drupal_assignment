@@ -1,5 +1,6 @@
 @import "../../config";
 @import "../../utils";
+@import "../../icons";
 @import "owl.carousel";
 
 .c-slider__paragraph {
@@ -17,22 +18,25 @@
 
 .owl-nav {
   .disabled {
-    @extend %is-hidden;
+    @extend %icon-chevron-next--disabled;
+
+    opacity: 0.5;
+    cursor: default !important;
   }
 }
 
 .owl-prev,
 .owl-next {
   @extend %u-image-replacement;
+  @extend %icon-chevron-next;
 
   background-color: rgba(255, 255, 255, 0.25);
-  background-image: url("../imgs/icons/icon-chevron-next.svg");
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 100%;
   height: 2.25rem;
   position: absolute;
-  top: calc(50% - 1.125rem); // 50% - (2.25rem / 2)
+  top: calc(50% - (4.375rem - 1.125rem)); // 50% - (4.375rem - (2.25rem / 2))
   width: 2.25rem;
 }
 
@@ -58,7 +62,7 @@
   color: $peacock-blue;
   border: 1px solid currentColor;
   display: inline-block;
-  margin: 1.75rem 1rem;
+  margin: 1.75rem 0.75rem;
 
   &.active {
     background: currentColor;

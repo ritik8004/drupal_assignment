@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
+  // Using array_combine to ensure we have same data in key and value.
+  $cartQuantityOptions = array_combine($range, $range);
+
+  foreach ($form['cart'] as $id => $item) {
+    if (is_array($item) && isset($item['quantity'])) {
+      $form['cart'][$id]['quantity']['#type'] = 'select';
+      $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
+  // Using array_combine to ensure we have same data in key and value.
+  $cartQuantityOptions = array_combine($range, $range);
+
+  $form['quantity']['#type'] = 'select';
+  $form['quantity']['#options'] = $cartQuantityOptions;
+  unset($form['quantity']['#size']);
+}

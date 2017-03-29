@@ -68,6 +68,16 @@ function alshaya_custom_modules_installed($modules) {
     ->set('weight', 6)
     ->save();
 
+  // Unset the Block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_powered')
+    ->set('region', '-1')
+    ->save();
+
+  // Unset the Block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_breadcrumbs')
+    ->set('region', '-1')
+    ->save();
+
   // Set search block to available on all pages.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')->set('visibility', [])->save();
 
@@ -88,5 +98,10 @@ function alshaya_custom_modules_installed($modules) {
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_account_menu')
     ->set('region', 'menu_secondary')
     ->set('weight', -11)
+    ->save();
+
+  // Unset the Main Navigation Block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
+    ->set('region', '-1')
     ->save();
 }

@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_product module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_product_install() {
+  // Add fields to store the values from attributes as fields.
+  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
+}

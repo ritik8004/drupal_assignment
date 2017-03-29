@@ -11,6 +11,11 @@
   font-size: 14px;
   line-height: 2.29;
 
+  @include breakpoint($only-mobile) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
   p {
     margin-top: 0;
     margin-bottom: 1.5rem;

@@ -1,0 +1,97 @@
+{
+  "_links": {
+    "self": {
+      "href": "http:\/\/local.alshaya.com\/block\/4?_format=hal_json"
+    },
+    "type": {
+      "href": "http:\/\/drupal.org\/rest\/type\/block_content\/basic"
+    },
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/revision_user": [
+      {
+        "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json"
+      }
+    ]
+  },
+  "id": [
+    {
+      "value": "4"
+    }
+  ],
+  "uuid": [
+    {
+      "value": "920c98f0-f0a3-462c-9d33-d459e20850ef"
+    }
+  ],
+  "revision_id": [
+    {
+      "value": "4"
+    }
+  ],
+  "langcode": [
+    {
+      "value": "en",
+      "lang": "en"
+    }
+  ],
+  "type": [
+    {
+      "target_id": "basic"
+    }
+  ],
+  "info": [
+    {
+      "value": "Join the club",
+      "lang": "en"
+    }
+  ],
+  "changed": [
+    {
+      "value": "1490641410",
+      "lang": "en"
+    }
+  ],
+  "revision_created": [
+    {
+      "value": "1490641410"
+    }
+  ],
+  "_embedded": {
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/revision_user": [
+      {
+        "_links": {
+          "self": {
+            "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json"
+          },
+          "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+          }
+        },
+        "uuid": [
+          {
+            "value": "7ba78011-4b3a-426b-80e5-2861bcb2acd0"
+          }
+        ]
+      }
+    ]
+  },
+  "revision_translation_affected": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "default_langcode": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "body": [
+    {
+      "value": "<p>Win exciting prizes<\/p>\r\n\r\n<p>Unlock exclusive rewards<\/p>\r\n\r\n<p>Be the first to know<\/p>\r\n\r\n<a href=\"\">Learn more<\/a>\r\n",
+      "format": "rich_text",
+      "summary": "",
+      "lang": "en"
+    }
+  ]
+}

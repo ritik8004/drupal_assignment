@@ -1,0 +1,21 @@
+fields:
+  # Field for color attribute.
+  color:
+    label: 'Color'
+    description: 'Color attribute for the product.'
+    cardinality: 1
+    type: 'string'
+
+  # Field for size attribute.
+  size:
+    label: 'Size'
+    description: 'Size attribute for the product.'
+    cardinality: 1
+    type: 'string'
+
+  # Field for special_price attribute.
+  special_price:
+    label: 'Special price'
+    description: 'Special price attribute for the product.'
+    cardinality: 1
+    type: 'string'

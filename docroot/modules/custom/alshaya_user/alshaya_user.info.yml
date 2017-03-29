@@ -1,0 +1,15 @@
+name: 'Alshaya user'
+type: module
+core: 8.x
+description: 'Stores user field and related settings.'
+dependencies:
+  - block
+  - datetime
+  - email_registration
+  - field
+  - path
+  - system
+  - user
+  - views
+version: 8.x-1.0
+package: Alshaya
