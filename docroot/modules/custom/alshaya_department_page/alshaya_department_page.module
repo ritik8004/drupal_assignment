@@ -15,7 +15,7 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
   $tids = array_keys($form['field_product_category']['widget']['#options']);
 
   foreach ($tids as $tid) {
-    $page_exists = _check_existance_of_department_page($tid);
+    $page_exists = alshaya_department_page_page_exists($tid);
     if ($page_exists) {
       // Unset the value.
       unset($form['field_product_category']['widget']['#options'][$tid]);
@@ -32,7 +32,7 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
  * @return bool
  *   Returns FALSE if page not found, else returns the $node_id of the page.
  */
-function _check_existance_of_department_page($tid) {
+function alshaya_department_page_page_exists($tid) {
   // Check if we already have a department page linked to the same category.
   $query = \Drupal::database()->select('node__field_product_category', 'nfpc');
   $query->addField('nfpc', 'entity_id');
