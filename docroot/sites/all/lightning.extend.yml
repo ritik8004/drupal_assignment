@@ -21,7 +21,7 @@ modules:
   - alshaya_admin
   - alshaya_arabic
   - alshaya_captcha
-  - alshaya_cart_notification
+  - alshaya_acm_cart_notification
   - alshaya_custom
   - alshaya_default_content
   - alshaya_department_page
