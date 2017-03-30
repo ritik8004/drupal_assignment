@@ -362,6 +362,20 @@ class SKU extends ContentEntityBase implements SKUInterface {
               'weight' => $weight,
             ]);
             break;
+
+          case 'image':
+            $field = BaseFieldDefinition::create('image');
+            $field->setDisplayOptions('view', array(
+              'label' => 'hidden',
+              'type' => 'image',
+              'weight' => $weight,
+            ));
+
+            $field->setDisplayOptions('form', array(
+              'type' => 'image_image',
+              'weight' => $weight,
+            ));
+            break;
         }
 
         // Check if we don't have the field type defined yet.
