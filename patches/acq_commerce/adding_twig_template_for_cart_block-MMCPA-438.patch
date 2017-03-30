@@ -12,10 +12,10 @@ index 0000000..9f6b11e
 +    - core/jquery
 +    - core/drupal
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.module b/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.module
-index a081fec..7633230 100644
+index a081fec..6aa0d71 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.module
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.module
-@@ -18,3 +18,44 @@ function acq_cart_preprocess_acq_sku(&$variables) {
+@@ -18,3 +18,45 @@ function acq_cart_preprocess_acq_sku(&$variables) {
    // we provide a hook that's only called if this module is enabled on display.
    \Drupal::moduleHandler()->alter('add_to_cart_display', $variables);
  }
@@ -55,6 +55,7 @@ index a081fec..7633230 100644
 +        'ordertotal'=> '',
 +        'currency_format' => '',
 +        'currency_code_position' => '',
++        'order_status'=> '',
 +      ),
 +      'template' => 'block--acqcartsummary',
 +    ),
@@ -184,7 +185,7 @@ index 0000000..70fff36
 +  }
 +}
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartBlock.php b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartBlock.php
-index 6ca1b31..7c7370b 100644
+index 6ca1b31..1549a7d 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartBlock.php
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartBlock.php
 @@ -11,6 +11,7 @@
@@ -195,7 +196,7 @@ index 6ca1b31..7c7370b 100644
  
  /**
   * Provides a 'CartBlock' block.
-@@ -65,32 +66,75 @@ public function build() {
+@@ -65,32 +66,77 @@ public function build() {
      $cart = $this->cartStorage->getCart();
      $items = $cart->items();
  
@@ -274,6 +275,8 @@ index 6ca1b31..7c7370b 100644
 +      '#discount' => $discount,
 +      '#ordertotal'=> $order_total,
 +      '#currency_format' => $currency_format,
++      //@todo: Status would be dynmaic, adding static for now.
++      '#order_status' => $this->t('Before delivery'),
 +      '#currency_code_position' => $currency_code_position,
 +      '#attached' => [
 +        'library' =>[
@@ -350,10 +353,10 @@ index 0000000..6487a6c
 +}
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqcartsummary.html.twig b/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqcartsummary.html.twig
 new file mode 100644
-index 0000000..b8413aa
+index 0000000..3d7fd75
 --- /dev/null
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqcartsummary.html.twig
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,104 @@
 +<div class="acq-cart-summary">
 +  <div class="caption">
 +    <span class="title">{% trans %} Order Summary {% endtrans %}</span>
@@ -455,9 +458,9 @@ index 0000000..b8413aa
 +      </span>
 +      {% endif %}
 +    </div>
++    <span class="status">{{ order_status }}</span>
 +  </div>
 +</div>
-\ No newline at end of file
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqminicart.html.twig b/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqminicart.html.twig
 new file mode 100644
 index 0000000..8afcf9f
