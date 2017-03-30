@@ -1,5 +1,5 @@
 (function ($) {
-  Drupal.behaviors.alshaya_cart_notification = {
+  Drupal.behaviors.alshaya_acm_cart_notification = {
     attach: function (context, settings) {
       var element = document.getElementById('cart_notification');
       var dialogsettings = {
