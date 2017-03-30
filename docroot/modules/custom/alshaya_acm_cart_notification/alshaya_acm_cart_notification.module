@@ -14,7 +14,7 @@ use Drupal\Core\Url;
 /**
  * Implements hook_form_alter().
  */
-function alshaya_cart_notification_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function alshaya_acm_cart_notification_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   // Altering Sku base form, which is the form implementation for Simple,
   // Grouped and Configurable products.
@@ -27,21 +27,21 @@ function alshaya_cart_notification_form_alter(&$form, FormStateInterface $form_s
     ];
 
     $form['add_to_cart']['#ajax'] = [
-      'callback' => 'alshaya_cart_notification_form_submit',
+      'callback' => 'alshaya_acm_cart_notification_form_submit',
       'wrapper' => 'cart_notification',
     ];
 
     // Attach the js file with the add to cart form.
     $form['#attached']['library'][] = 'core/drupal.ajax';
     $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-    $form['#attached']['library'][] = 'alshaya_cart_notification/cart_notification_js';
+    $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
   }
 }
 
 /**
  * AJAX callback for the add to cart submit button.
  */
-function alshaya_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
+function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
 
   // Product name.
   $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
@@ -61,7 +61,7 @@ function alshaya_cart_notification_form_submit(&$form, FormStateInterface $form_
 
   // Use the template to render the HTML.
   $output = [
-    '#theme' => 'cart_notitification',
+    '#theme' => 'cart_notification',
     '#quantity' => $quantity,
     '#image' => $image,
     '#product_name' => $product_name,
@@ -80,9 +80,9 @@ function alshaya_cart_notification_form_submit(&$form, FormStateInterface $form_
 /**
  * Implements hook_theme().
  */
-function alshaya_cart_notification_theme($existing, $type, $theme, $path) {
+function alshaya_acm_cart_notification_theme($existing, $type, $theme, $path) {
   return [
-    'cart_notitification' => [
+    'cart_notification' => [
       'variables' => [
         'quantity' => 0,
         'image' => '',
