@@ -77,7 +77,7 @@ function alshaya_user_modules_installed($modules) {
 
 Thank you for registering at [site:name]. You may now log in by clicking this link or copying and pasting it into your browser:
 
-[user:one-time-login-url]
+[user:registrationpassword-url]
 
 This link can only be used once to log in and will lead you to a page where you can set your password.
 
@@ -89,24 +89,6 @@ password: Your password
 --  [site:name] team');
   $config->save();
 
-  // Reset default subject and body of activation mail.
-  $mail_config = \Drupal::configFactory()->getEditable('user.mail');
-  $mail_config->set('status_activated.subject', 'Account details for [user:display-name] at [site:name] (approved)');
-  $mail_config->set('status_activated.body', '[user:display-name],
-
-Your account at [site:name] has been activated.
-
-You may now log in by clicking this link or copying and pasting it into your browser:
-
-[user:registrationpassword-url]
-
-This link can only be used once to log in and will lead you to a page where you can set your password.
-
-After setting your password, you will be able to log in at [site:login-url] in the future using:
-
-username: [user:account-name]
-password: Your password
-
---  [site:name] team');
-  $mail_config->save();
+  // Disable account activation mail.
+  \Drupal::configFactory()->getEditable('user.settings')->set('notify.status_activated', FALSE)->save();
 }
