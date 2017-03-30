@@ -100,8 +100,9 @@ function alshaya_custom_modules_installed($modules) {
     ->set('weight', -11)
     ->save();
 
-  // Unset the Main Navigation Block.
+  // Set the Main Navigation Block.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
-    ->set('region', '-1')
+    ->set('region', 'menu_primary')
+    ->set('weight', -15)
     ->save();
 }

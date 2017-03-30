@@ -3,7 +3,7 @@
     <li>
       <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
       {% if level3.child is not empty %}
-        <div> {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}</div>
+        {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
       {% endif %}
     </li>
   {% endfor %}

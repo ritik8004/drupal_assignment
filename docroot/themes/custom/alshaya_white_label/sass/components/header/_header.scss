@@ -14,6 +14,10 @@
   }
 }
 
+.block--display {
+  display: block !important;
+}
+
 .c-menu-secondary {
   border-bottom: 1px solid $white;
 
@@ -392,53 +396,203 @@ header {
 /*
 	SITE HEADER - MAIN NAVIGATION
 */
-
 .mobile--menu {
   font-size: 0.75rem;
   color: $black-two;
 }
 
-.block-alshaya-main-menu {
-  @include breakpoint($upto-desktop) {
-    .main--menu {
-      display: none;
-    }
+.main--menu {
+  ul {
+    padding: 0;
   }
 
   li {
     list-style: none;
   }
+}
 
-  ul {
-    display: flex;
-    margin: 0;
-    padding: 0;
-  }
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    position: relative;
 
-  li.parent--level {
-    flex: 1;
-    vertical-align: top;
-    background-color: $very-light-blue;
-    list-style: none;
-    text-align: center;
-    padding: 10px;
-
-    &:hover {
-      background: $peacock-blue;
-
-      a {
-        color: $white-five;
+    @include breakpoint($upto-desktop) {
+      .main--menu {
+        display: none;
       }
     }
 
-    a {
-      font-size: 0.75rem;
-      color: $peacock-blue;
-      text-decoration: none;
+    li {
+      list-style: none;
     }
 
     ul {
-      display: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
     }
+
+    li.parent--level {
+      flex: 1;
+      vertical-align: top;
+      background-color: $very-light-blue;
+      list-style: none;
+      text-align: center;
+      padding: 10px;
+
+      &:hover {
+        background: $peacock-blue;
+
+        a.level--one {
+          color: $white-five;
+        }
+      }
+
+      a {
+        font-size: 0.75rem;
+        color: $peacock-blue;
+        text-decoration: none;
+      }
+
+      ul {
+        display: none;
+      }
+    }
+  }
+
+  .child--first {
+    position: absolute;
+    text-align: left;
+    top: 38px;
+    right: 0;
+    left: 0;
+    padding: 1.875rem 1.5625rem !important;
+    background: $white-five;
+    z-index: 10;
+
+    a {
+      color: $peacock-blue;
+
+      &:hover {
+        color: $peacock-blue !important;
+      }
+    }
+
+    .level--two {
+      .level__two--child {
+        display: inline-block;
+        padding: 1.563rem;
+        width: 210px;
+        position: relative;
+        vertical-align: top;
+
+        &::after {
+          content: '';
+          background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
+          width: 8px;
+          height: 17px;
+          display: inline-block;
+          vertical-align: middle;
+          position: absolute;
+          right: 10px;
+        }
+
+        &:hover {
+          background-color: $very-light-blue;
+        }
+      }
+
+      .child--two {
+        width: 30%;
+        vertical-align: top;
+        margin-bottom: 1.563rem;
+        padding: 0 1.5rem;
+
+        li {
+          padding: 0.3125rem 0;
+
+          a {
+            color: $brownish-grey;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.48);
+}
+
+@include breakpoint($upto-desktop) {
+  .mobile--overlay {
+    background-color: rgba(0, 0, 0, 0.48);
+  }
+
+  .main--menu {
+    background: $white-five;
+    display: none;
+    width: 80%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 20;
+    overflow-y: scroll;
+  }
+
+  a {
+    text-decoration: none;
+    color: $brownish-grey;
+  }
+
+  .parent--level {
+    border-bottom: 1px solid #cecece;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    position: relative;
+
+    .level--one::after {
+      content: '';
+      background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
+      width: 8px;
+      height: 17px;
+      display: inline-block;
+      vertical-align: middle;
+      position: absolute;
+      right: 10px;
+    }
+  }
+
+  .level--two {
+    display: none;
+  }
+
+  .level--two,
+  .child--two {
+    margin-#{$left}: 0.5em;
+    padding-top: 20px;
+
+    li {
+      margin-#{$left}: 0.5rem;
+      padding-top: 20px;
+    }
+  }
+}
+
+.mobile--close {
+  display: none;
+  background: $white-five;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 12;
+
+  p {
+    padding: 20px;
   }
 }
