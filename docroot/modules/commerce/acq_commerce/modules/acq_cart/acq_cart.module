@@ -43,5 +43,19 @@ function acq_cart_theme($existing, $type, $theme, $path) {
       ),
       'template' => 'block--acqminicart',
     ),
+    'acq_cart_summary' => array(
+      'variables' => array(
+        'cart_link' => '',
+        'number_of_items' => '',
+        'products' => '',
+        'subtotal' => '',
+        'tax' => '',
+        'discount' => '',
+        'ordertotal'=> '',
+        'currency_format' => '',
+        'currency_code_position' => '',
+      ),
+      'template' => 'block--acqcartsummary',
+    ),
   );
 }

@@ -11,6 +11,7 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides a 'CartBlock' block.
@@ -65,32 +66,75 @@ class CartBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $cart = $this->cartStorage->getCart();
     $items = $cart->items();
 
-    $rows = array();
+    // Fetch the config.
+    $config = \Drupal::configFactory()
+      ->get('acq_commerce.currency');
+
+    // Fetch the currency format from the config factor.
+    $currency_format = $config->get('currency_code');
+
+    // Fetch the currency code position.
+    $currency_code_position = $config->get('currency_code_position');
+
+    // Image Url.
+    // @todo: Real image from products.
+    $img = 'http://www.israel-catalog.com/sites/default/files/imagecache/prod-small/products/images/israel-t-shirt-california-women.jpg';
+
+    // Products and No.of items.
+    $products = array();
+    $cart_count = 0;
 
     foreach ($items as $item) {
-      $rows[$item['item_id']] = [$item['name'], $item['qty'], $item['price']];
+      $products[] = [
+        'name' => $item['name'],
+        'imgurl' => $img,
+        'qty' => $item['qty'],
+        'total' => $item['price'],
+      ];
+
+      $cart_count += $item['qty'];
     }
 
-    $build = [
-      '#theme' => 'table',
-      '#header' => [t('Name'), t('Quantity'), t('Price')],
-      '#empty' => t('There are no products in your cart yet.'),
-      '#rows' => $rows,
-    ];
-
+    // Totals.
+    $subtotal = $tax = $discount = 0;
     $totals = $cart->totals();
 
-    $build['#rows']['sub'] = ['', t('Subtotal'), $totals['sub']];
+    // Subtotal.
+    $subtotal = $totals['sub'];
 
+    // Tax.
     if ((float) $totals['tax'] > 0) {
-      $build['#rows']['tax'] = ['', t('Tax'), $totals['tax']];
+      $tax = $totals['tax'];
     }
 
+    // Discount.
     if ((float) $totals['discount'] > 0) {
-      $build['#rows']['discount'] = ['', t('Discount'), $totals['discount']];
+      $discount = $totals['discount'];
     }
 
-    $build['#rows']['grand'] = ['', t('Grand Total'), $totals['grand']];
+    // Grand Total or Order total.
+    $order_total = $totals['grand'];
+
+    // Generate the cart link.
+    $url = Url::fromRoute('acq_cart.cart')->toString();
+
+    $build = [
+      '#theme' => 'acq_cart_summary',
+      '#cart_link' => $url,
+      '#number_of_items' => $cart_count,
+      '#products' => $products,
+      '#subtotal' => $subtotal,
+      '#tax' => $tax,
+      '#discount' => $discount,
+      '#ordertotal'=> $order_total,
+      '#currency_format' => $currency_format,
+      '#currency_code_position' => $currency_code_position,
+      '#attached' => [
+        'library' =>[
+          'core/jquery.ui.accordion',
+        ]
+      ]
+    ];
 
     return $build;
   }

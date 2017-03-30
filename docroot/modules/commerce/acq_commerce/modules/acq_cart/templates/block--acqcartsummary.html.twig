@@ -1,0 +1,103 @@
+<div class="acq-cart-summary">
+  <div class="caption">
+    <span class="title">{% trans %} Order Summary {% endtrans %}</span>
+    <a href="{{ cart_link }}">{% trans %} Edit {% endtrans %}</a>
+  </div>
+  <div class="content">
+    <div class="content-head">{% trans %} Items in your basket {% endtrans %} ({{ number_of_items }})</div>
+    <div class="content-items">
+      <ul>
+        {% for key, product in products %}
+          <li>
+            <img src="{{ product.imgurl }}"/>
+            <span class="product-name">{{ product.name }}</span>
+            <span class="product-qty">
+              <span class="label">{% trans %}Quantity: {% endtrans %}</span>
+              {{ product.qty }}
+            </span>
+            {% if currency_code_position == 'before' %}
+              <span class="product-total">
+                <span class="prefix">{{ currency_format }}</span>
+                <span class="total--amount">{{ product.total }}</span></span>
+            {% else %}
+              <span class="product-total">
+                <span class="total--amount">{{ product.total }}</span>
+                <span class="prefix">{{ currency_format }}</span>
+              </span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="totals">
+
+    {#Sub total#}
+    <div class="sub-total">
+      {% trans %}Sub total{% endtrans %}
+      {% if currency_code_position == 'before' %}
+      <span class="total">
+        <span class="prefix">{{ currency_format }}</span>
+        <span class="total--amount">{{ subtotal }}</span>
+      </span>
+      {% else %}
+      <span class="total">
+        <span class="total--amount">{{ subtotal }}</span>
+        <span class="prefix">{{ currency_format }}</span>
+      </span>
+      {% endif %}
+    </div>
+
+    {#Tax#}
+    {% if tax > 0 %}
+      <div class="tax-total">
+        {% trans %}Tax{% endtrans %}
+        {% if currency_code_position == 'before' %}
+        <span class="total">
+          <span class="prefix">{{ currency_format }}</span>
+          <span class="total--amount">{{ tax }}</span>
+        </span>
+        {% else %}
+        <span class="total">
+          <span class="total--amount">{{ tax }}</span>
+          <span class="prefix">{{ currency_format }}</span>
+        </span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {#Discount#}
+    {% if discount > 0 %}
+      <div class="discount-total">
+        {% trans %}Discount{% endtrans %}
+        {% if currency_code_position == 'before' %}
+        <span class="total">
+          <span class="prefix">{{ currency_format }}</span>
+          <span class="total--amount">{{ discount }}</span>
+        </span>
+        {% else %}
+        <span class="total">
+          <span class="total--amount">{{ discount }}</span>
+          <span class="prefix">{{ currency_format }}</span>
+        </span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {#Order total#}
+    <div class="order-total">
+      {% trans %}Order Total{% endtrans %}
+      {% if currency_code_position == 'before' %}
+      <span class="total">
+        <span class="prefix">{{ currency_format }}</span>
+        <span class="total--amount">{{ ordertotal }}</span>
+      </span>
+      {% else %}
+      <span class="total">
+        <span class="total--amount">{{ ordertotal }}</span>
+        <span class="prefix">{{ currency_format }}</span>
+      </span>
+      {% endif %}
+    </div>
+  </div>
+</div>
