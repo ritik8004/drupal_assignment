@@ -10,6 +10,7 @@ dependencies:
   - path
   - system
   - user
+  - user_registrationpassword
   - views
 version: 8.x-1.0
 package: Alshaya
