@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.alshaya_profile_view
+  module:
+    - system
+    - views
+  theme:
+    - alshaya_white_label
+id: views_block__alshaya_profile_view_block_1
+theme: alshaya_white_label
+region: content
+weight: -9
+provider: null
+plugin: 'views_block:alshaya_profile_view-block_1'
+settings:
+  id: 'views_block:alshaya_profile_view-block_1'
+  label: ''
+  provider: views
+  label_display: visible
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    pages: "/user/*/address_book\r\n/user/*/address_book/add\r\n/profile/*/edit"
+    negate: false
+    context_mapping: {  }
