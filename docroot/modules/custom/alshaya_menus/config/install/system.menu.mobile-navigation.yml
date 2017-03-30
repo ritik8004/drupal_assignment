@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: mobile-navigation
+label: 'Mobile navigation'
+description: ''
+locked: false
