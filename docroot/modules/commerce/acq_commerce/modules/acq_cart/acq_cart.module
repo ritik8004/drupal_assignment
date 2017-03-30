@@ -54,6 +54,7 @@ function acq_cart_theme($existing, $type, $theme, $path) {
         'ordertotal'=> '',
         'currency_format' => '',
         'currency_code_position' => '',
+        'order_status'=> '',
       ),
       'template' => 'block--acqcartsummary',
     ),

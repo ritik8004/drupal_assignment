@@ -128,6 +128,8 @@ class CartBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#discount' => $discount,
       '#ordertotal'=> $order_total,
       '#currency_format' => $currency_format,
+      //@todo: Status would be dynmaic, adding static for now.
+      '#order_status' => $this->t('Before delivery'),
       '#currency_code_position' => $currency_code_position,
       '#attached' => [
         'library' =>[
