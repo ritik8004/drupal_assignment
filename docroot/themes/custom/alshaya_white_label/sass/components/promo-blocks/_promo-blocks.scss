@@ -1,6 +1,10 @@
 .c-promo__items {
   @include container(1026px);
 
+  &.c-promo__items--department {
+    @include container(923px);
+  }
+
   @include breakpoint($only-mobile) {
     text-align: center;
   }
@@ -131,5 +135,46 @@
   @include breakpoint($tablet) {
     width: calc(50% - 0.75rem);
     max-width: 31.3125rem;
+  }
+}
+
+.c-promo-1-1--small {
+  & > div:first-child {
+    float: $left;
+    max-width: 18.1875rem;
+    width: 31.527%;
+  }
+
+  & > div:last-child {
+    float: $right;
+    max-width: 37.875rem;
+    width: 65.65%;
+  }
+}
+
+.c-promo-1-1--large {
+  & > div:first-child {
+    float: $left;
+    max-width: 37.875rem;
+    width: 65.65%;
+  }
+
+  & > div:last-child {
+    float: $right;
+    max-width: 18.1875rem;
+    width: 31.527%;
+  }
+}
+
+.c-promo-1-1--eq__item {
+  max-width: 28.0625rem;
+  width: calc(50% - 0.75rem);
+
+  &:first-child {
+    float: $left;
+  }
+
+  &:last-child {
+    float: $right;
   }
 }
