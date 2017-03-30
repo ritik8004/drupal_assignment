@@ -1,0 +1,474 @@
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.libraries.yml b/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.libraries.yml
+new file mode 100644
+index 0000000..9f6b11e
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.libraries.yml
+@@ -0,0 +1,7 @@
++acq-cart-custom-js:
++  version: 1.x
++  js:
++    js/acq_cart_custom.js: {}
++  dependencies:
++    - core/jquery
++    - core/drupal
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.module b/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.module
+index a081fec..7633230 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.module
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.module
+@@ -18,3 +18,44 @@ function acq_cart_preprocess_acq_sku(&$variables) {
+   // we provide a hook that's only called if this module is enabled on display.
+   \Drupal::moduleHandler()->alter('add_to_cart_display', $variables);
+ }
++
++/**
++ * Implements hook_theme().
++ */
++function acq_cart_theme($existing, $type, $theme, $path) {
++  // Fetch the config.
++  $config = \Drupal::configFactory()
++    ->get('acq_commerce.currency');
++
++  // Fetch the currency format from the config factor.
++  $currency_format = $config->get('currency_code');
++
++  // Fetch the currency code position.
++  $currency_code_position = $config->get('currency_code_position');
++
++  return array(
++    'acq_cart_mini_cart' => array(
++      'variables' => array(
++        'quantity' => 0,
++        'total' => NULL,
++        'currency_format' => $currency_format,
++        'currency_code_position' => $currency_code_position
++      ),
++      'template' => 'block--acqminicart',
++    ),
++    'acq_cart_summary' => array(
++      'variables' => array(
++        'cart_link' => '',
++        'number_of_items' => '',
++        'products' => '',
++        'subtotal' => '',
++        'tax' => '',
++        'discount' => '',
++        'ordertotal'=> '',
++        'currency_format' => '',
++        'currency_code_position' => '',
++      ),
++      'template' => 'block--acqcartsummary',
++    ),
++  );
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.routing.yml b/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.routing.yml
+index 46b2da9..39694c3 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.routing.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/acq_cart.routing.yml
+@@ -5,3 +5,11 @@ acq_cart.cart:
+     _title: 'Cart'
+   requirements:
+     _permission: 'access cart page'
++
++acq_cart.getMiniCartRender:
++  path: '/mini-cart'
++  defaults:
++    _controller: '\Drupal\acq_cart\Controller\getMiniCart::content'
++    _title: 'Cart'
++  requirements:
++    _permission: 'access content'
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/js/acq_cart_custom.js b/docroot/modules/commerce/acq_commerce/modules/acq_cart/js/acq_cart_custom.js
+new file mode 100644
+index 0000000..99742f7
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/js/acq_cart_custom.js
+@@ -0,0 +1,16 @@
++(function ($) {
++  Drupal.behaviors.acq_cart_js = {
++    attach: function (context, settings) {
++      $.ajax({
++        url: "/" + drupalSettings.path.pathPrefix + "mini-cart",
++          success: function(result) {
++            $("#mini-cart-wrapper").html(result);
++          }
++      });
++
++      $(".acq-cart-summary .content").accordion({
++        collapsible: true
++      });
++    }
++  };
++})(jQuery);
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Controller/getMiniCart.php b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Controller/getMiniCart.php
+new file mode 100644
+index 0000000..70fff36
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Controller/getMiniCart.php
+@@ -0,0 +1,79 @@
++<?php
++
++namespace Drupal\acq_cart\Controller;
++
++use Drupal\Core\Controller\ControllerBase;
++use Drupal\acq_cart\CartStorageInterface;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++use Symfony\Component\HttpFoundation\JsonResponse;
++
++/**
++ * Class getMiniCart
++ * @package Drupal\acq_cart\Controller
++ */
++class getMiniCart extends ControllerBase {
++  /**
++   * Drupal\acq_cart\CartStorageInterface definition.
++   *
++   * @var \Drupal\acq_cart\CartStorageInterface
++   */
++  protected $cartStorage;
++
++  /**
++   * Constructor.
++   *
++   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
++   *   The cart session.
++   */
++  public function __construct(CartStorageInterface $cart_storage) {
++    $this->cartStorage = $cart_storage;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container) {
++    return new static(
++      $container->get('acq_cart.cart_storage')
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function content() {
++    $cart = $this->cartStorage->getCart();
++    $totals = $cart->totals();
++
++    // Fetch the config.
++    $config = \Drupal::configFactory()
++      ->get('acq_commerce.currency');
++
++    // Fetch the currency format from the config factor.
++    $currency_format = $config->get('currency_code');
++
++    // Fetch the currency code position.
++    $currency_code_position = $config->get('currency_code_position');
++
++    // The grand total including discounts and taxes.
++    $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
++
++    // The number of items in cart.
++    $items = $this->cartStorage->getCart()->items();
++    $quantity = 0;
++    foreach ($items as $item) {
++      $quantity += $item['qty'];
++    }
++
++    // Use the template to render the HTML.
++    $output = [
++      '#theme' => 'acq_cart_mini_cart',
++      '#quantity' => $quantity,
++      '#total' => $grand_total,
++      '#currency_format' => $this->t($currency_format),
++      '#currency_code_position' => $currency_code_position,
++    ];
++
++    return new JsonResponse(drupal_render($output)->jsonSerialize());
++  }
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartBlock.php b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartBlock.php
+index 6ca1b31..7c7370b 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartBlock.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartBlock.php
+@@ -11,6 +11,7 @@
+ use Drupal\Core\Block\BlockBase;
+ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
++use Drupal\Core\Url;
+ 
+ /**
+  * Provides a 'CartBlock' block.
+@@ -65,32 +66,75 @@ public function build() {
+     $cart = $this->cartStorage->getCart();
+     $items = $cart->items();
+ 
+-    $rows = array();
++    // Fetch the config.
++    $config = \Drupal::configFactory()
++      ->get('acq_commerce.currency');
++
++    // Fetch the currency format from the config factor.
++    $currency_format = $config->get('currency_code');
++
++    // Fetch the currency code position.
++    $currency_code_position = $config->get('currency_code_position');
++
++    // Image Url.
++    // @todo: Real image from products.
++    $img = 'http://www.israel-catalog.com/sites/default/files/imagecache/prod-small/products/images/israel-t-shirt-california-women.jpg';
++
++    // Products and No.of items.
++    $products = array();
++    $cart_count = 0;
+ 
+     foreach ($items as $item) {
+-      $rows[$item['item_id']] = [$item['name'], $item['qty'], $item['price']];
++      $products[] = [
++        'name' => $item['name'],
++        'imgurl' => $img,
++        'qty' => $item['qty'],
++        'total' => $item['price'],
++      ];
++
++      $cart_count += $item['qty'];
+     }
+ 
+-    $build = [
+-      '#theme' => 'table',
+-      '#header' => [t('Name'), t('Quantity'), t('Price')],
+-      '#empty' => t('There are no products in your cart yet.'),
+-      '#rows' => $rows,
+-    ];
+-
++    // Totals.
++    $subtotal = $tax = $discount = 0;
+     $totals = $cart->totals();
+ 
+-    $build['#rows']['sub'] = ['', t('Subtotal'), $totals['sub']];
++    // Subtotal.
++    $subtotal = $totals['sub'];
+ 
++    // Tax.
+     if ((float) $totals['tax'] > 0) {
+-      $build['#rows']['tax'] = ['', t('Tax'), $totals['tax']];
++      $tax = $totals['tax'];
+     }
+ 
++    // Discount.
+     if ((float) $totals['discount'] > 0) {
+-      $build['#rows']['discount'] = ['', t('Discount'), $totals['discount']];
++      $discount = $totals['discount'];
+     }
+ 
+-    $build['#rows']['grand'] = ['', t('Grand Total'), $totals['grand']];
++    // Grand Total or Order total.
++    $order_total = $totals['grand'];
++
++    // Generate the cart link.
++    $url = Url::fromRoute('acq_cart.cart')->toString();
++
++    $build = [
++      '#theme' => 'acq_cart_summary',
++      '#cart_link' => $url,
++      '#number_of_items' => $cart_count,
++      '#products' => $products,
++      '#subtotal' => $subtotal,
++      '#tax' => $tax,
++      '#discount' => $discount,
++      '#ordertotal'=> $order_total,
++      '#currency_format' => $currency_format,
++      '#currency_code_position' => $currency_code_position,
++      '#attached' => [
++        'library' =>[
++          'core/jquery.ui.accordion',
++        ]
++      ]
++    ];
+ 
+     return $build;
+   }
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartMiniBlock.php b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartMiniBlock.php
+new file mode 100644
+index 0000000..6487a6c
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Plugin/Block/CartMiniBlock.php
+@@ -0,0 +1,58 @@
++<?php
++
++namespace Drupal\acq_cart\Plugin\Block;
++
++use Drupal\Core\Block\BlockBase;
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Provides a 'CartMiniBlock' block.
++ *
++ * @Block(
++ *   id = "cart_mini_block",
++ *   admin_label = @Translation("Cart Mini Block"),
++ * )
++ */
++class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface {
++
++  /**
++   * Constructor.
++   *
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin_id for the plugin instance.
++   * @param string $plugin_definition
++   *   The plugin implementation definition.
++   */
++  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function build() {
++    // Something to show till we get the AJAX response back.
++    $loading_message = $this->t('Loading ...');
++    $output = [
++      '#markup' => '<div id="mini-cart-wrapper">' . $loading_message . '</div>',
++      '#attached' => [
++        'library' => 'acq_cart/acq-cart-custom-js'
++        ]
++    ];
++    return $output;
++  }
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqcartsummary.html.twig b/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqcartsummary.html.twig
+new file mode 100644
+index 0000000..b8413aa
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqcartsummary.html.twig
+@@ -0,0 +1,103 @@
++<div class="acq-cart-summary">
++  <div class="caption">
++    <span class="title">{% trans %} Order Summary {% endtrans %}</span>
++    <a href="{{ cart_link }}">{% trans %} Edit {% endtrans %}</a>
++  </div>
++  <div class="content">
++    <div class="content-head">{% trans %} Items in your basket {% endtrans %} ({{ number_of_items }})</div>
++    <div class="content-items">
++      <ul>
++        {% for key, product in products %}
++          <li>
++            <img src="{{ product.imgurl }}"/>
++            <span class="product-name">{{ product.name }}</span>
++            <span class="product-qty">
++              <span class="label">{% trans %}Quantity: {% endtrans %}</span>
++              {{ product.qty }}
++            </span>
++            {% if currency_code_position == 'before' %}
++              <span class="product-total">
++                <span class="prefix">{{ currency_format }}</span>
++                <span class="total--amount">{{ product.total }}</span></span>
++            {% else %}
++              <span class="product-total">
++                <span class="total--amount">{{ product.total }}</span>
++                <span class="prefix">{{ currency_format }}</span>
++              </span>
++            {% endif %}
++          </li>
++        {% endfor %}
++      </ul>
++    </div>
++  </div>
++  <div class="totals">
++
++    {#Sub total#}
++    <div class="sub-total">
++      {% trans %}Sub total{% endtrans %}
++      {% if currency_code_position == 'before' %}
++      <span class="total">
++        <span class="prefix">{{ currency_format }}</span>
++        <span class="total--amount">{{ subtotal }}</span>
++      </span>
++      {% else %}
++      <span class="total">
++        <span class="total--amount">{{ subtotal }}</span>
++        <span class="prefix">{{ currency_format }}</span>
++      </span>
++      {% endif %}
++    </div>
++
++    {#Tax#}
++    {% if tax > 0 %}
++      <div class="tax-total">
++        {% trans %}Tax{% endtrans %}
++        {% if currency_code_position == 'before' %}
++        <span class="total">
++          <span class="prefix">{{ currency_format }}</span>
++          <span class="total--amount">{{ tax }}</span>
++        </span>
++        {% else %}
++        <span class="total">
++          <span class="total--amount">{{ tax }}</span>
++          <span class="prefix">{{ currency_format }}</span>
++        </span>
++        {% endif %}
++      </div>
++    {% endif %}
++
++    {#Discount#}
++    {% if discount > 0 %}
++      <div class="discount-total">
++        {% trans %}Discount{% endtrans %}
++        {% if currency_code_position == 'before' %}
++        <span class="total">
++          <span class="prefix">{{ currency_format }}</span>
++          <span class="total--amount">{{ discount }}</span>
++        </span>
++        {% else %}
++        <span class="total">
++          <span class="total--amount">{{ discount }}</span>
++          <span class="prefix">{{ currency_format }}</span>
++        </span>
++        {% endif %}
++      </div>
++    {% endif %}
++
++    {#Order total#}
++    <div class="order-total">
++      {% trans %}Order Total{% endtrans %}
++      {% if currency_code_position == 'before' %}
++      <span class="total">
++        <span class="prefix">{{ currency_format }}</span>
++        <span class="total--amount">{{ ordertotal }}</span>
++      </span>
++      {% else %}
++      <span class="total">
++        <span class="total--amount">{{ ordertotal }}</span>
++        <span class="prefix">{{ currency_format }}</span>
++      </span>
++      {% endif %}
++    </div>
++  </div>
++</div>
+\ No newline at end of file
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqminicart.html.twig b/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqminicart.html.twig
+new file mode 100644
+index 0000000..8afcf9f
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/templates/block--acqminicart.html.twig
+@@ -0,0 +1,8 @@
++<div class="acq-mini-cart">
++  {% if currency_code_position == 'before' %}
++    <span class="total"><span class="prefix">{{ currency_format }}</span><span class="total--amount">{{ total }}</span></span>
++  {% else %}
++    <span class="total">{{ total }}<span class="prefix">{{ currency_format }}</span></span>
++  {% endif %}
++  <a class="cart-link" href="{{ url('acq_cart.cart') }}"><span class="quantity">{{ quantity }}</span></a>
++</div>
