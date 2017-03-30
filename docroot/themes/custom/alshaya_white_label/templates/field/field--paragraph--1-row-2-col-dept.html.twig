@@ -54,24 +54,24 @@
 
 {% if label_hidden %}
   {% if multiple %}
-    <div{{ attributes.addClass(classes, 'c-promo__items') }}>
+    <div{{ attributes.addClass(classes, 'c-promo-1-1--eq__items') }}>
       {% for item in items %}
-        <div{{ item.attributes.addClass(classes, 'c-promo__item', 'clearfix') }}>{{ item.content }}</div>
+        <div{{ item.attributes.addClass(classes, 'c-promo-1-1--eq__item') }}>{{ item.content }}</div>
       {% endfor %}
     </div>
   {% else %}
     {% for item in items %}
-      <div{{ attributes.addClass(classes, 'c-promo__item', 'clearfix') }}>{{ item.content }}</div>
+      <div{{ attributes.addClass(classes, 'c-promo-1-1--eq__item') }}>{{ item.content }}</div>
     {% endfor %}
   {% endif %}
 {% else %}
   <div{{ attributes.addClass(classes) }}>
     <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
     {% if multiple %}
-      <div{{ attributes.addClass(classes, 'c-promo__items', 'clearfix') }}>
+      <div class='c-promo-1-1--eq__items'>
     {% endif %}
     {% for item in items %}
-      <div{{ item.attributes.addClass('c-promo__item', 'clearfix') }}>{{ item.content }}</div>
+      <div{{ item.attributes.addClass('c-promo-1-1--eq__item') }}>{{ item.content }}</div>
     {% endfor %}
     {% if multiple %}
       </div>
