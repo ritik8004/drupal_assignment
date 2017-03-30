@@ -288,6 +288,9 @@ class ProductSyncResource extends ResourceBase {
 
     $node->setPublished(FALSE);
 
+    // Invoke the alter hook to allow all modules to update the node.
+    \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
+
     return($node);
   }
 
@@ -358,6 +361,10 @@ class ProductSyncResource extends ResourceBase {
       $node = $this->entityManager->getStorage('node')->load($nid);
       if ($node && $node->id()) {
         $node->field_category = $categories;
+
+        // Invoke the alter hook to allow all modules to update the node.
+        \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
+
         $node->save();
       }
     }
