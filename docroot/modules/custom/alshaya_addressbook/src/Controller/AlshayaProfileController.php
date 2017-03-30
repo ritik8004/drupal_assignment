@@ -14,7 +14,23 @@ use Drupal\profile\Controller\ProfileController;
 class AlshayaProfileController extends ProfileController {
 
   /**
-   * {@inheritdoc}
+   * Overriding the ProfileController::userProfileForm().
+   *
+   * The /user/{user}/{profile_type} page renders the profile add form by
+   * default. We don't want the 'profile add' form to be available on the page
+   * and thus overriding here. It will only work for the 'address_book'
+   * profile. For other profile types, behavior will be same as provided by the
+   * profile module.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   Route match service.
+   * @param \Drupal\user\UserInterface $user
+   *   Current user object.
+   * @param \Drupal\profile\Entity\ProfileTypeInterface $profile_type
+   *   Profile type entity.
+   *
+   * @return mixed
+   *   Rendered array.
    */
   public function userProfileForm(RouteMatchInterface $route_match, UserInterface $user, ProfileTypeInterface $profile_type) {
 
