@@ -43,13 +43,19 @@ class DownloadImagesQueue {
    *
    * @param $sku_id
    *   SKU Entity ID to attach the image to.
+   * @param $field
+   *   SKU Entity field to store the field into.
+   * @param $index
+   *   Item index in the field to store the value into.
    * @param $path
    *   Path of image.
    */
-  public function addItem($sku_id, $path) {
+  public function addItem($sku_id, $field, $index, $path) {
     $this->queue->createItem([
       'sku_id' => $sku_id,
       'path' => $path,
+      'field' => $field,
+      'index' => $index,
     ]);
   }
 

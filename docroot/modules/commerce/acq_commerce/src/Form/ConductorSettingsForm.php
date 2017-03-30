@@ -67,11 +67,18 @@ class ConductorSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('url_ingest'),
     );
 
-    $form['media_base_url'] = array(
+    $form['base_url'] = array(
       '#type' => 'url',
-      '#title' => $this->t('Base URL for media files'),
+      '#title' => $this->t('Base URL for Magento'),
       '#required' => TRUE,
-      '#default_value' => $config->get('media_base_url'),
+      '#default_value' => $config->get('base_url'),
+    );
+
+    $form['media_path'] = array(
+      '#type' => 'url',
+      '#title' => $this->t('Path prefix for the media directory'),
+      '#required' => FALSE,
+      '#default_value' => $config->get('media_path'),
     );
 
     $form['timeout'] = array(

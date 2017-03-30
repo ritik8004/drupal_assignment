@@ -446,7 +446,7 @@ class ProductSyncResource extends ResourceBase {
         $this->downloadImagesQueueManager = \Drupal::service('acq_sku.download_images_queue');
       }
 
-      $this->downloadImagesQueueManager->addItem($sku->id(), $attributes['image']);
+      $this->downloadImagesQueueManager->addItem($sku->id(), 'image', 0, $attributes['image']);
     }
   }
 
