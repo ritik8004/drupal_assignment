@@ -11,6 +11,8 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -52,6 +54,20 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $cacheTags = [];
 
   /**
+   * Route match service.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+  /**
    * AlshayaMegaMenuBlock constructor.
    *
    * @param array $configuration
@@ -64,11 +80,17 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository service.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   Route match service.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database connection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository, RouteMatchInterface $route_match, Connection $connection) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityManager = $entity_manager;
     $this->entityRepository = $entity_repository;
+    $this->routeMatch = $route_match;
+    $this->connection = $connection;
   }
 
   /**
@@ -80,7 +102,9 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('current_route_match'),
+      $container->get('database')
     );
   }
 
@@ -100,6 +124,22 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     // Removes the first term 'default category' as its not required.
     $key = key($term_data);
     $term_data = $term_data[$key]['child'];
+
+    $route_name = $this->routeMatch->getRouteName();
+    // If /taxonomy/term/tid page.
+    if ($route_name == 'entity.taxonomy_term.canonical') {
+      /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
+      $route_parameter_value = $this->routeMatch->getParameter('taxonomy_term');
+      // If term is of 'acq_product_category' vocabulary.
+      if ($route_parameter_value->getVocabularyId() == 'acq_product_category') {
+        // Get the root parent id to add the active class.
+        $root_parent_tid = $this->getRootParentId($route_parameter_value->id());
+        if (isset($term_data[$root_parent_tid])) {
+          $term_data[$root_parent_tid]['class'] = 'active';
+        }
+      }
+
+    }
 
     return [
       '#theme' => 'alshaya_main_menu_level1',
@@ -137,6 +177,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
           'id' => $term->id(),
           'path' => $term->get('path')->getValue()[0]['alias'],
           'highlight_image' => $this->getHighlightImage($term),
+          'active_class' => '',
         ];
         $data[$term->id()]['child'] = $this->getChildTerms($term->id());
       }
@@ -189,6 +230,40 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   }
 
   /**
+   * Recursively search to get the root parent id.
+   *
+   * @param int $tid
+   *   Term id.
+   *
+   * @return mixed
+   *   Root parent id.
+   */
+  public function getRootParentId($tid) {
+    $parent_tids = [];
+
+    while ($tid > 0) {
+      $query = $this->connection->select('taxonomy_term_hierarchy', 'tth');
+      $query->fields('tth', ['parent']);
+      $query->condition('tth.tid', $tid);
+      $parent = $query->execute()->fetchField();
+      if ($parent == 0) {
+        $parent_tids[] = $tid;
+        break;
+      }
+
+      // Add term id to array.
+      $parent_tids[] = $tid;
+      // Make parent tid as tid to further search for.
+      $tid = $parent;
+    }
+
+    // Removes the last element from array as Its 'Default category'.
+    array_pop($parent_tids);
+    // Returns the last element of array (root parent tid).
+    return end($parent_tids);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getCacheTags() {
@@ -199,6 +274,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       parent::getCacheTags(),
       $this->cacheTags
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }
