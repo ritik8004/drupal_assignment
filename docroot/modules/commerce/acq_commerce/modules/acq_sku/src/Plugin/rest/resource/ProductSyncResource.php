@@ -59,6 +59,11 @@ class ProductSyncResource extends ResourceBase {
   private $queryFactory;
 
   /**
+   * @var DownloadImagesQueue $downloadImagesQueueManager
+   */
+  private $downloadImagesQueueManager = NULL;
+
+  /**
    * Construct
    *
    * @param array $configuration
@@ -235,6 +240,9 @@ class ProductSyncResource extends ResourceBase {
       }
 
       $sku->save();
+
+      // Update fields based on the values from attributes that require SKU id.
+      $this->updateAttributeFieldsPostSave($sku, $product['attributes']);
 
       if ($display) {
         $display->save();
@@ -415,9 +423,61 @@ class ProductSyncResource extends ResourceBase {
         $field = $additionalFields[$key];
 
         $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
-
         $field_key = 'attr_' . $key;
-        $sku->{$field_key}->setValue($value);
+
+        switch ($field['type']) {
+          case 'string':
+            $sku->{$field_key}->setValue($value);
+            break;
+
+          case 'image':
+            // We will manage this post save.
+            break;
+        }
+      }
+    }
+  }
+
+  /**
+   * updateAttributeFieldsPostSave
+   *
+   * Update the fields based on the values from attributes.
+   * We need the SKU id for some cases which will be handled in this.
+   *
+   * @param SKU $sku
+   * @param array $attributes
+   */
+  private function updateAttributeFieldsPostSave(SKU $sku, array $attributes) {
+    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+
+    // Loop through all the attributes available for this particular SKU.
+    foreach ($attributes as $key => $value) {
+      // Check if attribute is required by us.
+      if (isset($additionalFields[$key])) {
+        $field = $additionalFields[$key];
+
+        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+        $field_key = 'attr_' . $key;
+
+        switch ($field['type']) {
+          case 'string':
+            // Already managed in pre-save.
+            break;
+
+          case 'image':
+            // Initialise queue manager if not already done.
+            if (empty($this->downloadImagesQueueManager)) {
+              $this->downloadImagesQueueManager = \Drupal::service('acq_sku.download_images_queue');
+            }
+
+            // @TODO: Enhance the process by checking if the same image is
+            // already there during update.
+            foreach ($value as $index => $val) {
+              $this->downloadImagesQueueManager->addItem($sku->id(), $field_key, $index, $val);
+            }
+
+            break;
+        }
       }
     }
   }
