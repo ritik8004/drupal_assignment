@@ -89,9 +89,6 @@ function alshaya_captcha_form_alter(array &$form, FormStateInterface $form_state
 
     // If there is threshold value mentioned in field.
     if (!empty($flood_threshold) && $flood_threshold > 0) {
-      // Temporary store captcha element.
-      $form_state->set('temp_captcha_element', $form['captcha']);
-
       // Flood event name.
       $flood_event = 'alshaya_captcha_' . $form['#id'];
 
@@ -101,11 +98,8 @@ function alshaya_captcha_form_alter(array &$form, FormStateInterface $form_state
         $form_state->set('flood', $flood);
       }
 
-      // If flood exceeds threshold.
-      if (!$flood->isAllowed($flood_event, $flood_threshold)) {
-        $form['captcha'] = $form_state->get('temp_captcha_element');
-      }
-      else {
+      // If flood not exceeds threshold.
+      if ($flood->isAllowed($flood_event, $flood_threshold)) {
         unset($form['captcha']);
         $form['#validate'][] = '_alshaya_captcha_form_validate';
       }
