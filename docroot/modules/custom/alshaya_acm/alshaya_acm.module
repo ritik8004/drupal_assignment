@@ -16,12 +16,17 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Using array_combine to ensure we have same data in key and value.
   $cartQuantityOptions = array_combine($range, $range);
 
+  $product_count = 0;
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
       $form['cart'][$id]['quantity']['#type'] = 'select';
       $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
+      $product_count += $form['cart'][$id]['quantity']['#default_value'];
     }
   }
+
+  // Set Form title.
+  $form['#title'] = t("Cart (%count)", ['%count' => $product_count]);
 }
 
 /**

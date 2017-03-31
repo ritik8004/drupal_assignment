@@ -5,9 +5,13 @@
 // Style guide: base.heading
 
 %page-title {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: bold;
   text-transform: lowercase;
+
+  @include breakpoint($tablet) {
+    font-size: 1.5rem;
+  }
 
   a {
     text-decoration: none;

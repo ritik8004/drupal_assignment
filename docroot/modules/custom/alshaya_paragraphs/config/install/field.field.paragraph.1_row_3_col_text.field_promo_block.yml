@@ -1,0 +1,71 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_promo_block
+    - paragraphs.paragraphs_type.1_row_3_col_text
+    - paragraphs.paragraphs_type.promo_block_text
+  module:
+    - entity_reference_revisions
+id: paragraph.1_row_3_col_text.field_promo_block
+field_name: field_promo_block
+entity_type: paragraph
+bundle: 1_row_3_col_text
+label: 'Promo Block'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      promo_block_text: promo_block_text
+    target_bundles_drag_drop:
+      1_row_3_col_text:
+        weight: 16
+        enabled: false
+      1_row_1_col:
+        weight: 17
+        enabled: false
+      1_row_1_col_dept:
+        weight: 18
+        enabled: false
+      1_row_1st_col_2_row_2nd_col:
+        weight: 19
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 20
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 21
+        enabled: false
+      1_row_2_col_dept:
+        weight: 22
+        enabled: false
+      1_row_3_col:
+        weight: 23
+        enabled: false
+      1_row_3_col_dept:
+        weight: 24
+        enabled: false
+      banner:
+        weight: 25
+        enabled: false
+      banner_full_width:
+        weight: 26
+        enabled: false
+      main_menu_highlight:
+        weight: 27
+        enabled: false
+      promo_block:
+        weight: 28
+        enabled: false
+      promo_block_text:
+        enabled: true
+        weight: 29
+      related_info_one_column:
+        weight: 30
+        enabled: false
+field_type: entity_reference_revisions

@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.1_row_3_col_text.field_promo_block
+    - paragraphs.paragraphs_type.1_row_3_col_text
+  module:
+    - entity_reference_revisions
+    - workbench_moderation
+id: paragraph.1_row_3_col_text.default
+targetEntityType: paragraph
+bundle: 1_row_3_col_text
+mode: default
+content:
+  field_promo_block:
+    weight: 6
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_revisions_autocomplete
+hidden:
+  created: true
+  status: true
+  uid: true

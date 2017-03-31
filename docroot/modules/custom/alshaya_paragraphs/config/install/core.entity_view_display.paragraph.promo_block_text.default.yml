@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.promo_block_text.field_link
+    - field.field.paragraph.promo_block_text.field_title
+    - paragraphs.paragraphs_type.promo_block_text
+  module:
+    - link
+id: paragraph.promo_block_text.default
+targetEntityType: paragraph
+bundle: promo_block_text
+mode: default
+content:
+  field_link:
+    weight: 0
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+  field_title:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden: {  }
