@@ -139,6 +139,23 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function removeItemFromCart($sku) {
+    $items = $this->items();
+    foreach ($items as $key => &$item) {
+      if (!isset($item['sku'])) {
+        continue;
+      }
+      if ($item['sku'] == $sku) {
+        unset($items[$key]);
+        break;
+      }
+    }
+    $this->cart->items = $items;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function addRawItemToCart(array $item) {
     $items = $this->items();
 
@@ -415,23 +432,6 @@ class Cart implements CartInterface {
       return $this->cart->{$property_name};
     }
     return NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function removeItem($sku) {
-    $items = $this->items();
-    foreach ($items as $key => &$item) {
-      if (!isset($item['sku'])) {
-        continue;
-      }
-      if ($item['sku'] == $sku) {
-        unset($items[$key]);
-        break;
-      }
-    }
-    $this->cart->items = $items;
   }
 
 }
