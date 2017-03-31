@@ -1,16 +1,16 @@
-uuid: ad67dfe2-07f6-4195-8f9f-fb5bee3dfc49
+uuid: e2cb8943-5e16-45ba-95fa-a3025e613c95
 langcode: en
 status: true
 dependencies:
   config:
-    - acq_sku.type.simple
+    - acq_sku.type.grouped
     - core.entity_view_mode.acq_sku.teaser
-    - image.style.thumbnail
+    - field.field.acq_sku.grouped.field_grouped_skus
   module:
     - image
-id: acq_sku.simple.teaser
+id: acq_sku.grouped.teaser
 targetEntityType: acq_sku
-bundle: simple
+bundle: grouped
 mode: teaser
 content:
   attr_special_price:
@@ -25,7 +25,7 @@ content:
     type: image
     weight: 0
     settings:
-      image_style: thumbnail
+      image_style: ''
       image_link: ''
     third_party_settings: {  }
   name:
@@ -35,8 +35,8 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-  price:
-    label: hidden
+  sku:
+    label: above
     type: string
     weight: 1
     settings:
@@ -47,5 +47,6 @@ hidden:
   attr_size: true
   attributes: true
   crosssell: true
-  sku: true
+  field_grouped_skus: true
+  price: true
   upsell: true

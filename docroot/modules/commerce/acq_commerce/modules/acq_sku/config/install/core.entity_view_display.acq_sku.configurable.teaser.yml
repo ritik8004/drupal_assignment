@@ -1,22 +1,23 @@
-uuid: ad67dfe2-07f6-4195-8f9f-fb5bee3dfc49
+uuid: 1d2457fe-92d6-487e-a2a0-8641173b00d5
 langcode: en
 status: true
 dependencies:
   config:
-    - acq_sku.type.simple
+    - acq_sku.type.configurable
     - core.entity_view_mode.acq_sku.teaser
-    - image.style.thumbnail
+    - field.field.acq_sku.configurable.field_configurable_attributes
+    - field.field.acq_sku.configurable.field_configured_skus
   module:
     - image
-id: acq_sku.simple.teaser
+id: acq_sku.configurable.teaser
 targetEntityType: acq_sku
-bundle: simple
+bundle: configurable
 mode: teaser
 content:
   attr_special_price:
-    label: above
     type: string
-    weight: 3
+    weight: 4
+    label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -25,7 +26,7 @@ content:
     type: image
     weight: 0
     settings:
-      image_style: thumbnail
+      image_style: ''
       image_link: ''
     third_party_settings: {  }
   name:
@@ -36,7 +37,14 @@ content:
       link_to_entity: false
     third_party_settings: {  }
   price:
-    label: hidden
+    label: above
+    type: string
+    weight: 3
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  sku:
+    label: above
     type: string
     weight: 1
     settings:
@@ -47,5 +55,6 @@ hidden:
   attr_size: true
   attributes: true
   crosssell: true
-  sku: true
+  field_configurable_attributes: true
+  field_configured_skus: true
   upsell: true

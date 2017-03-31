@@ -9,33 +9,27 @@ dependencies:
     - field.field.node.acq_product.field_skus
     - node.type.acq_product
   module:
-    - text
+    - acq_sku
     - user
-third_party_settings: {  }
 _core:
-  default_config_hash: SL8Rk0pwu_ckitgUyY542i_aMUbHIkqM4r7824GIL6w
+  default_config_hash: 8tvjE9hXbxhnB14KyKzgnivEXVJy76VzQ5Y9btUJsZU
 id: node.acq_product.teaser
 targetEntityType: node
 bundle: acq_product
 mode: teaser
 content:
-  body:
-    label: hidden
-    type: text_summary_or_trimmed
-    weight: 2
-    settings:
-      trim_length: 600
-    third_party_settings: {  }
   field_skus:
+    type: sku_formatter
     weight: 1
     label: hidden
     settings:
       view_mode: teaser
     third_party_settings: {  }
-    type: sku_formatter
   links:
     weight: 0
     settings: {  }
     third_party_settings: {  }
 hidden:
+  body: true
   field_category: true
+  langcode: true
