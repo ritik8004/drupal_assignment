@@ -1,0 +1,7 @@
+alshaya.acm.js:
+  version: 1.x
+  js:
+    js/alshaya_acm_custom.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
