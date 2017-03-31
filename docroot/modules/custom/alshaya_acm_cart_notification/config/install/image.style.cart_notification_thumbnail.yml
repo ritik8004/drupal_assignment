@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: cart_notification_thumbnail
+label: Cart Notificaiton Thumbnail 69x69
+effects:
+  66d66417-6939-4bc5-869c-df1605cc9833:
+    uuid: 66d66417-6939-4bc5-869c-df1605cc9833
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 69
+      height: 69
+      upscale: false

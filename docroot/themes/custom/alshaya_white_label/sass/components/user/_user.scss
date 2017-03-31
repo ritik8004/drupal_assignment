@@ -1,0 +1,184 @@
+.user-page {
+  border-top: 1px solid $white;
+  margin: 3em auto 1em;
+  padding-top: 1em;
+  position: relative;
+
+  h1 {
+    @extend %page-title;
+
+    position: absolute;
+    top: -3.125rem;
+    color: $peacock-blue;
+  }
+
+  .c-sidebar-second {
+    h2 {
+      color: $peacock-blue;
+      font-size: 14px;
+    }
+  }
+
+  #block-alshaya-white-label-local-tasks {
+    display: none;
+  }
+
+  #block-youllbeableto {
+    margin-top: 3em;
+    margin-bottom: 4.375rem;
+
+    a {
+      font-weight: bold;
+    }
+  }
+
+  #block-jointheclub {
+    margin-top: 9.063rem;
+
+    a {
+      font-weight: bold;
+    }
+  }
+
+  #block-onlineexclusiveheadingovertwolinesneverthree {
+    a {
+      font-weight: bold;
+    }
+  }
+
+  .form-wrapper,
+  .form-item {
+    margin-top: 3em;
+    position: relative;
+  }
+
+  .field--name-field-first-name,
+  .field--name-field-last-name {
+    @include breakpoint($tablet) {
+      display: inline-block;
+      max-width: 11.625rem;
+    }
+  }
+
+  .field--name-field-first-name {
+    margin-#{$right}: 1.25rem;
+  }
+
+  .captcha {
+    font-size: 12px;
+    color: $greyish;
+  }
+
+  .user-form {
+    margin-top: -3em;
+  }
+
+  .user-form,
+  .user-login-form,
+  .user-pass {
+    font-size: 12px;
+    color: $brownish-grey;
+    line-height: 1.43;
+    max-width: 24.75rem;
+
+    @include breakpoint($tablet) {
+      font-size: 0.875em;
+    }
+
+    .form-submit {
+      @extend %btn;
+
+      background: $pumpkin-orange;
+      margin-top: 1em;
+      width: 100%;
+
+      @include breakpoint($tablet) {
+        width: auto;
+      }
+    }
+
+    .description {
+      display: none;
+    }
+
+    #password-policy-status {
+      display: none;
+    }
+
+    label.form-required,
+    .form-item-field-privilege-card-number-0-value label {
+      font-size: 16px;
+      color: $greyish;
+      position: absolute;
+      pointer-events: none;
+      left: 0;
+      top: -0.125rem;
+      transition: 0.2s ease all;
+    }
+
+    label.option {
+      position: relative;
+      top: 0;
+      font-size: 12px;
+    }
+
+    .error {
+      font-size: 12px;
+      color: $red-error;
+    }
+
+    .text-full,
+    .form-email,
+    .form-text {
+      border: 1px solid $brownish-grey;
+      border-width: 0 0 1px;
+      padding: 0.35rem 0 1em;
+      width: 100%;
+      height: 1.563rem;
+      outline: transparent;
+      font-size: 16px;
+
+      &:focus,
+      &:active,
+      &.valid {
+        border-color: $windows-blue;
+        background: transparent;
+      }
+    }
+
+    input.error {
+      border-color: $red-error;
+      border-width: 0 0 2px;
+
+      &:focus,
+      &.active {
+        border-color: $red-error;
+      }
+    }
+  }
+
+  input:focus ~ label.form-required,
+  .form-item-field-privilege-card-number-0-value:focus ~ label,
+  .form-item-field-privilege-card-number-0-value:not(:focus):valid ~ label,
+  input:not(:focus):valid ~ label.form-required {
+    top: -1.25em;
+    bottom: 0;
+    #{$left}: 0;
+    opacity: 1;
+    font-size: 12px;
+  }
+}
+
+.user-login-form {
+  position: relative;
+
+  & > a {
+    position: absolute;
+    bottom: 0.75em;
+    #{$left}: 9.5em;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+}
+

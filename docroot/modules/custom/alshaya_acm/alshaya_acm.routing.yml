@@ -5,3 +5,11 @@ alshaya_acm.cart_config:
     _title: 'Cart Configuration'
   requirements:
     _permission: 'access commerce administration pages'
+
+alshaya_acm.cart_remove_sku:
+  path: 'cart/remove/{sku}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm\Controller\CartController::cartRemoveSku'
+    _title: 'Cart'
+  requirements:
+    _permission: 'access content'

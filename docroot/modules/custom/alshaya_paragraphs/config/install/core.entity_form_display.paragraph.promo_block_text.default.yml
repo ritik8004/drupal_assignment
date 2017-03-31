@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.promo_block_text.field_link
+    - field.field.paragraph.promo_block_text.field_title
+    - paragraphs.paragraphs_type.promo_block_text
+  module:
+    - link
+    - workbench_moderation
+id: paragraph.promo_block_text.default
+targetEntityType: paragraph
+bundle: promo_block_text
+mode: default
+content:
+  field_link:
+    weight: 6
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+  field_title:
+    weight: 7
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+hidden:
+  created: true
+  status: true
+  uid: true

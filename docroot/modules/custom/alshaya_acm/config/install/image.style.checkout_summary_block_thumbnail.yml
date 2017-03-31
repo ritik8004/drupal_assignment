@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: checkout_summary_block_thumbnail
+label: 'Checkout Summary Block Thumbnail 57x57'
+effects:
+  66d66417-6939-4bc5-869c-df1605cc9833:
+    uuid: 66d66417-6939-4bc5-869c-df1605cc9833
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 57
+      height: 57
+      upscale: false
