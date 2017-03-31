@@ -1,0 +1,312 @@
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.services.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.services.yml
+index 6acb035..cb2bfb3 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.services.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.services.yml
+@@ -18,3 +18,7 @@ services:
+       - '@entity.query'
+       - '@logger.factory'
+       - 'acq_product_category'
++
++  acq_sku.download_images_queue:
++    class: Drupal\acq_sku\DownloadImagesQueue
++
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/DownloadImagesQueue.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/DownloadImagesQueue.php
+new file mode 100644
+index 0000000..582f474
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/DownloadImagesQueue.php
+@@ -0,0 +1,62 @@
++<?php
++
++/**
++ * @file
++ * Wrapper to manage dowloading of product images..
++ */
++
++namespace Drupal\acq_sku;
++
++
++use Drupal\Core\Queue\QueueInterface;
++
++class DownloadImagesQueue {
++  const QUEUE_ID = 'acq_sku_download_product_images';
++  const BATCH_COUNT = 20;
++
++  /**
++   * @var QueueInterface
++   */
++  protected $queue = NULL;
++
++  public function __construct() {
++    $this->queue = \Drupal::service('queue')->get(static::QUEUE_ID);
++  }
++
++  /**
++   * Clear the queue.
++   */
++  public function clear() {
++    $this->queue->deleteQueue();
++  }
++
++  /**
++   * @return mixed
++   *   Number of items in the queue.
++   */
++  public function queueSize() {
++    return $this->queue->numberOfItems();
++  }
++
++  /**
++   * Add item to queue for processing.
++   *
++   * @param $sku_id
++   *   SKU Entity ID to attach the image to.
++   * @param $field
++   *   SKU Entity field to store the field into.
++   * @param $index
++   *   Item index in the field to store the value into.
++   * @param $path
++   *   Path of image.
++   */
++  public function addItem($sku_id, $field, $index, $path) {
++    $this->queue->createItem([
++      'sku_id' => $sku_id,
++      'path' => $path,
++      'field' => $field,
++      'index' => $index,
++    ]);
++  }
++
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Entity/SKU.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Entity/SKU.php
+index f50152d..0b0c5e1 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Entity/SKU.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Entity/SKU.php
+@@ -362,6 +362,20 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+               'weight' => $weight,
+             ]);
+             break;
++
++          case 'image':
++            $field = BaseFieldDefinition::create('image');
++            $field->setDisplayOptions('view', array(
++              'label' => 'hidden',
++              'type' => 'image',
++              'weight' => $weight,
++            ));
++
++            $field->setDisplayOptions('form', array(
++              'type' => 'image_image',
++              'weight' => $weight,
++            ));
++            break;
+         }
+
+         // Check if we don't have the field type defined yet.
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/QueueWorker/productImagesDownloader.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/QueueWorker/productImagesDownloader.php
+new file mode 100644
+index 0000000..252bbad
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/QueueWorker/productImagesDownloader.php
+@@ -0,0 +1,87 @@
++<?php
++
++namespace Drupal\acq_sku\Plugin\QueueWorker;
++
++use Drupal\acq_sku\Entity\SKU;
++use Drupal\Component\Render\FormattableMarkup;
++use Drupal\Core\Queue\QueueWorkerBase;
++use Drupal\Core\Queue\RequeueException;
++use Drupal\Core\Queue\SuspendQueueException;
++
++/**
++ * Download images.
++ *
++ * @QueueWorker(
++ *   id = "acq_sku_download_product_images",
++ *   title = @Translation("Product images downloader"),
++ *   cron = {"time" = 60}
++ * )
++ */
++class ProductImagesDownloader extends QueueWorkerBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function processItem($data) {
++    // Get the magento base url and media dir prefix from config.
++    $baseUrl = trim(\Drupal::config('acq_commerce.conductor')->get('base_url'), '/');
++    $mediaPath = trim(\Drupal::config('acq_commerce.conductor')->get('media_path'), '/');
++
++    // No need to process the queue if base url is not set.
++    // Media path could be empty and files may come directly from base url.
++    if (empty($baseUrl)) {
++      throw new SuspendQueueException('Please set the magento base url first to allow downloading images');
++    }
++
++    // Prepare the media base url.
++    $mediaBaseUrl = $baseUrl . '/';
++    $mediaBaseUrl .= empty($mediaPath) ? '' : $mediaPath . '/';
++
++    // Remove slash from beginning.
++    $data['path'] = trim($data['path'], '/');
++
++    // Prepare the full url for the file to download.
++    $fileUrl = $mediaBaseUrl . $data['path'];
++
++    // Preparing args for all info/error messages.
++    $args = ['@file' => $fileUrl, '@sku_id' => $data['sku_id']];
++
++    // Try to load the SKU entity.
++    if ($sku = SKU::load($data['sku_id'])) {
++      // Download the file contents.
++      $fileData = file_get_contents($fileUrl);
++
++      // Check to ensure errors like 404, 403, etc. are catched and empty file
++      // not saved in SKU.
++      if (empty($fileData)) {
++        throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
++      }
++
++      $fileName = basename($data['path']);
++      $directory = 'public://acm/' . str_replace('/' . $fileName, '', $data['path']);
++
++      // Prepare the directory.
++      file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
++
++      // Save the file as file entity.
++      if ($file = file_save_data($fileData, $directory . '/' . $fileName, FILE_EXISTS_RENAME)) {
++        $fileFieldValue = [
++          'target_id' => $file->id(),
++          'alt' => $sku->label(),
++          'title' => $sku->label(),
++        ];
++        // File is saved, we set the file ID into image
++        $sku->get($data['field'])->set($data['index'], $fileFieldValue);
++        $sku->save();
++        \Drupal::logger('acq_sku')->info('Saved file "@file" for SKU id @sku_id.', $args);
++      }
++      else {
++        throw new RequeueException(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
++      }
++    }
++    else {
++      throw new \Exception(new FormattableMarkup('Failed to load SKU for SKU id @sku_id while saving file "@file".', $args));
++    }
++  }
++
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+index b5a76c4..9d2362a 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+@@ -59,6 +59,11 @@ class ProductSyncResource extends ResourceBase {
+   private $queryFactory;
+
+   /**
++   * @var DownloadImagesQueue $downloadImagesQueueManager
++   */
++  private $downloadImagesQueueManager = NULL;
++
++  /**
+    * Construct
+    *
+    * @param array $configuration
+@@ -236,6 +241,9 @@ public function post(array $products = [])
+
+       $sku->save();
+
++      // Update fields based on the values from attributes that require SKU id.
++      $this->updateAttributeFieldsPostSave($sku, $product['attributes']);
++
+       if ($display) {
+         $display->save();
+       }
+@@ -415,9 +423,61 @@ private function updateAttributeFields(SKU $sku, array $attributes) {
+         $field = $additionalFields[$key];
+
+         $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
++        $field_key = 'attr_' . $key;
++
++        switch ($field['type']) {
++          case 'string':
++            $sku->{$field_key}->setValue($value);
++            break;
++
++          case 'image':
++            // We will manage this post save.
++            break;
++        }
++      }
++    }
++  }
++
++  /**
++   * updateAttributeFieldsPostSave
++   *
++   * Update the fields based on the values from attributes.
++   * We need the SKU id for some cases which will be handled in this.
++   *
++   * @param SKU $sku
++   * @param array $attributes
++   */
++  private function updateAttributeFieldsPostSave(SKU $sku, array $attributes) {
++    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
++
++    // Loop through all the attributes available for this particular SKU.
++    foreach ($attributes as $key => $value) {
++      // Check if attribute is required by us.
++      if (isset($additionalFields[$key])) {
++        $field = $additionalFields[$key];
+
++        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+         $field_key = 'attr_' . $key;
+-        $sku->{$field_key}->setValue($value);
++
++        switch ($field['type']) {
++          case 'string':
++            // Already managed in pre-save.
++            break;
++
++          case 'image':
++            // Initialise queue manager if not already done.
++            if (empty($this->downloadImagesQueueManager)) {
++              $this->downloadImagesQueueManager = \Drupal::service('acq_sku.download_images_queue');
++            }
++
++            // @TODO: Enhance the process by checking if the same image is
++            // already there during update.
++            foreach ($value as $index => $val) {
++              $this->downloadImagesQueueManager->addItem($sku->id(), $field_key, $index, $val);
++            }
++
++            break;
++        }
+       }
+     }
+   }
+diff --git a/docroot/modules/commerce/acq_commerce/src/Form/ConductorSettingsForm.php b/docroot/modules/commerce/acq_commerce/src/Form/ConductorSettingsForm.php
+index e808e5c..59a6bd1 100644
+--- a/docroot/modules/commerce/acq_commerce/src/Form/ConductorSettingsForm.php
++++ b/docroot/modules/commerce/acq_commerce/src/Form/ConductorSettingsForm.php
+@@ -67,6 +67,20 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+       '#default_value' => $config->get('url_ingest'),
+     );
+
++    $form['base_url'] = array(
++      '#type' => 'url',
++      '#title' => $this->t('Base URL for Magento'),
++      '#required' => TRUE,
++      '#default_value' => $config->get('base_url'),
++    );
++
++    $form['media_path'] = array(
++      '#type' => 'url',
++      '#title' => $this->t('Path prefix for the media directory'),
++      '#required' => FALSE,
++      '#default_value' => $config->get('media_path'),
++    );
++
+     $form['timeout'] = array(
+       '#type' => 'number',
+       '#title' => $this->t('Conductor Connection Timeout'),

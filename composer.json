@@ -32,7 +32,8 @@
         "drupal/captcha": "^1.0@beta",
         "drupal/recaptcha": "^2.2",
         "drupal/views_field_view": "1.0-beta2",
-        "drupal/user_registrationpassword": "^1.0"
+        "drupal/user_registrationpassword": "^1.0",
+        "drupal/clientside_validation": "1.x-dev"
     },
     "require-dev": {
         "behat/behat": "^3.1",
@@ -52,6 +53,17 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        "jqueryvalidate": {
+            "type": "package",
+            "package": {
+                "name": "jqueryvalidate",
+                "version": "1.15.0",
+                "dist": {
+                    "url": "https://jqueryvalidation.org/files/jquery-validation-1.15.0.zip",
+                    "type": "zip"
+                }
+            }
         }
     },
     "autoload-dev": {

@@ -19,3 +19,24 @@ fields:
     description: 'Special price attribute for the product.'
     cardinality: 1
     type: 'string'
+
+  # Field for base image attribute.
+  image:
+    label: 'Image'
+    description: 'Base image attribute for the product.'
+    cardinality: -1
+    type: 'image'
+
+  # Field for small image attribute.
+  small_image:
+    label: 'Small image'
+    description: 'Small image attribute for the product.'
+    cardinality: -1
+    type: 'image'
+
+  # Field for thumbnail image attribute.
+  thumbnail:
+    label: 'Thumbnail'
+    description: 'Thumbnail image attribute for the product.'
+    cardinality: -1
+    type: 'image'
