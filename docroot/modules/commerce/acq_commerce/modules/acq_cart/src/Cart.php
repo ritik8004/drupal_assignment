@@ -417,4 +417,21 @@ class Cart implements CartInterface {
     return NULL;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function removeItem($sku) {
+    $items = $this->items();
+    foreach ($items as $key => &$item) {
+      if (!isset($item['sku'])) {
+        continue;
+      }
+      if ($item['sku'] == $sku) {
+        unset($items[$key]);
+        break;
+      }
+    }
+    $this->cart->items = $items;
+  }
+
 }

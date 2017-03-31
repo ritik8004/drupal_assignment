@@ -258,4 +258,12 @@ interface CartInterface {
    */
   public function get($property_name);
 
+  /**
+   * Removes an SKU from cart.
+   *
+   * @param string $sku
+   *   The name of the SKU to be removed from the cart.
+   */
+  public function removeItem($sku);
+
 }
