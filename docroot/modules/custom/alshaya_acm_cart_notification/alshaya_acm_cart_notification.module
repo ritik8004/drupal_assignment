@@ -10,6 +10,8 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements hook_form_alter().
@@ -55,9 +57,16 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   $url = Url::fromRoute('acq_cart.cart')->toString();
 
   // Product Image.
-  // @todo: Add correct image for notification once MMCPA-365 is over.
-  // Adding a dummy image for now.
-  $image = 'http://media.laredoute.com/products1/72by72/2/8/5/500775662_1008_CO_1_1200.jpg';
+  // Create image path.
+  $image = SKU::loadFromSKU($string_sku)
+    ->get('attr_image')
+    ->getValue();
+
+  // If we have image for the product.
+  if ($image != NULL) {
+    $file_uri = File::load($image[0]['target_id'])->getFileUri();
+    $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($file_uri);
+  }
 
   // Use the template to render the HTML.
   $output = [
