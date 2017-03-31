@@ -4,8 +4,6 @@ dependencies:
   config:
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
-    - field.field.paragraph.promo_block.field_subtitle
-    - field.field.paragraph.promo_block.field_title
     - paragraphs.paragraphs_type.promo_block
   module:
     - image
@@ -34,18 +32,4 @@ content:
       target: ''
     third_party_settings: {  }
     type: link
-  field_subtitle:
-    weight: 3
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-  field_title:
-    weight: 2
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
 hidden: {  }
