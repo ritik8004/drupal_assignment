@@ -132,10 +132,15 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $route_parameter_value = $this->routeMatch->getParameter('taxonomy_term');
       // If term is of 'acq_product_category' vocabulary.
       if ($route_parameter_value->getVocabularyId() == 'acq_product_category') {
-        // Get the root parent id to add the active class.
-        $root_parent_tid = $this->getRootParentId($route_parameter_value->id());
-        if (isset($term_data[$root_parent_tid])) {
-          $term_data[$root_parent_tid]['class'] = 'active';
+        // Get all parents of the given term.
+        $parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($route_parameter_value->id());
+        array_pop($parents);
+        if (!empty($parents)) {
+          /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
+          $root_parent_term = end($parents);
+          if (isset($term_data[$root_parent_term->id()])) {
+            $term_data[$root_parent_term->id()]['class'] = 'active';
+          }
         }
       }
 
@@ -227,40 +232,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     return $highlight_images;
-  }
-
-  /**
-   * Recursively search to get the root parent id.
-   *
-   * @param int $tid
-   *   Term id.
-   *
-   * @return mixed
-   *   Root parent id.
-   */
-  public function getRootParentId($tid) {
-    $parent_tids = [];
-
-    while ($tid > 0) {
-      $query = $this->connection->select('taxonomy_term_hierarchy', 'tth');
-      $query->fields('tth', ['parent']);
-      $query->condition('tth.tid', $tid);
-      $parent = $query->execute()->fetchField();
-      if ($parent == 0) {
-        $parent_tids[] = $tid;
-        break;
-      }
-
-      // Add term id to array.
-      $parent_tids[] = $tid;
-      // Make parent tid as tid to further search for.
-      $tid = $parent;
-    }
-
-    // Removes the last element from array as Its 'Default category'.
-    array_pop($parent_tids);
-    // Returns the last element of array (root parent tid).
-    return end($parent_tids);
   }
 
   /**
