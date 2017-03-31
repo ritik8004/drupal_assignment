@@ -1,4 +1,3 @@
-uuid: 82ce0413-21e2-4053-a1a0-9048422211df
 langcode: en
 status: true
 dependencies:
@@ -8,11 +7,11 @@ dependencies:
   module:
     - node
     - user
-id: basket_horizontal_recommendation
-label: 'Basket - Horizontal Recommendation'
+id: product_slider
+label: 'Product Slider'
 module: views
 description: ''
-tag: Basket
+tag: 'Product, Slider'
 base_table: node_field_data
 base_field: nid
 core: 8.x
@@ -172,7 +171,7 @@ display:
           entity_field: status
           plugin_id: boolean
       sorts: {  }
-      title: 'Basket - Horizontal Recommendation'
+      title: 'Product Slider'
       header: {  }
       footer: {  }
       empty: {  }
@@ -227,10 +226,10 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
-  block_horizontal_recommendation:
+  block_product_slider:
     display_plugin: block
-    id: block_horizontal_recommendation
-    display_title: 'Block: Horizontal Recommendation'
+    id: block_product_slider
+    display_title: 'Block: Product Slider'
     position: 1
     display_options:
       display_extenders: {  }

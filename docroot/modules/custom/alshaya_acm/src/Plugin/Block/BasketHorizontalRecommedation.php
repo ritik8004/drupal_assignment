@@ -1,14 +1,12 @@
 <?php
 
-namespace Drupal\acq_cart\Plugin\Block;
+namespace Drupal\alshaya_acm\Plugin\Block;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Block\BlockBase;
 use Drupal\acq_cart\CartStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-
-
 
 /**
  * Provides a 'Basket: Horizontal Product Recommendation' block.
@@ -62,10 +60,14 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
   public function build() {
     // Get current cart skus.
     $cartSkus = $this->cartStorage->getCartSkus();
-    // Get all upSellSkus.
-    $items = SKU::getUpSellSKUs($cartSkus);
+    // Get all cross sell SKU.
+    $items = SKU::getCrossSellSKUs($cartSkus);
 
-    return views_embed_view('basket_horizontal_recommendation', 'block_horizontal_recommendation', implode(',', $items));
+    if (!empty($items)) {
+      return views_embed_view('product_slider', 'block_product_slider', implode(',', $items));
+    }
+
+    return [];
   }
 
 }

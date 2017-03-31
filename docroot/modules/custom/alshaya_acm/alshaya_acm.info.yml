@@ -10,8 +10,13 @@ dependencies:
   - acq_customer
   - acq_payment
   - acq_sku
+  - alshaya_acm
+  - block
+  - block_content
   - ctools
   - language
   - node
   - pathauto
+  - system
   - taxonomy
+  - user
