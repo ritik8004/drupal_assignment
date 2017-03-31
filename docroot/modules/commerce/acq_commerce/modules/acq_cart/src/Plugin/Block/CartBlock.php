@@ -12,6 +12,9 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Provides a 'CartBlock' block.
@@ -76,15 +79,20 @@ class CartBlock extends BlockBase implements ContainerFactoryPluginInterface {
     // Fetch the currency code position.
     $currency_code_position = $config->get('currency_code_position');
 
-    // Image Url.
-    // @todo: Real image from products.
-    $img = 'http://www.israel-catalog.com/sites/default/files/imagecache/prod-small/products/images/israel-t-shirt-california-women.jpg';
-
     // Products and No.of items.
     $products = array();
     $cart_count = 0;
 
     foreach ($items as $item) {
+      $img = '';
+      // Create image path.
+      $image = SKU::loadFromSKU($item['sku'])->get('attr_image')->getValue();
+      // If we have image for the product.
+      if($image != NULL) {
+        $file_uri = File::load($image[0]['target_id'])->getFileUri();
+        $img = ImageStyle::load('order_summary_block_thumbnail')->buildUrl($file_uri);
+      }
+      // Create products array to be used in twig.
       $products[] = [
         'name' => $item['name'],
         'imgurl' => $img,
@@ -92,6 +100,7 @@ class CartBlock extends BlockBase implements ContainerFactoryPluginInterface {
         'total' => $item['price'],
       ];
 
+      // Total number of items in the cart.
       $cart_count += $item['qty'];
     }
 
