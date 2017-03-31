@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Link;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -17,11 +18,17 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $cartQuantityOptions = array_combine($range, $range);
 
   $product_count = 0;
+  $form['cart']['#header'][] = t('Remove');
+
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
       $form['cart'][$id]['quantity']['#type'] = 'select';
       $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
+
       $product_count += $form['cart'][$id]['quantity']['#default_value'];
+
+      $remove_url = Url::fromUserInput('/cart/remove/' . $id);
+      $form['cart'][$id]['remove'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toRenderable();
     }
   }
 
