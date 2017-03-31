@@ -5,6 +5,7 @@ description: 'Advanced Page CT and related settings.'
 dependencies:
   - alshaya_paragraphs
   - block
+  - captcha
   - entity_reference_revisions
   - field
   - menu_ui

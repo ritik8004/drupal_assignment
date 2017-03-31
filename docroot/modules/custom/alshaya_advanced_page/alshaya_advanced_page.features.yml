@@ -1,4 +1,5 @@
 bundle: alshaya
 excluded:
   - block.block.views_block__products_products_block
+  - captcha.captcha_point.node_advanced_page_form
 required: true
