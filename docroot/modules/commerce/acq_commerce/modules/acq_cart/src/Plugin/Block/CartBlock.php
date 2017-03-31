@@ -11,10 +11,6 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Url;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\file\Entity\File;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Provides a 'CartBlock' block.
@@ -69,83 +65,32 @@ class CartBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $cart = $this->cartStorage->getCart();
     $items = $cart->items();
 
-    // Fetch the config.
-    $config = \Drupal::configFactory()
-      ->get('acq_commerce.currency');
-
-    // Fetch the currency format from the config factor.
-    $currency_format = $config->get('currency_code');
-
-    // Fetch the currency code position.
-    $currency_code_position = $config->get('currency_code_position');
-
-    // Products and No.of items.
-    $products = array();
-    $cart_count = 0;
+    $rows = array();
 
     foreach ($items as $item) {
-      $img = '';
-      // Create image path.
-      $image = SKU::loadFromSKU($item['sku'])->get('attr_image')->getValue();
-      // If we have image for the product.
-      if($image != NULL) {
-        $file_uri = File::load($image[0]['target_id'])->getFileUri();
-        $img = ImageStyle::load('order_summary_block_thumbnail')->buildUrl($file_uri);
-      }
-      // Create products array to be used in twig.
-      $products[] = [
-        'name' => $item['name'],
-        'imgurl' => $img,
-        'qty' => $item['qty'],
-        'total' => $item['price'],
-      ];
-
-      // Total number of items in the cart.
-      $cart_count += $item['qty'];
+      $rows[$item['item_id']] = [$item['name'], $item['qty'], $item['price']];
     }
-
-    // Totals.
-    $subtotal = $tax = $discount = 0;
-    $totals = $cart->totals();
-
-    // Subtotal.
-    $subtotal = $totals['sub'];
-
-    // Tax.
-    if ((float) $totals['tax'] > 0) {
-      $tax = $totals['tax'];
-    }
-
-    // Discount.
-    if ((float) $totals['discount'] > 0) {
-      $discount = $totals['discount'];
-    }
-
-    // Grand Total or Order total.
-    $order_total = $totals['grand'];
-
-    // Generate the cart link.
-    $url = Url::fromRoute('acq_cart.cart')->toString();
 
     $build = [
-      '#theme' => 'acq_cart_summary',
-      '#cart_link' => $url,
-      '#number_of_items' => $cart_count,
-      '#products' => $products,
-      '#subtotal' => $subtotal,
-      '#tax' => $tax,
-      '#discount' => $discount,
-      '#ordertotal'=> $order_total,
-      '#currency_format' => $currency_format,
-      //@todo: Status would be dynmaic, adding static for now.
-      '#order_status' => $this->t('Before delivery'),
-      '#currency_code_position' => $currency_code_position,
-      '#attached' => [
-        'library' =>[
-          'core/jquery.ui.accordion',
-        ]
-      ]
+      '#theme' => 'table',
+      '#header' => [t('Name'), t('Quantity'), t('Price')],
+      '#empty' => t('There are no products in your cart yet.'),
+      '#rows' => $rows,
     ];
+
+    $totals = $cart->totals();
+
+    $build['#rows']['sub'] = ['', t('Subtotal'), $totals['sub']];
+
+    if ((float) $totals['tax'] > 0) {
+      $build['#rows']['tax'] = ['', t('Tax'), $totals['tax']];
+    }
+
+    if ((float) $totals['discount'] > 0) {
+      $build['#rows']['discount'] = ['', t('Discount'), $totals['discount']];
+    }
+
+    $build['#rows']['grand'] = ['', t('Grand Total'), $totals['grand']];
 
     return $build;
   }
