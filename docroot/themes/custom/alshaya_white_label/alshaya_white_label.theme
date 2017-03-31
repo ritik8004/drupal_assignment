@@ -156,3 +156,15 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       }
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_white_label_theme() {
+  return [
+    'customer_cart_form' => [
+      'render element' => 'form',
+      'path' => drupal_get_path('theme', 'alshaya_white_label') . '/templates/form',
+    ],
+  ];
+}
