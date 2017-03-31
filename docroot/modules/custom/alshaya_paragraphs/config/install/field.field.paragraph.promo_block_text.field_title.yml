@@ -3,11 +3,11 @@ status: true
 dependencies:
   config:
     - field.storage.paragraph.field_title
-    - paragraphs.paragraphs_type.promo_block
-id: paragraph.promo_block.field_title
+    - paragraphs.paragraphs_type.promo_block_text
+id: paragraph.promo_block_text.field_title
 field_name: field_title
 entity_type: paragraph
-bundle: promo_block
+bundle: promo_block_text
 label: Title
 description: ''
 required: false

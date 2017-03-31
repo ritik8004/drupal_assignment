@@ -1,0 +1,7 @@
+name: 'Alshaya Cart Notification'
+type: module
+description: 'Custom install for Alshaya sites for showing the cart notifications.'
+package: 'Custom'
+core: 8.x
+dependencies:
+  - acq_sku

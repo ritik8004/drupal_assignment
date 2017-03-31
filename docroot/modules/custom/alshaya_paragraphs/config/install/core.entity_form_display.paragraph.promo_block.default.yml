@@ -4,8 +4,6 @@ dependencies:
   config:
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
-    - field.field.paragraph.promo_block.field_subtitle
-    - field.field.paragraph.promo_block.field_title
     - image.style.thumbnail
     - paragraphs.paragraphs_type.promo_block
   module:
@@ -31,20 +29,6 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
-  field_subtitle:
-    weight: 3
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
-  field_title:
-    weight: 1
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
 hidden:
   created: true
   status: true

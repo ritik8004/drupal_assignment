@@ -1,0 +1,104 @@
+<?php
+
+/**
+ * @file
+ * Contains form alter for sku base form.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Url;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_acm_cart_notification_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  // Altering Sku base form, which is the form implementation for Simple,
+  // Grouped and Configurable products.
+  if ($form_id == 'sku_base_form') {
+    // Adding a form element a placeholder to populate as a cart notification.
+    $form['cart_notification_modal'] = [
+      '#markup' => '',
+      '#prefix' => '<div id = "cart_notification">',
+      '#suffix' => '</div>',
+    ];
+
+    $form['add_to_cart']['#ajax'] = [
+      'callback' => 'alshaya_acm_cart_notification_form_submit',
+      'wrapper' => 'cart_notification',
+    ];
+
+    // Attach the js file with the add to cart form.
+    $form['#attached']['library'][] = 'core/drupal.ajax';
+    $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+    $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
+  }
+}
+
+/**
+ * AJAX callback for the add to cart submit button.
+ */
+function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
+
+  // Product name.
+  $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
+  $product_value = SKU::loadFromSKU($string_sku)->get('name')->getValue();
+  $product_name = $product_value[0]['value'];
+
+  // Quantity.
+  $quantity = $form_state->getValue('quantity');
+
+  // Generating cart link.
+  $url = Url::fromRoute('acq_cart.cart')->toString();
+
+  // Product Image.
+  // Create image path.
+  $image = SKU::loadFromSKU($string_sku)
+    ->get('attr_image')
+    ->getValue();
+
+  // If we have image for the product.
+  if ($image != NULL) {
+    $file_uri = File::load($image[0]['target_id'])->getFileUri();
+    $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($file_uri);
+  }
+
+  // Use the template to render the HTML.
+  $output = [
+    '#theme' => 'cart_notification',
+    '#quantity' => $quantity,
+    '#image' => $image,
+    '#product_name' => $product_name,
+    '#link' => $url,
+  ];
+
+  $html = drupal_render($output);
+
+  // Ajax Response.
+  $response = new AjaxResponse();
+  $response->addCommand(new HtmlCommand('#cart_notification', $html));
+
+  return $response;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_acm_cart_notification_theme($existing, $type, $theme, $path) {
+  return [
+    'cart_notification' => [
+      'variables' => [
+        'quantity' => 0,
+        'image' => '',
+        'product_name' => '',
+        'link' => '',
+      ],
+      'template' => 'cart-notification',
+    ],
+  ];
+}

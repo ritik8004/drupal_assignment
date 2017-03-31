@@ -7,6 +7,7 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_1_col
     - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
     - paragraphs.paragraphs_type.1_row_3_col
+    - paragraphs.paragraphs_type.1_row_3_col_text
   module:
     - entity_reference_revisions
 id: node.advanced_page.field_promo_blocks
@@ -26,6 +27,7 @@ settings:
       1_row_1st_col_2_row_2nd_col: 1_row_1st_col_2_row_2nd_col
       1_row_1_col: 1_row_1_col
       1_row_3_col: 1_row_3_col
+      1_row_3_col_text: 1_row_3_col_text
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         enabled: true
@@ -47,5 +49,29 @@ settings:
         enabled: false
       related_info_one_column:
         weight: 14
+        enabled: false
+      1_row_3_col_text:
+        enabled: true
+        weight: 16
+      1_row_1_col_dept:
+        weight: 18
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 20
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 21
+        enabled: false
+      1_row_2_col_dept:
+        weight: 22
+        enabled: false
+      1_row_3_col_dept:
+        weight: 24
+        enabled: false
+      main_menu_highlight:
+        weight: 27
+        enabled: false
+      promo_block_text:
+        weight: 29
         enabled: false
 field_type: entity_reference_revisions
