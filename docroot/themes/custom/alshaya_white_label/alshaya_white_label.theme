@@ -73,17 +73,6 @@ function alshaya_white_label_preprocess_block(&$variables) {
 }
 
 /**
- * Implements template_preprocess_block().
- */
-function alshaya_white_label_preprocess_block__views_block__alshaya_product_list_block_1(&$variables) {
-  /* @var \Drupal\taxonomy\TermInterface $route_match_term */
-  $route_match_term = \Drupal::routeMatch()->getParameter('taxonomy_term');
-  if (!is_null($route_match_term)) {
-    $variables['term_description'] = $route_match_term->getDescription();
-  }
-}
-
-/**
  * Implements hook_preprocess_node().
  */
 function alshaya_white_label_preprocess_node(&$variables) {
