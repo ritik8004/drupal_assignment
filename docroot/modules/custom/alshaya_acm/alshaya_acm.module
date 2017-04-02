@@ -78,6 +78,8 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'ordertotal' => '',
         'currency_format' => '',
         'currency_code_position' => '',
+        'delivery_address' => '',
+        'delivery_method' => '',
       ],
       'template' => 'block--checkout-summary',
     ],

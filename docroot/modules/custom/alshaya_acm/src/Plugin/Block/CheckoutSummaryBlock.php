@@ -64,6 +64,29 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $cart = $this->cartStorage->getCart();
     $items = $cart->items();
 
+    // Shipping method & carrier.
+    $shipping_method = $cart->getShippingMethod();
+    $carrier_code = $shipping_method['carrier_code'];
+    $method_code = $shipping_method['method_code'];
+    $shipping_method_string = $this->t('@method by @carrier',
+      ['@method' => $method_code, '@carrier' => $carrier_code]
+    );
+
+    // Delivery address.
+    $shipping_address = $cart->getShipping();
+    $shipping_address_string = isset($shipping_address->street) ?
+      $shipping_address->street . ', ' : '';
+    $shipping_address_string .= isset($shipping_address->street2) ?
+      $shipping_address->street2 . ', ' : '';
+    $shipping_address_string .= isset($shipping_address->city) ?
+      $shipping_address->city . ', ' : '';
+    $shipping_address_string .= isset($shipping_address->region) ?
+      $shipping_address->region . ', ' : '';
+    $shipping_address_string .= isset($shipping_address->country) ?
+      $shipping_address->country . ', ' : '';
+    $shipping_address_string .= isset($shipping_address->postcode) ?
+      $shipping_address->postcode : '';
+
     // Fetch the config.
     $config = \Drupal::configFactory()
       ->get('acq_commerce.currency');
@@ -133,6 +156,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#ordertotal' => $order_total,
       '#currency_format' => $currency_format,
       '#currency_code_position' => $currency_code_position,
+      '#delivery_address' => $shipping_address_string,
+      '#delivery_method' => $shipping_method_string,
       '#attached' => [
         'library' => [
           'alshaya_acm/alshaya.acm.js',
