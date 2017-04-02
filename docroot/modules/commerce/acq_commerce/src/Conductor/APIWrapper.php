@@ -89,7 +89,9 @@ class APIWrapper {
 
     try {
       $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
-    } catch (ConductorException $e) {
+    }
+    catch (ConductorException $e) {
+      // Throw exceptions here.
     }
 
     return $cart;
