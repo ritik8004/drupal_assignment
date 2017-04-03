@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "553f786a28df1ef625b6bdc6909bf79a",
+    "content-hash": "abc050f4ad388d221084db59ba8ca37b",
     "packages": [
         {
             "name": "acquia/blt",
@@ -3243,7 +3243,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/facets-8.x-1.0-alpha8.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha8",
                 "shasum": "6cb469fdf9e5d924e5ed910cbe062f4a1fa995a2"
             },
             "require": {
@@ -4628,6 +4628,66 @@
             "homepage": "https://www.drupal.org/project/pathauto",
             "support": {
                 "source": "http://cgit.drupalcode.org/pathauto"
+            }
+        },
+        {
+            "name": "drupal/profile",
+            "version": "1.0.0-alpha5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/profile",
+                "reference": "8.x-1.0-alpha5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/profile-8.x-1.0-alpha5.zip",
+                "reference": null,
+                "shasum": "58a3efbcc2a2f6689fe3316ef471d31ca7f0fa36"
+            },
+            "require": {
+                "drupal/core": "~8.1",
+                "drupal/entity": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-alpha5",
+                    "datestamp": "1471873739"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "bojanz",
+                    "homepage": "https://www.drupal.org/user/86106"
+                },
+                {
+                    "name": "dakala",
+                    "homepage": "https://www.drupal.org/user/53175"
+                },
+                {
+                    "name": "fago",
+                    "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "mglaman",
+                    "homepage": "https://www.drupal.org/user/2416470"
+                },
+                {
+                    "name": "pcambra",
+                    "homepage": "https://www.drupal.org/user/122101"
+                }
+            ],
+            "description": "Provides configurable user profiles.",
+            "homepage": "http://drupal.org/project/profile",
+            "support": {
+                "source": "http://cgit.drupalcode.org/profile"
             }
         },
         {
@@ -11852,7 +11912,8 @@
         "drupal/taxonomy_term_depth": 20,
         "drupal/captcha": 10,
         "drupal/clientside_validation": 20,
-        "drupal/facets": 15
+        "drupal/facets": 15,
+        "drupal/profile": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
