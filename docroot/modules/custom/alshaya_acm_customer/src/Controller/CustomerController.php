@@ -81,6 +81,8 @@ class CustomerController extends ControllerBase {
       '#account' => $account,
       '#currency_code' => $currencyCode,
       '#currency_code_position' => $currencyCodePosition,
+      // @TODO: We may want to set it to cache time limit of API call.
+      '#cache' => ['max-age' => 0],
     ];
 
     return $build;
