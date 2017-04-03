@@ -1,5 +1,0 @@
-services:
-  alshaya_addressbook.route_subscriber:
-    class: Drupal\alshaya_addressbook\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }
