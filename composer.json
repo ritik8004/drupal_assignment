@@ -34,7 +34,8 @@
         "drupal/views_field_view": "1.0-beta2",
         "drupal/user_registrationpassword": "^1.0",
         "drupal/clientside_validation": "1.x-dev",
-        "drupal/facets": "^1.0@alpha"
+        "drupal/facets": "^1.0@alpha",
+        "drupal/profile": "^1.0@alpha"
     },
     "require-dev": {
         "behat/behat": "^3.1",
