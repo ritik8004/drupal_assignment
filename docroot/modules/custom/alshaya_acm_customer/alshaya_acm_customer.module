@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['user_order_list'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'order_details' => NULL,
+      'order_not_found' => NULL,
+      'account' => NULL,
+      'currency_code' => NULL,
+      'currency_code_position' => NULL,
+      'search_form' => NULL,
+    ],
+  ];
+
+  return $items;
+}

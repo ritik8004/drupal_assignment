@@ -18,6 +18,7 @@ modules:
   - alshaya_addressbook
   - alshaya_advanced_page
   - alshaya_acm
+  - alshaya_acm_customer
   - alshaya_acm_product
   - alshaya_admin
   - alshaya_arabic

@@ -1,0 +1,68 @@
+{#
+/**
+ * @file
+ *
+ * Default user order item template.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - order: Order information recieved from conductor.
+ * - account: Order information recieved from conductor.
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes }}>
+  <div>
+    <div>
+      {% trans %}
+        Logged in as {{ account.first_name }} {{ account.last_name }}
+      {% endtrans %}
+    </div>
+    <div>
+      {{ search_form }}
+    </div>
+  </div>
+
+  <div>
+    {{ order_not_found }}
+  </div>
+  <ul>
+    {% for order in order_details %}
+      <li>
+        <div>
+          <span class="light">{{ "Order ID"|t }}</span>
+          <span class="dark">{{ order.orderId }}</span>
+          <span class="light">{{ order.date }}</span>
+        </div>
+
+        <div>
+          <span class="dark">
+            {% trans %}
+              {{ order.name }}...
+            {% endtrans %}
+          </span>
+          <span class="light">
+            {% trans %}
+              Total: {{ order.quantity }} items
+            {% endtrans %}
+          </span>
+        </div>
+
+        <div>
+          <span class="button status-{{ order.status|lower }}">{{ order.status|t }}</span>
+        </div>
+
+        <div>
+          <span class="light">{{ "Order Total"|t }}</span>
+          {% if currency_code_position == 'before' %}
+            <span class="total"><span class="prefix">{{ currency_code }}</span><span class="total--amount">{{ order.total }}</span></span>
+          {% else %}
+            <span class="total">{{ order.total }}<span class="prefix">{{ currency_code }}</span></span>
+          {% endif %}
+          <span class="dark"></span>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

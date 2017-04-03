@@ -1,0 +1,7 @@
+name: 'Alshaya ACM Order'
+type: module
+description: 'All custom code around orders.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm_product
