@@ -101,4 +101,12 @@
     </div>
     <span class="status">{% trans %}Before Delivery{% endtrans %}</span>
   </div>
+  <div class="delivery-type">
+    {{ delivery_label }} <a href="{{ shipping_url }}">{% trans %}Change{% endtrans %}</a>
+    <div class="method">{{ delivery_method }}</div>
+  </div>
+  <div class="address">
+    {{ address_label }} <a href="{{ shipping_url }}">{% trans %}Edit{% endtrans %}</a>
+    <div class="delivery-address">{{ delivery_address }}</div>
+  </div>
 </div>
