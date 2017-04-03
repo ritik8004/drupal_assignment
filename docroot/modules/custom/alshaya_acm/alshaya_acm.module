@@ -20,6 +20,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $product_count = 0;
   $form['cart']['#header'][] = t('Remove');
 
+  // Change checkout button text to 'Secure Checkout'.
+  $form['actions']['checkout']['#value'] = t('Secure Checkout');
+
   // Add continue shopping link, that redirect user to homepage.
   $form['actions']['continue_shopping'] = [
     '#type' => 'link',
