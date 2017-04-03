@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 348x428
+label: 348x428
+effects:
+  f30f20cb-3fce-428f-8a60-afb019e2d38c:
+    uuid: f30f20cb-3fce-428f-8a60-afb019e2d38c
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 348
+      height: 428
