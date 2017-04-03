@@ -12,7 +12,7 @@ alshaya_white_label.tablet:
     - 1x
 alshaya_white_label.desktop:
   label: desktop
-  mediaQuery: 'all and (min-width: 1025px)'
+  mediaQuery: 'all and (min-width: 1284px)'
   weight: 2
   multipliers:
     - 1x

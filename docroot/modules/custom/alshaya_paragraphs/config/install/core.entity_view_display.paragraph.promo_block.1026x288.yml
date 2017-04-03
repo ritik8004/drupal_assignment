@@ -5,11 +5,11 @@ dependencies:
     - core.entity_view_mode.paragraph.1026x288
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
+    - image.style.1026x288
     - paragraphs.paragraphs_type.promo_block
-    - responsive_image.styles.1026x288
   module:
+    - image
     - link
-    - responsive_image
 id: paragraph.promo_block.1026x288
 targetEntityType: paragraph
 bundle: promo_block
@@ -19,10 +19,10 @@ content:
     weight: 0
     label: hidden
     settings:
-      responsive_image_style: 1026x288
+      image_style: 1026x288
       image_link: ''
     third_party_settings: {  }
-    type: responsive_image
+    type: image
   field_link:
     weight: 1
     label: hidden
