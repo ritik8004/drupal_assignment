@@ -49,4 +49,10 @@ class OrderSearchForm extends FormBase {
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+  }
+
 }
