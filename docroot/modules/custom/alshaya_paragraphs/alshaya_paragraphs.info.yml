@@ -14,6 +14,7 @@ dependencies:
   - link
   - paragraphs
   - path
+  - responsive_image
   - system
   - text
   - user
