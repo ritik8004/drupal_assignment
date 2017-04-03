@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.skus_sku_reference_display_price
+  module:
+    - facets
+    - system
+  theme:
+    - alshaya_white_label
+id: skusskureferencedisplayprice
+theme: alshaya_white_label
+region: sidebar_first
+weight: -16
+provider: null
+plugin: 'facet_block:skus_sku_reference_display_price'
+settings:
+  id: 'facet_block:skus_sku_reference_display_price'
+  label: Price
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: false
+    context_mapping: {  }
