@@ -5,7 +5,7 @@ dependencies:
     - field.field.paragraph.1_row_3_col_text.field_promo_block
     - paragraphs.paragraphs_type.1_row_3_col_text
   module:
-    - entity_reference_revisions
+    - paragraphs
     - workbench_moderation
 id: paragraph.1_row_3_col_text.default
 targetEntityType: paragraph
@@ -15,11 +15,14 @@ content:
   field_promo_block:
     weight: 6
     settings:
-      match_operator: CONTAINS
-      size: 60
-      placeholder: ''
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: promo_block_text
     third_party_settings: {  }
-    type: entity_reference_revisions_autocomplete
+    type: entity_reference_paragraphs
 hidden:
   created: true
   status: true

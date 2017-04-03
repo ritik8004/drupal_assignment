@@ -36,6 +36,14 @@
         $('body').removeClass('mobile--overlay');
       });
 
+      $('.parent--level').on('click', function () {
+        $(this).addClass('current--clicked').siblings().removeClass('current--clicked');
+      });
+
+      $('.level--two').on('click', function () {
+        $(this).addClass('current--clicked').siblings().removeClass('current--clicked');
+      });
+
     }
   };
 

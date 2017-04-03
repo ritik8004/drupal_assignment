@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.address_book.field_address
+    - profile.type.address_book
+  module:
+    - address
+id: profile.address_book.default
+targetEntityType: profile
+bundle: address_book
+mode: default
+content:
+  field_address:
+    weight: 0
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: address_default
+hidden:
+  langcode: true
