@@ -190,4 +190,11 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     return $build;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
 }
