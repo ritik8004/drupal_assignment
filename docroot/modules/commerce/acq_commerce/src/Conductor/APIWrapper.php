@@ -199,6 +199,11 @@ class APIWrapper {
    * @return array - New customer array.
    */
   public function createCustomer($first_name, $last_name, $email) {
+    // First check if the user exists in Magento.
+    if ($existingCustomer = $this->getCustomer($email)) {
+      return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email);
+    }
+
     return $this->updateCustomer(NULL, $first_name, $last_name, $email);
   }
 
@@ -246,7 +251,7 @@ class APIWrapper {
     $endpoint = "customer/$email";
 
     $doReq = function($client, $opt) use ($endpoint) {
-      return($client->post($endpoint, $opt));
+      return($client->get($endpoint, $opt));
     };
 
     $customer = array();
