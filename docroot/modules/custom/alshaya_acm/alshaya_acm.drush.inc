@@ -19,6 +19,9 @@ function alshaya_acm_drush_command() {
   $commands['alshaya-acm-offline-products-sync'] = [
     'description' => 'Imports commerce products from the codebase.',
     'aliases'     => ['aaops'],
+    'options'     => [
+      'limit' => 'Number of products to sync.',
+    ],
   ];
 
   return($commands);
@@ -50,6 +53,11 @@ function drush_alshaya_acm_offline_products_sync() {
 
   module_load_include('data', 'alshaya_acm', 'includes/products');
   global $_alshaya_acm_products;
+
+  $limit = (int) drush_get_option('limit');
+  if ($limit) {
+    $_alshaya_acm_products = array_slice($_alshaya_acm_products, 0, $limit);
+  }
 
   $resource->post($_alshaya_acm_products);
   drush_print(dt('Done.'));
