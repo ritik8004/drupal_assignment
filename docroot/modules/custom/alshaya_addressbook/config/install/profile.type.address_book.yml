@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: address_book
-label: 'Address book'
+label: Address
 registration: false
 multiple: true
 roles:
