@@ -224,7 +224,7 @@ class ShippingInformation extends AddressFormBase {
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $values = $form_state->getValue($pane_form['#parents']);
 
-    $shipping_method == NULL;
+    $shipping_method = NULL;
 
     if (isset($values['address']['shipping_methods'])) {
       $shipping_method = $values['address']['shipping_methods'];
