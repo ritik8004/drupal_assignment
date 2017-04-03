@@ -1,0 +1,24 @@
+diff --git a/modules/acq_sku/src/AcquiaCommerce/SKUPluginBase.php b/modules/acq_sku/src/AcquiaCommerce/SKUPluginBase.php
+index f6a89eb..045ce7f 100644
+--- a/modules/acq_sku/src/AcquiaCommerce/SKUPluginBase.php
++++ b/modules/acq_sku/src/AcquiaCommerce/SKUPluginBase.php
+@@ -113,7 +113,8 @@ public function cartName($sku, $cart) {
+     $display_node = $this->getDisplayNode($sku);
+     $url = $display_node->toUrl();
+     $link = Link::fromTextAndUrl($sku->label(), $url);
+-    return render($link->toRenderable());
++    $renderArray = $link->toRenderable();
++    return render($renderArray);
+   }
+
+   /**
+@@ -125,7 +126,8 @@ public function getDisplayNode(SKU $sku) {
+       ->condition('field_skus', $sku->getSKU())
+       ->range(0, 1);
+
+-    $nid = reset($query->execute());
++    $result = $query->execute();
++    $nid = reset($result);
+
+     return Node::load($nid);
+   }
