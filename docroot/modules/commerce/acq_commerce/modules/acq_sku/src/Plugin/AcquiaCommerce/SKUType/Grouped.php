@@ -98,7 +98,14 @@ class Grouped extends SKUPluginBase {
       drupal_set_message(t('Please select a quantity greater than 0.'), 'error');
     }
 
-    \Drupal::service('acq_cart.cart_storage')->updateCart();
+    $response = \Drupal::service('acq_cart.cart_storage')->updateCart();
+
+    // Show errors for updating the cart.
+    if ($response->code == 0) {
+      // @todo: Use a better way to show errors.
+      // @todo: Check if we can use the same cart notification to show errors.
+      drupal_set_message($response->message);
+    }
   }
 
   /**

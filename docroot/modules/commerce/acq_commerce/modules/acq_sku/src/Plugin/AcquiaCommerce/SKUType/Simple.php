@@ -71,6 +71,13 @@ class Simple extends SKUPluginBase {
 
     $cart->addItemToCart($sku, $quantity);
 
-    \Drupal::service('acq_cart.cart_storage')->updateCart();
+    $response = \Drupal::service('acq_cart.cart_storage')->updateCart();
+
+    // Show errors for updating the cart.
+    if ($response->code == 0) {
+      // @todo: Use a better way to show errors.
+      // @todo: Check if we can use the same cart notification to show errors.
+      drupal_set_message($response->message);
+    }
   }
 }
