@@ -20,6 +20,13 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $product_count = 0;
   $form['cart']['#header'][] = t('Remove');
 
+  // Add continue shopping link, that redirect user to homepage.
+  $form['actions']['continue_shopping'] = [
+    '#type' => 'link',
+    '#title' => t('Continue shopping'),
+    '#url' => Url::fromRoute('<front>'),
+  ];
+
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
       $form['cart'][$id]['quantity']['#type'] = 'select';
