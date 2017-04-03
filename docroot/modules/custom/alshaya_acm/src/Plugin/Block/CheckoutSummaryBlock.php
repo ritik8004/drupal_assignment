@@ -64,6 +64,24 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $cart = $this->cartStorage->getCart();
     $items = $cart->items();
 
+    // URL to change delivery address or shipping method.
+    $options = ['absolute' => TRUE];
+    $shipping_url = Url::fromRoute('acq_checkout.form', ['step' => 'shipping'], $options);
+    $shipping_url = $shipping_url->toString();
+
+    // @todo: Delivery type is Home delivery or Click and collect.
+    // We should get the type from cartStorage object.
+    $type = 'hd';
+
+    if ($type == 'hd') {
+      $delivery_label = $this->t("Home Delivery");
+      $address_label = $this->t("Delivery Address");
+    }
+    else {
+      $delivery_label = $this->t("Click & Collect");
+      $address_label = $this->t("Collection Store");
+    }
+
     // Shipping method & carrier.
     $shipping_method = $cart->getShippingMethod();
     $carrier_code = $shipping_method['carrier_code'];
@@ -158,6 +176,9 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#currency_code_position' => $currency_code_position,
       '#delivery_address' => $shipping_address_string,
       '#delivery_method' => $shipping_method_string,
+      '#delivery_label' => $delivery_label,
+      '#address_label' => $address_label,
+      '#shipping_url' => $shipping_url,
       '#attached' => [
         'library' => [
           'alshaya_acm/alshaya.acm.js',
