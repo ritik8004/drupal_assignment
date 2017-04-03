@@ -99,6 +99,18 @@ class CartSessionStorage implements CartStorageInterface {
 
     $cart = (object) \Drupal::service('acq_commerce.api')->updateCart($cart_id, $update);
 
+    // Example error handling done for updateCart method.
+    // @see: addToCartSubmit() in Simple.php.
+    //
+    // The APIWrapper.php will now forward the exceptions from magento.
+    // We should get ->code and ->message as two properties for all API calls.
+    // We shall forward the exception to the caller so it can be handled and
+    // used to show error messages.
+    // @todo: Check if the there is a list of all possible error codes.
+    if ($cart->code == 0) {
+      return $cart;
+    }
+
     if (empty($cart)) {
       return;
     }
