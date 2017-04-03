@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 348x202
+label: 348x202
+effects:
+  04dfc1f6-dc4c-4002-9fdc-acb986fb7e84:
+    uuid: 04dfc1f6-dc4c-4002-9fdc-acb986fb7e84
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 348
+      height: 202
