@@ -10,10 +10,75 @@ dependencies:
     - field.field.node.advanced_page.field_slider
     - node.type.advanced_page
   module:
+    - field_group
     - paragraphs
     - path
     - text
     - workbench_moderation
+third_party_settings:
+  field_group:
+    group_banner_full_width:
+      children:
+        - field_banner
+      parent_name: ''
+      weight: 10
+      label: 'Banner full width'
+      format_type: details
+      format_settings:
+        open: false
+        required_fields: true
+        classes: ''
+        id: ''
+    group_related:
+      children:
+        - field_related_info
+      parent_name: ''
+      weight: 11
+      label: Related
+      format_type: details
+      format_settings:
+        label: Related
+        element: div
+        show_label: true
+        label_element: h3
+        attributes: ''
+        effect: collapsible
+        speed: fast
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+    group_promo_banner_full_width:
+      children:
+        - field_promo_banner_full_width
+      parent_name: ''
+      weight: 12
+      label: 'Promo Banner full width'
+      format_type: details
+      format_settings:
+        element: div
+        show_label: false
+        label_element: h3
+        effect: none
+        speed: fast
+        attributes: ''
+        classes: ''
+        id: ''
+        required_fields: true
+        open: false
+    group_promo_blocks:
+      children:
+        - field_promo_blocks
+      parent_name: ''
+      weight: 109
+      label: 'Promo blocks'
+      format_type: details
+      format_settings:
+        label: 'Promo blocks'
+        required_fields: true
+        id: ''
+        classes: ''
+        open: false
 id: node.advanced_page.default
 targetEntityType: node
 bundle: advanced_page
@@ -21,7 +86,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 31
+    weight: 7
     settings:
       rows: 9
       summary_rows: 3
@@ -29,12 +94,12 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 3
     settings: {  }
     third_party_settings: {  }
   field_banner:
     type: entity_reference_paragraphs
-    weight: 32
+    weight: 8
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -45,7 +110,7 @@ content:
     third_party_settings: {  }
   field_promo_banner_full_width:
     type: entity_reference_paragraphs
-    weight: 35
+    weight: 9
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -56,7 +121,7 @@ content:
     third_party_settings: {  }
   field_promo_blocks:
     type: entity_reference_paragraphs
-    weight: 36
+    weight: 13
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -67,7 +132,7 @@ content:
     third_party_settings: {  }
   field_related_info:
     type: entity_reference_paragraphs
-    weight: 33
+    weight: 9
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -78,7 +143,7 @@ content:
     third_party_settings: {  }
   field_slider:
     type: entity_reference_paragraphs
-    weight: 34
+    weight: 8
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -89,36 +154,36 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 2
+    weight: 1
     settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 6
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 15
+    weight: 4
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 16
+    weight: 5
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: -5
+    weight: 0
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 2
     settings:
       match_operator: CONTAINS
       size: 60
