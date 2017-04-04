@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\user\Entity\User;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$form, FormStateInterface $form_state) {
+  $user_id = \Drupal::currentUser()->getAccount()->id();
+  /* @var \Drupal\user\Entity\User $user */
+  $user = User::load($user_id);
+  /** @var \Drupal\profile\Entity\ProfileInterface|bool $default_address */
+  $default_address = \Drupal::entityTypeManager()->getStorage('profile')
+    ->loadByUser($user, 'address_book');
+
+  // If user doesn't have any default address yet.
+  if (!$default_address) {
+    $form['actions']['submit']['#access'] = FALSE;
+  }
+
+  // Submit handler.
+  $form['actions']['submit']['#submit'][] = '_alshaya_addressbook_profile_add_submit';
+  $form['actions']['set_default']['#submit'][] = '_alshaya_addressbook_profile_add_submit';
+}
+
+/**
+ * Submit handler for 'profile' add form.
+ */
+function _alshaya_addressbook_profile_add_submit(&$form, FormStateInterface $form_state) {
+  $user_id = \Drupal::currentUser()->getAccount()->id();
+  // Redirect user to address book profile page after adding address.
+  $form_state->setRedirect('entity.profile.type.address_book.user_profile_form', [
+    'user' => $user_id,
+    'profile_type' => 'address_book',
+  ]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function alshaya_addressbook_profile_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  // If the address is default address, not allow user to delete it.
+  if ($operation == 'delete' && $entity->getType() == 'address_book') {
+    if ($entity->isDefault() && $entity->getOwnerId() == $account->id()) {
+      return AccessResult::forbidden();
+    }
+  }
+}
+
+/**
+ * Implements hook_user_view_alter().
+ */
+function alshaya_addressbook_user_view_alter(&$build) {
+  // Remove/Hide the 'address_book' info on 'user/uid' page.
+  if (isset($build['profile_address_book'])) {
+    unset($build['profile_address_book']);
+  }
+}
