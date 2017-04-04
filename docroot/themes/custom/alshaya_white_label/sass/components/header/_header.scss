@@ -446,6 +446,11 @@ header {
       text-align: center;
       padding: 10px;
 
+      &.active {
+        background: $white-five;
+        border-top: 2px solid $peacock-blue;
+      }
+
       &:hover {
         background: $peacock-blue;
 
@@ -587,6 +592,10 @@ header {
     padding-bottom: 20px;
     position: relative;
 
+    p {
+      display: none;
+    }
+
     &::after {
       content: '';
       background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
@@ -606,11 +615,9 @@ header {
 
   .level--two,
   .child--two {
-    padding-#{$left}: 0.5em;
     padding-top: 20px;
 
     li {
-      padding-#{$left}: 0.5rem;
       margin: 10px 0;
       padding-top: 10px;
       padding-bottom: 10px;
