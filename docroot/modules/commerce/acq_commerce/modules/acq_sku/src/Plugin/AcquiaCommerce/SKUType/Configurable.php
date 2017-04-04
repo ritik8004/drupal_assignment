@@ -218,11 +218,12 @@ class Configurable extends SKUPluginBase {
 
       $cart->addItemToCart($tree_pointer->getSKU(), $quantity);
 
-      $response = \Drupal::service('acq_cart.cart_storage')->updateCart();
-
-      // Show errors for updating the cart.
-      if ($response->code == 0) {
-        drupal_set_message($response->message, 'error');
+      try {
+        \Drupal::service('acq_cart.cart_storage')->updateCart();
+      }
+      catch (\Exception $e) {
+        // Handling error and showing it to the user.
+        drupal_set_message($e->getMessage(), 'error');
       }
     }
     else {

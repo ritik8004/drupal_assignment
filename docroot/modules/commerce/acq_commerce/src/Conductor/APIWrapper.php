@@ -43,10 +43,7 @@ class APIWrapper {
       $cart = $this->tryAgentRequest($doReq, 'createCart', 'cart');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $cart;
@@ -71,10 +68,7 @@ class APIWrapper {
       $cart = $this->tryAgentRequest($doReq, 'getCart', 'cart');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $cart;
@@ -101,10 +95,7 @@ class APIWrapper {
       $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
     }
     catch (ConductorResultException $e) {
-      return [
-        'message' => $e->getFailureMessages(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $cart;
@@ -129,10 +120,7 @@ class APIWrapper {
       $result = $this->tryAgentRequest($doReq, 'placeOrder', 'cart');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $result;
@@ -157,10 +145,7 @@ class APIWrapper {
       $methods = $this->tryAgentRequest($doReq, 'getShippingMethods', 'methods');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $methods;
@@ -188,10 +173,7 @@ class APIWrapper {
       $methods = $this->tryAgentRequest($doReq, 'getShippingEstimates', 'methods');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $methods;
@@ -216,10 +198,7 @@ class APIWrapper {
       $methods = $this->tryAgentRequest($doReq, 'getPaymentMethods', 'methods');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $methods;
@@ -267,10 +246,7 @@ class APIWrapper {
       $customer = $this->tryAgentRequest($doReq, 'updateCustomer', 'customer');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $customer;
@@ -295,10 +271,7 @@ class APIWrapper {
       $customer = $this->tryAgentRequest($doReq, 'getCustomer', 'customer');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $customer;
@@ -324,10 +297,7 @@ class APIWrapper {
       $orders = $this->tryAgentRequest($doReq, 'getCustomerOrders', 'orders');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $orders;
@@ -351,10 +321,7 @@ class APIWrapper {
       $categories = $this->tryAgentRequest($doReq, 'getCategories', 'products');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $categories;
@@ -380,10 +347,7 @@ class APIWrapper {
       $categories = $this->tryAgentRequest($doReq, 'getProductsByUpdatedDates', 'products');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $categories;
@@ -416,10 +380,7 @@ class APIWrapper {
       $result = $this->tryAgentRequest($doReq, 'getPaymentToken', 'token');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $result;
@@ -443,10 +404,7 @@ class APIWrapper {
       $result = $this->tryAgentRequest($doReq, 'systemWatchdog', 'system');
     }
     catch (ConductorException $e) {
-      return [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-      ];
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $result;
