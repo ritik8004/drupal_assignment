@@ -1,14 +1,15 @@
 {
   "_links": {
     "self": {
-      "href": "http:\/\/local.alshaya.com\/block\/4?_format=hal_json"
+      "href": "http:\/\/local.alshaya.com\/en\/block\/4?_format=hal_json"
     },
     "type": {
       "href": "http:\/\/drupal.org\/rest\/type\/block_content\/basic"
     },
-    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/revision_user": [
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
       {
-        "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json"
+        "href": "http:\/\/local.alshaya.com\/en\/user\/0?_format=hal_json",
+        "lang": "en"
       }
     ]
   },
@@ -46,7 +47,7 @@
   ],
   "changed": [
     {
-      "value": "1490641410",
+      "value": "1491282146",
       "lang": "en"
     }
   ],
@@ -55,25 +56,6 @@
       "value": "1490641410"
     }
   ],
-  "_embedded": {
-    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/revision_user": [
-      {
-        "_links": {
-          "self": {
-            "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json"
-          },
-          "type": {
-            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
-          }
-        },
-        "uuid": [
-          {
-            "value": "7ba78011-4b3a-426b-80e5-2861bcb2acd0"
-          }
-        ]
-      }
-    ]
-  },
   "revision_translation_affected": [
     {
       "value": "1",
@@ -86,9 +68,53 @@
       "lang": "en"
     }
   ],
+  "content_translation_source": [
+    {
+      "value": "und",
+      "lang": "en"
+    }
+  ],
+  "content_translation_outdated": [
+    {
+      "value": "0",
+      "lang": "en"
+    }
+  ],
+  "_embedded": {
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
+      {
+        "_links": {
+          "self": {
+            "href": "http:\/\/local.alshaya.com\/en\/user\/0?_format=hal_json"
+          },
+          "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+          }
+        },
+        "uuid": [
+          {
+            "value": "fa56033a-bf5f-4528-9057-6c2b5fd94fbb"
+          }
+        ],
+        "lang": "en"
+      }
+    ]
+  },
+  "content_translation_status": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "content_translation_created": [
+    {
+      "value": "1491243645",
+      "lang": "en"
+    }
+  ],
   "body": [
     {
-      "value": "<p>Win exciting prizes<\/p>\r\n\r\n<p>Unlock exclusive rewards<\/p>\r\n\r\n<p>Be the first to know<\/p>\r\n\r\n<a href=\"\">Learn more<\/a>\r\n",
+      "value": "<p> <i class=\"icon-win\"><\/i>Win exciting prizes<\/p>\r\n<p><i class=\"icon-reward\"><\/i>Unlock exclusive rewards<\/p>\r\n<p><i class=\"icon-heart\"><\/i>Be the first to know<\/p>\r\n<p><a href=\"\">Learn more<\/a><\/p>\r\n",
       "format": "rich_text",
       "summary": "",
       "lang": "en"
