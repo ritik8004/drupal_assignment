@@ -7,8 +7,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 
 /**
@@ -61,6 +59,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $cart = $this->cartStorage->getCart();
     $items = $cart->items();
 
@@ -123,16 +122,12 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $img = '';
 
       // Load sku from item_id that we have in $item.
-      $sku = SKU::loadFromSKU($item['sku']);
-
-      // Create image path.
-      if (!empty($sku->attr_image)) {
-        $image = $sku->get('attr_image')->getValue();
-      }
+      $media = alshaya_acm_product_get_sku_media($item['sku']);
 
       // If we have image for the product.
-      if ($image != NULL) {
-        $file_uri = File::load($image[0]['target_id'])->getFileUri();
+      if (!empty($media)) {
+        $image = array_shift($media);
+        $file_uri = $image->getFileUri();
         $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
       }
       // Create products array to be used in twig.
