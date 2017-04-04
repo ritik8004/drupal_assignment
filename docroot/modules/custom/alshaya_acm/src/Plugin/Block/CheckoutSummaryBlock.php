@@ -194,6 +194,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getCacheMaxAge() {
+    // We don't want this block to be cached since it needs to show the updated
+    // details from the cart.
     return 0;
   }
 
