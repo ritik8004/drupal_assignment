@@ -89,7 +89,6 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    * {@inheritdoc}
    */
   public function addToCartValidate(&$form, FormStateInterface $form_state) {
-    // Do all common validation.
 
   }
 
