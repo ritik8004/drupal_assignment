@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_customer module.
+ */
+
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_customer_install() {
+  // Grant permission to access own orders to authenticated users.
+  $role = Role::load('authenticated');
+  $role->grantPermission('access own orders');
+  $role->save();
+}
