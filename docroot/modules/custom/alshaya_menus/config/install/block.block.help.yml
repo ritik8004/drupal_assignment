@@ -10,7 +10,7 @@ dependencies:
 id: help
 theme: alshaya_white_label
 region: footer_primary
-weight: -10
+weight: -12
 provider: null
 plugin: 'system_menu_block:help'
 settings:
