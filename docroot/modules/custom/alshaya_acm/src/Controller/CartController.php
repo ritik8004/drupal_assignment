@@ -51,7 +51,7 @@ class CartController extends ControllerBase {
   public function cartRemoveSku($sku) {
     if (!empty($sku)) {
       // Remove the item from cart.
-      $this->cart->removeItem($sku);
+      $this->cart->removeItemFromCart($sku);
       // Update cart, after the item has been removed.
       $this->cartStorage->updateCart();
 

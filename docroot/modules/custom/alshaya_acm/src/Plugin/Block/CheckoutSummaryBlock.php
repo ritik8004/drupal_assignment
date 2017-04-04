@@ -121,8 +121,15 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     foreach ($items as $item) {
       $img = '';
+
+      // Load sku from item_id that we have in $item.
+      $sku = SKU::loadFromSKU($item['sku']);
+
       // Create image path.
-      $image = SKU::loadFromSKU($item['sku'])->get('attr_image')->getValue();
+      if (!empty($sku->attr_image)) {
+        $image = $sku->get('attr_image')->getValue();
+      }
+
       // If we have image for the product.
       if ($image != NULL) {
         $file_uri = File::load($image[0]['target_id'])->getFileUri();
