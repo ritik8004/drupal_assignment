@@ -214,14 +214,14 @@ class CustomerController extends ControllerBase {
     // @TODO: Add conditions for partial delivery status - not in MVP1.
     // Check MMCPA-145 comments for more details.
     if ($status['returned'] !== 0) {
-      return 'returned';
+      return ['text' => $this->t('returned'), 'class' => 'status-returned'];
     }
     elseif ($status['delivered'] !== 0) {
-      return 'delivered';
+      return ['text' => $this->t('delivered'), 'class' => 'status-delivered'];
     }
 
     // Finally if it is neither delivered nor returned, it is pending.
-    return 'pending';
+    return ['text' => $this->t('pending'), 'class' => 'status-pending'];;
   }
 
   /**
