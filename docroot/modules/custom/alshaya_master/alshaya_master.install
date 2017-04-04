@@ -51,4 +51,9 @@ function alshaya_master_install() {
   $lang_config = $config_factory->getEditable('language.negotiation')->get();
   $lang_config['url']['prefixes']['en'] = 'en';
   $config_factory->getEditable('language.negotiation')->setData($lang_config)->save();
+
+  // Add <i class> for allowed html in rich text.
+  \Drupal::configFactory()->getEditable('filter.format.rich_text')
+    ->set('filters.filter_html.settings.allowed_html', '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <br> <h1> <pre> <drupal-entity data-*> <i class>')
+    ->save();
 }
