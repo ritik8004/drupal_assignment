@@ -107,7 +107,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $ids = $query->execute();
 
     if (count($ids) != 1) {
-      \Drupal::logger('my_module')->error(
+      \Drupal::logger('acq_sku')->error(
         'Duplicate product or non-existent SKU @sku found while loading.',
         array('@sku' => $sku)
       );
