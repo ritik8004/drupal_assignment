@@ -46,6 +46,7 @@ permissions:
   - 'translate block_content'
   - 'translate any entity'
   - 'administer blocks'
+  - 'administer taxonomy'
   - 'create department_page content'
   - 'delete any department_page content'
   - 'delete own department_page content'
