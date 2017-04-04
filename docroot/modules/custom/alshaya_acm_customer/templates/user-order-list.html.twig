@@ -6,8 +6,11 @@
  *
  * Available variables:
  * - attributes: HTML attributes for the wrapper.
- * - order: Order information recieved from conductor.
+ * - order_details: Array of all themed orders.
  * - account: Order information recieved from conductor.
+ * - pager: Pager.
+ * - order_not_found: Text to display if no orders found for search result or account.
+ * - search_form: Rendered search form.
  *
  * @ingroup themeable
  */
@@ -27,42 +30,18 @@
   <div>
     {{ order_not_found }}
   </div>
-  <ul>
+
+  {# Do not remove class in below ul, add classes if required, below class is used in JS. #}
+  <ul class="order-items">
     {% for order in order_details %}
       <li>
-        <div>
-          <span class="light">{{ "Order ID"|t }}</span>
-          <span class="dark">{{ order.orderId }}</span>
-          <span class="light">{{ order.orderDate }}</span>
-        </div>
-
-        <div>
-          <span class="dark">
-            {% trans %}
-              {{ order.name }}...
-            {% endtrans %}
-          </span>
-          <span class="light">
-            {% trans %}
-              Total: {{ order.quantity }} items
-            {% endtrans %}
-          </span>
-        </div>
-
-        <div>
-          <span class="button status-{{ order.status|lower }}">{{ order.status|t }}</span>
-        </div>
-
-        <div>
-          <span class="light">{{ "Order Total"|t }}</span>
-          {% if currency_code_position == 'before' %}
-            <span class="total"><span class="prefix">{{ currency_code }}</span><span class="total--amount">{{ order.total }}</span></span>
-          {% else %}
-            <span class="total">{{ order.total }}<span class="prefix">{{ currency_code }}</span></span>
-          {% endif %}
-          <span class="dark"></span>
-        </div>
+        {{ order }}
       </li>
     {% endfor %}
   </ul>
+
+  {# Do not remove class in below div, add classes if required, below class is used in JS. #}
+  <div class="orders-list-infinite-scroll-pager-wrapper visually-hidden">
+    {{ pager }}
+  </div>
 </div>

@@ -19,9 +19,17 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'order_details' => NULL,
       'order_not_found' => NULL,
       'account' => NULL,
+      'search_form' => NULL,
+      'pager' => NULL,
+    ],
+  ];
+
+  $items['user_order_list_item'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'order' => NULL,
       'currency_code' => NULL,
       'currency_code_position' => NULL,
-      'search_form' => NULL,
     ],
   ];
 

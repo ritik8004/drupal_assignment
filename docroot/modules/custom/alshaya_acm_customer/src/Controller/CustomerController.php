@@ -22,14 +22,17 @@ class CustomerController extends ControllerBase {
   public function listOrders(UserInterface $user = NULL) {
     $build = [];
 
-    // Get account details.
-    $account = [];
-    $account['first_name'] = $user->get('field_first_name')->getString();
-    $account['last_name'] = $user->get('field_last_name')->getString();
+    // Get items to show per page from config.
+    $itemsPerPage = \Drupal::config('alshaya_acm_customer.orders_config')->get('items_per_page');
 
     // Get the currency code and position.
     $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
     $currencyCodePosition = \Drupal::config('acq_commerce.currency')->get('currency_code_position');
+
+    // Build account details array.
+    $account = [];
+    $account['first_name'] = $user->get('field_first_name')->getString();
+    $account['last_name'] = $user->get('field_last_name')->getString();
 
     // Get the search form.
     $searchForm = \Drupal::formBuilder()->getForm('Drupal\alshaya_acm_customer\Form\OrderSearchForm');
@@ -54,8 +57,17 @@ class CustomerController extends ControllerBase {
       }
     }
     else {
+      // Initialise pager.
+      $currentPageNumber = pager_default_initialize(count($orders), $itemsPerPage);
+
+      // Get the offset to start displaying orders from.
+      $offset = $currentPageNumber * $itemsPerPage;
+
+      // Get the orders to display for current page.
+      $ordersPaged = array_slice($orders, $offset, $itemsPerPage);
+
       // Loop through each order and prepare the array for template.
-      foreach ($orders as $orderId => $order) {
+      foreach ($ordersPaged as $orderId => $order) {
         $orderRow = [];
 
         // @TODO: MMCPA-612.
@@ -76,23 +88,50 @@ class CustomerController extends ControllerBase {
         // Calculate status of order based on status of items.
         $orderRow['status'] = $this->getOrderStatus($order);
 
-        $orderDetails[] = $orderRow;
+        $orderDetails[] = [
+          '#theme' => 'user_order_list_item',
+          '#order' => $orderRow,
+          '#currency_code' => $currencyCode,
+          '#currency_code_position' => $currencyCodePosition,
+        ];
       }
     }
 
-    $build[] = [
+    $build = [
       '#theme' => 'user_order_list',
       '#search_form' => $searchForm,
       '#order_details' => $orderDetails,
       '#order_not_found' => $noOrdersFoundMessage,
       '#account' => $account,
-      '#currency_code' => $currencyCode,
-      '#currency_code_position' => $currencyCodePosition,
+      '#pager' => ['#type' => 'pager'],
+      '#attached' => [
+        'library' => ['alshaya_acm_customer/orders-list-infinite-scroll'],
+      ],
       // @TODO: We may want to set it to cache time limit of API call.
       '#cache' => ['max-age' => 0],
     ];
 
     return $build;
+  }
+
+  /**
+   * Prints json of pager and orders list for current page.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User for which the orders are to be displayed.
+   */
+  public function listOrdersAjax(UserInterface $user = NULL) {
+    $fullBuild = $this->listOrders($user);
+
+    $response['orders_list'] = '';
+    foreach ($fullBuild['#order_details'] as $order) {
+      $response['orders_list'] .= '<li>' . \Drupal::service('renderer')->render($order) . '</li>';
+    }
+
+    $response['pager'] = \Drupal::service('renderer')->render($fullBuild['#pager']);
+
+    print json_encode($response);
+    exit;
   }
 
   /**
@@ -107,9 +146,6 @@ class CustomerController extends ControllerBase {
   protected function getUserOrders(UserInterface $user) {
     $orders = [];
 
-    $cacheTimeLimit = \Drupal::config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
-    $expire = strtotime('+' . $cacheTimeLimit . ' minutes');
-
     $cid = 'orders_list_' . $user->id();
 
     if ($cache = \Drupal::cache()->get($cid)) {
@@ -117,7 +153,17 @@ class CustomerController extends ControllerBase {
     }
     else {
       $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($user->getEmail());
-      \Drupal::cache()->set($cid, $orders, $expire);
+
+      // Get the cache expiration time based on config value.
+      $cacheTimeLimit = \Drupal::config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
+
+      // We can disable caching via config by setting it to zero.
+      if ($cacheTimeLimit > 0) {
+        $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
+
+        // Store in cache.
+        \Drupal::cache()->set($cid, $orders, $expire);
+      }
     }
 
     // Search by Order ID, SKU, Name.
