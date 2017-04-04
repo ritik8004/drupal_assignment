@@ -1,0 +1,9 @@
+alshaya_acm_customer.list_orders_ajax:
+  path: '/user/{user}/orders-ajax'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_customer\Controller\CustomerController::listOrdersAjax'
+    _title: 'Orders'
+  requirements:
+    _custom_access: '\Drupal\acq_customer\Controller\CustomerController::checkAccess'
+  options:
+    user: \d+

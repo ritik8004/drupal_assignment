@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ *
+ * Default user order item template.
+ *
+ * Available variables:
+ * - order: Processed information for single order.
+ * - currency_code: Currency code.
+ * - currency_code_position: Currency code position.
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div>
+  <span class="light">{{ "Order ID"|t }}</span>
+  <span class="dark">{{ order.orderId }}</span>
+  <span class="light">{{ order.orderDate }}</span>
+</div>
+
+<div>
+  <span class="dark">
+    {% trans %}
+      {{ order.name }}...
+    {% endtrans %}
+  </span>
+  <span class="light">
+    {% trans %}
+      Total: {{ order.quantity }} items
+    {% endtrans %}
+  </span>
+</div>
+
+<div>
+  <span class="button {{ order.status.class }}">{{ order.status.text }}</span>
+</div>
+
+<div>
+  <span class="light">{{ "Order Total"|t }}</span>
+  {% if currency_code_position == 'before' %}
+    <span class="total"><span class="prefix">{{ currency_code }}</span><span class="total--amount">{{ order.total }}</span></span>
+  {% else %}
+    <span class="total">{{ order.total }}<span class="prefix">{{ currency_code }}</span></span>
+  {% endif %}
+  <span class="dark"></span>
+</div>

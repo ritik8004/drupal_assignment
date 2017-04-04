@@ -45,7 +45,26 @@ class CustomerController extends ControllerBase {
   /**
    * Checks if user has access to the orders display page.
    */
-  public function checkAccess() {
-    return AccessResult::allowed()->cachePerPermissions();
+  public function checkAccess(UserInterface $user = NULL) {
+    // Something fishy, it should probably return 404 and not even reach here.
+    if (empty($user)) {
+      return AccessResult::forbidden();
+    }
+
+    // Load the current logged in user details.
+    $currentUser = \Drupal::currentUser();
+
+    // By design, only logged in users will be able to access the orders page.
+    if ($currentUser->isAnonymous()) {
+      return AccessResult::forbidden();
+    }
+
+    // If user is trying to access another user's orders, check admin perm.
+    if ($currentUser->id() != $user->id()) {
+      return AccessResult::allowedIfHasPermission($currentUser, 'access all orders');
+    }
+
+    // Check if user has access to view own orders.
+    return AccessResult::allowedIfHasPermission($currentUser, 'access own orders');
   }
 }
