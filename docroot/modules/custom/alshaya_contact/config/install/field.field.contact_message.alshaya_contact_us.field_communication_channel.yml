@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.alshaya_contact_us
+    - field.storage.contact_message.field_communication_channel
+id: contact_message.alshaya_contact_us.field_communication_channel
+field_name: field_communication_channel
+entity_type: contact_message
+bundle: alshaya_contact_us
+label: 'Select your prefered communication channel'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Email
+  off_label: Mobile
+field_type: boolean

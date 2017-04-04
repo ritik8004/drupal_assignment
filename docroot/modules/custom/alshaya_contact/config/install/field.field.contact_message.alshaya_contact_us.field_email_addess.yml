@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.alshaya_contact_us
+    - field.storage.contact_message.field_email_addess
+id: contact_message.alshaya_contact_us.field_email_addess
+field_name: field_email_addess
+entity_type: contact_message
+bundle: alshaya_contact_us
+label: 'Email Addess'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

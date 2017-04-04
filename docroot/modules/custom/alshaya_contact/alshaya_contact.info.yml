@@ -1,0 +1,14 @@
+name: 'Alshaya contact'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - captcha
+  - contact
+  - contact_storage
+  - features_ui
+  - field
+  - system
+  - telephone
+  - views
+version: 8.x-1.0
