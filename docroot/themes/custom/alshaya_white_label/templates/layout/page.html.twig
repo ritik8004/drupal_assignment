@@ -2,41 +2,43 @@
 
   <!-- ______________________ MENU SECONDARY _______________________ -->
 
-  {% if page.menu_secondary %}
-    <div class="c-menu-secondary">
-      <div class="l-container">
-        <div class="c-menu-secondary__region">
-          {{ page.menu_secondary }}
+  <div class="header--wrapper">
+    {% if page.menu_secondary %}
+      <div class="c-menu-secondary">
+        <div class="l-container">
+          <div class="c-menu-secondary__region">
+            {{ page.menu_secondary }}
+          </div>
         </div>
       </div>
-    </div>
-  {% endif %}
-  <!-- /menu-secondary -->
+    {% endif %}
+    <!-- /menu-secondary -->
 
-  <!-- ______________________ HEADER _______________________ -->
+    <!-- ______________________ HEADER _______________________ -->
 
-  {% if page.header %}
-    <header class="c-header">
-      <div class="l-container">
-        <div class="c-header__region">
-          {{ page.header }}
+    {% if page.header %}
+      <header class="c-header">
+        <div class="l-container">
+          <div class="c-header__region">
+            {{ page.header }}
+          </div>
+        </div>
+      </header>
+    {% endif %}
+    <!-- /header -->
+
+    <!-- ______________________ MENU PRIMARY _______________________ -->
+
+    {% if page.menu_primary %}
+      <div class="c-menu-primary">
+        <div class="l-container">
+          <div id="c-menu-primary__region">
+            {{ page.menu_primary }}
+          </div>
         </div>
       </div>
-    </header>
-  {% endif %}
-  <!-- /header -->
-
-  <!-- ______________________ MENU PRIMARY _______________________ -->
-
-  {% if page.menu_primary %}
-    <div class="c-menu-primary">
-      <div class="l-container">
-        <div id="c-menu-primary__region">
-          {{ page.menu_primary }}
-        </div>
-      </div>
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
   <!-- /menu-primary -->
 
   <!-- ______________________ BREADCRUMB _______________________ -->

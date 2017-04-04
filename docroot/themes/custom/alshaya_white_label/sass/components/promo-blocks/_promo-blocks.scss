@@ -1,5 +1,15 @@
 .c-promo__items {
-  @include container(1026px);
+  @include breakpoint($only-mobile) {
+    @include container(304px);
+  }
+
+  @include breakpoint($only-tablet) {
+    @include container(702px);
+  }
+
+  @include breakpoint($desktop) {
+    @include container(1026px);
+  }
 
   &.c-promo__items--department {
     @include container(923px);

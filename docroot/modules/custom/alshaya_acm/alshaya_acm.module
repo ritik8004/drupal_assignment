@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Link;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -17,11 +18,27 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $cartQuantityOptions = array_combine($range, $range);
 
   $product_count = 0;
+  $form['cart']['#header'][] = t('Remove');
+
+  // Change checkout button text to 'Secure Checkout'.
+  $form['actions']['checkout']['#value'] = t('Secure Checkout');
+
+  // Add continue shopping link, that redirect user to homepage.
+  $form['actions']['continue_shopping'] = [
+    '#type' => 'link',
+    '#title' => t('Continue shopping'),
+    '#url' => Url::fromRoute('<front>'),
+  ];
+
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
       $form['cart'][$id]['quantity']['#type'] = 'select';
       $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
+
       $product_count += $form['cart'][$id]['quantity']['#default_value'];
+
+      $remove_url = Url::fromUserInput('/cart/remove/' . $id);
+      $form['cart'][$id]['remove'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toRenderable();
     }
   }
 
@@ -71,6 +88,11 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'ordertotal' => '',
         'currency_format' => '',
         'currency_code_position' => '',
+        'delivery_address' => '',
+        'delivery_method' => '',
+        'delivery_label' => '',
+        'address_label' => '',
+        'shipping_url' => '',
       ],
       'template' => 'block--checkout-summary',
     ],

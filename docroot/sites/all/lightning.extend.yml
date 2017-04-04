@@ -15,6 +15,7 @@ lightning_extensions:
 # List of additional modules to enable after Lightning is installed.
 modules:
   - acsf
+  - alshaya_addressbook
   - alshaya_advanced_page
   - alshaya_acm
   - alshaya_acm_product
@@ -32,6 +33,7 @@ modules:
   - alshaya_newsletter
   - alshaya_password_policy
   - alshaya_permissions
+  - alshaya_product
   - alshaya_stores_finder
   - alshaya_user
   - color

@@ -46,4 +46,9 @@ function alshaya_master_install() {
   $site_config = $config_factory->getEditable('system.site')->get();
   $site_config['page']['front'] = '/home';
   $config_factory->getEditable('system.site')->setData($site_config)->save();
+
+  // Set '/en' as english language prefix.
+  $lang_config = $config_factory->getEditable('language.negotiation')->get();
+  $lang_config['url']['prefixes']['en'] = 'en';
+  $config_factory->getEditable('language.negotiation')->setData($lang_config)->save();
 }

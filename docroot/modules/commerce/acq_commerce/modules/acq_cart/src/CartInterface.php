@@ -65,6 +65,14 @@ interface CartInterface {
   public function addItemToCart($sku, $quantity);
 
   /**
+   * Removes an SKU from cart.
+   *
+   * @param string $sku
+   *   The name of the SKU to be removed from the cart.
+   */
+  public function removeItemFromCart($sku);
+
+  /**
    * Adds a raw item to the cart. Does not preform any validation
    * before appending to the cart items. Used for more complex items.
    *
@@ -257,5 +265,4 @@ interface CartInterface {
    *   The value of the totals, NULL if not defined.
    */
   public function get($property_name);
-
 }
