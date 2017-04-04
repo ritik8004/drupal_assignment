@@ -4,6 +4,8 @@ dependencies:
   module:
     - alshaya_acm
     - system
+  theme:
+    - alshaya_white_label
 id: baskethorizontalproductrecommendation
 theme: alshaya_white_label
 region: content
