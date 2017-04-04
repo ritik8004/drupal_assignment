@@ -10,7 +10,7 @@ dependencies:
 id: views_block__footer_categories_block_footer_categories
 theme: alshaya_white_label
 region: footer_primary
-weight: -12
+weight: -14
 provider: null
 plugin: 'views_block:footer_categories-block_footer_categories'
 settings:
