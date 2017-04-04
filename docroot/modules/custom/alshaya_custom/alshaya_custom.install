@@ -106,6 +106,12 @@ function alshaya_custom_modules_installed($modules) {
     ->set('weight', -15)
     ->save();
 
+  // Set the Status Messages block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_messages')
+    ->set('region', 'content')
+    ->set('weight', -14)
+    ->save();
+
   // Disable the default 'content' search index.
   \Drupal::configFactory()->getEditable('search_api.index.content')->set('status', FALSE)->save();
 
