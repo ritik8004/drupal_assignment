@@ -47,7 +47,7 @@ class CustomerController extends ControllerBase {
     if (empty($orders)) {
       // @TODO: Check the empty result message.
       if ($search = \Drupal::request()->query->get('search')) {
-        $noOrdersFoundMessage['#markup'] = $this->t('You search yielded no results, please try different text in search.');
+        $noOrdersFoundMessage['#markup'] = $this->t('Your search yielded no results, please try different text in search.');
       }
       else {
         $noOrdersFoundMessage['#markup'] = $this->t('You have no orders.');
@@ -58,15 +58,22 @@ class CustomerController extends ControllerBase {
       foreach ($orders as $orderId => $order) {
         $orderRow = [];
 
+        // @TODO: MMCPA-612.
+        $orderRow['orderId'] = $orderId;
+        // @TODO: MMCPA-612.
+        $orderRow['orderDate'] = '30 Nov. 2016 @ 20h55';
+
         // We will display the name of first order item.
         $item = reset($order['items']);
-
-        $orderRow['orderId'] = $orderId;
-        $orderRow['orderDate'] = '30 Nov. 2016 @ 20h55';
         $orderRow['name'] = $item['name'];
+
+        // Calculate total items in the order.
         $orderRow['quantity'] = $this->getOrderTotalQuantity($order);
+
+        // Format total to have max 3 decimals as per mockup.
         $orderRow['total'] = number_format($order['totals']['grand'], 3);
 
+        // Calculate status of order based on status of items.
         $orderRow['status'] = $this->getOrderStatus($order);
 
         $orderDetails[] = $orderRow;
