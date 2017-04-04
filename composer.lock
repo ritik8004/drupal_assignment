@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c9c896e3990ba758483f98d23d08ce3",
+    "content-hash": "afe12831afe5457b90fdbc9a0a31067f",
     "packages": [
         {
             "name": "acquia/blt",
@@ -3378,17 +3378,17 @@
         },
         {
             "name": "drupal/field_group",
-            "version": "1.0.0-rc6",
+            "version": "1.0.0-rc4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/field_group",
-                "reference": "8.x-1.0-rc6"
+                "reference": "8.x-1.0-rc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-1.0-rc6.zip",
+                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-1.0-rc4.zip",
                 "reference": null,
-                "shasum": "1ce3c6387e745a04a1099956a5bf39bb50096d44"
+                "shasum": "085ce08ad15e68837e8f8017f81eb3f7b33cb324"
             },
             "require": {
                 "drupal/core": "*"
@@ -3399,8 +3399,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc6",
-                    "datestamp": "1480365484"
+                    "version": "8.x-1.0-rc4",
+                    "datestamp": "1480288380"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

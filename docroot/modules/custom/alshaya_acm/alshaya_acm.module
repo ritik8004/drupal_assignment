@@ -13,12 +13,10 @@ use Drupal\Core\Link;
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
   // Using array_combine to ensure we have same data in key and value.
   $cartQuantityOptions = array_combine($range, $range);
-
-  $product_count = 0;
-  $form['cart']['#header'][] = t('Remove');
 
   // Change checkout button text to 'Secure Checkout'.
   $form['actions']['checkout']['#value'] = t('Secure Checkout');
@@ -30,15 +28,34 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#url' => Url::fromRoute('<front>'),
   ];
 
+  $product_count = 0;
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
       $form['cart'][$id]['quantity']['#type'] = 'select';
       $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
 
+      // Club Quantity and remove link.
+      $remove_url = Url::fromUserInput('/cart/remove/' . $id);
+      $form['cart'][$id]['quantity'] = [
+        $form['cart'][$id]['quantity'],
+        Link::fromTextAndUrl(t('Remove'), $remove_url)->toRenderable(),
+      ];
       $product_count += $form['cart'][$id]['quantity']['#default_value'];
 
-      $remove_url = Url::fromUserInput('/cart/remove/' . $id);
-      $form['cart'][$id]['remove'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toRenderable();
+      // Load Images.
+      $media = alshaya_acm_product_get_sku_media($id);
+      if (!empty($media)) {
+        // Club the image and name of product.
+        $form['cart'][$id]['name'] = [
+          [
+            '#theme' => 'image_style',
+            '#style_name' => '137x144',
+            '#uri' => current($media)->getFileUri(),
+          ],
+          $form['cart'][$id]['name'],
+        ];
+      }
+
     }
   }
 
