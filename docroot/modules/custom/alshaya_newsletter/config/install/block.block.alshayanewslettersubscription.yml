@@ -8,7 +8,7 @@ dependencies:
 id: alshayanewslettersubscription
 theme: alshaya_white_label
 region: footer_primary
-weight: -6
+weight: -15
 provider: null
 plugin: alshaya_newsletter_subscription
 settings:

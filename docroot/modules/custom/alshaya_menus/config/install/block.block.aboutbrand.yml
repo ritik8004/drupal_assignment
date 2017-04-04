@@ -10,7 +10,7 @@ dependencies:
 id: aboutbrand
 theme: alshaya_white_label
 region: footer_primary
-weight: -11
+weight: -13
 provider: null
 plugin: 'system_menu_block:about-brand'
 settings:
