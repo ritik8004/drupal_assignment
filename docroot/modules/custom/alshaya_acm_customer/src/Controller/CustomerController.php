@@ -149,17 +149,26 @@ class CustomerController extends ControllerBase {
    *   Status of order, ensure string can be used directly as class too.
    */
   private function getOrderStatus(array $order) {
-    // Need to add conditions for other status.
+    // We support only three status as of now.
+    $status = ['pending' => 0, 'delivered' => 0, 'returned' => 0];
+
+    // Check for each item status.
     foreach ($order['items'] as $item) {
       $itemStatus = $this->getOrderItemStatus($item);
-
-      // @TODO: Currently we display either pending or delivered.
-      if ($itemStatus != 'delivered') {
-        return 'pending';
-      }
+      $status[$itemStatus]++;
     }
 
-    return 'delivered';
+    // @TODO: Add conditions for partial delivery status - not in MVP1.
+    // Check MMCPA-145 comments for more details.
+    if ($status['returned'] !== 0) {
+      return 'returned';
+    }
+    elseif ($status['delivered'] !== 0) {
+      return 'delivered';
+    }
+
+    // Finally if it is neither delivered nor returned, it is pending.
+    return 'pending';
   }
 
   /**
