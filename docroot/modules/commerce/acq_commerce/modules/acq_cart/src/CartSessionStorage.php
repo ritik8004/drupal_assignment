@@ -77,7 +77,7 @@ class CartSessionStorage implements CartStorageInterface {
       try {
         $cart = $this->updateCart();
       }
-      catch(\Exception $e) {
+      catch (\Exception $e) {
         // Intentionally suppressing the error here. This will happen when there
         // is no cart and still updateCart is called.
       }
