@@ -74,7 +74,13 @@ class CartSessionStorage implements CartStorageInterface {
 
     // No cart in session, try to load an updated cart.
     if (!$cart) {
-      $cart = $this->updateCart();
+      try {
+        $cart = $this->updateCart();
+      }
+      catch (\Exception $e) {
+        // Intentionally suppressing the error here. This will happen when there
+        // is no cart and still updateCart is called.
+      }
     }
 
     return $cart;

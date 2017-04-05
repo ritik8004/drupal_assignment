@@ -12,6 +12,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 
 /**
  * Implements hook_form_alter().
@@ -45,37 +46,52 @@ function alshaya_acm_cart_notification_form_alter(&$form, FormStateInterface $fo
  */
 function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
 
-  // Product name.
-  $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
-  $product_value = SKU::loadFromSKU($string_sku)->get('name')->getValue();
-  $product_name = $product_value[0]['value'];
+  // Check if we have an error in Subscriber.
+  $error_on_add_to_cart = AddToCartErrorEventSubscriber::getErrorStatus();
 
-  // Quantity.
-  $quantity = $form_state->getValue('quantity');
-
-  // Generating cart link.
-  $url = Url::fromRoute('acq_cart.cart')->toString();
-
-  // Product Image.
-  // Create image path.
-  $image = SKU::loadFromSKU($string_sku)
-    ->get('attr_image')
-    ->getValue();
-
-  // If we have image for the product.
-  if ($image != NULL) {
-    $file_uri = File::load($image[0]['target_id'])->getFileUri();
-    $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($file_uri);
+  // If we have error, we show a error notification and hide complexity
+  // from user.
+  if ($error_on_add_to_cart == TRUE) {
+    // Use the template to render the error.
+    $output = [
+      '#theme' => 'add_to_cart_error',
+      '#message' => t('Oops! Something went wrong.'),
+    ];
   }
+  else {
+    // Product name.
+    $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
+    $product_value = SKU::loadFromSKU($string_sku)->get('name')->getValue();
+    $product_name = $product_value[0]['value'];
 
-  // Use the template to render the HTML.
-  $output = [
-    '#theme' => 'cart_notification',
-    '#quantity' => $quantity,
-    '#image' => $image,
-    '#product_name' => $product_name,
-    '#link' => $url,
-  ];
+    // Quantity.
+    $quantity = $form_state->getValue('quantity');
+
+    // Generating cart link.
+    $url = Url::fromRoute('acq_cart.cart')->toString();
+
+    // Product Image.
+    // Create image path.
+    $image = SKU::loadFromSKU($string_sku)
+      ->get('attr_image')
+      ->getValue();
+
+    // If we have image for the product.
+    if ($image != NULL) {
+      $file_uri = File::load($image[0]['target_id'])->getFileUri();
+      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($file_uri);
+    }
+
+    // Use the template to render the HTML.
+    $output = [
+      '#theme' => 'cart_notification',
+      '#quantity' => $quantity,
+      '#image' => $image,
+      '#product_name' => $product_name,
+      '#link' => $url,
+      '#link_text' => t('View Cart.'),
+    ];
+  }
 
   $html = drupal_render($output);
 
@@ -97,8 +113,15 @@ function alshaya_acm_cart_notification_theme($existing, $type, $theme, $path) {
         'image' => '',
         'product_name' => '',
         'link' => '',
+        'link_text' => '',
       ],
       'template' => 'cart-notification',
+    ],
+    'add_to_cart_error' => [
+      'variables' => [
+        'message' => '',
+      ],
+      'template' => 'add-to-cart-error',
     ],
   ];
 }

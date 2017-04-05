@@ -13,6 +13,7 @@ use Drupal\acq_cart\Entity\Cart;
 use Drupal\acq_cart\Entity\LineItem;
 use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
  * Defines the grouped SKU type
@@ -98,7 +99,15 @@ class Grouped extends SKUPluginBase {
       drupal_set_message(t('Please select a quantity greater than 0.'), 'error');
     }
 
-    \Drupal::service('acq_cart.cart_storage')->updateCart();
+    try {
+      \Drupal::service('acq_cart.cart_storage')->updateCart();
+    }
+    catch (\Exception $e) {
+      // Dispatch event so action can be taken.
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $event = new AddToCartErrorEvent($e);
+      $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
+    }
   }
 
   /**
