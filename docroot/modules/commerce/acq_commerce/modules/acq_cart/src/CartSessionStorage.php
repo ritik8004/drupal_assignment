@@ -102,8 +102,7 @@ class CartSessionStorage implements CartStorageInterface {
       ]);
       $update = $cart->getCart();
     }
-
-    // Handling any errors and returning it back to the caller.
+    
     $cart = (object) \Drupal::service('acq_commerce.api')->updateCart($cart_id, $update);
 
     if (empty($cart)) {
