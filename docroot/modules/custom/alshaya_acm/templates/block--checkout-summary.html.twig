@@ -9,21 +9,25 @@
       <ul>
         {% for key, product in products %}
           <li>
-            <img src="{{ product.imgurl }}"/>
-            <span class="product-name">{{ product.name }}</span>
-            <span class="product-qty">
-              <span class="label">{% trans %}Quantity: {% endtrans %}</span>
-              {{ product.qty }}
-            </span>
-            {% if currency_code_position == 'before' %}
-              <span class="product-total">
-                <span class="prefix">{{ currency_format }}</span>
-                <span class="total--amount">{{ product.total }}</span></span>
-            {% else %}
-              <span class="product-total">
-                <span class="total--amount">{{ product.total }}</span>
-                <span class="prefix">{{ currency_format }}</span>
+            <div class="left">
+              <img src="{{ product.imgurl }}"/>
+            </div>
+            <div class="right">
+              <span class="product-name">{{ product.name }}</span>
+              <span class="product-qty">
+                <span class="label">{% trans %}Quantity: {% endtrans %}</span>
+                {{ product.qty }}
               </span>
+              {% if currency_code_position == 'before' %}
+                <span class="product-total">
+                  <span class="prefix">{{ currency_format }}</span>
+                  <span class="total--amount">{{ product.total }}</span></span>
+              {% else %}
+                <span class="product-total">
+                  <span class="total--amount">{{ product.total }}</span>
+                  <span class="prefix">{{ currency_format }}</span>
+                </span>
+            </div>
             {% endif %}
           </li>
         {% endfor %}
