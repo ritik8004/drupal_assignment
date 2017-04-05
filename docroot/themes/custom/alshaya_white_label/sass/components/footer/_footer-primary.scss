@@ -12,7 +12,12 @@
   position: relative;
 
   @include breakpoint($tablet) {
-    padding: 1.5rem 1.25rem;
+    padding: 1.25em 1.5em;
+
+    .l-container {
+      min-width: 45rem;
+      max-width: 64rem;
+    }
   }
 
   .l-container {
@@ -21,7 +26,7 @@
 
   &__region {
     position: relative;
-    min-height: 260px;
+    min-height: 16.25em;
   }
 }
 
@@ -45,6 +50,22 @@
     line-height: 2.14;
     text-decoration: none;
   }
+
+  &--help,
+  &--category,
+  &--about {
+    @include breakpoint($tablet) {
+      margin-#{$right}: 5.3rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 3rem;
+    }
+
+    @include breakpoint($desktop-wide) {
+      margin-#{$right}: 4.5rem;
+    }
+  }
 }
 
 .c-footer-menu--about,
@@ -59,8 +80,8 @@
     @include breakpoint($only-mobile) {
       margin: 0.938rem 0;
       background-color: rgba(255, 255, 255, 0.25);
-      background-image: url("../imgs/icons/icon-chevron-next.svg");
-      background-position: right;
+      background-image: url("../imgs/icons/icon-chevron-#{$next}.svg");
+      background-position: $right;
       background-repeat: no-repeat;
       background-size: 0.438rem;
     }
@@ -71,7 +92,7 @@
     border-top: 1px solid $white;
     margin: 0;
     padding: 0 0.75em;
-    text-align: left;
+    text-align: $left;
   }
 }
 
@@ -88,6 +109,7 @@
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
+    text-transform: lowercase;
 
     @include breakpoint($only-mobile) {
       text-align: center;
@@ -114,6 +136,10 @@
       top: 0;
       font-size: 13px;
 
+      @include breakpoint($desktop-wide) {
+        width: 22.31rem;
+      }
+
       @include breakpoint($only-mobile) {
         left: 0;
       }
@@ -122,7 +148,7 @@
         right: 0;
         top: 100%;
         color: $red-error;
-        padding: 1em 0;
+        padding: 0.25em 0;
       }
     }
   }
@@ -132,7 +158,7 @@
     border-width: 0 0 1px;
     margin-top: 2.5rem;
     width: 100%;
-    height: 2.5rem;
+    height: 2.2rem;
     outline: transparent;
 
     @include breakpoint($tablet) {
@@ -143,7 +169,7 @@
   #edit-submit {
     @extend %btn;
 
-    background: $windows-blue;
+    background: $peacock-blue;
     position: absolute;
     #{$right}: 0;
     bottom: 0;
@@ -152,25 +178,35 @@
 }
 
 .c-footer-menu--help {
+  max-width: 3.25em;
+
   @include breakpoint($only-mobile) {
     margin-bottom: 4em;
     border-bottom: 1px solid $white;
+    max-width: 100%;
   }
 
   @include breakpoint($only-tablet) {
-    margin: 11em -8.5em;
+    margin: 11em -13em;
     vertical-align: top;
   }
 }
 
 .c-footer-menu--about {
+  max-width: 100%;
+
+  @include breakpoint($tablet) {
+    max-width: 8.5em;
+  }
+
   @include breakpoint($only-tablet) {
     vertical-align: top;
   }
 }
 
-.c-footer-menu--category {
-  @include breakpoint($only-tablet) {
-    margin-right: 3em;
+.c-footer-menu--about,
+.c-footer-menu--help, {
+  .c-footer-menu {
+    width: 100%;
   }
 }
