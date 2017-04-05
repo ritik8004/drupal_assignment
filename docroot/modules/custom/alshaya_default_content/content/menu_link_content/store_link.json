@@ -1,7 +1,7 @@
 {
   "_links": {
     "self": {
-      "href": "http:\/\/local.alshaya.com\/admin\/structure\/menu\/item\/3\/edit?_format=hal_json"
+      "href": "http:\/\/local.alshaya.com\/admin\/structure\/menu\/item\/4\/edit?_format=hal_json"
     },
     "type": {
       "href": "http:\/\/drupal.org\/rest\/type\/menu_link_content\/menu_link_content"
@@ -9,23 +9,19 @@
     "http:\/\/drupal.org\/rest\/relation\/menu_link_content\/menu_link_content\/content_translation_uid": [
       {
         "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json",
-        "lang": "ar"
+        "lang": "en"
       }
     ]
   },
   "uuid": [
     {
-      "value": "8fdd91fd-2d9c-4c06-9f3d-e13f090c4c54"
+      "value": "f2aa29eb-c39c-4d4b-a14e-7834d3e95ec5"
     }
   ],
   "langcode": [
     {
       "value": "en",
       "lang": "en"
-    },
-    {
-      "value": "ar",
-      "lang": "ar"
     }
   ],
   "bundle": [
@@ -35,26 +31,22 @@
   ],
   "title": [
     {
-      "value": "Register",
+      "value": "STORES",
       "lang": "en"
-    },
-    {
-      "value": "تسجيل مستخدم جديد",
-      "lang": "ar"
     }
   ],
   "menu_name": [
     {
-      "value": "account"
+      "value": "mobile-navigation"
     }
   ],
   "link": [
     {
-      "uri": "internal:\/user\/register",
+      "uri": "internal:\/store",
       "title": "",
       "options": {
         "attributes": {
-          "class": "register-link",
+          "class": "no--desktop store",
           "target": ""
         }
       }
@@ -72,7 +64,7 @@
   ],
   "weight": [
     {
-      "value": "0"
+      "value": "-48"
     }
   ],
   "expanded": [
@@ -87,34 +79,26 @@
   ],
   "changed": [
     {
-      "value": "1490074994",
+      "value": "1490868561",
       "lang": "en"
-    },
-    {
-      "value": "1490342082",
-      "lang": "ar"
     }
   ],
   "default_langcode": [
     {
       "value": "1",
       "lang": "en"
-    },
-    {
-      "value": "0",
-      "lang": "ar"
     }
   ],
   "content_translation_source": [
     {
-      "value": "en",
-      "lang": "ar"
+      "value": "und",
+      "lang": "en"
     }
   ],
   "content_translation_outdated": [
     {
       "value": "0",
-      "lang": "ar"
+      "lang": "en"
     }
   ],
   "_embedded": {
@@ -130,23 +114,23 @@
         },
         "uuid": [
           {
-            "value": "d6938892-1fa0-4357-b5d6-7f38d8256a81"
+            "value": "7e13d5ef-9d5a-4e51-8840-c723d12d58e6"
           }
         ],
-        "lang": "ar"
+        "lang": "en"
       }
     ]
   },
   "content_translation_status": [
     {
       "value": "1",
-      "lang": "ar"
+      "lang": "en"
     }
   ],
   "content_translation_created": [
     {
-      "value": "1490341973",
-      "lang": "ar"
+      "value": "1490868031",
+      "lang": "en"
     }
   ]
 }
