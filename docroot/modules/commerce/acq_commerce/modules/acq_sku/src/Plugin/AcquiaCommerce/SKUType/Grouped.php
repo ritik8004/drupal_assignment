@@ -13,7 +13,7 @@ use Drupal\acq_cart\Entity\Cart;
 use Drupal\acq_cart\Entity\LineItem;
 use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm\AddToCartErrorEvent;
+use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
  * Defines the grouped SKU type

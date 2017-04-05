@@ -8,7 +8,7 @@
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
-use Drupal\alshaya_acm\AddToCartErrorEvent;
+use Drupal\acq_sku\AddToCartErrorEvent;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_cart\Entity\Cart;
 use Drupal\acq_cart\Entity\LineItem;
