@@ -8,6 +8,7 @@
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
+use Drupal\alshaya_acm\AddToCartErrorEvent;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_cart\Entity\Cart;
 use Drupal\acq_cart\Entity\LineItem;
@@ -75,8 +76,10 @@ class Simple extends SKUPluginBase {
       \Drupal::service('acq_cart.cart_storage')->updateCart();
     }
     catch (\Exception $e) {
-      // Handling error and showing it to the user.
-      drupal_set_message($e->getMessage(), 'error');
+      // Dispatch event so action can be taken.
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $event = new AddToCartErrorEvent($e);
+      $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
     }
   }
 }

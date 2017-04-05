@@ -13,6 +13,7 @@ use Drupal\acq_cart\Entity\Cart;
 use Drupal\acq_cart\Entity\LineItem;
 use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm\AddToCartErrorEvent;
 
 /**
  * Defines the grouped SKU type
@@ -102,8 +103,10 @@ class Grouped extends SKUPluginBase {
       \Drupal::service('acq_cart.cart_storage')->updateCart();
     }
     catch (\Exception $e) {
-      // Handling error and showing it to the user.
-      drupal_set_message($e->getMessage(), 'error');
+      // Dispatch event so action can be taken.
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $event = new AddToCartErrorEvent($e);
+      $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
     }
   }
 
