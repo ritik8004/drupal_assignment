@@ -85,9 +85,9 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     // Use the template to render the HTML.
     $output = [
       '#theme' => 'cart_notification',
-      '#quantity' => t('Qty:') . ' ' . $quantity,
+      '#quantity' => $quantity,
       '#image' => $image,
-      '#product_name' => $product_name . ' ' . t('has been added to your cart.'),
+      '#product_name' => $product_name,
       '#link' => $url,
       '#link_text' => t('View Cart.'),
     ];
