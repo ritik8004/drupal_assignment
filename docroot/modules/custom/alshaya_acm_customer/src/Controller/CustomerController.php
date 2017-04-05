@@ -74,7 +74,7 @@ class CustomerController extends ControllerBase {
       foreach ($ordersPaged as $orderId => $order) {
         $orderDetails[] = [
           '#theme' => 'user_order_list_item',
-          '#order' => $this->getProcessedOrderRow($orderId, $order),
+          '#order' => $this->getProcessedOrderSummary($orderId, $order),
           '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $user->id(), 'order_id' => $orderId])->toString(),
           '#currency_code' => $currencyCode,
           '#currency_code_position' => $currencyCodePosition,
@@ -186,7 +186,7 @@ class CustomerController extends ControllerBase {
     $account['last_name'] = $user->get('field_last_name')->getString();
 
     $build = [];
-    $build['#order'] = $this->getProcessedOrderRow($order_id, $order);
+    $build['#order'] = $this->getProcessedOrderSummary($order_id, $order);
     $build['#order_details'] = $this->getProcessedOrderDetails($order);
     $build['#products'] = $products;
     // @TODO: MMCPA-641.
@@ -337,7 +337,7 @@ class CustomerController extends ControllerBase {
   }
 
   /**
-   * Helper function to prepare order row to pass to template.
+   * Helper function to prepare order summary to pass to template.
    *
    * @param mixed $orderId
    *   Order id.
@@ -345,9 +345,9 @@ class CustomerController extends ControllerBase {
    *   Order array from API.
    *
    * @return array
-   *   Processed order array.
+   *   Processed order summary array.
    */
-  private function getProcessedOrderRow($orderId, array $order) {
+  private function getProcessedOrderSummary($orderId, array $order) {
     $orderRow = [];
 
     // @TODO: MMCPA-612.
@@ -372,13 +372,13 @@ class CustomerController extends ControllerBase {
   }
 
   /**
-   * Helper function to prepare order details to pass to template.
+   * Helper function to prepare order detail to pass to template.
    *
    * @param array $order
    *   Order array from API.
    *
    * @return array
-   *   Processed order array.
+   *   Processed order detail array.
    */
   private function getProcessedOrderDetails(array $order) {
     $orderDetails = [];
