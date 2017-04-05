@@ -89,9 +89,11 @@ class MyAccountNavBlock extends BlockBase implements ContainerFactoryPluginInter
       'entity.profile.type.address_book.user_profile_form' => [
         $this->t('Home'), $this->t('My Account'), $this->t('Address Book'),
       ],
+      // TODO: Update the route name once link is available.
       'entity.user.canonical' => [
         $this->t('Home'), $this->t('My Account'),
       ],
+      // TODO: Update the route name once link is available.
       'entity.user.canonical' => [
         $this->t('Home'), $this->t('My Account'),
       ],

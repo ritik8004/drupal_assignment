@@ -87,11 +87,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
     // Communication preferences link.
     $links['communication_preference'] = [
+      // TODO: Update the route name once link is available.
       '#markup' => Link::createFromRoute($this->t('Communication preferences'), 'entity.user.canonical', ['user' => $uid])->toString(),
     ];
 
     // Change password link.
     $links['change_password'] = [
+      // TODO: Update the route name once link is available.
       '#markup' => Link::createFromRoute($this->t('Change password'), 'entity.user.canonical', ['user' => $uid])->toString(),
     ];
 
