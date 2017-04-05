@@ -81,6 +81,24 @@ class CartSessionStorage implements CartStorageInterface {
   }
 
   /**
+   * Get skus of current cart times.
+   *
+   * @return array
+   */
+  public function getCartSkus() {
+    $items = $this->getCart()->items();
+    if (empty($items))
+      return array();
+
+    $skus = array();
+    foreach ($items as $item) {
+      $skus[] = $item['sku'];
+    }
+
+    return $skus;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function updateCart() {

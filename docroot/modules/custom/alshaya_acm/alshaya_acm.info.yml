@@ -11,9 +11,12 @@ dependencies:
   - acq_payment
   - acq_sku
   - block
-  - image
+  - block_content
   - ctools
+  - image
   - language
   - node
   - pathauto
+  - system
   - taxonomy
+  - user
