@@ -31,10 +31,10 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
     $exception = $event->getEventException();
 
     // Logs a notice.
-    \Drupal::logger('alshaya_acm')->notice('bla');
     \Drupal::logger('alshaya_acm')->notice($exception->getMessage());
 
-    // Show user interface message here.
+    // Set an error here, which can be shown to the user.
+    drupal_set_message(AddToCartErrorEvent::SUBMIT . ' | ' . $exception->getMessage(), 'error');
   }
 
 }
