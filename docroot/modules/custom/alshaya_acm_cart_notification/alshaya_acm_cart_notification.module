@@ -12,7 +12,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\alshaya_acm\AddToCartErrorEvent;
+use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
  * Implements hook_form_alter().
@@ -53,18 +53,14 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       $error_on_add_to_cart = TRUE;
     }
   }
+
   // If we have error, we show a error notification and hide complexity
   // from user.
   if ($error_on_add_to_cart == TRUE) {
     // Use the template to render the error.
     $output = [
-      '#theme' => 'cart_notification',
-      '#quantity' => '',
-      '#image' => '',
-      '#product_name' => t('Oops! Something went wrong.'),
-      '#link' => '',
-      '#link_text' => '',
-      '#class' => 'error',
+      '#theme' => 'add_to_cart_error',
+      '#message' => t('Oops! Something went wrong.'),
     ];
   }
   else {
@@ -99,7 +95,6 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#product_name' => $product_name . ' ' . t('has been added to your cart.'),
       '#link' => $url,
       '#link_text' => t('View Cart.'),
-      '#class' => 'success',
     ];
   }
 
@@ -124,9 +119,14 @@ function alshaya_acm_cart_notification_theme($existing, $type, $theme, $path) {
         'product_name' => '',
         'link' => '',
         'link_text' => '',
-        'class' => '',
       ],
       'template' => 'cart-notification',
+    ],
+    'add_to_cart_error' => [
+      'variables' => [
+        'message' => '',
+      ],
+      'template' => 'add-to-cart-error',
     ],
   ];
 }
