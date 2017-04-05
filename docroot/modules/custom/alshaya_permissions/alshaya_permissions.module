@@ -46,7 +46,7 @@ function alshaya_permissions_form_node_acq_product_edit_form_alter(&$form, FormS
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_permissions_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (!\Drupal::entityTypeManager()->getAccessControlHandler('taxonomy_term')->createAccess()) {
+  if (!\Drupal::currentUser()->hasPermission('translate acq_product_category taxonomy_term')) {
     $form['name']['#disabled'] = TRUE;
   }
 }
