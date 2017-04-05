@@ -1,0 +1,30 @@
+.c-facet {
+  a {
+    font-size: 0.75rem;
+    line-height: 1;
+    color: $windows-blue;
+    font-weight: bold;
+    margin-top: 0.75rem;
+    display: inline-block;
+    text-transform: lowercase;
+  }
+
+  ul {
+    @extend %list-clear;
+  }
+
+  label {
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  .item-list {
+    padding: 1.5rem 0.5rem 1rem;
+    line-height: 1.6;
+    height: auto !important;
+  }
+
+  .facet-item__value {
+    margin-left: 1rem;
+  }
+}

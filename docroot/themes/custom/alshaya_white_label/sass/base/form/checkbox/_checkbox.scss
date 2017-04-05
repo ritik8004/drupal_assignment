@@ -1,0 +1,22 @@
+// Form
+//
+// Markup: checkbox.twig
+//
+// Style guide: base.form.checkbox
+
+input[type=checkbox] {
+  display: none;
+}
+
+input[type=checkbox] ~ label::before {
+  @extend %icon-checkbox--inactive;
+
+  content: '';
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+input[type=checkbox]:checked ~ label::before {
+  @extend %icon-checkbox--active;
+}

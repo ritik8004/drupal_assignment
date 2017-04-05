@@ -8,8 +8,16 @@
 
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
-      $('.region__footer-primary').accordion({
-        header: '.is-accordion'
+      function moveContextualLink(parent, body) {
+        $(parent).each(function () {
+          var contextualLink = $(this).find('.c-accordion__title').next();
+          $(this).append(contextualLink);
+        });
+      }
+
+      moveContextualLink('.c-accordion');
+      $('.region__sidebar-first').accordion({
+        header: '.c-accordion__title'
       });
     }
   };

@@ -172,3 +172,21 @@ function alshaya_white_label_theme() {
     ],
   ];
 }
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  $routmatch = \Drupal::routeMatch();
+  if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routmatch->getParameter('taxonomy_term');
+    $term_depth = $term->get('depth_level')->getValue()[0]['value'];
+    if ($term_depth == 2) {
+      $suggestions[] = "page__department";
+    }
+    else {
+      $suggestions[] = "page__plp";
+    }
+
+  }
+}
