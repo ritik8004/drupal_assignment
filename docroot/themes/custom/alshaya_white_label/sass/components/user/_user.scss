@@ -17,6 +17,10 @@
       color: $peacock-blue;
       font-size: 14px;
     }
+
+    p {
+      color: $brownish-grey;
+    }
   }
 
   #block-alshaya-white-label-local-tasks {
@@ -111,7 +115,7 @@
       color: $greyish;
       position: absolute;
       pointer-events: none;
-      left: 0;
+      #{$left}: 0;
       top: -0.125rem;
       transition: 0.2s ease all;
     }
@@ -132,7 +136,6 @@
     .form-text {
       border: 1px solid $brownish-grey;
       border-width: 0 0 1px;
-      padding: 0.35rem 0 1em;
       width: 100%;
       height: 1.563rem;
       outline: transparent;
@@ -160,7 +163,10 @@
   input:focus ~ label.form-required,
   .form-item-field-privilege-card-number-0-value:focus ~ label,
   .form-item-field-privilege-card-number-0-value:not(:focus):valid ~ label,
-  input:not(:focus):valid ~ label.form-required {
+  input:not(:focus):valid ~ label.form-required,
+  input:active ~ label.form-required,
+  input:not(:active):valid ~ label.form-required,
+  input.error ~ label.form-required {
     top: -1.25em;
     bottom: 0;
     #{$left}: 0;
@@ -179,6 +185,44 @@
     text-decoration: none;
     font-size: 0.75rem;
     font-weight: bold;
+    z-index: 999;
   }
 }
 
+#block-youllbeableto,
+#block-jointheclub {
+  i {
+    float: $left;
+    width: 18px;
+    height: 18px;
+    background-repeat: no-repeat;
+    margin-#{$right}: 0.625em;
+    background-size: 18px;
+  }
+
+  i.icon {
+    &-wish {
+      background-image: url("../imgs/icons/ic-wishlish.svg");
+    }
+
+    &-store {
+      background-image: url("../imgs/icons/ic-language.svg");
+    }
+
+    &-offer {
+      background-image: url("../imgs/icons/ic-shopping-bag.svg");
+    }
+
+    &-win {
+      background-image: url("../imgs/icons/ic-trophy.svg");
+    }
+
+    &-reward {
+      background-image: url("../imgs/icons/ic-like.svg");
+    }
+
+    &-heart {
+      background-image: url("../imgs/icons/ic-speech-bubble.svg");
+    }
+  }
+}
