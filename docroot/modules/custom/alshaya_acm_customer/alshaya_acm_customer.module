@@ -28,6 +28,20 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
     'render element' => 'elements',
     'variables' => [
       'order' => NULL,
+      'order_detail_link' => NULL,
+      'currency_code' => NULL,
+      'currency_code_position' => NULL,
+    ],
+  ];
+
+  $items['user_order_detail'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'order' => NULL,
+      'order_details' => NULL,
+      'products' => NULL,
+      'delivery_detail_notice' => NULL,
+      'account' => NULL,
       'currency_code' => NULL,
       'currency_code_position' => NULL,
     ],

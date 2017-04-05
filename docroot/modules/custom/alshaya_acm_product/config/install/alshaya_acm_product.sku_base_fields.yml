@@ -5,6 +5,7 @@ fields:
     description: 'Color attribute for the product.'
     cardinality: 1
     type: 'string'
+    configurable: 1
 
   # Field for size attribute.
   size:
@@ -12,6 +13,7 @@ fields:
     description: 'Size attribute for the product.'
     cardinality: 1
     type: 'string'
+    configurable: 1
 
   # Field for special_price attribute.
   special_price:
@@ -19,6 +21,7 @@ fields:
     description: 'Special price attribute for the product.'
     cardinality: 1
     type: 'string'
+    configurable: 0
 
   # Field for base image attribute.
   image:
@@ -26,6 +29,7 @@ fields:
     description: 'Base image attribute for the product.'
     cardinality: -1
     type: 'image'
+    configurable: 0
 
   # Field for small image attribute.
   small_image:
@@ -33,6 +37,7 @@ fields:
     description: 'Small image attribute for the product.'
     cardinality: -1
     type: 'image'
+    configurable: 0
 
   # Field for thumbnail image attribute.
   thumbnail:
@@ -40,3 +45,4 @@ fields:
     description: 'Thumbnail image attribute for the product.'
     cardinality: -1
     type: 'image'
+    configurable: 0
