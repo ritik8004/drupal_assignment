@@ -1,10 +1,12 @@
 <ul class="child--first">
   {% for key, level2 in data.child %}
     <li class="level--two">
-      <a  class="level__two--child" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
+      <div class="menu--wrapper-one">
+        <a  class="level__two--child" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
         {% if level2.description is not empty %}
           {{ level2.description | raw }}
         {% endif %}
+      </div>
       {% if level2.child is not empty %}
         {{ alshaya_main_menu('alshaya_main_menu_level3', level2.child) }}
       {% endif %}

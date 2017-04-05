@@ -490,12 +490,25 @@ header {
     }
 
     .level--two {
-      .level__two--child {
+      .menu--wrapper-one {
         display: inline-block;
         padding: 1.563rem;
         width: 210px;
         position: relative;
         vertical-align: top;
+
+        p {
+          font-size: 12px;
+          margin: 0;
+        }
+
+        &:hover {
+          background-color: $very-light-blue;
+        }
+      }
+
+      .level__two--child {
+        font-size: 14px;
 
         &::after {
           content: '';
@@ -506,10 +519,6 @@ header {
           vertical-align: middle;
           position: absolute;
           right: 10px;
-        }
-
-        &:hover {
-          background-color: $very-light-blue;
         }
       }
 
@@ -525,6 +534,10 @@ header {
         margin-bottom: 1.563rem;
         padding: 0 1.5rem;
         position: absolute;
+
+        p {
+          display: none;
+        }
 
         li {
           padding: 0.3125rem 0;

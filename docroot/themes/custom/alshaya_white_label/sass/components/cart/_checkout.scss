@@ -1,11 +1,16 @@
-.path--cart {
-  .form-wrapper,
-  .form-item {
-    margin-top: 3em;
+.alias--cart-checkout-billing,
+.alias--cart-checkout {
+  #address_wrapper .form-item,
+  .form-item-billing-information-email {
+    margin-top: 2.5rem;
     position: relative;
   }
 
-  .l-container {
+  .form-item-billing-information-email {
+    max-width: 24.75rem;
+  }
+
+  .l-container.page-standard {
     @extend %l-container--full;
 
     margin-top: 2rem;
@@ -32,7 +37,7 @@
       position: absolute;
       color: $windows-blue;
       bottom: 1.375rem;
-      #{$left}: 0.625rem;
+      #{$left}: 1.563rem;
       text-decoration: none;
       font-size: 0.75rem;
       font-weight: bold;
@@ -97,15 +102,21 @@
       color: $red-error !important;
     }
 
-    .js-form-type-textfield {
+    #edit-billing-information {
       input {
         border: 1px solid $brownish-grey;
         border-width: 0 0 1px;
-        padding: 0.35rem 0 1em;
+        padding: 0.35rem 0 0.4rem;
         width: 100%;
         height: 1.563rem;
         outline: transparent;
         font-size: 16px;
+
+        &::placeholder {
+          opacity: 0;
+          visibility: hidden;
+          color: $white-five;
+        }
       }
 
       &:focus,
@@ -113,10 +124,6 @@
       &.valid {
         border-color: $windows-blue;
         background: transparent;
-      }
-
-      &::placeholder {
-        opacity: 0;
       }
     }
 
@@ -153,6 +160,48 @@
       padding: 1.563rem 1.25rem;
     }
 
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      width: 100%;
+      list-style: none;
+      display: inline-block;
+      border-top: 1px solid $white;
+      padding: 1.563rem;
+    }
+
+    .left {
+      float: $left;
+      width: 20%;
+    }
+
+    .right {
+      float: $right;
+      width: 80%;
+
+      a,
+      span {
+        text-decoration: none;
+        font-size: 13px;
+      }
+
+      > span {
+        display: block;
+      }
+
+      .product-name {
+        margin-bottom: 5px;
+      }
+
+      .product-qty {
+        color: $greyish;
+        margin-bottom: 3px;
+      }
+    }
+
     .ui-accordion-header-icon {
       background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
       #{$left}: 92%;
@@ -165,6 +214,7 @@
 
     .ui-accordion-content {
       border: none;
+      padding: 0;
     }
   }
 
@@ -183,6 +233,12 @@
 
   #edit-billing-information {
     border: none;
+    margin-top: 1.563rem;
+    padding: 1.563rem;
+  }
+
+  .form-item-billing-information-address-first-name {
+    padding-right: 1rem;
   }
 
   .form-item-billing-information-address-first-name,
@@ -212,9 +268,10 @@
     }
   }
 
-  #edit-actions {
+  .multistep-default #edit-actions {
     text-align: $right;
     background: $white-four;
+    margin-top: 1rem;
     padding: 0.9375rem 1.563rem;
 
     input {
@@ -266,5 +323,89 @@
   .status {
     font-size: 12px;
     margin-top: 5px;
+  }
+}
+
+// Items in the cart page.
+
+.alias--cart {
+  h1 {
+    font-size: 24px;
+    font-weight: normal;
+  }
+
+  .page-standard.l-container {
+    @extend %l-container--full;
+  }
+
+  #edit-cart {
+    width: 100%;
+
+    thead {
+      background: $white-three;
+
+      th {
+        font-size: 14px;
+        font-weight: normal;
+      }
+    }
+
+    tr {
+      display: flex;
+      padding: 0.93rem 1.563rem;
+
+      td,
+      th {
+        flex: 1;
+        text-align: left;
+      }
+    }
+
+    td {
+      img,
+      a {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      img {
+        width: 30%;
+      }
+
+      a {
+        width: 68%;
+      }
+
+      select {
+        -webkit-appearance: none;
+        border: 1px solid $white-two;
+        border-radius: 0;
+        padding: 0.5rem 0.0625rem 0.5rem 0.625rem;
+      }
+    }
+  }
+
+  #edit-totals {
+    float: $right;
+
+    td:last-child {
+      background: #f7f7f7;
+      margin-left: 1rem;
+      padding: 1rem 1.25rem;
+    }
+  }
+
+  #edit-update,
+  #edit-checkout {
+    @extend %btn;
+
+    background: $pumpkin-orange;
+    margin-top: 1em;
+  }
+
+  #edit-continue-shopping {
+    font-size: 12px;
+    border: 1px solid $peacock-blue;
+    padding: 0.625rem 1.6rem;
   }
 }
