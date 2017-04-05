@@ -34,13 +34,11 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $form['cart'][$id]['quantity']['#type'] = 'select';
       $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
 
-      // Club Quantity and remove link.
-      $remove_url = Url::fromUserInput('/cart/remove/' . $id);
-      $form['cart'][$id]['quantity'] = [
-        $form['cart'][$id]['quantity'],
-        Link::fromTextAndUrl(t('Remove'), $remove_url)->toRenderable(),
-      ];
       $product_count += $form['cart'][$id]['quantity']['#default_value'];
+
+      // Add remove link as suffix of quantity.
+      $remove_url = Url::fromUserInput('/cart/remove/' . $id);
+      $form['cart'][$id]['quantity']['#suffix'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toString();
 
       // Load Images.
       $media = alshaya_acm_product_get_sku_media($id);
