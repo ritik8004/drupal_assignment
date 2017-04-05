@@ -83,26 +83,44 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     // Shipping method & carrier.
     $shipping_method = $cart->getShippingMethod();
-    $carrier_code = $shipping_method['carrier_code'];
-    $method_code = $shipping_method['method_code'];
-    $shipping_method_string = $this->t('@method by @carrier',
-      ['@method' => $method_code, '@carrier' => $carrier_code]
-    );
+    $carrier_code = isset($shipping_method['carrier_code']) ?
+      $shipping_method['carrier_code'] : NULL;
+
+    $method_code = isset($shipping_method['method_code']) ?
+      $shipping_method['method_code'] : NULL;
+
+    // Display shipping method section only if a method is set.
+    if ($method_code != NULL && $carrier_code != NULL) {
+      $shipping_method_string = $this->t('@method by @carrier',
+        ['@method' => $method_code, '@carrier' => $carrier_code]
+      );
+    }
+    else {
+      $shipping_method_string = NULL;
+    }
 
     // Delivery address.
     $shipping_address = $cart->getShipping();
-    $shipping_address_string = isset($shipping_address->street) ?
-      $shipping_address->street . ', ' : '';
-    $shipping_address_string .= isset($shipping_address->street2) ?
-      $shipping_address->street2 . ', ' : '';
-    $shipping_address_string .= isset($shipping_address->city) ?
-      $shipping_address->city . ', ' : '';
-    $shipping_address_string .= isset($shipping_address->region) ?
-      $shipping_address->region . ', ' : '';
-    $shipping_address_string .= isset($shipping_address->country) ?
-      $shipping_address->country . ', ' : '';
-    $shipping_address_string .= isset($shipping_address->postcode) ?
-      $shipping_address->postcode : '';
+
+    // We check if address is set, we will use Address line 1 as our indicator
+    // as it is a mandatory field.
+    if (isset($shipping_address->street)) {
+      $shipping_address_string = $shipping_address->street;
+
+      $shipping_address_string .= isset($shipping_address->street2) ?
+        $shipping_address->street2 . ', ' : '';
+      $shipping_address_string .= isset($shipping_address->city) ?
+        $shipping_address->city . ', ' : '';
+      $shipping_address_string .= isset($shipping_address->region) ?
+        $shipping_address->region . ', ' : '';
+      $shipping_address_string .= isset($shipping_address->country) ?
+        $shipping_address->country . ', ' : '';
+      $shipping_address_string .= isset($shipping_address->postcode) ?
+        $shipping_address->postcode : '';
+    }
+    else {
+      $shipping_address_string = NULL;
+    }
 
     // Fetch the config.
     $config = \Drupal::configFactory()
