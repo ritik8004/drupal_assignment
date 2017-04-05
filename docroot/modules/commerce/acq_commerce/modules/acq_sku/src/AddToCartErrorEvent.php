@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\Event;
 /**
  * Class AddToCartErrorEvent.
  *
- * @package Drupal\alshaya_acm
+ * @package Drupal\acq_sku
  */
 class AddToCartErrorEvent extends Event {
 

@@ -104,12 +104,7 @@ class CartSessionStorage implements CartStorageInterface {
     }
 
     // Handling any errors and returning it back to the caller.
-    try {
-      $cart = (object) \Drupal::service('acq_commerce.api')->updateCart($cart_id, $update);
-    }
-    catch (\Exception $e) {
-      throw $e;
-    }
+    $cart = (object) \Drupal::service('acq_commerce.api')->updateCart($cart_id, $update);
 
     if (empty($cart)) {
       return;

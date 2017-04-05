@@ -8,12 +8,12 @@
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
-use Drupal\acq_sku\AddToCartErrorEvent;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_cart\Entity\Cart;
 use Drupal\acq_cart\Entity\LineItem;
 use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
  * Defines the simple SKU type
