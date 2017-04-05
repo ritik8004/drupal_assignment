@@ -73,6 +73,82 @@ function alshaya_white_label_preprocess_block(&$variables) {
 }
 
 /**
+ * Implements template_preprocess_profile().
+ */
+function alshaya_white_label_preprocess_profile__address_book(&$variables) {
+  /* @var \Drupal\profile\Entity\Profile $profile */
+  $profile = $variables['content']['field_address']['#object'];
+  $values = $profile->get('field_address')->getValue();
+  $telephone = $profile->get('field_telephone')->getValue();
+
+  $variables['delivery_to'] = '';
+  $variables['delivery_address'] = '';
+  $variables['contact_no'] = '';
+
+  // Contact info.
+  if (isset($telephone[0]) && !empty($telephone[0]['value'])) {
+    $variables['contact_no'] = $telephone[0]['value'];
+  }
+
+  if (isset($values[0])) {
+    // If name is available.
+    if (isset($values[0]['given_name']) && !empty($values[0]['given_name'])) {
+      $variables['delivery_to'] = $values[0]['given_name'] . ' ' . $values[0]['family_name'];
+    }
+
+    // Get country list.
+    $country_list = \Drupal::service('address.country_repository')->getList();
+
+    // Address info.
+    $variables['delivery_address'] = [
+      'organization' => $values[0]['organization'],
+      'address_line1' => $values[0]['address_line1'],
+      'address_line2' => $values[0]['address_line2'],
+      'postal_code' => $values[0]['postal_code'],
+      'sorting_code' => $values[0]['sorting_code'],
+      'dependent_locality' => $values[0]['dependent_locality'],
+      'locality' => $values[0]['locality'],
+      'administrative_area' => $values[0]['administrative_area'],
+      'country' => $country_list[$values[0]['country_code']],
+    ];
+
+    // If profile is default profile.
+    $variables['is_default_profile'] = $profile->isDefault() ?: '';
+
+    // Operation links.
+    $variables['edit_operation'] = '';
+    $variables['delete_operation'] = '';
+    $variables['set_default_operation'] = '';
+    $current_user = \Drupal::currentUser();
+
+    // Edit operation.
+    if ($profile->access('update') && $profile->hasLinkTemplate('edit-form')) {
+      $variables['edit_operation'] = [
+        'title' => t('Edit'),
+        'url' => $profile->urlInfo('edit-form', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+      ];
+    }
+
+    // Delete operation.
+    if ($profile->access('delete') && $profile->hasLinkTemplate('delete-form')) {
+      $variables['delete_operation'] = [
+        'title' => t('Delete'),
+        'url' => $profile->urlInfo('delete-form', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+      ];
+    }
+
+    // Primary address operation.
+    if (!$profile->isDefault()) {
+      $variables['set_default_operation'] = [
+        'title' => t('Primary address'),
+        'url' => $profile->toUrl('set-default', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+        'parameter' => $profile,
+      ];
+    }
+  }
+}
+
+/**
  * Implements hook_preprocess_node().
  */
 function alshaya_white_label_preprocess_node(&$variables) {

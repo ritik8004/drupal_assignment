@@ -65,3 +65,18 @@ function alshaya_addressbook_user_view_alter(&$build) {
     unset($build['profile_address_book']);
   }
 }
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function alshaya_addressbook_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  if ($entity->getEntityTypeId() == 'profile' && $entity->getType() == 'address_book') {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    // Unset/Remove operation links for address_book page.
+    if ($route_name == 'entity.profile.type.address_book.user_profile_form') {
+      unset($operations['set_default']);
+      unset($operations['delete']);
+      unset($operations['edit']);
+    }
+  }
+}
