@@ -17,13 +17,13 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    *
    * @var bool
    */
-  public static $isErrorOnAddToCart = FALSE;
+  public static $erroredOnAddToCart = FALSE;
 
   /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[AddToCartErrorEvent::SUBMIT][] = ['showerrormessage', 800];
+    $events[AddToCartErrorEvent::SUBMIT][] = ['onAddToCartError', 800];
     return $events;
   }
 
@@ -31,17 +31,17 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    * Check error status in EventSubscriber.
    *
    * @return bool
-   *   Returns the current value of $isErrorOnAddToCart.
+   *   Returns the current value of $erroredOnAddToCart.
    */
   public static function getErrorStatus() {
-    return self::$isErrorOnAddToCart;
+    return self::$erroredOnAddToCart;
   }
 
   /**
    * Sets the static variable when there is an error.
    */
   public static function setErrorStatus() {
-    self::$isErrorOnAddToCart = TRUE;
+    self::$erroredOnAddToCart = TRUE;
   }
 
   /**
@@ -50,14 +50,12 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\acq_sku\AddToCartErrorEvent $event
    *   Exception raised.
    */
-  public function showerrormessage(AddToCartErrorEvent $event) {
-
-    $exception = $event->getEventException();
-
+  public function onAddToCartError(AddToCartErrorEvent $event) {
     // Set our static variable to TRUE.
     self::setErrorStatus();
 
     // Logs a notice.
+    $exception = $event->getEventException();
     \Drupal::logger('acq_sku')->notice($exception->getMessage());
   }
 
