@@ -11,6 +11,6 @@ use Drupal\node\NodeInterface;
  * Implements hook_acq_sku_product_node_alter().
  */
 function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, array $product) {
-  $visible = $product['visibility'] != 1;
+  $visible = $product['visibility'] == 1;
   $node->setPublished($visible);
 }
