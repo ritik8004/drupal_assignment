@@ -61,14 +61,35 @@ class CustomerController extends ControllerBase {
       }
     }
     else {
-      // Initialise pager.
-      $currentPageNumber = pager_default_initialize(count($orders), $itemsPerPage);
+      // Get current page number.
+      $currentPageNumber = (int) \Drupal::request()->query->get('page');
 
       // Get the offset to start displaying orders from.
       $offset = $currentPageNumber * $itemsPerPage;
 
       // Get the orders to display for current page.
       $ordersPaged = array_slice($orders, $offset, $itemsPerPage, TRUE);
+
+      $nextPageButton = [];
+
+      if (count($orders) > $offset + $itemsPerPage) {
+        // Get all the query parameters we currently have.
+        $query = \Drupal::request()->query->all();
+        $query['page'] = $currentPageNumber + 1;
+
+        // Prepare the next page url.
+        $nextPageUrl = Url::fromRoute('alshaya_acm_customer.list_orders_ajax', ['user' => $user->id()], ['query' => $query])->toString();
+
+        // Prepare the next page button tag.
+        $nextPageButton = [
+          '#type' => 'html_tag',
+          '#tag' => 'button',
+          '#value' => $this->t('show more'),
+          '#attributes' => [
+            'attr-next-page' => $nextPageUrl,
+          ],
+        ];
+      }
 
       // Loop through each order and prepare the array for template.
       foreach ($ordersPaged as $orderId => $order) {
@@ -88,7 +109,7 @@ class CustomerController extends ControllerBase {
       '#order_details' => $orderDetails,
       '#order_not_found' => $noOrdersFoundMessage,
       '#account' => $account,
-      '#pager' => ['#type' => 'pager'],
+      '#next_page_button' => $nextPageButton,
       '#attached' => [
         'library' => ['alshaya_acm_customer/orders-list-infinite-scroll'],
       ],
@@ -113,7 +134,7 @@ class CustomerController extends ControllerBase {
       $response['orders_list'] .= '<li>' . \Drupal::service('renderer')->render($order) . '</li>';
     }
 
-    $response['pager'] = \Drupal::service('renderer')->render($fullBuild['#pager']);
+    $response['next_page_button'] = \Drupal::service('renderer')->render($fullBuild['#next_page_button']);
 
     print json_encode($response);
     exit;
