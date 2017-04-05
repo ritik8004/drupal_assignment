@@ -47,15 +47,15 @@ function alshaya_acm_cart_notification_form_alter(&$form, FormStateInterface $fo
 function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
   // Get error messages to check if we have an error.
   $messages = drupal_get_messages('error');
-  $flag = FALSE;
+  $error_on_add_to_cart = FALSE;
   foreach ($messages['error'] as $error) {
     if (!strpos($error, AddToCartErrorEvent::SUBMIT)) {
-      $flag = TRUE;
+      $error_on_add_to_cart = TRUE;
     }
   }
   // If we have error, we show a error notification and hide complexity
   // from user.
-  if ($flag == TRUE) {
+  if ($error_on_add_to_cart == TRUE) {
     // Use the template to render the error.
     $output = [
       '#theme' => 'cart_notification',
@@ -64,6 +64,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#product_name' => t('Oops! Something went wrong.'),
       '#link' => '',
       '#link_text' => '',
+      '#class' => 'error',
     ];
   }
   else {
@@ -98,6 +99,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#product_name' => $product_name . ' ' . t('has been added to your cart.'),
       '#link' => $url,
       '#link_text' => t('View Cart.'),
+      '#class' => 'success',
     ];
   }
 
@@ -122,6 +124,7 @@ function alshaya_acm_cart_notification_theme($existing, $type, $theme, $path) {
         'product_name' => '',
         'link' => '',
         'link_text' => '',
+        'class' => '',
       ],
       'template' => 'cart-notification',
     ],
