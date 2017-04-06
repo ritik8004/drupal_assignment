@@ -1,9 +1,8 @@
 orders-list-infinite-scroll:
   version: VERSION
   js:
-    js/infinite-scroll.js : {}
+    js/orders-list-pager.js : {}
   dependencies:
     - core/jquery
     - core/jquery.once
     - core/drupal
-    - core/drupal.debounce

@@ -41,7 +41,9 @@
   </ul>
 
   {# Do not remove class in below div, add classes if required, below class is used in JS. #}
-  <div class="orders-list-infinite-scroll-pager-wrapper visually-hidden">
-    {{ pager }}
-  </div>
+  {% if next_page_button %}
+    <div class="orders-list-pager-wrapper">
+      {{ next_page_button }}
+    </div>
+  {% endif %}
 </div>

@@ -52,3 +52,68 @@ function alshaya_acm_product_get_sku_media($sku) {
 
   return $media;
 }
+
+/**
+ * Utility function to return media files for a SKU.
+ *
+ * @param mixed $sku
+ *   SKU text or full entity object.
+ *
+ * @return array
+ *   Array of configurable field values.
+ */
+function alshaya_acm_product_get_sku_configurable_values($sku) {
+  $configurableFieldValues = [];
+
+  $skuEntity = is_object($sku) ? $sku : SKU::loadFromSKU($sku);
+
+  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  $configurableFields = array_filter($fields, function ($field) {
+    return (bool) $field['configurable'];
+  });
+
+  foreach ($configurableFields as $key => $field) {
+    $fieldKey = 'attr_' . $key;
+
+    $configurableFieldValues[$fieldKey] = [
+      'label' => $skuEntity->get($fieldKey)->getFieldDefinition()->getLabel(),
+      'value' => $skuEntity->get($fieldKey)->getString(),
+    ];
+  }
+
+  return $configurableFieldValues;
+}
+
+/**
+ * Utility function to get parent SKU for a configurable child sku.
+ *
+ * @param mixed $sku
+ *   SKU text or full entity object.
+ *
+ * @return object
+ *   Loaded SKU entity.
+ */
+function alshaya_acm_product_get_parent_sku_by_sku($sku) {
+  $sku = is_object($sku) ? $sku->getSKU() : $sku;
+
+  // Execute the query and get all SKU which have current SKU in
+  // field_configured_skus.
+  $query = \Drupal::entityQuery('acq_sku');
+  $query->condition('field_configured_skus', $sku);
+  $ids = $query->execute();
+
+  if (count($ids) != 1) {
+    \Drupal::logger('alshaya_acm_product')->error(
+      'SKU @sku has no or multiple parent SKUs.',
+      ['@sku' => $sku]
+    );
+
+    throw new RuntimeException('No or multiple parent SKUs found');
+  }
+
+  // Get the first id.
+  $parentSkuId = array_shift($ids);
+
+  // Return fully load SKU.
+  return SKU::load($parentSkuId);
+}

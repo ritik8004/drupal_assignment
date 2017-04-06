@@ -13,35 +13,38 @@
  */
 #}
 
-<div>
-  <span class="light">{{ "Order ID"|t }}</span>
-  <span class="dark">{{ order.orderId }}</span>
-  <span class="light">{{ order.orderDate }}</span>
-</div>
+<a href="{{ order_detail_link }}">
+  <div>
+    <div class="light">{{ "Order ID"|t }}</div>
+    <div class="dark">{{ order.orderId }}</div>
+    <div class="light">{{ order.orderDate }}</div>
+  </div>
 
-<div>
-  <span class="dark">
-    {% trans %}
-      {{ order.name }}...
-    {% endtrans %}
-  </span>
-  <span class="light">
-    {% trans %}
-      Total: {{ order.quantity }} items
-    {% endtrans %}
-  </span>
-</div>
+  <div>
+    <div class="dark">
+      {% trans %}
+        {{ order.name }}...
+      {% endtrans %}
+    </div>
+    <div class="light">
+      {% trans %}
+        Total: {{ order.quantity }} items
+      {% endtrans %}
+    </div>
+  </div>
 
-<div>
-  <span class="button {{ order.status.class }}">{{ order.status.text }}</span>
-</div>
+  <div>
+    <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
+  </div>
 
-<div>
-  <span class="light">{{ "Order Total"|t }}</span>
-  {% if currency_code_position == 'before' %}
-    <span class="total"><span class="prefix">{{ currency_code }}</span><span class="total--amount">{{ order.total }}</span></span>
-  {% else %}
-    <span class="total">{{ order.total }}<span class="prefix">{{ currency_code }}</span></span>
-  {% endif %}
-  <span class="dark"></span>
-</div>
+  <div>
+    <div class="light">{{ "Order Total"|t }}</div>
+    <div class="dark">
+      {% if currency_code_position == 'before' %}
+        <span class="currency-code prefix">{{ currency_code }}</span>{{ order.total }}
+      {% else %}
+        {{ order.total }}<span class="currency-code suffix">{{ currency_code }}</span>
+      {% endif %}
+    </div>
+  </div>
+</a>
