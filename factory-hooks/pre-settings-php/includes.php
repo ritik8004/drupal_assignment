@@ -29,3 +29,7 @@ $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.acm.acquia
 $config['acq_commerce.conductor']['verify_ssl'] = FALSE;
 $config['acq_commerce.conductor']['base_url'] = 'https://sylvain-kolpzxy-pgplwghmuzhmm.us.magentosite.cloud';
 $config['acq_commerce.conductor']['media_path'] = 'media/catalog/product';
+
+// Recaptcha settings.
+$config['recaptcha.settings']['site_key'] = '6Le93BsUAAAAAMOiJ5wrk4ICF0N-dLs6iM_eR4di';
+$config['recaptcha.settings']['secret_key'] = '6Le93BsUAAAAABQ0RMy0TIFuKasg3uz8hqVl4c6n';
