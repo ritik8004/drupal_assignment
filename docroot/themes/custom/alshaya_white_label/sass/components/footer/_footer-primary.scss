@@ -18,6 +18,14 @@
       min-width: 45rem;
       max-width: 64rem;
     }
+
+    .language-switcher-language-url {
+      display: none;
+
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
   }
 
   .l-container {
@@ -49,6 +57,7 @@
     color: $brownish-grey;
     line-height: 2.14;
     text-decoration: none;
+    font-family: $alshaya-thin;
   }
 
   &--help,
@@ -63,7 +72,7 @@
     }
 
     @include breakpoint($desktop-wide) {
-      margin-#{$right}: 4.5rem;
+      margin-#{$right}: 4rem;
     }
   }
 }
@@ -76,6 +85,7 @@
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
+    font-family: $alshaya-bold;
 
     @include breakpoint($only-mobile) {
       margin: 0.938rem 0;
@@ -107,7 +117,8 @@
   }
 
   h2 {
-    font-size: 0.875rem;
+    font-size: 14px;
+    font-family: $alshaya-bold;
     color: $peacock-blue;
     text-transform: lowercase;
 
@@ -118,6 +129,7 @@
 
   form {
     position: relative;
+    max-width: 291px;
   }
 
   .form-item {
@@ -160,6 +172,7 @@
     width: 100%;
     height: 2.2rem;
     outline: transparent;
+    font-size: 13px;
 
     @include breakpoint($tablet) {
       width: 18.188rem;
@@ -169,6 +182,7 @@
   #edit-submit {
     @extend %btn;
 
+    font-family: $alshaya-bold;
     background: $peacock-blue;
     position: absolute;
     #{$right}: 0;
@@ -209,4 +223,9 @@
   .c-footer-menu {
     width: 100%;
   }
+}
+
+.newsletter-block-label {
+  font-size: 13px;
+  line-height: 2.31;
 }
