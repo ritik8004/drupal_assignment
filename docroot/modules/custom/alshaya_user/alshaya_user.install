@@ -72,21 +72,17 @@ function alshaya_user_modules_installed($modules) {
   // Set default configuration for user mails from registration password module.
   $config = \Drupal::configFactory()->getEditable('user_registrationpassword.settings');
   $config->set('registration', USER_REGISTRATIONPASSWORD_VERIFICATION_PASS);
-  $config->set('register_subject', 'Account details for [user:display-name] at [site:name]');
-  $config->set('register_body', '[user:display-name],
+  $config->set('register_subject', 'SUBJECT: Welcome to [site:name]');
+  $config->set('register_body', 'Hi [user:display-name] !
 
-Thank you for registering at [site:name]. You may now log in by clicking this link or copying and pasting it into your browser:
+You recently signed up for [site:name] Account.
+Please verify your email address and activate your account by clicking the below link
 
-[user:registrationpassword-url]
+[user:one-time-login-url]
 
-This link can only be used once to log in and will lead you to a page where you can set your password.
+Or verify using this link : [user:one-time-login-url]
 
-After setting your password, you will be able to log in at [site:login-url] in the future using:
-
-username: [user:name]
-password: Your password
-
---  [site:name] team');
+If you did not request this verification, please ignore this email. If you feel something is wrong, please contact our support team at [site:mail].');
   $config->save();
 
   // Disable account activation mail.
