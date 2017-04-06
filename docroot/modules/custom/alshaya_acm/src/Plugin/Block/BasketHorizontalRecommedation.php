@@ -60,8 +60,10 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
   public function build() {
     // Get current cart skus.
     $cartSkus = $this->cartStorage->getCartSkus();
-    // Get all cross sell SKU.
-    $items = SKU::getCrossSellSKUs($cartSkus);
+    if (!empty($cartSkus)) {
+      // Get all cross sell SKU.
+      $items = SKU::getCrossSellSKUs($cartSkus);
+    }
 
     if (!empty($items)) {
       return views_embed_view('product_slider', 'block_product_slider', implode(',', $items));
