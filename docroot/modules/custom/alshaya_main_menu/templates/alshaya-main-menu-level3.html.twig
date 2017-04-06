@@ -1,7 +1,7 @@
 <ul class="child--two">
   {% for key, level3 in data %}
     <li>
-      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
+      <a class="level--three" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
       {% if level3.child is not empty %}
         {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
       {% endif %}

@@ -447,12 +447,12 @@ header {
       padding: 10px;
 
       &.active {
-        background: $white-five;
-        border-top: 2px solid $peacock-blue;
+        background: $white-five !important;
+        border-top: 2px solid $peacock-blue !important;
       }
 
       &:hover {
-        background: $peacock-blue;
+        background: $peacock-blue !important;
 
         a.level--one {
           color: $white-five;
@@ -477,7 +477,7 @@ header {
     top: 38px;
     right: 0;
     left: 0;
-    padding: 1.875rem 1.5625rem !important;
+    padding: 1.5625rem 0 !important;
     background: $white-five;
     z-index: 10;
 
@@ -519,6 +519,7 @@ header {
           vertical-align: middle;
           position: absolute;
           right: 10px;
+          top: 30px;
         }
       }
 
@@ -529,11 +530,13 @@ header {
       }
 
       .child--two {
-        width: 30%;
+        width: 100%;
         vertical-align: top;
         margin-bottom: 1.563rem;
-        padding: 0 1.5rem;
         position: absolute;
+        top: 0;
+        margin-top: 1.5625rem;
+        margin-left: 2.8125rem;
 
         p {
           display: none;
@@ -558,6 +561,17 @@ header {
 @include breakpoint($desktop) {
   .overlay {
     background-color: rgba(0, 0, 0, 0.48);
+  }
+
+  .child--three,
+  .aa {
+    display: block !important;
+  }
+
+  .level--three {
+    font-size: 14px !important;
+    color: $peacock-blue !important;
+    margin-bottom: 0.5rem;
   }
 }
 
