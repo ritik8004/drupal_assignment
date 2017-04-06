@@ -1,8 +1,8 @@
-<ul class="child--first">
+<ul class="menu__list menu--two__list">
   {% for key, level2 in data.child %}
-    <li class="level--two">
-      <div class="menu--wrapper-one">
-        <a  class="level__two--child" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
+    <li class="menu__list-item menu--two__list-item">
+      <div class="menu__link-wrapper menu-two__link-wrapper">
+        <a  class="menu__link menu-two__link" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
         {% if level2.description is not empty %}
           {{ level2.description | raw }}
         {% endif %}
