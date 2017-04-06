@@ -409,3 +409,15 @@
     padding: 0.625rem 1.6rem;
   }
 }
+
+// COUPON CODE
+.form-item-coupon {
+  display: inline-block;
+  border-top: 1px solid $white;
+  border-bottom: 1px solid $white;
+  padding: 1rem 1.563rem;
+
+  #edit-coupon {
+    display: none;
+  }
+}
