@@ -74,10 +74,9 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
 
   foreach ($configurableFields as $key => $field) {
     $fieldKey = 'attr_' . $key;
+
     $configurableFieldValues[$fieldKey] = [
-      // @TODO: Find a way to avoid translating variable below.
-      // @codingStandardsIgnoreLine
-      'label' => t($field['label']),
+      'label' => $skuEntity->get($fieldKey)->getFieldDefinition()->getLabel(),
       'value' => $skuEntity->get($fieldKey)->getString(),
     ];
   }
