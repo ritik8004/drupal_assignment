@@ -26,6 +26,21 @@ $very-light-blue: #d9efff;
 $red-error: #d0011b;
 
 // Fonts ///////////////
+@font-face {
+  font-family: 'alshaya-bold';
+  src: url('../fonts/alshayabold-webfont.woff2') format('woff2'), url('../fonts/alshayabold-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'alshaya-thin';
+  src: url('../fonts/alshayathin-webfont.woff2') format('woff2'), url('../fonts/alshayathin-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+$alshaya-bold: 'alshaya-bold';
+$alshaya-thin: 'alshaya-bold';
 $arial: 'arialmt', arial, sans-serif;
 $body_font: $arial;
 
@@ -35,10 +50,8 @@ $mobile: 320px !default;
 $tablet: 768px !default;
 $desktop: 1025px !default;
 $desktop-wide: 1284px !default;
-
 $upto-tablet: max-width $tablet - 1;
 $upto-desktop: max-width $desktop - 1;
-
 $only-mobile: 0 $tablet - 1;
 $only-tablet: $tablet $desktop - 1;
 
