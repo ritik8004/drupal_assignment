@@ -251,7 +251,7 @@ class Configurable extends SKUPluginBase {
       $sku_name = $product['sku'];
 
       $skus[] = ['value' => $sku_name];
-      
+
       if (empty($sku_entity)) {
         continue;
       }
@@ -290,7 +290,9 @@ class Configurable extends SKUPluginBase {
 
     foreach ($sku->field_configured_skus as $child_sku) {
       $child_sku = SKU::loadFromSKU($child_sku->getString());
-      $tree['products'][$child_sku->getSKU()] = $child_sku;
+      if (!empty($child_sku)) {
+        $tree['products'][$child_sku->getSKU()] = $child_sku;
+      }
     }
 
     $configurables = unserialize(

@@ -5,6 +5,8 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
@@ -28,13 +30,28 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#url' => Url::fromRoute('<front>'),
   ];
 
+  // Add sub total price of product.
+  $form['cart']['#header'][] = t('Sub total');
+
+  // Get cart items by sku.
+  $cart_item = alshaya_acm_get_cart_items_by_sku();
   $product_count = 0;
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
+      $product_count += $form['cart'][$id]['quantity']['#default_value'];
+
       $form['cart'][$id]['quantity']['#type'] = 'select';
       $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
 
-      $product_count += $form['cart'][$id]['quantity']['#default_value'];
+      // Add ajax callback to update cart's total on quantity change.
+      $form['cart'][$id]['quantity']['#ajax'] = [
+        'callback' => 'alshaya_acm_cart_ajax_quantity_callback',
+        'event' => 'change',
+      ];
+      // Add sub total price of product.
+      $form['cart'][$id]['sub_total'] = [
+        '#markup' => ($item['quantity']['#default_value'] * $cart_item[$id]['price']),
+      ];
 
       // Add remove link as suffix of quantity.
       $remove_url = Url::fromUserInput('/cart/remove/' . $id);
@@ -53,12 +70,83 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
           $form['cart'][$id]['name'],
         ];
       }
-
     }
   }
 
+  $form['cart']['#prefix'] = '<div id="table-cart-items">';
+  $form['cart']['#suffix'] = '</div>';
+
+  $form['totals']['#prefix'] = '<div id="table-cart-totals">';
+  $form['totals']['#suffix'] = '</div>';
+
   // Set Form title.
   $form['#title'] = t("Cart (%count)", ['%count' => $product_count]);
+}
+
+/**
+ * Ajax callback: Update cart item's sub total and cart's total / sub total.
+ */
+function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $form_state) {
+  // Get form values.
+  $form_state_cart = $form_state->getValue('cart');
+
+  // Get triggering element to update quantity of sku.
+  $trigger = $form_state->getTriggeringElement();
+  $sku = $trigger['#parents'][1];;
+  $quantity = $trigger['#value'];
+
+  // Update cart with sku quantity.
+  $cartStorage = \Drupal::service('acq_cart.cart_storage');
+  $cart = $cartStorage->getCart();
+  $cart->updateItemQuantity($sku, $quantity);
+  $cartStorage->updateCart();
+  $newcart = $cartStorage->getCart();
+
+  // Get cart items by sku.
+  $cart_item = alshaya_acm_get_cart_items_by_sku();
+
+  // Update the sub total price of each product.
+  $form['cart'][$sku]['sub_total']['#markup'] = ($quantity * $cart_item[$sku]['price']);
+
+  // Get the new totals of cart.
+  $totals = $newcart->totals();
+
+  $form['totals']['sub']['value']['#plain_text'] = $totals['sub'];
+
+  if ((float) $totals['tax'] > 0) {
+    $form['totals']['tax']['value']['#plain_text'] = $totals['tax'];
+  }
+
+  if ((float) $totals['discount'] > 0) {
+    $form['totals']['discount']['value']['#plain_text'] = $totals['discount'];
+  }
+
+  $form['totals']['grand']['value']['#plain_text'] = $totals['grand'];
+
+  $response = new AjaxResponse();
+  $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
+  $response->addCommand(new ReplaceCommand('#table-cart-totals', $form['totals']));
+
+  return $response;
+}
+
+/**
+ * Get all cart items as sku associated array.
+ *
+ * @return array
+ *   Array of all skus assiciated by sku key.
+ */
+function alshaya_acm_get_cart_items_by_sku() {
+  $skus = [];
+  $cartStorage = \Drupal::service('acq_cart.cart_storage');
+  $cart = $cartStorage->getCart();
+  $items = $cart->items();
+  if (!empty($items)) {
+    foreach ($items as $index => $line_item) {
+      $skus[$line_item['sku']] = $line_item;
+    }
+  }
+  return $skus;
 }
 
 /**
