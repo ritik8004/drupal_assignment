@@ -68,7 +68,7 @@
     }
   }
 
-  .field--name-field-title {
+  .field--name-field-link {
     color: $peacock-blue;
     font-size: 0.75rem;
     font-weight: bold;
@@ -88,10 +88,11 @@
     }
   }
 
-  .field--name-field-subtitle {
+  .field--name-field-title {
     font-size: 0.5625rem;
     color: $brownish-grey;
     text-transform: lowercase;
+    margin-top: 0.5rem;
 
     @include breakpoint($only-mobile) {
       padding-bottom: 0.5rem;
