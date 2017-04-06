@@ -65,4 +65,16 @@ function alshaya_master_install() {
     ->set('region', 'content')
     ->set('weight', -14)
     ->save();
+
+  // Set page title to exclude on Frontpage.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_page_title')
+    ->set('visibility', [
+      'request_path' => [
+        'id' => 'request_path',
+        'pages' => '<front>',
+        'negate' => 'true',
+        'context_mapping' => [],
+      ],
+    ])
+    ->save();
 }
