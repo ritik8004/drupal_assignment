@@ -1,0 +1,190 @@
+.c-promo__items {
+  @include breakpoint($only-mobile) {
+    @include container(304px);
+  }
+
+  @include breakpoint($only-tablet) {
+    @include container(702px);
+  }
+
+  @include breakpoint($desktop) {
+    @include container(1026px);
+  }
+
+  &.c-promo__items--department {
+    @include container(923px);
+  }
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+
+  img {
+    vertical-align: middle;
+  }
+
+  .paragraph {
+    position: relative;
+  }
+
+  .field--type-link a {
+    @extend %u-image-replacement;
+    @extend %u-overlay-content;
+  }
+}
+
+.c-promo__item {
+  margin-bottom: 0.5rem;
+
+  @include breakpoint($tablet) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.c-promo-1-3__item {
+  margin-bottom: 0.5rem;
+  float: $left;
+  line-height: 1;
+  text-align: center;
+
+  @include breakpoint($only-mobile) {
+    width: calc(50% - 0.5rem);
+
+    &:nth-child(2) {
+      float: $right;
+    }
+
+    &:nth-child(3) {
+      display: none;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    margin-bottom: 1.5rem;
+    width: calc(33.33% - 1rem);
+
+    &:nth-child(2) {
+      margin: 0 1.5rem;
+    }
+  }
+
+  .field--name-field-title {
+    color: $peacock-blue;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0.5rem;
+    }
+
+    @include breakpoint($tablet) {
+      font-size: 0.9375rem;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 1.375rem;
+      font-weight: normal;
+    }
+  }
+
+  .field--name-field-subtitle {
+    font-size: 0.5625rem;
+    color: $brownish-grey;
+    text-transform: lowercase;
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0.5rem;
+    }
+
+    @include breakpoint($tablet) {
+      font-size: 0.6875rem;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 1rem;
+    }
+  }
+}
+
+.c-promo-1-2__item {
+  margin-bottom: 0.5rem;
+
+  @include breakpoint($tablet) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.c-promo-1-2--one {
+  @include breakpoint($tablet) {
+    float: $left;
+  }
+}
+
+.c-promo-1-2--two {
+  @include breakpoint($tablet) {
+    float: $right;
+    max-width: 18rem;
+  }
+
+  .c-promo-1-2__item {
+    @include breakpoint($tablet) {
+      float: $right;
+    }
+  }
+
+  .c-promo-1-2__item:first-child {
+    @include breakpoint($tablet) {
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+.c-promo-1-2--one,
+.c-promo-1-2--two {
+  @include breakpoint($tablet) {
+    width: calc(50% - 0.75rem);
+    max-width: 31.3125rem;
+  }
+}
+
+.c-promo-1-1--small {
+  & > div:first-child {
+    float: $left;
+    max-width: 18.1875rem;
+    width: 31.527%;
+  }
+
+  & > div:last-child {
+    float: $right;
+    max-width: 37.875rem;
+    width: 65.65%;
+  }
+}
+
+.c-promo-1-1--large {
+  & > div:first-child {
+    float: $left;
+    max-width: 37.875rem;
+    width: 65.65%;
+  }
+
+  & > div:last-child {
+    float: $right;
+    max-width: 18.1875rem;
+    width: 31.527%;
+  }
+}
+
+.c-promo-1-1--eq__item {
+  max-width: 28.0625rem;
+  width: calc(50% - 0.75rem);
+
+  &:first-child {
+    float: $left;
+  }
+
+  &:last-child {
+    float: $right;
+  }
+}

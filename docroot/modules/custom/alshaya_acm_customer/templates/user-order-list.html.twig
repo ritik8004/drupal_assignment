@@ -1,0 +1,49 @@
+{#
+/**
+ * @file
+ *
+ * Default user order item template.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - order_details: Array of all themed orders.
+ * - account: Order information recieved from conductor.
+ * - pager: Pager.
+ * - order_not_found: Text to display if no orders found for search result or account.
+ * - search_form: Rendered search form.
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes }}>
+  <div>
+    <div>
+      {% trans %}
+        Logged in as {{ account.first_name }} {{ account.last_name }}
+      {% endtrans %}
+    </div>
+    <div>
+      {{ search_form }}
+    </div>
+  </div>
+
+  <div>
+    {{ order_not_found }}
+  </div>
+
+  {# Do not remove class in below ul, add classes if required, below class is used in JS. #}
+  <ul class="order-items">
+    {% for order in order_details %}
+      <li>
+        {{ order }}
+      </li>
+    {% endfor %}
+  </ul>
+
+  {# Do not remove class in below div, add classes if required, below class is used in JS. #}
+  {% if next_page_button %}
+    <div class="orders-list-pager-wrapper">
+      {{ next_page_button }}
+    </div>
+  {% endif %}
+</div>

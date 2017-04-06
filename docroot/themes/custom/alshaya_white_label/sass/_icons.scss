@@ -1,0 +1,29 @@
+%icon-chevron-next {
+  background-image: url('data:image/svg+xml;utf-8,<svg width="9" height="17" viewBox="0 0 9 17" xmlns="http://www.w3.org/2000/svg"><title>671AA34F-00D3-466A-B5FC-B14EE4F3B62D</title><path d="M1.078 0L8.48 8.5 1.078 17l-1.06-.928L6.58 8.5.018.928z" fill="#333" fill-rule="evenodd"/></svg>');
+}
+
+%icon-chevron-next--disabled {
+  background-image: url('data:image/svg+xml;utf-8,<svg width="9" height="17" viewBox="0 0 9 17" xmlns="http://www.w3.org/2000/svg"><title>671AA34F-00D3-466A-B5FC-B14EE4F3B62D</title><path d="M1.078 0L8.48 8.5 1.078 17l-1.06-.928L6.58 8.5.018.928z" fill="#fff" fill-rule="evenodd"/></svg>');
+}
+
+%icon-chevron-up {
+  background-image: url('data:image/svg+xml;utf-8,<svg width="15" height="8" viewBox="0 0 15 8" xmlns="http://www.w3.org/2000/svg"><title>6C28A1B4-2A9D-4C21-8AF3-DEADDCFC600B</title><path d="M0 7.042L7.5.462l7.5 6.58-.819.94L7.5 2.154.819 7.983z" fill="#333" fill-rule="evenodd"/></svg>');
+  transform: rotate(180deg);
+}
+
+%icon-chevron-down {
+  background-image: url('data:image/svg+xml;utf-8,<svg width="15" height="8" viewBox="0 0 15 8" xmlns="http://www.w3.org/2000/svg"><title>6C28A1B4-2A9D-4C21-8AF3-DEADDCFC600B</title><path d="M0 7.042L7.5.462l7.5 6.58-.819.94L7.5 2.154.819 7.983z" fill="#333" fill-rule="evenodd"/></svg>');
+}
+
+%icon-checkbox--inactive {
+  background-image: url('data:image/svg+xml;utf-8,<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>26248BD3-87D0-4A18-AA77-0FF7A3341AFA</title><defs><rect id="a" width="12" height="12" rx="1.6"/><mask id="b" x="0" y="0" width="12" height="12" fill="#fff"><use xlink:href="#a"/></mask></defs><use mask="url(#b)" xlink:href="#a" stroke="#ADADAD" stroke-width="2" fill="none" fill-rule="evenodd"/></svg>');
+}
+
+%icon-checkbox--active {
+  background-image: url('data:image/svg+xml;utf-8,<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><title>FF0F1EEC-6E7B-4E10-803B-D7EFC3BF1381</title><g fill="none" fill-rule="evenodd"><rect fill="#3680CB" width="12" height="12" rx="1.6"/><path fill="#F7F7F7" d="M2.25 6.528l.75-.7 1.929 1.8L9 3.828l.75.7-4.821 4.5z"/></g></svg>');
+}
+
+// TODO: Rename to add icon prefix and follow BEM.
+%menu-hover--mobile {
+  background-image: url('data:image/svg+xml;utf-8,<svg width="24" height="13" viewBox="0 0 9 17" xmlns="http://www.w3.org/2000/svg"><title>671AA34F-00D3-466A-B5FC-B14EE4F3B62D</title><path d="M1.078 0L8.48 8.5 1.078 17l-1.06-.928L6.58 8.5.018.928z" fill="#fff" fill-rule="evenodd"/></svg>');
+}

@@ -3,6 +3,12 @@ global_styles:
   css:
     theme:
       css/styles.css: {}
+  js:
+    js/menu.js: {}
+    js/accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.accordion
 
 rtl_styles:
   version: VERSION

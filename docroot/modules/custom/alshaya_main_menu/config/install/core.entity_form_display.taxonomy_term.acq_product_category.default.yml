@@ -1,0 +1,55 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.acq_product_category.field_commerce_id
+    - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - paragraphs
+    - path
+    - text
+id: taxonomy_term.acq_product_category.default
+targetEntityType: taxonomy_term
+bundle: acq_product_category
+mode: default
+content:
+  description:
+    type: text_textfield
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_main_menu_highlight:
+    type: entity_reference_paragraphs
+    weight: 31
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: -5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    settings: {  }
+    third_party_settings: {  }
+  translation:
+    weight: 10
+hidden:
+  field_commerce_id: true

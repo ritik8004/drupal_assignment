@@ -1,0 +1,20 @@
+<div class="main--menu">
+  <div class="mobile--close">
+    <p>X</p>
+  </div>
+  <ul>
+    {% for key1, level1 in term_tree %}
+      {% if level1.class == true %}
+        <li class="parent--level {{ level1.class }}">
+      {% else %}
+        <li class="parent--level">
+      {% endif %}
+          <a class="level--one" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level1.id}) }}">{{ level1.label }}</a>
+
+          {% if level1.child is not empty %}
+            {{ alshaya_main_menu('alshaya_main_menu_level2', level1) }}
+          {% endif %}
+        </li>
+    {% endfor %}
+  </ul>
+</div>

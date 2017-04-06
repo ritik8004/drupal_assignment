@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.department_page.body
+    - field.field.node.department_page.field_product_category
+    - field.field.node.department_page.field_promo_blocks
+    - node.type.department_page
+  module:
+    - entity_reference_revisions
+    - user
+id: node.department_page.default
+targetEntityType: node
+bundle: department_page
+mode: default
+content:
+  field_promo_blocks:
+    type: entity_reference_revisions_entity_view
+    weight: 1
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+  links:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  body: true
+  field_product_category: true
+  langcode: true

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_highlight_link
+    - paragraphs.paragraphs_type.main_menu_highlight
+  module:
+    - link
+id: paragraph.main_menu_highlight.field_highlight_link
+field_name: field_highlight_link
+entity_type: paragraph
+bundle: main_menu_highlight
+label: 'Highlight link'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

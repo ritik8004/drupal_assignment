@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 923x288
+label: 923x288
+effects:
+  724a1469-4d04-42b8-bf21-03589d07149f:
+    uuid: 724a1469-4d04-42b8-bf21-03589d07149f
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 923
+      height: 288

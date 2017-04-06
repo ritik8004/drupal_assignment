@@ -1,6 +1,6 @@
 name: 'Alshaya Config'
 type: module
 description: 'Custom module to store site specific custom configurations.'
-package: 'Custom'
+package: 'Alshaya'
 core: 8.x
 configure: alshaya_config.settings

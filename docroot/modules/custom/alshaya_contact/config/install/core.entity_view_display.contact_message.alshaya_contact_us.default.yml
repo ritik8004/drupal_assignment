@@ -1,0 +1,79 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.alshaya_contact_us
+    - field.field.contact_message.alshaya_contact_us.field_communication_channel
+    - field.field.contact_message.alshaya_contact_us.field_email_addess
+    - field.field.contact_message.alshaya_contact_us.field_first_name
+    - field.field.contact_message.alshaya_contact_us.field_last_name
+    - field.field.contact_message.alshaya_contact_us.field_mobile_number
+id: contact_message.alshaya_contact_us.default
+targetEntityType: contact_message
+bundle: alshaya_contact_us
+mode: default
+content:
+  field_communication_channel:
+    weight: 1
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+  field_email_addess:
+    weight: 6
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_first_name:
+    weight: 3
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_last_name:
+    weight: 4
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_mobile_number:
+    weight: 7
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  mail:
+    weight: -2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  message:
+    type: string
+    weight: 0
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  name:
+    weight: -3
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  subject:
+    weight: -1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden:
+  langcode: true

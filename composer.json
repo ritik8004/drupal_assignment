@@ -25,7 +25,18 @@
         "drupal/paragraphs": "^1.1",
         "drupal/search_api_solr": "^1.0@beta",
         "drupal/default_content": "^1.0@alpha",
-        "drupal/taxonomy_access_fix": "^2.1"
+        "drupal/taxonomy_access_fix": "^2.1",
+        "drupal/password_policy": "^3.0",
+        "drupal/taxonomy_term_depth": "1.x-dev",
+        "drupal/email_registration": "^1.0",
+        "drupal/captcha": "^1.0@beta",
+        "drupal/recaptcha": "^2.2",
+        "drupal/views_field_view": "1.0-beta2",
+        "drupal/user_registrationpassword": "^1.0",
+        "drupal/clientside_validation": "1.x-dev",
+        "drupal/facets": "^1.0@alpha",
+        "drupal/profile": "^1.0@alpha",
+        "drupal/field_group": "1.0.0-rc4"
     },
     "require-dev": {
         "behat/behat": "^3.1",
@@ -45,6 +56,17 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        "jqueryvalidate": {
+            "type": "package",
+            "package": {
+                "name": "jqueryvalidate",
+                "version": "1.15.0",
+                "dist": {
+                    "url": "https://jqueryvalidation.org/files/jquery-validation-1.15.0.zip",
+                    "type": "zip"
+                }
+            }
         }
     },
     "autoload-dev": {
@@ -66,6 +88,11 @@
             ]
         },
         "enable-patching": true,
+        "patches": {
+            "drupal/taxonomy_term_depth": {
+                "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
+            }
+        },
         "installer-paths": {
             "docroot/core": [
                 "type:drupal-core"
@@ -94,13 +121,6 @@
             "drush/contrib/{$name}": [
                 "type:drupal-drush"
             ]
-        },
-        "patches": {
-            "drupal/acq_commerce": {
-                "Offline products sync": "patches/acq_commerce/allow_offline_sync_of_products.patch",
-                "Remove panelizer dependency": "patches/acq_commerce/remove_panelizer_dependency.patch",
-                "Add up/cross sell fields": "patches/acq_commerce/add_up_cross_sell_fields_MMCPA-363"
-            }
         }
     },
     "scripts": {

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains install hooks for alshaya_default_content module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_default_content_install() {
+  // Set initial translation string for en language.
+  // Array of language translations for custom strings.
+  $strings = [
+    'Find Store' => [
+      'ar' => 'البحث عن محلاتنا',
+    ],
+    'KWD' => [
+      'ar' => 'د٠ك٠',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+}

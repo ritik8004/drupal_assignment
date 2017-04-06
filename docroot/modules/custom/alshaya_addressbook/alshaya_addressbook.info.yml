@@ -1,0 +1,12 @@
+name: alshaya_addressbook
+type: module
+core: 8.x
+dependencies:
+  - address
+  - block
+  - field
+  - profile
+  - system
+  - views
+  - workbench_moderation
+version: 8.x-1.0

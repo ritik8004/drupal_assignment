@@ -1,0 +1,8 @@
+name: 'Alshaya ACM Customer'
+type: module
+description: 'All custom code around acq_customer.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - acq_customer
+  - alshaya_acm_product

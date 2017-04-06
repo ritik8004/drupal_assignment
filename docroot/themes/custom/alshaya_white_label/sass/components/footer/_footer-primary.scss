@@ -9,52 +9,81 @@
   padding-top: 1.625rem;
   padding-bottom: 1.625rem;
   margin-top: 1.625rem;
+  position: relative;
 
   @include breakpoint($tablet) {
-    padding: 1.625rem 8px;
-  }
+    padding: 1.25em 1.5em;
 
-  @include breakpoint($only-mobile) {
-    position: relative;
+    .l-container {
+      min-width: 45rem;
+      max-width: 64rem;
+    }
   }
 
   .l-container {
-    @extend %l-container--full;
+    @include container(65.625rem);
+  }
+
+  &__region {
+    position: relative;
+    min-height: 16.25em;
   }
 }
 
 .c-footer-menu {
   @extend %list-clear;
 
+  @include breakpoint($desktop) {
+    margin-#{$right}: 3.2rem;
+    display: inline-block;
+    vertical-align: top;
+  }
+
   @include breakpoint($only-mobile) {
     display: none;
   }
 
-  &__link {
+  &__link,
+  &__tab a {
     font-size: 0.875rem;
     color: $brownish-grey;
     line-height: 2.14;
     text-decoration: none;
   }
+
+  &--help,
+  &--category,
+  &--about {
+    @include breakpoint($tablet) {
+      margin-#{$right}: 5.3rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 3rem;
+    }
+
+    @include breakpoint($desktop-wide) {
+      margin-#{$right}: 4.5rem;
+    }
+  }
 }
 
 .c-footer-menu--about,
-.c-footer-menu--help {
+.c-footer-menu--help,
+.c-footer-menu--category {
   display: inline-block;
-  margin-#{$right}: 1.625rem;
-  vertical-align: top;
 
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
 
     @include breakpoint($only-mobile) {
-      margin: 15px 0;
+      margin: 0.938rem 0;
       background-color: rgba(255, 255, 255, 0.25);
-      background-image: url("../imgs/icons/icon-chevron-next.svg");
-      background-position: right;
+      background-image: url("../imgs/icons/icon-chevron-#{$next}.svg");
+      background-position: $right;
       background-repeat: no-repeat;
-      background-size: 7px;
+      background-size: 0.438rem;
     }
   }
 
@@ -63,27 +92,27 @@
     border-top: 1px solid $white;
     margin: 0;
     padding: 0 0.75em;
-    text-align: left;
+    text-align: $left;
   }
 }
 
 .alshaya-newsletter-subscribe {
-  margin: 0 8px 2.5rem;
-  display: inline-block;
+  margin: 0 0.5rem 2.5rem;
 
   @include breakpoint($tablet) {
-    float: right;
-    width: 42%;
+    float: $right;
+    max-width: 22.31rem;
     margin: 0;
+    display: inline-block;
   }
 
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
-    text-align: center;
+    text-transform: lowercase;
 
-    @include breakpoint($tablet) {
-      text-align: left;
+    @include breakpoint($only-mobile) {
+      text-align: center;
     }
   }
 
@@ -92,16 +121,34 @@
   }
 
   .form-item {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: $brownish-grey;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
 
     label {
       line-height: 1.36;
       display: inline-block;
       width: 100%;
+      position: absolute;
+      top: 0;
+      font-size: 13px;
+
+      @include breakpoint($desktop-wide) {
+        width: 22.31rem;
+      }
 
       @include breakpoint($only-mobile) {
-        text-align: center;
+        left: 0;
+      }
+
+      &#edit-email-error {
+        right: 0;
+        top: 100%;
+        color: $red-error;
+        padding: 0.25em 0;
       }
     }
   }
@@ -109,24 +156,57 @@
   #edit-email {
     border-bottom: 1px solid $brownish-grey;
     border-width: 0 0 1px;
-    margin-top: 1.6rem;
+    margin-top: 2.5rem;
     width: 100%;
-    height: 37px;
+    height: 2.2rem;
+    outline: transparent;
+
+    @include breakpoint($tablet) {
+      width: 18.188rem;
+    }
   }
 
   #edit-submit {
-    background: $windows-blue;
-    color: $white-five;
-    padding: 10px 22px;
-    border: 0;
+    @extend %btn;
+
+    background: $peacock-blue;
     position: absolute;
-    right: 0;
-    bottom: 1px;
+    #{$right}: 0;
+    bottom: 0;
+    border-radius: 0;
   }
 }
 
-.menu--help {
+.c-footer-menu--help {
+  max-width: 3.25em;
+
   @include breakpoint($only-mobile) {
-    margin-bottom: 2em;
+    margin-bottom: 4em;
+    border-bottom: 1px solid $white;
+    max-width: 100%;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin: 11em -13em;
+    vertical-align: top;
+  }
+}
+
+.c-footer-menu--about {
+  max-width: 100%;
+
+  @include breakpoint($tablet) {
+    max-width: 8.5em;
+  }
+
+  @include breakpoint($only-tablet) {
+    vertical-align: top;
+  }
+}
+
+.c-footer-menu--about,
+.c-footer-menu--help, {
+  .c-footer-menu {
+    width: 100%;
   }
 }

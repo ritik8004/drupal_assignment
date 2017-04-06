@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_captcha_modules_installed($modules) {
+  $config_factory = \Drupal::configFactory();
+  // Set captcha setting.
+  $config_factory->getEditable('captcha.settings')->set('default_challenge', 'recaptcha/reCAPTCHA')->save();
+  // Set captcha-point setting.
+  $config_factory->getEditable('captcha.captcha_point.user_register_form')->set('status', TRUE)->save();
+
+  // Update/Set settings for 'login' captcha point entity.
+  $login_captcha_point_config = $config_factory->getEditable('captcha.captcha_point.user_login_form');
+  $login_captcha_point = $login_captcha_point_config->get();
+  $login_captcha_point['status'] = TRUE;
+  $login_captcha_point['dependencies'] = [
+    'module' => ['alshaya_captcha'],
+  ];
+  $login_captcha_point['third_party_settings'] = [
+    'alshaya_captcha' => [
+      'captcha_delay_attempts' => 5,
+    ],
+  ];
+  $login_captcha_point_config->setData($login_captcha_point)->save();
+
+  // Update/Set settings for 'user_pass' (forget password) captcha point entity.
+  $forget_pass_captcha_point_config = $config_factory->getEditable('captcha.captcha_point.user_pass');
+  $forget_pass_captcha_point = $forget_pass_captcha_point_config->get();
+  $forget_pass_captcha_point['status'] = TRUE;
+  $forget_pass_captcha_point['dependencies'] = [
+    'module' => ['alshaya_captcha'],
+  ];
+  $forget_pass_captcha_point['third_party_settings'] = [
+    'alshaya_captcha' => [
+      'captcha_delay_attempts' => 5,
+    ],
+  ];
+  $forget_pass_captcha_point_config->setData($forget_pass_captcha_point)->save();
+}

@@ -1,13 +1,17 @@
-name: alshaya_i18n
+name: 'Alshaya i18n'
 type: module
 core: 8.x
+package: Alshaya
+description: 'All settings and custom code around internationalisation.'
 dependencies:
+  - alshaya_advanced_page
+  - alshaya_custom
   - block
-  - content_translation
   - config_translation
-  - locale
+  - content_translation
   - language
+  - locale
+  - menu_link_content
   - system
   - views
-  - alshaya_custom
 version: 8.x-1.0

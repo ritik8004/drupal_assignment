@@ -3,15 +3,23 @@ langcode: en
 status: true
 dependencies:
   config:
+    - acq_sku.type.simple
+    - core.entity_view_mode.acq_sku.teaser
     - image.style.thumbnail
   module:
-    - acq_sku
     - image
 id: acq_sku.simple.teaser
 targetEntityType: acq_sku
 bundle: simple
 mode: teaser
 content:
+  attr_special_price:
+    label: above
+    type: string
+    weight: 3
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
   image:
     label: hidden
     type: image
@@ -31,7 +39,13 @@ content:
     label: hidden
     type: string
     weight: 1
-    settings: {  }
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
 hidden:
+  attr_color: true
+  attr_size: true
+  attributes: true
+  crosssell: true
   sku: true
+  upsell: true

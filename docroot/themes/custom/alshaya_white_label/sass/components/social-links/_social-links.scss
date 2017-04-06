@@ -4,20 +4,18 @@
     bottom: 1rem;
     left: 50%;
     transform: translate(-50%, 0);
-    min-width: 240px;
+    min-width: 15rem;
   }
 
   @include breakpoint($tablet) {
-    float: right;
-    clear: right;
-    text-align: right;
-    margin-top: 1rem;
-    min-width: 316px;
+    min-width: 18.188em;
+    position: absolute;
+    top: 25%;
+    #{$right}: 0;
   }
 
   @include breakpoint($desktop) {
-    max-width: 537px;
-    width: 100%;
+    top: 55%;
   }
 
   ul {

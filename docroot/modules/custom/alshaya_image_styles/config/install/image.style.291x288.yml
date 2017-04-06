@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 291x288
+label: 291x288
+effects:
+  36489ecb-4873-4cd3-8e74-cb022d0422f5:
+    uuid: 36489ecb-4873-4cd3-8e74-cb022d0422f5
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 291
+      height: 288

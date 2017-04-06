@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya user.
+ */
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_user_modules_installed($modules) {
+  // Disable password strength indicator.
+  \Drupal::configFactory()->getEditable('user.settings')->set('password_strength', FALSE)->save();
+
+  // Disable user to set own timezone.
+  \Drupal::configFactory()->getEditable('system.date')->set('timezone.user.configurable', FALSE)->save();
+
+  // Disable user contact form by default.
+  \Drupal::configFactory()->getEditable('contact.settings')->set('user_default_enabled', FALSE)->save();
+
+  // Set user account form display settings.
+  $userConfig = \Drupal::configFactory()->getEditable('core.entity_form_display.user.user.default');
+  $content = $userConfig->get('content');
+  $content['account']['weight'] = 2;
+  $content['field_first_name'] = [
+    'weight' => 0,
+    'type' => 'string_textfield',
+    'settings' => [
+      'size' => 60,
+      'placeholder' => '',
+    ],
+    'third_party_settings' => [],
+  ];
+  $content['field_last_name'] = [
+    'weight' => 1,
+    'type' => 'string_textfield',
+    'settings' => [
+      'size' => 60,
+      'placeholder' => '',
+    ],
+    'third_party_settings' => [],
+  ];
+  $content['field_privilege_card_number'] = [
+    'weight' => 3,
+    'type' => 'string_textfield',
+    'settings' => [
+      'size' => 60,
+      'placeholder' => '',
+    ],
+    'third_party_settings' => [],
+  ];
+  $content['field_terms_and_condition'] = [
+    'weight' => 4,
+    'type' => 'boolean_checkbox',
+    'settings' => [
+      'display_label' => TRUE,
+    ],
+    'third_party_settings' => [],
+  ];
+  unset($content['acq_customer_id']);
+  unset($content['contact']);
+  unset($content['langcode']);
+  unset($content['language']);
+  $userConfig->set('content', $content)->save();
+  $hidden = $userConfig->get('hidden');
+  $hidden['acq_customer_id'] = TRUE;
+  $hidden['contact'] = TRUE;
+  $hidden['langcode'] = TRUE;
+  $hidden['language'] = TRUE;
+  $userConfig->set('hidden', $hidden)->save();
+
+  // Set default configuration for user mails from registration password module.
+  $config = \Drupal::configFactory()->getEditable('user_registrationpassword.settings');
+  $config->set('registration', USER_REGISTRATIONPASSWORD_VERIFICATION_PASS);
+  $config->set('register_subject', 'Account details for [user:display-name] at [site:name]');
+  $config->set('register_body', '[user:display-name],
+
+Thank you for registering at [site:name]. You may now log in by clicking this link or copying and pasting it into your browser:
+
+[user:registrationpassword-url]
+
+This link can only be used once to log in and will lead you to a page where you can set your password.
+
+After setting your password, you will be able to log in at [site:login-url] in the future using:
+
+username: [user:name]
+password: Your password
+
+--  [site:name] team');
+  $config->save();
+
+  // Disable account activation mail.
+  \Drupal::configFactory()->getEditable('user.settings')->set('notify.status_activated', FALSE)->save();
+}

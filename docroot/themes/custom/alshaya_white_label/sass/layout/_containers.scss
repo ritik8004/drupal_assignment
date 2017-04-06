@@ -37,9 +37,51 @@
 
   .c-content__secondary {
     @include breakpoint($desktop) {
-      max-width: 420px;
+      max-width: 26.25rem;
       width: 32.71%;
       float: $right;
+    }
+  }
+}
+
+// Two Column 1050
+.l-column--two-1050 {
+  @extend %l-container--center;
+
+  padding: 0 0.5rem;
+
+  main {
+    @include breakpoint($desktop) {
+      width: 50%;
+      float: $left;
+    }
+  }
+
+  .c-sidebar-second {
+    font-size: 0.75em;
+
+    @include breakpoint($tablet) {
+      border-#{$left}: 1px solid $white;
+    }
+
+    @include breakpoint($desktop) {
+      width: 50%;
+      float: $right;
+      margin-bottom: 3.125rem;
+
+      &__region {
+        max-width: 13.25rem;
+        margin: 0 auto;
+
+        @include breakpoint($tablet) {
+          max-width: 30.25rem;
+          padding-#{$left}: 10em;
+        }
+
+        > div {
+          max-width: 16rem;
+        }
+      }
     }
   }
 }

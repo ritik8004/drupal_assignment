@@ -8,7 +8,7 @@
 
 <article {{ attributes.addClass(classes) }}>
   <div class="c-content">
-    <div class="l-container {{ content.field_related_info | render ? 'l-column--two' : 'l-column--one' }}">
+    <div class="l-container {{ show_right_sidebar ? 'l-column--two' : 'l-column--one' }}">
       {% if content.field_banner %}
         <div class="c-content__banner">
           {{ content.field_banner }}
@@ -40,10 +40,11 @@
           {% endif %}
           <div class="c-content__body">
             {{ content.body }}
+            {{ content.field_promo_blocks }}
           </div>
         </div>
 
-        {% if content.field_related_info | render %}
+        {% if show_right_sidebar %}
           <div class="c-content__secondary c-related-info">
             {{ content.field_related_info }}
           </div>

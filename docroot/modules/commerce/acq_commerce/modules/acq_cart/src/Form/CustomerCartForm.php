@@ -181,7 +181,7 @@ class CustomerCartForm extends FormBase {
 
     $this->cartStorage->updateCart();
 
-    if ($form_state->getUserInput()['op'] == 'Checkout') {
+    if ($form_state->getTriggeringElement()['#parents'][0] == 'checkout') {
       $form_state->setRedirect('acq_checkout.form');
     } else {
       drupal_set_message(t('Your cart has been updated.'));

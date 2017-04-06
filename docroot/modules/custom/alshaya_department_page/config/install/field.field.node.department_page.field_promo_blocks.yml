@@ -1,0 +1,70 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_promo_blocks
+    - node.type.department_page
+    - paragraphs.paragraphs_type.1_row_1_col_dept
+    - paragraphs.paragraphs_type.1_row_2_col_1_2_dept
+    - paragraphs.paragraphs_type.1_row_2_col_2_1_dept
+    - paragraphs.paragraphs_type.1_row_2_col_dept
+    - paragraphs.paragraphs_type.1_row_3_col_dept
+  module:
+    - entity_reference_revisions
+id: node.department_page.field_promo_blocks
+field_name: field_promo_blocks
+entity_type: node
+bundle: department_page
+label: 'Promo Blocks'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      1_row_1_col_dept: 1_row_1_col_dept
+      1_row_2_col_1_2_dept: 1_row_2_col_1_2_dept
+      1_row_2_col_2_1_dept: 1_row_2_col_2_1_dept
+      1_row_2_col_dept: 1_row_2_col_dept
+      1_row_3_col_dept: 1_row_3_col_dept
+    target_bundles_drag_drop:
+      1_row_1_col:
+        weight: 13
+        enabled: false
+      1_row_1_col_dept:
+        enabled: true
+        weight: 14
+      1_row_1st_col_2_row_2nd_col:
+        weight: 15
+        enabled: false
+      1_row_2_col_1_2_dept:
+        enabled: true
+        weight: 16
+      1_row_2_col_2_1_dept:
+        enabled: true
+        weight: 17
+      1_row_2_col_dept:
+        enabled: true
+        weight: 18
+      1_row_3_col:
+        weight: 19
+        enabled: false
+      1_row_3_col_dept:
+        enabled: true
+        weight: 20
+      banner:
+        weight: 21
+        enabled: false
+      banner_full_width:
+        weight: 22
+        enabled: false
+      promo_block:
+        weight: 23
+        enabled: false
+      related_info_one_column:
+        weight: 24
+        enabled: false
+field_type: entity_reference_revisions

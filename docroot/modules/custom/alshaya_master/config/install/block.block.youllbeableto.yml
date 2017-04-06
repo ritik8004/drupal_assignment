@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:1a2425f6-8986-4e40-a30a-88ffebf18c53'
+  module:
+    - block_content
+    - system
+  theme:
+    - alshaya_white_label
+id: youllbeableto
+theme: alshaya_white_label
+region: sidebar_second
+weight: -13
+provider: null
+plugin: 'block_content:1a2425f6-8986-4e40-a30a-88ffebf18c53'
+settings:
+  id: 'block_content:1a2425f6-8986-4e40-a30a-88ffebf18c53'
+  label: 'You’ll be able to'
+  provider: block_content
+  label_display: visible
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: "/user/register\r\n/user/login"
+    negate: false
+    context_mapping: {  }

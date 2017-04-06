@@ -1,9 +1,11 @@
-name: 'Image Styles'
+name: 'Alshaya Image Styles'
 type: module
 core: 8.x
+description: 'All the image styles.'
 dependencies:
   - block
   - image
+  - responsive_image
   - system
   - views
 version: 8.x-1.0

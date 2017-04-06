@@ -7,9 +7,9 @@ dependencies:
     - content_translation
 third_party_settings:
   content_translation:
-    enabled: false
+    enabled: true
 id: node.advanced_page
 target_entity_type_id: node
 target_bundle: advanced_page
 default_langcode: site_default
-language_alterable: false
+language_alterable: true

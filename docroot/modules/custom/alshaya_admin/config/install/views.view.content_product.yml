@@ -466,7 +466,7 @@ display:
           group_type: group
           admin_label: ''
           operator: '='
-          value: '1'
+          value: All
           group: 1
           exposed: true
           expose:
@@ -476,7 +476,7 @@ display:
             use_operator: false
             operator: status_op
             identifier: status
-            required: true
+            required: false
             remember: false
             multiple: false
             remember_roles:
@@ -500,7 +500,7 @@ display:
           entity_field: status
           plugin_id: boolean
       sorts: {  }
-      title: Content
+      title: Products
       empty:
         area_text_custom:
           id: area_text_custom
@@ -543,7 +543,7 @@ display:
       path: admin/content/product
       menu:
         type: tab
-        title: Product
+        title: Products
         description: ''
         expanded: false
         parent: system.admin_content

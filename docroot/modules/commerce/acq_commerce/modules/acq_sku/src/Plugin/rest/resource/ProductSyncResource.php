@@ -59,6 +59,11 @@ class ProductSyncResource extends ResourceBase {
   private $queryFactory;
 
   /**
+   * @var DownloadImagesQueue $downloadImagesQueueManager
+   */
+  private $downloadImagesQueueManager = NULL;
+
+  /**
    * Construct
    *
    * @param array $configuration
@@ -191,12 +196,6 @@ class ProductSyncResource extends ResourceBase {
         $sku->price->value = $product['price'];
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
-        // Update upsell linked SKUs.
-        $this->updateLinkedSkus('upsell', $sku, $product['linked']);
-
-        // Update crosssell linked SKUs.
-        $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
-
         $this->logger->info(
           'Updating product SKU @sku.',
           array('@sku' => $product['sku'])
@@ -212,12 +211,6 @@ class ProductSyncResource extends ResourceBase {
           'attributes' => $this->formatProductAttributes($product['attributes']),
         ));
 
-        // Update upsell linked SKUs.
-        $this->updateLinkedSkus('upsell', $sku, $product['linked']);
-
-        // Update crosssell linked SKUs.
-        $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
-
         $display = $this->createDisplayNode($product);
 
         $this->logger->info(
@@ -227,6 +220,15 @@ class ProductSyncResource extends ResourceBase {
 
         $created++;
       }
+
+      // Update the fields based on the values from attributes.
+      $this->updateAttributeFields($sku, $product['attributes']);
+
+      // Update upsell linked SKUs.
+      $this->updateLinkedSkus('upsell', $sku, $product['linked']);
+
+      // Update crosssell linked SKUs.
+      $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
 
       $plugin_manager = \Drupal::service('plugin.manager.sku');
       $plugin_definition = $plugin_manager->pluginFromSKU($sku);
@@ -238,6 +240,9 @@ class ProductSyncResource extends ResourceBase {
       }
 
       $sku->save();
+
+      // Update fields based on the values from attributes that require SKU id.
+      $this->updateAttributeFieldsPostSave($sku, $product['attributes']);
 
       if ($display) {
         $display->save();
@@ -282,6 +287,9 @@ class ProductSyncResource extends ResourceBase {
     ));
 
     $node->setPublished(FALSE);
+
+    // Invoke the alter hook to allow all modules to update the node.
+    \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
 
     return($node);
   }
@@ -353,6 +361,10 @@ class ProductSyncResource extends ResourceBase {
       $node = $this->entityManager->getStorage('node')->load($nid);
       if ($node && $node->id()) {
         $node->field_category = $categories;
+
+        // Invoke the alter hook to allow all modules to update the node.
+        \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
+
         $node->save();
       }
     }
@@ -397,6 +409,83 @@ class ProductSyncResource extends ResourceBase {
 
     foreach ($fieldData as $delta => $value) {
       $sku->{$type}->set($delta, $value);
+    }
+  }
+
+  /**
+   * updateAttributeFields
+   *
+   * Update the fields based on the values from attributes.
+   *
+   * @param SKU $sku
+   * @param array $attributes
+   */
+  private function updateAttributeFields(SKU $sku, array $attributes) {
+    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+
+    // Loop through all the attributes available for this particular SKU.
+    foreach ($attributes as $key => $value) {
+      // Check if attribute is required by us.
+      if (isset($additionalFields[$key])) {
+        $field = $additionalFields[$key];
+
+        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+        $field_key = 'attr_' . $key;
+
+        switch ($field['type']) {
+          case 'string':
+            $sku->{$field_key}->setValue($value);
+            break;
+
+          case 'image':
+            // We will manage this post save.
+            break;
+        }
+      }
+    }
+  }
+
+  /**
+   * updateAttributeFieldsPostSave
+   *
+   * Update the fields based on the values from attributes.
+   * We need the SKU id for some cases which will be handled in this.
+   *
+   * @param SKU $sku
+   * @param array $attributes
+   */
+  private function updateAttributeFieldsPostSave(SKU $sku, array $attributes) {
+    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+
+    // Loop through all the attributes available for this particular SKU.
+    foreach ($attributes as $key => $value) {
+      // Check if attribute is required by us.
+      if (isset($additionalFields[$key])) {
+        $field = $additionalFields[$key];
+
+        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+        $field_key = 'attr_' . $key;
+
+        switch ($field['type']) {
+          case 'string':
+            // Already managed in pre-save.
+            break;
+
+          case 'image':
+            // Initialise queue manager if not already done.
+            if (empty($this->downloadImagesQueueManager)) {
+              $this->downloadImagesQueueManager = \Drupal::service('acq_sku.download_images_queue');
+            }
+
+            // @TODO: Enhance the process by checking if the same image is
+            // already there during update.
+            foreach ($value as $index => $val) {
+              $this->downloadImagesQueueManager->addItem($sku->id(), $field_key, $index, $val);
+            }
+
+            break;
+        }
+      }
     }
   }
 

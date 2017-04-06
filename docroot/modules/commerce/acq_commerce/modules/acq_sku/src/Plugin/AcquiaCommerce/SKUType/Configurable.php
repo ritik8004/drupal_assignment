@@ -14,6 +14,7 @@ use Drupal\acq_cart\Entity\LineItem;
 use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
+use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
  * Defines the configurable SKU type
@@ -218,7 +219,15 @@ class Configurable extends SKUPluginBase {
 
       $cart->addItemToCart($tree_pointer->getSKU(), $quantity);
 
-      \Drupal::service('acq_cart.cart_storage')->updateCart();
+      try {
+        \Drupal::service('acq_cart.cart_storage')->updateCart();
+      }
+      catch (\Exception $e) {
+        // Dispatch event so action can be taken.
+        $dispatcher = \Drupal::service('event_dispatcher');
+        $event = new AddToCartErrorEvent($e);
+        $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
+      }
     }
     else {
       drupal_set_message(t('The current selection does not appear to be valid.'));
@@ -242,7 +251,7 @@ class Configurable extends SKUPluginBase {
       $sku_name = $product['sku'];
 
       $skus[] = ['value' => $sku_name];
-      
+
       if (empty($sku_entity)) {
         continue;
       }
@@ -281,7 +290,9 @@ class Configurable extends SKUPluginBase {
 
     foreach ($sku->field_configured_skus as $child_sku) {
       $child_sku = SKU::loadFromSKU($child_sku->getString());
-      $tree['products'][$child_sku->getSKU()] = $child_sku;
+      if (!empty($child_sku)) {
+        $tree['products'][$child_sku->getSKU()] = $child_sku;
+      }
     }
 
     $configurables = unserialize(

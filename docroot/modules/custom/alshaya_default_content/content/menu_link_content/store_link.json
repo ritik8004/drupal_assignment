@@ -1,0 +1,136 @@
+{
+  "_links": {
+    "self": {
+      "href": "http:\/\/local.alshaya.com\/admin\/structure\/menu\/item\/4\/edit?_format=hal_json"
+    },
+    "type": {
+      "href": "http:\/\/drupal.org\/rest\/type\/menu_link_content\/menu_link_content"
+    },
+    "http:\/\/drupal.org\/rest\/relation\/menu_link_content\/menu_link_content\/content_translation_uid": [
+      {
+        "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json",
+        "lang": "en"
+      }
+    ]
+  },
+  "uuid": [
+    {
+      "value": "f2aa29eb-c39c-4d4b-a14e-7834d3e95ec5"
+    }
+  ],
+  "langcode": [
+    {
+      "value": "en",
+      "lang": "en"
+    }
+  ],
+  "bundle": [
+    {
+      "value": "menu_link_content"
+    }
+  ],
+  "title": [
+    {
+      "value": "STORES",
+      "lang": "en"
+    }
+  ],
+  "menu_name": [
+    {
+      "value": "mobile-navigation"
+    }
+  ],
+  "link": [
+    {
+      "uri": "internal:\/store",
+      "title": "",
+      "options": {
+        "attributes": {
+          "class": "no--desktop store",
+          "target": ""
+        }
+      }
+    }
+  ],
+  "external": [
+    {
+      "value": "0"
+    }
+  ],
+  "rediscover": [
+    {
+      "value": "1"
+    }
+  ],
+  "weight": [
+    {
+      "value": "-48"
+    }
+  ],
+  "expanded": [
+    {
+      "value": "0"
+    }
+  ],
+  "enabled": [
+    {
+      "value": "1"
+    }
+  ],
+  "changed": [
+    {
+      "value": "1490868561",
+      "lang": "en"
+    }
+  ],
+  "default_langcode": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "content_translation_source": [
+    {
+      "value": "und",
+      "lang": "en"
+    }
+  ],
+  "content_translation_outdated": [
+    {
+      "value": "0",
+      "lang": "en"
+    }
+  ],
+  "_embedded": {
+    "http:\/\/drupal.org\/rest\/relation\/menu_link_content\/menu_link_content\/content_translation_uid": [
+      {
+        "_links": {
+          "self": {
+            "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json"
+          },
+          "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+          }
+        },
+        "uuid": [
+          {
+            "value": "7e13d5ef-9d5a-4e51-8840-c723d12d58e6"
+          }
+        ],
+        "lang": "en"
+      }
+    ]
+  },
+  "content_translation_status": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "content_translation_created": [
+    {
+      "value": "1490868031",
+      "lang": "en"
+    }
+  ]
+}

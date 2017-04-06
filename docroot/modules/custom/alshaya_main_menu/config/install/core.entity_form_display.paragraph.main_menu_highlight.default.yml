@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.main_menu_highlight.field_highlight_image
+    - field.field.paragraph.main_menu_highlight.field_highlight_link
+    - image.style.thumbnail
+    - paragraphs.paragraphs_type.main_menu_highlight
+  module:
+    - image
+    - link
+    - workbench_moderation
+id: paragraph.main_menu_highlight.default
+targetEntityType: paragraph
+bundle: main_menu_highlight
+mode: default
+content:
+  field_highlight_image:
+    type: image_image
+    weight: 6
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    third_party_settings: {  }
+  field_highlight_link:
+    weight: 7
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+hidden:
+  created: true
+  status: true
+  uid: true

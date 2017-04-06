@@ -1,0 +1,411 @@
+.alias--cart-checkout-billing,
+.alias--cart-checkout {
+  #address_wrapper .form-item,
+  .form-item-billing-information-email {
+    margin-top: 2.5rem;
+    position: relative;
+  }
+
+  .form-item-billing-information-email {
+    max-width: 24.75rem;
+  }
+
+  .l-container.page-standard {
+    @extend %l-container--full;
+
+    margin-top: 2rem;
+  }
+
+  main {
+    @include breakpoint($desktop) {
+      max-width: 735px;
+      width: 57.24%;
+      float: $left;
+    }
+  }
+
+  .c-sidebar-second {
+    @include breakpoint($desktop) {
+      max-width: 26.25rem;
+      width: 32.71%;
+      float: $right;
+    }
+  }
+
+  .multistep-default {
+    & > a {
+      position: absolute;
+      color: $windows-blue;
+      bottom: 1.375rem;
+      #{$left}: 1.563rem;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: bold;
+      z-index: 10;
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+
+  .multistep-default {
+    font-size: 12px;
+    color: $brownish-grey;
+    line-height: 1.43;
+    border: 1px solid $greyish;
+    position: relative;
+
+    #address_wrapper {
+      max-width: 24.75rem;
+    }
+
+    @include breakpoint($tablet) {
+      font-size: 0.875em;
+    }
+
+    .form-submit {
+      @extend %btn;
+
+      background: $pumpkin-orange;
+      margin-top: 1em;
+      width: 100%;
+
+      @include breakpoint($tablet) {
+        width: auto;
+      }
+    }
+
+    .js-form-type-textfield {
+      label {
+        font-size: 16px;
+        color: $greyish;
+        position: absolute;
+        pointer-events: none;
+        left: 0;
+        top: -0.125rem;
+        transition: 0.2s ease all;
+      }
+    }
+
+    .js-form-type-textfield {
+      label.option {
+        position: relative;
+        top: 0;
+        font-size: 12px;
+      }
+    }
+
+    .error {
+      position: relative !important;
+      font-size: 12px !important;
+      color: $red-error !important;
+    }
+
+    #edit-billing-information {
+      input {
+        border: 1px solid $brownish-grey;
+        border-width: 0 0 1px;
+        padding: 0.35rem 0 0.4rem;
+        width: 100%;
+        height: 1.563rem;
+        outline: transparent;
+        font-size: 16px;
+
+        &::placeholder {
+          opacity: 0;
+          visibility: hidden;
+          color: $white-five;
+        }
+      }
+
+      &:focus,
+      &:active,
+      &.valid {
+        border-color: $windows-blue;
+        background: transparent;
+      }
+    }
+
+    input.error {
+      border-color: $red-error;
+      border-width: 0 0 2px;
+
+      &:focus,
+      &.active {
+        border-color: $red-error;
+      }
+    }
+  }
+
+  input:focus ~ label.form-required,
+  input:not(:focus):valid ~ label.form-required {
+    top: -1.25em;
+    bottom: 0;
+    #{$left}: 0;
+    opacity: 1;
+    font-size: 12px;
+  }
+
+  .ui-widget {
+    display: inline-block;
+    width: 100%;
+
+    .ui-accordion-header {
+      font-size: 12px;
+      color: $brownish-grey;
+      background: $white-four;
+      border-radius: 0;
+      border: 0;
+      padding: 1.563rem 1.25rem;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      width: 100%;
+      list-style: none;
+      display: inline-block;
+      border-top: 1px solid $white;
+      padding: 1.563rem;
+    }
+
+    .left {
+      float: $left;
+      width: 20%;
+    }
+
+    .right {
+      float: $right;
+      width: 80%;
+
+      a,
+      span {
+        text-decoration: none;
+        font-size: 13px;
+      }
+
+      > span {
+        display: block;
+      }
+
+      .product-name {
+        margin-bottom: 5px;
+      }
+
+      .product-qty {
+        color: $greyish;
+        margin-bottom: 3px;
+      }
+    }
+
+    .ui-accordion-header-icon {
+      background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
+      #{$left}: 92%;
+      transform: rotate(90deg);
+    }
+
+    .ui-icon-triangle-1-e {
+      transform: rotate(0deg);
+    }
+
+    .ui-accordion-content {
+      border: none;
+      padding: 0;
+    }
+  }
+
+  .fieldset-legend {
+    font-size: 1rem;
+    color: $peacock-blue;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $greyish;
+  }
+
+  .fieldset-legend,
+  legend {
+    display: block;
+    width: 100%;
+  }
+
+  #edit-billing-information {
+    border: none;
+    margin-top: 1.563rem;
+    padding: 1.563rem;
+  }
+
+  .form-item-billing-information-address-first-name {
+    padding-right: 1rem;
+  }
+
+  .form-item-billing-information-address-first-name,
+  .form-item-billing-information-address-last-name {
+    width: 49%;
+    display: inline-block;
+  }
+
+  .form-item-billing-information-address-dynamic-parts-region,
+  .form-item-billing-information-address-dynamic-parts-country {
+    label {
+      display: none;
+    }
+
+    select {
+      width: 100%;
+      height: 1.563rem;
+      font-size: 16px;
+      color: $greyish;
+      border: none;
+      background: transparent;
+      border-bottom: 1px solid $brownish-grey;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -ms-progress-appearance: none;
+      border-radius: 0;
+    }
+  }
+
+  .multistep-default #edit-actions {
+    text-align: $right;
+    background: $white-four;
+    margin-top: 1rem;
+    padding: 0.9375rem 1.563rem;
+
+    input {
+      margin-top: 0;
+    }
+  }
+}
+
+.acq-cart-summary {
+  .caption {
+    font-size: 14px;
+    background: $white-three;
+    padding: 1.563rem 1.25rem;
+
+    .title {
+      color: $black-two;
+    }
+
+    a {
+      text-decoration: none;
+      float: $right;
+    }
+  }
+}
+
+.totals {
+  font-size: 14px;
+  background: $white-three;
+  padding: 1.563rem 1.25rem;
+
+  .sub-total,
+  .order-total {
+    > span {
+      display: inline-block;
+      width: 45%;
+    }
+
+    .total--amount {
+      float: $right;
+    }
+  }
+
+  .order-total {
+    font-weight: bold;
+    color: $black-two;
+    margin-top: 10px;
+  }
+
+  .status {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+}
+
+// Items in the cart page.
+
+.alias--cart {
+  h1 {
+    font-size: 24px;
+    font-weight: normal;
+  }
+
+  .page-standard.l-container {
+    @extend %l-container--full;
+  }
+
+  #edit-cart {
+    width: 100%;
+
+    thead {
+      background: $white-three;
+
+      th {
+        font-size: 14px;
+        font-weight: normal;
+      }
+    }
+
+    tr {
+      display: flex;
+      padding: 0.93rem 1.563rem;
+
+      td,
+      th {
+        flex: 1;
+        text-align: left;
+      }
+    }
+
+    td {
+      img,
+      a {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      img {
+        width: 30%;
+      }
+
+      a {
+        width: 68%;
+      }
+
+      select {
+        -webkit-appearance: none;
+        border: 1px solid $white-two;
+        border-radius: 0;
+        padding: 0.5rem 0.0625rem 0.5rem 0.625rem;
+      }
+    }
+  }
+
+  #edit-totals {
+    float: $right;
+
+    td:last-child {
+      background: #f7f7f7;
+      margin-left: 1rem;
+      padding: 1rem 1.25rem;
+    }
+  }
+
+  #edit-update,
+  #edit-checkout {
+    @extend %btn;
+
+    background: $pumpkin-orange;
+    margin-top: 1em;
+  }
+
+  #edit-continue-shopping {
+    font-size: 12px;
+    border: 1px solid $peacock-blue;
+    padding: 0.625rem 1.6rem;
+  }
+}

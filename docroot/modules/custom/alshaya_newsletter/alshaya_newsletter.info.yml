@@ -1,7 +1,7 @@
-name: alshaya_newsletter
+name: 'Alshaya Newsletter'
 type: module
 description: 'Alshaya newsletter module.'
-package: Custom
+package: 'Alshaya'
 core: 8.x
 version: 8.x-1.0
 dependencies:

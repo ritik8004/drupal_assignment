@@ -1,0 +1,52 @@
+uuid: e2cb8943-5e16-45ba-95fa-a3025e613c95
+langcode: en
+status: true
+dependencies:
+  config:
+    - acq_sku.type.grouped
+    - core.entity_view_mode.acq_sku.teaser
+    - field.field.acq_sku.grouped.field_grouped_skus
+  module:
+    - image
+id: acq_sku.grouped.teaser
+targetEntityType: acq_sku
+bundle: grouped
+mode: teaser
+content:
+  attr_special_price:
+    label: above
+    type: string
+    weight: 3
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  image:
+    label: hidden
+    type: image
+    weight: 0
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+  name:
+    label: hidden
+    type: string
+    weight: 2
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  sku:
+    label: above
+    type: string
+    weight: 1
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  attr_color: true
+  attr_size: true
+  attributes: true
+  crosssell: true
+  field_grouped_skus: true
+  price: true
+  upsell: true

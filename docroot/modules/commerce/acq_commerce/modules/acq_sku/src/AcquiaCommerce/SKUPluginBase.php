@@ -113,7 +113,8 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $display_node = $this->getDisplayNode($sku);
     $url = $display_node->toUrl();
     $link = Link::fromTextAndUrl($sku->label(), $url);
-    return render($link->toRenderable());
+    $renderArray = $link->toRenderable();
+    return render($renderArray);
   }
 
   /**
@@ -125,7 +126,8 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       ->condition('field_skus', $sku->getSKU())
       ->range(0, 1);
 
-    $nid = reset($query->execute());
+    $result = $query->execute();
+    $nid = reset($result);
 
     return Node::load($nid);
   }

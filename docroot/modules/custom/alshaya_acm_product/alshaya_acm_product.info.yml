@@ -1,0 +1,8 @@
+name: 'Alshaya ACM Product'
+type: module
+description: 'All custom code around products.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm
+  - views

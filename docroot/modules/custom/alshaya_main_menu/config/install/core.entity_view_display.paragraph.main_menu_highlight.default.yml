@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.main_menu_highlight.field_highlight_image
+    - field.field.paragraph.main_menu_highlight.field_highlight_link
+    - paragraphs.paragraphs_type.main_menu_highlight
+  module:
+    - image
+    - link
+id: paragraph.main_menu_highlight.default
+targetEntityType: paragraph
+bundle: main_menu_highlight
+mode: default
+content:
+  field_highlight_image:
+    weight: 0
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+  field_highlight_link:
+    weight: 1
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+hidden: {  }

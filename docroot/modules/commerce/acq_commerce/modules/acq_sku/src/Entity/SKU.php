@@ -96,18 +96,32 @@ class SKU extends ContentEntityBase implements SKUInterface {
   }
 
   /**
+   * Query to get ids of given skus.
+   *
+   * @param array $sku
+   *   an Array of sku.
+   *
+   * @return array|int
+   */
+  public static function getSKUids(array $sku) {
+    $query = \Drupal::entityQuery('acq_sku')
+                    ->condition('sku', $sku, 'IN');
+    $ids = $query->execute();
+
+    return $ids;
+  }
+
+  /**
    * Loads a SKU Entity from SKU.
    *
    * @param $sku string - SKU to load.
    * @return SKU - Found SKU
    */
   public static function loadFromSKU($sku) {
-    $query = \Drupal::entityQuery('acq_sku')
-      ->condition('sku', $sku);
-    $ids = $query->execute();
+    $ids = SKU::getSKUids(array($sku));
 
     if (count($ids) != 1) {
-      \Drupal::logger('my_module')->error(
+      \Drupal::logger('acq_sku')->error(
         'Duplicate product or non-existent SKU @sku found while loading.',
         array('@sku' => $sku)
       );
@@ -118,6 +132,54 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $sku = SKU::load($id);
 
     return $sku;
+  }
+
+  /**
+   * Get all the cross sell sku of given skus.
+   *
+   * @param array $sku
+   *   An array of sku.
+   *
+   * @return array
+   *   Return array of cross sell skus.
+   */
+  public static function getCrossSellSKUs(array $sku) {
+    $ids = SKU::getSKUids($sku);
+    $skus = SKU::loadMultiple($ids);
+
+    $crossskus = array();
+    foreach ($skus as $sku) {
+      $crosssell = $sku->getCrossSell();
+      foreach ($crosssell as $item) {
+        $crossskus[] = $item['value'];
+      }
+    }
+
+    return $crossskus;
+  }
+
+  /**
+   * Get all the up sell sku of given skus.
+   *
+   * @param array $sku
+   *   An array of sku.
+   *
+   * @return array
+   *   Return array of up sell skus.
+   */
+  public static function getUpSellSKUs(array $sku) {
+    $ids = SKU::getSKUids($sku);
+    $skus = SKU::loadMultiple($ids);
+
+    $upsellskus = array();
+    foreach ($skus as $sku) {
+      $upSell = $sku->getUpSell();
+      foreach ($upSell as $item) {
+        $upsellskus[] = $item['value'];
+      }
+    }
+
+    return $upsellskus;
   }
 
   /**
@@ -167,6 +229,20 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   public function getOwnerId() {
     return $this->get('user_id')->target_id;
+  }
+
+  /**
+   * Get all the cross sell sku values of current entity.
+   */
+  public function getCrossSell() {
+    return $this->get('crosssell')->getValue();
+  }
+
+  /**
+   * Get all the upsell sku values of current entity.
+   */
+  public function getUpSell() {
+    return $this->get('upsell')->getValue();
   }
 
   /**
@@ -333,6 +409,74 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'));
+
+    // Get all the fields added by other modules and add them as base fields.
+    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+
+    // Get the default weight increment value from variables.
+    $defaultWeightIncrement = \Drupal::state()->get('acq_sku.base_field_weight_increment', 20);
+
+    // Check if we have additional fields to be added as base fields.
+    if (!empty($additionalFields) && is_array($additionalFields)) {
+      foreach ($additionalFields as $machine_name => $field_info) {
+        // Initialise the field variable.
+        $field = NULL;
+
+        // Showing the fields at the bottom.
+        $weight = $defaultWeightIncrement + count($fields);
+
+        switch ($field_info['type']) {
+          case 'string':
+            $field = BaseFieldDefinition::create('string');
+            $field->setDisplayOptions('view', [
+              'label' => 'above',
+              'type' => 'string',
+              'weight' => $weight,
+            ]);
+            $field->setDisplayOptions('form', [
+              'type' => 'string_textfield',
+              'weight' => $weight,
+            ]);
+            break;
+
+          case 'image':
+            $field = BaseFieldDefinition::create('image');
+            $field->setDisplayOptions('view', array(
+              'label' => 'hidden',
+              'type' => 'image',
+              'weight' => $weight,
+            ));
+
+            $field->setDisplayOptions('form', array(
+              'type' => 'image_image',
+              'weight' => $weight,
+            ));
+            break;
+        }
+
+        // Check if we don't have the field type defined yet.
+        if (empty($field)) {
+          throw new \RuntimeException('Field type not defined yet, please contact TA.');
+        }
+
+        $field->setLabel(t($field_info['label']));
+
+        // Update cardinality with default value if empty.
+        $field_info['description'] = empty($field_info['description']) ? 1 : $field_info['description'];
+        $field->setDescription(t($field_info['description']));
+
+        // Update cardinality with default value if empty.
+        $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];
+        $field->setCardinality($field_info['cardinality']);
+
+
+        $field->setDisplayConfigurable('form', TRUE);
+        $field->setDisplayConfigurable('view', TRUE);
+
+        // We will use attr prefix to avoid conflicts with default base fields.
+        $fields['attr_' . $machine_name] = $field;
+      }
+    }
 
     return $fields;
   }

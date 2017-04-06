@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_menus module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_menus_install() {
+  $storedConfig = \Drupal::configFactory()->getEditable('menu_link_attributes.config');
+  $attributes = $storedConfig->get('attributes');
+  $class_description = t('Enter value for class attribute. Please refer to user guide to check classes to be used here to apply specific styles/icons.');
+  $attributes['class']['description'] = $class_description;
+  $storedConfig->set('attributes', $attributes)->save();
+}

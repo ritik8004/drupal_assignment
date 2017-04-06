@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Implements hook_preprocess_html().
@@ -79,6 +80,21 @@ function alshaya_white_label_preprocess_node(&$variables) {
   if (!empty($variables['elements']['#entity_type'])) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('entity--type-' . $variables['elements']['#entity_type']);
   }
+  if ($variables['node']->bundle() == 'advanced_page') {
+    $node = $variables['node']->toArray();
+    // Check and set the "show_right_sidebar" variable, to show or hide sidebar.
+    // This is a workaround, because of https://www.drupal.org/node/2864220.
+    if (count($node['field_related_info']) === 1) {
+      $paragraph = Paragraph::load($node['field_related_info'][0]['target_id'])->toArray();
+      if (!empty($paragraph['field_banner']) || !empty($paragraph['field_body']) || !empty($paragraph['field_title'])) {
+        $variables['show_right_sidebar'] = TRUE;
+      }
+    }
+  }
+  elseif ($variables['node']->bundle() == 'acq_product' && $variables['elements']['#view_mode'] == 'product_list') {
+    // Hide the node title on product list/search page.
+    $variables['label'] = NULL;
+  }
 }
 
 /**
@@ -142,5 +158,35 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       if ($form['#id'] == 'views-exposed-form-search-page') {
         $form['keywords']['#attributes']['placeholder'] = t('search item or Keyword');
       }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_white_label_theme() {
+  return [
+    'customer_cart_form' => [
+      'render element' => 'form',
+      'path' => drupal_get_path('theme', 'alshaya_white_label') . '/templates/form',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  $routmatch = \Drupal::routeMatch();
+  if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routmatch->getParameter('taxonomy_term');
+    $term_depth = $term->get('depth_level')->getValue()[0]['value'];
+    if ($term_depth == 2) {
+      $suggestions[] = "page__department";
+    }
+    else {
+      $suggestions[] = "page__plp";
+    }
+
   }
 }

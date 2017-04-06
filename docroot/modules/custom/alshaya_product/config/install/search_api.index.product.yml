@@ -1,0 +1,138 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_category
+    - field.storage.node.field_skus
+    - search_api.server.database
+  module:
+    - taxonomy
+    - acq_sku
+    - file
+    - search_api
+    - node
+id: product
+name: Product
+description: ''
+read_only: false
+field_settings:
+  status:
+    label: 'Publishing status'
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+  type:
+    label: 'Content type'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+  tid:
+    label: 'Category » Taxonomy term » Term ID'
+    datasource_id: 'entity:node'
+    property_path: 'field_category:entity:tid'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_category
+      module:
+        - taxonomy
+  vid:
+    label: 'Category » Taxonomy term » Vocabulary'
+    datasource_id: 'entity:node'
+    property_path: 'field_category:entity:vid'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_category
+      module:
+        - taxonomy
+  name:
+    label: 'Category » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_category:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_category
+      module:
+        - taxonomy
+  vid_1:
+    label: 'Category » Taxonomy term » Vocabulary'
+    datasource_id: 'entity:node'
+    property_path: 'field_category:entity:vid'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_category
+      module:
+        - taxonomy
+  name_1:
+    label: 'SKUs » SKU Reference » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  price:
+    label: 'SKUs » SKU Reference » Display Price'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:price'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_color:
+    label: 'SKUs » SKU Reference » Color'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_color'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_size:
+    label: 'SKUs » SKU Reference » Size'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_size'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  uri:
+    label: 'SKUs » SKU Reference » Image » File » URI'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_image:entity:uri'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+        - file
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - acq_product
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  rendered_item: {  }
+tracker_settings:
+  default: {  }
+options:
+  index_directly: true
+  cron_limit: 50
+server: database

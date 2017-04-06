@@ -1,6 +1,7 @@
-name: Paragraphs
+name: 'Alshaya Paragraphs'
 type: module
 core: 8.x
+description: 'All the paragraphs and its fields and field settings.'
 dependencies:
   - alshaya_image_styles
   - block
@@ -12,8 +13,11 @@ dependencies:
   - lightning_core
   - link
   - paragraphs
+  - path
+  - responsive_image
   - system
   - text
+  - user
   - views
   - workbench_moderation
 version: 8.x-1.0

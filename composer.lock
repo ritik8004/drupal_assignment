@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bb6be4a230262acdeaa1f6138d23b91",
+    "content-hash": "afe12831afe5457b90fdbc9a0a31067f",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1502,17 +1502,17 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/acquia_connector",
-                "reference": "8.x-1.7"
+                "reference": "8.x-1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "42d059bdc7efe11691113040cd80be3ebcf19b35"
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.8.zip",
+                "reference": "8.x-1.8",
+                "shasum": "457e44a9a9411c4d54dfd7284a1b55e6ed5a4ed3"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -1526,8 +1526,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1480953783"
+                    "version": "8.x-1.8",
+                    "datestamp": "1490205485"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1597,7 +1597,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/acsf-8.x-1.35.zip",
-                "reference": null,
+                "reference": "8.x-1.35",
                 "shasum": "a2443e886d2abd50507114b442ed4a0c316d62d4"
             },
             "require": {
@@ -1943,6 +1943,118 @@
             }
         },
         {
+            "name": "drupal/captcha",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/captcha",
+                "reference": "8.x-1.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/captcha-8.x-1.0-beta1.zip",
+                "reference": "8.x-1.0-beta1",
+                "shasum": "5b6c701bdab332bac61f59dcc78e05578f94d8b7"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta1",
+                    "datestamp": "1487198586"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "RobLoach",
+                    "homepage": "https://www.drupal.org/user/61114"
+                },
+                {
+                    "name": "elachlan",
+                    "homepage": "https://www.drupal.org/user/1021502"
+                },
+                {
+                    "name": "naveenvalecha",
+                    "homepage": "https://www.drupal.org/user/2665733"
+                },
+                {
+                    "name": "podarok",
+                    "homepage": "https://www.drupal.org/user/116002"
+                },
+                {
+                    "name": "soxofaan",
+                    "homepage": "https://www.drupal.org/user/41478"
+                },
+                {
+                    "name": "wundo",
+                    "homepage": "https://www.drupal.org/user/25523"
+                }
+            ],
+            "description": "The CAPTCHA module provides this feature to virtually any user facing web form on a Drupal site.",
+            "homepage": "https://www.drupal.org/project/captcha",
+            "support": {
+                "source": "http://cgit.drupalcode.org/captcha"
+            }
+        },
+        {
+            "name": "drupal/clientside_validation",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/clientside_validation",
+                "reference": "f573d87376628e8b5d99ca1b014ad4c8730f42c8"
+            },
+            "require": {
+                "composer/installers": "^1.0.20",
+                "drupal/core": "~8.0",
+                "jqueryvalidate": "1.15.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-rc3+3-dev",
+                    "datestamp": "1476780325"
+                },
+                "installer-paths": {
+                    "clientside_validation_jquery/js/lib": [
+                        "type:drupal-library"
+                    ]
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Jelle_S",
+                    "homepage": "https://www.drupal.org/user/829198"
+                },
+                {
+                    "name": "attiks",
+                    "homepage": "https://www.drupal.org/user/105002"
+                }
+            ],
+            "description": "This module adds clientside validation",
+            "homepage": "https://www.drupal.org/project/clientside_validation",
+            "support": {
+                "source": "http://cgit.drupalcode.org/clientside_validation"
+            },
+            "time": "2016-10-18 08:41:35"
+        },
+        {
             "name": "drupal/coder",
             "version": "8.2.12",
             "source": {
@@ -2003,7 +2115,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.6",
-                    "datestamp": "1489502883"
+                    "datestamp": "1490994483"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2105,7 +2217,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha1",
-                    "datestamp": "1476873539"
+                    "datestamp": "1490940184"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2542,7 +2654,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/default_content-8.x-1.0-alpha4.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha4",
                 "shasum": "e4db72ccdb4e8800367c088cbf4c0648290581e3"
             },
             "require": {
@@ -2685,18 +2797,18 @@
             }
         },
         {
-            "name": "drupal/embed",
-            "version": "1.0.0-rc3",
+            "name": "drupal/email_registration",
+            "version": "1.0.0-rc4",
             "source": {
                 "type": "git",
-                "url": "https://git.drupal.org/project/embed",
-                "reference": "8.x-1.0-rc3"
+                "url": "https://git.drupal.org/project/email_registration",
+                "reference": "8.x-1.0-rc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/embed-8.x-1.0-rc3.zip",
-                "reference": "8.x-1.0-rc3",
-                "shasum": "9138d016313a47a52c6c9805fb7d034ff5105f3a"
+                "url": "https://ftp.drupal.org/files/projects/email_registration-8.x-1.0-rc4.zip",
+                "reference": "8.x-1.0-rc4",
+                "shasum": "442a441f71a254e6bc87ab7d774518838d64882e"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -2707,8 +2819,63 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc3",
-                    "datestamp": "1468176563"
+                    "version": "8.x-1.0-rc4",
+                    "datestamp": "1482843783"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Herberte",
+                    "homepage": "https://www.drupal.org/user/1171"
+                },
+                {
+                    "name": "andypost",
+                    "homepage": "https://www.drupal.org/user/118908"
+                },
+                {
+                    "name": "greggles",
+                    "homepage": "https://www.drupal.org/user/36762"
+                },
+                {
+                    "name": "moshe weitzman",
+                    "homepage": "https://www.drupal.org/user/23"
+                }
+            ],
+            "description": "Allows users to register with an e-mail address as their username.",
+            "homepage": "https://www.drupal.org/project/email_registration",
+            "support": {
+                "source": "http://cgit.drupalcode.org/email_registration"
+            }
+        },
+        {
+            "name": "drupal/embed",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/embed",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/embed-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "cc746ad807260e01c7788dd82110dcebbb4d678a"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1490755685"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2815,7 +2982,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/entity_block-8.x-1.0-alpha2.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha2",
                 "shasum": "05373f1dc52fafbf8e11543c968e42a33a6e8304"
             },
             "require": {
@@ -2954,7 +3121,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/entity_embed-8.x-1.0-beta2.zip",
-                "reference": null,
+                "reference": "8.x-1.0-beta2",
                 "shasum": "21cdeb2b058efce461683aed9a8951053512dca7"
             },
             "require": {
@@ -3022,7 +3189,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/entity_reference_revisions-8.x-1.2.zip",
-                "reference": null,
+                "reference": "8.x-1.2",
                 "shasum": "15261a4237cc2a743522a7bd81e9f34e01d12843"
             },
             "require": {
@@ -3063,6 +3230,82 @@
             "homepage": "https://www.drupal.org/project/entity_reference_revisions",
             "support": {
                 "source": "http://cgit.drupalcode.org/entity_reference_revisions"
+            }
+        },
+        {
+            "name": "drupal/facets",
+            "version": "1.0.0-alpha8",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/facets",
+                "reference": "8.x-1.0-alpha8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/facets-8.x-1.0-alpha8.zip",
+                "reference": "8.x-1.0-alpha8",
+                "shasum": "6cb469fdf9e5d924e5ed910cbe062f4a1fa995a2"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "require-dev": {
+                "drupal/search_api": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-alpha8",
+                    "datestamp": "1490003883"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "See all contributors",
+                    "homepage": "https://www.drupal.org/node/2348769/committers"
+                },
+                {
+                    "name": "StryKaizer",
+                    "homepage": "https://www.drupal.org/user/462700"
+                },
+                {
+                    "name": "borisson_",
+                    "homepage": "https://www.drupal.org/user/2393360"
+                },
+                {
+                    "name": "drunken monkey",
+                    "homepage": "https://www.drupal.org/user/205582"
+                },
+                {
+                    "name": "jurcello",
+                    "homepage": "https://www.drupal.org/user/774070"
+                },
+                {
+                    "name": "marthinal",
+                    "homepage": "https://www.drupal.org/user/387593"
+                },
+                {
+                    "name": "mr.baileys",
+                    "homepage": "https://www.drupal.org/user/383424"
+                },
+                {
+                    "name": "swentel",
+                    "homepage": "https://www.drupal.org/user/107403"
+                }
+            ],
+            "description": "The Facet module allows site builders to easily create and manage faceted search interfaces.",
+            "homepage": "https://www.drupal.org/project/facets",
+            "support": {
+                "source": "git://git.drupal.org/project/facets.git",
+                "issues": "https://www.drupal.org/project/issues/facets",
+                "irc": "irc://irc.freenode.org/drupal-search-api"
             }
         },
         {
@@ -3131,6 +3374,65 @@
             "homepage": "https://www.drupal.org/project/features",
             "support": {
                 "source": "http://cgit.drupalcode.org/features"
+            }
+        },
+        {
+            "name": "drupal/field_group",
+            "version": "1.0.0-rc4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/field_group",
+                "reference": "8.x-1.0-rc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-1.0-rc4.zip",
+                "reference": null,
+                "shasum": "085ce08ad15e68837e8f8017f81eb3f7b33cb324"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-rc4",
+                    "datestamp": "1480288380"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Hydra",
+                    "homepage": "https://www.drupal.org/user/647364"
+                },
+                {
+                    "name": "Stalski",
+                    "homepage": "https://www.drupal.org/user/322618"
+                },
+                {
+                    "name": "jyve",
+                    "homepage": "https://www.drupal.org/user/591438"
+                },
+                {
+                    "name": "swentel",
+                    "homepage": "https://www.drupal.org/user/107403"
+                },
+                {
+                    "name": "zuuperman",
+                    "homepage": "https://www.drupal.org/user/361625"
+                }
+            ],
+            "description": "Provides the field_group module.",
+            "homepage": "https://www.drupal.org/project/field_group",
+            "support": {
+                "source": "http://cgit.drupalcode.org/field_group"
             }
         },
         {
@@ -3723,7 +4025,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/menu_admin_per_menu-8.x-1.0-rc1.zip",
-                "reference": null,
+                "reference": "8.x-1.0-rc1",
                 "shasum": "9cb136b0d33ac570101f3c5e17f605ca711f208d"
             },
             "require": {
@@ -3770,7 +4072,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/menu_link_attributes-8.x-1.0-beta3.zip",
-                "reference": null,
+                "reference": "8.x-1.0-beta3",
                 "shasum": "60dbace4eca093fddf00c185396251b95d865fa0"
             },
             "require": {
@@ -3875,7 +4177,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/multiversion-8.x-1.0-alpha12.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha12",
                 "shasum": "521decbaf2af5bcbb225ab7699da6263ba5767d0"
             },
             "require": {
@@ -3993,7 +4295,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/panelizer-8.x-3.0-alpha3.zip",
-                "reference": null,
+                "reference": "8.x-3.0-alpha3",
                 "shasum": "f862ae14f47cb486cd4719242763064e7d6ac387"
             },
             "require": {
@@ -4063,7 +4365,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/panels-8.x-3.0-beta5.zip",
-                "reference": null,
+                "reference": "8.x-3.0-beta5",
                 "shasum": "3f62240b59b503902f349f2667a65c668d1e3fb2"
             },
             "require": {
@@ -4213,7 +4515,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/paragraphs-8.x-1.1.zip",
-                "reference": null,
+                "reference": "8.x-1.1",
                 "shasum": "c678e5704a98c6a0549e415412da081cfeb03a00"
             },
             "require": {
@@ -4268,6 +4570,66 @@
             "homepage": "https://www.drupal.org/project/paragraphs",
             "support": {
                 "source": "http://cgit.drupalcode.org/paragraphs"
+            }
+        },
+        {
+            "name": "drupal/password_policy",
+            "version": "3.0.0-alpha3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/password_policy",
+                "reference": "8.x-3.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/password_policy-8.x-3.0-alpha3.zip",
+                "reference": "8.x-3.0-alpha3",
+                "shasum": "efe3ac404276ab2274b29393e55f6a4b7fb58681"
+            },
+            "require": {
+                "drupal/core": "*",
+                "drupal/ctools": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-3.x": "3.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-3.0-alpha3",
+                    "datestamp": "1488135183"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "AohRveTPV",
+                    "homepage": "https://www.drupal.org/user/2760115"
+                },
+                {
+                    "name": "deekayen",
+                    "homepage": "https://www.drupal.org/user/972"
+                },
+                {
+                    "name": "miglius",
+                    "homepage": "https://www.drupal.org/user/18741"
+                },
+                {
+                    "name": "nerdstein",
+                    "homepage": "https://www.drupal.org/user/1557710"
+                },
+                {
+                    "name": "shrop",
+                    "homepage": "https://www.drupal.org/user/14767"
+                }
+            ],
+            "description": "Sets up constraints and expiration of passwords.",
+            "homepage": "https://www.drupal.org/project/password_policy",
+            "support": {
+                "source": "http://cgit.drupalcode.org/password_policy"
             }
         },
         {
@@ -4328,6 +4690,127 @@
             }
         },
         {
+            "name": "drupal/profile",
+            "version": "1.0.0-alpha5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/profile",
+                "reference": "8.x-1.0-alpha5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/profile-8.x-1.0-alpha5.zip",
+                "reference": "8.x-1.0-alpha5",
+                "shasum": "58a3efbcc2a2f6689fe3316ef471d31ca7f0fa36"
+            },
+            "require": {
+                "drupal/core": "~8.1",
+                "drupal/entity": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-alpha5",
+                    "datestamp": "1471873739"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "bojanz",
+                    "homepage": "https://www.drupal.org/user/86106"
+                },
+                {
+                    "name": "dakala",
+                    "homepage": "https://www.drupal.org/user/53175"
+                },
+                {
+                    "name": "fago",
+                    "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "mglaman",
+                    "homepage": "https://www.drupal.org/user/2416470"
+                },
+                {
+                    "name": "pcambra",
+                    "homepage": "https://www.drupal.org/user/122101"
+                }
+            ],
+            "description": "Provides configurable user profiles.",
+            "homepage": "http://drupal.org/project/profile",
+            "support": {
+                "source": "http://cgit.drupalcode.org/profile"
+            }
+        },
+        {
+            "name": "drupal/recaptcha",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/recaptcha",
+                "reference": "8.x-2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/recaptcha-8.x-2.2.zip",
+                "reference": "8.x-2.2",
+                "shasum": "99a3bda62b34ad6dac1d497fcf578e25aad0a3e0"
+            },
+            "require": {
+                "drupal/captcha": "*",
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-2.2",
+                    "datestamp": "1469859539"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "hass",
+                    "homepage": "https://www.drupal.org/u/hass"
+                },
+                {
+                    "name": "See other contributors",
+                    "homepage": "https://www.drupal.org/node/147903/committers"
+                },
+                {
+                    "name": "diolan",
+                    "homepage": "https://www.drupal.org/user/2336786"
+                },
+                {
+                    "name": "hass",
+                    "homepage": "https://www.drupal.org/user/85918"
+                },
+                {
+                    "name": "id.medion",
+                    "homepage": "https://www.drupal.org/user/2542592"
+                }
+            ],
+            "description": "Protect your website from spam and abuse while letting real people pass through with ease.",
+            "homepage": "https://www.drupal.org/project/recaptcha",
+            "support": {
+                "source": "http://git.drupal.org/project/recaptcha.git",
+                "issues": "https://www.drupal.org/project/issues/recaptcha"
+            }
+        },
+        {
             "name": "drupal/replication",
             "version": "1.0.0-alpha5",
             "source": {
@@ -4338,7 +4821,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/replication-8.x-1.0-alpha5.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha5",
                 "shasum": "c93cf5c84c2fe58ac5969c89a060cb37bebcce60"
             },
             "require": {
@@ -4459,7 +4942,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/scheduled_updates-8.x-1.0-alpha5.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha5",
                 "shasum": "05e431fba49f6acc34276b7e055725398c239428"
             },
             "require": {
@@ -4473,7 +4956,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha5",
-                    "datestamp": "1489190883"
+                    "datestamp": "1453656839"
                 },
                 "patches_applied": {
                     "2674874 - Issue saving Schedule Update Type form": "https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch",
@@ -4527,7 +5010,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta4",
-                    "datestamp": "1483286941"
+                    "datestamp": "1491153783"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4567,7 +5050,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/search_api_solr-8.x-1.0-beta1.zip",
-                "reference": null,
+                "reference": "8.x-1.0-beta1",
                 "shasum": "2b8c127d5da0124f61aab80979b3313ae22d9b82"
             },
             "require": {
@@ -4790,7 +5273,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/taxonomy_access_fix-8.x-2.1.zip",
-                "reference": null,
+                "reference": "8.x-2.1",
                 "shasum": "8bc5416c2357c3cfe7914d35d84ff9cad1f529e7"
             },
             "require": {
@@ -4821,6 +5304,47 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_access_fix"
             }
+        },
+        {
+            "name": "drupal/taxonomy_term_depth",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/taxonomy_term_depth",
+                "reference": "94def9d21d76ea23e9a0373481aa4470f30a6ee7"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.x-dev",
+                    "datestamp": "1486726083"
+                },
+                "patches_applied": {
+                    "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Cadila",
+                    "homepage": "https://www.drupal.org/user/2669241"
+                }
+            ],
+            "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
+            "homepage": "https://www.drupal.org/project/taxonomy_term_depth",
+            "support": {
+                "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
+            },
+            "time": "2017-02-10 12:17:57"
         },
         {
             "name": "drupal/token",
@@ -4887,6 +5411,53 @@
             }
         },
         {
+            "name": "drupal/user_registrationpassword",
+            "version": "1.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/user_registrationpassword",
+                "reference": "8.x-1.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/user_registrationpassword-8.x-1.0-alpha1.zip",
+                "reference": "8.x-1.0-alpha1",
+                "shasum": "0ce78e541ea3867d6faf4c8bfbc572429bb28446"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-alpha1",
+                    "datestamp": "1472948339"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Rob C",
+                    "homepage": "https://www.drupal.org/user/313382"
+                },
+                {
+                    "name": "jide",
+                    "homepage": "https://www.drupal.org/user/146088"
+                }
+            ],
+            "description": "Let users register with a password on the registration form when verification mail is required.",
+            "homepage": "https://www.drupal.org/project/user_registrationpassword",
+            "support": {
+                "source": "http://cgit.drupalcode.org/user_registrationpassword"
+            }
+        },
+        {
             "name": "drupal/video_embed_field",
             "version": "1.4.0",
             "source": {
@@ -4941,6 +5512,65 @@
             "homepage": "https://www.drupal.org/project/video_embed_field",
             "support": {
                 "source": "http://cgit.drupalcode.org/video_embed_field"
+            }
+        },
+        {
+            "name": "drupal/views_field_view",
+            "version": "1.0.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/views_field_view",
+                "reference": "8.x-1.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/views_field_view-8.x-1.0-beta2.zip",
+                "reference": "8.x-1.0-beta2",
+                "shasum": "2f9c841f5e1ac8a9f8410b6d62c715edb9987519"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta2",
+                    "datestamp": "1447937051"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "damiankloip",
+                    "homepage": "https://www.drupal.org/user/1037976"
+                },
+                {
+                    "name": "dawehner",
+                    "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "jibran",
+                    "homepage": "https://www.drupal.org/user/1198144"
+                },
+                {
+                    "name": "tizzo",
+                    "homepage": "https://www.drupal.org/user/168251"
+                },
+                {
+                    "name": "voxpelli",
+                    "homepage": "https://www.drupal.org/user/341713"
+                }
+            ],
+            "description": "Adds a view field handler to embed views inside views.",
+            "homepage": "https://www.drupal.org/project/views_field_view",
+            "support": {
+                "source": "http://cgit.drupalcode.org/views_field_view"
             }
         },
         {
@@ -5001,7 +5631,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/workbench_moderation-8.x-1.2.zip",
-                "reference": null,
+                "reference": "8.x-1.2",
                 "shasum": "3d37b29ed1e7fbf398160fe2494abc4361e4341c"
             },
             "require": {
@@ -5926,6 +6556,17 @@
                 }
             ],
             "time": "2015-04-20T18:58:01+00:00"
+        },
+        {
+            "name": "jqueryvalidate",
+            "version": "1.15.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://jqueryvalidation.org/files/jquery-validation-1.15.0.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         },
         {
             "name": "masterminds/html5",
@@ -9018,16 +9659,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.32.0",
+            "version": "v1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "9935b662e24d6e634da88901ab534cc12e8c728f"
+                "reference": "05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9935b662e24d6e634da88901ab534cc12e8c728f",
-                "reference": "9935b662e24d6e634da88901ab534cc12e8c728f",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a",
+                "reference": "05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a",
                 "shasum": ""
             },
             "require": {
@@ -9036,12 +9677,12 @@
             "require-dev": {
                 "psr/container": "^1.0",
                 "symfony/debug": "~2.7",
-                "symfony/phpunit-bridge": "~3.2"
+                "symfony/phpunit-bridge": "~3.3@dev"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.32-dev"
+                    "dev-master": "1.33-dev"
                 }
             },
             "autoload": {
@@ -9076,7 +9717,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-02-27T00:07:03+00:00"
+            "time": "2017-03-22T15:40:09+00:00"
         },
         {
             "name": "vierbergenlars/php-semver",
@@ -10453,7 +11094,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/devel-8.x-1.0-rc1.zip",
-                "reference": null,
+                "reference": "8.x-1.0-rc1",
                 "shasum": "04a01f50d508eca70e065b7eba38cd6c83a436c0"
             },
             "require": {
@@ -10742,16 +11383,16 @@
         },
         {
             "name": "geerlingguy/drupal-vm",
-            "version": "4.3.1",
+            "version": "4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/geerlingguy/drupal-vm.git",
-                "reference": "c583688403fd770299aa1516e8bd416243b6cc52"
+                "reference": "281c318d0f8958d91e745fda36820d9567c0f837"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/c583688403fd770299aa1516e8bd416243b6cc52",
-                "reference": "c583688403fd770299aa1516e8bd416243b6cc52",
+                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/281c318d0f8958d91e745fda36820d9567c0f837",
+                "reference": "281c318d0f8958d91e745fda36820d9567c0f837",
                 "shasum": ""
             },
             "type": "vm",
@@ -10777,7 +11418,7 @@
                 "virtual machine",
                 "vm"
             ],
-            "time": "2017-03-13T22:18:19+00:00"
+            "time": "2017-03-25T03:18:11+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
@@ -11326,7 +11967,12 @@
         "drupal/menu_admin_per_menu": 5,
         "drupal/menu_link_attributes": 10,
         "drupal/search_api_solr": 10,
-        "drupal/default_content": 15
+        "drupal/default_content": 15,
+        "drupal/taxonomy_term_depth": 20,
+        "drupal/captcha": 10,
+        "drupal/clientside_validation": 20,
+        "drupal/facets": 15,
+        "drupal/profile": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,

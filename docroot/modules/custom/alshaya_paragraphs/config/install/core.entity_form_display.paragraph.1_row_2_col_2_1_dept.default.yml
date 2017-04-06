@@ -1,0 +1,41 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_1
+    - field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_2
+    - paragraphs.paragraphs_type.1_row_2_col_2_1_dept
+  module:
+    - paragraphs
+    - workbench_moderation
+id: paragraph.1_row_2_col_2_1_dept.default
+targetEntityType: paragraph
+bundle: 1_row_2_col_2_1_dept
+mode: default
+content:
+  field_1_row_2_col_1:
+    weight: 7
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    type: entity_reference_paragraphs
+  field_1_row_2_col_2:
+    weight: 6
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: promo_block
+    third_party_settings: {  }
+    type: entity_reference_paragraphs
+hidden:
+  created: true
+  status: true
+  uid: true

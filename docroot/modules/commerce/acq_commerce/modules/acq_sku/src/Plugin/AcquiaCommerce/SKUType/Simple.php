@@ -13,6 +13,7 @@ use Drupal\acq_cart\Entity\Cart;
 use Drupal\acq_cart\Entity\LineItem;
 use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
  * Defines the simple SKU type
@@ -71,6 +72,14 @@ class Simple extends SKUPluginBase {
 
     $cart->addItemToCart($sku, $quantity);
 
-    \Drupal::service('acq_cart.cart_storage')->updateCart();
+    try {
+      \Drupal::service('acq_cart.cart_storage')->updateCart();
+    }
+    catch (\Exception $e) {
+      // Dispatch event so action can be taken.
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $event = new AddToCartErrorEvent($e);
+      $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
+    }
   }
 }

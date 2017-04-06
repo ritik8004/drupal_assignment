@@ -68,6 +68,16 @@ function alshaya_custom_modules_installed($modules) {
     ->set('weight', 6)
     ->save();
 
+  // Unset the Block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_powered')
+    ->set('region', '-1')
+    ->save();
+
+  // Unset the Block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_breadcrumbs')
+    ->set('region', '-1')
+    ->save();
+
   // Set search block to available on all pages.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')->set('visibility', [])->save();
 
@@ -80,9 +90,29 @@ function alshaya_custom_modules_installed($modules) {
   // Set visitor user registration.
   \Drupal::configFactory()->getEditable('user.settings')->set('register', 'visitors')->save();
 
+  // Set email verification to false to make password field visible on
+  // registration.
+  \Drupal::configFactory()->getEditable('user.settings')->set('verify_mail', FALSE)->save();
+
   // Set the 'header' region for user menu.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_account_menu')
     ->set('region', 'menu_secondary')
     ->set('weight', -11)
     ->save();
+
+  // Set the Main Navigation Block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
+    ->set('region', 'menu_primary')
+    ->set('weight', -15)
+    ->save();
+
+  // Disable the default 'content' search index.
+  \Drupal::configFactory()->getEditable('search_api.index.content')->set('status', FALSE)->save();
+
+  // Disable the default '/taxonomy/term/tid' view.
+  $term_view = \Drupal::entityTypeManager()->getStorage('view')->load('taxonomy_term');
+  if (!is_null($term_view)) {
+    $term_view->setStatus(FALSE);
+    $term_view->save();
+  }
 }

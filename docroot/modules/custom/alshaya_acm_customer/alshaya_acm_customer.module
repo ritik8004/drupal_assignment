@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['user_order_list'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'order_details' => NULL,
+      'order_not_found' => NULL,
+      'account' => NULL,
+      'search_form' => NULL,
+      'next_page_button' => NULL,
+    ],
+  ];
+
+  $items['user_order_list_item'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'order' => NULL,
+      'order_detail_link' => NULL,
+      'currency_code' => NULL,
+      'currency_code_position' => NULL,
+    ],
+  ];
+
+  $items['user_order_detail'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'order' => NULL,
+      'order_details' => NULL,
+      'products' => NULL,
+      'delivery_detail_notice' => NULL,
+      'account' => NULL,
+      'currency_code' => NULL,
+      'currency_code_position' => NULL,
+    ],
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_customer_form_multistep_default_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // When we reach the final step, clear cache of orders list for the user.
+  if (empty($form['actions']) || empty($form['actions']['next']) || empty((string) $form['actions']['next']['#value'])) {
+    \Drupal::cache()->delete('orders_list_' . \Drupal::currentUser()->id());
+  }
+}

@@ -1,11 +1,15 @@
-name: alshaya_menus
+name: 'Alshaya Menus'
 type: module
 core: 8.x
+description: 'Footer and Header menus and related code.'
 dependencies:
   - block
   - menu_admin_per_menu
   - menu_link_attributes
   - system
+  - taxonomy_term_depth
+  - user
+  - views
   - views
 version: 8.x-1.0
 package: Alshaya

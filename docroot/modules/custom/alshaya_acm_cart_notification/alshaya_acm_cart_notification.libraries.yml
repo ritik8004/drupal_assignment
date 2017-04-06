@@ -1,0 +1,6 @@
+cart_notification_js:
+  version: 1.x
+  js:
+    js/cart_notification.js: {}
+  dependencies:
+    - core/drupal.dialog

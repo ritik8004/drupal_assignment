@@ -1,0 +1,6 @@
+'access own orders':
+  title: 'View own order details and list'
+
+'access all orders':
+  title: 'View all order details and list'
+  restrict access: true

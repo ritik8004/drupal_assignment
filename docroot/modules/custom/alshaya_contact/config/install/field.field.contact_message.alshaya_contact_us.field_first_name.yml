@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.alshaya_contact_us
+    - field.storage.contact_message.field_first_name
+id: contact_message.alshaya_contact_us.field_first_name
+field_name: field_first_name
+entity_type: contact_message
+bundle: alshaya_contact_us
+label: 'First name'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

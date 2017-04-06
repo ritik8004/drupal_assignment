@@ -1,0 +1,5 @@
+services:
+  alshaya_acm.add_to_cart_error_event:
+    class: Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }

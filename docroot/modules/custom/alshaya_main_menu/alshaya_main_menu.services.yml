@@ -1,0 +1,6 @@
+services:
+    alshaya_main_menu.twig.alshaya_main_menu_extensions:
+        class: Drupal\alshaya_main_menu\Twig\AlshayaMainMenuTwigExtension
+        arguments: ['@renderer']
+        tags:
+          - { name: twig.extension }
