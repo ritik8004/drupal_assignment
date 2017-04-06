@@ -4,11 +4,7 @@ core: 8.x
 dependencies:
   - block
   - captcha
-  - contact
-  - contact_storage
-  - features_ui
-  - field
   - system
-  - telephone
   - views
+  - webform
 version: 8.x-1.0
