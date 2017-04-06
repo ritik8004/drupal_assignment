@@ -50,7 +50,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       ];
       // Add sub total price of product.
       $form['cart'][$id]['sub_total'] = [
-        '#markup' => ($cart_item[$id]['qty'] * $cart_item[$id]['price']),
+        '#markup' => ($item['quantity']['#default_value'] * $cart_item[$id]['price']),
       ];
 
       // Add remove link as suffix of quantity.
