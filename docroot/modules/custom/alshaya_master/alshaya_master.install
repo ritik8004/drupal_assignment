@@ -14,9 +14,11 @@ function alshaya_master_install() {
   $strings = [
     'Log in' => [
       'en' => 'Sign in',
+      'ar' => 'تسجيل الدخول',
     ],
     'Log out' => [
       'en' => 'Sign out',
+      'ar' => 'خروج',
     ],
     'Create new account' => [
       'en' => 'Create an account',
@@ -29,6 +31,9 @@ function alshaya_master_install() {
     ],
     'Create' => [
       'ar' => 'تسجيل',
+    ],
+    'Arabic' => [
+      'ar' => 'عربية',
     ],
   ];
   alshaya_i18n_save_translations($strings);

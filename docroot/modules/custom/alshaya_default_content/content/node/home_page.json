@@ -1,254 +1,226 @@
 {
-  "_links": {
-    "self": {
-      "href": "http:\/\/local.alshaya.com\/home?_format=hal_json"
-    },
-    "type": {
-      "href": "http:\/\/drupal.org\/rest\/type\/node\/advanced_page"
-    },
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/uid": [
-      {
-        "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json",
-        "lang": "en"
-      }
-    ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/revision_uid": [
-      {
-        "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json"
-      }
-    ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/field_banner": [
-      {
-        "href": ""
-      }
-    ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/field_promo_banner_full_width": [
-      {
-        "href": ""
-      }
-    ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/field_related_info": [
-      {
-        "href": ""
-      }
-    ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/field_slider": [
-      {
-        "href": ""
-      }
-    ]
-  },
-  "nid": [
-    {
-      "value": "2"
-    }
-  ],
-  "uuid": [
-    {
-      "value": "cf3cab33-ad69-489e-bfca-121486d2d7f1"
-    }
-  ],
-  "vid": [
-    {
-      "value": "2"
-    }
-  ],
-  "langcode": [
-    {
-      "value": "en",
-      "lang": "en"
-    }
-  ],
-  "type": [
-    {
-      "target_id": "advanced_page"
-    }
-  ],
-  "title": [
-    {
-      "value": "Home",
-      "lang": "en"
-    }
-  ],
-  "_embedded": {
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/uid": [
-      {
-        "_links": {
-          "self": {
-            "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json"
-          },
-          "type": {
-            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
-          }
+    "_links": {
+        "self": {
+            "href": "http:\/\/local.alshaya.com\/en\/home?_format=hal_json"
         },
-        "uuid": [
-          {
-            "value": "b1fb67d2-507a-4cb8-8cde-c5dbaac2d855"
-          }
+        "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/node\/advanced_page"
+        },
+        "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/uid": [
+            {
+                "href": "http:\/\/local.alshaya.com\/en\/user\/0?_format=hal_json",
+                "lang": "en"
+            },
+            {
+                "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json",
+                "lang": "ar"
+            }
         ],
-        "lang": "en"
-      }
-    ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/revision_uid": [
-      {
-        "_links": {
-          "self": {
-            "href": "http:\/\/local.alshaya.com\/user\/1?_format=hal_json"
-          },
-          "type": {
-            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
-          }
-        },
-        "uuid": [
-          {
-            "value": "b1fb67d2-507a-4cb8-8cde-c5dbaac2d855"
-          }
+        "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/revision_uid": [
+            {
+                "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+            }
         ]
-      }
+    },
+    "nid": [
+        {
+            "value": "2"
+        }
     ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/field_banner": [
-      {
-        "_links": {
-          "self": {
-            "href": ""
-          },
-          "type": {
-            "href": "http:\/\/drupal.org\/rest\/type\/paragraph\/banner_full_width"
-          }
-        },
-        "uuid": [
-          {
-            "value": "1a2f6fef-d85e-45ee-9f28-1f861e89f3a7"
-          }
-        ],
-        "target_revision_id": "1"
-      }
+    "uuid": [
+        {
+            "value": "cf3cab33-ad69-489e-bfca-121486d2d7f1"
+        }
     ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/field_promo_banner_full_width": [
-      {
-        "_links": {
-          "self": {
-            "href": ""
-          },
-          "type": {
-            "href": "http:\/\/drupal.org\/rest\/type\/paragraph\/banner"
-          }
-        },
-        "uuid": [
-          {
-            "value": "7613f0df-cfbd-49e5-ac89-17b7404ab529"
-          }
-        ],
-        "target_revision_id": "2"
-      }
+    "vid": [
+        {
+            "value": "204"
+        }
     ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/field_related_info": [
-      {
-        "_links": {
-          "self": {
-            "href": ""
-          },
-          "type": {
-            "href": "http:\/\/drupal.org\/rest\/type\/paragraph\/related_info_one_column"
-          }
+    "langcode": [
+        {
+            "value": "en",
+            "lang": "en"
         },
-        "uuid": [
-          {
-            "value": "18b49bb1-d4db-4e98-b188-398754684ebd"
-          }
-        ],
-        "target_revision_id": "3"
-      }
+        {
+            "value": "ar",
+            "lang": "ar"
+        }
     ],
-    "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/field_slider": [
-      {
-        "_links": {
-          "self": {
-            "href": ""
-          },
-          "type": {
-            "href": "http:\/\/drupal.org\/rest\/type\/paragraph\/banner"
-          }
+    "type": [
+        {
+            "target_id": "advanced_page"
+        }
+    ],
+    "title": [
+        {
+            "value": "Home",
+            "lang": "en"
         },
-        "uuid": [
-          {
-            "value": "f0f4dfef-71a4-4adc-add6-b2f13fe98fd6"
-          }
+        {
+            "value": "Home",
+            "lang": "ar"
+        }
+    ],
+    "_embedded": {
+        "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/uid": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "http:\/\/local.alshaya.com\/en\/user\/0?_format=hal_json"
+                    },
+                    "type": {
+                        "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+                    }
+                },
+                "uuid": [
+                    {
+                        "value": "a3897291-2122-419a-b1a3-7bbd09fbc191"
+                    }
+                ],
+                "lang": "en"
+            },
+            {
+                "_links": {
+                    "self": {
+                        "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+                    },
+                    "type": {
+                        "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+                    }
+                },
+                "uuid": [
+                    {
+                        "value": "cc5b8ebc-69bd-4190-a0e7-9b8071fb2d87"
+                    }
+                ],
+                "lang": "ar"
+            }
         ],
-        "target_revision_id": "4"
-      }
+        "http:\/\/drupal.org\/rest\/relation\/node\/advanced_page\/revision_uid": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+                    },
+                    "type": {
+                        "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+                    }
+                },
+                "uuid": [
+                    {
+                        "value": "cc5b8ebc-69bd-4190-a0e7-9b8071fb2d87"
+                    }
+                ]
+            }
+        ]
+    },
+    "status": [
+        {
+            "value": "1",
+            "lang": "en"
+        },
+        {
+            "value": "1",
+            "lang": "ar"
+        }
+    ],
+    "created": [
+        {
+            "value": "1490357796",
+            "lang": "en"
+        },
+        {
+            "value": "1491504182",
+            "lang": "ar"
+        }
+    ],
+    "changed": [
+        {
+            "value": "1490358428",
+            "lang": "en"
+        },
+        {
+            "value": "1491504459",
+            "lang": "ar"
+        }
+    ],
+    "promote": [
+        {
+            "value": "0",
+            "lang": "en"
+        },
+        {
+            "value": "0",
+            "lang": "ar"
+        }
+    ],
+    "sticky": [
+        {
+            "value": "0",
+            "lang": "en"
+        },
+        {
+            "value": "0",
+            "lang": "ar"
+        }
+    ],
+    "revision_timestamp": [
+        {
+            "value": "1491504459"
+        }
+    ],
+    "revision_translation_affected": [
+        {
+            "value": "1",
+            "lang": "ar"
+        }
+    ],
+    "default_langcode": [
+        {
+            "value": "1",
+            "lang": "en"
+        },
+        {
+            "value": "0",
+            "lang": "ar"
+        }
+    ],
+    "content_translation_source": [
+        {
+            "value": "und",
+            "lang": "en"
+        },
+        {
+            "value": "en",
+            "lang": "ar"
+        }
+    ],
+    "content_translation_outdated": [
+        {
+            "value": "0",
+            "lang": "en"
+        },
+        {
+            "value": "0",
+            "lang": "ar"
+        }
+    ],
+    "path": [
+        {
+            "alias": "\/home",
+            "pid": "255",
+            "lang": "en"
+        }
+    ],
+    "moderation_state": [
+        {
+            "target_id": "published",
+            "lang": "en"
+        },
+        {
+            "target_id": "published",
+            "lang": "ar"
+        }
     ]
-  },
-  "status": [
-    {
-      "value": "1",
-      "lang": "en"
-    }
-  ],
-  "created": [
-    {
-      "value": "1490357796",
-      "lang": "en"
-    }
-  ],
-  "changed": [
-    {
-      "value": "1490358428",
-      "lang": "en"
-    }
-  ],
-  "promote": [
-    {
-      "value": "0",
-      "lang": "en"
-    }
-  ],
-  "sticky": [
-    {
-      "value": "0",
-      "lang": "en"
-    }
-  ],
-  "revision_timestamp": [
-    {
-      "value": "1490358428"
-    }
-  ],
-  "revision_translation_affected": [
-    {
-      "value": "1",
-      "lang": "en"
-    }
-  ],
-  "default_langcode": [
-    {
-      "value": "1",
-      "lang": "en"
-    }
-  ],
-  "content_translation_source": [
-    {
-      "value": "und",
-      "lang": "en"
-    }
-  ],
-  "content_translation_outdated": [
-    {
-      "value": "0",
-      "lang": "en"
-    }
-  ],
-  "path": [
-    {
-      "alias": "\/home",
-      "pid": "3",
-      "lang": "en"
-    }
-  ],
-  "moderation_state": [
-    {
-      "target_id": "published",
-      "lang": "en"
-    }
-  ]
 }
