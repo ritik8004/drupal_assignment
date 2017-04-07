@@ -27,21 +27,6 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
     $form['actions']['submit']['#access'] = FALSE;
   }
 
-  // Submit handler.
-  $form['actions']['submit']['#submit'][] = '_alshaya_addressbook_profile_add_submit';
-  $form['actions']['set_default']['#submit'][] = '_alshaya_addressbook_profile_add_submit';
-}
-
-/**
- * Submit handler for 'profile' add form.
- */
-function _alshaya_addressbook_profile_add_submit(&$form, FormStateInterface $form_state) {
-  $user_id = \Drupal::currentUser()->getAccount()->id();
-  // Redirect user to address book profile page after adding address.
-  $form_state->setRedirect('entity.profile.type.address_book.user_profile_form', [
-    'user' => $user_id,
-    'profile_type' => 'address_book',
-  ]);
 }
 
 /**
@@ -86,4 +71,6 @@ function alshaya_addressbook_form_profile_address_book_edit_form_alter(array &$f
 function alshaya_addressbook_entity_type_alter(array &$entity_types) {
   /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
   $entity_types['profile']->setFormClass('delete', 'Drupal\alshaya_addressbook\Form\AlshayaProfileDeleteForm');
+  $entity_types['profile']->setFormClass('add', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
+  $entity_types['profile']->setFormClass('edit', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
 }

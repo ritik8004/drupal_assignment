@@ -13,6 +13,11 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    * {@inheritdoc}
    */
   public function getDescription() {
+    // If not address book profile.
+    if ($this->entity->getType() != 'address_book') {
+      return parent::getDescription();
+    }
+
     return $this->t('You have selected to delete this address, are you sure?');
   }
 
@@ -20,6 +25,11 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    * {@inheritdoc}
    */
   public function getConfirmText() {
+    // If not address book profile.
+    if ($this->entity->getType() != 'address_book') {
+      return parent::getDescription();
+    }
+
     return $this->t('yes, delete this address');
   }
 
@@ -27,6 +37,11 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    * {@inheritdoc}
    */
   public function getCancelText() {
+    // If not address book profile.
+    if ($this->entity->getType() != 'address_book') {
+      return parent::getDescription();
+    }
+
     return $this->t('No, take me back');
   }
 
@@ -34,7 +49,12 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    * {@inheritdoc}
    */
   protected function getDeletionMessage() {
-    return $this->t('The address has been deleted.');
+    // If not address book profile.
+    if ($this->entity->getType() != 'address_book') {
+      return parent::getDescription();
+    }
+
+    return $this->t('Address is deleted successfully.');
   }
 
 }
