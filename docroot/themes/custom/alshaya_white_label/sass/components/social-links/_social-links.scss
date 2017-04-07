@@ -10,12 +10,12 @@
   @include breakpoint($tablet) {
     min-width: 18.188em;
     position: absolute;
-    top: 25%;
+    top: 30%;
     #{$right}: 0;
   }
 
   @include breakpoint($desktop) {
-    top: 55%;
+    top: 60%;
   }
 
   ul {

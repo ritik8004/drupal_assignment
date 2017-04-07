@@ -7,8 +7,9 @@
   h1 {
     @extend %page-title;
 
+    font-family: $alshaya-bold;
     position: absolute;
-    top: -3.125rem;
+    top: -3.5rem;
     color: $peacock-blue;
   }
 
@@ -16,6 +17,8 @@
     h2 {
       color: $peacock-blue;
       font-size: 14px;
+      font-family: $alshaya-bold;
+      text-transform: lowercase;
     }
 
     p {
@@ -47,6 +50,7 @@
   #block-onlineexclusiveheadingovertwolinesneverthree {
     a {
       font-weight: bold;
+      text-transform: lowercase;
     }
   }
 
@@ -191,6 +195,8 @@
 
 #block-youllbeableto,
 #block-jointheclub {
+  text-transform: lowercase;
+
   i {
     float: $left;
     width: 18px;

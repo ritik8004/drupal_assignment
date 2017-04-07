@@ -18,6 +18,19 @@
       min-width: 45rem;
       max-width: 64rem;
     }
+
+    .language-switcher-language-url {
+      display: none;
+
+      a {
+        text-transform: lowercase;
+        font-size: 14px;
+      }
+
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
   }
 
   .l-container {
@@ -49,13 +62,14 @@
     color: $brownish-grey;
     line-height: 2.14;
     text-decoration: none;
+    font-family: $alshaya-thin;
   }
 
   &--help,
   &--category,
   &--about {
     @include breakpoint($tablet) {
-      margin-#{$right}: 5.3rem;
+      margin-#{$right}: 4.3rem;
     }
 
     @include breakpoint($desktop) {
@@ -63,7 +77,7 @@
     }
 
     @include breakpoint($desktop-wide) {
-      margin-#{$right}: 4.5rem;
+      margin-#{$right}: 4rem;
     }
   }
 }
@@ -76,6 +90,7 @@
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
+    font-family: $alshaya-bold;
 
     @include breakpoint($only-mobile) {
       margin: 0.938rem 0;
@@ -101,13 +116,14 @@
 
   @include breakpoint($tablet) {
     float: $right;
-    max-width: 22.31rem;
+    max-width: 357px;
     margin: 0;
     display: inline-block;
   }
 
   h2 {
-    font-size: 0.875rem;
+    font-size: 14px;
+    font-family: $alshaya-bold;
     color: $peacock-blue;
     text-transform: lowercase;
 
@@ -118,6 +134,11 @@
 
   form {
     position: relative;
+    max-width: 100%;
+
+    @include breakpoint($tablet) {
+      max-width: 291px;
+    }
   }
 
   .form-item {
@@ -136,10 +157,6 @@
       top: 0;
       font-size: 13px;
 
-      @include breakpoint($desktop-wide) {
-        width: 22.31rem;
-      }
-
       @include breakpoint($only-mobile) {
         left: 0;
       }
@@ -156,19 +173,17 @@
   #edit-email {
     border-bottom: 1px solid $brownish-grey;
     border-width: 0 0 1px;
-    margin-top: 2.5rem;
+    margin-top: 1.5rem;
     width: 100%;
     height: 2.2rem;
     outline: transparent;
-
-    @include breakpoint($tablet) {
-      width: 18.188rem;
-    }
+    font-size: 13px;
   }
 
   #edit-submit {
     @extend %btn;
 
+    font-family: $alshaya-bold;
     background: $peacock-blue;
     position: absolute;
     #{$right}: 0;
@@ -208,5 +223,50 @@
 .c-footer-menu--help, {
   .c-footer-menu {
     width: 100%;
+  }
+}
+
+.newsletter-block-label {
+  font-size: 13px;
+  line-height: 2.31;
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+}
+
+.language-switcher-language-url {
+  ul {
+    @extend %list-clear;
+
+    text-align: center;
+
+    li {
+      display: inline;
+      margin-right: 11px;
+
+      &:first-child {
+        &::after {
+          content: "";
+          position: absolute;
+          border-top: 1px solid $peacock-blue;
+          width: 14px;
+          transform: rotate(-70deg);
+          transform-origin: 0% 0%;
+          top: 1em;
+        }
+      }
+
+      a {
+        font-size: 14px;
+        text-transform: lowercase;
+        color: $brownish-grey;
+        padding-right: 5px;
+      }
+
+      &.is-active a {
+        color: $peacock-blue;
+      }
+    }
   }
 }
