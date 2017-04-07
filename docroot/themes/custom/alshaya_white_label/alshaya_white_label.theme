@@ -277,3 +277,32 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
 
   }
 }
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function alshaya_white_label_preprocess_field(&$variables, $hook) {
+  $element = $variables['element'];
+  // If 'acq_sku' entity with 'product_list' display mode.
+  if ($element['#entity_type'] == 'acq_sku' && $element['#view_mode'] == 'product_list') {
+    if (isset($element['#field_name'])) {
+      // Hide/Remove all images except first.
+      if ($element['#field_name'] == 'attr_image') {
+        if (!empty($variables['items'])) {
+          $variables['items'] = [$variables['items'][0]];
+        }
+      }
+
+      // Added the currency label.
+      if ($element['#field_name'] == 'price') {
+        if (!empty($variables['items'])) {
+          $price = $variables['items'][0]['content']['#context']['value'];
+          $variables['items'][0]['content'] = [
+            '#theme' => 'alshaya_acm_price',
+            '#price' => $price,
+          ];
+        }
+      }
+    }
+  }
+}
