@@ -42,9 +42,6 @@ function _alshaya_addressbook_profile_add_submit(&$form, FormStateInterface $for
     'user' => $user_id,
     'profile_type' => 'address_book',
   ]);
-
-  drupal_get_messages();
-  drupal_set_message(t('Address added successfully.'));
 }
 
 /**
@@ -74,19 +71,6 @@ function alshaya_addressbook_user_view_alter(&$build) {
  */
 function alshaya_addressbook_form_profile_address_book_delete_form_alter(array &$form, FormStateInterface $form_state) {
   $form['#title'] = t('Delete address');
-  $form['description']['#markup'] = '<div>' . t('You have selected to delete this address, are you sure?') . '</div>';
-  $form['actions']['submit']['#value'] = t('yes, delete this address');
-  $form['actions']['submit']['#submit'][] = '_alshaya_addressbook_delete_message';
-  $form['actions']['cancel']['#title'] = t('No, take me back');
-  $form['actions']['cancel']['#attributes'] = ['class' => ['dialog-cancel']];
-}
-
-/**
- * Submit handler for 'profile' delete form.
- */
-function _alshaya_addressbook_delete_message(&$form, FormStateInterface $form_state) {
-  drupal_get_messages();
-  drupal_set_message(t('Address deleted successfully.'));
 }
 
 /**
@@ -94,14 +78,12 @@ function _alshaya_addressbook_delete_message(&$form, FormStateInterface $form_st
  */
 function alshaya_addressbook_form_profile_address_book_edit_form_alter(array &$form, FormStateInterface $form_state) {
   $form['#title'] = t('Edit address');
-  $form['actions']['submit']['#submit'][] = '_alshaya_addressbook_update_message';
-  $form['actions']['set_default']['#submit'][] = '_alshaya_addressbook_update_message';
 }
 
 /**
- * Submit handler for 'profile' edit form.
+ * Implements hook_entity_type_alter().
  */
-function _alshaya_addressbook_update_message(&$form, FormStateInterface $form_state) {
-  drupal_get_messages();
-  drupal_set_message(t('Address has been updated successfully.'));
+function alshaya_addressbook_entity_type_alter(array &$entity_types) {
+  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  $entity_types['profile']->setFormClass('delete', 'Drupal\alshaya_addressbook\Form\AlshayaProfileDeleteForm');
 }
