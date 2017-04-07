@@ -16,7 +16,7 @@ provider: null
 plugin: 'block_content:434e5b69-4571-4bbb-b889-161a5aba7668'
 settings:
   id: 'block_content:434e5b69-4571-4bbb-b889-161a5aba7668'
-  label: 'Online exclusive heading over two lines never three'
+  label: 'online exclusive heading over two lines never three'
   provider: block_content
   label_display: visible
   status: true
