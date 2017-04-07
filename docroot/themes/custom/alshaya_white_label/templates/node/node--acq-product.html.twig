@@ -25,14 +25,14 @@
     </footer>
   {% endif %}
 
-  {% if view_mode == 'product_list'  %}
-    <div{{ content_attributes }}>
-      <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ content }}</a>
-    </div>
-  {% else %}
+  {% if view_mode == 'full'  %}
     <div{{ content_attributes }}>
       {{ content }}
     </div>
+  {% else %}
+      <div{{ content_attributes }}>
+        <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ content }}</a>
+      </div>
   {% endif %}
 
 </article>
