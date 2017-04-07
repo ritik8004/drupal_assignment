@@ -84,7 +84,7 @@ class MyAccountNavBlock extends BlockBase implements ContainerFactoryPluginInter
         $this->t('Home'), $this->t('My Account'), $this->t('Orders'),
       ],
       'entity.user.edit_form' => [
-        $this->t('Home'), $this->t('My Account'),
+        $this->t('Home'), $this->t('My Account'), $this->t('Contact details'),
       ],
       'entity.profile.type.address_book.user_profile_form' => [
         $this->t('Home'), $this->t('My Account'), $this->t('Address Book'),
