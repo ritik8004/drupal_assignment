@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_user\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -109,6 +110,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     ];
 
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['user']);
   }
 
 }
