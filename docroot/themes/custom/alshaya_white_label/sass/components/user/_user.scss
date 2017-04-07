@@ -62,7 +62,7 @@
 
   .field--name-field-first-name,
   .field--name-field-last-name {
-    @include breakpoint($tablet) {
+    @include breakpoint($desktop) {
       display: inline-block;
       max-width: 11.625rem;
     }
@@ -91,6 +91,11 @@
 
     @include breakpoint($tablet) {
       font-size: 0.875em;
+      max-width: 19.75rem;
+    }
+
+    @include breakpoint($desktop-wide) {
+      max-width: 24.75rem;
     }
 
     .form-submit {
@@ -165,8 +170,7 @@
   }
 
   input:focus ~ label.form-required,
-  .form-item-field-privilege-card-number-0-value:focus ~ label,
-  .form-item-field-privilege-card-number-0-value:not(:focus):valid ~ label,
+  .form-item-field-privilege-card-number-0-value input ~ label,
   input:not(:focus):valid ~ label.form-required,
   input:active ~ label.form-required,
   input:not(:active):valid ~ label.form-required,
@@ -176,6 +180,10 @@
     #{$left}: 0;
     opacity: 1;
     font-size: 12px;
+  }
+
+  .form-type-checkbox .option {
+    top: 0 !important;
   }
 }
 
@@ -190,6 +198,10 @@
     font-size: 0.75rem;
     font-weight: bold;
     z-index: 999;
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
   }
 }
 
