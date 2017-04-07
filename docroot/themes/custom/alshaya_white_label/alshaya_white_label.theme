@@ -296,8 +296,11 @@ function alshaya_white_label_preprocess_field(&$variables, $hook) {
       // Added the currency label.
       if ($element['#field_name'] == 'price') {
         if (!empty($variables['items'])) {
-          // @todo Make currency label as per country.
-          $variables['items'][0]['content']['#template'] = '{{ "KD"| t }} {{ value|nl2br }}';
+          $price = $variables['items'][0]['content']['#context']['value'];
+          $variables['items'][0]['content'] = [
+            '#theme' => 'alshaya_acm_price',
+            '#price' => $price,
+          ];
         }
       }
     }
