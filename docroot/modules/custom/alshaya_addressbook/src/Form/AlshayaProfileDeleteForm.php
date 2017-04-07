@@ -36,6 +36,18 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
   /**
    * {@inheritdoc}
    */
+  public function getQuestion() {
+    // If not address book profile.
+    if ($this->entity->getType() != 'address_book') {
+      return parent::getQuestion();
+    }
+
+    return $this->t('Delete address');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCancelText() {
     // If not address book profile.
     if ($this->entity->getType() != 'address_book') {
