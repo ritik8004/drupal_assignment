@@ -40,7 +40,7 @@
   ],
   "info": [
     {
-      "value": "Online exclusive heading over two lines never three",
+      "value": "online exclusive heading over two lines never three",
       "lang": "en"
     }
   ],
@@ -88,7 +88,7 @@
   ],
   "body": [
     {
-      "value": "<p>Longer promotional description copy set over two or three lines never but never four.<\/p>\r\n\r\n<a href=\"\">Redeem now<\/a>\r\n",
+      "value": "<p>longer promotional description copy set over two or three lines never but never four.<\/p>\r\n\r\n<a href=\"\">redeem now<\/a>\r\n",
       "format": "rich_text",
       "summary": "",
       "lang": "en"
