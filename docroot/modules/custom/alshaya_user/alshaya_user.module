@@ -41,6 +41,26 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
 /**
  * Implements hook_form_FORM_ID_alter().
  */
+function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
+  // Add our custom submit handler function.
+  $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+}
+
+/**
+ * Form submit callback for user registration form.
+ *
+ * Store the email address in session and redirect to completion page.
+ */
+function alshaya_user_form_user_register_form_submit($form, FormStateInterface $form_state) {
+  // @TODO: I'm not sure how this will behave with varnish. It works with
+  // normal Drupal cache.
+  $_SESSION['alshaya_user']['last_registered_mail'] = $form_state->getValue('mail');
+  return $form_state->setRedirect('alshaya_user.user_register_complete');
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function alshaya_user_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Add forgot password link.
   $form['account']['forgot_password'] = [
