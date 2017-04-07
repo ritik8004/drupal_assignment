@@ -42,4 +42,7 @@ function alshaya_captcha_modules_installed($modules) {
     ],
   ];
   $forget_pass_captcha_point_config->setData($forget_pass_captcha_point)->save();
+
+  // Set Drupal user flood limit.
+  $config_factory->getEditable('user.flood')->set('user_limit', 10)->save();
 }
