@@ -1,0 +1,295 @@
+// Define Fonts
+@font-face {
+  font-family: 'alshaya-bold';
+  src: url('../fonts/alshaya-bold.woff2') format('woff2'), url('../fonts/alshaya-bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'alshaya-thin';
+  src: url('../fonts/alshaya-thin.woff2') format('woff2'), url('../fonts/alshaya-thin.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'alshaya-arabic-thin';
+  src: url('../fonts/alshaya-arabic-thin.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-thin.woff') format('woff'), url('../fonts/alshaya-arabic-thin.ttf')  format('truetype'), url('../fonts/alshaya-arabic-thin.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'alshaya-arabic-bold';
+  src: url('../fonts/alshaya-arabic-bold.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-bold.woff') format('woff'), url('../fonts/alshaya-arabic-bold.ttf')  format('truetype'), url('../fonts/alshaya-arabic-bold.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'alshaya-icons';
+  src: url('../fonts/alshaya-icons.eot?2pxs5l');
+  src: url('../fonts/alshaya-icons.eot?2pxs5l#iefix') format('embedded-opentype'), url('../fonts/alshaya-icons.ttf?2pxs5l') format('truetype'), url('../fonts/alshaya-icons.woff?2pxs5l') format('woff'), url('../fonts/alshaya-icons.svg?2pxs5l#alshaya-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Font Family
+$alshaya-bold: 'alshaya-bold';
+$alshaya-thin: 'alshaya-thin';
+$alshaya-arabic-bold: '$alshaya-arabic-bold';
+$alshaya-arabic-thin: '$alshaya-arabic-thin';
+$alshaya-icons: 'alshaya-icons';
+$arial: 'arialmt', arial, sans-serif;
+$body_font: $arial;
+
+// Icon Fonts
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: $alshaya-icons !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ic_arrowdown::before {
+  content: "\e900";
+}
+
+.icon-ic_arrowup::before {
+  content: "\e901";
+}
+
+.icon-ic_blog::before {
+  content: "\e902";
+}
+
+.icon-ic_blogselect::before {
+  content: "\e903";
+}
+
+.icon-ic_checkboxempty::before {
+  content: "\e904";
+}
+
+.icon-ic_checkboxfull::before {
+  content: "\e905";
+}
+
+.icon-ic_checkshape::before {
+  content: "\e906";
+}
+
+.icon-ic_chevrondown::before {
+  content: "\e907";
+}
+
+.icon-ic_chevronleft::before {
+  content: "\e908";
+}
+
+.icon-ic_chevronright::before {
+  content: "\e909";
+}
+
+.icon-ic_chevronup::before {
+  content: "\e90a";
+}
+
+.icon-ic_close::before {
+  content: "\e90b";
+}
+
+.icon-ic_closeshape::before {
+  content: "\e90c";
+}
+
+.icon-ic_delivery::before {
+  content: "\e90d";
+}
+
+.icon-ic_deliveryservice::before {
+  content: "\e90e";
+}
+
+.icon-ic_direction::before {
+  content: "\e90f";
+}
+
+.icon-ic_email::before {
+  content: "\e910";
+}
+
+.icon-ic_emailselect::before {
+  content: "\e911";
+}
+
+.icon-ic_facebook::before {
+  content: "\e912";
+}
+
+.icon-ic_facebookselect::before {
+  content: "\e913";
+}
+
+.icon-ic_googleplus::before {
+  content: "\e914";
+}
+
+.icon-ic_googleplusselect::before {
+  content: "\e915";
+}
+
+.icon-ic_hide::before {
+  content: "\e916";
+}
+
+.icon-ic_infomation::before {
+  content: "\e917";
+}
+
+.icon-ic_instagram::before {
+  content: "\e918";
+}
+
+.icon-ic_instagramselect::before {
+  content: "\e919";
+}
+
+.icon-ic_language::before {
+  content: "\e91a";
+}
+
+.icon-ic_list::before {
+  content: "\e91b";
+}
+
+.icon-ic_login::before {
+  content: "\e91c";
+}
+
+.icon-ic_logout::before {
+  content: "\e91d";
+}
+
+.icon-ic_map::before {
+  content: "\e91e";
+}
+
+.icon-ic_mappin::before {
+  content: "\e91f";
+}
+
+.icon-ic_menu::before {
+  content: "\e920";
+}
+
+.icon-ic_mylocation::before {
+  content: "\e921";
+}
+
+.icon-ic_newsletter::before {
+  content: "\e922";
+}
+
+.icon-ic_nextdaydelivery::before {
+  content: "\e923";
+}
+
+.icon-ic_pinterest::before {
+  content: "\e924";
+}
+
+.icon-ic_pinterestselect::before {
+  content: "\e925";
+}
+
+.icon-ic_play::before {
+  content: "\e926";
+}
+
+.icon-ic_prize::before {
+  content: "\e927";
+}
+
+.icon-ic_radioempty::before {
+  content: "\e928";
+}
+
+.icon-ic_radiofull::before {
+  content: "\e929";
+}
+
+.icon-ic_rating::before {
+  content: "\e92a";
+}
+
+.icon-ic_ratingfull::before {
+  content: "\e92b";
+}
+
+.icon-ic_rewards::before {
+  content: "\e92c";
+}
+
+.icon-ic_search::before {
+  content: "\e92d";
+}
+
+.icon-ic_shoppingbag::before {
+  content: "\e92e";
+}
+
+.icon-ic_show::before {
+  content: "\e92f";
+}
+
+.icon-ic_twitter::before {
+  content: "\e930";
+}
+
+.icon-ic_twitterselect::before {
+  content: "\e931";
+}
+
+.icon-ic_user::before {
+  content: "\e932";
+}
+
+.icon-ic_whiteglovedelivery::before {
+  content: "\e933";
+}
+
+.icon-ic_wishlist::before {
+  content: "\e934";
+}
+
+.icon-ic_wishlistfull::before {
+  content: "\e935";
+}
+
+.icon-ic_youtube::before {
+  content: "\e936";
+}
+
+.icon-ic_youtubeselect::before {
+  content: "\e937";
+}
+
+.icon-ic_zoom::before {
+  content: "\e938";
+}
+
+.icon-bell::before {
+  content: "\e006";
+}
+
+.icon-marquee-plus::before {
+  content: "\e083";
+}

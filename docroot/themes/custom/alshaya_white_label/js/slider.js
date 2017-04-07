@@ -24,7 +24,8 @@
         dots: true,
         nav: true,
         autoplay: true,
-        autoplayTimeout: 5000,
+        loop: true,
+        autoplayTimeout: 15000,
         autoplayHoverPause: true
       };
 

@@ -55,7 +55,7 @@ display:
         type: default
         options:
           grouping: {  }
-          row_class: c-category__items
+          row_class: c-category-list__items
           default_row_class: false
       row:
         type: fields
@@ -102,7 +102,7 @@ display:
             preserve_tags: ''
             html: false
           element_type: div
-          element_class: c-category__title
+          element_class: c-category-list__title
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
@@ -234,7 +234,7 @@ display:
             preserve_tags: ''
             html: false
           element_type: div
-          element_class: c-category__item
+          element_class: c-category-list__item
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
@@ -356,6 +356,7 @@ display:
           entity_field: tid
           plugin_id: taxonomy
       display_extenders: {  }
+      css_class: c-category-list
     cache_metadata:
       max-age: -1
       contexts:

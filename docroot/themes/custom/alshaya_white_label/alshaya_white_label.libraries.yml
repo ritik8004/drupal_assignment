@@ -4,7 +4,6 @@ global_styles:
     theme:
       css/styles.css: {}
   js:
-    js/menu.js: {}
     js/accordion.js: {}
   dependencies:
     - core/jquery
@@ -37,11 +36,3 @@ owlcarousel:
   version: VERSION
   js:
     libs/owlcarousel.min.js: {}
-
-footer_accordion:
-  version: VERSION
-  js:
-    js/accordion.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.ui.accordion
