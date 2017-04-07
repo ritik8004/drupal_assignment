@@ -9,7 +9,7 @@
       </div>
       {% if level2.child is not empty %}
         {{ alshaya_main_menu('alshaya_main_menu_level3', level2.child) }}
-      {% endif %}
+
         {% if level2.highlight_image is not empty %}
             <div>{{ 'Highlight' | t }}</div>
           {% for highlight_image in level2.highlight_image %}
@@ -25,6 +25,7 @@
             </div>
           {% endfor %}
         {% endif %}
+      {% endif %}
     </li>
   {% endfor %}
 </ul>
