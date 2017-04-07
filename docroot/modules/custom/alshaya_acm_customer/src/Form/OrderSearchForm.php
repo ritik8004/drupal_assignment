@@ -23,12 +23,27 @@ class OrderSearchForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+
     $form['search'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Search orders by'),
       '#required' => FALSE,
       '#placeholder' => $this->t('ID, name, SKU'),
       '#default_value' => \Drupal::request()->query->get('search'),
+    ];
+
+    $filterOptions = ['' => $this->t('All Orders')];
+
+    $account = \Drupal::request()->attributes->get('user');
+    $filterOptions += alshaya_acm_customer_get_available_user_order_status($account);
+
+    $form['filter'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Show'),
+      '#required' => FALSE,
+      '#options' => $filterOptions,
+      '#default_value' => \Drupal::request()->query->get('filter'),
     ];
 
     $form['actions'] = [
