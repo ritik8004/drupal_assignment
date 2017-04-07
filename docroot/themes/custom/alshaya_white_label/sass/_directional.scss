@@ -24,9 +24,6 @@ $dir: ltr !default;
   @return if-ltr($else, $if);
 }
 
-$alshaya-bold-font: if-ltr($alshaya-bold, $noto-arabic);
-$noto-arabic-regular: if-ltr($noto-arabic, $alshaya-bold);
-
 $left: if-ltr(left, right);
 $right: if-ltr(right, left);
 
@@ -79,3 +76,8 @@ $last-child: if-ltr(":last-child", ":first-child");
     @content;
   }
 }
+
+$alshaya-bold: if-ltr($alshaya-bold, $alshaya-arabic-bold);
+$alshaya-arabic-bold: if-ltr($alshaya-arabic-bold, $alshaya-bold);
+$alshaya-thin: if-ltr($alshaya-thin, $alshaya-arabic-thin);
+$alshaya-arabic-thin: if-ltr($alshaya-arabic-thin, $alshaya-thin);
