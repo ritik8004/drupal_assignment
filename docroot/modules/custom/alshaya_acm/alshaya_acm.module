@@ -20,6 +20,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Using array_combine to ensure we have same data in key and value.
   $cartQuantityOptions = array_combine($range, $range);
 
+  // Unset update button.
+  unset($form['actions']['update']);
+
   // Change checkout button text to 'Secure Checkout'.
   $form['actions']['checkout']['#value'] = t('Secure Checkout');
 
@@ -48,9 +51,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         'callback' => 'alshaya_acm_cart_ajax_quantity_callback',
         'event' => 'change',
       ];
+
+      $form['cart'][$id]['price'] = [
+        '#markup' => alshaya_acm_price_format($cart_item[$id]['price']),
+      ];
+
       // Add sub total price of product.
       $form['cart'][$id]['sub_total'] = [
-        '#markup' => ($item['quantity']['#default_value'] * $cart_item[$id]['price']),
+        '#markup' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
       ];
 
       // Add remove link as suffix of quantity.
@@ -79,8 +87,100 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['totals']['#prefix'] = '<div id="table-cart-totals">';
   $form['totals']['#suffix'] = '</div>';
 
+  $form['privilege_card_wrapper'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Enter a priviledge card number'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  ];
+
+  $form['privilege_card_wrapper']['privilege_card_number'] = [
+    '#type' => 'textfield',
+    '#title' => t('Privilege Card Number'),
+  ];
+
+  $form['privilege_card_wrapper']['privilege_card_number2'] = [
+    '#type' => 'textfield',
+    '#title' => t('Re-enter Privilege Card Number'),
+    '#states' => [
+      'required' => [
+        ':input[name="privilege_card_number"]' => ['empty' => FALSE],
+      ],
+    ],
+    '#element_validate' => [
+      'alshaya_acm_privilege_card_number_validate',
+    ],
+  ];
+
+  $cartStorage = \Drupal::service('acq_cart.cart_storage');
+  $cart = $cartStorage->getCart();
+  _alshaya_acm_format_cart_total($form, $cart);
+
   // Set Form title.
   $form['#title'] = t("Cart (%count)", ['%count' => $product_count]);
+}
+
+/**
+ * Validate privilege card number entered.
+ */
+function alshaya_acm_privilege_card_number_validate(&$element, FormStateInterface $form_state) {
+  $card1 = $form_state->getValue('privilege_card_number');
+  $card2 = $form_state->getValue('privilege_card_number2');
+
+  if (!empty($card1) && ($card1 != $card2)) {
+    $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
+  }
+}
+
+/**
+ * Alter totals to use markup instead of plain text.
+ *
+ * @param array $form
+ *   The form array.
+ * @param object $cart
+ *   The cart object.
+ */
+function _alshaya_acm_format_cart_total(array &$form, $cart) {
+  // Get the new totals of cart.
+  $totals = $cart->totals();
+
+  $form['totals']['sub']['value'] = [
+    '#markup' => alshaya_acm_price_format($totals['sub']),
+  ];
+
+  if ((float) $totals['tax'] > 0) {
+    $form['totals']['tax']['value'] = [
+      '#markup' => alshaya_acm_price_format($totals['tax']),
+    ];
+  }
+
+  if ((float) $totals['discount'] > 0) {
+    $form['totals']['discount']['value'] = [
+      '#markup' => alshaya_acm_price_format($totals['discount']),
+    ];
+  }
+
+  $form['totals']['grand']['value'] = [
+    '#markup' => alshaya_acm_price_format($totals['grand']),
+  ];
+}
+
+/**
+ * Wrapper function to format price value with currency.
+ *
+ * @param float $price
+ *   Price value.
+ *
+ * @return mixed|null
+ *   Return rendered theme with html for price.
+ */
+function alshaya_acm_price_format($price) {
+  $output = [
+    '#theme' => 'alshaya_acm_price',
+    '#price' => $price,
+  ];
+
+  return render($output);
 }
 
 /**
@@ -106,22 +206,10 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $cart_item = alshaya_acm_get_cart_items_by_sku();
 
   // Update the sub total price of each product.
-  $form['cart'][$sku]['sub_total']['#markup'] = ($quantity * $cart_item[$sku]['price']);
+  $form['cart'][$sku]['sub_total']['#markup'] = alshaya_acm_price_format($quantity * $cart_item[$sku]['price']);
 
-  // Get the new totals of cart.
-  $totals = $newcart->totals();
-
-  $form['totals']['sub']['value']['#plain_text'] = $totals['sub'];
-
-  if ((float) $totals['tax'] > 0) {
-    $form['totals']['tax']['value']['#plain_text'] = $totals['tax'];
-  }
-
-  if ((float) $totals['discount'] > 0) {
-    $form['totals']['discount']['value']['#plain_text'] = $totals['discount'];
-  }
-
-  $form['totals']['grand']['value']['#plain_text'] = $totals['grand'];
+  // Update form total values.
+  _alshaya_acm_format_cart_total($form, $newcart);
 
   $response = new AjaxResponse();
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
@@ -199,5 +287,40 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'block--checkout-summary',
     ],
+    'alshaya_acm_price' => [
+      'variables' => [
+        'price' => '',
+        'currency_format' => '',
+        'currency_code_position' => '',
+      ],
+    ],
   ];
+}
+
+/**
+ * Format price value with currency.
+ *
+ * Default template: alshaya-acm-price.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - price: a price value.
+ *   - currency_format: Currency format.
+ *   - currency_code_position: Currency code position with amount.
+ *
+ * @see alshaya_acm_price_format()
+ */
+function template_preprocess_alshaya_acm_price(array &$variables) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+
+  // Fetch the currency format from the config factor.
+  $currency_format = $config->get('currency_code');
+
+  // Fetch the currency code position.
+  $currency_code_position = $config->get('currency_code_position');
+
+  // @todo: find a way to avoid t($currency_format);
+  $variables['currency_format'] = $currency_format;
+  $variables['currency_code_position'] = $currency_code_position;
 }
