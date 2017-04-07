@@ -1,13 +1,3 @@
-// Header
-//
-// Markup: header.twig
-//
-// Style guide: component.header
-
-/*
-	SITE HEADER - TOP LEVEL MENU
-*/
-
 @include breakpoint($desktop) {
   .no--desktop {
     display: none;
