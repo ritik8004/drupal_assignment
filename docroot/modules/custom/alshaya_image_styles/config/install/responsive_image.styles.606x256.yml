@@ -5,8 +5,6 @@ dependencies:
     - image.style.146x132
     - image.style.472x202
     - image.style.606x256
-  theme:
-    - alshaya_white_label
 id: 606x256
 label: 606x256
 image_style_mappings:
