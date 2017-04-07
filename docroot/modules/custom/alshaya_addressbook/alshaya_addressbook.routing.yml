@@ -1,0 +1,6 @@
+alshaya_addressbook.close_modal:
+  path: '/alshaya/close-modal'
+  defaults:
+    _controller: '\Drupal\alshaya_addressbook\Controller\AddressBookHelper::closeModal'
+  requirements:
+    _access: 'TRUE'

@@ -70,7 +70,7 @@ class getMiniCart extends ControllerBase {
       '#theme' => 'acq_cart_mini_cart',
       '#quantity' => $quantity,
       '#total' => $grand_total,
-      '#currency_format' => $this->t($currency_format),
+      '#currency_format' => $currency_format,
       '#currency_code_position' => $currency_code_position,
     ];
 
