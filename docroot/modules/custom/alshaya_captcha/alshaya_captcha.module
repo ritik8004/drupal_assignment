@@ -107,67 +107,6 @@ function alshaya_captcha_form_alter(array &$form, FormStateInterface $form_state
       $form['#submit'][] = '_alshaya_captcha_form_submit';
     }
   }
-
-  // User Login form.
-  if ($form_id == 'user_login_form') {
-    // Add a Validate handler, which runs first.
-    array_unshift($form['#validate'], 'alshaya_captcha_clear_flood_event');
-  }
-}
-
-/**
- * Unblocks the user if he is blocked by Drupal flood.
- *
- * This validation should run before the validateFinal in userLoginForm.
- */
-function alshaya_captcha_clear_flood_event(array &$form, FormStateInterface $form_state) {
-  // Get flood settings.
-  $config = \Drupal::configFactory()->get('user.flood');
-
-  // Account Object.
-  $account = user_load_by_name($form_state->getValue('name'));
-
-  // Flood event to look for.
-  $event = 'user.failed_login_user';
-
-  if ($account) {
-    // Create identifier string.
-    if ($config->get('uid_only')) {
-      // Register flood events based on the uid only, so they apply for any
-      // IP address. This is the most secure option.
-      $identifier = $account->id();
-    }
-    else {
-      // The default identifier is a combination of uid and IP address. This
-      // is less secure but more resistant to denial-of-service attacks that
-      // could lock out all users with public user names.
-      $identifier = $account->id() . '-' . Drupal::request()->getClientIp();
-    }
-
-    $flood = \Drupal::service('flood');
-
-    // Check if flood has blocked the user yet.
-    $is_Allowed = $flood->isAllowed($event, $config->get('user_limit'), $config->get('user_window'), $identifier);
-    if (!$is_Allowed) {
-      // We clear only one flood event instead of emptying all.
-      $flood_id = \Drupal::database()->select('flood', 'f')
-        ->fields('f', ['fid'])
-        ->condition('event', $event)
-        ->condition('identifier', $identifier)
-        ->condition('timestamp', REQUEST_TIME - $config->get('user_window'), '>')
-        ->orderBy('fid')
-        ->range(0, 1)
-        ->execute()
-        ->fetchField();
-
-      // Clear the oldest event.
-      \Drupal::database()->delete('flood')
-        ->condition('event', $event)
-        ->condition('identifier', $identifier)
-        ->condition('fid', $flood_id)
-        ->execute();
-    }
-  }
 }
 
 /**
