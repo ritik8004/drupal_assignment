@@ -9,6 +9,29 @@
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
 
+      var $listItems = $('.menu__list-item');
+      $listItems.each(function () {
+        var linkWrapper = $(this).find('> .menu__link-wrapper');
+        var link = linkWrapper.find('.menu__link');
+        var submenu = $(this).find('> .menu__list');
+
+        if (submenu.length > 0) {
+          $(this).addClass('has-child');
+          linkWrapper.after('<span class="menu__in"></span>');
+          submenu.prepend('<span class="menu__list-item back--link"><span class="menu__back"></span> <span>' + link.text() + ' </span> </span> ');
+        }
+      });
+
+      var $menuIn = $('.menu__in');
+      $menuIn.click(function () {
+        $(this).next().toggleClass('menu__list--active');
+      });
+
+      var $menuBack = $('.back--link');
+      $menuBack.click(function () {
+        $(this).parent().toggleClass('menu__list--active');
+      });
+
       $('.mobile--menu, .mobile--search').click(function (e) {
         e.preventDefault();
       });
@@ -25,14 +48,6 @@
 
       $('.c-menu-primary .mobile--search').click(function () {
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
-      });
-
-      $('.parent--level').mouseover(function () {
-        $('.child--first', this).stop(true, true).show();
-        $('body').addClass('overlay');
-      }).mouseout(function () {
-        $('.child--first').stop(true, true).hide();
-        $('body').removeClass('overlay');
       });
 
       $('.mobile--close').on('click', function (e) {

@@ -432,13 +432,13 @@ header {
       list-style: none;
     }
 
-    ul {
+    ul.menu--one__list {
       display: flex;
       margin: 0;
       padding: 0;
     }
 
-    li.parent--level {
+    li.menu--one__list-item {
       flex: 1;
       vertical-align: top;
       background-color: $very-light-blue;
@@ -447,14 +447,18 @@ header {
       padding: 10px;
 
       &.active {
-        background: $white-five;
-        border-top: 2px solid $peacock-blue;
+        background: $white-five !important;
+        border-top: 2px solid $peacock-blue !important;
       }
 
       &:hover {
-        background: $peacock-blue;
+        background: $peacock-blue !important;
 
-        a.level--one {
+        ul.menu--two__list {
+          display: block;
+        }
+
+        a.menu--one__link {
           color: $white-five;
         }
       }
@@ -471,13 +475,13 @@ header {
     }
   }
 
-  .child--first {
+  .menu--two__list {
     position: absolute;
     text-align: left;
     top: 38px;
     right: 0;
     left: 0;
-    padding: 1.875rem 1.5625rem !important;
+    padding: 1.5625rem 0 !important;
     background: $white-five;
     z-index: 10;
 
@@ -489,8 +493,8 @@ header {
       }
     }
 
-    .level--two {
-      .menu--wrapper-one {
+    .menu--two__list-item {
+      > .menu-two__link-wrapper {
         display: inline-block;
         padding: 1.563rem;
         width: 210px;
@@ -507,7 +511,7 @@ header {
         }
       }
 
-      .level__two--child {
+      .menu-two__link {
         font-size: 14px;
 
         &::after {
@@ -519,21 +523,24 @@ header {
           vertical-align: middle;
           position: absolute;
           right: 10px;
+          top: 30px;
         }
       }
 
       &:hover {
-        ul.child--two {
+        ul.menu--three__list {
           display: inline-block;
         }
       }
 
-      .child--two {
-        width: 30%;
+      .menu--three__list {
+        width: 100%;
         vertical-align: top;
         margin-bottom: 1.563rem;
-        padding: 0 1.5rem;
         position: absolute;
+        top: 0;
+        margin-top: 1.5625rem;
+        margin-left: 2.8125rem;
 
         p {
           display: none;
@@ -559,6 +566,28 @@ header {
   .overlay {
     background-color: rgba(0, 0, 0, 0.48);
   }
+
+  .menu--four__list {
+    display: block !important;
+  }
+
+  .level--three {
+    font-size: 14px !important;
+    color: $peacock-blue !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .menu__in,
+  .back--link {
+    display: none;
+  }
+
+  .menu--three__list-item {
+    > .menu-two__link-wrapper a {
+      font-size: 0.875rem !important;
+      color: $peacock-blue !important;
+    }
+  }
 }
 
 @include breakpoint($upto-desktop) {
@@ -580,7 +609,7 @@ header {
   .main--menu {
     display: none;
 
-    > ul {
+    ul.menu--one__list {
       background: $white-five;
       width: 80%;
       height: 100%;
@@ -593,54 +622,129 @@ header {
   }
 
   .main--menu a {
+    font-size: 12px;
     text-decoration: none;
     color: $brownish-grey;
   }
 
-  .parent--level {
-    border-bottom: 1px solid $greyish;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    position: relative;
+  .menu__list-item {
+    border-bottom: 1px solid $white;
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
+    padding-top: 0.9375rem;
+    padding-bottom: 0.9375rem;
+  }
 
+  .menu--one__list-item {
     p {
       display: none;
     }
+  }
 
-    &::after {
-      content: '';
-      background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
-      width: 8px;
-      height: 17px;
-      display: inline-block;
-      vertical-align: middle;
-      position: absolute;
-      top: 20px;
-      right: 10px;
+  .menu--two__list-item {
+    padding: 0;
+    border: 0;
+
+    > .menu-two__link-wrapper {
+      border-bottom: 1px solid $white;
+      padding-top: 0.9375rem;
+      padding-bottom: 0.9375rem;
+    }
+
+    .menu__in {
+      margin-top: -30px;
+    }
+
+    .menu--three__list-item {
+      padding: 0;
+      border: none;
     }
   }
 
-  .level--two {
+  .menu--three__list-item {
+    > .menu-two__link-wrapper {
+      border-bottom: 1px solid $white;
+      padding-top: 0.9375rem;
+      padding-bottom: 0.9375rem;
+    }
+  }
+
+  .menu--three__list-item,
+  .menu--four__list-item {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .menu__in {
+    background: url('../imgs/icons/ic-chevronright-copy-9.svg') no-repeat;
+    float: right;
+    margin-top: -14px;
+  }
+
+  .menu__back {
+    background: url('../imgs/icons/ic-chevronleft.svg') no-repeat;
+  }
+
+  .menu__in,
+  .menu__back {
+    width: 7px;
+    height: 11px;
+    display: inline-block;
+  }
+
+  .menu__list--active {
+    position: absolute;
+    top: 0;
+    background: white;
+    display: block !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .menu--two__list,
+  .menu--three__list,
+  .menu--four__list {
     display: none;
   }
 
-  .level--two,
-  .child--two {
-    padding-top: 20px;
-
-    li {
-      margin: 10px 0;
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
+  .menu-two__link-wrapper a.menu-two__link {
+    color: $peacock-blue;
   }
 
-  .child--two {
-    li {
-      border-top: 1px solid $greyish;
-      display: none;
+  .menu--two__list.menu__list--active {
+    span.back--link {
+      color: $peacock-blue;
+      display: block;
+      font-size: 12px;
+      margin: 0.625rem;
+      padding: 0.9375rem 0.625rem;
+    }
+
+    .menu--three__list.menu__list--active {
+      span.back--link {
+        display: block !important;
+      }
+
+      .menu--four__list {
+        span.back--link {
+          display: none;
+        }
+      }
+    }
+
+    .menu--three__list {
+      span.back--link {
+        display: none !important;
+      }
+
+      &.menu__list--active {
+        .menu--four__list-item,
+        .menu-two__link-wrapper {
+          margin-left: 0.625rem;
+          margin-right: 0.625rem;
+        }
+      }
     }
   }
 }
@@ -656,18 +760,5 @@ header {
   p {
     margin: 0;
     padding: 10px 12px;
-  }
-}
-
-.current--clicked {
-  ul.child--first,
-  li.level--two {
-    display: block !important;
-  }
-
-  .current--clicked {
-    ul.child--two li {
-      display: block !important;
-    }
   }
 }

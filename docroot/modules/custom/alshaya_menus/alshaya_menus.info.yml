@@ -4,6 +4,7 @@ core: 8.x
 description: 'Footer and Header menus and related code.'
 dependencies:
   - block
+  - language
   - menu_admin_per_menu
   - menu_link_attributes
   - system
