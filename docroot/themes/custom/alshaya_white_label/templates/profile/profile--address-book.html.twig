@@ -1,0 +1,68 @@
+{% if is_default_profile is empty %}
+    <div>
+{% else %}
+        <div class="active">
+{% endif %}
+
+    <div>
+         {% if delivery_to is not empty %}
+             <div>
+                <div>{{ 'Delivery to' | t }}</div>
+                <div>{{ delivery_to }}</div>
+             </div>
+         {% endif %}
+        {% if contact_no is not empty %}
+            <div>
+                <div>{{ 'Contact no.' | t }}</div>
+                <div>{{ contact_no }}</div>
+            </div>
+        {% endif %}
+        {% if delivery_address is not empty %}
+            <div>
+                <div>{{ 'Delivery address' | t }}</div>
+                {% if delivery_address.organization is not empty %}
+                    <div>{{ delivery_address.organization }}</div>
+                {% endif %}
+                {% if delivery_address.address_line1 is not empty %}
+                    <div>{{ delivery_address.address_line1 }}</div>
+                {% endif %}
+                {% if delivery_address.address_line2 is not empty %}
+                    <div>{{ delivery_address.address_line2 }}</div>
+                {% endif %}
+                {% if delivery_address.locality is not empty %}
+                    <div>{{ delivery_address.locality }}</div>
+                {% endif %}
+                {% if delivery_address.dependent_locality is not empty %}
+                    <div>{{ delivery_address.dependent_locality }}</div>
+                {% endif %}
+                {% if delivery_address.sorting_code is not empty %}
+                    <div>{{ delivery_address.dependent_locality }}</div>
+                {% endif %}
+                {% if delivery_address.administrative_area is not empty %}
+                    <div>{{ delivery_address.administrative_area }}</div>
+                {% endif %}
+                {% if delivery_address.country is not empty %}
+                    <div>{{ delivery_address.country }}</div>
+                {% endif %}
+                {% if delivery_address.postal_code is not empty %}
+                    <div>{{ delivery_address.postal_code }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
+            <div>
+                {% if edit_operation is not empty %}
+                    {{ link(edit_operation.title, edit_operation.url ) }}
+                {% endif %}
+            </div>
+            <div>
+                {% if delete_operation is not empty %}
+                    {{ link(delete_operation.title, delete_operation.url ) }}
+                {% endif %}
+            </div>
+            <div>
+                {% if set_default_operation is not empty %}
+                    {{ link(set_default_operation.title, set_default_operation.url ) }}
+                {% endif %}
+            </div>
+    </div>
+</div>
