@@ -46,18 +46,36 @@ function alshaya_acm_cart_notification_form_alter(&$form, FormStateInterface $fo
  */
 function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
 
-  // Check if we have an error in Subscriber.
-  $error_on_add_to_cart = AddToCartErrorEventSubscriber::getErrorStatus();
+  // If there are validation failures on the form.
+  if ($form_state->getErrors()) {
+    $errors = $form_state->getErrors();
+    // Render $errors as list so even multiple errors are properly displayed.
+    $error_list = [
+      '#theme' => 'item_list',
+      '#list_type' => 'ul',
+      '#title' => '',
+      '#items' => $errors,
+      '#attributes' => ['class' => 'error-list'],
+      '#wrapper_attributes' => ['class' => 'container'],
+    ];
 
-  // If we have error, we show a error notification and hide complexity
-  // from user.
-  if ($error_on_add_to_cart == TRUE) {
+    $error_html = drupal_render($error_list);
+
+    // Use the template to render the error.
+    $output = [
+      '#theme' => 'add_to_cart_error',
+      '#message' => $error_html,
+    ];
+  }
+  // Check if we have an error in Subscriber.
+  elseif (AddToCartErrorEventSubscriber::getErrorStatus()) {
     // Use the template to render the error.
     $output = [
       '#theme' => 'add_to_cart_error',
       '#message' => t('Oops! Something went wrong.'),
     ];
   }
+  // Show success notification.
   else {
     // Product name.
     $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();

@@ -7,7 +7,10 @@
         dialogClass: 'dialog-cart-notification',
         title: '',
         close: function() {
+          // Add a new placeholder div for further AJAX calls.
           $("#sku-base-form").append('<div id = "cart_notification"></div>');
+          // Perform cleanup to avoid duplicate HTML of dialog in DOM.
+          $(this).dialog('destroy').remove();
         }
       };
       var myDialog = Drupal.dialog(element, dialogsettings);
