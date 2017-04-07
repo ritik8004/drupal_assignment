@@ -10,6 +10,7 @@ dependencies:
   - field
   - file
   - image
+  - language
   - lightning_core
   - link
   - paragraphs

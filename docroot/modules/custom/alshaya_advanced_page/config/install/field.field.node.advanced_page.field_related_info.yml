@@ -29,4 +29,43 @@ settings:
       related_info_one_column:
         enabled: true
         weight: 4
+      1_row_1st_col_2_row_2nd_col:
+        weight: 16
+        enabled: false
+      1_row_1_col:
+        weight: 17
+        enabled: false
+      1_row_1_col_dept:
+        weight: 18
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 19
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 20
+        enabled: false
+      1_row_2_col_dept:
+        weight: 21
+        enabled: false
+      1_row_3_col:
+        weight: 22
+        enabled: false
+      1_row_3_col_dept:
+        weight: 23
+        enabled: false
+      1_row_3_col_text:
+        weight: 24
+        enabled: false
+      banner:
+        weight: 25
+        enabled: false
+      main_menu_highlight:
+        weight: 27
+        enabled: false
+      promo_block:
+        weight: 28
+        enabled: false
+      promo_block_text:
+        weight: 29
+        enabled: false
 field_type: entity_reference_revisions

@@ -2,19 +2,16 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_body
     - paragraphs.paragraphs_type.related_info_one_column
-  module:
-    - text
-id: paragraph.related_info_one_column.field_body
-field_name: field_body
+id: paragraph.related_info_one_column.created
+field_name: created
 entity_type: paragraph
 bundle: related_info_one_column
-label: body
-description: ''
+label: 'Authored on'
+description: 'The time that the Paragraph was created.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: text_long
+field_type: created
