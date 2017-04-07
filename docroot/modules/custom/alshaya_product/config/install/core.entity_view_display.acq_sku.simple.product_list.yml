@@ -12,7 +12,7 @@ targetEntityType: acq_sku
 bundle: simple
 mode: product_list
 content:
-  image:
+  attr_image:
     label: hidden
     type: image
     weight: 0
@@ -36,7 +36,7 @@ content:
     third_party_settings: {  }
 hidden:
   attr_color: true
-  attr_image: true
+  image: true
   attr_size: true
   attr_small_image: true
   attr_special_price: true

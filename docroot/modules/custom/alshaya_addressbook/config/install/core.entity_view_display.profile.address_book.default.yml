@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.profile.address_book.field_address
+    - field.field.profile.address_book.field_telephone
     - profile.type.address_book
   module:
     - address
@@ -17,5 +18,11 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: address_default
+  field_telephone:
+    weight: 1
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
 hidden:
   langcode: true
