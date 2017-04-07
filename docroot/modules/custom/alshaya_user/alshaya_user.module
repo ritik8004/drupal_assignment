@@ -22,6 +22,20 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $form['account']['mail']['#description'] = '';
   $form['account']['name']['#description'] = '';
   $form['account']['pass']['#description'] = '';
+
+  // We don't want to show the terms and conditions field to logged in users.
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    $form['field_terms_and_condition']['#access'] = FALSE;
+  }
+  else {
+    // Update title from description for terms and conditions field.
+    $form['field_terms_and_condition']['widget']['#title'] = $form['field_terms_and_condition']['widget']['#description'];
+    $form['field_terms_and_condition']['widget']['value']['#title'] = $form['field_terms_and_condition']['widget']['value']['#description'];
+
+    // Set description to NULL for terms and conditions field.
+    $form['field_terms_and_condition']['widget']['#description'] = NULL;
+    $form['field_terms_and_condition']['widget']['value']['#description'] = NULL;
+  }
 }
 
 /**
