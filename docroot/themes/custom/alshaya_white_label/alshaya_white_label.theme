@@ -6,7 +6,6 @@
  */
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 
@@ -182,16 +181,6 @@ function alshaya_white_label_preprocess_node(&$variables) {
   elseif ($variables['node']->bundle() == 'acq_product' && $variables['elements']['#view_mode'] == 'product_list') {
     // Hide the node title on product list/search page.
     $variables['label'] = NULL;
-
-    // Product node id.
-    $nid = $variables['node']->id();
-    // Make the product field link.
-    $field_sku = $variables['content']['field_skus'];
-    $variables['content']['field_skus'] = [
-      '#title' => $field_sku,
-      '#type' => 'link',
-      '#url' => Url::fromRoute('entity.node.canonical', ['node' => $nid]),
-    ];
   }
 }
 
