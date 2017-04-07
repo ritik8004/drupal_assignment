@@ -1,5 +1,7 @@
 /* stylelint-disable */
 
+@import "_config.scss";
+
 // directional-scss | Author: Tyson Matanich (http://matanich.com), 2013 | License: MIT
 $dir: ltr !default;
 
@@ -21,6 +23,9 @@ $dir: ltr !default;
 @function if-rtl($if, $else: null) {
   @return if-ltr($else, $if);
 }
+
+$alshaya-bold-font: if-ltr($alshaya-bold, $noto-arabic);
+$noto-arabic-regular: if-ltr($noto-arabic, $alshaya-bold);
 
 $left: if-ltr(left, right);
 $right: if-ltr(right, left);

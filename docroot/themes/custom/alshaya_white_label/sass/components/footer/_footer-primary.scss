@@ -6,7 +6,7 @@
 
 .c-footer-primary {
   border-top: 2px solid $peacock-blue;
-  padding-top: 1.625rem;
+  padding-top: 16px;
   padding-bottom: 1.625rem;
   margin-top: 1.625rem;
   position: relative;
@@ -20,15 +20,15 @@
     }
 
     .language-switcher-language-url {
-      display: none;
+      display: block;
 
       a {
         text-transform: lowercase;
         font-size: 14px;
       }
 
-      @include breakpoint($only-mobile) {
-        display: block;
+      @include breakpoint($desktop-wide) {
+        display: none;
       }
     }
   }
@@ -90,7 +90,7 @@
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
-    font-family: $alshaya-bold;
+    font-family: $alshaya-bold-font;
 
     @include breakpoint($only-mobile) {
       margin: 0.938rem 0;
@@ -112,7 +112,7 @@
 }
 
 .alshaya-newsletter-subscribe {
-  margin: 0 0.5rem 2.5rem;
+  margin: 1em 0.5rem 2.5rem;
 
   @include breakpoint($tablet) {
     float: $right;
@@ -123,7 +123,7 @@
 
   h2 {
     font-size: 14px;
-    font-family: $alshaya-bold;
+    font-family: $alshaya-bold-font;
     color: $peacock-blue;
     text-transform: lowercase;
 
@@ -183,7 +183,7 @@
   #edit-submit {
     @extend %btn;
 
-    font-family: $alshaya-bold;
+    font-family: $alshaya-bold-font;
     background: $peacock-blue;
     position: absolute;
     #{$right}: 0;
@@ -235,15 +235,16 @@
   }
 }
 
-.language-switcher-language-url {
+.c-footer-primary .language-switcher-language-url {
   ul {
     @extend %list-clear;
 
     text-align: center;
+    padding: 0;
 
     li {
-      display: inline;
-      margin-right: 11px;
+      display: inline-block;
+      padding: 0 5px;
 
       &:first-child {
         &::after {
@@ -260,12 +261,12 @@
       a {
         font-size: 14px;
         text-transform: lowercase;
-        color: $brownish-grey;
-        padding-right: 5px;
+        color: $peacock-blue;
+        margin: 0 5px;
       }
 
       &.is-active a {
-        color: $peacock-blue;
+        color: $brownish-grey;
       }
     }
   }
