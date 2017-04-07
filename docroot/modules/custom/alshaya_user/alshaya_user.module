@@ -35,6 +35,9 @@ function alshaya_user_form_user_login_form_alter(&$form, FormStateInterface $for
 
   // Change submit button text.
   $form['actions']['submit']['#value'] = t('Submit');
+
+  // Add a submit handler.
+  array_unshift($form['#validate'], 'alshaya_acm_clear_flood_event');
 }
 
 /**
@@ -45,4 +48,66 @@ function alshaya_user_form_user_pass_alter(&$form, FormStateInterface $form_stat
     '#markup' => t('Please enter your email address.') . '</br>' . t('We will send you an email with a password reminder.'),
     '#weight' => -10,
   ];
+}
+
+/**
+ * Unblocks the user if he is blocked by Drupal flood.
+ *
+ * This validation should run after the validateFinal in userloginForm.
+ */
+function alshaya_acm_clear_flood_event(array &$form, FormStateInterface $form_state) {
+  // Get flood settings.
+  $config = \Drupal::configFactory()->get('user.flood');
+
+  // Account Object.
+  $account = user_load_by_name($form_state->getValue('name'));
+
+  if ($account) {
+
+    if ($config->get('uid_only')) {
+      // Register flood events based on the uid only, so they apply for any
+      // IP address. This is the most secure option.
+      $identifier = $account->id();
+    }
+    else {
+      // The default identifier is a combination of uid and IP address. This
+      // is less secure but more resistant to denial-of-service attacks that
+      // could lock out all users with public user names.
+      $identifier = $account->id() . '-' . Drupal::request()->getClientIp();
+    }
+
+    $failed_attempts_count = \Drupal::database()->select('flood', 'f')
+      ->condition('event', 'user.failed_login_user')
+      ->condition('identifier', $identifier)
+      ->condition('timestamp', REQUEST_TIME - $config->get('user_window'), '>')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $flood = \Drupal::service('flood');
+    // Check if flood has blocked the user yet.
+    $is_Allowed = $flood->isAllowed('user.failed_login_user', $config->get('user_limit'), $config->get('user_window'), $identifier);
+    if (!$is_Allowed) {
+      // We clear only one flood event instead of emptying all. As we need to
+      // keep showing the captcha once user has reached 5 failed attempts.
+      // $flood->clear('user.failed_login_user', $identifier).
+      // Fetch the oldest event.
+      $flood_id = \Drupal::database()->select('flood', 'f')
+        ->addField('f', 'fid')
+        ->condition('event', 'user.failed_login_user')
+        ->condition('identifier', $identifier)
+        ->condition('timestamp', REQUEST_TIME - $config->get('user_window'), '>')
+        ->sort('fid')
+        ->range(0, 1)
+        ->execute()
+        ->fetchField();
+
+      // Clear the oldest event.
+      \Drupal::database()->delete('flood')
+        ->condition('event', 'user.failed_login_user')
+        ->condition('identifier', $identifier)
+        ->condition('fid', $flood_id)
+        ->execute();
+    }
+  }
 }
