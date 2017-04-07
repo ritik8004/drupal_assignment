@@ -24,6 +24,7 @@
       <div class="c-content__container clearfix">
         <div class="c-content__primary">
           {% if title_prefix or title_suffix or display_submitted or unpublished or page is empty and label %}
+            {% if not is_front %}
             <header>
               {{ title_prefix }}
               {% if label %}
@@ -37,7 +38,9 @@
                 <p class="unpublished">{{ 'Unpublished'|t }}</p>
               {% endif %}
             </header>
+            {% endif %}
           {% endif %}
+
           <div class="c-content__body">
             {{ content.body }}
             {{ content.field_promo_blocks }}
