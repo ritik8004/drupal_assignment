@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 146x132
+label: 146x132
+effects:
+  219285d3-167f-4280-8962-96cc142e4a30:
+    uuid: 219285d3-167f-4280-8962-96cc142e4a30
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 146
+      height: 132

@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 921x256
+label: 921x256
+effects:
+  6e94d76c-9a27-4496-85be-abd2816018eb:
+    uuid: 6e94d76c-9a27-4496-85be-abd2816018eb
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 921
+      height: 256

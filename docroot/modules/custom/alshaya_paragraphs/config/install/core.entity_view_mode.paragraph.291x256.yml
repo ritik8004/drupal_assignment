@@ -6,8 +6,8 @@ dependencies:
     - paragraphs
 third_party_settings:
   lightning_core:
-    description: 'This view mode will render the banner image in 923x288 image style.'
-id: paragraph.923x288
-label: 923x288
+    description: 'This view mode will render the banner image in 291x256 image style.'
+id: paragraph.291x256
+label: 291x256
 targetEntityType: paragraph
 cache: true
