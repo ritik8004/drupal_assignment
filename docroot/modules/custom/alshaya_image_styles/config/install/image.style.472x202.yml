@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 472x202
+label: 472x202
+effects:
+  981d344a-2771-4cb7-9654-fdbb7d81da91:
+    uuid: 981d344a-2771-4cb7-9654-fdbb7d81da91
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 472
+      height: 202

@@ -2,26 +2,26 @@ langcode: en
 status: true
 dependencies:
   config:
-    - image.style.146x132
-    - image.style.224x202
-    - image.style.326x288
-id: 326x288
-label: 326x288
+    - image.style.304x132
+    - image.style.720x202
+    - image.style.921x256
+id: 921x256
+label: 921x256
 image_style_mappings:
   -
     breakpoint_id: alshaya_white_label.desktop
     multiplier: 1x
     image_mapping_type: image_style
-    image_mapping: 326x288
+    image_mapping: 921x256
   -
     breakpoint_id: alshaya_white_label.tablet
     multiplier: 1x
     image_mapping_type: image_style
-    image_mapping: 224x202
+    image_mapping: 720x202
   -
     breakpoint_id: alshaya_white_label.mobile
     multiplier: 1x
     image_mapping_type: image_style
-    image_mapping: 146x132
+    image_mapping: 304x132
 breakpoint_group: alshaya_white_label
-fallback_image_style: 146x132
+fallback_image_style: 304x132

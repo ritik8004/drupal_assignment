@@ -27,6 +27,13 @@ $red-error: #d0011b;
 
 // Fonts ///////////////
 @font-face {
+  font-family: 'noto_kufi_arabicregular';
+  src: url('../fonts/notokufiarabic-regular-webfont.woff2') format('woff2'), url('../fonts/notokufiarabic-regular-webfont.woff') format('woff'), url('../fonts/notokufiarabic-regular-webfont.svg#noto_kufi_arabicregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'alshaya-bold';
   src: url('../fonts/alshayabold-webfont.woff2') format('woff2'), url('../fonts/alshayabold-webfont.woff') format('woff');
   font-weight: normal;
@@ -39,6 +46,8 @@ $red-error: #d0011b;
   font-weight: normal;
   font-style: normal;
 }
+
+$noto-arabic: 'noto_kufi_arabicregular';
 $alshaya-bold: 'alshaya-bold';
 $alshaya-thin: 'alshaya-thin';
 $arial: 'arialmt', arial, sans-serif;

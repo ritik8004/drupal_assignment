@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 449x256
+label: 449x256
+effects:
+  b9ab64a2-1a44-474a-83db-af5bf81d639b:
+    uuid: b9ab64a2-1a44-474a-83db-af5bf81d639b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 449
+      height: 256

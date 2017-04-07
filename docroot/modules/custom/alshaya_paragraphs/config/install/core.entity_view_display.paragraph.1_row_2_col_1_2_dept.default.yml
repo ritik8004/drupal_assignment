@@ -17,7 +17,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      view_mode: 291x288
+      view_mode: 291x256
       link: ''
     third_party_settings: {  }
   field_1_row_2_col_2:
@@ -25,7 +25,7 @@ content:
     weight: 1
     label: hidden
     settings:
-      view_mode: 606x288
+      view_mode: 606x256
       link: ''
     third_party_settings: {  }
 hidden: {  }

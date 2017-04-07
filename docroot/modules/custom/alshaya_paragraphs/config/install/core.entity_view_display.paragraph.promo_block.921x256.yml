@@ -2,27 +2,27 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.paragraph.449x288
+    - core.entity_view_mode.paragraph.921x256
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
-    - image.style.449x288
     - paragraphs.paragraphs_type.promo_block
+    - responsive_image.styles.921x256
   module:
-    - image
     - link
-id: paragraph.promo_block.449x288
+    - responsive_image
+id: paragraph.promo_block.921x256
 targetEntityType: paragraph
 bundle: promo_block
-mode: 449x288
+mode: 921x256
 content:
   field_banner:
     weight: 0
     label: hidden
     settings:
-      image_style: 449x288
+      responsive_image_style: 921x256
       image_link: ''
     third_party_settings: {  }
-    type: image
+    type: responsive_image
   field_link:
     weight: 1
     label: hidden
