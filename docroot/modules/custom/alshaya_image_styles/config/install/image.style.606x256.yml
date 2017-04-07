@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 606x256
+label: 606x256
+effects:
+  2580f05e-31e7-409f-8bd3-8df876d086c4:
+    uuid: 2580f05e-31e7-409f-8bd3-8df876d086c4
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 606
+      height: 256

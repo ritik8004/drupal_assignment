@@ -16,7 +16,7 @@ content:
     weight: 1
     label: hidden
     settings:
-      view_mode: 291x288
+      view_mode: 291x256
       link: ''
     third_party_settings: {  }
     type: entity_reference_revisions_entity_view
@@ -24,7 +24,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      view_mode: 606x288
+      view_mode: 606x256
       link: ''
     third_party_settings: {  }
     type: entity_reference_revisions_entity_view

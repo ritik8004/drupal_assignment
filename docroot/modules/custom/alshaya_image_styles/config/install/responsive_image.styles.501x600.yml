@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - image.style.304x144
+    - image.style.304x132
     - image.style.348x428
     - image.style.501x600
 id: 501x600
@@ -22,6 +22,6 @@ image_style_mappings:
     breakpoint_id: alshaya_white_label.mobile
     multiplier: 1x
     image_mapping_type: image_style
-    image_mapping: 304x144
+    image_mapping: 304x132
 breakpoint_group: alshaya_white_label
-fallback_image_style: 304x144
+fallback_image_style: 304x132

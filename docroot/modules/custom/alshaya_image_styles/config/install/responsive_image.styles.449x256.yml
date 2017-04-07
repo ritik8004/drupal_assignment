@@ -3,21 +3,21 @@ status: true
 dependencies:
   config:
     - image.style.146x132
-    - image.style.224x202
-    - image.style.326x288
-id: 326x288
-label: 326x288
+    - image.style.348x202
+    - image.style.449x256
+id: 449x256
+label: 449x256
 image_style_mappings:
   -
     breakpoint_id: alshaya_white_label.desktop
     multiplier: 1x
     image_mapping_type: image_style
-    image_mapping: 326x288
+    image_mapping: 449x256
   -
     breakpoint_id: alshaya_white_label.tablet
     multiplier: 1x
     image_mapping_type: image_style
-    image_mapping: 224x202
+    image_mapping: 348x202
   -
     breakpoint_id: alshaya_white_label.mobile
     multiplier: 1x

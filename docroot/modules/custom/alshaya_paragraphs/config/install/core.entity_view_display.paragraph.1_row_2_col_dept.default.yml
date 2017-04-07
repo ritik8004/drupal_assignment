@@ -16,7 +16,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      view_mode: 449x288
+      view_mode: 449x256
       link: ''
     third_party_settings: {  }
 hidden: {  }

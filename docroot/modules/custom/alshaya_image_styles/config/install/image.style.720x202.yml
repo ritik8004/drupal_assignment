@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 720x202
+label: 720x202
+effects:
+  00dd1cdf-7fb6-49f1-9e35-5cff0cb17340:
+    uuid: 00dd1cdf-7fb6-49f1-9e35-5cff0cb17340
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 720
+      height: 202
