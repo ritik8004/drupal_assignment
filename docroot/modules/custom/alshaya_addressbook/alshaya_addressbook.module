@@ -66,3 +66,18 @@ function alshaya_addressbook_entity_type_alter(array &$entity_types) {
   $entity_types['profile']->setFormClass('add', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
   $entity_types['profile']->setFormClass('edit', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
 }
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function alshaya_addressbook_views_query_alter(ViewExecutable $view, Sql $query) {
+  // If profile view.
+  if ($view->id() == 'profiles' && $view->getDisplay()->display['id'] == 'profile_type_listing') {
+    // Add the order by default profile.
+    $query->addField('profile', 'is_default', 'profile_default_profile');
+    $query->orderby[] = [
+      'field' => 'profile_default_profile',
+      'direction' => 'DESC',
+    ];;
+  }
+}
