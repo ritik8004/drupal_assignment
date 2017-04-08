@@ -27,7 +27,7 @@
         font-size: 14px;
       }
 
-      @include breakpoint($desktop-wide) {
+      @include breakpoint($desktop) {
         display: none;
       }
     }
@@ -129,6 +129,7 @@
 
     @include breakpoint($only-mobile) {
       text-align: center;
+      margin-bottom: 0;
     }
   }
 
@@ -202,7 +203,7 @@
   }
 
   @include breakpoint($only-tablet) {
-    margin: 11em -13em;
+    margin: 12em -13em;
     vertical-align: top;
   }
 }
@@ -233,9 +234,19 @@
   @include breakpoint($only-mobile) {
     text-align: center;
   }
+
+  @include breakpoint($tablet) {
+    max-width: 357px;
+  }
 }
 
 .c-footer-primary .language-switcher-language-url {
+  @include breakpoint($only-tablet) {
+    position: absolute;
+    right: 188px;
+    bottom: 260px;
+  }
+
   ul {
     @extend %list-clear;
 
