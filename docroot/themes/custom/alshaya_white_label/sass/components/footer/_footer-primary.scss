@@ -1,9 +1,3 @@
-// Footer
-//
-// Markup: footer-primary.twig
-//
-// Style guide: component.footer-primary
-
 .c-footer-primary {
   border-top: 2px solid $peacock-blue;
   padding-top: 16px;
@@ -90,7 +84,7 @@
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
-    font-family: $alshaya-bold-font;
+    font-family: $alshaya-bold;
 
     @include breakpoint($only-mobile) {
       margin: 0.938rem 0;
@@ -123,7 +117,7 @@
 
   h2 {
     font-size: 14px;
-    font-family: $alshaya-bold-font;
+    font-family: $alshaya-bold;
     color: $peacock-blue;
     text-transform: lowercase;
 
@@ -184,7 +178,7 @@
   #edit-submit {
     @extend %btn;
 
-    font-family: $alshaya-bold-font;
+    font-family: $alshaya-bold;
     background: $peacock-blue;
     position: absolute;
     #{$right}: 0;

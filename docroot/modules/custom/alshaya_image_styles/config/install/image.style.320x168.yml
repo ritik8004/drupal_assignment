@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 320x168
+label: 320x168
+effects:
+  76fb313f-deff-4d0c-a181-0f238f3c3796:
+    uuid: 76fb313f-deff-4d0c-a181-0f238f3c3796
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 320
+      height: 168

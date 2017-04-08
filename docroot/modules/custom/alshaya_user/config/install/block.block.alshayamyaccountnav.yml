@@ -10,7 +10,7 @@ dependencies:
 id: alshayamyaccountnav
 theme: alshaya_white_label
 region: pre_content
-weight: 0
+weight: -19
 provider: null
 plugin: alshaya_my_account_nav
 settings:
