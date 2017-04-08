@@ -8,23 +8,41 @@
         {% endif %}
       </div>
       {% if level2.child is not empty %}
-        {{ alshaya_main_menu('alshaya_main_menu_level3', level2.child) }}
+        <ul class="menu__list menu--three__list">
+        {% for key3, level3 in level2.child %}
+          {% if level3.child is not empty %}
+            <li class="menu__list-item menu--three__list-item">
+              <div class="menu__link-wrapper menu-two__link-wrapper">
+                <a class="menu__link menu--three__link" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
+              </div>
+              {% if level3.child is not empty %}
+                {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
+              {% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
 
-        {% if level2.highlight_image is not empty %}
-            <div>{{ 'Highlight' | t }}</div>
-          {% for highlight_image in level2.highlight_image %}
-            <div>
-              <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
-            </div>
-          {% endfor %}
-          {% elseif data.highlight_image is not empty %}
-            <div>{{ 'Highlight' | t }}</div>
-          {% for highlight_image in data.highlight_image %}
-            <div>
-              <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
-            </div>
-          {% endfor %}
-        {% endif %}
+          {#Highlight image start#}
+          <div class="highlights">
+            {% if level2.highlight_image is not empty %}
+              <div class="title">{{ 'Highlight' | t }}</div>
+              {% for highlight_image in level2.highlight_image %}
+                <div>
+                  <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
+                </div>
+              {% endfor %}
+            {% elseif data.highlight_image is not empty %}
+              <div class="title">{{ 'Highlight' | t }}</div>
+              {% for highlight_image in data.highlight_image %}
+                <div>
+                  <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          {#Highlight image end#}
+
+      </ul>
       {% endif %}
     </li>
   {% endfor %}

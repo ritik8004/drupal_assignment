@@ -86,8 +86,8 @@
         height: 15px;
         position: absolute;
         top: 2px;
-        right: -10px;
-        left: -10px;
+        #{$left}: -10px;
+        #{$left}: -10px;
       }
     }
 
@@ -127,8 +127,8 @@
         height: 15px;
         position: absolute;
         top: 2px;
-        right: -10px;
-        left: -10px;
+        #{$left}: -10px;
+        #{$left}: -10px;
       }
 
       .is-active {
@@ -173,7 +173,7 @@ header {
     @include breakpoint($only-tablet) {
       position: absolute;
       bottom: -60px;
-      left: 35%;
+      #{$left}: 35%;
     }
 
     @include breakpoint($only-mobile) {
@@ -251,7 +251,7 @@ header {
       width: 24px;
       height: 24px;
       bottom: -8px;
-      left: 4px;
+      #{$left}: 4px;
       border-radius: 50%;
       padding: 5px;
     }
@@ -308,7 +308,7 @@ header {
     }
 
     form {
-      background: $peacock-blue;
+      background: $marine-blue;
       padding: 0.625rem;
     }
   }
@@ -347,7 +347,8 @@ header {
 
     .store {
       &::before {
-        background: url('../imgs/icons/store--big.svg') no-repeat;
+        mask-image: url('../imgs/icons/store--big.svg');
+        background: $marine-blue;
         width: 16px;
         height: 23px;
       }
@@ -355,9 +356,14 @@ header {
 
     .mobile--menu {
       &::before {
-        background: url('../imgs/icons/mobile-menu.svg') no-repeat;
+        mask-image: url('../imgs/icons/mobile-menu.svg');
+        background: $marine-blue;
         width: 24px;
         height: 13px;
+
+        &:hover {
+          background: $white-five;
+        }
       }
     }
   }
@@ -376,9 +382,22 @@ header {
       text-align: center;
       padding: 0.9375rem 0;
 
+      &:hover {
+        background: $marine-blue;
+
+        a {
+          color: $white-five;
+
+          &::before {
+            background: $white-five;
+          }
+        }
+      }
+
       .mobile--search {
         &::before {
-          background: url('../imgs/icons/ic-search.svg') no-repeat;
+          mask-image: url('../imgs/icons/ic-search.svg');
+          background: $marine-blue;
           width: 22px;
           height: 22px;
         }
@@ -423,6 +442,7 @@ header {
       display: flex;
       margin: 0;
       padding: 0;
+      background: $white-five;
     }
 
     li.menu--one__list-item {
@@ -471,10 +491,11 @@ header {
 
   .menu--two__list {
     position: absolute;
-    text-align: left;
-    top: 38px;
-    right: 0;
-    left: 0;
+    width: 100%;
+    text-align: $left;
+    top: 40px;
+    #{$left}: 0;
+    #{$left}: 0;
     padding-top: 1.5625rem !important;
     background: $white-five;
     z-index: 10;
@@ -491,7 +512,7 @@ header {
       > .menu-two__link-wrapper {
         font-family: $alshaya-bold;
         display: inline-block;
-        padding: 1.563rem;
+        padding: 1.0625rem 1.563rem;
         width: 210px;
         position: relative;
         vertical-align: top;
@@ -515,23 +536,26 @@ header {
           p {
             color: $white-five;
           }
+
+          &::after {
+            background-color: $white-five;
+          }
+        }
+
+        &::after {
+          content: '';
+          mask-image: url('../imgs/icons/icon-chevron-next.svg');
+          background-color: $marine-blue;
+          width: 8px;
+          height: 17px;
+          position: absolute;
+          #{$right}: 10px;
+          top: 39%;
         }
       }
 
       .menu-two__link {
         font-size: 14px;
-
-        &::after {
-          content: '';
-          background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
-          width: 8px;
-          height: 17px;
-          display: inline-block;
-          vertical-align: middle;
-          position: absolute;
-          right: 10px;
-          top: 30px;
-        }
       }
 
       &:hover {
@@ -541,7 +565,7 @@ header {
       }
 
       .menu--three__list {
-        width: 100%;
+        width: 80%;
         vertical-align: top;
         margin-bottom: 1.563rem;
         position: absolute;
@@ -601,6 +625,7 @@ header {
       font-family: $alshaya-bold !important;
       font-size: 0.875rem !important;
       color: $marine-blue !important;
+      margin-bottom: 0.5rem;
     }
   }
 
@@ -609,6 +634,13 @@ header {
     vertical-align: top;
     display: inline-block;
     margin-#{$right}: 3.125rem;
+
+    .title {
+      font-family: $alshaya-bold;
+      font-size: 14px;
+      color: $marine-blue;
+      margin-bottom: 0.8rem;
+    }
   }
 }
 
@@ -625,9 +657,9 @@ header {
       width: 100%;
       height: 100;
       top: 0;
-      right: 0;
+      #{$left}: 0;
       bottom: 0;
-      left: 0;
+      #{$left}: 0;
       background-color: rgba(0, 0, 0, 0.48);
     }
   }
@@ -786,7 +818,7 @@ header {
   background: $white-five;
   position: fixed;
   top: 8px;
-  left: 81%;
+  #{$left}: 81%;
   width: 26px;
   height: 26px;
   z-index: 12;
@@ -830,7 +862,7 @@ header {
   }
 
   .mobile--close {
-    left: 51%;
+    #{$left}: 51%;
   }
 
   .main--menu ul.menu--one__list {

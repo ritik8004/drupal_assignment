@@ -10,6 +10,7 @@
   padding-bottom: 1.625rem;
   margin-top: 1.625rem;
   position: relative;
+  background: $white-five;
 
   @include breakpoint($tablet) {
     padding: 1.25em 1.5em;

@@ -1,7 +1,7 @@
 <div class="main--menu">
 <div class="toggle--sign no--desktop">
-  <div class="shop one active">shop</div>
-  <div class="account one">sign in / register</div>
+  <div class="shop one active">{{ 'shop' | t }}</div>
+  <div class="account one">{{ "sign in" | t }} / {{ "register" | t }}</div>
 </div>
   <div class="mobile--close">
     <span></span>
@@ -24,3 +24,5 @@
     {% endfor %}
   </ul>
 </div>
+
+ <div class="title">{{ 'Highlight' | t }}</div>

@@ -63,6 +63,15 @@
         $(this).addClass('current--clicked').siblings().removeClass('current--clicked');
       });
 
+      $('.menu--one__list-item').hover(
+        function () {
+          $('body').addClass('overlay');
+        },
+        function () {
+          $('body').removeClass('overlay');
+        }
+      );
+
     }
   };
 
