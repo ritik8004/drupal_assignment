@@ -1,7 +1,7 @@
 .c-social-links {
   @include breakpoint($only-mobile) {
     position: absolute;
-    bottom: 1rem;
+    bottom: 0.5rem;
     left: 50%;
     transform: translate(-50%, 0);
     min-width: 15rem;
@@ -10,12 +10,12 @@
   @include breakpoint($tablet) {
     min-width: 18.188em;
     position: absolute;
-    top: 30%;
+    top: 31%;
     #{$right}: 0;
   }
 
   @include breakpoint($desktop) {
-    top: 68%;
+    top: 61%;
   }
 
   ul {

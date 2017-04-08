@@ -1,8 +1,23 @@
 .user-page {
   border-top: 1px solid $white;
-  margin: 3em auto 1em;
+  margin: 4.5em auto 1em;
   padding-top: 1em;
   position: relative;
+
+  .c-content {
+    position: relative;
+
+    .messages--error {
+      font-size: 13px;
+      position: absolute;
+      color: $red-error;
+      top: 59%;
+
+      em {
+        font-style: normal;
+      }
+    }
+  }
 
   h1 {
     @extend %page-title;
@@ -123,7 +138,6 @@
       font-size: 16px;
       color: $greyish;
       position: absolute;
-      pointer-events: none;
       #{$left}: 0;
       top: -0.125rem;
       transition: 0.2s ease all;
@@ -184,6 +198,10 @@
 
   .form-type-checkbox .option {
     top: 0 !important;
+
+    &::before {
+      margin-right: 1em;
+    }
   }
 }
 
@@ -242,5 +260,22 @@
     &-heart {
       background-image: url("../imgs/icons/ic-speech-bubble.svg");
     }
+  }
+}
+
+.alias--user-password {
+  .user-page {
+    .user-pass {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    h1 {
+      top: -4.5rem;
+    }
+  }
+
+  p {
+    display: none;
   }
 }
