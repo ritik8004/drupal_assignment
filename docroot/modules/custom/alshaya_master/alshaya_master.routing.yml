@@ -1,0 +1,7 @@
+alshaya_master.home:
+  path: '/home'
+  defaults:
+    _controller: '\Drupal\alshaya_master\Controller\HomeController::home'
+    _title: 'Home'
+  requirements:
+    _access: 'TRUE'
