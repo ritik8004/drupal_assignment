@@ -72,7 +72,8 @@ $dir: rtl;
 }
 
 @include breakpoint($upto-desktop) {
-  .menu__in, .menu__back {
-     transform: rotate(180deg);
+  .menu__in,
+  .menu__back {
+    transform: rotate(180deg);
   }
 }

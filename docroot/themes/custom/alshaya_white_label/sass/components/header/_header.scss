@@ -9,7 +9,8 @@
 */
 
 @include breakpoint($desktop) {
-  .no--desktop {
+  .no--desktop,
+  .toggle--sign.no--desktop {
     display: none;
   }
 
@@ -23,10 +24,59 @@
 }
 
 .c-menu-secondary {
-  border-bottom: 1px solid $white;
-
   @include breakpoint($only-mobile) {
     display: none;
+
+    .c-menu-secondary__region {
+      background: $white-five !important;
+      text-align: $left !important;
+    }
+
+    #block-alshayastoresfinder,
+    #block-languageswitcher {
+      display: none !important;
+    }
+
+    position: absolute;
+    width: 80%;
+    height: 100%;
+    background: $white-five;
+    z-index: 3;
+    padding-top: 1rem;
+
+    #block-alshaya-white-label-account-menu {
+      display: block !important;
+    }
+
+    .menu {
+      li {
+        display: block;
+        border-bottom: 1px solid #ddd;
+        padding: 0.94rem 0;
+        margin-left: 0.625rem;
+        margin-right: 0.625rem;
+        position: relative;
+
+        a {
+          &::before {
+            background: none;
+            width: 1px;
+            height: 1px;
+          }
+        }
+
+        &::after {
+          content: '';
+          mask-image: url(../imgs/icons/ic-chevronright-copy-9.svg);
+          background: $marine-blue;
+          position: absolute;
+          #{$right}: 0;
+          width: 6px;
+          height: 10px;
+          top: 20px;
+        }
+      }
+    }
   }
 
   a {
@@ -34,8 +84,8 @@
   }
 
   .c-menu-secondary__region {
+    background: $white-four;
     text-align: $right;
-    padding: 6.5px 0;
   }
 
   ul {
@@ -46,9 +96,25 @@
   li {
     list-style: none;
     display: inline-block;
-    padding-#{$left}: 16px;
-    padding-#{$right}: 35px;
-    position: relative;
+    padding-top: 0.3125rem;
+    padding-#{$right}: 1.438rem;
+    padding-bottom: 0.3125rem;
+    padding-#{$left}: 3rem;
+    text-transform: lowercase;
+
+    a {
+      color: $greyish;
+    }
+
+    &:hover {
+      background: $white-five;
+
+      a {
+        &::before {
+          background: $marine-blue-two;
+        }
+      }
+    }
   }
 
   .language-switcher-language-url {
@@ -58,7 +124,9 @@
   }
 
   a {
+    font-family: $alshaya-thin;
     text-decoration: none;
+    position: relative;
 
     &:hover {
       color: $peacock-blue;
@@ -82,57 +150,75 @@
       &::before {
         content: '';
         display: inline-block;
+        background: $greyish;
         width: 15px;
         height: 15px;
         position: absolute;
-        top: 2px;
-        #{$left}: -10px;
-        #{$left}: -10px;
+        top: 0;
+        #{$left}: -20px;
       }
     }
 
     .register-link::before {
-      background: url('../imgs/icons/register.svg') no-repeat;
+      mask-image: url('../imgs/icons/register.svg');
     }
 
     li:last-child a::before {
-      background: url('../imgs/icons/sign-in.svg') no-repeat;
+      mask-image: url('../imgs/icons/sign-in.svg');
+      width: 12px;
     }
 
     a.stores-finder::before {
-      background: url('../imgs/icons/find-us.svg') no-repeat;
+      mask-image: url('../imgs/icons/find-us.svg');
+      width: 12px;
     }
   }
 
   .block-alshaya-stores-finder {
     display: inline-block;
-    padding-#{$left}: 16px;
-    padding-#{$right}: 35px;
+    padding: 0.3125rem 1.438rem 0.3125rem 3rem;
     position: relative;
+    text-transform: lowercase;
 
-    a {
-      color: $peacock-blue;
+    &:hover {
+      background: $white-five;
+
+      a::before {
+        background: $marine-blue-two;
+      }
     }
   }
 
   #block-languageswitcher {
     position: relative;
+    text-transform: lowercase;
 
     ul {
+      padding-top: 0.3125rem;
+      padding-bottom: 0.3125rem;
+
       &::before {
         content: '';
-        background: url('../imgs/icons/lang.svg') no-repeat;
+        mask-image: url('../imgs/icons/lang.svg');
+        background: $greyish;
         display: inline-block;
-        width: 15px;
-        height: 15px;
+        width: 14px;
+        height: 14px;
+        top: 7px;
         position: absolute;
-        top: 2px;
-        #{$left}: -10px;
-        #{$left}: -10px;
+        #{$left}: 28px;
       }
 
       .is-active {
         display: none;
+      }
+    }
+
+    &:hover {
+      background: $white-five;
+
+      ul::before {
+        background: $marine-blue-two;
       }
     }
   }
@@ -172,7 +258,7 @@ header {
 
     @include breakpoint($only-tablet) {
       position: absolute;
-      bottom: -60px;
+      bottom: -43px;
       #{$left}: 35%;
     }
 
@@ -186,9 +272,11 @@ header {
     }
 
     input[type="text"] {
+      font-family: $alshaya-thin;
       padding: 7.5px;
       vertical-align: bottom;
       height: 40px;
+      text-transform: lowercase;
 
       &::placeholder {
         font-size: 12px;
@@ -235,7 +323,7 @@ header {
     }
 
     .cart-link {
-      background: url('../imgs/icons/cart.svg') no-repeat;
+      background: url('../imgs/icons/basket.svg') no-repeat;
       display: inline-block;
       width: 32px;
       height: 32px;
@@ -244,14 +332,15 @@ header {
     }
 
     .quantity {
+      font-size: 10px;
       position: absolute;
       background: url('../imgs/icons/indicator-shape.svg') no-repeat;
       color: $white-five;
       text-align: center;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       bottom: -8px;
-      #{$left}: 4px;
+      #{$left}: -4px;
       border-radius: 50%;
       padding: 5px;
     }
@@ -453,6 +542,7 @@ header {
       border-top: 1px solid $white;
       border-bottom: 1px solid $white;
       padding: 10px;
+      text-transform: lowercase;
 
       &.active {
         background: $white-five !important;
@@ -523,6 +613,7 @@ header {
         }
 
         p {
+          font-family: $arial;
           font-size: 12px;
           margin: 0;
           margin-top: 6px;
@@ -618,7 +709,7 @@ header {
     min-width: 9rem;
     max-width: 10rem;
     display: inline-block;
-    margin-#{$right}: 3.125rem;
+    margin-#{$right}: 2rem;
     margin-bottom: 1.5rem;
 
     > .menu-two__link-wrapper a {
@@ -630,17 +721,27 @@ header {
   }
 
   .highlights {
-    max-width: 12.5rem;
     vertical-align: top;
     display: inline-block;
-    margin-#{$right}: 3.125rem;
+    width: 44%;
+
+    .highlighted {
+      display: inline-block;
+      max-width: 12.5rem;
+    }
 
     .title {
       font-family: $alshaya-bold;
+      display: block;
       font-size: 14px;
       color: $marine-blue;
       margin-bottom: 0.8rem;
     }
+  }
+
+  .level-three__wrapper {
+    width: 53%;
+    display: inline-block;
   }
 }
 
@@ -760,6 +861,7 @@ header {
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 2;
   }
 
   .menu--two__list,
@@ -839,19 +941,19 @@ header {
   width: 80%;
   background: $white;
   z-index: 10;
+  display: table;
 
   .one {
     font-family: $alshaya-thin;
     font-size: 14px;
-    display: inline-block;
     padding: 1rem 2rem;
+    display: table-cell;
   }
 
   .active {
     font-family: $alshaya-bold;
     color: $marine-blue;
     background: $white-five;
-    width: 35%;
   }
 }
 
@@ -867,5 +969,12 @@ header {
 
   .main--menu ul.menu--one__list {
     width: 50%;
+  }
+}
+
+// Toggle between Accounts
+@include breakpoint($only-mobile) {
+  .remove--toggle {
+    display: none !important;
   }
 }

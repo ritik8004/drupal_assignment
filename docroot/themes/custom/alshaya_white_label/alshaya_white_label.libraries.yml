@@ -12,6 +12,10 @@ global_styles:
 
 rtl_styles:
   version: VERSION
+  js:
+    js/menu.js: {}
+  dependencies:
+    - core/jquery
   css:
     theme:
       css/rtl.css: {}
