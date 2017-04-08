@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd466fedb0280b79ca35b483ad5dc337",
+    "content-hash": "350e99f61bfc9ade02ba00c19a47f849",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1940,6 +1940,49 @@
             "homepage": "http://drupal.org/project/address",
             "support": {
                 "source": "http://cgit.drupalcode.org/address"
+            }
+        },
+        {
+            "name": "drupal/better_exposed_filters",
+            "version": "3.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/better_exposed_filters",
+                "reference": "8.x-3.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-3.0-alpha2.zip",
+                "reference": null,
+                "shasum": "f1bbe21379a4ac8e28e3edfbdd4964343299caeb"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-3.x": "3.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-3.0-alpha2",
+                    "datestamp": "1484626084"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "mikeker",
+                    "homepage": "https://www.drupal.org/user/192273"
+                }
+            ],
+            "description": "Provides advanced options (such as links, checkboxes, or jQueryUI widgets) for exposed Views elements.",
+            "homepage": "https://www.drupal.org/project/better_exposed_filters",
+            "support": {
+                "source": "http://cgit.drupalcode.org/better_exposed_filters"
             }
         },
         {
@@ -5010,7 +5053,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta4",
-                    "datestamp": "1483286941"
+                    "datestamp": "1491153783"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5631,7 +5674,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.0-beta10.zip",
-                "reference": null,
+                "reference": "8.x-5.0-beta10",
                 "shasum": "72ce691fd0f17fc2a7d66a3ab1a8a2546d50eb5d"
             },
             "require": {
@@ -12050,7 +12093,8 @@
         "drupal/clientside_validation": 20,
         "drupal/facets": 15,
         "drupal/profile": 15,
-        "drupal/webform": 10
+        "drupal/webform": 10,
+        "drupal/better_exposed_filters": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
