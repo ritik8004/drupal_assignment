@@ -5,6 +5,7 @@
  * Theme specific functionality.
  */
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -134,7 +135,13 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     if ($profile->access('delete') && $profile->hasLinkTemplate('delete-form')) {
       $variables['delete_operation'] = [
         'title' => t('Delete'),
-        'url' => $profile->urlInfo('delete-form', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+        'url' => $profile->urlInfo('delete-form', [
+          'attributes' => [
+            'class' => ['use-ajax'],
+            'data-dialog-type' => 'modal',
+            'data-dialog-options' => Json::encode(['width' => '700']),
+          ],
+        ]),
       ];
     }
 
@@ -147,6 +154,9 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
       ];
     }
   }
+
+  $variables['#attached']['library'][] = 'modal/modal';
+  $variables['#attached']['library'][] = 'core/drupal.ajax';
 }
 
 /**
