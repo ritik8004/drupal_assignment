@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_customer\Controller;
 
-use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
@@ -23,6 +22,8 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function listOrders(UserInterface $user = NULL) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+
     $build = [];
 
     // Get items to show per page from config.
@@ -43,7 +44,7 @@ class CustomerController extends ControllerBase {
     $searchForm['form_build_id']['#printed'] = TRUE;
 
     // Get the orders to display for current user and filter applied.
-    $orders = $this->getUserOrders($user);
+    $orders = alshaya_acm_customer_get_user_orders($user, 'search', 'filter');
 
     // Initialising order details array to array.
     $orderDetails = [];
@@ -95,7 +96,7 @@ class CustomerController extends ControllerBase {
       foreach ($ordersPaged as $orderId => $order) {
         $orderDetails[] = [
           '#theme' => 'user_order_list_item',
-          '#order' => $this->getProcessedOrderSummary($orderId, $order),
+          '#order' => alshaya_acm_customer_get_processed_order_summary($orderId, $order),
           '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $user->id(), 'order_id' => $orderId])->toString(),
           '#currency_code' => $currencyCode,
           '#currency_code_position' => $currencyCodePosition,
@@ -153,9 +154,10 @@ class CustomerController extends ControllerBase {
    */
   public function orderDetail(UserInterface $user, $order_id) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get the orders to display for current user and filter applied.
-    $orders = $this->getUserOrders($user);
+    $orders = alshaya_acm_customer_get_user_orders($user);
 
     $order = $orders[$order_id];
 
@@ -207,8 +209,8 @@ class CustomerController extends ControllerBase {
     $account['last_name'] = $user->get('field_last_name')->getString();
 
     $build = [];
-    $build['#order'] = $this->getProcessedOrderSummary($order_id, $order);
-    $build['#order_details'] = $this->getProcessedOrderDetails($order);
+    $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order_id, $order);
+    $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
     $build['#products'] = $products;
     // @TODO: MMCPA-641.
     $build['#delivery_detail_notice'] = $this->t('Your order will be delivered between 1 and 3 days');
@@ -219,209 +221,6 @@ class CustomerController extends ControllerBase {
     $build['#cache'] = ['max-age' => 0];
 
     return $build;
-  }
-
-  /**
-   * Returns orders from cache if available.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   User object for which the orders are required.
-   *
-   * @return array
-   *   Array of orders.
-   */
-  protected function getUserOrders(UserInterface $user) {
-    $orders = [];
-
-    $cid = 'orders_list_' . $user->id();
-
-    if ($cache = \Drupal::cache()->get($cid)) {
-      $orders = $cache->data;
-    }
-    else {
-      $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($user->getEmail());
-
-      // Get the cache expiration time based on config value.
-      $cacheTimeLimit = \Drupal::config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
-
-      // We can disable caching via config by setting it to zero.
-      if ($cacheTimeLimit > 0) {
-        $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
-
-        // Store in cache.
-        \Drupal::cache()->set($cid, $orders, $expire);
-      }
-    }
-
-    // Search by Order ID, SKU, Name.
-    if ($search = \Drupal::request()->query->get('search')) {
-      $orders = array_filter($orders, function ($order, $orderId) use ($search) {
-        // Search by Order ID.
-        if (stripos($orderId, $search) > -1) {
-          return TRUE;
-        }
-
-        foreach ($order['items'] as $orderItem) {
-          // Search by name.
-          if (stripos($orderItem['name'], $search) > -1) {
-            return TRUE;
-          }
-          // Search by SKU.
-          elseif (stripos($orderItem['sku'], $search) > -1) {
-            return TRUE;
-          }
-        }
-
-        return FALSE;
-      }, ARRAY_FILTER_USE_BOTH);
-    }
-
-    return $orders;
-  }
-
-  /**
-   * Apply conditions and get order status.
-   *
-   * @param array $order
-   *   Item array.
-   *
-   * @return string
-   *   Status of order, ensure string can be used directly as class too.
-   */
-  private function getOrderStatus(array $order) {
-    // We support only three status as of now.
-    $status = ['pending' => 0, 'delivered' => 0, 'returned' => 0];
-
-    // Check for each item status.
-    foreach ($order['items'] as $item) {
-      $itemStatus = $this->getOrderItemStatus($item);
-      $status[$itemStatus]++;
-    }
-
-    // @TODO: Add conditions for partial delivery status - not in MVP1.
-    // Check MMCPA-145 comments for more details.
-    if ($status['returned'] !== 0) {
-      return ['text' => $this->t('returned'), 'class' => 'status-returned'];
-    }
-    elseif ($status['delivered'] !== 0) {
-      return ['text' => $this->t('delivered'), 'class' => 'status-delivered'];
-    }
-
-    // Finally if it is neither delivered nor returned, it is pending.
-    return ['text' => $this->t('pending'), 'class' => 'status-pending'];;
-  }
-
-  /**
-   * Apply conditions and get order item status.
-   *
-   * @param array $item
-   *   Item array.
-   *
-   * @return string
-   *   Status of item, ensure string can be used directly as class too.
-   */
-  private function getOrderItemStatus(array $item) {
-    if (empty($item['shipped']) && empty($item['refunded'])) {
-      return 'pending';
-    }
-
-    if (empty($item['refunded']) && $item['shipped'] === $item['ordered']) {
-      return 'delivered';
-    }
-
-    if (empty($item['shipped']) && $item['refunded'] === $item['ordered']) {
-      return 'returned';
-    }
-
-    // @TODO: Check condition for partial delivery, partial pending.
-    // @TODO: Check condition for partial delivery, partial returned.
-    return 'pending';
-  }
-
-  /**
-   * Get total number of items in order.
-   *
-   * @param array $order
-   *   Item array.
-   *
-   * @return int
-   *   Number of total items in the order.
-   */
-  private function getOrderTotalQuantity(array $order) {
-    $total = 0;
-
-    foreach ($order['items'] as $item) {
-      $total += $item['ordered'];
-    }
-
-    return $total;
-  }
-
-  /**
-   * Helper function to prepare order summary to pass to template.
-   *
-   * @param mixed $orderId
-   *   Order id.
-   * @param array $order
-   *   Order array from API.
-   *
-   * @return array
-   *   Processed order summary array.
-   */
-  private function getProcessedOrderSummary($orderId, array $order) {
-    $orderRow = [];
-
-    // @TODO: MMCPA-612.
-    $orderRow['orderId'] = $orderId;
-    // @TODO: MMCPA-612.
-    $orderRow['orderDate'] = '30 Nov. 2016 @ 20h55';
-
-    // We will display the name of first order item.
-    $item = reset($order['items']);
-    $orderRow['name'] = $item['name'];
-
-    // Calculate total items in the order.
-    $orderRow['quantity'] = $this->getOrderTotalQuantity($order);
-
-    // Format total to have max 3 decimals as per mockup.
-    $orderRow['total'] = number_format($order['totals']['grand'], 3);
-
-    // Calculate status of order based on status of items.
-    $orderRow['status'] = $this->getOrderStatus($order);
-
-    return $orderRow;
-  }
-
-  /**
-   * Helper function to prepare order detail to pass to template.
-   *
-   * @param array $order
-   *   Order array from API.
-   *
-   * @return array
-   *   Processed order detail array.
-   */
-  private function getProcessedOrderDetails(array $order) {
-    $orderDetails = [];
-
-    $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
-
-    // @TODO: MMCPA-641.
-    $orderDetails['contact_no'] = '+965 12 34 5679';
-
-    $address_formatter = new ACQAddressFormatter();
-    $orderDetails['delivery_address'] = $address_formatter->render((object) $order['shipping']['address']);
-
-    // @TODO: MMCPA-641.
-    $orderDetails['delivery_method'] = $order['shipping']['method']['carrier_code'];
-    $orderDetails['delivery_charge'] = $order['shipping']['method']['amount'];
-
-    $orderDetails['payment_method'] = $order['payment']['method_title'];
-
-    $orderDetails['sub_total'] = $order['totals']['sub'];
-    $orderDetails['order_total'] = $order['totals']['grand'];
-
-    return $orderDetails;
   }
 
 }
