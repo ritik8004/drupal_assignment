@@ -87,9 +87,8 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
       'callback' => '::deleteConfirmRedirect',
     ];
 
-    $form['actions']['cancel']['#url'] = Url::fromRoute('alshaya_addressbook.close_modal');
-    $form['actions']['cancel']['#attributes']['class'][] = 'use-ajax';
-    $form['actions']['cancel']['#attributes']['data-dialog-type'] = 'modal';
+    $form['actions']['cancel']['#attributes']['class'][] = 'button';
+    $form['actions']['cancel']['#attributes']['class'][] = 'dialog-cancel';
 
     return $form;
   }
@@ -107,15 +106,6 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
       ])->toString()));
       return $response;
     }
-  }
-
-  /**
-   * Close modal window.
-   */
-  public function closeModal() {
-    $response = new AjaxResponse();
-    $response->addCommand(new CloseModalDialogCommand());
-    return $response;
   }
 
 }
