@@ -1,0 +1,12 @@
+# Schema for the configuration files of the Acquia Commerce module.
+
+alshaya_user.settings:
+  type: config_object
+  label: 'Custom account settings'
+  mapping:
+    terms_conditions:
+      type: text_format
+      label: 'Terms and Conditions label'
+    user_register_complete:
+      type: text_format
+      label: 'User registration completion message'

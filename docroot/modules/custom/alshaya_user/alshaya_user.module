@@ -26,8 +26,8 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   }
   else {
     // Update title from description for terms and conditions field.
-    $form['field_terms_and_condition']['widget']['#title'] = $form['field_terms_and_condition']['widget']['#description'];
-    $form['field_terms_and_condition']['widget']['value']['#title'] = $form['field_terms_and_condition']['widget']['value']['#description'];
+    $form['field_terms_and_condition']['widget']['#title'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
+    $form['field_terms_and_condition']['widget']['value']['#title'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
 
     // Set description to NULL for terms and conditions field.
     $form['field_terms_and_condition']['widget']['#description'] = NULL;
@@ -36,6 +36,36 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
     // Change submit button text.
     $form['actions']['submit']['#value'] = t('Create');
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
+  // Add our custom submit handler function.
+  $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+}
+
+/**
+ * Form submit callback for user registration form.
+ *
+ * Store the email address in session and redirect to completion page.
+ */
+function alshaya_user_form_user_register_form_submit($form, FormStateInterface $form_state) {
+  // Get form storage.
+  $storage = $form_state->getStorage();
+
+  // Get the new user account object from storage.
+  $account = $storage['user'];
+
+  // Prepare user data array.
+  $user_data = ['id' => $account->id()];
+
+  // Get the string to pass into GET.
+  $user_data_string = base64_encode(json_encode($user_data));
+
+  // Redirect the user with email in GET.
+  return $form_state->setRedirect('alshaya_user.user_register_complete', ['user' => $user_data_string]);
 }
 
 /**
