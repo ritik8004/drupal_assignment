@@ -23,7 +23,7 @@ class HomeController extends ControllerBase {
     $entityDetails = \Drupal::config('alshaya_master.home')->get('entity');
 
     if (!empty($entityDetails)) {
-      $view_builder = \Drupal::entityTypeManager()->getViewBuilder($$entityDetails['entity_type']);
+      $view_builder = \Drupal::entityTypeManager()->getViewBuilder($entityDetails['entity_type']);
       $storage = \Drupal::entityTypeManager()->getStorage($entityDetails['entity_type']);
       $entity = $storage->load($entityDetails['id']);
       $build = $view_builder->view($entity, $entityDetails['view_mode']);
