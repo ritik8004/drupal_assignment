@@ -16,7 +16,7 @@ provider: null
 plugin: 'block_content:1a2425f6-8986-4e40-a30a-88ffebf18c53'
 settings:
   id: 'block_content:1a2425f6-8986-4e40-a30a-88ffebf18c53'
-  label: 'You’ll be able to'
+  label: 'you’ll be able to'
   provider: block_content
   label_display: visible
   status: true
