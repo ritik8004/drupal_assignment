@@ -1,3 +1,4 @@
+@import '../../../node_modules/breakpoint-sass/stylesheets/breakpoint';
 @import "../../config";
 @import "../../utils";
 @import "../../icons";
@@ -14,15 +15,6 @@
 
 .c-slider__items {
   position: relative;
-}
-
-.owl-nav {
-  .disabled {
-    @extend %icon-chevron-next--disabled;
-
-    opacity: 0.5;
-    cursor: default !important;
-  }
 }
 
 .owl-prev,
@@ -42,13 +34,21 @@
 
 .owl-prev {
   float: left;
-  left: 1.65rem;
   transform: rotate(-180deg);
+  left: 0.5rem;
+
+  @include breakpoint($tablet) {
+    left: 1.65rem;
+  }
 }
 
 .owl-next {
   float: left;
-  right: 1.65rem;
+  right: 0.5rem;
+
+  @include breakpoint($tablet) {
+    right: 1.65rem;
+  }
 }
 
 .owl-dots {
