@@ -75,40 +75,95 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#message' => t('Oops! Something went wrong.'),
     ];
   }
-  // Show success notification.
+  // Show success notification of the product.
   else {
-    // Product name.
-    $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
-    $product_value = SKU::loadFromSKU($string_sku)->get('name')->getValue();
-    $product_name = $product_value[0]['value'];
+    // Get product type.
+    $type = SKU::load($form_state->getValue('sku_id'))->getType();
 
-    // Quantity.
-    $quantity = $form_state->getValue('quantity');
+    // Check for product type as they have different data structures.
+    // Product type - Configurable.
+    if ($type == 'configurable') {
+      // Quantity.
+      $quantity = $form_state->getValue('quantity');
 
-    // Generating cart link.
-    $url = Url::fromRoute('acq_cart.cart')->toString();
+      // Get form values for configurable product.
+      $tree = $form_state->get('tree');
+      $configurables = $form_state->getValue('configurables');
+      $tree_pointer = $tree['options'];
+      foreach ($configurables as $key => $value) {
+        if (empty($value)) {
+          continue;
+        }
+        // Move the tree pointer if the selection is valid.
+        if (isset($tree_pointer["$key:$value"])) {
+          $tree_pointer = $tree_pointer["$key:$value"];
+        }
+      }
+      // In case the option on product is not available, $tree_pointer is an
+      // array instead of SKU Object.
+      // ex: We have only XL and L, but the dropdown shows S as well.
+      // This may not be needed on prod as we will hide the options not
+      // available.
+      // @todo: Remove this check once Product page is done.
+      if (!($tree_pointer instanceof SKU)) {
+        // Use the template to render the error.
+        $output = [
+          '#theme' => 'add_to_cart_error',
+          '#message' => t('Oops! Something went wrong.'),
+        ];
+      }
+      else {
+        $string_sku = $tree_pointer->getSKU();
 
-    // Product Image.
-    // Create image path.
-    $image = SKU::loadFromSKU($string_sku)
-      ->get('attr_image')
-      ->getValue();
+        // Product Name.
+        $product_value = SKU::loadFromSKU($string_sku)->get('name')->getValue();
+        $product_name = $product_value[0]['value'];
 
-    // If we have image for the product.
-    if ($image != NULL) {
-      $file_uri = File::load($image[0]['target_id'])->getFileUri();
-      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($file_uri);
+        // Product Image.
+        // Create image path.
+        $image = alshaya_acm_cart_notification_get_product_image($string_sku);
+
+        // Generating cart link.
+        $url = Url::fromRoute('acq_cart.cart')->toString();
+
+        // Use the template to render the HTML.
+        $output = [
+          '#theme' => 'cart_notification',
+          '#quantity' => $quantity,
+          '#image' => $image,
+          '#product_name' => $product_name,
+          '#link' => $url,
+          '#link_text' => t('View Cart.'),
+        ];
+      }
     }
+    // Product Type - Simple.
+    else {
+      // Product name.
+      $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
+      $product_value = SKU::loadFromSKU($string_sku)->get('name')->getValue();
+      $product_name = $product_value[0]['value'];
 
-    // Use the template to render the HTML.
-    $output = [
-      '#theme' => 'cart_notification',
-      '#quantity' => $quantity,
-      '#image' => $image,
-      '#product_name' => $product_name,
-      '#link' => $url,
-      '#link_text' => t('View Cart.'),
-    ];
+      // Quantity.
+      $quantity = $form_state->getValue('quantity');
+
+      // Generating cart link.
+      $url = Url::fromRoute('acq_cart.cart')->toString();
+
+      // Product Image.
+      // Create image path.
+      $image = alshaya_acm_cart_notification_get_product_image($string_sku);
+
+      // Use the template to render the HTML.
+      $output = [
+        '#theme' => 'cart_notification',
+        '#quantity' => $quantity,
+        '#image' => $image,
+        '#product_name' => $product_name,
+        '#link' => $url,
+        '#link_text' => t('View Cart.'),
+      ];
+    }
   }
 
   $html = drupal_render($output);
@@ -118,6 +173,33 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   $response->addCommand(new HtmlCommand('#cart_notification', $html));
 
   return $response;
+}
+
+/**
+ * Helper function to return product image.
+ *
+ * @param string $string_sku
+ *   SKU of the product.
+ *
+ * @return string
+ *   Returns the image URL to be passed to theme function. FALSE if not found.
+ */
+function alshaya_acm_cart_notification_get_product_image($string_sku) {
+  // Product Image.
+  // Create image path.
+  $image = SKU::loadFromSKU($string_sku)
+    ->get('attr_image')
+    ->getValue();
+
+  // If we have image for the product.
+  if ($image != NULL) {
+    $file_uri = File::load($image[0]['target_id'])->getFileUri();
+    $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($file_uri);
+    return $image;
+  }
+  else {
+    return FALSE;
+  }
 }
 
 /**
