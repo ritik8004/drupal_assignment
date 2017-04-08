@@ -320,7 +320,6 @@ function template_preprocess_alshaya_acm_price(array &$variables) {
   // Fetch the currency code position.
   $currency_code_position = $config->get('currency_code_position');
 
-  // @todo: find a way to avoid t($currency_format);
   $variables['currency_format'] = $currency_format;
   $variables['currency_code_position'] = $currency_code_position;
 }
