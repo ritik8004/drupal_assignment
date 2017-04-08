@@ -48,12 +48,11 @@ class UserController extends ControllerBase {
 
     $build = [];
 
-    // Use email from session.
-    $args = [
-      '@email' => $account->getEmail(),
-    ];
+    // Get text from config.
+    $text = \Drupal::config('alshaya_user.settings')->get('user_register_complete.value');
 
-    $build['#markup'] = $this->t("You're almost done.<br>We've sent a verification email to <a href='mailto:@email'>@email</a>.<br>Clicking on the email confirmation link, lets us know the email address is both valid and yours.<br>It is also your final step in the sign up process.", $args);
+    // Use email from session and replace in text.
+    $build['#markup'] = str_replace('[email]', $account->getEmail(), $text);
 
     $build['#cache'] = ['max-age' => 0];
 

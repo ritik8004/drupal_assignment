@@ -29,8 +29,8 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   }
   else {
     // Update title from description for terms and conditions field.
-    $form['field_terms_and_condition']['widget']['#title'] = $form['field_terms_and_condition']['widget']['#description'];
-    $form['field_terms_and_condition']['widget']['value']['#title'] = $form['field_terms_and_condition']['widget']['value']['#description'];
+    $form['field_terms_and_condition']['widget']['#title'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
+    $form['field_terms_and_condition']['widget']['value']['#title'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
 
     // Set description to NULL for terms and conditions field.
     $form['field_terms_and_condition']['widget']['#description'] = NULL;
