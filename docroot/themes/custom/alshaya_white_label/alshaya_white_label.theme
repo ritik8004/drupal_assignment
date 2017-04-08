@@ -169,15 +169,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('entity--type-' . $variables['elements']['#entity_type']);
   }
 
-  // Check if the current node is front page.
-  $node_url = Url::fromRoute('<current>')->getInternalPath();
-  $front_page_url = Url::fromUserInput(\Drupal::config('system.site')->get('page')['front'])->getInternalPath();
-  if ($node_url == $front_page_url) {
-    $variables['is_front'] = TRUE;
-  }
-  else {
-    $variables['is_front'] = FALSE;
-  }
+  $variables['is_front'] = _alshaya_white_label_is_front_page();
 
   if ($variables['node']->bundle() == 'advanced_page') {
     $node = $variables['node']->toArray();
@@ -288,9 +280,7 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
-  $node_url = Url::fromRoute('<current>')->getInternalPath();
-  $front_page_url = Url::fromUserInput(\Drupal::config('system.site')->get('page')['front'])->getInternalPath();
-  if ($node_url == $front_page_url) {
+  if (_alshaya_white_label_is_front_page()) {
     $suggestions[] = 'page__front';
   }
 }
@@ -300,9 +290,7 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
  */
 function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, array $variables) {
   // Check if the current node is front page.
-  $node_url = Url::fromRoute('<current>')->getInternalPath();
-  $front_page_url = Url::fromUserInput(\Drupal::config('system.site')->get('page')['front'])->getInternalPath();
-  if ($node_url == $front_page_url) {
+  if (_alshaya_white_label_is_front_page()) {
     $suggestions[] = 'node__advanced_page_front';
   }
 }
@@ -334,4 +322,26 @@ function alshaya_white_label_preprocess_field(&$variables, $hook) {
       }
     }
   }
+}
+
+/**
+ * Helper function to check if the page is front page.
+ *
+ * @return bool
+ *   True if it is frontpage, false otherwise
+ */
+function _alshaya_white_label_is_front_page() {
+  // @TODO: PathMatcher::isFrontPage is not working so we are doing it custom.
+  // Check this later if a fix is available in Drupal.
+  // First check if we are on a node page, as we are using node for home page.
+  if ($nodeParam = Drupal::request()->attributes->get('node')) {
+    // Check if the current node is front page via checking the URL.
+    $node_url = Url::fromRoute('<current>')->getInternalPath();
+    $front_page_url = Url::fromUserInput(\Drupal::config('system.site')->get('page')['front'])->getInternalPath();
+    if ($node_url == $front_page_url) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }
