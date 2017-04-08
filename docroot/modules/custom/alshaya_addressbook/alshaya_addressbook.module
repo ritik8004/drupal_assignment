@@ -26,7 +26,6 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
   if (!$default_address) {
     $form['actions']['submit']['#access'] = FALSE;
   }
-
 }
 
 /**
