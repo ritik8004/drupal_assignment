@@ -6,15 +6,10 @@
  */
 
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\user\Entity\User;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-use Drupal\Component\Serialization\Json;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\CloseModalDialogCommand;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -70,59 +65,4 @@ function alshaya_addressbook_entity_type_alter(array &$entity_types) {
   $entity_types['profile']->setFormClass('delete', 'Drupal\alshaya_addressbook\Form\AlshayaProfileDeleteForm');
   $entity_types['profile']->setFormClass('add', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
   $entity_types['profile']->setFormClass('edit', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function alshaya_addressbook_preprocess_profile(&$variables) {
-  $profile = $variables['elements']['#profile'];
-
-  if ($profile->access('delete')) {
-    $variables['content']['delete_link'] = [
-      '#title' => t('Delete'),
-      '#type' => 'link',
-      '#url' => URL::fromUserInput('/profile/' . $profile->id() . '/delete'),
-      '#attributes' => [
-        'class' => ['use-ajax'],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode(['width' => '700']),
-      ],
-    ];
-
-    $variables['content']['#attached']['library'][] = 'modal/modal';
-    $variables['content']['#attached']['library'][] = 'core/drupal.ajax';
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_addressbook_form_profile_address_book_delete_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['actions']['submit']['#value'] = t('yes, delete this address');
-  $form['actions']['submit']['#submit'][] = 'alshaya_addressbook_delete_confirm_reload';
-  $form['actions']['submit']['#ajax'] = [
-    'callback' => 'alshaya_addressbook_delete_confirm_reload',
-  ];
-
-  $form['actions']['cancel']['#title'] = t('No, take me back');
-  $form['actions']['cancel']['#url'] = Url::fromRoute('alshaya_addressbook.close_modal');
-  $form['actions']['cancel']['#attributes']['class'][] = 'use-ajax';
-  $form['actions']['cancel']['#attributes']['data-dialog-type'] = 'modal';
-}
-
-/**
- * Ajax submit callback: Close the modal window and reload the page.
- */
-function alshaya_addressbook_delete_confirm_reload(array &$form, FormStateInterface $form_state) {
-  $entity = $form_state->getFormObject()->getEntity();
-  $response = new AjaxResponse();
-  if ($form_state->isExecuted()) {
-    $response->addCommand(new CloseModalDialogCommand());
-    $response->addCommand(new RedirectCommand(Url::fromRoute('entity.profile.type.address_book.user_profile_form', [
-      'user' => $entity->getOwnerId(),
-      'profile_type' => 'address_book',
-    ])->toString()));
-    return $response;
-  }
 }
