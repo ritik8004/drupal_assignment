@@ -90,3 +90,20 @@ function alshaya_user_form_user_pass_alter(&$form, FormStateInterface $form_stat
     '#weight' => -10,
   ];
 }
+
+/**
+ * Implements hook_preprocess_menu().
+ */
+function alshaya_user_preprocess_menu(&$variables) {
+  // For now we want to process only for authenticated users.
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    // Loop through all the links.
+    foreach ($variables['items'] as $key => &$item) {
+      // We want to process only the register link.
+      if ($item['url']->getRouteName() == 'user.register') {
+        // Hide the register link for authenticated user.
+        unset($variables['items'][$key]);
+      }
+    }
+  }
+}
