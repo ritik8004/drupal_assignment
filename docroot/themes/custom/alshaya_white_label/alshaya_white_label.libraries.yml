@@ -36,3 +36,16 @@ owlcarousel:
   version: VERSION
   js:
     libs/owlcarousel.min.js: {}
+
+footer_accordion:
+  version: VERSION
+  js:
+    js/accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.accordion
+
+unmask_password:
+  version: VERSION
+  js:
+    js/unmask_password.js: {}
