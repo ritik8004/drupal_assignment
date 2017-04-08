@@ -6,9 +6,9 @@ dependencies:
     - core.entity_view_mode.acq_sku.product_list
     - field.field.acq_sku.configurable.field_configurable_attributes
     - field.field.acq_sku.configurable.field_configured_skus
-    - image.style.291x288
+    - responsive_image.styles.291x288
   module:
-    - image
+    - responsive_image
 id: acq_sku.configurable.product_list
 targetEntityType: acq_sku
 bundle: configurable
@@ -16,10 +16,10 @@ mode: product_list
 content:
   attr_image:
     label: hidden
-    type: image
+    type: responsive_image
     weight: 0
     settings:
-      image_style: 291x288
+      responsive_image_style: 291x288
       image_link: ''
     third_party_settings: {  }
   name:
@@ -38,7 +38,6 @@ content:
     third_party_settings: {  }
 hidden:
   attr_color: true
-  image: true
   attr_size: true
   attr_small_image: true
   attr_special_price: true
@@ -47,5 +46,6 @@ hidden:
   crosssell: true
   field_configurable_attributes: true
   field_configured_skus: true
+  image: true
   sku: true
   upsell: true

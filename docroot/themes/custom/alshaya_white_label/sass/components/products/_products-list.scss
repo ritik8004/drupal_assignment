@@ -1,0 +1,192 @@
+.c-plp {
+  padding-top: 1.75rem;
+
+  .region__content {
+    position: relative;
+  }
+
+  .c-page-title {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    @include breakpoint($only-tablet) {
+      max-width: 20rem;
+    }
+  }
+
+  .c-page-title__description {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+
+    @include breakpoint($only-tablet) {
+      max-width: 20rem;
+      font-size: 0.875rem;
+      margin-top: 0.1875rem;
+    }
+
+    font-size: 1rem;
+    text-transform: lowercase;
+    color: #0084cc;
+    font-family: $alshaya-thin;
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  .c-products-list {
+    .view-header {
+      margin-top: 1.125rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      color: #333;
+      padding-bottom: 9px;
+      border-bottom: 1px solid #ddd;
+      font-family: $alshaya-thin;
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+
+  .c-products__item {
+    float: $left;
+    text-align: center;
+    color: #333;
+    height: 19.5rem;
+
+    @include breakpoint($only-mobile) {
+      &:nth-child(2n) {
+        float: $right;
+      }
+    }
+
+    @include breakpoint($mobile) {
+      width: 50%;
+      max-width: 9rem;
+    }
+
+    @include breakpoint($tablet) {
+      height: 24rem;
+    }
+
+    @include breakpoint($tablet) {
+      width: 31.59%;
+      max-width: 291px;
+      height: 30rem;
+
+      &:nth-child(3n+2) {
+        margin: 0 2.6%;
+      }
+    }
+
+    .field--name-name {
+      margin-bottom: 0.875rem;
+      color: #666;
+      font-family: $alshaya-thin;
+      font-size: 0.75rem;
+
+      @include breakpoint($tablet) {
+        font-size: 0.875rem;
+      }
+    }
+
+    .field--name-price {
+      font-size: 0.75rem;
+
+      @include breakpoint($tablet) {
+        font-size: 0.9375rem;
+      }
+    }
+  }
+
+  .c-products__item__label {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .c-products__item__link {
+    color: #333;
+  }
+}
+
+.c-facet__blocks__wrapper--mobile {
+  @include breakpoint($desktop) {
+    display: none;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 0.75rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    position: absolute;
+    top: 0;
+    #{$right}: 2.25rem;
+  }
+
+  .c-facet__label {
+    @include breakpoint($only-mobile) {
+      width: 6.75rem;
+      font-size: 0.75rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 7.875rem;
+    }
+
+    background: #e5e5e5;
+    padding: 0.625rem;
+    padding-left: 0.75rem;
+    font-weight: normal;
+    margin: 0;
+    position: relative;
+    border-right: 1px solid white;
+    height: 2.1875rem;
+    z-index: 2;
+
+    &::after {
+      @extend %icon-chevron-down;
+
+      #{$right}: -2.25rem;
+      content: '';
+      height: 2.1875rem;
+      width: 2.1875rem;
+      background-color: #e5e5e5;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 0;
+      transform: rotate(180deg);
+    }
+
+    &.is-active {
+      background: white;
+    }
+  }
+
+  .c-facet__blocks {
+    @include breakpoint($only-tablet) {
+      #{$right}: -2.1875rem;
+      top: 2.1875rem;
+    }
+
+    width: 16.8125rem;
+    position: absolute;
+    display: none;
+    background-color: #fff;
+    z-index: 1;
+  }
+
+  .c-facet:first-child {
+    .c-facet__title {
+      border-top: none;
+    }
+  }
+}
