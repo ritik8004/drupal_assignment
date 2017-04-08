@@ -1,0 +1,6 @@
+alshaya_user.user_settings_form:
+  title: 'Custom account settings'
+  parent: user.admin_index
+  description: 'Configure custom user account settings added for Alshaya.'
+  weight: 10
+  route_name: alshaya_user.user_settings_form
