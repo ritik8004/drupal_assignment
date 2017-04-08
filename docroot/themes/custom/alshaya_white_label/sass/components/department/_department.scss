@@ -1,79 +1,15 @@
 .c-department {
   margin-top: 1.75rem;
 
-  @include breakpoint($desktop) {
-    @include container(1284px);
-  }
-
-  @include breakpoint($only-mobile) {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
-
-  @include breakpoint($tablet) {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
-  h2 {
-    @extend %page-title;
-
+  .c-page-title {
     border-bottom: 1px solid $white;
     margin-bottom: 0.75rem;
     margin-top: 0;
     padding-bottom: 0.75rem;
   }
 
-  main {
-    @include breakpoint($desktop) {
-      max-width: 923px;
-      width: 74.6763%;
-      float: $right;
-    }
-  }
-
-  aside {
-    @include breakpoint($desktop) {
-      max-width: 200px;
-      width: 16.1812%;
-      float: $left;
-    }
-  }
-
-  article header h2 {
-    @extend %page-title;
-  }
-
-  #block-alshaya-white-label-page-title,
-  .submitted,
-  #block-alshaya-white-label-content,
-  #block-alshaya-white-label-local-tasks {
+  .c-page-title__description {
     display: none;
-  }
-
-  .c-category__title {
-    font-size: 14px;
-    margin-bottom: 5px;
-    font-weight: bold;
-
-    a {
-      color: $peacock-blue;
-      text-decoration: none;
-    }
-  }
-
-  .c-category__items {
-    margin-bottom: 1.75rem;
-  }
-
-  .c-category__item {
-    font-size: 12px;
-    line-height: 2;
-
-    a {
-      color: #666;
-      text-decoration: none;
-    }
   }
 }
 

@@ -1,0 +1,17 @@
+.c-front__node {
+  @include breakpoint($only-mobile) {
+    @include container(304px);
+  }
+
+  @include breakpoint($only-tablet) {
+    @include container(720px);
+  }
+
+  @include breakpoint($desktop) {
+    @include container(1026px);
+  }
+
+  .c-content__banner {
+    margin-bottom: 1.5rem;
+  }
+}

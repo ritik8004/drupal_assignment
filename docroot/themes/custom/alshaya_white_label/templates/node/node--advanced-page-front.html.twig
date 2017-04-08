@@ -1,0 +1,29 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'c-front__node',
+  ]
+%}
+
+<article {{ attributes.addClass(classes) }}>
+  <div class="c-content">
+    {% if content.field_banner %}
+      <div class="c-content__banner">
+        {{ content.field_banner }}
+      </div>
+    {% endif %}
+
+    {% if content.field_slider %}
+      <div class="c-content__slider">
+        {{ content.field_slider }}
+      </div>
+    {% endif %}
+
+    <div class="c-content__container clearfix">
+      {{ content.body }}
+      {{ content.field_promo_blocks }}
+    </div>
+  </div>
+</article>
