@@ -257,6 +257,11 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       if ($form['#id'] == 'views-exposed-form-search-page') {
         $form['keywords']['#attributes']['placeholder'] = t('search item or Keyword');
       }
+      break;
+
+    case "user_login_form":
+      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      break;
   }
 }
 

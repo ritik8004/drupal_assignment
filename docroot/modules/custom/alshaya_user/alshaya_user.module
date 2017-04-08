@@ -44,11 +44,11 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
 function alshaya_user_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Add forgot password link.
   $form['account']['forgot_password'] = [
-    '#markup' => Link::createFromRoute(t('Forgot Password'), 'user.pass')->toString(),
+    '#markup' => Link::createFromRoute(t('Forgot password'), 'user.pass')->toString(),
   ];
 
   // Change submit button text.
-  $form['actions']['submit']['#value'] = t('Submit');
+  $form['actions']['submit']['#value'] = t('sign in');
 }
 
 /**

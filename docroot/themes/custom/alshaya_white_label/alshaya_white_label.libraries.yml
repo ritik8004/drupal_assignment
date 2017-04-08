@@ -45,3 +45,8 @@ footer_accordion:
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion
+
+unmask_password:
+  version: VERSION
+  js:
+    js/unmask_password.js: {}
