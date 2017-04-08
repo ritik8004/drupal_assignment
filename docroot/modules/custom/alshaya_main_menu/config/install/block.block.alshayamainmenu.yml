@@ -8,7 +8,7 @@ dependencies:
 id: alshayamainmenu
 theme: alshaya_white_label
 region: pre_content
-weight: 0
+weight: -20
 provider: null
 plugin: alshaya_main_menu
 settings:
