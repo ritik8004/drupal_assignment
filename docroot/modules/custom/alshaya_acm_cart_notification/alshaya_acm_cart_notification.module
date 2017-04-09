@@ -10,7 +10,6 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Url;
-use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 
@@ -83,30 +82,8 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     // Check for product type as they have different data structures.
     // Product type - Configurable.
     if ($type == 'configurable') {
-      // Quantity.
-      $quantity = $form_state->getValue('quantity');
-
-      // Get form values for configurable product.
-      $tree = $form_state->get('tree');
-      // All configurables.
-      $configurables = $form_state->getValue('configurables');
-      // All child skus.
-      $child_sku = $tree['options'];
-      foreach ($configurables as $key => $value) {
-        if (empty($value)) {
-          continue;
-        }
-        // Assign the correct sku to $child_sku based on configurable selected
-        // by user.
-        if (isset($child_sku["$key:$value"])) {
-          $child_sku = $child_sku["$key:$value"];
-        }
-      }
-      // In case the option on product is not available, $child_sku is not
-      // set. ex: We have only XL and L, but the drop down shows S, L as well.
-      // This may not be needed on prod as we will hide the options not
-      // available once PDP is done.
-      // @todo: Remove this check once Product page is done.
+      // If we have a child_sku available.
+      $child_sku = SKU::loadFromSKU($form_state->getValue('child_sku'));
       if (!($child_sku instanceof SKU)) {
         // Use the template to render the error.
         $output = [
@@ -115,15 +92,24 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
         ];
       }
       else {
+        // Quantity.
+        $quantity = $form_state->getValue('quantity');
+
         // Product Name.
-        $product_value = $child_sku->get('name')->getValue();
-        $product_name = $product_value[0]['value'];
+        $product = SKU::load($form_state->getValue('sku_id'));
+        $product_name = $product->get('name')->getString();
 
         // Product Image.
-        // Create image path.
-        $image = $child_sku->get('attr_image')->getValue();
-        $image = ImageStyle::load('cart_notification_thumbnail')
-          ->buildUrl(File::load($image[0]['target_id'])->getFileUri());
+        // Include the utility file.
+        \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+        $image = NULL;
+        $sku_media = !empty($child_sku) ? alshaya_acm_product_get_sku_media($child_sku) : alshaya_acm_product_get_sku_media($child_sku);
+
+        if ($sku_media) {
+          $imageEntity = array_shift($sku_media);
+          $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($imageEntity->getFileUri());
+        }
 
         // Generating cart link.
         $url = Url::fromRoute('acq_cart.cart')->toString();
@@ -154,7 +140,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
 
       // Product Image.
       // Create image path.
-      module_load_include('inc', 'alshaya_acm_product', 'alshaya_acm_product.utility');
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
       $image = alshaya_acm_product_get_sku_media($string_sku);
       $file_uri = $image[0]->getFileUri();
       $image = ImageStyle::load('cart_notification_thumbnail')
