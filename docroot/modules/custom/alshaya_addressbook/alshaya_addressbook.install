@@ -17,4 +17,28 @@ function alshaya_addressbook_modules_installed($modules) {
   $role->grantPermission('delete own address_book profile');
   $role->grantPermission('view own address_book profile');
   $role->save();
+
+  $config_factory = \Drupal::configFactory();
+  // Profile view.
+  $profile_view = $config_factory->getEditable('views.view.profiles');
+
+  // Get the display.
+  $display = $profile_view->get('display');
+
+  // Add the sort.
+  $display['default']['display_options']['sorts'] = [
+    'is_default' => [
+      'id' => 'is_default',
+      'table' => 'profile',
+      'field' => 'is_default',
+      'entity_type' => 'profile',
+      'entity_field' => 'is_default',
+      'plugin_d' => 'standard',
+      'order' => 'DESC',
+    ],
+  ];
+
+  // Save the configuration.
+  $profile_view->set('display', $display)->save();
+
 }
