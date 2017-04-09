@@ -61,6 +61,14 @@ class UserConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('user_register_complete.value'),
     ];
 
+    $form['password_tooltip'] = [
+      '#type' => 'text_format',
+      '#format' => 'rich_text',
+      '#title' => $this->t('Password tooltip'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('password_tooltip.value'),
+    ];
+
     return $form;
   }
 
