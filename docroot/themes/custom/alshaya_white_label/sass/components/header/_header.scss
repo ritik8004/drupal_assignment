@@ -67,8 +67,7 @@
 
         &::after {
           content: '';
-          mask-image: url(../imgs/icons/ic-chevronright-copy-9.svg);
-          background: $marine-blue;
+          background: url(../imgs/icons/ic-chevronright-copy-9.svg);
           position: absolute;
           #{$right}: 0;
           width: 6px;
@@ -108,12 +107,6 @@
 
     &:hover {
       background: $white-five;
-
-      a {
-        &::before {
-          background: $marine-blue-two;
-        }
-      }
     }
   }
 
@@ -150,7 +143,6 @@
       &::before {
         content: '';
         display: inline-block;
-        background: $greyish;
         width: 15px;
         height: 15px;
         position: absolute;
@@ -159,18 +151,42 @@
       }
     }
 
-    .register-link::before {
-      mask-image: url('../imgs/icons/register.svg');
+    .register-link {
+      &::before {
+        background: url('../imgs/icons/register.svg');
+      }
+
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/register-hover.svg');
+        }
+      }
     }
 
-    li:last-child a::before {
-      mask-image: url('../imgs/icons/sign-in.svg');
-      width: 12px;
+    li:last-child a {
+      &::before {
+        background: url('../imgs/icons/sign-in.svg');
+        width: 12px;
+      }
+
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/sign-in-hover.svg');
+        }
+      }
     }
 
-    a.stores-finder::before {
-      mask-image: url('../imgs/icons/find-us.svg');
-      width: 12px;
+    a.stores-finder {
+      &::before {
+        background: url('../imgs/icons/find-us.svg');
+        width: 12px;
+      }
+
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/find-us-hover.svg');
+        }
+      }
     }
   }
 
@@ -182,10 +198,6 @@
 
     &:hover {
       background: $white-five;
-
-      a::before {
-        background: $marine-blue-two;
-      }
     }
   }
 
@@ -199,8 +211,7 @@
 
       &::before {
         content: '';
-        mask-image: url('../imgs/icons/lang.svg');
-        background: $greyish;
+        background: url('../imgs/icons/lang.svg');
         display: inline-block;
         width: 14px;
         height: 14px;
@@ -218,7 +229,7 @@
       background: $white-five;
 
       ul::before {
-        background: $marine-blue-two;
+        background: url('../imgs/icons/lang-hover.svg');
       }
     }
   }
@@ -284,9 +295,8 @@ header {
     }
 
     #edit-submit-search {
-      background: url('../imgs/assets/search.svg') 10px 6px no-repeat;
+      background: $marine-blue url('../imgs/assets/search.svg') 10px 8px no-repeat;
       border: none;
-      background-color: $peacock-blue;
       text-indent: -9999px;
       width: 42px;
       height: 40px;
@@ -425,6 +435,7 @@ header {
       text-decoration: none;
       color: $brownish-grey;
       font-size: 12px;
+      display: block;
 
       &::before {
         content: ' ';
@@ -436,22 +447,28 @@ header {
 
     .store {
       &::before {
-        mask-image: url('../imgs/icons/store--big.svg');
-        background: $marine-blue;
+        background: url('../imgs/icons/store--big.svg');
         width: 16px;
         height: 23px;
+      }
+
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/store--big--hover.svg');
+        }
       }
     }
 
     .mobile--menu {
       &::before {
-        mask-image: url('../imgs/icons/mobile-menu.svg');
-        background: $marine-blue;
+        background: url('../imgs/icons/mobile-menu.svg');
         width: 24px;
         height: 13px;
+      }
 
-        &:hover {
-          background: $white-five;
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/mobile-menu--hover.svg');
         }
       }
     }
@@ -476,19 +493,20 @@ header {
 
         a {
           color: $white-five;
-
-          &::before {
-            background: $white-five;
-          }
         }
       }
 
       .mobile--search {
         &::before {
-          mask-image: url('../imgs/icons/ic-search.svg');
-          background: $marine-blue;
+          background: url('../imgs/icons/ic-search.svg');
           width: 22px;
           height: 22px;
+        }
+
+        &:hover {
+          &::before {
+            background: url('../imgs/icons/ic-search--hover.svg');
+          }
         }
       }
     }
@@ -606,6 +624,7 @@ header {
         width: 210px;
         position: relative;
         vertical-align: top;
+        z-index: 10;
 
         a {
           font-family: $alshaya-bold;
@@ -627,21 +646,22 @@ header {
           p {
             color: $white-five;
           }
-
-          &::after {
-            background-color: $white-five;
-          }
         }
 
         &::after {
           content: '';
-          mask-image: url('../imgs/icons/icon-chevron-next.svg');
-          background-color: $marine-blue;
+          background: url('../imgs/icons/icon-chevron-next.svg');
           width: 8px;
           height: 17px;
           position: absolute;
           #{$right}: 10px;
           top: 39%;
+        }
+
+        &:hover {
+          &::after {
+            background: url('../imgs/icons/icon-chevron-next--hover.svg');
+          }
         }
       }
 
@@ -651,19 +671,19 @@ header {
 
       &:hover {
         ul.menu--three__list {
-          display: inline-block;
+          display: block;
         }
       }
 
       .menu--three__list {
-        width: 80%;
+        width: 100%;
         vertical-align: top;
         margin-bottom: 1.563rem;
         position: absolute;
+        background: $white-five;
         top: 0;
-        bottom: 0;
+        padding-#{$left}: 16rem;
         margin-top: 1.5625rem;
-        margin-#{$left}: 2.8125rem;
 
         p {
           display: none;
@@ -727,7 +747,7 @@ header {
 
     .highlighted {
       display: inline-block;
-      max-width: 12.5rem;
+      max-width: 11.5rem;
     }
 
     .title {
@@ -753,7 +773,7 @@ header {
   .mobile--overlay {
     &::before {
       content: '';
-      position: absolute;
+      position: fixed;
       z-index: 2;
       width: 100%;
       height: 100;
@@ -770,9 +790,9 @@ header {
 
     ul.menu--one__list {
       background: $white-five;
-      width: 80%;
+      width: 79.9%;
       height: 100%;
-      position: absolute;
+      position: fixed;
       top: 50px;
       z-index: 20;
       overflow-y: scroll;
@@ -936,7 +956,7 @@ header {
 }
 
 .toggle--sign {
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 80%;
   background: $white;
@@ -976,5 +996,101 @@ header {
 @include breakpoint($only-mobile) {
   .remove--toggle {
     display: none !important;
+  }
+}
+
+// Main Menu Logged In State
+
+.logged-in {
+  .menu--account {
+    li:first-child {
+      a::before {
+        background: url('../imgs/icons/register.svg');
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
+}
+
+//User Menu Account
+.my-account-nav {
+  display: none;
+
+  h2 {
+    color: $marine-blue-two;
+    font-size: 12px;
+    padding: 0.94rem 0;
+    padding-top: 4rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
+    text-transform: lowercase;
+  }
+
+  position: absolute;
+  width: 80%;
+  top: 0;
+  background: #fff;
+  height: 100%;
+  z-index: 10;
+
+  ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: block;
+      font-family: $alshaya-thin;
+      border-bottom: 1px solid #ddd;
+      padding: 0.94rem 0;
+      margin-left: 0.625rem;
+      margin-right: 0.625rem;
+      text-align: left;
+      position: relative;
+
+      &:hover {
+        background: none;
+
+        a {
+          color: $brownish-grey;
+        }
+      }
+
+      &::after {
+        content: '';
+        background: url(../imgs/icons/ic-chevronright-copy-9.svg);
+        position: absolute;
+        #{$right}: 0;
+        width: 6px;
+        height: 10px;
+        top: 20px;
+      }
+    }
+  }
+}
+
+.logged-out {
+  .account--logged_in {
+    display: none;
+  }
+}
+
+.logged-in {
+  .account {
+    display: none;
+  }
+
+  .toggle--sign {
+    top: 40px;
+  }
+
+  ul.menu--one__list {
+    top: 90px;
+  }
+
+  .mobile--close {
+    top: 50px;
   }
 }
