@@ -3,6 +3,8 @@
   font-family: $alshaya-bold;
   color: #003971;
   line-height: 1;
+  margin-top: 0;
+  margin-bottom: 0;
 
   @include breakpoint($only-mobile) {
     font-size: 1.125rem;

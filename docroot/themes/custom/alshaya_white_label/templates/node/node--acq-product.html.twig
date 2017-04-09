@@ -9,7 +9,7 @@
 <article{{ attributes }}>
   {{ title_prefix }}
   {% if not page %}
-    <h2{{ title_attributes }}>
+    <h2{{ title_attributes.addClass("c-products__item__label") }}>
       <a href="{{ url }}" rel="bookmark">{{ label }}</a>
     </h2>
   {% endif %}
@@ -31,7 +31,7 @@
     </div>
   {% else %}
       <div{{ content_attributes }}>
-        <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ content }}</a>
+        <a class="c-products__item__link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ content }}</a>
       </div>
   {% endif %}
 

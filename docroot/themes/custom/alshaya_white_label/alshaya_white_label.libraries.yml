@@ -14,6 +14,11 @@ rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+  js:
+      js/accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.accordion
 
 color_styles:
   version: VERSION
