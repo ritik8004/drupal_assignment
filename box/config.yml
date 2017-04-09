@@ -57,6 +57,7 @@ installed_extras:
 php_version: "5.6"
 php_packages_extra:
   - "php{{ php_version }}-bz2"
+php_memory_limit: "512M"
 
 # Solr Configuration.
 solr_version: "4.5.1"
