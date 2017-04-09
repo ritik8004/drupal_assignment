@@ -11,6 +11,7 @@ dependencies:
   - image
   - lightning_core
   - node
+  - responsive_image
   - search_api
   - system
   - taxonomy
@@ -18,3 +19,4 @@ dependencies:
   - views
   - views_infinite_scroll
 version: 8.x-1.0
+package: Alshaya
