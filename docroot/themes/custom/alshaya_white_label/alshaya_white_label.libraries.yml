@@ -5,6 +5,7 @@ global_styles:
       css/styles.css: {}
   js:
     js/accordion.js: {}
+    js/menu.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion
