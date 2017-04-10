@@ -5,6 +5,7 @@ description: 'Stores user field and related settings.'
 dependencies:
   - alshaya_user
   - block
+  - change_pwd_page
   - datetime
   - email_registration
   - field

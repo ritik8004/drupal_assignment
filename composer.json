@@ -39,7 +39,9 @@
         "drupal/field_group": "1.0.0-rc4",
         "drupal/webform": "^5.0@beta",
         "drupal/better_exposed_filters": "^3.0@alpha",
-        "drupal/back_to_top": "^1.0@beta"
+        "drupal/back_to_top": "^1.0@beta",
+        "drupal/change_pwd_page": "^1.0@beta",
+        "drupal/mobile_number": "^1.0@alpha"
     },
     "require-dev": {
         "behat/behat": "^3.1",

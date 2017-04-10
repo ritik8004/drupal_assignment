@@ -95,7 +95,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     // Change password link.
     $links['change_password'] = [
       // TODO: Update the route name once link is available.
-      '#markup' => Link::createFromRoute($this->t('Change password'), 'entity.user.canonical', ['user' => $uid])->toString(),
+      '#markup' => Link::createFromRoute($this->t('Change password'), 'change_pwd_page.change_password_form', ['user' => $uid])->toString(),
     ];
 
     $build = [

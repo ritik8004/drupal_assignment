@@ -9,6 +9,22 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 
 /**
+ * Check if the current user has is only authenticated user.
+ *
+ * @return bool
+ *   Return true if user is only authenticated user.
+ */
+function alshaya_user_only_authenticated() {
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    $roles = \Drupal::currentUser()->getRoles();
+    if (count($roles) == 1) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -22,7 +38,13 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
 
   // We don't want to show the terms and conditions field to logged in users.
   if (\Drupal::currentUser()->isAuthenticated()) {
+    // Get if user only authenticated or not.
+    $only_authenticated = alshaya_user_only_authenticated();
     $form['field_terms_and_condition']['#access'] = FALSE;
+    // Disabled true, if only authenticated.
+    $form['account']['mail']['#disabled'] = $only_authenticated;
+    // Access false, if only authenticated.
+    $form['account']['current_pass']['#access'] = !$only_authenticated;
   }
   else {
     // Update title from description for terms and conditions field.
