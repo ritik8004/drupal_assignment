@@ -115,10 +115,9 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     ];
 
     // Change password link.
-    // TODO: Update the route name once link is available.
     $links['change_password'] = [
       'text' => $this->t('Change password'),
-      'route' => 'entity.user.canonical',
+      'route' => 'change_pwd_page.change_password_form',
       'options' => ['user' => $account->id()],
     ];
 
