@@ -1,0 +1,18 @@
+cloud_zoom:
+  version: 1.0.3
+  css:
+    theme:
+      js/cloud-zoom/cloud-zoom.css: {}
+      css/alshaya_product_zoom.css: {}
+  js:
+    js/cloud-zoom/cloud-zoom.1.0.3.js: {minified: true}
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+product.cloud_zoom:
+  version: 1.x
+  js:
+    js/alshaya_product_zoom.js: {}
+  dependencies:
+    - alshaya_product_zoom/cloud_zoom

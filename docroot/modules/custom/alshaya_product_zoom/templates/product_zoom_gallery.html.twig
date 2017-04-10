@@ -1,0 +1,13 @@
+<div class="cloud-zoom-container">
+  <div id="wrap">
+    <a href="{{ mainImage.url }}" rel="zoomWidth:'auto', zoomHeight:'auto', position:'right', adjustX:0, adjustY:0, tint:'false', tintOpacity:'0.5', lensOpacity:'0.5', softFocus:true, smoothMove:'3', showTitle:true, titleOpacity:'0.5'" id="cloud-zoom" class="cloud-zoom">
+      <img width="480" height="300" src="{{ mainImage.image }}"/></a>
+  </div>
+  <div class="cloud-zoom-gallery-thumbs">
+    {% for thumbs in thumbnails %}
+      <a href="{{ thumbs.url }}" class="cloud-zoom-gallery" rel="useZoom: 'cloud-zoom',smallImage: '{{ thumbs.url }}'">
+        <img src="{{ thumbs.image }}"/>
+      </a>
+    {% endfor %}
+  </div>
+</div>

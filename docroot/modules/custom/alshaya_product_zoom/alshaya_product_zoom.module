@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for Alshaya Product Zoom module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
+  return [
+    'product_zoom_gallery' => [
+      'variables' => [
+        'mainImage' => '',
+        'thumbnails' => '',
+      ],
+      'template' => 'product_zoom_gallery',
+    ],
+  ];
+}
