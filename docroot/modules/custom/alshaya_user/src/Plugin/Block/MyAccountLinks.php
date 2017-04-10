@@ -64,6 +64,9 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
     // Get user id of user who's profile is currently visit.
     $account = \Drupal::request()->attributes->get('user');
+    if (empty($account)) {
+      $account = $this->currentUser;
+    }
 
     // Get the current route to set active class.
     $currentRoute = \Drupal::routeMatch()->getRouteName();
