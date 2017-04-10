@@ -1,6 +1,11 @@
 <div class="main--menu">
-  <div class="mobile--close">
-    <p>X</p>
+<div class="toggle--sign no--desktop">
+  <div class="shop one active">{{ 'shop' | t }}</div>
+  <div class="account one">{{ "sign in" | t }} / {{ "register" | t }}</div>
+  <div class="account--logged_in one">{{ 'my account' | t }}</div>
+</div>
+  <div class="mobile--close no--desktop">
+    <span></span>
   </div>
   <ul class="menu__list menu--one__list">
     {% for key1, level1 in term_tree %}
@@ -20,3 +25,5 @@
     {% endfor %}
   </ul>
 </div>
+
+ <div class="title">{{ 'Highlight' | t }}</div>
