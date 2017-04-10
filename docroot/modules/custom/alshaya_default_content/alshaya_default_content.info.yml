@@ -8,3 +8,4 @@ dependencies:
   - alshaya_menus
   - default_content
   - alshaya_main_menu
+  - alshaya_user
