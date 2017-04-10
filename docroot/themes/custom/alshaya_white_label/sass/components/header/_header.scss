@@ -1,6 +1,7 @@
 @include breakpoint($desktop) {
   .no--desktop,
-  .toggle--sign.no--desktop {
+  .toggle--sign.no--desktop,
+  .mobile--close {
     display: none;
   }
 
@@ -14,7 +15,11 @@
 }
 
 .c-menu-secondary {
-  @include breakpoint($only-mobile) {
+  @include breakpoint($only-tablet) {
+    width: 270px !important;
+  }
+
+  @include breakpoint($upto-desktop) {
     display: none;
 
     .c-menu-secondary__region {
@@ -275,6 +280,7 @@ header {
       vertical-align: bottom;
       height: 40px;
       text-transform: lowercase;
+      max-width: 280px;
 
       &::placeholder {
         font-size: 12px;
@@ -533,7 +539,7 @@ header {
     }
 
     ul.menu--one__list {
-      display: flex;
+      display: flex !important;
       margin: 0;
       padding: 0;
       background: $white-five;
@@ -967,20 +973,20 @@ header {
 // Tablet Specific menu width
 @include breakpoint($only-tablet) {
   .toggle--sign {
-    width: 50%;
+    width: 270px;
   }
 
   .mobile--close {
-    #{$left}: 51%;
+    #{$left}: 280px;
   }
 
   .main--menu ul.menu--one__list {
-    width: 50%;
+    width: 270px;
   }
 }
 
 // Toggle between Accounts
-@include breakpoint($only-mobile) {
+@include breakpoint($upto-desktop) {
   .remove--toggle {
     display: none !important;
   }
@@ -1001,14 +1007,13 @@ header {
 }
 
 //User Menu Account
-.my-account-nav {
+.c-menu-primary .my-account-nav {
   display: none;
 
   h2 {
     color: $marine-blue-two;
     font-size: 12px;
     padding: 0.94rem 0;
-    padding-top: 4rem;
     margin-left: 1rem;
     margin-right: 1rem;
     margin-bottom: 0;
@@ -1079,14 +1084,6 @@ header {
 
   .mobile--close {
     top: 50px;
-  }
-
-  &.mobile--overlay {
-    .user-page {
-      position: inherit;
-      margin: 0;
-      padding: 0;
-    }
   }
 
   @include breakpoint($desktop) {

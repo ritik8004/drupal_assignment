@@ -1,3 +1,14 @@
 .l-one--w {
-  @include container(80.25rem);
+  @include breakpoint($only-mobile) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  @include breakpoint($only-tablet) {
+    @include container(720px);
+  }
+
+  @include breakpoint($desktop) {
+    @include container(1050px);
+  }
 }
