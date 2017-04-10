@@ -92,7 +92,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['promotion_code_wrapper']['promotion'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
-    '#suffix' => '<span id="apply_coupon">apply</span>',
+    '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
   ];
   $form['coupon']['#type'] = 'hidden';
 
