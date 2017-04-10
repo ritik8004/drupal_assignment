@@ -55,6 +55,7 @@
         $('.c-menu-secondary').addClass('remove--toggle');
         $('body').removeClass('mobile--overlay');
         $('.my-account-nav').removeClass('block--display');
+        $('.mobile--close').removeClass('block--display');
       });
 
       $('.menu--one__list-item.has-child').hover(
