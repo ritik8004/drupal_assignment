@@ -10,3 +10,6 @@ alshaya_user.settings:
     user_register_complete:
       type: text_format
       label: 'User registration completion message'
+    password_tooltip:
+      type: text_format
+      label: 'Password tooltip'
