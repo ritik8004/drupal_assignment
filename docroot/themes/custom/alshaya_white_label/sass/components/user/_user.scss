@@ -55,7 +55,9 @@
   }
 
   #block-jointheclub {
-    margin-top: 9.063rem;
+    border-top: 1px solid #ddd;
+    margin-top: 4.5rem;
+    padding-top: 4.5rem;
 
     a {
       font-weight: bold;
@@ -75,16 +77,26 @@
     position: relative;
   }
 
+  #edit-account {
+    @include breakpoint($desktop) {
+      clear: both;
+      padding-top: 1px;
+    }
+  }
+
   .field--name-field-first-name,
   .field--name-field-last-name {
     @include breakpoint($desktop) {
-      display: inline-block;
-      max-width: 11.625rem;
+      float: left;
+      max-width: 186px;
+      width: calc(50% - 12px);
     }
   }
 
   .field--name-field-first-name {
-    margin-#{$right}: 1.25rem;
+    @include breakpoint($desktop) {
+      margin-right: 1.25rem;
+    }
   }
 
   .captcha {
