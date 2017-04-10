@@ -79,83 +79,49 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     // Get product type.
     $type = SKU::load($form_state->getValue('sku_id'))->getType();
 
+    // Product Name.
+    $product = SKU::load($form_state->getValue('sku_id'));
+    $product_name = $product->get('name')->getString();
+
+    // Quantity.
+    $quantity = $form_state->getValue('quantity');
+
+    // Generating cart link.
+    $url = Url::fromRoute('acq_cart.cart')->toString();
+
+    // Product Image.
     // Check for product type as they have different data structures.
-    // Product type - Configurable.
     if ($type == 'configurable') {
       // If we have a child_sku available.
       $child_sku = SKU::loadFromSKU($form_state->getValue('child_sku'));
-      if (!($child_sku instanceof SKU)) {
-        // Use the template to render the error.
-        $output = [
-          '#theme' => 'add_to_cart_error',
-          '#message' => t('Oops! Something went wrong.'),
-        ];
-      }
-      else {
-        // Quantity.
-        $quantity = $form_state->getValue('quantity');
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
-        // Product Name.
-        $product = SKU::load($form_state->getValue('sku_id'));
-        $product_name = $product->get('name')->getString();
+      $image = NULL;
+      $sku_media = !empty($child_sku) ? alshaya_acm_product_get_sku_media($child_sku) : alshaya_acm_product_get_sku_media($child_sku);
 
-        // Product Image.
-        // Include the utility file.
-        \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-        $image = NULL;
-        $sku_media = !empty($child_sku) ? alshaya_acm_product_get_sku_media($child_sku) : alshaya_acm_product_get_sku_media($child_sku);
-
-        if ($sku_media) {
-          $imageEntity = array_shift($sku_media);
-          $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($imageEntity->getFileUri());
-        }
-
-        // Generating cart link.
-        $url = Url::fromRoute('acq_cart.cart')->toString();
-
-        // Use the template to render the HTML.
-        $output = [
-          '#theme' => 'cart_notification',
-          '#quantity' => $quantity,
-          '#image' => $image,
-          '#product_name' => $product_name,
-          '#link' => $url,
-          '#link_text' => t('View Cart.'),
-        ];
+      if ($sku_media) {
+        $imageEntity = array_shift($sku_media);
+        $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($imageEntity->getFileUri());
       }
     }
     // Product Type - Simple.
     else {
-      // Product name.
-      $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
-      $product_value = SKU::loadFromSKU($string_sku)->get('name')->getValue();
-      $product_name = $product_value[0]['value'];
-
-      // Quantity.
-      $quantity = $form_state->getValue('quantity');
-
-      // Generating cart link.
-      $url = Url::fromRoute('acq_cart.cart')->toString();
-
-      // Product Image.
-      // Create image path.
       \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-      $image = alshaya_acm_product_get_sku_media($string_sku);
+      $image = alshaya_acm_product_get_sku_media(SKU::load($form_state->getValue('sku_id'))->getSKU());
       $file_uri = $image[0]->getFileUri();
       $image = ImageStyle::load('cart_notification_thumbnail')
         ->buildUrl($file_uri);
-
-      // Use the template to render the HTML.
-      $output = [
-        '#theme' => 'cart_notification',
-        '#quantity' => $quantity,
-        '#image' => $image,
-        '#product_name' => $product_name,
-        '#link' => $url,
-        '#link_text' => t('View Cart.'),
-      ];
     }
+
+    // Use the template to render the HTML.
+    $output = [
+      '#theme' => 'cart_notification',
+      '#quantity' => $quantity,
+      '#image' => $image,
+      '#product_name' => $product_name,
+      '#link' => $url,
+      '#link_text' => t('View Cart.'),
+    ];
   }
 
   $html = drupal_render($output);
