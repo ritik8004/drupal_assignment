@@ -7,6 +7,9 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Check if the current user has is only authenticated user.
@@ -147,4 +150,15 @@ function alshaya_user_process_password_confirm_after_build($element) {
     </div>';
 
   return $element;
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_user_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'my account- need help' block other than user/{uid} page.
+  if ($operation == 'view' && $block->id() == 'myaccountneedhelp') {
+    $current_route = \Drupal::routeMatch()->getRouteName();
+    return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
+  }
 }
