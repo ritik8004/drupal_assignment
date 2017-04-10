@@ -43,8 +43,10 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
-  // Add our custom submit handler function.
-  $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+  // Add our custom submit handler function for anonymous users.
+  if (\Drupal::currentUser()->isAnonymous()) {
+    $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+  }
 }
 
 /**
