@@ -196,9 +196,6 @@
     text-transform: lowercase;
 
     ul {
-      padding-top: 0.3125rem;
-      padding-bottom: 0.3125rem;
-
       &::before {
         content: '';
         background: url('../imgs/icons/lang.svg');
@@ -1019,9 +1016,9 @@ header {
     text-transform: lowercase;
   }
 
-  position: absolute;
+  position: fixed;
   width: 80%;
-  top: 0;
+  top: 88px;
   background: #fff;
   height: 100%;
   z-index: 10;
@@ -1082,5 +1079,19 @@ header {
 
   .mobile--close {
     top: 50px;
+  }
+
+  &.mobile--overlay {
+    .user-page {
+      position: inherit;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .block-alshayamyaccountlinks {
+      display: none;
+    }
   }
 }
