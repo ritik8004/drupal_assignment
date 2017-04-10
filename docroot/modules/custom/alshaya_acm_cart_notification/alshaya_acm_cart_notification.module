@@ -76,12 +76,14 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   }
   // Show success notification of the product.
   else {
+    // SKU entity.
+    $sku_entity = SKU::load($form_state->getValue('sku_id'));
+
     // Get product type.
-    $type = SKU::load($form_state->getValue('sku_id'))->getType();
+    $type = $sku_entity->getType();
 
     // Product Name.
-    $product = SKU::load($form_state->getValue('sku_id'));
-    $product_name = $product->get('name')->getString();
+    $product_name = $sku_entity->get('name')->getString();
 
     // Quantity.
     $quantity = $form_state->getValue('quantity');
@@ -91,23 +93,19 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
 
     // Product Image.
     // Check for product type as they have different data structures.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     if ($type == 'configurable') {
       // If we have a child_sku available.
       $child_sku = SKU::loadFromSKU($form_state->getValue('child_sku'));
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
       $image = NULL;
-      $sku_media = !empty($child_sku) ? alshaya_acm_product_get_sku_media($child_sku) : alshaya_acm_product_get_sku_media($child_sku);
-
-      if ($sku_media) {
-        $imageEntity = array_shift($sku_media);
-        $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($imageEntity->getFileUri());
-      }
+      $sku_media = alshaya_acm_product_get_sku_media($child_sku);
+      $imageEntity = array_shift($sku_media);
+      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($imageEntity->getFileUri());
     }
     // Product Type - Simple.
     else {
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-      $image = alshaya_acm_product_get_sku_media(SKU::load($form_state->getValue('sku_id'))->getSKU());
+      $image = alshaya_acm_product_get_sku_media($sku_entity);
       $file_uri = $image[0]->getFileUri();
       $image = ImageStyle::load('cart_notification_thumbnail')
         ->buildUrl($file_uri);
