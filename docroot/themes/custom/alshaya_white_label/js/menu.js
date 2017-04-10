@@ -42,10 +42,6 @@
         $('.mobile--close').addClass('block--display');
       });
 
-      $('.form-item-coupon label').click(function () {
-        $('.form-item-coupon #edit-coupon').slideToggle();
-      });
-
       $('.c-menu-primary .mobile--search').click(function () {
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
       });
@@ -55,6 +51,7 @@
         $('.c-menu-secondary').addClass('remove--toggle');
         $('body').removeClass('mobile--overlay');
         $('.my-account-nav').removeClass('block--display');
+        $('.mobile--close').removeClass('block--display');
       });
 
       $('.menu--one__list-item.has-child').hover(
