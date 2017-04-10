@@ -6,21 +6,20 @@ global_styles:
   js:
     js/accordion.js: {}
     js/menu.js: {}
+    js/form.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion
 
 rtl_styles:
   version: VERSION
-  js:
-    js/menu.js: {}
-  dependencies:
-    - core/jquery
   css:
     theme:
       css/rtl.css: {}
   js:
-      js/accordion.js: {}
+    js/menu.js: {}
+    js/form.js: {}
+    js/accordion.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion

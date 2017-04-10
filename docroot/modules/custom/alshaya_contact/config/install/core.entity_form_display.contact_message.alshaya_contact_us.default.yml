@@ -51,7 +51,7 @@ content:
     type: string_textarea
     weight: 5
     settings:
-      rows: 12
+      rows: 1
       placeholder: ''
     third_party_settings: {  }
 hidden:
