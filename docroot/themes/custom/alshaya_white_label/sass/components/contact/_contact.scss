@@ -1,0 +1,147 @@
+.c-contact {
+  .c-page-title {
+    border-bottom: 1px solid $white;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+.contact-form {
+  max-width: 24.75rem;
+  margin-top: 3rem;
+
+  legend {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-type-radio {
+    display: inline-block;
+
+    &:first-child {
+      margin-right: 57px;
+    }
+
+    label {
+      position: relative;
+      font-size: 14px;
+      color: #666;
+    }
+
+    input[type=radio] {
+      display: none;
+    }
+
+    input[type=radio] ~ label::before {
+      content: '';
+      width: 14px;
+      height: 14px;
+      background: white;
+      display: inline-block;
+      border-radius: 100%;
+      border: 1px solid #adadad;
+      margin-right: 1rem;
+      position: relative;
+      top: 2px;
+    }
+
+    input[type=radio]:checked ~ label::before {
+      border: 3px solid #0084cc;
+    }
+  }
+
+  input[type="text"],
+  input,
+  textarea {
+    border: 1px solid #666;
+    border-width: 0 0 1px;
+    width: 100%;
+    height: 1.563rem;
+    outline: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    border-bottom: 1px solid #0084cc;
+  }
+
+  input.error,
+  textarea.error {
+    border-bottom: 2px solid #d0011b;
+  }
+
+  label.error {
+    font-size: 12px;
+    margin-top: 8px;
+    display: block;
+    color: #d0011b;
+  }
+
+  .form-type-tel,
+  .form-type-email,
+  .form-type-textfield,
+  .form-type-textarea {
+    label:last-of-type {
+      font-size: 16px;
+      color: #adadad;
+      position: absolute;
+      left: 0;
+      top: -0.125rem;
+      transition: 0.2s ease all;
+    }
+
+    input[type="text"]:focus ~ label:last-of-type,
+    textarea:focus ~ label:last-of-type,
+    input:focus ~ label:last-of-type,
+    textarea:focus ~ label:last-of-type,
+    .active-label:last-of-type {
+      top: -1.25em;
+      bottom: 0;
+      left: 0;
+      opacity: 1;
+      font-size: 12px;
+    }
+  }
+
+  .form-item {
+    position: relative;
+  }
+
+  fieldset {
+    margin-top: 2.875rem;
+    margin-bottom: 2.875rem;
+  }
+
+  .field--name-field-first-name {
+    margin-right: 24px;
+  }
+
+  .field--name-field-first-name,
+  .field--name-field-last-name {
+    float: left;
+    max-width: 186px;
+    width: calc(50% - 12px);
+  }
+
+  .field--type-telephone,
+  .field--type-email {
+    clear: both;
+    padding-top: 3rem;
+  }
+
+  .field--type-string-long {
+    margin-top: 3rem;
+  }
+
+  .form-submit {
+    width: 91px;
+    height: 35px;
+    text-transform: lowercase;
+    font-size: 14px;
+    color: #fff;
+    background: #ff6d22;
+    margin-bottom: 115px;
+    border: none;
+    margin-top: 3rem;
+    line-height: 1;
+  }
+}
+
