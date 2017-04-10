@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "350e99f61bfc9ade02ba00c19a47f849",
+    "content-hash": "469cb01893f0e7f9fdd3d33d93c0739b",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1943,6 +1943,61 @@
             }
         },
         {
+            "name": "drupal/back_to_top",
+            "version": "1.0.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/back_to_top",
+                "reference": "8.x-1.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/back_to_top-8.x-1.0-beta2.zip",
+                "reference": null,
+                "shasum": "387923041fa13e4eb09dbfbf301ca22646e5447f"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta2",
+                    "datestamp": "1471598939"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nitesh Sethia",
+                    "homepage": "https://www.drupal.org/user/2474982"
+                },
+                {
+                    "name": "acke",
+                    "homepage": "https://www.drupal.org/user/765764"
+                },
+                {
+                    "name": "sockiplatsmurf",
+                    "homepage": "https://www.drupal.org/user/1726528"
+                },
+                {
+                    "name": "sumitmadan",
+                    "homepage": "https://www.drupal.org/user/1538790"
+                }
+            ],
+            "description": "Back To Top adds a button that hovers in the bottom of your screen and allow users to smoothly scroll up the page using jQuery.",
+            "homepage": "https://www.drupal.org/project/back_to_top",
+            "support": {
+                "source": "http://cgit.drupalcode.org/back_to_top"
+            }
+        },
+        {
             "name": "drupal/better_exposed_filters",
             "version": "3.0.0-alpha2",
             "source": {
@@ -1953,7 +2008,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-3.0-alpha2.zip",
-                "reference": null,
+                "reference": "8.x-3.0-alpha2",
                 "shasum": "f1bbe21379a4ac8e28e3edfbdd4964343299caeb"
             },
             "require": {
@@ -12094,7 +12149,8 @@
         "drupal/facets": 15,
         "drupal/profile": 15,
         "drupal/webform": 10,
-        "drupal/better_exposed_filters": 15
+        "drupal/better_exposed_filters": 15,
+        "drupal/back_to_top": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
