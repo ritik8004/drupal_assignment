@@ -57,7 +57,7 @@
         $('.my-account-nav').removeClass('block--display');
       });
 
-      $('.menu--one__list-item').hover(
+      $('.menu--one__list-item.has-child').hover(
         function () {
           $('body').addClass('overlay');
         },

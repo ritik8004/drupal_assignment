@@ -5,10 +5,9 @@
  * Constains hooks and alters for Alshaya Department page.
  */
 
-use Drupal\block\Entity\Block;
-use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -18,8 +17,7 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
   $tids = array_keys($form['field_product_category']['widget']['#options']);
 
   foreach ($tids as $tid) {
-    $page_exists = alshaya_department_page_page_exists($tid);
-    if ($page_exists) {
+    if ($page_exists = alshaya_department_page_page_exists($tid)) {
       // Unset the value.
       unset($form['field_product_category']['widget']['#options'][$tid]);
     }
@@ -36,44 +34,31 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
  *   Returns FALSE if page not found, else returns the $node_id of the page.
  */
 function alshaya_department_page_page_exists($tid) {
-  // Check if we already have a department page linked to the same category.
-  // @todo: Performance improvement by using caching.
-  $query = \Drupal::database()->select('node__field_product_category', 'nfpc');
-  $query->addField('nfpc', 'entity_id');
-  $query->condition('nfpc.field_product_category_target_id', $tid);
-  $query->range(0, 1);
-  $nid = $query->execute()->fetchField();
+  static $department_pages;
 
-  // If we did not find any nid for department page, this means we don't yet
-  // have a page for the category.
-  if ($nid) {
-    return $nid;
+  // We cache the nid-tid relationship for a single page request.
+  if (empty($department_pages)) {
+    // Load all the department page - category relationships.
+    $query = \Drupal::database()->select('node__field_product_category', 'nfpc');
+    $query->addField('nfpc', 'field_product_category_target_id', 'tid');
+    $query->addField('nfpc', 'entity_id', 'nid');
+    $department_pages = $query->execute()->fetchAllKeyed();
   }
-  else {
-    return FALSE;
+
+  // Check if we have department page available for tid passed in args.
+  if (isset($department_pages[$tid])) {
+    return $department_pages[$tid];
   }
+
+  return FALSE;
 }
 
 /**
- * Implements hook_block_access().
+ * Implements hook_ENTITY_TYPE_presave().
  */
-function alshaya_department_page_block_access(Block $block, $operation, AccountInterface $account) {
-  // Blocks to hide if there is a department node available for a term page.
-  $term_page_blocks = [
-    'views_block:alshaya_product_list-block_1',
-  ];
-
-  // Block operation is view and block is a facet_block or from term_page_blocks
-  // array, we check further conditions.
-  if ($operation == 'view'
-    && (in_array($block->getPluginId(), $term_page_blocks) || strpos($block->getPluginId(), 'facet_block:') === 0)) {
-    // Check if we are on term page.
-    if ($term = Drupal::request()->attributes->get('taxonomy_term')) {
-      // Check if the term has department node associated to it.
-      if (alshaya_department_page_page_exists($term->id())) {
-        // We will display content of node.
-        return AccessResult::forbidden();
-      }
-    }
-  }
+function alshaya_department_page_node_presave(EntityInterface $entity) {
+  // Allows for clearing of blocks based on node type.
+  // Used for mega menu block.
+  $tags = ['node_type:' . $entity->getType()];
+  Cache::invalidateTags($tags);
 }

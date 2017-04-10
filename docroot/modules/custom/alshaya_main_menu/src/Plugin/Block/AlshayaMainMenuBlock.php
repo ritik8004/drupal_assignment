@@ -184,6 +184,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
           'highlight_image' => $this->getHighlightImage($term),
           'active_class' => '',
         ];
+
+        // Check if there is a department page available for this term.
+        if ($nid = alshaya_department_page_page_exists($term->id())) {
+          // Use the path of node instead of term path.
+          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+        }
+
         $data[$term->id()]['child'] = $this->getChildTerms($term->id());
       }
     }
@@ -251,6 +258,10 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getCacheContexts() {
+    // Add department page node type cache tag.
+    // This is custom cache tag and cleared in hook_presave in department
+    // module.
+    $this->cacheTags[] = 'node_type:department_page';
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 

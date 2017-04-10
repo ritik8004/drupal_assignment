@@ -15,7 +15,7 @@
         <li class="menu__list-item menu--one__list-item">
       {% endif %}
           <div class="menu__link-wrapper menu-two__link-wrapper">
-            <a class="menu__link menu--one__link" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level1.id}) }}">{{ level1.label }}</a>
+            <a class="menu__link menu--one__link" href="{{ level1.path }}">{{ level1.label }}</a>
           </div>
 
           {% if level1.child is not empty %}
@@ -25,5 +25,3 @@
     {% endfor %}
   </ul>
 </div>
-
- <div class="title">{{ 'Highlight' | t }}</div>
