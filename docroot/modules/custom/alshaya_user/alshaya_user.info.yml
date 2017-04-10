@@ -3,7 +3,7 @@ type: module
 core: 8.x
 description: 'Stores user field and related settings.'
 dependencies:
-  - alshaya_user
+  - alshaya_password_policy
   - block
   - datetime
   - email_registration
