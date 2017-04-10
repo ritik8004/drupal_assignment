@@ -219,6 +219,9 @@ class Configurable extends SKUPluginBase {
 
       $cart->addItemToCart($tree_pointer->getSKU(), $quantity);
 
+      // Add child SKU to form state to allow other modules to use it.
+      $form_state->setValue('child_sku', $tree_pointer->getSKU());
+
       try {
         \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
