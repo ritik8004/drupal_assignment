@@ -294,6 +294,16 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
+  // Check if we are on node page.
+  if ($routmatch->getRouteName() == 'entity.node.canonical') {
+    $node = Drupal::request()->attributes->get('node');
+
+    // For now we want to update only the department_page template.
+    if ($node->bundle() == 'department_page') {
+      $suggestions[] = 'page__department';
+    }
+  }
+
   if (\Drupal::service('path.matcher')->isFrontPage()) {
     $suggestions[] = 'page__front';
   }
