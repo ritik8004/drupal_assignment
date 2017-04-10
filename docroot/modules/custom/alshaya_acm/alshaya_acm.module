@@ -20,9 +20,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Using array_combine to ensure we have same data in key and value.
   $cartQuantityOptions = array_combine($range, $range);
 
-  // Unset update button.
-  unset($form['actions']['update']);
-
   // Change checkout button text to 'Secure Checkout'.
   $form['actions']['checkout']['#value'] = t('Secure Checkout');
 
@@ -87,11 +84,24 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['totals']['#prefix'] = '<div id="table-cart-totals">';
   $form['totals']['#suffix'] = '</div>';
 
+  // Wrap Promotion code in a fieldset.
+  $form['promotion_code_wrapper'] = [
+    '#type' => 'details',
+    '#title' => t('Add a promo code'),
+  ];
+  $form['promotion_code_wrapper']['promotion'] = [
+    '#title' => t('Promotion code'),
+    '#type' => 'textfield',
+    '#suffix' => '<span id="apply_coupon">apply</span>',
+  ];
+  $form['coupon']['#type'] = 'hidden';
+
+  // Attach library, to cater to Coupon submit button.
+  $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
+
   $form['privilege_card_wrapper'] = [
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Enter a priviledge card number'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number'] = [
