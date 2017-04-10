@@ -279,3 +279,225 @@
     display: none;
   }
 }
+
+#block-alshaya-white-label-content {
+  .order-items {
+    list-style: none;
+    width: 100%;
+    padding: 0;
+
+    li {
+      height: 96px;
+
+      @include breakpoint($desktop) {
+        width: 921px;
+      }
+
+      @include breakpoint($only-mobile) {
+        height: 143px;
+      }
+
+      background-color: $white-five;
+      display: table-row;
+
+      &:hover {
+        background-color: $white-four;
+      }
+
+      a {
+        background-image: url(../imgs/icons/icon-chevron-#{$next}.svg);
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: percent-value(97%) center;
+        display: block;
+        border-bottom: 1px solid #adadad;
+
+        @include breakpoint($desktop) {
+          width: 921px;
+        }
+
+        @include breakpoint($only-mobile) {
+          height: 143px;
+          background-position: percent-value(80%) 60%;
+        }
+
+        @include breakpoint($only-tablet) {
+          padding-#{$right}: 10%;
+        }
+
+        .first-second {
+          height: 96px;
+
+          @include breakpoint($only-mobile) {
+            width: 180px;
+            height: 143px;
+            vertical-align: middle;
+
+            > .first {
+              padding-bottom: 8px;
+            }
+
+            > .second {
+              padding-top: 8px;
+            }
+          }
+
+          @include breakpoint($only-tablet) {
+            width: 200px;
+            height: 96px;
+
+            .second {
+              display: none;
+            }
+          }
+
+          @include breakpoint($desktop) {
+            width: 243px;
+
+            .second {
+              display: none;
+            }
+          }
+        }
+
+        .second-third {
+          height: 96px;
+
+          @include breakpoint($only-mobile) {
+            vertical-align: top;
+            padding: 15px;
+
+            .second {
+              display: none;
+            }
+
+            .third {
+              padding: 0;
+            }
+          }
+
+          @include breakpoint($desktop) {
+            width: 333px;
+
+            > div {
+              display: table-cell;
+              padding: 0;
+            }
+
+            .second {
+              width: 227px;
+            }
+          }
+        }
+
+        > div {
+          padding: 0;
+          display: table-cell;
+          vertical-align: middle;
+
+          > div {
+            padding: 0 16px;
+            white-space: nowrap;
+          }
+        }
+
+        .first {
+          width: 125px;
+        }
+
+        .second {
+          width: 300px;
+
+          @include breakpoint($only-mobile) {
+            width: 180px;
+          }
+
+          @include breakpoint($only-tablet) {
+            margin-bottom: 10px;
+          }
+        }
+
+        .order-quantity {
+          @include breakpoint($only-tablet) {
+            margin-top: 10px;
+          }
+        }
+
+        .third {
+          width: 105px;
+        }
+
+        .fourth {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+
+          @include breakpoint($only-tablet) {
+            text-align: left;
+          }
+
+          @include breakpoint($desktop) {
+            width: 225px;
+            text-align: center;
+          }
+        }
+
+        .light {
+          color: $greyish;
+          height: 14px;
+          font-family: $arial;
+          font-size: 12px;
+          margin-bottom: 5px;
+
+          @include breakpoint($only-mobile) {
+            font-size: 10px;
+          }
+        }
+
+        .dark {
+          color: $black-two;
+          height: 16px;
+          font-family: $arial;
+          font-size: 14px;
+          font-weight: $alshaya-bold;
+          letter-spacing: 0.5px;
+
+          @include breakpoint($only-mobile) {
+            font-size: 12px;
+          }
+        }
+
+        .date {
+          margin-top: 10px;
+        }
+
+        .button {
+          font-family: $arial;
+          font-size: 12px;
+          font-weight: bold;
+          text-align: center;
+          color: $white-five;
+          height: 23px;
+          line-height: 23px;
+          width: 106px;
+
+          @include breakpoint($tablet) {
+            font-size: 10px;
+          }
+
+          &.status-pending {
+            background-color: $tomato;
+          }
+
+          &.status-returned {
+            background-color: $grey-ash;
+          }
+
+          &.status-delivered {
+            background-color: $medium-green;
+          }
+        }
+      }
+    }
+  }
+}

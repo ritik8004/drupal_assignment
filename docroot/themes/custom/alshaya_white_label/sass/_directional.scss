@@ -65,6 +65,15 @@ $last-child: if-ltr(":last-child", ":first-child");
   }
 }
 
+@function percent-value($value) {
+  @if $dir == rtl {
+     @return (100 - $value);
+  }
+  @else {
+    @return $value;
+  }
+}
+
 @mixin if-ltr {
   @if $dir != rtl {
     @content;
