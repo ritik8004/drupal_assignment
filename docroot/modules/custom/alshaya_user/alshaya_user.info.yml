@@ -9,6 +9,7 @@ dependencies:
   - datetime
   - email_registration
   - field
+  - mobile_number
   - path
   - system
   - user
