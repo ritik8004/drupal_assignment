@@ -82,4 +82,10 @@ function alshaya_master_install() {
       ],
     ])
     ->save();
+
+  // Settings override of 'back_to_top'.
+  \Drupal::configFactory()->getEditable('back_to_top.settings')
+    ->set('back_to_top_prevent_on_mobile', FALSE)
+    ->set('back_to_top_prevent_in_admin', TRUE)
+    ->save();
 }
