@@ -37,7 +37,7 @@
       });
 
       $('.hamburger--menu').click(function () {
-        $('.main--menu').toggle();
+        $('.main--menu').show();
         $('body').addClass('mobile--overlay');
         $('.mobile--close').addClass('block--display');
       });
@@ -51,16 +51,55 @@
       });
 
       $('.mobile--close').on('click', function (e) {
-        $('.main--menu').toggle();
+        $('.main--menu').hide();
+        $('.c-menu-secondary').addClass('remove--toggle');
         $('body').removeClass('mobile--overlay');
+        $('.my-account-nav').removeClass('block--display');
       });
 
-      $('.parent--level').on('click', function () {
-        $(this).addClass('current--clicked').siblings().removeClass('current--clicked');
+      $('.menu--one__list-item').hover(
+        function () {
+          $('body').addClass('overlay');
+        },
+        function () {
+          $('body').removeClass('overlay');
+        }
+      );
+
+      $('.logged-out .account').click(function () {
+        $('.account').addClass('active');
+        $('.shop').removeClass('active');
+        $('.c-menu-secondary').addClass('block--display');
+        $('.menu--one__list').addClass('remove--toggle');
+        $('.menu--one__list').removeClass('block--display');
+        $('.c-menu-secondary').removeClass('remove--toggle');
       });
 
-      $('.level--two').on('click', function () {
-        $(this).addClass('current--clicked').siblings().removeClass('current--clicked');
+      $('.logged-out .shop').click(function () {
+        $('.shop').addClass('active');
+        $('.account').removeClass('active');
+        $('.c-menu-secondary').removeClass('block--display');
+        $('.menu--one__list').removeClass('remove--toggle');
+        $('.menu--one__list').addClass('block--display');
+        $('.c-menu-secondary').addClass('remove--toggle');
+      });
+
+      $('.logged-in .account--logged_in').click(function () {
+        $('.account--logged_in').addClass('active');
+        $('.shop').removeClass('active');
+        $('.my-account-nav').addClass('block--display');
+        $('.menu--one__list').addClass('remove--toggle');
+        $('.menu--one__list').removeClass('block--display');
+        $('.my-account-nav').removeClass('remove--toggle');
+      });
+
+      $('.logged-in .shop').click(function () {
+        $('.shop').addClass('active');
+        $('.account--logged_in').removeClass('active');
+        $('.c-menu-secondary').addClass('block--display');
+        $('.menu--one__list').removeClass('remove--toggle');
+        $('.menu--one__list').addClass('block--display');
+        $('.c-menu-secondary').addClass('remove--toggle');
       });
 
     }

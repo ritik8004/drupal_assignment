@@ -35,6 +35,7 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $form['account']['mail']['#description'] = '';
   $form['account']['name']['#description'] = '';
   $form['account']['pass']['#description'] = '';
+  $form['account']['pass']['#after_build'][] = 'alshaya_user_process_password_confirm_after_build';
 
   // We don't want to show the terms and conditions field to logged in users.
   if (\Drupal::currentUser()->isAuthenticated()) {
@@ -128,4 +129,20 @@ function alshaya_user_preprocess_menu(&$variables) {
       }
     }
   }
+}
+
+/**
+ * After build process callback for updating password confirm form element.
+ */
+function alshaya_user_process_password_confirm_after_build($element) {
+  // Get tooltip content from config.
+  $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
+
+  // Add tooltip as suffix to first element.
+  $element['pass1']['#suffix'] = '<div class="password-tooltip>
+      <div class="password-tooltip-icon"></div>
+      <div class="password-tooltip-content">' . $tooltip . '</div>
+    </div>';
+
+  return $element;
 }

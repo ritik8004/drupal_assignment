@@ -62,46 +62,83 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     // Current user id.
     $uid = $this->currentUser->id();
 
+    // Get user id of user who's profile is currently visit.
+    $account = \Drupal::request()->attributes->get('user');
+
+    // Get the current route to set active class.
+    $currentRoute = \Drupal::routeMatch()->getRouteName();
+
+    // Prepare active class options.
+    $activeLinkOptions = ['attributes' => ['class' => 'active']];
+
     // My account link.
     $links['my_account'] = [
-      '#markup' => Link::createFromRoute($this->t('My account'), 'entity.user.canonical', ['user' => $uid])->toString(),
+      'text' => $this->t('My account'),
+      'route' => 'entity.user.canonical',
+      'options' => ['user' => $account->id()],
     ];
+
+    if ($uid != $account->id()) {
+      $links['my_account']['text'] = $this->t('Account');
+    }
 
     // Orders link.
     $links['orders'] = [
-      '#markup' => Link::createFromRoute($this->t('Orders'), 'acq_customer.orders', ['user' => $uid])->toString(),
+      'text' => $this->t('Orders'),
+      'route' => 'acq_customer.orders',
+      'options' => ['user' => $account->id()],
     ];
 
     // Contact details link.
     $links['contact_details'] = [
-      '#markup' => Link::createFromRoute($this->t('Contact details'), 'entity.user.edit_form', ['user' => $uid])->toString(),
+      'text' => $this->t('Contact details'),
+      'route' => 'entity.user.edit_form',
+      'options' => ['user' => $account->id()],
     ];
 
     // Address book link.
     $links['address_book'] = [
-      '#markup' => Link::createFromRoute($this->t('Address book'), 'entity.profile.type.address_book.user_profile_form',
-        [
-          'user' => $uid,
-          'profile_type' => 'address_book',
-        ])->toString(),
+      'text' => $this->t('Address book'),
+      'route' => 'entity.profile.type.address_book.user_profile_form',
+      'options' => [
+        'user' => $account->id(),
+        'profile_type' => 'address_book',
+      ],
     ];
 
     // Communication preferences link.
+    // TODO: Update the route name once link is available.
     $links['communication_preference'] = [
-      // TODO: Update the route name once link is available.
-      '#markup' => Link::createFromRoute($this->t('Communication preferences'), 'entity.user.canonical', ['user' => $uid])->toString(),
+      'text' => $this->t('Communication preferences'),
+      'route' => 'entity.user.canonical',
+      'options' => ['user' => $account->id()],
     ];
 
     // Change password link.
     $links['change_password'] = [
-      // TODO: Update the route name once link is available.
-      '#markup' => Link::createFromRoute($this->t('Change password'), 'change_pwd_page.change_password_form', ['user' => $uid])->toString(),
+      'text' => $this->t('Change password'),
+      'route' => 'change_pwd_page.change_password_form',
+      'options' => ['user' => $account->id()],
     ];
+
+    $items = [];
+
+    foreach ($links as $key => $link) {
+      $options = [];
+
+      if ($link['route'] == $currentRoute) {
+        $options = $activeLinkOptions;
+      }
+
+      $items[$key] = [
+        '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)->toString(),
+      ];
+    }
 
     $build = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
-      '#items' => $links,
+      '#items' => $items,
       '#attributes' => [
         'class' => [
           'my-account-nav',
@@ -116,7 +153,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['user']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }
