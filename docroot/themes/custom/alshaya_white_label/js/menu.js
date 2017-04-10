@@ -42,10 +42,6 @@
         $('.mobile--close').addClass('block--display');
       });
 
-      $('.form-item-coupon label').click(function () {
-        $('.form-item-coupon #edit-coupon').slideToggle();
-      });
-
       $('.c-menu-primary .mobile--search').click(function () {
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
       });

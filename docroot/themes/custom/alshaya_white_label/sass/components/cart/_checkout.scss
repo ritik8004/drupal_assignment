@@ -421,3 +421,12 @@
     display: none;
   }
 }
+
+// Hide Update cart button
+.customer-cart-form {
+  .form-actions {
+    #edit-update {
+      display: none;
+    }
+  }
+}
