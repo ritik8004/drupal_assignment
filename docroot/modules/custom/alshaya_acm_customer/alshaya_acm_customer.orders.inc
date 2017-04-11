@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_checkout\ACQAddressFormatter;
+use Drupal\Component\Utility\Unicode;
 use Drupal\user\UserInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
@@ -194,7 +195,7 @@ function alshaya_acm_customer_get_processed_order_summary($orderId, array $order
 
   // We will display the name of first order item.
   $item = reset($order['items']);
-  $orderRow['name'] = $item['name'];
+  $orderRow['name'] = Unicode::truncate($item['name'], 25, TRUE, TRUE);
 
   // Calculate total items in the order.
   $orderRow['quantity'] = alshaya_acm_customer_get_order_total_quantity($order);
