@@ -51,12 +51,23 @@
       border-radius: 0;
     }
 
-    .form-actions .form-submit {
-      margin-top: 0;
-      min-width: 91px;
-      margin-#{$right}: 20px;
-      padding: 2px 16px 3px;
-      width: auto;
+    .form-actions {
+      margin-bottom: 90px;
+
+      .form-submit {
+        margin-top: 0;
+        margin-bottom: 23px;
+        min-width: 91px;
+        margin-#{$right}: 20px;
+        padding: 2px 16px 3px;
+        width: auto;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          float: none;
+          width: 100%;
+        }
+      }
     }
 
     .js-form-type-select {
