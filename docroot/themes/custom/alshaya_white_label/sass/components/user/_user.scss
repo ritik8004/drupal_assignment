@@ -25,12 +25,12 @@
     font-family: $alshaya-bold;
     position: absolute;
     top: -3.5rem;
-    color: $peacock-blue;
+    color: $marine-blue;
   }
 
   .c-sidebar-second {
     h2 {
-      color: $peacock-blue;
+      color: $marine-blue;
       font-size: 14px;
       font-family: $alshaya-bold;
       text-transform: lowercase;
@@ -55,7 +55,14 @@
   }
 
   #block-jointheclub {
-    margin-top: 9.063rem;
+    border-top: 1px solid #ddd;
+    margin-top: 1.5rem;
+    padding-top: 0.5rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 4.5rem;
+      padding-top: 4.5rem;
+    }
 
     a {
       font-weight: bold;
@@ -75,16 +82,26 @@
     position: relative;
   }
 
+  #edit-account {
+    @include breakpoint($desktop) {
+      clear: both;
+      padding-top: 1px;
+    }
+  }
+
   .field--name-field-first-name,
   .field--name-field-last-name {
     @include breakpoint($desktop) {
-      display: inline-block;
-      max-width: 11.625rem;
+      float: left;
+      max-width: 186px;
+      width: calc(50% - 12px);
     }
   }
 
   .field--name-field-first-name {
-    margin-#{$right}: 1.25rem;
+    @include breakpoint($desktop) {
+      margin-#{$right}: 1.25rem;
+    }
   }
 
   .captcha {
@@ -102,7 +119,7 @@
     font-size: 12px;
     color: $brownish-grey;
     line-height: 1.43;
-    max-width: 24.75rem;
+    max-width: 100%;
 
     @include breakpoint($tablet) {
       font-size: 0.875em;
@@ -147,6 +164,17 @@
       position: relative;
       top: 0;
       font-size: 12px;
+
+      p {
+        display: inline-block;
+        vertical-align: top;
+        margin: 0;
+
+        a {
+          color: $cerulean;
+          font-weight: bold;
+        }
+      }
     }
 
     .error {
@@ -183,12 +211,11 @@
     }
   }
 
-  input:focus ~ label.form-required,
-  .form-item-field-privilege-card-number-0-value input ~ label,
-  input:not(:focus):valid ~ label.form-required,
-  input:active ~ label.form-required,
-  input:not(:active):valid ~ label.form-required,
-  input.error ~ label.form-required {
+  .form-item input:focus ~ label,
+  .form-item input:not(:focus):valid ~ label,
+  .form-item input:active ~ label,
+  .form-item input:not(:active):valid ~ label,
+  .form-item input.error ~ label {
     top: -1.25em;
     bottom: 0;
     #{$left}: 0;
@@ -269,13 +296,327 @@
       width: 100%;
       max-width: 100%;
     }
-
-    h1 {
-      top: -4.5rem;
-    }
   }
 
   p {
     display: none;
   }
+}
+
+#block-alshaya-white-label-content {
+  .order-items {
+    list-style: none;
+    width: 100%;
+    padding: 0;
+
+    li {
+      height: 96px;
+
+      @include breakpoint($desktop) {
+        width: 921px;
+      }
+
+      @include breakpoint($only-mobile) {
+        height: 143px;
+      }
+
+      background-color: $white-five;
+      display: table-row;
+
+      &:hover {
+        background-color: $white-four;
+      }
+
+      a {
+        background-image: url(../imgs/icons/icon-chevron-#{$next}.svg);
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: percent-value(97%) center;
+        display: block;
+        border-bottom: 1px solid #adadad;
+
+        @include breakpoint($desktop) {
+          width: 921px;
+        }
+
+        @include breakpoint($only-mobile) {
+          height: 143px;
+          background-position: percent-value(80%) 60%;
+        }
+
+        @include breakpoint($only-tablet) {
+          padding-#{$right}: 10%;
+        }
+
+        .first-second {
+          height: 96px;
+
+          @include breakpoint($only-mobile) {
+            width: 180px;
+            height: 143px;
+            vertical-align: middle;
+
+            > .first {
+              padding-bottom: 8px;
+            }
+
+            > .second {
+              padding-top: 8px;
+            }
+          }
+
+          @include breakpoint($only-tablet) {
+            width: 200px;
+            height: 96px;
+
+            .second {
+              display: none;
+            }
+          }
+
+          @include breakpoint($desktop) {
+            width: 243px;
+
+            .second {
+              display: none;
+            }
+          }
+        }
+
+        .second-third {
+          height: 96px;
+
+          @include breakpoint($only-mobile) {
+            vertical-align: top;
+            padding: 15px;
+
+            .second {
+              display: none;
+            }
+
+            .third {
+              padding: 0;
+            }
+          }
+
+          @include breakpoint($desktop) {
+            width: 333px;
+
+            > div {
+              display: table-cell;
+              padding: 0;
+            }
+
+            .second {
+              width: 227px;
+            }
+          }
+        }
+
+        > div {
+          padding: 0;
+          display: table-cell;
+          vertical-align: middle;
+
+          > div {
+            padding: 0 16px;
+            white-space: nowrap;
+          }
+        }
+
+        .first {
+          width: 125px;
+        }
+
+        .second {
+          width: 300px;
+
+          @include breakpoint($only-mobile) {
+            width: 180px;
+          }
+
+          @include breakpoint($only-tablet) {
+            margin-bottom: 10px;
+          }
+        }
+
+        .order-quantity {
+          @include breakpoint($only-tablet) {
+            margin-top: 10px;
+          }
+        }
+
+        .third {
+          width: 105px;
+        }
+
+        .fourth {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+
+          @include breakpoint($only-tablet) {
+            text-align: left;
+          }
+
+          @include breakpoint($desktop) {
+            width: 225px;
+            text-align: center;
+          }
+        }
+
+        .light {
+          color: $greyish;
+          height: 14px;
+          font-family: $arial;
+          font-size: 12px;
+          margin-bottom: 5px;
+
+          @include breakpoint($only-mobile) {
+            font-size: 10px;
+          }
+        }
+
+        .dark {
+          color: $black-two;
+          height: 16px;
+          font-family: $arial;
+          font-size: 14px;
+          font-weight: $alshaya-bold;
+          letter-spacing: 0.5px;
+
+          @include breakpoint($only-mobile) {
+            font-size: 12px;
+          }
+        }
+
+        .date {
+          margin-top: 10px;
+        }
+
+        .button {
+          font-family: $arial;
+          font-size: 12px;
+          font-weight: bold;
+          text-align: center;
+          color: $white-five;
+          height: 23px;
+          line-height: 23px;
+          width: 106px;
+
+          @include breakpoint($tablet) {
+            font-size: 10px;
+          }
+
+          &.status-pending {
+            background-color: $tomato;
+          }
+
+          &.status-returned {
+            background-color: $grey-ash;
+          }
+
+          &.status-delivered {
+            background-color: $medium-green;
+          }
+        }
+      }
+    }
+  }
+}
+
+#unmask_password {
+  position: absolute;
+  top: 0;
+  #{$right}: 0;
+  font-size: 12px;
+  color: $greyish;
+}
+
+.alias--user-register h1 {
+  @include breakpoint($desktop) {
+    top: -0.5em;
+  }
+}
+
+.alias--user-login h1 {
+  @include breakpoint($desktop) {
+    top: -4em;
+  }
+}
+
+.password-tooltip {
+  position: relative;
+}
+
+.password-tooltip-icon {
+  position: absolute;
+  top: -24px;
+  #{$right}: 0;
+  background: #0084cc;
+  width: 13px;
+  height: 13px;
+  text-align: center;
+  border-radius: 100%;
+  font-size: 10px;
+  color: white;
+  font-weight: normal;
+}
+
+.password-tooltip:hover .password-tooltip-content {
+  display: block;
+}
+
+.password-tooltip-content {
+  background: #f0f6fc;
+  border: 2px solid #0084cc;
+  padding: 10px;
+  position: absolute;
+  top: -4px;
+  #{$right}: 0;
+  z-index: 1;
+  max-width: 300px;
+  float: $right;
+}
+
+.password-tooltip-content ul {
+  list-style: none;
+  display: block;
+  padding-left: 0;
+  font-size: 10px;
+  color: #666;
+  margin: 0;
+}
+
+.password-tooltip-content {
+  background: #f0f6fc;
+  border: 1px solid #0084cc;
+  display: none;
+}
+
+.password-tooltip-content::after,
+.password-tooltip-content::before {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  #{$right}: 2px;
+}
+
+.password-tooltip-content::after {
+  border-color: rgba(240, 246, 252, 0);
+  border-bottom-color: #f0f6fc;
+  border-width: 5px;
+  margin-#{$left}: -5px;
+}
+
+.password-tooltip-content::before {
+  border-color: rgba(0, 132, 204, 0);
+  border-bottom-color: #0084cc;
+  border-width: 6px;
+  margin-#{$left}: -6px;
+  #{$right}: 1px;
 }

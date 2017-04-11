@@ -1,4 +1,3 @@
-{% set attributes = attributes.addClass('c-plp', 'l-two--sf') %}
 <div>
   <!-- ______________________ MENU SECONDARY _______________________ -->
 
@@ -67,23 +66,13 @@
 
   <!-- ______________________ MAIN _______________________ -->
 
-  <div class="clearfix page-wrapper">
-    <div{{ attributes.addClass('l-container') }}>
+  <div class="clearfix">
+    <div{{ attributes.addClass('l-two--sf c-add-address l-container') }}>
 
       {% if page.sidebar_first %}
         <aside class="c-sidebar-first">
           <div class="c-sidebar-first__region">
-            {% if (page.sidebar_first.skusskureferencecolor|render|striptags|trim) or (page.sidebar_first.skusskureferencedisplayprice|render|striptags|trim) or (page.sidebar.skusskureferencesize|render|striptags|trim) %}
-              <div class="c-facet__blocks__wrapper">
-                <h3 class="c-facet__label">{{ "Filter" | t }}</h3>
-                <div class="c-facet__blocks">
-                  {{ page.sidebar_first.skusskureferencecolor }}
-                  {{ page.sidebar_first.skusskureferencedisplayprice }}
-                  {{ page.sidebar_first.skusskureferencesize }}
-                </div>
-              </div>
-            {%  endif %}
-            {{ page.sidebar_first | without('skusskureferencecolor', 'skusskureferencedisplayprice', 'skusskureferencesize') }}
+            {{ page.sidebar_first }}
           </div>
         </aside>
       {% endif %}
@@ -126,6 +115,7 @@
 
         <div class="c-content">
           <div class="c-content__region">
+            <h1 class="js-quickedit-page-title c-page-title">Address Book</h1>
             {{ page.content }}
           </div>
         </div>

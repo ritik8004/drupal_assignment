@@ -138,7 +138,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
           'attributes' => [
             'class' => ['use-ajax'],
             'data-dialog-type' => 'modal',
-            'data-dialog-options' => Json::encode(['width' => '700']),
+            'data-dialog-options' => Json::encode(['width' => '341']),
           ],
         ]),
       ];
@@ -285,11 +285,7 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
   $routmatch = \Drupal::routeMatch();
   if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = $routmatch->getParameter('taxonomy_term');
-    $term_depth = $term->get('depth_level')->getValue()[0]['value'];
-    if ($term_depth == 2) {
-      $suggestions[] = 'page__department';
-    }
-    else {
+    if ($term->bundle() == 'acq_product_category') {
       $suggestions[] = 'page__plp';
     }
   }

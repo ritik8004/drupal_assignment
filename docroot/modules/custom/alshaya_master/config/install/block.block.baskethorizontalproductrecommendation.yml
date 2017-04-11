@@ -9,7 +9,7 @@ dependencies:
 id: baskethorizontalproductrecommendation
 theme: alshaya_white_label
 region: content
-weight: -14
+weight: 1
 provider: null
 plugin: basket_horizontal_recommendation
 settings:

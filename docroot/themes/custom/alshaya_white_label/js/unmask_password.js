@@ -8,7 +8,7 @@
 
   Drupal.behaviors.unmaskPassword = {
     attach: function (context, settings) {
-      $('.form-type-password').append('<div id="unmask_password">Show password</div>');
+      $('.form-type-password').append('<div id="unmask_password">Show</div>');
       $('#unmask_password').on('click', function () {
         if ($('#edit-pass').attr('type') === 'password') {
           $('#edit-pass').attr('type', 'text');

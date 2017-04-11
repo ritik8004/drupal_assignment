@@ -1,0 +1,222 @@
+.user__address--column {
+  border: 1px solid $white;
+  font-family: $arial;
+  font-size: 12px;
+  margin-bottom: 24px;
+
+  @include breakpoint($tablet) {
+    float: $left;
+    width: 50%;
+    max-width: 255px;
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 24px;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    margin-bottom: 48px;
+    max-width: 420px;
+    width: calc(50% - 24px);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 48px;
+    }
+  }
+
+  .address--data {
+    min-height: 192px;
+    overflow: hidden;
+    padding: 26px 28px 51px 16px;
+
+    @include breakpoint($tablet) {
+      padding: 26px 14px 37px 16px;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 26px 44px 53px 23px;
+    }
+  }
+
+  .address--contact {
+    margin-top: 22px;
+  }
+
+  .address--content {
+    color: $black-two;
+
+    @include breakpoint($desktop) {
+      font-size: 14px;
+      font-weight: 700;
+    }
+  }
+
+  .address--label {
+    margin-bottom: 3px;
+  }
+
+  .address--userinfo {
+    float: left;
+    padding-right: 26px;
+    vertical-align: top;
+    width: 57%;
+
+    @include breakpoint($desktop) {
+      padding-right: 108px;
+    }
+  }
+
+  .address--delivery {
+    float: left;
+    width: 43%;
+  }
+
+  .address--options {
+    border-top: 1px solid $white;
+    clear: both;
+    display: table;
+    width: 100%;
+
+    @include breakpoint($desktop) {
+      padding: 19px 24px;
+    }
+
+    a {
+      color: $black-two;
+    }
+  }
+
+  .address--controls {
+    border-#{$right}: 1px solid $white;
+    display: table-cell;
+    min-height: 49px;
+    padding: 14px;
+    vertical-align: middle;
+
+    @include breakpoint($tablet) {
+      padding: 29px 14px;
+      min-height: 73px;
+    }
+
+    @include breakpoint($desktop) {
+      border: none;
+      min-height: none;
+      padding: 0;
+      padding-#{$right}: 20px;
+    }
+
+    .ajax-progress-throbber {
+      display: none;
+    }
+  }
+
+  .address--primary {
+    max-width: 151px;
+    position: relative;
+    padding-#{$right}: 9px;
+    padding-#{$left}: 40px;
+
+    @include breakpoint($tablet) {
+      max-width: 106px;
+      padding-#{$left}: 50px;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$right}: 41px;
+      max-width: none;
+      padding-#{$left}: 26px;
+      text-indent: 0;
+    }
+
+    a::before {
+      content: "";
+      display: inline-block;
+      vertical-align: middle;
+      width: 14px;
+      height: 14px;
+      border-radius: 100%;
+      margin-#{$right}: 12px;
+      border: 1px solid;
+      position: absolute;
+      #{$left}: 16px;
+
+      @include breakpoint($desktop) {
+        #{$left}: 0;
+      }
+    }
+
+    a:hover::before {
+      border: 4px solid #3680cb;
+      background: white;
+    }
+  }
+
+  .address--edit,
+  .address--delete {
+    a {
+      display: block;
+      text-transform: uppercase;
+
+      @include breakpoint($desktop) {
+        border: 1px solid $black-two;
+        display: inline-block;
+        font-weight: 700;
+        padding: 10px 24px;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .address--delete {
+    border-#{$right}: none;
+    padding-#{$right}: 0;
+  }
+
+  .active {
+    .address--data {
+      background: $white-four;
+    }
+
+    .address--controls:last-child {
+      border-#{$right}: none;
+      text-align: right;
+
+      @include breakpoint($desktop) {
+        padding-right: 0;
+      }
+    }
+  }
+}
+
+.c-address-book {
+  .block-page-title-block {
+    padding-bottom: 8px;
+    border-bottom: 1px solid $white;
+  }
+
+  .region__content {
+    position: relative;
+  }
+
+  .view-profiles .view-content {
+    position: relative;
+    top: -20px;
+  }
+
+  .block-system > a {
+    @extend %button-wide;
+
+    display: block;
+    margin-bottom: 20px;
+
+    @include breakpoint($tablet) {
+      display: inline-block;
+      position: absolute;
+      top: -20px;
+      #{$right}: 0;
+    }
+  }
+}
