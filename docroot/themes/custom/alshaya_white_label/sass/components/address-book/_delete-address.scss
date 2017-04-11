@@ -1,0 +1,94 @@
+.path--user {
+  .ui-dialog-title {
+    @extend %page-title;
+
+    border-bottom: 1px solid $white;
+    font-size: 18px;
+    float: $left;
+    padding-bottom: 7px;
+    margin-top: 25px;
+    margin-bottom: 18px;
+    width: 70%;
+  }
+
+  .ui-dialog {
+    background: #fff;
+    padding: 0;
+    padding-bottom: 21px;
+    padding-#{$left}: 25px;
+    z-index: 2;
+
+    @include breakpoint($only-mobile) {
+      max-width: 341px;
+      width: 100% !important;
+    }
+
+    .ui-dialog-buttonpane button {
+      margin-#{$right}: 8px;
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset,
+    .ui-dialog-content,
+    .ui-dialog-titlebar {
+      float: none;
+      padding: 0;
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset {
+      float: $left;
+    }
+
+    .ui-dialog-buttonpane {
+      margin: 0;
+      padding: 0;
+    }
+
+    .ui-button .ui-button-text {
+      font-weight: 700;
+    }
+
+    .ui-dialog-content {
+      margin-bottom: 34px;
+      padding-#{$right}: 50px;
+    }
+  }
+
+  .ui-widget-header {
+    overflow: hidden;
+  }
+
+  .ui-dialog-titlebar-close {
+    height: 50px;
+    #{$right}: 0;
+    #{$left}: initial;
+    top: 0;
+    width: 40px;
+
+    &::after {
+      background: $white;
+      content: "X";
+      display: block;
+      padding: 10px 15px;
+      position: absolute;
+      #{$right}: 0;
+      #{$left}: initial;
+      top: 10px;
+    }
+  }
+
+  .button--primary span {
+    @extend %button-wide;
+
+    min-width: 0;
+  }
+
+  .dialog-cancel span {
+    color: #3381d0;
+    font-size: 12px;
+  }
+
+  button {
+    background: #fff;
+    border: none;
+  }
+}
