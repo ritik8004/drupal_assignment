@@ -1,0 +1,24 @@
+<div>
+    <div>
+        <div>{{ 'Order ID:' | t }} {{ order.id }}</div>
+        <div>{{ order.date }}</div>
+    </div>
+    <div>
+        <div>{{ order.item_names | join(', ') }}</div>
+        <div>{{ 'Total:' | t }} {{ order.items | length }} {{ 'items' | t }}</div>
+    </div>
+    <div>{{ order.status }}</div>
+    <div>{{ 'Order Total' | t }} {{ order.totals.grand }}</div>
+    <div>
+        {% for item in order.items %}
+            <div>{{  item.sku_attr_image }}</div>
+            <div class="product-name">{{ item.name }}</div>
+            <div class="product-code">{{ 'Item code' | t }} {{ item.sku }}</div>
+            <div class="product-quantity">{{ 'Qty:' | t }} {{ item.ordered }}</div>
+            <div class="product-price-unit">{{ 'Unit Price' | t }} {{ item.price }}</div>
+            <div class="product-price-total">{{ 'Total' | t }} {{ item.total_price }}</div>
+        {% endfor %}
+    </div>
+    <div><a href="{{ path('alshaya_acm_customer.orders_detail', {'user': order.user_id, 'order_id': order.id}) }}">{{ 'ORDER DETAILS'| t }}</a>
+    </div>
+</div>
