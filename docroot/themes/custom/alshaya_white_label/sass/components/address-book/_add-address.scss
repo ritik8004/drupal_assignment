@@ -1,0 +1,77 @@
+.c-add-address {
+  .c-page-title {
+    border-bottom: 1px solid $white;
+    padding-bottom: 8px;
+  }
+
+  .profile-form {
+    @extend .contact-form;
+
+    @include breakpoint($desktop) {
+      margin-top: 4.5rem;
+    }
+
+    .address-container-inline > .form-item {
+      max-width: 144px;
+      margin-right: 0;
+      width: 100%;
+
+      &:first-child {
+        margin-#{$right}: 0.7em;
+      }
+
+      @include breakpoint($tablet) {
+        max-width: 186px;
+
+        &:first-child {
+          margin-#{$right}: 1em;
+        }
+      }
+    }
+
+    summary {
+      display: none;
+    }
+
+    .form-item {
+      padding-bottom: 3rem;
+    }
+
+    .form-wrapper.field--type-telephone {
+      padding-top: 0;
+    }
+
+    select {
+      background: none;
+      border: none;
+      border-bottom: 1px solid #0084cc;
+      height: 1.6rem;
+      outline: none;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+
+    .form-actions .form-submit {
+      margin-top: 0;
+      min-width: 91px;
+      margin-#{$right}: 20px;
+      padding: 2px 16px 3px;
+      width: auto;
+    }
+
+    .js-form-type-select {
+      position: relative;
+    }
+
+    .country {
+      width: 100%;
+    }
+
+    .js-form-type-select label {
+      color: #adadad;
+      #{$left}: 0;
+      position: absolute;
+      top: -28px;
+    }
+  }
+}
