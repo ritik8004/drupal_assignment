@@ -1,0 +1,41 @@
+//Error messages
+.messages {
+  &.messages--status,
+  &.messages--warning {
+    font-family: $arial;
+    font-size: 12px;
+    margin: 1rem 0;
+    padding: 0.75rem;
+
+    &::before {
+      content: '';
+      width: 26px;
+      height: 26px;
+      display: inline-block;
+      margin-right: 1rem;
+      vertical-align: middle;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 14px;
+    }
+  }
+
+  &.messages--status {
+    background: $tealish;
+    color: $white-five;
+
+    &::before {
+      background: url('../imgs/icons/ic-done.svg');
+    }
+  }
+
+  &.messages--warning {
+    background: $cherry;
+    color: $white-five;
+
+    &::before {
+      background: url('../imgs/icons/error.png');
+    }
+  }
+}
