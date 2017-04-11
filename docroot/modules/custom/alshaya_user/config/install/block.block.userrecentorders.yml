@@ -1,28 +1,23 @@
 langcode: en
 status: true
 dependencies:
-  content:
-    - 'block_content:basic:ae5d8d43-345e-49f7-a9fb-6d77a1752a0e'
   module:
-    - block_content
+    - alshaya_acm_customer
     - system
     - user
   theme:
     - alshaya_white_label
-id: myaccountneedhelp
+id: userrecentorders
 theme: alshaya_white_label
 region: content
-weight: -15
+weight: -16
 provider: null
-plugin: 'block_content:ae5d8d43-345e-49f7-a9fb-6d77a1752a0e'
+plugin: alshaya_user_recent_orders
 settings:
-  id: 'block_content:ae5d8d43-345e-49f7-a9fb-6d77a1752a0e'
-  label: 'My Account - Need Help'
-  provider: block_content
+  id: alshaya_user_recent_orders
+  label: 'User recent orders'
+  provider: alshaya_acm_customer
   label_display: '0'
-  status: true
-  info: ''
-  view_mode: full
 visibility:
   request_path:
     id: request_path
