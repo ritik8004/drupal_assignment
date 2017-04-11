@@ -119,8 +119,8 @@ function alshaya_user_process_password_confirm_after_build($element) {
   $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
 
   // Add tooltip as suffix to first element.
-  $element['pass1']['#suffix'] = '<div class="password-tooltip>
-      <div class="password-tooltip-icon"></div>
+  $element['pass1']['#suffix'] = '<div class="password-tooltip">
+      <div class="password-tooltip-icon">!</div>
       <div class="password-tooltip-content">' . $tooltip . '</div>
     </div>';
 
