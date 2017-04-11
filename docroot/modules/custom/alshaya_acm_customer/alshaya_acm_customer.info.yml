@@ -6,7 +6,3 @@ core: 8.x
 dependencies:
   - acq_customer
   - alshaya_acm_product
-  - alshaya_acm_customer
-  - block
-  - system
-  - user
