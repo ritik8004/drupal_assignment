@@ -22,8 +22,6 @@
           toggleOverlay('.ui-dialog-titlebar-close', 'modal-overlay');
         }, 5000);
       });
-
-
     }
   };
 
