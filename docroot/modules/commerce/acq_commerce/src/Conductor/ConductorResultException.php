@@ -41,13 +41,32 @@ class ConductorResultException extends ConductorException {
         continue;
       }
 
+      $prefix = 'response:';
+
+      if ($position = strpos($mesg, $prefix)) {
+        $responseString = substr($mesg, strpos($mesg, $prefix) + strlen($prefix));
+        $response = json_decode($responseString, TRUE);
+        if (is_array($response) && isset($response['message'])) {
+          $mesg = $response['message'];
+        }
+      }
+
       $this->failures[$key] = $mesg;
     }
 
     if ($this->success) {
       $mesg = 'Conductor request successful but did not contain requested data.';
-    } else {
+    }
+    else {
+      // Generic exception message.
       $mesg = 'Conductor request unsuccessful.';
+
+      // Check if we have a better exception message in failures.
+      if ($this->failures) {
+        // We return the first failure message in getMessage(), rest can be
+        // accessed via getFailureMessage().
+        $mesg = array_shift($this->failures);
+      }
     }
 
     return parent::__construct($mesg);

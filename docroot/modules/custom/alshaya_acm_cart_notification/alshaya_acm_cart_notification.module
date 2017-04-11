@@ -91,24 +91,28 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     // Generating cart link.
     $url = Url::fromRoute('acq_cart.cart')->toString();
 
-    // Product Image.
-    // Check for product type as they have different data structures.
+    // Include the utility file to get product image.
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    // Initialise the image variable to be used in output array.
+    $image = NULL;
+
+    // Check for product type as they have different data structures.
     if ($type == 'configurable') {
       // If we have a child_sku available.
       $child_sku = SKU::loadFromSKU($form_state->getValue('child_sku'));
-
-      $image = NULL;
       $sku_media = alshaya_acm_product_get_sku_media($child_sku);
-      $imageEntity = array_shift($sku_media);
-      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($imageEntity->getFileUri());
     }
     // Product Type - Simple.
     else {
-      $image = alshaya_acm_product_get_sku_media($sku_entity);
-      $file_uri = $image[0]->getFileUri();
-      $image = ImageStyle::load('cart_notification_thumbnail')
-        ->buildUrl($file_uri);
+      $sku_media = alshaya_acm_product_get_sku_media($sku_entity);
+    }
+
+    // In local or for some weired product we may not have an image.
+    if (!empty($sku_media)) {
+      // We will use the first image only.
+      $imageEntity = array_shift($sku_media);
+      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($imageEntity->getFileUri());
     }
 
     // Use the template to render the HTML.
@@ -122,9 +126,13 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     ];
   }
 
+  // Unset all status messages as we already show the message in modal.
+  unset($_SESSION['messages']['status']);
+
+  // Get the rendered html to pass into HtmlCommand.
   $html = drupal_render($output);
 
-  // Ajax Response.
+  // Prepare the ajax Response.
   $response = new AjaxResponse();
   $response->addCommand(new HtmlCommand('#cart_notification', $html));
 

@@ -278,9 +278,12 @@ class Cart implements CartInterface {
    * {@inheritdoc}
    */
   public function getShippingMethod() {
+    $shipping = NULL;
+
     if (isset($this->cart, $this->cart->carrier)) {
       $shipping = $this->cart->carrier;
     }
+
     return $shipping;
   }
 

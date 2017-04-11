@@ -22,6 +22,13 @@ class CustomerCartForm extends FormBase {
   /**
    * Drupal\acq_cart\CartStorageInterface definition.
    *
+   * @var \Drupal\acq_cart\Cart
+   */
+  protected $cart;
+
+  /**
+   * Drupal\acq_cart\CartStorageInterface definition.
+   *
    * @var \Drupal\acq_cart\CartStorageInterface
    */
   protected $cartStorage;
@@ -152,35 +159,35 @@ class CustomerCartForm extends FormBase {
     */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
+
+    if (!($form_state->getErrors())) {
+      $cartFormItems = $form_state->getValue('cart');
+
+      if (!empty($cartFormItems)) {
+        $update_cart = [];
+
+        foreach ($cartFormItems as $sku => $item) {
+          $update_cart[] = ['sku' => $sku, 'qty' => $item['quantity']];
+        }
+
+        $this->cart = $this->cartStorage->getCart();
+        $this->cart->setItemsInCart($update_cart);
+
+        $coupon = $form_state->getValue('coupon');
+
+        if (!empty($coupon)) {
+          $this->cart->setCoupon($coupon);
+        }
+
+        $this->updateCart($form_state);
+      }
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $cart = $form_state->getValue('cart');
-
-    if (empty($cart)) {
-      return;
-    }
-
-    $update_cart = [];
-
-    foreach ($cart as $sku => $item) {
-      $update_cart[] = ['sku' => $sku, 'qty' => $item['quantity']];
-    }
-
-    $cart = $this->cartStorage->getCart();
-    $cart->setItemsInCart($update_cart);
-
-    $coupon = $form_state->getValue('coupon');
-
-    if (!empty($coupon)) {
-      $cart->setCoupon($coupon);
-    }
-
-    $this->cartStorage->updateCart();
-
     if ($form_state->getTriggeringElement()['#parents'][0] == 'checkout') {
       $form_state->setRedirect('acq_checkout.form');
     } else {
@@ -188,4 +195,28 @@ class CustomerCartForm extends FormBase {
     }
   }
 
+
+  /**
+   * @param $form_state
+   *   FormStateInterface object.
+   */
+  private function updateCart(FormStateInterface $form_state) {
+    try {
+      $this->cartStorage->updateCart();
+    }
+    catch (\Exception $e) {
+      if ($e->getMessage() == 'Coupon code is not valid') {
+        // Set the error and require rebuild.
+        $form_state->setErrorByName('coupon', $this->t('This coupon code seems invalid or expired, please try new one.'));
+        $form_state->setRebuild(TRUE);
+
+        // Reset the cart.
+        $this->cart->setCoupon('');
+        $this->updateCart($form_state);
+      }
+      else {
+        // @TODO: handle more exceptions.
+      }
+    }
+  }
 }
