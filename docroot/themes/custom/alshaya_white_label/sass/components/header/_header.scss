@@ -6,7 +6,15 @@
   }
 
   .header--wrapper {
+    position: relative;
     background: $white-five;
+    z-index: 3;
+  }
+
+  .first--child_open {
+    .menu--three__list {
+      display: block !important;
+    }
   }
 }
 
@@ -36,7 +44,7 @@
     width: 80%;
     height: 100%;
     background: $white-five;
-    z-index: 3;
+    z-index: 4;
     padding-top: 1rem;
 
     #block-alshaya-white-label-account-menu {
@@ -444,12 +452,6 @@ header {
         width: 16px;
         height: 23px;
       }
-
-      &:hover {
-        &::before {
-          background: url('../imgs/icons/store--big--hover.svg');
-        }
-      }
     }
 
     .mobile--menu {
@@ -458,17 +460,27 @@ header {
         width: 24px;
         height: 13px;
       }
+    }
+  }
 
+  @include breakpoint($only-mobile) {
+    display: block;
+
+    .store {
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/store--big--hover.svg');
+        }
+      }
+    }
+
+    .mobile--menu {
       &:hover {
         &::before {
           background: url('../imgs/icons/mobile-menu--hover.svg');
         }
       }
     }
-  }
-
-  @include breakpoint($only-mobile) {
-    display: block;
 
     ul.menu {
       display: flex;
@@ -527,6 +539,7 @@ header {
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     position: relative;
+    z-index: 4;
 
     @include breakpoint($upto-desktop) {
       .main--menu {
@@ -684,6 +697,7 @@ header {
 
         li {
           padding: 0.3125rem 0;
+          vertical-align: top;
 
           a {
             color: $brownish-grey;
@@ -699,8 +713,17 @@ header {
 }
 
 @include breakpoint($desktop) {
-  .overlay {
+  .overlay::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100;
+    top: 0;
+    #{$left}: 0;
+    bottom: 0;
+    #{$left}: 0;
     background-color: rgba(0, 0, 0, 0.48);
+    z-index: 3;
   }
 
   .menu--four__list {
@@ -736,11 +759,17 @@ header {
   .highlights {
     vertical-align: top;
     display: inline-block;
-    width: 44%;
+    width: 39%;
+    margin-top: 5px;
+
+    div:nth-child(2) {
+      margin-right: 24px;
+    }
 
     .highlighted {
       display: inline-block;
       max-width: 11.5rem;
+      vertical-align: top;
     }
 
     .title {
@@ -753,7 +782,7 @@ header {
   }
 
   .level-three__wrapper {
-    width: 53%;
+    width: 58%;
     display: inline-block;
   }
 }
@@ -767,7 +796,7 @@ header {
     &::before {
       content: '';
       position: fixed;
-      z-index: 2;
+      z-index: 4;
       width: 100%;
       height: 100;
       top: 0;
@@ -1007,6 +1036,12 @@ header {
 }
 
 //User Menu Account
+@include breakpoint($only-tablet) {
+  .my-account-nav {
+    width: 270px !important;
+  }
+}
+
 .c-menu-primary .my-account-nav {
   display: none;
 
@@ -1039,7 +1074,7 @@ header {
       padding: 0.94rem 0;
       margin-left: 0.625rem;
       margin-right: 0.625rem;
-      text-align: left;
+      text-align: $left;
       position: relative;
 
       &:hover {
@@ -1092,3 +1127,15 @@ header {
     }
   }
 }
+
+//Highlights fix
+.highlighted {
+  @media only screen and (min-device-width: 1195px) and (max-device-width: 1275px) {
+    max-width: 10.5rem;
+  }
+
+  @media only screen and (min-device-width: 1020px) and (max-device-width: 1195px) {
+    max-width: 9.5rem;
+  }
+}
+
