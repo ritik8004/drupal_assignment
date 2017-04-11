@@ -138,7 +138,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
           'attributes' => [
             'class' => ['use-ajax'],
             'data-dialog-type' => 'modal',
-            'data-dialog-options' => Json::encode(['width' => '700']),
+            'data-dialog-options' => Json::encode(['width' => '341']),
           ],
         ]),
       ];
