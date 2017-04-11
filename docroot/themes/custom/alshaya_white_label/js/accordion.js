@@ -38,4 +38,12 @@
     }
   };
 
+  Drupal.behaviors.footeraccordion = {
+    attach: function (context, settings) {
+      $('.region__footer-primary').accordion({
+        header: 'h2'
+      });
+    }
+  };
+
 })(jQuery, Drupal);
