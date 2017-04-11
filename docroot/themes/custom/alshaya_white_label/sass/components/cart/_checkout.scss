@@ -329,9 +329,31 @@
 // Items in the cart page.
 
 .alias--cart {
+  .page-standard {
+    max-width: 1236px !important;
+    margin: auto;
+    margin-top: 2rem;
+
+    #edit-actions {
+      clear: both;
+      float: $right;
+      display: inline-grid;
+      margin-right: 4rem;
+      margin-bottom: 1rem;
+    }
+  }
+
   h1 {
     font-size: 24px;
     font-weight: normal;
+    color: $cobalt-blue;
+    border-bottom: 1px solid $white;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+
+    em {
+      font-style: inherit;
+    }
   }
 
   .page-standard.l-container {
@@ -352,12 +374,43 @@
 
     tr {
       display: flex;
-      padding: 0.93rem 1.563rem;
+      border-bottom: 1px solid $white;
+
+      td {
+        &:first-child {
+          a {
+            font-size: 14px;
+            font-weight: normal;
+            color: $black-two;
+          }
+        }
+      }
+
+      &:nth-child(2n) {
+        background: rgba(247, 247, 247, 0.72);
+
+        td:last-child {
+          background: $white-four;
+        }
+      }
 
       td,
       th {
         flex: 1;
         text-align: left;
+        padding: 0.93rem 1.563rem;
+      }
+
+      td {
+        &:last-child {
+          background: $white-four;
+        }
+      }
+
+      th {
+        &:last-child {
+          background: $white-two;
+        }
       }
     }
 
@@ -374,24 +427,42 @@
 
       a {
         width: 68%;
+        font-size: 12px;
+        font-weight: bold;
+        color: $windows-blue;
       }
 
       select {
         -webkit-appearance: none;
         border: 1px solid $white-two;
         border-radius: 0;
-        padding: 0.5rem 0.0625rem 0.5rem 0.625rem;
+        padding: 0.5rem 3.2rem 0.5rem 0.625rem;
+      }
+
+      .form-type-select {
+        margin-bottom: 1rem;
+
+        &::after {
+          content: '';
+          position: absolute;
+        }
       }
     }
   }
 
   #edit-totals {
     float: $right;
+    font-size: 14px;
 
     td:last-child {
       background: #f7f7f7;
       margin-left: 1rem;
-      padding: 1rem 1.25rem;
+      padding: 1rem 13.84rem;
+      padding-left: 1rem;
+    }
+
+    tr > td {
+      padding-right: 1rem;
     }
   }
 
@@ -401,6 +472,7 @@
 
     background: $pumpkin-orange;
     margin-top: 1em;
+    margin-bottom: 12px;
   }
 
   #edit-continue-shopping {
@@ -411,15 +483,9 @@
 }
 
 // COUPON CODE
-.form-item-coupon {
-  display: inline-block;
-  border-top: 1px solid $white;
-  border-bottom: 1px solid $white;
-  padding: 1rem 1.563rem;
-
-  #edit-coupon {
-    display: none;
-  }
+#edit-promotion-code-wrapper,
+#edit-privilege-card-wrapper {
+  display: none;
 }
 
 // Hide Update cart button
