@@ -73,7 +73,7 @@
       {% if page.sidebar_first %}
         <aside class="c-sidebar-first">
           <div class="c-sidebar-first__region">
-            {% if page.sidebar_first.skusskureferencecolor or page.sidebar_first.skusskureferencedisplayprice or page.sidebar.skusskureferencesize %}
+            {% if (page.sidebar_first.skusskureferencecolor|render|striptags|trim) or (page.sidebar_first.skusskureferencedisplayprice|render|striptags|trim) or (page.sidebar.skusskureferencesize|render|striptags|trim) %}
               <div class="c-facet__blocks__wrapper">
                 <h3 class="c-facet__label">{{ "Filter" | t }}</h3>
                 <div class="c-facet__blocks">
