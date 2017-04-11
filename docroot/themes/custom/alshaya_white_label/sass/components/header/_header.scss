@@ -278,7 +278,8 @@ header {
     @include breakpoint($only-tablet) {
       position: absolute;
       bottom: -43px;
-      #{$left}: 35%;
+      #{$left}: 0;
+      #{$right}: 0;
     }
 
     @include breakpoint($only-mobile) {
