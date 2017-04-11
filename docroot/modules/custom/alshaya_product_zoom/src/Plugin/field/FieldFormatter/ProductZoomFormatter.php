@@ -28,6 +28,7 @@ class ProductZoomFormatter extends ImageFormatterBase {
     return [
       'slide_style' => 0,
       'zoom_style' => 0,
+      'thumb_style' => 0,
       'zoom_width' => '0',
       'zoom_height' => '0',
       'zoom_position' => 'right',
@@ -57,7 +58,15 @@ class ProductZoomFormatter extends ImageFormatterBase {
 
     $element['zoom_style'] = [
       '#default_value' => $this->getSetting('zoom_style'),
-      '#title' => $this->t('Zoom image style'),
+      '#title' => $this->t('Zoom area image style'),
+      '#empty_option' => $this->t('None (original image)'),
+      '#type' => 'select',
+      '#options' => $image_styles,
+    ];
+
+    $element['thumb_style'] = [
+      '#default_value' => $this->getSetting('thumb_style'),
+      '#title' => $this->t('Thumbnail image style'),
       '#empty_option' => $this->t('None (original image)'),
       '#type' => 'select',
       '#options' => $image_styles,
@@ -157,42 +166,75 @@ class ProductZoomFormatter extends ImageFormatterBase {
   public function viewElements(FieldItemListInterface $items, $langcode = NULL) {
     $settings = $this->getSettings();
 
+    $properties = self::getRelStringForProductZoom($settings);
+
     // Thumbnail Image style.
-    $thumbnail_style = $settings['slide_style'];
+    $thumbnail_style = $settings['thumb_style'];
 
     // Zoom Image style.
     $zoom_style = $settings['zoom_style'];
 
+    // Slide Style.
+    $slide_style = $settings['slide_style'];
+
     $thumbnails = [];
     $main_image = [];
-
     foreach ($items as $delta => $item) {
-
       $image_field = $item->getValue();
       $file_uri = File::load($image_field['target_id'])->getFileUri();
 
       if ($delta == 0) {
-        $imageLarge = ImageStyle::load('300x300')->buildUrl($file_uri);
-        $imageZoom = ImageStyle::load('300x300')->buildUrl($file_uri);
+        $imageZoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+        $imageMedium = ImageStyle::load($slide_style)->buildUrl($file_uri);
         $main_image = [
-          'url' => $imageZoom,
-          'image' => $imageLarge,
+          'zoomurl' => $imageZoom,
+          'mediumurl' => $imageMedium,
         ];
       }
-
-      $imageSmall = ImageStyle::load('144x144')->buildUrl($file_uri);
-      $imageZoom = ImageStyle::load('300x300')->buildUrl($file_uri);
+      $imageSmall = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+      $imageZoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+      $imageMedium = ImageStyle::load($slide_style)->buildUrl($file_uri);
       $thumbnails[] = [
-        'url' => $imageZoom,
-        'image' => $imageSmall,
+        'thumburl' => $imageSmall,
+        'mediumurl' => $imageMedium,
+        'zoomurl' => $imageZoom,
+        'type' => 'image',
       ];
+    }
 
+    // Build Videos as part of our list.
+    // @todo: Get real videos.
+
+    $videos = [
+      'https://www.youtube.com/embed/eKG08z85DtY',
+      'https://player.vimeo.com/video/1084537',
+    ];
+
+    foreach ($videos as $video) {
+      if (strpos($video, 'youtube')) {
+        $thumbnails[] = [
+          'thumburl' => 'https://img.youtube.com/vi/' . self::getYouTubeVideoId($video) . '/hqdefault.jpg',
+          'url' => $video,
+          'type' => 'youtube',
+          'width' => 81,
+          'height' => 81,
+        ];
+      }
+      else {
+        $thumbnails[] = [
+          'url' => $video,
+          'type' => 'vimeo',
+          'width' => 81,
+          'height' => 81,
+        ];
+      }
     }
 
     $element = [
       '#theme' => 'product_zoom_gallery',
       '#mainImage' => $main_image,
       '#thumbnails' => $thumbnails,
+      '#properties' => $properties,
       '#attached' => [
         'library' => [
           'alshaya_product_zoom/product.cloud_zoom',
@@ -201,6 +243,67 @@ class ProductZoomFormatter extends ImageFormatterBase {
     ];
 
     return $element;
+  }
+
+  /**
+   * Get the rel attribute for Alshaya Product zoom.
+   *
+   * @param array $settings
+   *   Product Zoom settings.
+   *
+   * @return string
+   *   return the rel attribute.
+   */
+  public static function getRelStringForProductZoom(array $settings) {
+
+    $string = '';
+    $string .= "zoomWidth:'" . $settings['zoom_width'] . "'";
+    $string .= ",zoomHeight:'" . $settings['zoom_height'] . "'";
+    $string .= ",position:'" . $settings['zoom_position'] . "'";
+    $string .= ",adjustX:'" . $settings['adjust_x'] . "'";
+    $string .= ",adjustY:'" . $settings['adjust_y'] . "'";
+    $string .= ",tint:'" . $settings['tint'] . "'";
+    $string .= ",tintOpacity:'" . $settings['tint_opacity'] . "'";
+    $string .= ",lensOpacity:'" . $settings['lens_opacity'] . "'";
+    $string .= ",softFocus:" . $settings['soft_focus'];
+    $string .= ",smoothMove:'" . $settings['smooth_move'] . "'";
+
+    return $string;
+  }
+
+  /**
+   * Get the youtube video ID from URL.
+   *
+   * @param string $url
+   *   Youtube URLs.
+   *
+   * @return string
+   *   The youtube video id.
+   */
+  public static function getYouTubeVideoId($url) {
+    $video_id = FALSE;
+    $url = parse_url($url);
+    if (strcasecmp($url['host'], 'youtu.be') === 0) {
+      // (dontcare)://youtu.be/<video id>.
+      $video_id = substr($url['path'], 1);
+    }
+    elseif (strcasecmp($url['host'], 'www.youtube.com') === 0) {
+      if (isset($url['query'])) {
+        parse_str($url['query'], $url['query']);
+        if (isset($url['query']['v'])) {
+          // (dontcare)://www.youtube.com/(dontcare)?v=<video id>.
+          $video_id = $url['query']['v'];
+        }
+      }
+      if ($video_id == FALSE) {
+        $url['path'] = explode('/', substr($url['path'], 1));
+        if (in_array($url['path'][0], ['e', 'embed', 'v'])) {
+          // (dontcare)://www.youtube.com/(whitelist)/<video id>.
+          $video_id = $url['path'][1];
+        }
+      }
+    }
+    return $video_id;
   }
 
 }

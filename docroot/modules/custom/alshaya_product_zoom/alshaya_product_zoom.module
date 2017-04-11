@@ -14,6 +14,7 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
       'variables' => [
         'mainImage' => '',
         'thumbnails' => '',
+        'properties' => '',
       ],
       'template' => 'product_zoom_gallery',
     ],

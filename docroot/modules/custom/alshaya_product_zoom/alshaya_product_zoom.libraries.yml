@@ -5,7 +5,18 @@ cloud_zoom:
       js/cloud-zoom/cloud-zoom.css: {}
       css/alshaya_product_zoom.css: {}
   js:
-    js/cloud-zoom/cloud-zoom.1.0.3.js: {minified: true}
+    js/cloud-zoom/cloud-zoom.1.0.3.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+lightslider:
+  version: 1.x
+  css:
+    theme:
+      js/lightslider/src/css/lightslider.css: {}
+  js:
+    js/lightslider/src/js/lightslider.js: {}
   dependencies:
     - core/drupal
     - core/jquery
@@ -16,3 +27,4 @@ product.cloud_zoom:
     js/alshaya_product_zoom.js: {}
   dependencies:
     - alshaya_product_zoom/cloud_zoom
+    - alshaya_product_zoom/lightslider

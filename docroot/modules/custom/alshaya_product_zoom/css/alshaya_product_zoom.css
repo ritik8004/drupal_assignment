@@ -1,7 +1,22 @@
 /* Display image bellow Drupal overlay.*/
 .cloud-zoom-container #wrap {
-    z-index: 499 !important;
+  z-index: 499 !important;
+  position: relative;
 }
 .cloud-zoom-gallery-thumbs {
-    clear:left;
+  clear:left;
+}
+
+.cloud-zoom-container #cloud-zoom-big {
+  width: 314px !important;
+  height: 309px !important;
+  border: none;
+}
+
+.cloud-zoom-container .cloud-zoom-lens {
+  width: 227px !important;
+  height: 212px !important;
+  background-color: rgba(253, 253, 253, 0.44) !important;
+  border: 1px solid #fefefe;
+  margin: -1px !important;
 }
