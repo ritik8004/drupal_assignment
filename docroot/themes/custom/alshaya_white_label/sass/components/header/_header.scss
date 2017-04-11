@@ -12,6 +12,19 @@
   }
 
   .first--child_open {
+    > .menu-two__link-wrapper {
+      background-color: $marine-blue;
+
+      &::after {
+        background: url('../imgs/icons/icon-chevron-next--hover.svg') no-repeat !important;
+      }
+
+      a,
+      p {
+        color: $white-five !important;
+      }
+    }
+
     .menu--three__list {
       display: block !important;
     }
