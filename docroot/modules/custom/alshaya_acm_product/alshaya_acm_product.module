@@ -90,6 +90,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $sku = $entity->get('field_skus')->first()->getString();
       $skuEntity = SKU::loadFromSKU($sku);
 
+      // Hide the sku reference field.
+      unset($build['field_skus']);
+
       // Get the image.
       $build['image'] = NULL;
       $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
