@@ -1,4 +1,5 @@
-.c-add-address {
+.c-add-address,
+.c-address-book {
   .c-page-title {
     border-bottom: 1px solid $white;
     padding-bottom: 8px;
@@ -14,6 +15,7 @@
     .address-container-inline > .form-item {
       max-width: 144px;
       margin-right: 0;
+      vertical-align: top;
       width: 100%;
 
       &:first-child {
@@ -80,9 +82,14 @@
 
     .js-form-type-select label {
       color: #adadad;
+      font-size: 12px;
       #{$left}: 0;
       position: absolute;
-      top: -28px;
+      top: -22px;
+
+      &.error {
+        top: 28px;
+      }
     }
   }
 }
