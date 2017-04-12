@@ -10,7 +10,7 @@ field_name: field_terms_and_condition
 entity_type: user
 bundle: user
 label: 'Terms and condition'
-description: 'I would like to receive exclusive deals from Pottery Barn.<br>By registering I agree to your <a href="">Terms and Conditions.</a>'
+description: 'I would like to receive exclusive deals from Pottery Barn. By registering I agree to your <a href="">Terms and Conditions.</a>'
 required: true
 translatable: false
 default_value:

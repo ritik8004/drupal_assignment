@@ -229,7 +229,7 @@
     text-align: center;
   }
 
-  @include breakpoint($tablet) {
+  @include breakpoint($desktop-wide) {
     width: 357px;
   }
 }
