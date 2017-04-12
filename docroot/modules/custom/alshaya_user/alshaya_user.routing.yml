@@ -13,3 +13,12 @@ alshaya_user.user_register_complete:
     _title: 'Email verification required'
   requirements:
     _user_is_logged_in: 'FALSE'
+
+alshaya_user.user_communication_preference:
+  path: '/user/{user}/communication-preference'
+  defaults:
+    _form: '\Drupal\alshaya_user\Form\UserCommunicationPreference'
+    _title: 'Communication preferences'
+  requirements:
+    _entity_access: 'user.update'
+    user: \d+

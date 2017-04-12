@@ -114,7 +114,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     // TODO: Update the route name once link is available.
     $links['communication_preference'] = [
       'text' => $this->t('Communication preferences'),
-      'route' => 'entity.user.canonical',
+      'route' => 'alshaya_user.user_communication_preference',
       'options' => ['user' => $account->id()],
     ];
 
