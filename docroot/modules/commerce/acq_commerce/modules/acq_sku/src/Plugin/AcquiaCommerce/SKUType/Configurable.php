@@ -449,7 +449,7 @@ class Configurable extends SKUPluginBase {
 
     $display_node = $this->getDisplayNode($parent_sku);
     $url = $display_node->toUrl();
-    $link = Link::fromTextAndUrl($label, $url);
-    return render($link->toRenderable());
+    $link = Link::fromTextAndUrl($label, $url)->toRenderable();
+    return render($link);
   }
 }
