@@ -19,6 +19,8 @@ default_value_callback: ''
 settings:
   countries:
     KW: KW
+    AE: AE
+    US: US
   verify: none
   message: "Your verification code from !site_name:\n!code"
 field_type: mobile_number

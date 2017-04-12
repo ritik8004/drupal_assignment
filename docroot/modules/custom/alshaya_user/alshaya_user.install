@@ -40,6 +40,15 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
+  $content['field_mobile_number'] = [
+    'weight' => 2,
+    'type' => 'mobile_number_default',
+    'settings' => [
+      'default_country' => 'KW',
+      'countries' => [],
+    ],
+    'third_party_settings' => [],
+  ];
   $content['field_privilege_card_number'] = [
     'weight' => 3,
     'type' => 'string_textfield',
