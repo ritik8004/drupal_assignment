@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm module.
+ */
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_acm_modules_installed($modules) {
+  if (in_array('alshaya_acm', $modules)) {
+    // Update category sync resource to allow basic_auth.
+    $config = \Drupal::configFactory()->getEditable('rest.resource.acq_categorysync');
+    $configuration = $config->get('configuration');
+    $configuration['POST']['supported_auth'][] = 'basic_auth';
+    $config->set('configuration', $configuration);
+    $config->save();
+
+    // Update product sync resource to allow basic_auth.
+    $config = \Drupal::configFactory()->getEditable('rest.resource.acq_productsync');
+    $configuration = $config->get('configuration');
+    $configuration['POST']['supported_auth'][] = 'basic_auth';
+    $config->set('configuration', $configuration);
+    $config->save();
+  }
+}
