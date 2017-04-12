@@ -73,16 +73,14 @@
       {% if page.sidebar_first %}
         <aside class="c-sidebar-first">
           <div class="c-sidebar-first__region">
-            {% if (page.sidebar_first.skusskureferencecolor|render|striptags|trim) or (page.sidebar_first.skusskureferencedisplayprice|render|striptags|trim) or (page.sidebar.skusskureferencesize|render|striptags|trim) %}
-              <div class="c-facet__blocks__wrapper">
-                <h3 class="c-facet__label">{{ "Filter" | t }}</h3>
-                <div class="c-facet__blocks">
-                  {{ page.sidebar_first.skusskureferencecolor }}
-                  {{ page.sidebar_first.skusskureferencedisplayprice }}
-                  {{ page.sidebar_first.skusskureferencesize }}
-                </div>
+            <div class="c-facet__blocks__wrapper">
+              <h3 class="c-facet__label">{{ "Filter" | t }}</h3>
+              <div class="c-facet__blocks">
+                {{ page.sidebar_first.skusskureferencecolor }}
+                {{ page.sidebar_first.skusskureferencedisplayprice }}
+                {{ page.sidebar_first.skusskureferencesize }}
               </div>
-            {%  endif %}
+            </div>
             {{ page.sidebar_first | without('skusskureferencecolor', 'skusskureferencedisplayprice', 'skusskureferencesize') }}
           </div>
         </aside>
