@@ -83,7 +83,7 @@
         }
 
         @include breakpoint($desktop) {
-          padding-#{$left}: 10em;
+          padding-#{$left}: 8.5em;
         }
 
         > div {
