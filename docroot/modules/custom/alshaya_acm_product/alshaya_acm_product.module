@@ -93,12 +93,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       ];
     }
     // @todo: Hardcoding videos for now.
-
     $videos = [
       'https://www.youtube.com/embed/eKG08z85DtY',
       'https://player.vimeo.com/video/1084537',
     ];
-
     foreach ($videos as $video) {
       if (strpos($video, 'youtube')) {
         $thumbnails[] = [
@@ -118,7 +116,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
     }
-
     $build['product_zoom'] = [
       '#theme' => 'product_zoom_gallery',
       '#mainImage' => $main_image,
