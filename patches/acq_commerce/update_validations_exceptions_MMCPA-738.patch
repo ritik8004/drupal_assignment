@@ -103,7 +103,7 @@ index a6a8659..1de15f1 100644
 +      $this->cartStorage->updateCart();
 +    }
 +    catch (\Exception $e) {
-+      if ($e->getMessage() == 'Coupon code is not valid') {
++      if ($e->getMessage() == $this->t('Coupon code is not valid')) {
 +        // Set the error and require rebuild.
 +        $form_state->setErrorByName('coupon', $this->t('This coupon code seems invalid or expired, please try new one.'));
 +        $form_state->setRebuild(TRUE);
