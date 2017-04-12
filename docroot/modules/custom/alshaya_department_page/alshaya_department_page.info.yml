@@ -6,6 +6,7 @@ dependencies:
   - alshaya_paragraphs
   - block
   - content_translation
+  - ctools
   - entity_reference_revisions
   - field
   - language

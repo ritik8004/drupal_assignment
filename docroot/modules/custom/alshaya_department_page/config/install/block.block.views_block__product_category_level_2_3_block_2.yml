@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.product_category_level_2_3
+  module:
+    - ctools
+    - views
+  theme:
+    - alshaya_white_label
+id: views_block__product_category_level_2_3_block_2
+theme: alshaya_white_label
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'views_block:product_category_level_2_3-block_2'
+settings:
+  id: 'views_block:product_category_level_2_3-block_2'
+  label: ''
+  provider: views
+  label_display: visible
+  views_label: ''
+  items_per_page: none
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      department_page: department_page
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

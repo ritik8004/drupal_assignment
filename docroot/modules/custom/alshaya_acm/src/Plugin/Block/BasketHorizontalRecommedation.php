@@ -72,4 +72,11 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
     return [];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
 }
