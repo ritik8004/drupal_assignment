@@ -23,7 +23,7 @@ class AlshayaProfileForm extends ProfileForm {
         '#type' => 'link',
         '#title' => t('Cancel'),
         '#attributes' => [
-          'class' => ['button'],
+          'class' => ['cancel-button', 'button'],
         ],
         '#weight' => 20,
         '#url' => Url::fromRoute('entity.profile.type.address_book.user_profile_form', [
