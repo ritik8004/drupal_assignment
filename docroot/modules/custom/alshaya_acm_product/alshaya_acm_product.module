@@ -6,6 +6,10 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 
 /**
@@ -46,5 +50,97 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product') {
+    if ($view_mode == 'full') {
+      $sku = $entity->get('field_skus')->first()->getString();
+      $skuEntity = SKU::loadFromSKU($sku);
+
+      // Get up sell block for the product.
+      $items = $skuEntity->get('upsell')->getValue();
+
+      if (!empty($items)) {
+        $up_sell_skus = array_column($items, 'value');
+        $up_sell_skus = array_slice($up_sell_skus, 0, 12);
+        $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $up_sell_skus));
+        // Weight will no effect later once template is modified.
+        $build['up_sell']['#weight'] = 10;
+      }
+
+      // Get cross sell block for the product.
+      $items = $skuEntity->get('crosssell')->getValue();
+
+      if (!empty($items)) {
+        $cross_sell_skus = array_column($items, 'value');
+        $cross_sell_skus = array_slice($cross_sell_skus, 0, 12);
+        $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $cross_sell_skus));
+        // Weight will no effect later once template is modified.
+        $build['cross_sell']['#weight'] = 11;
+      }
+    }
+    elseif ($view_mode == 'teaser') {
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+      $sku = $entity->get('field_skus')->first()->getString();
+      $skuEntity = SKU::loadFromSKU($sku);
+
+      // Hide the sku reference field.
+      unset($build['field_skus']);
+
+      // Get the image.
+      $build['image'] = NULL;
+      $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
+      if ($sku_media) {
+        $imageEntity = array_shift($sku_media);
+        $build['image'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
+      }
+
+      // Get the price.
+      $build['price'] = [
+        '#theme' => 'alshaya_acm_price',
+        '#price' => $skuEntity->get('price')->getString(),
+      ];
+
+      // Get the special price.
+      // @TODO: Calculate discount and pass it once we have some realistic data.
+      $build['special_price'] = NULL;
+      if ($special_price = $skuEntity->get('attr_special_price')->getString()) {
+        $build['special_price'] = [
+          '#theme' => 'alshaya_acm_price',
+          '#price' => $special_price,
+        ];
+      }
+    }
+    elseif ($view_mode == 'modal') {
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+      $sku = $entity->get('field_skus')->first()->getString();
+      $skuEntity = SKU::loadFromSKU($sku);
+
+      // Get the image.
+      // @TODO: We need to display the full slider and zoom box.
+      $build['image'] = NULL;
+      $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
+      if ($sku_media) {
+        $imageEntity = array_shift($sku_media);
+        $build['image'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  // Remove/Hide the 'add to cart' form from product list/search page.
+  if ($build['#view_mode'] == 'teaser') {
+    $build['#no_add_to_cart'] = TRUE;
   }
 }

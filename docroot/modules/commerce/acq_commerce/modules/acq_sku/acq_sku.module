@@ -44,6 +44,9 @@ function acq_sku_preprocess_acq_sku(&$variables) {
  *   - cardinality: Number of values allowed to be stored.
  *   - type: Type of the field.
  *   - weight: Default weight of the field in form and display.
+ *   - configurable: Whether the field is part of configurable options.
+ *   - visible_view: Whether the field should be visible while viewing content.
+ *   - visible_form: Whether the field should be visible in form.
  */
 function acq_sku_add_base_fields(array $fields) {
   // Get the fields from config.
