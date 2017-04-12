@@ -655,3 +655,23 @@
   margin-#{$left}: -6px;
   #{$right}: 1px;
 }
+
+//Email verification page.
+.alias--user-register-complete {
+  h1 {
+    font-family: $alshaya-bold;
+  }
+
+  #block-alshaya-white-label-content {
+    padding-top: 1rem;
+
+    span {
+      display: block;
+      margin-bottom: 1.5rem;
+
+      a {
+        color: $windows-blue;
+      }
+    }
+  }
+}
