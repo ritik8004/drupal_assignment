@@ -1,29 +1,3 @@
-diff --git a/modules/acq_cart/js/acq_cart_custom.js b/modules/acq_cart/js/acq_cart_custom.js
-index d852387..4f57adf 100644
---- a/modules/acq_cart/js/acq_cart_custom.js
-+++ b/modules/acq_cart/js/acq_cart_custom.js
-@@ -1,12 +1,12 @@
- (function ($) {
--    Drupal.behaviors.acq_cart_js = {
--        attach: function (context, settings) {
--            $.ajax({
--                url: "/" + drupalSettings.path.pathPrefix + "mini-cart",
--                success: function(result) {
--                    $("#mini-cart-wrapper").html(result);
--                }
--            });
-+  Drupal.behaviors.acq_cart_js = {
-+    attach: function (context, settings) {
-+      $.ajax({
-+        url: Drupal.url('mini-cart'),
-+        success: function (result) {
-+          $("#mini-cart-wrapper").html(result);
-         }
--    };
-+      });
-+    }
-+  };
- })(jQuery);
 diff --git a/modules/acq_cart/src/Cart.php b/modules/acq_cart/src/Cart.php
 index 0daa3e2..8d1f80c 100644
 --- a/modules/acq_cart/src/Cart.php
@@ -41,24 +15,6 @@ index 0daa3e2..8d1f80c 100644
      return $shipping;
    }
 
-diff --git a/modules/acq_cart/src/Controller/getMiniCart.php b/modules/acq_cart/src/Controller/getMiniCart.php
-index 88e1fdb..d1475d6 100644
---- a/modules/acq_cart/src/Controller/getMiniCart.php
-+++ b/modules/acq_cart/src/Controller/getMiniCart.php
-@@ -43,6 +43,13 @@ public static function create(ContainerInterface $container) {
-    */
-   public function content() {
-     $cart = $this->cartStorage->getCart();
-+
-+    if (empty($cart)) {
-+      // Something is wrong, but we have already logged at API level.
-+      // Just respond back with empty text to avoid issues.
-+      return new JsonResponse([]);
-+    }
-+
-     $totals = $cart->totals();
-
-     // Fetch the config.
 diff --git a/modules/acq_cart/src/Form/CustomerCartForm.php b/modules/acq_cart/src/Form/CustomerCartForm.php
 index a6a8659..1de15f1 100644
 --- a/modules/acq_cart/src/Form/CustomerCartForm.php
