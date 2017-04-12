@@ -1,0 +1,5 @@
+alshaya_loyalty.settings:
+  title: 'Custom loyalty settings'
+  base_route_name: alshaya_loyalty.loyalty_settings_form
+  names:
+    - alshaya_loyalty.settings

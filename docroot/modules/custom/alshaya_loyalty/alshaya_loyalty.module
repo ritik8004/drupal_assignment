@@ -1,0 +1,127 @@
+<?php
+
+/**
+ * @file
+ * Module for for privilege card fields and validation.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_loyalty_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['field_privilege_card_number']['#element_validate'] = [
+    '_alshaya_loyalty_validate_field_value',
+  ];
+}
+
+/**
+ * Element validate callback.
+ */
+function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $form_state, &$complete_form) {
+  // Get current field.
+  $field = end($element['#array_parents']);
+
+  $field_val = $form_state->getValue($field);
+
+  if (is_string($field_val)) {
+    $element_value = $field_val;
+  }
+
+  if (is_array($field_val)) {
+    $element_value = $field_val[0]['value'];
+  }
+
+  if (!empty($element_value)) {
+    // Get alshaya loyalty settings.
+    $config = \Drupal::config('alshaya_loyalty.settings');
+
+    $max_length = $config->get('apcn_max_length');
+    $value_start_with = $config->get('apcn_value_starts_with');
+
+    // Validate number against validation settings.
+    if (!alshaya_loyalty_check_valid_apc_number($element_value, $max_length, $value_start_with)) {
+      $form_state->setError($element, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
+    }
+  }
+}
+
+/**
+ * Compare the value against the settings.
+ *
+ * @param string $value
+ *   The value to validate.
+ * @param int $max_length
+ *   The maximum length of the string.
+ * @param string $value_start_with
+ *   The value should start with.
+ *
+ * @return bool
+ *   Return true of false.
+ */
+function alshaya_loyalty_check_valid_apc_number($value, $max_length, $value_start_with) {
+  if (strlen($value) != $max_length) {
+    return FALSE;
+  }
+  if (substr($value, 0, strlen($value_start_with)) != $value_start_with) {
+    return FALSE;
+  }
+  if (!is_numeric($value)) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Add privilege card fields to the form.
+ */
+function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $form_state) {
+  // Get user input for the form.
+  $values = &$form_state->getUserInput();
+
+  $form['privilege_card_wrapper'] = [
+    '#type' => 'details',
+    '#title' => t('Enter a priviledge card number'),
+    '#open' => !empty($values) && !empty($values['privilege_card_number']) && !empty($values['privilege_card_number2']),
+    '#weight' => 3,
+  ];
+
+  $form['privilege_card_wrapper']['privilege_card_number'] = [
+    '#type' => 'textfield',
+    '#title' => t('Privilege Card Number'),
+    '#element_validate' => [
+      '_alshaya_loyalty_validate_field_value',
+    ],
+  ];
+
+  $form['privilege_card_wrapper']['privilege_card_number2'] = [
+    '#type' => 'textfield',
+    '#title' => t('Re-enter Privilege Card Number'),
+    '#states' => [
+      'required' => [
+        ':input[name="privilege_card_number"]' => ['empty' => FALSE],
+      ],
+    ],
+    '#element_validate' => [
+      '_alshaya_loyalty_validate_field_value',
+      '_alshaya_loyalty_compare_field_values',
+    ],
+    '#element_validate_settings' => [
+      'validate_apc_number' => TRUE,
+    ],
+  ];
+}
+
+/**
+ * Compare two field values.
+ */
+function _alshaya_loyalty_compare_field_values(&$element, FormStateInterface $form_state, &$complete_form) {
+  $card1 = $form_state->getValue('privilege_card_number');
+  $card2 = $form_state->getValue('privilege_card_number2');
+
+  if (!empty($card1) && ($card1 != $card2)) {
+    $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
+  }
+}

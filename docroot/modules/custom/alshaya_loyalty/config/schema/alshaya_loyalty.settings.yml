@@ -1,0 +1,12 @@
+# Schema for the configuration files of the alshaya loyalty settings.
+
+alshaya_loyalty.settings:
+  type: config_object
+  label: 'Custom loyalty settings'
+  mapping:
+    apcn_max_length:
+      type: integer
+      label: 'Max. Length'
+    apcn_value_starts_with:
+      type: string
+      label: 'Value starts with'
