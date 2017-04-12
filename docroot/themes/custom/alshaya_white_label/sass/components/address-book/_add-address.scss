@@ -55,6 +55,8 @@
 
     .form-actions {
       margin-bottom: 90px;
+      font-size: 12px;
+      font-weight: 700;
 
       .form-submit {
         margin-top: 0;
@@ -68,6 +70,16 @@
           display: block;
           float: none;
           width: 100%;
+        }
+      }
+
+      .cancel-button {
+        display: block;
+        text-align: center;
+        padding: 11px;
+
+        @include breakpoint($tablet) {
+          display: inline-block;
         }
       }
     }
