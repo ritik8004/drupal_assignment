@@ -61,9 +61,10 @@
 
           {% else %}
             <div class="address--primary address--controls">
-              <span>Primary address</span>
+              <span>{{ "Primary address"|t }}</span>
             </div>
           {% endif %}
+
           {% if edit_operation is not empty %}
             <div class="address--edit address--controls">
               {{ link(edit_operation.title, edit_operation.url ) }}

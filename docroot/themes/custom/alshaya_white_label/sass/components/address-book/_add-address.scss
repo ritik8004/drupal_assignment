@@ -82,9 +82,10 @@
 
     .js-form-type-select label {
       color: #adadad;
+      font-size: 12px;
       #{$left}: 0;
       position: absolute;
-      top: -28px;
+      top: -22px;
 
       &.error {
         top: 28px;
