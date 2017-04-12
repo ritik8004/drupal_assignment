@@ -1,0 +1,170 @@
+{#
+/**
+ * @file
+ *
+ * Default user order print template.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper.
+ * - order: Array containing all order details.
+ *
+ * @ingroup themeable
+ */
+#}
+{{ site_logo }}
+<div>
+  {% trans %}
+    Thank you for shopping online with us, {{ account.first_name }} {{ account.last_name }}
+  {% endtrans %}
+</div>
+<div>
+  {% trans %}
+    You’ll receive an email addressed to {{ account.mail }} conﬁrming your order
+  {% endtrans %}
+</div>
+<div>
+  {% trans %}
+    Your Privileges Card Number is: {{ account.privilege_card_number }}
+  {% endtrans %}
+</div>
+<div>
+  {{ barcode }}
+</div>
+<div>
+  {% trans %}
+    Your order number is: {{ order.orderId }}
+  {% endtrans %}
+</div>
+
+<div>{{ "order details"|t }}</div>
+
+{# Delivery to #}
+<div>
+  {{ "Delivery to"|t }}
+  {{ account.first_name }} {{ account.last_name }}
+</div>
+
+{# Contact no. #}
+<div>
+  {{ "Contact no."|t }}
+  {{ order_details.contact_no }}
+</div>
+
+{# Delivery address #}
+<div>
+  {{ "Delivery address"|t }}
+  {{ order_details.delivery_address }}
+</div>
+
+{# Billing address #}
+<div>
+  {{ "Billing address"|t }}
+  {{ order_details.billing_address }}
+</div>
+
+
+{# Payment method #}
+<div>
+  {{ "Payment method"|t }}
+  {{ order_details.payment_method }}
+</div>
+
+{# Delivery method #}
+<div>
+  {{ "Delivery method"|t }}
+  {{ order_details.delivery_method }}
+</div>
+
+{# Product details #}
+<div>
+  {% trans %}
+    Product details ({{ products_count }})
+  {% endtrans %}
+</div>
+
+<table>
+  {% for product in products %}
+    <tr class="order-item-row">
+      <td>
+        {% if product.image %}
+          <img src="{{ product.image }}" />
+        {% endif %}
+      </td>
+      <td>
+        <div>{{ product.name }}</div>
+
+        {% for attribute in product.attributes %}
+          <div>
+            {% trans %}
+            {{ attribute.label }}: {{ attribute.value }}
+            {% endtrans %}
+          </div>
+        {% endfor %}
+
+        <div>
+          {% trans %}
+          Item code: {{ product.sku }}
+          {% endtrans %}
+        </div>
+
+        <div>
+          {% trans %}
+          Quantity: {{ product.ordered }}
+          {% endtrans %}
+        </div>
+      </td>
+      <td>
+        <div class="light">{{ "Unit price"|t }}</div>
+        {% if currency_code_position == 'before' %}
+          <span class="currency-code prefix">{{ currency_code }}</span>{{ product.total }}
+        {% else %}
+          {{ product.total }}<span class="currency-code suffix">{{ currency_code }}</span>
+        {% endif %}
+      </td>
+      <td>
+        <div class="light">{{ "Total"|t }}</div>
+        {% if currency_code_position == 'before' %}
+          <span class="currency-code prefix">{{ currency_code }}</span>{{ product.total }}
+        {% else %}
+          {{ product.total }}<span class="currency-code suffix">{{ currency_code }}</span>
+        {% endif %}
+      </td>
+
+      <td>&nbsp;</td>
+    </tr>
+  {% endfor %}
+</table>
+
+{# Sub total #}
+<div>{{ "Sub total"|t }}</div>
+<div>
+  {% if currency_code_position == 'before' %}
+    <span class="currency-code prefix">{{ currency_code }}</span>{{ order_details.sub_total }}
+  {% else %}
+    {{ order_details.sub_total }}<span class="currency-code suffix">{{ currency_code }}</span>
+  {% endif %}
+</div>
+
+{# Sub total #}
+<div>
+  <div>{{ "Delivery charge"|t }}</div>
+  <div>
+    {% if currency_code_position == 'before' %}
+      <span class="currency-code prefix">{{ currency_code }}</span>{{ order_details.delivery_charge }}
+    {% else %}
+      {{ order_details.delivery_charge }}<span class="currency-code suffix">{{ currency_code }}</span>
+    {% endif %}
+  </div>
+</div>
+
+<div>
+  <div>{{ "ORDER TOTAL"|t }}</div>
+  <div>
+    {% if currency_code_position == 'before' %}
+      <span class="currency-code prefix">{{ currency_code }}</span>{{ order_details.order_total }}
+    {% else %}
+      {{ order_details.order_total }}<span class="currency-code suffix">{{ currency_code }}</span>
+    {% endif %}
+  </div>
+  <td>&nbsp;</td>
+</div>

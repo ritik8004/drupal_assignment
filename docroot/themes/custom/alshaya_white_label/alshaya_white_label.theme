@@ -315,6 +315,10 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
   if (\Drupal::service('path.matcher')->isFrontPage()) {
     $suggestions[] = 'page__front';
   }
+
+  if ($routmatch->getRouteName() == 'alshaya_acm_customer.orders_print') {
+    $suggestions[] = 'page__orderprint';
+  }
 }
 
 /**
