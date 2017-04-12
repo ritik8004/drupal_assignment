@@ -70,9 +70,15 @@
   }
 
   #block-onlineexclusiveheadingovertwolinesneverthree {
+    @include breakpoint($only-mobile) {
+      width: 50%;
+      margin: 0 auto;
+    }
+
     a {
       font-weight: bold;
       text-transform: lowercase;
+      color: $cerulean;
     }
   }
 
@@ -128,6 +134,10 @@
 
     @include breakpoint($desktop-wide) {
       max-width: 24.75rem;
+    }
+
+    .password-confirm {
+      display: none;
     }
 
     .form-submit {
@@ -227,7 +237,7 @@
     top: 0 !important;
 
     &::before {
-      margin-right: 1em;
+      margin-right: 0.5em;
     }
   }
 }
@@ -254,13 +264,20 @@
 #block-jointheclub {
   text-transform: lowercase;
 
+  a {
+    color: $cerulean;
+  }
+
   i {
-    float: $left;
+    display: inline-block;
     width: 18px;
     height: 18px;
     background-repeat: no-repeat;
     margin-#{$right}: 0.625em;
     background-size: 18px;
+    position: relative;
+    top: 5px;
+    color: $cerulean;
   }
 
   i.icon {
@@ -542,6 +559,10 @@
 .alias--user-login h1 {
   @include breakpoint($desktop) {
     top: -4em;
+  }
+
+  @include breakpoint($only-mobile) {
+    top: -5em;
   }
 }
 
