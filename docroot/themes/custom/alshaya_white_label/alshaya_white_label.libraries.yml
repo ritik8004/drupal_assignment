@@ -4,8 +4,10 @@ global_styles:
     theme:
       css/styles.css: {}
   js:
-    js/menu.js: {}
     js/accordion.js: {}
+    js/menu.js: {}
+    js/form.js: {}
+    js/address_book.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion
@@ -15,6 +17,14 @@ rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+  js:
+    js/menu.js: {}
+    js/form.js: {}
+    js/accordion.js: {}
+    js/address_book.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.accordion
 
 color_styles:
   version: VERSION

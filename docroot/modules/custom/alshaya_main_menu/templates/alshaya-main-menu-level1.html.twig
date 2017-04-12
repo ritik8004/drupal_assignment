@@ -1,6 +1,11 @@
 <div class="main--menu">
-  <div class="mobile--close">
-    <p>X</p>
+<div class="toggle--sign no--desktop">
+  <div class="shop one active">{{ 'shop' | t }}</div>
+  <div class="account one">{{ "sign in" | t }} / {{ "register" | t }}</div>
+  <div class="account--logged_in one">{{ 'my account' | t }}</div>
+</div>
+  <div class="mobile--close no--desktop">
+    <span></span>
   </div>
   <ul class="menu__list menu--one__list">
     {% for key1, level1 in term_tree %}
@@ -10,7 +15,7 @@
         <li class="menu__list-item menu--one__list-item">
       {% endif %}
           <div class="menu__link-wrapper menu-two__link-wrapper">
-            <a class="menu__link menu--one__link" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level1.id}) }}">{{ level1.label }}</a>
+            <a class="menu__link menu--one__link" href="{{ level1.path }}">{{ level1.label }}</a>
           </div>
 
           {% if level1.child is not empty %}

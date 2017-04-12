@@ -3,7 +3,7 @@ fields:
   color:
     label: 'Color'
     description: 'Color attribute for the product.'
-    cardinality: 1
+    cardinality: -1
     type: 'string'
     configurable: 1
 
@@ -11,7 +11,7 @@ fields:
   size:
     label: 'Size'
     description: 'Size attribute for the product.'
-    cardinality: 1
+    cardinality: -1
     type: 'string'
     configurable: 1
 

@@ -10,7 +10,6 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Url;
-use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 
@@ -75,12 +74,16 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#message' => t('Oops! Something went wrong.'),
     ];
   }
-  // Show success notification.
+  // Show success notification of the product.
   else {
-    // Product name.
-    $string_sku = SKU::load($form_state->getValue('sku_id'))->getSKU();
-    $product_value = SKU::loadFromSKU($string_sku)->get('name')->getValue();
-    $product_name = $product_value[0]['value'];
+    // SKU entity.
+    $sku_entity = SKU::load($form_state->getValue('sku_id'));
+
+    // Get product type.
+    $type = $sku_entity->getType();
+
+    // Product Name.
+    $product_name = $sku_entity->get('name')->getString();
 
     // Quantity.
     $quantity = $form_state->getValue('quantity');
@@ -89,15 +92,23 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     $url = Url::fromRoute('acq_cart.cart')->toString();
 
     // Product Image.
-    // Create image path.
-    $image = SKU::loadFromSKU($string_sku)
-      ->get('attr_image')
-      ->getValue();
+    // Check for product type as they have different data structures.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    if ($type == 'configurable') {
+      // If we have a child_sku available.
+      $child_sku = SKU::loadFromSKU($form_state->getValue('child_sku'));
 
-    // If we have image for the product.
-    if ($image != NULL) {
-      $file_uri = File::load($image[0]['target_id'])->getFileUri();
-      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($file_uri);
+      $image = NULL;
+      $sku_media = alshaya_acm_product_get_sku_media($child_sku);
+      $imageEntity = array_shift($sku_media);
+      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($imageEntity->getFileUri());
+    }
+    // Product Type - Simple.
+    else {
+      $image = alshaya_acm_product_get_sku_media($sku_entity);
+      $file_uri = $image[0]->getFileUri();
+      $image = ImageStyle::load('cart_notification_thumbnail')
+        ->buildUrl($file_uri);
     }
 
     // Use the template to render the HTML.

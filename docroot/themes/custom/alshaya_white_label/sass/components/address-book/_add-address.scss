@@ -1,0 +1,95 @@
+.c-add-address,
+.c-address-book {
+  .c-page-title {
+    border-bottom: 1px solid $white;
+    padding-bottom: 8px;
+  }
+
+  .profile-form {
+    @extend .contact-form;
+
+    @include breakpoint($desktop) {
+      margin-top: 4.5rem;
+    }
+
+    .address-container-inline > .form-item {
+      max-width: 144px;
+      margin-right: 0;
+      vertical-align: top;
+      width: 100%;
+
+      &:first-child {
+        margin-#{$right}: 0.7em;
+      }
+
+      @include breakpoint($tablet) {
+        max-width: 186px;
+
+        &:first-child {
+          margin-#{$right}: 1em;
+        }
+      }
+    }
+
+    summary {
+      display: none;
+    }
+
+    .form-item {
+      padding-bottom: 3rem;
+    }
+
+    .form-wrapper.field--type-telephone {
+      padding-top: 0;
+    }
+
+    select {
+      background: none;
+      border: none;
+      border-bottom: 1px solid #0084cc;
+      height: 1.6rem;
+      outline: none;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+
+    .form-actions {
+      margin-bottom: 90px;
+
+      .form-submit {
+        margin-top: 0;
+        margin-bottom: 23px;
+        min-width: 91px;
+        margin-#{$right}: 20px;
+        padding: 2px 16px 3px;
+        width: auto;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          float: none;
+          width: 100%;
+        }
+      }
+    }
+
+    .js-form-type-select {
+      position: relative;
+    }
+
+    .country {
+      width: 100%;
+    }
+
+    .js-form-type-select label {
+      color: #adadad;
+      font-size: 12px;
+      #{$left}: 0;
+      position: absolute;
+      top: -22px;
+
+      &.error {
+        top: 28px;
+      }
+    }
+  }
+}

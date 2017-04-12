@@ -6,6 +6,9 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Implements hook_theme().
@@ -47,6 +50,11 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['user_recent_order'] = [
+    'render element' => 'elements',
+    'variables' => ['order' => NULL],
+  ];
+
   return $items;
 }
 
@@ -57,5 +65,16 @@ function alshaya_acm_customer_form_multistep_default_alter(&$form, FormStateInte
   // When we reach the final step, clear cache of orders list for the user.
   if (empty($form['actions']) || empty($form['actions']['next']) || empty((string) $form['actions']['next']['#value'])) {
     \Drupal::cache()->delete('orders_list_' . \Drupal::currentUser()->id());
+  }
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_acm_customer_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'recent orders' block other than user/{uid} page.
+  if ($operation == 'view' && $block->id() == 'userrecentorders') {
+    $current_route = \Drupal::routeMatch()->getRouteName();
+    return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
   }
 }

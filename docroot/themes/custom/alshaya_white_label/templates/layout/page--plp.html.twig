@@ -1,3 +1,191 @@
-{% extends 'page.html.twig' %}
-{% set attributes = attributes.addClass('c-plp clearfix') %}
+{% set attributes = attributes.addClass('c-plp', 'l-two--sf') %}
+<div>
+  <!-- ______________________ MENU SECONDARY _______________________ -->
 
+  <div class="header--wrapper">
+    {% if page.menu_secondary %}
+      <div class="c-menu-secondary">
+        <div class="l-container">
+          <div class="c-menu-secondary__region">
+            {{ page.menu_secondary }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <!-- /menu-secondary -->
+
+    <!-- ______________________ HEADER _______________________ -->
+
+    {% if page.header %}
+      <header class="c-header">
+        <div class="l-container">
+          <div class="c-header__region">
+            {{ page.header }}
+          </div>
+        </div>
+      </header>
+    {% endif %}
+    <!-- /header -->
+
+    <!-- ______________________ MENU PRIMARY _______________________ -->
+
+    {% if page.menu_primary %}
+      <div class="c-menu-primary">
+        <div class="l-container">
+          <div id="c-menu-primary__region">
+            {{ page.menu_primary }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  <!-- /menu-primary -->
+
+  <!-- ______________________ BREADCRUMB _______________________ -->
+
+  {% if page.breadcrumb %}
+    <div class="c-breadcrumb">
+      <div class="l-container">
+        <div class="c-breadcrumb__region">
+          {{ page.breadcrumb }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <!-- /breadcrumb -->
+
+  <!-- ______________________ Pre content _______________________ -->
+  {% if page.pre_content %}
+    <div class="c-pre-content">
+      <div class="l-container">
+        <div class="c-pre-content__region">
+          {{ page.pre_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- ______________________ MAIN _______________________ -->
+
+  <div class="clearfix page-wrapper">
+    <div{{ attributes.addClass('l-container') }}>
+
+      {% if page.sidebar_first %}
+        <aside class="c-sidebar-first">
+          <div class="c-sidebar-first__region">
+            {% if (page.sidebar_first.skusskureferencecolor|render|striptags|trim) or (page.sidebar_first.skusskureferencedisplayprice|render|striptags|trim) or (page.sidebar.skusskureferencesize|render|striptags|trim) %}
+              <div class="c-facet__blocks__wrapper">
+                <h3 class="c-facet__label">{{ "Filter" | t }}</h3>
+                <div class="c-facet__blocks">
+                  {{ page.sidebar_first.skusskureferencecolor }}
+                  {{ page.sidebar_first.skusskureferencedisplayprice }}
+                  {{ page.sidebar_first.skusskureferencesize }}
+                </div>
+              </div>
+            {%  endif %}
+            {{ page.sidebar_first | without('skusskureferencecolor', 'skusskureferencedisplayprice', 'skusskureferencesize') }}
+          </div>
+        </aside>
+      {% endif %}
+      <!-- /sidebar-first -->
+
+      <main>
+
+        {% if title or messages or tabs or action_links %}
+          <div class="c-content__header">
+
+            {% if page.highlighted %}
+              <div class="c-content__highlighted">
+                {{ page.highlighted }}
+              </div>
+            {% endif %}
+
+            {{ title_prefix }}
+
+            {% if title %}
+              <h1 class="c-content__title">
+                {{ title }}
+              </h1>
+            {% endif %}
+
+            {{ title_suffix }}
+            {{ messages }}
+            {{ page.help }}
+
+            {% if tabs %}
+              <div class="c-content__tabs">{{ tabs }}</div>
+            {% endif %}
+
+            {% if action_links %}
+              <ul class="c-content__action-links">{{ action_links }}</ul>
+            {% endif %}
+
+          </div>
+          <!-- /#content-header -->
+        {% endif %}
+
+        <div class="c-content">
+          <div class="c-content__region">
+            {{ page.content }}
+          </div>
+        </div>
+
+        {{ feed_icons }}
+
+      </main>
+      <!-- /content-inner /content -->
+
+      {% if page.sidebar_second %}
+        <aside class="c-sidebar-second">
+          <div class="c-sidebar-second__region">
+            {{ page.sidebar_second }}
+          </div>
+        </aside>
+      {% endif %}
+      <!-- /sidebar-first -->
+
+    </div>
+  </div>
+  <!-- /main -->
+
+  <!-- ______________________ Post content _______________________ -->
+
+  {% if page.post_content %}
+    <div class="c-post-content">
+      <div class="l-container">
+        <div class="c-post-content__region">
+          {{ page.post_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- ______________________ FOOTER PRIMARY _______________________ -->
+
+  {% if page.footer_primary %}
+    <div class="c-footer-primary">
+      <div class="l-container">
+        <div class="c-footer-primary__region">
+          {{ page.footer_primary }}
+        </div>
+      </div>
+    </div>
+    <!-- /footer-primary -->
+  {% endif %}
+
+  <!-- ______________________ FOOTER SECONDARY _______________________ -->
+
+  {% if page.footer_secondary %}
+    <div class="c-footer-secondary">
+      <div class="l-container">
+        <div class="c-footer-secondary__region">
+          {{ page.footer_secondary }}
+        </div>
+      </div>
+    </div>
+    <!-- /footer-secondary -->
+  {% endif %}
+
+
+</div>
+<!-- /page -->

@@ -3,19 +3,7 @@ type: theme
 description: 'Base theme for Alshaya brands.'
 core: 8.x
 base theme: cog
-libraries:
-  - alshaya_white_label/color_styles
-libraries-override:
-  core/jquery.ui:
-    css:
-      component:
-        assets/vendor/jquery.ui/themes/base/core.css: false
-      theme:
-        assets/vendor/jquery.ui/themes/base/theme.css: false
-  core/jquery.ui.accordion:
-    css:
-      component:
-        assets/vendor/jquery.ui/themes/base/accordion.css: false
+
 regions:
   menu_primary: 'Menu Primary'
   menu_secondary: 'Menu Secondary'
@@ -28,3 +16,18 @@ regions:
   post_content: 'Post content'
   footer_primary: 'Footer Primary'
   footer_secondary: 'Footer Secondary'
+
+libraries:
+  - alshaya_white_label/color_styles
+
+libraries-override:
+  core/jquery.ui:
+    css:
+      component:
+        assets/vendor/jquery.ui/themes/base/core.css: false
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+  core/jquery.ui.accordion:
+    css:
+      component:
+        assets/vendor/jquery.ui/themes/base/accordion.css: false

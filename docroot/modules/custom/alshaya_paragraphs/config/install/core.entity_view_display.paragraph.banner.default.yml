@@ -4,11 +4,11 @@ dependencies:
   config:
     - field.field.paragraph.banner.field_banner
     - field.field.paragraph.banner.field_link
-    - image.style.1284x424
     - paragraphs.paragraphs_type.banner
+    - responsive_image.styles.1284x424
   module:
-    - image
     - link
+    - responsive_image
 id: paragraph.banner.default
 targetEntityType: paragraph
 bundle: banner
@@ -18,10 +18,10 @@ content:
     weight: 0
     label: hidden
     settings:
-      image_style: 1284x424
+      responsive_image_style: 1284x424
       image_link: ''
     third_party_settings: {  }
-    type: image
+    type: responsive_image
   field_link:
     weight: 1
     label: hidden

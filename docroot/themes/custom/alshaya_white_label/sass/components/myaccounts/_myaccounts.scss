@@ -1,0 +1,20 @@
+.c-sidebar-first {
+  .my-account-nav {
+    .item-list ul {
+      @extend %list-clear;
+
+      font-size: 0.75rem;
+    }
+
+    a {
+      color: #666;
+      line-height: 2;
+
+      &.active,
+      &:hover {
+        color: #032760;
+        font-weight: bold;
+      }
+    }
+  }
+}

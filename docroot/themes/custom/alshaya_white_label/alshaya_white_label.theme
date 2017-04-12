@@ -5,10 +5,10 @@
  * Theme specific functionality.
  */
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\Core\Url;
 
 /**
  * Implements hook_preprocess_html().
@@ -74,17 +74,29 @@ function alshaya_white_label_preprocess_block(&$variables) {
 }
 
 /**
+ * Implements template_view_alter().
+ */
+function alshaya_white_label_theme_suggestions_views_view_grid_alter(array &$suggestions, &$variables) {
+  $routmatch = \Drupal::routeMatch();
+  if ($routmatch->getRouteName() == 'entity.profile.type.address_book.user_profile_form') {
+    $suggestions[] = "views_view_grid__address_book";
+  }
+}
+
+/**
  * Implements template_preprocess_profile().
  */
 function alshaya_white_label_preprocess_profile__address_book(&$variables) {
   /* @var \Drupal\profile\Entity\Profile $profile */
   $profile = $variables['content']['field_address']['#object'];
-  $values = $profile->get('field_address')->getValue();
-  $telephone = $profile->get('field_telephone')->getValue();
 
-  $variables['delivery_to'] = '';
-  $variables['delivery_address'] = '';
-  $variables['contact_no'] = '';
+  if ($profile) {
+    $values = $profile->get('field_address')->getValue();
+    $telephone = $profile->get('field_telephone')->getValue();
+    $variables['delivery_to'] = '';
+    $variables['delivery_address'] = '';
+    $variables['contact_no'] = '';
+  }
 
   // Contact info.
   if (isset($telephone[0]) && !empty($telephone[0]['value'])) {
@@ -134,7 +146,13 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     if ($profile->access('delete') && $profile->hasLinkTemplate('delete-form')) {
       $variables['delete_operation'] = [
         'title' => t('Delete'),
-        'url' => $profile->urlInfo('delete-form', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+        'url' => $profile->urlInfo('delete-form', [
+          'attributes' => [
+            'class' => ['use-ajax'],
+            'data-dialog-type' => 'modal',
+            'data-dialog-options' => Json::encode(['width' => '341']),
+          ],
+        ]),
       ];
     }
 
@@ -147,6 +165,9 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
       ];
     }
   }
+
+  $variables['#attached']['library'][] = 'modal/modal';
+  $variables['#attached']['library'][] = 'core/drupal.ajax';
 }
 
 /**
@@ -169,21 +190,13 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('entity--type-' . $variables['elements']['#entity_type']);
   }
 
-  // Check if the current node is front page.
-  $node_url = Url::fromRoute('<current>')->getInternalPath();
-  $front_page_url = Url::fromUserInput(\Drupal::config('system.site')->get('page')['front'])->getInternalPath();
-  if ($node_url == $front_page_url) {
-    $variables['is_front'] = TRUE;
-  }
-  else {
-    $variables['is_front'] = FALSE;
-  }
+  $variables['is_front'] = ($variables['view_mode'] == 'full' && \Drupal::service('path.matcher')->isFrontPage()) ? TRUE : FALSE;
 
   if ($variables['node']->bundle() == 'advanced_page') {
     $node = $variables['node']->toArray();
     // Check and set the "show_right_sidebar" variable, to show or hide sidebar.
     // This is a workaround, because of https://www.drupal.org/node/2864220.
-    if (count($node['field_related_info']) === 1) {
+    if (count($node['field_related_info']) >= 1) {
       $paragraph = Paragraph::load($node['field_related_info'][0]['target_id'])->toArray();
       if (!empty($paragraph['field_banner']) || !empty($paragraph['field_body']) || !empty($paragraph['field_title'])) {
         $variables['show_right_sidebar'] = TRUE;
@@ -255,7 +268,7 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
     case "views_exposed_form":
       // Adding Place holder on Search.
       if ($form['#id'] == 'views-exposed-form-search-page') {
-        $form['keywords']['#attributes']['placeholder'] = t('search item or Keyword');
+        $form['keywords']['#attributes']['placeholder'] = t('search item or keyword');
       }
       break;
 
@@ -284,14 +297,33 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
   $routmatch = \Drupal::routeMatch();
   if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = $routmatch->getParameter('taxonomy_term');
-    $term_depth = $term->get('depth_level')->getValue()[0]['value'];
-    if ($term_depth == 2) {
-      $suggestions[] = "page__department";
+    if ($term->bundle() == 'acq_product_category') {
+      $suggestions[] = 'page__plp';
     }
-    else {
-      $suggestions[] = "page__plp";
-    }
+  }
 
+  // Check if we are on node page.
+  if ($routmatch->getRouteName() == 'entity.node.canonical') {
+    $node = Drupal::request()->attributes->get('node');
+
+    // For now we want to update only the department_page template.
+    if ($node->bundle() == 'department_page') {
+      $suggestions[] = 'page__department';
+    }
+  }
+
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    $suggestions[] = 'page__front';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_node_alter().
+ */
+function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  // Check if the current node is front page.
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    $suggestions[] = 'node__advanced_page_front';
   }
 }
 

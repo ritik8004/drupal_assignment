@@ -4,6 +4,7 @@ core: 8.x
 package: 'Alshaya'
 description: 'Master module for updating the core settings.'
 dependencies:
+  - back_to_top
   - clientside_validation_jquery
   - acq_cart
   - alshaya_i18n

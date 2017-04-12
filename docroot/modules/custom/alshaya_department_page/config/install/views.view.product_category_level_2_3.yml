@@ -55,7 +55,7 @@ display:
         type: default
         options:
           grouping: {  }
-          row_class: c-category__items
+          row_class: c-category-list__items
           default_row_class: false
       row:
         type: fields
@@ -102,7 +102,7 @@ display:
             preserve_tags: ''
             html: false
           element_type: div
-          element_class: c-category__title
+          element_class: c-category-list__title
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
@@ -234,7 +234,7 @@ display:
             preserve_tags: ''
             html: false
           element_type: div
-          element_class: c-category__item
+          element_class: c-category-list__item
           element_label_type: ''
           element_label_class: ''
           element_label_colon: false
@@ -299,7 +299,101 @@ display:
             group_items: {  }
           entity_type: taxonomy_term
           plugin_id: numeric
-      sorts: {  }
+        langcode:
+          id: langcode
+          table: taxonomy_term_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: in
+          value:
+            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: taxonomy_term
+          entity_field: langcode
+          plugin_id: language
+        langcode_1:
+          id: langcode_1
+          table: taxonomy_term_field_data
+          field: langcode
+          relationship: parent
+          group_type: group
+          admin_label: ''
+          operator: in
+          value:
+            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: taxonomy_term
+          entity_field: langcode
+          plugin_id: language
+      sorts:
+        weight:
+          id: weight
+          table: taxonomy_term_field_data
+          field: weight
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          entity_type: taxonomy_term
+          entity_field: weight
+          plugin_id: standard
       header: {  }
       footer: {  }
       empty: {  }
@@ -331,10 +425,11 @@ display:
           default_argument_type: taxonomy_tid
           default_argument_options:
             term_page: '1'
+            node: true
+            limit: true
+            vids:
+              acq_product_category: acq_product_category
             anyall: ','
-            node: false
-            limit: false
-            vids: {  }
           default_argument_skip_url: false
           summary_options:
             base_path: ''
@@ -356,6 +451,7 @@ display:
           entity_field: tid
           plugin_id: taxonomy
       display_extenders: {  }
+      css_class: c-category-list
     cache_metadata:
       max-age: -1
       contexts:

@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 768x254
+label: 768x254
+effects:
+  ec61beea-ad98-41c8-9f9e-475333c95ca4:
+    uuid: ec61beea-ad98-41c8-9f9e-475333c95ca4
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 768
+      height: 254

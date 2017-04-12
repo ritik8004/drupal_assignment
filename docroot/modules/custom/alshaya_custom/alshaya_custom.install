@@ -102,8 +102,7 @@ function alshaya_custom_modules_installed($modules) {
 
   // Set the Main Navigation Block.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
-    ->set('region', 'menu_primary')
-    ->set('weight', -15)
+    ->set('region', -1)
     ->save();
 
   // Disable the default 'content' search index.

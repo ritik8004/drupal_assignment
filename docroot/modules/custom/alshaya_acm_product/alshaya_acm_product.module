@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -17,6 +18,39 @@ use Drupal\image\Entity\ImageStyle;
 function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, array $product) {
   $visible = $product['visibility'] == 1;
   $node->setPublished($visible);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
+  // @TODO: Simple SKU are processed by default in commerce code, configurable
+  // SKUs are processed below, we will need to check for bundled products
+  // when we work on it: MMCPA-211.
+  if ($sku->bundle() == 'configurable') {
+    // Get the configurable attributes array.
+    $configurable_attributes_data = unserialize($sku->get('field_configurable_attributes')->getString());
+
+    // Get the configurable fields we want to capture separately as fields.
+    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+    $configurableFields = array_filter($fields, function ($field) {
+      return (bool) $field['configurable'];
+    });
+
+    // Loop through the configurable fields.
+    foreach ($configurableFields as $key => $field) {
+      $field_key = 'attr_' . $key;
+
+      // Loop through all configurable data available from API.
+      foreach ($configurable_attributes_data as $attribute_data) {
+        if ($attribute_data['code'] == $key) {
+          foreach ($attribute_data['values'] as $index => $value) {
+            $sku->get($field_key)->set($index, $value['value_id']);
+          }
+        }
+      }
+    }
+  }
 }
 
 /**

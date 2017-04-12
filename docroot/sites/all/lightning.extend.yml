@@ -33,7 +33,6 @@ modules:
   - alshaya_master
   - alshaya_menus
   - alshaya_newsletter
-  - alshaya_password_policy
   - alshaya_permissions
   - alshaya_product
   - alshaya_stores_finder

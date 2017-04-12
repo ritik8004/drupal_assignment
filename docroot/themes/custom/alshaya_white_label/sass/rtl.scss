@@ -1,62 +1,49 @@
 // Override default value for $dir in directional.scss
 $dir: rtl;
 
-//Mirroring Tabs for R2L support
-
+// These are third-party modules that provide useful utility functions for
+// building grids and media queries.
 @import '../node_modules/susy/sass/susy';
 @import '../node_modules/breakpoint-sass/stylesheets/breakpoint';
 
-/**
-  Normal reset
-*/
+// Reset to normalize browser styles.
 @import "reset";
 
-/**
-  Import helpers from directional.scss
-*/
-@import "directional";
-
-/**
-  Config file that contains centralized variables
-*/
+// Config file that contains centralized variables.
 @import "config";
-@import "mixins";
 @import "utils";
 
-// Base
-//
-// These are the default base styles applied to HTML elements.
-//
-// Component classes can override these styles, but if no class applies a style
-// to an HTML element, these styles will be the ones displayed.
-//
-// Style guide: base
+// Utilities for building multilingual websites.
+@import "directional";
 
-// Form
-//
-// These are the default form styles applied to HTML elements.
-//
-// Style guide: form
+// These are the default base styles applied to HTML elements.
 @import "base/**/*";
 
-// Layout
-//
 // These are the layout rules.
-//
-// Style guide: layout
 @import "layout/**/*";
 
-// Components
-//
 // Design components are reusable styling that can be applied using just the CSS
 // class names specified in the component. Also known as design 'modules'.
-//
-// Style guide: components
 @import "components/**/*";
 
-// States
-//
 // States are variations that are usually applied via js, such as `.is-active`.
-//
-// Style guide: states
 @import "state/**/*";
+
+// RTL specific Styles for desktop
+
+@include breakpoint($desktop) {
+  .menu--two__list-item {
+    > .menu-two__link-wrapper::after {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .menu__in,
+  .menu__back,
+  .c-menu-primary .my-account-nav ul li::after,
+  .c-menu-secondary .menu li::after {
+    transform: rotate(180deg);
+  }
+}

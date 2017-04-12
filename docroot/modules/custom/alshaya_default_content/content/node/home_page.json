@@ -206,13 +206,6 @@
             "lang": "ar"
         }
     ],
-    "path": [
-        {
-            "alias": "\/home",
-            "pid": "255",
-            "lang": "en"
-        }
-    ],
     "moderation_state": [
         {
             "target_id": "published",

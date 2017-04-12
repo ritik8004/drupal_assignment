@@ -1,20 +1,41 @@
-// Header
-//
-// Markup: header.twig
-//
-// Style guide: component.header
-
-/*
-	SITE HEADER - TOP LEVEL MENU
-*/
-
 @include breakpoint($desktop) {
-  .no--desktop {
+  .no--desktop,
+  .toggle--sign.no--desktop,
+  .mobile--close {
     display: none;
   }
 
   .header--wrapper {
+    position: relative;
     background: $white-five;
+    z-index: 3;
+  }
+
+  .first--child_open {
+    > .menu-two__link-wrapper {
+      background-color: $marine-blue;
+
+      &::after {
+        background: url('../imgs/icons/icon-chevron-next--hover.svg') no-repeat !important;
+      }
+
+      a,
+      p {
+        color: $white-five !important;
+      }
+    }
+
+    .menu--three__list {
+      display: block !important;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .acq-mini-cart {
+    .total {
+      display: none !important;
+    }
   }
 }
 
@@ -23,10 +44,62 @@
 }
 
 .c-menu-secondary {
-  border-bottom: 1px solid $white;
+  @include breakpoint($only-tablet) {
+    width: 270px !important;
+  }
 
-  @include breakpoint($only-mobile) {
+  @include breakpoint($upto-desktop) {
     display: none;
+
+    .c-menu-secondary__region {
+      background: $white-five !important;
+      text-align: $left !important;
+    }
+
+    #block-alshayastoresfinder,
+    #block-languageswitcher {
+      display: none !important;
+    }
+
+    position: absolute;
+    width: 80%;
+    height: 100%;
+    background: $white-five;
+    z-index: 4;
+    padding-top: 1rem;
+
+    #block-alshaya-white-label-account-menu {
+      display: block !important;
+    }
+
+    .menu {
+      li {
+        display: block;
+        border-bottom: 1px solid #ddd;
+        padding: 0.94rem 0;
+        margin-left: 0.625rem;
+        margin-right: 0.625rem;
+        position: relative;
+
+        a {
+          &::before {
+            background: none;
+            width: 1px;
+            height: 1px;
+          }
+        }
+
+        &::after {
+          content: '';
+          background: url(../imgs/icons/ic-chevronright-copy-9.svg);
+          position: absolute;
+          #{$right}: 0;
+          width: 6px;
+          height: 10px;
+          top: 20px;
+        }
+      }
+    }
   }
 
   a {
@@ -34,8 +107,8 @@
   }
 
   .c-menu-secondary__region {
+    background: $white-four;
     text-align: $right;
-    padding: 6.5px 0;
   }
 
   ul {
@@ -46,9 +119,19 @@
   li {
     list-style: none;
     display: inline-block;
-    padding-#{$left}: 16px;
-    padding-#{$right}: 35px;
-    position: relative;
+    padding-top: 0.3125rem;
+    padding-#{$right}: 1.438rem;
+    padding-bottom: 0.3125rem;
+    padding-#{$left}: 3rem;
+    text-transform: lowercase;
+
+    a {
+      color: $greyish;
+    }
+
+    &:hover {
+      background: $white-five;
+    }
   }
 
   .language-switcher-language-url {
@@ -58,7 +141,9 @@
   }
 
   a {
+    font-family: $alshaya-thin;
     text-decoration: none;
+    position: relative;
 
     &:hover {
       color: $peacock-blue;
@@ -85,54 +170,87 @@
         width: 15px;
         height: 15px;
         position: absolute;
-        top: 2px;
-        right: -10px;
-        left: -10px;
+        top: 0;
+        #{$left}: -20px;
       }
     }
 
-    .register-link::before {
-      background: url('../imgs/icons/register.svg') no-repeat;
+    .register-link {
+      &::before {
+        background: url('../imgs/icons/register.svg');
+      }
+
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/register-hover.svg');
+        }
+      }
     }
 
-    li:last-child a::before {
-      background: url('../imgs/icons/sign-in.svg') no-repeat;
+    li:last-child a {
+      &::before {
+        background: url('../imgs/icons/sign-in.svg');
+        width: 12px;
+      }
+
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/sign-in-hover.svg');
+        }
+      }
     }
 
-    a.stores-finder::before {
-      background: url('../imgs/icons/find-us.svg') no-repeat;
+    a.stores-finder {
+      &::before {
+        background: url('../imgs/icons/find-us.svg');
+        width: 12px;
+      }
+
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/find-us-hover.svg');
+        }
+      }
     }
   }
 
   .block-alshaya-stores-finder {
     display: inline-block;
-    padding-#{$left}: 16px;
-    padding-#{$right}: 35px;
+    padding: 0.3125rem 1.438rem 0.3125rem 3rem;
     position: relative;
+    text-transform: lowercase;
 
-    a {
-      color: $peacock-blue;
+    &:hover {
+      background: $white-five;
     }
   }
 
   #block-languageswitcher {
     position: relative;
+    text-transform: lowercase;
 
     ul {
       &::before {
         content: '';
-        background: url('../imgs/icons/lang.svg') no-repeat;
+        background: url('../imgs/icons/lang.svg');
         display: inline-block;
-        width: 15px;
-        height: 15px;
+        width: 14px;
+        height: 14px;
+        top: 7px;
         position: absolute;
-        top: 2px;
-        right: -10px;
-        left: -10px;
+        #{$left}: 28px;
       }
 
       .is-active {
         display: none;
+      }
+    }
+
+    &:hover {
+      background: $white-five;
+
+      ul::before {
+        background: url('../imgs/icons/lang-hover.svg');
       }
     }
   }
@@ -172,8 +290,9 @@ header {
 
     @include breakpoint($only-tablet) {
       position: absolute;
-      bottom: -60px;
-      left: 35%;
+      bottom: -43px;
+      #{$left}: 0;
+      #{$right}: 0;
     }
 
     @include breakpoint($only-mobile) {
@@ -186,9 +305,13 @@ header {
     }
 
     input[type="text"] {
+      font-family: $alshaya-thin;
       padding: 7.5px;
       vertical-align: bottom;
-      height: 40px;
+      height: 35px;
+      text-transform: lowercase;
+      max-width: 280px;
+      border: 1px solid $white;
 
       &::placeholder {
         font-size: 12px;
@@ -196,12 +319,11 @@ header {
     }
 
     #edit-submit-search {
-      background: url('../imgs/assets/search.svg') 10px 6px no-repeat;
+      background: $marine-blue url('../imgs/assets/search.svg') 10px 7px no-repeat;
       border: none;
-      background-color: $peacock-blue;
       text-indent: -9999px;
       width: 42px;
-      height: 40px;
+      height: 35px;
       text-align: center;
       margin-#{$left}: -5px;
       vertical-align: bottom;
@@ -223,19 +345,19 @@ header {
 
       .prefix {
         font-weight: normal;
-        float: left;
+        float: $left;
         display: inline-block;
         vertical-align: bottom;
-        margin-right: 6px;
+        margin-#{$right}: 6px;
       }
 
       .total--amount {
-        float: right;
+        float: $right;
       }
     }
 
     .cart-link {
-      background: url('../imgs/icons/cart.svg') no-repeat;
+      background: url('../imgs/icons/basket.svg') no-repeat;
       display: inline-block;
       width: 32px;
       height: 32px;
@@ -244,14 +366,15 @@ header {
     }
 
     .quantity {
+      font-size: 10px;
       position: absolute;
       background: url('../imgs/icons/indicator-shape.svg') no-repeat;
       color: $white-five;
       text-align: center;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       bottom: -8px;
-      left: 4px;
+      #{$left}: -4px;
       border-radius: 50%;
       padding: 5px;
     }
@@ -308,7 +431,7 @@ header {
     }
 
     form {
-      background: $peacock-blue;
+      background: $marine-blue;
       padding: 0.625rem;
     }
   }
@@ -334,7 +457,9 @@ header {
 
     a {
       text-decoration: none;
-      color: $peacock-blue;
+      color: $brownish-grey;
+      font-size: 12px;
+      display: block;
 
       &::before {
         content: ' ';
@@ -346,7 +471,7 @@ header {
 
     .store {
       &::before {
-        background: url('../imgs/icons/store--big.svg') no-repeat;
+        background: url('../imgs/icons/store--big.svg');
         width: 16px;
         height: 23px;
       }
@@ -354,7 +479,7 @@ header {
 
     .mobile--menu {
       &::before {
-        background: url('../imgs/icons/mobile-menu.svg') no-repeat;
+        background: url('../imgs/icons/mobile-menu.svg');
         width: 24px;
         height: 13px;
       }
@@ -364,6 +489,22 @@ header {
   @include breakpoint($only-mobile) {
     display: block;
 
+    .store {
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/store--big--hover.svg');
+        }
+      }
+    }
+
+    .mobile--menu {
+      &:hover {
+        &::before {
+          background: url('../imgs/icons/mobile-menu--hover.svg');
+        }
+      }
+    }
+
     ul.menu {
       display: flex;
       margin: 0;
@@ -372,28 +513,28 @@ header {
     li {
       flex: 1;
       display: inline-block;
-      background-color: $very-light-blue;
       text-align: center;
       padding: 0.9375rem 0;
 
       &:hover {
-        background-color: $peacock-blue;
+        background: $marine-blue;
 
         a {
           color: $white-five;
         }
       }
 
-      &:nth-child(2) {
-        border-right: 2px solid $white-five;
-        border-left: 2px solid $white-five;
-      }
-
       .mobile--search {
         &::before {
-          background: url('../imgs/icons/mobile.svg') no-repeat;
+          background: url('../imgs/icons/ic-search.svg');
           width: 22px;
           height: 22px;
+        }
+
+        &:hover {
+          &::before {
+            background: url('../imgs/icons/ic-search--hover.svg');
+          }
         }
       }
     }
@@ -409,6 +550,10 @@ header {
 }
 
 .main--menu {
+  @include breakpoint($desktop) {
+    display: block !important;
+  }
+
   ul {
     padding: 0;
   }
@@ -421,6 +566,7 @@ header {
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     position: relative;
+    z-index: 4;
 
     @include breakpoint($upto-desktop) {
       .main--menu {
@@ -433,39 +579,48 @@ header {
     }
 
     ul.menu--one__list {
-      display: flex;
+      display: flex !important;
       margin: 0;
       padding: 0;
+      background: $white-five;
     }
 
     li.menu--one__list-item {
       flex: 1;
       vertical-align: top;
-      background-color: $very-light-blue;
       list-style: none;
       text-align: center;
+      border-top: 1px solid $white;
+      border-bottom: 1px solid $white;
       padding: 10px;
+      text-transform: lowercase;
 
       &.active {
         background: $white-five !important;
         border-top: 2px solid $peacock-blue !important;
       }
 
+      a {
+        font-family: $alshaya-thin;
+      }
+
       &:hover {
-        background: $peacock-blue !important;
+        border-top: 2px solid $marine-blue;
+        border-bottom: 0;
 
         ul.menu--two__list {
           display: block;
         }
 
         a.menu--one__link {
-          color: $white-five;
+          font-family: $alshaya-bold;
+          color: $marine-blue;
         }
       }
 
       a {
         font-size: 0.75rem;
-        color: $peacock-blue;
+        color: $black-two;
         text-decoration: none;
       }
 
@@ -477,11 +632,12 @@ header {
 
   .menu--two__list {
     position: absolute;
-    text-align: left;
-    top: 38px;
-    right: 0;
-    left: 0;
-    padding: 1.5625rem 0 !important;
+    width: 100%;
+    text-align: $left;
+    top: 40px;
+    #{$left}: 0;
+    #{$left}: 0;
+    padding-top: 1.5625rem !important;
     background: $white-five;
     z-index: 10;
 
@@ -495,41 +651,64 @@ header {
 
     .menu--two__list-item {
       > .menu-two__link-wrapper {
+        font-family: $alshaya-bold;
         display: inline-block;
-        padding: 1.563rem;
+        padding: 1.0625rem 1.563rem;
         width: 210px;
         position: relative;
         vertical-align: top;
+        z-index: 10;
+
+        a {
+          font-family: $alshaya-bold;
+          color: $marine-blue;
+
+          &:hover {
+            color: $white-five !important;
+          }
+        }
 
         p {
+          font-family: $arial;
           font-size: 12px;
           margin: 0;
+          margin-top: 6px;
+          color: $brownish-grey;
         }
 
         &:hover {
-          background-color: $very-light-blue;
+          background-color: $marine-blue;
+
+          a,
+          p {
+            color: $white-five;
+          }
+        }
+
+        &::after {
+          content: '';
+          background: url('../imgs/icons/icon-chevron-next.svg');
+          width: 8px;
+          height: 17px;
+          position: absolute;
+          #{$right}: 10px;
+          top: 39%;
+        }
+
+        &:hover {
+          &::after {
+            background: url('../imgs/icons/icon-chevron-next--hover.svg');
+          }
         }
       }
 
       .menu-two__link {
         font-size: 14px;
-
-        &::after {
-          content: '';
-          background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
-          width: 8px;
-          height: 17px;
-          display: inline-block;
-          vertical-align: middle;
-          position: absolute;
-          right: 10px;
-          top: 30px;
-        }
       }
 
       &:hover {
         ul.menu--three__list {
-          display: inline-block;
+          display: block;
         }
       }
 
@@ -538,9 +717,10 @@ header {
         vertical-align: top;
         margin-bottom: 1.563rem;
         position: absolute;
+        background: $white-five;
         top: 0;
+        padding-#{$left}: 16rem;
         margin-top: 1.5625rem;
-        margin-left: 2.8125rem;
 
         p {
           display: none;
@@ -548,6 +728,7 @@ header {
 
         li {
           padding: 0.3125rem 0;
+          vertical-align: top;
 
           a {
             color: $brownish-grey;
@@ -563,8 +744,17 @@ header {
 }
 
 @include breakpoint($desktop) {
-  .overlay {
+  .overlay::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100;
+    top: 0;
+    #{$left}: 0;
+    bottom: 0;
+    #{$left}: 0;
     background-color: rgba(0, 0, 0, 0.48);
+    z-index: 3;
   }
 
   .menu--four__list {
@@ -583,25 +773,67 @@ header {
   }
 
   .menu--three__list-item {
+    min-width: 9rem;
+    max-width: 10rem;
+    display: inline-block;
+    margin-#{$right}: 2rem;
+    margin-bottom: 1.5rem;
+
     > .menu-two__link-wrapper a {
+      font-family: $alshaya-bold !important;
       font-size: 0.875rem !important;
-      color: $peacock-blue !important;
+      color: $marine-blue !important;
+      margin-bottom: 0.5rem;
     }
+  }
+
+  .highlights {
+    vertical-align: top;
+    display: inline-block;
+    width: 39%;
+    margin-top: 5px;
+
+    div:nth-child(2) {
+      margin-#{$right}: 24px;
+    }
+
+    .highlighted {
+      display: inline-block;
+      max-width: 11.5rem;
+      vertical-align: top;
+    }
+
+    .title {
+      font-family: $alshaya-bold;
+      display: block;
+      font-size: 14px;
+      color: $marine-blue;
+      margin-bottom: 0.8rem;
+    }
+  }
+
+  .level-three__wrapper {
+    width: 58%;
+    display: inline-block;
   }
 }
 
 @include breakpoint($upto-desktop) {
+  .highlights {
+    display: none;
+  }
+
   .mobile--overlay {
     &::before {
       content: '';
-      position: absolute;
-      z-index: 2;
+      position: fixed;
+      z-index: 4;
       width: 100%;
       height: 100;
       top: 0;
-      right: 0;
+      #{$left}: 0;
       bottom: 0;
-      left: 0;
+      #{$left}: 0;
       background-color: rgba(0, 0, 0, 0.48);
     }
   }
@@ -611,10 +843,10 @@ header {
 
     ul.menu--one__list {
       background: $white-five;
-      width: 80%;
+      width: 79.9%;
       height: 100%;
-      position: absolute;
-      top: 0;
+      position: fixed;
+      top: 50px;
       z-index: 20;
       overflow-y: scroll;
       margin-top: 0;
@@ -622,6 +854,7 @@ header {
   }
 
   .main--menu a {
+    font-family: $alshaya-thin;
     font-size: 12px;
     text-decoration: none;
     color: $brownish-grey;
@@ -629,8 +862,8 @@ header {
 
   .menu__list-item {
     border-bottom: 1px solid $white;
-    margin-left: 0.625rem;
-    margin-right: 0.625rem;
+    margin-#{$left}: 0.625rem;
+    margin-#{$right}: 0.625rem;
     padding-top: 0.9375rem;
     padding-bottom: 0.9375rem;
   }
@@ -671,18 +904,19 @@ header {
 
   .menu--three__list-item,
   .menu--four__list-item {
-    margin-left: 0;
-    margin-right: 0;
+    margin-#{$left}: 0;
+    margin-#{$right}: 0;
   }
 
   .menu__in {
     background: url('../imgs/icons/ic-chevronright-copy-9.svg') no-repeat;
-    float: right;
+    float: $right;
     margin-top: -14px;
   }
 
   .menu__back {
     background: url('../imgs/icons/ic-chevronleft.svg') no-repeat;
+    margin-#{$right}: 0.625rem;
   }
 
   .menu__in,
@@ -700,6 +934,7 @@ header {
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 2;
   }
 
   .menu--two__list,
@@ -709,21 +944,25 @@ header {
   }
 
   .menu-two__link-wrapper a.menu-two__link {
-    color: $peacock-blue;
+    color: $marine-blue;
   }
 
   .menu--two__list.menu__list--active {
     span.back--link {
-      color: $peacock-blue;
+      font-family: alshaya-bold;
+      color: $marine-blue;
       display: block;
       font-size: 12px;
-      margin: 0.625rem;
       padding: 0.9375rem 0.625rem;
     }
 
     .menu--three__list.menu__list--active {
       span.back--link {
         display: block !important;
+      }
+
+      .menu--three__list-item .menu__in {
+        margin-#{$right}: 0.625rem;
       }
 
       .menu--four__list {
@@ -741,8 +980,8 @@ header {
       &.menu__list--active {
         .menu--four__list-item,
         .menu-two__link-wrapper {
-          margin-left: 0.625rem;
-          margin-right: 0.625rem;
+          margin-#{$left}: 0.625rem;
+          margin-#{$right}: 0.625rem;
         }
       }
     }
@@ -753,12 +992,181 @@ header {
   display: none;
   background: $white-five;
   position: fixed;
-  top: 20px;
-  left: 81%;
+  top: 8px;
+  #{$left}: 81%;
+  width: 26px;
+  height: 26px;
   z-index: 12;
+  text-align: center;
+  padding-top: 4px;
 
-  p {
-    margin: 0;
-    padding: 10px 12px;
+  span {
+    background: url('../imgs/icons/ic-close.svg') no-repeat;
+    width: 17px;
+    height: 17px;
+    display: inline-block;
   }
 }
+
+.toggle--sign {
+  position: fixed;
+  top: 0;
+  width: 80%;
+  background: $white;
+  z-index: 10;
+  display: table;
+
+  .one {
+    font-family: $alshaya-thin;
+    font-size: 14px;
+    padding: 1rem 2rem;
+    display: table-cell;
+  }
+
+  .active {
+    font-family: $alshaya-bold;
+    color: $marine-blue;
+    background: $white-five;
+  }
+}
+
+// Tablet Specific menu width
+@include breakpoint($only-tablet) {
+  .toggle--sign {
+    width: 270px;
+  }
+
+  .mobile--close {
+    #{$left}: 280px;
+  }
+
+  .main--menu ul.menu--one__list {
+    width: 270px;
+  }
+}
+
+// Toggle between Accounts
+@include breakpoint($upto-desktop) {
+  .remove--toggle {
+    display: none !important;
+  }
+}
+
+// Main Menu Logged In State
+
+.logged-in {
+  .menu--account {
+    li:first-child {
+      a::before {
+        background: url('../imgs/icons/register.svg');
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
+}
+
+//User Menu Account
+@include breakpoint($only-tablet) {
+  .my-account-nav {
+    width: 270px !important;
+  }
+}
+
+.c-menu-primary .my-account-nav {
+  display: none;
+
+  h2 {
+    color: $marine-blue-two;
+    font-size: 12px;
+    padding: 0.94rem 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
+    text-transform: lowercase;
+  }
+
+  position: fixed;
+  width: 80%;
+  top: 88px;
+  background: #fff;
+  height: 100%;
+  z-index: 10;
+
+  ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: block;
+      font-family: $alshaya-thin;
+      border-bottom: 1px solid #ddd;
+      padding: 0.94rem 0;
+      margin-left: 0.625rem;
+      margin-right: 0.625rem;
+      text-align: $left;
+      position: relative;
+
+      &:hover {
+        background: none;
+
+        a {
+          color: $brownish-grey;
+        }
+      }
+
+      &::after {
+        content: '';
+        background: url(../imgs/icons/ic-chevronright-copy-9.svg);
+        position: absolute;
+        #{$right}: 0;
+        width: 6px;
+        height: 10px;
+        top: 20px;
+      }
+    }
+  }
+}
+
+.logged-out {
+  .account--logged_in {
+    display: none;
+  }
+}
+
+.logged-in {
+  .account {
+    display: none;
+  }
+
+  .toggle--sign {
+    top: 40px;
+  }
+
+  ul.menu--one__list {
+    top: 90px;
+  }
+
+  .mobile--close {
+    top: 50px;
+  }
+
+  @include breakpoint($desktop) {
+    .block-alshayamyaccountlinks {
+      display: none;
+    }
+  }
+}
+
+//Highlights fix
+.highlighted {
+  @media only screen and (min-device-width: 1195px) and (max-device-width: 1275px) {
+    max-width: 10.5rem;
+  }
+
+  @media only screen and (min-device-width: 1020px) and (max-device-width: 1195px) {
+    max-width: 9.5rem;
+  }
+}
+

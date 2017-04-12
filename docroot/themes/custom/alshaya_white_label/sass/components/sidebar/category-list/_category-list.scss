@@ -1,0 +1,24 @@
+.c-category-list__title {
+  font-size: 0.875rem;
+  margin-bottom: 0.375rem;
+  font-weight: bold;
+  font-family: $alshaya-bold;
+
+  a {
+    color: $marine-blue;
+  }
+}
+
+.c-category-list__items {
+  margin-bottom: 1.75rem;
+}
+
+.c-category-list__item {
+  font-size: 0.75rem;
+  line-height: 2;
+
+  a {
+    color: #666;
+    font-family: $alshaya-thin;
+  }
+}

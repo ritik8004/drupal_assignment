@@ -1,5 +1,7 @@
-// Drupal
-//
-// Markup: drupal.twig
-//
-// Style guide: base.drupal
+.block-local-tasks-block {
+  ul {
+    margin: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}

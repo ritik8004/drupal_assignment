@@ -1,19 +1,24 @@
-// Headings
-//
-// Markup: heading.twig
-//
-// Style guide: base.heading
-
 %page-title {
-  font-size: 1.125rem;
-  font-weight: bold;
   text-transform: lowercase;
+  font-family: $alshaya-bold;
+  color: #003971;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 0;
 
-  @include breakpoint($tablet) {
+  @include breakpoint($only-mobile) {
+    font-size: 1.125rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    font-size: 1.375rem;
+  }
+
+  @include breakpoint($desktop) {
     font-size: 1.5rem;
   }
+}
 
-  a {
-    text-decoration: none;
-  }
+.c-page-title {
+  @extend %page-title;
 }

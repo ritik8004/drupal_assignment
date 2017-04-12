@@ -60,6 +60,10 @@
   .c-sidebar-second {
     font-size: 0.75em;
 
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
     @include breakpoint($tablet) {
       border-#{$left}: 1px solid $white;
     }
@@ -79,7 +83,7 @@
         }
 
         @include breakpoint($desktop) {
-          padding-#{$left}: 10em;
+          padding-#{$left}: 8.5em;
         }
 
         > div {
