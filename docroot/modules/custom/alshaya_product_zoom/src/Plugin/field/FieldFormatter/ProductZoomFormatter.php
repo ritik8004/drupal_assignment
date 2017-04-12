@@ -26,18 +26,18 @@ class ProductZoomFormatter extends ImageFormatterBase {
    */
   public static function defaultSettings() {
     return [
-      'slide_style' => 0,
-      'zoom_style' => 0,
-      'thumb_style' => 0,
-      'zoom_width' => '0',
-      'zoom_height' => '0',
+      'slide_style' => 'product_zoom_medium_606x504',
+      'zoom_style' => 'product_zoom_large_800x800',
+      'thumb_style' => 'product_zoom_small_81x72',
+      'zoom_width' => 'auto',
+      'zoom_height' => 'auto',
       'zoom_position' => 'right',
       'adjust_x' => '0',
       'adjust_y' => '0',
-      'tint' => 'false',
-      'tint_opacity' => '0.5',
-      'lens_opacity' => '0.5',
-      'soft_focus' => 'true',
+      'tint' => '',
+      'tint_opacity' => '0.25',
+      'lens_opacity' => '0.85',
+      'soft_focus' => 'false',
       'smooth_move' => '3',
     ] + parent::defaultSettings();
   }
@@ -166,8 +166,6 @@ class ProductZoomFormatter extends ImageFormatterBase {
   public function viewElements(FieldItemListInterface $items, $langcode = NULL) {
     $settings = $this->getSettings();
 
-    $properties = self::getRelStringForProductZoom($settings);
-
     // Thumbnail Image style.
     $thumbnail_style = $settings['thumb_style'];
 
@@ -204,7 +202,6 @@ class ProductZoomFormatter extends ImageFormatterBase {
 
     // Build Videos as part of our list.
     // @todo: Get real videos.
-
     $videos = [
       'https://www.youtube.com/embed/eKG08z85DtY',
       'https://player.vimeo.com/video/1084537',
@@ -234,7 +231,7 @@ class ProductZoomFormatter extends ImageFormatterBase {
       '#theme' => 'product_zoom_gallery',
       '#mainImage' => $main_image,
       '#thumbnails' => $thumbnails,
-      '#properties' => $properties,
+      '#properties' => self::getRelStringForProductZoom($settings),
       '#attached' => [
         'library' => [
           'alshaya_product_zoom/product.cloud_zoom',
