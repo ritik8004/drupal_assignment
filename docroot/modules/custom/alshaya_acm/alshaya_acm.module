@@ -99,28 +99,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Attach library, to cater to Coupon submit button.
   $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
 
-  $form['privilege_card_wrapper'] = [
-    '#type' => 'details',
-    '#title' => t('Enter a priviledge card number'),
-  ];
-
-  $form['privilege_card_wrapper']['privilege_card_number'] = [
-    '#type' => 'textfield',
-    '#title' => t('Privilege Card Number'),
-  ];
-
-  $form['privilege_card_wrapper']['privilege_card_number2'] = [
-    '#type' => 'textfield',
-    '#title' => t('Re-enter Privilege Card Number'),
-    '#states' => [
-      'required' => [
-        ':input[name="privilege_card_number"]' => ['empty' => FALSE],
-      ],
-    ],
-    '#element_validate' => [
-      'alshaya_acm_privilege_card_number_validate',
-    ],
-  ];
+  // Add privilege card number fields.
+  alshaya_loyalty_add_privilege_card_fields($form, $form_state);
 
   $cartStorage = \Drupal::service('acq_cart.cart_storage');
   $cart = $cartStorage->getCart();
@@ -128,18 +108,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Set Form title.
   $form['#title'] = t("Cart (%count)", ['%count' => $product_count]);
-}
-
-/**
- * Validate privilege card number entered.
- */
-function alshaya_acm_privilege_card_number_validate(&$element, FormStateInterface $form_state) {
-  $card1 = $form_state->getValue('privilege_card_number');
-  $card2 = $form_state->getValue('privilege_card_number2');
-
-  if (!empty($card1) && ($card1 != $card2)) {
-    $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
-  }
 }
 
 /**

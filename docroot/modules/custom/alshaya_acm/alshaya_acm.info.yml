@@ -10,6 +10,7 @@ dependencies:
   - acq_customer
   - acq_payment
   - acq_sku
+  - alshaya_loyalty
   - block
   - block_content
   - ctools
