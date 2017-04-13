@@ -14,7 +14,7 @@
   }
 
   .user__order--detail {
-    background: #f7f7f7;
+    background: $white-four;
     width: 100%;
     font-size: 12px;
     margin-bottom: 88px;
@@ -24,11 +24,11 @@
     }
 
     .light {
-      color: #adadad;
+      color: $greyish;
     }
 
     .dark {
-      color: #333;
+      color: $black-two;
       font-weight: 700;
     }
 
@@ -41,9 +41,9 @@
       }
 
       td {
-        background: #e0eaf3;
+        background: $solitude;
         padding: 20px 16px;
-        padding-left: 56px;
+        padding-#{$left}: 56px;
         text-indent: -40px;
         vertical-align: middle;
 
@@ -56,13 +56,13 @@
 
         @include breakpoint($tablet) {
           padding: 28px 22px;
-          padding-left: 56px;
+          padding-#{$left}: 56px;
         }
       }
 
       .blend {
         @include breakpoint($desktop) {
-          background: #d7e5f0;
+          background: $denim;
         }
       }
     }
@@ -76,16 +76,16 @@
     .sub-total-row,
     .order-item-row {
       .blend {
-        background: #f7f7f7;
+        background: $white-four;
 
         @include breakpoint($tablet) {
-          background: #f2f2f2;
+          background: $white-smoke-light;
         }
       }
     }
 
     .order-item-row {
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $white;
 
       img {
         min-width: 128px;
@@ -132,7 +132,7 @@
 
     .order-summary-row {
       td {
-        background: #f4f4f4;
+        background: $white-smoke;
         padding: 22px 16px;
 
         @include breakpoint($tablet) {
@@ -149,15 +149,15 @@
       }
 
       .blend {
-        background: #ececec;
+        background: $whisper;
       }
     }
 
     .order-details-row {
-      background: #e8eff5;
+      background: $pale-grey;
 
       .blend {
-        background: #e0eaf3;
+        background: $solitude;
       }
 
       .mobile-only {
@@ -174,11 +174,11 @@
 
       .tablet-blend {
         @include breakpoint($tablet) {
-          background: #e0eaf3;
+          background: $solitude;
         }
 
         @include breakpoint($desktop) {
-          background: #e8eff5;
+          background: $pale-grey;
         }
       }
     }
@@ -216,7 +216,7 @@
   .sub-total-row,
   .delivery-charge-row,
   .total-row {
-    background: #fff;
+    background: $white-five;
 
     td {
       padding: 10px 22px 9px;
@@ -225,7 +225,7 @@
 
   .button.status-delivered,
   .button.status-pending {
-    color: #fff;
+    color: $white-five;
     font-weight: bold;
     font-size: 12px;
     width: 106px;
@@ -235,11 +235,11 @@
   }
 
   .button.status-pending {
-    background-color: #e6591a;
+    background-color: $tomato;
   }
 
   .button.status-delivered {
-    background-color: #3ab549;
+    background-color: $medium-green;
   }
 
   .desktop-only {
