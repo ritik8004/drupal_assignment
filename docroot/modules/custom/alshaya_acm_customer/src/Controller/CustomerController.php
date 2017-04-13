@@ -298,7 +298,7 @@ class CustomerController extends ControllerBase {
       '#theme' => 'image',
       '#uri' => theme_get_setting('logo.url'),
     ];
-    $build['#barcode'] = $this->getBarcode($order_id);
+    $build['#barcode'] = $this->getBarcode(str_pad($order_id, 12, '0', STR_PAD_LEFT));
     $build['#products_count'] = count($products);
     $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order_id, $order);
     $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
