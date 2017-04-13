@@ -397,8 +397,8 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
     /* @var \Drupal\user\Entity\User $user */
     $user = $route_match->getParameter('user');
     if ($user) {
-      $fname = $user->get('field_first_name') ? $user->get('field_first_name')->getValue()[0]['value'] : '';
-      $lname = $user->get('field_last_name') ? $user->get('field_last_name')->getValue()[0]['value'] : '';
+      $fname = $user->get('field_first_name') ? (!empty($user->get('field_first_name')->getValue()) ? $user->get('field_first_name')->getValue()[0]['value'] : '') : '';
+      $lname = $user->get('field_last_name') ? (!empty($user->get('field_last_name')->getValue()) ? $user->get('field_last_name')->getValue()[0]['value'] : '') : '';
       if (!empty($fname)) {
         $variables['title'] = [
           '#markup' => t('My Account') . '<div>' . t('Hello, @fname @lname', ['@fname' => $fname, '@lname' => $lname]) . '</div>',
@@ -423,11 +423,7 @@ function alshaya_white_label_preprocess_user(&$variables) {
   $user = $variables['user'];
   if ($user) {
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
-    $variables['contact_number'] = $user->get('field_mobile_number') ? $user->get('field_mobile_number')->getValue()[0]['value'] : '';
-    $variables['privilege_card'] = $user->get('field_privilege_card_number') ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '';
-    if (!empty($variables['privilege_card'])) {
-      $variables['privilege_card'] = 'XXXX-XXXX-XXXX-' . substr($variables['privilege_card'], -4);
-    }
-
+    $variables['contact_number'] = $user->get('field_mobile_number') ? (!empty($user->get('field_mobile_number')->getValue()) ? $user->get('field_mobile_number')->getValue()[0]['value'] : '') : '';
+    $variables['privilege_card'] = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
   }
 }

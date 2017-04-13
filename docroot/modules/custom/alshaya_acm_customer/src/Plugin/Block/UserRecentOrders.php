@@ -131,7 +131,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             // Theme the order total grands with currency.
             $order['total']['grands'] = [
               '#theme' => 'alshaya_acm_price',
-              '#price' => $order['total']['grands'],
+              '#price' => isset($order['total']) ? $order['total']['grands'] : 0,
             ];
 
             // Iterate over each order item.
