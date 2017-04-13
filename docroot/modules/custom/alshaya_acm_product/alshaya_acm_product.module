@@ -154,6 +154,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ],
         ],
       ];
+
+      $build['product_zoom_gallery'] = [
+        '#theme' => 'product_zoom_gallery',
+        '#thumbnails' => $thumbnails,
+        '#attached' => [
+          'library' => [
+            'alshaya_product_zoom/product.product_zoom_gallery',
+          ],
+        ],
+      ];
+
     }
     elseif ($view_mode == 'teaser') {
       \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
