@@ -262,7 +262,7 @@
     }
   }
 
-  .tablet--desktop--only {
+  .above-mobile {
     display: none;
 
     @include breakpoint($tablet) {

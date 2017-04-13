@@ -42,7 +42,7 @@
           </div>
         </td>
 
-        <td class="tablet--desktop--only">
+        <td class="above-mobile">
           <div class="dark">
             {% trans %}
             {{ order.name }}...
@@ -67,7 +67,7 @@
           <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
         </td>
 
-        <td class="tablet--desktop--only blend">
+        <td class="above-mobile blend">
           <div class="light">{{ "Order Total"|t }}</div>
           <div class="dark">
             {% if currency_code_position == 'before' %}
@@ -77,18 +77,18 @@
             {% endif %}
           </div>
         </td>
-        <td class="tablet--desktop--only empty--cell">&nbsp;</td>
+        <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
 
       {% if delivery_detail_notice %}
       <tr class="delivery-details-row">
-        <td colspan="3" class="tablet--desktop--only">
+        <td colspan="3" class="above-mobile">
           <span class="icon-ic_infomation"></span>{{ delivery_detail_notice }}
         </td>
         <td colspan="2" class="mobile-only">
           <span class="icon-ic_infomation"></span>{{ delivery_detail_notice }}
         </td>
-        <td class="tablet--desktop--only blend">&nbsp;</td>
+        <td class="above-mobile blend">&nbsp;</td>
         <td class="desktop-only empty--cell">&nbsp;</td>
       </tr>
       {% endif %}
@@ -116,7 +116,7 @@
             <div class="dark">{{ order_details.delivery_method }}</div>
           </div>
         </td>
-        <td class="tablet--desktop--only tablet-blend">
+        <td class="above-mobile tablet-blend">
           <div class="label">{{ "Delivery method"|t }}</div>
           <div class="dark">{{ order_details.delivery_method }}</div>
 
@@ -129,7 +129,7 @@
           <div class="label">{{ "Payment method"|t }}</div>
           <div class="dark">{{ order_details.payment_method }}</div>
         </td>
-        <td class="tablet--desktop--only empty--cell">&nbsp;</td>
+        <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
 
       {% for product in products %}
@@ -187,7 +187,7 @@
               {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
             {% endif %}
           </td>
-          <td class="tablet--desktop--only blend">
+          <td class="above-mobile blend">
             <div class="light">{{ "Total"|t }}</div>
             {% if currency_code_position == 'before' %}
               <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
@@ -196,13 +196,13 @@
             {% endif %}
           </td>
 
-          <td class="tablet--desktop--only empty--cell">&nbsp;</td>
+          <td class="above-mobile empty--cell">&nbsp;</td>
         </tr>
       {% endfor %}
 
       <tr class="sub-total-row">
         <td class="desktop-only">&nbsp;</td>
-        <td class="tablet--desktop--only">&nbsp;</td>
+        <td class="above-mobile">&nbsp;</td>
         <td>{{ "Sub total"|t }}</td>
         <td class="blend">
           {% if currency_code_position == 'before' %}
@@ -211,12 +211,12 @@
             {{ order_details.sub_total }}<span class="currency-code suffix">{{ currency_code }}</span>
           {% endif %}
         </td>
-        <td class="tablet--desktop--only empty--cell">&nbsp;</td>
+        <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
 
       <tr class="delivery-charge-row">
         <td class="desktop-only">&nbsp;</td>
-        <td class="tablet--desktop--only">&nbsp;</td>
+        <td class="above-mobile">&nbsp;</td>
         <td>{{ "Delivery charge"|t }}</td>
         <td class="blend">
           {% if currency_code_position == 'before' %}
@@ -225,12 +225,12 @@
             {{ order_details.delivery_charge }}<span class="currency-code suffix">{{ currency_code }}</span>
           {% endif %}
         </td>
-        <td class="tablet--desktop--only empty--cell">&nbsp;</td>
+        <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
 
       <tr class="total-row">
         <td class="desktop-only">&nbsp;</td>
-        <td class="tablet--desktop--only">&nbsp;</td>
+        <td class="above-mobile">&nbsp;</td>
         <td>
           <div class="dark">{{ "ORDER TOTAL"|t }}</div>
         </td>
@@ -243,7 +243,7 @@
             {% endif %}
           </div>
         </td>
-        <td class="tablet--desktop--only empty--cell">&nbsp;</td>
+        <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
     </tbody>
   </table>
