@@ -402,6 +402,13 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
       }
     }
   }
+
+  // Change page title if address book page.
+  if ($route_match->getRouteName() == 'entity.profile.type.address_book.user_profile_form') {
+    $variables['title'] = [
+      '#markup' => t('Address Book'),
+    ];
+  }
 }
 
 /**
