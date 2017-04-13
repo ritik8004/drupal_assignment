@@ -1,0 +1,279 @@
+.order-detail {
+  &.l-two--sf {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .c-page-title {
+    top: -2.5rem;
+
+    @include breakpoint($tablet) {
+      top: -3.5rem;
+    }
+  }
+
+  .user__order--detail {
+    background: #f7f7f7;
+    width: 100%;
+    font-size: 12px;
+    margin-bottom: 88px;
+
+    @include breakpoint($tablet) {
+      font-size: 14px;
+    }
+
+    .light {
+      color: #adadad;
+    }
+
+    .dark {
+      color: #333;
+      font-weight: 700;
+    }
+
+    .delivery-details-row {
+      font-size: 13px;
+      font-weight: 700;
+
+      @include breakpoint($tablet) {
+        font-size: 15px;
+      }
+
+      td {
+        background: #e0eaf3;
+        padding: 20px 16px;
+        padding-left: 56px;
+        text-indent: -40px;
+        vertical-align: middle;
+
+        .icon-ic_infomation {
+          font-size: 24px;
+          font-weight: 700;
+          margin-right: 17px;
+          vertical-align: middle;
+        }
+
+        @include breakpoint($tablet) {
+          padding: 28px 22px;
+          padding-left: 56px;
+        }
+      }
+
+      .blend {
+        @include breakpoint($desktop) {
+          background: #d7e5f0;
+        }
+      }
+    }
+
+    .delivery-details-row,
+    .label {
+      color: $windows-blue;
+    }
+
+    .delivery-charge-row,
+    .sub-total-row,
+    .order-item-row {
+      .blend {
+        background: #f7f7f7;
+
+        @include breakpoint($tablet) {
+          background: #f2f2f2;
+        }
+      }
+    }
+
+    .order-item-row {
+      border-bottom: 1px solid #ddd;
+
+      img {
+        min-width: 128px;
+
+        @include breakpoint($tablet) {
+          min-width: 137px;
+        }
+      }
+
+      .dark {
+        margin-bottom: 6px;
+
+        @include breakpoint($tablet) {
+          margin-bottom: 3px;
+        }
+      }
+
+      .blend {
+        @include breakpoint($upto-tablet) {
+          vertical-align: bottom;
+        }
+      }
+
+      .mobile-only {
+        margin-top: 29px;
+      }
+
+      .tablet-only {
+        margin-top: 45px;
+      }
+    }
+
+    .label {
+      margin-bottom: 3px;
+    }
+
+    .contact {
+      margin-top: 19px;
+
+      @include breakpoint($tablet) {
+        margin-top: 39px;
+      }
+    }
+
+    .order-summary-row {
+      td {
+        background: #f4f4f4;
+        padding: 22px 16px;
+
+        @include breakpoint($tablet) {
+          padding: 22px 24px;
+        }
+      }
+
+      .mobile-only {
+        margin-top: 19px;
+      }
+
+      .tablet-only {
+        margin-top: 15px;
+      }
+
+      .blend {
+        background: #ececec;
+      }
+    }
+
+    .order-details-row {
+      background: #e8eff5;
+
+      .blend {
+        background: #e0eaf3;
+      }
+
+      .mobile-only {
+        margin-top: 19px;
+
+        &.delivery--method {
+          margin-top: 34px;
+        }
+      }
+
+      .tablet-only {
+        margin-top: 29px;
+      }
+
+      .tablet-blend {
+        @include breakpoint($tablet) {
+          background: #e0eaf3;
+        }
+
+        @include breakpoint($desktop) {
+          background: #e8eff5;
+        }
+      }
+    }
+
+    .warm--white {
+      background-color: $white;
+    }
+
+    td {
+      padding: 22px 24px;
+      vertical-align: top;
+    }
+
+    .address {
+      margin-top: 0;
+    }
+
+    .currency-code {
+      padding-right: 38px;
+
+      @include breakpoint($tablet) {
+        padding-right: 9px;
+      }
+    }
+  }
+
+  .empty--cell {
+    width: 45px;
+
+    @include breakpoint($desktop) {
+      width: 133px;
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row {
+    background: #fff;
+
+    td {
+      padding: 10px 22px 9px;
+    }
+  }
+
+  .button.status-delivered,
+  .button.status-pending {
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    width: 106px;
+    padding: 10px;
+    padding-bottom: 11px;
+    text-align: center;
+  }
+
+  .button.status-pending {
+    background-color: #e6591a;
+  }
+
+  .button.status-delivered {
+    background-color: #3ab549;
+  }
+
+  .desktop-only {
+    display: none;
+
+    @include breakpoint($desktop) {
+      display: table-cell;
+    }
+  }
+
+  .tablet-only {
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: block;
+    }
+
+    @include breakpoint($desktop) {
+      display: none;
+    }
+  }
+
+  .tablet--desktop--only {
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: table-cell;
+    }
+  }
+
+  .mobile-only {
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+}
+
