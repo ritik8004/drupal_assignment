@@ -8,20 +8,20 @@
 /**
  * Implements hook_modules_installed().
  */
-function alshaya_loyalty_modules_installed() {
+function alshaya_loyalty_modules_installed(array $modules) {
   // Set user account form display settings.
-  $userConfig = \Drupal::configFactory()->getEditable('core.entity_form_display.user.user.default');
-  $content = $userConfig->get('content');
-
-  $content['field_privilege_card_number'] = [
-    'weight' => 3,
-    'type' => 'string_textfield',
-    'settings' => [
-      'size' => 60,
-      'placeholder' => '',
-    ],
-    'third_party_settings' => [],
-  ];
-
-  $userConfig->set('content', $content)->save();
+  if (in_array('user', $modules)) {
+    // Rebuild user entity form display for field_privilege_card_number field.
+    $user_form_display = \Drupal::entityTypeManager()->getStorage('entity_form_display')->load('user.user.default');
+    $user_form_display
+      ->setComponent('field_privilege_card_number', [
+        'type' => 'string_textfield',
+        'weight' => 3,
+        'settings' => [
+          'size' => 60,
+          'placeholder' => '',
+        ],
+      ])
+      ->save();
+  }
 }
