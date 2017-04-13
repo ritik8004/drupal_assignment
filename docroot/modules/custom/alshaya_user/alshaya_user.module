@@ -70,6 +70,9 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
 function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
   // Add our custom submit handler function for anonymous users.
   if (\Drupal::currentUser()->isAnonymous()) {
+    // Hide mobile number field from registration page.
+    $form['field_mobile_number']['#access'] = FALSE;
+
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
   }
 }
