@@ -28,3 +28,14 @@ product.cloud_zoom:
   dependencies:
     - alshaya_product_zoom/cloud_zoom
     - alshaya_product_zoom/lightslider
+
+product.image_gallery:
+  version: 1.x
+  css:
+    theme:
+      css/alshaya_product_zoom.css: {}
+  dependencies:
+    - core/drupal.dialog
+    - core/jquery.ui.draggable
+    - alshaya_product_zoom/lightslider
+    - alshaya_product_zoom/product.cloud_zoom
