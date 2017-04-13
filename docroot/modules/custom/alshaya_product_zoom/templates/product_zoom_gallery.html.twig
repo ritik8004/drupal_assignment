@@ -1,0 +1,33 @@
+<div id="product-image-gallery-container">
+  <ul id="product-image-gallery">
+    {% for thumbs in thumbnails %}
+      {% if thumbs.type == 'youtube' %}
+        <li data-iframe="{{ thumbs.url }}" class="youtube">
+          <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+        </li>
+      {% elseif thumbs.type == 'vimeo' %}
+        <li data-iframe="{{ thumbs.url }}" class="vimeo">
+          <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
+        </li>
+      {% else %}
+        <li>
+          <a href="{{ thumbs.zoomurl }}" class="a-gallery">
+            <img src="{{ thumbs.thumburl }}"/>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+  {% set firstItem =  thumbnails | first %}
+  <div id="full-image-wrapper" style="width: 400px; height: 400px; overflow: hidden;">
+    {% if firstItem.type == 'youtube' %}
+        <img width='{{ firstItem.width }}' height='{{ firstItem.height }}' src="{{ firstItem.thumburl }}"/>
+    {% elseif firstItem.type == 'vimeo' %}
+        <img width='{{ firstItem.width }}' height='{{ firstItem.height }}' src=""/>
+    {% else %}
+        <img style="max-width: none;" id="full-image" src="{{ firstItem.zoomurl }}"/>
+    {% endif %}
+  </div>
+
+  <button class="zoomout">Zoom Out</button ><button class="zoomin">Zoom In</button >
+</div>
