@@ -1,7 +1,10 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - facets.facet.skus_sku_reference_display_price
   module:
+    - facets
     - system
   theme:
     - alshaya_white_label

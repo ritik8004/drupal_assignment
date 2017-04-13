@@ -17,8 +17,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  countries:
-    KW: KW
+  countries: {  }
   verify: none
   message: "Your verification code from !site_name:\n!code"
 field_type: mobile_number

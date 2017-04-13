@@ -17,41 +17,29 @@ index b87ff69..ddbf25f 100644
        $changed = max($translation_changed, $changed);
      }
      return $changed;
-@@ -267,6 +268,38 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+@@ -267,6 +268,26 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
        ->setDisplayConfigurable('form', TRUE)
        ->setDisplayConfigurable('view', TRUE);
 
 +    $fields['crosssell'] = BaseFieldDefinition::create('string')
 +      ->setLabel(t('Cross sell SKU'))
 +      ->setDescription(t('Reference to all Cross sell SKUs.'))
-+      ->setDisplayOptions('view', array(
-+        'label' => 'above',
-+        'type' => 'string',
-+        'weight' => 5,
-+      ))
 +      ->setDisplayOptions('form', array(
 +        'type' => 'string_textfield',
 +        'weight' => 5,
 +      ))
 +      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-+      ->setDisplayConfigurable('form', TRUE)
-+      ->setDisplayConfigurable('view', TRUE);
++      ->setDisplayConfigurable('form', TRUE);
 +
 +    $fields['upsell'] = BaseFieldDefinition::create('string')
 +      ->setLabel(t('Up sell SKU'))
 +      ->setDescription(t('Reference to all up sell SKUs.'))
-+      ->setDisplayOptions('view', array(
-+        'label' => 'above',
-+        'type' => 'string',
-+        'weight' => 6,
-+      ))
 +      ->setDisplayOptions('form', array(
 +        'type' => 'string_textfield',
 +        'weight' => 6,
 +      ))
 +      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-+      ->setDisplayConfigurable('form', TRUE)
-+      ->setDisplayConfigurable('view', TRUE);
++      ->setDisplayConfigurable('form', TRUE);
 +
      $fields['image'] = BaseFieldDefinition::create('image')
        ->setLabel(t('Image'))

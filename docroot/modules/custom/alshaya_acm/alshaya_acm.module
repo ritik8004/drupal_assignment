@@ -15,10 +15,47 @@ use Drupal\Core\Link;
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-  $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
-  // Using array_combine to ensure we have same data in key and value.
-  $cartQuantityOptions = array_combine($range, $range);
+
+  // Get the current cart.
+  $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+
+  // Get current cart items.
+  $cart_items = $cart->items();
+
+  if (empty($cart_items)) {
+    // Set Form title.
+    $form['#title'] = t("Cart (%count)", ['%count' => 0]);
+
+    // Add empty message wrapper container.
+    $form['empty'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => 'empty-cart-wrapper',
+      ],
+    ];
+
+    // Add the empty message.
+    $form['empty']['message'] = [
+      '#markup' => '<div class="empty-cart-message">' . t('Your shopping basket is empty') . '</div>',
+      '#weight' => -50,
+    ];
+
+    // Add the continue shopping button in same container.
+    $form['empty']['continue_shopping'] = [
+      '#type' => 'link',
+      '#title' => t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+    ];
+
+    // Unset all other items.
+    unset($form['cart']);
+    unset($form['actions']['checkout']);
+
+    // Simply return, we don't want to process below code.
+    return;
+  }
 
   // Change checkout button text to 'Secure Checkout'.
   $form['actions']['checkout']['#value'] = t('Secure Checkout');
@@ -41,7 +78,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $product_count += $form['cart'][$id]['quantity']['#default_value'];
 
       $form['cart'][$id]['quantity']['#type'] = 'select';
-      $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
+      $form['cart'][$id]['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
 
       // Add ajax callback to update cart's total on quantity change.
       $form['cart'][$id]['quantity']['#ajax'] = [
@@ -78,22 +115,30 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     }
   }
 
+  // Add wrapper to cart table for themeing.
   $form['cart']['#prefix'] = '<div id="table-cart-items">';
   $form['cart']['#suffix'] = '</div>';
 
+  // Add wrapper to cart totals table for themeing.
   $form['totals']['#prefix'] = '<div id="table-cart-totals">';
   $form['totals']['#suffix'] = '</div>';
+
+  // Update some labels to match wireframe/mockup.
+  $form['totals']['sub']['label'] = ['#markup' => t('Sub total')];
+  $form['totals']['grand']['label'] = ['#markup' => t('Order Total <span>(Before Delivery)</span>')];
 
   // Wrap Promotion code in a fieldset.
   $form['promotion_code_wrapper'] = [
     '#type' => 'details',
     '#title' => t('Add a promo code'),
   ];
+
   $form['promotion_code_wrapper']['promotion'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
     '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
   ];
+
   $form['coupon']['#type'] = 'hidden';
 
   // Attach library, to cater to Coupon submit button.
@@ -216,12 +261,8 @@ function alshaya_acm_get_cart_items_by_sku() {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
-  // Using array_combine to ensure we have same data in key and value.
-  $cartQuantityOptions = array_combine($range, $range);
-
   $form['quantity']['#type'] = 'select';
-  $form['quantity']['#options'] = $cartQuantityOptions;
+  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
   unset($form['quantity']['#size']);
 }
 
@@ -297,4 +338,22 @@ function template_preprocess_alshaya_acm_price(array &$variables) {
 
   $variables['currency_format'] = $currency_format;
   $variables['currency_code_position'] = $currency_code_position;
+}
+
+/**
+ * Helper function to get cart quantity options.
+ */
+function _alshaya_acm_get_cart_quantity_options() {
+  static $cartQuantityOptions;
+
+  // Prepare the array once per page request.
+  if (empty($cartQuantityOptions)) {
+    // Get array using range() with 1 as minimum and maximum value from config.
+    $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
+
+    // Using array_combine to ensure we have same data in key and value.
+    $cartQuantityOptions = array_combine($range, $range);
+  }
+
+  return $cartQuantityOptions;
 }

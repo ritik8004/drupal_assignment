@@ -1,0 +1,25 @@
+{%
+set classes = [
+'node',
+'node--type-' ~ node.bundle|clean_class,
+view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+]
+%}
+
+<article{{ attributes }}>
+  <a class="use-ajax" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'node': node.id}) }}">
+    {{ content.image }}
+
+    {{ title_prefix }}
+    {% if not page %}
+      <h2{{ title_attributes.addClass("c-products__item__label") }}>
+        {{ label }}
+      </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {{ content.price }}
+
+    {{ content.special_price }}
+  </a>
+</article>

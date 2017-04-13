@@ -1,0 +1,21 @@
+{%
+set classes = [
+'node',
+'node--type-' ~ node.bundle|clean_class,
+view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+]
+%}
+
+<article{{ attributes }}>
+  {{ title_prefix }}
+  {% if not page %}
+    <h2{{ title_attributes.addClass("c-products__item__label") }}>
+      {{ label }}
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {{ content }}
+
+  <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ "View Full Product Details"|t }}</a>
+</article>
