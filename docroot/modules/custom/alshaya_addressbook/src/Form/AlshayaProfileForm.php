@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_addressbook\Form;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Serialization\Json;
 use Drupal\profile\Form\ProfileForm;
 use Drupal\Core\Url;
 
@@ -31,6 +32,11 @@ class AlshayaProfileForm extends ProfileForm {
           'profile_type' => 'address_book',
         ]),
       ];
+
+      // Open delete form in modal on address edit screen.
+      $element['delete']['#attributes']['class'][] = 'use-ajax';
+      $element['delete']['#attributes']['data-dialog-type'] = 'modal';
+      $element['delete']['#attributes']['data-dialog-options'] = Json::encode(['width' => '341']);
     }
 
     return $element;
