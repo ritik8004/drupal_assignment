@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 186x120
+label: 186x120
+effects:
+  dfa1d043-99ed-44f0-8c0d-25221a4c848d:
+    uuid: dfa1d043-99ed-44f0-8c0d-25221a4c848d
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 186
+      height: 120
