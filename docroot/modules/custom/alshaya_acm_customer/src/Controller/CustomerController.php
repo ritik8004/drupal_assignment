@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\user\UserInterface;
+use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
 
 /**
  * Customer controller to add/override pages for customer.
@@ -209,6 +210,7 @@ class CustomerController extends ControllerBase {
     $account['last_name'] = $user->get('field_last_name')->getString();
 
     $build = [];
+    $build['#barcode'] = $this->getBarcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
     $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order_id, $order);
     $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
     $build['#products'] = $products;
@@ -221,6 +223,107 @@ class CustomerController extends ControllerBase {
     $build['#cache'] = ['max-age' => 0];
 
     return $build;
+  }
+
+  /**
+   * Controller function for order print.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User object for which the orders detail page is being viewed.
+   * @param string $order_id
+   *   Order id to view the detail for.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function orderPrint(UserInterface $user, $order_id) {
+    // Get order details and add more information for print.
+    $build = $this->orderDetail($user, $order_id);
+    $build['#account']['mail'] = $user->get('mail')->getString();
+    $build['#account']['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
+    $build['#account']['#site_logo'] = [
+      '#theme' => 'image',
+      '#uri' => theme_get_setting('logo.url'),
+    ];
+    $build['#products_count'] = count($build['#products']);
+    $build['#theme'] = 'user_order_print';
+
+    return $build;
+  }
+
+  /**
+   * Function to get barcode.
+   *
+   * @param string $order_number
+   *   Order number for which barcode needed.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function getBarcode($order_number) {
+    $build = [];
+    $settings = [
+      'type' => 'C128',
+      'value' => $order_number,
+      'color' => '#000000',
+      'height' => 90,
+      'width' => 110,
+      'padding_top' => 0,
+      'padding_right' => 0,
+      'padding_bottom' => 0,
+      'padding_left' => 0,
+      'show_value' => TRUE,
+    ];
+    $generator = new BarcodeGenerator();
+    $suffix = str_replace(
+      '+', 'plus', strtolower($settings['type'])
+    );
+    $build['barcode'] = [
+      '#theme' => 'barcode__' . $suffix,
+      '#attached' => [
+        'library' => [
+          'barcodes/' . $suffix,
+        ],
+      ],
+      '#type' => $settings['type'],
+      '#value' => $settings['value'],
+      '#width' => $settings['width'],
+      '#height' => $settings['height'],
+      '#color' => $settings['color'],
+      '#padding_top' => $settings['padding_top'],
+      '#padding_right' => $settings['padding_right'],
+      '#padding_bottom' => $settings['padding_bottom'],
+      '#padding_left' => $settings['padding_left'],
+      '#show_value' => $settings['show_value'],
+    ];
+
+    try {
+      $barcode = $generator->getBarcodeObj(
+        $settings['type'],
+        $settings['value'],
+        $settings['width'],
+        $settings['height'],
+        $settings['color'],
+        [
+          $settings['padding_top'],
+          $settings['padding_right'],
+          $settings['padding_bottom'],
+          $settings['padding_left'],
+        ]
+      );
+      $build['barcode']['#svg'] = $barcode->getSvgCode();
+    }
+    catch (\Exception $e) {
+      $this->logger->error(
+        'Error: @error, given: @value',
+        [
+          '@error' => $e->getMessage(),
+          '@value' => $settings['value'],
+        ]
+      );
+    }
+    return $build;
+
   }
 
 }
