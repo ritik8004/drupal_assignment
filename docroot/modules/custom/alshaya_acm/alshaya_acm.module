@@ -144,8 +144,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Attach library, to cater to Coupon submit button.
   $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
 
-  $cartStorage = \Drupal::service('acq_cart.cart_storage');
-  $cart = $cartStorage->getCart();
   _alshaya_acm_format_cart_total($form, $cart);
 
   // Set Form title.
