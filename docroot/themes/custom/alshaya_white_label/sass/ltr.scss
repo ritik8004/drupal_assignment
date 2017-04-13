@@ -7,7 +7,7 @@
 @import "reset";
 
 // Config file that contains centralized variables.
-@import "config";
+@import "config/**/*";
 @import "utils";
 
 // Utilities for building multilingual websites.

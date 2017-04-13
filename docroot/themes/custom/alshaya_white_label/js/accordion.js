@@ -9,11 +9,15 @@
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
       function moveContextualLink(parent, body) {
+        if (typeof body === 'undefined') {
+          body = '.c-accordion__title';
+        }
         $(parent).each(function () {
-          var contextualLink = $(this).find('.c-accordion__title').next();
+          var contextualLink = $(this).find(body).next();
           $(this).append(contextualLink);
         });
       }
+
       if (context === document) {
         moveContextualLink('.c-accordion');
 
