@@ -43,6 +43,13 @@ class getMiniCart extends ControllerBase {
    */
   public function content() {
     $cart = $this->cartStorage->getCart();
+
+    if (empty($cart)) {
+      // Something is wrong, but we have already logged at API level.
+      // Just respond back with empty text to avoid issues.
+      return new JsonResponse([]);
+    }
+
     $totals = $cart->totals();
 
     // Fetch the config.

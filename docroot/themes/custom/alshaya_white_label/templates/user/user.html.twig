@@ -1,0 +1,16 @@
+<article{{ attributes }}>
+    <div>{{ 'Account Details' | t }}</div>
+    {% if email %}
+        <div>{{ 'Email' | t }}</div>
+        {{ email }}
+    {% endif %}
+    <div>{{ 'Contact number' | t }}</div>
+    {% if contact_number %}
+        {{ contact_number }}
+    {% endif %}
+    <div>{{ 'Privilege card number' | t }}</div>
+    {% if privilege_card %}
+        {{ privilege_card }}
+    {% endif %}
+</article>
+

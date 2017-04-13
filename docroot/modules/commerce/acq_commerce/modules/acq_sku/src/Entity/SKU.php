@@ -347,34 +347,22 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['crosssell'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Cross sell SKU'))
       ->setDescription(t('Reference to all Cross sell SKUs.'))
-      ->setDisplayOptions('view', array(
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => 5,
-      ))
       ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
         'weight' => 5,
       ))
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['upsell'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Up sell SKU'))
       ->setDescription(t('Reference to all up sell SKUs.'))
-      ->setDisplayOptions('view', array(
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => 6,
-      ))
       ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
         'weight' => 6,
       ))
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['image'] = BaseFieldDefinition::create('image')
       ->setLabel(t('Image'))
@@ -428,29 +416,39 @@ class SKU extends ContentEntityBase implements SKUInterface {
         switch ($field_info['type']) {
           case 'string':
             $field = BaseFieldDefinition::create('string');
-            $field->setDisplayOptions('view', [
-              'label' => 'above',
-              'type' => 'string',
-              'weight' => $weight,
-            ]);
-            $field->setDisplayOptions('form', [
-              'type' => 'string_textfield',
-              'weight' => $weight,
-            ]);
+
+            if ($field_info['visible_view']) {
+              $field->setDisplayOptions('view', [
+                'label' => 'above',
+                'type' => 'string',
+                'weight' => $weight,
+              ]);
+            }
+
+            if ($field_info['visible_form']) {
+              $field->setDisplayOptions('form', [
+                'type' => 'string_textfield',
+                'weight' => $weight,
+              ]);
+            }
             break;
 
           case 'image':
             $field = BaseFieldDefinition::create('image');
-            $field->setDisplayOptions('view', array(
-              'label' => 'hidden',
-              'type' => 'image',
-              'weight' => $weight,
-            ));
+            if ($field_info['visible_view']) {
+              $field->setDisplayOptions('view', array(
+                'label' => 'hidden',
+                'type' => 'image',
+                'weight' => $weight,
+              ));
+            }
 
-            $field->setDisplayOptions('form', array(
-              'type' => 'image_image',
-              'weight' => $weight,
-            ));
+            if ($field_info['visible_form']) {
+              $field->setDisplayOptions('form', array(
+                'type' => 'image_image',
+                'weight' => $weight,
+              ));
+            }
             break;
         }
 
@@ -470,8 +468,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $field->setCardinality($field_info['cardinality']);
 
 
-        $field->setDisplayConfigurable('form', TRUE);
-        $field->setDisplayConfigurable('view', TRUE);
+        $field->setDisplayConfigurable('form', (bool) $field_info['visible_form']);
+        $field->setDisplayConfigurable('view', (bool) $field_info['visible_view']);
 
         // We will use attr prefix to avoid conflicts with default base fields.
         $fields['attr_' . $machine_name] = $field;

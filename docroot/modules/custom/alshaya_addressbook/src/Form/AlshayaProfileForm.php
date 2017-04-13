@@ -4,11 +4,37 @@ namespace Drupal\alshaya_addressbook\Form;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\profile\Form\ProfileForm;
+use Drupal\Core\Url;
 
 /**
  * Form controller for profile forms (add/edit).
  */
 class AlshayaProfileForm extends ProfileForm {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function actions(array $form, FormStateInterface $form_state) {
+    $element = parent::actions($form, $form_state);
+
+    if ($this->entity->getType() == 'address_book') {
+      $user_id = $this->currentUser()->id();
+      $element['cancel_button'] = [
+        '#type' => 'link',
+        '#title' => t('Cancel'),
+        '#attributes' => [
+          'class' => ['cancel-button', 'button'],
+        ],
+        '#weight' => 20,
+        '#url' => Url::fromRoute('entity.profile.type.address_book.user_profile_form', [
+          'user' => $user_id,
+          'profile_type' => 'address_book',
+        ]),
+      ];
+    }
+
+    return $element;
+  }
 
   /**
    * {@inheritdoc}
