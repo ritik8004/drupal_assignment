@@ -4,12 +4,12 @@
         <div>{{ 'Email' | t }}</div>
         {{ email }}
     {% endif %}
-    <div>{{ 'Contact number' | t }}</div>
-    {% if contact_number %}
+    {% if contact_number is not empty %}
+        <div>{{ 'Contact number' | t }}</div>
         {{ contact_number }}
     {% endif %}
-    <div>{{ 'Privilege card number' | t }}</div>
-    {% if privilege_card %}
+    {% if privilege_card is not empty%}
+        <div>{{ 'Privilege card number' | t }}</div>
         {{ privilege_card }}
     {% endif %}
 </article>
