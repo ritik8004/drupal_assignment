@@ -70,22 +70,7 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
 function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
   // Add our custom submit handler function for anonymous users.
   if (\Drupal::currentUser()->isAnonymous()) {
-    $form['field_privilege_card_number']['#access'] = FALSE;
-
-    // Add privilege card number fields.
-    alshaya_loyalty_add_privilege_card_fields($form, $form_state);
-
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
-    array_unshift($form['actions']['submit']['#submit'], 'alshaya_user_form_set_privilege_card_number');
-  }
-}
-
-/**
- * Set privilege card number value for register form.
- */
-function alshaya_user_form_set_privilege_card_number(array &$form, FormStateInterface $form_state) {
-  if (\Drupal::currentUser()->isAnonymous() && $apc_number = $form_state->getValue('privilege_card_number')) {
-    $form_state->setValue('field_privilege_card_number', [['value' => $apc_number]]);
   }
 }
 

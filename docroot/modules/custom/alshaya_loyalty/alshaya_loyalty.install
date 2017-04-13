@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for alshaya_loyalty.
+ */
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_loyalty_modules_installed() {
+  // Set user account form display settings.
+  $userConfig = \Drupal::configFactory()->getEditable('core.entity_form_display.user.user.default');
+  $content = $userConfig->get('content');
+
+  $content['field_privilege_card_number'] = [
+    'weight' => 3,
+    'type' => 'string_textfield',
+    'settings' => [
+      'size' => 60,
+      'placeholder' => '',
+    ],
+    'third_party_settings' => [],
+  ];
+
+  $userConfig->set('content', $content)->save();
+}
