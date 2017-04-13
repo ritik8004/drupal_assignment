@@ -312,8 +312,34 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
+  // If checkout page for user.
+  if ($routmatch->getRouteName() == 'acq_checkout.form') {
+    $suggestions[] = 'page__checkout';
+  }
+
   if (\Drupal::service('path.matcher')->isFrontPage()) {
     $suggestions[] = 'page__front';
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_white_label_page_attachments_alter(array &$attachments) {
+  // Get current route.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  // Routes from where we need to remove the 'back_to_top' button.
+  $skip_back_to_top_routes = [
+    'acq_checkout.form',
+  ];
+
+  if (in_array($route_name, $skip_back_to_top_routes)) {
+    // If back_to_top library is added to page, remove it.
+    if (in_array('back_to_top/back_to_top_js', $attachments['#attached']['library'])) {
+      $index = array_search('back_to_top/back_to_top_js', $attachments['#attached']['library']);
+      unset($attachments['#attached']['library'][$index]);
+    }
   }
 }
 
