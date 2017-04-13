@@ -228,7 +228,7 @@ class ProductZoomFormatter extends ImageFormatterBase {
     }
 
     $element = [
-      '#theme' => 'product_zoom_gallery',
+      '#theme' => 'product_zoom',
       '#mainImage' => $main_image,
       '#thumbnails' => $thumbnails,
       '#properties' => self::getRelStringForProductZoom($settings),
