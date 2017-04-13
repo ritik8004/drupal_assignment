@@ -374,7 +374,7 @@
     @extend %l-container--full;
   }
 
-  #edit-cart {
+  #table-cart-items table {
     width: 100%;
 
     thead {
@@ -464,7 +464,7 @@
     }
   }
 
-  #edit-totals {
+  #table-cart-totals {
     float: $right;
     font-size: 14px;
 
@@ -496,17 +496,8 @@
   }
 }
 
-// COUPON CODE
+// Promotion and Privilege cards.
 #edit-promotion-code-wrapper,
 #edit-privilege-card-wrapper {
-  display: none;
-}
-
-// Hide Update cart button
-.customer-cart-form {
-  .form-actions {
-    #edit-update {
-      display: none;
-    }
-  }
+  clear: both;
 }
