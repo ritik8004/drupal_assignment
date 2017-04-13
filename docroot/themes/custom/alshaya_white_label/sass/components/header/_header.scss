@@ -216,7 +216,9 @@
 
   .block-alshaya-stores-finder {
     display: inline-block;
-    padding: 0.3125rem 1.438rem 0.3125rem 3rem;
+    padding: 0.3125rem 0;
+    padding-#{$right}: 0.3125rem;
+    padding-#{$left}: 1.438rem;
     position: relative;
     text-transform: lowercase;
 
@@ -368,15 +370,13 @@ header {
     .quantity {
       font-size: 10px;
       position: absolute;
-      background: url('../imgs/icons/indicator-shape.svg') no-repeat;
+      background: $pumpkin-orange;
       color: $white-five;
       text-align: center;
-      width: 20px;
-      height: 20px;
       bottom: -8px;
       #{$left}: -4px;
       border-radius: 50%;
-      padding: 5px;
+      padding: 5px 7px;
     }
   }
 }
