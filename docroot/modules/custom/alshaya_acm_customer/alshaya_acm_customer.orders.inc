@@ -219,8 +219,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
 
-  // @TODO: MMCPA-641.
-  $orderDetails['contact_no'] = '+965 12 34 5679';
+  $orderDetails['contact_no'] = $order['shipping']['address']['phone'];
 
   $address_formatter = new ACQAddressFormatter();
   $orderDetails['delivery_address'] = $address_formatter->render((object) $order['shipping']['address']);

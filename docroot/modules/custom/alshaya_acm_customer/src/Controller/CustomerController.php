@@ -213,7 +213,7 @@ class CustomerController extends ControllerBase {
     $account['last_name'] = $user->get('field_last_name')->getString();
 
     $build = [];
-    $build['#barcode'] = $this->getBarcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
+
     $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
     $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
     $build['#products'] = $products;
@@ -242,6 +242,7 @@ class CustomerController extends ControllerBase {
   public function orderPrint(UserInterface $user, $order_id) {
     // Get order details and add more information for print.
     $build = $this->orderDetail($user, $order_id);
+    $build['#barcode'] = $this->getBarcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
     $build['#account']['mail'] = $user->get('mail')->getString();
     $build['#account']['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
     $build['#account']['#site_logo'] = [
