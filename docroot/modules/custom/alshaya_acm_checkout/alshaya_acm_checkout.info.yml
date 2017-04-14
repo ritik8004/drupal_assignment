@@ -1,0 +1,7 @@
+name: 'Alshaya ACM Checkout'
+type: module
+description: 'All custom code around acq_checkout.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm
