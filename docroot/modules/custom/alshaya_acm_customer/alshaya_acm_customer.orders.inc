@@ -228,6 +228,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $address_formatter = new ACQAddressFormatter();
   $orderDetails['delivery_address'] = $address_formatter->render((object) $order['shipping']['address']);
+  $orderDetails['billing_address'] = $address_formatter->render((object) $order['billing']);
 
   // @TODO: MMCPA-641.
   $orderDetails['delivery_method'] = $order['shipping']['method']['carrier_code'];

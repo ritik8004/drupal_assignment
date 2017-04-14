@@ -339,6 +339,7 @@
     list-style: none;
     width: 100%;
     padding: 0;
+    display: table;
 
     li {
       height: 96px;
@@ -383,7 +384,7 @@
           height: 96px;
 
           @include breakpoint($only-mobile) {
-            width: 180px;
+            width: 100%;
             height: 143px;
             vertical-align: middle;
 
@@ -418,6 +419,7 @@
           height: 96px;
 
           @include breakpoint($only-mobile) {
+            width: 100%;
             vertical-align: top;
             padding: 15px;
 

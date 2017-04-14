@@ -1,5 +1,8 @@
+// @TODO: Replace individual imports with glob.
+@import "../../config/breakpoints";
+@import "../../config/colors";
+@import "../../config/fonts";
 @import '../../../node_modules/breakpoint-sass/stylesheets/breakpoint';
-@import "../../config";
 @import "../../utils";
 @import "../../icons";
 @import "owl.carousel";

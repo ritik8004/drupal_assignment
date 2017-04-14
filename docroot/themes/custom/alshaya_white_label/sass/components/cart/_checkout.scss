@@ -329,6 +329,14 @@
 // Items in the cart page.
 
 .alias--cart {
+  @include breakpoint($only-mobile) {
+    #edit-actions {
+      display: block;
+      float: none;
+      margin-right: 0;
+    }
+  }
+
   .page-standard {
     max-width: 1236px !important;
     margin: auto;
@@ -340,6 +348,12 @@
       display: inline-grid;
       margin-right: 4rem;
       margin-bottom: 1rem;
+    }
+
+    #edit-continue-shopping {
+      width: 100%;
+      display: block;
+      text-align: center;
     }
   }
 
@@ -360,7 +374,7 @@
     @extend %l-container--full;
   }
 
-  #edit-cart {
+  #table-cart-items table {
     width: 100%;
 
     thead {
@@ -450,7 +464,7 @@
     }
   }
 
-  #edit-totals {
+  #table-cart-totals {
     float: $right;
     font-size: 14px;
 
@@ -477,22 +491,13 @@
 
   #edit-continue-shopping {
     font-size: 12px;
-    border: 1px solid $peacock-blue;
+    border: 1px solid $marine-blue-two;
     padding: 0.625rem 1.6rem;
   }
 }
 
-// COUPON CODE
+// Promotion and Privilege cards.
 #edit-promotion-code-wrapper,
 #edit-privilege-card-wrapper {
-  display: none;
-}
-
-// Hide Update cart button
-.customer-cart-form {
-  .form-actions {
-    #edit-update {
-      display: none;
-    }
-  }
+  clear: both;
 }

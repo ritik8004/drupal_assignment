@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_checkout module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_checkout_install() {
+  // Configure multistep_checkout as checkout_flow_plugin.
+  $configFactory = Drupal::configFactory()->getEditable('acq_checkout.settings');
+  $configFactory->set('checkout_flow_plugin', 'multistep_checkout');
+  $configFactory->save();
+}

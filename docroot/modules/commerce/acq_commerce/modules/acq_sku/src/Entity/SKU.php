@@ -364,6 +364,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDisplayConfigurable('form', TRUE);
 
+    $fields['related'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Related SKU'))
+      ->setDescription(t('Reference to all related SKUs.'))
+      ->setDisplayOptions('form', array(
+        'type' => 'string_textfield',
+        'weight' => 7,
+      ))
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setDisplayConfigurable('form', TRUE);
+
     $fields['image'] = BaseFieldDefinition::create('image')
       ->setLabel(t('Image'))
       ->setDescription(t('Product image'))

@@ -70,6 +70,9 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
 function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
   // Add our custom submit handler function for anonymous users.
   if (\Drupal::currentUser()->isAnonymous()) {
+    // Hide mobile number field from registration page.
+    $form['field_mobile_number']['#access'] = FALSE;
+
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
   }
 }
@@ -92,8 +95,10 @@ function alshaya_user_form_user_register_form_submit($form, FormStateInterface $
   // Get the string to pass into GET.
   $user_data_string = base64_encode(json_encode($user_data));
 
-  // Redirect the user with email in GET.
-  return $form_state->setRedirect('alshaya_user.user_register_complete', ['user' => $user_data_string]);
+  if (\Drupal::currentUser()->isAnonymous()) {
+    // Redirect the user with email in GET.
+    $form_state->setRedirect('alshaya_user.user_register_complete', ['user' => $user_data_string]);
+  }
 }
 
 /**

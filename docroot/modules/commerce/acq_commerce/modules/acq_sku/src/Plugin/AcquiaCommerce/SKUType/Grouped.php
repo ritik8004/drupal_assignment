@@ -117,10 +117,14 @@ class Grouped extends SKUPluginBase {
     $sku->field_grouped_skus->setValue([]);
 
     foreach ($product['linked'] as $linked_sku) {
-      $sku->field_grouped_skus->set(
-        $linked_sku['position'],
-        $linked_sku['linked_sku']
-      );
+      // Linked may contain associated, upsell, crosssell and related.
+      // We want only the associated ones for grouped.
+      if ($linked_sku['type'] == 'associated') {
+        $sku->field_grouped_skus->set(
+          $linked_sku['position'],
+          $linked_sku['linked_sku']
+        );
+      }
     }
   }
 }

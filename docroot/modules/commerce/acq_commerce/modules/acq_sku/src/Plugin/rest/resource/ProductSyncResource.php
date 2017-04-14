@@ -230,6 +230,9 @@ class ProductSyncResource extends ResourceBase {
       // Update crosssell linked SKUs.
       $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
 
+      // Update related linked SKUs.
+      $this->updateLinkedSkus('related', $sku, $product['linked']);
+
       $plugin_manager = \Drupal::service('plugin.manager.sku');
       $plugin_definition = $plugin_manager->pluginFromSKU($sku);
 

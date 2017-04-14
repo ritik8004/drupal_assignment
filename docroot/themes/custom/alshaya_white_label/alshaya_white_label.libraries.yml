@@ -1,39 +1,27 @@
 global_styles:
-  version: VERSION
-  css:
-    theme:
-      css/styles.css: {}
-  js:
-    js/accordion.js: {}
-    js/menu.js: {}
-    js/form.js: {}
-    js/address_book.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.ui.accordion
-
-rtl_styles:
-  version: VERSION
-  css:
-    theme:
-      css/rtl.css: {}
-  js:
-    js/menu.js: {}
-    js/form.js: {}
-    js/accordion.js: {}
-    js/address_book.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.ui.accordion
-
-color_styles:
-  version: VERSION
   css:
     theme:
       css/colors.css: {}
+  js:
+    js/accordion.js: {}
+    js/menu.js: {}
+    js/form.js: {}
+    js/address_book.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.accordion
+
+ltr_styles:
+  css:
+    theme:
+      css/ltr.css: {}
+
+rtl_styles:
+  css:
+    theme:
+      css/rtl.css: {}
 
 slider_banner:
-  version: VERSION
   css:
   theme:
     css/components/slider/slider-banner.css: {}
@@ -43,20 +31,10 @@ slider_banner:
     - core/jquery
     - alshaya_white_label/owlcarousel
 
-owlcarousel:
-  version: VERSION
-  js:
-    libs/owlcarousel.min.js: {}
-
-footer_accordion:
-  version: VERSION
-  js:
-    js/accordion.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.ui.accordion
-
 unmask_password:
-  version: VERSION
   js:
     js/unmask_password.js: {}
+
+owlcarousel:
+  js:
+    libs/owlcarousel.min.js: {}

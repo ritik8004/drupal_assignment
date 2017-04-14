@@ -216,7 +216,9 @@
 
   .block-alshaya-stores-finder {
     display: inline-block;
-    padding: 0.3125rem 1.438rem 0.3125rem 3rem;
+    padding: 0.3125rem 0;
+    padding-#{$right}: 0.3125rem;
+    padding-#{$left}: 1.438rem;
     position: relative;
     text-transform: lowercase;
 
@@ -368,15 +370,13 @@ header {
     .quantity {
       font-size: 10px;
       position: absolute;
-      background: url('../imgs/icons/indicator-shape.svg') no-repeat;
+      background: $pumpkin-orange;
       color: $white-five;
       text-align: center;
-      width: 20px;
-      height: 20px;
       bottom: -8px;
       #{$left}: -4px;
       border-radius: 50%;
-      padding: 5px;
+      padding: 5px 7px;
     }
   }
 }
@@ -1089,42 +1089,38 @@ header {
 
   position: fixed;
   width: 80%;
-  top: 88px;
+  top: 75px;
   background: #fff;
   height: 100%;
   z-index: 10;
+  padding: 0;
 
-  ul {
-    padding: 0;
-    margin: 0;
+  li {
+    display: block;
+    font-family: $alshaya-thin;
+    border-bottom: 1px solid #ddd;
+    padding: 0.94rem 0;
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
+    text-align: $left;
+    position: relative;
 
-    li {
-      display: block;
-      font-family: $alshaya-thin;
-      border-bottom: 1px solid #ddd;
-      padding: 0.94rem 0;
-      margin-left: 0.625rem;
-      margin-right: 0.625rem;
-      text-align: $left;
-      position: relative;
+    &:hover {
+      background: none;
 
-      &:hover {
-        background: none;
-
-        a {
-          color: $brownish-grey;
-        }
+      a {
+        color: $brownish-grey;
       }
+    }
 
-      &::after {
-        content: '';
-        background: url(../imgs/icons/ic-chevronright-copy-9.svg);
-        position: absolute;
-        #{$right}: 0;
-        width: 6px;
-        height: 10px;
-        top: 20px;
-      }
+    &::after {
+      content: '';
+      background: url(../imgs/icons/ic-chevronright-copy-9.svg);
+      position: absolute;
+      #{$right}: 0;
+      width: 6px;
+      height: 10px;
+      top: 20px;
     }
   }
 }
@@ -1167,6 +1163,14 @@ header {
 
   @media only screen and (min-device-width: 1020px) and (max-device-width: 1195px) {
     max-width: 9.5rem;
+  }
+}
+
+.site-brand-home {
+  margin: 0;
+
+  a {
+    display: block;
   }
 }
 
