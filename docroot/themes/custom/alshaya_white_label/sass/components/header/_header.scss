@@ -837,20 +837,6 @@ header {
   }
 }
 
-// Main Menu Logged In State
-
-.logged-in {
-  .menu--account {
-    li:first-child {
-      a::before {
-        background: url('../imgs/icons/register.svg');
-        width: 15px;
-        height: 15px;
-      }
-    }
-  }
-}
-
 //User Menu Account
 @include breakpoint($only-tablet) {
   .my-account-nav {

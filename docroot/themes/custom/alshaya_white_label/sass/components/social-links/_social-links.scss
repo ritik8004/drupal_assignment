@@ -28,7 +28,7 @@
   }
 
   [class^="c-social-links--"] {
-    @extend %u-image-replacement;
+    @include u-image-replacement;
 
     width: 1.5625rem;
     height: 1.5625rem;

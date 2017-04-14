@@ -52,7 +52,7 @@
 }
 
 [class^="c-footer__logo--"] {
-  @extend %u-image-replacement;
+  @include u-image-replacement;
 
   display: inline-block;
   vertical-align: middle;

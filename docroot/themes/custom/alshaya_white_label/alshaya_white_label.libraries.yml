@@ -35,6 +35,6 @@ slider_banner:
 owlcarousel:
   css:
     theme:
-      libs/css/owl.carousel.css: {}
+      vendor/css/owl.carousel.css: {}
   js:
-    libs/js/owlcarousel.min.js: {}
+    vendor/js/owlcarousel.min.js: {}
