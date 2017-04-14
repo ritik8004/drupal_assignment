@@ -12,4 +12,16 @@ function alshaya_acm_product_install() {
   // Add fields to store the values from attributes as fields.
   $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
+
+  // Make meta tags visible in form of acq_product.
+  $product_config_factory = Drupal::configFactory()->getEditable('core.entity_form_display.node.acq_product.default');
+  $content = $product_config_factory->get('content');
+  $content['field_meta_tags'] = [
+    'weight' => 110,
+    'settings' => [],
+    'third_party_settings' => [],
+    'type' => metatag_firehose,
+  ];
+  $product_config_factory->set('content', $content);
+  $product_config_factory->save();
 }

@@ -1,0 +1,11 @@
+name: 'Alshaya SEO'
+description: 'Code around custom SEO requirements of Alshaya.'
+type: module
+core: 8.x
+package: 'Alshaya'
+dependencies:
+  - alshaya_i18n
+  - metatag_open_graph
+  - node
+  - token
+version: 8.x-1.0

@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\alshaya_i18n\AlshayaI18nLanguages;
+use Drupal\Core\Render\BubbleableMetadata;
+
+/**
+ * Implements hook_token_info().
+ */
+function alshaya_seo_token_info() {
+  $info = [];
+
+  // Token to return locale for the currently visited page.
+  $info['tokens']['site']['locale'] = [
+    'name' => 'locale',
+    'description' => t('Locale (en_US) for the currently visited page.'),
+  ];
+
+  $info['tokens']['node']['locale:alternate'] = [
+    'name' => 'locale:alternate',
+    'description' => t('Alternate locale available for the node.'),
+  ];
+
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function alshaya_seo_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+
+  if ($type == 'site') {
+    if (isset($tokens['locale'])) {
+      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $replacements[$tokens['locale']] = AlshayaI18nLanguages::getLocale($langcode);
+    }
+  }
+
+  if ($type == 'node' && !empty($data['node'])) {
+    if (isset($tokens['locale:alternate'])) {
+      /** @var \Drupal\node\NodeInterface $node */
+      $node = $data['node'];
+
+      // Get all translations in which the node is available.
+      $translations = $node->getTranslationLanguages();
+
+      if (!empty($translations)) {
+        $alternates = [];
+
+        foreach ($translations as $langcode => $language) {
+          $alternates[] = AlshayaI18nLanguages::getLocale($langcode);
+        }
+
+        $replacements[$tokens['locale:alternate']] = implode(',', $alternates);
+      }
+    }
+  }
+
+  return $replacements;
+}
