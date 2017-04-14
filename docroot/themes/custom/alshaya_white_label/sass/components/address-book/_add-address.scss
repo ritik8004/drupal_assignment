@@ -5,6 +5,10 @@
     padding-bottom: 8px;
   }
 
+  .block-local-tasks-block {
+    display: none;
+  }
+
   .profile-form {
     @extend .contact-form;
 
