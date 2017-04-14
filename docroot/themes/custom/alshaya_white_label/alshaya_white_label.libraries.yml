@@ -21,20 +21,20 @@ rtl_styles:
     theme:
       css/rtl.css: {}
 
+unmask_password:
+  js:
+    js/unmask_password.js: {}
+
 slider_banner:
-  css:
-  theme:
-    css/components/slider/slider-banner.css: {}
   js:
     js/slider.js: {}
   dependencies:
     - core/jquery
     - alshaya_white_label/owlcarousel
 
-unmask_password:
-  js:
-    js/unmask_password.js: {}
-
 owlcarousel:
+  css:
+    theme:
+      libs/css/owl.carousel.css: {}
   js:
-    libs/owlcarousel.min.js: {}
+    libs/js/owlcarousel.min.js: {}
