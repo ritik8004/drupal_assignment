@@ -36,7 +36,7 @@
       var myDialog = Drupal.dialog(element, dialogsettings);
 
       // Open Gallery modal when we click on the zoom image.
-      $('.cloud-zoom-container .mousetrap').click(function () {
+      $('.cloud-zoom-container #wrap').on('click', function () {
         myDialog.show();
         myDialog.showModal();
       });
@@ -88,6 +88,7 @@
           if($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
             var href = $(this).attr('data-iframe');
             $('#full-image-wrapper img').hide();
+            $('#full-image-wrapper iframe').remove();
             $('#full-image-wrapper').append('<iframe id="player" width="480" height="480" src="'
               + href + '" frameborder="0" allowfullscreen></iframe>');
           }

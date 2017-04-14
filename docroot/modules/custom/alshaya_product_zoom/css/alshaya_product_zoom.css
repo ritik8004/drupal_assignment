@@ -20,3 +20,10 @@
   border: 1px solid #fefefe;
   margin: -1px !important;
 }
+.ui-dialog {
+  z-index: 999;
+  background: indianred;
+}
+.ui-dialog-title {
+  display: none;
+}
