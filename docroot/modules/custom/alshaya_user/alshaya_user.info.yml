@@ -4,7 +4,6 @@ core: 8.x
 description: 'Stores user field and related settings.'
 dependencies:
   - alshaya_acm_customer
-  - alshaya_loyalty
   - alshaya_password_policy
   - block
   - block_content

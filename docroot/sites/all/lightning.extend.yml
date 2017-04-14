@@ -29,6 +29,7 @@ modules:
   - alshaya_default_content
   - alshaya_department_page
   - alshaya_i18n
+  - alshaya_loyalty
   - alshaya_main_menu
   - alshaya_master
   - alshaya_menus

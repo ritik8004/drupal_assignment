@@ -1,0 +1,6 @@
+alshaya_loyalty.loyalty_settings_form:
+  title: 'Loyalty settings'
+  parent: alshaya_user.user_settings_form
+  description: 'Administer the validation criteria for privilege card number.'
+  route_name: alshaya_loyalty.loyalty_settings_form
+  weight: 1

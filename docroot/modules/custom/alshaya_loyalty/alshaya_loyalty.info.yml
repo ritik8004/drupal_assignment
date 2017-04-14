@@ -3,6 +3,7 @@ type: module
 core: 8.x
 description: 'Adds privilege card number fields, settings and validations.'
 dependencies:
+  - alshaya_user
   - field
   - system
   - user

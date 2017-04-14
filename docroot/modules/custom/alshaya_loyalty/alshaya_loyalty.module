@@ -9,12 +9,43 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_alter().
  */
-function alshaya_loyalty_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['field_privilege_card_number']['#element_validate'] = [
-    '_alshaya_loyalty_validate_field_value',
-  ];
+function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $add_privilege_fields = FALSE;
+
+  switch ($form_id) {
+    // Add privilege card number fields to cart form.
+    case 'customer_cart_form':
+      $add_privilege_fields = TRUE;
+
+      // Save the value of privilege card to field_privilege_card.
+      array_unshift($form['#submit'], 'alshaya_loyalty_save_privilege_card_number');
+      break;
+
+    // Add privilege card number fields to Register form.
+    case 'user_register_form':
+      if (\Drupal::currentUser()->isAnonymous()) {
+        $form['field_privilege_card_number']['#access'] = FALSE;
+        $add_privilege_fields = TRUE;
+
+        // Save the value of privilege card to field_privilege_card.
+        array_unshift($form['actions']['submit']['#submit'], 'alshaya_loyalty_register_user_set_privilege_card_number');
+      }
+      break;
+
+    case 'user_form':
+      // Validate privilege card number.
+      $form['field_privilege_card_number']['#element_validate'] = [
+        '_alshaya_loyalty_validate_field_value',
+      ];
+      break;
+  }
+
+  if ($add_privilege_fields) {
+    // Add privilege card number fields.
+    alshaya_loyalty_add_privilege_card_fields($form, $form_state);
+  }
 }
 
 /**
@@ -45,6 +76,26 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
     if (!alshaya_loyalty_check_valid_apc_number($element_value, $max_length, $value_start_with)) {
       $form_state->setError($element, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
     }
+  }
+}
+
+/**
+ * Set privilege card number value for register form.
+ */
+function alshaya_loyalty_register_user_set_privilege_card_number(array &$form, FormStateInterface $form_state) {
+  if (\Drupal::currentUser()->isAnonymous() && $apc_number = $form_state->getValue('privilege_card_number')) {
+    $form_state->setValue('field_privilege_card_number', [['value' => $apc_number]]);
+  }
+}
+
+/**
+ * Save privilege card number for current user.
+ */
+function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInterface $form_state) {
+  if (\Drupal::currentUser()->isAuthenticated() && $apc_number = $form_state->getValue('privilege_card_number')) {
+    $user = User::load(\Drupal::currentUser()->id());
+    $user->get('field_privilege_card_number')->set(0, $apc_number);
+    $user->save();
   }
 }
 
@@ -124,52 +175,5 @@ function _alshaya_loyalty_compare_field_values(&$element, FormStateInterface $fo
 
   if (!empty($card1) && ($card1 != $card2)) {
     $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
-  }
-}
-
-/**
- * Implements hook_form_alter().
- */
-function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $add_privilege_fields = FALSE;
-
-  if ($form_id == 'customer_cart_form') {
-    $add_privilege_fields = TRUE;
-
-    // Save the value of privilege card to field_privilege_card.
-    array_unshift($form['#submit'], 'alshaya_loyalty_save_privilege_card_number');
-  }
-
-  if ($form_id == 'user_register_form' && \Drupal::currentUser()->isAnonymous()) {
-    $form['field_privilege_card_number']['#access'] = FALSE;
-    $add_privilege_fields = TRUE;
-
-    // Save the value of privilege card to field_privilege_card.
-    array_unshift($form['actions']['submit']['#submit'], 'alshaya_loyalty_register_user_set_privilege_card_number');
-  }
-
-  if ($add_privilege_fields) {
-    // Add privilege card number fields.
-    alshaya_loyalty_add_privilege_card_fields($form, $form_state);
-  }
-}
-
-/**
- * Set privilege card number value for register form.
- */
-function alshaya_loyalty_register_user_set_privilege_card_number(array &$form, FormStateInterface $form_state) {
-  if (\Drupal::currentUser()->isAnonymous() && $apc_number = $form_state->getValue('privilege_card_number')) {
-    $form_state->setValue('field_privilege_card_number', [['value' => $apc_number]]);
-  }
-}
-
-/**
- * Save privilege card number for current user.
- */
-function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInterface $form_state) {
-  if (\Drupal::currentUser()->isAuthenticated() && $apc_number = $form_state->getValue('privilege_card_number')) {
-    $user = User::load(\Drupal::currentUser()->id());
-    $user->get('field_privilege_card_number')->set(0, $apc_number);
-    $user->save();
   }
 }
