@@ -49,15 +49,6 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
-  $content['field_privilege_card_number'] = [
-    'weight' => 3,
-    'type' => 'string_textfield',
-    'settings' => [
-      'size' => 60,
-      'placeholder' => '',
-    ],
-    'third_party_settings' => [],
-  ];
   $content['field_terms_and_condition'] = [
     'weight' => 4,
     'type' => 'boolean_checkbox',

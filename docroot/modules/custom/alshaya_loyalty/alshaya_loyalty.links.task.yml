@@ -1,0 +1,4 @@
+alshaya_loyalty.loyalty_settings_form_tab:
+  route_name: alshaya_loyalty.loyalty_settings_form
+  title: Loyalty Settings
+  base_route: alshaya_user.user_settings_form
