@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: order_date
+label: 'Order Date'
+locked: false
+pattern: 'd M. Y @ H:i'

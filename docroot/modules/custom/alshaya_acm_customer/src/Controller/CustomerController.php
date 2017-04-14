@@ -7,6 +7,7 @@ use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\user\UserInterface;
 use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Customer controller to add/override pages for customer.
@@ -94,11 +95,11 @@ class CustomerController extends ControllerBase {
       }
 
       // Loop through each order and prepare the array for template.
-      foreach ($ordersPaged as $orderId => $order) {
+      foreach ($ordersPaged as $order) {
         $orderDetails[] = [
           '#theme' => 'user_order_list_item',
-          '#order' => alshaya_acm_customer_get_processed_order_summary($orderId, $order),
-          '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $user->id(), 'order_id' => $orderId])->toString(),
+          '#order' => alshaya_acm_customer_get_processed_order_summary($order),
+          '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $user->id(), 'order_id' => $order['increment_id']])->toString(),
           '#currency_code' => $currencyCode,
           '#currency_code_position' => $currencyCodePosition,
         ];
@@ -113,7 +114,7 @@ class CustomerController extends ControllerBase {
       '#account' => $account,
       '#next_page_button' => $nextPageButton,
       '#attached' => [
-        'library' => ['alshaya_acm_customer/orders-list-infinite-scroll'],
+        'library' => ['alshaya_acm_customer/orders-list'],
       ],
       // @TODO: We may want to set it to cache time limit of API call.
       '#cache' => ['max-age' => 0],
@@ -160,11 +161,13 @@ class CustomerController extends ControllerBase {
     // Get the orders to display for current user and filter applied.
     $orders = alshaya_acm_customer_get_user_orders($user);
 
-    $order = $orders[$order_id];
+    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
 
-    if (empty($order)) {
+    if ($order_index === FALSE) {
       throw new NotFoundHttpException();
     }
+
+    $order = $orders[$order_index];
 
     $products = [];
     foreach ($order['items'] as $item) {
@@ -210,8 +213,8 @@ class CustomerController extends ControllerBase {
     $account['last_name'] = $user->get('field_last_name')->getString();
 
     $build = [];
-    $build['#barcode'] = $this->getBarcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
-    $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order_id, $order);
+
+    $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
     $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
     $build['#products'] = $products;
     // @TODO: MMCPA-641.
@@ -239,6 +242,7 @@ class CustomerController extends ControllerBase {
   public function orderPrint(UserInterface $user, $order_id) {
     // Get order details and add more information for print.
     $build = $this->orderDetail($user, $order_id);
+    $build['#barcode'] = $this->getBarcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
     $build['#account']['mail'] = $user->get('mail')->getString();
     $build['#account']['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
     $build['#account']['#site_logo'] = [
