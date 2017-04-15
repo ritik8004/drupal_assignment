@@ -20,7 +20,7 @@ function alshaya_acm_product_install() {
     'weight' => 110,
     'settings' => [],
     'third_party_settings' => [],
-    'type' => metatag_firehose,
+    'type' => 'metatag_firehose',
   ];
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
