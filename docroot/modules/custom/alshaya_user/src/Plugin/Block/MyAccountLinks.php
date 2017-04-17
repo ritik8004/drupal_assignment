@@ -167,6 +167,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $this->currentUser->id()]);
+  }
+
+  /**
    * Get the dynamic value as title for the block.
    *
    * @return string
