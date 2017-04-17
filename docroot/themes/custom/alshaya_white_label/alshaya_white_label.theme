@@ -134,11 +134,19 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     $variables['set_default_operation'] = '';
     $current_user = \Drupal::currentUser();
 
+    // Current language.
+    $current_language = \Drupal::languageManager()->getCurrentLanguage();
+
     // Edit operation.
     if ($profile->access('update') && $profile->hasLinkTemplate('edit-form')) {
       $variables['edit_operation'] = [
         'title' => t('Edit'),
-        'url' => $profile->urlInfo('edit-form', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+        'url' => $profile->urlInfo('edit-form', [
+          'query' => [
+            'destination' => $current_language->getId() . '/user/' . $current_user->id() . '/address_book',
+          ],
+          'language' => $current_language,
+        ]),
       ];
     }
 
@@ -152,6 +160,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
             'data-dialog-type' => 'modal',
             'data-dialog-options' => Json::encode(['width' => '341']),
           ],
+          'language' => $current_language,
         ]),
       ];
     }
@@ -160,7 +169,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     if (!$profile->isDefault()) {
       $variables['set_default_operation'] = [
         'title' => t('Primary address'),
-        'url' => $profile->toUrl('set-default', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+        'url' => $profile->toUrl('set-default', ['query' => ['destination' => $current_language->getId() . '/user/' . $current_user->id() . '/address_book']]),
         'parameter' => $profile,
       ];
     }
