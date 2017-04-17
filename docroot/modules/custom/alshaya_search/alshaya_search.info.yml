@@ -1,23 +1,18 @@
-name: 'Alshaya product'
+name: 'Alshaya Search'
+description: 'Contains search config for Alshaya'
 type: module
 core: 8.x
 dependencies:
   - acq_sku
-  - alshaya_image_styles
-  - alshaya_search
-  - better_exposed_filters
+  - alshaya_product
   - block
-  - facets
-  - file
   - image
   - lightning_core
   - node
-  - responsive_image
   - search_api
+  - search_api_solr
   - system
-  - taxonomy
   - user
   - views
-  - views_infinite_scroll
 version: 8.x-1.0
 package: Alshaya

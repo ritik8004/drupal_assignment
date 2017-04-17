@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya Search.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_search_install() {
+  \Drupal::configFactory()->getEditable('views.view.search')
+    ->set('base_table', 'search_api_index_product')
+    ->set('dependencies', [
+      'config' => [
+        'search_api.index.product',
+      ],
+      'module' => [
+        'search_api',
+      ],
+    ])->save();
+}
