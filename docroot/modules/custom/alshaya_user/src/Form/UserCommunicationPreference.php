@@ -112,7 +112,7 @@ class UserCommunicationPreference extends FormBase {
     ];
 
     $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = ['#type' => 'submit', '#value' => $this->t('Submit')];
+    $form['actions']['submit'] = ['#type' => 'submit', '#value' => $this->t('Save')];
 
     return $form;
   }
