@@ -1,0 +1,141 @@
+.c-order-list {
+  .c-page-title {
+    border-bottom: 1px solid $white;
+    padding-bottom: 8px;
+  }
+
+  .block-local-tasks-block {
+    display: none;
+  }
+
+  .order-search-form {
+    border-bottom: 1px solid $whisper-dark;
+    margin-top: 12px;
+    padding-bottom: 12px;
+
+    @include breakpoint($tablet) {
+      border: 0;
+      margin-top: 0;
+      padding-bottom: 0;
+      position: relative;
+      top: -3.5rem;
+    }
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  text-align: $right;
+  font-size: 12px;
+
+  .form-actions,
+  .form-item {
+    display: inline-block;
+  }
+
+  .form-item {
+    input,
+    select {
+      float: $right;
+      outline: none;
+    }
+
+    label {
+      color: $black-two;
+      float: $left;
+      line-height: 35px;
+      position: absolute;
+      top: -30px;
+
+      @include breakpoint($desktop) {
+        position: static;
+      }
+    }
+  }
+
+  .form-type-select {
+    position: relative;
+
+    @include icon(chevrondown, after) {
+      border-#{$left}: 1px solid $white;
+      font-size: 28px;
+      line-height: 35px;
+      padding-#{$right}: 3px;
+      pointer-events: none;
+      position: absolute;
+      #{$right}: 0;
+      width: 35px;
+    }
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 23px;
+    }
+  }
+
+  .form-select {
+    border: 1px solid $whisper-dark;
+    background-color: $whisper-dark;
+    border-radius: 0;
+    padding: 10px 30px 9px 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    min-width: 135px;
+
+    @include breakpoint($tablet) {
+      min-width: 150px;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 12px;
+    }
+  }
+
+  .form-text {
+    border: 1px solid $whisper-dark;
+    padding: 10px 8px 9px 16px;
+    width: 125px;
+
+    @include breakpoint($tablet) {
+      width: 153px;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 28px;
+    }
+  }
+
+  .form-actions {
+    position: relative;
+
+    @include icon(search, after) {
+      font-size: 22px;
+      pointer-events: none;
+      position: absolute;
+      #{$right}: 10px;
+      width: 35px;
+      line-height: 35px;
+    }
+  }
+
+  .form-submit {
+    background-color: $whisper-dark;
+    background-size: 16px;
+    border: 1px solid $whisper-dark;
+    font-size: 0;
+    height: 35px;
+    width: 35px;
+    position: relative;
+    float: left;
+    #{$left}: -5px;
+  }
+}
+
+.orders-list-pager-wrapper {
+  margin-bottom: 24px;
+  padding-top: 8px;
+  text-align: center;
+
+  button {
+    @extend %button-brand;
+  }
+}

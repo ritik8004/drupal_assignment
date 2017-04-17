@@ -1,0 +1,89 @@
+.c-content__slider {
+  text-align: center;
+}
+
+.c-slider-promo__items {
+  position: relative;
+}
+
+.c-slider-promo {
+  position: relative;
+
+  a {
+    @include u-overlay-content;
+    @include u-image-replacement;
+  }
+}
+
+.owl-prev,
+.owl-next {
+  @include breakpoint($tablet) {
+    top: calc(50% - 1.125rem); // 50% - (2.25rem / 2)
+  }
+
+  @include breakpoint($only-mobile) {
+    top: calc(50% - (4.375rem - 1.125rem)); // 50% - (4.375rem - (2.25rem / 2))
+  }
+
+  @include u-image-replacement;
+
+  cursor: pointer;
+  position: absolute;
+
+  &::before {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 100%;
+    height: 2.25rem;
+    line-height: 2.25rem;
+    width: 2.25rem;
+    color: #000;
+    font-size: 2rem;
+    display: block;
+  }
+}
+
+.owl-prev {
+  @include breakpoint($tablet) {
+    left: 1.65rem;
+  }
+
+  @include icon(chevronleft);
+
+  left: 0.5rem;
+}
+
+.owl-next {
+  @include breakpoint($tablet) {
+    right: 1.65rem;
+  }
+
+  @include icon(chevronright);
+
+  right: 0.5rem;
+}
+
+.owl-dots {
+  @include breakpoint($tablet) {
+    @include u-center--horizontally;
+
+    bottom: 0;
+  }
+}
+
+.owl-dot {
+  @include breakpoint($tablet) {
+    color: $white-five;
+  }
+
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 100%;
+  color: $marine-blue-two;
+  border: 1px solid currentColor;
+  display: inline-block;
+  margin: 1.75rem 0.75rem;
+
+  &.active {
+    background: currentColor;
+  }
+}

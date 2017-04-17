@@ -12,8 +12,8 @@
   }
 
   .field--type-link a {
-    @extend %u-image-replacement;
-    @extend %u-overlay-content;
+    @include u-image-replacement;
+    @include u-overlay-content;
   }
 }
 

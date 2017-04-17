@@ -3,14 +3,16 @@
   margin-right: 0.5rem;
 
   &:last-child {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $white;
   }
 }
 
 .c-accordion__title {
+  @include icon(chevrondown, after);
+
   position: relative;
-  border-top: 1px solid #ddd;
-  color: #666;
+  border-top: 1px solid $white;
+  color: $grey-ash;
   font-size: 0.875rem;
   font-weight: normal;
   height: 2.9375rem;
@@ -20,22 +22,15 @@
   text-transform: lowercase;
 
   &::after {
-    @extend %icon-chevron-up;
+    @include u-center--vertically;
 
-    content: '';
-    width: 0.9375rem;
-    height: 0.5rem;
+    font-size: 2rem;
     #{$right}: 1rem;
-    top: calc(50% - 0.25rem);
-    background-repeat: no-repeat;
-    position: absolute;
   }
 
   &.ui-state-active {
-    border-bottom: 1px solid #ddd;
-  }
+    @include icon(chevronup, after);
 
-  &.ui-state-active::after {
-    transform: rotate(0deg);
+    border-bottom: 1px solid $white;
   }
 }

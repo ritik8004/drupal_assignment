@@ -2,15 +2,18 @@ input[type=checkbox] {
   display: none;
 }
 
-input[type=checkbox] ~ label::before {
-  @extend %icon-checkbox--inactive;
+input[type=checkbox] ~ label {
+  @include icon(checkboxempty);
 
-  content: '';
-  display: inline-block;
-  width: 0.75rem;
-  height: 0.75rem;
+  &::before {
+    font-size: 1rem;
+  }
 }
 
-input[type=checkbox]:checked ~ label::before {
-  @extend %icon-checkbox--active;
+input[type=checkbox]:checked ~ label {
+  @include icon(checkboxfull);
+
+  &::before {
+    color: $windows-blue;
+  }
 }

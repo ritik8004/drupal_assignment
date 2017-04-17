@@ -37,16 +37,85 @@
 
 // Font Family
 $alshaya-bold: 'alshaya-bold';
+$alshaya-bold-nodir: 'alshaya-bold';
+
 $alshaya-thin: 'alshaya-thin';
-$alshaya-arabic-bold: '$alshaya-arabic-bold';
-$alshaya-arabic-thin: '$alshaya-arabic-thin';
+$alshaya-thin-nodir: 'alshaya-thin';
+
+$alshaya-arabic-bold: 'alshaya-arabic-bold';
+$alshaya-arabic-bold-nodir: 'alshaya-arabic-bold';
+
+$alshaya-arabic-thin: 'alshaya-arabic-thin';
+$alshaya-arabic-thin-nodir: 'alshaya-thin';
+
 $alshaya-icons: 'alshaya-icons';
 $arial: 'arialmt', arial, sans-serif;
 $body_font: $arial;
 
 // Icon Fonts
-[class^="icon-"],
-[class*=" icon-"] {
+$icons: (
+  arrowdown: "\e900",
+  arrowup: "\e901",
+  blog: "\e902",
+  blogselect: "\e903",
+  checkboxempty: "\e904",
+  checkboxfull: "\e905",
+  checkshape: "\e906",
+  chevrondown: "\e907",
+  chevronleft: "\e908",
+  chevronright: "\e909",
+  chevronup: "\e90a",
+  close: "\e90b",
+  closeshape: "\e90c",
+  delivery: "\e90d",
+  deliveryservice: "\e90e",
+  direction: "\e90f",
+  email: "\e910",
+  emailselect: "\e911",
+  facebook: "\e912",
+  facebookselect: "\e913",
+  googleplus: "\e914",
+  googleplusselect: "\e915",
+  hide: "\e916",
+  infomation: "\e917",
+  instagram: "\e918",
+  instagramselect: "\e919",
+  language: "\e91a",
+  list: "\e91b",
+  login: "\e91c",
+  logout: "\e91d",
+  map: "\e91e",
+  mappin: "\e91f",
+  menu: "\e920",
+  mylocation: "\e921",
+  newsletter: "\e922",
+  nextdaydelivery: "\e923",
+  pinterest: "\e924",
+  pinterestselect: "\e925",
+  play: "\e926",
+  prize: "\e927",
+  radioempty: "\e928",
+  radiofull: "\e929",
+  rating: "\e92a",
+  ratingfull: "\e92b",
+  rewards: "\e92c",
+  search: "\e92d",
+  shoppingbag: "\e92e",
+  show: "\e92f",
+  twitter: "\e930",
+  twitterselect: "\e931",
+  user: "\e932",
+  whiteglovedelivery: "\e933",
+  wishlist: "\e934",
+  wishlistfull: "\e935",
+  youtube: "\e936",
+  youtubeselect: "\e937",
+  zoom: "\e938",
+  bell: "\e006",
+  marquee-plus: "\e083"
+);
+
+@mixin iconbase() {
   font-family: $alshaya-icons !important;
   speak: none;
   font-style: normal;
@@ -58,238 +127,36 @@ $body_font: $arial;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-ic_arrowdown::before {
-  content: "\e900";
+@mixin icon($icon: false, $position: before, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: "#{map-get($icons, $icon)}";
+    }
+
+    @if $styles {
+      @include iconbase;
+    }
+
+    @content;
+  }
 }
 
-.icon-ic_arrowup::before {
-  content: "\e901";
+[class^="icon-"],
+[class*=" icon-"] {
+  &::before {
+    @include iconbase;
+  }
 }
 
-.icon-ic_blog::before {
-  content: "\e902";
-}
-
-.icon-ic_blogselect::before {
-  content: "\e903";
-}
-
-.icon-ic_checkboxempty::before {
-  content: "\e904";
-}
-
-.icon-ic_checkboxfull::before {
-  content: "\e905";
-}
-
-.icon-ic_checkshape::before {
-  content: "\e906";
-}
-
-.icon-ic_chevrondown::before {
-  content: "\e907";
-}
-
-.icon-ic_chevronleft::before {
-  content: "\e908";
-}
-
-.icon-ic_chevronright::before {
-  content: "\e909";
-}
-
-.icon-ic_chevronup::before {
-  content: "\e90a";
-}
-
-.icon-ic_close::before {
-  content: "\e90b";
-}
-
-.icon-ic_closeshape::before {
-  content: "\e90c";
-}
-
-.icon-ic_delivery::before {
-  content: "\e90d";
-}
-
-.icon-ic_deliveryservice::before {
-  content: "\e90e";
-}
-
-.icon-ic_direction::before {
-  content: "\e90f";
-}
-
-.icon-ic_email::before {
-  content: "\e910";
-}
-
-.icon-ic_emailselect::before {
-  content: "\e911";
-}
-
-.icon-ic_facebook::before {
-  content: "\e912";
-}
-
-.icon-ic_facebookselect::before {
-  content: "\e913";
-}
-
-.icon-ic_googleplus::before {
-  content: "\e914";
-}
-
-.icon-ic_googleplusselect::before {
-  content: "\e915";
-}
-
-.icon-ic_hide::before {
-  content: "\e916";
-}
-
-.icon-ic_infomation::before {
-  content: "\e917";
-}
-
-.icon-ic_instagram::before {
-  content: "\e918";
-}
-
-.icon-ic_instagramselect::before {
-  content: "\e919";
-}
-
-.icon-ic_language::before {
-  content: "\e91a";
-}
-
-.icon-ic_list::before {
-  content: "\e91b";
-}
-
-.icon-ic_login::before {
-  content: "\e91c";
-}
-
-.icon-ic_logout::before {
-  content: "\e91d";
-}
-
-.icon-ic_map::before {
-  content: "\e91e";
-}
-
-.icon-ic_mappin::before {
-  content: "\e91f";
-}
-
-.icon-ic_menu::before {
-  content: "\e920";
-}
-
-.icon-ic_mylocation::before {
-  content: "\e921";
-}
-
-.icon-ic_newsletter::before {
-  content: "\e922";
-}
-
-.icon-ic_nextdaydelivery::before {
-  content: "\e923";
-}
-
-.icon-ic_pinterest::before {
-  content: "\e924";
-}
-
-.icon-ic_pinterestselect::before {
-  content: "\e925";
-}
-
-.icon-ic_play::before {
-  content: "\e926";
-}
-
-.icon-ic_prize::before {
-  content: "\e927";
-}
-
-.icon-ic_radioempty::before {
-  content: "\e928";
-}
-
-.icon-ic_radiofull::before {
-  content: "\e929";
-}
-
-.icon-ic_rating::before {
-  content: "\e92a";
-}
-
-.icon-ic_ratingfull::before {
-  content: "\e92b";
-}
-
-.icon-ic_rewards::before {
-  content: "\e92c";
-}
-
-.icon-ic_search::before {
-  content: "\e92d";
-}
-
-.icon-ic_shoppingbag::before {
-  content: "\e92e";
-}
-
-.icon-ic_show::before {
-  content: "\e92f";
-}
-
-.icon-ic_twitter::before {
-  content: "\e930";
-}
-
-.icon-ic_twitterselect::before {
-  content: "\e931";
-}
-
-.icon-ic_user::before {
-  content: "\e932";
-}
-
-.icon-ic_whiteglovedelivery::before {
-  content: "\e933";
-}
-
-.icon-ic_wishlist::before {
-  content: "\e934";
-}
-
-.icon-ic_wishlistfull::before {
-  content: "\e935";
-}
-
-.icon-ic_youtube::before {
-  content: "\e936";
-}
-
-.icon-ic_youtubeselect::before {
-  content: "\e937";
-}
-
-.icon-ic_zoom::before {
-  content: "\e938";
-}
-
-.icon-bell::before {
-  content: "\e006";
-}
-
-.icon-marquee-plus::before {
-  content: "\e083";
+@each $icon, $unicode in $icons {
+  %icon-ic_#{$icon},
+  .icon-ic_#{$icon} {
+    &::before {
+      content: $unicode;
+    }
+  }
 }

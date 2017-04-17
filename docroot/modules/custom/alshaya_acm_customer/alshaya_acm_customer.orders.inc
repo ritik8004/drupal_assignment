@@ -48,9 +48,9 @@ function alshaya_acm_customer_get_user_orders(UserInterface $user, $search_key =
 
   // Search by Order ID, SKU, Name.
   if ($search_key && $search = \Drupal::request()->query->get($search_key)) {
-    $orders = array_filter($orders, function ($order, $orderId) use ($search) {
+    $orders = array_filter($orders, function ($order) use ($search) {
       // Search by Order ID.
-      if (stripos($orderId, $search) > -1) {
+      if (stripos($order['increment_id'], $search) > -1) {
         return TRUE;
       }
 
@@ -66,7 +66,7 @@ function alshaya_acm_customer_get_user_orders(UserInterface $user, $search_key =
       }
 
       return FALSE;
-    }, ARRAY_FILTER_USE_BOTH);
+    });
   }
 
   // Filter order by status.
@@ -177,21 +177,17 @@ function alshaya_acm_customer_get_order_total_quantity(array $order) {
 /**
  * Helper function to prepare order summary to pass to template.
  *
- * @param mixed $orderId
- *   Order id.
  * @param array $order
  *   Order array from API.
  *
  * @return array
  *   Processed order summary array.
  */
-function alshaya_acm_customer_get_processed_order_summary($orderId, array $order) {
+function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $orderRow = [];
 
-  // @TODO: MMCPA-612.
-  $orderRow['orderId'] = $orderId;
-  // @TODO: MMCPA-612.
-  $orderRow['orderDate'] = '30 Nov. 2016 @ 20h55';
+  $orderRow['orderId'] = $order['increment_id'];
+  $orderRow['orderDate'] = \Drupal::service('date.formatter')->format(strtotime($order['created_at']), 'order_date');
 
   // We will display the name of first order item.
   $item = reset($order['items']);
@@ -223,8 +219,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
 
-  // @TODO: MMCPA-641.
-  $orderDetails['contact_no'] = '+965 12 34 5679';
+  $orderDetails['contact_no'] = $order['shipping']['address']['phone'];
 
   $address_formatter = new ACQAddressFormatter();
   $orderDetails['delivery_address'] = $address_formatter->render((object) $order['shipping']['address']);
