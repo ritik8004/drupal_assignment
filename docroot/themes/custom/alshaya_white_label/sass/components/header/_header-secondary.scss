@@ -34,6 +34,7 @@
         top: calc(50% - 0.5rem);
         font-size: 1.125rem;
         cursor: pointer;
+        pointer-events: none;
       }
 
       border-bottom: 1px solid #ddd;
