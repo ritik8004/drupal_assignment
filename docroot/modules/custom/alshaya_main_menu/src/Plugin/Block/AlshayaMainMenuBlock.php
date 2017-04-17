@@ -176,6 +176,15 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
         // For cache tag bubbling up.
         $this->cacheTags[] = 'taxonomy_term:' . $term->id();
 
+        // Get value of boolean field which will decide if we show/hide this
+        // term and child terms in the menu.
+        $includeMenu = $term->get('field_category_include_menu')->getValue();
+
+        // Hide the menu if there is a value in the field and it is FALSE.
+        if (!empty($includeMenu) && !($includeMenu[0]['value'])) {
+          continue;
+        }
+
         $data[$term->id()] = [
           'label' => $term->label(),
           'description' => $term->getDescription(),
