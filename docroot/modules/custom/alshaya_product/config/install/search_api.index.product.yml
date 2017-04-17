@@ -16,6 +16,16 @@ name: Product
 description: ''
 read_only: false
 field_settings:
+  content:
+    label: 'Rendered HTML output'
+    property_path: rendered_item
+    type: text
+    configuration:
+      roles:
+        anonymous: anonymous
+      view_mode:
+        'entity:node':
+          acq_product: default
   status:
     label: 'Publishing status'
     datasource_id: 'entity:node'
