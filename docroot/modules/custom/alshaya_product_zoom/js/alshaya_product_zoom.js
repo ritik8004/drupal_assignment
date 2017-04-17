@@ -1,50 +1,53 @@
 (function ($) {
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
-      // Inlialize Product Zoom using CloudZoom library.
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Initialize Product Zoom using CloudZoom library.
+      // Initialize lightSliders.
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       items = $('.cloud-zoom:not(cloud-zoom-processed), .cloud-zoom-gallery:not(cloud-zoom-processed)', context);
       if (items.length) {
         items.addClass('cloud-zoom-processed').CloudZoom();
         items.parent().css('float', 'left');
       }
-
-      // Initialize lightSliders.
       // Slider 1 - For Desktop - Image zoom.
       $("#lightSlider").lightSlider({
         vertical: true,
-        // Number of items to show at one time.
         item: 5,
-        // The vertical container height, adjust this as per theme requirements.
         verticalHeight: 500,
       });
-
       // Slider - 2 For Desktop - Image Gallery.
       $("#product-image-gallery").lightSlider({
         vertical: true,
         item: 5,
         verticalHeight: 500,
       });
-
       // Slider - 3 For Mobile - Image Gallery.
       $("#product-image-gallery-mobile").lightSlider({
         item: 1,
+        onAfterSlide: function (el) {
+          el.children('iframe').remove();
+        },
       });
-
       // Show mobile slider only on mobile resolution.
       toggleProductImageGallery();
       $(window).on("resize", function (e) {
         toggleProductImageGallery();
       });
 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Modal view on image click in desktop and tablet.
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Modal view for Slider-2 when clicking on big image - Image Gallery.
       var element = document.getElementById('product-image-gallery-container');
       var dialogsettings = {
         autoOpen: true,
+        // Change dimensions of modal window as per theme needs.
         width: 1024,
         height: 768,
         dialogClass: 'dialog-product-image-gallery-container',
         open: function () {
-          // ZoomIn ZoomOut in Gallery view.
+          // ZoomIn ZoomOut in Gallery view with a draggable container.
           // Make sure it always starts @ zero position for below calcs to work.
           if ($("#full-image-wrapper").length > 0) {
             $("#full-image").css({top: 0, left: 0});
@@ -90,8 +93,7 @@
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
                 $('#full-image-wrapper iframe').remove();
-                $('#full-image-wrapper').append('<iframe id="player" width="480" height="480" src="'
-                  + href + '" frameborder="0" allowfullscreen></iframe>');
+                appendVideoIframe($('#full-image-wrapper'), href, 480, 480);
               }
               else{
                 var bigImage = $(this).children('a').attr('href');
@@ -106,22 +108,23 @@
           }
         }
       };
-      var myDialog = Drupal.dialog(element, dialogsettings);
-
       // Open Gallery modal when we click on the zoom image.
+      var myDialog = Drupal.dialog(element, dialogsettings);
       $('.cloud-zoom-container #wrap').on('click', function () {
         myDialog.show();
         myDialog.showModal();
       });
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Handling videos inside sliders.
+      // Swapping the conatiners or Inserting video iframes inside containers on click of video thumbnails.
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      // Fetch Vimeo thumbnail.
+      // Fetch Vimeo thumbnail via a GET call. Vimeo doesnot give thumbnails via URL like YT.
       $('#lightSlider li.video-product-zoom.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
         var vimeoVideoUrl = $(this).attr('data-iframe');
         var match = /vimeo.*\/(\d+)/i.exec(vimeoVideoUrl);
         var self = $(this);
-
         if (match) {
           var vimeoVideoID = match[1];
           $.getJSON('https://www.vimeo.com/api/v2/video/' + vimeoVideoID + '.json?callback=?', {format: "json"}, function (data) {
@@ -132,6 +135,16 @@
       });
 
       // Support Youtube & Vimeo videos in slider.
+      // For Mobile slider we only insert, no need to remove it.
+      $('#product-image-gallery-mobile li').on('click', function () {
+        if($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
+          var href = $(this).attr('data-iframe');
+          $(this).children('img').hide();
+          $(this).children('iframe').remove();
+          appendVideoIframe($(this), href, 320, 320);
+        }
+      });
+      // For Desktop slider, we add a iframe on click on the image.
       $('#lightSlider li').on('click', function () {
         if ($(this).hasClass('video-product-zoom')) {
           var wrap = $('#wrap');
@@ -140,11 +153,11 @@
           var height = wrap.height();
           var URL = $(this).attr('data-iframe');
           $('#yt-vi-container iframe').remove();
-          $('#yt-vi-container').html('<iframe id="player" width="' + width + '" height="' + height + '" src="'
-            + URL + '" frameborder="0" allowfullscreen></iframe>');
+          appendVideoIframe($('#yt-vi-container'), URL, width, height);
           $('#wrap').hide();
         }
       });
+      // For Desktop slider, we remove the iframe when we want to zoom another image.
       $('#lightSlider li a.cloud-zoom-gallery').on('click', function () {
         var playerIframe = $('#yt-vi-container iframe');
         // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
@@ -153,6 +166,10 @@
           $('#wrap').show();
         }
       });
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Helper functions.
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       /**
        * Toggles the product gallery based on screen width.
@@ -168,6 +185,23 @@
           $('.image-gallery-mobile').hide();
           $('.cloud-zoom-container').show();
         }
+      }
+
+      /**
+       * Appends iframe tag in the element that is passed.
+       *
+       * @param element
+       *   The HTML element inside which we want iframe.
+       * @param href
+       *   The URL of video.
+       * @param width
+       *   The width of iframe/video.
+       * @param height
+       *   The height of the iframe/video.
+       */
+      function appendVideoIframe(element, href, width, height) {
+        element.append('<iframe id="player" width="' + width + '" height="' + height + '" src="' + href
+          + '" frameborder="0" allowfullscreen></iframe>');
       }
     }
   };
