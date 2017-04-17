@@ -22,7 +22,7 @@
 }
 .ui-dialog {
   z-index: 999;
-  background: indianred;
+  background: #f7f7f7;
 }
 .ui-dialog-title {
   display: none;
