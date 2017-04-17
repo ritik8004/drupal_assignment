@@ -11,7 +11,7 @@
         </li>
       {% else %}
         <li>
-          <a href="{{ thumbs.zoomurl }}" class="a-gallery">
+          <a href="{{ thumbs.fullurl }}" class="a-gallery">
             <img src="{{ thumbs.thumburl }}"/>
           </a>
         </li>
@@ -19,7 +19,7 @@
     {% endfor %}
   </ul>
   {% set firstItem =  thumbnails | first %}
-  <div id="full-image-wrapper" style="width: 800px; height: 800px; overflow: hidden;">
+  <div id="full-image-wrapper" style="width: 600px; height: 600px; overflow: hidden;">
     {% if firstItem.type == 'youtube' %}
         <img width='{{ firstItem.width }}' height='{{ firstItem.height }}' src="{{ firstItem.thumburl }}"/>
     {% elseif firstItem.type == 'vimeo' %}
