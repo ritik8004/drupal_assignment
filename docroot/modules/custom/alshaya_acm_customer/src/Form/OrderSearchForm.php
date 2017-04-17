@@ -40,6 +40,7 @@ class OrderSearchForm extends FormBase {
 
     $form['filter'] = [
       '#type' => 'select',
+      '#weight' => 10,
       '#title' => $this->t('Show'),
       '#required' => FALSE,
       '#options' => $filterOptions,
@@ -48,6 +49,7 @@ class OrderSearchForm extends FormBase {
 
     $form['actions'] = [
       '#type' => 'actions',
+      '#weight' => 2,
     ];
 
     $form['actions']['submit'] = [
