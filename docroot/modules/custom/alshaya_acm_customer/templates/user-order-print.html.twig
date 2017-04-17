@@ -22,11 +22,13 @@
     You’ll receive an email addressed to {{ account.mail }} conﬁrming your order
   {% endtrans %}
 </div>
-<div>
-  {% trans %}
-    Your Privileges Card Number is: {{ account.privilege_card_number }}
-  {% endtrans %}
-</div>
+{% if account.privilege_card_number %}
+  <div>
+    {% trans %}
+      Your Privileges Card Number is: {{ account.privilege_card_number }}
+    {% endtrans %}
+  </div>
+{% endif %}
 <div>
   {{ barcode }}
 </div>
