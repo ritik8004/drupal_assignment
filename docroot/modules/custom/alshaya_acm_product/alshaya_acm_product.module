@@ -109,6 +109,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       // Create our thumbnails to be rendered for zoom.
       foreach ($media as $delta => $image) {
         $file_uri = $image->getFileUri();
+        // Show original full image in the modal inside a draggable container.
         $original_image = $image->url();
         if ($delta == 0) {
           $imageZoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
@@ -128,7 +129,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           'fullurl' => $original_image,
           'type' => 'image',
         ];
-        // @todo: Remove the below line when we have multiple images.
+        // @todo: Remove the below comment when we have multiple images.
         // To have more than 1 image in the slider, please duplicate above,
         // so we have same image added multiple times.
       }
