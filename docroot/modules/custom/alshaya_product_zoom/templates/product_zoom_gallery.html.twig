@@ -19,13 +19,13 @@
     {% endfor %}
   </ul>
   {% set firstItem =  thumbnails | first %}
-  <div id="full-image-wrapper" style="width: 400px; height: 400px; overflow: hidden;">
+  <div id="full-image-wrapper" style="width: 800px; height: 800px; overflow: hidden;">
     {% if firstItem.type == 'youtube' %}
         <img width='{{ firstItem.width }}' height='{{ firstItem.height }}' src="{{ firstItem.thumburl }}"/>
     {% elseif firstItem.type == 'vimeo' %}
         <img width='{{ firstItem.width }}' height='{{ firstItem.height }}' src=""/>
     {% else %}
-        <img style="max-width: none;" id="full-image" src="{{ firstItem.zoomurl }}"/>
+        <img style="max-width: none;" id="full-image" src="{{ firstItem.fullurl }}"/>
     {% endif %}
   </div>
 
