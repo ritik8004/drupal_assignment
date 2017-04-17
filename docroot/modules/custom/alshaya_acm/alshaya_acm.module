@@ -70,6 +70,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Add sub total price of product.
   $form['cart']['#header'][] = t('Sub total');
 
+  // Adds delivery options to cart.
+  $form['cart']['#header'][] = t('Delivery options');
+
   // Get cart items by sku.
   $cart_item = alshaya_acm_get_cart_items_by_sku();
   $product_count = 0;
@@ -112,6 +115,19 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
           $form['cart'][$id]['name'],
         ];
       }
+
+      // TODO: Get delivery options from conductor.
+      $product_delivery_options = '<div>';
+      $product_delivery_options .= '<span class="home-delivery">' . t('Home Delivery') . '</span>';
+      $product_delivery_options .= '<span class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<span>';
+      $product_delivery_options .= '<div>';
+      $product_delivery_options .= '<div>';
+      $product_delivery_options .= '<span class="click-collect">' . t('Click and Collect') . '</span>';
+      $product_delivery_options .= '<span class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</span>';
+      $product_delivery_options .= '</div>';
+      $form['cart'][$id]['delivery_options'] = [
+        '#markup' => $product_delivery_options,
+      ];
     }
   }
 
@@ -148,6 +164,28 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Set Form title.
   $form['#title'] = t("Cart (%count)", ['%count' => $product_count]);
+
+  // Todo: Update markup once information available from conductor.
+  $home_delivery_markup = '<div>';
+  $home_delivery_markup .= '<div class="home-delivery">' . t('Home Delivery') . '</div>';
+  $home_delivery_markup .= '<div>' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '</div>';
+  $home_delivery_markup .= '<div class="home-delivery-icons"><span class="visa">Visa</span><span class="master-card">Master Card</span></div>';
+  $home_delivery_markup .= '</div>';
+  $form['home_delivery'] = [
+    '#markup' => $home_delivery_markup,
+    '#weight' => 100,
+  ];
+
+  // Todo: Update markup once information available from conductor.
+  $click_and_collect_markup = '<div>';
+  $click_and_collect_markup .= '<div class="click-collect">' . t('Click and Collect') . '</div>';
+  $click_and_collect_markup .= '<div>' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</div>';
+  $click_and_collect_markup .= '<div class="click-collect-icons"><span class="verified-secure">Verified Secure</span></div>';
+  $click_and_collect_markup .= '</div>';
+  $form['click_and_collect'] = [
+    '#markup' => $click_and_collect_markup,
+    '#weight' => 100,
+  ];
 }
 
 /**
