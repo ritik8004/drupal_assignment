@@ -245,7 +245,7 @@ class CustomerController extends ControllerBase {
     $build['#barcode'] = $this->getBarcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
     $build['#account']['mail'] = $user->get('mail')->getString();
     $build['#account']['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
-    $build['#account']['#site_logo'] = [
+    $build['#site_logo'] = [
       '#theme' => 'image',
       '#uri' => theme_get_setting('logo.url'),
     ];
