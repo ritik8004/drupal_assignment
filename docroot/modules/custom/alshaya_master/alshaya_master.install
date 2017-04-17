@@ -124,4 +124,28 @@ function alshaya_master_install() {
   $dependencies = $blockConfig->get('dependencies');
   $dependencies['config'][] = 'field.field.block_content.basic.field_image';
   $blockConfig->set('dependencies', $dependencies)->save();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+
+  // Enable only FB, Twitter, Pinterest.
+  // @codingStandardsIgnoreLine
+  $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Pinterest:pinterest'");
+
+  // Disable all extras.
+  foreach ($configFactory->get('option_extras') as $option => $status) {
+    $configFactory->set('option_extras.' . $option, 0);
+  }
+
+  // Enable share this for Product CT.
+  $configFactory->set('node_types.acq_product', 'acq_product');
+
+  // Enable lazy load of JS to enhance performance (rendering time).
+  $configFactory->set('late_load', 1);
+
+  // Set the option to use custom style for showing share images.
+  $configFactory->set('button_option', 'stbc_custom');
+
+  // Save the changes.
+  $configFactory->save();
 }
