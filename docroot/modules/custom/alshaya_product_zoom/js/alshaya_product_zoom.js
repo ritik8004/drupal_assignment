@@ -25,6 +25,17 @@
         verticalHeight: 500,
       });
 
+      // Slider - 3 For Mobile - Image Gallery.
+      $("#product-image-gallery-mobile").lightSlider({
+        item: 1,
+      });
+
+      // Show mobile slider only on mobile resolution.
+      toggleProductImageGallery();
+      $(window).on("resize", function (e) {
+        toggleProductImageGallery();
+      });
+
       // Modal view for Slider-2 when clicking on big image - Image Gallery.
       var element = document.getElementById('product-image-gallery-container');
       var dialogsettings = {
@@ -106,7 +117,7 @@
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       // Fetch Vimeo thumbnail.
-      $('#lightSlider li.video-product-zoom.vimeo, #product-image-gallery li.vimeo').each(function () {
+      $('#lightSlider li.video-product-zoom.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
         var vimeoVideoUrl = $(this).attr('data-iframe');
         var match = /vimeo.*\/(\d+)/i.exec(vimeoVideoUrl);
         var self = $(this);
@@ -142,6 +153,22 @@
           $('#wrap').show();
         }
       });
+
+      /**
+       * Toggles the product gallery based on screen width.
+       */
+      function toggleProductImageGallery() {
+        if ($(window).width() < 381) {
+          $('.image-gallery-mobile').show();
+          $('.cloud-zoom-container').hide();
+
+          console.log('show');
+        }
+        else {
+          $('.image-gallery-mobile').hide();
+          $('.cloud-zoom-container').show();
+        }
+      }
     }
   };
 })(jQuery);
