@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
-use Drupal\alshaya_product_zoom\Plugin\Field\FieldFormatter\ProductZoomFormatter;
 
 /**
  * Implements hook_acq_sku_product_node_alter().
@@ -98,10 +97,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       // Fetch media.
       module_load_include('inc', 'alshaya_acm_product', 'alshaya_acm_product.utility');
+      module_load_include('inc', 'alshaya_product_zoom', 'alshaya_product_zoom.utility');
       $media = alshaya_acm_product_get_sku_media($skuEntity);
 
       // Fetch settings.
-      $settings = ProductZoomFormatter::defaultSettings();
+      $settings = alshaya_product_zoom_cloudzoom_default_settings();
       $thumbnail_style = $settings['thumb_style'];
       $zoom_style = $settings['zoom_style'];
       $slide_style = $settings['slide_style'];
@@ -142,7 +142,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       foreach ($videos as $video) {
         if (strpos($video, 'youtube')) {
           $thumbnails[] = [
-            'thumburl' => 'https://img.youtube.com/vi/' . ProductZoomFormatter::getYouTubeVideoId($video) . '/hqdefault.jpg',
+            'thumburl' => 'https://img.youtube.com/vi/' . alshaya_product_zoom_getyoutubeid($video) . '/hqdefault.jpg',
             'url' => $video,
             'type' => 'youtube',
             'width' => 81,
@@ -162,7 +162,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         '#theme' => 'product_zoom',
         '#mainImage' => $main_image,
         '#thumbnails' => $thumbnails,
-        '#properties' => ProductZoomFormatter::getRelStringForProductZoom($settings),
+        '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
         '#attached' => [
           'library' => [
             'alshaya_product_zoom/product.cloud_zoom',
