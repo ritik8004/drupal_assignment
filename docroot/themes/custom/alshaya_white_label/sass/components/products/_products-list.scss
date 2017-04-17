@@ -121,15 +121,8 @@
     display: none;
   }
 
-  @include breakpoint($only-mobile) {
-    margin-bottom: 0.75rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    position: absolute;
-    top: 0;
-    #{$right}: 2.25rem;
-  }
+  position: relative;
+  z-index: 2;
 
   .c-facet__label {
     @include breakpoint($only-mobile) {
@@ -137,7 +130,7 @@
       font-size: 0.75rem;
     }
 
-    @include breakpoint($only-tablet) {
+    @include breakpoint($tablet) {
       width: 7.875rem;
     }
 
@@ -158,11 +151,10 @@
     border-right: 1px solid $white-five;
     font-weight: normal;
     margin: 0;
-    position: relative;
-    z-index: 2;
 
     &.is-active {
       background: $white-five;
+      position: relative;
     }
   }
 
@@ -182,6 +174,83 @@
   .c-facet:first-child {
     .c-facet__title {
       border-top: none;
+    }
+  }
+}
+
+.filter--mobile {
+  @include breakpoint($tablet) {
+    position: absolute;
+    top: 0;
+    #{$right}: 2.25rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 0.75rem;
+  }
+}
+
+.is-filter {
+  @include breakpoint($only-mobile) {
+    max-width: 6.75rem;
+
+    &:last-child {
+      float: right;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    &:first-child {
+      transform: translate(-3.7rem, 0);
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    display: inline-block;
+  }
+
+  &.view-filters {
+    label {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+
+      @include u-center--vertically;
+
+      position: absolute;
+      left: -3rem;
+      font-size: 12px;
+    }
+
+    .form-type-select {
+      @include icon(chevrondown, after) {
+        #{$right}: -2.25rem;
+        height: 2.1875rem;
+        width: 2.1875rem;
+        background-color: $white-two;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        font-size: 2rem;
+      }
+
+      position: relative;
+    }
+
+    select {
+      @include breakpoint($only-mobile) {
+        max-width: 6.75rem;
+        border-right: 1px solid #fff;
+      }
+
+      border: none;
+      background: #e5e5e5;
+      padding: 0.625rem;
+      padding-left: 0.75rem;
+      height: 2.1875rem;
+      border-radius: 0;
+      -webkit-appearance: none;
+      font-size: 0.75rem;
     }
   }
 }
