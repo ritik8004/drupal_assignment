@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class CartConfigForm.
+ * Class CheckoutSettingsForm.
  */
 class CheckoutSettingsForm extends ConfigFormBase {
 
