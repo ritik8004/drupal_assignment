@@ -1,0 +1,21 @@
+form.user-communication-preference {
+  .form-item {
+    margin-top: 0.5em;
+  }
+
+  legend {
+    margin-bottom: 1.5em;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 3em;
+    }
+  }
+
+  .form-submit {
+    margin-top: 0;
+  }
+
+  input[checked=checked]:checked + label {
+    font-weight: bold;
+  }
+}
