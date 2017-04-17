@@ -9,7 +9,7 @@
     @include breakpoint($only-mobile) {
       padding-bottom: 0.5rem;
       margin-bottom: 0.75rem;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $white;
     }
 
     @include breakpoint($only-tablet) {
@@ -30,7 +30,7 @@
 
     font-size: 1rem;
     text-transform: lowercase;
-    color: #0084cc;
+    color: $cerulean-two;
     font-family: $alshaya-thin;
 
     p {
@@ -44,9 +44,9 @@
       margin-top: 1.125rem;
       margin-bottom: 1.5rem;
       font-size: 0.875rem;
-      color: #333;
+      color: $black;
       padding-bottom: 9px;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $white;
       font-family: $alshaya-thin;
 
       @include breakpoint($only-mobile) {
@@ -58,7 +58,7 @@
   .c-products__item {
     float: $left;
     text-align: center;
-    color: #333;
+    color: $black;
     height: 19.5rem;
 
     @include breakpoint($only-mobile) {
@@ -88,7 +88,7 @@
 
     .field--name-name {
       margin-bottom: 0.875rem;
-      color: #666;
+      color: $grey-ash;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
 
@@ -112,7 +112,7 @@
   }
 
   .c-products__item__link {
-    color: #333;
+    color: $black;
   }
 }
 
@@ -141,33 +141,28 @@
       width: 7.875rem;
     }
 
-    background: #e5e5e5;
+    @include icon(chevrondown, after) {
+      #{$right}: -2.25rem;
+      height: 2.1875rem;
+      width: 2.1875rem;
+      background-color: $white-two;
+      position: absolute;
+      text-align: center;
+      top: 0;
+      font-size: 2rem;
+    }
+
+    background: $white-two;
+    height: 2.1875rem;
     padding: 0.625rem;
-    padding-left: 0.75rem;
+    border-right: 1px solid $white-five;
     font-weight: normal;
     margin: 0;
     position: relative;
-    border-right: 1px solid white;
-    height: 2.1875rem;
     z-index: 2;
 
-    &::after {
-      @extend %icon-chevron-down;
-
-      #{$right}: -2.25rem;
-      content: '';
-      height: 2.1875rem;
-      width: 2.1875rem;
-      background-color: #e5e5e5;
-      background-position: center;
-      background-repeat: no-repeat;
-      position: absolute;
-      top: 0;
-      transform: rotate(180deg);
-    }
-
     &.is-active {
-      background: white;
+      background: $white-five;
     }
   }
 
@@ -180,7 +175,7 @@
     width: 16.8125rem;
     position: absolute;
     display: none;
-    background-color: #fff;
+    background-color: $white-five;
     z-index: 1;
   }
 
