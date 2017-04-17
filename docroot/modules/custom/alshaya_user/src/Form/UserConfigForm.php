@@ -31,6 +31,7 @@ class UserConfigForm extends ConfigFormBase {
     $config = $this->config('alshaya_user.settings');
     $config->set('terms_conditions', $form_state->getValue('terms_conditions'));
     $config->set('user_register_complete', $form_state->getValue('user_register_complete'));
+    $config->set('password_tooltip', $form_state->getValue('password_tooltip'));
     $config->save();
 
     return parent::submitForm($form, $form_state);

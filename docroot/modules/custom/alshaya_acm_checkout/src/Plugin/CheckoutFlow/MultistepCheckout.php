@@ -3,6 +3,9 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RedirectDestinationTrait;
+use Drupal\Core\Url;
 
 /**
  * Provides the default multistep checkout flow.
@@ -13,6 +16,8 @@ use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
  * )
  */
 class MultistepCheckout extends CheckoutFlowWithPanesBase {
+
+  use RedirectDestinationTrait;
 
   /**
    * {@inheritdoc}
@@ -43,6 +48,31 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     ];
 
     return $steps;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form = parent::buildForm($form, $form_state);
+
+    $panes = $this->getPanes($this->stepId);
+    foreach ($panes as $pane_id => $pane) {
+      $form[$pane_id] = [
+        '#parents' => [$pane_id],
+        '#type' => $pane->getWrapperElement(),
+        '#title' => $pane->getLabel(),
+        '#access' => $pane->isVisible(),
+      ];
+      $form[$pane_id] = $pane->buildPaneForm($form[$pane_id], $form_state, $form);
+    }
+
+    // For login we want user to start again with checkout after login.
+    if ($this->stepId == 'login') {
+      $form['#action'] = Url::fromRoute('<current>', [], ['query' => $this->getDestinationArray(), 'external' => FALSE])->toString();
+    }
+
+    return $form;
   }
 
 }

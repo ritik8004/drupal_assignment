@@ -1,0 +1,6 @@
+alshaya_acm_checkout.checkout_settings_form:
+  title: 'Custom checkout settings'
+  parent: acq_commerce.configuration
+  description: 'Configure custom checkout settings.'
+  weight: 10
+  route_name: alshaya_acm_checkout.checkout_settings_form

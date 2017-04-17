@@ -11,9 +11,9 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @ACQCheckoutPane(
  *   id = "checkout_guest",
- *   label = @Translation("Checkout as Guest"),
+ *   label = @Translation("new customers"),
  *   default_step = "login",
- *   wrapper_element = "container",
+ *   wrapper_element = "fieldset",
  * )
  */
 class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
@@ -31,13 +31,19 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $pane_form['checkout_guest']['summary'] = [
-      '#markup' => 'Continue as guest form will come here',
+    $config = \Drupal::config('alshaya_acm_checkout.settings');
+
+    $pane_form['checkout_guest']['checkout_as_guest'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('checkout as guest'),
     ];
 
-    $pane_form['checkout_guest']['next'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('checkout out as guest'),
+    $pane_form['checkout_guest']['email_usage'] = [
+      '#markup' => '<div class="checkout-guest-email-usage">' . $config->get('checkout_guest_email_usage.value') . '</div>',
+    ];
+
+    $pane_form['checkout_guest']['summary'] = [
+      '#markup' => '<div class="checkout-guest-summary">' . $config->get('checkout_guest_summary.value') . '</div>',
     ];
 
     return $pane_form;
