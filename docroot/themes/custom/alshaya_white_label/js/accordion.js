@@ -28,9 +28,9 @@
           var facetBlockWrapper = $('.c-facet__blocks__wrapper').clone(true, true);
           var mainBlock = $('.block-system-main-block');
           var facetLabel = facetBlockWrapper.find('.c-facet__label');
-          var facetBlock = $(facetBlockWrapper).find('.c-facet__blocks');
+          var facetBlock = facetBlockWrapper.find('.c-facet__blocks');
 
-          facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile');
+          facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile').addClass('is-filter');
           mainBlock.after(facetBlockWrapper);
           facetLabel.click(function () {
             $('.page-wrapper, .header--wrapper, .c-pre-content').toggleClass('show-overlay');
@@ -38,6 +38,11 @@
             facetBlock.toggle();
           });
         }
+
+        var viewFilter = $('.c-products-list .view-filters');
+        viewFilter.addClass('is-filter');
+
+        $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
       }
     }
   };
