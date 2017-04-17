@@ -28,35 +28,39 @@
   }
 
   [class^="c-social-links--"] {
-    @extend %u-image-replacement;
+    @include u-image-replacement;
 
     width: 1.5625rem;
     height: 1.5625rem;
     display: inline-block;
-    background-size: 100%;
+
+    &::before {
+      font-size: 2rem;
+      color: $marine-blue-two;
+    }
   }
 
   .c-social-links--facebook {
-    background-image: url("../imgs/social-icons/facebook.svg");
+    @include icon(facebook);
   }
 
   .c-social-links--instagram {
-    background-image: url("../imgs/social-icons/instagram.svg");
+    @include icon(instagram);
   }
 
   .c-social-links--youtube {
-    background-image: url("../imgs/social-icons/youtube.svg");
+    @include icon(youtube);
   }
 
   .c-social-links--google-plus {
-    background-image: url("../imgs/social-icons/google.svg");
+    @include icon(googleplus);
   }
 
   .c-social-links--twitter {
-    background-image: url("../imgs/social-icons/twitter.svg");
+    @include icon(twitter);
   }
 
   .c-social-links--pinterest {
-    background-image: url("../imgs/social-icons/pinterest.svg");
+    @include icon(pinterest);
   }
 }

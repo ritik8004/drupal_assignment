@@ -1,5 +1,43 @@
+/**
+  * ALIGNMENT
+ */
+@mixin u-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin u-center--horizontally {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+@mixin u-center--vertically {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+/**
+  * VISIBILITY
+ */
+@mixin u-visibility($state, $important: false) {
+  @if $important {
+    display: $state !important;
+  }
+
+  @else {
+    display: $state;
+  }
+}
+
+/**
+  * Helpers
+ */
 // Image Replacement
-%u-image-replacement {
+@mixin u-image-replacement {
   border: 0;
   font: 0/0 a;
   text-shadow: none;
@@ -7,7 +45,7 @@
 }
 
 // Overlay Content
-%u-overlay-content {
+@mixin u-overlay-content {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -15,11 +53,7 @@
   left: 0;
 }
 
-// is-
-%is-hidden {
-  display: none;
-}
-
+// @TODO: Replace the classes below with mixins.
 // Classes
 %show-overlay,
 .show-overlay {
