@@ -258,15 +258,17 @@
 
   & > a {
     position: absolute;
-    bottom: 0.75em;
-    #{$left}: 9.5em;
+    bottom: -3.75em;
     text-decoration: none;
     font-size: 0.75rem;
     font-weight: bold;
     z-index: 999;
+    width: 100%;
+    text-align: center;
 
-    @include breakpoint($only-mobile) {
-      display: none;
+    @include breakpoint($tablet) {
+      #{$left}: -2em;
+      bottom: 0.75em;
     }
   }
 }
