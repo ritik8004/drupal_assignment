@@ -1,0 +1,5 @@
+alshaya_acm_checkout.settings:
+  title: 'Custom checkout settings'
+  base_route_name: alshaya_acm_checkout.checkout_settings_form
+  names:
+    - alshaya_acm_checkout.settings
