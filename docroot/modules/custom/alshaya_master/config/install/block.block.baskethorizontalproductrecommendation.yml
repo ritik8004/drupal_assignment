@@ -14,9 +14,9 @@ provider: null
 plugin: basket_horizontal_recommendation
 settings:
   id: basket_horizontal_recommendation
-  label: 'Basket: Horizontal Product Recommendation'
+  label: 'Product Recommendation'
   provider: alshaya_acm
-  label_display: '0'
+  label_display: visible
 visibility:
   request_path:
     id: request_path
