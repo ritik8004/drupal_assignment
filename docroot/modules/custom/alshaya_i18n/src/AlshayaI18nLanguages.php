@@ -12,10 +12,15 @@ namespace Drupal\alshaya_i18n;
  */
 class AlshayaI18nLanguages {
 
-  private static $languages = [
-    'ar_KW' => 'ar',
-    'en_US' => 'en',
-  ];
+  /**
+   * Helper function to get all language <> locale mappings from config.
+   *
+   * @return array
+   *   Array of all language <> locale mappings.
+   */
+  private static function getLanguages() {
+    return \Drupal::config('alshaya_i18n.locale_mappings')->get('mappings');
+  }
 
   /**
    * Function to get locale from langcode.
@@ -27,7 +32,7 @@ class AlshayaI18nLanguages {
    *   Locale if found, FALSE otherwise.
    */
   public static function getLocale($langcode) {
-    $languages = array_flip(self::$languages);
+    $languages = array_flip(self::getLanguages());
     return isset($languages[$langcode]) ? $languages[$langcode] : FALSE;
   }
 
@@ -41,7 +46,8 @@ class AlshayaI18nLanguages {
    *   Langcode if found, FALSE otherwise.
    */
   public static function getLanguage($locale) {
-    return isset(self::$languages[$locale]) ? self::$languages[$locale] : FALSE;
+    $languages = self::getLanguages();
+    return isset($languages[$locale]) ? $languages[$locale] : FALSE;
   }
 
 }
