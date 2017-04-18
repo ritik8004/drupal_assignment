@@ -23,7 +23,6 @@
         "drupal/menu_admin_per_menu": "^1.0@RC",
         "drupal/menu_link_attributes": "^1.0@beta",
         "drupal/paragraphs": "^1.1",
-        "drupal/search_api_solr": "^1.0@beta",
         "drupal/default_content": "^1.0@alpha",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/password_policy": "^3.0",
@@ -45,7 +44,9 @@
         "drupal/barcodes": "^1.6",
         "drupal/sharethis": "^2.0@beta",
         "drupal/mailsystem": "^4.1",
-        "drupal/mimemail": "1.x-dev"
+        "drupal/mimemail": "1.x-dev",
+        "drupal/search_api_solr": "1.0-beta2",
+        "drupal/search_api_autocomplete": "1.x-dev"
     },
     "require-dev": {
         "behat/behat": "^3.1",
@@ -100,6 +101,15 @@
         "patches": {
             "drupal/taxonomy_term_depth": {
                 "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
+            },
+            "acquia/lightning": {
+                "Plugin Exception error on installation -- search_api": "https://www.drupal.org/files/issues/2869253-3-search-api-breaking.patch"
+            },
+            "drupal/search_api_solr": {
+                "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
+            },
+            "drupal/search_api_autocomplete": {
+                "Failed site install due to missing search_api_autocomplete config dependency": "https://www.drupal.org/files/issues/2824390-15.patch"
             }
         },
         "installer-paths": {

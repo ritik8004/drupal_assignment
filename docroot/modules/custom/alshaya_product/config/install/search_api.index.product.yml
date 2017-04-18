@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.storage.node.field_category
     - field.storage.node.field_skus
-    - search_api.server.database
+    - search_api.server.solr
   module:
     - taxonomy
     - acq_sku
@@ -16,6 +16,16 @@ name: Product
 description: ''
 read_only: false
 field_settings:
+  content:
+    label: 'Rendered HTML output'
+    property_path: rendered_item
+    type: text
+    configuration:
+      roles:
+        anonymous: anonymous
+      view_mode:
+        'entity:node':
+          acq_product: default
   status:
     label: 'Publishing status'
     datasource_id: 'entity:node'
@@ -135,4 +145,4 @@ tracker_settings:
 options:
   index_directly: true
   cron_limit: 50
-server: database
+server: solr
