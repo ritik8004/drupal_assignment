@@ -66,6 +66,7 @@
       width: 20.625rem;
       margin-#{$left}: -2em;
       padding-#{$left}: 3em;
+      display: inline-block;
     }
 
     @include breakpoint($desktop) {
@@ -75,8 +76,10 @@
     }
 
     .field--name-body {
-      max-width: 12em;
-      float: $left;
+      @include breakpoint($tablet) {
+        max-width: 14em;
+        float: $left;
+      }
     }
 
     h2 {
@@ -201,7 +204,8 @@
     }
 
     label.form-required,
-    .form-item-field-privilege-card-number-0-value label {
+    .form-item-privilege-card-number label,
+    .form-item-privilege-card-number2 label {
       font-size: 16px;
       color: $greyish;
       position: absolute;
@@ -791,5 +795,27 @@
     margin-top: 50px;
     margin-bottom: 55px;
     padding: 24px;
+  }
+}
+
+.privilege-card-wrapper {
+  margin-top: 2rem;
+
+  .privilege-card-wrapper-title {
+    color: $dark-sand;
+    font-family: $alshaya-bold;
+  }
+
+  .form-wrapper {
+    margin-top: 0.25rem;
+  }
+
+  summary {
+    outline: transparent;
+    color: $greyish;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
   }
 }

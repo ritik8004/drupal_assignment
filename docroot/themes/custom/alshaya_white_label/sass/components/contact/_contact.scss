@@ -59,7 +59,8 @@
     textarea:focus ~ label:last-of-type,
     input:focus ~ label:last-of-type,
     textarea:focus ~ label:last-of-type,
-    .active-label:last-of-type {
+    .active-label:last-of-type,
+    input:active ~ label.form-required {
       top: -1.25em;
       bottom: 0;
       #{$left}: 0;
