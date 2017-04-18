@@ -62,12 +62,17 @@
         $('.menu--two__list-item').removeClass('first--child_open');
       });
 
+      // @TODO: Refactor to reduce complexity.
       $('.mobile--close').on('click', function (e) {
         $('.main--menu').hide();
-        $('.c-menu-secondary').addClass('remove--toggle');
+        $('.c-menu-secondary').removeClass('block--display');
+        $('.shop').addClass('active');
+        $('.account--logged_in').removeClass('active');
+        $('.account').removeClass('active');
         $('body').removeClass('mobile--overlay');
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
+        $('.remove--toggle').removeClass('remove--toggle')
       });
 
       $('.menu--one__list-item.has-child').hover(
