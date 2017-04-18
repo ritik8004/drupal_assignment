@@ -105,7 +105,8 @@ header {
       }
     }
 
-    #edit-submit-search {
+    #edit-submit-search,
+    #edit-submit-search--2 {
       background: $marine-blue url('../imgs/assets/search.svg') 10px 7px no-repeat;
       border: none;
       text-indent: -9999px;
@@ -211,7 +212,8 @@ header {
       border: 0;
     }
 
-    #edit-actions {
+    #edit-actions,
+    #edit-actions--3 {
       display: none;
     }
 
