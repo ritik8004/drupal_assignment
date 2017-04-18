@@ -3,4 +3,5 @@ cart_notification_js:
   js:
     js/cart_notification.js: {}
   dependencies:
-    - core/drupal.dialog
+    - core/jquery
+    - core/drupal
