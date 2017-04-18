@@ -534,33 +534,6 @@
         .date {
           margin-top: 10px;
         }
-
-        .button {
-          font-family: $arial;
-          font-size: 12px;
-          font-weight: bold;
-          text-align: center;
-          color: $white-five;
-          height: 23px;
-          line-height: 23px;
-          width: 106px;
-
-          @include breakpoint($tablet) {
-            font-size: 10px;
-          }
-
-          &.status-pending {
-            background-color: $tomato;
-          }
-
-          &.status-returned {
-            background-color: $grey-ash;
-          }
-
-          &.status-delivered {
-            background-color: $medium-green;
-          }
-        }
       }
     }
   }
@@ -702,6 +675,10 @@
     position: static;
     padding-bottom: 10px;
   }
+
+  .c-content .messages--error {
+    top: auto;
+  }
 }
 
 .path--user {
@@ -719,5 +696,71 @@
 
   .block-alshaya-user h2 {
     display: none;
+  }
+
+  .c-order-help {
+    color: $windows-blue;
+
+    .field--name-body {
+      p,
+      ul {
+        display: inline-block;
+        font-size: 12px;
+        margin: 0;
+        padding-left: 0;
+        vertical-align: top;
+
+        @include breakpoint($desktop) {
+          vertical-align: middle;
+        }
+      }
+
+      a {
+        color: $windows-blue;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      li {
+        list-style: none;
+        margin-bottom: 21px;
+
+        @include breakpoint($desktop) {
+          display: inline-block;
+          margin-#{$right}: 69px;
+          margin-bottom: 0;
+        }
+
+        &:last-child {
+          margin: 0;
+        }
+      }
+
+      p {
+        font-size: 13px;
+        font-weight: 700;
+        margin-#{$right}: 50px;
+
+        @include breakpoint($desktop) {
+          font-size: 15px;
+          margin-#{$right}: 64px;
+        }
+
+        @include icon(infomation, before) {
+          font-size: 24px;
+          margin-right: 17px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  .c-order-help {
+    background: #e8eff5;
+    margin-top: 50px;
+    margin-bottom: 55px;
+    padding: 24px;
   }
 }

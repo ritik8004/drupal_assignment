@@ -41,10 +41,15 @@
 
     label {
       color: $black-two;
+      display: none;
       float: $left;
       line-height: 35px;
-      position: absolute;
-      top: -30px;
+
+      @include breakpoint($tablet) {
+        display: block;
+        position: absolute;
+        top: -30px;
+      }
 
       @include breakpoint($desktop) {
         position: static;
@@ -82,7 +87,7 @@
     min-width: 135px;
 
     @include breakpoint($tablet) {
-      min-width: 150px;
+      min-width: 185px;
     }
 
     @include breakpoint($desktop) {
@@ -130,12 +135,61 @@
   }
 }
 
-.orders-list-pager-wrapper {
+.c-order-list .orders-list-pager-wrapper {
   margin-bottom: 24px;
   padding-top: 8px;
   text-align: center;
 
   button {
     @extend %button-brand;
+  }
+}
+
+.recent__orders--list {
+  margin-bottom: 0;
+  border-top: 1px solid $white;
+
+  td {
+    @include breakpoint($tablet) {
+      width: 200px;
+    }
+  }
+
+  .order--items {
+    @include breakpoint($tablet) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 187px;
+    }
+  }
+
+  .order-summary-row td {
+    background-color: $white-five;
+    border-bottom: 1px solid $white;
+  }
+}
+
+.subtitle {
+  color: $marine-blue;
+  font-size: 16px;
+  text-transform: lowercase;
+  padding-bottom: 9px;
+  margin-bottom: 0;
+}
+
+.block-alshaya-acm-customer > a {
+  font-size: 14px;
+  color: #3680cb;
+
+  &.order__detail--link {
+    position: static;
+    display: none;
+  }
+
+  @include breakpoint($tablet) {
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
   }
 }

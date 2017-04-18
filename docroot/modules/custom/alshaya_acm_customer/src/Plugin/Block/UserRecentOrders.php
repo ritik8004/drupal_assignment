@@ -96,7 +96,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
       // Recent order text.
       $build['recent_order_title'] = [
-        '#markup' => '<div>' . $this->t("Recent Orders") . '</div>',
+        '#markup' => '<h2 class="subtitle">' . $this->t("Recent Orders") . '</h2>',
       ];
 
       // If no order available for the user.
@@ -114,6 +114,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
         // All order link.
         $build['view_all_orders'] = [
           '#type' => 'link',
+          'class' => ['show-all'],
           '#title' => $this->t('View all orders'),
           '#url' => Url::fromRoute('acq_customer.orders', ['user' => $uid]),
         ];
