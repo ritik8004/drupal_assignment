@@ -6,12 +6,15 @@ dependencies:
   - acq_sku
   - alshaya_product
   - block
+  - file
   - image
   - lightning_core
   - node
   - search_api
+  - search_api_autocomplete
   - search_api_solr
   - system
+  - taxonomy
   - user
   - views
 version: 8.x-1.0

@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_category
+    - field.storage.node.field_skus
+    - search_api.server.solr
+  module:
+    - acq_sku
+    - file
+    - node
+    - search_api
+    - taxonomy
+id: search_api_views_search
+label: search_api_views_search
+index_id: product
+suggester_id: server
+type: views
+options:
+  suggester_configuration:
+    fields:
+      content: content
+  min_length: '1'
+  results: 1
+  delay: ''
+  custom:
+    display: page
+  submit_button_selector: ':submit'
+  autosubmit: 1
