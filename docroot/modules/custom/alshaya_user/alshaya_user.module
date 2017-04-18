@@ -11,6 +11,8 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Render\Element\PasswordConfirm;
 
 /**
  * Check if the current user has is only authenticated user.
@@ -176,4 +178,26 @@ function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $blo
   if ($block->getPluginId() == 'system_menu_block:account') {
     $build['#cache']['contexts'][] = 'route';
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['account']['pass']['#process'][] = 'alshaya_user_form_change_pwd_form_process_pass';
+  // Change current password title and submit button text.
+  $form['account']['current_pass']['#title'] = (new TranslatableMarkup('current password'))->render();
+  $form['actions']['submit']['#value'] = (new TranslatableMarkup('change password'))->render();
+}
+
+/**
+ * Process functon to change elements of password_confirm type field.
+ */
+function alshaya_user_form_change_pwd_form_process_pass(&$element, FormStateInterface $form_state, &$complete_form) {
+  // Change title for password field.
+  $element = PasswordConfirm::processPasswordConfirm($element, $form_state, $complete_form);
+  $element['pass1']['#title'] = t('new password');
+  $element['pass2']['#title'] = t('confirm password');
+
+  return $element;
 }

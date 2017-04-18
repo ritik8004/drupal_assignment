@@ -432,6 +432,13 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
       '#markup' => t('Address Book'),
     ];
   }
+
+  // Change page title for change password form.
+  if ($route_match->getRouteName() == 'change_pwd_page.change_password_form') {
+    $variables['title'] = [
+      '#markup' => t('change password'),
+    ];
+  }
 }
 
 /**
