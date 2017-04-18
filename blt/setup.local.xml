@@ -6,10 +6,6 @@
 
     <echo>Revert settings.php file to avoid GIT issues.</echo>
     <exec dir="${repo.root}" command="git checkout docroot/sites/${multisite.name}/settings.php" logoutput="true" checkreturn="true" level="${blt.exec_level}" passthru="true" />
-
-    <echo>Revert file permissions for settings.php file.</echo>
-    <chmod mode="0544" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
-    <chmod mode="0444" file="${docroot}/sites/${multisite.name}/settings.php" failonerror="false"/>
   </target>
 
   <target name="sync:products">
@@ -37,6 +33,6 @@
 
   <target name="refresh:local:drupal"
           description="Reinstall local dev environment."
-          depends="setup:composer:install, frontend:build, local:drupal:install, local:reset-settings-file, sync:products, sync:product-images">
+          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:products, sync:product-images">
   </target>
 </project>

@@ -3,8 +3,10 @@ status: true
 dependencies:
   config:
     - field.field.node.store.body
+    - field.field.node.store.field_meta_tags
     - node.type.store
   module:
+    - metatag
     - text
     - user
 id: node.store.default
@@ -18,6 +20,12 @@ content:
     weight: 101
     settings: {  }
     third_party_settings: {  }
+  field_meta_tags:
+    weight: 102
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
   links:
     weight: 100
 hidden:

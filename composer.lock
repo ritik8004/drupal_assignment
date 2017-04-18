@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4b365d290b0825178e01a604a531e00",
+    "content-hash": "a5d83eee0f64552d0c216ad417b0dbc5",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2319,7 +2319,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.6",
-                    "datestamp": "1490994483"
+                    "datestamp": "1489502883"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2421,7 +2421,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha1",
-                    "datestamp": "1490940184"
+                    "datestamp": "1476873539"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4401,6 +4401,9 @@
                 "drupal": {
                     "version": "8.x-1.0",
                     "datestamp": "1485902197"
+                },
+                "patches_applied": {
+                    "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5312,7 +5315,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha5",
-                    "datestamp": "1453656839"
+                    "datestamp": "1489190883"
                 },
                 "patches_applied": {
                     "2674874 - Issue saving Schedule Update Type form": "https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch",
