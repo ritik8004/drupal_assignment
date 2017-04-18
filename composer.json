@@ -44,7 +44,9 @@
         "drupal/barcodes": "^1.6",
         "drupal/sharethis": "^2.0@beta",
         "drupal/mailsystem": "^4.1",
-        "drupal/mimemail": "1.x-dev"
+        "drupal/mimemail": "1.x-dev",
+        "drupal/search_api_solr": "1.0-beta2",
+        "drupal/search_api_autocomplete": "1.x-dev"
     },
     "require-dev": {
         "behat/behat": "^3.1",
