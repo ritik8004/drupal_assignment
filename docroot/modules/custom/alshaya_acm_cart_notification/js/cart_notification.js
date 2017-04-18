@@ -1,8 +1,8 @@
 (function ($) {
   "use strict";
-  Drupal.behaviors.alshaya_acm_cart_notification = {
+  Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      $(window).click(function() {
+      $(window).on('click', function() {
         // check if element is Visible
         var element = $('#cart_notification');
         var length = $('#cart_notification').html().length;
@@ -11,7 +11,7 @@
         }
       });
       // Stop event from inside container to propogate out.
-      $('#cart_notification').click(function(event){
+      $('#cart_notification').on('click', function(event){
         event.stopPropagation();
       });
     }
