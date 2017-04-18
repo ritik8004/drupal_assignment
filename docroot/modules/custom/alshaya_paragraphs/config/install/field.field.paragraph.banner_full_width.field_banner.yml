@@ -5,7 +5,14 @@ dependencies:
     - field.storage.paragraph.field_banner
     - paragraphs.paragraphs_type.banner_full_width
   module:
+    - content_translation
     - image
+third_party_settings:
+  content_translation:
+    translation_sync:
+      file: file
+      alt: '0'
+      title: '0'
 id: paragraph.banner_full_width.field_banner
 field_name: field_banner
 entity_type: paragraph
@@ -13,7 +20,7 @@ bundle: banner_full_width
 label: Banner
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
