@@ -1,11 +1,12 @@
 (function ($) {
+  "use strict";
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      items = $('.cloud-zoom:not(cloud-zoom-processed), .cloud-zoom-gallery:not(cloud-zoom-processed)', context);
+      var items = $('.cloud-zoom:not(cloud-zoom-processed), .cloud-zoom-gallery:not(cloud-zoom-processed)', context);
       if (items.length) {
         items.addClass('cloud-zoom-processed').CloudZoom();
         items.parent().css('float', 'left');
@@ -126,7 +127,7 @@
         if (match) {
           var vimeoVideoID = match[1];
           $.getJSON('https://www.vimeo.com/api/v2/video/' + vimeoVideoID + '.json?callback=?', {format: "json"}, function (data) {
-            featuredImg = data[0].thumbnail_large;
+            var featuredImg = data[0].thumbnail_large;
             self.find('img').attr('src', featuredImg);
           });
         }
