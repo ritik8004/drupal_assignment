@@ -1,5 +1,14 @@
 //Error messages
 .messages {
+  span {
+    display: block;
+    margin-#{$left}: 2rem;
+
+    @include breakpoint($desktop) {
+      margin-top: 0.3125rem;
+    }
+  }
+
   &.messages--status,
   &.messages--warning {
     font-family: $arial;
@@ -12,7 +21,8 @@
       width: 26px;
       height: 26px;
       display: inline-block;
-      margin-right: 1rem;
+      position: absolute;
+      margin-#{$right}: 1rem;
       vertical-align: middle;
     }
 
