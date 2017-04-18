@@ -148,4 +148,14 @@ function alshaya_master_install() {
 
   // Save the changes.
   $configFactory->save();
+
+  // Set textformat for mail system module configurations.
+  \Drupal::configFactory()->getEditable('mimemail.settings')
+    ->set('format', 'mail_text')
+    ->save();
+
+  // Set default formatter for mime mail configurations.
+  \Drupal::configFactory()->getEditable('mailsystem.settings')
+    ->set('defaults.formatter', 'mime_mail')
+    ->save();
 }

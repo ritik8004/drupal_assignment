@@ -13,6 +13,9 @@ dependencies:
   - block
   - block_content
   - clientside_validation_jquery
+  - filter
+  - mailsystem
+  - mimemail
   - sharethis
   - system
   - views
