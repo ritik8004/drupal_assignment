@@ -140,3 +140,63 @@
     }
   }
 }
+
+.c-my-account-nav {
+  @include breakpoint($only-tablet) {
+    width: 270px !important;
+  }
+
+  display: none;
+
+  ul {
+    @extend %list-clear;
+  }
+
+  h2 {
+    color: $marine-blue-two;
+    font-size: 12px;
+    padding: 0.94rem 0;
+    margin: 0 1rem;
+    border-bottom: 1px solid $white;
+    text-transform: lowercase;
+    font-weight: normal;
+    font-family: $alshaya-bold;
+  }
+
+  position: fixed;
+  width: 80%;
+  top: 5.6875rem;
+  background: $white-five;
+  height: 100%;
+  z-index: 10;
+  padding: 0;
+
+  li {
+    display: block;
+    font-family: $alshaya-thin;
+    border-bottom: 1px solid $white;
+    padding: 0.94rem 0;
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
+    text-align: $left;
+    position: relative;
+
+    &:hover {
+      background: none;
+
+      a {
+        color: $brownish-grey;
+      }
+    }
+
+    &::after {
+      content: '';
+      background: url(../imgs/icons/ic-chevronright-copy-9.svg);
+      position: absolute;
+      #{$right}: 0;
+      width: 6px;
+      height: 10px;
+      top: 20px;
+    }
+  }
+}
