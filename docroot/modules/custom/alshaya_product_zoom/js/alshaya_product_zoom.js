@@ -56,9 +56,7 @@
             var maskHeight = $("#full-image-wrapper").height();
             var imgPos     = $("#full-image").offset();
             var imgWidth   = $("#full-image").width();
-            console.log(imgWidth);
             var imgHeight  = $("#full-image").height();
-            console.log(imgHeight);
             var x1 = (imgPos.left + maskWidth) - imgWidth;
             var y1 = (imgPos.top + maskHeight) - imgHeight;
             var x2 = imgPos.left;
@@ -110,7 +108,7 @@
       };
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
-      $('.cloud-zoom-container #wrap').on('click', function () {
+      $('.cloud-zoom-container #cloud-zoom-wrap').on('click', function () {
         myDialog.show();
         myDialog.showModal();
       });
@@ -147,14 +145,14 @@
       // For Desktop slider, we add a iframe on click on the image.
       $('#lightSlider li').on('click', function () {
         if ($(this).hasClass('video-product-zoom')) {
-          var wrap = $('#wrap');
+          var wrap = $('#cloud-zoom-wrap');
           // Get width & height of wrap.
           var width = wrap.width();
           var height = wrap.height();
           var URL = $(this).attr('data-iframe');
           $('#yt-vi-container iframe').remove();
           appendVideoIframe($('#yt-vi-container'), URL, width, height);
-          $('#wrap').hide();
+          $('#cloud-zoom-wrap').hide();
         }
       });
       // For Desktop slider, we remove the iframe when we want to zoom another image.
@@ -163,7 +161,7 @@
         // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
         if (playerIframe.length > 0) {
           playerIframe.remove();
-          $('#wrap').show();
+          $('#cloud-zoom-wrap').show();
         }
       });
 
@@ -178,8 +176,6 @@
         if ($(window).width() < 381) {
           $('.image-gallery-mobile').show();
           $('.cloud-zoom-container').hide();
-
-          console.log('show');
         }
         else {
           $('.image-gallery-mobile').hide();
