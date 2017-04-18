@@ -214,8 +214,14 @@ class APIWrapper {
    */
   public function createCustomer($first_name, $last_name, $email) {
     // First check if the user exists in Magento.
-    if ($existingCustomer = $this->getCustomer($email)) {
-      return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email);
+    try {
+      if ($existingCustomer = $this->getCustomer($email)) {
+        return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email);
+      }
+    }
+    catch (\Exception $e) {
+      // We are expecting error here for all emails that are not registered
+      // already in magento.
     }
 
     return $this->updateCustomer(NULL, $first_name, $last_name, $email);

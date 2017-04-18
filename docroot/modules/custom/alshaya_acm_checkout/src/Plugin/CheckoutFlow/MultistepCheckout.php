@@ -90,6 +90,12 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       if (empty($step_id)) {
         $step_id = reset($step_ids);
       }
+
+      // If the requested step is not valid we redirect them to proper URL.
+      // This will mostly happen when user logs in.
+      if (!empty($requested_step_id)) {
+        $this->redirectToStep($step_id);
+      }
     }
 
     $config = $this->getConfiguration();
