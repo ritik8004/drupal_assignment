@@ -9,9 +9,7 @@
 
     .messages--error {
       font-size: 13px;
-      position: absolute;
       color: $red-error;
-      top: 59%;
 
       em {
         font-style: normal;
@@ -38,6 +36,7 @@
 
     p {
       color: $brownish-grey;
+      margin: 3px 0;
     }
   }
 
@@ -47,14 +46,12 @@
 
   #block-youllbeableto {
     margin-top: 3em;
-    margin-bottom: 1.5rem;
-
-    @include breakpoint($tablet) {
-      margin-bottom: 4.375rem;
-    }
+    margin-bottom: 4.1rem;
 
     a {
       font-weight: bold;
+      padding-top: 1em;
+      display: inline-block;
     }
   }
 
@@ -77,24 +74,55 @@
       width: 30.25rem;
     }
 
+    .field--name-body {
+      max-width: 12em;
+      float: $left;
+    }
+
     h2 {
       color: $dark-sand;
     }
 
     a {
       font-weight: bold;
+      margin-top: 1em;
+      display: inline-block;
+    }
+
+    p {
+      margin: 9px 0;
     }
   }
 
   #block-onlineexclusiveheadingovertwolinesneverthree {
-    @include breakpoint($only-mobile) {
-      display: none;
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: block;
     }
 
     a {
       font-weight: bold;
       text-transform: lowercase;
       color: $cerulean;
+    }
+
+    h2 {
+      max-width: 12rem;
+      display: inline-block;
+      float: $left;
+      margin-top: 0;
+    }
+
+    .field--name-body {
+      max-width: 11rem;
+      float: $left;
+      clear: $left;
+    }
+
+    p > a {
+      padding-top: 1em;
+      display: inline-block;
     }
   }
 
@@ -260,19 +288,20 @@
   position: relative;
 
   & > a {
+    @include breakpoint($tablet) {
+      #{$left}: 9em;
+      bottom: 0.75em;
+      width: auto;
+    }
+
     position: absolute;
-    bottom: -3.75em;
+    bottom: -2.5em;
     text-decoration: none;
     font-size: 0.75rem;
     font-weight: bold;
     z-index: 999;
     width: 100%;
     text-align: center;
-
-    @include breakpoint($tablet) {
-      #{$left}: -2em;
-      bottom: 0.75em;
-    }
   }
 }
 
@@ -547,19 +576,11 @@
   color: $greyish;
 }
 
-.alias--user-register h1 {
-  @include breakpoint($desktop) {
-    top: -0.5em;
-  }
-}
-
-.alias--user-login h1 {
-  @include breakpoint($desktop) {
-    top: -4em;
-  }
-
-  @include breakpoint($only-mobile) {
-    top: -5em;
+.alias--user-login {
+  #block-youllbeableto {
+    @include breakpoint($only-mobile) {
+      margin-top: 4em;
+    }
   }
 }
 
