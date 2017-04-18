@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4b365d290b0825178e01a604a531e00",
+    "content-hash": "a5d83eee0f64552d0c216ad417b0dbc5",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2319,7 +2319,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.6",
-                    "datestamp": "1490994483"
+                    "datestamp": "1489502883"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2421,7 +2421,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha1",
-                    "datestamp": "1490940184"
+                    "datestamp": "1476873539"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -9332,7 +9332,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-21T08:33:48+00:00"
+            "time": "2017-04-03T20:37:06+00:00"
         },
         {
             "name": "symfony/filesystem",
