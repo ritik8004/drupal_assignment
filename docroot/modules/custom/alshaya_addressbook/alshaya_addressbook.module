@@ -26,6 +26,14 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
   if (!$default_address) {
     $form['actions']['submit']['#access'] = FALSE;
   }
+
+  // Get the default country from 'admin/config/regional/settings' site
+  // regional settings.
+  $default_site_country = \Drupal::config('system.date')->get('country.default');
+  if (!empty($default_site_country)) {
+    // Set the default country.
+    $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = $default_site_country;
+  }
 }
 
 /**
