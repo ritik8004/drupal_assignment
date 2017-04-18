@@ -66,7 +66,7 @@
         $('.main--menu').hide();
         $('.c-menu-secondary').addClass('remove--toggle');
         $('body').removeClass('mobile--overlay');
-        $('.my-account-nav').removeClass('block--display');
+        $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
       });
 
@@ -100,10 +100,10 @@
       $('.logged-in .account--logged_in').click(function () {
         $('.account--logged_in').addClass('active');
         $('.shop').removeClass('active');
-        $('.my-account-nav').addClass('block--display');
+        $('.c-my-account-nav').addClass('block--display');
         $('.menu--one__list').addClass('remove--toggle');
         $('.menu--one__list').removeClass('block--display');
-        $('.my-account-nav').removeClass('remove--toggle');
+        $('.c-my-account-nav').removeClass('remove--toggle');
       });
 
       $('.logged-in .shop').click(function () {

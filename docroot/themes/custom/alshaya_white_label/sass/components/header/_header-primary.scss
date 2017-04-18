@@ -837,65 +837,6 @@ header {
   }
 }
 
-//User Menu Account
-@include breakpoint($only-tablet) {
-  .my-account-nav {
-    width: 270px !important;
-  }
-}
-
-.c-menu-primary .my-account-nav {
-  display: none;
-
-  h2 {
-    color: $marine-blue-two;
-    font-size: 12px;
-    padding: 0.94rem 0;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 0;
-    border-bottom: 1px solid #ddd;
-    text-transform: lowercase;
-  }
-
-  position: fixed;
-  width: 80%;
-  top: 75px;
-  background: #fff;
-  height: 100%;
-  z-index: 10;
-  padding: 0;
-
-  li {
-    display: block;
-    font-family: $alshaya-thin;
-    border-bottom: 1px solid #ddd;
-    padding: 0.94rem 0;
-    margin-left: 0.625rem;
-    margin-right: 0.625rem;
-    text-align: $left;
-    position: relative;
-
-    &:hover {
-      background: none;
-
-      a {
-        color: $brownish-grey;
-      }
-    }
-
-    &::after {
-      content: '';
-      background: url(../imgs/icons/ic-chevronright-copy-9.svg);
-      position: absolute;
-      #{$right}: 0;
-      width: 6px;
-      height: 10px;
-      top: 20px;
-    }
-  }
-}
-
 .logged-out {
   .account--logged_in {
     display: none;

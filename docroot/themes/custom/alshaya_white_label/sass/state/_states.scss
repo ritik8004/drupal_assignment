@@ -1,1 +1,3 @@
-/* stylelint-disabled */ // Remove this line on adding content.
+.is-hidden {
+  @include u-visibility(none);
+}
