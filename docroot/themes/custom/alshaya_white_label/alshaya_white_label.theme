@@ -422,7 +422,7 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
       $lname = $user->get('field_last_name') ? (!empty($user->get('field_last_name')->getValue()) ? $user->get('field_last_name')->getValue()[0]['value'] : '') : '';
       if (!empty($fname)) {
         $variables['title'] = [
-          '#markup' => t('My Account') . '<div>' . t('Hello, @fname @lname', ['@fname' => $fname, '@lname' => $lname]) . '</div>',
+          '#markup' => t('My Account'),
         ];
       }
     }

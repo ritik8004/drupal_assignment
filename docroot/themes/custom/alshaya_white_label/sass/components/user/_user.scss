@@ -710,7 +710,12 @@
   }
 
   .c-content .messages--error {
-    top: auto;
+    position: static;
+
+    .messages__list {
+      list-style: none;
+      padding-left: 0;
+    }
   }
 }
 
@@ -740,11 +745,25 @@
         display: inline-block;
         font-size: 12px;
         margin: 0;
-        padding-left: 0;
+        padding-#{$left}: 0;
         vertical-align: top;
 
         @include breakpoint($desktop) {
           vertical-align: middle;
+        }
+      }
+
+      ul {
+        margin-#{$left}: 41px;
+        margin-top: 16px;
+
+        @include breakpoint($tablet) {
+          margin: 0;
+          margin-#{$left}: 50px;
+        }
+
+        @include breakpoint($desktop) {
+          margin-#{$left}: 64px;
         }
       }
 
@@ -774,11 +793,9 @@
       p {
         font-size: 13px;
         font-weight: 700;
-        margin-#{$right}: 50px;
 
         @include breakpoint($desktop) {
           font-size: 15px;
-          margin-#{$right}: 64px;
         }
 
         @include icon(infomation, before) {
@@ -794,7 +811,11 @@
     background: #e8eff5;
     margin-top: 50px;
     margin-bottom: 55px;
-    padding: 24px;
+    padding: 20px 16px;
+
+    @include breakpoint($tablet) {
+      padding: 24px;
+    }
   }
 }
 
