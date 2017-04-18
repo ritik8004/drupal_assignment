@@ -1,24 +1,19 @@
 (function ($) {
-  Drupal.behaviors.alshaya_acm_cart_notification = {
+  "use strict";
+  Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      var element = document.getElementById('cart_notification');
-      var dialogsettings = {
-        autoOpen: true,
-        dialogClass: 'dialog-cart-notification',
-        title: '',
-        close: function() {
-          // Add a new placeholder div for further AJAX calls.
-          $("#sku-base-form").append('<div id = "cart_notification"></div>');
-          // Perform cleanup to avoid duplicate HTML of dialog in DOM.
-          $(this).dialog('destroy').remove();
+      $(window).on('click', function() {
+        // check if element is Visible
+        var element = $('#cart_notification');
+        var length = $('#cart_notification').html().length;
+        if (length > 0) {
+          $('#cart_notification').empty();
         }
-      };
-      var myDialog = Drupal.dialog(element, dialogsettings);
-      // Avoiding empty dialog during first page load.
-      if($(element).html().length != 0) {
-        myDialog.show();
-        myDialog.showModal();
-       }
+      });
+      // Stop event from inside container to propogate out.
+      $('#cart_notification').on('click', function(event){
+        event.stopPropagation();
+      });
     }
   };
 })(jQuery);
