@@ -9,6 +9,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_preprocess_html().
@@ -143,7 +144,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
         'title' => t('Edit'),
         'url' => $profile->urlInfo('edit-form', [
           'query' => [
-            'destination' => $current_language->getId() . '/user/' . $current_user->id() . '/address_book',
+            'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
           ],
           'language' => $current_language,
         ]),
@@ -169,7 +170,11 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     if (!$profile->isDefault()) {
       $variables['set_default_operation'] = [
         'title' => t('Primary address'),
-        'url' => $profile->toUrl('set-default', ['query' => ['destination' => $current_language->getId() . '/user/' . $current_user->id() . '/address_book']]),
+        'url' => $profile->toUrl('set-default', [
+          'query' => [
+            'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
+          ],
+        ]),
         'parameter' => $profile,
       ];
     }

@@ -37,6 +37,11 @@ class AlshayaProfileForm extends ProfileForm {
       $element['delete']['#attributes']['class'][] = 'use-ajax';
       $element['delete']['#attributes']['data-dialog-type'] = 'modal';
       $element['delete']['#attributes']['data-dialog-options'] = Json::encode(['width' => '341']);
+      // Get current language.
+      $current_language = \Drupal::languageManager()->getCurrentLanguage();
+      if (isset($element['delete']['#url'])) {
+        $element['delete']['#url']->setOption('language', $current_language);
+      }
     }
 
     return $element;
