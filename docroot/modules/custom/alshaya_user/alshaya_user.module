@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\block\Entity\Block;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
@@ -165,5 +166,14 @@ function alshaya_user_block_access(Block $block, $operation, AccountInterface $a
   if ($operation == 'view' && $block->id() == 'myaccountneedhelp') {
     $current_route = \Drupal::routeMatch()->getRouteName();
     return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
+  }
+}
+
+/**
+ * Implements hook_block_build_alter().
+ */
+function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $block) {
+  if ($block->getPluginId() == 'system_menu_block:account') {
+    $build['#cache']['contexts'][] = 'route';
   }
 }
