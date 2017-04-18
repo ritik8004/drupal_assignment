@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.acq_product_category.field_category_include_menu
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
     - taxonomy.vocabulary.acq_product_category
@@ -19,6 +20,15 @@ content:
     weight: 0
     settings: {  }
     third_party_settings: {  }
+  field_category_include_menu:
+    weight: 2
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
   field_main_menu_highlight:
     type: entity_reference_revisions_entity_view
     weight: 1
