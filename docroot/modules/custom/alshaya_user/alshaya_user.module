@@ -11,7 +11,6 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Render\Element\PasswordConfirm;
 
 /**
@@ -186,8 +185,8 @@ function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $blo
 function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['account']['pass']['#process'][] = 'alshaya_user_form_change_pwd_form_process_pass';
   // Change current password title and submit button text.
-  $form['account']['current_pass']['#title'] = (new TranslatableMarkup('current password'))->render();
-  $form['actions']['submit']['#value'] = (new TranslatableMarkup('change password'))->render();
+  $form['account']['current_pass']['#title'] = t('current password');
+  $form['actions']['submit']['#value'] = t('change password');
 }
 
 /**
