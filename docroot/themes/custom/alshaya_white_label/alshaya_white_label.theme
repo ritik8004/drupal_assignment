@@ -286,13 +286,15 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       break;
 
     case "user_register_form":
-      $prefix = '<div class="privilege-card-wrapper">';
-      $prefix .= '<div class="privilege-card-wrapper-title">' . t('already a privilege club card member?') . '</div>';
-      $form['privilege_card_wrapper']['#prefix'] = $prefix;
-      $form['privilege_card_wrapper']['#suffix'] = '</div>';
-      $form['privilege_card_wrapper']['#title'] = t('enter card details');
-      $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
-      $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
+        $prefix = '<div class="privilege-card-wrapper">';
+        $prefix .= '<div class="privilege-card-wrapper-title">' . t('already a privilege club card member?') . '</div>';
+        $form['privilege_card_wrapper']['#prefix'] = $prefix;
+        $form['privilege_card_wrapper']['#suffix'] = '</div>';
+        $form['privilege_card_wrapper']['#title'] = t('enter card details');
+        $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
+        $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+      }
       break;
   }
 }
