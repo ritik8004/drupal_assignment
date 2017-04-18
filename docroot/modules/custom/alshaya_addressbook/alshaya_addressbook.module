@@ -30,9 +30,34 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
   // Get the default country from 'admin/config/regional/settings' site
   // regional settings.
   $default_site_country = \Drupal::config('system.date')->get('country.default');
-  if (!empty($default_site_country)) {
-    // Set the default country.
-    $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = $default_site_country;
+  if (empty($default_site_country)) {
+    // If no default country is set, take the first as default.
+    $full_country_list = \Drupal::service('address.country_repository')->getList();
+    $default_site_country = key($full_country_list);
+  }
+
+  // Set the default country.
+  $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = $default_site_country;
+}
+
+/**
+ * Processor for the country in address field.
+ */
+function _alshaya_addressbook_country_process(array &$element, FormStateInterface $form_state) {
+  $default_country_code = $element['#default_value']['country_code'];
+  $element['country_code'] = [
+    '#type' => 'hidden',
+    '#value' => $default_country_code,
+  ];
+  return $element;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_addressbook_element_info_alter(array &$info) {
+  if (isset($info['address']['#process'])) {
+    $info['address']['#process'][] = '_alshaya_addressbook_country_process';
   }
 }
 
