@@ -47,7 +47,11 @@
 
   #block-youllbeableto {
     margin-top: 3em;
-    margin-bottom: 4.375rem;
+    margin-bottom: 1.5rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 4.375rem;
+    }
 
     a {
       font-weight: bold;
@@ -61,7 +65,7 @@
 
     @include breakpoint($tablet) {
       margin-top: 4.5rem;
-      padding-top: 4.5rem;
+      padding-top: 3.5rem;
       width: 20.625rem;
       margin-#{$left}: -2em;
       padding-#{$left}: 3em;
@@ -84,8 +88,7 @@
 
   #block-onlineexclusiveheadingovertwolinesneverthree {
     @include breakpoint($only-mobile) {
-      width: 50%;
-      margin: 0 auto;
+      display: none;
     }
 
     a {
