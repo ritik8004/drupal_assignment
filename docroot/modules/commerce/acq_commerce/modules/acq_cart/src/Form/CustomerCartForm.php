@@ -192,18 +192,6 @@ class CustomerCartForm extends FormBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    if ($form_state->getTriggeringElement()['#parents'][0] == 'checkout') {
-      $form_state->setRedirect('acq_checkout.form');
-    }
-    else {
-      drupal_set_message(t('Your cart has been updated.'));
-    }
-  }
-
-  /**
    * Cart update utility.
    *
    * @param Drupal\Core\Form\FormStateInterface $form_state
