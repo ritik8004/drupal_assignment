@@ -23,7 +23,7 @@
        */
       function toggleAccordion() {
         var desktopView = $(document).width();
-        if (desktopView >= '768') {
+        if (desktopView > '768') {
           $('.c-footer-is-accordion').accordion('disable');
           $('.c-footer-is-accordion .ui-accordion-content').show();
         }
