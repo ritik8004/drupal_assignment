@@ -3,10 +3,10 @@
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       {% if css %}
       <style type="text/css">
-          * {
-            font-family: 'Arial', Helvetica;
-            font-size: 13px;
-          }
+        a { color: #0d6fc0; }
+        .bold { font-weight: bold; }
+        .button { background: #ff6d22; color: #fff; padding: 10px 30px; }
+        p { margin-bottom: 16px;}
       </style>
       {% endif %}
   </head>
@@ -16,5 +16,51 @@
         {{ body|raw }}
       </div>
     </div>
+    <footer style="border-top: 2px solid #003971; text-align: center;">
+      <div style="padding-top: 30px; padding-bottom: 50px;">
+        <a href="" target="_blank" style="display: inline-block;">
+          <div style"inline-block;">
+            <img src="https://whitelabel1.test-alshayaec.acsitefactory.com/themes/custom/alshaya_white_label/imgs/social-icons/facebook.svg" alt="">
+          </div>
+        </a>
+        <a href="" target="_blank" style="display: inline-block;  margin: 0 15px;">
+          <div>
+            <img src="https://whitelabel1.test-alshayaec.acsitefactory.com/themes/custom/alshaya_white_label/imgs/social-icons/instagram.svg" alt="">
+          </div>
+        </a>
+        <a href="" target="_blank" style="display: inline-block; margin: 0 15px;">
+          <div>
+            <img src="https://whitelabel1.test-alshayaec.acsitefactory.com/themes/custom/alshaya_white_label/imgs/social-icons/youtube.svg" alt=""  "taget+_blank">
+          </div>
+        </a>
+        <a href="" target="_blank" style="display: inline-block; margin: 0 15px;">
+          <div>
+            <img src="https://whitelabel1.test-alshayaec.acsitefactory.com/themes/custom/alshaya_white_label/imgs/social-icons/google.svg" alt=""  "taget+_blank">
+          </div>
+        </a>
+        <a href="" target="_blank" style="display: inline-block; margin: 0 15px;">
+          <div>
+            <img src="https://whitelabel1.test-alshayaec.acsitefactory.com/themes/custom/alshaya_white_label/imgs/social-icons/twitter.svg" alt=""  "taget+_blank">
+          </div>
+        </a>
+        <a href="" target="_blank" style="display: inline-block;">
+          <div>
+            <img src="https://whitelabel1.test-alshayaec.acsitefactory.com/themes/custom/alshaya_white_label/imgs/social-icons/pinterest.svg" alt="" "taget+_blank">
+          </div>
+        </a>
+      </div>
+      <div style="font-family: 'Arial', helvetica; font-size: 11px; background: #f7f7f7; padding: 16px; 60px; text-align: center;">
+        <p>
+          {% trans %}
+            &copy; Copyright Mothercare UK Limited  2016 Registerd in England no. 533087, VAT Reg no 440 6445 66
+          {% endtrans %}
+        </p>
+        <p>
+          {% trans %}
+            Registered office: Cherry Tree Road, Watford, Herfordshire, WD24 6SH
+          {% endtrans %}
+        </p>
+      </div>
+    </footer>
   </body>
 </html>
