@@ -738,6 +738,7 @@
 
   .c-order-help {
     color: $windows-blue;
+    overflow: hidden;
 
     .field--name-body {
       p,
@@ -749,21 +750,23 @@
         vertical-align: top;
 
         @include breakpoint($desktop) {
-          vertical-align: middle;
+          float: $left;
         }
       }
 
       ul {
-        margin-#{$left}: 41px;
-        margin-top: 16px;
+        margin-#{$left}: 2.6rem;
+        margin-top: 1rem;
 
         @include breakpoint($tablet) {
           margin: 0;
-          margin-#{$left}: 50px;
+          margin-#{$left}: 3.1rem;
         }
 
         @include breakpoint($desktop) {
-          margin-#{$left}: 64px;
+          width: 65%;
+          margin-#{$left}: 0;
+          font-size: 0;
         }
       }
 
@@ -778,15 +781,30 @@
       li {
         list-style: none;
         margin-bottom: 21px;
+        font-size: 12px;
 
         @include breakpoint($desktop) {
           display: inline-block;
-          margin-#{$right}: 69px;
+          margin-#{$right}: 0;
           margin-bottom: 0;
+          text-align: center;
+          width: 33.33%;
+          vertical-align: top;
+          line-height: 24px;
+        }
+
+        &:first-child {
+          @include breakpoint($desktop) {
+            text-align: $left;
+          }
         }
 
         &:last-child {
           margin: 0;
+
+          @include breakpoint($desktop) {
+            text-align: $right;
+          }
         }
       }
 
@@ -796,6 +814,7 @@
 
         @include breakpoint($desktop) {
           font-size: 15px;
+          width: 35%;
         }
 
         @include icon(infomation, before) {

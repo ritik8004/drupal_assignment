@@ -13,24 +13,6 @@
       margin-bottom: 36px;
     }
   }
-
-  .empty--cell {
-    width: 45px;
-
-    @include breakpoint($desktop) {
-      width: 133px;
-    }
-  }
-
-  .sub-total-row,
-  .delivery-charge-row,
-  .total-row {
-    background: $white-five;
-
-    td {
-      padding: 10px 22px 9px;
-    }
-  }
 }
 
 .user__order--detail {
@@ -51,6 +33,24 @@
   .dark {
     color: $black-two;
     font-weight: 700;
+  }
+
+  .empty--cell {
+    width: 45px;
+
+    @include breakpoint($desktop) {
+      width: 133px;
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row {
+    background: $white-five;
+
+    td {
+      padding: 10px 22px 9px;
+    }
   }
 
   .delivery-details-row {
@@ -230,10 +230,10 @@
   }
 
   .currency-code {
-    padding-right: 38px;
+    padding-#{$right}: 38px;
 
     @include breakpoint($tablet) {
-      padding-right: 9px;
+      padding-#{$right}: 9px;
     }
   }
 
