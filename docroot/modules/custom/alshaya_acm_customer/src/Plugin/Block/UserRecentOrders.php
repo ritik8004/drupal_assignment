@@ -138,7 +138,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
               // Load SKU to get the image.
-              $sku = SKU::loadFromSKU($item['sku']);
+              $sku = SKU::loadFromSku($item['sku']);
               if ($sku) {
                 $sku_image = $sku->attr_image->view('product_list');
                 $order['items'][$key]['sku_attr_image'] = $sku_image;

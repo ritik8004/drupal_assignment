@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\SKUAccessControlHandler.
- */
-
 namespace Drupal\acq_sku;
 
 use Drupal\Core\Access\AccessResult;

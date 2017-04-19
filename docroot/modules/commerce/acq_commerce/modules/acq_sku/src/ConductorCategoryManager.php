@@ -1,76 +1,75 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\ConductorCategoryManager
- */
-
 namespace Drupal\acq_sku;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\taxonomy\VocabularyInterface;
 use Drupal\acq_commerce\Conductor\ClientFactory;
 
 /**
- * Provides a service for Conductor category data to taxonomy
- * synchronization.
+ * Provides a service for category data to taxonomy synchronization.
  *
  * @ingroup acq_sku
  */
 class ConductorCategoryManager implements CategoryManagerInterface {
 
-  use \Drupal\acq_commerce\Conductor\AgentRequestTrait;
-
   /**
-   * Conductor Agent Category Data API Endpoint
+   * Conductor Agent Category Data API Endpoint.
+   *
    * @const CONDUCTOR_API_CATEGORY
    */
   const CONDUCTOR_API_CATEGORY = 'categories';
 
   /**
-   * Taxonomy Term Entity Storage
-   * @var TermStorageInterface $termStorage
+   * Taxonomy Term Entity Storage.
+   *
+   * @var \Drupal\taxonomy\TermStorageInterface
    */
   private $termStorage;
 
   /**
-   * Taxonomy Vocabulary Entity Storage
-   * @var VocabularyStorageInterface $vocabStorage
+   * Taxonomy Vocabulary Entity Storage.
+   *
+   * @var \Drupal\taxonomy\VocabularyStorageInterface
    */
   private $vocabStorage;
 
   /**
-   * Taxonomy Vocabulary Entity to Sync
-   * @var VocabularyInterface $vocabulary
+   * Taxonomy Vocabulary Entity to Sync.
+   *
+   * @var \Drupal\taxonomy\VocabularyInterface
    */
   private $vocabulary;
 
   /**
-   * Drupal Entity Query Factory
-   * @var QueryFactory $queryFactory
+   * Drupal Entity Query Factory.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
    */
   private $queryFactory;
 
   /**
-   * Result (create / update / failed) counts
-   * @var array $results
+   * Result (create / update / failed) counts.
+   *
+   * @var array
    */
   private $results;
 
   /**
-   * Constructor
+   * Constructor.
    *
-   * @param EntityTypeManagerInterface $entity_type_manager
-   * @param ClientFactory $client
-   * @param QueryFactory $query_factory
-   * @param LoggerChannelFactory $loggerFactory
-   *
-   * @return void
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   EntityTypeManager object.
+   * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
+   *   ClientFactory object.
+   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
+   *   QueryFactory object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+   *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, QueryFactory $query_factory, LoggerChannelFactory $logger_factory)
-  {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, QueryFactory $query_factory, LoggerChannelFactory $logger_factory) {
+
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->queryFactory = $query_factory;
@@ -79,42 +78,41 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function synchronizeTree($vocabulary, $remoteRoot = NULL)
-  {
+  public function synchronizeTree($vocabulary, $remoteRoot = NULL) {
+
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
     // Load Conductor Category data.
     $remoteRoot = ($remoteRoot !== NULL) ? (int) $remoteRoot : NULL;
-    $categories = [ $this->loadCategoryData($remoteRoot) ];
+    $categories = [$this->loadCategoryData($remoteRoot)];
 
     // Recurse the category tree and create / update nodes.
     $this->syncCategory($categories, NULL);
 
-    return($this->results);
+    return ($this->results);
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function synchronizeTreeOffline($vocabulary, array $categories)
-  {
+  public function synchronizeTreeOffline($vocabulary, array $categories) {
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
     // Recurse the category tree and create / update nodes.
     $this->syncCategory($categories, NULL);
 
-    return($this->results);
+    return $this->results;
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function synchronizeCategory($vocabulary, array $categories)
-  {
+  public function synchronizeCategory($vocabulary, array $categories) {
+
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
@@ -136,50 +134,52 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     }
 
     // Recurse the category tree and create / update nodes.
-    $this->syncCategory([ $categories ], $parent);
+    $this->syncCategory([$categories], $parent);
 
-    return($this->results);
+    return ($this->results);
   }
 
   /**
-   * loadCategoryData
+   * LoadCategoryData.
    *
    * Load the commerce backend category data from Conductor.
    *
-   * @param int $remoteRoot Remote Root ID (optional)
+   * @param int $remoteRoot
+   *   Remote Root ID (optional)
    *
-   * @return array $categories
+   * @return array
+   *   Array of categories.
    */
-  private function loadCategoryData($remoteRoot)
-  {
+  private function loadCategoryData($remoteRoot) {
+
     $endpoint = self::CONDUCTOR_API_CATEGORY;
 
-    $doReq = function($client, $opt) use ($endpoint) {
-      return($client->get($endpoint, $opt));
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
     };
 
-    $categories = array();
+    $categories = [];
 
     try {
       $categories = $this->tryAgentRequest($doReq, 'loadCategoryData', 'categories');
-    } catch (ConductorException $e) {
+    }
+    catch (ConductorException $e) {
       $this->logger->error('Unable to load conductor category data.');
     }
 
-    return($categories);
+    return ($categories);
   }
 
   /**
-   * loadVocabulary
+   * LoadVocabulary.
    *
    * Load a taxonomy vocabulary from a vid.
    *
-   * @param string $vocabulary Vocabulary VID
-   *
-   * @return void
+   * @param string $vocabulary
+   *   Vocabulary VID.
    */
-  private function loadVocabulary($vocabulary)
-  {
+  private function loadVocabulary($vocabulary) {
+
     if (!strlen($vocabulary)) {
       throw new \InvalidArgumentException('CategoryManager requires a taxonomy vocabulary machine name.');
     }
@@ -198,33 +198,30 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   }
 
   /**
-   * resetResults
+   * ResetResults.
    *
    * Reset the results counters.
-   *
-   * @return void
    */
-  private function resetResults()
-  {
-    $this->results = array(
+  private function resetResults() {
+    $this->results = [
       'created' => 0,
       'updated' => 0,
       'failed'  => 0,
-    );
+    ];
   }
 
   /**
-   * syncCategory
+   * SyncCategory.
    *
    * Recursive category synchronization and saving.
    *
-   * @param array $categories Children Categories
-   * @param array|null $parent Parent Category
-   *
-   * @return void
+   * @param array $categories
+   *   Children Categories.
+   * @param array|null $parent
+   *   Parent Category.
    */
-  private function syncCategory(array $categories, $parent = NULL)
-  {
+  private function syncCategory(array $categories, $parent = NULL) {
+
     foreach ($categories as $category) {
       if (!isset($category['category_id']) || !isset($category['name'])) {
         $this->logger->error('Invalid / missing category ID or name.');
@@ -232,7 +229,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         continue;
       }
 
-      $parent_data = ($parent) ? [ $parent->id() ] : [0];
+      $parent_data = ($parent) ? [$parent->id()] : [0];
       $position = (isset($category['position'])) ? (int) $category['position'] : 1;
 
       // Load existing term (if found).
@@ -248,16 +245,17 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
         $this->logger->error(
           'Multiple terms found for category id @cid',
-          array('@cid' => $category['category_id'])
+          ['@cid' => $category['category_id']]
         );
 
         $this->results['failed']++;
         continue;
 
-      } elseif (count($tids) == 1) {
+      }
+      elseif (count($tids) == 1) {
 
         $this->logger->info('Updating category term @name [@id]',
-          array('@name' => $category['name'], '@id' => $category['category_id'])
+          ['@name' => $category['name'], '@id' => $category['category_id']]
         );
 
         // Load and update the term entity.
@@ -269,17 +267,20 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         // Break child relationships.
         $children = $this->termStorage->loadChildren($term->id(), $this->vocabulary->id());
         if (count($children)) {
-          $child_ids = array_map(function($child) { return($child->id()); }, $children);
+          $child_ids = array_map(function ($child) {
+            return ($child->id());
+          }, $children);
 
           $this->termStorage->deleteTermHierarchy($child_ids);
         }
 
         $this->results['updated']++;
 
-      } else {
+      }
+      else {
         // Create the term entity.
         $this->logger->info('Creating category term @name [@id]',
-          array('@name' => $category['name'], '@id' => $category['category_id'])
+          ['@name' => $category['name'], '@id' => $category['category_id']]
         );
 
         $term = $this->termStorage->create([
@@ -300,4 +301,5 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $this->syncCategory($childCats, $term);
     }
   }
+
 }

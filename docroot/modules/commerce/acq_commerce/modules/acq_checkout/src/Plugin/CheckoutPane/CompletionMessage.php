@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutPane\CompletionMessage.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutPane;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -15,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
  * @ACQCheckoutPane(
  *   id = "completion_message",
  *   label = @Translation("Completion Message"),
- *   default_step = "complete",
+ *   defaultStep = "complete",
  * )
  */
 class CompletionMessage extends CheckoutPaneBase {

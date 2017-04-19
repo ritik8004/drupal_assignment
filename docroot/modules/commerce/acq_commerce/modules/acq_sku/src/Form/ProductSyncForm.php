@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains Drupal\acq_sku\Form\ProductSyncForm
- */
 
 namespace Drupal\acq_sku\Form;
 
@@ -14,28 +10,34 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ContentEntityExampleSettingsForm.
+ *
  * @package Drupal\acq_sku\Form
+ *
  * @ingroup acq_sku
  */
 class ProductSyncForm extends FormBase {
 
   /**
-   * Conductor Category Manager
-   * @var CategoryManagerInterface $catManager
+   * Conductor Category Manager.
+   *
+   * @var \Drupal\acq_sku\CategoryManagerInterface
    */
   private $catManager;
 
   /**
-   * Conductor Ingest API Helper
-   * @var IngestAPIWrapper $ingestApi
+   * Conductor Ingest API Helper.
+   *
+   * @var \Drupal\acq_commerce\Conductor\IngestAPIWrapper
    */
   private $ingestApi;
 
   /**
-   * Constructor.
+   * ProductSyncForm constructor.
    *
-   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
-   *   The cart storage.
+   * @param \Drupal\acq_sku\CategoryManagerInterface $cat_manager
+   *   CategoryManagerInterface instance.
+   * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $api
+   *   IngestAPIWrapper object.
    */
   public function __construct(CategoryManagerInterface $cat_manager, IngestAPIWrapper $api) {
     $this->catManager = $cat_manager;
@@ -67,7 +69,7 @@ class ProductSyncForm extends FormBase {
    *
    * @param array $form
    *   An associative array containing the structure of the form.
-   * @param FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   An associative array containing the current state of the form.
    *
    * @return array
@@ -77,17 +79,17 @@ class ProductSyncForm extends FormBase {
 
     $form['actions']['#type'] = 'actions';
 
-    $form['actions']['cats'] = array(
+    $form['actions']['cats'] = [
       '#type' => 'submit',
       '#value' => t('Synchronize Categories'),
-    );
+    ];
 
-    $form['actions']['products'] = array(
+    $form['actions']['products'] = [
       '#type' => 'submit',
       '#value' => t('Synchronize Products'),
-    );
+    ];
 
-    return($form);
+    return ($form);
   }
 
   /**
@@ -95,10 +97,8 @@ class ProductSyncForm extends FormBase {
    *
    * @param array $form
    *   An associative array containing the structure of the form.
-   * @param FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   An associative array containing the current state of the form.
-   *
-   * @return void
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $action = $form_state->getUserInput()['op'];
@@ -108,10 +108,12 @@ class ProductSyncForm extends FormBase {
         $this->catManager->synchronizeTree('acq_product_category');
         drupal_set_message('Category Synchronization Complete.', 'status');
         break;
+
       case 'Synchronize Products':
         $this->ingestApi->productFullSync();
         drupal_set_message('Product Synchronization Processing...', 'status');
         break;
     }
   }
+
 }

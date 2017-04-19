@@ -2,8 +2,12 @@
 
 /**
  * @file
- * Provides base hooks to the product functionality of Acquia Commerce connector.
+ * Acquia Commerce product module file.
+ *
+ * Provides base hooks to the product functionality of Acquia Commerce
+ * connector.
  */
+
 use Drupal\Core\Render\Element;
 
 /**

@@ -7,3 +7,6 @@ dependencies:
   - acq_commerce
   - key_value_field
   - rest
+  - inline_entity_form
+  - workbench_moderation
+  - panelizer

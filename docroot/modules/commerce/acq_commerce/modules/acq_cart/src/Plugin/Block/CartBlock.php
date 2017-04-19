@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_cart\Plugin\Block\CartBlock.
- */
-
 namespace Drupal\acq_cart\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
@@ -65,7 +60,7 @@ class CartBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $cart = $this->cartStorage->getCart();
     $items = $cart->items();
 
-    $rows = array();
+    $rows = [];
 
     foreach ($items as $item) {
       $rows[$item['item_id']] = [$item['name'], $item['qty'], $item['price']];

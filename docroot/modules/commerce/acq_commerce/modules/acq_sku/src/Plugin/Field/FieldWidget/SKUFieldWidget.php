@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\Plugin\Field\FieldWidget\SKUFieldWidget.
- */
-
 namespace Drupal\acq_sku\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
@@ -46,7 +41,6 @@ class SKUFieldWidget extends WidgetBase {
       '#required' => TRUE,
       '#min' => 1,
     ];
-
 
     return $elements;
   }

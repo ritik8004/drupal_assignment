@@ -1,18 +1,10 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\CheckoutPaneManager;
-use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\acq_cart\CartStorageInterface;
-use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -64,7 +56,7 @@ abstract class CheckoutFlowWithPanesBase extends CheckoutFlowBase implements Che
    * @param \Drupal\acq_checkout\CheckoutPaneManager $pane_manager
    *   The checkout pane manager.
    */
-  public function __construct(array $configuration, $pane_id, $pane_definition, EventDispatcherInterface $event_dispatcher, RouteMatchInterface $route_match, CartStorageInterface $cart_storage, $api_wrapper, CheckoutPaneManager $pane_manager) {
+  public function __construct(array $configuration, $pane_id, $pane_definition, EventDispatcherInterface $event_dispatcher, RouteMatchInterface $route_match, CartStorageInterface $cart_storage, APIWrapper $api_wrapper, CheckoutPaneManager $pane_manager) {
     $this->paneManager = $pane_manager;
 
     parent::__construct($configuration, $pane_id, $pane_definition, $event_dispatcher, $route_match, $cart_storage, $api_wrapper);

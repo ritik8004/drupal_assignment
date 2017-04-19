@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_commerce\SKUInterface.
- */
-
 namespace Drupal\acq_commerce;
 
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -13,6 +8,7 @@ use Drupal\Core\Entity\EntityChangedInterface;
 
 /**
  * Provides an interface defining a SKU entity.
+ *
  * @ingroup acq_commerce
  */
 interface SKUInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {

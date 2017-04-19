@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\Form\SKUDeleteForm.
- */
-
 namespace Drupal\acq_sku\Form;
 
 use Drupal\Core\Entity\ContentEntityConfirmFormBase;
@@ -22,13 +17,13 @@ class SKUDeleteForm extends ContentEntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to delete entity %name?', array('%name' => $this->entity->label()));
+    return $this->t('Are you sure you want to delete entity %name?', ['%name' => $this->entity->label()]);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCancelURL() {
+  public function getCancelUrl() {
     return new Url('entity.acq_sku.collection');
   }
 
@@ -47,10 +42,10 @@ class SKUDeleteForm extends ContentEntityConfirmFormBase {
     $entity->delete();
 
     \Drupal::logger('acq_sku')->notice('@type: deleted %title.',
-      array(
+      [
         '@type' => $this->entity->bundle(),
         '%title' => $this->entity->label(),
-      ));
+      ]);
     $form_state->setRedirect('entity.acq_sku.collection');
     $form_state->setRedirect('entity.acq_sku.collection');
   }

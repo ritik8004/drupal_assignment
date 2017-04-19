@@ -1,13 +1,15 @@
 <?php
 
-use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Entity\EntityTypeInterface;
-
 /**
  * @file
+ * Acquia Commerce customer module file.
+ *
  * Provides base hooks to the customer profile functionality of Acquia Commerce
  * connector.
  */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\EntityTypeInterface;
 
 /**
  * Implements hook_entity_base_field_info().
@@ -17,11 +19,11 @@ function acq_customer_entity_base_field_info(EntityTypeInterface $entity_type) {
     $fields['acq_customer_id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Customer ID'))
       ->setDescription(t('Remote ID used to identify user'))
-      ->setDisplayOptions('form', array(
+      ->setDisplayOptions('form', [
         'type' => 'number',
         'weight' => 30,
         'default_value' => 0,
-      ))
+      ])
       ->setDisplayConfigurable('form', TRUE);
 
     return $fields;

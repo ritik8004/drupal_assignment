@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowInterface;

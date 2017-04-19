@@ -1,13 +1,7 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Controller\CheckoutController.
- */
-
 namespace Drupal\acq_checkout\Controller;
 
-use Drupal\acq_checkout\CheckoutFlowPluginCollection;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;

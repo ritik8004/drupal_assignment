@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutFlow\MultistepDefault.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutFlow;
 
 /**

@@ -1,16 +1,10 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowInterface.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutFlow;
 
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Form\FormInterface;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Places an order through a series of steps.

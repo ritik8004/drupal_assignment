@@ -1,16 +1,10 @@
 <?php
 
-/**
- * @file:
- * Contains Drupal\acq_customer\Controller\CustomerController;
- */
-
 namespace Drupal\acq_customer\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Access\AccessResult;
 use Drupal\user\UserInterface;
-
 
 /**
  * Class CustomerController.
@@ -25,7 +19,6 @@ class CustomerController extends ControllerBase {
 
     $orders = \Drupal::service('acq_commerce.api')
       ->getCustomerOrders($user->getEmail());
-
 
     if (empty($orders)) {
       $build['#markup'] = t('You have no orders.');
@@ -67,4 +60,5 @@ class CustomerController extends ControllerBase {
     // Check if user has access to view own orders.
     return AccessResult::allowedIfHasPermission($currentUser, 'access own orders');
   }
+
 }

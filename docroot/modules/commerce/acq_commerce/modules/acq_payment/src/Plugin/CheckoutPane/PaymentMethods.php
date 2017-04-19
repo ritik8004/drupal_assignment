@@ -1,16 +1,9 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_payment\Plugin\CheckoutPane\PaymentMethods.
- */
-
 namespace Drupal\acq_payment\Plugin\CheckoutPane;
 
-use Drupal\acq_payment\PaymentMethodManager;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
-use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -19,8 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
  * @ACQCheckoutPane(
  *   id = "payment_methods",
  *   label = @Translation("Payment Methods"),
- *   default_step = "payment",
- *   wrapper_element = "fieldset",
+ *   defaultStep = "payment",
+ *   wrapperElement = "fieldset",
  * )
  */
 class PaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterface {
@@ -81,7 +74,8 @@ class PaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterface {
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
 
-    // Get available payment methods and compare to enable payment method plugins.
+    // Get available payment methods and compare to enabled payment method
+    // plugins.
     $apiWrapper = $this->getApiWrapper();
     $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
     $payment_methods = array_intersect($payment_methods, array_keys($plugins));

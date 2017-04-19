@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_cart\Form\CustomerCartForm.
- */
-
 namespace Drupal\acq_cart\Form;
 
 use Drupal\acq_cart\CartStorageInterface;
@@ -155,8 +150,8 @@ class CustomerCartForm extends FormBase {
   }
 
   /**
-    * {@inheritdoc}
-    */
+   * {@inheritdoc}
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
@@ -190,14 +185,28 @@ class CustomerCartForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($form_state->getTriggeringElement()['#parents'][0] == 'checkout') {
       $form_state->setRedirect('acq_checkout.form');
-    } else {
+    }
+    else {
       drupal_set_message(t('Your cart has been updated.'));
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($form_state->getTriggeringElement()['#parents'][0] == 'checkout') {
+      $form_state->setRedirect('acq_checkout.form');
+    }
+    else {
+      drupal_set_message(t('Your cart has been updated.'));
+    }
+  }
 
   /**
-   * @param $form_state
+   * Cart update utility.
+   *
+   * @param Drupal\Core\Form\FormStateInterface $form_state
    *   FormStateInterface object.
    */
   private function updateCart(FormStateInterface $form_state) {
@@ -219,4 +228,5 @@ class CustomerCartForm extends FormBase {
       }
     }
   }
+
 }

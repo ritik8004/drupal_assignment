@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_payment\Plugin\PaymentMethod\Checkmo.
- */
-
 namespace Drupal\acq_payment\Plugin\PaymentMethod;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -38,7 +33,6 @@ class Checkmo extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $values = $form_state->getValue($pane_form['#parents']);
     $cart = $this->getCart();
     $cart->setPaymentMethodData([
       'cc_type' => '',

@@ -1,57 +1,61 @@
 <?php
-/**
- * @file
- * Contains Drupal\acq_commerce\Conductor\AgentRequestTrait
- */
 
 namespace Drupal\acq_commerce\Conductor;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\RequestException;
-use Psr\Log\LoggerInterface;
 
 /**
- * Trait AgentRequestTrait
+ * Trait AgentRequestTrait.
+ *
  * @package Drupal\acq_commerce\Conductor
+ *
  * @ingroup acq_commerce
  */
 trait AgentRequestTrait {
 
   /**
-   * HTTP (Guzzle) Conductor Client Factory
-   * @var ClientFactory $clientFactory
+   * HTTP (Guzzle) Conductor Client Factory.
+   *
+   * @var ClientFactory
    */
   private $clientFactory;
 
   /**
-   * Debug / Verbose Connection Logging
-   * @var bool $debug
+   * Debug / Verbose Connection Logging.
+   *
+   * @var bool
    */
   private $debug;
 
   /**
-   * System / Watchdog Logger
-   * @var LoggerInterface $logger
+   * System / Watchdog Logger.
+   *
+   * @var \Psr\Log\LoggerInterface
    */
   private $logger;
 
   /**
-   * tryAgentRequest
+   * TryAgentRequest.
    *
    * Try a simple request with the Guzzle client, adding debug callbacks
    * and catching / logging request exceptions if needed.
    *
-   * @param callable  $doReq  Request closure, passed client and opts array
-   * @param string    $action Action name for logging
-   * @param string    $reskey Result data key (or NULL)
+   * @param callable $doReq
+   *   Request closure, passed client and opts array.
+   * @param string $action
+   *   Action name for logging.
+   * @param string $reskey
+   *   Result data key (or NULL)
    *
-   * @return mixed $result
+   * @return mixed
+   *   API response.
+   *
    * @throws ConductorException
    * @throws ConductorResultException
    */
-  protected function tryAgentRequest(callable $doReq, $action, $reskey = NULL)
-  {
+  protected function tryAgentRequest(callable $doReq, $action, $reskey = NULL) {
+
     $client = $this->clientFactory->createAgentClient();
     $reqOpts = [];
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');
@@ -61,7 +65,7 @@ trait AgentRequestTrait {
 
       // Log transfer final endpoint and total time in debug mode.
       $reqOpts['on_stats'] =
-        function(TransferStats $stats) use ($logger, $action) {
+        function (TransferStats $stats) use ($logger, $action) {
           $code =
             ($stats->hasResponse()) ?
             $stats->getResponse()->getStatusCode() :
@@ -77,10 +81,11 @@ trait AgentRequestTrait {
         };
     }
 
-    // Make Request
+    // Make Request.
     try {
       $result = $doReq($client, $reqOpts);
-    } catch (RequestException $e) {
+    }
+    catch (RequestException $e) {
       $mesg = sprintf(
         '%s: Exception during request: (%d) - %s',
         $action,
@@ -119,9 +124,11 @@ trait AgentRequestTrait {
         throw new ConductorResultException($response);
       }
 
-      return($response[$reskey]);
-    } else {
-      return($response);
+      return ($response[$reskey]);
+    }
+    else {
+      return ($response);
     }
   }
+
 }

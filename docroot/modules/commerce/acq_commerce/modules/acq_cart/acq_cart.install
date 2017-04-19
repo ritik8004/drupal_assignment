@@ -2,10 +2,11 @@
 
 /**
  * @file
- * Contains install hooks for acq_cart
+ * Contains install hooks for acq_cart.
  */
 
 use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_install().
@@ -18,11 +19,11 @@ function acq_cart_install() {
     'weight' => 1,
   ])->save();
 
-  $role = \Drupal\user\Entity\Role::load('anonymous');
+  $role = Role::load('anonymous');
   $role->grantPermission('access cart page');
   $role->save();
 
-  $role = \Drupal\user\Entity\Role::load('authenticated');
+  $role = Role::load('authenticated');
   $role->grantPermission('access cart page');
   $role->save();
 }

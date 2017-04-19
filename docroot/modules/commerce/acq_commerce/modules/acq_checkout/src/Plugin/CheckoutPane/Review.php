@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutPane\Review.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutPane;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -16,7 +11,7 @@ use Drupal\Core\Link;
  * @ACQCheckoutPane(
  *   id = "review",
  *   label = @Translation("Review"),
- *   default_step = "review",
+ *   defaultStep = "review",
  * )
  */
 class Review extends CheckoutPaneBase implements CheckoutPaneInterface {

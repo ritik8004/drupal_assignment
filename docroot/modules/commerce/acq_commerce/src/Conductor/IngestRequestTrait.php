@@ -1,56 +1,57 @@
 <?php
-/**
- * @file
- * Contains Drupal\acq_commerce\Conductor\IngestRequestTrait
- */
 
 namespace Drupal\acq_commerce\Conductor;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\RequestException;
-use Psr\Log\LoggerInterface;
 
 /**
- * Trait IngestRequestTrait
+ * Trait IngestRequestTrait.
+ *
  * @package Drupal\acq_commerce\Conductor
+ *
  * @ingroup acq_commerce
  */
 trait IngestRequestTrait {
 
   /**
-   * HTTP (Guzzle) Conductor Client Factory
-   * @var ClientFactory $clientFactory
+   * HTTP (Guzzle) Conductor Client Factory.
+   *
+   * @var ClientFactory
    */
   private $clientFactory;
 
   /**
-   * Debug / Verbose Connection Logging
-   * @var bool $debug
+   * Debug / Verbose Connection Logging.
+   *
+   * @var bool
    */
   private $debug;
 
   /**
-   * System / Watchdog Logger
-   * @var LoggerInterface $logger
+   * System / Watchdog Logger.
+   *
+   * @var LoggerInterface
    */
   private $logger;
 
   /**
-   * tryIngestRequest
+   * TryIngestRequest.
    *
    * Try a simple request with the Guzzle client, adding debug callbacks
    * and catching / logging request exceptions if needed.
    *
-   * @param callable  $doReq  Request closure, passed client and opts array
-   * @param string    $action Action name for logging
-   * @param string    $reskey Result data key (or NULL)
+   * @param callable $doReq
+   *   Request closure, passed client and opts array.
+   * @param string $action
+   *   Action name for logging.
+   * @param string $reskey
+   *   Result data key (or NULL)
    *
-   * @return void
    * @throws ConductorException
    */
-  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL)
-  {
+  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL) {
+
     $client = $this->clientFactory->createIngestClient();
     $reqOpts = [];
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');
@@ -60,7 +61,7 @@ trait IngestRequestTrait {
 
       // Log transfer final endpoint and total time in debug mode.
       $reqOpts['on_stats'] =
-        function(TransferStats $stats) use ($logger, $action) {
+        function (TransferStats $stats) use ($logger, $action) {
           $code =
             ($stats->hasResponse()) ?
             $stats->getResponse()->getStatusCode() :
@@ -73,17 +74,17 @@ trait IngestRequestTrait {
             $stats->getTransferTime(),
             $code
           ));
-      };
+        };
     }
 
-    // Make Request
+    // Make Request.
     try {
       $result = $doReq($client, $reqOpts);
-    } catch (RequestException $e) {
+    }
+    catch (RequestException $e) {
       $mesg = sprintf(
         '%s: Exception during request: (%d) - %s',
         $action,
-        (string) $event,
         $e->getCode(),
         $e->getMessage()
       );
@@ -92,4 +93,5 @@ trait IngestRequestTrait {
       throw new ConductorException($mesg, $e->getCode(), $e);
     }
   }
+
 }

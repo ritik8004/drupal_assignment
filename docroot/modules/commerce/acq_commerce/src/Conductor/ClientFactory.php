@@ -1,59 +1,60 @@
 <?php
-/**
- * @file
- * Contains Drupal\acq_commerce\Conductor\ClientFactory
- */
 
 namespace Drupal\acq_commerce\Conductor;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Http\ClientFactory as DrupalClientFactory;
-use GuzzleHttp\Client;
 
 /**
- * Class ClientFactory
+ * Class ClientFactory.
+ *
  * @package Drupal\acq_commerce\Conductor
+ *
  * @ingroup acq_commerce
  */
 final class ClientFactory {
 
   /**
-   * Guzzle HttpClient Factory
-   * @var DrupalClientFactory $clientFactory
+   * Guzzle HttpClient Factory.
+   *
+   * @var \Drupal\Core\Http\ClientFactory
    */
   private $clientFactory;
 
   /**
-   * Drupal Config Factory
-   * @var ConfigFactory $configFactory
+   * Drupal Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
    */
   private $configFactory;
 
   /**
-   * Constructor
+   * Constructor.
    *
-   * @param DrupalClientFactory $clientFactory
-   * @param ConfigFactory $configFactory
-   *
-   * @return void
+   * @param \Drupal\Core\Http\ClientFactory $clientFactory
+   *   ClientFactory object.
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
+   *   ConfigFactory object.
    */
-  public function __construct(DrupalClientFactory $clientFactory, ConfigFactory $configFactory)
-  {
-        $this->clientFactory = $clientFactory;
-        $this->configFactory = $configFactory;
+  public function __construct(DrupalClientFactory $clientFactory, ConfigFactory $configFactory) {
+
+    $this->clientFactory = $clientFactory;
+    $this->configFactory = $configFactory;
   }
 
   /**
-   * createAgentClient
+   * CreateAgentClient.
    *
    * Create a Guzzle http client configured to connect to the
    * Conductor Agent (sync) instance from the site configuration.
    *
-   * @return Client $client
+   * @return \GuzzleHttp\Client
+   *   Object of initialized client.
+   *
    * @throws \InvalidArgumentException
    */
-  public function createAgentClient()
-  {
+  public function createAgentClient() {
+
     $config = $this->configFactory->get('acq_commerce.conductor');
     if (!strlen($config->get('url_agent'))) {
       throw new \InvalidArgumentException('No Conductor Agent URL specified.');
@@ -62,23 +63,25 @@ final class ClientFactory {
     $clientConfig = [
       'base_uri' => $config->get('url_agent'),
       'timeout'  => (int) $config->get('timeout'),
-      'verify'   => (bool) $config->get('verify_ssl')
+      'verify'   => (bool) $config->get('verify_ssl'),
     ];
 
     return $this->clientFactory->fromOptions($clientConfig);
   }
 
   /**
-   * createIngestClient
+   * CreateIngestClient.
    *
    * Create a Guzzle http client configured to connect to the
    * Conductor Ingest (async) instance from the site configuration.
    *
-   * @return Client $client
+   * @return \GuzzleHttp\Client
+   *   Object of initialized client.
+   *
    * @throws \InvalidArgumentException
    */
-  public function createIngestClient()
-  {
+  public function createIngestClient() {
+
     $config = $this->configFactory->get('acq_commerce.conductor');
     if (!strlen($config->get('url_ingest'))) {
       throw new \InvalidArgumentException('No Conductor Ingest URL specified.');
@@ -87,9 +90,10 @@ final class ClientFactory {
     $clientConfig = [
       'base_uri' => $config->get('url_ingest'),
       'timeout'  => (int) $config->get('timeout'),
-      'verify'   => (bool) $config->get('verify_ssl')
+      'verify'   => (bool) $config->get('verify_ssl'),
     ];
 
     return $this->clientFactory->fromOptions($clientConfig);
   }
+
 }
