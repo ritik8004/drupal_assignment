@@ -129,7 +129,7 @@ class APIWrapper {
     $result = [];
 
     try {
-      $result = $this->tryAgentRequest($doReq, 'placeOrder', 'cart');
+      $result = $this->tryAgentRequest($doReq, 'placeOrder');
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());

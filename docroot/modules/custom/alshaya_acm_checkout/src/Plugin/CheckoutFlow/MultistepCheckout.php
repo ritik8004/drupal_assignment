@@ -45,7 +45,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
     $steps['confirmation'] = [
       'label' => $this->t('Order confirmation'),
-      'next_label' => $this->t('View order confirmation'),
+      'next_label' => $this->t('place order'),
     ];
 
     return $steps;
@@ -72,6 +72,8 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     if ($this->stepId == 'login') {
       $form['#action'] = Url::fromRoute('<current>', [], ['query' => $this->getDestinationArray(), 'external' => FALSE])->toString();
     }
+
+    $form['#attached']['library'][] = 'alshaya_acm_checkout/checkout_flow';
 
     return $form;
   }
@@ -173,6 +175,38 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     }
 
     return $actions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    parent::submitForm($form, $form_state);
+
+    if ($next_step_id = $this->getNextStepId()) {
+      if ($next_step_id == 'confirmation') {
+        $this->cartStorage->pushCart();
+        $cart_id = $this->cartStorage->getCartId();
+
+        // Place an order.
+        $response = $this->apiWrapper->placeOrder($cart_id);
+
+        // Store the order details from response in tempstore.
+        $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+        $temp_store->set('order', $response['order']);
+
+        // Clear orders list cache if user is logged in.
+        if (\Drupal::currentUser()->isAuthenticated()) {
+          \Drupal::cache()->delete('orders_list_' . \Drupal::currentUser()->id());
+        }
+        else {
+          // Store the email address of customer in tempstore.
+          $cart = $this->cartStorage->getCart();
+          $shipping = $cart->getShipping();
+          $temp_store->set('email', $shipping->email);
+        }
+      }
+    }
   }
 
 }

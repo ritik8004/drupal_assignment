@@ -1,0 +1,8 @@
+checkout_flow:
+  version: 1.x
+  js:
+    js/alshaya_acm_checkout.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
