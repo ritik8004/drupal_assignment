@@ -5,7 +5,14 @@ dependencies:
     - field.storage.paragraph.field_highlight_image
     - paragraphs.paragraphs_type.main_menu_highlight
   module:
+    - content_translation
     - image
+third_party_settings:
+  content_translation:
+    translation_sync:
+      file: file
+      alt: '0'
+      title: '0'
 id: paragraph.main_menu_highlight.field_highlight_image
 field_name: field_highlight_image
 entity_type: paragraph
@@ -13,7 +20,7 @@ bundle: main_menu_highlight
 label: 'Highlight image'
 description: ''
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

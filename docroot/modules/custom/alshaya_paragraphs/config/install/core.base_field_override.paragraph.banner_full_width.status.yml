@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.banner_full_width
+id: paragraph.banner_full_width.status
+field_name: status
+entity_type: paragraph
+bundle: banner_full_width
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
