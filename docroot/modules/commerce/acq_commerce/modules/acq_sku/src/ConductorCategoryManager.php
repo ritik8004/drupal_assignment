@@ -96,16 +96,25 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Synchronize categories in offline mode, i.e. not connected to middleware.
+   *
+   * @param string $vocabulary
+   *   Vocabulary machine name.
+   * @param array $categories
+   *   Category tree to import.
+   *
+   * @return array
+   *   Array summarising updates.
    */
   public function synchronizeTreeOffline($vocabulary, array $categories) {
+
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
     // Recurse the category tree and create / update nodes.
     $this->syncCategory($categories, NULL);
 
-    return $this->results;
+    return ($this->results);
   }
 
   /**
