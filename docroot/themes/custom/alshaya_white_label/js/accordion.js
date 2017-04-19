@@ -23,11 +23,11 @@
        */
       function toggleAccordion(){
         var desktopView = $(document).width();
-        if(desktopView >= '768'){
+        if (desktopView >= '768') {
           $('.c-footer-is-accordion').accordion('disable');
           $('.c-footer-is-accordion .ui-accordion-content').show();
         }
-        else{
+        else {
           $('.c-footer-is-accordion').accordion('enable');
         }
       }
@@ -46,7 +46,7 @@
         });
         // Toggle Accordion in desktop & mobile.
         toggleAccordion();
-        $(window).on("resize", function(){
+        $(window).on("resize", function () {
           toggleAccordion();
         });
 
