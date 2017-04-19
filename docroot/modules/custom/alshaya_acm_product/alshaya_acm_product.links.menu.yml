@@ -1,0 +1,6 @@
+alshaya_acm_product.product_settings_form:
+  title: 'Custom Product settings'
+  parent: acq_commerce.configuration
+  description: 'Configure custom product settings.'
+  weight: 10
+  route_name: alshaya_acm_product.product_settings_form

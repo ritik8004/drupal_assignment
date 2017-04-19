@@ -1,0 +1,5 @@
+alshaya_acm_product.settings:
+  title: 'Alshaya ACM Product settings'
+  base_route_name: alshaya_acm_product.product_settings_form
+  names:
+    - alshaya_acm_product.settings
