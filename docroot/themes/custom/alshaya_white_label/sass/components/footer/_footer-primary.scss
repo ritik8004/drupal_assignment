@@ -47,10 +47,6 @@
     vertical-align: top;
   }
 
-  @include breakpoint($only-mobile) {
-    display: none;
-  }
-
   a {
     font-size: 0.875rem;
     color: $brownish-grey;
