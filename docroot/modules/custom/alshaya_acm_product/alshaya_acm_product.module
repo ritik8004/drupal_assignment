@@ -105,11 +105,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       unset($build['field_skus']);
 
       // Get the image.
-      $build['image'] = NULL;
+      $build['image_url'] = [];
       $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
       if ($sku_media) {
         $imageEntity = array_shift($sku_media);
-        $build['image'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
+        $build['image_url']['#markup'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
       }
 
       // Get the price.
@@ -136,11 +136,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
-      $build['image'] = NULL;
+      $build['image_url'] = NULL;
       $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
       if ($sku_media) {
         $imageEntity = array_shift($sku_media);
-        $build['image'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
+        $build['image_url']['#markup'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
       }
     }
   }

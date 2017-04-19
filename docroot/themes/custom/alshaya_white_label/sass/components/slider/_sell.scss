@@ -1,0 +1,47 @@
+.view-product-slider {
+  text-align: center;
+  max-width: 304px;
+  margin-bottom: 24px;
+
+  @include breakpoint($tablet) {
+    padding: 0 2.75rem;
+    margin-left: 24px;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 44.5rem;
+    margin-left: 129px;
+  }
+
+  @include breakpoint($only-tablet) {
+    max-width: 26rem;
+  }
+
+  .c-products__item__label {
+    font-size: 0.8125rem;
+    font-family: $alshaya-thin;
+    color: $black;
+    font-weight: normal;
+    margin: 0.625rem 0;
+  }
+
+  .views-row {
+    height: 312px;
+  }
+
+  .price-wrapper {
+    font-size: 0.875rem;
+  }
+
+  .owl-prev {
+    @include breakpoint($tablet) {
+      left: -2.25rem;
+    }
+  }
+
+  .owl-next {
+    @include breakpoint($tablet) {
+      right: -2.25rem;
+    }
+  }
+}
