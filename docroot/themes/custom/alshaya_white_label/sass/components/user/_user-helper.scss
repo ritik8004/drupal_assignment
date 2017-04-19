@@ -1,14 +1,14 @@
 .c-user--node {
   .c-page-title {
     border-bottom: 1px solid $white;
-    padding-bottom: 8px;
+    padding-bottom: 0.75rem;
 
     @include breakpoint($tablet) {
-      margin-bottom: 30px;
+      margin-bottom: 1.8rem;
     }
 
     @include breakpoint($desktop) {
-      margin-bottom: 22px;
+      margin-bottom: 1.9rem;
     }
   }
 

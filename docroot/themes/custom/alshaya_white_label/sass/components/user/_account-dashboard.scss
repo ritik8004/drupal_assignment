@@ -1,0 +1,57 @@
+.account--dashboard {
+  margin-bottom: 57px;
+
+  .subtitle {
+    border-bottom: 1px solid $white;
+    font-weight: 700;
+    margin-bottom: 21px;
+
+    @include breakpoint($desktop) {
+      margin-bottom: 18px;
+    }
+  }
+
+  ul {
+    font-size: 0;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  li {
+    font-size: 14px;
+    margin-bottom: 22px;
+
+    @include breakpoint($desktop) {
+      display: inline-block;
+      margin-bottom: 0;
+      width: 33%;
+    }
+  }
+
+  .contact--number {
+    @include breakpoint($desktop) {
+      padding-left: 50px;
+    }
+  }
+
+  .card--number {
+    @include breakpoint($desktop) {
+      padding-left: 35px;
+    }
+  }
+
+  .label {
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+}
+
+.label.dark {
+  color: #000;
+  font-size: 14px;
+}
+
+.label.black {
+  color: $black;
+}
