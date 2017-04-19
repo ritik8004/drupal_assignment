@@ -34,6 +34,13 @@ slider_banner:
     - core/jquery
     - alshaya_white_label/owlcarousel
 
+sell:
+  js:
+    js/sell.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_white_label/owlcarousel
+
 owlcarousel:
   css:
     theme:

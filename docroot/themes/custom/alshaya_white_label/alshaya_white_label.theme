@@ -77,6 +77,15 @@ function alshaya_white_label_preprocess_block(&$variables) {
 /**
  * Implements template_view_alter().
  */
+function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
+  if ($variables['view']->current_display == "block_product_slider") {
+    $suggestions[] = 'views_view__product_slider';
+  }
+}
+
+/**
+ * Implements template_view_grid_alter().
+ */
 function alshaya_white_label_theme_suggestions_views_view_grid_alter(array &$suggestions, &$variables) {
   $routmatch = \Drupal::routeMatch();
   if ($routmatch->getRouteName() == 'entity.profile.type.address_book.user_profile_form') {
