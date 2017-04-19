@@ -6,6 +6,7 @@ label: Webmaster
 weight: 11
 is_admin: null
 permissions:
+  - 'access administration pages'
   - 'access content overview'
   - 'access toolbar'
   - 'administer about-brand menu items'
