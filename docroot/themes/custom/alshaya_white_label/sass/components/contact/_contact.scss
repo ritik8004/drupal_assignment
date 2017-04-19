@@ -10,7 +10,7 @@
 .contact-form,
 .user-communication-preference {
   max-width: 24.75rem;
-  margin-top: 3rem;
+  margin-top: 0;
 
   legend {
     font-weight: bold;
@@ -60,7 +60,7 @@
     input:focus ~ label:last-of-type,
     textarea:focus ~ label:last-of-type,
     .active-label:last-of-type,
-    input:active ~ label.form-required {
+    input:visited ~ label:last-of-type {
       top: -1.25em;
       bottom: 0;
       #{$left}: 0;
@@ -78,12 +78,12 @@
     margin-bottom: 2.875rem;
   }
 
-  .field--name-field-first-name {
+  .form-item-first-name {
     margin-right: 1.5rem;
   }
 
-  .field--name-field-first-name,
-  .field--name-field-last-name {
+  .form-item-first-name,
+  .form-item-last-name {
     float: left;
     max-width: 11.625rem;
     width: calc(50% - 0.75rem);
@@ -119,6 +119,11 @@
 
   .form-item {
     margin-bottom: 2.5rem;
+    display: inline-block;
+  }
+
+  fieldset {
+    margin-top: 1em;
   }
 
   .form-type-radio {

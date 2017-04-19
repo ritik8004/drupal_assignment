@@ -1,3 +1,17 @@
+.captcha {
+  font-size: 12px;
+  color: $greyish;
+}
+
+.messages--error {
+  font-size: 13px;
+  color: $red-error;
+
+  em {
+    font-style: normal;
+  }
+}
+
 .user-page {
   border-top: 1px solid $white;
   margin: 4.5em auto 1em;
@@ -6,15 +20,6 @@
 
   .c-content {
     position: relative;
-
-    .messages--error {
-      font-size: 13px;
-      color: $red-error;
-
-      em {
-        font-style: normal;
-      }
-    }
   }
 
   h1 {
@@ -155,11 +160,6 @@
     @include breakpoint($desktop) {
       margin-#{$right}: 1.25rem;
     }
-  }
-
-  .captcha {
-    font-size: 12px;
-    color: $greyish;
   }
 
   .user-form {
@@ -847,15 +847,26 @@
   }
 
   .form-wrapper {
-    margin-top: 0.25rem;
+    margin-top: 0;
   }
 
   summary {
     outline: transparent;
-    color: $greyish;
+    color: $brownish-grey;
+
+    @include icon(chevronup, after) {
+      font-size: 1.563em;
+      top: 0.25em;
+      position: relative;
+      left: 0.25em;
+    }
 
     &::-webkit-details-marker {
       display: none;
     }
+  }
+
+  details[open] summary {
+    @include icon(chevrondown, after);
   }
 }
