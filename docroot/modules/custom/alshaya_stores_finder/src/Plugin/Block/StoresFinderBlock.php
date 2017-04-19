@@ -32,7 +32,7 @@ class StoresFinderBlock extends BlockBase {
       '#markup' => Link::createFromRoute($this->t('Find Store'), 'view.stores_finder.page_1', [], [
         'attributes' =>
           [
-            'class' => ['store-finder', $is_active],
+            'class' => ['stores-finder', $is_active],
           ],
       ])->toString(),
     ];
