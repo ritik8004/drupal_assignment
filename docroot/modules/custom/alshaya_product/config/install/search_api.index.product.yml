@@ -90,7 +90,7 @@ field_settings:
     label: 'SKUs » SKU Reference » Display Price'
     datasource_id: 'entity:node'
     property_path: 'field_skus:entity:price'
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.field_skus
@@ -127,6 +127,11 @@ field_settings:
       module:
         - acq_sku
         - file
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
 datasource_settings:
   'entity:node':
     bundles:
@@ -143,6 +148,6 @@ processor_settings:
 tracker_settings:
   default: {  }
 options:
-  index_directly: true
+  index_directly: false
   cron_limit: 50
 server: solr

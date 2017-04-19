@@ -35,11 +35,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
 hidden:
-  attr_color: true
-  attr_image: true
-  attr_size: true
-  attr_small_image: true
-  attr_thumbnail: true
   attributes: true
   crosssell: true
   name: true

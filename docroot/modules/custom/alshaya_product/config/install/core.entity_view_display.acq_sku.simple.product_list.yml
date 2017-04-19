@@ -4,9 +4,6 @@ dependencies:
   config:
     - acq_sku.type.simple
     - core.entity_view_mode.acq_sku.product_list
-    - responsive_image.styles.291x288
-  module:
-    - responsive_image
 id: acq_sku.simple.product_list
 targetEntityType: acq_sku
 bundle: simple

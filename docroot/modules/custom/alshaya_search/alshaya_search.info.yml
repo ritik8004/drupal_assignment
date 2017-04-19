@@ -4,8 +4,8 @@ type: module
 core: 8.x
 dependencies:
   - acq_sku
-  - alshaya_product
   - block
+  - facets
   - file
   - image
   - lightning_core
