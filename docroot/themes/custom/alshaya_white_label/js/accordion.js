@@ -44,6 +44,20 @@
 
         $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
       }
+
+      if ($('.recent__orders--list .order-summary-row').length) {
+        var parentOrder = $('.recent__orders--list .order-summary-row');
+        var listOrder = $('.recent__orders--list .order-item-row');
+
+        $(listOrder).hide();
+
+        $(parentOrder).click(function () {
+          var $ub = $(this).nextAll().stop(true, true).slideToggle();
+          listOrder.not($ub).hide();
+          $ub.parent().toggleClass('open--accordion');
+          listOrder.not($ub).parent().removeClass('open--accordion');
+        });
+      }
     }
   };
 

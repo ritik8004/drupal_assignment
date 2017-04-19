@@ -1,0 +1,18 @@
+.c-user--node {
+  .c-page-title {
+    border-bottom: 1px solid $white;
+    padding-bottom: 8px;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 30px;
+    }
+
+    @include breakpoint($desktop) {
+      margin-bottom: 22px;
+    }
+  }
+
+  .block-local-tasks-block {
+    display: none;
+  }
+}
