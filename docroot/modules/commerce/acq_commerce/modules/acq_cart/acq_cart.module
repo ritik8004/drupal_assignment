@@ -1,9 +1,5 @@
 <?php
 
-use Drupal\acq_cart\Entity\Order;
-use Drupal\acq_cart\Entity\LineItem;
-use Drupal\acq_product\Entity\Product;
-
 /**
  * @file
  * Provides base hooks to the cart functionality of Acquia Commerce connector.

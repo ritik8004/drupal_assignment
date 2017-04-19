@@ -1,18 +1,16 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\Entity\Controller\SKUViewBuilder.
- */
-
 namespace Drupal\acq_sku\Entity\Controller;
 
 use Drupal\Core\Entity\EntityViewBuilder;
-use Drupal\Core\Form\FormState;
 
+/**
+ * SKUViewBuilder class.
+ */
 class SKUViewBuilder extends EntityViewBuilder {
+
   /**
-   * @inheritdocs
+   * {@inheritdoc}
    */
   public function build(array $build) {
     $build = parent::build($build);
@@ -39,4 +37,5 @@ class SKUViewBuilder extends EntityViewBuilder {
 
     return $build;
   }
+
 }

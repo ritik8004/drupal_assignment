@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\Entity\SKUType.
- */
-
 namespace Drupal\acq_sku\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;

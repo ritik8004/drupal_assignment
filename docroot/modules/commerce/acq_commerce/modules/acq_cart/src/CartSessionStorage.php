@@ -1,14 +1,7 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_cart\CartSessionStorage.
- */
-
 namespace Drupal\acq_cart;
 
-use Drupal\acq_cart\Cart;
-use Drupal\acq_cart\CartStorageInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\Plugin\Field\FieldType\SKUFieldType.
- */
-
 namespace Drupal\acq_sku\Plugin\Field\FieldType;
 
 use Drupal\acq_sku\Entity\SKU;
@@ -101,7 +96,7 @@ class SKUFieldType extends FieldItemBase {
             'max' => $max_length,
             'maxMessage' => t('%name: may not be longer than @max characters.', [
               '%name' => $this->getFieldDefinition()->getLabel(),
-              '@max' => $max_length
+              '@max' => $max_length,
             ]),
           ],
         ],
@@ -153,7 +148,7 @@ class SKUFieldType extends FieldItemBase {
   public function get($property_name) {
     // Since we are doing reference in custom way, we load the value here.
     if ($property_name === 'entity' && !isset($this->values[$property_name])) {
-      $value = $this->values[$property_name] = SKU::loadFromSKU($this->values['value']);
+      $value = $this->values[$property_name] = SKU::loadFromSku($this->values['value']);
       $this->properties[$property_name] = $this->getTypedDataManager()->getPropertyInstance($this, $property_name, $value);
     }
 

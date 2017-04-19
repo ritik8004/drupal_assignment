@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter.
- */
-
 namespace Drupal\acq_sku\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemInterface;

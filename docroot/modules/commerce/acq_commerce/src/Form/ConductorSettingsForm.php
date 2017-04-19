@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains Drupal\acq_commerce\Form\ConductorSettingsForm
- */
 
 namespace Drupal\acq_commerce\Form;
 
@@ -10,29 +6,31 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class OrderSettingsForm
+ * Class OrderSettingsForm.
+ *
  * @package Drupal\acq_commerce\Form
+ *
  * @ingroup acq_commerce
  */
 class ConductorSettingsForm extends ConfigFormBase {
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'acq_commerce_conductor_settings';
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function getEditableConfigNames()
-  {
+  public function getEditableConfigNames() {
+
     return ['acq_commerce.conductor'];
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
@@ -49,63 +47,64 @@ class ConductorSettingsForm extends ConfigFormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('acq_commerce.conductor');
-    $form['url_agent'] = array(
+    $form['url_agent'] = [
       '#type' => 'url',
       '#title' => $this->t('Conductor Agent (Synchronous) URL'),
       '#required' => TRUE,
       '#default_value' => $config->get('url_agent'),
-    );
+    ];
 
-    $form['url_ingest'] = array(
+    $form['url_ingest'] = [
       '#type' => 'url',
       '#title' => $this->t('Conductor Ingest (Asynchronous) URL'),
       '#required' => TRUE,
       '#default_value' => $config->get('url_ingest'),
-    );
+    ];
 
-    $form['base_url'] = array(
+    $form['base_url'] = [
       '#type' => 'url',
       '#title' => $this->t('Base URL for Magento'),
       '#required' => TRUE,
       '#default_value' => $config->get('base_url'),
-    );
+    ];
 
-    $form['media_path'] = array(
+    $form['media_path'] = [
       '#type' => 'url',
       '#title' => $this->t('Path prefix for the media directory'),
       '#required' => FALSE,
       '#default_value' => $config->get('media_path'),
-    );
+    ];
 
-    $form['timeout'] = array(
+    $form['timeout'] = [
       '#type' => 'number',
       '#title' => $this->t('Conductor Connection Timeout'),
       '#required' => TRUE,
       '#default_value' => $config->get('timeout'),
-    );
+    ];
 
-    $form['verify_ssl'] = array(
+    $form['verify_ssl'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Conductor Verify SSL'),
       '#default_value' => $config->get('verify_ssl'),
-    );
+    ];
 
-    $form['debug'] = array(
+    $form['debug'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Debug Level Logging Of API Connections'),
       '#default_value' => $config->get('debug'),
-    );
+    ];
 
-    $form['page_size'] = array(
+    $form['page_size'] = [
       '#type' => 'number',
       '#title' => $this->t('Conductor Product Synchronization Page Size'),
       '#default_value' => $config->get('product_page_size'),
-    );
+    ];
 
     return parent::buildForm($form, $form_state);
   }
+
 }

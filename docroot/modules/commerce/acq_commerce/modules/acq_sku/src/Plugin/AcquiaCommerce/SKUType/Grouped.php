@@ -1,22 +1,14 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Grouped;
- */
-
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\acq_cart\Entity\Cart;
-use Drupal\acq_cart\Entity\LineItem;
-use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
- * Defines the grouped SKU type
+ * Defines the grouped SKU type.
  *
  * @SKUType(
  *   id = "grouped",
@@ -25,10 +17,11 @@ use Drupal\acq_sku\AddToCartErrorEvent;
  * )
  */
 class Grouped extends SKUPluginBase {
+
   /**
    * {@inheritdoc}
    */
-  public function addToCartForm($form, FormStateInterface $form_state, SKU $sku = NULL) {
+  public function addToCartForm(array $form, FormStateInterface $form_state, SKU $sku = NULL) {
     if (empty($sku)) {
       return $form;
     }
@@ -44,8 +37,8 @@ class Grouped extends SKUPluginBase {
     ];
 
     foreach ($sku->field_grouped_skus as $grouped_sku) {
-      $grouped_sku = SKU::loadFromSKU($grouped_sku->getString());
-      $id = $grouped_sku->getSKU();
+      $grouped_sku = SKU::loadFromSku($grouped_sku->getString());
+      $id = $grouped_sku->getSku();
 
       $form['grouped_items'][$id]['name'] = [
         '#plain_text' => $grouped_sku->label(),
@@ -72,7 +65,7 @@ class Grouped extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function addToCartSubmit(&$form, FormStateInterface $form_state) {
+  public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
     $skus = $form_state->getValue('grouped_items');
 
@@ -84,10 +77,10 @@ class Grouped extends SKUPluginBase {
         $cart->addItemToCart($sku, $quantity);
 
         drupal_set_message(
-          t('Added @quantity of @name to the cart.' ,
+          t('Added @quantity of @name to the cart.',
             [
               '@quantity' => $quantity,
-              '@name' => SKU::loadFromSKU($sku)->label()
+              '@name' => SKU::loadFromSku($sku)->label(),
             ]
         ));
 
@@ -113,7 +106,7 @@ class Grouped extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function processImport($sku, $product) {
+  public function processImport($sku, array $product) {
     $sku->field_grouped_skus->setValue([]);
 
     foreach ($product['linked'] as $linked_sku) {
@@ -127,4 +120,5 @@ class Grouped extends SKUPluginBase {
       }
     }
   }
+
 }

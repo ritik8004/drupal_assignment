@@ -1,14 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutPane\ShippingInformation.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\ACQAddressFormatter;
-use Drupal\address\LabelHelper;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -17,8 +11,8 @@ use Drupal\Core\Form\FormStateInterface;
  * @ACQCheckoutPane(
  *   id = "shipping_information",
  *   label = @Translation("Shipping information"),
- *   default_step = "shipping",
- *   wrapper_element = "fieldset",
+ *   defaultStep = "shipping",
+ *   wrapperElement = "fieldset",
  * )
  */
 class ShippingInformation extends AddressFormBase {
@@ -67,10 +61,10 @@ class ShippingInformation extends AddressFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Use same address as billing'),
       '#default_value' => '',
-      '#ajax' => array(
-        'callback' => array($this, 'updateAddressAjaxCallback'),
+      '#ajax' => [
+        'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
-      ),
+      ],
     ];
 
     $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
@@ -78,8 +72,8 @@ class ShippingInformation extends AddressFormBase {
     // Block proceeding checkout until shipping method is chosen.
     $complete_form['actions']['next']['#states'] = [
       'invisible' => [
-        '#shipping_methods_wrapper' => array('value' => ''),
-      ]
+        '#shipping_methods_wrapper' => ['value' => ''],
+      ],
     ];
 
     $pane_form['address']['shipping_methods'] = [
@@ -101,13 +95,12 @@ class ShippingInformation extends AddressFormBase {
     $complete_form['actions']['get_shipping_methods'] = [
       '#type' => 'button',
       '#value' => $this->t('Estimate Shipping'),
-      '#ajax' => array(
-        'callback' => array($this, 'updateAddressAjaxCallback'),
+      '#ajax' => [
+        'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
-      ),
+      ],
       '#weight' => -50,
     ];
-
 
     return $pane_form;
   }
@@ -174,6 +167,14 @@ class ShippingInformation extends AddressFormBase {
     return $address_fields;
   }
 
+  /**
+   * Generates shipping estimate based on address and chosen shipping method.
+   *
+   * @param object $address
+   *   The object of address.
+   * @param array $select
+   *   Array with selected whipping method.
+   */
   public static function generateShippingEstimates($address, array &$select) {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
 
@@ -188,14 +189,13 @@ class ShippingInformation extends AddressFormBase {
       unset($select['#suffix']);
     }
 
-
     foreach ($shipping_methods as $method) {
       // Key needs to hold both carrier and method.
       $key = implode(
         ',',
         [
           $method['carrier_code'],
-          $method['method_code']
+          $method['method_code'],
         ]
       );
 
@@ -232,9 +232,9 @@ class ShippingInformation extends AddressFormBase {
     }
 
     $address_values = $values['address'];
-    $address = array();
+    $address = [];
 
-    array_walk_recursive($address_values, function($value, $key) use (&$address) {
+    array_walk_recursive($address_values, function ($value, $key) use (&$address) {
       $address[$key] = $value;
     });
 

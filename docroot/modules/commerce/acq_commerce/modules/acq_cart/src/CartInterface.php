@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_cart\CartInterface.
- */
-
 namespace Drupal\acq_cart;
 
 /**
@@ -55,7 +50,7 @@ interface CartInterface {
   public function items();
 
   /**
-   * Adds an item to the cart
+   * Adds an item to the cart.
    *
    * @param string $sku
    *   The product SKU.
@@ -73,28 +68,31 @@ interface CartInterface {
   public function removeItemFromCart($sku);
 
   /**
-   * Adds a raw item to the cart. Does not preform any validation
-   * before appending to the cart items. Used for more complex items.
+   * Adds a raw item to the cart.
+   *
+   * Does not preform any validation before appending to the cart items. Used
+   * for more complex items.
    *
    * @param array $item
+   *   The raw product array.
    */
   public function addRawItemToCart(array $item);
 
   /**
-   * Adds an array of items to the cart
+   * Adds an array of items to the cart.
    *
-   * @param array
+   * @param array $items
    *   The product array.
    */
-  public function addItemsToCart($items);
+  public function addItemsToCart(array $items);
 
   /**
-   * Sets an array of items to the cart
+   * Sets an array of items to the cart.
    *
-   * @param array
+   * @param array $items
    *   The product array.
    */
-  public function setItemsInCart($items);
+  public function setItemsInCart(array $items);
 
   /**
    * Updates a cart item's quantity.
@@ -118,7 +116,7 @@ interface CartInterface {
    * Sets the billing address.
    *
    * @param object|array $address
-   *   The billing address
+   *   The billing address.
    */
   public function setBilling($address);
 
@@ -146,7 +144,6 @@ interface CartInterface {
    */
   public function getShippingMethodAsString();
 
-
   /**
    * Gets the shipping method.
    *
@@ -161,7 +158,7 @@ interface CartInterface {
    * Sets the shipping address.
    *
    * @param object|array $address
-   *   The shipping address
+   *   The shipping address.
    */
   public function setShipping($address);
 
@@ -177,11 +174,11 @@ interface CartInterface {
    * Sets the payment method.
    *
    * @param string $payment_method
-   *   The payment method
+   *   The payment method.
    * @param array $data
-   *   The payment data
+   *   The payment data.
    */
-  public function setPaymentMethod($payment_method, $data = []);
+  public function setPaymentMethod($payment_method, array $data = []);
 
   /**
    * Gets the payment method data.
@@ -195,9 +192,9 @@ interface CartInterface {
    * Sets the payment method data.
    *
    * @param array $data
-   *   The payment method data
+   *   The payment method data.
    */
-  public function setPaymentMethodData($data = []);
+  public function setPaymentMethodData(array $data = []);
 
   /**
    * Gets the current checkout step.
@@ -218,7 +215,7 @@ interface CartInterface {
   /**
    * Check if a cart is shippable.
    *
-   * @return boolean
+   * @return bool
    *   TRUE if the cart is shippable, FALSE if not.
    */
   public function getShippable();
@@ -226,7 +223,7 @@ interface CartInterface {
   /**
    * Check if a cart is shippable.
    *
-   * @param boolean $shippable
+   * @param bool $shippable
    *   TRUE if the cart s shippable, FALSE if not.
    */
   public function setShippable($shippable);
@@ -253,7 +250,7 @@ interface CartInterface {
    * @param array $cart
    *   The coupon code.
    */
-  public function convertToCustomerCart($cart);
+  public function convertToCustomerCart(array $cart);
 
   /**
    * Gets a cart property.
@@ -265,4 +262,5 @@ interface CartInterface {
    *   The value of the totals, NULL if not defined.
    */
   public function get($property_name);
+
 }

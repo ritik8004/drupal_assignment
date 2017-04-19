@@ -1,13 +1,6 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_cart\CartStorageInterface.
- */
-
 namespace Drupal\acq_cart;
-
-use Drupal\acq_cart\CartInterface;
 
 /**
  * Defines the interface for storing carts.
@@ -28,6 +21,7 @@ interface CartStorageInterface {
    * Adds the given cart to storage.
    *
    * @param \Drupal\acq_cart\CartInterface $cart
+   *   The cart object.
    */
   public function addCart(CartInterface $cart);
 

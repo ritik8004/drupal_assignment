@@ -2,9 +2,10 @@
 
 /**
  * @file
- * Contains install hooks for acq_sku
+ * Contains install hooks for acq_sku.
  */
 
+use Drupal\user\Entity\Role;
 use Drupal\node\Entity\Node;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 
@@ -32,12 +33,12 @@ function acq_sku_install() {
     'weight' => 0,
   ])->save();
 
-  $role = \Drupal\user\Entity\Role::load('anonymous');
+  $role = Role::load('anonymous');
   $role->grantPermission('restful post acq_categorysync');
   $role->grantPermission('restful post acq_productsync');
   $role->save();
 
-  $role = \Drupal\user\Entity\Role::load('authenticated');
+  $role = Role::load('authenticated');
   $role->grantPermission('restful post acq_categorysync');
   $role->grantPermission('restful post acq_productsync');
   $role->save();

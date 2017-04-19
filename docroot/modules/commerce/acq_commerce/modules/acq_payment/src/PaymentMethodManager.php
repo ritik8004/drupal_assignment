@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_payment\PaymentMethodManager.
- */
-
 namespace Drupal\acq_payment;
 
 use Drupal\acq_cart\CartInterface;

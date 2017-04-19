@@ -1,25 +1,18 @@
 <?php
-/**
- * @file
- * Contains Drupal\acq_sku\Plugin\rest\resource\CategorySyncResource
- */
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
 use Drupal\acq_sku\CategoryManagerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CategorySyncResource
+ * Class CategorySyncResource.
+ *
  * @package Drupal\acq_sku\Plugin
+ *
  * @ingroup acq_sku
  *
  * @RestResource(
@@ -34,31 +27,35 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CategorySyncResource extends ResourceBase {
 
   /**
-   * Taxonomy Vacabulary VID of Acquia Commerce Category Taxonomy
+   * Taxonomy Vacabulary VID of Acquia Commerce Category Taxonomy.
+   *
    * @const CATEGORY_TAXONOMY
    */
   const CATEGORY_TAXONOMY = 'acq_product_category';
 
   /**
-   * Drupal Entity Type Manager Instance
-   * @var EntityTypeManagerInterface $entityManager
+   * Drupal Entity Type Manager Instance.
+   *
+   * @var EntityTypeManagerInterface
    */
   private $entityManager;
 
   /**
-   * Drupal Config Factory Instance
-   * @var ConfigFactoryInterface $configFactory
+   * Drupal Config Factory Instance.
+   *
+   * @var ConfigFactoryInterface
    */
   private $configFactory;
 
   /**
-   * Drupal Entity Query Factory
-   * @var QueryFactory $queryFactory
+   * Drupal Entity Query Factory.
+   *
+   * @var QueryFactory
    */
   private $queryFactory;
 
   /**
-   * Construct
+   * Construct.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -73,7 +70,7 @@ class CategorySyncResource extends ResourceBase {
    * @param \Drupal\acq_sku\CategoryManagerInterface $category_manager
    *   A CategoryManager instance.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, $serializer_formats, LoggerInterface $logger, CategoryManagerInterface $category_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, CategoryManagerInterface $category_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->categoryManager = $category_manager;
   }
@@ -93,16 +90,18 @@ class CategorySyncResource extends ResourceBase {
   }
 
   /**
-   * post
+   * Post.
    *
    * Handle Conductor posting an array of category data for update.
    *
-   * @param array $categories Category data for update
+   * @param array $categories
+   *   Category data for update.
    *
-   * @return ResourceResponse $response
+   * @return \Drupal\rest\ResourceResponse
+   *   HTTP Response.
    */
-  public function post(array $categories = [])
-  {
+  public function post(array $categories = []) {
+
     $response = $this->categoryManager->synchronizeCategory(
       self::CATEGORY_TAXONOMY,
       $categories
@@ -110,6 +109,7 @@ class CategorySyncResource extends ResourceBase {
 
     $response['success'] = (bool) (($response['created'] > 0) || ($response['updated'] > 0));
 
-    return(new ResourceResponse($response));
+    return (new ResourceResponse($response));
   }
+
 }

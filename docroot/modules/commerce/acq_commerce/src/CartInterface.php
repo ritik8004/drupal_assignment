@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_commerce\CartInterface.
- */
-
 namespace Drupal\acq_commerce;
 
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -13,6 +8,7 @@ use Drupal\Core\Entity\EntityChangedInterface;
 
 /**
  * Provides an interface defining a Cart entity.
+ *
  * @ingroup acq_commerce
  */
 interface CartInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {

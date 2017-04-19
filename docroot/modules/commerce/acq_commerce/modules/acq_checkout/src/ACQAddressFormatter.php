@@ -1,16 +1,9 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\ACQAddressFormatter.
- */
-
 namespace Drupal\acq_checkout;
 
-use CommerceGuys\Addressing\AddressFormat\AddressField;
 use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use CommerceGuys\Addressing\LocaleHelper;
-use Drupal\address\AddressInterface;
 use Drupal\address\FieldHelper;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Render\Element;
@@ -54,10 +47,10 @@ class ACQAddressFormatter {
    */
   protected function viewElement($address, $langcode) {
     $country_code = $address->country;
-    $countryRepository = \Drupal::service('address.country_repository');
-    $countries = $countryRepository->getList();
-    $addressFormatRepository = \Drupal::service('address.address_format_repository');
-    $address_format = $addressFormatRepository->get($country_code);
+    $country_repository = \Drupal::service('address.country_repository');
+    $countries = $country_repository->getList();
+    $address_format_repository = \Drupal::service('address.address_format_repository');
+    $address_format = $address_format_repository->get($country_code);
     $values = $this->getValues($address, $country_code, $address_format);
 
     $element = [];
@@ -132,8 +125,8 @@ class ACQAddressFormatter {
         break;
       }
       $parents[] = $index ? $original_values[$subdivision_fields[$index - 1]] : $address->country;
-      $subdivisionRepository = \Drupal::service('address.subdivision_repository');
-      $subdivision = $subdivisionRepository->get($values[$field], $parents);
+      $subdivision_repository = \Drupal::service('address.subdivision_repository');
+      $subdivision = $subdivision_repository->get($values[$field], $parents);
       if (!$subdivision) {
         break;
       }
@@ -172,7 +165,8 @@ class ACQAddressFormatter {
     // depending on whether the format is minor-to-major or major-to-minor.
     if (LocaleHelper::match($address_format->getLocale(), $locale)) {
       $format_string = '%country' . "\n" . $address_format->getLocalFormat();
-    } else {
+    }
+    else {
       $format_string = $address_format->getFormat() . "\n" . '%country';
     }
 

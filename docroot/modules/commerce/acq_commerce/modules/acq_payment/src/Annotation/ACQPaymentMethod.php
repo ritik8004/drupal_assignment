@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_payment\Annotation\ACQPaymentMethod.
- */
-
 namespace Drupal\acq_payment\Annotation;
 
 use Drupal\Component\Annotation\Plugin;

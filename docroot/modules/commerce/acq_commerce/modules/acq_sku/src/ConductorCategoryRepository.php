@@ -1,68 +1,67 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\ConductorCategoryRepository
- */
-
 namespace Drupal\acq_sku;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\taxonomy\VocabularyInterface;
-use Drupal\acq_commerce\Conductor\ClientFactory;
 
 /**
- * Provides a service for Conductor product synchronization to load
- * taxonomy categories.
+ * Provides a service for product synchronization to load categories.
  *
  * @ingroup acq_sku
  */
 class ConductorCategoryRepository implements CategoryRepositoryInterface {
 
   /**
-   * Loaded Taxonomy Terms By Commerce ID
-   * @var TermInterface[] $terms
+   * Loaded Taxonomy Terms By Commerce ID.
+   *
+   * @var \Drupal\taxonomy\TermInterface[]
    */
   private $terms = [];
 
   /**
-   * Taxonomy Term Entity Storage
-   * @var TermStorageInterface $termStorage
+   * Taxonomy Term Entity Storage.
+   *
+   * @var \Drupal\taxonomy\TermStorageInterface
    */
   private $termStorage;
 
   /**
-   * Taxonomy Vocabulary Entity Storage
-   * @var VocabularyStorageInterface $vocabStorage
+   * Taxonomy Vocabulary Entity Storage.
+   *
+   * @var \Drupal\taxonomy\VocabularyStorageInterface
    */
   private $vocabStorage;
 
   /**
-   * Taxonomy Vocabulary Entity to Sync
-   * @var VocabularyInterface $vocabulary
+   * Taxonomy Vocabulary Entity to Sync.
+   *
+   * @var \Drupal\taxonomy\VocabularyInterface
    */
   private $vocabulary;
 
   /**
-   * Drupal Entity Query Factory
-   * @var QueryFactory $queryFactory
+   * Drupal Entity Query Factory.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
    */
   private $queryFactory;
 
   /**
-   * Constructor
+   * Constructor.
    *
-   * @param EntityTypeManagerInterface $entity_type_manager
-   * @param QueryFactory $query_factory
-   * @param LoggerChannelFactory $loggerFactory
-   * @param string $vocabulary Taxonomy Vocabulary for categories
-   *
-   * @return void
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   EntityTypeManager object.
+   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
+   *   QueryFactory object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+   *   LoggerFactory object.
+   * @param string $vocabulary
+   *   Taxonomy Vocabulary for categories.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, $vocabulary = NULL)
-  {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, $vocabulary = NULL) {
+
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->queryFactory = $query_factory;
@@ -74,10 +73,10 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function loadCategoryTerm($commerce_id)
-  {
+  public function loadCategoryTerm($commerce_id) {
+
     if (!$this->vocabulary) {
       throw new \RuntimeException('No Taxonomy vocabulary set.');
     }
@@ -86,14 +85,14 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
     if ($commerce_id < 1) {
       $this->logger->error(
         'Invalid category id @cid',
-        array('@cid' => $commerce_id)
+        ['@cid' => $commerce_id]
       );
 
-      return(NULL);
+      return (NULL);
     }
 
     if (isset($this->terms[$commerce_id])) {
-      return($this->terms[$commerce_id]);
+      return ($this->terms[$commerce_id]);
     }
 
     $query = $this->queryFactory->get('taxonomy_term');
@@ -108,41 +107,42 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
 
       $this->logger->error(
         'Multiple terms found for category id @cid',
-        array('@cid' => $category['category_id'])
+        ['@cid' => $category['category_id']]
       );
 
-      return(NULL);
+      return (NULL);
 
-    } elseif (count($tids) == 1) {
+    }
+    elseif (count($tids) == 1) {
       $term = $this->termStorage->load(array_shift($tids));
       $this->terms[$commerce_id] = $term;
-      return($term);
+      return ($term);
     }
 
-    return(NULL);
+    return (NULL);
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function setVocabulary($vocabulary)
-  {
+  public function setVocabulary($vocabulary) {
+
     $this->loadVocabulary($vocabulary);
-    return($this);
+    return ($this);
   }
 
   /**
-   * loadVocabulary
+   * LoadVocabulary.
    *
    * Load a taxonomy vocabulary from a vid.
    *
-   * @param string $vocabulary Vocabulary VID
+   * @param string $vocabulary
+   *   Vocabulary VID.
    *
-   * @return void
    * @throws \InvalidArgumentException
    */
-  private function loadVocabulary($vocabulary)
-  {
+  private function loadVocabulary($vocabulary) {
+
     if (!strlen($vocabulary)) {
       throw new \InvalidArgumentException(
         'ConductorCategoryRepository requires a taxonomy vocabulary machine name.'
@@ -160,4 +160,5 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
 
     $this->vocabulary = $vocab;
   }
+
 }

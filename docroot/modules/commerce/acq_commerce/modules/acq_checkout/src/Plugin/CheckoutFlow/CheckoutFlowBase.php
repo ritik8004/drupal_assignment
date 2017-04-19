@@ -1,16 +1,11 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowBase.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutFlow;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\Response\NeedsRedirectException;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -74,7 +69,7 @@ abstract class CheckoutFlowBase extends PluginBase implements CheckoutFlowInterf
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   The api wrapper.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, RouteMatchInterface $route_match, CartStorageInterface $cart_storage, $api_wrapper) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, RouteMatchInterface $route_match, CartStorageInterface $cart_storage, APIWrapper $api_wrapper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->setConfiguration($configuration);

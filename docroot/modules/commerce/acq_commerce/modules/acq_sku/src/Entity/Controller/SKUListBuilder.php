@@ -1,16 +1,9 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\Entity\Controller\SKUListBuilder.
- */
-
 namespace Drupal\acq_sku\Entity\Controller;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
-use Drupal\Core\Url;
-use Drupal\commerce_price\Price;
 
 /**
  * Provides a list controller for acq_sku entity.
