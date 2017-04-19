@@ -1,0 +1,79 @@
+.c-user-edit {
+  .user-form {
+    @include breakpoint($desktop) {
+      margin-top: -1.5rem;
+    }
+
+    .field--name-field-mobile-number {
+      position: static;
+      margin-top: 0;
+      clear: both;
+      padding-top: 1px;
+    }
+
+    .mobile-number-field {
+      padding-top: 1px;
+      margin-top: 1.5rem;
+
+      label {
+        color: #adadad;
+        display: block;
+        font-size: 0.75rem;
+      }
+
+      .form-type-textfield {
+        display: inline-block;
+        width: 9.4rem;
+      }
+
+      input {
+        #{$left}: -5px;
+        position: relative;
+        width: 14.4rem;
+
+        @include breakpoint($tablet) {
+          width: 7rem;
+        }
+      }
+    }
+
+    input:disabled {
+      color: #adadad;
+    }
+
+    input:not(:focus):valid ~ label,
+    input:not(:active):valid ~ label {
+      font-size: 1rem;
+      top: -0.125rem;
+    }
+
+    input:focus:valid ~ label,
+    input:active:valid ~ label,
+    .form-item input ~ label.active-label {
+      bottom: 0;
+      font-size: 0.75rem;
+      left: 0;
+      opacity: 1;
+      top: -1.25em;
+    }
+
+    #edit-account {
+      padding-top: 0;
+    }
+  }
+
+  .c-content .messages--error {
+    margin-top: 1.25rem;
+  }
+
+  .field--name-field-first-name {
+    margin-#{$right}: 1.25rem;
+  }
+
+  .field--name-field-first-name,
+  .field--name-field-last-name {
+    float: $left;
+    max-width: 11.7rem;
+    width: calc(50% - 12px);
+  }
+}
