@@ -77,7 +77,7 @@ class ConductorSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Path prefix for the media directory'),
       '#required' => FALSE,
       '#default_value' => $config->get('media_path'),
-    );
+    ];
 
     $form['timeout'] = [
       '#type' => 'number',
