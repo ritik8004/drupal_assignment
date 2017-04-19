@@ -114,7 +114,7 @@
   ],
   "body": [
     {
-      "value": "<p><i class=\"icon-wish\"><\/i>save items to your wishlist<\/p>\r\n<p><i class=\"icon-store\"><\/i>store multiple shipping addresses<\/p>\r\n<p><i class=\"icon-offer\"><\/i>get special offers and updates on deals<\/p>\r\n<p><a href=\"\">already registered? sign in here<\/a><\/p>",
+      "value": "<p><span class=\"icon-wish\">&nbsp;<\/span>save items to your wishlist<\/p>\r\n<p><span class=\"icon-store\">&nbsp;<\/span>store multiple shipping addresses<\/p>\r\n<p><span class=\"icon-offer\">&nbsp;<\/span>get special offers and updates on deals<\/p>\r\n<p><a href=\"\">already registered? sign in here<\/a><\/p>",
       "format": "rich_text",
       "summary": "",
       "lang": "en"
