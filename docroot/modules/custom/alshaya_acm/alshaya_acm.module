@@ -10,6 +10,7 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -60,15 +61,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Change checkout button text to 'Secure Checkout'.
   $form['actions']['checkout']['#value'] = t('Secure Checkout');
 
-  // Add continue shopping link, that redirect user to homepage.
-  $form['actions']['continue_shopping'] = [
-    '#type' => 'link',
-    '#title' => t('Continue shopping'),
-    '#url' => Url::fromRoute('<front>'),
-  ];
-
   // Add sub total price of product.
   $form['cart']['#header'][] = t('Sub total');
+  $form['cart']['#header'][2] = t('Unit Price');
 
   // Adds delivery options to cart.
   $form['cart']['#header'][] = t('Delivery options');
@@ -104,23 +99,36 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       // Load Images.
       $media = alshaya_acm_product_get_sku_media($id);
+
+      $color = '';
+      $sku_entity = SKU::loadFromSKU($id);
+      if ($sku_entity) {
+        if ($color_attribute = $sku_entity->get('attr_color')) {
+          $color = $color_attribute->getValue()[0]['value'];
+        }
+      }
       if (!empty($media)) {
-        // Club the image and name of product.
         $form['cart'][$id]['name'] = [
-          [
+          '#theme' => 'alshaya_cart_product_name',
+          '#color' => $color,
+          '#name' => $form['cart'][$id]['name'],
+          '#image' => [
             '#theme' => 'image_style',
             '#style_name' => '137x144',
             '#uri' => current($media)->getFileUri(),
           ],
-          $form['cart'][$id]['name'],
+          '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
+          '#item_code' => $id,
+          '#include_in_bundle' => t('Items included in bundle'),
         ];
       }
 
       // TODO: Get delivery options from conductor.
-      $product_delivery_options = '<div>';
+      $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
+      $product_delivery_options .= '<div>';
       $product_delivery_options .= '<span class="home-delivery">' . t('Home Delivery') . '</span>';
       $product_delivery_options .= '<span class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<span>';
-      $product_delivery_options .= '<div>';
+      $product_delivery_options .= '</div>';
       $product_delivery_options .= '<div>';
       $product_delivery_options .= '<span class="click-collect">' . t('Click and Collect') . '</span>';
       $product_delivery_options .= '<span class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</span>';
@@ -128,6 +136,13 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $form['cart'][$id]['delivery_options'] = [
         '#markup' => $product_delivery_options,
       ];
+
+      // Adding class attribute to columns for mobile view.
+      $form['cart'][$id]['quantity']['#wrapper_attributes'] = ['class' => ['quantity']];
+      $form['cart'][$id]['name']['#wrapper_attributes'] = ['class' => ['name']];
+      $form['cart'][$id]['sub_total']['#wrapper_attributes'] = ['class' => ['subtotal']];
+      $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price']];
+      $form['cart'][$id]['delivery_options']['#wrapper_attributes'] = ['class' => ['delivery-option']];
     }
   }
 
@@ -143,6 +158,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['totals']['sub']['label'] = ['#markup' => t('Sub total')];
   $form['totals']['grand']['label'] = ['#markup' => t('Order Total <span>(Before Delivery)</span>')];
 
+  $form['totals']['#weight'] = 10;
+
   // Wrap Promotion code in a fieldset.
   $form['promotion_code_wrapper'] = [
     '#type' => 'details',
@@ -155,6 +172,23 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
   ];
 
+  if (!empty($cart_items)) {
+    // Add continue shopping link, that redirect user to homepage.
+    $form['continue_shopping'] = [
+      '#type' => 'link',
+      '#title' => t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+      '#weight' => 4,
+    ];
+
+    // Add continue shopping link, that redirect user to homepage.
+    $form['actions']['continue_shopping_mobile'] = [
+      '#type' => 'link',
+      '#title' => t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+    ];
+  }
+
   $form['coupon']['#type'] = 'hidden';
 
   // Attach library, to cater to Coupon submit button.
@@ -163,29 +197,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   _alshaya_acm_format_cart_total($form, $cart);
 
   // Set Form title.
-  $form['#title'] = t("Cart (%count)", ['%count' => $product_count]);
-
-  // Todo: Update markup once information available from conductor.
-  $home_delivery_markup = '<div>';
-  $home_delivery_markup .= '<div class="home-delivery">' . t('Home Delivery') . '</div>';
-  $home_delivery_markup .= '<div>' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '</div>';
-  $home_delivery_markup .= '<div class="home-delivery-icons"><span class="visa">Visa</span><span class="master-card">Master Card</span></div>';
-  $home_delivery_markup .= '</div>';
-  $form['home_delivery'] = [
-    '#markup' => $home_delivery_markup,
-    '#weight' => 100,
-  ];
-
-  // Todo: Update markup once information available from conductor.
-  $click_and_collect_markup = '<div>';
-  $click_and_collect_markup .= '<div class="click-collect">' . t('Click and Collect') . '</div>';
-  $click_and_collect_markup .= '<div>' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</div>';
-  $click_and_collect_markup .= '<div class="click-collect-icons"><span class="verified-secure">Verified Secure</span></div>';
-  $click_and_collect_markup .= '</div>';
-  $form['click_and_collect'] = [
-    '#markup' => $click_and_collect_markup,
-    '#weight' => 100,
-  ];
+  $form['#title'] = t("Basket (%count)", ['%count' => $product_count]);
 }
 
 /**
@@ -344,6 +356,16 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'price' => '',
         'currency_format' => '',
         'currency_code_position' => '',
+      ],
+    ],
+    'alshaya_cart_product_name' => [
+      'variables' => [
+        'color' => '',
+        'item_code' => '',
+        'total_price' => '',
+        'name' => '',
+        'image' => '',
+        'include_in_bundle' => '',
       ],
     ],
   ];
