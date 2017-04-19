@@ -1,0 +1,37 @@
+.alias--search {
+  .c-sidebar-first {
+    @include breakpoint($desktop) {
+      max-width: 26.25rem;
+      width: 32.71%;
+      float: $left;
+      padding-top: 2rem;
+      margin: 0 2.5rem 0 1.5625rem;
+    }
+  }
+}
+
+.ui-autocomplete {
+  z-index: 99;
+  background: $white-five;
+  border: 1px solid $white;
+  border-top-width: 0;
+
+  li.ui-menu-item {
+    display: inherit;
+    padding: 10px 1rem 10px 7.5px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $white;
+    }
+
+    &:hover {
+      background-color: $white-smoke-light;
+      border: 1px solid $white;
+    }
+
+    a {
+      font-family: $alshaya-thin;
+      color: $brownish-grey;
+    }
+  }
+}

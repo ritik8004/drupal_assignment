@@ -99,6 +99,7 @@ header {
       text-transform: lowercase;
       max-width: 280px;
       border: 1px solid $white;
+      background-image: none;
 
       &::placeholder {
         font-size: 12px;
