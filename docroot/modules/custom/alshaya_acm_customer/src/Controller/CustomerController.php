@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\user\UserInterface;
+use Drupal\block\Entity\Block;
 use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -106,13 +107,20 @@ class CustomerController extends ControllerBase {
       }
     }
 
-    $build = [
+    // Load my-account-help block for rendering on order list page.
+    $help_block = NULL;
+    $help_block_entity = Block::load('myaccountneedhelp');
+    if ($help_block_entity) {
+      $help_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
+    }
+    $build['order-list'] = [
       '#theme' => 'user_order_list',
       '#search_form' => $searchForm,
       '#order_details' => $orderDetails,
       '#order_not_found' => $noOrdersFoundMessage,
       '#account' => $account,
       '#next_page_button' => $nextPageButton,
+      '#help_block' => $help_block,
       '#attached' => [
         'library' => ['alshaya_acm_customer/orders-list'],
       ],

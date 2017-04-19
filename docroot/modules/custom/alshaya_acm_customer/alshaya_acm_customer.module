@@ -24,6 +24,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'account' => NULL,
       'search_form' => NULL,
       'next_page_button' => NULL,
+      'help_block' => NULL,
     ],
   ];
 
