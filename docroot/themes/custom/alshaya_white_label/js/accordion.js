@@ -22,8 +22,8 @@
        * Toggles the footer accordions for desktop.
        */
       function toggleAccordion() {
-        var desktopView = $(document).width();
-        if (desktopView > '768') {
+        var desktopView = $(window).width();
+        if (desktopView > 768) {
           $('.c-footer-is-accordion').accordion('disable');
           $('.c-footer-is-accordion .ui-accordion-content').show();
         }
