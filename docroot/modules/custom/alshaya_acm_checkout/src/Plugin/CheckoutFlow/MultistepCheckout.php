@@ -191,8 +191,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         // Place an order.
         $response = $this->apiWrapper->placeOrder($cart_id);
 
-        \Drupal::logger('nik')->info(print_r($response, 1));
-
+        // Store the order details from response in tempstore.
         $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
         $temp_store->set('order', $response['order']);
 
@@ -201,6 +200,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           \Drupal::cache()->delete('orders_list_' . \Drupal::currentUser()->id());
         }
         else {
+          // Store the email address of customer in tempstore.
           $cart = $this->cartStorage->getCart();
           $shipping = $cart->getShipping();
           $temp_store->set('email', $shipping->email);

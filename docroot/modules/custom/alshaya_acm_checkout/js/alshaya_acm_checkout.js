@@ -1,7 +1,5 @@
 (function ($, Drupal) {
-  "use strict";
-
-  var $pager = null;
+  'use strict';
 
   /**
    * All custom js for checkout flow.
@@ -13,7 +11,7 @@
    */
   Drupal.behaviors.alshaya_acm_checkout = {
     attach: function (context, settings) {
-      if ($('.same-as-shipping:checked').val() == 2) {
+      if ($('.same-as-shipping:checked').val() === '2') {
         $('div[data-drupal-selector="edit-billing-address-address"]').show();
       }
       else {

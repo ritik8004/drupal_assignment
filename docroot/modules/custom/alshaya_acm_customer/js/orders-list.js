@@ -1,5 +1,5 @@
 (function ($, Drupal) {
-  "use strict";
+  'use strict';
 
   var $pager = null;
 
@@ -12,13 +12,13 @@
    *   Initialize orders list pager and bind the show more button event.
    */
   Drupal.behaviors.orders_list = {
-    attach : function() {
-      $('.orders-list-pager-wrapper').once('orders-list-pager').each(function() {
+    attach: function () {
+      $('.orders-list-pager-wrapper').once('orders-list-pager').each(function () {
         $pager = $(this);
         Drupal.bindOrdersListPaginationEvent();
       });
 
-      $('.alshaya-acm-customer-order-list-search').once('orders-list-search').each(function() {
+      $('.alshaya-acm-customer-order-list-search').once('orders-list-search').each(function () {
         $('.alshaya-acm-customer-order-list-search .form-select[data-drupal-selector="edit-filter"]').bind('change', function () {
           $('.alshaya-acm-customer-order-list-search .form-submit[data-drupal-selector="edit-submit-orders"]').trigger('click');
         });
@@ -27,7 +27,7 @@
   };
 
   Drupal.bindOrdersListPaginationEvent = function () {
-    $pager.find('button').on('click', function(event) {
+    $pager.find('button').on('click', function (event) {
       event.preventDefault();
 
       // Disable the event now.

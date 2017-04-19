@@ -191,13 +191,13 @@ class GuestDeliveryHome extends AddressFormBase {
     $values = $form_state->getValue($pane_form['#parents']);
 
     if (!(\Drupal::service('email.validator')->isValid($values['address']['email']))) {
-      $form_state->setErrorByName('email', t('You have entered an invalid email addresss.'));
+      $form_state->setErrorByName('email', $this->t('You have entered an invalid email addresss.'));
     }
 
     $user = user_load_by_mail($values['address']['email']);
 
     if ($user !== FALSE) {
-      $form_state->setErrorByName('email', t('You already have an account, please login.'));
+      $form_state->setErrorByName('email', $this->t('You already have an account, please login.'));
     }
   }
 
