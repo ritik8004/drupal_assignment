@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya Search.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_search_install() {
+  $search_view = \Drupal::configFactory()->getEditable('views.view.search');
+  $search_view_display = $search_view->get('display');
+  $search_view_display['default']['display_options']['row']['options']['view_modes']['entity:node']['acq_product'] = 'search_result';
+  $search_view_display['default']['display_options']['fields']['rendered']['table'] = 'search_api_index_product';
+  $search_view_display['default']['display_options']['filters']['search_api_fulltext']['table'] = 'search_api_index_product';
+  $search_view_display['default']['display_options']['sorts']['search_api_relevance']['table'] = 'search_api_index_product';
+
+  $search_view->set('base_table', 'search_api_index_product')
+    ->set('dependencies', [
+      'config' => [
+        'search_api.index.product',
+      ],
+      'module' => [
+        'search_api',
+      ],
+    ])
+    ->set('display', $search_view_display)
+    ->save();
+
+  // Allow anonymous and authenticated users to use autocomplete.
+  user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
+  user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);
+}

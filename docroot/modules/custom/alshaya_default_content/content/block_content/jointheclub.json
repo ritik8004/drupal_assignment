@@ -114,7 +114,7 @@
   ],
   "body": [
     {
-      "value": "<p> <i class=\"icon-win\"><\/i>Win exciting prizes<\/p>\r\n<p><i class=\"icon-reward\"><\/i>Unlock exclusive rewards<\/p>\r\n<p><i class=\"icon-heart\"><\/i>Be the first to know<\/p>\r\n<p><a href=\"\">Learn more<\/a><\/p>\r\n",
+      "value": "<p> <span class=\"icon-win\">&nbsp;<\/span>Win exciting prizes<\/p>\r\n<p><span class=\"icon-reward\">&nbsp;<\/span>Unlock exclusive rewards<\/p>\r\n<p><span class=\"icon-heart\">&nbsp;<\/span>Be the first to know<\/p>\r\n<p><a href=\"\">Learn more<\/a><\/p>\r\n",
       "format": "rich_text",
       "summary": "",
       "lang": "en"

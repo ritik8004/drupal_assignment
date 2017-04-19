@@ -100,7 +100,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     // Check for product type as they have different data structures.
     if ($type == 'configurable') {
       // If we have a child_sku available.
-      $child_sku = SKU::loadFromSku($form_state->getValue('child_sku'));
+      $child_sku = SKU::loadFromSku($form_state->getTemporaryValue('child_sku'));
       $sku_media = alshaya_acm_product_get_sku_media($child_sku);
     }
     // Product Type - Simple.

@@ -3,17 +3,25 @@ status: true
 dependencies:
   config:
     - field.field.node.department_page.body
+    - field.field.node.department_page.field_meta_tags
     - field.field.node.department_page.field_product_category
     - field.field.node.department_page.field_promo_blocks
     - node.type.department_page
   module:
     - entity_reference_revisions
+    - metatag
     - user
 id: node.department_page.default
 targetEntityType: node
 bundle: department_page
 mode: default
 content:
+  field_meta_tags:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
   field_promo_blocks:
     type: entity_reference_revisions_entity_view
     weight: 1

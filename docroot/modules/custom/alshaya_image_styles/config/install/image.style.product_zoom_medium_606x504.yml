@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: product_zoom_medium_606x504
+label: product.zoom.medium.606x504
+effects:
+  858d65c9-3fe4-47d6-b85f-2565e1a3f25d:
+    uuid: 858d65c9-3fe4-47d6-b85f-2565e1a3f25d
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 606
+      height: 504
+

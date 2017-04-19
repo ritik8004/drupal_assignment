@@ -85,6 +85,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
       '#empty_option' => '- ' . $labels['administrativeArea'] . ' -',
       '#required' => TRUE,
       '#validated' => TRUE,
+      '#default_value' => isset($address->region) ? $address->region : '',
     ];
     $pane_form['address']['dynamic_parts']['postcode'] = [
       '#type' => 'textfield',

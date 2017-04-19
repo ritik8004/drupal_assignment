@@ -183,8 +183,8 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     $user = User::load($this->currentUser->id());
     $title = '';
     if ($user) {
-      $fname = $user->get('field_first_name') ? $user->get('field_first_name')->getValue()[0]['value'] : '';
-      $lname = $user->get('field_last_name') ? $user->get('field_last_name')->getValue()[0]['value'] : '';
+      $fname = $user->get('field_first_name')->getString();
+      $lname = $user->get('field_last_name')->getString();
       if (!empty($fname)) {
         $title = $this->t('Welcome, @fname @lname', ['@fname' => $fname, '@lname' => $lname]);
       }

@@ -16,32 +16,11 @@
   padding: 10px 20px 9px;
 }
 
-.button.status-delivered,
-.button.status-pending,
-.button.status-processing {
-  color: $white-five;
-  font-weight: bold;
-  font-size: 12px;
-  width: 106px;
-  padding: 10px;
-  padding-bottom: 11px;
-  text-align: center;
-}
-
-.button.status-pending,
-.button.status-processing {
-  background-color: $tomato;
-}
-
-.button.status-delivered {
-  background-color: $medium-green;
-}
-
 .button {
-  .status-pending,
-  .status-pending,
-  .status-processing,
-  .status-returned {
+  &.status-pending,
+  &.status-delivered,
+  &.status-processing,
+  &.status-returned {
     font-family: $arial;
     font-size: 10px;
     font-weight: bold;

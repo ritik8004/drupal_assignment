@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+    - lightning_core
+third_party_settings:
+  lightning_core:
+    description: ''
+id: acq_sku.search_result
+label: 'Search result'
+targetEntityType: acq_sku
+cache: true

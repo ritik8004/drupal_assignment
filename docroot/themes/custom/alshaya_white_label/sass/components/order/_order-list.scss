@@ -8,6 +8,10 @@
     display: none;
   }
 
+  .region__content {
+    position: relative;
+  }
+
   .order-search-form {
     border-bottom: 1px solid $whisper-dark;
     margin-top: 12px;
@@ -17,8 +21,9 @@
       border: 0;
       margin-top: 0;
       padding-bottom: 0;
-      position: relative;
-      top: -3.5rem;
+      position: absolute;
+      top: -1rem;
+      #{$right}: 0;
     }
   }
 }
@@ -155,12 +160,51 @@
     }
   }
 
+  .order-summary-row {
+    cursor: pointer;
+    position: relative;
+  }
+
+  .toggle--icon {
+    position: relative;
+  }
+
+  .toggle--icon .icon-ic_chevrondown {
+    font-size: 30px;
+    position: absolute;
+    #{$right}: 3.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include breakpoint($tablet) {
+      #{$right}: 1.2rem;
+    }
+
+    @include breakpoint($desktop) {
+      #{$right}: 2rem;
+    }
+  }
+
+  .order__detail--link {
+    text-align: $right;
+    font-size: 12px;
+
+    td {
+      background-color: $whisper-light;
+      padding: 16px 24px;
+    }
+
+    a {
+      color: $windows-blue;
+    }
+  }
+
   .order--items {
     @include breakpoint($tablet) {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 187px;
+      max-width: 175px;
     }
   }
 
@@ -168,28 +212,36 @@
     background-color: $white-five;
     border-bottom: 1px solid $white;
   }
-}
 
-.subtitle {
-  color: $marine-blue;
-  font-size: 16px;
-  text-transform: lowercase;
-  padding-bottom: 9px;
-  margin-bottom: 0;
+  .order-item-row {
+    display: none;
+  }
 }
 
 .block-alshaya-acm-customer > a {
   font-size: 14px;
-  color: #3680cb;
+  color: $windows-blue;
+  position: absolute;
+  #{$right}: 0;
+  top: 0;
+}
 
-  &.order__detail--link {
-    position: static;
-    display: none;
+.no--orders {
+  text-align: center;
+  border-top: 1px solid $white;
+  padding-top: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.open--accordion {
+  .order-summary-row td {
+    background-color: $whisper-light;
   }
 
-  @include breakpoint($tablet) {
-    position: absolute;
-    #{$right}: 0;
-    top: 0;
+  .toggle--icon {
+    .icon-ic_chevrondown {
+      @include icon(chevronup);
+    }
   }
 }

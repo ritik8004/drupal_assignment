@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_seo module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_seo_install() {
+  // Update global metatag defaults to include og_locale and og_site_name.
+  $global_config_factory = Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
+  $global_tags = $global_config_factory->get('tags');
+  $global_tags['og_locale'] = '[site:locale]';
+  $global_tags['og_site_name'] = '[site:name]';
+  $global_config_factory->set('tags', $global_tags);
+  $global_config_factory->save();
+
+  // Update node metatag defaults to include og_description and
+  // og_locale_alternative.
+  $node_config_factory = Drupal::configFactory()->getEditable('metatag.metatag_defaults.node');
+  $node_tags = $node_config_factory->get('tags');
+  $node_tags['og_description'] = '[node:summary]';
+  $node_tags['og_locale_alternative'] = '[node:locale:alternate]';
+  $node_config_factory->set('tags', $node_tags);
+  $node_config_factory->save();
+}

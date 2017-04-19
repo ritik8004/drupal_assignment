@@ -3,10 +3,12 @@ status: true
 dependencies:
   config:
     - field.field.node.department_page.body
+    - field.field.node.department_page.field_meta_tags
     - field.field.node.department_page.field_product_category
     - field.field.node.department_page.field_promo_blocks
     - node.type.department_page
   module:
+    - metatag
     - paragraphs
     - path
     - text
@@ -29,6 +31,11 @@ content:
     weight: 3
     settings: {  }
     third_party_settings: {  }
+  field_meta_tags:
+    weight: 27
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_firehose
   field_product_category:
     weight: 26
     settings: {  }

@@ -3,8 +3,10 @@ status: true
 dependencies:
   config:
     - field.field.node.store.body
+    - field.field.node.store.field_meta_tags
     - node.type.store
   module:
+    - metatag
     - path
     - text
     - workbench_moderation
@@ -26,6 +28,11 @@ content:
     weight: 10
     settings: {  }
     third_party_settings: {  }
+  field_meta_tags:
+    weight: 32
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_firehose
   langcode:
     type: language_select
     weight: 2

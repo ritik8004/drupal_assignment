@@ -1,0 +1,12 @@
+diff --git a/$include_in_menumodules/acq_checkout/src/Plugin/CheckoutPane/AddressFormBase.php b/$include_in_menumodules/acq_checkout/src/Plugin/CheckoutPane/AddressFormBase.php
+index d8e7d4c..d52d021 100644
+--- a/$include_in_menumodules/acq_checkout/src/Plugin/CheckoutPane/AddressFormBase.php
++++ b/$include_in_menumodules/acq_checkout/src/Plugin/CheckoutPane/AddressFormBase.php
+@@ -88,6 +88,7 @@ public function buildPaneForm(array $pane_form, FormStateInterface $form_state,
+       '#empty_option' => '- ' . $labels['administrativeArea'] . ' -',
+       '#required' => TRUE,
+       '#validated' => TRUE,
++      '#default_value' => isset($address->region) ? $address->region : '',
+     ];
+     $pane_form['address']['dynamic_parts']['postcode'] = [
+       '#type' => 'textfield',

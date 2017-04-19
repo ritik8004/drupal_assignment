@@ -15,11 +15,13 @@ ltr_styles:
   css:
     theme:
       css/ltr.css: {}
+      css/ltr.css: {media: print}
 
 rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+      css/rtl.css: {media: print}
 
 unmask_password:
   js:

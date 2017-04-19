@@ -9,9 +9,7 @@
 
     .messages--error {
       font-size: 13px;
-      position: absolute;
       color: $red-error;
-      top: 59%;
 
       em {
         font-style: normal;
@@ -38,6 +36,7 @@
 
     p {
       color: $brownish-grey;
+      margin: 3px 0;
     }
   }
 
@@ -47,14 +46,12 @@
 
   #block-youllbeableto {
     margin-top: 3em;
-    margin-bottom: 1.5rem;
-
-    @include breakpoint($tablet) {
-      margin-bottom: 4.375rem;
-    }
+    margin-bottom: 4.1rem;
 
     a {
       font-weight: bold;
+      padding-top: 1em;
+      display: inline-block;
     }
   }
 
@@ -69,6 +66,7 @@
       width: 20.625rem;
       margin-#{$left}: -2em;
       padding-#{$left}: 3em;
+      display: inline-block;
     }
 
     @include breakpoint($desktop) {
@@ -77,24 +75,57 @@
       width: 30.25rem;
     }
 
+    .field--name-body {
+      @include breakpoint($tablet) {
+        max-width: 14em;
+        float: $left;
+      }
+    }
+
     h2 {
       color: $dark-sand;
     }
 
     a {
       font-weight: bold;
+      margin-top: 1em;
+      display: inline-block;
+    }
+
+    p {
+      margin: 9px 0;
     }
   }
 
   #block-onlineexclusiveheadingovertwolinesneverthree {
-    @include breakpoint($only-mobile) {
-      display: none;
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: block;
     }
 
     a {
       font-weight: bold;
       text-transform: lowercase;
       color: $cerulean;
+    }
+
+    h2 {
+      max-width: 12rem;
+      display: inline-block;
+      float: $left;
+      margin-top: 0;
+    }
+
+    .field--name-body {
+      max-width: 11rem;
+      float: $left;
+      clear: $left;
+    }
+
+    p > a {
+      padding-top: 1em;
+      display: inline-block;
     }
   }
 
@@ -173,7 +204,8 @@
     }
 
     label.form-required,
-    .form-item-field-privilege-card-number-0-value label {
+    .form-item-privilege-card-number label,
+    .form-item-privilege-card-number2 label {
       font-size: 16px;
       color: $greyish;
       position: absolute;
@@ -260,19 +292,20 @@
   position: relative;
 
   & > a {
+    @include breakpoint($tablet) {
+      #{$left}: 9em;
+      bottom: 0.75em;
+      width: auto;
+    }
+
     position: absolute;
-    bottom: -3.75em;
+    bottom: -2.5em;
     text-decoration: none;
     font-size: 0.75rem;
     font-weight: bold;
     z-index: 999;
     width: 100%;
     text-align: center;
-
-    @include breakpoint($tablet) {
-      #{$left}: -2em;
-      bottom: 0.75em;
-    }
   }
 }
 
@@ -547,19 +580,11 @@
   color: $greyish;
 }
 
-.alias--user-register h1 {
-  @include breakpoint($desktop) {
-    top: -0.5em;
-  }
-}
-
-.alias--user-login h1 {
-  @include breakpoint($desktop) {
-    top: -4em;
-  }
-
-  @include breakpoint($only-mobile) {
-    top: -5em;
+.alias--user-login {
+  #block-youllbeableto {
+    @include breakpoint($only-mobile) {
+      margin-top: 4em;
+    }
   }
 }
 
@@ -641,12 +666,20 @@
 
 //Email verification page.
 .alias--user-register-complete {
-  h1 {
+  .c-page-title {
     font-family: $alshaya-bold;
+
+    @include breakpoint($only-tablet) {
+      padding: 0 1rem;
+    }
   }
 
   #block-alshaya-white-label-content {
     padding-top: 1rem;
+
+    @include breakpoint($only-tablet) {
+      padding: 0 1rem;
+    }
 
     span {
       display: block;
@@ -677,7 +710,12 @@
   }
 
   .c-content .messages--error {
-    top: auto;
+    position: static;
+
+    .messages__list {
+      list-style: none;
+      padding-left: 0;
+    }
   }
 }
 
@@ -700,6 +738,7 @@
 
   .c-order-help {
     color: $windows-blue;
+    overflow: hidden;
 
     .field--name-body {
       p,
@@ -707,11 +746,27 @@
         display: inline-block;
         font-size: 12px;
         margin: 0;
-        padding-left: 0;
+        padding-#{$left}: 0;
         vertical-align: top;
 
         @include breakpoint($desktop) {
-          vertical-align: middle;
+          float: $left;
+        }
+      }
+
+      ul {
+        margin-#{$left}: 2.6rem;
+        margin-top: 1rem;
+
+        @include breakpoint($tablet) {
+          margin: 0;
+          margin-#{$left}: 3.1rem;
+        }
+
+        @include breakpoint($desktop) {
+          width: 65%;
+          margin-#{$left}: 0;
+          font-size: 0;
         }
       }
 
@@ -726,26 +781,40 @@
       li {
         list-style: none;
         margin-bottom: 21px;
+        font-size: 12px;
 
         @include breakpoint($desktop) {
           display: inline-block;
-          margin-#{$right}: 69px;
+          margin-#{$right}: 0;
           margin-bottom: 0;
+          text-align: center;
+          width: 33.33%;
+          vertical-align: top;
+          line-height: 24px;
+        }
+
+        &:first-child {
+          @include breakpoint($desktop) {
+            text-align: $left;
+          }
         }
 
         &:last-child {
           margin: 0;
+
+          @include breakpoint($desktop) {
+            text-align: $right;
+          }
         }
       }
 
       p {
         font-size: 13px;
         font-weight: 700;
-        margin-#{$right}: 50px;
 
         @include breakpoint($desktop) {
           font-size: 15px;
-          margin-#{$right}: 64px;
+          width: 35%;
         }
 
         @include icon(infomation, before) {
@@ -761,6 +830,32 @@
     background: #e8eff5;
     margin-top: 50px;
     margin-bottom: 55px;
-    padding: 24px;
+    padding: 20px 16px;
+
+    @include breakpoint($tablet) {
+      padding: 24px;
+    }
+  }
+}
+
+.privilege-card-wrapper {
+  margin-top: 2rem;
+
+  .privilege-card-wrapper-title {
+    color: $dark-sand;
+    font-family: $alshaya-bold;
+  }
+
+  .form-wrapper {
+    margin-top: 0.25rem;
+  }
+
+  summary {
+    outline: transparent;
+    color: $greyish;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
   }
 }

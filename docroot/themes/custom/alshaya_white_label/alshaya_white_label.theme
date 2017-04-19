@@ -286,13 +286,15 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       break;
 
     case "user_register_form":
-      $prefix = '<div class="privilege-card-wrapper">';
-      $prefix .= '<div class="privilege-card-wrapper-title">' . t('already a privilege club card member?') . '</div>';
-      $form['privilege_card_wrapper']['#prefix'] = $prefix;
-      $form['privilege_card_wrapper']['#suffix'] = '</div>';
-      $form['privilege_card_wrapper']['#title'] = t('enter card details');
-      $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
-      $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
+        $prefix = '<div class="privilege-card-wrapper">';
+        $prefix .= '<div class="privilege-card-wrapper-title">' . t('Already a privilege club card member?') . '</div>';
+        $form['privilege_card_wrapper']['#prefix'] = $prefix;
+        $form['privilege_card_wrapper']['#suffix'] = '</div>';
+        $form['privilege_card_wrapper']['#title'] = t('Enter card details');
+        $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
+        $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+      }
       break;
   }
 }
@@ -420,7 +422,7 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
       $lname = $user->get('field_last_name') ? (!empty($user->get('field_last_name')->getValue()) ? $user->get('field_last_name')->getValue()[0]['value'] : '') : '';
       if (!empty($fname)) {
         $variables['title'] = [
-          '#markup' => t('My Account') . '<div>' . t('Hello, @fname @lname', ['@fname' => $fname, '@lname' => $lname]) . '</div>',
+          '#markup' => t('My Account'),
         ];
       }
     }
@@ -430,6 +432,13 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
   if ($route_match->getRouteName() == 'entity.profile.type.address_book.user_profile_form') {
     $variables['title'] = [
       '#markup' => t('Address Book'),
+    ];
+  }
+
+  // Change page title for change password form.
+  if ($route_match->getRouteName() == 'change_pwd_page.change_password_form') {
+    $variables['title'] = [
+      '#markup' => t('change password'),
     ];
   }
 }

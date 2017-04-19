@@ -37,6 +37,7 @@ modules:
   - alshaya_newsletter
   - alshaya_permissions
   - alshaya_product
+  - alshaya_seo
   - alshaya_stores_finder
   - alshaya_user
   - color
