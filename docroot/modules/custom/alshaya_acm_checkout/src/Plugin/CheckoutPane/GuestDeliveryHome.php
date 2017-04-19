@@ -188,6 +188,17 @@ class GuestDeliveryHome extends AddressFormBase {
    * {@inheritdoc}
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $values = $form_state->getValue($pane_form['#parents']);
+
+    if (!(\Drupal::service('email.validator')->isValid($values['address']['email']))) {
+      $form_state->setErrorByName('email', t('You have entered an invalid email addresss.'));
+    }
+
+    $user = user_load_by_mail($values['address']['email']);
+
+    if ($user !== FALSE) {
+      $form_state->setErrorByName('email', t('You already have an account, please login.'));
+    }
   }
 
   /**
@@ -220,6 +231,17 @@ class GuestDeliveryHome extends AddressFormBase {
     list($carrier, $method) = explode(',', $shipping_method);
 
     $cart->setShippingMethod($carrier, $method);
+
+    // We are only looking to convert guest carts.
+    if ($cart->customerId() != 0) {
+      return;
+    }
+
+    // Get the customer id of Magento from this email.
+    $customer = \Drupal::service('acq_commerce.api')->createCustomer($address['first_name'], $address['last_name'], $address['email']);
+    $customer_cart = \Drupal::service('acq_commerce.api')->createCart($customer['customer_id']);
+    $cart->convertToCustomerCart($customer_cart);
+    \Drupal::service('acq_cart.cart_storage')->pushCart();
   }
 
 }

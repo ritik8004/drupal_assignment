@@ -46,7 +46,7 @@ class CustomerController extends ControllerBase {
     $searchForm['form_build_id']['#printed'] = TRUE;
 
     // Get the orders to display for current user and filter applied.
-    $orders = alshaya_acm_customer_get_user_orders($user, 'search', 'filter');
+    $orders = alshaya_acm_customer_get_user_orders($user->getEmail(), 'search', 'filter');
 
     // Initialising order details array to array.
     $orderDetails = [];
@@ -159,7 +159,7 @@ class CustomerController extends ControllerBase {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get the orders to display for current user and filter applied.
-    $orders = alshaya_acm_customer_get_user_orders($user);
+    $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
 
     $order_index = array_search($order_id, array_column($orders, 'increment_id'));
 

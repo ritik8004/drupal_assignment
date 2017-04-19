@@ -13,8 +13,8 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 /**
  * Returns orders from cache if available.
  *
- * @param \Drupal\user\UserInterface $user
- *   User object for which the orders are required.
+ * @param string $email
+ *   Email address of the user.
  * @param string $search_key
  *   Key to look for in $_GET for searching.
  * @param string $filter_key
@@ -23,16 +23,21 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  * @return array
  *   Array of orders.
  */
-function alshaya_acm_customer_get_user_orders(UserInterface $user, $search_key = '', $filter_key = '') {
+function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_key = '') {
   $orders = [];
 
-  $cid = 'orders_list_' . $user->id();
+  $cid = 'orders_list_' . $email;
 
   if ($cache = \Drupal::cache()->get($cid)) {
     $orders = $cache->data;
   }
   else {
-    $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($user->getEmail());
+    $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($email);
+
+    // Sort them by default by date.
+    usort($orders, function ($a, $b) {
+      return $b['created_at'] > $a['created_at'];
+    });
 
     // Get the cache expiration time based on config value.
     $cacheTimeLimit = \Drupal::config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
@@ -250,7 +255,7 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
   $all_status = [];
 
   // Get all the orders for the user.
-  $orders = alshaya_acm_customer_get_user_orders($user);
+  $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
 
   // Loop through all the orders to get status of each.
   foreach ($orders as $order) {
@@ -259,7 +264,6 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
 
     // Add the status in array (overriding if already available).
     $all_status[$status['key']] = $status['text'];
-
   }
 
   // Sort them by ascending order of key to keep it consistent across languages.
