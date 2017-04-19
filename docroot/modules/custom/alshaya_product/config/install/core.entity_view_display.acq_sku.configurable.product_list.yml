@@ -6,9 +6,6 @@ dependencies:
     - core.entity_view_mode.acq_sku.product_list
     - field.field.acq_sku.configurable.field_configurable_attributes
     - field.field.acq_sku.configurable.field_configured_skus
-    - responsive_image.styles.291x288
-  module:
-    - responsive_image
 id: acq_sku.configurable.product_list
 targetEntityType: acq_sku
 bundle: configurable

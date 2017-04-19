@@ -22,6 +22,8 @@ content:
       view_mode: product_list
     third_party_settings: {  }
     type: sku_formatter
+  sharethis:
+    weight: 10
 hidden:
   body: true
   field_category: true

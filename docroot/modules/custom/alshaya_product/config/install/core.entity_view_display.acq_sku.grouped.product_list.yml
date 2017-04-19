@@ -5,9 +5,6 @@ dependencies:
     - acq_sku.type.grouped
     - core.entity_view_mode.acq_sku.product_list
     - field.field.acq_sku.grouped.field_grouped_skus
-    - responsive_image.styles.291x288
-  module:
-    - responsive_image
 id: acq_sku.grouped.product_list
 targetEntityType: acq_sku
 bundle: grouped
