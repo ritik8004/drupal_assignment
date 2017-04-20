@@ -250,14 +250,36 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     // We show the size guide link if available as prefix.
     if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
-      $options = [
-        'attributes' => [
-          'class' => ['use-ajax', 'size-guide-link'],
-          'data-dialog-type' => 'modal',
-          'data-dialog-options' => Json::encode(['width' => 'auto']),
-        ],
-      ];
-      $url = Url::fromUri($size_guide_link, $options);
+      try {
+        $options = [
+          'attributes' => [
+            'class' => ['size-guide-link'],
+            'target' => '_blank',
+          ],
+        ];
+
+        // Try as external url.
+        $url = Url::fromUri($size_guide_link, $options);
+      }
+      catch (Exception $e) {
+        try {
+          $options = [
+            'attributes' => [
+              'class' => ['use-ajax', 'size-guide-link'],
+              'data-dialog-type' => 'modal',
+              'data-dialog-options' => Json::encode(['width' => 'auto']),
+            ],
+          ];
+
+          // Try as internal url.
+          $url = Url::fromUserInput($size_guide_link, $options);
+        }
+        catch (Exception $e) {
+          \Drupal::logger('alshaya_acm_product')->error('Invalid size guide link: @link', ['@link' => $size_guide_link]);
+          return;
+        }
+      }
+
       $link = Link::fromTextAndUrl(t('Size Guide'), $url);
 
       $form['ajax']['configurables']['size']['#prefix'] = $link->toString();
