@@ -46,7 +46,7 @@ function alshaya_user_modules_installed($modules) {
   // Set user account form display settings.
   $userConfig = \Drupal::configFactory()->getEditable('core.entity_form_display.user.user.default');
   $content = $userConfig->get('content');
-  $content['account']['weight'] = 2;
+  $content['account']['weight'] = 3;
   $content['field_first_name'] = [
     'weight' => 0,
     'type' => 'string_textfield',
