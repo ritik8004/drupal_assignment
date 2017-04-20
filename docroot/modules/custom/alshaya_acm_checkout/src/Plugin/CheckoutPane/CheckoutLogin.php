@@ -14,8 +14,8 @@ use Drupal\Core\Url;
  * @ACQCheckoutPane(
  *   id = "checkout_login",
  *   label = @Translation("returning customers"),
- *   default_step = "login",
- *   wrapper_element = "fieldset",
+ *   defaultStep = "login",
+ *   wrapperElement = "fieldset",
  * )
  */
 class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {

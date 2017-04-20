@@ -12,8 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
  * @ACQCheckoutPane(
  *   id = "member_delivery_collect",
  *   label = @Translation("Click and Collect"),
- *   default_step = "delivery",
- *   wrapper_element = "fieldset",
+ *   defaultStep = "delivery",
+ *   wrapperElement = "fieldset",
  * )
  */
 class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInterface {

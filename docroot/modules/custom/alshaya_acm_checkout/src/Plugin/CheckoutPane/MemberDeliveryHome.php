@@ -12,8 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
  * @ACQCheckoutPane(
  *   id = "member_delivery_home",
  *   label = @Translation("Home delivery"),
- *   default_step = "delivery",
- *   wrapper_element = "fieldset",
+ *   defaultStep = "delivery",
+ *   wrapperElement = "fieldset",
  * )
  */
 class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterface {

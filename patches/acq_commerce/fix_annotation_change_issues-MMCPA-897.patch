@@ -1,0 +1,62 @@
+diff --git a/modules/acq_checkout/src/Annotation/ACQCheckoutPane.php b/modules/acq_checkout/src/Annotation/ACQCheckoutPane.php
+index a2e52ec..d2862dd 100644
+--- a/modules/acq_checkout/src/Annotation/ACQCheckoutPane.php
++++ b/modules/acq_checkout/src/Annotation/ACQCheckoutPane.php
+@@ -55,8 +55,8 @@ class ACQCheckoutPane extends Plugin {
+    *   The annotation values.
+    */
+   public function __construct(array $values) {
+-    if (empty($values['admin_label'])) {
+-      $values['admin_label'] = $values['label'];
++    if (empty($values['adminLabel'])) {
++      $values['adminLabel'] = $values['label'];
+     }
+     parent::__construct($values);
+   }
+diff --git a/modules/acq_checkout/src/CheckoutPaneManager.php b/modules/acq_checkout/src/CheckoutPaneManager.php
+index 92dbdd5..b5f5a61 100644
+--- a/modules/acq_checkout/src/CheckoutPaneManager.php
++++ b/modules/acq_checkout/src/CheckoutPaneManager.php
+@@ -22,9 +22,9 @@ class CheckoutPaneManager extends DefaultPluginManager {
+   protected $defaults = [
+     'id' => '',
+     'label' => '',
+-    'admin_label' => '',
+-    'default_step' => '_disabled',
+-    'wrapper_element' => 'container',
++    'adminLabel' => '',
++    'defaultStep' => '_disabled',
++    'wrapperElement' => 'container',
+   ];
+ 
+   /**
+diff --git a/modules/acq_checkout/src/Plugin/CheckoutPane/CheckoutPaneBase.php b/modules/acq_checkout/src/Plugin/CheckoutPane/CheckoutPaneBase.php
+index fb4760b..2e959fb 100644
+--- a/modules/acq_checkout/src/Plugin/CheckoutPane/CheckoutPaneBase.php
++++ b/modules/acq_checkout/src/Plugin/CheckoutPane/CheckoutPaneBase.php
+@@ -80,7 +80,7 @@ public function setConfiguration(array $configuration) {
+    */
+   public function defaultConfiguration() {
+     $available_steps = array_keys($this->checkoutFlow->getSteps());
+-    $default_step = $this->pluginDefinition['default_step'];
++    $default_step = $this->pluginDefinition['defaultStep'];
+     if (!in_array($default_step, $available_steps)) {
+       // The specified default step isn't available on the parent checkout flow.
+       $default_step = '_disabled';
+@@ -110,14 +110,14 @@ public function getLabel() {
+    * {@inheritdoc}
+    */
+   public function getAdminLabel() {
+-    return $this->pluginDefinition['admin_label'];
++    return $this->pluginDefinition['adminLabel'];
+   }
+ 
+   /**
+    * {@inheritdoc}
+    */
+   public function getWrapperElement() {
+-    return $this->pluginDefinition['wrapper_element'];
++    return $this->pluginDefinition['wrapperElement'];
+   }
+ 
+   /**

@@ -13,8 +13,8 @@ use Drupal\Core\Link;
  * @ACQCheckoutPane(
  *   id = "checkout_guest",
  *   label = @Translation("new customers"),
- *   default_step = "login",
- *   wrapper_element = "fieldset",
+ *   defaultStep = "login",
+ *   wrapperElement = "fieldset",
  * )
  */
 class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {

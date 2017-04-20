@@ -13,8 +13,8 @@ use Drupal\image\Entity\ImageStyle;
  * @ACQCheckoutPane(
  *   id = "confirmation",
  *   label = @Translation("Confirmation"),
- *   default_step = "confirmation",
- *   wrapper_element = "container",
+ *   defaultStep = "confirmation",
+ *   wrapperElement = "container",
  * )
  */
 class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
