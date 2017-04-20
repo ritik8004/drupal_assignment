@@ -72,7 +72,7 @@
         $('body').removeClass('mobile--overlay');
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
-        $('.remove--toggle').removeClass('remove--toggle')
+        $('.remove--toggle').removeClass('remove--toggle');
       });
 
       $('.menu--one__list-item.has-child').hover(
