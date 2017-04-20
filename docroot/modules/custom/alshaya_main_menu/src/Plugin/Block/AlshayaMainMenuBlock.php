@@ -189,7 +189,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
           'label' => $term->label(),
           'description' => $term->getDescription(),
           'id' => $term->id(),
-          'path' => $term->get('path')->getValue()[0]['alias'],
+          'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(),
           'highlight_image' => $this->getHighlightImage($term),
           'active_class' => '',
         ];
