@@ -299,6 +299,10 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
       break;
 
+    case "change_pwd_form":
+      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      break;
+
     case "user_register_form":
       if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
         $prefix = '<div class="privilege-card-wrapper">';

@@ -204,6 +204,7 @@
     }
 
     label.form-required,
+    .field--name-field-privilege-card-number label,
     .form-item-privilege-card-number label,
     .form-item-privilege-card-number2 label {
       font-size: 16px;
@@ -700,7 +701,8 @@
   }
 }
 
-.c-change-password {
+.c-change-password,
+.c-user-edit {
   border: 0;
 
   .c-page-title {
@@ -811,6 +813,7 @@
       p {
         font-size: 13px;
         font-weight: 700;
+        line-height: 25px;
 
         @include breakpoint($desktop) {
           font-size: 15px;
@@ -820,7 +823,7 @@
         @include icon(infomation, before) {
           font-size: 24px;
           margin-right: 17px;
-          vertical-align: middle;
+          vertical-align: top;
         }
       }
     }

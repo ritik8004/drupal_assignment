@@ -57,11 +57,11 @@ class CustomerController extends ControllerBase {
     if (empty($orders)) {
       // @TODO: Check the empty result message.
       if ($search = \Drupal::request()->query->get('search')) {
-        $noOrdersFoundMessage['#markup'] = $this->t('Your search yielded no results, please try different text in search.');
+        $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('Your search yielded no results, please try different text in search.') . '</div>';
       }
       else {
         // Below message is taken from https://zpl.io/Oqv1o mockup.
-        $noOrdersFoundMessage['#markup'] = $this->t('You haven’t ordered anything recently.');
+        $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('You haven’t ordered anything recently.') . '</div>';
       }
     }
     else {

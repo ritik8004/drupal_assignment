@@ -19,6 +19,20 @@
           $('#unmask_password').html('Show password');
         }
       });
+
+      $('.change-pwd-form #unmask_password').on('click', function () {
+        var current = $(this).siblings('.form-text');
+
+        if ($(current).attr('type') === 'password') {
+          $(current).attr('type', 'text');
+          $(this).html('Hide password');
+        }
+        else if ($(current).attr('type') === 'text') {
+          $(current).attr('type', 'password');
+          $(this).html('Show password');
+        }
+      });
+
       $('#edit-submit').on('click', function () {
         if ($('#edit-pass').attr('type') === 'text') {
           $('#edit-pass').attr('type', 'password');
