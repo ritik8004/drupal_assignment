@@ -12,11 +12,24 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\acq_sku\Entity\SKU;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  // Route match.
+  $route_match = \Drupal::routeMatch();
+
+  // Change the title of the cart page.
+  if ($route_match->getRouteName() == 'acq_cart.cart') {
+    $request = \Drupal::request();
+
+    if ($route = $request->attributes->get(RouteObjectInterface::ROUTE_OBJECT)) {
+      $route->setDefault('_title', 'Basket');
+    }
+  }
+
   // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
@@ -305,6 +318,7 @@ function alshaya_acm_preprocess_page_title(&$variables) {
     foreach ($cart->items() as $item) {
       $product_count += $item['qty'];
     }
+
     $variables['title'] = [
       '#markup' => t("Basket (%count)", ['%count' => $product_count]),
     ];
