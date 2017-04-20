@@ -22,9 +22,9 @@ class CheckoutPaneManager extends DefaultPluginManager {
   protected $defaults = [
     'id' => '',
     'label' => '',
-    'admin_label' => '',
-    'default_step' => '_disabled',
-    'wrapper_element' => 'container',
+    'adminLabel' => '',
+    'defaultStep' => '_disabled',
+    'wrapperElement' => 'container',
   ];
 
   /**
