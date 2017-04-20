@@ -6,6 +6,31 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function alshaya_user_install() {
+  // Save texts for communication preference page.
+  $strings = [
+    'Email (@mail)' => [
+      'ar' => '(@mail) البريد الإلكتروني',
+    ],
+    'Mobile (@mobile)' => [
+      'ar' => '(@mobile) متحرك',
+    ],
+    'Select your preferred communication channel' => [
+      'ar' => 'حدد قناة الاتصال المفضلة لديك',
+    ],
+    'Your communication preference saved successfully.' => [
+      'ar' => 'تم حفظ تفضيلات الاتصال بنجاح.',
+    ],
+    'Communication preferences' => [
+      'ar' => 'تفضيلات التواصل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_modules_installed().
  */
 function alshaya_user_modules_installed($modules) {
@@ -40,17 +65,17 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
-  $content['field_privilege_card_number'] = [
-    'weight' => 3,
-    'type' => 'string_textfield',
+  $content['field_mobile_number'] = [
+    'weight' => 2,
+    'type' => 'mobile_number_default',
     'settings' => [
-      'size' => 60,
-      'placeholder' => '',
+      'default_country' => 'KW',
+      'countries' => [],
     ],
     'third_party_settings' => [],
   ];
   $content['field_terms_and_condition'] = [
-    'weight' => 4,
+    'weight' => 100,
     'type' => 'boolean_checkbox',
     'settings' => [
       'display_label' => TRUE,

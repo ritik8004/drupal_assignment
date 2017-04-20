@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -113,15 +114,14 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     // TODO: Update the route name once link is available.
     $links['communication_preference'] = [
       'text' => $this->t('Communication preferences'),
-      'route' => 'entity.user.canonical',
+      'route' => 'alshaya_user.user_communication_preference',
       'options' => ['user' => $account->id()],
     ];
 
     // Change password link.
-    // TODO: Update the route name once link is available.
     $links['change_password'] = [
       'text' => $this->t('Change password'),
-      'route' => 'entity.user.canonical',
+      'route' => 'change_pwd_page.change_password_form',
       'options' => ['user' => $account->id()],
     ];
 
@@ -139,7 +139,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       ];
     }
 
-    $build = [
+    $build = [];
+
+    $build['my_account_title'] = [
+      '#markup' => '<h2>' . $this->getTitle() . '</h2>',
+    ];
+
+    $build['my_account_links'] = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => $items,
@@ -158,6 +164,33 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $this->currentUser->id()]);
+  }
+
+  /**
+   * Get the dynamic value as title for the block.
+   *
+   * @return string
+   *   Title for the block.
+   */
+  protected function getTitle() {
+    $user = User::load($this->currentUser->id());
+    $title = '';
+    if ($user) {
+      $fname = $user->get('field_first_name')->getString();
+      $lname = $user->get('field_last_name')->getString();
+      if (!empty($fname)) {
+        $title = $this->t('Welcome, @fname @lname', ['@fname' => $fname, '@lname' => $lname]);
+      }
+    }
+
+    return $title;
   }
 
 }

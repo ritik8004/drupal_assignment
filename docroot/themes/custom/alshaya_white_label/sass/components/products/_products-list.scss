@@ -1,3 +1,7 @@
+#backtotop {
+  #{$right}: 20px;
+}
+
 .c-plp {
   padding-top: 1.75rem;
 
@@ -9,7 +13,7 @@
     @include breakpoint($only-mobile) {
       padding-bottom: 0.5rem;
       margin-bottom: 0.75rem;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $white;
     }
 
     @include breakpoint($only-tablet) {
@@ -30,7 +34,7 @@
 
     font-size: 1rem;
     text-transform: lowercase;
-    color: #0084cc;
+    color: $cerulean-two;
     font-family: $alshaya-thin;
 
     p {
@@ -44,9 +48,9 @@
       margin-top: 1.125rem;
       margin-bottom: 1.5rem;
       font-size: 0.875rem;
-      color: #333;
+      color: $black;
       padding-bottom: 9px;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $white;
       font-family: $alshaya-thin;
 
       @include breakpoint($only-mobile) {
@@ -58,7 +62,7 @@
   .c-products__item {
     float: $left;
     text-align: center;
-    color: #333;
+    color: $black;
     height: 19.5rem;
 
     @include breakpoint($only-mobile) {
@@ -88,7 +92,7 @@
 
     .field--name-name {
       margin-bottom: 0.875rem;
-      color: #666;
+      color: $grey-ash;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
 
@@ -112,7 +116,7 @@
   }
 
   .c-products__item__link {
-    color: #333;
+    color: $black;
   }
 }
 
@@ -121,15 +125,8 @@
     display: none;
   }
 
-  @include breakpoint($only-mobile) {
-    margin-bottom: 0.75rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    position: absolute;
-    top: 0;
-    #{$right}: 2.25rem;
-  }
+  position: relative;
+  z-index: 2;
 
   .c-facet__label {
     @include breakpoint($only-mobile) {
@@ -137,37 +134,31 @@
       font-size: 0.75rem;
     }
 
-    @include breakpoint($only-tablet) {
+    @include breakpoint($tablet) {
       width: 7.875rem;
     }
 
-    background: #e5e5e5;
-    padding: 0.625rem;
-    padding-left: 0.75rem;
-    font-weight: normal;
-    margin: 0;
-    position: relative;
-    border-right: 1px solid white;
-    height: 2.1875rem;
-    z-index: 2;
-
-    &::after {
-      @extend %icon-chevron-down;
-
+    @include icon(chevrondown, after) {
       #{$right}: -2.25rem;
-      content: '';
       height: 2.1875rem;
       width: 2.1875rem;
-      background-color: #e5e5e5;
-      background-position: center;
-      background-repeat: no-repeat;
+      background-color: $white-two;
       position: absolute;
+      text-align: center;
       top: 0;
-      transform: rotate(180deg);
+      font-size: 2rem;
     }
 
+    background: $white-two;
+    height: 2.1875rem;
+    padding: 0.625rem;
+    border-right: 1px solid $white-five;
+    font-weight: normal;
+    margin: 0;
+
     &.is-active {
-      background: white;
+      background: $white-five;
+      position: relative;
     }
   }
 
@@ -180,13 +171,90 @@
     width: 16.8125rem;
     position: absolute;
     display: none;
-    background-color: #fff;
+    background-color: $white-five;
     z-index: 1;
   }
 
   .c-facet:first-child {
     .c-facet__title {
       border-top: none;
+    }
+  }
+}
+
+.filter--mobile {
+  @include breakpoint($tablet) {
+    position: absolute;
+    top: 0;
+    #{$right}: 2.25rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 0.75rem;
+  }
+}
+
+.is-filter {
+  @include breakpoint($only-mobile) {
+    max-width: 6.75rem;
+
+    &:last-child {
+      float: right;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    &:first-child {
+      transform: translate(-3.7rem, 0);
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    display: inline-block;
+  }
+
+  &.view-filters {
+    label {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+
+      @include u-center--vertically;
+
+      position: absolute;
+      left: -3rem;
+      font-size: 12px;
+    }
+
+    .form-type-select {
+      @include icon(chevrondown, after) {
+        #{$right}: -2.25rem;
+        height: 2.1875rem;
+        width: 2.1875rem;
+        background-color: $white-two;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        font-size: 2rem;
+      }
+
+      position: relative;
+    }
+
+    select {
+      @include breakpoint($only-mobile) {
+        max-width: 6.75rem;
+        border-right: 1px solid #fff;
+      }
+
+      border: none;
+      background: #e5e5e5;
+      padding: 0.625rem;
+      padding-left: 0.75rem;
+      height: 2.1875rem;
+      border-radius: 0;
+      -webkit-appearance: none;
+      font-size: 0.75rem;
     }
   }
 }

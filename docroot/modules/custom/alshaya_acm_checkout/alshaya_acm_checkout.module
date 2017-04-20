@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
+ * Implements hook_acq_checkout_pane_pane_info_alter().
+ */
+function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definitions) {
+  // Remove all default panes.
+  unset($definitions['billing_information']);
+  unset($definitions['shipping_information']);
+  unset($definitions['review']);
+  unset($definitions['completion_message']);
+}

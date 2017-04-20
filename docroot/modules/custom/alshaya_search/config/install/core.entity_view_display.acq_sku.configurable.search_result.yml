@@ -1,0 +1,45 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - acq_sku.type.configurable
+    - core.entity_view_mode.acq_sku.search_result
+    - field.field.acq_sku.configurable.field_configurable_attributes
+    - field.field.acq_sku.configurable.field_configured_skus
+  module:
+    - image
+id: acq_sku.configurable.search_result
+targetEntityType: acq_sku
+bundle: configurable
+mode: search_result
+content:
+  attr_special_price:
+    label: above
+    type: string
+    weight: 35
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  image:
+    label: hidden
+    type: image
+    weight: 0
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+  price:
+    label: hidden
+    type: string
+    weight: 3
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  attributes: true
+  crosssell: true
+  field_configurable_attributes: true
+  field_configured_skus: true
+  name: true
+  sku: true
+  upsell: true

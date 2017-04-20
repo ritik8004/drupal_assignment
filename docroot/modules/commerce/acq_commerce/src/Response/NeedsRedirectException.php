@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_commerce\Response\NeedsRedirectException.
- */
-
 namespace Drupal\acq_commerce\Response;
 
 use Drupal\Component\Utility\UrlHelper;
@@ -23,11 +18,11 @@ class NeedsRedirectException extends EnforcedResponseException {
    * Constructs a new NeedsRedirectException object.
    *
    * @param string $url
-   *    The URL to redirect to.
+   *   The URL to redirect to.
    * @param int $status_code
-   *    The redirect status code.
+   *   The redirect status code.
    * @param string[] $headers
-   *    Headers to pass with the redirect.
+   *   Headers to pass with the redirect.
    */
   public function __construct($url, $status_code = 302, array $headers = []) {
     if (!UrlHelper::isValid($url)) {

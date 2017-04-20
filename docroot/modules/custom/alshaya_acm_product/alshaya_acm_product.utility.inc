@@ -40,7 +40,7 @@ function alshaya_acm_product_get_product_media($productId) {
 function alshaya_acm_product_get_sku_media($sku) {
   $media = [];
 
-  $skuEntity = is_object($sku) ? $sku : SKU::loadFromSKU($sku);
+  $skuEntity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
 
   // For now we load only the image field.
   $imageField = $skuEntity->get('attr_image')->getValue();
@@ -65,7 +65,7 @@ function alshaya_acm_product_get_sku_media($sku) {
 function alshaya_acm_product_get_sku_configurable_values($sku) {
   $configurableFieldValues = [];
 
-  $skuEntity = is_object($sku) ? $sku : SKU::loadFromSKU($sku);
+  $skuEntity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
 
   $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
   $configurableFields = array_filter($fields, function ($field) {

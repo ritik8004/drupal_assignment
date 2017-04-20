@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\Block\CheckoutProgressBlock.
- */
-
 namespace Drupal\acq_checkout\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;

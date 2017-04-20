@@ -1,23 +1,15 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
- */
-
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\acq_cart\Entity\Cart;
-use Drupal\acq_cart\Entity\LineItem;
-use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
 use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
- * Defines the configurable SKU type
+ * Defines the configurable SKU type.
  *
  * @SKUType(
  *   id = "configurable",
@@ -26,10 +18,11 @@ use Drupal\acq_sku\AddToCartErrorEvent;
  * )
  */
 class Configurable extends SKUPluginBase {
+
   /**
    * {@inheritdoc}
    */
-  public function addToCartForm($form, FormStateInterface $form_state, SKU $sku = NULL) {
+  public function addToCartForm(array $form, FormStateInterface $form_state, SKU $sku = NULL) {
     if (empty($sku)) {
       return $form;
     }
@@ -63,14 +56,14 @@ class Configurable extends SKUPluginBase {
         '#title' => $configurable['label'],
         '#options' => $options,
         '#required' => TRUE,
-        '#ajax' => array(
-          'callback' => array($this, 'configurableAjaxCallback'),
-          'progress' => array(
+        '#ajax' => [
+          'callback' => [$this, 'configurableAjaxCallback'],
+          'progress' => [
             'type' => 'throbber',
             'message' => NULL,
-          ),
+          ],
           'wrapper' => 'configurable_ajax',
-        ),
+        ],
       ];
     }
 
@@ -98,10 +91,15 @@ class Configurable extends SKUPluginBase {
   /**
    * Updates the form based on selections.
    *
-   * @param $form
+   * @param array $form
+   *   Array of form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Values of form.
+   *
+   * @return array
+   *   Array with dynamic parts of the form.
    */
-  public static function configurableAjaxCallback($form, FormStateInterface $form_state) {
+  public static function configurableAjaxCallback(array $form, FormStateInterface $form_state) {
     $dynamic_parts = &$form['ajax'];
 
     $configurables = $form_state->getValue('configurables');
@@ -128,11 +126,11 @@ class Configurable extends SKUPluginBase {
       $view = $view_builder
         ->view($tree_pointer);
 
-      // Block add to cart render because Form API won't allow AJAX Form-ception.
+      // Block add to cart render because Form API won't allow AJAX Formception.
       $view['#no_add_to_cart'] = TRUE;
 
       $dynamic_parts['add_to_cart'] = [
-        'entity_render' => [ '#markup' => render($view) ],
+        'entity_render' => ['#markup' => render($view)],
       ];
     }
     else {
@@ -140,7 +138,7 @@ class Configurable extends SKUPluginBase {
 
       foreach ($available_config as $key => $config) {
         $options = [
-          '' => $dynamic_parts['configurables']['color']['#options']['']
+          '' => $dynamic_parts['configurables']['color']['#options'][''],
         ];
 
         foreach ($config['values'] as $value) {
@@ -157,7 +155,7 @@ class Configurable extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function addToCartSubmit(&$form, FormStateInterface $form_state) {
+  public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
     $quantity = $form_state->getValue('quantity');
     $configurables = $form_state->getValue('configurables');
     $tree = $form_state->get('tree');
@@ -199,7 +197,6 @@ class Configurable extends SKUPluginBase {
         implode(', ', $label_parts)
       );
 
-
       $cart->addRawItemToCart([
         'name' => $label,
         'sku' => $tree['parent']->getSKU(),
@@ -210,14 +207,17 @@ class Configurable extends SKUPluginBase {
       ]);
 
       drupal_set_message(
-        t('Added @quantity of @name to the cart.' ,
+        t('Added @quantity of @name to the cart.',
           [
             '@quantity' => $quantity,
-            '@name' => $label
+            '@name' => $label,
           ]
       ));
 
-      $cart->addItemToCart($tree_pointer->getSKU(), $quantity);
+      $cart->addItemToCart($tree_pointer->getSku(), $quantity);
+
+      // Add child SKU to form state to allow other modules to use it.
+      $form_state->setTemporaryValue('child_sku', $tree_pointer->getSKU());
 
       try {
         \Drupal::service('acq_cart.cart_storage')->updateCart();
@@ -237,7 +237,7 @@ class Configurable extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function processImport($sku, $product) {
+  public function processImport($sku, array $product) {
     $sku->field_configurable_attributes->value =
       serialize($product['extension']['configurable_product_options']);
 
@@ -279,17 +279,22 @@ class Configurable extends SKUPluginBase {
   }
 
   /**
-   * Builds a display tree for helping determine which products belong to
-   * which combination of configurables.
+   * Builds a display tree.
+   *
+   * Helps to determine which products belong to which combination of
+   * configurables.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
-   * @return array - Configurables tree.
+   *   Object of SKU.
+   *
+   * @return array
+   *   Configurables tree.
    */
   public function deriveProductTree(SKU $sku) {
-    $tree = [ 'parent' => $sku ];
+    $tree = ['parent' => $sku];
 
     foreach ($sku->field_configured_skus as $child_sku) {
-      $child_sku = SKU::loadFromSKU($child_sku->getString());
+      $child_sku = SKU::loadFromSku($child_sku->getString());
       if (!empty($child_sku)) {
         $tree['products'][$child_sku->getSKU()] = $child_sku;
       }
@@ -314,12 +319,17 @@ class Configurable extends SKUPluginBase {
   /**
    * Creates subtrees based on available config.
    *
-   * @param $tree
-   * @param $current_config
-   * @param $available_config
+   * @param array $tree
+   *   Tree of products.
+   * @param array $available_config
+   *   Available configs.
+   * @param array $current_config
+   *   Config of current product.
+   *
    * @return array
+   *   Subtree.
    */
-  public static function recursiveConfigurableTree(&$tree, $available_config, $current_config = []) {
+  public static function recursiveConfigurableTree(array &$tree, array $available_config, array $current_config = []) {
     $subtree = ['#available_config' => $available_config];
 
     foreach ($available_config as $id => $config) {
@@ -349,18 +359,23 @@ class Configurable extends SKUPluginBase {
     return $subtree;
   }
 
-
   /**
-   * @param $tree - The whole configurable tree.
-   * @param $config - Config for the product.
-   * @return SKU - Reference to SKU in existing tree.
+   * Finds product in tree base on config.
+   *
+   * @param array $tree
+   *   The whole configurable tree.
+   * @param array $config
+   *   Config for the product.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   Reference to SKU in existing tree.
    */
-  public static function &findProductInTreeWithConfig(&$tree, $config) {
+  public static function &findProductInTreeWithConfig(array &$tree, array $config) {
     $sku = $tree['parent']->getSKU();
     $query = \Drupal::database()->select('acq_sku', 'acq_sku');
 
     $query->addField('acq_sku', 'sku');
-    $query->condition('sku', "%$sku%" , 'LIKE');
+    $query->condition('sku', "%$sku%", 'LIKE');
 
     foreach ($config as $key => $value) {
       $query->join('acq_sku__attributes', $key, "acq_sku.id = $key.entity_id");
@@ -372,31 +387,42 @@ class Configurable extends SKUPluginBase {
     return $tree['products'][$sku];
   }
 
-
   /**
-   * @param $sku
-   * @return \Drupal\acq_sku\Entity\SKU|void
+   * Get parent of current product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Current product.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU|null
+   *   Parent product or null if not found.
    */
-  public function getParentSKU(SKU $sku) {
+  public function getParentSku(SKU $sku) {
     $query = \Drupal::database()->select('acq_sku', 'acq_sku');
     $query->addField('acq_sku', 'sku');
     $query->join(
       'acq_sku__field_configured_skus',
       'child_sku', 'acq_sku.id = child_sku.entity_id'
     );
-    $query->condition("child_sku.field_configured_skus_value", $sku->getSKU());
+    $query->condition("child_sku.field_configured_skus_value", $sku->getSku());
     $parent_sku = $query->execute()->fetchField();
 
     if (empty($parent_sku)) {
-      return;
+      return NULL;
     }
 
-    return SKU::loadFromSKU($parent_sku);
+    return SKU::loadFromSku($parent_sku);
   }
 
   /**
+   * Get attribute value from key-value field.
+   *
    * @param \Drupal\acq_sku\Entity\SKU $sku
-   * @param $key
+   *   The object of product.
+   * @param string $key
+   *   Name of attribute.
+   *
+   * @return string|null
+   *   Value of field or null if empty.
    */
   public function getAttributeValue(SKU $sku, $key) {
     $query = \Drupal::database()->select('acq_sku__attributes', 'acq_sku__attributes');
@@ -409,8 +435,8 @@ class Configurable extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function cartName($sku, $cart) {
-    $parent_sku = $this->getParentSKU($sku);
+  public function cartName($sku, array $cart) {
+    $parent_sku = $this->getParentSku($sku);
 
     if (empty($parent_sku)) {
       return $sku->label();
@@ -446,7 +472,8 @@ class Configurable extends SKUPluginBase {
 
     $display_node = $this->getDisplayNode($parent_sku);
     $url = $display_node->toUrl();
-    $link = Link::fromTextAndUrl($label, $url);
-    return render($link->toRenderable());
+    $link = Link::fromTextAndUrl($label, $url)->toRenderable();
+    return render($link);
   }
+
 }

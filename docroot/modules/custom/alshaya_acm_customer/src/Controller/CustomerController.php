@@ -6,6 +6,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\user\UserInterface;
+use Drupal\block\Entity\Block;
+use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Customer controller to add/override pages for customer.
@@ -44,7 +47,7 @@ class CustomerController extends ControllerBase {
     $searchForm['form_build_id']['#printed'] = TRUE;
 
     // Get the orders to display for current user and filter applied.
-    $orders = alshaya_acm_customer_get_user_orders($user, 'search', 'filter');
+    $orders = alshaya_acm_customer_get_user_orders($user->getEmail(), 'search', 'filter');
 
     // Initialising order details array to array.
     $orderDetails = [];
@@ -54,11 +57,11 @@ class CustomerController extends ControllerBase {
     if (empty($orders)) {
       // @TODO: Check the empty result message.
       if ($search = \Drupal::request()->query->get('search')) {
-        $noOrdersFoundMessage['#markup'] = $this->t('Your search yielded no results, please try different text in search.');
+        $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('Your search yielded no results, please try different text in search.') . '</div>';
       }
       else {
         // Below message is taken from https://zpl.io/Oqv1o mockup.
-        $noOrdersFoundMessage['#markup'] = $this->t('You haven’t ordered anything recently.');
+        $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('You haven’t ordered anything recently.') . '</div>';
       }
     }
     else {
@@ -93,26 +96,33 @@ class CustomerController extends ControllerBase {
       }
 
       // Loop through each order and prepare the array for template.
-      foreach ($ordersPaged as $orderId => $order) {
+      foreach ($ordersPaged as $order) {
         $orderDetails[] = [
           '#theme' => 'user_order_list_item',
-          '#order' => alshaya_acm_customer_get_processed_order_summary($orderId, $order),
-          '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $user->id(), 'order_id' => $orderId])->toString(),
+          '#order' => alshaya_acm_customer_get_processed_order_summary($order),
+          '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $user->id(), 'order_id' => $order['increment_id']])->toString(),
           '#currency_code' => $currencyCode,
           '#currency_code_position' => $currencyCodePosition,
         ];
       }
     }
 
-    $build = [
+    // Load my-account-help block for rendering on order list page.
+    $help_block = NULL;
+    $help_block_entity = Block::load('myaccountneedhelp');
+    if ($help_block_entity) {
+      $help_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
+    }
+    $build['order-list'] = [
       '#theme' => 'user_order_list',
       '#search_form' => $searchForm,
       '#order_details' => $orderDetails,
       '#order_not_found' => $noOrdersFoundMessage,
       '#account' => $account,
       '#next_page_button' => $nextPageButton,
+      '#help_block' => $help_block,
       '#attached' => [
-        'library' => ['alshaya_acm_customer/orders-list-infinite-scroll'],
+        'library' => ['alshaya_acm_customer/orders-list'],
       ],
       // @TODO: We may want to set it to cache time limit of API call.
       '#cache' => ['max-age' => 0],
@@ -157,13 +167,15 @@ class CustomerController extends ControllerBase {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get the orders to display for current user and filter applied.
-    $orders = alshaya_acm_customer_get_user_orders($user);
+    $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
 
-    $order = $orders[$order_id];
+    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
 
-    if (empty($order)) {
+    if ($order_index === FALSE) {
       throw new NotFoundHttpException();
     }
+
+    $order = $orders[$order_index];
 
     $products = [];
     foreach ($order['items'] as $item) {
@@ -209,7 +221,8 @@ class CustomerController extends ControllerBase {
     $account['last_name'] = $user->get('field_last_name')->getString();
 
     $build = [];
-    $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order_id, $order);
+
+    $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
     $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
     $build['#products'] = $products;
     // @TODO: MMCPA-641.
@@ -221,6 +234,108 @@ class CustomerController extends ControllerBase {
     $build['#cache'] = ['max-age' => 0];
 
     return $build;
+  }
+
+  /**
+   * Controller function for order print.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User object for which the orders detail page is being viewed.
+   * @param string $order_id
+   *   Order id to view the detail for.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function orderPrint(UserInterface $user, $order_id) {
+    // Get order details and add more information for print.
+    $build = $this->orderDetail($user, $order_id);
+    $build['#barcode'] = $this->getBarcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
+    $build['#account']['mail'] = $user->get('mail')->getString();
+    $build['#account']['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
+    $build['#site_logo'] = [
+      '#theme' => 'image',
+      '#uri' => theme_get_setting('logo.url'),
+    ];
+    $build['#products_count'] = count($build['#products']);
+    $build['#theme'] = 'user_order_print';
+
+    return $build;
+  }
+
+  /**
+   * Function to get barcode.
+   *
+   * @param string $order_number
+   *   Order number for which barcode needed.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function getBarcode($order_number) {
+    $build = [];
+    $settings = [
+      'type' => 'C128',
+      'value' => $order_number,
+      'color' => '#000000',
+      'height' => 90,
+      'width' => 110,
+      'padding_top' => 0,
+      'padding_right' => 0,
+      'padding_bottom' => 0,
+      'padding_left' => 0,
+      'show_value' => TRUE,
+    ];
+    $generator = new BarcodeGenerator();
+    $suffix = str_replace(
+      '+', 'plus', strtolower($settings['type'])
+    );
+    $build['barcode'] = [
+      '#theme' => 'barcode__' . $suffix,
+      '#attached' => [
+        'library' => [
+          'barcodes/' . $suffix,
+        ],
+      ],
+      '#type' => $settings['type'],
+      '#value' => $settings['value'],
+      '#width' => $settings['width'],
+      '#height' => $settings['height'],
+      '#color' => $settings['color'],
+      '#padding_top' => $settings['padding_top'],
+      '#padding_right' => $settings['padding_right'],
+      '#padding_bottom' => $settings['padding_bottom'],
+      '#padding_left' => $settings['padding_left'],
+      '#show_value' => $settings['show_value'],
+    ];
+
+    try {
+      $barcode = $generator->getBarcodeObj(
+        $settings['type'],
+        $settings['value'],
+        $settings['width'],
+        $settings['height'],
+        $settings['color'],
+        [
+          $settings['padding_top'],
+          $settings['padding_right'],
+          $settings['padding_bottom'],
+          $settings['padding_left'],
+        ]
+      );
+      $build['barcode']['#svg'] = $barcode->getSvgCode();
+    }
+    catch (\Exception $e) {
+      $this->logger->error(
+        'Error: @error, given: @value',
+        [
+          '@error' => $e->getMessage(),
+          '@value' => $settings['value'],
+        ]
+      );
+    }
+    return $build;
+
   }
 
 }

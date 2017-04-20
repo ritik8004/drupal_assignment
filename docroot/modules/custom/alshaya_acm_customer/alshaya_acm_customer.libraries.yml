@@ -1,7 +1,7 @@
-orders-list-infinite-scroll:
+orders-list:
   version: VERSION
   js:
-    js/orders-list-pager.js : {}
+    js/orders-list.js : {}
   dependencies:
     - core/jquery
     - core/jquery.once

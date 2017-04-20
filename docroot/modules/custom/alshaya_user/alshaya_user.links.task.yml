@@ -1,0 +1,4 @@
+alshaya_user.user_settings_form:
+  route_name: alshaya_user.user_settings_form
+  title: 'Custom account settings'
+  base_route: alshaya_user.user_settings_form

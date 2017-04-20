@@ -9,6 +9,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_preprocess_html().
@@ -74,17 +75,38 @@ function alshaya_white_label_preprocess_block(&$variables) {
 }
 
 /**
+ * Implements template_view_alter().
+ */
+function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
+  if ($variables['view']->current_display == "block_product_slider") {
+    $suggestions[] = 'views_view__product_slider';
+  }
+}
+
+/**
+ * Implements template_view_grid_alter().
+ */
+function alshaya_white_label_theme_suggestions_views_view_grid_alter(array &$suggestions, &$variables) {
+  $routmatch = \Drupal::routeMatch();
+  if ($routmatch->getRouteName() == 'entity.profile.type.address_book.user_profile_form') {
+    $suggestions[] = "views_view_grid__address_book";
+  }
+}
+
+/**
  * Implements template_preprocess_profile().
  */
 function alshaya_white_label_preprocess_profile__address_book(&$variables) {
   /* @var \Drupal\profile\Entity\Profile $profile */
   $profile = $variables['content']['field_address']['#object'];
-  $values = $profile->get('field_address')->getValue();
-  $telephone = $profile->get('field_telephone')->getValue();
 
-  $variables['delivery_to'] = '';
-  $variables['delivery_address'] = '';
-  $variables['contact_no'] = '';
+  if ($profile) {
+    $values = $profile->get('field_address')->getValue();
+    $telephone = $profile->get('field_telephone')->getValue();
+    $variables['delivery_to'] = '';
+    $variables['delivery_address'] = '';
+    $variables['contact_no'] = '';
+  }
 
   // Contact info.
   if (isset($telephone[0]) && !empty($telephone[0]['value'])) {
@@ -122,11 +144,19 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     $variables['set_default_operation'] = '';
     $current_user = \Drupal::currentUser();
 
+    // Current language.
+    $current_language = \Drupal::languageManager()->getCurrentLanguage();
+
     // Edit operation.
     if ($profile->access('update') && $profile->hasLinkTemplate('edit-form')) {
       $variables['edit_operation'] = [
         'title' => t('Edit'),
-        'url' => $profile->urlInfo('edit-form', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+        'url' => $profile->urlInfo('edit-form', [
+          'query' => [
+            'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
+          ],
+          'language' => $current_language,
+        ]),
       ];
     }
 
@@ -140,6 +170,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
             'data-dialog-type' => 'modal',
             'data-dialog-options' => Json::encode(['width' => '341']),
           ],
+          'language' => $current_language,
         ]),
       ];
     }
@@ -148,7 +179,11 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     if (!$profile->isDefault()) {
       $variables['set_default_operation'] = [
         'title' => t('Primary address'),
-        'url' => $profile->toUrl('set-default', ['query' => ['destination' => 'user/' . $current_user->id() . '/address_book']]),
+        'url' => $profile->toUrl('set-default', [
+          'query' => [
+            'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
+          ],
+        ]),
         'parameter' => $profile,
       ];
     }
@@ -256,12 +291,28 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
     case "views_exposed_form":
       // Adding Place holder on Search.
       if ($form['#id'] == 'views-exposed-form-search-page') {
-        $form['keywords']['#attributes']['placeholder'] = t('search item or Keyword');
+        $form['keywords']['#attributes']['placeholder'] = t('search item or keyword');
       }
       break;
 
     case "user_login_form":
       $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      break;
+
+    case "change_pwd_form":
+      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      break;
+
+    case "user_register_form":
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
+        $prefix = '<div class="privilege-card-wrapper">';
+        $prefix .= '<div class="privilege-card-wrapper-title">' . t('Already a privilege club card member?') . '</div>';
+        $form['privilege_card_wrapper']['#prefix'] = $prefix;
+        $form['privilege_card_wrapper']['#suffix'] = '</div>';
+        $form['privilege_card_wrapper']['#title'] = t('Enter card details');
+        $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
+        $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+      }
       break;
   }
 }
@@ -300,8 +351,38 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
+  // If checkout page for user.
+  if ($routmatch->getRouteName() == 'acq_checkout.form') {
+    $suggestions[] = 'page__checkout';
+  }
+
   if (\Drupal::service('path.matcher')->isFrontPage()) {
     $suggestions[] = 'page__front';
+  }
+
+  if ($routmatch->getRouteName() == 'alshaya_acm_customer.orders_print') {
+    $suggestions[] = 'page__orderprint';
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_white_label_page_attachments_alter(array &$attachments) {
+  // Get current route.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  // Routes from where we need to remove the 'back_to_top' button.
+  $skip_back_to_top_routes = [
+    'acq_checkout.form',
+  ];
+
+  if (in_array($route_name, $skip_back_to_top_routes)) {
+    // If back_to_top library is added to page, remove it.
+    if (in_array('back_to_top/back_to_top_js', $attachments['#attached']['library'])) {
+      $index = array_search('back_to_top/back_to_top_js', $attachments['#attached']['library']);
+      unset($attachments['#attached']['library'][$index]);
+    }
   }
 }
 
@@ -341,5 +422,83 @@ function alshaya_white_label_preprocess_field(&$variables, $hook) {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function alshaya_white_label_preprocess_page_title(&$variables) {
+  $route_match = \Drupal::routeMatch();
+
+  // If user/uid (My Account) page.
+  if ($route_match->getRouteName() == 'entity.user.canonical') {
+    /* @var \Drupal\user\Entity\User $user */
+    $user = $route_match->getParameter('user');
+    if ($user) {
+      $fname = $user->get('field_first_name') ? (!empty($user->get('field_first_name')->getValue()) ? $user->get('field_first_name')->getValue()[0]['value'] : '') : '';
+      $lname = $user->get('field_last_name') ? (!empty($user->get('field_last_name')->getValue()) ? $user->get('field_last_name')->getValue()[0]['value'] : '') : '';
+      if (!empty($fname)) {
+        $variables['title'] = [
+          '#markup' => t('My Account'),
+        ];
+      }
+    }
+  }
+
+  // Change page title if address book page.
+  if ($route_match->getRouteName() == 'entity.profile.type.address_book.user_profile_form') {
+    $variables['title'] = [
+      '#markup' => t('Address Book'),
+    ];
+  }
+
+  // Change page title for change password form.
+  if ($route_match->getRouteName() == 'change_pwd_page.change_password_form') {
+    $variables['title'] = [
+      '#markup' => t('change password'),
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function alshaya_white_label_preprocess_user(&$variables) {
+  /* @var \Drupal\user\Entity\User $user */
+  $user = $variables['user'];
+  if ($user) {
+    $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
+    $variables['contact_number'] = $user->get('field_mobile_number') ? (!empty($user->get('field_mobile_number')->getValue()) ? $user->get('field_mobile_number')->getValue()[0]['value'] : '') : '';
+    $variables['privilege_card'] = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
+  }
+}
+
+/**
+ * Implements hook_preprocess_menu().
+ */
+function alshaya_white_label_preprocess_menu(&$variables) {
+  if ($variables['menu_name'] === 'account') {
+    // Get the current route.
+    $current_route = \Drupal::routeMatch()->getRouteName();
+    $items = $variables['items'];
+    foreach ($items as $key => $item) {
+      // If path is current_path, add active class.
+      if ($item['url']->getRouteName() == 'user.page' && $current_route == 'entity.user.canonical') {
+        $attributes = $item['url']->getOption('attributes');
+        $attributes['class'][] = 'is-active';
+        $item['url']->setOption('attributes', $attributes);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_block_alter().
+ */
+function alshaya_white_label_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  $routmatch = \Drupal::service('path.matcher');
+  if ($routmatch->isFrontPage() && $variables['elements']['#plugin_id'] == 'system_branding_block') {
+    $suggestions[] = "block__system_branding__home_block";
   }
 }

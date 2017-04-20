@@ -1,40 +1,40 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\CategoryRepositoryInterface
- */
-
 namespace Drupal\acq_sku;
 
 /**
- * Provides an interface for commerce category tree to taxonomy
- * synchronization.
+ * Provides an interface for category tree to taxonomy synchronization.
  *
  * @ingroup acq_sku
  */
 interface CategoryRepositoryInterface {
 
   /**
-   * loadCategoryTerm
+   * LoadCategoryTerm.
    *
    * Load a Taxonomy term representing a category by commerce ID.
    *
-   * @param int $commerce_id Commerce Backend ID
+   * @param int $commerce_id
+   *   Commerce Backend ID.
    *
-   * @return TermInterface|null $category
+   * @return \Drupal\taxonomy\TermInterface|null
+   *   Return found term or null if not found.
+   *
    * @throws \RuntimeException
    */
   public function loadCategoryTerm($commerce_id);
 
   /**
-   * setVocabulary
+   * SetVocabulary.
    *
    * Set the vocabulary name of the taxonomy used for category sync.
    *
-   * @param string $vocabulary Taxonomy vocabulary
+   * @param string $vocabulary
+   *   Taxonomy vocabulary.
    *
    * @return self
+   *   Return self.
    */
   public function setVocabulary($vocabulary);
+
 }

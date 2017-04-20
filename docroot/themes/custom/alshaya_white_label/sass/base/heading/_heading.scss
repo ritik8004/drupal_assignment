@@ -22,3 +22,11 @@
 .c-page-title {
   @extend %page-title;
 }
+
+.subtitle {
+  color: $marine-blue;
+  font-size: 16px;
+  text-transform: lowercase;
+  padding-bottom: 9px;
+  margin-bottom: 0;
+}

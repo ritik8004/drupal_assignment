@@ -1,0 +1,109 @@
+body {
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+.c-order-print {
+  .block-page-title-block {
+    display: none;
+  }
+
+  .site--brand {
+    border-bottom: 1px solid $white;
+    margin-bottom: 1.56rem;
+
+    img {
+      padding: 1.75rem 0;
+    }
+  }
+
+  .subtitle {
+    border-bottom: 1px solid $white;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.order--print {
+  border-top: none;
+
+  .order-details-row {
+    background: $white-smoke-light;
+
+    .label {
+      color: $grey-ash;
+    }
+
+    .blend {
+      background-color: #eee;
+
+      .delivery--method {
+        margin-top: 1.7rem;
+      }
+    }
+  }
+
+  .order-item-row .blend {
+    @include breakpoint($upto-tablet) {
+      vertical-align: top;
+    }
+  }
+
+  .product--count {
+    border-top: 1px solid $white-five;
+    border-bottom: 1px solid $white-five;
+  }
+}
+
+.delivery-details {
+  background-color: $white-smoke-light;
+  padding: 1.25rem 1rem;
+  padding-#{$left}: 3.5rem;
+  text-indent: -2.5rem;
+  vertical-align: middle;
+  margin-bottom: 3.4rem;
+  margin-top: 1.9rem;
+
+  .icon-ic_infomation {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-right: 1.06rem;
+    vertical-align: middle;
+  }
+
+  @include breakpoint($tablet) {
+    padding: 1.38rem;
+    padding-#{$left}: 3.5rem;
+  }
+}
+
+.dark--text {
+  color: $black;
+}
+
+.barcode--wrapper {
+  .inner--wrap {
+    display: inline-block;
+    vertical-align: middle;
+    width: 78%;
+  }
+
+  p {
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+  }
+
+  .print--barcode {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20%;
+    text-align: $right;
+
+    .value {
+      color: $grey-ash;
+      padding-#{$right}: 0.9rem;
+      top: -4px;
+      position: relative;
+    }
+  }
+}

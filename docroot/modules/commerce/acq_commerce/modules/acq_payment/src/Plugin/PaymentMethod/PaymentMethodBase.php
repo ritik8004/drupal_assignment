@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_payment\Plugin\CheckoutPane\PaymentMethodBase.
- */
-
 namespace Drupal\acq_payment\Plugin\PaymentMethod;
 
 use Drupal\acq_cart\CartInterface;
@@ -140,7 +135,7 @@ abstract class PaymentMethodBase extends PluginBase implements PaymentMethodInte
   }
 
   /**
-   * Builds the payment form.
+   * {@inheritdoc}
    */
   public function buildPaymentForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $pane_form['cc_number'] = [
@@ -206,7 +201,6 @@ abstract class PaymentMethodBase extends PluginBase implements PaymentMethodInte
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $values = $form_state->getValue($pane_form['#parents']);
     $payment_details = $values['payment_details'];
-    $payment_method_id = $this->getId();
 
     $cart = $this->getCart();
     $cart->setPaymentMethodData([

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Annotation\ACQCheckoutPane.
- */
-
 namespace Drupal\acq_checkout\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
@@ -42,7 +37,7 @@ class ACQCheckoutPane extends Plugin {
    *
    * @var string
    */
-  public $default_step;
+  public $defaultStep;
 
   /**
    * The wrapper element to use when rendering the pane's form.
@@ -51,7 +46,7 @@ class ACQCheckoutPane extends Plugin {
    *
    * @var string
    */
-  public $wrapper_element;
+  public $wrapperElement;
 
   /**
    * Constructs a new CommerceCheckoutPane object.
@@ -60,8 +55,8 @@ class ACQCheckoutPane extends Plugin {
    *   The annotation values.
    */
   public function __construct(array $values) {
-    if (empty($values['admin_label'])) {
-      $values['admin_label'] = $values['label'];
+    if (empty($values['adminLabel'])) {
+      $values['adminLabel'] = $values['label'];
     }
     parent::__construct($values);
   }

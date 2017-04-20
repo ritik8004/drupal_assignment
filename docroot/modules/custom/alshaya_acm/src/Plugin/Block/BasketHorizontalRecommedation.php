@@ -62,7 +62,7 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
     $cartSkus = $this->cartStorage->getCartSkus();
     if (!empty($cartSkus)) {
       // Get all cross sell SKU.
-      $items = SKU::getCrossSellSKUs($cartSkus);
+      $items = SKU::getCrossSellSkus($cartSkus);
     }
 
     if (!empty($items)) {
@@ -70,6 +70,13 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
     }
 
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
   }
 
 }

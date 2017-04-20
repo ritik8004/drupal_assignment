@@ -1,0 +1,4 @@
+alshaya_acm_product.product_settings_form:
+  route_name: alshaya_acm_product.product_settings_form
+  title: 'Custom Product settings'
+  base_route: alshaya_acm_product.product_settings_form

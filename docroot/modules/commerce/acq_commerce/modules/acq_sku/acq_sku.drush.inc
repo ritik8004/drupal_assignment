@@ -2,14 +2,14 @@
 
 /**
  * @file
- * Provides drush commands for the product functionality of Acquia Commerce connector.
+ * Provides drush commands for the products of Acquia Commerce connector.
  */
 
 /**
- * Implements hook_drush_command()
+ * Implements hook_drush_command().
  */
 function acq_sku_drush_command() {
-  $commands = array();
+  $commands = [];
 
   $commands['sync-commerce-products'] = [
     'description' => 'Run a full synchronization of all commerce product records.',
@@ -27,7 +27,7 @@ function acq_sku_drush_command() {
     ],
   ];
 
-  return($commands);
+  return ($commands);
 }
 
 /**

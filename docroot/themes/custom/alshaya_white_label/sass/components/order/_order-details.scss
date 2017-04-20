@@ -1,0 +1,273 @@
+.order-detail {
+  &.l-two--sf {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .c-page-title {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 36px;
+    }
+  }
+}
+
+.user__order--detail {
+  background: $white-four;
+  border-top: 1px solid #ddd;
+  width: 100%;
+  font-size: 12px;
+  margin-bottom: 88px;
+
+  @include breakpoint($tablet) {
+    font-size: 14px;
+  }
+
+  .light {
+    color: $greyish;
+  }
+
+  .dark {
+    color: $black-two;
+    font-weight: 700;
+  }
+
+  .empty--cell {
+    width: 45px;
+
+    @include breakpoint($desktop) {
+      width: 133px;
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row {
+    background: $white-five;
+
+    td {
+      padding: 10px 22px 9px;
+    }
+  }
+
+  .delivery-details-row {
+    font-size: 13px;
+    font-weight: 700;
+
+    @include breakpoint($tablet) {
+      font-size: 15px;
+    }
+
+    td {
+      background: $solitude;
+      padding: 20px 16px;
+      padding-#{$left}: 56px;
+      text-indent: -40px;
+      vertical-align: middle;
+
+      .icon-ic_infomation {
+        font-size: 24px;
+        font-weight: 700;
+        margin-right: 17px;
+        vertical-align: middle;
+      }
+
+      @include breakpoint($tablet) {
+        padding: 28px 22px;
+        padding-#{$left}: 56px;
+      }
+    }
+
+    .blend {
+      @include breakpoint($desktop) {
+        background: $denim;
+      }
+    }
+  }
+
+  .delivery-details-row,
+  .label {
+    color: $windows-blue;
+  }
+
+  .delivery-charge-row,
+  .sub-total-row,
+  .order-item-row {
+    .blend {
+      background: $white-four;
+
+      @include breakpoint($tablet) {
+        background: $white-smoke-light;
+      }
+    }
+  }
+
+  .order-item-row {
+    border-bottom: 1px solid $white;
+
+    img {
+      min-width: 128px;
+
+      @include breakpoint($tablet) {
+        min-width: 137px;
+      }
+    }
+
+    .dark {
+      margin-bottom: 6px;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 3px;
+      }
+    }
+
+    .blend {
+      @include breakpoint($upto-tablet) {
+        vertical-align: bottom;
+      }
+    }
+
+    .mobile-only {
+      margin-top: 29px;
+    }
+
+    .tablet-only {
+      margin-top: 45px;
+    }
+  }
+
+  .label {
+    margin-bottom: 3px;
+  }
+
+  .contact {
+    margin-top: 19px;
+
+    @include breakpoint($tablet) {
+      margin-top: 39px;
+    }
+  }
+
+  .order-summary-row {
+    td {
+      background: $white-smoke;
+      padding: 22px 16px;
+
+      @include breakpoint($tablet) {
+        padding: 22px 24px;
+      }
+    }
+
+    .mobile-only {
+      margin-top: 19px;
+    }
+
+    .tablet-only {
+      margin-top: 15px;
+    }
+
+    .blend {
+      background: $whisper;
+    }
+  }
+
+  .order-details-row {
+    background: $pale-grey;
+
+    .blend {
+      background: $solitude;
+    }
+
+    .mobile-only {
+      margin-top: 19px;
+
+      &.delivery--method {
+        margin-top: 34px;
+      }
+    }
+
+    .tablet-only {
+      margin-top: 29px;
+    }
+
+    .tablet-blend {
+      @include breakpoint($tablet) {
+        background: $solitude;
+      }
+
+      @include breakpoint($desktop) {
+        background: $pale-grey;
+      }
+    }
+  }
+
+  .warm--white {
+    background-color: $white;
+  }
+
+  td {
+    padding: 22px 16px;
+    vertical-align: top;
+
+    div {
+      margin-bottom: 3px;
+    }
+
+    @include breakpoint($upto-tablet) {
+      width: 50%;
+    }
+
+    @include breakpoint($tablet) {
+      padding: 22px 24px;
+    }
+  }
+
+  .address {
+    margin-top: 0;
+  }
+
+  .currency-code {
+    padding-#{$right}: 38px;
+
+    @include breakpoint($tablet) {
+      padding-#{$right}: 9px;
+    }
+  }
+
+  .desktop-only {
+    display: none;
+
+    @include breakpoint($desktop) {
+      display: table-cell;
+    }
+  }
+
+  .tablet-only {
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: block;
+    }
+
+    @include breakpoint($desktop) {
+      display: none;
+    }
+  }
+
+  .above-mobile {
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: table-cell;
+    }
+  }
+
+  .mobile-only {
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+}

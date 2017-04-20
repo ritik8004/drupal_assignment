@@ -12,8 +12,8 @@
   }
 
   .field--type-link a {
-    @extend %u-image-replacement;
-    @extend %u-overlay-content;
+    @include u-image-replacement;
+    @include u-overlay-content;
   }
 }
 
@@ -55,11 +55,6 @@
     color: $peacock-blue;
     font-size: 0.75rem;
     font-weight: bold;
-    margin-bottom: 0.25rem;
-
-    @include breakpoint($only-mobile) {
-      padding-top: 0.5rem;
-    }
 
     @include breakpoint($tablet) {
       font-size: 0.9375rem;
@@ -87,6 +82,16 @@
 
     @include breakpoint($desktop) {
       font-size: 1rem;
+    }
+  }
+}
+
+.c-promo-1-3__items--text {
+  .field--name-field-link {
+    margin-bottom: 0.25rem;
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0.5rem;
     }
   }
 }

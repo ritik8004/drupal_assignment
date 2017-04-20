@@ -27,7 +27,7 @@
           return;
         }
 
-        // Create input fields and add text styles  
+        // Create input fields and add text styles.
         braintree.hostedFields.create({
           client: clientInstance,
           styles: {
@@ -37,11 +37,11 @@
               'transition': 'color 0.1s',
               'line-height': '3'
             },
-            // Style the text of an invalid input
+            // Style the text of an invalid input.
             'input.invalid': {
               'color': '#E53A40'
             },
-            // placeholder styles need to be individually adjusted
+            // Placeholder styles need to be individually adjusted.
             '::-webkit-input-placeholder': {
               'color': 'rgba(0,0,0,0.6)'
             },
@@ -80,7 +80,7 @@
           });
 
           hostedFieldsInstance.on('cardTypeChange', function(event) {
-            // Change card bg depending on card type
+            // Change card bg depending on card type.
             if (!event.cards.length) {
               hostedFieldsInstance.setPlaceholder('cvv', '123');
             }
@@ -88,10 +88,10 @@
               $pane.removeClass().addClass(event.cards[0].type);
               $cardImage.removeClass().addClass(event.cards[0].type);
 
-              // Change the CVV length for AmericanExpress cards
+              // Change the CVV length for AmericanExpress cards.
               if (event.cards[0].code.size === 4) {
                 hostedFieldsInstance.setPlaceholder('cvv', '1234');
-              } 
+              }
             }
           });
 

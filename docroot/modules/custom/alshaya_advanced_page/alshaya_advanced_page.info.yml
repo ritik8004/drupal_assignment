@@ -10,6 +10,7 @@ dependencies:
   - field
   - field_group
   - menu_ui
+  - metatag
   - node
   - paragraphs
   - path

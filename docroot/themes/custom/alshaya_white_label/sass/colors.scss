@@ -1,4 +1,4 @@
-@import "config";
+@import "config/**/*";
 
 /* ---------- Color Module Styles ----------- */
 
@@ -8,17 +8,17 @@ body {
 
 a,
 .link {
-  color: $peacock-blue;
+  color: $marine-blue-two;
 }
 
 a:hover,
 a:focus,
 .link:hover,
 .link:focus {
-  color: $peacock-blue;
+  color: $marine-blue-two;
 }
 
 a:active,
 .link:active {
-  color: $peacock-blue;
+  color: $marine-blue-two;
 }

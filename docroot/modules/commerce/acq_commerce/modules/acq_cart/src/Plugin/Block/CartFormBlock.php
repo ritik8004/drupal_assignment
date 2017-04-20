@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_cart\Plugin\Block\CartFormBlock.
- */
-
 namespace Drupal\acq_cart\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;

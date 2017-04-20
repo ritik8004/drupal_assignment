@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowInterface;
@@ -85,7 +80,7 @@ abstract class CheckoutPaneBase extends PluginBase implements CheckoutPaneInterf
    */
   public function defaultConfiguration() {
     $available_steps = array_keys($this->checkoutFlow->getSteps());
-    $default_step = $this->pluginDefinition['default_step'];
+    $default_step = $this->pluginDefinition['defaultStep'];
     if (!in_array($default_step, $available_steps)) {
       // The specified default step isn't available on the parent checkout flow.
       $default_step = '_disabled';
@@ -115,14 +110,14 @@ abstract class CheckoutPaneBase extends PluginBase implements CheckoutPaneInterf
    * {@inheritdoc}
    */
   public function getAdminLabel() {
-    return $this->pluginDefinition['admin_label'];
+    return $this->pluginDefinition['adminLabel'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getWrapperElement() {
-    return $this->pluginDefinition['wrapper_element'];
+    return $this->pluginDefinition['wrapperElement'];
   }
 
   /**

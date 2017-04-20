@@ -1,14 +1,22 @@
 name: 'Alshaya master'
 type: module
 core: 8.x
-package: 'Alshaya'
+package: Alshaya
 description: 'Master module for updating the core settings.'
 dependencies:
-  - clientside_validation_jquery
   - acq_cart
+  - acq_checkout
+  - alshaya_acm
+  - alshaya_admin
   - alshaya_i18n
+  - back_to_top
   - block
   - block_content
+  - clientside_validation_jquery
+  - filter
+  - mailsystem
+  - mimemail
+  - sharethis
   - system
   - views
 version: 8.x-1.0

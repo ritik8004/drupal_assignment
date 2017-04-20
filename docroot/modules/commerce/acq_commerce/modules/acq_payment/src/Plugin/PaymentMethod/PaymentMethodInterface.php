@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_payment\Plugin\CheckoutPane\PaymentMethodInterface.
- */
-
 namespace Drupal\acq_payment\Plugin\PaymentMethod;
 
 use Drupal\Component\Plugin\DerivativeInspectionInterface;

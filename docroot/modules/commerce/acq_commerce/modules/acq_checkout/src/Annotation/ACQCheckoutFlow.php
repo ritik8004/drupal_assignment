@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Annotation\ACQCheckoutFlow.
- */
-
 namespace Drupal\acq_checkout\Annotation;
 
 use Drupal\Component\Annotation\Plugin;

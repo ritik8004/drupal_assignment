@@ -7,3 +7,46 @@
   padding: 11px;
   text-align: center;
 }
+
+%button-brand {
+  border: 1px solid $marine-blue-two;
+  color: $marine-blue-two;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 10px 20px 9px;
+}
+
+.button {
+  &.status-pending,
+  &.status-delivered,
+  &.status-processing,
+  &.status-returned {
+    font-family: $arial;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    color: $white-five;
+    height: 23px;
+    line-height: 23px;
+    width: 106px;
+
+    @include breakpoint($desktop) {
+      font-size: 12px;
+      height: 35px;
+      padding: 6px;
+    }
+  }
+
+  &.status-processing,
+  &.status-pending {
+    background-color: $tomato;
+  }
+
+  &.status-returned {
+    background-color: $grey-ash;
+  }
+
+  &.status-delivered {
+    background-color: $medium-green;
+  }
+}

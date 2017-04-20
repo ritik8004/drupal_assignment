@@ -62,7 +62,7 @@ function alshaya_master_install() {
 
   // Add <i class> for allowed html in rich text.
   \Drupal::configFactory()->getEditable('filter.format.rich_text')
-    ->set('filters.filter_html.settings.allowed_html', '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <br> <h1> <pre> <drupal-entity data-*> <i class>')
+    ->set('filters.filter_html.settings.allowed_html', '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <br> <h1> <pre> <drupal-entity data-*> <i class> <span class>')
     ->save();
 
   // Set the Status Messages block.
@@ -81,5 +81,81 @@ function alshaya_master_install() {
         'context_mapping' => [],
       ],
     ])
+    ->save();
+
+  // Settings override of 'back_to_top'.
+  \Drupal::configFactory()->getEditable('back_to_top.settings')
+    ->set('back_to_top_prevent_on_mobile', FALSE)
+    ->set('back_to_top_prevent_in_admin', TRUE)
+    ->save();
+
+  // Set basic block type view display.
+  $blockConfig = \Drupal::configFactory()->getEditable('core.entity_view_display.block_content.basic.default');
+  $content = $blockConfig->get('content');
+  $content['field_image'] = [
+    'weight' => 1,
+    'type' => 'image',
+    'label' => 'hidden',
+    'settings' => [
+      'image_style' => '186x120',
+      'image_link' => '',
+    ],
+    'third_party_settings' => [],
+  ];
+  $blockConfig->set('content', $content)->save();
+  $dependencies = $blockConfig->get('dependencies');
+  $dependencies['config'][] = 'field.field.block_content.basic.field_image';
+  $blockConfig->set('dependencies', $dependencies)->save();
+
+  // Set basic block type form display.
+  $blockConfig = \Drupal::configFactory()->getEditable('core.entity_form_display.block_content.basic.default');
+  $content = $blockConfig->get('content');
+  $content['field_image'] = [
+    'weight' => 11,
+    'type' => 'image_image',
+    'label' => 'hidden',
+    'settings' => [
+      'preview_image_style' => 'thumbnail',
+      'progress_indicator' => 'throbber',
+    ],
+    'third_party_settings' => [],
+  ];
+  $blockConfig->set('content', $content)->save();
+  $dependencies = $blockConfig->get('dependencies');
+  $dependencies['config'][] = 'field.field.block_content.basic.field_image';
+  $blockConfig->set('dependencies', $dependencies)->save();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+
+  // Enable only FB, Twitter, Pinterest.
+  // @codingStandardsIgnoreLine
+  $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Pinterest:pinterest'");
+
+  // Disable all extras.
+  foreach ($configFactory->get('option_extras') as $option => $status) {
+    $configFactory->set('option_extras.' . $option, 0);
+  }
+
+  // Enable share this for Product CT.
+  $configFactory->set('node_types.acq_product', 'acq_product');
+
+  // Enable lazy load of JS to enhance performance (rendering time).
+  $configFactory->set('late_load', 1);
+
+  // Set the option to use custom style for showing share images.
+  $configFactory->set('button_option', 'stbc_custom');
+
+  // Save the changes.
+  $configFactory->save();
+
+  // Set textformat for mail system module configurations.
+  \Drupal::configFactory()->getEditable('mimemail.settings')
+    ->set('format', 'mail_text')
+    ->save();
+
+  // Set default formatter for mime mail configurations.
+  \Drupal::configFactory()->getEditable('mailsystem.settings')
+    ->set('defaults.formatter', 'mime_mail')
     ->save();
 }

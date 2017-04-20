@@ -12,6 +12,7 @@ git:
   remotes:
 #    - 'alshayasde@svn-6182.devcloud.hosting.acquia.com:alshayasde.git'
     - 'alshayaec@svn-25.enterprise-g1.hosting.acquia.com:alshayaec.git'
+    - 'alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git'
 drush:
   aliases:
     remote: '${project.machine_name}.test'
@@ -64,5 +65,9 @@ behat:
 multisite:
   name:
     - g
+# Disabling security update check.
+disable-targets:
+  tests:
+    security-updates: true
 
 import: '${repo.root}/blt/setup.local.xml'

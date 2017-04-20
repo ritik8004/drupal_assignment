@@ -1,0 +1,7 @@
+alshaya_acm_checkout.checkout_settings_form:
+  path: '/admin/commerce/config/checkout-settings'
+  defaults:
+    _form: '\Drupal\alshaya_acm_checkout\Form\CheckoutSettingsForm'
+    _title: 'Checkout Settings'
+  requirements:
+    _permission: 'access commerce administration pages'

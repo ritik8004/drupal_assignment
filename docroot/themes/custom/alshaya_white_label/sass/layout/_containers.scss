@@ -78,16 +78,17 @@
         margin: 0 auto;
 
         @include breakpoint($tablet) {
-          max-width: 30.25rem;
-          padding-#{$left}: 5em;
+          max-width: 40.4em;
+          padding-#{$left}: 4em;
+          margin-right: 0;
         }
 
         @include breakpoint($desktop) {
-          padding-#{$left}: 10em;
+          padding-#{$left}: 7.3em;
         }
 
         > div {
-          max-width: 16rem;
+          max-width: 35.75em;
         }
       }
     }

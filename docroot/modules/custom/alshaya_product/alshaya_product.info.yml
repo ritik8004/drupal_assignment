@@ -4,6 +4,8 @@ core: 8.x
 dependencies:
   - acq_sku
   - alshaya_image_styles
+  - alshaya_search
+  - better_exposed_filters
   - block
   - facets
   - file

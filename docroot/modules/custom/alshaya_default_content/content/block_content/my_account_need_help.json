@@ -1,0 +1,145 @@
+{
+  "_links": {
+    "self": {
+      "href": "http:\/\/local.alshaya.com\/en\/block\/5?_format=hal_json"
+    },
+    "type": {
+      "href": "http:\/\/drupal.org\/rest\/type\/block_content\/basic"
+    },
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/revision_user": [
+      {
+        "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+      }
+    ],
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
+      {
+        "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json",
+        "lang": "en"
+      }
+    ]
+  },
+  "id": [
+    {
+      "value": "5"
+    }
+  ],
+  "uuid": [
+    {
+      "value": "ae5d8d43-345e-49f7-a9fb-6d77a1752a0e"
+    }
+  ],
+  "revision_id": [
+    {
+      "value": "5"
+    }
+  ],
+  "langcode": [
+    {
+      "value": "en",
+      "lang": "en"
+    }
+  ],
+  "type": [
+    {
+      "target_id": "basic"
+    }
+  ],
+  "info": [
+    {
+      "value": "My Account - Need Help",
+      "lang": "en"
+    }
+  ],
+  "changed": [
+    {
+      "value": "1491802729",
+      "lang": "en"
+    }
+  ],
+  "revision_created": [
+    {
+      "value": "1491802729"
+    }
+  ],
+  "_embedded": {
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/revision_user": [
+      {
+        "_links": {
+          "self": {
+            "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+          },
+          "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+          }
+        },
+        "uuid": [
+          {
+            "value": "ad260618-6524-4411-a571-db55dc1cbdda"
+          }
+        ]
+      }
+    ],
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
+      {
+        "_links": {
+          "self": {
+            "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+          },
+          "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+          }
+        },
+        "uuid": [
+          {
+            "value": "ad260618-6524-4411-a571-db55dc1cbdda"
+          }
+        ],
+        "lang": "en"
+      }
+    ]
+  },
+  "revision_translation_affected": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "default_langcode": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "content_translation_source": [
+    {
+      "value": "und",
+      "lang": "en"
+    }
+  ],
+  "content_translation_outdated": [
+    {
+      "value": "0",
+      "lang": "en"
+    }
+  ],
+  "content_translation_status": [
+    {
+      "value": "1",
+      "lang": "en"
+    }
+  ],
+  "content_translation_created": [
+    {
+      "value": "1491802729",
+      "lang": "en"
+    }
+  ],
+  "body": [
+    {
+      "value": "<p>Need help with your order?<\/p>\r\n\r\n<ul class=\"need-help-order\">\r\n\t<li><a href=\"\/contact\">Contact customer services<\/a><\/li>\r\n\t<li><a href=\"\/contact\">Online and in-store return policy<\/a><\/li>\r\n\t<li><a href=\"\/contact\">Delivery Information<\/a><\/li>\r\n<\/ul>\r\n",
+      "format": "rich_text",
+      "summary": "",
+      "lang": "en"
+    }
+  ]
+}

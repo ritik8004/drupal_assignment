@@ -47,10 +47,6 @@
     vertical-align: top;
   }
 
-  @include breakpoint($only-mobile) {
-    display: none;
-  }
-
   a {
     font-size: 0.875rem;
     color: $brownish-grey;
@@ -165,7 +161,7 @@
     }
   }
 
-  #edit-email {
+  .form-email {
     border-bottom: 1px solid $brownish-grey;
     border-width: 0 0 1px;
     margin-top: 1.5rem;
@@ -175,7 +171,7 @@
     font-size: 13px;
   }
 
-  #edit-submit {
+  .form-submit {
     @extend %btn;
 
     font-family: $alshaya-bold;
@@ -215,7 +211,7 @@
 }
 
 .c-footer-menu--about,
-.c-footer-menu--help, {
+.c-footer-menu--help {
   .c-footer-menu {
     width: 100%;
   }
@@ -229,7 +225,7 @@
     text-align: center;
   }
 
-  @include breakpoint($tablet) {
+  @include breakpoint($desktop-wide) {
     width: 357px;
   }
 }

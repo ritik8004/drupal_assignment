@@ -3,17 +3,21 @@ fields:
   color:
     label: 'Color'
     description: 'Color attribute for the product.'
-    cardinality: 1
+    cardinality: -1
     type: 'string'
     configurable: 1
+    visible_view: 0
+    visible_form: 1
 
   # Field for size attribute.
   size:
     label: 'Size'
     description: 'Size attribute for the product.'
-    cardinality: 1
+    cardinality: -1
     type: 'string'
     configurable: 1
+    visible_view: 0
+    visible_form: 1
 
   # Field for special_price attribute.
   special_price:
@@ -22,6 +26,8 @@ fields:
     cardinality: 1
     type: 'string'
     configurable: 0
+    visible_view: 1
+    visible_form: 1
 
   # Field for base image attribute.
   image:
@@ -30,6 +36,8 @@ fields:
     cardinality: -1
     type: 'image'
     configurable: 0
+    visible_view: 0
+    visible_form: 1
 
   # Field for small image attribute.
   small_image:
@@ -38,6 +46,8 @@ fields:
     cardinality: -1
     type: 'image'
     configurable: 0
+    visible_view: 0
+    visible_form: 1
 
   # Field for thumbnail image attribute.
   thumbnail:
@@ -46,3 +56,5 @@ fields:
     cardinality: -1
     type: 'image'
     configurable: 0
+    visible_view: 0
+    visible_form: 1

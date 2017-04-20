@@ -1,16 +1,13 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutPane\AddressFormBase.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutPane;
 
-use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\address\LabelHelper;
 use Drupal\Core\Form\FormStateInterface;
 
+/**
+ * Provides the address checkout pane.
+ */
 class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface {
 
   /**
@@ -88,6 +85,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
       '#empty_option' => '- ' . $labels['administrativeArea'] . ' -',
       '#required' => TRUE,
       '#validated' => TRUE,
+      '#default_value' => isset($address->region) ? $address->region : '',
     ];
     $pane_form['address']['dynamic_parts']['postcode'] = [
       '#type' => 'textfield',
@@ -102,10 +100,10 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
       '#options' => $countryRepository->getList(),
       '#default_value' => $country,
       '#required' => TRUE,
-      '#ajax' => array(
-        'callback' => array($this, 'addressAjaxCallback'),
+      '#ajax' => [
+        'callback' => [$this, 'addressAjaxCallback'],
         'wrapper' => 'dynamic_parts',
-      ),
+      ],
     ];
 
     return $pane_form;
@@ -131,7 +129,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
     $dynamic_parts['region']['#required'] = TRUE;
     $dynamic_parts['region']['#access'] = TRUE;
 
-    // Update labels
+    // Update labels.
     $cityLabel = $labels['locality'];
     $postcodeLabel = $labels['postalCode'];
     $regionLabel = $labels['administrativeArea'];

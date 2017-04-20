@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_payment\Plugin\PaymentMethod\Braintree.
- */
-
 namespace Drupal\acq_payment\Plugin\PaymentMethod;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -36,7 +31,7 @@ class Braintree extends PaymentMethodBase implements PaymentMethodInterface {
     $payment_data = isset($payment_method['additional_data']) ? $payment_method['additional_data'] : [];
     $nonce = isset($payment_data['payment_method_nonce']) ? $payment_data['payment_method_nonce'] : NULL;
 
-    // If payment details have already been filled out, don't show the form again.
+    // If payment details have already been filled out, don't show the form.
     if ($payment_method_name == $this->getId() && isset($nonce)) {
       $pane_form['payload_nonce'] = [
         '#type' => 'hidden',
@@ -99,11 +94,13 @@ class Braintree extends PaymentMethodBase implements PaymentMethodInterface {
 
     if ($cache = \Drupal::cache()->get($cid)) {
       $token = $cache->data;
-    } else {
+    }
+    else {
       $token = \Drupal::service('acq_commerce.api')->getPaymentToken('braintree');
       \Drupal::cache()->set($cid, $token);
     }
 
     return $token;
   }
+
 }

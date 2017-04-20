@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 192x168
+label: 192x168
+effects:
+  b82bc27a-23c3-41de-bb45-6255ff29ba8f:
+    uuid: b82bc27a-23c3-41de-bb45-6255ff29ba8f
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 192
+      height: 168

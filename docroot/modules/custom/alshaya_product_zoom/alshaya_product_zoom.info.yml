@@ -1,0 +1,7 @@
+name: 'Alshaya Product Zoom'
+type: module
+description: 'Adds product zoom feature using cloud zoom.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_image_styles

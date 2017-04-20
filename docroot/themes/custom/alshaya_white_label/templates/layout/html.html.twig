@@ -1,7 +1,7 @@
 <!-- CONDITIONAL CSS -->
 
 {% if html_attributes["dir"] == "ltr" %}
-  {{ attach_library('alshaya_white_label/global_styles') }}
+  {{ attach_library('alshaya_white_label/ltr_styles') }}
 {% elseif html_attributes["dir"] == "rtl" %}
   {{ attach_library('alshaya_white_label/rtl_styles') }}
 {% endif %}

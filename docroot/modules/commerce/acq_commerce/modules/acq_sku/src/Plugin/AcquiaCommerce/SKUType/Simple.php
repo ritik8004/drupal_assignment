@@ -1,22 +1,14 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Simple;
- */
-
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\acq_cart\Entity\Cart;
-use Drupal\acq_cart\Entity\LineItem;
-use Drupal\acq_commerce\LineItemInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\AddToCartErrorEvent;
 
 /**
- * Defines the simple SKU type
+ * Defines the simple SKU type.
  *
  * @SKUType(
  *   id = "simple",
@@ -25,10 +17,11 @@ use Drupal\acq_sku\AddToCartErrorEvent;
  * )
  */
 class Simple extends SKUPluginBase {
+
   /**
    * {@inheritdoc}
    */
-  public function addToCartForm($form, FormStateInterface $form_state, SKU $sku = NULL) {
+  public function addToCartForm(array $form, FormStateInterface $form_state, SKU $sku = NULL) {
     if (empty($sku)) {
       return $form;
     }
@@ -56,17 +49,17 @@ class Simple extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function addToCartSubmit(&$form, FormStateInterface $form_state) {
+  public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
     $sku_entity = SKU::load($form_state->getValue('sku_id'));
-    $sku = $sku_entity->getSKU();
+    $sku = $sku_entity->getSku();
     $quantity = $form_state->getValue('quantity');
 
     drupal_set_message(
-      t('Added @quantity of @name to the cart.' ,
+      t('Added @quantity of @name to the cart.',
       [
         '@quantity' => $quantity,
-        '@name' => $sku_entity->name->value
+        '@name' => $sku_entity->name->value,
       ]
     ));
 
@@ -82,4 +75,5 @@ class Simple extends SKUPluginBase {
       $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
     }
   }
+
 }

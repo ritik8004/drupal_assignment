@@ -1,0 +1,10 @@
+checkout_guest_summary:
+  value: '<p>You will have the oppotunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p><ul><li>Express checkout</li><li>Personalized offers</li><li>Favorite list</li><li>Order history</li><li>And more…</li></ul>'
+  format: 'rich_text'
+checkout_guest_email_usage:
+  value: 'Your email will be used only to send you information about your order.'
+  format: 'rich_text'
+checkout_guest_login:
+  value: 'Sign in to speed up the checkout process. It is the fastest way to review your selections, access your Address Book, and submit your order.'
+  format: 'rich_text'
+langcode: en

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains Drupal\acq_sku\Plugin\rest\resource\ProductSyncResource
- */
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
@@ -15,12 +11,12 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class ProductSyncResource
+ * Class ProductSyncResource.
+ *
  * @package Drupal\acq_sku\Plugin
+ *
  * @ingroup acq_sku
  *
  * @RestResource(
@@ -35,36 +31,42 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ProductSyncResource extends ResourceBase {
 
   /**
-   * Category Repository
-   * @var CategoryRepositoryInterface $categoryRepo
+   * Category Repository.
+   *
+   * @var \Drupal\acq_sku\CategoryRepositoryInterface
    */
   private $categoryRepo;
 
   /**
-   * Drupal Config Factory Instance
-   * @var ConfigFactoryInterface $configFactory
+   * Drupal Config Factory Instance.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   private $configFactory;
 
   /**
-   * Drupal Entity Type Manager Instance
-   * @var EntityTypeManagerInterface $entityManager
+   * Drupal Entity Type Manager Instance.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   private $entityManager;
 
   /**
-   * Drupal Entity Query Factory
-   * @var QueryFactory $queryFactory
+   * Drupal Entity Query Factory.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
    */
   private $queryFactory;
 
   /**
-   * @var DownloadImagesQueue $downloadImagesQueueManager
+   * Queue of images to download.
+   *
+   * @var DownloadImagesQueue
    */
   private $downloadImagesQueueManager = NULL;
 
   /**
-   * Construct
+   * Construct.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -73,7 +75,7 @@ class ProductSyncResource extends ResourceBase {
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager
+   *   The entity type manager.
    * @param array $serializer_formats
    *   The available serialization formats.
    * @param \Psr\Log\LoggerInterface $logger
@@ -81,11 +83,11 @@ class ProductSyncResource extends ResourceBase {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
-   *   The query factory
+   *   The query factory.
    * @param \Drupal\acq_sku\CategoryRepositoryInterface $cat_repo
-   *   Category Repository instance
+   *   Category Repository instance.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityManager = $entity_type_manager;
     $this->configFactory = $config_factory;
@@ -111,16 +113,18 @@ class ProductSyncResource extends ResourceBase {
   }
 
   /**
-   * post
+   * Post.
    *
    * Handle Conductor posting an array of product / SKU data for update.
    *
-   * @param array $products Product / SKU Data
+   * @param array $products
+   *   Product / SKU Data.
    *
-   * @return ResourceResponse $response
+   * @return \Drupal\rest\ResourceResponse
+   *   HTTP Response object.
    */
-  public function post(array $products = [])
-  {
+  public function post(array $products = []) {
+
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
     $updated = 0;
@@ -156,7 +160,7 @@ class ProductSyncResource extends ResourceBase {
       if (count($nids) > 1) {
         $this->logger->error(
           'Duplicate product SKU @sku found.',
-          array('@sku' => $product['sku'])
+          ['@sku' => $product['sku']]
         );
         $failed++;
         continue;
@@ -169,7 +173,7 @@ class ProductSyncResource extends ResourceBase {
         if (!$sku->id()) {
           $this->logger->error(
             'Loading product SKU @sku failed.',
-            array('@sku' => $product['sku'])
+            ['@sku' => $product['sku']]
           );
           $failed++;
           continue;
@@ -184,11 +188,12 @@ class ProductSyncResource extends ResourceBase {
         if (!count($nids)) {
           $this->logger->info(
             'Existing product SKU @sku has no display node, creating.',
-            array('@sku' => $product['sku'])
+            ['@sku' => $product['sku']]
           );
 
           $display = $this->createDisplayNode($product);
-        } else {
+        }
+        else {
           $this->updateNodeCategories($nids, $product);
         }
 
@@ -198,24 +203,25 @@ class ProductSyncResource extends ResourceBase {
 
         $this->logger->info(
           'Updating product SKU @sku.',
-          array('@sku' => $product['sku'])
+          ['@sku' => $product['sku']]
         );
 
         $updated++;
-      } else {
-        $sku = $em->create(array(
-          'type'       => $product['type'],
-          'sku'        => $product['sku'],
-          'name'       => html_entity_decode($product['name']),
-          'price'      => $product['price'],
+      }
+      else {
+        $sku = $em->create([
+          'type' => $product['type'],
+          'sku' => $product['sku'],
+          'name' => html_entity_decode($product['name']),
+          'price' => $product['price'],
           'attributes' => $this->formatProductAttributes($product['attributes']),
-        ));
+        ]);
 
         $display = $this->createDisplayNode($product);
 
         $this->logger->info(
           'Creating product SKU @sku.',
-          array('@sku' => $product['sku'])
+          ['@sku' => $product['sku']]
         );
 
         $created++;
@@ -229,6 +235,9 @@ class ProductSyncResource extends ResourceBase {
 
       // Update crosssell linked SKUs.
       $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
+
+      // Update related linked SKUs.
+      $this->updateLinkedSkus('related', $sku, $product['linked']);
 
       $plugin_manager = \Drupal::service('plugin.manager.sku');
       $plugin_definition = $plugin_manager->pluginFromSKU($sku);
@@ -249,59 +258,62 @@ class ProductSyncResource extends ResourceBase {
       }
     }
 
-    $response = array(
+    $response = [
       'success' => (bool) (($created > 0) || ($updated > 0)),
       'created' => $created,
       'updated' => $updated,
-      'failed'  => $failed,
-    );
+      'failed' => $failed,
+    ];
 
-    return(new ResourceResponse($response));
+    return (new ResourceResponse($response));
   }
 
   /**
-   * createDisplayNode
+   * CreateDisplayNode.
    *
    * Create a product display node for a set of SKU entities.
    *
-   * @param Array $product Product data
+   * @param array $product
+   *   Product data.
    *
-   * @return EntityInterface $node
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   Node object.
    */
-  private function createDisplayNode(array $product)
-  {
+  private function createDisplayNode(array $product) {
+
     $description = (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '';
 
     $categories = (isset($product['categories'])) ? $product['categories'] : [];
     $categories = $this->formatCategories($categories);
 
-    $node = $this->entityManager->getStorage('node')->create(array(
-      'type'           => 'acq_product',
-      'title'          => html_entity_decode($product['name']),
-      'body'           => [
+    $node = $this->entityManager->getStorage('node')->create([
+      'type' => 'acq_product',
+      'title' => html_entity_decode($product['name']),
+      'body' => [
         'value' => $description,
         'format' => 'rich_text',
       ],
-      'field_skus'     => array($product['sku']),
+      'field_skus' => [$product['sku']],
       'field_category' => $categories,
-    ));
+    ]);
 
     $node->setPublished(FALSE);
 
     // Invoke the alter hook to allow all modules to update the node.
     \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
 
-    return($node);
+    return $node;
   }
 
   /**
-   * formatCategories
+   * FormatCategories.
    *
-   * @return array $terms
+   * @return array
+   *   Array of terms.
    */
-  private function formatCategories(array $categories)
-  {
-    $terms = array();
+  private function formatCategories(array $categories) {
+
+    $terms = [];
 
     foreach ($categories as $cid) {
       $term = $this->categoryRepo->loadCategoryTerm($cid);
@@ -310,22 +322,24 @@ class ProductSyncResource extends ResourceBase {
       }
     }
 
-    return($terms);
+    return ($terms);
   }
 
   /**
-   * formatProductAttributes
+   * FormatProductAttributes.
    *
    * Format the product attributes data as an array for saving in a
    * key value field.
    *
    * @param array $attributes
+   *   Array of product attributes.
    *
-   * @return array $formatted
+   * @return array
+   *   Array of formatted product attributes.
    */
-  private function formatProductAttributes(array $attributes)
-  {
-    $formatted = array();
+  private function formatProductAttributes(array $attributes) {
+
+    $formatted = [];
 
     foreach ($attributes as $name => $value) {
 
@@ -333,27 +347,27 @@ class ProductSyncResource extends ResourceBase {
         continue;
       }
 
-      $formatted[] = array(
-        'key'   => $name,
+      $formatted[] = [
+        'key' => $name,
         'value' => substr((string) $value, 0, 100),
-      );
+      ];
     }
 
-    return($formatted);
+    return ($formatted);
   }
 
   /**
-   * updateNodeCategories
+   * UpdateNodeCategories.
    *
    * Update the assigned categories for display nodes (by ID).
    *
-   * @param int[] $nids Node IDs
-   * @param array $product Product Data
-   *
-   * @return void
+   * @param int[] $nids
+   *   Node IDs.
+   * @param array $product
+   *   Product Data.
    */
-  private function updateNodeCategories(array $nids, array $product)
-  {
+  private function updateNodeCategories(array $nids, array $product) {
+
     $categories = (isset($product['categories'])) ? $product['categories'] : [];
     $categories = $this->formatCategories($categories);
 
@@ -371,16 +385,17 @@ class ProductSyncResource extends ResourceBase {
   }
 
   /**
-   * updateLinkedSkus
+   * Update linked Skus.
    *
    * Prepare the field value for linked type (upsell, crosssell, etc.).
    * Get the position based on the position coming from API.
    *
    * @param string $type
-   * @param SKU $sku
+   *   Type of link.
+   * @param Drupal\acq_sku\Entity\SKU $sku
+   *   Root SKU.
    * @param array $linked
-   *
-   * @return void
+   *   Linked SKUs.
    */
   private function updateLinkedSkus($type, SKU &$sku, array $linked) {
     // Reset the upsell skus to null.
@@ -413,12 +428,14 @@ class ProductSyncResource extends ResourceBase {
   }
 
   /**
-   * updateAttributeFields
+   * Update attribute fields.
    *
    * Update the fields based on the values from attributes.
    *
-   * @param SKU $sku
+   * @param Drupal\acq_sku\Entity\SKU $sku
+   *   The root SKU.
    * @param array $attributes
+   *   The attributes to set.
    */
   private function updateAttributeFields(SKU $sku, array $attributes) {
     $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
@@ -446,13 +463,15 @@ class ProductSyncResource extends ResourceBase {
   }
 
   /**
-   * updateAttributeFieldsPostSave
+   * Update attribute fields post save.
    *
    * Update the fields based on the values from attributes.
    * We need the SKU id for some cases which will be handled in this.
    *
-   * @param SKU $sku
+   * @param Drupal\acq_sku\Entity\SKU $sku
+   *   The root SKU.
    * @param array $attributes
+   *   The attributes to set.
    */
   private function updateAttributeFieldsPostSave(SKU $sku, array $attributes) {
     $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();

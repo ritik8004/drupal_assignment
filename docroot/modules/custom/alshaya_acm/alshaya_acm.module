@@ -10,28 +10,63 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-  $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
-  // Using array_combine to ensure we have same data in key and value.
-  $cartQuantityOptions = array_combine($range, $range);
+
+  // Get the current cart.
+  $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+
+  // Get current cart items.
+  $cart_items = $cart->items();
+
+  if (empty($cart_items)) {
+    // Set Form title.
+    $form['#title'] = t("Cart (%count)", ['%count' => 0]);
+
+    // Add empty message wrapper container.
+    $form['empty'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => 'empty-cart-wrapper',
+      ],
+    ];
+
+    // Add the empty message.
+    $form['empty']['message'] = [
+      '#markup' => '<div class="empty-cart-message">' . t('Your shopping basket is empty') . '</div>',
+      '#weight' => -50,
+    ];
+
+    // Add the continue shopping button in same container.
+    $form['empty']['continue_shopping'] = [
+      '#type' => 'link',
+      '#title' => t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+    ];
+
+    // Unset all other items.
+    unset($form['cart']);
+    unset($form['actions']['checkout']);
+
+    // Simply return, we don't want to process below code.
+    return;
+  }
 
   // Change checkout button text to 'Secure Checkout'.
   $form['actions']['checkout']['#value'] = t('Secure Checkout');
 
-  // Add continue shopping link, that redirect user to homepage.
-  $form['actions']['continue_shopping'] = [
-    '#type' => 'link',
-    '#title' => t('Continue shopping'),
-    '#url' => Url::fromRoute('<front>'),
-  ];
-
   // Add sub total price of product.
   $form['cart']['#header'][] = t('Sub total');
+  $form['cart']['#header'][2] = t('Unit Price');
+
+  // Adds delivery options to cart.
+  $form['cart']['#header'][] = t('Delivery options');
 
   // Get cart items by sku.
   $cart_item = alshaya_acm_get_cart_items_by_sku();
@@ -41,7 +76,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $product_count += $form['cart'][$id]['quantity']['#default_value'];
 
       $form['cart'][$id]['quantity']['#type'] = 'select';
-      $form['cart'][$id]['quantity']['#options'] = $cartQuantityOptions;
+      $form['cart'][$id]['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
 
       // Add ajax callback to update cart's total on quantity change.
       $form['cart'][$id]['quantity']['#ajax'] = [
@@ -64,82 +99,105 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       // Load Images.
       $media = alshaya_acm_product_get_sku_media($id);
+
+      $color = '';
+      $sku_entity = SKU::loadFromSKU($id);
+      if ($sku_entity) {
+        if ($color_attribute = $sku_entity->get('attr_color')) {
+          $color = $color_attribute->getValue()[0]['value'];
+        }
+      }
       if (!empty($media)) {
-        // Club the image and name of product.
         $form['cart'][$id]['name'] = [
-          [
+          '#theme' => 'alshaya_cart_product_name',
+          '#color' => $color,
+          '#name' => $form['cart'][$id]['name'],
+          '#image' => [
             '#theme' => 'image_style',
             '#style_name' => '137x144',
             '#uri' => current($media)->getFileUri(),
           ],
-          $form['cart'][$id]['name'],
+          '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
+          '#item_code' => $id,
+          '#include_in_bundle' => t('Items included in bundle'),
         ];
       }
+
+      // TODO: Get delivery options from conductor.
+      $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
+      $product_delivery_options .= '<div>';
+      $product_delivery_options .= '<span class="home-delivery">' . t('Home Delivery') . '</span>';
+      $product_delivery_options .= '<span class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<span>';
+      $product_delivery_options .= '</div>';
+      $product_delivery_options .= '<div>';
+      $product_delivery_options .= '<span class="click-collect">' . t('Click and Collect') . '</span>';
+      $product_delivery_options .= '<span class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</span>';
+      $product_delivery_options .= '</div>';
+      $form['cart'][$id]['delivery_options'] = [
+        '#markup' => $product_delivery_options,
+      ];
+
+      // Adding class attribute to columns for mobile view.
+      $form['cart'][$id]['quantity']['#wrapper_attributes'] = ['class' => ['quantity']];
+      $form['cart'][$id]['name']['#wrapper_attributes'] = ['class' => ['name']];
+      $form['cart'][$id]['sub_total']['#wrapper_attributes'] = ['class' => ['subtotal']];
+      $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price']];
+      $form['cart'][$id]['delivery_options']['#wrapper_attributes'] = ['class' => ['delivery-option']];
     }
   }
 
+  // Add wrapper to cart table for themeing.
   $form['cart']['#prefix'] = '<div id="table-cart-items">';
   $form['cart']['#suffix'] = '</div>';
 
+  // Add wrapper to cart totals table for themeing.
   $form['totals']['#prefix'] = '<div id="table-cart-totals">';
   $form['totals']['#suffix'] = '</div>';
+
+  // Update some labels to match wireframe/mockup.
+  $form['totals']['sub']['label'] = ['#markup' => t('Sub total')];
+  $form['totals']['grand']['label'] = ['#markup' => t('Order Total <span>(Before Delivery)</span>')];
+
+  $form['totals']['#weight'] = 10;
 
   // Wrap Promotion code in a fieldset.
   $form['promotion_code_wrapper'] = [
     '#type' => 'details',
     '#title' => t('Add a promo code'),
   ];
+
   $form['promotion_code_wrapper']['promotion'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
     '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
   ];
+
+  if (!empty($cart_items)) {
+    // Add continue shopping link, that redirect user to homepage.
+    $form['continue_shopping'] = [
+      '#type' => 'link',
+      '#title' => t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+      '#weight' => 4,
+    ];
+
+    // Add continue shopping link, that redirect user to homepage.
+    $form['actions']['continue_shopping_mobile'] = [
+      '#type' => 'link',
+      '#title' => t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+    ];
+  }
+
   $form['coupon']['#type'] = 'hidden';
 
   // Attach library, to cater to Coupon submit button.
   $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
 
-  $form['privilege_card_wrapper'] = [
-    '#type' => 'details',
-    '#title' => t('Enter a priviledge card number'),
-  ];
-
-  $form['privilege_card_wrapper']['privilege_card_number'] = [
-    '#type' => 'textfield',
-    '#title' => t('Privilege Card Number'),
-  ];
-
-  $form['privilege_card_wrapper']['privilege_card_number2'] = [
-    '#type' => 'textfield',
-    '#title' => t('Re-enter Privilege Card Number'),
-    '#states' => [
-      'required' => [
-        ':input[name="privilege_card_number"]' => ['empty' => FALSE],
-      ],
-    ],
-    '#element_validate' => [
-      'alshaya_acm_privilege_card_number_validate',
-    ],
-  ];
-
-  $cartStorage = \Drupal::service('acq_cart.cart_storage');
-  $cart = $cartStorage->getCart();
   _alshaya_acm_format_cart_total($form, $cart);
 
   // Set Form title.
-  $form['#title'] = t("Cart (%count)", ['%count' => $product_count]);
-}
-
-/**
- * Validate privilege card number entered.
- */
-function alshaya_acm_privilege_card_number_validate(&$element, FormStateInterface $form_state) {
-  $card1 = $form_state->getValue('privilege_card_number');
-  $card2 = $form_state->getValue('privilege_card_number2');
-
-  if (!empty($card1) && ($card1 != $card2)) {
-    $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
-  }
+  $form['#title'] = t("Basket (%count)", ['%count' => $product_count]);
 }
 
 /**
@@ -251,12 +309,8 @@ function alshaya_acm_get_cart_items_by_sku() {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
-  // Using array_combine to ensure we have same data in key and value.
-  $cartQuantityOptions = array_combine($range, $range);
-
   $form['quantity']['#type'] = 'select';
-  $form['quantity']['#options'] = $cartQuantityOptions;
+  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
   unset($form['quantity']['#size']);
 }
 
@@ -304,6 +358,16 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'currency_code_position' => '',
       ],
     ],
+    'alshaya_cart_product_name' => [
+      'variables' => [
+        'color' => '',
+        'item_code' => '',
+        'total_price' => '',
+        'name' => '',
+        'image' => '',
+        'include_in_bundle' => '',
+      ],
+    ],
   ];
 }
 
@@ -332,4 +396,22 @@ function template_preprocess_alshaya_acm_price(array &$variables) {
 
   $variables['currency_format'] = $currency_format;
   $variables['currency_code_position'] = $currency_code_position;
+}
+
+/**
+ * Helper function to get cart quantity options.
+ */
+function _alshaya_acm_get_cart_quantity_options() {
+  static $cartQuantityOptions;
+
+  // Prepare the array once per page request.
+  if (empty($cartQuantityOptions)) {
+    // Get array using range() with 1 as minimum and maximum value from config.
+    $range = range(1, \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty'));
+
+    // Using array_combine to ensure we have same data in key and value.
+    $cartQuantityOptions = array_combine($range, $range);
+  }
+
+  return $cartQuantityOptions;
 }

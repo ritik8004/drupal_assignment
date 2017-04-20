@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains Drupal\acq_sku\Form\SKUForm.
- */
 
 namespace Drupal\acq_sku\Form;
 
@@ -26,12 +22,12 @@ class SKUForm extends ContentEntityForm {
     /* @var $entity \Drupal\acq_sku\Entity\SKU */
     $entity = $this->entity;
 
-    $form['langcode'] = array(
+    $form['langcode'] = [
       '#title' => $this->t('Language'),
       '#type' => 'language_select',
       '#default_value' => $entity->getUntranslated()->language()->getId(),
       '#languages' => Language::STATE_ALL,
-    );
+    ];
     return $form;
   }
 
@@ -43,4 +39,5 @@ class SKUForm extends ContentEntityForm {
     $entity = $this->getEntity();
     $entity->save();
   }
+
 }

@@ -16,15 +16,8 @@
  */
 #}
 <div{{ attributes }}>
-  <div>
-    <div>
-      {% trans %}
-        Logged in as {{ account.first_name }} {{ account.last_name }}
-      {% endtrans %}
-    </div>
-    <div>
-      {{ search_form }}
-    </div>
+  <div class="order-search-form">
+    {{ search_form }}
   </div>
 
   <div>
@@ -45,5 +38,10 @@
     <div class="orders-list-pager-wrapper">
       {{ next_page_button }}
     </div>
+  {% endif %}
+
+  {#Help block for user#}
+  {% if help_block %}
+    <div>{{ help_block }}</div>
   {% endif %}
 </div>

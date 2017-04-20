@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_checkout\Plugin\CheckoutPane\BillingInformation.
- */
-
 namespace Drupal\acq_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\ACQAddressFormatter;
@@ -17,8 +12,8 @@ use Drupal\user\Entity\User;
  * @ACQCheckoutPane(
  *   id = "billing_information",
  *   label = @Translation("Billing information"),
- *   default_step = "billing",
- *   wrapper_element = "fieldset",
+ *   defaultStep = "billing",
+ *   wrapperElement = "fieldset",
  * )
  */
 class BillingInformation extends AddressFormBase {
@@ -131,9 +126,9 @@ class BillingInformation extends AddressFormBase {
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $values = $form_state->getValue($pane_form['#parents']);
     $address_values = $values['address'];
-    $address = array();
+    $address = [];
 
-    array_walk_recursive($address_values, function($value, $key) use (&$address) {
+    array_walk_recursive($address_values, function ($value, $key) use (&$address) {
       $address[$key] = $value;
     });
 
@@ -151,12 +146,12 @@ class BillingInformation extends AddressFormBase {
       $name = $values['address']['first_name'] . $values['address']['last_name'] . rand(100, 999);
 
       $account = User::create(
-        array(
+        [
           'name' => $name,
           'mail' => $values['email'],
-          'roles' => array('authenticated'),
-          'status' => 1
-        )
+          'roles' => ['authenticated'],
+          'status' => 1,
+        ]
       );
       $account->save();
       user_login_finalize($account);

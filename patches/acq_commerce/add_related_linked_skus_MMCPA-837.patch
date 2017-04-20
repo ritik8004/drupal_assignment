@@ -1,0 +1,58 @@
+diff --git a/modules/acq_sku/src/Entity/SKU.php b/modules/acq_sku/src/Entity/SKU.php
+index 2b747f0..48d6a1d 100644
+--- a/modules/acq_sku/src/Entity/SKU.php
++++ b/modules/acq_sku/src/Entity/SKU.php
+@@ -364,6 +364,16 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+       ->setDisplayConfigurable('form', TRUE);
+ 
++    $fields['related'] = BaseFieldDefinition::create('string')
++      ->setLabel(t('Related SKU'))
++      ->setDescription(t('Reference to all related SKUs.'))
++      ->setDisplayOptions('form', array(
++        'type' => 'string_textfield',
++        'weight' => 7,
++      ))
++      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
++      ->setDisplayConfigurable('form', TRUE);
++
+     $fields['image'] = BaseFieldDefinition::create('image')
+       ->setLabel(t('Image'))
+       ->setDescription(t('Product image'))
+diff --git a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Grouped.php b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Grouped.php
+index 8498f0d..5632164 100644
+--- a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Grouped.php
++++ b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Grouped.php
+@@ -117,10 +117,14 @@ public function processImport($sku, $product) {
+     $sku->field_grouped_skus->setValue([]);
+ 
+     foreach ($product['linked'] as $linked_sku) {
+-      $sku->field_grouped_skus->set(
+-        $linked_sku['position'],
+-        $linked_sku['linked_sku']
+-      );
++      // Linked may contain associated, upsell, crosssell and related.
++      // We want only the associated ones for grouped.
++      if ($linked_sku['type'] == 'associated') {
++        $sku->field_grouped_skus->set(
++          $linked_sku['position'],
++          $linked_sku['linked_sku']
++        );
++      }
+     }
+   }
+ }
+diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+index 4931fd1..88909e4 100644
+--- a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
++++ b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+@@ -230,6 +230,9 @@ public function post(array $products = [])
+       // Update crosssell linked SKUs.
+       $this->updateLinkedSkus('crosssell', $sku, $product['linked']);
+ 
++      // Update related linked SKUs.
++      $this->updateLinkedSkus('related', $sku, $product['linked']);
++
+       $plugin_manager = \Drupal::service('plugin.manager.sku');
+       $plugin_definition = $plugin_manager->pluginFromSKU($sku);
+ 

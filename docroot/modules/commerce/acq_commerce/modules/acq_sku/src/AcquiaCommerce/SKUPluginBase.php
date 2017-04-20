@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase.
- */
-
 namespace Drupal\acq_sku\AcquiaCommerce;
 
 use Drupal\Core\Form\FormInterface;
@@ -14,8 +9,7 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\Link;
 
 /**
- * Defines a base SKU Plugin implementation that has blank implementations of
- * required methods. Can be used as a template for a new SKU type.
+ * Defines a base SKU Plugin. Can be used as a template for a new SKU type.
  */
 abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
@@ -24,7 +18,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    *
    * If you need to alter the display of the whole entity, override this method.
    */
-  public function build($build) {
+  public function build(array $build) {
     return $build;
   }
 
@@ -81,35 +75,35 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function addToCartForm($form, FormStateInterface $form_state, SKU $sku = NULL) {
+  public function addToCartForm(array $form, FormStateInterface $form_state, SKU $sku = NULL) {
 
   }
 
   /**
    * {@inheritdoc}
    */
-  public function addToCartValidate(&$form, FormStateInterface $form_state) {
+  public function addToCartValidate(array &$form, FormStateInterface $form_state) {
 
   }
 
   /**
    * {@inheritdoc}
    */
-  public function addToCartSubmit(&$form, FormStateInterface $form_state) {
+  public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
 
   }
 
   /**
    * {@inheritdoc}
    */
-  public function processImport($sku, $product) {
+  public function processImport($sku, array $product) {
 
   }
 
   /**
    * {@inheritdoc}
    */
-  public function cartName($sku, $cart) {
+  public function cartName($sku, array $cart) {
     $display_node = $this->getDisplayNode($sku);
     $url = $display_node->toUrl();
     $link = Link::fromTextAndUrl($sku->label(), $url);
@@ -123,7 +117,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   public function getDisplayNode(SKU $sku) {
     $query = \Drupal::entityQuery('node')
       ->condition('type', 'acq_product')
-      ->condition('field_skus', $sku->getSKU())
+      ->condition('field_skus', $sku->getSku())
       ->range(0, 1);
 
     $result = $query->execute();
@@ -131,4 +125,5 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
     return Node::load($nid);
   }
+
 }

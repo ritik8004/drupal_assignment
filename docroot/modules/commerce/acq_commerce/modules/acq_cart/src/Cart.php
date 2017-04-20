@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_cart\Cart.
- */
-
 namespace Drupal\acq_cart;
 
 use Drupal\acq_sku\Entity\SKU;
@@ -17,17 +12,23 @@ use Drupal\acq_sku\Entity\SKU;
 class Cart implements CartInterface {
 
   /**
-   * @var object $cart The magento cart object.
+   * The magento cart object.
+   *
+   * @var object
    */
   protected $cart;
 
   /**
-   * @var string $checkout_step_id The current checkout step id.
+   * The current checkout step id.
+   *
+   * @var string
    */
-  protected $checkout_step_id;
+  protected $checkoutStepId;
 
   /**
-   * @var boolean $is_shippable Whether or not the cart items can be shipped.
+   * Whether or not the cart items can be shipped.
+   *
+   * @var bool
    */
   protected $shippable = FALSE;
 
@@ -88,7 +89,7 @@ class Cart implements CartInterface {
    */
   public function items() {
     if (!isset($this->cart, $this->cart->items)) {
-      return array();
+      return [];
     }
 
     $items = $this->cart->items;
@@ -100,7 +101,7 @@ class Cart implements CartInterface {
 
       $plugin_manager = \Drupal::service('plugin.manager.sku');
       $plugin = $plugin_manager->pluginInstanceFromType($item['product_type']);
-      $sku = SKU::loadFromSKU($item['sku']);
+      $sku = SKU::loadFromSku($item['sku']);
 
       if (empty($sku) || empty($plugin)) {
         continue;
@@ -167,7 +168,7 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function addItemsToCart($items) {
+  public function addItemsToCart(array $items) {
     foreach ($items as $item) {
       if (!isset($item['sku'])) {
         continue;
@@ -184,7 +185,7 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function setItemsInCart($items) {
+  public function setItemsInCart(array $items) {
     $this->cart->items = $items;
   }
 
@@ -278,9 +279,12 @@ class Cart implements CartInterface {
    * {@inheritdoc}
    */
   public function getShippingMethod() {
+    $shipping = NULL;
+
     if (isset($this->cart, $this->cart->carrier)) {
       $shipping = $this->cart->carrier;
     }
+
     return $shipping;
   }
 
@@ -295,11 +299,11 @@ class Cart implements CartInterface {
         ',',
         [
           $method['carrier_code'],
-          $method['method_code']
+          $method['method_code'],
         ]
       );
     }
-    return;
+    return '';
   }
 
   /**
@@ -307,7 +311,7 @@ class Cart implements CartInterface {
    */
   public function getPaymentMethod($full_details = TRUE) {
     if (!isset($this->cart, $this->cart->payment)) {
-      return;
+      return [];
     }
 
     if ($full_details) {
@@ -320,7 +324,7 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function setPaymentMethod($payment_method, $data = []) {
+  public function setPaymentMethod($payment_method, array $data = []) {
     $this->cart->payment['method'] = $payment_method;
     if (!empty($data)) {
       $this->cart->payment['additional_data'] = $data;
@@ -339,7 +343,7 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function setPaymentMethodData($data = []) {
+  public function setPaymentMethodData(array $data = []) {
     if (isset($this->cart, $this->cart->payment)) {
       $this->cart->payment['additional_data'] = $data;
     }
@@ -349,14 +353,14 @@ class Cart implements CartInterface {
    * {@inheritdoc}
    */
   public function getCheckoutStep() {
-    return $this->checkout_step_id;
+    return $this->checkoutStepId;
   }
 
   /**
    * {@inheritdoc}
    */
   public function setCheckoutStep($step_id) {
-    $this->checkout_step_id = $step_id;
+    $this->checkoutStepId = $step_id;
   }
 
   /**
@@ -381,7 +385,7 @@ class Cart implements CartInterface {
       return $this->cart->coupon;
     }
 
-    return;
+    return '';
   }
 
   /**
@@ -420,8 +424,9 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function convertToCustomerCart($cart) {
+  public function convertToCustomerCart(array $cart) {
     $this->cart->cart_id = $cart['cart_id'];
+    $this->cart->customer_id = $cart['customer_id'];
   }
 
   /**

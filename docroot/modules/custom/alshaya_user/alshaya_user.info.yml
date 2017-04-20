@@ -3,11 +3,17 @@ type: module
 core: 8.x
 description: 'Stores user field and related settings.'
 dependencies:
+  - alshaya_acm_customer
+  - alshaya_i18n
   - alshaya_password_policy
   - block
+  - block_content
+  - change_pwd_page
   - datetime
   - email_registration
   - field
+  - inline_form_errors
+  - mobile_number
   - path
   - system
   - user

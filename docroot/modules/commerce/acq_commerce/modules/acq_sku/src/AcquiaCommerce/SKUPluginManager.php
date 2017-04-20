@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager.
- */
-
 namespace Drupal\acq_sku\AcquiaCommerce;
 
 use Drupal\Component\Plugin\Factory\DefaultFactory;
@@ -22,6 +17,7 @@ use Drupal\acq_sku\Entity\SKU;
  * @see plugin_api
  */
 class SKUPluginManager extends DefaultPluginManager {
+
   /**
    * Constructs a SKUPluginManager object.
    *
@@ -49,31 +45,32 @@ class SKUPluginManager extends DefaultPluginManager {
   /**
    * Takes a SKU entity and checks it for a matching plugin.
    *
-   * @param \Drupal\acq_sku\Entity\SKU
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   The SKU to check for a plugin.
    *
-   * @return array|NULL
+   * @return array|null
    *   Returns the plugin definition if found, otherwise returns NULL.
    */
-  public function pluginFromSKU(SKU $sku) {
+  public function pluginFromSku(SKU $sku) {
     if (empty($sku)) {
-      return;
+      return NULL;
     }
 
     $bundle = $sku->getType();
 
     if (empty($bundle)) {
-      return;
+      return NULL;
     }
 
     $plugin = NULL;
 
     try {
       $plugin = $this->getDefinition($bundle);
-    } catch (PluginNotFoundException $exception) {
-      \Drupal::logger('acq_sku')->notice(t('Bundle @bundle doesn\'t appear to 
+    }
+    catch (PluginNotFoundException $exception) {
+      \Drupal::logger('acq_sku')->notice(t("Bundle @bundle doesn't appear to 
         have an implementation, please check the plugin id on your implementation 
-        of the SKU plugin', ['@bundle' => $bundle]));
+        of the SKU plugin", ['@bundle' => $bundle]));
     } finally {
       return $plugin;
     }
@@ -82,10 +79,10 @@ class SKUPluginManager extends DefaultPluginManager {
   /**
    * Takes a type and checks it for a matching plugin.
    *
-   * @param $type - string
+   * @param string $type
    *   The SKU to check for a plugin.
    *
-   * @return array|NULL
+   * @return array|null
    *   Returns the plugin definition if found, otherwise returns NULL.
    */
   public function pluginInstanceFromType($type) {
@@ -95,12 +92,14 @@ class SKUPluginManager extends DefaultPluginManager {
       $plugin = $this->getDefinition($type);
       $class = $plugin['class'];
       $plugin = new $class();
-    } catch (PluginNotFoundException $exception) {
-      \Drupal::logger('acq_sku')->notice(t('Bundle @bundle doesn\'t appear to 
+    }
+    catch (PluginNotFoundException $exception) {
+      \Drupal::logger('acq_sku')->notice(t("Bundle @bundle doesn't appear to 
         have an implementation, please check the plugin id on your implementation 
-        of the SKU plugin', ['@bundle' => $type]));
+        of the SKU plugin", ['@bundle' => $type]));
     } finally {
       return $plugin;
     }
   }
+
 }

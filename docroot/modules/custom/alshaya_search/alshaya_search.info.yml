@@ -1,0 +1,21 @@
+name: 'Alshaya Search'
+description: 'Contains search config for Alshaya'
+type: module
+core: 8.x
+dependencies:
+  - acq_sku
+  - block
+  - facets
+  - file
+  - image
+  - lightning_core
+  - node
+  - search_api
+  - search_api_autocomplete
+  - search_api_solr
+  - system
+  - taxonomy
+  - user
+  - views
+version: 8.x-1.0
+package: Alshaya

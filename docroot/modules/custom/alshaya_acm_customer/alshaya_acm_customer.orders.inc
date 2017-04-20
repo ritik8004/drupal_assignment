@@ -13,8 +13,8 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 /**
  * Returns orders from cache if available.
  *
- * @param \Drupal\user\UserInterface $user
- *   User object for which the orders are required.
+ * @param string $email
+ *   Email address of the user.
  * @param string $search_key
  *   Key to look for in $_GET for searching.
  * @param string $filter_key
@@ -23,16 +23,21 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  * @return array
  *   Array of orders.
  */
-function alshaya_acm_customer_get_user_orders(UserInterface $user, $search_key = '', $filter_key = '') {
+function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_key = '') {
   $orders = [];
 
-  $cid = 'orders_list_' . $user->id();
+  $cid = 'orders_list_' . $email;
 
   if ($cache = \Drupal::cache()->get($cid)) {
     $orders = $cache->data;
   }
   else {
-    $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($user->getEmail());
+    $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($email);
+
+    // Sort them by default by date.
+    usort($orders, function ($a, $b) {
+      return $b['created_at'] > $a['created_at'];
+    });
 
     // Get the cache expiration time based on config value.
     $cacheTimeLimit = \Drupal::config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
@@ -48,9 +53,9 @@ function alshaya_acm_customer_get_user_orders(UserInterface $user, $search_key =
 
   // Search by Order ID, SKU, Name.
   if ($search_key && $search = \Drupal::request()->query->get($search_key)) {
-    $orders = array_filter($orders, function ($order, $orderId) use ($search) {
+    $orders = array_filter($orders, function ($order) use ($search) {
       // Search by Order ID.
-      if (stripos($orderId, $search) > -1) {
+      if (stripos($order['increment_id'], $search) > -1) {
         return TRUE;
       }
 
@@ -66,7 +71,7 @@ function alshaya_acm_customer_get_user_orders(UserInterface $user, $search_key =
       }
 
       return FALSE;
-    }, ARRAY_FILTER_USE_BOTH);
+    });
   }
 
   // Filter order by status.
@@ -177,21 +182,17 @@ function alshaya_acm_customer_get_order_total_quantity(array $order) {
 /**
  * Helper function to prepare order summary to pass to template.
  *
- * @param mixed $orderId
- *   Order id.
  * @param array $order
  *   Order array from API.
  *
  * @return array
  *   Processed order summary array.
  */
-function alshaya_acm_customer_get_processed_order_summary($orderId, array $order) {
+function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $orderRow = [];
 
-  // @TODO: MMCPA-612.
-  $orderRow['orderId'] = $orderId;
-  // @TODO: MMCPA-612.
-  $orderRow['orderDate'] = '30 Nov. 2016 @ 20h55';
+  $orderRow['orderId'] = $order['increment_id'];
+  $orderRow['orderDate'] = \Drupal::service('date.formatter')->format(strtotime($order['created_at']), 'order_date');
 
   // We will display the name of first order item.
   $item = reset($order['items']);
@@ -223,11 +224,11 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
 
-  // @TODO: MMCPA-641.
-  $orderDetails['contact_no'] = '+965 12 34 5679';
+  $orderDetails['contact_no'] = $order['shipping']['address']['phone'];
 
   $address_formatter = new ACQAddressFormatter();
   $orderDetails['delivery_address'] = $address_formatter->render((object) $order['shipping']['address']);
+  $orderDetails['billing_address'] = $address_formatter->render((object) $order['billing']);
 
   // @TODO: MMCPA-641.
   $orderDetails['delivery_method'] = $order['shipping']['method']['carrier_code'];
@@ -254,7 +255,7 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
   $all_status = [];
 
   // Get all the orders for the user.
-  $orders = alshaya_acm_customer_get_user_orders($user);
+  $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
 
   // Loop through all the orders to get status of each.
   foreach ($orders as $order) {
@@ -263,7 +264,6 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
 
     // Add the status in array (overriding if already available).
     $all_status[$status['key']] = $status['text'];
-
   }
 
   // Sort them by ascending order of key to keep it consistent across languages.

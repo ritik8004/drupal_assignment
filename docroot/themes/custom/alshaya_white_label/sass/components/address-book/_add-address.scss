@@ -1,7 +1,12 @@
-.c-add-address {
+.c-add-address,
+.c-address-book {
   .c-page-title {
     border-bottom: 1px solid $white;
     padding-bottom: 8px;
+  }
+
+  .block-local-tasks-block {
+    display: none;
   }
 
   .profile-form {
@@ -14,6 +19,7 @@
     .address-container-inline > .form-item {
       max-width: 144px;
       margin-right: 0;
+      vertical-align: top;
       width: 100%;
 
       &:first-child {
@@ -53,6 +59,8 @@
 
     .form-actions {
       margin-bottom: 90px;
+      font-size: 12px;
+      font-weight: 700;
 
       .form-submit {
         margin-top: 0;
@@ -68,6 +76,16 @@
           width: 100%;
         }
       }
+
+      .cancel-button {
+        display: block;
+        text-align: center;
+        padding: 11px;
+
+        @include breakpoint($tablet) {
+          display: inline-block;
+        }
+      }
     }
 
     .js-form-type-select {
@@ -80,9 +98,14 @@
 
     .js-form-type-select label {
       color: #adadad;
+      font-size: 12px;
       #{$left}: 0;
       position: absolute;
-      top: -28px;
+      top: -22px;
+
+      &.error {
+        top: 28px;
+      }
     }
   }
 }

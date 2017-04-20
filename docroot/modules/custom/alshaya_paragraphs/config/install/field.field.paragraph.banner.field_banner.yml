@@ -5,7 +5,14 @@ dependencies:
     - field.storage.paragraph.field_banner
     - paragraphs.paragraphs_type.banner
   module:
+    - content_translation
     - image
+third_party_settings:
+  content_translation:
+    translation_sync:
+      file: file
+      alt: '0'
+      title: '0'
 id: paragraph.banner.field_banner
 field_name: field_banner
 entity_type: paragraph
