@@ -65,5 +65,9 @@ behat:
 multisite:
   name:
     - g
+# Disabling security update check.
+disable-targets:
+  tests:
+    security-updates: true
 
 import: '${repo.root}/blt/setup.local.xml'
