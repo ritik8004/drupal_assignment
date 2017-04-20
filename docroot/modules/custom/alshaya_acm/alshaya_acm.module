@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -195,9 +196,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
 
   _alshaya_acm_format_cart_total($form, $cart);
-
-  // Set Form title.
-  $form['#title'] = t("Basket (%count)", ['%count' => $product_count]);
 }
 
 /**
@@ -270,6 +268,12 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $cartStorage->updateCart();
   $newcart = $cartStorage->getCart();
 
+  // Count total quantity in cart.
+  $product_count = 0;
+  foreach ($newcart->items() as $item) {
+    $product_count += $item['qty'];
+  }
+
   // Get cart items by sku.
   $cart_item = alshaya_acm_get_cart_items_by_sku();
 
@@ -282,8 +286,29 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $response = new AjaxResponse();
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $form['totals']));
+  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $product_count])));
 
   return $response;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_acm_preprocess_page_title(&$variables) {
+  $route_match = \Drupal::routeMatch();
+
+  // Change cart page title with quantity count.
+  if ($route_match->getRouteName() == 'acq_cart.cart') {
+    $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+    // Count total quantity in cart.
+    $product_count = 0;
+    foreach ($cart->items() as $item) {
+      $product_count += $item['qty'];
+    }
+    $variables['title'] = [
+      '#markup' => t("Basket (%count)", ['%count' => $product_count]),
+    ];
+  }
 }
 
 /**
