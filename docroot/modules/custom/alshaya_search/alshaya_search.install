@@ -200,14 +200,14 @@ function alshaya_search_install() {
   $search_view = \Drupal::configFactory()->getEditable('views.view.search');
   $search_view_display = $search_view->get('display');
   $search_view_display['default']['display_options']['row']['options']['view_modes']['entity:node']['acq_product'] = 'search_result';
-  $search_view_display['default']['display_options']['fields']['rendered']['table'] = 'search_api_index_product';
-  $search_view_display['default']['display_options']['filters']['search_api_fulltext']['table'] = 'search_api_index_product';
-  $search_view_display['default']['display_options']['sorts']['search_api_relevance']['table'] = 'search_api_index_product';
+  $search_view_display['default']['display_options']['fields']['rendered']['table'] = 'search_api_index_acquia_search_index';
+  $search_view_display['default']['display_options']['filters']['search_api_fulltext']['table'] = 'search_api_index_acquia_search_index';
+  $search_view_display['default']['display_options']['sorts']['search_api_relevance']['table'] = 'search_api_index_acquia_search_index';
 
-  $search_view->set('base_table', 'search_api_index_product')
+  $search_view->set('base_table', 'search_api_index_acquia_search_index')
     ->set('dependencies', [
       'config' => [
-        'search_api.index.product',
+        'search_api.index.acquia_search_index',
       ],
       'module' => [
         'search_api',
