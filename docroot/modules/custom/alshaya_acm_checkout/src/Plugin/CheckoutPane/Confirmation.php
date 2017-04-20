@@ -108,9 +108,6 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#url' => Url::fromRoute('<front>'),
     ];
 
-    // Create a new cart now.
-    \Drupal::service('acq_cart.cart_storage')->createCart();
-
     return $pane_form;
   }
 

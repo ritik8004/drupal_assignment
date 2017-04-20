@@ -75,9 +75,10 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
 
     $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
     $order_data = $temp_store->get('order');
+    $email = $temp_store->get('email');
 
     // Throw access denied if nothing in session.
-    if (empty($order_data) || empty($order_data['id'])) {
+    if (empty($order_data) || empty($order_data['id']) || empty($email)) {
       return [];
     }
 

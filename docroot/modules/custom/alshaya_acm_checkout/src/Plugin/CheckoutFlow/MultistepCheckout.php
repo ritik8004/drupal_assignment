@@ -206,15 +206,21 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         $temp_store->set('order', $response['order']);
 
         // Clear orders list cache if user is logged in.
-        if (\Drupal::currentUser()->isAuthenticated()) {
-          \Drupal::cache()->delete('orders_list_' . \Drupal::currentUser()->id());
-        }
-        else {
+        if (\Drupal::currentUser()->isAnonymous()) {
           // Store the email address of customer in tempstore.
           $cart = $this->cartStorage->getCart();
           $shipping = $cart->getShipping();
+          $email = $shipping->email;
           $temp_store->set('email', $shipping->email);
         }
+        else {
+          $email = \Drupal::currentUser()->getEmail();
+        }
+
+        \Drupal::cache()->delete('orders_list_' . $email);
+
+        // Create a new cart now.
+        $this->cartStorage->createCart();
       }
     }
   }
