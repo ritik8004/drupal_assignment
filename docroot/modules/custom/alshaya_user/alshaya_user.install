@@ -34,6 +34,10 @@ function alshaya_user_install() {
  * Implements hook_modules_installed().
  */
 function alshaya_user_modules_installed($modules) {
+  if (!in_array('alshaya_user', $modules)) {
+    return;
+  }
+
   // Disable password strength indicator.
   \Drupal::configFactory()->getEditable('user.settings')->set('password_strength', FALSE)->save();
 

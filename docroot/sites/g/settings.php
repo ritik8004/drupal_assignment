@@ -202,3 +202,5 @@ if (function_exists('acsf_hooks_includes')) {
     include $post_hook;
   }
 }
+require DRUPAL_ROOT . "/../vendor/acquia/blt/settings/blt.settings.php";
+$settings['install_profile'] = 'lightning';
