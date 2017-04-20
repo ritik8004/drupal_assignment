@@ -84,11 +84,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Get cart items by sku.
   $cart_item = alshaya_acm_get_cart_items_by_sku();
-  $product_count = 0;
+
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
-      $product_count += $form['cart'][$id]['quantity']['#default_value'];
-
       $form['cart'][$id]['quantity']['#type'] = 'select';
       $form['cart'][$id]['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
 
@@ -281,12 +279,6 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $cartStorage->updateCart();
   $newcart = $cartStorage->getCart();
 
-  // Count total quantity in cart.
-  $product_count = 0;
-  foreach ($newcart->items() as $item) {
-    $product_count += $item['qty'];
-  }
-
   // Get cart items by sku.
   $cart_item = alshaya_acm_get_cart_items_by_sku();
 
@@ -299,7 +291,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $response = new AjaxResponse();
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $form['totals']));
-  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $product_count])));
+  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
 
   return $response;
 }
@@ -313,14 +305,9 @@ function alshaya_acm_preprocess_page_title(&$variables) {
   // Change cart page title with quantity count.
   if ($route_match->getRouteName() == 'acq_cart.cart') {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
-    // Count total quantity in cart.
-    $product_count = 0;
-    foreach ($cart->items() as $item) {
-      $product_count += $item['qty'];
-    }
 
     $variables['title'] = [
-      '#markup' => t("Basket (%count)", ['%count' => $product_count]),
+      '#markup' => t("Basket (%count)", ['%count' => $cart->getCartItemsCount()]),
     ];
   }
 }

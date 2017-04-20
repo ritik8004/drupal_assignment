@@ -1,0 +1,49 @@
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Cart.php b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Cart.php
+index 8f04b8e..1925faa 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Cart.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Cart.php
+@@ -210,6 +210,21 @@ public function updateItemQuantity($sku, $quantity) {
+   }
+ 
+   /**
++   * Get the total quantity of all items in the cart.
++   *
++   * @return int
++   *   Return total number of items in the cart.
++   */
++  public function getCartItemsCount() {
++    $product_count = 0;
++    foreach ($this->items() as $item) {
++      $product_count += $item['qty'];
++    }
++
++    return $product_count;
++  }
++
++  /**
+    * {@inheritdoc}
+    */
+   public function getBilling() {
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Controller/getMiniCart.php b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Controller/getMiniCart.php
+index d1475d6..e5a1fa3 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Controller/getMiniCart.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_cart/src/Controller/getMiniCart.php
+@@ -65,17 +65,10 @@ public function content() {
+     // The grand total including discounts and taxes.
+     $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
+ 
+-    // The number of items in cart.
+-    $items = $this->cartStorage->getCart()->items();
+-    $quantity = 0;
+-    foreach ($items as $item) {
+-      $quantity += $item['qty'];
+-    }
+-
+     // Use the template to render the HTML.
+     $output = [
+       '#theme' => 'acq_cart_mini_cart',
+-      '#quantity' => $quantity,
++      '#quantity' => $cart->getCartItemsCount(),
+       '#total' => $grand_total,
+       '#currency_format' => $currency_format,
+       '#currency_code_position' => $currency_code_position,

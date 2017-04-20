@@ -210,6 +210,21 @@ class Cart implements CartInterface {
   }
 
   /**
+   * Get the total quantity of all items in the cart.
+   *
+   * @return int
+   *   Return total number of items in the cart.
+   */
+  public function getCartItemsCount() {
+    $product_count = 0;
+    foreach ($this->items() as $item) {
+      $product_count += $item['qty'];
+    }
+
+    return $product_count;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getBilling() {
