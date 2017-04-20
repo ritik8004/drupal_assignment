@@ -328,6 +328,11 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
+  // Check if we are on search page.
+  if ($routmatch->getRouteName() == 'view.search.page') {
+    $suggestions[] = 'page__search';
+  }
+
   // Check if we are on node page.
   if ($routmatch->getRouteName() == 'entity.node.canonical') {
     $node = Drupal::request()->attributes->get('node');
