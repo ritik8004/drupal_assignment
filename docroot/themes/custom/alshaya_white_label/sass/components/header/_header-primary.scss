@@ -99,6 +99,7 @@ header {
       text-transform: lowercase;
       max-width: 280px;
       border: 1px solid $white;
+      background-image: none;
 
       &::placeholder {
         font-size: 12px;
@@ -210,6 +211,7 @@ header {
     input {
       padding: 1.0625rem !important;
       border: 0;
+      background-image: none;
     }
 
     #edit-actions,

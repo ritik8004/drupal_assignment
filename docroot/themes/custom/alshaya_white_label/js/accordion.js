@@ -57,7 +57,12 @@
           var facetBlock = facetBlockWrapper.find('.c-facet__blocks');
 
           facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile').addClass('is-filter');
-          mainBlock.after(facetBlockWrapper);
+          if ($('body').hasClass('path--search')) {
+            mainBlock.before(facetBlockWrapper);
+          }
+          else {
+            mainBlock.after(facetBlockWrapper);
+          }
           facetLabel.click(function () {
             $('.page-wrapper, .header--wrapper, .c-pre-content').toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
