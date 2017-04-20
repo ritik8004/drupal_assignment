@@ -1,11 +1,93 @@
-.alias--search {
-  .c-sidebar-first {
-    @include breakpoint($desktop) {
-      max-width: 26.25rem;
-      width: 32.71%;
-      float: $left;
-      padding-top: 2rem;
-      margin: 0 2.5rem 0 1.5625rem;
+.c-search {
+  padding-top: 1.75rem;
+
+  .region__content {
+    position: relative;
+
+    .c-page-title {
+      @include breakpoint($only-mobile) {
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+        border-bottom: 1px solid $white;
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: 20rem;
+      }
+    }
+
+    .c-facet {
+      .item-list {
+        padding-left: 0;
+      }
+    }
+
+    .view-id-search {
+      margin-top: 2.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid $white;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+      }
+
+      .views-row {
+        float: $left;
+        text-align: center;
+        color: $black;
+        height: 19.5rem;
+
+        @include breakpoint($only-mobile) {
+          &:nth-child(2n) {
+            float: $right;
+          }
+        }
+
+        @include breakpoint($mobile) {
+          width: 50%;
+          max-width: 9rem;
+        }
+
+        @include breakpoint($tablet) {
+          height: 24rem;
+        }
+
+        @include breakpoint($tablet) {
+          width: 31.59%;
+          max-width: 291px;
+          height: 30rem;
+
+          &:nth-child(3n+2) {
+            margin: 0 2.6%;
+          }
+        }
+
+        .c-products__item__label {
+          font-size: 0.75rem;
+          margin-top: 0;
+
+          a,
+          span {
+            color: $grey-ash;
+            font-family: $alshaya-thin;
+          }
+
+          @include breakpoint($tablet) {
+            font-size: 0.875rem;
+          }
+        }
+
+        .field--name-price {
+          color: $black;
+          font-size: 0.9375rem;
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.875rem;
+          }
+        }
+      }
     }
   }
 }
