@@ -75,7 +75,20 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     // Hide mobile number field from registration page.
     $form['field_mobile_number']['#access'] = FALSE;
 
+    $form['actions']['submit']['#validate'][] = 'alshaya_user_form_user_register_form_validate';
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+  }
+}
+
+/**
+ * Form validate callback for user registration form.
+ *
+ * Validate the terms and conditions field.
+ */
+function alshaya_user_form_user_register_form_validate($form, FormStateInterface $form_state) {
+  $terms = $form_state->getValue('field_terms_and_condition');
+  if (is_array($terms) && empty($terms['value'])) {
+    $form_state->setErrorByName('field_terms_and_condition', t('Please agree to the Terms and Conditions.'));
   }
 }
 

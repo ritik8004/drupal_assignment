@@ -115,6 +115,16 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       return $step_id;
     }
 
+    // We need to show confirmation step even after cart is cleared.
+    if ($step_id == 'confirmation') {
+      $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+      $order_data = $temp_store->get('order');
+
+      if (!empty($order_data) && !empty($order_data['id'])) {
+        return $step_id;
+      }
+    }
+
     // If user is on a certain step in their cart, check that the step being
     // processed is not further along in the checkout process then their last
     // completed step. If they haven't started the checkout yet, make sure they
