@@ -55,8 +55,8 @@ class ACQCheckoutPane extends Plugin {
    *   The annotation values.
    */
   public function __construct(array $values) {
-    if (empty($values['admin_label'])) {
-      $values['admin_label'] = $values['label'];
+    if (empty($values['adminLabel'])) {
+      $values['adminLabel'] = $values['label'];
     }
     parent::__construct($values);
   }

@@ -11,8 +11,8 @@ use Drupal\Core\Form\FormStateInterface;
  * @ACQCheckoutPane(
  *   id = "billing_address",
  *   label = @Translation("Billing address"),
- *   default_step = "payment",
- *   wrapper_element = "container",
+ *   defaultStep = "payment",
+ *   wrapperElement = "fieldset",
  * )
  */
 class BillingAddress extends AddressFormBase {
