@@ -7,8 +7,12 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 
@@ -235,5 +239,28 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
   // Remove/Hide the 'add to cart' form from product list/search page.
   if ($build['#view_mode'] == 'teaser') {
     $build['#no_add_to_cart'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  if (isset($form['ajax']) && isset($form['ajax']['configurables']) && $form['ajax']['configurables']['size']) {
+
+    // We show the size guide link if available as prefix.
+    if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
+      $options = [
+        'attributes' => [
+          'class' => ['use-ajax', 'size-guide-link'],
+          'data-dialog-type' => 'modal',
+          'data-dialog-options' => Json::encode(['width' => 'auto']),
+        ],
+      ];
+      $url = Url::fromUri($size_guide_link, $options);
+      $link = Link::fromTextAndUrl(t('Size Guide'), $url);
+
+      $form['ajax']['configurables']['size']['#prefix'] = $link->toString();
+    }
   }
 }
