@@ -128,7 +128,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
         ];
         $build['go_shopping'] = [
           '#type' => 'link',
-          '#title' => $this->t('GO SHOPPING'),
+          '#title' => '<div class="no--orders--shop">' . $this->t('GO SHOPPING') . '</div>',
           '#url' => Url::fromRoute('<front>'),
         ];
       }
