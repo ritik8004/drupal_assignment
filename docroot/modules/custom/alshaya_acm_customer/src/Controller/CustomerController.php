@@ -4,10 +4,9 @@ namespace Drupal\alshaya_acm_customer\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\user\UserInterface;
 use Drupal\block\Entity\Block;
-use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -163,7 +162,6 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function orderDetail(UserInterface $user, $order_id) {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get the orders to display for current user and filter applied.
@@ -177,59 +175,15 @@ class CustomerController extends ControllerBase {
 
     $order = $orders[$order_index];
 
-    $products = [];
-    foreach ($order['items'] as $item) {
-      $product = $item;
-      $product['total'] = number_format($item['ordered'] * $item['price'], 3);
-
-      try {
-        // Check if we can find a parent SKU for this.
-        $parentSku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
-
-        // We will use the parent SKU name for display.
-        $product['name'] = $parentSku->label();
-
-        // Try to find attributes to display for this product.
-        $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
-      }
-      catch (\Exception $e) {
-        // Current SKU seems to be a simple one, we don't need to do anything.
-      }
-
-      $product['image'] = '';
-
-      // Load sku from item_id that we have in $item.
-      $media = alshaya_acm_product_get_sku_media($item['sku']);
-
-      // If we have image for the product.
-      if (!empty($media)) {
-        $image = array_shift($media);
-        $file_uri = $image->getFileUri();
-        $product['image'] = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
-      }
-
-      $products[] = $product;
-    }
-
-    // Get the currency code and position.
-    $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
-    $currencyCodePosition = \Drupal::config('acq_commerce.currency')->get('currency_code_position');
+    $build = alshaya_acm_customer_build_order_detail($order);
 
     // Build account details array.
     $account = [];
     $account['first_name'] = $user->get('field_first_name')->getString();
     $account['last_name'] = $user->get('field_last_name')->getString();
 
-    $build = [];
-
-    $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
-    $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
-    $build['#products'] = $products;
-    // @TODO: MMCPA-641.
-    $build['#delivery_detail_notice'] = $this->t('Your order will be delivered between 1 and 3 days');
+    $build['#print_link'] = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order_id]);
     $build['#account'] = $account;
-    $build['#currency_code'] = $currencyCode;
-    $build['#currency_code_position'] = $currencyCodePosition;
     $build['#theme'] = 'user_order_detail';
     $build['#cache'] = ['max-age' => 0];
 
@@ -248,9 +202,12 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function orderPrint(UserInterface $user, $order_id) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+
     // Get order details and add more information for print.
     $build = $this->orderDetail($user, $order_id);
-    $build['#barcode'] = $this->getBarcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
+
+    $build['#barcode'] = alshaya_acm_customer_get_barcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
     $build['#account']['mail'] = $user->get('mail')->getString();
     $build['#account']['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
     $build['#site_logo'] = [
@@ -264,78 +221,58 @@ class CustomerController extends ControllerBase {
   }
 
   /**
-   * Function to get barcode.
-   *
-   * @param string $order_number
-   *   Order number for which barcode needed.
+   * Controller function to show print view of last order for anonymous users.
    *
    * @return array
    *   Build array.
    */
-  public function getBarcode($order_number) {
-    $build = [];
-    $settings = [
-      'type' => 'C128',
-      'value' => $order_number,
-      'color' => '#000000',
-      'height' => 90,
-      'width' => 110,
-      'padding_top' => 0,
-      'padding_right' => 0,
-      'padding_bottom' => 0,
-      'padding_left' => 0,
-      'show_value' => TRUE,
-    ];
-    $generator = new BarcodeGenerator();
-    $suffix = str_replace(
-      '+', 'plus', strtolower($settings['type'])
-    );
-    $build['barcode'] = [
-      '#theme' => 'barcode__' . $suffix,
-      '#attached' => [
-        'library' => [
-          'barcodes/' . $suffix,
-        ],
-      ],
-      '#type' => $settings['type'],
-      '#value' => $settings['value'],
-      '#width' => $settings['width'],
-      '#height' => $settings['height'],
-      '#color' => $settings['color'],
-      '#padding_top' => $settings['padding_top'],
-      '#padding_right' => $settings['padding_right'],
-      '#padding_bottom' => $settings['padding_bottom'],
-      '#padding_left' => $settings['padding_left'],
-      '#show_value' => $settings['show_value'],
-    ];
+  public function orderPrintLast() {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
-    try {
-      $barcode = $generator->getBarcodeObj(
-        $settings['type'],
-        $settings['value'],
-        $settings['width'],
-        $settings['height'],
-        $settings['color'],
-        [
-          $settings['padding_top'],
-          $settings['padding_right'],
-          $settings['padding_bottom'],
-          $settings['padding_left'],
-        ]
-      );
-      $build['barcode']['#svg'] = $barcode->getSvgCode();
+    $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+    $order_data = $temp_store->get('order');
+    $email = $temp_store->get('email');
+
+    // Throw access denied if nothing in session.
+    if (empty($order_data) || empty($order_data['id']) || empty($email)) {
+      throw new AccessDeniedHttpException();
     }
-    catch (\Exception $e) {
-      $this->logger->error(
-        'Error: @error, given: @value',
-        [
-          '@error' => $e->getMessage(),
-          '@value' => $settings['value'],
-        ]
-      );
+
+    // @TODO: Remove the fix when we get the full order details.
+    $order_id = str_replace('"', '', $order_data['id']);
+    $order_id = str_pad($order_id, 9, '0', STR_PAD_LEFT);
+
+    // Get the orders to display for current user.
+    $orders = alshaya_acm_customer_get_user_orders($email);
+
+    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
+
+    if ($order_index === FALSE) {
+      throw new NotFoundHttpException();
     }
+
+    $order = $orders[$order_index];
+
+    $build = alshaya_acm_customer_build_order_detail($order);
+
+    // Build account details array.
+    $account = [];
+
+    // @TODO: Get privilege card number once integration done.
+    $account['first_name'] = $order['firstname'];
+    $account['last_name'] = $order['lastname'];
+    $account['mail'] = $order['email'];
+
+    $build['#site_logo'] = [
+      '#theme' => 'image',
+      '#uri' => theme_get_setting('logo.url'),
+    ];
+    $build['#barcode'] = alshaya_acm_customer_get_barcode($order_id);
+    $build['#products_count'] = count($build['#products']);
+    $build['#account'] = $account;
+    $build['#theme'] = 'user_order_print';
+
     return $build;
-
   }
 
 }

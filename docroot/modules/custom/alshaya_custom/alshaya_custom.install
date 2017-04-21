@@ -62,6 +62,10 @@ function alshaya_custom_install() {
  * Implements hook_modules_installed().
  */
 function alshaya_custom_modules_installed($modules) {
+  if (!in_array('alshaya_custom', $modules)) {
+    return;
+  }
+
   // Set the 'header' region.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')
     ->set('region', 'header')

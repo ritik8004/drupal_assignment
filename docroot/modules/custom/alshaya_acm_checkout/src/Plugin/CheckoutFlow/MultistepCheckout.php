@@ -115,6 +115,16 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       return $step_id;
     }
 
+    // We need to show confirmation step even after cart is cleared.
+    if ($step_id == 'confirmation') {
+      $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+      $order_data = $temp_store->get('order');
+
+      if (!empty($order_data) && !empty($order_data['id'])) {
+        return $step_id;
+      }
+    }
+
     // If user is on a certain step in their cart, check that the step being
     // processed is not further along in the checkout process then their last
     // completed step. If they haven't started the checkout yet, make sure they
@@ -196,15 +206,21 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         $temp_store->set('order', $response['order']);
 
         // Clear orders list cache if user is logged in.
-        if (\Drupal::currentUser()->isAuthenticated()) {
-          \Drupal::cache()->delete('orders_list_' . \Drupal::currentUser()->id());
-        }
-        else {
+        if (\Drupal::currentUser()->isAnonymous()) {
           // Store the email address of customer in tempstore.
           $cart = $this->cartStorage->getCart();
           $shipping = $cart->getShipping();
+          $email = $shipping->email;
           $temp_store->set('email', $shipping->email);
         }
+        else {
+          $email = \Drupal::currentUser()->getEmail();
+        }
+
+        \Drupal::cache()->delete('orders_list_' . $email);
+
+        // Create a new cart now.
+        $this->cartStorage->createCart();
       }
     }
   }
