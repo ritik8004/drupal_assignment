@@ -4,6 +4,8 @@ type: module
 core: 8.x
 dependencies:
   - acq_sku
+  - acquia_connector
+  - acquia_search
   - block
   - facets
   - file

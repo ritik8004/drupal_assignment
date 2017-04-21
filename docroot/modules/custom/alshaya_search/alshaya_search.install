@@ -9,6 +9,194 @@
  * Implements hook_install().
  */
 function alshaya_search_install() {
+  // Update Acquia search solr index.
+  $acquia_index = \Drupal::configFactory()
+    ->getEditable('search_api.index.acquia_search_index');
+  $acquia_index_dependencies = $acquia_index->get('dependencies');
+  $acquia_index_dependencies['config'] = array_merge($acquia_index_dependencies['config'], [
+    'field.storage.node.field_category',
+    'field.storage.node.field_skus',
+  ]);
+  $acquia_index_dependencies['module'] = array_merge($acquia_index_dependencies['module'], [
+    'taxonomy',
+    'acq_sku',
+    'file',
+  ]);
+
+  $field_settings = [
+    'content' => [
+      'label' => 'Rendered HTML output',
+      'property_path' => 'rendered_item',
+      'type' => 'text',
+      'configuration' => [
+        'roles' => [
+          0 => 'anonymous',
+        ],
+        'view_mode' => [],
+      ],
+    ],
+    'body' => [
+      'label' => 'Body',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'body',
+      'type' => 'text',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.body',
+        ],
+      ],
+    ],
+    'title' => [
+      'label' => 'Title',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'title',
+      'type' => 'text',
+    ],
+    'status' => [
+      'label' => 'Publishing status',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'status',
+      'type' => 'boolean',
+    ],
+    'type' => [
+      'label' => 'Content type',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'type',
+      'type' => 'string',
+    ],
+    'tid' => [
+      'label' => 'Category » Taxonomy term » Term ID',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'field_category:entity:tid',
+      'type' => 'integer',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.field_category',
+        ],
+        'module' => [
+          0 => 'taxonomy',
+        ],
+      ],
+    ],
+    'vid' => [
+      'label' => 'Category » Taxonomy term » Vocabulary',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'field_category:entity:vid',
+      'type' => 'string',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.field_category',
+        ],
+        'module' => [
+          0 => 'taxonomy',
+        ],
+      ],
+    ],
+    'name' => [
+      'label' => 'Category » Taxonomy term » Name',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'field_category:entity:name',
+      'type' => 'string',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.field_category',
+        ],
+        'module' => [
+          0 => 'taxonomy',
+        ],
+      ],
+    ],
+    'name_1' => [
+      'label' => 'SKUs » SKU Reference » Name',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'field_skus:entity:name',
+      'type' => 'string',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.field_skus',
+        ],
+        'module' => [
+          0 => 'acq_sku',
+        ],
+      ],
+    ],
+    'price' => [
+      'label' => 'SKUs » SKU Reference » Display Price',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'field_skus:entity:price',
+      'type' => 'integer',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.field_skus',
+        ],
+        'module' => [
+          0 => 'acq_sku',
+        ],
+      ],
+    ],
+    'attr_color' => [
+      'label' => 'SKUs » SKU Reference » Color',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'field_skus:entity:attr_color',
+      'type' => 'string',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.field_skus',
+        ],
+        'module' => [
+          0 => 'acq_sku',
+        ],
+      ],
+    ],
+    'attr_size' => [
+      'label' => 'SKUs » SKU Reference » Size',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'field_skus:entity:attr_size',
+      'type' => 'string',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.field_skus',
+        ],
+        'module' => [
+          0 => 'acq_sku',
+        ],
+      ],
+    ],
+    'uri' => [
+      'label' => 'SKUs » SKU Reference » Image » File » URI',
+      'datasource_id' => 'entity:node',
+      'property_path' => 'field_skus:entity:image:entity:uri',
+      'type' => 'string',
+      'dependencies' => [
+        'config' => [
+          0 => 'field.storage.node.field_skus',
+        ],
+        'module' => [
+          0 => 'acq_sku',
+          1 => 'file',
+        ],
+      ],
+    ],
+  ];
+  $acquia_index_field_settings = array_merge($acquia_index->get('field_settings'), $field_settings);
+
+  $acquia_index_datasource_settings = [
+    'entity:node' => [
+      'bundles' => [
+        'default' => FALSE,
+        'selected' => [
+          0 => 'acq_product',
+        ],
+      ],
+    ],
+  ];
+
+  $acquia_index->set('dependencies', $acquia_index_dependencies)
+    ->set('field_settings', $acquia_index_field_settings)
+    ->set('datasource_settings', $acquia_index_datasource_settings)
+    ->save();
+
+  // Update search view settings.
   $search_view = \Drupal::configFactory()->getEditable('views.view.search');
   $search_view_display = $search_view->get('display');
   $search_view_display['default']['display_options']['row']['options']['view_modes']['entity:node']['acq_product'] = 'search_result';
