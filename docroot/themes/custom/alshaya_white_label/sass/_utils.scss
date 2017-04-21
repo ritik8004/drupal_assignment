@@ -88,3 +88,12 @@
     z-index: 1;
   }
 }
+
+
+%clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

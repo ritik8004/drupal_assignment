@@ -6,7 +6,7 @@
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      var items = $('.cloud-zoom:not(cloud-zoom-processed), .cloud-zoom-gallery:not(cloud-zoom-processed)', context);
+      var items = $('.cloud-zoom:not(cloud-zoom-processed), .cloudzoom__thumbnails__image:not(cloud-zoom-processed)', context);
       if (items.length) {
         items.addClass('cloud-zoom-processed').CloudZoom();
         items.parent().css('float', 'left');
@@ -109,7 +109,7 @@
       };
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
-      $('.cloud-zoom-container #cloud-zoom-wrap').on('click', function () {
+      $('.cloudzoom #cloud-zoom-wrap').on('click', function () {
         myDialog.show();
         myDialog.showModal();
       });
@@ -120,7 +120,7 @@
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       // Fetch Vimeo thumbnail via a GET call. Vimeo doesnot give thumbnails via URL like YT.
-      $('#lightSlider li.video-product-zoom.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
+      $('#lightSlider li.cloudzoom__thumbnails__video.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
         var vimeoVideoUrl = $(this).attr('data-iframe');
         var match = /vimeo.*\/(\d+)/i.exec(vimeoVideoUrl);
         var self = $(this);
@@ -145,7 +145,7 @@
       });
       // For Desktop slider, we add a iframe on click on the image.
       $('#lightSlider li').on('click', function () {
-        if ($(this).hasClass('video-product-zoom')) {
+        if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var wrap = $('#cloud-zoom-wrap');
           // Get width & height of wrap.
           var width = wrap.width();
@@ -157,7 +157,7 @@
         }
       });
       // For Desktop slider, we remove the iframe when we want to zoom another image.
-      $('#lightSlider li a.cloud-zoom-gallery').on('click', function () {
+      $('#lightSlider li a.cloudzoom__thumbnails__image').on('click', function () {
         var playerIframe = $('#yt-vi-container iframe');
         // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
         if (playerIframe.length > 0) {
@@ -175,12 +175,12 @@
        */
       function toggleProductImageGallery() {
         if ($(window).width() < 381) {
-          $('.image-gallery-mobile').show();
-          $('.cloud-zoom-container').hide();
+          $('.mobilegallery').show();
+          $('.cloudzoom').hide();
         }
         else {
-          $('.image-gallery-mobile').hide();
-          $('.cloud-zoom-container').show();
+          $('.mobilegallery').hide();
+          $('.cloudzoom').show();
         }
       }
 
