@@ -40,6 +40,12 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
         // Save the value of privilege card to field_privilege_card.
         array_unshift($form['actions']['submit']['#submit'], 'alshaya_loyalty_register_user_set_privilege_card_number');
       }
+      else {
+        // Validate privilege card number.
+        $form['field_privilege_card_number']['#element_validate'] = [
+          '_alshaya_loyalty_validate_field_value',
+        ];
+      }
       break;
 
     case 'user_form':
@@ -65,14 +71,25 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
 
   $field_val = $form_state->getValue($field);
 
+  // Get the Element value.
+  //
+  // We need to check the value of the field is string or array and based on
+  // that we need to get the value in a variable to validate.
+  // Because we are using the same validate function for the custom privilege
+  // card number elements and for the field that we create with field api for
+  // user form.
+  //
+  // Check if the value is string.
   if (is_string($field_val)) {
     $element_value = $field_val;
   }
 
+  // Check if the value is array.
   if (is_array($field_val)) {
     $element_value = $field_val[0]['value'];
   }
 
+  // Validate the field if the value is not empty.
   if (!empty($element_value)) {
     // Get alshaya loyalty settings.
     $config = \Drupal::config('alshaya_loyalty.settings');
