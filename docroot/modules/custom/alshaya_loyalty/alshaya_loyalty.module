@@ -53,18 +53,16 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     case 'customer_cart_form':
       // Get the current cart.
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
-
       // Get current cart items.
       $cart_items = $cart->items();
 
-      // Add Previlege cart form elements only if there is something in cart.
+      // Add Privilege cart form elements only if there is something in cart.
       if (!empty($cart_items)) {
         $add_privilege_fields = TRUE;
         _alshaya_loyalty_form_attachements($form, $form_state);
         // Save the value of privilege card to field_privilege_card.
         array_unshift($form['#submit'], 'alshaya_loyalty_save_privilege_card_number');
       }
-
       break;
 
     // Add privilege card number fields to Register form.
@@ -93,7 +91,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
 }
 
 /**
- * Add prefix and element_validate for field_privilege_card_number.
+ * Add element_validate for field_privilege_card_number.
  */
 function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, FormStateInterface $form_state) {
   $validation = alshaya_loyalty_get_validation_settings();
@@ -122,10 +120,20 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
 
   $field_val = $form_state->getValue($field);
 
+  // Get the Element value.
+  //
+  // We need to check the value of the field is string or array and based on
+  // that we need to get the value in a variable to validate.
+  // Because we are using the same validate function for the custom privilege
+  // card number elements and for the field that we create with field api for
+  // user form.
+  //
+  // Check if the value is string.
   if (is_string($field_val)) {
     $element_raw_value = $field_val;
   }
 
+  // Check if the value is array.
   if (is_array($field_val)) {
     $element_raw_value = $field_val[0]['value'];
   }
@@ -133,6 +141,7 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
   // Clean the element value.
   $element_value = _alshaya_loyalty_clean_card_number($element_raw_value);
 
+  // Validate the field if the value is not empty.
   if (!empty($element_value)) {
     $validation = alshaya_loyalty_get_validation_settings();
 
