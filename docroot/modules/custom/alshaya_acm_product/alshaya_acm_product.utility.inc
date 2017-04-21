@@ -129,8 +129,7 @@ function alshaya_acm_product_get_parent_sku_by_sku($sku) {
  *   SKU Entity for which we want to display the media.
  */
 function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity) {
-  \Drupal::moduleHandler()
-    ->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
+  \Drupal::moduleHandler()->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
 
   // Fetch media.
   $media = alshaya_acm_product_get_sku_media($skuEntity);
