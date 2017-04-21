@@ -102,7 +102,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Get SKU attributes.
       $sku_attributes = alshaya_acm_product_get_sku_configurable_values($id);
 
-      $name = '';
+      $name = [];
       // Get parent sku of the sku.
       $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($id);
       if ($parent_sku) {
