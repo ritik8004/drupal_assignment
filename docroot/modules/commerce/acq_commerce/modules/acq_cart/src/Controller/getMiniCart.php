@@ -65,17 +65,10 @@ class getMiniCart extends ControllerBase {
     // The grand total including discounts and taxes.
     $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
 
-    // The number of items in cart.
-    $items = $this->cartStorage->getCart()->items();
-    $quantity = 0;
-    foreach ($items as $item) {
-      $quantity += $item['qty'];
-    }
-
     // Use the template to render the HTML.
     $output = [
       '#theme' => 'acq_cart_mini_cart',
-      '#quantity' => $quantity,
+      '#quantity' => $cart->getCartItemsCount(),
       '#total' => $grand_total,
       '#currency_format' => $currency_format,
       '#currency_code_position' => $currency_code_position,

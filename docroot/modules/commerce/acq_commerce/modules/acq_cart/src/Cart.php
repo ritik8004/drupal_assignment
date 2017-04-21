@@ -33,6 +33,13 @@ class Cart implements CartInterface {
   protected $shippable = FALSE;
 
   /**
+   * The total quantity in the cart.
+   *
+   * @var int
+   */
+  protected $cartTotalCount = 0;
+
+  /**
    * Constructor.
    *
    * @param object $cart
@@ -40,6 +47,11 @@ class Cart implements CartInterface {
    */
   public function __construct($cart) {
     $this->cart = $cart;
+    // Calculate the cart quantity items.
+    //
+    // There won't be any quantity count exists when we initialize the cart
+    // object. So, we have to calculate it explicitly here.
+    $this->updateCartItemsCount();
   }
 
   /**
@@ -207,6 +219,27 @@ class Cart implements CartInterface {
     }
 
     $this->cart->items = $items;
+  }
+
+  /**
+   * Get the total quantity of all items in the cart.
+   *
+   * @return int
+   *   Return total number of items in the cart.
+   */
+
+  public function getCartItemsCount() {
+    return $this->cartTotalCount;
+  }
+
+  /**
+   * Calculate the cart items quantity.
+   */
+  public function updateCartItemsCount() {
+    $this->cartTotalCount = 0;
+    foreach ($this->items() as $item) {
+      $this->cartTotalCount += $item['qty'];
+    }
   }
 
   /**

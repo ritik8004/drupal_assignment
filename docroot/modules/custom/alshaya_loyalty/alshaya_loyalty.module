@@ -19,18 +19,16 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     case 'customer_cart_form':
       // Get the current cart.
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
-
       // Get current cart items.
       $cart_items = $cart->items();
 
-      // Add Previlege cart form elements only if there is something in cart.
+      // Add Privilege card form elements only if there are products in cart.
       if (!empty($cart_items)) {
         $add_privilege_fields = TRUE;
 
         // Save the value of privilege card to field_privilege_card.
         array_unshift($form['#submit'], 'alshaya_loyalty_save_privilege_card_number');
       }
-
       break;
 
     // Add privilege card number fields to Register form.
@@ -146,7 +144,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   $form['privilege_card_wrapper'] = [
     '#type' => 'details',
     '#title' => t('Enter a priviledge card number'),
-    '#open' => !empty($values) && !empty($values['privilege_card_number']) && !empty($values['privilege_card_number2']),
+    '#open' => !empty($values) && (!empty($values['privilege_card_number']) || !empty($values['privilege_card_number2'])),
     '#weight' => 3,
   ];
 
