@@ -4,6 +4,7 @@ namespace Drupal\alshaya_main_menu\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\file\Entity\File;
 use Drupal\Core\Cache\Cache;
@@ -68,6 +69,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $connection;
 
   /**
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaMegaMenuBlock constructor.
    *
    * @param array $configuration
@@ -84,13 +92,16 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language
+   *   The Language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository, RouteMatchInterface $route_match, Connection $connection) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository, RouteMatchInterface $route_match, Connection $connection, LanguageManagerInterface $language) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityManager = $entity_manager;
     $this->entityRepository = $entity_repository;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
+    $this->languageManager = $language;
   }
 
   /**
@@ -104,7 +115,8 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('entity_type.manager'),
       $container->get('entity.repository'),
       $container->get('current_route_match'),
-      $container->get('database')
+      $container->get('database'),
+      $container->get('language_manager')
     );
   }
 
@@ -231,6 +243,15 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
 
         // Load paragraph entity.
         $paragraph = Paragraph::load($paragraph_id);
+
+        // Get the current language code.
+        $language = $this->languageManager->getCurrentLanguage()->getId();
+
+        // Get the translation of the paragraph if exists.
+        if ($paragraph->hasTranslation($language)) {
+          // Replace the current paragraph with translated one.
+          $paragraph = $paragraph->getTranslation($language);
+        }
 
         if ($paragraph && !empty($paragraph->get('field_highlight_image'))) {
           $image = $paragraph->get('field_highlight_image')->getValue();
