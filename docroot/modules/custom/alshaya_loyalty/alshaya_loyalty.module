@@ -17,10 +17,20 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
   switch ($form_id) {
     // Add privilege card number fields to cart form.
     case 'customer_cart_form':
-      $add_privilege_fields = TRUE;
+      // Get the current cart.
+      $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
 
-      // Save the value of privilege card to field_privilege_card.
-      array_unshift($form['#submit'], 'alshaya_loyalty_save_privilege_card_number');
+      // Get current cart items.
+      $cart_items = $cart->items();
+
+      // Add Previlege cart form elements only if there is something in cart.
+      if (!empty($cart_items)) {
+        $add_privilege_fields = TRUE;
+
+        // Save the value of privilege card to field_privilege_card.
+        array_unshift($form['#submit'], 'alshaya_loyalty_save_privilege_card_number');
+      }
+
       break;
 
     // Add privilege card number fields to Register form.

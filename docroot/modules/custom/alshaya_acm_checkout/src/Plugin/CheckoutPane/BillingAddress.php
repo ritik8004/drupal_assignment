@@ -39,12 +39,8 @@ class BillingAddress extends AddressFormBase {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $cart = $this->getCart();
 
-    $address = $cart->getBilling();
-    if (empty($address) || empty($address->country)) {
-      $address = $cart->getShipping();
-    }
-
-    $form_state->setTemporaryValue('address', $address);
+    $form_state->setTemporaryValue('address', $cart->getBilling());
+    $form_state->setTemporaryValue('shipping_address', $cart->getShipping());
 
     $pane_form['summary'] = [
       '#markup' => $this->t('Is the delivery address the same as your billing address?'),
@@ -56,7 +52,6 @@ class BillingAddress extends AddressFormBase {
         1 => $this->t('Yes'),
         2 => $this->t('No'),
       ],
-      '#default_value' => 1,
       '#attributes' => ['class' => ['same-as-shipping']],
       '#ajax' => [
         'callback' => [$this, 'updateAddressAjaxCallback'],
@@ -64,10 +59,15 @@ class BillingAddress extends AddressFormBase {
       ],
     ];
 
-    $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
+    if ($form_state->getValues()) {
+      $values = $form_state->getValue($pane_form['#parents']);
+      $same_as_shipping = $values['same_as_shipping'];
+      if ($same_as_shipping == 1) {
+        $form_state->setTemporaryValue('address', $cart->getShipping());
+      }
+    }
 
-    $form_state->setTemporaryValue('address', $cart->getBilling());
-    $form_state->setTemporaryValue('shipping_address', $cart->getShipping());
+    $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
 
     $pane_form['address']['first_name']['#weight'] = -10;
     $pane_form['address']['last_name']['#weight'] = -9;

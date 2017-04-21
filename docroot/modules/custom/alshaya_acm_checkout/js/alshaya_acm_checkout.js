@@ -9,13 +9,16 @@
    * @prop {Drupal~behaviorAttach} attach
    *   All custom js for checkout flow.
    */
-  Drupal.behaviors.alshaya_acm_checkout = {
+  Drupal.behaviors.ZZ_alshaya_acm_checkout = {
     attach: function (context, settings) {
       if ($('.same-as-shipping:checked').val() === '2') {
         $('div[data-drupal-selector="edit-billing-address-address"]').show();
       }
-      else {
+      else if ($('.same-as-shipping:checked').val() === '1') {
         $('div[data-drupal-selector="edit-billing-address-address"]').hide();
+      }
+      else {
+        setTimeout('jQuery(".same-as-shipping[value=1]").trigger("click").trigger("change")', 250);
       }
     }
   };

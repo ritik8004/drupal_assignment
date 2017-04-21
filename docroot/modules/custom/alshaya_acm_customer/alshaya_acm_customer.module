@@ -49,8 +49,25 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'account' => NULL,
       'currency_code' => NULL,
       'currency_code_position' => NULL,
+      'print_link' => NULL,
     ],
   ];
+
+  $items['checkout_order_detail'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'order' => NULL,
+      'barcode' => NULL,
+      'order_details' => NULL,
+      'products' => NULL,
+      'delivery_detail_notice' => NULL,
+      'account' => NULL,
+      'currency_code' => NULL,
+      'currency_code_position' => NULL,
+      'print_link' => NULL,
+    ],
+  ];
+
   $items['user_order_print'] = [
     'render element' => 'elements',
     'variables' => [

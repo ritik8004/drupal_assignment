@@ -17,6 +17,7 @@ alshaya_acm_customer.orders_detail:
     _custom_access: '\Drupal\acq_customer\Controller\CustomerController::checkAccess'
   options:
     user: \d+
+
 alshaya_acm_customer.orders_print:
   path: '/user/{user}/order/{order_id}/print'
   defaults:
@@ -26,3 +27,11 @@ alshaya_acm_customer.orders_print:
     _custom_access: '\Drupal\acq_customer\Controller\CustomerController::checkAccess'
   options:
     user: \d+
+
+alshaya_acm_customer.print_last_order:
+  path: '/confirmation/print'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_customer\Controller\CustomerController::orderPrintLast'
+    _title: 'Order Print'
+  requirements:
+    _user_is_logged_in: 'FALSE'

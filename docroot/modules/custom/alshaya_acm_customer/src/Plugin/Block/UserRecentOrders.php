@@ -7,7 +7,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -38,13 +37,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
   protected $routeMatch;
 
   /**
-   * Commerce conductor service.
-   *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
-   */
-  protected $commerceConductor;
-
-  /**
    * The module handler.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -71,18 +63,15 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    *   The current account object.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route match object.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $commerce_conductor
-   *   Commerce conductor service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   Date time formatter service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account, RouteMatchInterface $route_match, APIWrapper $commerce_conductor, ModuleHandlerInterface $module_handler, DateFormatterInterface $date_formatter) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account, RouteMatchInterface $route_match, ModuleHandlerInterface $module_handler, DateFormatterInterface $date_formatter) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
     $this->routeMatch = $route_match;
-    $this->commerceConductor = $commerce_conductor;
     $this->moduleHandler = $module_handler;
     $this->dateFormatter = $date_formatter;
   }
@@ -97,7 +86,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       $plugin_definition,
       $container->get('current_user'),
       $container->get('current_route_match'),
-      $container->get('acq_commerce.api'),
       $container->get('module_handler'),
       $container->get('date.formatter')
     );
@@ -107,14 +95,22 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    * {@inheritdoc}
    */
   public function build() {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+
     $build = [];
 
-    $email = $this->currentUser->getEmail();
-    $uid = $this->currentUser->id();
+    // Get user id of user who's profile is currently visit.
+    $account = \Drupal::request()->attributes->get('user');
+    if (empty($account)) {
+      $account = $this->currentUser;
+    }
+
+    $email = $account->getEmail();
+    $uid = $account->id();
 
     try {
       // Get the orders of the user.
-      $orders = $this->commerceConductor->getCustomerOrders($email);
+      $orders = alshaya_acm_customer_get_user_orders($email);
 
       // Recent order text.
       $build['recent_order_title'] = [
@@ -134,10 +130,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       }
       else {
         // Sort the order in the basis of order date and show recent 3.
-        $order_date_field = 'created_at';
-        usort($orders, function ($a, $b) use (&$order_date_field) {
-          return strtotime($b[$order_date_field]) - strtotime($a[$order_date_field]);
-        });
         $orders = array_slice($orders, 0, 3);
 
         // All order link.
@@ -213,7 +205,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['user']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }
