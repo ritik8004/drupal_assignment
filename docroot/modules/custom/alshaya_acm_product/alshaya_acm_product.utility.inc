@@ -228,7 +228,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
  *   SKU name or full sku object.
  *
  * @return object
- *   Loaded SKU entity.
+ *   Loaded node object.
  */
 function alshaya_acm_product_get_display_node($sku) {
   $sku = is_object($sku) ? $sku->getSKU() : $sku;
