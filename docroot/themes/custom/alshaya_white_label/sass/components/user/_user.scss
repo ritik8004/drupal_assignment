@@ -736,7 +736,7 @@
     font-size: 14px;
   }
 
-  .block-alshaya-user h2 {
+  .block-alshaya-user:not(.c-my-account-nav) h2 {
     display: none;
   }
 
