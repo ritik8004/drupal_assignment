@@ -613,6 +613,8 @@ header {
   }
 
   .mobile--overlay {
+    overflow-y: hidden;
+
     &::before {
       content: '';
       position: fixed;
