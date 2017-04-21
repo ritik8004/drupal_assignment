@@ -213,3 +213,26 @@ function alshaya_user_form_change_pwd_form_process_pass(&$element, FormStateInte
 
   return $element;
 }
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_user_element_info_alter(array &$info) {
+  if (isset($info['mobile_number']['#process'])) {
+    $info['mobile_number']['#process'][] = '_alshaya_user_mobile_number_process';
+  }
+}
+
+/**
+ * Processor for the mobile number field to disable the country code.
+ */
+function _alshaya_user_mobile_number_process(array &$element, FormStateInterface $form_state) {
+  $default_site_country = _alshaya_custom_get_site_level_country_code();
+
+  // Set default country as per site.
+  $element['country-code']['#value'] = $default_site_country;
+  $options = $element['country-code']['#options'];
+  $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
+
+  return $element;
+}
