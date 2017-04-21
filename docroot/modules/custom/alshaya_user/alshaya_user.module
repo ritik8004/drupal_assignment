@@ -75,7 +75,7 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     // Hide mobile number field from registration page.
     $form['field_mobile_number']['#access'] = FALSE;
 
-    $form['actions']['submit']['#validate'][] = 'alshaya_user_form_user_register_form_validate';
+    $form['#validate'][] = 'alshaya_user_form_user_register_form_validate';
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
   }
 }

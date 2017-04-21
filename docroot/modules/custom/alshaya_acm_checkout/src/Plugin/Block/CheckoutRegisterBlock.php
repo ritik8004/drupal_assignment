@@ -102,9 +102,6 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $account->get('field_first_name')->setValue($order['firstname']);
     $account->get('field_last_name')->setValue($order['lastname']);
 
-    // @TODO: We need to remove this and have all validations executed properly.
-    $account->validate();
-
     $form = $this->entityFormBuilder->getForm($account, 'register');
 
     $form['title'] = [
