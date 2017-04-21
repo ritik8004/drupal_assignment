@@ -813,18 +813,18 @@
       }
 
       p {
-        font-size: 13px;
+        font-size: 0.8rem;
         font-weight: 700;
-        line-height: 25px;
+        line-height: 1.56rem;
 
         @include breakpoint($desktop) {
-          font-size: 15px;
+          font-size: 0.9rem;
           width: 35%;
         }
 
         @include icon(infomation, before) {
-          font-size: 24px;
-          margin-right: 17px;
+          font-size: 1.5rem;
+          margin-#{$right}: 1rem;
           vertical-align: top;
         }
       }
@@ -833,12 +833,12 @@
 
   .c-order-help {
     background: #e8eff5;
-    margin-top: 50px;
-    margin-bottom: 55px;
-    padding: 20px 16px;
+    margin-top: 3.1rem;
+    margin-bottom: 3.45rem;
+    padding: 1.25rem 1rem;
 
     @include breakpoint($tablet) {
-      padding: 24px;
+      padding: 1.5rem;
     }
   }
 }

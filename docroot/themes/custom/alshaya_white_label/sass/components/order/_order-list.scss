@@ -229,12 +229,25 @@
 .no--orders {
   border-top: 1px solid $white;
   color: $black;
-  padding-top: 20px;
+  padding-top: 1rem;
   font-size: 14px;
   font-weight: bold;
 
   @include breakpoint($tablet) {
     text-align: center;
+  }
+}
+
+.no--orders--shop {
+  margin-top: 1.75rem;
+
+  a {
+    @extend %button-wide;
+
+    display: block;
+    max-width: 19rem;
+    margin: auto;
+    text-transform: lowercase;
   }
 }
 
