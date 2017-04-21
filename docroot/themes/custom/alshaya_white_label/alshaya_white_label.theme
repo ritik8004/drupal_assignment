@@ -360,7 +360,8 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     $suggestions[] = 'page__front';
   }
 
-  if ($routmatch->getRouteName() == 'alshaya_acm_customer.orders_print') {
+  if ($routmatch->getRouteName() == 'alshaya_acm_customer.orders_print'
+    || $routmatch->getRouteName() == 'alshaya_acm_customer.print_last_order') {
     $suggestions[] = 'page__orderprint';
   }
 }

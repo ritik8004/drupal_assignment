@@ -9,6 +9,10 @@
  * Implements hook_modules_installed().
  */
 function alshaya_captcha_modules_installed($modules) {
+  if (!in_array('alshaya_captcha', $modules)) {
+    return;
+  }
+
   $config_factory = \Drupal::configFactory();
   // Set captcha setting.
   $config_factory->getEditable('captcha.settings')->set('default_challenge', 'recaptcha/reCAPTCHA')->save();

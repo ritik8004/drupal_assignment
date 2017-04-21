@@ -8,6 +8,7 @@ dependencies:
   - acq_checkout
   - alshaya_acm
   - alshaya_admin
+  - alshaya_custom
   - alshaya_i18n
   - back_to_top
   - block

@@ -75,7 +75,20 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     // Hide mobile number field from registration page.
     $form['field_mobile_number']['#access'] = FALSE;
 
+    $form['actions']['submit']['#validate'][] = 'alshaya_user_form_user_register_form_validate';
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+  }
+}
+
+/**
+ * Form validate callback for user registration form.
+ *
+ * Validate the terms and conditions field.
+ */
+function alshaya_user_form_user_register_form_validate($form, FormStateInterface $form_state) {
+  $terms = $form_state->getValue('field_terms_and_condition');
+  if (is_array($terms) && empty($terms['value'])) {
+    $form_state->setErrorByName('field_terms_and_condition', t('Please agree to the Terms and Conditions.'));
   }
 }
 
@@ -197,6 +210,29 @@ function alshaya_user_form_change_pwd_form_process_pass(&$element, FormStateInte
   $element = PasswordConfirm::processPasswordConfirm($element, $form_state, $complete_form);
   $element['pass1']['#title'] = t('new password');
   $element['pass2']['#title'] = t('confirm password');
+
+  return $element;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_user_element_info_alter(array &$info) {
+  if (isset($info['mobile_number']['#process'])) {
+    $info['mobile_number']['#process'][] = '_alshaya_user_mobile_number_process';
+  }
+}
+
+/**
+ * Processor for the mobile number field to disable the country code.
+ */
+function _alshaya_user_mobile_number_process(array &$element, FormStateInterface $form_state) {
+  $default_site_country = _alshaya_custom_get_site_level_country_code();
+
+  // Set default country as per site.
+  $element['country-code']['#value'] = $default_site_country;
+  $options = $element['country-code']['#options'];
+  $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
 
   return $element;
 }

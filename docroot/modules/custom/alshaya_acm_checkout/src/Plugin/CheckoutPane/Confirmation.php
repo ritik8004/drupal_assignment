@@ -5,7 +5,9 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Url;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Provides the final confirmation post payment.
@@ -45,6 +47,11 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
     $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
     $order_data = $temp_store->get('order');
 
+    // Throw access denied if nothing in session.
+    if (empty($order_data) || empty($order_data['id'])) {
+      throw new AccessDeniedHttpException();
+    }
+
     // @TODO: Remove the fix when we get the full order details.
     $order_id = str_replace('"', '', $order_data['id']);
     $order_id = str_pad($order_id, 9, '0', STR_PAD_LEFT);
@@ -66,54 +73,40 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $order = $orders[$order_index];
 
-    $products = [];
-    foreach ($order['items'] as $item) {
-      $product = $item;
-      $product['total'] = number_format($item['ordered'] * $item['price'], 3);
+    // Build account details array.
+    $account = [];
 
-      try {
-        // Check if we can find a parent SKU for this.
-        $parentSku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
+    if (\Drupal::currentUser()->isAnonymous()) {
+      // @TODO: Get privilege card number once integration done.
+      $account['first_name'] = $order['firstname'];
+      $account['last_name'] = $order['lastname'];
+      $account['mail'] = $order['email'];
 
-        // We will use the parent SKU name for display.
-        $product['name'] = $parentSku->label();
+      $print_link = Url::fromRoute('alshaya_acm_customer.print_last_order');
+    }
+    else {
+      $user = \Drupal::currentUser();
+      $account['first_name'] = $user->get('field_first_name')->getString();
+      $account['last_name'] = $user->get('field_last_name')->getString();
+      $account['mail'] = $user->getEmail();
+      $account['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
 
-        // Try to find attributes to display for this product.
-        $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
-      }
-      catch (\Exception $e) {
-        // Current SKU seems to be a simple one, we don't need to do anything.
-      }
-
-      $product['image'] = '';
-
-      // Load sku from item_id that we have in $item.
-      $media = alshaya_acm_product_get_sku_media($item['sku']);
-
-      // If we have image for the product.
-      if (!empty($media)) {
-        $image = array_shift($media);
-        $file_uri = $image->getFileUri();
-        $product['image'] = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
-      }
-
-      $products[] = $product;
+      $print_link = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order_id]);
     }
 
-    $build = [];
-    $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
-    $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
-    $build['#products'] = $products;
-    // @TODO: MMCPA-641.
-    $build['#delivery_detail_notice'] = $this->t('Your order will be delivered between 1 and 3 days');
-    $build['#currency_code'] = \Drupal::config('acq_commerce.currency')->get('currency_code');
-    $build['#currency_code_position'] = \Drupal::config('acq_commerce.currency')->get('currency_code_position');
-    $build['#theme'] = 'user_order_detail';
+    $build = alshaya_acm_customer_build_order_detail($order);
+    $build['#account'] = $account;
+    $build['#barcode'] = alshaya_acm_customer_get_barcode($order_id);
+    $build['#print_link'] = $print_link;
+    $build['#theme'] = 'checkout_order_detail';
 
     $pane_form['summary'] = $build;
 
-    // Create a new cart now.
-    $this->cartStorage->createCart();
+    $pane_form['continue_shopping'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+    ];
 
     return $pane_form;
   }

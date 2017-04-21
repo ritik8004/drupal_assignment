@@ -11,72 +11,51 @@
  * @ingroup themeable
  */
 #}
-
-<div>
-  <a href="{{ print_link }}" target="_blank">{{ "print"|t }}</a>
-</div>
 <div{{ attributes }}>
+
+  <div class="barcode--wrapper">
+    <div class="inner--wrap">
+      <div>
+        {% trans %}
+        <p>Thank you for shopping online with us, <strong class="dark--text">{{ account.first_name }} {{ account.last_name }}</strong></p>
+        {% endtrans %}
+      </div>
+
+      <div>
+        {% trans %}
+        <p>You’ll receive an email addressed to <strong class="dark--text">{{ account.mail }}</strong> conﬁrming your order</p>
+        {% endtrans %}
+      </div>
+
+      {% if account.privilege_card_number %}
+        <div>
+          {% trans %}
+          <p>Your Privileges Card Number is: <strong class="dark--text">{{ account.privilege_card_number }}</strong></p>
+          {% endtrans %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="print--barcode">
+      {{ barcode }}
+    </div>
+  </div>
+
+  <div class="order-summary">
+    <div class="order-id-details">
+      {% trans %}
+        Your order number is {{ order.orderId }}
+      {% endtrans %}
+    </div>
+
+    <div class="order-print-button">
+      <a href="{{ print_link }}" target="_blank">{{ "print confirmation"|t }}</a>
+    </div>
+
+  </div>
 
   <table class="user__order--detail">
     <tbody>
-      <tr class="order-summary-row">
-        <td>
-          <div class="light">{{ "Order ID"|t }}</div>
-          <div class="dark">{{ order.orderId }}</div>
-          <div class="light">{{ order.orderDate }}</div>
-
-          <div class="mobile-only">
-            <div class="dark">
-              {% trans %}
-              {{ order.name }}...
-              {% endtrans %}
-            </div>
-            <div class="light">
-              {% trans %}
-                    Total: {{ order.quantity }} items
-                    {% endtrans %}
-            </div>
-          </div>
-        </td>
-
-        <td class="above-mobile">
-          <div class="dark">
-            {% trans %}
-            {{ order.name }}...
-            {% endtrans %}
-          </div>
-          <div class="light">
-            {% trans %}
-                  Total: {{ order.quantity }} items
-                  {% endtrans %}
-          </div>
-
-          <div class="tablet-only">
-            <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
-          </div>
-        </td>
-
-        <td class="mobile-only">
-          <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
-        </td>
-
-        <td class="desktop-only">
-          <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
-        </td>
-
-        <td class="above-mobile blend">
-          <div class="light">{{ "Order Total"|t }}</div>
-          <div class="dark">
-            {% if currency_code_position == 'before' %}
-              <span class="currency-code prefix">{{ currency_code }}</span>{{ order.total }}
-            {% else %}
-              {{ order.total }}<span class="currency-code suffix">{{ currency_code }}</span>
-            {% endif %}
-          </div>
-        </td>
-        <td class="above-mobile empty--cell">&nbsp;</td>
-      </tr>
-
       {% if delivery_detail_notice %}
       <tr class="delivery-details-row">
         <td colspan="3" class="above-mobile">
@@ -127,6 +106,14 @@
           <div class="dark">{{ order_details.payment_method }}</div>
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
+      </tr>
+
+      <tr class="product--count">
+        <td colspan="5">
+          {% trans %}
+          Product details ({{ products_count }})
+          {% endtrans %}
+        </td>
       </tr>
 
       {% for product in products %}

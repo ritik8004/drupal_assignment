@@ -34,6 +34,10 @@ function alshaya_user_install() {
  * Implements hook_modules_installed().
  */
 function alshaya_user_modules_installed($modules) {
+  if (!in_array('alshaya_user', $modules)) {
+    return;
+  }
+
   // Disable password strength indicator.
   \Drupal::configFactory()->getEditable('user.settings')->set('password_strength', FALSE)->save();
 
@@ -46,7 +50,7 @@ function alshaya_user_modules_installed($modules) {
   // Set user account form display settings.
   $userConfig = \Drupal::configFactory()->getEditable('core.entity_form_display.user.user.default');
   $content = $userConfig->get('content');
-  $content['account']['weight'] = 2;
+  $content['account']['weight'] = 3;
   $content['field_first_name'] = [
     'weight' => 0,
     'type' => 'string_textfield',
