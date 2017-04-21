@@ -121,6 +121,10 @@ header {
     label {
       display: none;
     }
+
+    .form-item--error-message {
+      @include u-visibility(none);
+    }
   }
 
   .block-cart-mini-block {
