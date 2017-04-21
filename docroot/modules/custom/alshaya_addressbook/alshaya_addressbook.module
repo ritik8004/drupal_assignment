@@ -29,12 +29,7 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
 
   // Get the default country from 'admin/config/regional/settings' site
   // regional settings.
-  $default_site_country = \Drupal::config('system.date')->get('country.default');
-  if (empty($default_site_country)) {
-    // If no default country is set, take the first as default.
-    $full_country_list = \Drupal::service('address.country_repository')->getList();
-    $default_site_country = key($full_country_list);
-  }
+  $default_site_country = _get_site_level_country_code();
 
   // Set the default country.
   $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = $default_site_country;

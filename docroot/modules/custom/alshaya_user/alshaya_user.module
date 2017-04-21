@@ -214,12 +214,7 @@ function alshaya_user_element_info_alter(array &$info) {
  * Processor for the mobile number field to disable the country code.
  */
 function _alshaya_user_mobile_number_process(array &$element, FormStateInterface $form_state) {
-  $default_site_country = \Drupal::config('system.date')->get('country.default');
-  if (empty($default_site_country)) {
-    // If no default country is set, take the first as default.
-    $full_country_list = \Drupal::service('address.country_repository')->getList();
-    $default_site_country = key($full_country_list);
-  }
+  $default_site_country = _get_site_level_country_code();
 
   // Set default country as per site.
   $element['country-code']['#value'] = $default_site_country;

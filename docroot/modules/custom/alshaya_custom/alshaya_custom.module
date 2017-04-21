@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Utility function to get the site level country code.
+ *
+ * @return string
+ *   Country code.
+ */
+function _get_site_level_country_code() {
+  $default_site_country = \Drupal::config('system.date')->get('country.default');
+  if (empty($default_site_country)) {
+    // If no default country is set, take the first as default.
+    $full_country_list = \Drupal::service('address.country_repository')->getList();
+    $default_site_country = key($full_country_list);
+  }
+
+  return $default_site_country;
+}
