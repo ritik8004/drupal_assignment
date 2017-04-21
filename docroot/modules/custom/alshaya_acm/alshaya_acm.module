@@ -110,12 +110,28 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
           $size = !empty($size_attribute->getValue()) ? $size_attribute->getValue()[0]['value'] : '';
         }
       }
+
+      $name = '';
+      // Get parent sku of the sku.
+      $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($id);
+      if ($parent_sku) {
+        /* @var \Drupal\node\Entity\Node $parent_node */
+        $parent_node = alshaya_acm_product_get_display_node($parent_sku->getSKU());
+        if ($parent_node) {
+          $name = [
+            '#title' => $parent_node->getTitle(),
+            '#type' => 'link',
+            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]),
+          ];
+        }
+      }
+
       if (!empty($media)) {
         $form['cart'][$id]['name'] = [
           '#theme' => 'alshaya_cart_product_name',
           '#color' => $color,
           '#size' => $size,
-          '#name' => $form['cart'][$id]['name'],
+          '#name' => $name,
           '#image' => [
             '#theme' => 'image_style',
             '#style_name' => '137x144',
