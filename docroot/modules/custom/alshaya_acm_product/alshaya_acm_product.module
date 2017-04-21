@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -62,9 +63,12 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    $sku = $entity->get('field_skus')->first()->getString();
+    $skuEntity = SKU::loadFromSku($sku);
+
     if ($view_mode == 'full') {
-      $sku = $entity->get('field_skus')->first()->getString();
-      $skuEntity = SKU::loadFromSku($sku);
 
       // Get up sell block for the product.
       $items = $skuEntity->get('upsell')->getValue();
@@ -99,94 +103,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['related']['#weight'] = 11;
       }
 
-      // Fetch media.
-      module_load_include('inc', 'alshaya_acm_product', 'alshaya_acm_product.utility');
-      module_load_include('inc', 'alshaya_product_zoom', 'alshaya_product_zoom.utility');
-      $media = alshaya_acm_product_get_sku_media($skuEntity);
-
-      // Fetch settings.
-      $settings = alshaya_product_zoom_cloudzoom_default_settings();
-      $thumbnail_style = $settings['thumb_style'];
-      $zoom_style = $settings['zoom_style'];
-      $slide_style = $settings['slide_style'];
-
-      // Create our thumbnails to be rendered for zoom.
-      foreach ($media as $delta => $image) {
-        $file_uri = $image->getFileUri();
-        // Show original full image in the modal inside a draggable container.
-        $original_image = $image->url();
-        if ($delta == 0) {
-          $imageZoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-          $imageMedium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-          $main_image = [
-            'zoomurl' => $imageZoom,
-            'mediumurl' => $imageMedium,
-          ];
-        }
-        $imageSmall = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
-        $imageZoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-        $imageMedium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-        $thumbnails[] = [
-          'thumburl' => $imageSmall,
-          'mediumurl' => $imageMedium,
-          'zoomurl' => $imageZoom,
-          'fullurl' => $original_image,
-          'type' => 'image',
-        ];
-      }
-      // @TODO: Get video data.
-      $video = [];
-      $videos = [
-        'https://www.youtube.com/embed/Fcnl1UBgECE',
-        'https://www.youtube.com/embed/vm89kGqKqO0',
-      ];
-      foreach ($videos as $video) {
-        if (strpos($video, 'youtube')) {
-          $thumbnails[] = [
-            'thumburl' => 'https://img.youtube.com/vi/' . alshaya_product_zoom_getyoutubeid($video) . '/hqdefault.jpg',
-            'url' => $video,
-            'type' => 'youtube',
-            'width' => 81,
-            'height' => 81,
-          ];
-        }
-        else {
-          $thumbnails[] = [
-            'url' => $video,
-            'type' => 'vimeo',
-            'width' => 81,
-            'height' => 81,
-          ];
-        }
-      }
-      $build['product_zoom'] = [
-        '#theme' => 'product_zoom',
-        '#mainImage' => $main_image,
-        '#thumbnails' => $thumbnails,
-        '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
-        '#attached' => [
-          'library' => [
-            'alshaya_product_zoom/product.cloud_zoom',
-          ],
-        ],
-      ];
-
-      $build['product_zoom_gallery'] = [
-        '#theme' => 'product_zoom_gallery',
-        '#thumbnails' => $thumbnails,
-        '#attached' => [
-          'library' => [
-            'alshaya_product_zoom/product.product_zoom_gallery',
-          ],
-        ],
-      ];
+      alshaya_acm_product_get_gallery($build, $skuEntity);
     }
     elseif ($view_mode == 'teaser') {
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-      $sku = $entity->get('field_skus')->first()->getString();
-      $skuEntity = SKU::loadFromSku($sku);
-
       // Hide the sku reference field.
       unset($build['field_skus']);
 
@@ -215,11 +134,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
     }
     elseif ($view_mode == 'modal') {
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-      $sku = $entity->get('field_skus')->first()->getString();
-      $skuEntity = SKU::loadFromSku($sku);
-
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
       $build['image_url'] = NULL;
@@ -246,21 +160,97 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-  if (isset($form['ajax']) && isset($form['ajax']['configurables']) && $form['ajax']['configurables']['size']) {
+  if (isset($form['ajax']) && isset($form['ajax']['configurables'])) {
 
-    // We show the size guide link if available as prefix.
-    if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
-      $options = [
-        'attributes' => [
-          'class' => ['use-ajax', 'size-guide-link'],
-          'data-dialog-type' => 'modal',
-          'data-dialog-options' => Json::encode(['width' => 'auto']),
-        ],
-      ];
-      $url = Url::fromUri($size_guide_link, $options);
-      $link = Link::fromTextAndUrl(t('Size Guide'), $url);
+    if ($form['ajax']['configurables']['size']) {
+      // We show the size guide link if available as prefix.
+      if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')
+        ->get('size_guide_link')
+      ) {
+        try {
+          $options = [
+            'attributes' => [
+              'class' => ['size-guide-link'],
+              'target' => '_blank',
+            ],
+          ];
 
-      $form['ajax']['configurables']['size']['#prefix'] = $link->toString();
+          // Try as external url.
+          $url = Url::fromUri($size_guide_link, $options);
+        }
+        catch (Exception $e) {
+          try {
+            $options = [
+              'attributes' => [
+                'class' => ['use-ajax', 'size-guide-link'],
+                'data-dialog-type' => 'modal',
+                'data-dialog-options' => Json::encode(['width' => 'auto']),
+              ],
+            ];
+
+            // Try as internal url.
+            $url = Url::fromUserInput($size_guide_link, $options);
+          }
+          catch (Exception $e) {
+            \Drupal::logger('alshaya_acm_product')
+              ->error('Invalid size guide link: @link', ['@link' => $size_guide_link]);
+            return;
+          }
+        }
+
+        $link = Link::fromTextAndUrl(t('Size Guide'), $url);
+
+        $form['ajax']['configurables']['size']['#prefix'] = $link->toString();
+      }
+    }
+
+    foreach ($form['ajax']['configurables'] as &$configurable) {
+      if (is_array($configurable)) {
+        $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
+      }
+    }
+
+  }
+
+  $form['#attached']['library'][] = 'alshaya_acm_product/product_view';
+}
+
+/**
+ * Overridden ajax callback for configurable add to cart form.
+ *
+ * @param array $form
+ *   Form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   FormState object.
+ *
+ * @return array
+ *   Build array.
+ */
+function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormStateInterface $form_state) {
+  $dynamic_parts = Configurable::configurableAjaxCallback($form, $form_state);
+
+  $configurables = $form_state->getValue('configurables');
+  $tree = $form_state->get('tree');
+  $tree_pointer = &$tree['options'];
+
+  foreach ($configurables as $key => $value) {
+    if (empty($value)) {
+      continue;
+    }
+
+    // Move the tree pointer if the selection is valid.
+    if (isset($tree_pointer["$key:$value"])) {
+      $tree_pointer = &$tree_pointer["$key:$value"];
     }
   }
+
+  if ($tree_pointer instanceof SKU) {
+    $build = [];
+    alshaya_acm_product_get_gallery($build, $tree_pointer);
+
+    $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
+    $dynamic_parts['product_zoom_gallery'] = $build['gallery']['product_zoom_gallery'];
+  }
+
+  return $dynamic_parts;
 }

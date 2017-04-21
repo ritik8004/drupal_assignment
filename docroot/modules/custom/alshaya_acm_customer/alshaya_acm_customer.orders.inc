@@ -5,10 +5,12 @@
  * Contains utility functions to process orders and provide related data.
  */
 
+use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
 use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\Component\Utility\Unicode;
-use Drupal\user\UserInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\user\UserInterface;
 
 /**
  * Returns orders from cache if available.
@@ -270,4 +272,142 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
   ksort($all_status);
 
   return $all_status;
+}
+
+/**
+ * Function to get barcode.
+ *
+ * @param string $order_number
+ *   Order number for which barcode needed.
+ *
+ * @return array
+ *   Build array.
+ */
+function alshaya_acm_customer_get_barcode($order_number) {
+  $build = [];
+  $settings = [
+    'type' => 'C128',
+    'value' => $order_number,
+    'color' => '#000000',
+    'height' => 90,
+    'width' => 110,
+    'padding_top' => 0,
+    'padding_right' => 0,
+    'padding_bottom' => 0,
+    'padding_left' => 0,
+    'show_value' => TRUE,
+  ];
+  $generator = new BarcodeGenerator();
+  $suffix = str_replace(
+    '+', 'plus', strtolower($settings['type'])
+  );
+  $build['barcode'] = [
+    '#theme' => 'barcode__' . $suffix,
+    '#attached' => [
+      'library' => [
+        'barcodes/' . $suffix,
+      ],
+    ],
+    '#type' => $settings['type'],
+    '#value' => $settings['value'],
+    '#width' => $settings['width'],
+    '#height' => $settings['height'],
+    '#color' => $settings['color'],
+    '#padding_top' => $settings['padding_top'],
+    '#padding_right' => $settings['padding_right'],
+    '#padding_bottom' => $settings['padding_bottom'],
+    '#padding_left' => $settings['padding_left'],
+    '#show_value' => $settings['show_value'],
+  ];
+
+  try {
+    $barcode = $generator->getBarcodeObj(
+      $settings['type'],
+      $settings['value'],
+      $settings['width'],
+      $settings['height'],
+      $settings['color'],
+      [
+        $settings['padding_top'],
+        $settings['padding_right'],
+        $settings['padding_bottom'],
+        $settings['padding_left'],
+      ]
+    );
+    $build['barcode']['#svg'] = $barcode->getSvgCode();
+  }
+  catch (\Exception $e) {
+    $this->logger->error(
+      'Error: @error, given: @value',
+      [
+        '@error' => $e->getMessage(),
+        '@value' => $settings['value'],
+      ]
+    );
+  }
+  return $build;
+}
+
+/**
+ * Helper function to build render array for Order Detail.
+ *
+ * @param array $order
+ *   Order detail array.
+ *
+ * @return array
+ *   Build array.
+ */
+function alshaya_acm_customer_build_order_detail(array $order) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+  $products = [];
+  foreach ($order['items'] as $item) {
+    $product = $item;
+    $product['total'] = number_format($item['ordered'] * $item['price'], 3);
+
+    try {
+      // Check if we can find a parent SKU for this.
+      $parentSku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
+
+      // We will use the parent SKU name for display.
+      $product['name'] = $parentSku->label();
+
+      // Try to find attributes to display for this product.
+      $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+    }
+    catch (\Exception $e) {
+      // Current SKU seems to be a simple one, we don't need to do anything.
+    }
+
+    $product['image'] = '';
+
+    // Load sku from item_id that we have in $item.
+    $media = alshaya_acm_product_get_sku_media($item['sku']);
+
+    // If we have image for the product.
+    if (!empty($media)) {
+      $image = array_shift($media);
+      $file_uri = $image->getFileUri();
+      $product['image'] = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
+    }
+
+    $products[] = $product;
+  }
+
+  // Get the currency code and position.
+  $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
+  $currencyCodePosition = \Drupal::config('acq_commerce.currency')->get('currency_code_position');
+
+  $build = [];
+
+  $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
+  $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
+  $build['#products'] = $products;
+  // @TODO: MMCPA-641.
+  $build['#delivery_detail_notice'] = t('Your order will be delivered between 1 and 3 days');
+
+  $build['#currency_code'] = $currencyCode;
+  $build['#currency_code_position'] = $currencyCodePosition;
+
+  return $build;
 }
