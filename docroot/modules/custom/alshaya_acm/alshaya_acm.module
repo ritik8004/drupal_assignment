@@ -117,7 +117,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         }
       }
 
-      $image = '';
+      $image = [];
       if (!empty($media)) {
         $image = [
           '#theme' => 'image_style',
