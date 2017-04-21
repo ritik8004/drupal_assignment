@@ -11,7 +11,7 @@
  * @return string
  *   Country code.
  */
-function _get_site_level_country_code() {
+function _alshaya_custom_get_site_level_country_code() {
   $default_site_country = \Drupal::config('system.date')->get('country.default');
   if (empty($default_site_country)) {
     // If no default country is set, take the first as default.

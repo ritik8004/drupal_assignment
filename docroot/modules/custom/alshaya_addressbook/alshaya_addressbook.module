@@ -29,7 +29,7 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
 
   // Get the default country from 'admin/config/regional/settings' site
   // regional settings.
-  $default_site_country = _get_site_level_country_code();
+  $default_site_country = _alshaya_custom_get_site_level_country_code();
 
   // Set the default country.
   $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = $default_site_country;
