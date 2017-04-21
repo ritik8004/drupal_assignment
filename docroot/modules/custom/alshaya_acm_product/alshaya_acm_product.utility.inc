@@ -5,8 +5,10 @@
  * Utility file to expose functions to get data related to product.
  */
 
-use Drupal\node\Entity\Node;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\node\Entity\Node;
 use Drupal\file\Entity\File;
 
 /**
@@ -116,4 +118,104 @@ function alshaya_acm_product_get_parent_sku_by_sku($sku) {
 
   // Return fully load SKU.
   return SKU::load($parentSkuId);
+}
+
+/**
+ * Helper function to get gallery and zoom for particular SKU.
+ *
+ * @param array $build
+ *   Build array to add the gallery and zoom elements to.
+ * @param \Drupal\acq_commerce\SKUInterface $skuEntity
+ *   SKU Entity for which we want to display the media.
+ */
+function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
+
+  // Fetch media.
+  $media = alshaya_acm_product_get_sku_media($skuEntity);
+
+  // Fetch settings.
+  $settings = alshaya_product_zoom_cloudzoom_default_settings();
+  $thumbnail_style = $settings['thumb_style'];
+  $zoom_style = $settings['zoom_style'];
+  $slide_style = $settings['slide_style'];
+
+  // Create our thumbnails to be rendered for zoom.
+  foreach ($media as $delta => $image) {
+    $file_uri = $image->getFileUri();
+    // Show original full image in the modal inside a draggable container.
+    $original_image = $image->url();
+    if ($delta == 0) {
+      $imageZoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+      $imageMedium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+      $main_image = [
+        'zoomurl' => $imageZoom,
+        'mediumurl' => $imageMedium,
+      ];
+    }
+    $imageSmall = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+    $imageZoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+    $imageMedium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+    $thumbnails[] = [
+      'thumburl' => $imageSmall,
+      'mediumurl' => $imageMedium,
+      'zoomurl' => $imageZoom,
+      'fullurl' => $original_image,
+      'type' => 'image',
+    ];
+  }
+  // @TODO: Get video data.
+  $video = [];
+  $videos = [
+    'https://www.youtube.com/embed/Fcnl1UBgECE',
+    'https://www.youtube.com/embed/vm89kGqKqO0',
+  ];
+  foreach ($videos as $video) {
+    if (strpos($video, 'youtube')) {
+      $thumbnails[] = [
+        'thumburl' => 'https://img.youtube.com/vi/' . alshaya_product_zoom_getyoutubeid($video) . '/hqdefault.jpg',
+        'url' => $video,
+        'type' => 'youtube',
+        'width' => 81,
+        'height' => 81,
+      ];
+    }
+    else {
+      $thumbnails[] = [
+        'url' => $video,
+        'type' => 'vimeo',
+        'width' => 81,
+        'height' => 81,
+      ];
+    }
+  }
+
+  $build['gallery'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['gallery-wrapper'],
+    ],
+  ];
+
+  $build['gallery']['product_zoom'] = [
+    '#theme' => 'product_zoom',
+    '#mainImage' => $main_image,
+    '#thumbnails' => $thumbnails,
+    '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
+    '#attached' => [
+      'library' => [
+        'alshaya_product_zoom/product.cloud_zoom',
+      ],
+    ],
+  ];
+
+  $build['gallery']['product_zoom_gallery'] = [
+    '#theme' => 'product_zoom_gallery',
+    '#thumbnails' => $thumbnails,
+    '#attached' => [
+      'library' => [
+        'alshaya_product_zoom/product.product_zoom_gallery',
+      ],
+    ],
+  ];
 }
