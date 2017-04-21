@@ -7,13 +7,13 @@
             <span>{{ name }}</span>
         {% endif %}
         {% if color is not empty %}
-            <span>{{ 'Colour'|t }}: {{ color }}</span>
+            <span>{{ color.label }}: {{ color.value }}</span>
         {% endif %}
         {% if item_code is not empty %}
             <span>{{ 'Item code'|t }}: {{ item_code }}</span>
         {% endif %}
         {% if size is not empty %}
-            <span>{{ 'Size'|t }}: {{ size }}</span>
+            <span>{{ size.label }}: {{ size.value }}</span>
         {% endif %}
         {% if include_in_bundle is not empty %}
             <span>{{ include_in_bundle }}</span>
