@@ -12,6 +12,9 @@
         {% if item_code is not empty %}
             <span>{{ 'Item code'|t }}: {{ item_code }}</span>
         {% endif %}
+        {% if size is not empty %}
+            <span>{{ 'Size'|t }}: {{ size }}</span>
+        {% endif %}
         {% if include_in_bundle is not empty %}
             <span>{{ include_in_bundle }}</span>
         {% endif %}
