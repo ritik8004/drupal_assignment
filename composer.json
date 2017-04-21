@@ -113,6 +113,9 @@
             },
             "drupal/metatag": {
                 "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-9.patch"
+            },
+            "drupal/acquia_connector": {
+                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-2.patch"
             }
         },
         "installer-paths": {
