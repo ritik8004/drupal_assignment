@@ -40,9 +40,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $cart_items = $cart->items();
 
   if (empty($cart_items)) {
-    // Set Form title.
-    $form['#title'] = t("Cart (%count)", ['%count' => 0]);
-
     // Add empty message wrapper container.
     $form['empty'] = [
       '#type' => 'container',
@@ -199,6 +196,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#title' => t('Continue shopping'),
       '#url' => Url::fromRoute('<front>'),
     ];
+
+    unset($form['actions']['update']);
   }
 
   $form['coupon']['#type'] = 'hidden';
@@ -291,7 +290,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $response = new AjaxResponse();
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $form['totals']));
-  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
+  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $cartStorage->getCartItemsCount()])));
 
   return $response;
 }
