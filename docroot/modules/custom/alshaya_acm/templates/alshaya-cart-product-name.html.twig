@@ -6,14 +6,15 @@
         {% if name is not empty %}
             <span>{{ name }}</span>
         {% endif %}
-        {% if color is not empty %}
-            <span>{{ color.label }}: {{ color.value }}</span>
-        {% endif %}
+        {% for sku_attribute in sku_attributes %}
+            <span>
+                {% trans %}
+                {{ sku_attribute.label }}: {{ sku_attribute.value }}
+                {% endtrans %}
+            </span>
+        {% endfor %}
         {% if item_code is not empty %}
             <span>{{ 'Item code'|t }}: {{ item_code }}</span>
-        {% endif %}
-        {% if size is not empty %}
-            <span>{{ size.label }}: {{ size.value }}</span>
         {% endif %}
         {% if include_in_bundle is not empty %}
             <span>{{ include_in_bundle }}</span>

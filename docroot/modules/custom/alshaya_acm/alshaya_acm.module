@@ -99,17 +99,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Load Images.
       $media = alshaya_acm_product_get_sku_media($id);
 
-      $color = $size = '';
-      // Get configurable values.
-      $configurable_values = alshaya_acm_product_get_sku_configurable_values($id);
-      // If color is available.
-      if (isset($configurable_values['attr_color'])) {
-        $color = $configurable_values['attr_color'];
-      }
-      // If size is available.
-      if (isset($configurable_values['attr_size'])) {
-        $size = $configurable_values['attr_size'];
-      }
+      // Get SKU attributes.
+      $sku_attributes = alshaya_acm_product_get_sku_configurable_values($id);
 
       $name = '';
       // Get parent sku of the sku.
@@ -137,8 +128,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       $form['cart'][$id]['name'] = [
         '#theme' => 'alshaya_cart_product_name',
-        '#color' => $color,
-        '#size' => $size,
+        '#sku_attributes' => $sku_attributes,
         '#name' => $name,
         '#image' => $image,
         '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
@@ -383,8 +373,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
     ],
     'alshaya_cart_product_name' => [
       'variables' => [
-        'color' => '',
-        'size' => '',
+        'sku_attributes' => '',
         'item_code' => '',
         'total_price' => '',
         'name' => '',
