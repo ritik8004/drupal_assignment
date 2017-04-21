@@ -449,11 +449,6 @@ class Cart implements CartInterface {
         unset($cart->billing);
       }
 
-      // Update the cart quantity if not set.
-      if (empty($this->cartTotalCount)) {
-        $this->updateCartItemsCount();
-      }
-
       return $this->cart;
     }
     return NULL;
