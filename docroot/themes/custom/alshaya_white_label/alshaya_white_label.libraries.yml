@@ -47,3 +47,10 @@ owlcarousel:
       vendor/css/owl.carousel.css: {}
   js:
     vendor/js/owlcarousel.min.js: {}
+
+select2:
+  css:
+    theme:
+      vendor/css/select2.css: {}
+  js:
+    vendor/js/select2.full.min.js: {}
