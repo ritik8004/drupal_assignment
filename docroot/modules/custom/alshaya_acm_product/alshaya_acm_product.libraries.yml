@@ -1,0 +1,8 @@
+product_view:
+  version: 1.x
+  js:
+    js/alshaya_acm_product.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
