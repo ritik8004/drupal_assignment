@@ -221,7 +221,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
   ];
 }
 
-/*
+/**
  * Utility function to get parent node of the sku.
  *
  * @param mixed $sku
