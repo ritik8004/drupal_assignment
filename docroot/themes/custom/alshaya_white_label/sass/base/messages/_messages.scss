@@ -21,7 +21,7 @@
       width: 26px;
       height: 26px;
       display: inline-block;
-      position: absolute;
+      font-size: 1.6rem;
       margin-#{$right}: 1rem;
       vertical-align: middle;
     }
@@ -35,17 +35,13 @@
     background: $tealish;
     color: $white-five;
 
-    &::before {
-      background: url('../imgs/icons/ic-done.svg');
-    }
+    @include icon(checkshape);
   }
 
   &.messages--warning {
     background: $cherry;
     color: $white-five;
 
-    &::before {
-      background: url('../imgs/icons/error.png');
-    }
+    @include icon(warning);
   }
 }

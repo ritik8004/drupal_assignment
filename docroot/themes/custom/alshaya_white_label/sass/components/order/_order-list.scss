@@ -227,11 +227,15 @@
 }
 
 .no--orders {
-  text-align: center;
   border-top: 1px solid $white;
+  color: $black;
   padding-top: 20px;
   font-size: 14px;
   font-weight: bold;
+
+  @include breakpoint($tablet) {
+    text-align: center;
+  }
 }
 
 .open--accordion {

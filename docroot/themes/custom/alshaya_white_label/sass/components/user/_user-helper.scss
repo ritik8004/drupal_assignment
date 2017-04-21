@@ -1,4 +1,5 @@
-.c-user--node {
+.c-user--node,
+.c-communication-preferences {
   .c-page-title {
     border-bottom: 1px solid $white;
     padding-bottom: 0.75rem;
@@ -18,5 +19,89 @@
 
   .block-local-tasks-block {
     display: none;
+  }
+}
+
+// Dashboard page Sidebar.
+.c-user--node {
+  .c-sidebar-first {
+    @include breakpoint($upto-tablet) {
+      display: block;
+      margin-bottom: 2.6rem;
+
+      .my-account-nav {
+        li:first-child a {
+          text-transform: lowercase;
+          font-family: "alshaya-bold";
+          color: $marine-blue-two;
+          line-height: 1;
+          margin-top: 0;
+          font-size: 1.12rem;
+          border-bottom: 1px solid $white;
+          padding-bottom: 0.7rem;
+          padding-top: 0;
+
+          &::after {
+            content: none;
+          }
+        }
+
+        a {
+          border-bottom: 1px solid $white;
+          display: block;
+          line-height: 1;
+          padding: 1rem 0;
+          position: relative;
+
+          @include icon(chevronright, after) {
+            font-size: 1.9rem;
+            position: absolute;
+            #{right}: 0.7rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
+
+  main {
+    @include breakpoint($upto-tablet) {
+      display: none;
+    }
+  }
+}
+
+.path--profile {
+  .l-two--sf {
+    margin-top: 2.5rem;
+  }
+}
+
+.c-user-login {
+  .c-page-title {
+    top: -5.5rem;
+
+    @include breakpoint($tablet) {
+      top: -6rem;
+    }
+  }
+}
+
+.c-user-register {
+  .c-page-title {
+    top: -5.5rem;
+
+    @include breakpoint($desktop) {
+      top: -1rem;
+    }
+  }
+
+  .c-content__region .user-form {
+    margin-top: -0.5rem;
+
+    @include breakpoint($desktop) {
+      margin-top: -3rem;
+    }
   }
 }
