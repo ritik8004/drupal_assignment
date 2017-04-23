@@ -1,0 +1,64 @@
+.acq-content-product {
+  @extend %clearfix;
+}
+
+.content {
+  &__main {
+    @include breakpoint($desktop) {
+      width: 70%;
+      float: $left;
+    }
+  }
+
+  &__sidebar {
+    @include breakpoint($desktop) {
+      width: 30%;
+      float: $right;
+      padding: 0 1rem;
+    }
+  }
+}
+
+.field--name {
+  &-field-skus {
+    .field {
+      @extend %clearfix;
+
+      padding: 0.5rem 0;
+
+      &__label {
+        font-size: 14px;
+        font-family: $alshaya-bold;
+        color: $peacock-blue;
+        text-transform: lowercase;
+        display: inline;
+      }
+
+      &__item {
+        display: inline;
+      }
+    }
+
+    h2 {
+      font-family: $alshaya-thin;
+      font-size: 18px;
+      font-weight: 100;
+    }
+
+    .sku-base-form {
+      .form-item {
+        padding: 0.5rem 0;
+      }
+
+      input[type="submit"] {
+        font-family: $alshaya-bold;
+        background: $pumpkin-orange;
+        border-radius: 0;
+        color: $white-two;
+        padding: 0.625rem 1.6rem;
+        border: 0;
+        font-size: 0.813rem;
+      }
+    }
+  }
+}

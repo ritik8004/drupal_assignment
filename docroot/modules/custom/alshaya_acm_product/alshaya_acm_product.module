@@ -138,6 +138,26 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           'fullurl' => $original_image,
           'type' => 'image',
         ];
+        $thumbnails[] = [
+          'thumburl' => $imageSmall,
+          'mediumurl' => $imageMedium,
+          'zoomurl' => $imageZoom,
+          'fullurl' => $original_image,
+          'type' => 'image',
+        ];
+        $thumbnails[] = [
+          'thumburl' => $imageSmall,
+          'mediumurl' => $imageMedium,
+          'zoomurl' => $imageZoom,
+          'fullurl' => $original_image,
+          'type' => 'image',
+        ];$thumbnails[] = [
+          'thumburl' => $imageSmall,
+          'mediumurl' => $imageMedium,
+          'zoomurl' => $imageZoom,
+          'fullurl' => $original_image,
+          'type' => 'image',
+        ];
       }
       // @TODO: Get video data.
       $video = [];

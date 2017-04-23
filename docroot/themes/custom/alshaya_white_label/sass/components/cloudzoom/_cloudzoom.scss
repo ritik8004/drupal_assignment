@@ -1,51 +1,61 @@
 .cloudzoom {
-  max-width: 100%;
   @extend %clearfix;
+
+  max-width: 100%;
   display: flex;
   align-items: stretch;
-  .cloudzoom__herocontainer{
+
+  .cloudzoom__herocontainer {
     width: calc(100% - (92px + 1rem));
-    .cloudzoom__image{}
-    .cloudzoom__yt{}
   }
-  .cloudzoom__thumbnails{
+
+  .cloudzoom__thumbnails {
     width: 90px;
     margin-right: 1rem;
 
     .lSSlideWrapper {
-      @include breakpoint($only-tablet){
+      @include breakpoint($only-tablet) {
         height: 442px !important;
       }
+
       .lSSlideOuter {
         top: 50px;
-        .lSSlideWrapper{
-          @include breakpoint($only-tablet){
+
+        .lSSlideWrapper {
+          @include breakpoint($only-tablet) {
             height: 442px !important;
           }
+
           .lSAction {
             display: none !important;
           }
         }
       }
+
       #lightSlider {
         li {
           overflow: hidden;
+
           @include breakpoint($tablet) {
             height: 60px !important;
           }
+
           @include breakpoint($desktop) {
             height: 72px !important;
           }
+
           &.active {
             border: 1px solid;
           }
+
           img {
             width: 100%;
           }
         }
       }
+
       .lSAction {
-        &> a {
+        & > a {
           width: 100%;
           display: block;
           left: 0;
@@ -56,25 +66,28 @@
           margin-left: 0;
           opacity: 1;
         }
-        .lSPrev{
+
+        .lSPrev {
           top: 0;
           background: $white-five url(../imgs/icons/ic-chevron-copy.png) 50% 50% no-repeat;
         }
-        .lSNext{
+
+        .lSNext {
           bottom: 0;
           background: $white-five url(../imgs/icons/ic-chevron-copy-2.png) 50% 50% no-repeat;
         }
       }
     }
   }
+
   .lSPager {
     display: none;
   }
 }
 
 .mobilegallery {
-  &>.lSSlideOuter {
-    &>.lSPager {
+  & > .lSSlideOuter {
+    & > .lSPager {
       display: none;
     }
   }

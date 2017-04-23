@@ -20,7 +20,7 @@
       {% endfor %}
     </ul>
     {% set firstItem =  thumbnails | first %}
-    <div id="full-image-wrapper" class="imagegallery__full" style="width: 600px; height: 600px; overflow: hidden;">
+    <div id="full-image-wrapper" class="imagegallery__full" style="width: 100%; height: 725px; overflow: hidden;">
       {% if firstItem.type == 'youtube' %}
           <img class="imagegallery__full__video" width='{{ firstItem.width }}' height='{{ firstItem.height }}' src="{{ firstItem.thumburl }}"/>
       {% elseif firstItem.type == 'vimeo' %}
@@ -30,6 +30,8 @@
       {% endif %}
     </div>
 
+  </div>
+  <div class="button__wrapper">
     <button class="zoomout">{{ 'Zoom Out'|t }}</button ><button class="zoomin">{{ 'Zoom In'|t }}</button >
   </div>
 </div>

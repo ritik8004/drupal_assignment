@@ -1,0 +1,20 @@
+{%
+set classes = [
+  'node',
+  'node--type-' ~ node.bundle|clean_class,
+  view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+]
+%}
+
+<article{{ attributes }}>
+  <div class="acq-content-product">
+    <div class="content__main">
+      {{ content.product_zoom }}
+      {{ content.product_zoom_gallery }}
+    </div>
+    <div class="content__sidebar">
+      {{ content.field_skus }}
+      {{ content.body }}
+    </div>
+  </div>
+</article>
