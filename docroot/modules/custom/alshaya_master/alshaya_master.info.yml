@@ -10,6 +10,7 @@ dependencies:
   - alshaya_admin
   - alshaya_custom
   - alshaya_i18n
+  - alshaya_search
   - back_to_top
   - block
   - block_content

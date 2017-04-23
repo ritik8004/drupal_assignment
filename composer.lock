@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7cc268c8bd06b97acc9655576f2b8dac",
+    "content-hash": "bb8ca2762e41770384d7432b7265461a",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1533,7 +1533,7 @@
                     "datestamp": "1491851344"
                 },
                 "patches_applied": {
-                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-2.patch"
+                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
