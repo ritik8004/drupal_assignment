@@ -21,15 +21,35 @@
       /**
        * Toggles the footer accordions for desktop.
        */
-      function toggleAccordion() {
-        var desktopView = $(window).width();
-        if (desktopView > 768) {
-          $('.c-footer-is-accordion').accordion('disable');
-          $('.c-footer-is-accordion .ui-accordion-content').show();
+      // function toggleAccordion() {
+      //   var desktopView = $(window).width();
+      //   if (desktopView > 768) {
+      //     $('.c-footer-is-accordion').accordion('disable');
+      //     $('.c-footer-is-accordion .ui-accordion-content').show();
+      //   }
+      //   else {
+      //     $('.c-footer-is-accordion').accordion('enable');
+      //   }
+      // }
+
+      $('.c-footer-is-accordion').each(function () {
+        var contextualLink = $('.c-footer-is-accordion').children('.contextual');
+        if (contextualLink) {
+          $('.c-footer-is-accordion').append(contextualLink);
         }
-        else {
-          $('.c-footer-is-accordion').accordion('enable');
-        }
+      });
+
+      if ($('.c-footer-is-accordion').length) {
+        var accordionHead = $('.c-footer-is-accordion .is-accordion');
+        var accordionBody = $(accordionHead).next();
+
+        $(accordionBody).addClass('accordion--body');
+        $(accordionHead).click(function () {
+          var $ub = $(this).nextAll().stop(true, true).slideToggle();
+          accordionBody.not($ub).hide();
+          $ub.parent().toggleClass('open--accordion');
+          accordionBody.not($ub).parent().removeClass('open--accordion');
+        });
       }
 
       if (context === document) {
@@ -39,16 +59,16 @@
           header: '.c-accordion__title'
         });
 
-        $('.c-footer-is-accordion').accordion({
-          header: 'h2',
-          collapsible: true,
-          active: false
-        });
+        // $('.c-footer-is-accordion').accordion({
+        //   header: 'h2',
+        //   collapsible: true,
+        //   active: false
+        // });
         // Toggle Accordion in desktop & mobile.
-        toggleAccordion();
-        $(window).on('resize', function () {
-          toggleAccordion();
-        });
+        // toggleAccordion();
+        // $(window).on('resize', function () {
+        //   toggleAccordion();
+        // });
 
         if ($('.c-facet__blocks__wrapper').length) {
           var facetBlockWrapper = $('.c-facet__blocks__wrapper').clone(true, true);
@@ -75,6 +95,10 @@
 
         $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
       }
+
+      /**
+      * Toggles the Expand Order Accordions.
+      */
 
       if ($('.recent__orders--list .order-summary-row').length) {
         var parentOrder = $('.recent__orders--list .order-summary-row');

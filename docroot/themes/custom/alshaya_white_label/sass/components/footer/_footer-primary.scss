@@ -76,11 +76,17 @@
 .c-footer-menu--help,
 .c-footer-menu--category {
   display: inline-block;
+  vertical-align: top;
 
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
     font-family: $alshaya-bold;
+    cursor: pointer;
+
+    @include breakpoint($tablet) {
+      pointer-events: none;
+    }
 
     @include breakpoint($only-mobile) {
       margin: 0.938rem 0;
@@ -193,8 +199,9 @@
   }
 
   @include breakpoint($only-tablet) {
-    margin: 12em -13.5em;
-    vertical-align: top;
+    // margin: 12em -13.5em;
+    display: block;
+    // vertical-align: top;
   }
 }
 
@@ -270,6 +277,16 @@
       &.is-active a {
         color: $brownish-grey;
       }
+    }
+  }
+}
+
+.c-footer-is-accordion {
+  & > .contextual + div,
+  & > .contextual + .c-footer-menu,
+  .accordion--body {
+    @include breakpoint($upto-tablet) {
+      display: none;
     }
   }
 }
