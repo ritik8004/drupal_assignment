@@ -38,6 +38,7 @@
 
       $('.hamburger--menu').click(function () {
         $('.main--menu').show();
+        $('html').addClass('html--overlay');
         $('body').addClass('mobile--overlay');
         $('.mobile--close').addClass('block--display');
       });
@@ -69,6 +70,7 @@
         $('.shop').addClass('active');
         $('.account--logged_in').removeClass('active');
         $('.account').removeClass('active');
+        $('html').removeClass('html--overlay');
         $('body').removeClass('mobile--overlay');
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
