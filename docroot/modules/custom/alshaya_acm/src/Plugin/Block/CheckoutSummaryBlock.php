@@ -59,7 +59,21 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
+    // Load the CheckoutFlow plugin.
+    $config = \Drupal::config('acq_checkout.settings');
+    $checkout_flow_plugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
+    $plugin_manager = \Drupal::service('plugin.manager.acq_checkout_flow');
+    $checkout_flow = $plugin_manager->createInstance($checkout_flow_plugin, []);
+
+    // Get the current step.
+    $current_step_id = $checkout_flow->getStepId();
+
+    if ($current_step_id == 'login' || $current_step_id == 'confirmation') {
+      return [];
+    }
+
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
     $cart = $this->cartStorage->getCart();
     $items = $cart->items();
 

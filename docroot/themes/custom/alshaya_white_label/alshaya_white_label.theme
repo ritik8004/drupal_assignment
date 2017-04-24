@@ -341,11 +341,6 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
-  // Check if we are on search page.
-  if ($routmatch->getRouteName() == 'view.search.page') {
-    $suggestions[] = 'page__search';
-  }
-
   // Check if we are on node page.
   if ($routmatch->getRouteName() == 'entity.node.canonical') {
     $node = Drupal::request()->attributes->get('node');
@@ -354,11 +349,6 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     if ($node->bundle() == 'department_page') {
       $suggestions[] = 'page__department';
     }
-  }
-
-  // If checkout page for user.
-  if ($routmatch->getRouteName() == 'acq_checkout.form') {
-    $suggestions[] = 'page__checkout';
   }
 
   if (\Drupal::service('path.matcher')->isFrontPage()) {

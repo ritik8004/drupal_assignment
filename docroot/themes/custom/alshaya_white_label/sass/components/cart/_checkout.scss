@@ -541,3 +541,18 @@
     margin-top: 37px;
   }
 }
+
+.l-two--sf.checkout {
+  main {
+    float: $left;
+  }
+
+  .c-sidebar-second {
+    width: 291px;
+    float: $right;
+
+    .c-sidebar-second__region {
+      padding-left: 0;
+    }
+  }
+}
