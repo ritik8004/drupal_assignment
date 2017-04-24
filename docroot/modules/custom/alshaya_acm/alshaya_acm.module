@@ -290,7 +290,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $response = new AjaxResponse();
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $form['totals']));
-  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $cartStorage->getCartItemsCount()])));
+  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
 
   return $response;
 }
