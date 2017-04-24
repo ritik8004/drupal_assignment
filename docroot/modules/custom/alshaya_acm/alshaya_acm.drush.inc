@@ -62,6 +62,16 @@ function drush_alshaya_acm_offline_products_sync() {
   $limit = (int) drush_get_option('limit');
   if ($limit) {
     $_alshaya_acm_products = array_slice($_alshaya_acm_products, 0, $limit);
+
+    // Remove "Default Category" from product categories.
+    foreach ($_alshaya_acm_products as $key => $_alshaya_acm_product) {
+      if (isset($_alshaya_acm_product['categories'])) {
+        $default_cat_key = array_search(2, $_alshaya_acm_product['categories']);
+        if ($default_cat_key) {
+          unset($_alshaya_acm_products[$key]['categories'][$default_cat_key]);
+        }
+      }
+    }
   }
 
   $resource->post($_alshaya_acm_products);
