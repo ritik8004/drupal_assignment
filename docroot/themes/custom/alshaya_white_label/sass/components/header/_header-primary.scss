@@ -617,7 +617,7 @@ header {
   }
 
   .mobile--overlay {
-    overflow-y: hidden;
+    overflow: hidden;
 
     &::before {
       content: '';
@@ -903,5 +903,9 @@ header {
   a {
     display: block;
   }
+}
+
+.html--overlay {
+  overflow: hidden;
 }
 
