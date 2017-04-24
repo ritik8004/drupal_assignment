@@ -313,6 +313,7 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
         $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
         $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
       }
+      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
       break;
   }
 }
