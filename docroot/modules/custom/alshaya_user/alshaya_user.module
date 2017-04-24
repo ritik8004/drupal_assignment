@@ -148,7 +148,7 @@ function alshaya_user_preprocess_menu(&$variables) {
     // Loop through all the links.
     foreach ($variables['items'] as $key => &$item) {
       // We want to process only the register link.
-      if ($item['url']->getRouteName() == 'user.register') {
+      if ($item['url']->getRouteName() == 'user.register' || $item['url']->getRouteName() == 'user.login') {
         // Hide the register link for authenticated user.
         unset($variables['items'][$key]);
       }
