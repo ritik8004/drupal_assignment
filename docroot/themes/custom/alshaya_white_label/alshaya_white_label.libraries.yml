@@ -42,6 +42,12 @@ sell:
     - core/jquery
     - alshaya_white_label/owlcarousel
 
+autosize_textarea:
+  js:
+    js/autosize_textarea.js: {}
+  dependencies:
+    - alshaya_white_label/autosize
+
 owlcarousel:
   css:
     theme:
@@ -55,3 +61,7 @@ select2:
       vendor/css/select2.css: {}
   js:
     vendor/js/select2.full.min.js: {}
+
+autosize:
+  js:
+    vendor/js/autosize.min.js: {}
