@@ -72,7 +72,8 @@ header {
     }
   }
 
-  #block-alshaya-white-label-search {
+  #block-alshaya-white-label-search,
+  .block-views-exposed-filter-blocksearch-page {
     text-align: center;
 
     @include breakpoint($only-tablet) {
@@ -200,7 +201,8 @@ header {
 .c-menu-primary {
   display: none;
 
-  #block-exposedformsearchpage {
+  #block-exposedformsearchpage,
+  .block-views-exposed-filter-blocksearch-page {
     display: none;
 
     label {
