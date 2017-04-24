@@ -1,33 +1,37 @@
-<div id="product-image-gallery-container" style="display: none;">
-  <ul id="product-image-gallery">
-    {% for thumbs in thumbnails %}
-      {% if thumbs.type == 'youtube' %}
-        <li data-iframe="{{ thumbs.url }}" class="youtube">
-          <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
-        </li>
-      {% elseif thumbs.type == 'vimeo' %}
-        <li data-iframe="{{ thumbs.url }}" class="vimeo">
-          <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
-        </li>
+<div id="product-image-gallery-container" class="imagegallery" style="display: none;">
+  <div class="imagegallery__wrapper">
+    <ul id="product-image-gallery" class="imagegallery__thumbnails">
+      {% for thumbs in thumbnails %}
+        {% if thumbs.type == 'youtube' %}
+          <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video youtube">
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+          </li>
+        {% elseif thumbs.type == 'vimeo' %}
+          <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video vimeo">
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
+          </li>
+        {% else %}
+          <li>
+            <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
+              <img src="{{ thumbs.thumburl }}"/>
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    {% set firstItem =  thumbnails | first %}
+    <div id="full-image-wrapper" class="imagegallery__full" style="width: 100%; height: 725px; overflow: hidden;">
+      {% if firstItem.type == 'youtube' %}
+          <img class="imagegallery__full__video" width='{{ firstItem.width }}' height='{{ firstItem.height }}' src="{{ firstItem.thumburl }}"/>
+      {% elseif firstItem.type == 'vimeo' %}
+          <img class="imagegallery__full__video" width='{{ firstItem.width }}' height='{{ firstItem.height }}' src=""/>
       {% else %}
-        <li>
-          <a href="{{ thumbs.fullurl }}" class="a-gallery">
-            <img src="{{ thumbs.thumburl }}"/>
-          </a>
-        </li>
+          <img class="imagegallery__full__image" style="max-width: none;" id="full-image" src="{{ firstItem.fullurl }}"/>
       {% endif %}
-    {% endfor %}
-  </ul>
-  {% set firstItem =  thumbnails | first %}
-  <div id="full-image-wrapper" style="width: 600px; height: 600px; overflow: hidden;">
-    {% if firstItem.type == 'youtube' %}
-        <img width='{{ firstItem.width }}' height='{{ firstItem.height }}' src="{{ firstItem.thumburl }}"/>
-    {% elseif firstItem.type == 'vimeo' %}
-        <img width='{{ firstItem.width }}' height='{{ firstItem.height }}' src=""/>
-    {% else %}
-        <img style="max-width: none;" id="full-image" src="{{ firstItem.fullurl }}"/>
-    {% endif %}
-  </div>
+    </div>
 
-  <button class="zoomout">{{ 'Zoom Out'|t }}</button ><button class="zoomin">{{ 'Zoom In'|t }}</button >
+  </div>
+  <div class="button__wrapper">
+    <button class="zoomout"></button ><button class="zoomin"></button >
+  </div>
 </div>
