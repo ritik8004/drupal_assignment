@@ -26,10 +26,10 @@ display:
       cache:
         type: search_api_time
         options:
-          results_lifespan: '3600'
-          results_lifespan_custom: '0'
-          output_lifespan: '3600'
-          output_lifespan_custom: '0'
+          results_lifespan: 3600
+          results_lifespan_custom: 0
+          output_lifespan: 3600
+          output_lifespan_custom: 0
       query:
         type: views_query
         options:
@@ -216,9 +216,10 @@ display:
       display_extenders: {  }
       title: Search
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_interface'
+        - url
         - url.query_args
       tags: {  }
   page:
@@ -231,8 +232,9 @@ display:
       path: search
       exposed_block: true
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_interface'
+        - url
         - url.query_args
       tags: {  }

@@ -1,5 +1,2 @@
 bundle: alshaya
-excluded:
-  - block.block.alshaya_white_label_search
-  - block.block.cog_search
 required: true

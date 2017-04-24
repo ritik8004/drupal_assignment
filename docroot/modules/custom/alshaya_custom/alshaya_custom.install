@@ -82,13 +82,11 @@ function alshaya_custom_modules_installed($modules) {
     ->set('region', '-1')
     ->save();
 
-  // Set search block to available on all pages.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')->set('visibility', [])->save();
-
   // Set the block configuration settings for system branding block.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_branding')
     ->set('settings.use_site_name', FALSE)
     ->set('settings.use_site_slogan', FALSE)
+    ->set('weight', '-23')
     ->save();
 
   // Set visitor user registration.

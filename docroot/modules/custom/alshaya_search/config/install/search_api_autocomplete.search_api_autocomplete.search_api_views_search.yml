@@ -1,16 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - field.storage.node.field_category
-    - field.storage.node.field_skus
-    - search_api.server.solr
-  module:
-    - acq_sku
-    - file
-    - node
-    - search_api
-    - taxonomy
+dependencies: {  }
 id: search_api_views_search
 label: search_api_views_search
 index_id: product
