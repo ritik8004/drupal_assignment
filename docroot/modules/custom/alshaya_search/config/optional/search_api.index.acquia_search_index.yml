@@ -50,8 +50,9 @@ field_settings:
 datasource_settings:
   'entity:node':
     bundles:
-      default: true
-      selected: {  }
+      default: false
+      selected:
+        - acq_product
     languages:
       default: true
       selected: {  }
