@@ -805,6 +805,10 @@ header {
 }
 
 .toggle--sign {
+  @include breakpoint($only-mobile) {
+    color: $black;
+  }
+
   position: fixed;
   top: 0;
   width: 80%;
@@ -813,6 +817,10 @@ header {
   display: table;
 
   .one {
+    @include breakpoint($only-tablet) {
+      font-family: $alshaya-bold;
+    }
+
     font-family: $alshaya-thin;
     font-size: 14px;
     padding: 1rem 2rem;
