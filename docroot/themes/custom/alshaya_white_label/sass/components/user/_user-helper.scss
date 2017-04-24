@@ -56,7 +56,7 @@
           @include icon(chevronright, after) {
             font-size: 1.9rem;
             position: absolute;
-            #{right}: 0.7rem;
+            #{$right}: 0.7rem;
             top: 50%;
             transform: translateY(-50%);
           }

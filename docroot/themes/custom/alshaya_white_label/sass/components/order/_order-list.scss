@@ -216,6 +216,28 @@
   .order-item-row {
     display: none;
   }
+
+  .total--price {
+    @include breakpoint($only-tablet) {
+      vertical-align: bottom;
+    }
+  }
+
+  .order-item-row {
+    td .tablet-only {
+      margin-top: 32px;
+    }
+  }
+
+  .order__detail--link {
+    td.tablet-only {
+      @include breakpoint($only-tablet) {
+        margin-top: 0;
+        width: 100%;
+        display: table-cell;
+      }
+    }
+  }
 }
 
 .block-alshaya-acm-customer > a {
@@ -238,17 +260,15 @@
   }
 }
 
-.no--orders--shop {
+.block-alshaya-acm-customer > .no--orders + a {
+  @extend %button-wide;
+
+  display: block;
+  max-width: 19rem;
+  margin: auto;
   margin-top: 1.75rem;
-
-  a {
-    @extend %button-wide;
-
-    display: block;
-    max-width: 19rem;
-    margin: auto;
-    text-transform: lowercase;
-  }
+  position: static;
+  text-transform: lowercase;
 }
 
 .open--accordion {
