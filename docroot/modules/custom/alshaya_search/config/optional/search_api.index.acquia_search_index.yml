@@ -1,0 +1,76 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - field.storage.node.field_skus
+    - search_api.server.acquia_search_server
+  module:
+    - acq_sku
+    - search_api
+    - node
+id: acquia_search_index
+name: 'Acquia Search Solr Index'
+description: ''
+read_only: false
+field_settings:
+  body:
+    label: Body
+    datasource_id: 'entity:node'
+    property_path: body
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.body
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
+  color:
+    label: Color
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_color'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  price:
+    label: Price
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:price'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - acq_product
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  rendered_item: {  }
+  aggregated_field: {  }
+  add_url:
+    plugin_id: add_url
+    settings: {  }
+tracker_settings:
+  default: {  }
+options:
+  index_directly: false
+  cron_limit: 50
+  processors:
+    language:
+      status: '1'
+      weight: -50
+      settings: {  }
+      processorPluginId: language
+server: acquia_search_server

@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_search_views_pre_render(ViewExecutable $view) {
+  if ($view->id() == 'search') {
+    $view->setTitle('Search results for "' . $view->getExposedInput()['keywords'] . '"');
+  }
+}

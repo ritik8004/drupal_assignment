@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.product
+    - search_api.index.acquia_search_index
     - views.view.search
   module:
     - search_api
@@ -12,7 +12,7 @@ url_alias: color
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: attr_color
+field_identifier: color
 facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: checkbox
