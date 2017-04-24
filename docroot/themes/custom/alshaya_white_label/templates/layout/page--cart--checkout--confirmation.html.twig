@@ -1,4 +1,4 @@
-{% set attributes = attributes.addClass('user-page', 'l-one--w', 'checkout-login') %}
+{% set attributes = attributes.addClass('user-page', 'l-one--w', 'checkout-login', 'order-confirmation') %}
 <div>
 
     <!-- ______________________ BREADCRUMB _______________________ -->
@@ -18,7 +18,11 @@
 
     <div class="clearfix page-wrapper">
         <div{{ attributes.addClass('l-container') }}>
-
+          <h1 class="site-brand-home">
+            <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
+              <img src="/themes/custom/alshaya_white_label/mothercare-logo.svg" alt="{{ 'Home'|t }}"/>
+            </a>
+          </h1>
             <main>
 
                 <div class="c-content">
