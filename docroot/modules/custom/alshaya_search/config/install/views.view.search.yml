@@ -75,7 +75,13 @@ display:
       row:
         type: search_api
         options:
-          view_modes: {  }
+          view_modes:
+            'entity:node':
+              acq_product: search_result
+              advanced_page: default
+              department_page: default
+              page: default
+              store: default
       fields:
         rendered:
           table: search_api_index_acquia_search_index
