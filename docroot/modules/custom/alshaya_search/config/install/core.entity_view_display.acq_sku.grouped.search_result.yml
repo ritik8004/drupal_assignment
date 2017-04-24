@@ -24,7 +24,7 @@ content:
     type: image
     weight: 0
     settings:
-      image_style: ''
+      image_style: 291x288
       image_link: ''
     third_party_settings: {  }
   price:

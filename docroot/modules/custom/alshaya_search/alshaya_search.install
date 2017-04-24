@@ -19,7 +19,6 @@ function alshaya_search_install() {
       ->getEditable('search_api.index.acquia_search_index')
       ->setData($search_api_index)
       ->save();
-
   }
   else {
     // Enable Solr Server and Index.

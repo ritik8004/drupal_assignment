@@ -66,12 +66,6 @@ function alshaya_custom_modules_installed($modules) {
     return;
   }
 
-  // Set the 'header' region.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_search')
-    ->set('region', 'header')
-    ->set('weight', 6)
-    ->save();
-
   // Unset the Block.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_powered')
     ->set('region', '-1')
