@@ -1,0 +1,132 @@
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
+index ae18eb4..7e195c1 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
+@@ -5,6 +5,8 @@
+  * Provides drush commands for the products of Acquia Commerce connector.
+  */
+ 
++const DELETE_BATCH_COUNT = 1000;
++
+ /**
+  * Implements hook_drush_command().
+  */
+@@ -27,6 +29,14 @@ function acq_sku_drush_command() {
+     ],
+   ];
+ 
++  $commands['clean-synced-data'] = [
++    'description' => 'Flush all commerce data from the site (Products, SKUs and Product Categories).',
++    'aliases'     => ['accd'],
++    'examples'    => [
++      'drush acsc' => 'Flush all commerce data from the site (Products, SKUs and Product Categories).',
++    ],
++  ];
++
+   return ($commands);
+ }
+ 
+@@ -48,3 +58,103 @@ function drush_acq_sku_sync_commerce_cats() {
+   $container->get('acq_sku.category_manager')->synchronizeTree('acq_product_category');
+   drush_print(dt('Done.'));
+ }
++
++/**
++ * Implements drush clean synced data command.
++ */
++function drush_acq_sku_clean_synced_data() {
++  if (!drush_confirm(dt("Are you sure you want to clean commerce data (Products, SKUs and Product Categories)?"))) {
++    return drush_user_abort();
++  }
++  drush_print(dt('Cleaning synced commerce data (Products, SKUs and Product Categories), please wait...'));
++
++  // Set batch operation.
++  $batch = [
++    'title' => t('Clean synced data'),
++    'init_message' => t('Cleaning synced commerce data starting...'),
++    'operations' => [
++      ['_acq_sku_clean_process', []],
++    ],
++    'progress_message' => t('Processed @current out of @total.'),
++    'error_message' => t('Synced data could not be cleaned because an error occurred.'),
++    'finished' => '_acq_sku_clean_finished',
++  ];
++
++  batch_set($batch);
++  drush_backend_batch_process();
++  drush_print(dt('Synced commerce data cleaned.'));
++}
++
++/**
++ * Function to process entity delete operation.
++ *
++ * @param mixed|array $context
++ *   The batch current context.
++ */
++function _acq_sku_clean_process(&$context) {
++  // Use the $context['sandbox'] at your convenience to store the
++  // information needed to track progression between successive calls.
++  if (empty($context['sandbox'])) {
++    // Get all the entities that need to be deleted.
++    $context['sandbox']['results'] = [];
++
++    // Get all acq_product entities.
++    $query = \Drupal::entityQuery('node');
++    $query->addTag('node');
++    $query->condition('type', 'acq_product');
++    $product_entities = $query->execute();
++    foreach ($product_entities as $product_entity) {
++      $context['sandbox']['results'][] = [$product_entity, 'node'];
++    }
++
++    // Get all acq_sku entities.
++    $query = \Drupal::entityQuery('acq_sku');
++    $sku_entities = $query->execute();
++    foreach ($sku_entities as $sku_entity) {
++      $context['sandbox']['results'][] = [$sku_entity, 'acq_sku'];
++    }
++
++    // Get all acq_product_category entities.
++    $query = \Drupal::entityQuery('taxonomy_term');
++    $query->condition('vid', 'acq_product_category');
++    $cat_entities = $query->execute();
++    foreach ($cat_entities as $cat_entity) {
++      $context['sandbox']['results'][] = [$cat_entity, 'taxonomy_term'];
++    }
++
++    $context['sandbox']['progress'] = 0;
++    $context['sandbox']['current_id'] = 0;
++    $context['sandbox']['max'] = count($context['sandbox']['results']);
++  }
++
++  $results = [];
++  if (isset($context['sandbox']['results']) && !empty($context['sandbox']['results'])) {
++    $results = $context['sandbox']['results'];
++  }
++
++  $results = array_slice($results, isset($context['sandbox']['current']) ? $context['sandbox']['current'] : 0, DELETE_BATCH_COUNT);
++
++  foreach ($results as $key => $result) {
++    $context['results'][] = $results[0] . ' : ' . $result[1];
++    $context['sandbox']['progress']++;
++    $context['sandbox']['current_id'] = $result[0];
++    $context['message'] = 'Deleting ' . $result[1] . ':' . $result[0];
++
++    // Load the entity.
++    $entity = \Drupal::entityTypeManager()->getStorage($result[1])->load($result[0]);
++    if ($entity) {
++      try {
++        // Delete entity.
++        $entity->delete();
++      }
++      catch (\Exception $e) {
++        \Drupal::logger('acq_sku')->error($e->getMessage());
++      }
++    }
++    // Update our progress information.
++    $context['sandbox']['current']++;
++  }
++  if ($context['sandbox']['progress'] !== $context['sandbox']['max']) {
++    $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
++  }
++}
