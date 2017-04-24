@@ -126,6 +126,19 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ];
       }
 
+      // TODO: Get delivery options from conductor.
+      $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
+      $product_delivery_options .= '<div class="tooltip--wrap">';
+      $product_delivery_options .= '<div class="contains--tooltip">';
+      $product_delivery_options .= '<p class="home-delivery tooltip--head">' . t('Home Delivery') . '</p>';
+      $product_delivery_options .= '<p class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<p>';
+      $product_delivery_options .= '</div>';
+      $product_delivery_options .= '<div class="contains--tooltip">';
+      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click and Collect') . '</p>';
+      $product_delivery_options .= '<p class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</p>';
+      $product_delivery_options .= '</div>';
+      $product_delivery_options .= '</div>';
+
       $form['cart'][$id]['name'] = [
         '#theme' => 'alshaya_cart_product_name',
         '#sku_attributes' => $sku_attributes,
@@ -134,18 +147,11 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
         '#item_code' => $id,
         '#include_in_bundle' => t('Items included in bundle'),
+        '#available_delivery_methods' => [
+          '#markup' => $product_delivery_options,
+        ],
       ];
 
-      // TODO: Get delivery options from conductor.
-      $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
-      $product_delivery_options .= '<div>';
-      $product_delivery_options .= '<span class="home-delivery">' . t('Home Delivery') . '</span>';
-      $product_delivery_options .= '<span class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<span>';
-      $product_delivery_options .= '</div>';
-      $product_delivery_options .= '<div>';
-      $product_delivery_options .= '<span class="click-collect">' . t('Click and Collect') . '</span>';
-      $product_delivery_options .= '<span class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</span>';
-      $product_delivery_options .= '</div>';
       $form['cart'][$id]['delivery_options'] = [
         '#markup' => $product_delivery_options,
       ];
@@ -153,8 +159,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Adding class attribute to columns for mobile view.
       $form['cart'][$id]['quantity']['#wrapper_attributes'] = ['class' => ['quantity']];
       $form['cart'][$id]['name']['#wrapper_attributes'] = ['class' => ['name']];
-      $form['cart'][$id]['sub_total']['#wrapper_attributes'] = ['class' => ['subtotal']];
-      $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price']];
+      $form['cart'][$id]['sub_total']['#wrapper_attributes'] = [
+        'class' => [
+          'subtotal',
+          'blend',
+          'dark',
+        ],
+      ];
+      $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price dark']];
       $form['cart'][$id]['delivery_options']['#wrapper_attributes'] = ['class' => ['delivery-option']];
     }
   }
@@ -177,6 +189,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['promotion_code_wrapper'] = [
     '#type' => 'details',
     '#title' => t('Add a promo code'),
+    '#prefix' => '<div class="promo-continue-shopping-wrapper">',
   ];
 
   $form['promotion_code_wrapper']['promotion'] = [
@@ -192,6 +205,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#title' => t('Continue shopping'),
       '#url' => Url::fromRoute('<front>'),
       '#weight' => 4,
+      '#suffix' => '</div>',
     ];
 
     // Add continue shopping link, that redirect user to homepage.
@@ -379,6 +393,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'name' => '',
         'image' => '',
         'include_in_bundle' => '',
+        'available_delivery_methods' => '',
       ],
     ],
   ];

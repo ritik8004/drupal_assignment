@@ -302,6 +302,10 @@
   background: $white-three;
   padding: 1.563rem 1.25rem;
 
+  table {
+    width: 100%;
+  }
+
   .sub-total,
   .order-total {
     > span {
@@ -328,32 +332,48 @@
 
 // Items in the cart page.
 
-.alias--cart {
-  @include breakpoint($only-mobile) {
-    #edit-actions {
-      display: block;
-      float: none;
-      margin-right: 0;
-    }
-  }
-
-  .page-standard {
-    max-width: 1236px !important;
+body.alias--cart {
+  .page-standard.l-container {
+    max-width: 19rem;
     margin: auto;
     margin-top: 2rem;
+
+    @include breakpoint($tablet) {
+      max-width: 45rem;
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 77.25rem;
+    }
 
     #edit-actions {
       clear: both;
       float: $right;
       display: inline-grid;
-      margin-right: 4rem;
       margin-bottom: 1rem;
-    }
 
-    #edit-continue-shopping {
-      width: 100%;
+      @include breakpoint($upto-tablet) {
+        display: block;
+        float: none;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 5.2rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: 16.8rem;
+      }
+    }
+  }
+}
+
+.alias--cart {
+  @include breakpoint($only-mobile) {
+    #edit-actions {
       display: block;
-      text-align: center;
+      float: none;
+      margin-#{$right}: 0;
     }
   }
 
@@ -381,13 +401,11 @@
       background: $white-three;
 
       th {
-        font-size: 14px;
         font-weight: normal;
       }
     }
 
     tr {
-      display: flex;
       border-bottom: 1px solid $white;
 
       td {
@@ -408,21 +426,82 @@
         }
       }
 
-      td,
       th {
-        flex: 1;
-        text-align: left;
-        padding: 0.93rem 1.563rem;
+        padding: 1rem;
+        padding-#{$right}: 0.5rem;
+        text-align: $left;
+
+        @include breakpoint($desktop) {
+          padding: 1.06rem 1.5rem 0.88rem;
+        }
       }
 
       td {
-        &:last-child {
-          background: $white-four;
+        text-align: $left;
+        padding: 1rem;
+        vertical-align: top;
+
+        @include breakpoint($desktop) {
+          padding: 1.5rem;
+        }
+
+        &.quantity {
+          @include breakpoint($upto-tablet) {
+            padding: 0 1rem;
+            float: $right;
+
+            a {
+              width: auto;
+              line-height: 35px;
+              margin-#{$left}: 13px;
+            }
+          }
+        }
+      }
+
+      td.name {
+        width: 18.75rem;
+        padding-right: 4px;
+
+        @include breakpoint($desktop) {
+          width: 25rem;
+        }
+      }
+
+      td.blend {
+        background: $white-four;
+        width: 7.06rem;
+
+        @include breakpoint($tablet) {
+          background: $white-smoke-light;
+        }
+
+        @include breakpoint($desktop) {
+          width: 10.8rem;
+        }
+      }
+
+      td.delivery-option {
+        clear: both;
+
+        @include breakpoint($upto-tablet) {
+          font-size: 10px;
+        }
+
+        @include breakpoint($tablet) {
+          width: 7.6rem;
+          padding-left: 0.63rem;
+          padding-right: 0;
+        }
+
+        @include breakpoint($desktop) {
+          width: 16.8rem;
+          padding: 1rem
         }
       }
 
       th {
-        &:last-child {
+        &:nth-child(4) {
           background: $white-two;
         }
       }
@@ -436,7 +515,15 @@
       }
 
       img {
-        width: 30%;
+        max-width: 8rem;
+
+        @include breakpoint($tablet) {
+          max-width: 7.125rem;
+        }
+
+        @include breakpoint($desktop) {
+          max-width: 8.56rem;
+        }
       }
 
       a {
@@ -450,33 +537,86 @@
         -webkit-appearance: none;
         border: 1px solid $white-two;
         border-radius: 0;
+        background-color: #fff;
         padding: 0.5rem 3.2rem 0.5rem 0.625rem;
+        width: 70px;
+        height: 35px;
+        font-size: 12px;
+        outline: none;
       }
 
       .form-type-select {
-        margin-bottom: 1rem;
+        width: 70px;
+        margin-bottom: 0.75rem;
+        position: relative;
 
-        &::after {
-          content: '';
+        @include icon(chevrondown, after) {
+          border-#{$left}: 1px solid $white;
+          font-size: 28px;
+          line-height: 35px;
+          pointer-events: none;
           position: absolute;
+          right: 0;
+          top: 0;
+          text-align: center;
+          background-color: $white-two;
+          width: 35px;
         }
       }
     }
   }
 
   #table-cart-totals {
-    float: $right;
     font-size: 14px;
 
+    @include breakpoint($tablet) {
+      float: $right;
+      margin-#{$right}: 7.6rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 16.8rem;
+    }
+
+    table {
+      width: 100%;
+    }
+
+    td {
+      @include breakpoint($tablet) {
+        text-align: $right;
+      }
+    }
+
     td:last-child {
-      background: #f7f7f7;
+      background: $white-four;
+      color: $black;
       margin-left: 1rem;
-      padding: 1rem 13.84rem;
-      padding-left: 1rem;
+      padding: 1rem;
+      text-align: $left;
+    }
+
+    tr:last-child {
+      td:first-child span {
+        display: block;
+        font-size: 12px;
+      }
+
+      td:nth-child(2) {
+        background-color: $whisper-light;
+        font-weight: bold;
+      }
     }
 
     tr > td {
-      padding-right: 1rem;
+      @include breakpoint($tablet) {
+        padding-right: 1rem;
+        width: 7.06rem;
+      }
+
+      @include breakpoint($desktop) {
+        width: 10.8rem;
+      }
     }
   }
 
@@ -487,12 +627,42 @@
     background: $pumpkin-orange;
     margin-top: 1em;
     margin-bottom: 12px;
+
+    @include breakpoint($upto-tablet) {
+      display: block;
+      width: 100%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 10.8rem;
+    }
+  }
+
+  #edit-continue-shopping,
+  #edit-continue-shopping-mobile {
+    font-size: 12px;
+    border: 1px solid $marine-blue-two;
+    display: block;
+    padding: 0.625rem 1.6rem;
+    text-align: center;
+
+    @include breakpoint($tablet) {
+      max-width: 173px;
+    }
   }
 
   #edit-continue-shopping {
-    font-size: 12px;
-    border: 1px solid $marine-blue-two;
-    padding: 0.625rem 1.6rem;
+    margin-top: 16px;
+
+    @include breakpoint($upto-tablet) {
+      display: none;
+    }
+  }
+
+  #edit-continue-shopping-mobile {
+    @include breakpoint($tablet) {
+      display: none;
+    }
   }
 }
 
@@ -513,10 +683,10 @@
 
   a {
     margin: auto;
-    max-width: 304px;
+    max-width: 19rem;
 
     @include breakpoint($tablet) {
-      max-width: 173px;
+      max-width: 10.81rem;
     }
   }
 

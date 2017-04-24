@@ -92,6 +92,14 @@
           listOrder.not($ub).parent().removeClass('open--accordion');
         });
       }
+
+      if ($('.contains--tooltip').length) {
+        var element = $('.contains--tooltip .tooltip--head');
+
+        $(element).click(function () {
+          $(this).next('.tooltip').toggle();
+        });
+      }
     }
   };
 
