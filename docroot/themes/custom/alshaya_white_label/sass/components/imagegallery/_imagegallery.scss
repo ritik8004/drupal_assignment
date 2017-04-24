@@ -1,9 +1,9 @@
 .imagegallery {
   &__wrapper {
-    @extend %clearfix;
+    @include clearfix;
+    @include u-visibility(flex);
 
     max-width: 100%;
-    display: flex;
     align-items: stretch;
 
     & > .lSSlideOuter {
@@ -24,7 +24,7 @@
             }
 
             .lSAction {
-              display: none !important;
+              @include u-visibility(none, true);
             }
           }
         }
@@ -53,8 +53,9 @@
 
         .lSAction {
           & > a {
+            @include u-visibility(block);
+
             width: 100%;
-            display: block;
             left: 0;
             height: 42px;
             cursor: pointer;
@@ -62,16 +63,22 @@
             margin-top: 0;
             margin-left: 0;
             opacity: 1;
+            text-align: center;
+            font-size: 36px;
           }
 
           .lSPrev {
+            @include icon(chevronup);
+
             top: 0;
-            background: $white-five url(../imgs/icons/ic-chevron-copy.png) 50% 50% no-repeat;
+            background-color: $white-five;
           }
 
           .lSNext {
+            @include icon(chevrondown);
+
             bottom: 0;
-            background: $white-five url(../imgs/icons/ic-chevron-copy-2.png) 50% 50% no-repeat;
+            background-color: $white-five;
           }
         }
       }
@@ -98,37 +105,33 @@
     .zoomin {
       font-family: $alshaya-thin;
       cursor: pointer;
-      padding: 20px;
-      border-radius: 30px;
-      background: #e5e5e5;
-      border: 0;
-      font-size: 0;
-      color: transparent;
-      text-indent: -9999em;
+      border-radius: 35px;
+      border: none;
+      font-size: 24px;
     }
 
     .zoomout {
-      background: url(../imgs/icons/minus.png);
-      background-size: contain;
+      @include icon(search);
     }
 
     .zoomin {
-      background: url(../imgs/icons/plus.png);
-      background-size: contain;
+      @include icon(zoom);
     }
   }
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
+  @include icon(close);
+
   position: absolute;
   right: 0;
   top: 50%;
-  width: 20px;
+  width: 30px;
   margin: -10px 0 0 0;
-  padding: 20px;
-  height: 20px;
+  height: 30px;
   border: none;
   z-index: 9;
-  background: $marine-blue url(../imgs/icons/close.png);
-  background-size: cover;
+  font-size: 30px;
+  color: $white-two;
+  background-color: $marine-blue;
 }

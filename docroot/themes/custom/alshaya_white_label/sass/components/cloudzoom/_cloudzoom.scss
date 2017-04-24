@@ -1,8 +1,8 @@
 .cloudzoom {
-  @extend %clearfix;
+  @include clearfix;
+  @include u-visibility(flex);
 
   max-width: 100%;
-  display: flex;
   align-items: stretch;
 
   .cloudzoom__herocontainer {
@@ -19,20 +19,20 @@
       }
 
       .lSSlideOuter {
-        top: 50px;
-
         .lSSlideWrapper {
           @include breakpoint($only-tablet) {
             height: 442px !important;
           }
 
           .lSAction {
-            display: none !important;
+            @include u-visibility(none, true);
           }
         }
       }
 
       #lightSlider {
+        margin-top: 50px;
+
         li {
           overflow: hidden;
 
@@ -65,30 +65,36 @@
           margin-top: 0;
           margin-left: 0;
           opacity: 1;
+          text-align: center;
+          font-size: 36px;
         }
 
         .lSPrev {
+          @include icon(chevronup);
+
           top: 0;
-          background: $white-five url(../imgs/icons/ic-chevron-copy.png) 50% 50% no-repeat;
+          background-color: $white-five;
         }
 
         .lSNext {
+          @include icon(chevrondown);
+
           bottom: 0;
-          background: $white-five url(../imgs/icons/ic-chevron-copy-2.png) 50% 50% no-repeat;
+          background-color: $white-five;
         }
       }
     }
   }
 
   .lSPager {
-    display: none;
+    @include u-visibility(none);
   }
 }
 
 .mobilegallery {
   & > .lSSlideOuter {
     & > .lSPager {
-      display: none;
+      @include u-visibility(none);
     }
   }
 }

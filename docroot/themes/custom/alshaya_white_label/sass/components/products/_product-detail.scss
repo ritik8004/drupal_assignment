@@ -1,5 +1,5 @@
 .acq-content-product {
-  @extend %clearfix;
+  @include clearfix;
 }
 
 .content {
@@ -22,20 +22,21 @@
 .field--name {
   &-field-skus {
     .field {
-      @extend %clearfix;
+      @include clearfix;
 
       padding: 0.5rem 0;
 
       &__label {
+        @include u-visibility(inline);
+
         font-size: 14px;
         font-family: $alshaya-bold;
         color: $peacock-blue;
         text-transform: lowercase;
-        display: inline;
       }
 
       &__item {
-        display: inline;
+        @include u-visibility(inline);
       }
     }
 
