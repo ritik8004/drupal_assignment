@@ -10,7 +10,6 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
-use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -100,32 +99,42 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Load Images.
       $media = alshaya_acm_product_get_sku_media($id);
 
-      $color = $size = '';
-      $sku_entity = SKU::loadFromSKU($id);
-      if ($sku_entity) {
-        if ($color_attribute = $sku_entity->get('attr_color')) {
-          $color = !empty($color_attribute->getValue()) ? $color_attribute->getValue()[0]['value'] : '';
-        }
-        if ($size_attribute = $sku_entity->get('attr_size')) {
-          $size = !empty($size_attribute->getValue()) ? $size_attribute->getValue()[0]['value'] : '';
+      // Get SKU attributes.
+      $sku_attributes = alshaya_acm_product_get_sku_configurable_values($id);
+
+      $name = [];
+      // Get parent sku of the sku.
+      $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($id);
+      if ($parent_sku) {
+        /* @var \Drupal\node\Entity\Node $parent_node */
+        $parent_node = alshaya_acm_product_get_display_node($parent_sku->getSKU());
+        if ($parent_node) {
+          $name = [
+            '#title' => $parent_node->getTitle(),
+            '#type' => 'link',
+            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]),
+          ];
         }
       }
+
+      $image = [];
       if (!empty($media)) {
-        $form['cart'][$id]['name'] = [
-          '#theme' => 'alshaya_cart_product_name',
-          '#color' => $color,
-          '#size' => $size,
-          '#name' => $form['cart'][$id]['name'],
-          '#image' => [
-            '#theme' => 'image_style',
-            '#style_name' => '137x144',
-            '#uri' => current($media)->getFileUri(),
-          ],
-          '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
-          '#item_code' => $id,
-          '#include_in_bundle' => t('Items included in bundle'),
+        $image = [
+          '#theme' => 'image_style',
+          '#style_name' => '137x144',
+          '#uri' => current($media)->getFileUri(),
         ];
       }
+
+      $form['cart'][$id]['name'] = [
+        '#theme' => 'alshaya_cart_product_name',
+        '#sku_attributes' => $sku_attributes,
+        '#name' => $name,
+        '#image' => $image,
+        '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
+        '#item_code' => $id,
+        '#include_in_bundle' => t('Items included in bundle'),
+      ];
 
       // TODO: Get delivery options from conductor.
       $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
@@ -364,8 +373,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
     ],
     'alshaya_cart_product_name' => [
       'variables' => [
-        'color' => '',
-        'size' => '',
+        'sku_attributes' => '',
         'item_code' => '',
         'total_price' => '',
         'name' => '',

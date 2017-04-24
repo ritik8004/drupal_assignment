@@ -219,3 +219,26 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
     ],
   ];
 }
+
+/**
+ * Utility function to get parent node of the sku.
+ *
+ * @param mixed $sku
+ *   SKU name or full sku object.
+ *
+ * @return object
+ *   Loaded node object.
+ */
+function alshaya_acm_product_get_display_node($sku) {
+  $sku = is_object($sku) ? $sku->getSKU() : $sku;
+
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', 'acq_product')
+    ->condition('field_skus', $sku)
+    ->range(0, 1);
+
+  $result = $query->execute();
+  $nid = reset($result);
+
+  return Node::load($nid);
+}
