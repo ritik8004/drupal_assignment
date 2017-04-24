@@ -1,5 +1,5 @@
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
-index ae18eb4..97bf432 100644
+index ae18eb4..7e195c1 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
 @@ -5,6 +5,8 @@
@@ -26,7 +26,7 @@ index ae18eb4..97bf432 100644
    return ($commands);
  }
  
-@@ -48,3 +58,97 @@ function drush_acq_sku_sync_commerce_cats() {
+@@ -48,3 +58,103 @@ function drush_acq_sku_sync_commerce_cats() {
    $container->get('acq_sku.category_manager')->synchronizeTree('acq_product_category');
    drush_print(dt('Done.'));
  }
@@ -64,38 +64,44 @@ index ae18eb4..97bf432 100644
 + *   The batch current context.
 + */
 +function _acq_sku_clean_process(&$context) {
-+  $results = [];
-+
-+  // Get all acq_product entities.
-+  $query = \Drupal::entityQuery('node');
-+  $query->addTag('node');
-+  $query->condition('type', 'acq_product');
-+  $product_entities = $query->execute();
-+  foreach ($product_entities as $product_entity) {
-+    $results[] = [$product_entity, 'node'];
-+  }
-+
-+  // Get all acq_sku entities.
-+  $query = \Drupal::entityQuery('acq_sku');
-+  $sku_entities = $query->execute();
-+  foreach ($sku_entities as $sku_entity) {
-+    $results[] = [$sku_entity, 'acq_sku'];
-+  }
-+
-+  // Get all acq_product_category entities.
-+  $query = \Drupal::entityQuery('taxonomy_term');
-+  $query->condition('vid', 'acq_product_category');
-+  $cat_entities = $query->execute();
-+  foreach ($cat_entities as $cat_entity) {
-+    $results[] = [$cat_entity, 'taxonomy_term'];
-+  }
-+
 +  // Use the $context['sandbox'] at your convenience to store the
 +  // information needed to track progression between successive calls.
 +  if (empty($context['sandbox'])) {
++    // Get all the entities that need to be deleted.
++    $context['sandbox']['results'] = [];
++
++    // Get all acq_product entities.
++    $query = \Drupal::entityQuery('node');
++    $query->addTag('node');
++    $query->condition('type', 'acq_product');
++    $product_entities = $query->execute();
++    foreach ($product_entities as $product_entity) {
++      $context['sandbox']['results'][] = [$product_entity, 'node'];
++    }
++
++    // Get all acq_sku entities.
++    $query = \Drupal::entityQuery('acq_sku');
++    $sku_entities = $query->execute();
++    foreach ($sku_entities as $sku_entity) {
++      $context['sandbox']['results'][] = [$sku_entity, 'acq_sku'];
++    }
++
++    // Get all acq_product_category entities.
++    $query = \Drupal::entityQuery('taxonomy_term');
++    $query->condition('vid', 'acq_product_category');
++    $cat_entities = $query->execute();
++    foreach ($cat_entities as $cat_entity) {
++      $context['sandbox']['results'][] = [$cat_entity, 'taxonomy_term'];
++    }
++
 +    $context['sandbox']['progress'] = 0;
 +    $context['sandbox']['current_id'] = 0;
-+    $context['sandbox']['max'] = count($results);
++    $context['sandbox']['max'] = count($context['sandbox']['results']);
++  }
++
++  $results = [];
++  if (isset($context['sandbox']['results']) && !empty($context['sandbox']['results'])) {
++    $results = $context['sandbox']['results'];
 +  }
 +
 +  $results = array_slice($results, isset($context['sandbox']['current']) ? $context['sandbox']['current'] : 0, DELETE_BATCH_COUNT);
