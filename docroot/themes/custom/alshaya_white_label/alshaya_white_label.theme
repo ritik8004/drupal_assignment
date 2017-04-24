@@ -349,6 +349,10 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     if ($node->bundle() == 'department_page') {
       $suggestions[] = 'page__department';
     }
+
+    if ($node->bundle() == 'acq_product') {
+      $suggestions[] = 'page__pdp';
+    }
   }
 
   if (\Drupal::service('path.matcher')->isFrontPage()) {

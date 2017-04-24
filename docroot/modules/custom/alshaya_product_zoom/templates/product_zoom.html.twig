@@ -1,23 +1,18 @@
-<div class="cloud-zoom-container">
-  <div id="cloud-zoom-wrap">
-    <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
-      <img src="{{ mainImage.mediumurl }}"/></a>
-  </div>
-  <div id = "yt-vi-container"></div>
-  <div class="cloud-zoom-gallery-thumbs">
+<div class="cloudzoom">
+  <div class="cloudzoom__thumbnails">
     <ul id="lightSlider">
     {% for thumbs in thumbnails %}
       {% if thumbs.type == 'youtube' %}
-        <li data-iframe="{{ thumbs.url }}" class="video-product-zoom youtube">
+        <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video youtube">
           <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" />
         </li>
       {% elseif thumbs.type == 'vimeo' %}
-        <li data-iframe="{{ thumbs.url }}" class="video-product-zoom vimeo">
+        <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video vimeo">
           <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
         </li>
       {% else %}
         <li>
-          <a href="{{ thumbs.zoomurl }}" class="cloud-zoom-gallery" rel="useZoom: 'cloud-zoom',smallImage: '{{ thumbs.mediumurl }}'">
+          <a href="{{ thumbs.zoomurl }}" class="cloud-zoom-gallery cloudzoom__thumbnails__image" rel="useZoom: 'cloud-zoom',smallImage: '{{ thumbs.mediumurl }}'">
             <img src="{{ thumbs.thumburl }}"/>
           </a>
         </li>
@@ -25,26 +20,33 @@
     {% endfor %}
     </ul>
   </div>
+  <div class="cloudzoom__herocontainer">
+    <div id="cloud-zoom-wrap" class="cloudzoom__image">
+      <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
+        <img src="{{ mainImage.mediumurl }}"/></a>
+    </div>
+    <div id="yt-vi-container" class= "cloudzoom__video"></div>
+  </div>
 </div>
-<div class="image-gallery-mobile">
-  <ul id="product-image-gallery-mobile">
+<div class="mobilegallery">
+  <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails">
     {% for thumbs in thumbnails %}
       {% if thumbs.type == 'youtube' %}
-        <li data-iframe="{{ thumbs.url }}" class="youtube">
+        <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video youtube">
           <img src="{{ thumbs.thumburl }}"/>
         </li>
       {% elseif thumbs.type == 'vimeo' %}
-        <li data-iframe="{{ thumbs.url }}" class="vimeo">
+        <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video vimeo">
           <img src=""/>
         </li>
       {% else %}
         <li>
-          <a href="{{ thumbs.fullurl }}" class="a-gallery">
+          <a href="{{ thumbs.fullurl }}" class="mobilegallery__thumbnails__image a-gallery">
             <img src="{{ thumbs.fullurl }}"/>
           </a>
         </li>
       {% endif %}
     {% endfor %}
   </ul>
-  <span class=""subtext">{{ 'Pinch to Zoom'|t }}</span>
+  <span class="subtext">{{ 'Pinch to Zoom'|t }}</span>
 </div>
