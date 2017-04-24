@@ -784,8 +784,14 @@
     font-size: 14px;
   }
 
-  .block-alshaya-user:not(.c-my-account-nav) h2 {
-    display: none;
+  .block-alshaya-user:not(.c-my-account-nav) {
+    h2 {
+      @include u-visibility(none);
+    }
+
+    .sign-out {
+      @include u-visibility(none);
+    }
   }
 
   .c-order-help {
