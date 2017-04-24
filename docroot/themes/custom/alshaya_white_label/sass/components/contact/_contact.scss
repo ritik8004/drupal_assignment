@@ -5,6 +5,22 @@
     padding-bottom: 0.75rem;
     margin-top: 2rem;
   }
+
+  .form-type-textarea {
+    textarea {
+      resize: none;
+      padding-#{$right}: 1.25rem;
+    }
+
+    .field-suffix {
+      position: absolute;
+      top: 0.125rem;
+      right: 0;
+      font-size: 0.8125rem;
+      color: $greyish;
+      font-weight: normal;
+    }
+  }
 }
 
 .contact-form,
