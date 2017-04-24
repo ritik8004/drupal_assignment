@@ -1,0 +1,45 @@
+.user-page.checkout-delivery {
+  main {
+    form {
+      input,
+      select {
+        &::placeholder {
+          color: transparent;
+        }
+      }
+
+      .form-type-select label {
+        display: none;
+      }
+
+      fieldset {
+        border: 1px solid #adadad;
+
+        legend {
+          padding: 1em;
+        }
+      }
+
+      .form-actions {
+        background: #f7f7f7;
+        display: inline-block;
+        width: 100%;
+        vertical-align: middle;
+        padding: 1em;
+        line-height: 2.8;
+
+        .form-submit {
+          float: right;
+          margin: 0;
+          margin-right: 0.75em;
+        }
+
+        a {
+          font-weight: bold;
+          color: #0084cc;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

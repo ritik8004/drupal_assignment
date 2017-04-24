@@ -10,6 +10,7 @@ global_styles:
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion
+    - core/jquery.ui.tabs
 
 ltr_styles:
   css:

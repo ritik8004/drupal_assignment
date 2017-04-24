@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\AddressFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides the delivery home pane for guests.
@@ -39,6 +40,10 @@ class GuestDeliveryHome extends AddressFormBase {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $pane_form['guest_delivery_home']['summary'] = [
       '#markup' => $this->t('Standard delivery for purchases over KD 250'),
+    ];
+
+    $pane_form['guest_delivery_home']['title'] = [
+      '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
     ];
 
     $cart = $this->getCart();
@@ -92,6 +97,15 @@ class GuestDeliveryHome extends AddressFormBase {
         'wrapper' => 'address_wrapper',
       ],
       '#weight' => -50,
+    ];
+
+    $complete_form['actions']['back_to_basket'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Back to basket'),
+      '#url' => Url::fromRoute('acq_cart.cart'),
+      '#attributes' => [
+        'class' => ['back-to-basket'],
+      ],
     ];
 
     return $pane_form;
