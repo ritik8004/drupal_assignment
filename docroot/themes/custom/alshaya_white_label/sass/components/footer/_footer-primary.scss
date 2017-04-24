@@ -199,9 +199,7 @@
   }
 
   @include breakpoint($only-tablet) {
-    // margin: 12em -13.5em;
     display: block;
-    // vertical-align: top;
   }
 }
 
