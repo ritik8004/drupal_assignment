@@ -16,6 +16,8 @@ function alshaya_captcha_modules_installed($modules) {
   $config_factory = \Drupal::configFactory();
   // Set captcha setting.
   $config_factory->getEditable('captcha.settings')->set('default_challenge', 'recaptcha/reCAPTCHA')->save();
+  // Hide the description for captcha.
+  $config_factory->getEditable('captcha.settings')->set('add_captcha_description', FALSE)->save();
   // Set captcha-point setting.
   $config_factory->getEditable('captcha.captcha_point.user_register_form')->set('status', TRUE)->save();
 
