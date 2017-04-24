@@ -88,3 +88,11 @@
     z-index: 1;
   }
 }
+
+@mixin clearfix {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

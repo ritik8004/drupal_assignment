@@ -1,19 +1,19 @@
 /* Display image bellow Drupal overlay.*/
-.cloud-zoom-container #wrap {
+.cloudzoom #wrap {
   z-index: 499 !important;
   position: relative;
 }
-.cloud-zoom-gallery-thumbs {
+.cloudzoom__thumbnails {
   clear:left;
 }
 
-.cloud-zoom-container #cloud-zoom-big {
+.cloudzoom #cloud-zoom-big {
   width: 314px !important;
   height: 309px !important;
   border: none;
 }
 
-.cloud-zoom-container .cloud-zoom-lens {
+.cloudzoom .cloud-zoom-lens {
   width: 227px !important;
   height: 212px !important;
   background-color: rgba(253, 253, 253, 0.44) !important;
@@ -27,7 +27,7 @@
 .ui-dialog-title {
   display: none;
 }
-#product-image-gallery-container .lSSlideOuter {
+/*#product-image-gallery-container .lSSlideOuter {
   float: left;
   width: 25%;
-}
+}*/
