@@ -37,6 +37,11 @@ function drush_alshaya_acm_offline_categories_sync() {
   module_load_include('data', 'alshaya_acm', 'includes/categories');
   global $_alshaya_acm_categories;
 
+  // Remove top level item (Default Category) from the categories.
+  if (isset($_alshaya_acm_categories[0]) && $_alshaya_acm_categories[0]['category_id'] == 2) {
+    $_alshaya_acm_categories = $_alshaya_acm_categories[0]['children'];
+  }
+
   $container->get('acq_sku.category_manager')->synchronizeTreeOffline('acq_product_category', $_alshaya_acm_categories);
   drush_print(dt('Done.'));
 }
