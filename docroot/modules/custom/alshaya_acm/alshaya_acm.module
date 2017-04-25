@@ -177,7 +177,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Add wrapper to cart totals table for themeing.
   $form['totals']['#prefix'] = '<div id="table-cart-totals">';
-  $form['totals']['#suffix'] = '</div>';
 
   // Update some labels to match wireframe/mockup.
   $form['totals']['sub']['label'] = ['#markup' => t('Sub total')];
@@ -213,6 +212,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#type' => 'link',
       '#title' => t('Continue shopping'),
       '#url' => Url::fromRoute('<front>'),
+      '#suffix' => '</div>',
     ];
   }
 
