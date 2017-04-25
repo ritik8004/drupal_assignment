@@ -52,30 +52,15 @@
   }
 
   .form-type-select {
-    @include icon(chevrondown, after);
-
-    font-size: 14px;
-    margin-top: 2em;
-    width: 100%;
-
-    &::after {
-      font-size: 22px;
-      background: #ddd;
-      padding: 0.25em;
-      position: absolute;
-      right: 54px;
-      top: 1px;
-      border-radius: 0 3px 3px 0;
-    }
+    @include form-selector-wrap;
 
     .form-select {
-      border: 1px solid $white-two;
-      background: transparent;
-      padding: 1em;
-      border-radius: 0;
-      width: 94%;
-      height: 35px;
+      @include form-selector(1.56rem);
     }
+  }
+
+  .form-item-guest-delivery-home-address-shipping-methods {
+    margin-bottom: 1rem;
   }
 }
 
