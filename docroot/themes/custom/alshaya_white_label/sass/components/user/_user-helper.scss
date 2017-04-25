@@ -83,7 +83,21 @@
     top: -5.5rem;
 
     @include breakpoint($tablet) {
-      top: -6rem;
+      top: -4.9rem;
+    }
+  }
+
+  .user-login-form {
+    .form-item:first-child {
+      margin-top: 1.49em;
+    }
+
+    .form-item {
+      margin-top: 5.1em;
+    }
+
+    #edit-actions {
+      margin-top: 1.9rem;
     }
   }
 }
