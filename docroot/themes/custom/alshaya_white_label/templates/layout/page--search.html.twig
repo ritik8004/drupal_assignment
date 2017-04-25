@@ -164,7 +164,36 @@
     <div class="c-footer-primary">
       <div class="l-container">
         <div class="c-footer-primary__region">
-          {{ page.footer_primary }}
+
+          <div class="primary--footer--right">
+            <div class="language--switcher mobile-only-block">
+              {{ page.footer_primary.languageswitcher_2 }}
+            </div>
+            {{ page.footer_primary|without('views_block__footer_categories_block_footer_categories', 'aboutbrand', 'help', 'languageswitcher_2', 'sociallinks') }}
+
+            <div class="footer--social above-mobile-block">
+              {{ page.footer_primary.sociallinks }}
+            </div>
+
+            <div class="language--switcher tablet-only-block">
+              {{ page.footer_primary.languageswitcher_2 }}
+            </div>
+          </div>
+
+          <div class="footer--menu">
+            <div class="footer--categories">
+              {{ page.footer_primary.views_block__footer_categories_block_footer_categories }}
+            </div>
+
+            <div class="footer--abouthelp">
+              {{ page.footer_primary.aboutbrand }}
+              {{ page.footer_primary.help}}
+            </div>
+
+            <div class="footer--social mobile-only-block">
+              {{ page.footer_primary.sociallinks }}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -92,8 +92,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    padding-top: 1.625rem;
-    padding-bottom: 1.625rem;
+    padding: 2rem 1.25rem;
     line-height: 1.5;
   }
 
