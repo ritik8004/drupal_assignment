@@ -37,11 +37,6 @@ function drush_alshaya_acm_offline_categories_sync() {
   module_load_include('data', 'alshaya_acm', 'includes/categories');
   global $_alshaya_acm_categories;
 
-  // Remove top level item (Default Category) from the categories.
-  if (isset($_alshaya_acm_categories[0]) && $_alshaya_acm_categories[0]['category_id'] == 2) {
-    $_alshaya_acm_categories = $_alshaya_acm_categories[0]['children'];
-  }
-
   $container->get('acq_sku.category_manager')->synchronizeTreeOffline('acq_product_category', $_alshaya_acm_categories);
   drush_print(dt('Done.'));
 }
@@ -62,16 +57,6 @@ function drush_alshaya_acm_offline_products_sync() {
   $limit = (int) drush_get_option('limit');
   if ($limit) {
     $_alshaya_acm_products = array_slice($_alshaya_acm_products, 0, $limit);
-
-    // Remove "Default Category" from product categories.
-    foreach ($_alshaya_acm_products as $key => $_alshaya_acm_product) {
-      if (isset($_alshaya_acm_product['categories'])) {
-        $default_cat_key = array_search(2, $_alshaya_acm_product['categories']);
-        if ($default_cat_key) {
-          unset($_alshaya_acm_products[$key]['categories'][$default_cat_key]);
-        }
-      }
-    }
   }
 
   $resource->post($_alshaya_acm_products);
