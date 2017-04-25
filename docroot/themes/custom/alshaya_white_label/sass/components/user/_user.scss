@@ -679,28 +679,18 @@
 
 .password-tooltip-content::after,
 .password-tooltip-content::before {
-  bottom: 100%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
+  @extend %tooltip-before-after;
+
   #{$right}: 2px;
 }
 
 .password-tooltip-content::after {
-  border-color: rgba(240, 246, 252, 0);
-  border-bottom-color: #f0f6fc;
-  border-width: 5px;
-  margin-#{$left}: -5px;
+  @extend %tooltip-after;
 }
 
 .password-tooltip-content::before {
-  border-color: rgba(0, 132, 204, 0);
-  border-bottom-color: #0084cc;
-  border-width: 6px;
-  margin-#{$left}: -6px;
+  @extend %tooltip-before;
+
   #{$right}: 1px;
 }
 

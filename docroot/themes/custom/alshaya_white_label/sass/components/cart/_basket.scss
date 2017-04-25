@@ -113,6 +113,7 @@
       z-index: 1;
       padding: 5px 11px;
       top: 1.25rem;
+      #{$right}: 5rem;
       background-color: $alice-blue;
       border: 1px solid $cerulean-two;
       width: 10.81rem;
@@ -120,6 +121,10 @@
       @include breakpoint($upto-desktop) {
         #{$right}: 0;
       }
+    }
+
+    &:hover .tooltip {
+      display: block;
     }
 
     &:nth-child(2) {
@@ -151,18 +156,29 @@
     }
   }
 
+  .tooltip::before,
+  .tooltip::after {
+    #{$right}: 4px;
+
+    @extend %tooltip-before-after;
+
+    @include breakpoint($desktop) {
+      #{$right}: 36px;
+    }
+  }
+
+  .tooltip::after {
+    @extend %tooltip-after;
+  }
+
   .tooltip::before {
-    content: '';
-    display: block;
-    width: 0;
-    height: 0;
-    position: absolute;
-    border-left: 0.5rem solid transparent;
-    border-right: 0.5rem solid transparent;
-    border-top: 0.5rem solid transparent;
-    border-bottom: 0.5rem solid $cerulean-two;
-    top: -1rem;
-    #{$right}: 2.81rem;
+    #{$right}: 3px;
+
+    @extend %tooltip-before;
+
+    @include breakpoint($desktop) {
+      #{$right}: 35px;
+    }
   }
 
   .delivery-option {
@@ -171,11 +187,12 @@
 }
 
 .promo-continue-shopping-wrapper {
-  margin-top: 33px;
-
   @include breakpoint($tablet) {
+    border-top: 1px solid $white;
+    margin-top: 33px;
     float: $left;
     width: 17.43rem;
+    margin-bottom: 4.56rem;
   }
 
   @include breakpoint($desktop) {
@@ -250,6 +267,10 @@
     padding: 4px 0;
     position: relative;
     z-index: 1;
+
+    &:focus {
+      border-color: $windows-blue;
+    }
 
     &.error {
       border-bottom: 2px solid $cherry;

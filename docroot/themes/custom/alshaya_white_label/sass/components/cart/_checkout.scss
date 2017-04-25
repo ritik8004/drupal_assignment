@@ -375,6 +375,7 @@ body.alias--cart {
       clear: both;
       float: $right;
       display: inline-grid;
+      margin-top: 0.5rem;
       margin-bottom: 1rem;
 
       @include breakpoint($upto-tablet) {
@@ -383,11 +384,11 @@ body.alias--cart {
       }
 
       @include breakpoint($tablet) {
-        margin-#{$right}: 5.2rem;
+        margin-#{$right}: -2.4rem;
       }
 
       @include breakpoint($desktop) {
-        margin-#{$right}: 16.8rem;
+        margin-#{$right}: 0;
       }
     }
   }
@@ -596,11 +597,11 @@ body.alias--cart {
 
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 7.6rem;
+      margin-#{$right}: 7.5rem;
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 16.8rem;
+      margin-#{$right}: 16.7rem;
     }
 
     table {
