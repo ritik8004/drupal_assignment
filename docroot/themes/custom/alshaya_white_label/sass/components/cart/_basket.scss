@@ -1,0 +1,270 @@
+.path--cart {
+  #table-cart-items {
+    tr {
+      td {
+        @include breakpoint($upto-tablet) {
+          display: flex;
+
+          .item--bundle {
+            display: none;
+          }
+        }
+
+        &.subtotal,
+        &.price {
+          @include breakpoint($upto-tablet) {
+            display: none;
+          }
+        }
+      }
+
+      th {
+        @include breakpoint($upto-tablet) {
+          display: none;
+
+          &:first-child {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+
+  .customer-cart-form {
+    font-size: 0.75rem;
+
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+
+    .price-currency.prefix {
+      padding-right: 0.5rem;
+
+      @include breakpoint($tablet) {
+        padding-right: 0;
+      }
+
+      @include breakpoint($desktop) {
+        padding-right: 1.56rem;
+      }
+    }
+
+    .image {
+      display: inline-block;
+      width: 44%;
+      vertical-align: top;
+
+      @include breakpoint($desktop) {
+        width: 40%;
+      }
+
+      img {
+        border: 1px solid $white;
+      }
+    }
+
+    .dark {
+      color: $black;
+    }
+
+    .item--bundle {
+      color: $cerulean-two;
+      margin-top: 0.75rem;
+    }
+
+    .items {
+      display: inline-block;
+      width: 54%;
+      color: $greyish;
+      padding-#{$left}: 0.625rem;
+
+      @include breakpoint($desktop) {
+        width: 58%;
+      }
+
+      div {
+        margin-bottom: 0.187rem;
+      }
+    }
+
+    .mobile-only {
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+  }
+
+  .tooltip--wrap {
+    padding-#{$left}: 2.2rem;
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: 0;
+      margin-top: 0.625rem;
+    }
+  }
+
+  .contains--tooltip {
+    position: relative;
+
+    .tooltip {
+      display: none;
+      font-size: 0.625rem;
+      position: absolute;
+      z-index: 1;
+      padding: 5px 11px;
+      top: 1.25rem;
+      background-color: $alice-blue;
+      border: 1px solid $cerulean-two;
+      width: 10.81rem;
+
+      @include breakpoint($upto-desktop) {
+        #{$right}: 0;
+      }
+    }
+
+    &:nth-child(2) {
+      margin-top: 1.68rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 2.8rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 2.125rem;
+      }
+    }
+  }
+
+  .tooltip--head {
+    font-size: 0.75rem;
+    color: $cerulean-two;
+    margin: 0;
+
+    @include icon(infomation, after) {
+      margin-#{$left}: 0.5rem;
+      vertical-align: middle;
+      font-weight: bold;
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 1rem;
+      }
+    }
+  }
+
+  .tooltip::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    border-top: 0.5rem solid transparent;
+    border-bottom: 0.5rem solid $cerulean-two;
+    top: -1rem;
+    #{$right}: 2.81rem;
+  }
+
+  .delivery-option {
+    font-size: 0.75rem;
+  }
+}
+
+.promo-continue-shopping-wrapper {
+  margin-top: 33px;
+
+  @include breakpoint($tablet) {
+    float: $left;
+    width: 17.43rem;
+  }
+
+  @include breakpoint($desktop) {
+    width: 19.56rem;
+  }
+
+  summary {
+    padding: 1rem 0;
+    position: relative;
+    outline: none;
+
+    @include icon(chevrondown, after) {
+      position: absolute;
+      #{$right}: 0.625rem;
+      font-size: 1.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details {
+    border-bottom: 1px solid $white;
+    position: relative;
+    font-size: 0.875rem;
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 1.5rem;
+    }
+  }
+
+  .form-item {
+    position: relative;
+  }
+
+  details[open] summary {
+    @include icon(chevronup, after);
+  }
+
+  label {
+    position: relative;
+    top: -3.4rem;
+
+    &.error {
+      bottom: 7px;
+      position: absolute;
+      top: auto;
+      left: 0;
+      color: $cherry;
+      font-size: 0.81rem;
+    }
+  }
+
+  input {
+    border: none;
+    border-bottom: 1px solid $white;
+    background-color: transparent;
+    color: $black;
+    text-shadow: none;
+    width: 100%;
+    margin-top: 1.125rem;
+    vertical-align: bottom;
+    margin-bottom: 0.625rem;
+    outline: none;
+    padding: 4px 0;
+    position: relative;
+    z-index: 1;
+
+    &.error {
+      border-bottom: 2px solid $cherry;
+    }
+  }
+
+  #apply_coupon {
+    position: absolute;
+    bottom: 2.1rem;
+    #{$right}: 0;
+    padding: 6px 11px;
+    background: $pumpkin-orange;
+    color: $white-five;
+    text-transform: capitalize;
+    z-index: 2;
+    cursor: pointer;
+  }
+}

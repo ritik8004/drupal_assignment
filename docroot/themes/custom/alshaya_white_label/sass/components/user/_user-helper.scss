@@ -97,11 +97,39 @@
     }
   }
 
+  .messages--error {
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: -2rem;
+      padding-top: 1.5rem;
+      padding-bottom: 0;
+      margin-#{$left}: 0;
+    }
+  }
+
   .c-content__region .user-form {
     margin-top: -0.5rem;
 
     @include breakpoint($desktop) {
       margin-top: -3rem;
     }
+  }
+}
+
+.c-user-password,
+.c-user-register-complete {
+  .my-account-nav {
+    display: none;
+  }
+
+  .c-page-title {
+    top: -3.5rem;
+    margin-left: 0;
   }
 }

@@ -1,26 +1,27 @@
 <div>
+    <div class="image"><img src="https://images.apple.com/au/pr/products/images/iPhone6_34FR_SpGry_iPhone6plus_34FL_SpGry_Homescreen_HERO.jpg" alt=""></div>
     {% if image is not empty %}
         <div class="image">{{ image }}</div>
     {% endif %}
     <div class="items">
         {% if name is not empty %}
-            <span>{{ name }}</span>
+            <div class="dark">{{ name }}</div>
         {% endif %}
         {% for sku_attribute in sku_attributes %}
-            <span>
+            <div>
                 {% trans %}
                 {{ sku_attribute.label }}: {{ sku_attribute.value }}
                 {% endtrans %}
-            </span>
+            </div>
         {% endfor %}
         {% if item_code is not empty %}
-            <span>{{ 'Item code'|t }}: {{ item_code }}</span>
+            <div>{{ 'Item code'|t }}: {{ item_code }}</div>
         {% endif %}
         {% if include_in_bundle is not empty %}
-            <span>{{ include_in_bundle }}</span>
+            <div class="item--bundle">{{ include_in_bundle }}</div>
         {% endif %}
         {% if total_price is not empty %}
-            <span>{{ total_price }}</span>
+            <div class="mobile-only dark">{{ total_price }}</div>
         {% endif %}
     </div>
 </div>
