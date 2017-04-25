@@ -50,8 +50,12 @@
     @include breakpoint($desktop) {
       display: inline-block;
 
-      &:first-child {
-        @include u-visibility(none);
+      @at-root {
+        &:first-child {
+          .logged-out & {
+            @include u-visibility(none);
+          }
+        }
       }
     }
   }
