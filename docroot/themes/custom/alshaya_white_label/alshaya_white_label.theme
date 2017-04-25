@@ -437,13 +437,9 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
     /* @var \Drupal\user\Entity\User $user */
     $user = $route_match->getParameter('user');
     if ($user) {
-      $fname = $user->get('field_first_name') ? (!empty($user->get('field_first_name')->getValue()) ? $user->get('field_first_name')->getValue()[0]['value'] : '') : '';
-      $lname = $user->get('field_last_name') ? (!empty($user->get('field_last_name')->getValue()) ? $user->get('field_last_name')->getValue()[0]['value'] : '') : '';
-      if (!empty($fname)) {
-        $variables['title'] = [
-          '#markup' => t('My Account'),
-        ];
-      }
+      $variables['title'] = [
+        '#markup' => t('My Account'),
+      ];
     }
   }
 
