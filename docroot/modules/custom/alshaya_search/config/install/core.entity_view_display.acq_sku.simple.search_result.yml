@@ -15,7 +15,7 @@ content:
   attr_special_price:
     label: hidden
     type: string
-    weight: 35
+    weight: 3
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -27,16 +27,22 @@ content:
       image_style: 291x288
       image_link: ''
     third_party_settings: {  }
+  name:
+    type: string
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
   price:
     label: hidden
     type: string
-    weight: 1
+    weight: 2
     settings:
       link_to_entity: false
     third_party_settings: {  }
 hidden:
   attributes: true
   crosssell: true
-  name: true
   sku: true
   upsell: true
