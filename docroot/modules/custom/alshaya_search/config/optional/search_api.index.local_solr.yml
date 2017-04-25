@@ -14,7 +14,7 @@ description: ''
 read_only: false
 field_settings:
   color:
-    label: 'Color'
+    label: Color
     datasource_id: 'entity:node'
     property_path: 'field_skus:entity:attr_color'
     type: string
@@ -29,7 +29,7 @@ field_settings:
     property_path: title
     type: text
   price:
-    label: 'Price'
+    label: Price
     datasource_id: 'entity:node'
     property_path: 'field_skus:entity:price'
     type: integer
@@ -38,6 +38,11 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  status:
+    label: 'Publishing status'
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
 datasource_settings:
   'entity:node':
     bundles:

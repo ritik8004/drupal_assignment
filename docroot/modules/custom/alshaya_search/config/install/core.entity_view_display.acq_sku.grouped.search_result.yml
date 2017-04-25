@@ -5,6 +5,7 @@ dependencies:
     - acq_sku.type.grouped
     - core.entity_view_mode.acq_sku.search_result
     - field.field.acq_sku.grouped.field_grouped_skus
+    - image.style.291x288
   module:
     - image
 id: acq_sku.grouped.search_result

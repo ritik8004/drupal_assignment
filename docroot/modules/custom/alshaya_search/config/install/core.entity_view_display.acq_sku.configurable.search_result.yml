@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.acq_sku.search_result
     - field.field.acq_sku.configurable.field_configurable_attributes
     - field.field.acq_sku.configurable.field_configured_skus
+    - image.style.291x288
   module:
     - image
 id: acq_sku.configurable.search_result
