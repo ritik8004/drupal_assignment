@@ -133,10 +133,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       ];
     }
 
-    // Removes the first term 'default category' as its not required.
-    $key = key($term_data);
-    $term_data = $term_data[$key]['child'];
-
     $route_name = $this->routeMatch->getRouteName();
     // If /taxonomy/term/tid page.
     if ($route_name == 'entity.taxonomy_term.canonical') {
