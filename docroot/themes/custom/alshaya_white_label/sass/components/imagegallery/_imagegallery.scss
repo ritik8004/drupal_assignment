@@ -1,56 +1,43 @@
+.dialog-product-image-gallery-container {
+  @include breakpoint($only-tablet) {
+    width: 720px !important;
+    left: calc((100% - 720px) / 2);
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .button__wrapper {
+    @include u-visibility(none);
+  }
+}
+
 .imagegallery {
   &__wrapper {
-    @include clearfix;
-    @include u-visibility(flex);
-
     max-width: 100%;
-    align-items: stretch;
+
+    @include clearfix;
+
+    @include breakpoint($desktop) {
+      @include u-visibility(flex);
+
+      align-items: stretch;
+    }
 
     & > .lSSlideOuter {
       width: 90px;
       margin-right: 1rem;
+      order: 1;
+
+      @include breakpoint($only-tablet) {
+        width: 100%;
+        margin-right: 0;
+
+        & > .lSPager {
+          @include u-visibility(none);
+        }
+      }
 
       .lSSlideWrapper {
-        @include breakpoint($only-tablet) {
-          height: 442px !important;
-        }
-
-        .lSSlideOuter {
-          top: 50px;
-
-          .lSSlideWrapper {
-            @include breakpoint($only-tablet) {
-              height: 442px !important;
-            }
-
-            .lSAction {
-              @include u-visibility(none, true);
-            }
-          }
-        }
-
-        #lightSlider {
-          li {
-            overflow: hidden;
-
-            @include breakpoint($tablet) {
-              height: 60px !important;
-            }
-
-            @include breakpoint($desktop) {
-              height: 72px !important;
-            }
-
-            &.active {
-              border: 1px solid;
-            }
-
-            img {
-              width: 100%;
-            }
-          }
-        }
-
         .lSAction {
           & > a {
             @include u-visibility(block);
@@ -81,11 +68,74 @@
             background-color: $white-five;
           }
         }
+
+        @include breakpoint($only-tablet) {
+          height: 92px !important;
+
+          #product-image-gallery {
+            height: 92px !important;
+            margin-left: 60px;
+
+            li {
+              width: 92px !important;
+              margin-right: 25px;
+              margin-bottom: 0 !important;
+              margin-top: 10px;
+            }
+          }
+
+          .lSAction {
+            & > a {
+              @include u-visibility(block);
+
+              width: 50px;
+              left: 0;
+              height: 72px;
+              cursor: pointer;
+              position: absolute;
+              margin-top: 0;
+              margin-left: 0;
+              opacity: 1;
+              text-align: center;
+              font-size: 36px;
+              padding-top: 17px;
+            }
+
+            .lSPrev {
+              @include icon(chevronleft);
+
+              top: 10px;
+              left: 0;
+              background-color: $white-five;
+            }
+
+            .lSNext {
+              @include icon(chevronright);
+
+              left: 632px;
+              bottom: 10px;
+              background-color: $white-five;
+            }
+          }
+        }
       }
     }
 
     & > .imagegallery__full {
+      order: 2;
       width: calc(100% - (92px + 1rem));
+
+      @include breakpoint($tablet) {
+        height: 640px;
+      }
+
+      @include breakpoint($desktop) {
+        height: 725px;
+      }
+
+      img {
+        width: 100%;
+      }
 
       iframe {
         width: 100% !important;
