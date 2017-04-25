@@ -105,6 +105,10 @@
       @include breakpoint($desktop) {
         margin-top: 2.63em;
       }
+
+      @include breakpoint($only-tablet) {
+        margin-top: 2.9rem;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -130,6 +134,16 @@
     #edit-actions {
       margin-top: 0.477rem;
       margin-bottom: 4rem;
+    }
+
+    .field--name-field-first-name {
+      @include breakpoint($only-tablet) {
+        margin-top: 2.45rem;
+
+        .form-type-textfield {
+          margin-top: 0;
+        }
+      }
     }
   }
 }
