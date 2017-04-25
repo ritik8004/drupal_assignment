@@ -95,6 +95,10 @@
     @include breakpoint($desktop) {
       top: -0.9rem;
     }
+
+    @include breakpoint($only-mobile) {
+      top: -3.8rem;
+    }
   }
 
   .c-content__region .user-form {
@@ -108,6 +112,10 @@
 
       @include breakpoint($only-tablet) {
         margin-top: 2.9rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 2.93rem;
       }
     }
 
@@ -139,6 +147,14 @@
     .field--name-field-first-name {
       @include breakpoint($only-tablet) {
         margin-top: 2.45rem;
+
+        .form-type-textfield {
+          margin-top: 0;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.5rem;
 
         .form-type-textfield {
           margin-top: 0;
