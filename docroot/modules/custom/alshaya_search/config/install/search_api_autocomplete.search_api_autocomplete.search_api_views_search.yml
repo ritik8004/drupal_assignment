@@ -3,15 +3,15 @@ status: true
 dependencies: {  }
 id: search_api_views_search
 label: search_api_views_search
-index_id: product
+index_id: acquia_search_index
 suggester_id: server
 type: views
 options:
   suggester_configuration:
     fields:
-      content: content
+      title: 0
   min_length: '1'
-  results: 1
+  results: 0
   delay: ''
   custom:
     display: page

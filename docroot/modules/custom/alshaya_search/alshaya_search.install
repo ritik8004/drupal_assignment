@@ -11,16 +11,14 @@ use Symfony\Component\Yaml\Yaml;
  * Implements hook_install().
  */
 function alshaya_search_install() {
-  // Set index to solr, if not Acquia Env.
-  if (isset($_ENV['AH_SITE_NAME'])) {
-    // Set new config for acquia search index.
-    $search_api_index = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_search') . '/config/optional/search_api.index.acquia_search_index.yml'));
-    \Drupal::configFactory()
-      ->getEditable('search_api.index.acquia_search_index')
-      ->setData($search_api_index)
-      ->save();
-  }
-  else {
+  // Set new config for acquia search index.
+  $search_api_index = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_search') . '/config/optional/search_api.index.acquia_search_index.yml'));
+  \Drupal::configFactory()
+    ->getEditable('search_api.index.acquia_search_index')
+    ->setData($search_api_index)
+    ->save();
+
+  if (!isset($_ENV['AH_SITE_NAME'])) {
     // Enable Solr Server and Index.
     \Drupal::service('lightning.config_helper')
       ->optional('alshaya_search')
@@ -47,6 +45,10 @@ function alshaya_search_install() {
         ],
       ])
       ->set('display', $search_view_display)
+      ->save();
+
+    \Drupal::configFactory()->getEditable('search_api_autocomplete.search_api_autocomplete.search_api_views_search')
+      ->set('index_id', 'local_solr')
       ->save();
   }
 
