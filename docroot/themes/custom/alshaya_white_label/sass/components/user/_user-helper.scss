@@ -89,6 +89,10 @@
 }
 
 .c-user-register {
+  .messages.drupal-messages {
+    display: none;
+  }
+
   .c-page-title {
     top: -5.5rem;
 
