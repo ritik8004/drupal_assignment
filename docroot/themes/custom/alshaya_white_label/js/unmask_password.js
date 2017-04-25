@@ -8,17 +8,20 @@
 
   Drupal.behaviors.unmaskPassword = {
     attach: function (context, settings) {
+      var show = Drupal.t('Show');
+      var showPassword = Drupal.t('Show password');
+      var hidePassword = Drupal.t('Hide password');
       if (!$('.form-type-password-confirm').find('#unmask_password').length) {
-        $('.form-type-password').append('<div id="unmask_password">Show</div>');
+        $('.form-type-password').append('<div id="unmask_password">' + show + '</div>');
       }
       $('#unmask_password').on('click', function () {
         if ($('#edit-pass').attr('type') === 'password') {
           $('#edit-pass').attr('type', 'text');
-          $('#unmask_password').html('Hide password');
+          $('#unmask_password').html(hidePassword);
         }
         else if ($('#edit-pass').attr('type') === 'text') {
           $('#edit-pass').attr('type', 'password');
-          $('#unmask_password').html('Show password');
+          $('#unmask_password').html(showPassword);
         }
       });
 
@@ -27,11 +30,11 @@
 
         if ($(current).attr('type') === 'password') {
           $(current).attr('type', 'text');
-          $(this).html('Hide password');
+          $(this).html(hidePassword);
         }
         else if ($(current).attr('type') === 'text') {
           $(current).attr('type', 'password');
-          $(this).html('Show password');
+          $(this).html(showPassword);
         }
       });
 
@@ -40,11 +43,11 @@
 
         if ($(current).attr('type') === 'password') {
           $(current).attr('type', 'text');
-          $(this).html('Hide password');
+          $(this).html(hidePassword);
         }
         else if ($(current).attr('type') === 'text') {
           $(current).attr('type', 'password');
-          $(this).html('Show password');
+          $(this).html(showPassword);
         }
       });
 
