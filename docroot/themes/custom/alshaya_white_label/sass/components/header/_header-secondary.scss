@@ -25,6 +25,20 @@
     @extend %list-clear;
   }
 
+  #block-alshaya-white-label-account-menu-menu {
+    li {
+      @include breakpoint($desktop) {
+        @at-root {
+          &:first-child {
+            .logged-out & {
+              @include u-visibility(none);
+            }
+          }
+        }
+      }
+    }
+  }
+
   li {
     @include breakpoint($upto-desktop) {
       @include icon(chevronright, after) {
@@ -49,14 +63,6 @@
 
     @include breakpoint($desktop) {
       display: inline-block;
-
-      @at-root {
-        &:first-child {
-          .logged-out & {
-            @include u-visibility(none);
-          }
-        }
-      }
     }
   }
 

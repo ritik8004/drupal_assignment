@@ -1,5 +1,9 @@
 .c-content__slider {
   text-align: center;
+
+  @include breakpoint($tablet) {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .c-slider-promo__items {
