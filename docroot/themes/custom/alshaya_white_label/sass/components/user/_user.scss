@@ -268,9 +268,14 @@
       }
     }
 
-    .error {
+    .error,
+    .form-item--error-message {
       font-size: 12px;
       color: $red-error;
+
+      strong {
+        font-weight: 400;
+      }
     }
 
     .text-full,
