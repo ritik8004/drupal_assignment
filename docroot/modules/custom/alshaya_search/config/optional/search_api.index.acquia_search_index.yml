@@ -47,11 +47,6 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  status:
-      label: 'Publishing status'
-      datasource_id: 'entity:node'
-      property_path: status
-      type: boolean
 datasource_settings:
   'entity:node':
     bundles:
@@ -62,11 +57,12 @@ datasource_settings:
       default: true
       selected: {  }
 processor_settings:
-  rendered_item: {  }
-  aggregated_field: {  }
   add_url:
     plugin_id: add_url
     settings: {  }
+  aggregated_field: {  }
+  rendered_item: {  }
+  entity_status: {  }
 tracker_settings:
   default: {  }
 options:
