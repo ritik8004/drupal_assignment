@@ -155,11 +155,6 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
           'query' => [
             'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
           ],
-          'attributes' => [
-            'class' => ['use-ajax'],
-            'data-dialog-type' => 'modal',
-            'data-dialog-options' => Json::encode(['width' => '341']),
-          ],
           'language' => $current_language,
         ]),
       ];
