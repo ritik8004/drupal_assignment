@@ -1,6 +1,5 @@
-{% set attributes = attributes.addClass('user-page', 'l-two--sf', 'checkout', 'checkout-login', 'checkout-delivery', 'checkout-payment') %}
+{% set attributes = attributes.addClass('user-page', 'l-one--w', 'checkout-login') %}
 <div>
-
     <!-- ______________________ BREADCRUMB _______________________ -->
 
     {% if page.breadcrumb %}
@@ -20,7 +19,7 @@
         <div{{ attributes.addClass('l-container') }}>
           <h1 class="site-brand-home">
             <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
-              <img src="/themes/custom/alshaya_white_label/mothercare-logo.svg" alt="{{ 'Home'|t }}"/>
+                <img src="/themes/custom/alshaya_white_label/mothercare-logo.svg" alt="{{ 'Home'|t }}"/>
             </a>
           </h1>
 
@@ -36,16 +35,6 @@
 
             </main>
             <!-- /content-inner /content -->
-
-            <!-- /sidebar-second -->
-            {% if page.sidebar_second %}
-                <aside class="c-sidebar-second">
-                    <div class="c-sidebar-second__region">
-                        {{ page.sidebar_second }}
-                    </div>
-                </aside>
-            {% endif %}
-            <!-- /sidebar-first -->
 
         </div>
     </div>

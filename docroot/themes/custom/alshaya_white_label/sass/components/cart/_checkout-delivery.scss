@@ -13,25 +13,43 @@
       }
 
       fieldset {
-        border: 1px solid #adadad;
+        border: 2px solid #adadad;
+
+        @include breakpoint($only-tablet) {
+          width: 100%;
+        }
 
         legend {
           padding: 1em;
+
+          span {
+            color: $marine-blue-two;
+          }
         }
       }
 
       .form-actions {
-        background: #f7f7f7;
+        background: $white-four;
         display: inline-block;
         width: 100%;
         vertical-align: middle;
         padding: 1em;
         line-height: 2.8;
 
+        @include breakpoint($only-mobile) {
+          text-align: center;
+          line-height: 3.8;
+          background: white;
+        }
+
         .form-submit {
-          float: right;
+          float: $right;
           margin: 0;
           margin-right: 0.75em;
+
+          @include breakpoint($only-mobile) {
+            float: none;
+          }
         }
 
         a {

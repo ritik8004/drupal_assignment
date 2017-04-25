@@ -1,0 +1,105 @@
+.l-two--sf.checkout {
+  @include breakpoint($only-mobile) {
+    max-width: 390px;
+  }
+
+  @include breakpoint($only-tablet) {
+    max-width: 1020px;
+  }
+
+  main {
+    float: $left;
+
+    @include breakpoint($only-tablet) {
+      width: 66%;
+    }
+  }
+
+  .c-sidebar-second {
+    width: 100%;
+    float: $right;
+
+    @include breakpoint($tablet) {
+      width: 234px;
+    }
+
+    @include breakpoint($desktop) {
+      width: 291px;
+    }
+
+    .c-sidebar-second__region {
+      padding-#{$left}: 0;
+    }
+  }
+}
+
+.user-page.checkout {
+  h1 {
+    position: relative;
+    top: 0;
+  }
+
+  .site-brand-home {
+    width: 40.5%;
+
+    @include breakpoint($tablet) {
+      width: 50%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 100%;
+    }
+  }
+
+  .form-type-select {
+    @include icon(chevrondown, after);
+
+    font-size: 14px;
+    margin-top: 2em;
+    width: 100%;
+
+    &::after {
+      font-size: 22px;
+      background: #ddd;
+      padding: 0.25em;
+      position: absolute;
+      right: 54px;
+      top: 1px;
+      border-radius: 0 3px 3px 0;
+    }
+
+    .form-select {
+      border: 1px solid $white-two;
+      background: transparent;
+      padding: 1em;
+      border-radius: 0;
+      width: 94%;
+      height: 35px;
+    }
+  }
+}
+
+.block-checkout-summary-block {
+  .delivery-type,
+  .address {
+    background: $white-four;
+    font-size: 12px;
+    padding: 2em;
+    line-height: 1.5;
+    font-weight: bold;
+
+    a {
+      float: $right;
+    }
+
+    .method,
+    .delivery-address {
+      font-weight: normal;
+      margin-top: 1em;
+    }
+  }
+}
+
+.delivery-type {
+  border-bottom: 1px solid $white;
+}

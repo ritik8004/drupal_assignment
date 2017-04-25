@@ -288,11 +288,36 @@
 
     .title {
       color: $black-two;
+      font-weight: bold;
     }
 
     a {
       text-decoration: none;
       float: $right;
+      font-weight: bold;
+      color: $cerulean-two;
+    }
+  }
+
+  .content-head {
+    width: 100%;
+    background: $white-four;
+    padding: 1em;
+    font-size: 14px;
+  }
+
+  .content-items {
+    height: auto !important;
+    display: inline-block !important;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 12px;
+
+      .left {
+        float: $left;
+      }
     }
   }
 }
@@ -539,20 +564,5 @@
   @include breakpoint($desktop) {
     margin-bottom: 24px;
     margin-top: 37px;
-  }
-}
-
-.l-two--sf.checkout {
-  main {
-    float: $left;
-  }
-
-  .c-sidebar-second {
-    width: 291px;
-    float: $right;
-
-    .c-sidebar-second__region {
-      padding-left: 0;
-    }
   }
 }
