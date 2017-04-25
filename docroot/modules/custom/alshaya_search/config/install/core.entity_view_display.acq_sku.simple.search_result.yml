@@ -4,7 +4,7 @@ dependencies:
   config:
     - acq_sku.type.simple
     - core.entity_view_mode.acq_sku.search_result
-    - image.style.large
+    - image.style.291x288
   module:
     - image
 id: acq_sku.simple.search_result
