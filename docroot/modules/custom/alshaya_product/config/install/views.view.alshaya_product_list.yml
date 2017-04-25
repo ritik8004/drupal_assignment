@@ -91,7 +91,7 @@ display:
         options:
           view_modes:
             'entity:node':
-              acq_product: product_list
+              acq_product: search_result
       fields:
         name_1:
           id: name_1
