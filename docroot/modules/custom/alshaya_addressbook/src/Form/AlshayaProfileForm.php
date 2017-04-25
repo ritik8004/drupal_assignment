@@ -48,15 +48,17 @@ class AlshayaProfileForm extends ProfileForm {
         '#type' => 'view',
         '#name' => 'profiles',
         '#display_id' => 'profile_type_listing',
-        '#arguments' => [\Drupal::currentUser()->id(), 'address_book', 1],
+        '#arguments' => [$this->currentUser()->id(), 'address_book', 1],
         '#embed' => TRUE,
-        '#title' => t('Active @type', ['@type' => 'Address Book']),
+        '#title' => $this->t('Active @type', ['@type' => 'Address Book']),
         '#weight' => 30,
         '#pre_render' => [
           ['\Drupal\views\Element\View', 'preRenderViewElement'],
           'profile_views_add_title_pre_render',
         ],
       ];
+
+      $element['delete']['#access'] = FALSE;
     }
 
     return $element;
