@@ -26,6 +26,22 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
   if (!$default_address) {
     $form['actions']['submit']['#access'] = FALSE;
   }
+
+  // Render the active profiles.
+  $form['active_profiles'] = [
+    '#type' => 'view',
+    '#name' => 'profiles',
+    '#display_id' => 'profile_type_listing',
+    '#arguments' => [\Drupal::currentUser()->id(), 'address_book', 1],
+    '#embed' => TRUE,
+    '#title' => t('Active @type', ['@type' => 'Address Book']),
+    '#weight' => 100,
+    '#pre_render' => [
+      ['\Drupal\views\Element\View', 'preRenderViewElement'],
+      'profile_views_add_title_pre_render',
+    ],
+  ];
+
   // Get the default country from 'admin/config/regional/settings' site
   // regional settings.
   $default_site_country = _alshaya_custom_get_site_level_country_code();
@@ -82,6 +98,20 @@ function alshaya_addressbook_user_view_alter(&$build) {
  */
 function alshaya_addressbook_form_profile_address_book_edit_form_alter(array &$form, FormStateInterface $form_state) {
   $form['#title'] = t('Edit address');
+  // Render the active profiles.
+  $form['active_profiles'] = [
+    '#type' => 'view',
+    '#name' => 'profiles',
+    '#display_id' => 'profile_type_listing',
+    '#arguments' => [\Drupal::currentUser()->id(), 'address_book', 1],
+    '#embed' => TRUE,
+    '#title' => t('Active @type', ['@type' => 'Address Book']),
+    '#weight' => 100,
+    '#pre_render' => [
+      ['\Drupal\views\Element\View', 'preRenderViewElement'],
+      'profile_views_add_title_pre_render',
+    ],
+  ];
 }
 
 /**

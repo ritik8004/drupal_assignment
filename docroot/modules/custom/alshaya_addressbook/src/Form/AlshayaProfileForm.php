@@ -43,21 +43,6 @@ class AlshayaProfileForm extends ProfileForm {
         $element['delete']['#url']->setOption('language', $current_language);
       }
 
-      // Render the active profiles.
-      $element['active_profiles'] = [
-        '#type' => 'view',
-        '#name' => 'profiles',
-        '#display_id' => 'profile_type_listing',
-        '#arguments' => [$this->currentUser()->id(), 'address_book', 1],
-        '#embed' => TRUE,
-        '#title' => $this->t('Active @type', ['@type' => 'Address Book']),
-        '#weight' => 30,
-        '#pre_render' => [
-          ['\Drupal\views\Element\View', 'preRenderViewElement'],
-          'profile_views_add_title_pre_render',
-        ],
-      ];
-
       $element['delete']['#access'] = FALSE;
     }
 
