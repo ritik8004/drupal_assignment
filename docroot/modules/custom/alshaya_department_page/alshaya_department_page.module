@@ -9,7 +9,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\taxonomy\Entity\Term;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -69,6 +68,30 @@ function alshaya_department_page_node_presave(EntityInterface $entity) {
  * Implements hook_preprocess_page_title().
  */
 function alshaya_department_page_preprocess_page_title(&$variables) {
+  if ($node = _alshaya_department_page_get_department_node()) {
+    // Change the title of the department node.
+    $variables['title'] = [
+      '#markup' => _alshaya_department_page_get_node_title($node),
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_department_page_preprocess_html(&$variables) {
+  if ($node = _alshaya_department_page_get_department_node()) {
+    $variables['head_title']['title'] = _alshaya_department_page_get_node_title($node);
+  }
+}
+
+/**
+ * Get the department node object based on current root.
+ *
+ * @return mixed|null
+ *   Return Node object if department page, else NULL.
+ */
+function _alshaya_department_page_get_department_node() {
   // Route match.
   $route_match = \Drupal::routeMatch();
   // Request Object.
@@ -76,24 +99,40 @@ function alshaya_department_page_preprocess_page_title(&$variables) {
 
   if ($node = $route_match->getParameter('node')) {
     if ($node->bundle() == 'department_page') {
-      $tid = $node->get('field_product_category')->first()->target_id;
-      $term = Term::load($tid);
-      $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
-
-      if ($term->hasTranslation($langcode)) {
-        $term = $term->getTranslation($langcode);
-      }
-
-      // Change the title of the department node.
-      $variables['title'] = [
-        '#markup' => $term->label(),
-      ];
-
-      // Change the title in the title bar for the department node.
-      if ($route = $request->attributes->get(RouteObjectInterface::ROUTE_OBJECT)) {
-        // @todo: Here the title is not changed. Need to look for solution.
-        $route->setDefault('_title', $term->label());
-      }
+      return $node;
     }
   }
+  return NULL;
+}
+
+/**
+ * Return the taxonomy term title based on given node object.
+ *
+ * @param object $node
+ *   The Node object.
+ *
+ * @return string
+ *   Return the term label.
+ */
+function _alshaya_department_page_get_node_title($node) {
+  $department_term = &drupal_static(__FUNCTION__, []);
+
+  if (isset($department_term[$node->id()])) {
+    return $department_term[$node->id()];
+  }
+
+  // Get the product category for current department page.
+  $tid = $node->get('field_product_category')->first()->target_id;
+  // Load the term object.
+  $term = Term::load($tid);
+  // Get the current language code.
+  $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+  // Get the translations of the term based on the current lang code.
+  if ($term->hasTranslation($langcode)) {
+    $term = $term->getTranslation($langcode);
+  }
+  // Set the label for drupal static.
+  $department_term[$node->id()] = $term->label();
+
+  return $department_term[$node->id()];
 }
