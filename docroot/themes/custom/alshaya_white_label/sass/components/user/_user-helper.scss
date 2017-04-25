@@ -93,15 +93,43 @@
     top: -5.5rem;
 
     @include breakpoint($desktop) {
-      top: -1rem;
+      top: -0.9rem;
     }
   }
 
   .c-content__region .user-form {
     margin-top: -0.5rem;
 
+    .form-wrapper,
+    .form-item {
+      @include breakpoint($desktop) {
+        margin-top: 2.63em;
+      }
+    }
+
     @include breakpoint($desktop) {
-      margin-top: -3rem;
+      margin-top: -2.65rem;
+    }
+
+    .form-type-password-confirm {
+      margin-top: 4.5rem;
+
+      .confirm-parent {
+        margin-top: 4.42rem;
+      }
+    }
+
+    .field--name-field-terms-and-condition {
+      margin-top: 1.38rem;
+
+      .form-item-field-terms-and-condition-value {
+        margin-top: 0;
+      }
+    }
+
+    #edit-actions {
+      margin-top: 0.477rem;
+      margin-bottom: 4rem;
     }
   }
 }
