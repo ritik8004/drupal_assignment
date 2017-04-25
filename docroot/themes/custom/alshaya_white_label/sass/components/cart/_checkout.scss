@@ -496,7 +496,7 @@ body.alias--cart {
 
         @include breakpoint($desktop) {
           width: 16.8rem;
-          padding: 1rem
+          padding: 1rem;
         }
       }
 
@@ -537,7 +537,7 @@ body.alias--cart {
         -webkit-appearance: none;
         border: 1px solid $white-two;
         border-radius: 0;
-        background-color: #fff;
+        background-color: $white-five;
         padding: 0.5rem 3.2rem 0.5rem 0.625rem;
         width: 70px;
         height: 35px;
