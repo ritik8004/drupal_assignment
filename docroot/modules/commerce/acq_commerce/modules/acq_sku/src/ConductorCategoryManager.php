@@ -231,6 +231,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    */
   private function syncCategory(array $categories, $parent = NULL) {
 
+    // Remove top level item (Default Category) from the categories, if its set
+    // in configuration and category is with no parent.
+    $filter_category = \Drupal::config('acq_commerce.conductor')->get('filter_category');
+    if ($filter_category && $parent == NULL) {
+      $categories = $categories[0]['children'];
+    }
+
     foreach ($categories as $category) {
       if (!isset($category['category_id']) || !isset($category['name'])) {
         $this->logger->error('Invalid / missing category ID or name.');

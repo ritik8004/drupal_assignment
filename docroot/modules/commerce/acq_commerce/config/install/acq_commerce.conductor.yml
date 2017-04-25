@@ -4,3 +4,4 @@ timeout: 30
 verify_ssl: true
 product_page_size: 50
 stock_check_cache_proportion: 10
+filter_category: true
