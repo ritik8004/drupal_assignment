@@ -20,6 +20,10 @@
       color: $greyish;
       font-weight: normal;
     }
+
+    #edit-message_counter {
+      @include u-visibility(none);
+    }
   }
 }
 
