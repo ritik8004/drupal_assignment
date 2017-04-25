@@ -6,7 +6,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\profile\Form\ProfileForm;
 use Drupal\Core\Url;
-use Drupal\user\Entity\User;
 
 /**
  * Form controller for profile forms (add/edit).
@@ -43,25 +42,6 @@ class AlshayaProfileForm extends ProfileForm {
       if (isset($element['delete']['#url'])) {
         $element['delete']['#url']->setOption('language', $current_language);
       }
-
-      $user_id = $this->currentUser()->id();
-      /* @var \Drupal\user\Entity\User $user */
-      $user = User::load($user_id);
-      /** @var \Drupal\profile\Entity\ProfileInterface|bool $default_address */
-      $default_address = \Drupal::entityTypeManager()->getStorage('profile')
-        ->loadByUser($user, 'address_book');
-
-      // If user doesn't have any default address yet.
-      if (!$default_address) {
-        $element['submit']['#access'] = FALSE;
-        $element['set_default']['#value'] = $this->t('Add');
-      }
-      else {
-        $element['set_default']['#access'] = FALSE;
-        $element['submit']['#value'] = $this->t('Add');
-      }
-
-      $element['delete']['#access'] = FALSE;
 
       // Render the active profiles.
       $element['active_profiles'] = [

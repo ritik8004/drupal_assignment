@@ -8,12 +8,24 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\user\Entity\User;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$form, FormStateInterface $form_state) {
+  $user_id = \Drupal::currentUser()->getAccount()->id();
+  /* @var \Drupal\user\Entity\User $user */
+  $user = User::load($user_id);
+  /** @var \Drupal\profile\Entity\ProfileInterface|bool $default_address */
+  $default_address = \Drupal::entityTypeManager()->getStorage('profile')
+    ->loadByUser($user, 'address_book');
+
+  // If user doesn't have any default address yet.
+  if (!$default_address) {
+    $form['actions']['submit']['#access'] = FALSE;
+  }
   // Get the default country from 'admin/config/regional/settings' site
   // regional settings.
   $default_site_country = _alshaya_custom_get_site_level_country_code();
