@@ -8,6 +8,7 @@
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -92,13 +93,19 @@ function alshaya_department_page_preprocess_html(&$variables) {
  *   Return Node object if department page, else NULL.
  */
 function _alshaya_department_page_get_department_node() {
+  $node = &drupal_static(__FUNCTION__, []);
   // Route match.
   $route_match = \Drupal::routeMatch();
-  // Request Object.
-  $request = \Drupal::request();
+  // Return if the static cache is set and it is the node object.
+  if (isset($node) && $node instanceof Node) {
+    return $node;
+  }
 
-  if ($node = $route_match->getParameter('node')) {
-    if ($node->bundle() == 'department_page') {
+  // Load the processed parameter.
+  if ($tempNode = $route_match->getParameter('node')) {
+    // Check if the current node type is department_page.
+    if ($tempNode->bundle() == 'department_page') {
+      $node = $tempNode;
       return $node;
     }
   }
