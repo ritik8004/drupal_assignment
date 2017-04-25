@@ -8,24 +8,26 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\user\Entity\User;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$form, FormStateInterface $form_state) {
-  $user_id = \Drupal::currentUser()->getAccount()->id();
-  /* @var \Drupal\user\Entity\User $user */
-  $user = User::load($user_id);
-  /** @var \Drupal\profile\Entity\ProfileInterface|bool $default_address */
-  $default_address = \Drupal::entityTypeManager()->getStorage('profile')
-    ->loadByUser($user, 'address_book');
-
-  // If user doesn't have any default address yet.
-  if (!$default_address) {
-    $form['actions']['submit']['#access'] = FALSE;
-  }
+  // Render the active profiles.
+  $form['active_profiles'] = [
+    '#type' => 'view',
+    '#name' => 'profiles',
+    '#display_id' => 'profile_type_listing',
+    '#arguments' => [\Drupal::currentUser()->id(), 'address_book', 1],
+    '#embed' => TRUE,
+    '#title' => t('Active @type', ['@type' => 'Address Book']),
+    '#weight' => 10,
+    '#pre_render' => [
+      ['\Drupal\views\Element\View', 'preRenderViewElement'],
+      'profile_views_add_title_pre_render',
+    ],
+  ];
 
   // Get the default country from 'admin/config/regional/settings' site
   // regional settings.

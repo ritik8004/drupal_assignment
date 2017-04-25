@@ -155,6 +155,11 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
           'query' => [
             'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
           ],
+          'attributes' => [
+            'class' => ['use-ajax'],
+            'data-dialog-type' => 'modal',
+            'data-dialog-options' => Json::encode(['width' => '341']),
+          ],
           'language' => $current_language,
         ]),
       ];
@@ -199,7 +204,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
 function alshaya_white_label_preprocess_links__dropbutton__operations(&$variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
   // Unset/Remove operation links for address_book page.
-  if ($route_name == 'entity.profile.type.address_book.user_profile_form') {
+  if ($route_name == 'entity.profile.type.address_book.user_profile_form' || $route_name == 'entity.profile.add_form') {
     unset($variables['links']);
   }
 }
