@@ -24,10 +24,16 @@ function alshaya_acm_product_get_product_media($productId) {
   // Load product from id.
   $product = Node::load($productId);
 
-  // Get SKU from product.
-  $skuEntity = $product->get('field_skus')->first()->get('entity')->getValue();
+  if ($product instanceof Node) {
+    // Get SKU from product.
+    $skuEntity = $product->get('field_skus')
+      ->first()
+      ->get('entity')
+      ->getValue();
 
-  return alshaya_acm_product_get_sku_media($skuEntity);
+    return alshaya_acm_product_get_sku_media($skuEntity);
+  }
+  return NULL;
 }
 
 /**
@@ -44,12 +50,14 @@ function alshaya_acm_product_get_sku_media($sku) {
 
   $skuEntity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
 
-  // For now we load only the image field.
-  $imageField = $skuEntity->get('attr_image')->getValue();
+  if ($skuEntity instanceof SKU) {
+    // For now we load only the image field.
+    $imageField = $skuEntity->get('attr_image')->getValue();
 
-  // We will return the array of File objects.
-  foreach ($imageField as $image) {
-    $media[] = File::load($image['target_id']);
+    // We will return the array of File objects.
+    foreach ($imageField as $image) {
+      $media[] = File::load($image['target_id']);
+    }
   }
 
   return $media;
@@ -69,20 +77,23 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
 
   $skuEntity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
 
-  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
-  $configurableFields = array_filter($fields, function ($field) {
-    return (bool) $field['configurable'];
-  });
+  if ($skuEntity instanceof SKU) {
+    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')
+      ->get('fields');
+    $configurableFields = array_filter($fields, function ($field) {
+      return (bool) $field['configurable'];
+    });
 
-  foreach ($configurableFields as $key => $field) {
-    $fieldKey = 'attr_' . $key;
+    foreach ($configurableFields as $key => $field) {
+      $fieldKey = 'attr_' . $key;
 
-    $configurableFieldValues[$fieldKey] = [
-      'label' => $skuEntity->get($fieldKey)->getFieldDefinition()->getLabel(),
-      'value' => $skuEntity->get($fieldKey)->getString(),
-    ];
+      $configurableFieldValues[$fieldKey] = [
+        'label' => $skuEntity->get($fieldKey)->getFieldDefinition()->getLabel(),
+        'value' => $skuEntity->get($fieldKey)->getString(),
+      ];
+    }
+
   }
-
   return $configurableFieldValues;
 }
 
@@ -156,34 +167,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
     $imageSmall = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
     $imageZoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
     $imageMedium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-    $thumbnails[] = [
-      'thumburl' => $imageSmall,
-      'mediumurl' => $imageMedium,
-      'zoomurl' => $imageZoom,
-      'fullurl' => $original_image,
-      'type' => 'image',
-    ];
-    $thumbnails[] = [
-      'thumburl' => $imageSmall,
-      'mediumurl' => $imageMedium,
-      'zoomurl' => $imageZoom,
-      'fullurl' => $original_image,
-      'type' => 'image',
-    ];
-    $thumbnails[] = [
-      'thumburl' => $imageSmall,
-      'mediumurl' => $imageMedium,
-      'zoomurl' => $imageZoom,
-      'fullurl' => $original_image,
-      'type' => 'image',
-    ];
-    $thumbnails[] = [
-      'thumburl' => $imageSmall,
-      'mediumurl' => $imageMedium,
-      'zoomurl' => $imageZoom,
-      'fullurl' => $original_image,
-      'type' => 'image',
-    ];
     $thumbnails[] = [
       'thumburl' => $imageSmall,
       'mediumurl' => $imageMedium,
