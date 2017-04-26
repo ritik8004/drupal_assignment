@@ -2,7 +2,7 @@
 
 .sharethis-wrapper {
   & > span {
-    padding: 10px 0;
+    padding: 10px 10px 10px 0;
     font-size: 36px;
 
     &:hover {
@@ -15,12 +15,18 @@
   }
 
   .st_twitter_custom {
-    padding: 0 5px;
-
     @include icon(twitter);
   }
 
   .st_pinterest_custom {
     @include icon(pinterest);
+  }
+
+  .st_instagram_custom {
+    @include icon(instagram);
+  }
+
+  .st_youtube_custom {
+    @include icon(youtube);
   }
 }
