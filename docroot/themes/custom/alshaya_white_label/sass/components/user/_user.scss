@@ -640,7 +640,7 @@
 
 .password-tooltip-icon {
   position: absolute;
-  top: 0;
+  top: -25px;
   #{$right}: 0;
   background: #0084cc;
   width: 13px;
@@ -661,7 +661,7 @@
   border: 2px solid #0084cc;
   padding: 10px;
   position: absolute;
-  top: 20px;
+  top: 0;
   #{$right}: 0;
   z-index: 1;
   max-width: 300px;

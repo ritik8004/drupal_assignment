@@ -17,7 +17,7 @@
     .is-filter {
       @include breakpoint($only-mobile) {
         &:first-child {
-          transform: translate(-2.1875rem, 0);
+          transform: translate(#{negate-value(-2.1875)}rem, 0);
         }
       }
 

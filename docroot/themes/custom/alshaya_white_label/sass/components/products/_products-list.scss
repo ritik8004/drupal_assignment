@@ -162,8 +162,11 @@
   }
 
   .c-facet__blocks {
-    @include breakpoint($only-tablet) {
+    @include breakpoint($upto-desktop) {
       #{$right}: -2.1875rem;
+    }
+
+    @include breakpoint($only-tablet) {
       top: 2.1875rem;
     }
 
@@ -198,14 +201,14 @@
     max-width: 6.75rem;
 
     &:last-child {
-      float: right;
-      transform: translate(-2.1875rem, 0);
+      float: $right;
+      transform: translate(#{negate-value(-2.1875)}rem, 0);
     }
   }
 
   @include breakpoint($tablet) {
     &:first-child {
-      transform: translate(-3.7rem, 0);
+      transform: translate(#{negate-value(-3.7)}rem, 0);
     }
   }
 
@@ -222,7 +225,7 @@
       @include u-center--vertically;
 
       position: absolute;
-      left: -3rem;
+      #{$left}: -4rem;
       font-size: 12px;
     }
 
