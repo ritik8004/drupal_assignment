@@ -242,6 +242,8 @@
   label {
     position: relative;
     top: -3.4rem;
+    font-size: 0.75rem;
+    color: $greyish;
 
     &.error {
       bottom: 7px;
@@ -287,5 +289,11 @@
     text-transform: capitalize;
     z-index: 2;
     cursor: pointer;
+  }
+
+  .form-item--error-message {
+    color: $cherry;
+    position: relative;
+    top: -1rem;
   }
 }

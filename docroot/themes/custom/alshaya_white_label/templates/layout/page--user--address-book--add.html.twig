@@ -153,13 +153,7 @@
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
 
   {% if page.footer_primary %}
-    <div class="c-footer-primary">
-      <div class="l-container">
-        <div class="c-footer-primary__region">
-          {{ page.footer_primary }}
-        </div>
-      </div>
-    </div>
+      {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
     <!-- /footer-primary -->
   {% endif %}
 

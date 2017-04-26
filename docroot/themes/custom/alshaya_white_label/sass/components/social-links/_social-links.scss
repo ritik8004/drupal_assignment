@@ -1,41 +1,24 @@
 .c-social-links {
-  @include breakpoint($only-mobile) {
-    position: absolute;
-    bottom: 0.5rem;
-    left: 50%;
-    transform: translate(-50%, 0);
-    min-width: 15rem;
-  }
-
-  @include breakpoint($tablet) {
-    min-width: 18.188em;
-    position: absolute;
-    top: 32%;
-    #{$right}: 0;
-  }
-
-  @include breakpoint($desktop) {
-    top: 63%;
-  }
-
   ul {
+    font-size: 0;
+
     @extend %list-clear;
+
+    @include breakpoint($upto-tablet) {
+      text-align: center;
+    }
   }
 
   li {
-    float: $left;
+    display: inline-block;
     margin-#{$right}: 0.9375rem;
   }
 
   [class^="c-social-links--"] {
     @include u-image-replacement;
 
-    width: 1.5625rem;
-    height: 1.5625rem;
-    display: inline-block;
-
     &::before {
-      font-size: 2rem;
+      font-size: 1.7rem;
       color: $marine-blue-two;
     }
   }
