@@ -117,7 +117,7 @@ class CustomerCartForm extends FormBase {
       ];
     }
 
-    if ((float) $totals['discount'] > 0) {
+    if ((float) $totals['discount'] != 0) {
       $form['totals']['discount'] = [
         'label' => ['#plain_text' => t('Discount')],
         'value' => ['#plain_text' => $totals['discount']],
