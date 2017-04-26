@@ -667,10 +667,12 @@ body.alias--cart {
   #edit-continue-shopping,
   #edit-continue-shopping-mobile {
     font-size: 12px;
+    font-weight: bold;
     border: 1px solid $marine-blue-two;
     display: block;
     padding: 0.625rem 1.6rem;
     text-align: center;
+    text-transform: lowercase;
 
     @include breakpoint($tablet) {
       max-width: 173px;
