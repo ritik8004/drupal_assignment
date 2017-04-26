@@ -25,6 +25,20 @@
     @extend %list-clear;
   }
 
+  .menu--account {
+    li {
+      @include breakpoint($desktop) {
+        @at-root {
+          &:first-child {
+            .logged-out & {
+              @include u-visibility(none);
+            }
+          }
+        }
+      }
+    }
+  }
+
   li {
     @include breakpoint($upto-desktop) {
       @include icon(chevronright, after) {
@@ -35,6 +49,10 @@
         font-size: 1.125rem;
         cursor: pointer;
         pointer-events: none;
+      }
+
+      &:last-child {
+        @include u-visibility(none);
       }
 
       border-bottom: 1px solid #ddd;
@@ -66,7 +84,8 @@
 
     line-height: 1;
 
-    &:hover {
+    &:hover,
+    &.is-active {
       color: $marine-blue-two;
       background: $white-five;
     }
@@ -156,7 +175,7 @@
     color: $marine-blue-two;
     font-size: 12px;
     padding: 0.94rem 0;
-    margin: 0 1rem;
+    margin: 0 0.625rem;
     border-bottom: 1px solid $white;
     text-transform: lowercase;
     font-weight: normal;
@@ -170,6 +189,12 @@
   height: 100%;
   z-index: 10;
   padding: 0;
+
+  a {
+    &::before {
+      margin: 0;
+    }
+  }
 
   li {
     display: block;

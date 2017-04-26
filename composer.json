@@ -8,7 +8,6 @@
         "acquia/blt": "^8.3",
         "acquia/lightning": "2.0.3",
         "drupal/address": "^1.0-rc4",
-        "drupal/acquia_connector": "^1.5.0",
         "drupal/acsf": "^1.33.0",
         "drupal/cog": "^1.0.0",
         "drupal/core": "^8.0",
@@ -46,7 +45,8 @@
         "drupal/mailsystem": "^4.1",
         "drupal/mimemail": "1.x-dev",
         "drupal/search_api_solr": "1.0-beta2",
-        "drupal/search_api_autocomplete": "1.x-dev"
+        "drupal/search_api_autocomplete": "1.x-dev",
+        "drupal/acquia_connector": "1.9.0"
     },
     "require-dev": {
         "behat/behat": "^3.1",
@@ -113,6 +113,9 @@
             },
             "drupal/metatag": {
                 "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-9.patch"
+            },
+            "drupal/acquia_connector": {
+                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
             }
         },
         "installer-paths": {

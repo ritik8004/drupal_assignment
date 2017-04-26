@@ -1,0 +1,63 @@
+.user-page.checkout-delivery {
+  main {
+    form {
+      input,
+      select {
+        &::placeholder {
+          color: transparent;
+        }
+      }
+
+      .form-type-select label {
+        display: none;
+      }
+
+      fieldset {
+        border: 2px solid #adadad;
+
+        @include breakpoint($only-tablet) {
+          width: 100%;
+        }
+
+        legend {
+          padding: 1em;
+
+          span {
+            color: $marine-blue-two;
+          }
+        }
+      }
+
+      .form-actions {
+        background: $white-four;
+        display: inline-block;
+        width: 100%;
+        vertical-align: middle;
+        padding: 1em;
+        line-height: 2.8;
+
+        @include breakpoint($only-mobile) {
+          text-align: center;
+          line-height: 3.8;
+          background: white;
+        }
+
+        .form-submit {
+          float: $right;
+          margin: 0;
+          margin-right: 0.75em;
+
+          @include breakpoint($only-mobile) {
+            float: none;
+          }
+        }
+
+        a {
+          font-weight: bold;
+          color: #0084cc;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

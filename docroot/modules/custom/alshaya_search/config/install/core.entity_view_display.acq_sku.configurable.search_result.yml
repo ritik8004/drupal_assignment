@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.acq_sku.search_result
     - field.field.acq_sku.configurable.field_configurable_attributes
     - field.field.acq_sku.configurable.field_configured_skus
+    - image.style.291x288
   module:
     - image
 id: acq_sku.configurable.search_result
@@ -14,9 +15,9 @@ bundle: configurable
 mode: search_result
 content:
   attr_special_price:
-    label: above
+    label: hidden
     type: string
-    weight: 35
+    weight: 3
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -25,13 +26,20 @@ content:
     type: image
     weight: 0
     settings:
-      image_style: ''
+      image_style: 291x288
       image_link: ''
+    third_party_settings: {  }
+  name:
+    type: string
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
   price:
     label: hidden
     type: string
-    weight: 3
+    weight: 2
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -40,6 +48,5 @@ hidden:
   crosssell: true
   field_configurable_attributes: true
   field_configured_skus: true
-  name: true
   sku: true
   upsell: true

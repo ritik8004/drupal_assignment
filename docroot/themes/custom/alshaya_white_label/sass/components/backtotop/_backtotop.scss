@@ -1,0 +1,36 @@
+#backtotop {
+  @include breakpoint($only-mobile) {
+    @include u-visibility(none, true);
+  }
+
+  @include icon(arrowup, after) {
+    width: 2.3125rem;
+    height: 2.3125rem;
+    background: $whisper-light;
+    font-size: 2.125rem;
+    position: absolute;
+    top: -3rem;
+    right: 0.875rem;
+    border-radius: 100%;
+    color: $black;
+  }
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  #{$right}: 20px;
+  text-indent: 0;
+  bottom: 0;
+  cursor: pointer;
+  position: fixed;
+  font-size: 0.5rem;
+  z-index: 3;
+  display: block;
+  background: none;
+  text-transform: lowercase;
+  text-align: center;
+  color: $grey-ash;
+  height: 4.375rem;
+  width: 4.375rem;
+}

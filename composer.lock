@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5d83eee0f64552d0c216ad417b0dbc5",
+    "content-hash": "bb8ca2762e41770384d7432b7265461a",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1505,17 +1505,17 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/acquia_connector",
-                "reference": "8.x-1.8"
+                "reference": "8.x-1.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.8.zip",
-                "reference": "8.x-1.8",
-                "shasum": "457e44a9a9411c4d54dfd7284a1b55e6ed5a4ed3"
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.9.zip",
+                "reference": null,
+                "shasum": "a52f410b077f955ecadbb249218b4abd9cad17d1"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -1529,8 +1529,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.8",
-                    "datestamp": "1490205485"
+                    "version": "8.x-1.9",
+                    "datestamp": "1491851344"
+                },
+                "patches_applied": {
+                    "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2319,7 +2322,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.6",
-                    "datestamp": "1489502883"
+                    "datestamp": "1490994483"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2421,7 +2424,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha1",
-                    "datestamp": "1476873539"
+                    "datestamp": "1490940184"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5315,7 +5318,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha5",
-                    "datestamp": "1489190883"
+                    "datestamp": "1453656839"
                 },
                 "patches_applied": {
                     "2674874 - Issue saving Schedule Update Type form": "https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch",

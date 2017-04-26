@@ -1,4 +1,5 @@
-.c-user--node {
+.c-user--node,
+.c-communication-preferences {
   .c-page-title {
     border-bottom: 1px solid $white;
     padding-bottom: 0.75rem;
@@ -18,5 +19,193 @@
 
   .block-local-tasks-block {
     display: none;
+  }
+}
+
+// Dashboard page Sidebar.
+.c-user--node {
+  .c-sidebar-first {
+    @include breakpoint($upto-tablet) {
+      display: block;
+      margin-bottom: 2.6rem;
+
+      .my-account-nav {
+        li:first-child a {
+          text-transform: lowercase;
+          font-family: "alshaya-bold";
+          color: $marine-blue-two;
+          line-height: 1;
+          margin-top: 0;
+          font-size: 1.12rem;
+          border-bottom: 1px solid $white;
+          padding-bottom: 0.7rem;
+          padding-top: 0;
+
+          &::after {
+            content: none;
+          }
+        }
+
+        a {
+          border-bottom: 1px solid $white;
+          display: block;
+          line-height: 1;
+          padding: 1rem 0;
+          position: relative;
+
+          @include icon(chevronright, after) {
+            font-size: 1.9rem;
+            position: absolute;
+            #{$right}: 0.7rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
+
+  main {
+    @include breakpoint($upto-tablet) {
+      display: none;
+    }
+  }
+}
+
+.path--profile {
+  .l-two--sf {
+    margin-top: 2.5rem;
+  }
+}
+
+.c-user-login {
+  .c-page-title {
+    top: -5.5rem;
+
+    @include breakpoint($tablet) {
+      top: -4.9rem;
+    }
+  }
+
+  .user-login-form {
+    .form-item:first-child {
+      margin-top: 1.49em;
+    }
+
+    .form-item {
+      margin-top: 5.1em;
+    }
+
+    #edit-actions {
+      margin-top: 1.9rem;
+    }
+  }
+}
+
+.c-user-register {
+  .messages.drupal-messages {
+    display: none;
+  }
+
+  .c-page-title {
+    top: -5.5rem;
+
+    @include breakpoint($desktop) {
+      top: -0.9rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: -3.8rem;
+    }
+  }
+
+  .messages--error {
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: -2rem;
+      padding-top: 1.5rem;
+      padding-bottom: 0;
+      margin-#{$left}: 0;
+    }
+  }
+
+  .c-content__region .user-form {
+    margin-top: -0.5rem;
+
+    .form-wrapper,
+    .form-item {
+      @include breakpoint($desktop) {
+        margin-top: 2.63em;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-top: 2.9rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 2.93rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: -2.65rem;
+    }
+
+    .form-type-password-confirm {
+      margin-top: 4.5rem;
+
+      .confirm-parent {
+        margin-top: 4.42rem;
+      }
+    }
+
+    .field--name-field-terms-and-condition {
+      margin-top: 1.38rem;
+
+      .form-item-field-terms-and-condition-value {
+        margin-top: 0;
+      }
+    }
+
+    #edit-actions {
+      margin-top: 0.477rem;
+      margin-bottom: 4rem;
+    }
+
+    .field--name-field-first-name {
+      @include breakpoint($only-tablet) {
+        margin-top: 2.45rem;
+
+        .form-type-textfield {
+          margin-top: 0;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.5rem;
+
+        .form-type-textfield {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+.c-user-password,
+.c-user-register-complete {
+  .my-account-nav {
+    display: none;
+  }
+
+  .c-page-title {
+    top: -3.5rem;
+    margin-left: 0;
   }
 }

@@ -47,7 +47,8 @@ modules:
 # In the components key of their info file, Lightning components may list
 # additional sub-components to be installed. To override this behavior, you can
 # specify sub-components that should be excluded from the install process.
-exclude_components: []
+exclude_components:
+  - lightning_search
 
 # A system path to redirect to once installation is complete.
 redirect:

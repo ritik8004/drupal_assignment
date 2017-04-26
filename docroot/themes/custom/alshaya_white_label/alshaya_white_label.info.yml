@@ -22,6 +22,10 @@ libraries:
   - alshaya_white_label/color_styles
 
 libraries-override:
+  back_to_top/back_to_top_icon:
+    css:
+      theme:
+        css/back_to_top.css: false
   core/jquery.ui:
     css:
       component:

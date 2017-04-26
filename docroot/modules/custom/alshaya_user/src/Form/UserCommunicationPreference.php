@@ -125,7 +125,7 @@ class UserCommunicationPreference extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $preference = $form_state->getValue('communication_preference');
     $this->userData->set('user', $this->user_profile->id(), 'communication_preference', $preference);
-    drupal_set_message($this->t('<span>Your communication preference saved successfully.</span>'));
+    drupal_set_message($this->t('Your communication preference saved successfully.'));
   }
 
 }

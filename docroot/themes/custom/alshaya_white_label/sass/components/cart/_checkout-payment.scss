@@ -1,0 +1,44 @@
+.user-page.checkout-delivery.checkout-payment {
+  .multistep-checkout {
+    border: 1px solid #adadad;
+    margin-top: 0.75em;
+
+    fieldset {
+      width: 100%;
+      border: 0;
+      margin: 0;
+      padding: 0;
+
+      legend {
+        background: $white-four;
+        width: 100%;
+      }
+
+      .fieldset-wrapper {
+        position: relative;
+
+        .form-item {
+          display: block;
+        }
+
+        .webform-options-display-one-column {
+          padding-#{$left}: 1em;
+        }
+      }
+    }
+  }
+
+  fieldset#edit-payment-methods > legend {
+    display: none;
+  }
+}
+
+#address_wrapper {
+  padding: 0 1em;
+}
+
+#edit-billing-address {
+  .fieldset-wrapper {
+    padding: 1em;
+  }
+}

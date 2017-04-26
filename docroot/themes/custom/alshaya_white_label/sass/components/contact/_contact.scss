@@ -5,6 +5,26 @@
     padding-bottom: 0.75rem;
     margin-top: 2rem;
   }
+
+  .form-type-textarea {
+    textarea {
+      resize: none;
+      padding-#{$right}: 1.25rem;
+    }
+
+    .field-suffix {
+      position: absolute;
+      top: 0.125rem;
+      right: 0;
+      font-size: 0.8125rem;
+      color: $greyish;
+      font-weight: normal;
+    }
+
+    #edit-message_counter {
+      @include u-visibility(none);
+    }
+  }
 }
 
 .contact-form,
@@ -100,6 +120,10 @@
   }
 
   .form-submit {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+
     width: 5.6875rem;
     height: 2.1875rem;
     text-transform: lowercase;

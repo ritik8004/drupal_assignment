@@ -2,7 +2,25 @@
 .c-address-book {
   .c-page-title {
     border-bottom: 1px solid $white;
-    padding-bottom: 8px;
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.25rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 0.25rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.8rem;
+    }
+  }
+
+  .messages--error {
+    margin-top: 1rem;
+
+    @include breakpoint($upto-tablet) {
+      padding-bottom: 1rem;
+    }
   }
 
   .block-local-tasks-block {
@@ -105,6 +123,16 @@
 
       &.error {
         top: 28px;
+      }
+    }
+  }
+
+  .region__content {
+    .profile-form {
+      margin-top: 1rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 1.9rem;
       }
     }
   }

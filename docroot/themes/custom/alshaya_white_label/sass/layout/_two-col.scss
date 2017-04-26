@@ -36,9 +36,6 @@
 
   // @TODO: Move to c-address-book.
   &.c-address-book {
-    padding-left: 0;
-    padding-right: 0;
-
     .c-sidebar-first {
       @include breakpoint($tablet) {
         display: block;
