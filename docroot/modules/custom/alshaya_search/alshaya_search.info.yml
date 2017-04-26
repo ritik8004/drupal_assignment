@@ -7,6 +7,7 @@ dependencies:
   - acquia_connector
   - acquia_search
   - alshaya_image_styles
+  - better_exposed_filters
   - block
   - facets
   - file

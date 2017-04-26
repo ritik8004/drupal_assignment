@@ -4,6 +4,7 @@ dependencies:
   config:
     - search_api.index.acquia_search_index
   module:
+    - better_exposed_filters
     - search_api
     - views_infinite_scroll
 id: search
@@ -37,7 +38,7 @@ display:
           bypass_access: false
           skip_access: false
       exposed_form:
-        type: input_required
+        type: bef
         options:
           submit_button: Search
           reset_button: false
@@ -46,7 +47,30 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          input_required: false
           text_input_required: 'Enter keywords to search the site.'
+          bef:
+            general:
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              autosubmit: true
+              autosubmit_hide: true
+            sort:
+              bef_format: default
+              advanced:
+                collapsible: false
+                collapsible_label: 'Sort options'
+                combine: true
+                combine_rewrite: "Relevance Desc|Relevance\nName Desc|Name Z to A\nName Asc|Name A to Z\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
+                reset: false
+                reset_label: ''
+                is_secondary: false
+            search_api_fulltext:
+              bef_format: default
+              more_options:
+                is_secondary: false
+                rewrite:
+                  filter_rewrite_values: ''
           text_input_required_format: rich_text
       pager:
         type: infinite_scroll
@@ -201,9 +225,33 @@ display:
           group_type: group
           admin_label: ''
           order: DESC
-          exposed: false
+          exposed: true
           expose:
-            label: ''
+            label: Relevance
+          plugin_id: search_api
+        price:
+          id: price
+          table: search_api_index_acquia_search_index
+          field: price
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: true
+          expose:
+            label: Price
+          plugin_id: search_api
+        title:
+          id: title
+          table: search_api_index_acquia_search_index
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: true
+          expose:
+            label: Name
           plugin_id: search_api
       header:
         result:
@@ -242,6 +290,8 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
       tags: {  }
   page:
     display_plugin: page
@@ -258,4 +308,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
       tags: {  }
