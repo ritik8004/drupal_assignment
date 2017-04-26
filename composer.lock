@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb8ca2762e41770384d7432b7265461a",
+    "content-hash": "fbe714d436ec639b185d6d3e74c0e921",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1514,7 +1514,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.9.zip",
-                "reference": null,
+                "reference": "8.x-1.9",
                 "shasum": "a52f410b077f955ecadbb249218b4abd9cad17d1"
             },
             "require": {
@@ -2057,17 +2057,11 @@
         },
         {
             "name": "drupal/better_exposed_filters",
-            "version": "3.0.0-alpha2",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/better_exposed_filters",
-                "reference": "8.x-3.0-alpha2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-3.0-alpha2.zip",
-                "reference": "8.x-3.0-alpha2",
-                "shasum": "f1bbe21379a4ac8e28e3edfbdd4964343299caeb"
+                "reference": "05c5d454ae9667ceb5fb62dca7c077dbca87ea61"
             },
             "require": {
                 "drupal/core": "*"
@@ -2078,8 +2072,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha2",
-                    "datestamp": "1484626084"
+                    "version": "8.x-3.0-alpha2+15-dev",
+                    "datestamp": "1492103042"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2096,7 +2090,8 @@
             "homepage": "https://www.drupal.org/project/better_exposed_filters",
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
-            }
+            },
+            "time": "2017-04-14 01:04:17"
         },
         {
             "name": "drupal/captcha",
@@ -12820,13 +12815,13 @@
         "drupal/facets": 15,
         "drupal/profile": 15,
         "drupal/webform": 10,
-        "drupal/better_exposed_filters": 15,
         "drupal/back_to_top": 10,
         "drupal/change_pwd_page": 10,
         "drupal/mobile_number": 15,
         "drupal/sharethis": 10,
         "drupal/mimemail": 20,
-        "drupal/search_api_autocomplete": 20
+        "drupal/search_api_autocomplete": 20,
+        "drupal/better_exposed_filters": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
