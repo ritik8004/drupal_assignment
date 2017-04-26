@@ -65,3 +65,7 @@ select2:
 autosize:
   js:
     vendor/js/autosize.min.js: {}
+
+sizeguide:
+  js:
+    js/sizeguide.js: {}
