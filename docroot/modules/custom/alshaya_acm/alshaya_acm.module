@@ -287,7 +287,7 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     ];
   }
 
-  if ((float) $totals['discount'] > 0) {
+  if ((float) $totals['discount'] != 0) {
     $form['totals']['discount']['value'] = [
       '#markup' => alshaya_acm_price_format($totals['discount']),
     ];
