@@ -193,9 +193,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         $cart->removeItemFromCart($id);
         $cart_storage->updateCart();
 
-        // Update flag for showing the error.
-        $out_of_stock_error = TRUE;
-
         // Basket out of stock error.
         $out_of_stock_message = t('Some items in your basket are out of stock and have been removed.');
 
@@ -207,8 +204,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
           'price' => $form['cart'][$id]['price'],
           'sku_attributes' => $form['cart'][$id]['name']['#sku_attributes'],
         ];
-        $form_state->setTemporary($out_of_stock_items);
-
+        if (!$form_state->getTemporaryValue('out_of_stock')) {
+          $form_state->setTemporaryValue('out_of_stock', []);
+        }
+        $form_state->setTemporaryValue('out_of_stock', $form_state->getTemporaryValue('out_of_stock') + $out_of_stock_items);
         // Remove item from cart.
         unset($form['cart'][$id]);
       }
@@ -268,13 +267,12 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     unset($form['actions']['update']);
   }
 
-  $out_of_stock_items = $form_state->getTemporary();
   // If there are some out of stock items.
-  if (!empty($out_of_stock_items)) {
+  if (!empty($form_state->getTemporaryValue('out_of_stock'))) {
     // Out of stock items list.
     $form['out_of_stock_items'] = [
       '#theme' => 'out_of_stock_items',
-      '#data' => $out_of_stock_items,
+      '#data' => $form_state->getTemporaryValue('out_of_stock'),
       '#weight' => 200,
     ];
   }
@@ -371,16 +369,6 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     // Update quantity.
     $quantity = 0;
 
-    // Add item to the out of stock.
-    $out_of_stock_items[] = [
-      'name' => 'name',
-      'image' => 'image',
-      'item_code' => $sku,
-      'price' => $form['cart'][$sku]['price'],
-      'sku_attributes' => 'aatributesss',
-    ];
-    $form_state->setTemporary($out_of_stock_items);
-
     unset($form['cart'][$sku]);
   }
   // If quantity we added for sku is more than what available in stock.
@@ -393,10 +381,9 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   if ($quantity == 0) {
     $cart->removeItemFromCart($sku);
   }
-  else {
-    $cart->updateItemQuantity($sku, $quantity);
-  }
 
+  // Todo: Unable to remove the last item from cart, thus setting quantity to 0.
+  $cart->updateItemQuantity($sku, $quantity);
   $cartStorage->updateCart();
   $newcart = $cartStorage->getCart();
 

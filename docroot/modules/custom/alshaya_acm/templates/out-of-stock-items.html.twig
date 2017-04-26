@@ -12,8 +12,11 @@
                 {% for item in data %}
                     <tr>
                         <td>
-                            <div>{{ item.image }}</div>
-                            <div>{{ item.name }}</div>
+                            <div>{{ item.image }} fdsfd</div>
+                            <div>{{ item.name }} dfsd </div>
+                            {% for sku_attribute in sku_attributes %}
+                                <div>{{ sku_attribute.label }}: {{ sku_attribute.value }}</div>
+                            {% endfor %}
                             <div>{{ item.item_code }}</div>
                         </td>
                         <td>
