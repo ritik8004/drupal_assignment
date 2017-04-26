@@ -1,16 +1,21 @@
 <html>
   <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      {% if css %}
       <style type="text/css">
-        a { color: #0d6fc0; }
+        body {font-family: Arial, helvetica; font-size: 13px; line-height: 1.31; color: #666;}
+        h1 {font-size: 24px; color: #003773; border-bottom: 1px solid #ddd; padding-bottom: 15px;}
+        a { color: #0d6fc0; text-decoration: none;}
         .bold { font-weight: bold; }
-        .button { background: #ff6d22; color: #fff; padding: 10px 30px; }
+        .button { background: #ff6d22; color: #fff; padding: 10px 30px; margin: 10px 0; display: inline-block;}
         p { margin-bottom: 16px;}
+        #center {min-height: 200px; padding: 0 25px;}
+        #header {border-bottom: 1px solid #ddd; padding: 25px 25px 40px 25px; margin-bottom: 23px;}
       </style>
-      {% endif %}
   </head>
   <body id="mimemail-body" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
+    <div id="header">
+      <img src="{{ site_base_path ~ directory }}/mothercare-logo.svg" width="281px"/>
+    </div>
     <div id="center">
       <div id="main">
         {{ body|raw }}
@@ -23,39 +28,39 @@
             <img src="https://cdn.rawgit.com/skippednote/b8e62d5fccd4f5349fff0c77b2a9729d/raw/7c26aeb0e5ae098f1027c16fe2d54c1f7766a333/facebook.svg" alt="">
           </div>
         </a>
-        <a href="" target="_blank" style="display: inline-block;  margin: 0 15px;">
+        <a href="" target="_blank" style="display: inline-block;  margin: 0 0 0 15px;">
           <div>
             <img src="https://cdn.rawgit.com/skippednote/b8e62d5fccd4f5349fff0c77b2a9729d/raw/7c26aeb0e5ae098f1027c16fe2d54c1f7766a333/instagram.svg" alt="">
           </div>
         </a>
-        <a href="" target="_blank" style="display: inline-block; margin: 0 15px;">
+        <a href="" target="_blank" style="display: inline-block; margin: 0 0 0 15px;">
           <div>
             <img src="https://cdn.rawgit.com/skippednote/b8e62d5fccd4f5349fff0c77b2a9729d/raw/7c26aeb0e5ae098f1027c16fe2d54c1f7766a333/youtube.svg" alt=""  "taget+_blank">
           </div>
         </a>
-        <a href="" target="_blank" style="display: inline-block; margin: 0 15px;">
+        <a href="" target="_blank" style="display: inline-block; margin: 0 0 0 15px;">
           <div>
             <img src="https://cdn.rawgit.com/skippednote/b8e62d5fccd4f5349fff0c77b2a9729d/raw/7c26aeb0e5ae098f1027c16fe2d54c1f7766a333/google.svg" alt=""  "taget+_blank">
           </div>
         </a>
-        <a href="" target="_blank" style="display: inline-block; margin: 0 15px;">
+        <a href="" target="_blank" style="display: inline-block; margin: 0 0 0 15px;">
           <div>
             <img src="https://cdn.rawgit.com/skippednote/b8e62d5fccd4f5349fff0c77b2a9729d/raw/7c26aeb0e5ae098f1027c16fe2d54c1f7766a333/twitter.svg" alt=""  "taget+_blank">
           </div>
         </a>
-        <a href="" target="_blank" style="display: inline-block;">
+        <a href="" target="_blank" style="display: inline-block; margin: 0 0 0 15px;">
           <div>
             <img src="https://cdn.rawgit.com/skippednote/b8e62d5fccd4f5349fff0c77b2a9729d/raw/7c26aeb0e5ae098f1027c16fe2d54c1f7766a333/pinterest.svg" alt="" "taget+_blank">
           </div>
         </a>
       </div>
-      <div style="font-family: 'Arial', helvetica; font-size: 11px; background: #f7f7f7; padding: 16px; 60px; text-align: center;">
-        <p>
+      <div style="font-family: Arial, helvetica; font-size: 11px; line-height: 1.55; background: #f7f7f7; padding: 16px; text-align: center;">
+        <p style="margin:0;">
           {% trans %}
             &copy; Copyright Mothercare UK Limited  2016 Registerd in England no. 533087, VAT Reg no 440 6445 66
           {% endtrans %}
         </p>
-        <p>
+        <p style="margin:0;">
           {% trans %}
             Registered office: Cherry Tree Road, Watford, Herfordshire, WD24 6SH
           {% endtrans %}
