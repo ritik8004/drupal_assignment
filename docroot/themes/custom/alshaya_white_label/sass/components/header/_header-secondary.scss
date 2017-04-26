@@ -25,7 +25,7 @@
     @extend %list-clear;
   }
 
-  #block-alshaya-white-label-account-menu-menu {
+  .menu--account {
     li {
       @include breakpoint($desktop) {
         @at-root {
