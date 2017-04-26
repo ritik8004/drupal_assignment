@@ -1,0 +1,32 @@
+// share fields on product detail page
+
+.sharethis-wrapper {
+  & > span {
+    padding: 10px 10px 10px 0;
+    font-size: 36px;
+
+    &:hover {
+      color: $cherry;
+    }
+  }
+
+  .st_facebook_custom {
+    @include icon(facebook);
+  }
+
+  .st_twitter_custom {
+    @include icon(twitter);
+  }
+
+  .st_pinterest_custom {
+    @include icon(pinterest);
+  }
+
+  .st_instagram_custom {
+    @include icon(instagram);
+  }
+
+  .st_youtube_custom {
+    @include icon(youtube);
+  }
+}

@@ -72,7 +72,8 @@ header {
     }
   }
 
-  #block-alshaya-white-label-search {
+  #block-alshaya-white-label-search,
+  .block-views-exposed-filter-blocksearch-page {
     text-align: center;
 
     @include breakpoint($only-tablet) {
@@ -99,6 +100,7 @@ header {
       text-transform: lowercase;
       max-width: 280px;
       border: 1px solid $white;
+      background-image: none;
 
       &::placeholder {
         font-size: 12px;
@@ -119,6 +121,10 @@ header {
 
     label {
       display: none;
+    }
+
+    .form-item--error-message {
+      @include u-visibility(none);
     }
   }
 
@@ -195,7 +201,8 @@ header {
 .c-menu-primary {
   display: none;
 
-  #block-exposedformsearchpage {
+  #block-exposedformsearchpage,
+  .block-views-exposed-filter-blocksearch-page {
     display: none;
 
     label {
@@ -210,6 +217,7 @@ header {
     input {
       padding: 1.0625rem !important;
       border: 0;
+      background-image: none;
     }
 
     #edit-actions,
@@ -611,6 +619,8 @@ header {
   }
 
   .mobile--overlay {
+    overflow: hidden;
+
     &::before {
       content: '';
       position: fixed;
@@ -645,6 +655,7 @@ header {
     font-size: 12px;
     text-decoration: none;
     color: $brownish-grey;
+    display: block;
   }
 
   .menu__list-item {
@@ -796,6 +807,10 @@ header {
 }
 
 .toggle--sign {
+  @include breakpoint($only-mobile) {
+    color: $black;
+  }
+
   position: fixed;
   top: 0;
   width: 80%;
@@ -804,6 +819,10 @@ header {
   display: table;
 
   .one {
+    @include breakpoint($only-tablet) {
+      font-family: $alshaya-bold;
+    }
+
     font-family: $alshaya-thin;
     font-size: 14px;
     padding: 1rem 2rem;
@@ -886,5 +905,9 @@ header {
   a {
     display: block;
   }
+}
+
+.html--overlay {
+  overflow: hidden;
 }
 

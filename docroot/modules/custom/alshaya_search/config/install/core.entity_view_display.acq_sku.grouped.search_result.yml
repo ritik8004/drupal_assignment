@@ -5,6 +5,7 @@ dependencies:
     - acq_sku.type.grouped
     - core.entity_view_mode.acq_sku.search_result
     - field.field.acq_sku.grouped.field_grouped_skus
+    - image.style.291x288
   module:
     - image
 id: acq_sku.grouped.search_result
@@ -15,7 +16,7 @@ content:
   attr_special_price:
     label: hidden
     type: string
-    weight: 2
+    weight: 3
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -24,12 +25,19 @@ content:
     type: image
     weight: 0
     settings:
-      image_style: ''
+      image_style: 291x288
       image_link: ''
+    third_party_settings: {  }
+  name:
+    type: string
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
   price:
     type: string
-    weight: 1
+    weight: 2
     label: hidden
     settings:
       link_to_entity: false
@@ -38,6 +46,5 @@ hidden:
   attributes: true
   crosssell: true
   field_grouped_skus: true
-  name: true
   sku: true
   upsell: true

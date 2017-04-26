@@ -4,19 +4,23 @@
     {% endif %}
     <div class="items">
         {% if name is not empty %}
-            <span>{{ name }}</span>
+            <div class="dark">{{ name }}</div>
         {% endif %}
-        {% if color is not empty %}
-            <span>{{ 'Colour'|t }}: {{ color }}</span>
-        {% endif %}
+        {% for sku_attribute in sku_attributes %}
+            <div>
+                {% trans %}
+                {{ sku_attribute.label }}: {{ sku_attribute.value }}
+                {% endtrans %}
+            </div>
+        {% endfor %}
         {% if item_code is not empty %}
-            <span>{{ 'Item code'|t }}: {{ item_code }}</span>
+            <div>{{ 'Item code'|t }}: {{ item_code }}</div>
         {% endif %}
         {% if include_in_bundle is not empty %}
-            <span>{{ include_in_bundle }}</span>
+            <div class="item--bundle">{{ include_in_bundle }}</div>
         {% endif %}
         {% if total_price is not empty %}
-            <span>{{ total_price }}</span>
+            <div class="mobile-only dark">{{ total_price }}</div>
         {% endif %}
     </div>
 </div>

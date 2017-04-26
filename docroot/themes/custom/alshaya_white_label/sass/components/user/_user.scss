@@ -1,6 +1,7 @@
 .captcha {
   font-size: 12px;
   color: $greyish;
+  margin-top: 1.5rem;
 }
 
 .messages--error {
@@ -29,6 +30,15 @@
     position: absolute;
     top: -3.5rem;
     color: $marine-blue;
+
+    @include breakpoint($desktop) {
+      top: -0.9rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-#{$left}: 1rem;
+      top: -5.5rem;
+    }
   }
 
   .c-sidebar-second {
@@ -41,7 +51,13 @@
 
     p {
       color: $brownish-grey;
-      margin: 3px 0;
+      margin: 12px 0;
+    }
+
+    .c-sidebar-second__region {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 6.95em;
+      }
     }
   }
 
@@ -50,12 +66,16 @@
   }
 
   #block-youllbeableto {
-    margin-top: 3em;
-    margin-bottom: 4.1rem;
+    margin-top: 1.81rem;
+    margin-bottom: 4rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: -0.5rem;
+    }
 
     a {
       font-weight: bold;
-      padding-top: 1em;
+      padding-top: 0.45em;
       display: inline-block;
     }
   }
@@ -66,11 +86,11 @@
     padding-top: 0.5rem;
 
     @include breakpoint($tablet) {
-      margin-top: 4.5rem;
+      margin-top: 4.4rem;
       padding-top: 3.5rem;
       width: 20.625rem;
       margin-#{$left}: -2em;
-      padding-#{$left}: 3em;
+      padding-#{$left}: 2.45em;
       display: inline-block;
     }
 
@@ -89,6 +109,7 @@
 
     h2 {
       color: $dark-sand;
+      margin-bottom: 0.1rem;
     }
 
     a {
@@ -120,6 +141,7 @@
       display: inline-block;
       float: $left;
       margin-top: 0;
+      margin-bottom: 0;
     }
 
     .field--name-body {
@@ -128,9 +150,13 @@
       clear: $left;
     }
 
-    p > a {
-      padding-top: 1em;
-      display: inline-block;
+    p {
+      line-height: 1.1rem;
+
+      > a {
+        padding-top: 1em;
+        display: inline-block;
+      }
     }
   }
 
@@ -138,6 +164,10 @@
   .form-item {
     margin-top: 3em;
     position: relative;
+
+    @include breakpoint($desktop) {
+      margin-top: 2.6em;
+    }
   }
 
   #edit-account {
@@ -164,6 +194,11 @@
 
   .user-form {
     margin-top: -3em;
+
+    @include breakpoint($only-tablet) {
+      margin-#{$left}: 1rem;
+      margin-top: -0.6rem;
+    }
   }
 
   .user-form,
@@ -205,6 +240,7 @@
     }
 
     label.form-required,
+    .form-type-textfield label,
     .field--name-field-privilege-card-number label,
     .form-item-privilege-card-number label,
     .form-item-privilege-card-number2 label {
@@ -233,9 +269,14 @@
       }
     }
 
-    .error {
+    .error,
+    .form-item--error-message {
       font-size: 12px;
       color: $red-error;
+
+      strong {
+        font-weight: 400;
+      }
     }
 
     .text-full,
@@ -253,6 +294,12 @@
       &.valid {
         border-color: $windows-blue;
         background: transparent;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .form-email {
+        margin-top: 9px;
       }
     }
 
@@ -320,7 +367,7 @@
     color: $cerulean;
   }
 
-  i {
+  span {
     display: inline-block;
     width: 18px;
     height: 18px;
@@ -328,11 +375,11 @@
     margin-#{$right}: 0.625em;
     background-size: 18px;
     position: relative;
-    top: 5px;
+    top: 0;
     color: $cerulean;
   }
 
-  i.icon {
+  span.icon {
     &-wish {
       background-image: url("../imgs/icons/ic-wishlish.svg");
     }
@@ -591,13 +638,9 @@
   }
 }
 
-.password-tooltip {
-  position: relative;
-}
-
 .password-tooltip-icon {
   position: absolute;
-  top: -45px;
+  top: 0;
   #{$right}: 0;
   background: #0084cc;
   width: 13px;
@@ -618,7 +661,7 @@
   border: 2px solid #0084cc;
   padding: 10px;
   position: absolute;
-  top: -4px;
+  top: 20px;
   #{$right}: 0;
   z-index: 1;
   max-width: 300px;
@@ -642,28 +685,18 @@
 
 .password-tooltip-content::after,
 .password-tooltip-content::before {
-  bottom: 100%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
+  @extend %tooltip-before-after;
+
   #{$right}: 2px;
 }
 
 .password-tooltip-content::after {
-  border-color: rgba(240, 246, 252, 0);
-  border-bottom-color: #f0f6fc;
-  border-width: 5px;
-  margin-#{$left}: -5px;
+  @extend %tooltip-after;
 }
 
 .password-tooltip-content::before {
-  border-color: rgba(0, 132, 204, 0);
-  border-bottom-color: #0084cc;
-  border-width: 6px;
-  margin-#{$left}: -6px;
+  @extend %tooltip-before;
+
   #{$right}: 1px;
 }
 
@@ -736,8 +769,14 @@
     font-size: 14px;
   }
 
-  .block-alshaya-user h2 {
-    display: none;
+  .block-alshaya-user:not(.c-my-account-nav) {
+    h2 {
+      @include u-visibility(none);
+    }
+
+    .sign-out {
+      @include u-visibility(none);
+    }
   }
 
   .c-order-help {
@@ -813,18 +852,18 @@
       }
 
       p {
-        font-size: 13px;
+        font-size: 0.8rem;
         font-weight: 700;
-        line-height: 25px;
+        line-height: 1.56rem;
 
         @include breakpoint($desktop) {
-          font-size: 15px;
+          font-size: 0.9rem;
           width: 35%;
         }
 
         @include icon(infomation, before) {
-          font-size: 24px;
-          margin-right: 17px;
+          font-size: 1.5rem;
+          margin-#{$right}: 1rem;
           vertical-align: top;
         }
       }
@@ -833,12 +872,12 @@
 
   .c-order-help {
     background: #e8eff5;
-    margin-top: 50px;
-    margin-bottom: 55px;
-    padding: 20px 16px;
+    margin-top: 3.1rem;
+    margin-bottom: 3.45rem;
+    padding: 1.25rem 1rem;
 
     @include breakpoint($tablet) {
-      padding: 24px;
+      padding: 1.5rem;
     }
   }
 }

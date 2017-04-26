@@ -6,7 +6,7 @@
 
   @include breakpoint($tablet) {
     float: $left;
-    width: 50%;
+    width: calc(50% - 0.75rem);
     max-width: 255px;
 
     &:nth-of-type(odd) {
@@ -25,16 +25,17 @@
   }
 
   .address--data {
-    min-height: 192px;
     overflow: hidden;
     padding: 26px 28px 51px 16px;
 
     @include breakpoint($tablet) {
+      min-height: 13.75rem;
       padding: 26px 14px 37px 16px;
     }
 
     @include breakpoint($desktop) {
       padding: 26px 44px 53px 23px;
+      min-height: 14rem;
     }
   }
 

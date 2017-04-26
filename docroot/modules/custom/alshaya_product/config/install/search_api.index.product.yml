@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.storage.node.field_category
     - field.storage.node.field_skus
-    - search_api.server.solr
+    - search_api.server.database
   module:
     - taxonomy
     - acq_sku
@@ -16,16 +16,6 @@ name: Product
 description: ''
 read_only: false
 field_settings:
-  content:
-    label: 'Rendered HTML output'
-    property_path: rendered_item
-    type: text
-    configuration:
-      roles:
-        anonymous: anonymous
-      view_mode:
-        'entity:node':
-          acq_product: default
   status:
     label: 'Publishing status'
     datasource_id: 'entity:node'
@@ -90,7 +80,7 @@ field_settings:
     label: 'SKUs » SKU Reference » Display Price'
     datasource_id: 'entity:node'
     property_path: 'field_skus:entity:price'
-    type: integer
+    type: string
     dependencies:
       config:
         - field.storage.node.field_skus
@@ -148,6 +138,6 @@ processor_settings:
 tracker_settings:
   default: {  }
 options:
-  index_directly: false
+  index_directly: true
   cron_limit: 50
-server: solr
+server: database

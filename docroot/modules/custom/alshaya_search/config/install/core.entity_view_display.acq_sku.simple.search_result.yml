@@ -4,7 +4,7 @@ dependencies:
   config:
     - acq_sku.type.simple
     - core.entity_view_mode.acq_sku.search_result
-    - image.style.large
+    - image.style.291x288
   module:
     - image
 id: acq_sku.simple.search_result
@@ -15,7 +15,7 @@ content:
   attr_special_price:
     label: hidden
     type: string
-    weight: 35
+    weight: 3
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -24,19 +24,25 @@ content:
     type: image
     weight: 0
     settings:
-      image_style: large
+      image_style: 291x288
       image_link: ''
+    third_party_settings: {  }
+  name:
+    type: string
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
   price:
     label: hidden
     type: string
-    weight: 1
+    weight: 2
     settings:
       link_to_entity: false
     third_party_settings: {  }
 hidden:
   attributes: true
   crosssell: true
-  name: true
   sku: true
   upsell: true

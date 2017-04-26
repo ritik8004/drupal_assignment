@@ -27,8 +27,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     $steps = [];
     if (\Drupal::currentUser()->isAnonymous()) {
       $steps['login'] = [
-        'label' => $this->t('Login'),
-        'previous_label' => $this->t('Return to login'),
+        'label' => $this->t('Welcome'),
       ];
     }
 
@@ -91,6 +90,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       $step_id = $cart_step_id;
       if (empty($step_id)) {
         $step_id = reset($step_ids);
+        $this->redirectToStep($step_id);
       }
 
       // If the requested step is not valid we redirect them to proper URL.

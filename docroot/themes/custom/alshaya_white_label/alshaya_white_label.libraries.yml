@@ -10,6 +10,7 @@ global_styles:
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion
+    - core/jquery.ui.tabs
 
 ltr_styles:
   css:
@@ -41,9 +42,26 @@ sell:
     - core/jquery
     - alshaya_white_label/owlcarousel
 
+autosize_textarea:
+  js:
+    js/autosize_textarea.js: {}
+  dependencies:
+    - alshaya_white_label/autosize
+
 owlcarousel:
   css:
     theme:
       vendor/css/owl.carousel.css: {}
   js:
     vendor/js/owlcarousel.min.js: {}
+
+select2:
+  css:
+    theme:
+      vendor/css/select2.css: {}
+  js:
+    vendor/js/select2.full.min.js: {}
+
+autosize:
+  js:
+    vendor/js/autosize.min.js: {}

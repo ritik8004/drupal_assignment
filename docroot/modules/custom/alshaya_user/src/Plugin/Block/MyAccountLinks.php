@@ -137,6 +137,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       'options' => ['user' => $account->id()],
     ];
 
+    // Sign out link.
+    $links['sign_out'] = [
+      'text' => $this->t('Sign out'),
+      'route' => 'user.logout',
+      'options' => [],
+    ];
+
     $items = [];
 
     foreach ($links as $key => $link) {
@@ -149,6 +156,15 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $items[$key] = [
         '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)->toString(),
       ];
+
+      // Add class for sign-out.
+      if ($key == 'sign_out') {
+        $items[$key]['#wrapper_attributes'] = [
+          'class' => [
+            'sign-out',
+          ],
+        ];
+      }
     }
 
     $build = [];

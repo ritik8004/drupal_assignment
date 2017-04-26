@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.product
+    - search_api.index.acquia_search_index
     - views.view.search
   module:
     - search_api

@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
@@ -135,7 +136,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   // Prepare the ajax Response.
   $response = new AjaxResponse();
   $response->addCommand(new HtmlCommand('#cart_notification', $html));
-
+  $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
   return $response;
 }
 

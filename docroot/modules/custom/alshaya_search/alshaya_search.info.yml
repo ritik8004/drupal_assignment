@@ -4,6 +4,9 @@ type: module
 core: 8.x
 dependencies:
   - acq_sku
+  - acquia_connector
+  - acquia_search
+  - alshaya_image_styles
   - block
   - facets
   - file
@@ -17,5 +20,6 @@ dependencies:
   - taxonomy
   - user
   - views
+  - views_infinite_scroll
 version: 8.x-1.0
 package: Alshaya

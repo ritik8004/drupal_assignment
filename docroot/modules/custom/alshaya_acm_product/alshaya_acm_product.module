@@ -104,7 +104,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       alshaya_acm_product_get_gallery($build, $skuEntity);
-
     }
     elseif ($view_mode == 'teaser') {
       // Hide the sku reference field.

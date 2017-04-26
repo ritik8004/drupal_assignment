@@ -1,6 +1,21 @@
 .user-page.checkout-login {
+  border: 0;
+  margin: 0 auto 1em;
+  min-height: calc(100vh - 110px);
+
+  @include breakpoint($tablet) {
+    margin: 0.5em auto 1em;
+  }
+
+  h1 {
+    position: relative;
+    padding-top: 0;
+    padding-bottom: 0.5em;
+  }
+
   .multistep-checkout {
     max-width: 100%;
+    border-top: 1px solid $white;
   }
 }
 
@@ -17,7 +32,6 @@
 
     @include breakpoint($only-mobile) {
       display: inline-block;
-      width: 10.5em;
       vertical-align: top;
       margin-top: 0;
     }
@@ -26,8 +40,9 @@
       @include breakpoint($only-mobile) {
         padding: 0.5em;
         border: 1px solid $cerulean-two;
-        width: 9.5em;
+        width: 100%;
         text-align: center;
+        margin-bottom: 1em;
       }
     }
   }
@@ -81,6 +96,11 @@
       display: inline-block;
       margin: 1em 0;
       padding: 0.625rem 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        text-align: center;
+      }
     }
   }
 
