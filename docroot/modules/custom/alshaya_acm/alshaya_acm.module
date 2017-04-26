@@ -355,7 +355,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   elseif ($sku_stock['quantity'] < $quantity) {
     // Update the quantity and update error message.
     $quantity = $sku_stock['quantity'];
-    $error_message = t('Sorry, we now only have 1 of these available and we have updated your basket.');
+    $error_message = t('Sorry, we now only have @quantity of these available and we have updated your basket.', ['@quantity' => $quantity]);
   }
 
   $cart->updateItemQuantity($sku, $quantity);
