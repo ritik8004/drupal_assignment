@@ -194,22 +194,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         $cart_storage->updateCart();
 
         // Basket out of stock error.
-        $out_of_stock_message = t('Some items in your basket are out of stock and have been removed.');
-
-        $out_of_stock_items = $form_state->getTemporary();
-        $out_of_stock_items[] = [
-          'name' => $form['cart'][$id]['name']['#name'],
-          'image' => $form['cart'][$id]['name']['#image'],
-          'item_code' => $form['cart'][$id]['name']['#item_code'],
-          'price' => $form['cart'][$id]['price'],
-          'sku_attributes' => $form['cart'][$id]['name']['#sku_attributes'],
-        ];
-        if (!$form_state->getTemporaryValue('out_of_stock')) {
-          $form_state->setTemporaryValue('out_of_stock', []);
-        }
-        $form_state->setTemporaryValue('out_of_stock', $form_state->getTemporaryValue('out_of_stock') + $out_of_stock_items);
-        // Remove item from cart.
-        unset($form['cart'][$id]);
+        $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
       }
     }
   }
@@ -265,16 +250,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     ];
 
     unset($form['actions']['update']);
-  }
-
-  // If there are some out of stock items.
-  if (!empty($form_state->getTemporaryValue('out_of_stock'))) {
-    // Out of stock items list.
-    $form['out_of_stock_items'] = [
-      '#theme' => 'out_of_stock_items',
-      '#data' => $form_state->getTemporaryValue('out_of_stock'),
-      '#weight' => 200,
-    ];
   }
 
   $form['coupon']['#type'] = 'hidden';
@@ -365,7 +340,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
 
   // If sku not available in stock.
   if (!$sku_stock['is_in_stock']) {
-    $out_of_stock_message = t('Some items in your basket are out of stock and have been removed.');
+    $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
     // Update quantity.
     $quantity = 0;
 
@@ -506,11 +481,6 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'image' => '',
         'include_in_bundle' => '',
         'available_delivery_methods' => '',
-      ],
-    ],
-    'out_of_stock_items' => [
-      'variables' => [
-        'data' => NULL,
       ],
     ],
   ];
