@@ -52,6 +52,7 @@ class CustomerController extends ControllerBase {
     $orderDetails = [];
 
     $noOrdersFoundMessage = ['#markup' => ''];
+    $help_block = NULL;
 
     if (empty($orders)) {
       // @TODO: Check the empty result message.
@@ -104,14 +105,14 @@ class CustomerController extends ControllerBase {
           '#currency_code_position' => $currencyCodePosition,
         ];
       }
+
+      // Load my-account-help block for rendering on order list page.
+      $help_block_entity = Block::load('myaccountneedhelp');
+      if ($help_block_entity) {
+        $help_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
+      }
     }
 
-    // Load my-account-help block for rendering on order list page.
-    $help_block = NULL;
-    $help_block_entity = Block::load('myaccountneedhelp');
-    if ($help_block_entity) {
-      $help_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
-    }
     $build['order-list'] = [
       '#theme' => 'user_order_list',
       '#search_form' => $searchForm,
