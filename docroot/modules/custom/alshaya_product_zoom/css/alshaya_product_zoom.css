@@ -34,4 +34,6 @@
 
 #full-image-wrapper img {
   transition: transform 0.25s ease;
+  transform: scale(1);
+  cursor: move;
 }
