@@ -367,7 +367,7 @@
     color: $cerulean;
   }
 
-  i {
+  span {
     display: inline-block;
     width: 18px;
     height: 18px;
@@ -375,11 +375,11 @@
     margin-#{$right}: 0.625em;
     background-size: 18px;
     position: relative;
-    top: 5px;
+    top: 0;
     color: $cerulean;
   }
 
-  i.icon {
+  span.icon {
     &-wish {
       background-image: url("../imgs/icons/ic-wishlish.svg");
     }
