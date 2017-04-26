@@ -270,7 +270,7 @@ display:
           value:
             min: ''
             max: ''
-            value: '3'
+            value: '2'
           group: 1
           exposed: false
           expose:
