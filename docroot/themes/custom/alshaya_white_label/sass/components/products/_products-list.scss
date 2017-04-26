@@ -29,6 +29,7 @@
     }
 
     font-size: 1rem;
+    font-weight: normal;
     text-transform: lowercase;
     color: $cerulean-two;
     font-family: $alshaya-thin;
@@ -110,6 +111,7 @@
   .c-products__item__label {
     margin-top: 0;
     margin-bottom: 0;
+    display: none;
   }
 
   .c-products__item__link {
@@ -197,6 +199,7 @@
 
     &:last-child {
       float: right;
+      transform: translate(-2.1875rem, 0);
     }
   }
 
