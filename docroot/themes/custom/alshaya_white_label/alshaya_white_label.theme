@@ -512,8 +512,6 @@ function alshaya_white_label_theme_suggestions_block_alter(array &$suggestions, 
  * Implements THEMENAME_preprocess().
  */
 function alshaya_white_label_preprocess(&$variables, $hook) {
-  $request = \Drupal::request();
-  $scheme = $request->getScheme();
-  $host = $request->getHost();
-  $variables['site_base_path'] = $scheme . '://' . $host . '/';
+  global $base_url;
+  $variables['site_base_path'] = $base_url . '/';
 }
