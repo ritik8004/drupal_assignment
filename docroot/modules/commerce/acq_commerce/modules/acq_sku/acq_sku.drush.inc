@@ -5,7 +5,7 @@
  * Provides drush commands for the products of Acquia Commerce connector.
  */
 
-const DELETE_BATCH_COUNT = 1000;
+const DELETE_BATCH_COUNT = 200;
 
 /**
  * Implements hook_drush_command().
@@ -138,7 +138,6 @@ function _acq_sku_clean_process(&$context) {
     $context['results'][] = $results[0] . ' : ' . $result[1];
     $context['sandbox']['progress']++;
     $context['sandbox']['current_id'] = $result[0];
-    $context['message'] = 'Deleting ' . $result[1] . ':' . $result[0];
 
     // Load the entity.
     $entity = \Drupal::entityTypeManager()->getStorage($result[1])->load($result[0]);
@@ -154,6 +153,7 @@ function _acq_sku_clean_process(&$context) {
     // Update our progress information.
     $context['sandbox']['current']++;
   }
+  $context['message'] = 'Processed ' . $context['sandbox']['progress'] . ' out of ' . $context['sandbox']['max'] . '.';
   if ($context['sandbox']['progress'] !== $context['sandbox']['max']) {
     $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
   }
