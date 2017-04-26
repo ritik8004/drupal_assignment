@@ -220,15 +220,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
     ],
   ];
 
-  $build['gallery']['product_zoom_gallery'] = [
-    '#theme' => 'product_zoom_gallery',
-    '#thumbnails' => $thumbnails,
-    '#attached' => [
-      'library' => [
-        'alshaya_product_zoom/product.product_zoom_gallery',
-      ],
-    ],
-  ];
 }
 
 /**

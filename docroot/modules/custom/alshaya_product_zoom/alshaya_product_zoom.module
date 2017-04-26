@@ -18,11 +18,5 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'product_zoom',
     ],
-    'product_zoom_gallery' => [
-      'variables' => [
-        'thumbnails' => '',
-      ],
-      'template' => 'product_zoom_gallery',
-    ],
   ];
 }
