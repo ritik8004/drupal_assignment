@@ -1,0 +1,30 @@
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>{{ 'Product' | t }}</th>
+                <th>{{ 'Unit price' | t }}</th>
+                <th>{{ 'Available action' | t }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if data %}
+                {% for item in data %}
+                    <tr>
+                        <td>
+                            <div>{{ item.image }}</div>
+                            <div>{{ item.name }}</div>
+                            <div>{{ item.item_code }}</div>
+                        </td>
+                        <td>
+                            <div>{{ item.price }}</div>
+                        </td>
+                        <td>
+                            <div>{{ 'Add to Wishlist' | t }}</div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
