@@ -12,13 +12,10 @@
   Drupal.behaviors.alshaya_acm_product = {
     attach: function (context, settings) {
       // If we find the gallery in add cart form ajax response, we update the main gallery.
-      if ($('.field--name-field-skus .cloud-zoom-container').size() > 0) {
-        $('.gallery-wrapper .cloud-zoom-container').replaceWith($('.field--name-field-skus .cloud-zoom-container'));
-        $('.gallery-wrapper .image-gallery-mobile').replaceWith($('.field--name-field-skus .image-gallery-mobile'));
-        $('.gallery-wrapper .product-image-gallery-container').replaceWith($('.field--name-field-skus .product-image-gallery-container'));
-
+      if ($('.field--name-field-skus #product-zoom-container').size() > 0) {
+        $('.content__main #product-zoom-container').replaceWith($('.field--name-field-skus #product-zoom-container'));
         // Execute the attach function of alshaya_product_zoom again.
-        Drupal.behaviors.alshaya_product_zoom.attach($('.gallery-wrapper'), settings);
+        Drupal.behaviors.alshaya_product_zoom.attach($('#product-zoom-container'), settings);
       }
     }
   };
