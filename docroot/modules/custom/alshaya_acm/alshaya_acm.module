@@ -188,7 +188,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       if (!$sku_stock['is_in_stock']) {
         // Basket out of stock error.
         $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
-        $form['cart'][$id]['name']['#wrapper_attributes']['class'][] = 'error';
+        $form['cart'][$id]['#attributes']['class'][] = 'sku-out-stock';
         $secure_checkout_access = FALSE;
       }
     }
@@ -336,10 +336,6 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   // Stock check.
   $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku);
 
-  // TODO: REMOVE THIS hard coded value before commit.
-  $sku_stock['quantity'] = 6;
-  $sku_stock['is_in_stock'] = 0;
-
   $error_message = '';
 
   // If sku not available in stock.
@@ -348,7 +344,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     // If out of stock, remove/hide the secure checkout button.
     $form['actions']['checkout']['#access'] = FALSE;
     $form['actions']['continue_shopping_mobile']['#access'] = FALSE;
-    $form['cart'][$sku]['name']['#wrapper_attributes']['class'][] = 'error';
+    $form['cart'][$sku]['#attributes']['class'][] = 'sku-out-stock';
     // Ajax response to update page section.
     $response->addCommand(new HtmlCommand('#out-of-stock-message', $out_of_stock_message));
     $response->addCommand(new ReplaceCommand('#secure-checkout-button', $form['actions']));
