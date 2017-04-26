@@ -12,6 +12,11 @@ use Drupal\views\ViewExecutable;
  */
 function alshaya_search_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'search') {
-    $view->setTitle('Search results for "' . $view->getExposedInput()['keywords'] . '"');
+    if (isset($view->getExposedInput()['keywords'])) {
+      $view->setTitle('Search results for "' . $view->getExposedInput()['keywords'] . '"');
+    }
+
+    // Add search library to search page.
+    $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
   }
 }

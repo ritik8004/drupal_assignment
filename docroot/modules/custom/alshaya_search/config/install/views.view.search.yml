@@ -225,9 +225,9 @@ display:
           group_type: group
           admin_label: ''
           order: DESC
-          exposed: false
+          exposed: true
           expose:
-            label: ''
+            label: Relevance
           plugin_id: search_api
         price:
           id: price

@@ -1,0 +1,5 @@
+alshaya_search:
+  js:
+    js/alshaya_search.js: {}
+  dependencies:
+    - core/jquery
