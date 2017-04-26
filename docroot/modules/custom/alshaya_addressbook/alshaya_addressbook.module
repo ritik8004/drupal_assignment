@@ -25,6 +25,11 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
   // If user doesn't have any default address yet.
   if (!$default_address) {
     $form['actions']['submit']['#access'] = FALSE;
+    $form['actions']['set_default']['#value'] = t('Add');
+  }
+  else {
+    $form['actions']['set_default']['#access'] = FALSE;
+    $form['actions']['submit']['#value'] = t('Add');
   }
 
   // Render the active profiles.
