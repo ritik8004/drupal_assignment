@@ -201,6 +201,8 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
     }
   }
 
+  $pager_flag = count($thumbnails) > 5 ? 'pager-yes' : 'pager-no';
+
   $build['gallery'] = [
     '#type' => 'container',
     '#attributes' => [
@@ -212,6 +214,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
     '#theme' => 'product_zoom',
     '#mainImage' => $main_image,
     '#thumbnails' => $thumbnails,
+    '#pager_flag' => $pager_flag,
     '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
     '#attached' => [
       'library' => [

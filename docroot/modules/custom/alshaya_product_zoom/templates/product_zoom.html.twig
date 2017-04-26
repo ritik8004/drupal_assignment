@@ -1,7 +1,7 @@
 <div id="product-zoom-container">
   <div class="cloudzoom">
     <div class="cloudzoom__thumbnails">
-      <ul id="lightSlider">
+      <ul id="lightSlider" class="{{ pager_flag }}">
       {% for thumbs in thumbnails %}
         {% if thumbs.type == 'youtube' %}
           <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video youtube">
@@ -30,7 +30,7 @@
     </div>
   </div>
   <div class="mobilegallery">
-    <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails">
+    <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails {{ pager_flag }}">
       {% for thumbs in thumbnails %}
         {% if thumbs.type == 'youtube' %}
           <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video youtube">
@@ -53,7 +53,7 @@
   </div>
   <div id="product-image-gallery-container" class="imagegallery" style="display: none;">
     <div class="imagegallery__wrapper">
-      <ul id="product-image-gallery" class="imagegallery__thumbnails">
+      <ul id="product-image-gallery" class="imagegallery__thumbnails {{ pager_flag }}">
         {% for thumbs in thumbnails %}
           {% if thumbs.type == 'youtube' %}
             <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video youtube">

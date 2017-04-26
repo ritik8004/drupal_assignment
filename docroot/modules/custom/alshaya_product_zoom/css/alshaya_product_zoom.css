@@ -31,3 +31,7 @@
   float: left;
   width: 25%;
 }*/
+
+#full-image-wrapper img {
+  transition: transform 0.25s ease;
+}

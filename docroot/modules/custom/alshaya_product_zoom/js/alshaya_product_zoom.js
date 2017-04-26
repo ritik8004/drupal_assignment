@@ -51,7 +51,7 @@
           // ZoomIn ZoomOut in Gallery view with a draggable container.
           // Make sure it always starts @ zero position for below calcs to work.
           if ($('#full-image-wrapper').length > 0) {
-            $('#full-image').css({top: 0, left: 0});
+            $('#full-image').css({top: 0, left: -200});
 
             var maskWidth = $('#full-image-wrapper').width();
             var maskHeight = $('#full-image-wrapper').height();
@@ -68,22 +68,31 @@
             $('#full-image').css({cursor: 'move'});
 
             // Zoom in and Zoom out buttons.
+            var matrixRegex = '/matrix\((-?\d*\.?\d+),\s*0,\s*0,\s*(-?\d*\.?\d+),\s*0,\s*0\)/';
             var image = $('#full-image-wrapper img');
-            var imagesize = image.width();
-            var orignalwidth = imagesize;
             $('.zoomin').on('click', function () {
-              imagesize = imagesize + 25;
-              image.width(imagesize);
-              image.height('auto');
+              var current_scale = image.css('transform').match(matrixRegex);
+              console.log(current_scale);
+              if (current_scale == null) {
+                current_scale = 1;
+              }
+              else {
+                current_scale = current_scale[1];
+              }
+              var scale = current_scale + 0.25;
+              if(scale < 2.25) {
+                image.css("transform", 'scale(' + scale + ')');
+              }
             });
 
             $('.zoomout').on('click', function () {
-              imagesize = imagesize - 25;
-              if (imagesize < orignalwidth) {
+              var current_scale = image.css('transform').match(matrixRegex);
+              current_scale = current_scale[1];
+              var scale = current_scale - 0.25;
+              if (scale < 1) {
                 return;
               }
-              image.width(imagesize);
-              image.height('auto');
+              image.css("transform", 'scale(' + scale + ')');
             });
 
             // Swap the big image inside slider-2 when clicking on thumbnail.
