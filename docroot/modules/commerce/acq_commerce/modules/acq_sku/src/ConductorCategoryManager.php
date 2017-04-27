@@ -233,7 +233,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
     // Remove top level item (Default Category) from the categories, if its set
     // in configuration and category is with no parent.
-    $filter_category = \Drupal::config('acq_commerce.conductor')->get('filter_category');
+    $filter_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
     if ($filter_category && $parent == NULL) {
       $categories = $categories[0]['children'];
     }

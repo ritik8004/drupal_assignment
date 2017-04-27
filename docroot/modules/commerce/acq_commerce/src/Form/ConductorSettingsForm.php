@@ -41,7 +41,7 @@ class ConductorSettingsForm extends ConfigFormBase {
       ->set('timeout', (int) $form_state->getValue('timeout'))
       ->set('verify_ssl', (bool) $form_state->getValue('verify_ssl'))
       ->set('product_page_size', (int) $form_state->getValue('page_size'))
-      ->set('filter_category', (bool) $form_state->getValue('filter_category'))
+      ->set('filter_root_category', (bool) $form_state->getValue('filter_root_category'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -105,10 +105,10 @@ class ConductorSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('product_page_size'),
     ];
 
-    $form['filter_category'] = [
+    $form['filter_root_category'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Filter root level category'),
-      '#default_value' => $config->get('filter_category'),
+      '#default_value' => $config->get('filter_root_category'),
     ];
 
     return parent::buildForm($form, $form_state);
