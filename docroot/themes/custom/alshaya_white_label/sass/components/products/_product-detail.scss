@@ -53,6 +53,8 @@
     }
 
     .sku-base-form {
+      @include clearfix;
+
       .form-item {
         padding: 0.5rem 0;
       }
@@ -65,7 +67,135 @@
         padding: 0.625rem 1.6rem;
         border: 0;
         font-size: 0.813rem;
+        float: left;
       }
     }
+  }
+}
+
+#color-select {
+  padding-left: 0;
+
+  li {
+    @include u-visibility(inline-block);
+
+    div {
+      @include u-visibility(block);
+      @include u-image-replacement;
+
+      height: 38px;
+      width: 38px;
+      margin: 6px 6px 6px 0;
+    }
+
+    .Orange {
+      background-color: $pumpkin-orange;
+    }
+
+    .Purple {
+      background-color: purple;
+    }
+
+    .White {
+      background-color: $white;
+    }
+
+    .unavailable {
+      position: relative;
+
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        background: $black;
+      }
+
+      &::before {
+        left: 50%;
+        width: 1px;
+        height: calc(100% * 1.414);
+        top: -21%;
+        transform: rotate(45deg);
+      }
+
+      &::after {
+        top: 50%;
+        left: -21%;
+        height: 1px;
+        width: calc(100% * 1.414);
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+
+.form-item-configurables-size label {
+  @include u-visibility(none);
+}
+
+#size-select {
+  padding-left: 0;
+
+  li {
+    @include u-visibility(inline-block);
+
+    div {
+      @include u-visibility(block);
+
+      height: 38px;
+      width: 38px;
+      margin: 5px 5px 5px 0;
+      border: 1px solid $black;
+      text-align: center;
+      padding-top: 10px;
+    }
+
+    .unavailable {
+      position: relative;
+
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        background: $black;
+      }
+
+      &::before {
+        left: 50%;
+        width: 1px;
+        height: calc(100% * 1.414);
+        top: -21%;
+        transform: rotate(45deg);
+      }
+
+      &::after {
+        top: 50%;
+        left: -21%;
+        height: 1px;
+        width: calc(100% * 1.414);
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+
+.form-item-quantity {
+  float: left;
+
+  label {
+    float: left;
+    padding: 5px 20px 5px 0;
+  }
+
+  #edit-quantity {
+    border: none;
+    border-radius: 0;
+    padding: 5px 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    margin: 0 5px;
   }
 }
