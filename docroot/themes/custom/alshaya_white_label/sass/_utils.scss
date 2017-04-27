@@ -89,6 +89,28 @@
   }
 }
 
+.mobile-only-block {
+  @include breakpoint($tablet) {
+    display: none;
+  }
+}
+
+.tablet-only-block {
+  display: none;
+
+  @include breakpoint($only-tablet) {
+    display: block;
+  }
+}
+
+.above-mobile-block {
+  display: none;
+
+  @include breakpoint($tablet) {
+    display: block;
+  }
+}
+
 @mixin clearfix {
   &::after {
     content: "";

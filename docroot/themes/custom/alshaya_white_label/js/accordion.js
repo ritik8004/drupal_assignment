@@ -22,21 +22,14 @@
        * Toggles the footer accordions.
        */
 
-      $('.c-footer-is-accordion').each(function () {
-        var contextualLink = $('.c-footer-is-accordion').children('.contextual');
-        if (contextualLink) {
-          $('.c-footer-is-accordion').append(contextualLink);
-        }
-      });
-
       if ($('.c-footer-is-accordion').length) {
         var accordionHead = $('.c-footer-is-accordion .is-accordion');
-        var accordionBody = $(accordionHead).next();
+        var accordionBody = $(accordionHead).nextAll();
 
         $(accordionBody).addClass('accordion--body');
         $(accordionHead).click(function () {
           var $ub = $(this).nextAll().stop(true, true).slideToggle();
-          accordionBody.not($ub).hide();
+          accordionBody.not($ub).slideUp();
           $ub.parent().toggleClass('open--accordion');
           accordionBody.not($ub).parent().removeClass('open--accordion');
         });
@@ -87,7 +80,7 @@
 
         $(parentOrder).click(function () {
           var $ub = $(this).nextAll().stop(true, true).slideToggle();
-          listOrder.not($ub).hide();
+          listOrder.not($ub).slideUp();
           $ub.parent().toggleClass('open--accordion');
           listOrder.not($ub).parent().removeClass('open--accordion');
         });

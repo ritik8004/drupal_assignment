@@ -10,6 +10,7 @@ dependencies:
   - better_exposed_filters
   - block
   - facets
+  - facets_summary
   - file
   - image
   - lightning_core

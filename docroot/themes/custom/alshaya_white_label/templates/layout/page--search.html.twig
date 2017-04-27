@@ -1,4 +1,4 @@
-{% set attributes = attributes.addClass('c-search', 'l-two--sf') %}
+{% set attributes = attributes.addClass('c-search', 'c-plp', 'l-two--sf') %}
 <div>
   <!-- ______________________ MENU SECONDARY _______________________ -->
 
@@ -161,13 +161,7 @@
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
 
   {% if page.footer_primary %}
-    <div class="c-footer-primary">
-      <div class="l-container">
-        <div class="c-footer-primary__region">
-          {{ page.footer_primary }}
-        </div>
-      </div>
-    </div>
+      {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
     <!-- /footer-primary -->
   {% endif %}
 

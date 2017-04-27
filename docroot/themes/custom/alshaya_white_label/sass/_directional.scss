@@ -45,6 +45,15 @@ $last-child: if-ltr(":last-child", ":first-child");
   }
 }
 
+@function negate-value($value) {
+  @if $dir == rtl and $value < 0 {
+    @return #{$value * -1};
+  }
+  @else {
+    @return $value;
+  }
+}
+
 @function corner-values($values) {
   @if $dir == rtl and length($values) > 1 {
     // Reorder right and left positions in list

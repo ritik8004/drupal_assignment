@@ -78,12 +78,29 @@
   }
 }
 
-.c-user-login {
+.c-user-login.user-page {
+  @include breakpoint($only-mobile) {
+    margin-top: 2.5em;
+  }
+
+  @include breakpoint($tablet) {
+    padding: 1em 0;
+    margin: 4.5em 1.5em 1em;
+  }
+
+  .user-login-form {
+    @include breakpoint($tablet) {
+      position: relative;
+      top: 0.5em;
+    }
+  }
+
   .c-page-title {
-    top: -5.5rem;
+    top: -4rem;
 
     @include breakpoint($tablet) {
       top: -4.9rem;
+      margin-left: 0;
     }
   }
 
@@ -98,6 +115,12 @@
 
     #edit-actions {
       margin-top: 1.9rem;
+    }
+  }
+
+  .c-sidebar-second {
+    #block-youllbeableto {
+      margin-bottom: 3.23rem;
     }
   }
 }
@@ -194,6 +217,12 @@
           margin-top: 0;
         }
       }
+    }
+  }
+
+  .c-sidebar-second {
+    #block-youllbeableto {
+      margin-bottom: 3.23rem;
     }
   }
 }
