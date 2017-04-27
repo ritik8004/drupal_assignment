@@ -28,4 +28,10 @@ processor_configs:
     weights:
       build: '10'
     settings: {  }
+  reset_facets:
+    processor_id: reset_facets
+    weights:
+      build: '-10'
+    settings:
+      link_text: 'Clear all'
 empty_behavior: null
