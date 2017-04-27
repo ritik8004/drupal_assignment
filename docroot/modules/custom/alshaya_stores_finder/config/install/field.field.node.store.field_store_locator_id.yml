@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_store_locator_id
+    - node.type.store
+id: node.store.field_store_locator_id
+field_name: field_store_locator_id
+entity_type: node
+bundle: store
+label: 'Store Locator Id'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
