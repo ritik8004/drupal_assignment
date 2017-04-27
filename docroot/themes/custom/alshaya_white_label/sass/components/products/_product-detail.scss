@@ -117,8 +117,6 @@
         height: calc(100% * 1.414);
         top: -21%;
         transform: rotate(45deg);
-        -ms-transform: rotate(45deg); /* IE 9 */
-        -webkit-transform: rotate(45deg);
       }
 
       &::after {
@@ -127,8 +125,6 @@
         height: 1px;
         width: calc(100% * 1.414);
         transform: rotate(45deg);
-        -ms-transform: rotate(45deg); /* IE 9 */
-        -webkit-transform: rotate(45deg);
       }
     }
   }
@@ -172,8 +168,6 @@
         height: calc(100% * 1.414);
         top: -21%;
         transform: rotate(45deg);
-        -ms-transform: rotate(45deg); /* IE 9 */
-        -webkit-transform: rotate(45deg);
       }
 
       &::after {
@@ -182,8 +176,6 @@
         height: 1px;
         width: calc(100% * 1.414);
         transform: rotate(45deg);
-        -ms-transform: rotate(45deg); /* IE 9 */
-        -webkit-transform: rotate(45deg);
       }
     }
   }
