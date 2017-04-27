@@ -97,6 +97,69 @@
         }
       }
     }
+
+    .block-views-exposed-filter-blocksearch-page {
+      @include breakpoint($only-tablet) {
+        .form-item {
+          float: none;
+        }
+      }
+
+      .form-item-keywords {
+        display: none;
+      }
+
+      .filter--mobile {
+        @include breakpoint($tablet) {
+          top: 0.25rem;
+        }
+
+        .is-filter.view-filters {
+          .form-type-select {
+            text-transform: lowercase;
+
+            select {
+              @include breakpoint($desktop) {
+                width: 9.4rem;
+              }
+            }
+
+            label {
+              #{$left}: -2.9rem;
+            }
+          }
+        }
+
+        .c-facet__blocks__wrapper--mobile {
+          transform: none;
+
+          @include breakpoint($tablet) {
+            transform: translate(#{negate-value(-3.7)}rem, 0);
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.alias--search {
+  header {
+    .form-item-sort-bef-combine {
+      display: none;
+    }
+
+    @include breakpoint($only-tablet) {
+      .bef-exposed-form {
+        .form-item-keywords {
+          float: none;
+        }
+      }
+    }
   }
 }
 
