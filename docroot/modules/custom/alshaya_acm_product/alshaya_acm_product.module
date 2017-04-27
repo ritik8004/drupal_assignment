@@ -249,7 +249,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     alshaya_acm_product_get_gallery($build, $tree_pointer);
 
     $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
-    $dynamic_parts['product_zoom_gallery'] = $build['gallery']['product_zoom_gallery'];
   }
 
   return $dynamic_parts;
