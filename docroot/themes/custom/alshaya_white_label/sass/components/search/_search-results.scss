@@ -139,6 +139,63 @@
         }
       }
     }
+
+    .block-facets-summary-blockfilter-bar {
+      overflow: hidden;
+      margin-bottom: 1.125rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid $white;
+
+      ul {
+        padding: 0;
+        margin: 0;
+
+        li {
+          list-style: none;
+          float: #{$left};
+          margin-#{$right}: 0.75rem;
+
+          a {
+            color: $white-four;
+            font-size: 12px;
+
+            span {
+              background: $cerulean-two;
+              display: inline-block;
+              padding: 0.657rem 17px;
+              text-align: center;
+              vertical-align: middle;
+
+              &.facet-item__value {
+                float: #{$left};
+                margin-#{$right}: 1px;
+              }
+
+              &.js-facet-deactivate {
+                background-image: url(../imgs/icons/combined-shape.svg);
+                background-repeat: no-repeat;
+                background-size: 18px;
+                background-position-x: center;
+                background-position-y: center;
+                padding: 0.657rem 1.094rem;
+                color: transparent;
+                text-indent: -89rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .view-header.search-count {
+      margin-top: 0.9rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+      color: $black;
+      padding-bottom: 9px;
+      border-bottom: 1px solid $white;
+      font-family: $alshaya-thin;
+    }
   }
 
   @include breakpoint($only-tablet) {

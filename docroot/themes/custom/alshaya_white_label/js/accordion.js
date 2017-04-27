@@ -68,6 +68,9 @@
             facetBlock.toggle();
           });
         }
+
+        $('.c-search .view-search .view-header').addClass('search-count');
+        $('.c-search .view-search .view-header').insertBefore('#block-filterbar');
       }
 
       /**
