@@ -88,6 +88,10 @@
     margin: 4.5em 1.5em 1em;
   }
 
+  @include breakpoint($desktop) {
+    margin: 4.5em auto 1em;
+  }
+
   .user-login-form {
     @include breakpoint($tablet) {
       position: relative;
