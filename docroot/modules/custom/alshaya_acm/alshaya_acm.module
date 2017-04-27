@@ -374,8 +374,11 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   // Update form total values.
   _alshaya_acm_format_cart_total($form, $newcart);
 
+  $cart_total = [];
+  $cart_total['totals'] = $form['totals'];
+  $cart_total['actions'] = $form['actions'];
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
-  $response->addCommand(new ReplaceCommand('#table-cart-totals', $form['totals']));
+  $response->addCommand(new ReplaceCommand('#table-cart-totals', $cart_total));
   $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
 
   $response->addCommand(new ReplaceCommand('#stock-error-' . $sku, $error_message));
