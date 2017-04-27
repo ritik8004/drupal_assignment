@@ -455,12 +455,29 @@
       }
 
       a {
-        background-image: url(../imgs/icons/icon-chevron-#{$next}.svg);
-        background-color: transparent;
-        background-repeat: no-repeat;
-        background-position: percent-value(97%) center;
+        @include icon(chevron#{$right}, after) {
+          font-size: 1.875rem;
+          position: absolute;
+          #{$right}: 1rem;
+          border-radius: 100%;
+          color: $black;
+          padding: 2px;
+          padding-#{$left}: 4px;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 35px;
+          width: 35px;
+
+          @include breakpoint($only-mobile) {
+            background-color: $whisper-light;
+            #{$right}: 4rem;
+            top: 62%;
+          }
+        }
+
         display: block;
         border-bottom: 1px solid $whisper-dark;
+        position: relative;
 
         @include breakpoint($desktop) {
           width: 921px;

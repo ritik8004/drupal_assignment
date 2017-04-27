@@ -6,13 +6,25 @@
       font-size: 0.75rem;
     }
 
+    li:first-child a {
+      line-height: 1;
+      padding-bottom: 6px;
+    }
+
     a {
-      color: #666;
-      line-height: 2;
+      color: $grey-ash;
+      display: block;
+      line-height: 1.9;
+      text-transform: lowercase;
+      font-size: 0.75rem;
+
+      @include breakpoint($desktop) {
+        font-size: 0.875rem;
+      }
 
       &.active,
       &:hover {
-        color: #032760;
+        color: $marine-blue;
         font-weight: bold;
       }
     }

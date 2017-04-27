@@ -99,7 +99,7 @@
           {% endif %}
         </td>
         <td>
-          <div>{{ product.name }}</div>
+          <div class="dark">{{ product.name }}</div>
 
           {% for attribute in product.attributes %}
             <div>
@@ -124,17 +124,17 @@
         <td>
           <div class="light">{{ "Unit price"|t }}</div>
           {% if currency_code_position == 'before' %}
-            <span class="currency-code prefix">{{ currency_code }}</span>{{ product.total }}
+            <span class="currency-code prefix dark">{{ currency_code }}</span><span class="dark">{{ product.total }}</span>
           {% else %}
-            {{ product.total }}<span class="currency-code suffix">{{ currency_code }}</span>
+            <span class="dark">{{ product.total }}</span><span class="currency-code suffix dark">{{ currency_code }}</span>
           {% endif %}
         </td>
         <td class="blend">
           <div class="light">{{ "Total"|t }}</div>
           {% if currency_code_position == 'before' %}
-            <span class="currency-code prefix">{{ currency_code }}</span>{{ product.total }}
+            <span class="currency-code prefix dark">{{ currency_code }}</span><span class="dark">{{ product.total }}</span>
           {% else %}
-            {{ product.total }}<span class="currency-code suffix">{{ currency_code }}</span>
+            <span class="dark">{{ product.total }}</span><span class="currency-code suffix dark">{{ currency_code }}</span>
           {% endif %}
         </td>
 

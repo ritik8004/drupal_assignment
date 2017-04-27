@@ -13,6 +13,21 @@
       margin-bottom: 36px;
     }
   }
+
+  .region__content {
+    position: relative;
+  }
+
+  .print--button {
+    display: none;
+    position: absolute;
+    #{$right}: 0;
+    top: -1rem;
+
+    @include breakpoint($tablet) {
+      display: block;
+    }
+  }
 }
 
 .user__order--detail {
@@ -54,8 +69,10 @@
   }
 
   .delivery-details-row {
-    font-size: 13px;
+    font-size: 0.812rem;
     font-weight: 700;
+    border-top: 1px solid $white-five;
+    border-bottom: 1px solid $white-five;
 
     @include breakpoint($tablet) {
       font-size: 15px;
