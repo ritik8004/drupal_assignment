@@ -482,15 +482,17 @@ function alshaya_white_label_preprocess_user(&$variables) {
  */
 function alshaya_white_label_preprocess_menu(&$variables) {
   if ($variables['menu_name'] === 'account') {
-    // Get the current route.
-    $current_route = \Drupal::routeMatch()->getRouteName();
+    // Get the current path.
+    $current_path = \Drupal::routeMatch()->getRouteObject()->getPath();
     $items = $variables['items'];
     foreach ($items as $key => $item) {
       // If path is current_path, add active class.
-      if ($item['url']->getRouteName() == 'user.page' && $current_route == 'entity.user.canonical') {
-        $attributes = $item['url']->getOption('attributes');
-        $attributes['class'][] = 'is-active';
-        $item['url']->setOption('attributes', $attributes);
+      if ($item['url']->getRouteName() == 'user.page') {
+        if (substr($current_path, 0, 6) === '/user/' || substr($current_path, 0, 9) === '/profile/') {
+          $attributes = $item['url']->getOption('attributes');
+          $attributes['class'][] = 'is-active';
+          $item['url']->setOption('attributes', $attributes);
+        }
       }
     }
   }
