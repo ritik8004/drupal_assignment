@@ -55,4 +55,16 @@ function alshaya_search_install() {
   // Allow anonymous and authenticated users to use autocomplete.
   user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
   user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);
+
+  // Set breadcrumbs block to show only on Search page.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_breadcrumbs')
+    ->set('visibility', [
+      'request_path' => [
+        'id' => 'request_path',
+        'pages' => '/search',
+        'negate' => FALSE,
+        'context_mapping' => [],
+      ],
+    ])
+    ->save();
 }
