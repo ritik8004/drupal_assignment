@@ -18,7 +18,7 @@
           }
         );
         var currentsize = $('.form-item-configurables-size select option:selected').text();
-        $('#size-select').before('<div><span class="size-label">Size : </span><span class="size-value">' + currentsize + '</span></div>');
+        $('#size-select').before('<div><span class="size-label">' + Drupal.t('Size') + ': </span><span class="size-value">' + currentsize + '</span></div>');
       }
       $('.form-item-configurables-size select').hide();
 
