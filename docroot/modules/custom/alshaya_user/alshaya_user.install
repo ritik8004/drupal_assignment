@@ -102,7 +102,7 @@ function alshaya_user_modules_installed($modules) {
   $config = \Drupal::configFactory()->getEditable('user_registrationpassword.settings');
   $config->set('registration', USER_REGISTRATIONPASSWORD_VERIFICATION_PASS);
   $config->set('register_subject', 'Welcome to [site:name]');
-  $config->set('register_body', 'Hi [user:display-name]!
+  $config->set('register_body', '<h1>Hi [user:display-name]!</h1>
 
 You recently signed up for [site:name] Account.
 
