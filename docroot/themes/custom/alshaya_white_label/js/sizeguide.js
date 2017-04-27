@@ -24,18 +24,14 @@
 
       $('#size-select li').click(function (event) {
         var y = $(this).text();
-
         $(this).siblings('li').removeClass('active');
         $(this).addClass('active');
-
         $('.form-item-configurables-size select').children('option').each(function (index, el) {
           if (y === $(this).text()) {
             $(this).siblings('option').attr('selected', false);
             $(this).attr('selected', 'selected').change();
           }
         });
-
-
       });
     }
   };
