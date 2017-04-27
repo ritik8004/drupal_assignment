@@ -1,35 +1,47 @@
 .c-footer-primary {
   border-top: 2px solid $peacock-blue;
   padding-top: 16px;
-  padding-bottom: 1.625rem;
+  padding-bottom: 2.25rem;
   position: relative;
   background: $white-five;
   z-index: 3;
 
   @include breakpoint($tablet) {
     padding: 1.25em 1.5em;
+    padding-top: 0.375rem;
 
     .l-container {
       min-width: 45rem;
       max-width: 64rem;
     }
+  }
 
-    .language-switcher-language-url {
-      display: block;
+  @include breakpoint($desktop) {
+    padding-top: 0.875rem;
+  }
 
-      a {
-        text-transform: lowercase;
-        font-size: 14px;
-      }
+  .primary--footer--right {
+    @include breakpoint($tablet) {
+      float: $right;
+    }
+  }
 
-      @include breakpoint($desktop) {
-        display: none;
-      }
+  .footer--categories,
+  .footer--abouthelp {
+    @include breakpoint($tablet) {
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
+  .footer--menu {
+    @include breakpoint($tablet) {
+      float: $left;
     }
   }
 
   .l-container {
-    @include container(65.625rem);
+    @include container(67.625rem);
   }
 
   &__region {
@@ -42,32 +54,38 @@
   @extend %list-clear;
 
   @include breakpoint($desktop) {
-    margin-#{$right}: 3.2rem;
+    margin-#{$right}: 2rem;
     display: inline-block;
+    max-width: 9.4rem;
     vertical-align: top;
+    min-width: 7rem;
   }
 
   a {
     font-size: 0.875rem;
     color: $brownish-grey;
-    line-height: 2.14;
+    display: block;
+    padding: 0.875rem 0;
     text-decoration: none;
     font-family: $alshaya-thin;
+
+    @include breakpoint($tablet) {
+      line-height: 2.14;
+      padding: 0;
+    }
   }
 
   &--help,
   &--category,
   &--about {
     @include breakpoint($tablet) {
-      margin-#{$right}: 4.3rem;
+      width: 8.9rem;
+      margin-#{$right}: 2.3rem;
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 3rem;
-    }
-
-    @include breakpoint($desktop-wide) {
-      margin-#{$right}: 4rem;
+      width: auto;
+      margin-#{$right}: 1rem;
     }
   }
 }
@@ -77,24 +95,39 @@
 .c-footer-menu--category {
   display: inline-block;
   vertical-align: top;
+  min-width: 7.8rem;
+
+  @include breakpoint($desktop) {
+    min-width: 6.4rem;
+  }
 
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
     font-family: $alshaya-bold;
     cursor: pointer;
+    outline: none;
 
     @include breakpoint($tablet) {
       pointer-events: none;
     }
 
+    @include breakpoint($desktop) {
+      margin-bottom: 0.312rem;
+    }
+
     @include breakpoint($only-mobile) {
-      margin: 0.938rem 0;
-      background-color: rgba(255, 255, 255, 0.25);
-      background-image: url("../imgs/icons/icon-chevron-#{$next}.svg");
-      background-position: $right;
-      background-repeat: no-repeat;
-      background-size: 0.438rem;
+      margin: 0;
+      padding: 0.938rem 0;
+      position: relative;
+
+      @include icon(chevronright, after) {
+        position: absolute;
+        #{$right}: 0;
+        font-size: 1.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
     }
   }
 
@@ -107,12 +140,33 @@
   }
 }
 
+.open--accordion {
+  .is-accordion {
+    @include breakpoint($only-mobile) {
+      @include icon(chevrondown, after);
+    }
+  }
+}
+
+.c-footer-menu__tab {
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+}
+
+.c-footer-menu--help {
+  @include breakpoint($desktop) {
+    min-width: 0;
+    max-width: 5rem;
+  }
+}
+
 .alshaya-newsletter-subscribe {
-  margin: 1em 0.5rem 2.5rem;
+  margin: 1em 0.5rem 2.9rem;
 
   @include breakpoint($tablet) {
     float: $right;
-    max-width: 357px;
+    max-width: 21.875rem;
     margin: 0;
     display: inline-block;
   }
@@ -125,7 +179,6 @@
 
     @include breakpoint($only-mobile) {
       text-align: center;
-      margin-bottom: 0;
     }
   }
 
@@ -134,13 +187,17 @@
     max-width: 100%;
 
     @include breakpoint($tablet) {
-      max-width: 291px;
+      min-width: 22.312rem;
     }
   }
 
   .form-item {
     font-size: 0.875rem;
     color: $brownish-grey;
+
+    @include breakpoint($tablet) {
+      max-width: 18.18rem;
+    }
 
     @include breakpoint($only-mobile) {
       text-align: center;
@@ -152,7 +209,7 @@
       width: 100%;
       position: absolute;
       top: 0;
-      font-size: 13px;
+      font-size: 0.812rem;
 
       @include breakpoint($only-mobile) {
         left: 0;
@@ -170,11 +227,16 @@
   .form-email {
     border-bottom: 1px solid $brownish-grey;
     border-width: 0 0 1px;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+    padding-#{$right}: 6.25rem;
     width: 100%;
     height: 2.2rem;
     outline: transparent;
     font-size: 13px;
+
+    @include breakpoint($tablet) {
+      margin-top: 1.7rem;
+    }
   }
 
   .form-submit {
@@ -186,14 +248,16 @@
     #{$right}: 0;
     bottom: 0;
     border-radius: 0;
+
+    @include breakpoint($tablet) {
+      #{$right}: 4.125rem;
+    }
   }
 }
 
 .c-footer-menu--help {
-  max-width: 3.25em;
-
   @include breakpoint($only-mobile) {
-    margin-bottom: 4em;
+    margin-bottom: 2.25em;
     border-bottom: 1px solid $white;
     max-width: 100%;
   }
@@ -206,6 +270,10 @@
 .c-footer-menu--about {
   max-width: 100%;
 
+  .c-footer-menu {
+    min-width: 9.4rem;
+  }
+
   @include breakpoint($tablet) {
     max-width: 9.5em;
   }
@@ -215,16 +283,11 @@
   }
 }
 
-.c-footer-menu--about,
-.c-footer-menu--help {
-  .c-footer-menu {
-    width: 100%;
-  }
-}
-
 .newsletter-block-label {
-  font-size: 13px;
-  line-height: 2.31;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-family: $alshaya-thin;
+  text-transform: lowercase;
 
   @include breakpoint($only-mobile) {
     text-align: center;
@@ -236,18 +299,17 @@
 }
 
 .c-footer-primary .language-switcher-language-url {
-  @include breakpoint($only-tablet) {
-    position: absolute;
-    #{$right}: 188px;
-    bottom: 260px;
-  }
+  position: relative;
+  clear: both;
 
   ul {
     @extend %list-clear;
 
-    text-align: center;
     padding: 0;
-    direction: ltr;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
 
     li {
       display: inline-block;
@@ -280,11 +342,35 @@
 }
 
 .c-footer-is-accordion {
-  & > .contextual + div,
-  & > .contextual + .c-footer-menu,
   .accordion--body {
-    @include breakpoint($upto-tablet) {
-      display: none;
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: block !important;
     }
+  }
+}
+
+.footer--social {
+  clear: both;
+  overflow: hidden;
+
+  .c-social-links {
+    @include breakpoint($tablet) {
+      margin-top: 2.812rem;
+      padding-left: 0.312rem;
+    }
+  }
+}
+
+.language--switcher {
+  @include breakpoint($tablet) {
+    margin-top: 1.875rem;
+  }
+}
+
+.region__footer-primary {
+  @include breakpoint($tablet) {
+    padding-left: 0.312rem;
   }
 }

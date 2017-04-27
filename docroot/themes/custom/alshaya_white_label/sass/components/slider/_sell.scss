@@ -1,16 +1,15 @@
 .view-product-slider {
   text-align: center;
-  max-width: 304px;
-  margin-bottom: 24px;
+  max-width: 19rem;
+  margin-bottom: 1.5rem;
 
   @include breakpoint($tablet) {
     padding: 0 2.75rem;
-    margin-left: 24px;
+    margin-left: 0;
   }
 
   @include breakpoint($desktop) {
     max-width: 44.5rem;
-    margin-left: 129px;
   }
 
   @include breakpoint($only-tablet) {
@@ -20,17 +19,20 @@
   .c-products__item__label {
     font-size: 0.8125rem;
     font-family: $alshaya-thin;
-    color: $black;
+    color: $grey-ash;
     font-weight: normal;
     margin: 0.625rem 0;
   }
 
   .views-row {
-    height: 312px;
+    height: 19.5rem;
   }
 
   .price-wrapper {
+    color: $black;
+    display: block;
     font-size: 0.875rem;
+    margin-bottom: 0.187rem;
   }
 
   .owl-prev {
@@ -43,5 +45,36 @@
     @include breakpoint($tablet) {
       right: -2.25rem;
     }
+  }
+
+  .owl-prev::before,
+  .owl-next::before {
+    font-size: 1.5rem;
+  }
+
+  .owl-item img {
+    width: auto;
+    margin: auto;
+
+    @include breakpoint($upto-desktop) {
+      max-width: 10rem;
+    }
+  }
+
+  .owl-prev,
+  .owl-next {
+    @include breakpoint($tablet) {
+      top: 25%;
+    }
+  }
+}
+
+.crossell-title {
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+
+  @include breakpoint($tablet) {
+    font-size: 1.125rem;
+    margin-left: 2.75rem;
   }
 }

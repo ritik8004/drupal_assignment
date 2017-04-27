@@ -1,6 +1,4 @@
 .c-search {
-  padding-top: 1.75rem;
-
   .region__content {
     position: relative;
 
@@ -16,6 +14,20 @@
       }
     }
 
+    .is-filter {
+      @include breakpoint($only-mobile) {
+        &:first-child {
+          transform: translate(#{negate-value(-2.1875)}rem, 0);
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        &:first-child {
+          transform: translate(0, 0);
+        }
+      }
+    }
+
     .c-facet {
       .item-list {
         padding-left: 0;
@@ -23,16 +35,6 @@
     }
 
     .view-id-search {
-      margin-top: 2.75rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid $white;
-
-      @include breakpoint($only-mobile) {
-        margin-top: 0;
-        padding-top: 0;
-        border-top: none;
-      }
-
       .views-row {
         float: $left;
         text-align: center;
@@ -64,9 +66,15 @@
           }
         }
 
+        h2.field.field--name-name {
+          display: none;
+        }
+
         .c-products__item__label {
           font-size: 0.75rem;
           margin-top: 0;
+          display: block;
+          font-weight: normal;
 
           a,
           span {
