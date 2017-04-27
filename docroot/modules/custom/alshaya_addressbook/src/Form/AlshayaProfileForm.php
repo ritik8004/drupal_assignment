@@ -42,6 +42,8 @@ class AlshayaProfileForm extends ProfileForm {
       if (isset($element['delete']['#url'])) {
         $element['delete']['#url']->setOption('language', $current_language);
       }
+
+      $element['delete']['#access'] = FALSE;
     }
 
     return $element;
