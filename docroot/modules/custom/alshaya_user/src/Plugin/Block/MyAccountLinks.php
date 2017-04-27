@@ -132,7 +132,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
     // Change password link.
     $links['change_password'] = [
-      'text' => $this->t('Change password'),
+      'text' => $this->t('change password'),
       'route' => 'change_pwd_page.change_password_form',
       'options' => ['user' => $account->id()],
     ];
