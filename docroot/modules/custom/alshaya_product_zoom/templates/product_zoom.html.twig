@@ -1,52 +1,91 @@
-<div class="cloudzoom">
-  <div class="cloudzoom__thumbnails">
-    <ul id="lightSlider">
-    {% for thumbs in thumbnails %}
-      {% if thumbs.type == 'youtube' %}
-        <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video youtube">
-          <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" />
-        </li>
-      {% elseif thumbs.type == 'vimeo' %}
-        <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video vimeo">
-          <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
-        </li>
-      {% else %}
-        <li>
-          <a href="{{ thumbs.zoomurl }}" class="cloud-zoom-gallery cloudzoom__thumbnails__image" rel="useZoom: 'cloud-zoom',smallImage: '{{ thumbs.mediumurl }}'">
-            <img src="{{ thumbs.thumburl }}"/>
-          </a>
-        </li>
-      {% endif %}
-    {% endfor %}
-    </ul>
-  </div>
-  <div class="cloudzoom__herocontainer">
-    <div id="cloud-zoom-wrap" class="cloudzoom__image">
-      <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
-        <img src="{{ mainImage.mediumurl }}"/></a>
+<div id="product-zoom-container">
+  <div class="cloudzoom">
+    <div class="cloudzoom__thumbnails">
+      <ul id="lightSlider" class="{{ pager_flag }}">
+      {% for thumbs in thumbnails %}
+        {% if thumbs.type == 'youtube' %}
+          <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video youtube">
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" />
+          </li>
+        {% elseif thumbs.type == 'vimeo' %}
+          <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video vimeo">
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
+          </li>
+        {% else %}
+          <li>
+            <a href="{{ thumbs.zoomurl }}" class="cloud-zoom-gallery cloudzoom__thumbnails__image" rel="useZoom: 'cloud-zoom',smallImage: '{{ thumbs.mediumurl }}'">
+              <img src="{{ thumbs.thumburl }}"/>
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      </ul>
     </div>
-    <div id="yt-vi-container" class= "cloudzoom__video"></div>
+    <div class="cloudzoom__herocontainer">
+      <div id="cloud-zoom-wrap" class="cloudzoom__image">
+        <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
+          <img src="{{ mainImage.mediumurl }}"/></a>
+      </div>
+      <div id="yt-vi-container" class= "cloudzoom__video"></div>
+    </div>
   </div>
-</div>
-<div class="mobilegallery">
-  <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails">
-    {% for thumbs in thumbnails %}
-      {% if thumbs.type == 'youtube' %}
-        <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video youtube">
-          <img src="{{ thumbs.thumburl }}"/>
-        </li>
-      {% elseif thumbs.type == 'vimeo' %}
-        <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video vimeo">
-          <img src=""/>
-        </li>
-      {% else %}
-        <li>
-          <a href="{{ thumbs.fullurl }}" class="mobilegallery__thumbnails__image a-gallery">
-            <img src="{{ thumbs.fullurl }}"/>
-          </a>
-        </li>
-      {% endif %}
-    {% endfor %}
-  </ul>
-  <span class="subtext">{{ 'Pinch to Zoom'|t }}</span>
+  <div class="mobilegallery">
+    <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails {{ pager_flag }}">
+      {% for thumbs in thumbnails %}
+        {% if thumbs.type == 'youtube' %}
+          <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video youtube">
+            <img src="{{ thumbs.thumburl }}"/>
+          </li>
+        {% elseif thumbs.type == 'vimeo' %}
+          <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video vimeo">
+            <img src=""/>
+          </li>
+        {% else %}
+          <li>
+            <a href="{{ thumbs.fullurl }}" class="mobilegallery__thumbnails__image a-gallery">
+              <img src="{{ thumbs.fullurl }}"/>
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <span class="subtext">{{ 'Pinch to Zoom'|t }}</span>
+  </div>
+  <div id="product-image-gallery-container" class="imagegallery" style="display: none;">
+    <div class="imagegallery__wrapper">
+      <ul id="product-image-gallery" class="imagegallery__thumbnails {{ pager_flag }}">
+        {% for thumbs in thumbnails %}
+          {% if thumbs.type == 'youtube' %}
+            <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video youtube">
+              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+            </li>
+          {% elseif thumbs.type == 'vimeo' %}
+            <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video vimeo">
+              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
+            </li>
+          {% else %}
+            <li>
+              <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
+                <img src="{{ thumbs.thumburl }}"/>
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% set firstItem =  thumbnails | first %}
+      <div id="full-image-wrapper" class="imagegallery__full" style="width: 100%; height: 725px; overflow: hidden;">
+        {% if firstItem.type == 'youtube' %}
+          <img class="imagegallery__full__video" width='{{ firstItem.width }}' height='{{ firstItem.height }}' src="{{ firstItem.thumburl }}"/>
+        {% elseif firstItem.type == 'vimeo' %}
+          <img class="imagegallery__full__video" width='{{ firstItem.width }}' height='{{ firstItem.height }}' src=""/>
+        {% else %}
+          <img class="imagegallery__full__image" style="max-width: none;" id="full-image" src="{{ firstItem.fullurl }}"/>
+        {% endif %}
+      </div>
+
+    </div>
+    <div class="button__wrapper">
+      <button class="zoomout"></button ><button class="zoomin"></button >
+    </div>
+  </div>
 </div>
