@@ -71,6 +71,16 @@
 
         $('.c-search .view-search .view-header').addClass('search-count');
         $('.c-search .view-search .view-header').insertBefore('#block-filterbar');
+
+        // Hiding the filter border if there are no filters.
+        var checkFilter = $.trim($('.c-search .region__content .block-facets-summary-blockfilter-bar').html());
+        console.log(checkFilter.length);
+        if (checkFilter.length) {
+          $('.c-search .region__content .block-facets-summary-blockfilter-bar').css('border-bottom-width', '1px');
+        }
+        else {
+          $('.c-search .region__content .block-facets-summary-blockfilter-bar').css('border-bottom-width', '0');
+        }
       }
 
       /**
