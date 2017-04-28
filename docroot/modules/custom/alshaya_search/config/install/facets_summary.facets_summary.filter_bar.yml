@@ -13,14 +13,14 @@ facets:
     checked: true
     label: Color
     separator: ', '
+    show_count: true
     weight: 0
-    show_count: false
   price:
     checked: true
     label: Price
     separator: ', '
+    show_count: true
     weight: 0
-    show_count: false
 facet_source_id: 'search_api:views_page__search__page'
 processor_configs:
   hide_when_not_rendered:
