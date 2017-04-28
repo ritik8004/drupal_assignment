@@ -1,0 +1,74 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_delivery_banner
+    - node.type.advanced_page
+    - paragraphs.paragraphs_type.1_row_3_col_delivery_banner
+  module:
+    - entity_reference_revisions
+id: node.advanced_page.field_delivery_banner
+field_name: field_delivery_banner
+entity_type: node
+bundle: advanced_page
+label: 'Delivery Banner'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      1_row_3_col_delivery_banner: 1_row_3_col_delivery_banner
+    target_bundles_drag_drop:
+      1_row_1_col:
+        weight: 17
+        enabled: false
+      1_row_1_col_dept:
+        weight: 18
+        enabled: false
+      1_row_1st_col_2_row_2nd_col:
+        weight: 19
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 20
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 21
+        enabled: false
+      1_row_2_col_dept:
+        weight: 22
+        enabled: false
+      1_row_3_col:
+        weight: 23
+        enabled: false
+      1_row_3_col_delivery_banner:
+        enabled: true
+        weight: 24
+      1_row_3_col_dept:
+        weight: 25
+        enabled: false
+      1_row_3_col_text:
+        weight: 26
+        enabled: false
+      banner:
+        weight: 27
+        enabled: false
+      banner_full_width:
+        weight: 28
+        enabled: false
+      main_menu_highlight:
+        weight: 29
+        enabled: false
+      promo_block:
+        weight: 30
+        enabled: false
+      promo_block_text:
+        weight: 31
+        enabled: false
+      related_info_one_column:
+        weight: 32
+        enabled: false
+field_type: entity_reference_revisions
