@@ -30,6 +30,21 @@ function alshaya_loyalty_get_validation_settings() {
 }
 
 /**
+ * Process the default value to remove the prefix number.
+ *
+ * @param string $default_value
+ *   The value of the field.
+ * @param array $validation
+ *   The loayalty field validation settings.
+ *
+ * @return string
+ *   The stripped value.
+ */
+function alshaya_loyalty_process_default_value($default_value, array $validation) {
+  return str_replace($validation['value_start_with'], '', $default_value);
+}
+
+/**
  * Implements hook_form_alter().
  */
 function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -87,7 +102,7 @@ function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, F
 
   if (!empty($form['field_privilege_card_number']['widget'][0]['value'])) {
     if ($default_value = $form['field_privilege_card_number']['widget'][0]['value']['#default_value']) {
-      $form['field_privilege_card_number']['widget'][0]['value']['#default_value'] = str_replace($validation['value_start_with'], '', $default_value);
+      $form['field_privilege_card_number']['widget'][0]['value']['#default_value'] = alshaya_loyalty_process_default_value($default_value, $validation);
     }
   }
 
@@ -206,6 +221,12 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   // Get user input for the form.
   $values = &$form_state->getUserInput();
 
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    $user = User::load(\Drupal::currentUser()->id());
+    $card_number = $user->get('field_privilege_card_number')->getValue();
+    $default_value = alshaya_loyalty_process_default_value($card_number[0]['value'], $validation);
+  }
+
   $form['privilege_card_wrapper'] = [
     '#type' => 'details',
     '#title' => t('Enter a priviledge card number'),
@@ -220,6 +241,8 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
       '_alshaya_loyalty_validate_field_value',
     ],
     '#prefix' => $validation['value_start_with'],
+    '#default_value' => isset($default_value) ? $default_value : '',
+    '#disabled' => isset($default_value) ? TRUE : FALSE,
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
@@ -238,6 +261,8 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
       'validate_apc_number' => TRUE,
     ],
     '#prefix' => $validation['value_start_with'],
+    '#default_value' => isset($default_value) ? $default_value : '',
+    '#disabled' => isset($default_value) ? TRUE : FALSE,
   ];
 }
 
