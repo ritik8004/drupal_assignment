@@ -109,6 +109,7 @@
     font-size: 0.875rem;
     color: $peacock-blue;
     font-family: $alshaya-bold;
+    font-weight: normal;
     cursor: pointer;
     outline: none;
 
@@ -180,6 +181,7 @@
     font-family: $alshaya-bold;
     color: $peacock-blue;
     text-transform: lowercase;
+    font-weight: normal;
 
     @include breakpoint($only-mobile) {
       text-align: center;
