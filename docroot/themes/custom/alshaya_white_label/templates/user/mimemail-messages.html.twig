@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -20,44 +21,32 @@
   </head>
   <body id="mimemail-body" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
     <div id="header">
-      <img src="{{ site_base_path ~ directory }}/mothercare-logo.png" width="281px"/>
+      <img src="{{ site_base_path ~ directory }}/mothercare-logo.png" width="281px" alt="logo" title="logo"/>
     </div>
     <div id="center">
       <div id="main">
         {{ body|raw }}
       </div>
     </div>
-    <footer style="border-top: 2px solid #003971; text-align: center;">
+    <div style="border-top: 2px solid #003971; text-align: center;">
       <div style="padding-top: 30px; padding-bottom: 50px;">
-        <a href="" target="_blank" style="display: inline-block;">
-          <div style="display: inline-block;">
-            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/facebook.png" width="24.3px" alt=""/>
-          </div>
+        <a href="" target="_blank">
+            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/facebook.png" width="24.3px" alt="facebook" title="facebook"/>
         </a>
-        <a href="" target="_blank" style="display: inline-block;  margin: 0 0 0 15px;">
-          <div>
-            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/instagram.png" width="24.3px" alt=""/>
-          </div>
+        <a href="" target="_blank">
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/instagram.png" width="24.3px"  alt="instagram" title="instagram"/>
         </a>
-        <a href="" target="_blank" style="display: inline-block; margin: 0 0 0 15px;">
-          <div>
-            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/youtube.png" width="24.3px" alt=""/>
-          </div>
+        <a href="" target="_blank">
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/youtube.png" width="24.3px"  alt="youtube" title="youtube"/>
         </a>
-        <a href="" target="_blank" style="display: inline-block; margin: 0 0 0 15px;">
-          <div>
-            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/google.png" width="24.3px" alt=""/>
-          </div>
+        <a href="" target="_blank">
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/google.png" width="24.3px"  alt="google" title="google"/>
         </a>
-        <a href="" target="_blank" style="display: inline-block; margin: 0 0 0 15px;">
-          <div>
-            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/twitter.png" width="24.3px" alt=""/>
-          </div>
+        <a href="" target="_blank">
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/twitter.png" width="24.3px" alt="twitter" title="twitter"/>
         </a>
-        <a href="" target="_blank" style="display: inline-block; margin: 0 0 0 15px;">
-          <div>
-            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/pinterest.png" width="24.3px" alt=""/>
-          </div>
+        <a href="" target="_blank">
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/pinterest.png" width="24.3px" alt="pinterest" title="pinterest"/>
         </a>
       </div>
       <div style="font-family: Arial, helvetica; font-size: 11px; line-height: 1.55; background: #f7f7f7; padding: 16px; text-align: center;">
@@ -72,6 +61,6 @@
           {% endtrans %}
         </p>
       </div>
-    </footer>
+    </div>
   </body>
 </html>
