@@ -5,9 +5,8 @@
 
       $.fn.cartNotificationScroll = function() {
         $('html,body').animate({
-          scrollTop: $('.header--wrapper').offset().top},
-          'slow'
-        );
+          scrollTop: $('.header--wrapper').offset().top
+        }, 'slow');
       };
 
       $(window).on('click', function() {
@@ -22,6 +21,27 @@
       $('#cart_notification').on('click', function(event){
         event.stopPropagation();
       });
+
+      var btn = document.querySelector('#edit-add-to-cart');
+      var l = Ladda.create(btn);
+
+      btn.addEventListener('click', function() {
+        l.start();
+      });
+
+      btn.addEventListener('mousedown', function() {
+        l.start();
+      });
+
+      btn.addEventListener('keydown', function(event) {
+        if (event.keyCode == 13 || event.keyCode == 32) {
+          l.start();
+        }
+      });
+
+      $.fn.stopSpinner = function() {
+        l.stop();
+      };
     }
   };
 })(jQuery);
