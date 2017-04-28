@@ -35,6 +35,10 @@
   }
 
   .footer--menu {
+    @include breakpoint($only-mobile) {
+      margin: 0 0.5rem;
+    }
+
     @include breakpoint($tablet) {
       float: $left;
     }
@@ -135,7 +139,7 @@
     width: 100%;
     border-top: 1px solid $white;
     margin: 0;
-    padding: 0 0.75em;
+    padding: 0;
     text-align: $left;
   }
 }
@@ -344,8 +348,10 @@
 .c-footer-is-accordion {
   .accordion--body {
     display: none;
+    border-top: 1px solid $white;
 
     @include breakpoint($tablet) {
+      border-top: 0;
       display: block !important;
     }
   }

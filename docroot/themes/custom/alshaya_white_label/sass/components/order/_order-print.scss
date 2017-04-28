@@ -107,3 +107,8 @@ body {
     }
   }
 }
+
+// Hide backtotop Button on print page.
+.order__print--wrap ~ #backtotop {
+  visibility: hidden;
+}
