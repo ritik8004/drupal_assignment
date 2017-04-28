@@ -169,9 +169,14 @@ function alshaya_acm_cart_notification_theme($existing, $type, $theme, $path) {
 /**
  * Implements hook_theme_suggestions_alter().
  */
-function alshaya_acm_cart_notification_theme_suggestions_input_alter(array &$suggestions, array $variables, $hook) {
-  if ($variables['element']['#type'] == 'submit') {
-    $suggestions[] = "input__add_to_cart";
-    $variables['element']['#attributes']['class'][] = 'ladda-button';
+function alshaya_acm_cart_notification_theme_suggestions_input_alter(array &$suggestions, array $variables) {
+  $routmatch = \Drupal::routeMatch();
+  if ($routmatch->getRouteName() == 'entity.node.canonical') {
+    $node = \Drupal::request()->attributes->get('node');
+
+    if ($node->bundle() == 'acq_product' && $variables['element']['#id'] == 'edit-add-to-cart') {
+      $suggestions[] = 'input__add_to_cart';
+      $variables['element']['#attributes']['class'][] = 'ladda-button';
+    }
   }
 }
