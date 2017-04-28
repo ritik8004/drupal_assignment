@@ -82,7 +82,7 @@
 
         $(parentOrder).click(function () {
           var $ub = $(this).nextAll().stop(true, true).slideToggle();
-          listOrder.not($ub).slideUp();
+          listOrder.not($ub).hide();
           $ub.parent().toggleClass('open--accordion');
           listOrder.not($ub).parent().removeClass('open--accordion');
         });

@@ -5,11 +5,14 @@
     padding-bottom: 0.75rem;
 
     @include breakpoint($tablet) {
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.7rem;
+      margin-top: 0.437rem;
     }
 
     @include breakpoint($desktop) {
+      margin-top: 0;
       margin-bottom: 1.9rem;
+      padding-bottom: 0.875rem;
     }
   }
 
@@ -19,6 +22,12 @@
 
   .block-local-tasks-block {
     display: none;
+  }
+}
+
+.c-user--node {
+  .subtitle {
+    border-bottom: 1px solid $white;
   }
 }
 
@@ -240,5 +249,27 @@
   .c-page-title {
     top: -3.5rem;
     margin-left: 0;
+  }
+}
+
+.l-two--sf {
+  &.c-address-book,
+  &.c-communication-preferences {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        max-width: 16.8125rem;
+        width: 24%;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 72%;
+        max-width: 57.5625rem;
+        float: right;
+      }
+    }
   }
 }
