@@ -11,12 +11,17 @@
     width: 70%;
   }
 
+  .profile-address-book-delete-form {
+    color: $black;
+    font-size: 0.875rem;
+  }
+
   .ui-dialog {
-    background: #fff;
+    background: $white-five;
     padding: 0;
     padding-bottom: 21px;
     padding-#{$left}: 25px;
-    z-index: 2;
+    z-index: 8;
 
     @include breakpoint($only-mobile) {
       max-width: 341px;
@@ -57,12 +62,16 @@
     overflow: hidden;
   }
 
-  .ui-dialog-titlebar-close {
-    height: 50px;
+  .ui-dialog .ui-dialog-titlebar-close {
+    color: $black;
+    height: 3.125rem;
+    font-size: 1rem;
     #{$right}: 0;
     #{$left}: initial;
     top: 0;
-    width: 40px;
+    width: 2.5rem;
+    outline: none;
+    background-color: transparent;
 
     &::after {
       background: $white;
