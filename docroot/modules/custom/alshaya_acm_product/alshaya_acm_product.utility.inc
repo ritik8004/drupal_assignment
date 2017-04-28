@@ -174,6 +174,34 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
       'fullurl' => $original_image,
       'type' => 'image',
     ];
+    $thumbnails[] = [
+      'thumburl' => $imageSmall,
+      'mediumurl' => $imageMedium,
+      'zoomurl' => $imageZoom,
+      'fullurl' => $original_image,
+      'type' => 'image',
+    ];
+    $thumbnails[] = [
+      'thumburl' => $imageSmall,
+      'mediumurl' => $imageMedium,
+      'zoomurl' => $imageZoom,
+      'fullurl' => $original_image,
+      'type' => 'image',
+    ];
+    $thumbnails[] = [
+      'thumburl' => $imageSmall,
+      'mediumurl' => $imageMedium,
+      'zoomurl' => $imageZoom,
+      'fullurl' => $original_image,
+      'type' => 'image',
+    ];
+    $thumbnails[] = [
+      'thumburl' => $imageSmall,
+      'mediumurl' => $imageMedium,
+      'zoomurl' => $imageZoom,
+      'fullurl' => $original_image,
+      'type' => 'image',
+    ];
   }
   // @TODO: Get video data.
   $video = [];
@@ -201,6 +229,8 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
     }
   }
 
+  $pager_flag = count($thumbnails) > 5 ? 'pager-yes' : 'pager-no';
+
   $build['gallery'] = [
     '#type' => 'container',
     '#attributes' => [
@@ -212,6 +242,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
     '#theme' => 'product_zoom',
     '#mainImage' => $main_image,
     '#thumbnails' => $thumbnails,
+    '#pager_flag' => $pager_flag,
     '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
     '#attached' => [
       'library' => [
@@ -220,15 +251,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
     ],
   ];
 
-  $build['gallery']['product_zoom_gallery'] = [
-    '#theme' => 'product_zoom_gallery',
-    '#thumbnails' => $thumbnails,
-    '#attached' => [
-      'library' => [
-        'alshaya_product_zoom/product.product_zoom_gallery',
-      ],
-    ],
-  ];
 }
 
 /**
