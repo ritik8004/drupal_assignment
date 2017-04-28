@@ -66,7 +66,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#type' => 'link',
       '#title' => t('Continue shopping'),
       '#url' => Url::fromRoute('<front>'),
-      '#suffix' => '</div>',
     ];
 
     // Unset all other items.
