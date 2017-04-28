@@ -61,6 +61,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#url' => Url::fromRoute('<front>'),
     ];
 
+    // Add continue shopping link, that redirect user to homepage.
+    $form['empty']['continue_shopping_mobile'] = [
+      '#type' => 'link',
+      '#title' => t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+      '#suffix' => '</div>',
+    ];
+
     // Unset all other items.
     unset($form['cart']);
     unset($form['actions']['checkout']);
