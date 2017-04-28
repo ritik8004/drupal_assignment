@@ -34,6 +34,7 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $query = explode('=', $string);
       if ($query[0] == 'keywords') {
         $breadcrumb->addLink(Link::createFromRoute('Search results for "' . $query[1] . '"', '<none>'));
+        $breadcrumb->addCacheableDependency(['url.path']);
         return $breadcrumb;
       }
     }
