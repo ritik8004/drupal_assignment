@@ -1,8 +1,6 @@
 .order-detail {
   &.l-two--sf {
     padding-top: 0;
-    padding-left: 0;
-    padding-right: 0;
   }
 
   .c-page-title {
@@ -26,6 +24,10 @@
 
     @include breakpoint($tablet) {
       display: block;
+    }
+
+    &:hover {
+      color: $white-five;
     }
   }
 }
