@@ -26,6 +26,14 @@
         }
       });
 
+      // Move mobile number error on contact details.
+      var mobileNumber = $('.form-item-field-mobile-number-0-mobile');
+      var mobileNumberError = mobileNumber.find('.form-item--error-message');
+      if (mobileNumberError.length > 0) {
+        mobileNumber.parent().append(mobileNumberError);
+        mobileNumberError.addClass('is-visible');
+      }
+
       $(window).on('load', function () {
         $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input').each(function () {
           if ($(this).val() !== '') {

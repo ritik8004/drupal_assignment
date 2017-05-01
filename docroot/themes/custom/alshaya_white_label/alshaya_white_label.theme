@@ -454,6 +454,14 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
       ];
     }
   }
+  elseif ($route_match->getRouteName() == 'entity.user.edit_form') {
+    $user = $route_match->getParameter('user');
+    if ($user) {
+      $variables['title'] = [
+        '#markup' => t('Contact Details'),
+      ];
+    }
+  }
 
   // Change page title if address book page.
   if ($route_match->getRouteName() == 'entity.profile.type.address_book.user_profile_form') {
