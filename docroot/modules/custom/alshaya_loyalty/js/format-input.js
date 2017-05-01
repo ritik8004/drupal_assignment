@@ -9,10 +9,13 @@
   Drupal.behaviors.formatInput = {
     attach: function (context, settings) {
       function formatPrivilegeCard(elem) {
-        var value = elem.val();
-        if (value.length > 0) {
-          elem.val(value.match(/\d{4}(?=\d{1,4})|\d+/g).join('-'));
-        }
+        elem.each(function (e) {
+          var value = $(this).val();
+          if (value.length > 0) {
+            $(this).val(value.match(/\d{4}(?=\d{1,4})|\d+/g).join('-'));
+          }
+        })
+
       }
 
       function preventDefaultValueDeletion(elem, defaultValue) {
@@ -24,12 +27,14 @@
       }
 
       var privilegeCard = $('.c-input__privilege-card');
+      var defaultValue = settings.alshaya_loyalty.card_validate.init_value.match(/\d{4}(?=\d{1,4})|\d+/g).join('-');
       formatPrivilegeCard(privilegeCard);
-      var defaultValue = privilegeCard.val();
 
-      privilegeCard.on('input', function () {
-        preventDefaultValueDeletion($(this), defaultValue);
-        formatPrivilegeCard($(this));
+      privilegeCard.each(function (ele) {
+        $(this).on('input', function (e) {
+          preventDefaultValueDeletion($(this), defaultValue);
+          formatPrivilegeCard($(this));
+        });
       });
     }
   };

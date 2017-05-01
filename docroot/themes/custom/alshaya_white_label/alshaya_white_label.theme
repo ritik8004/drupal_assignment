@@ -527,14 +527,3 @@ function alshaya_white_label_preprocess(&$variables, $hook) {
   global $base_url;
   $variables['site_base_path'] = $base_url . '/';
 }
-
-/**
- * Implements THEMENAME_preprocess_input().
- */
-function alshaya_white_label_preprocess_input(&$variables) {
-  // Attach library for privilege card input field.
-  if ($variables['element']['#id'] == 'edit-field-privilege-card-number-0-value') {
-    $variables['attributes']['class'][] = 'c-input__privilege-card';
-    $variables['#attached']['library'][] = 'alshaya_white_label/format_input';
-  }
-}
