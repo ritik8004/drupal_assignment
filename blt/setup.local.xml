@@ -33,6 +33,6 @@
 
   <target name="refresh:local:drupal"
           description="Reinstall local dev environment."
-          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:products, sync:product-images">
+          depends="setup:composer:install, frontend:build, local:drupal:install, local:reset-settings-file, sync:products, sync:product-images">
   </target>
 </project>

@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall hooks for the Lightning Extender subprofile.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_install() {
+  // Add code here perform additional site information tasks, generate sample
+  // content, etc.
+
+  $modules = [
+    'alshaya_custom',
+    'alshaya_addressbook',
+    'alshaya_advanced_page',
+    'alshaya_acm',
+    'alshaya_acm_checkout',
+    'alshaya_acm_customer',
+    'alshaya_acm_product',
+    'alshaya_admin',
+    'alshaya_arabic',
+    'alshaya_captcha',
+    'alshaya_acm_cart_notification',
+    'alshaya_contact',
+    'alshaya_default_content',
+    'alshaya_department_page',
+    'alshaya_i18n',
+    'alshaya_loyalty',
+    'alshaya_main_menu',
+    'alshaya_master',
+    'alshaya_menus',
+    'alshaya_newsletter',
+    'alshaya_permissions',
+    'alshaya_product',
+    'alshaya_seo',
+    'alshaya_stores_finder',
+    'alshaya_user',
+  ];
+
+  foreach ($modules as $module) {
+    \Drupal::service('module_installer')->install([$module]);
+  }
+}
