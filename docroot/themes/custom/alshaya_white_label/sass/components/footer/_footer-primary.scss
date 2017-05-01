@@ -24,6 +24,10 @@
     @include breakpoint($tablet) {
       float: $right;
     }
+
+    @include breakpoint($desktop) {
+      width: 33%;
+    }
   }
 
   .footer--categories,
@@ -31,6 +35,17 @@
     @include breakpoint($tablet) {
       display: inline-block;
       vertical-align: top;
+    }
+
+    @include breakpoint($desktop) {
+      float: $left;
+      width: 50%;
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: 3.5rem;
     }
   }
 
@@ -41,6 +56,10 @@
 
     @include breakpoint($tablet) {
       float: $left;
+    }
+
+    @include breakpoint($desktop) {
+      width: 67%;
     }
   }
 
@@ -58,38 +77,27 @@
   @extend %list-clear;
 
   @include breakpoint($desktop) {
-    margin-#{$right}: 2rem;
-    display: inline-block;
-    max-width: 9.4rem;
-    vertical-align: top;
-    min-width: 7rem;
+    margin-#{$right}: 2.6rem;
+    float: $left;
+    width: calc(50% - 2.6rem);
+
+    &:last-child {
+      margin-#{$right}: 0;
+    }
   }
 
   a {
     font-size: 0.875rem;
-    color: $brownish-grey;
+    color: $black;
     display: block;
     padding: 0.875rem 0;
     text-decoration: none;
     font-family: $alshaya-thin;
 
     @include breakpoint($tablet) {
+      color: $brownish-grey;
       line-height: 2.14;
       padding: 0;
-    }
-  }
-
-  &--help,
-  &--category,
-  &--about {
-    @include breakpoint($tablet) {
-      width: 8.9rem;
-      margin-#{$right}: 2.3rem;
-    }
-
-    @include breakpoint($desktop) {
-      width: auto;
-      margin-#{$right}: 1rem;
     }
   }
 }
@@ -97,14 +105,6 @@
 .c-footer-menu--about,
 .c-footer-menu--help,
 .c-footer-menu--category {
-  display: inline-block;
-  vertical-align: top;
-  min-width: 7.8rem;
-
-  @include breakpoint($desktop) {
-    min-width: 6.4rem;
-  }
-
   h2 {
     font-size: 0.875rem;
     color: $peacock-blue;
@@ -159,10 +159,24 @@
   }
 }
 
-.c-footer-menu--help {
+.c-footer-menu--help,
+.c-footer-menu--about {
   @include breakpoint($desktop) {
-    min-width: 0;
-    max-width: 5rem;
+    float: $left;
+    margin-#{$left}: 1.3rem;
+    width: calc(40% - 1.3rem);
+  }
+}
+
+.c-footer-menu--about .c-footer-menu {
+  @include breakpoint($desktop) {
+    min-width: 9.4rem;
+  }
+}
+
+.c-footer-menu--help .c-footer-menu {
+  @include breakpoint($desktop) {
+    min-width: 5.4rem;
   }
 }
 
@@ -270,18 +284,17 @@
 
   @include breakpoint($only-tablet) {
     display: block;
+    margin-top: 1.5rem;
   }
 }
 
 .c-footer-menu--about {
   max-width: 100%;
 
-  .c-footer-menu {
-    min-width: 9.4rem;
-  }
-
-  @include breakpoint($tablet) {
-    max-width: 9.5em;
+  @include breakpoint($desktop) {
+    float: $left;
+    margin-#{$left}: 2rem;
+    width: calc(60% - 2rem);
   }
 
   @include breakpoint($only-tablet) {
@@ -300,7 +313,7 @@
   }
 
   @include breakpoint($desktop-wide) {
-    width: 357px;
+    width: 22.312rem;
   }
 }
 
