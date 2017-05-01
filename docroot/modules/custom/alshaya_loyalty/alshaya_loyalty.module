@@ -9,6 +9,42 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
 
 /**
+ * Get validation settings stored for validation.
+ *
+ * @return array
+ *   Return the array with keys length and value start with.
+ */
+function alshaya_loyalty_get_validation_settings() {
+  $loyalty = &drupal_static(__FUNCTION__, []);
+
+  if (empty($loyalty)) {
+    // Get alshaya loyalty settings.
+    $config = \Drupal::config('alshaya_loyalty.settings');
+    $loyalty = [
+      'length' => $config->get('apcn_max_length'),
+      'value_start_with' => $config->get('apcn_value_starts_with'),
+    ];
+  }
+
+  return $loyalty;
+}
+
+/**
+ * Process the default value to remove the prefix number.
+ *
+ * @param string $default_value
+ *   The value of the field.
+ * @param array $validation
+ *   The loayalty field validation settings.
+ *
+ * @return string
+ *   The stripped value.
+ */
+function alshaya_loyalty_process_default_value($default_value, array $validation) {
+  return str_replace($validation['value_start_with'], '', $default_value);
+}
+
+/**
  * Implements hook_form_alter().
  */
 function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -42,13 +78,13 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
         // Save the value of privilege card to field_privilege_card.
         array_unshift($form['actions']['submit']['#submit'], 'alshaya_loyalty_register_user_set_privilege_card_number');
       }
+      else {
+        _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
+      }
       break;
 
     case 'user_form':
-      // Validate privilege card number.
-      $form['field_privilege_card_number']['#element_validate'] = [
-        '_alshaya_loyalty_validate_field_value',
-      ];
+      _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
       break;
   }
 
@@ -56,6 +92,27 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     // Add privilege card number fields.
     alshaya_loyalty_add_privilege_card_fields($form, $form_state);
   }
+}
+
+/**
+ * Add prefix and element_validate for field_privilege_card_number.
+ */
+function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, FormStateInterface $form_state) {
+  $validation = alshaya_loyalty_get_validation_settings();
+
+  if (!empty($form['field_privilege_card_number']['widget'][0]['value'])) {
+    if ($default_value = $form['field_privilege_card_number']['widget'][0]['value']['#default_value']) {
+      $form['field_privilege_card_number']['widget'][0]['value']['#default_value'] = alshaya_loyalty_process_default_value($default_value, $validation);
+    }
+  }
+  $form['field_privilege_card_number']['widget'][0]['value']['#default_value'] = $validation['value_start_with'];
+
+  // Validate privilege card number.
+  $form['field_privilege_card_number']['#element_validate'] = [
+    '_alshaya_loyalty_validate_field_value',
+  ];
+  // Save the value of privilege card number with the prefixed value.
+  array_unshift($form['actions']['submit']['#submit'], 'alshaya_loyalty_register_user_set_privilege_card_number');
 }
 
 /**
@@ -76,15 +133,15 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
   }
 
   if (!empty($element_value)) {
-    // Get alshaya loyalty settings.
-    $config = \Drupal::config('alshaya_loyalty.settings');
-
-    $max_length = $config->get('apcn_max_length');
-    $value_start_with = $config->get('apcn_value_starts_with');
+    $validation = alshaya_loyalty_get_validation_settings();
+    $validate_value = $validation['value_start_with'] . $element_value;
 
     // Validate number against validation settings.
-    if (!alshaya_loyalty_check_valid_apc_number($element_value, $max_length, $value_start_with)) {
-      $form_state->setError($element, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
+    if (!alshaya_loyalty_check_valid_apc_number($validate_value, $validation['length'], $validation['value_start_with'])) {
+      $form_state->setError($element, t("@number is not a valid privilege card number.", ['@number' => $validate_value]));
+    }
+    else {
+      $form_state->setValueForElement($element, $element_value);
     }
   }
 }
@@ -93,8 +150,16 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
  * Set privilege card number value for register form.
  */
 function alshaya_loyalty_register_user_set_privilege_card_number(array &$form, FormStateInterface $form_state) {
-  if (\Drupal::currentUser()->isAnonymous() && $apc_number = $form_state->getValue('privilege_card_number')) {
-    $form_state->setValue('field_privilege_card_number', [['value' => $apc_number]]);
+  if ($apc_number = $form_state->getValue('privilege_card_number')) {
+    $value = $apc_number;
+  }
+  elseif ($apc_number = $form_state->getValue('field_privilege_card_number')) {
+    $value = $apc_number[0]['value'];
+  }
+
+  if (isset($value)) {
+    $validation = alshaya_loyalty_get_validation_settings();
+    $form_state->setValue('field_privilege_card_number', [['value' => $validation['value_start_with'] . $value]]);
   }
 }
 
@@ -103,8 +168,9 @@ function alshaya_loyalty_register_user_set_privilege_card_number(array &$form, F
  */
 function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInterface $form_state) {
   if (\Drupal::currentUser()->isAuthenticated() && $apc_number = $form_state->getValue('privilege_card_number')) {
+    $validation = alshaya_loyalty_get_validation_settings();
     $user = User::load(\Drupal::currentUser()->id());
-    $user->get('field_privilege_card_number')->set(0, $apc_number);
+    $user->get('field_privilege_card_number')->set(0, $validation['value_start_with'] . $apc_number);
     $user->save();
   }
 }
@@ -140,8 +206,15 @@ function alshaya_loyalty_check_valid_apc_number($value, $max_length, $value_star
  * Add privilege card fields to the form.
  */
 function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $form_state) {
+  $validation = alshaya_loyalty_get_validation_settings();
   // Get user input for the form.
   $values = &$form_state->getUserInput();
+
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    $user = User::load(\Drupal::currentUser()->id());
+    $card_number = $user->get('field_privilege_card_number')->getValue();
+    $default_value = alshaya_loyalty_process_default_value($card_number[0]['value'], $validation);
+  }
 
   $form['privilege_card_wrapper'] = [
     '#type' => 'details',
@@ -156,6 +229,9 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#element_validate' => [
       '_alshaya_loyalty_validate_field_value',
     ],
+    '#prefix' => $validation['value_start_with'],
+    '#default_value' => isset($default_value) ? $default_value : '',
+    '#disabled' => isset($default_value) ? TRUE : FALSE,
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
@@ -173,6 +249,9 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#element_validate_settings' => [
       'validate_apc_number' => TRUE,
     ],
+    '#prefix' => $validation['value_start_with'],
+    '#default_value' => isset($default_value) ? $default_value : '',
+    '#disabled' => isset($default_value) ? TRUE : FALSE,
   ];
 }
 
