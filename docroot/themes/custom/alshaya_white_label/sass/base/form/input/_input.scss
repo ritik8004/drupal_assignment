@@ -6,6 +6,9 @@ input[type="submit"],
 textarea {
   border-radius: 0;
   -webkit-appearance: none;
-  position: relative;
-  z-index: 1;
+
+  &:focus {
+    position: relative;
+    z-index: 1;
+  }
 }
