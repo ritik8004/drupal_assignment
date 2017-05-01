@@ -24,4 +24,18 @@ function alshaya_acm_product_install() {
   ];
   $product_config_factory->set('content', $content);
   $product_config_factory->save();
+
+  $product_config_factory = Drupal::configFactory()->getEditable('core.entity_view_display.node.acq_product.teaser');
+  $content = $product_config_factory->get('content');
+  $content['field_skus'] = [
+    'weight' => 1,
+    'settings' => [
+      'view_mode' => 'full',
+    ],
+    'label' => 'hidden',
+    'third_party_settings' => [],
+    'type' => 'sku_formatter',
+  ];
+  $product_config_factory->set('content', $content);
+  $product_config_factory->save();
 }

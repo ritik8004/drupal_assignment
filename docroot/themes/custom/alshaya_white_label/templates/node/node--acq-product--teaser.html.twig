@@ -8,7 +8,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
 <article{{ attributes }}>
   <a class="use-ajax" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'node': node.id}) }}">
-    <img src={{ content.image_url }} />
+    {% if content.image_url is not null %}
+      <img src={{ content.image_url }} />
+    {% endif %}
 
     {{ title_prefix }}
     {% if not page %}
@@ -23,7 +25,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     {{ content.special_price }}
   </a>
 
-  <img src={{ content.image_url }} />
+  {% if content.image_url is not null %}
+    <img src={{ content.image_url }} />
+  {% endif %}
 
   {{ title_prefix }}
   {% if not page %}
