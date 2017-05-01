@@ -243,11 +243,11 @@
       display: none;
     }
 
-    label.form-required,
-    .form-type-textfield label,
-    .field--name-field-privilege-card-number label,
-    .form-item-privilege-card-number label,
-    .form-item-privilege-card-number2 label {
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error),
+    .field--name-field-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number2 label:not(.error) {
       font-size: 16px;
       color: $greyish;
       position: absolute;
@@ -318,11 +318,11 @@
     }
   }
 
-  .form-item input:focus ~ label,
-  .form-item input:not(:focus):valid ~ label,
-  .form-item input:active ~ label,
-  .form-item input:not(:active):valid ~ label,
-  .form-item input.error ~ label {
+  .form-item input:focus ~ label:not(.error),
+  .form-item input:not(:focus):valid ~ label:not(.error),
+  .form-item input:active ~ label:not(.error),
+  .form-item input:not(:active):valid ~ label:not(.error),
+  .form-item input.error ~ label:not(.error) {
     top: -1.25em;
     bottom: 0;
     #{$left}: 0;
