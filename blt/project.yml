@@ -42,10 +42,12 @@ import: '${repo.root}/blt/setup.local.xml'
 modules:
   local:
     enable: [dblog, devel, seckit, views_ui]
-    uninstall: [acsf, acquia_connector, shield]
+    # TODO: Allowing acquia_connector for now till we get alshaya_search working without acquia_search.
+    uninstall: [acsf, shield]
   ci:
     enable: {  }
-    uninstall: [acquia_connector, shield]
+    # TODO: Allowing acquia_connector for now till we get alshaya_search working without acquia_search.
+    uninstall: [shield]
   dev:
     enable: [acquia_connector, shield]
     uninstall: {  }
