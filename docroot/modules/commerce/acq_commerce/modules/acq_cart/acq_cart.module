@@ -29,15 +29,15 @@ function acq_cart_theme($existing, $type, $theme, $path) {
   // Fetch the currency code position.
   $currency_code_position = $config->get('currency_code_position');
 
-  return array(
-    'acq_cart_mini_cart' => array(
-      'variables' => array(
+  return [
+    'acq_cart_mini_cart' => [
+      'variables' => [
         'quantity' => 0,
         'total' => NULL,
         'currency_format' => $currency_format,
-        'currency_code_position' => $currency_code_position
-      ),
+        'currency_code_position' => $currency_code_position,
+      ],
       'template' => 'block--acqminicart',
-    ),
-  );
+    ],
+  ];
 }

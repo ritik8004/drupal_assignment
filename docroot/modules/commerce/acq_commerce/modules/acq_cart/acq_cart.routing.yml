@@ -9,7 +9,7 @@ acq_cart.cart:
 acq_cart.getMiniCartRender:
   path: '/mini-cart'
   defaults:
-    _controller: '\Drupal\acq_cart\Controller\getMiniCart::content'
+    _controller: '\Drupal\acq_cart\Controller\GetMiniCart::content'
     _title: 'Cart'
   requirements:
     _permission: 'access content'

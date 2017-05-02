@@ -227,7 +227,6 @@ class Cart implements CartInterface {
    * @return int
    *   Return total number of items in the cart.
    */
-
   public function getCartItemsCount() {
     return $this->cartTotalCount;
   }
