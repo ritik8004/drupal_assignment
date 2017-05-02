@@ -190,20 +190,18 @@
               }
 
               &.js-facet-deactivate {
-                @include icon(close, after);
+                @include icon(close, after) {
+                  position: absolute;
+                  top: 2.15%;
+                  left: 3.5%;
+                  color: $white-four;
+                }
 
                 color: transparent;
-                font-size: 2.07rem;
+                font-size: 2.09rem;
                 width: 35px;
                 height: 35px;
                 position: relative;
-
-                &::after {
-                  position: absolute;
-                  top: 2.15%;
-                  left: 5.4%;
-                  color: $white-four;
-                }
               }
             }
           }
