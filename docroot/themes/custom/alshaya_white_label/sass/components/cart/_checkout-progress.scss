@@ -17,6 +17,12 @@
     font-size: 14px;
     font-family: $body_font;
 
+    @include breakpoint($only-mobile) {
+      font-size: 12px;
+      float: left;
+      display: grid;
+    }
+
     &::before {
       position: relative;
       display: inline-block;
@@ -45,6 +51,11 @@
       content: "";
       width: 10em;
       height: 0;
+
+      @include breakpoint($only-mobile) {
+        width: 3em;
+        left: 4em;
+      }
     }
 
     a {
