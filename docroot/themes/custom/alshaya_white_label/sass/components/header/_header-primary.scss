@@ -592,6 +592,7 @@ header {
 
     div:nth-child(2) {
       margin-#{$right}: 24px;
+      float: $left;
     }
 
     .highlighted {
