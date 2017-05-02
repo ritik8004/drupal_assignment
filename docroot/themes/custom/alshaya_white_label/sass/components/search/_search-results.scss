@@ -176,7 +176,7 @@
               }
 
               &.js-facet-deactivate {
-                background-image: url(../imgs/icons/combined-shape.svg);
+                background-image: url("../imgs/icons/combined-shape.svg");
                 background-repeat: no-repeat;
                 background-size: 18px;
                 background-position-x: center;
@@ -185,6 +185,15 @@
                 color: transparent;
                 text-indent: -89rem;
               }
+            }
+          }
+
+          &.clear-all {
+            border: 2px solid $cerulean-two;
+            padding: 0.407rem 1.5rem;
+
+            a {
+              color: $cerulean-two;
             }
           }
         }

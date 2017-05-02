@@ -80,6 +80,10 @@
         else {
           $('.c-search .region__content .block-facets-summary-blockfilter-bar').css('border-bottom-width', '0');
         }
+
+        // Add class to clear all link and move it to the last.
+        $('#block-filterbar ul li:first-child').addClass('clear-all');
+        $('#block-filterbar ul li.clear-all').insertAfter('#block-filterbar ul li:last-child');
       }
 
       /**
