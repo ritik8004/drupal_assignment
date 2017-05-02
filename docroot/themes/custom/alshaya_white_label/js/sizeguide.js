@@ -9,8 +9,7 @@
   Drupal.behaviors.sizeguide = {
     attach: function (context, settings) {
 
-      if ($('#size-select').length === 0 && $(window).width() > 381) {
-        var currentsize = $('.form-item-configurables-size select option:nth-child(2)').text();
+      if ($('#size-select').length === 0) {
         $('.form-item-configurables-size select').after("<ul id='size-select' />")
           .children('option').each(function (index, el) {
             if (index > 0) {
@@ -18,9 +17,9 @@
             }
           }
         );
-        $('#size-select').before('<div><span class="size-label">' + Drupal.t('Size') + ': </span><span class="size-value">' + currentsize + '</span></div>');
+        var currentsize = $('.form-item-configurables-size select option:selected').text() === '- Select -' ? $('.form-item-configurables-size select option:nth-child(2)').text() : $('.form-item-configurables-size select option:selected').text();
+        $('#size-select').before('<div><span class="size-label">Size : </span><span class="size-value">' + currentsize + '</span></div>');
       }
-
       $('.form-item-configurables-size select').hide();
 
       $('#size-select li').click(function (event) {
