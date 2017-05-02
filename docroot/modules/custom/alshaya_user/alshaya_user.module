@@ -200,6 +200,11 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   // Change current password title and submit button text.
   $form['account']['current_pass']['#title'] = t('current password');
   $form['actions']['submit']['#value'] = t('change password');
+
+  // Set this as password policy module checks for the role element.
+  $form['account']['roles']['#default_value'] = [];
+  // Password policy validation.
+  $form['#validate'][] = '_password_policy_user_profile_form_validate';
 }
 
 /**
@@ -210,6 +215,15 @@ function alshaya_user_form_change_pwd_form_process_pass(&$element, FormStateInte
   $element = PasswordConfirm::processPasswordConfirm($element, $form_state, $complete_form);
   $element['pass1']['#title'] = t('new password');
   $element['pass2']['#title'] = t('confirm password');
+
+  // Get tooltip content from config.
+  $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
+
+  // Add tooltip as suffix to first element.
+  $element['pass1']['#suffix'] = '<div class="password-tooltip">
+      <div class="password-tooltip-icon">!</div>
+      <div class="password-tooltip-content">' . $tooltip . '</div>
+    </div>';
 
   return $element;
 }

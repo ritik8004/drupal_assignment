@@ -23,5 +23,10 @@ function alshaya_acm_modules_installed($modules) {
     $configuration['POST']['supported_auth'][] = 'basic_auth';
     $config->set('configuration', $configuration);
     $config->save();
+
+    // Update product category sync root setting.
+    $config = \Drupal::configFactory()->getEditable('acq_commerce.conductor');
+    $config->set('filter_root_category', TRUE);
+    $config->save();
   }
 }
