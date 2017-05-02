@@ -74,7 +74,6 @@
 
         // Hiding the filter border if there are no filters.
         var checkFilter = $.trim($('.c-search .region__content .block-facets-summary-blockfilter-bar').html());
-        console.log(checkFilter.length);
         if (checkFilter.length) {
           $('.c-search .region__content .block-facets-summary-blockfilter-bar').css('border-bottom-width', '1px');
         }

@@ -171,6 +171,10 @@
                 margin-#{$right}: 1px;
               }
 
+              &.facet-item__count {
+                display: none;
+              }
+
               &.js-facet-deactivate {
                 background-image: url(../imgs/icons/combined-shape.svg);
                 background-repeat: no-repeat;
