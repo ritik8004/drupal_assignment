@@ -68,6 +68,22 @@
             facetBlock.toggle();
           });
         }
+
+        $('.c-search .view-search .view-header').addClass('search-count');
+        $('.c-search .view-search .view-header').insertBefore('#block-filterbar');
+
+        // Hiding the filter border if there are no filters.
+        var checkFilter = $.trim($('.c-search .region__content .block-facets-summary-blockfilter-bar').html());
+        if (checkFilter.length) {
+          $('.c-search .region__content .block-facets-summary-blockfilter-bar').css('border-bottom-width', '1px');
+        }
+        else {
+          $('.c-search .region__content .block-facets-summary-blockfilter-bar').css('border-bottom-width', '0');
+        }
+
+        // Add class to clear all link and move it to the last.
+        $('#block-filterbar ul li:first-child').addClass('clear-all');
+        $('#block-filterbar ul li.clear-all').insertAfter('#block-filterbar ul li:last-child');
       }
 
       /**
