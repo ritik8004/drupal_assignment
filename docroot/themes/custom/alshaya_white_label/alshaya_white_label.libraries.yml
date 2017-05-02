@@ -28,10 +28,6 @@ unmask_password:
   js:
     js/unmask_password.js: {}
 
-format_input:
-  js:
-    js/format-input.js: {}
-
 slider_banner:
   js:
     js/slider.js: {}
