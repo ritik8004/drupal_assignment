@@ -444,6 +444,8 @@ header {
     }
 
     .menu--two__list-item {
+      line-height: 1;
+
       > .menu-two__link-wrapper {
         font-family: $alshaya-bold;
         display: inline-block;
@@ -589,6 +591,7 @@ header {
 
     div:nth-child(2) {
       margin-#{$right}: 24px;
+      float: $left;
     }
 
     .highlighted {
