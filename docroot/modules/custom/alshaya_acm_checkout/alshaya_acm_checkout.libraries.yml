@@ -1,21 +1,9 @@
 checkout_flow:
   version: 1.x
   js:
+    js/jquery.creditCardValidator.js: {}
     js/alshaya_acm_checkout.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
-    - core/drupal
-
-knet:
-  version: VERSION
-  js:
-    js/knet/client.min.js: {}
-    js/knet/hosted-fields.min.js: {}
-    js/knet/pane.js: {}
-  css:
-    base:
-      css/knet.css: { weight: -20 }
-  dependencies:
-    - core/jquery
     - core/drupal

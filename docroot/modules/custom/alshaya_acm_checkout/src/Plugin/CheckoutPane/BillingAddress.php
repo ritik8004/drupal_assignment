@@ -57,21 +57,35 @@ class BillingAddress extends AddressFormBase {
         'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
       ],
+      '#default_value' => 1,
     ];
+
+    // By default we want to use same address as shipping.
+    $same_as_shipping = 1;
 
     if ($form_state->getValues()) {
       $values = $form_state->getValue($pane_form['#parents']);
-      $same_as_shipping = $values['same_as_shipping'];
-      if ($same_as_shipping == 1) {
-        $form_state->setTemporaryValue('address', $cart->getShipping());
-      }
+      $same_as_shipping = (int) $values['same_as_shipping'];
     }
 
-    $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
+    if ($same_as_shipping === 1) {
+      $form_state->setTemporaryValue('address', $cart->getShipping());
 
-    $pane_form['address']['first_name']['#weight'] = -10;
-    $pane_form['address']['last_name']['#weight'] = -9;
-    $pane_form['address']['phone']['#weight'] = 0;
+      // Add empty wrapper to use when we click on No.
+      $pane_form['address'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => ['address_wrapper'],
+        ],
+      ];
+    }
+    else {
+      $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
+
+      $pane_form['address']['first_name']['#weight'] = -10;
+      $pane_form['address']['last_name']['#weight'] = -9;
+      $pane_form['address']['phone']['#weight'] = 0;
+    }
 
     return $pane_form;
   }

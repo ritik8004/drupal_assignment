@@ -27,6 +27,7 @@ class Cashondelivery extends PaymentMethodBase implements PaymentMethodInterface
    * {@inheritdoc}
    */
   public function buildPaymentForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+
     // Cash on Delivery doesn't need any payment details.
     return $pane_form;
   }

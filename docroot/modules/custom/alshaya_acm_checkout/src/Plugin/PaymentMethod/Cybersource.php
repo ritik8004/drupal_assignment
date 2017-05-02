@@ -6,20 +6,20 @@ use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
 
 /**
- * Provides the K-Net payment method.
+ * Provides the Cybersource payment method.
  *
  * @ACQPaymentMethod(
- *   id = "knet",
- *   label = @Translation("K-Net Debit Card"),
+ *   id = "cybersource",
+ *   label = @Translation("Cybersource"),
  * )
  */
-class Knet extends PaymentMethodBase implements PaymentMethodInterface {
+class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
 
   /**
    * {@inheritdoc}
    */
   public function buildPaymentSummary() {
-    return 'K-Net details here.';
+    return 'Cybersource details here.';
   }
 
 }
