@@ -40,6 +40,20 @@
           }
         });
       });
+
+      var i = setInterval(function () {
+        if ($('aside .block-facet--checkbox a.facets-soft-limit-link').length) {
+          console.log('hello world');
+          clearInterval(i);
+          $('aside .block-facet--checkbox').each(function() {
+            var softLink = $(this).find('a.facets-soft-limit-link');
+            softLink.insertAfter('aside .block-facet--checkbox ul li:last-child');
+          });
+        }
+        else {
+          console.log('hello world 1');
+        }
+      }, 100);
     }
   };
 })(jQuery);
