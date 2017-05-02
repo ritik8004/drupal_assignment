@@ -230,7 +230,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#title' => t('Enter a priviledge card number'),
     '#open' => FALSE,
     '#weight' => 3,
-    '#after_build' => ['privilege_card_wrapper_after_build'],
+    '#after_build' => ['alshaya_loyalty_privilege_card_wrapper_after_build'],
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number'] = [
@@ -271,7 +271,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
  * Keep open the wrapper when privilege card number value for one of the field
  * filled up.
  */
-function privilege_card_wrapper_after_build($element, FormStateInterface $form_state) {
+function alshaya_loyalty_privilege_card_wrapper_after_build($element, FormStateInterface $form_state) {
   // Get user input for the form.
   $inputs = &$form_state->getUserInput();
   $validation = alshaya_loyalty_get_validation_settings();
