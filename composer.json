@@ -9,8 +9,15 @@
         "acquia/lightning": "2.0.3",
         "drupal/address": "^1.0-rc4",
         "drupal/acsf": "^1.33.0",
+        "drupal/cog": "^1.0.0",
+        "drupal/core": "^8.0",
+        "drupal/features": "^3.0.0",
         "drupal/key_value_field": "^1.0-beta1",
+        "drupal/memcache": "2.x-dev",
         "drupal/restui": "^1.13",
+        "drupal/seckit": "^1.0.0-alpha2",
+        "drupal/security_review": "*",
+        "drupal/shield": "^1.0.0",
         "drush/drush": "^8.1.8",
         "drupal/menu_admin_per_menu": "^1.0@RC",
         "drupal/menu_link_attributes": "^1.0@beta",
@@ -42,10 +49,18 @@
         "drupal/better_exposed_filters": "3.x-dev"
     },
     "require-dev": {
+        "behat/behat": "^3.1",
+        "behat/mink": "~1.7",
+        "behat/mink-selenium2-driver": "^1.3.1",
         "drupal/console": "^1.0.0-rc13",
         "drupal/devel": "^1.0.0-alpha1",
+        "drupal/drupal-extension": "^3.2",
+        "drupal-composer/drupal-scaffold": "^2.1.0",
+        "jarnaiz/behat-junit-formatter": "^1.3.2",
+        "se/selenium-server-standalone": "^2.53",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
-        "geerlingguy/drupal-vm": "~4.2"
+        "geerlingguy/drupal-vm": "~4.2",
+        "bex/behat-screenshot": "^1.2"
     },
     "repositories": {
         "drupal": {
@@ -73,10 +88,22 @@
         "blt": {
             "update": true
         },
+        "drupal-scaffold": {
+            "initial": {
+                "sites/default/default.services.yml": "sites/default/services.yml",
+                "sites/default/default.settings.php": "sites/default/settings.php"
+            },
+            "excludes": [
+                "sites/development.services.yml"
+            ]
+        },
         "enable-patching": true,
         "patches": {
             "drupal/taxonomy_term_depth": {
                 "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
+            },
+            "acquia/lightning": {
+                "Plugin Exception error on installation -- search_api": "https://www.drupal.org/files/issues/2869253-3-search-api-breaking.patch"
             },
             "drupal/search_api_solr": {
                 "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
@@ -118,27 +145,12 @@
             ],
             "drush/contrib/{$name}": [
                 "type:drupal-drush"
-            ],
-            "docroot/libraries/{$name}": [
-                "type:drupal-library"
             ]
-        },
-        "merge-plugin": {
-            "require": [
-                "vendor/acquia/blt/composer.required.json",
-                "vendor/acquia/blt/composer.suggested.json"
-            ],
-            "include": [
-                "blt/composer.overrides.json"
-            ],
-            "merge-extra": true,
-            "merge-extra-deep": true,
-            "merge-scripts": true,
-            "replace": true
         }
     },
     "scripts": {
         "blt-alias": "blt install-alias -Dcreate_alias=true",
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "post-drupal-scaffold-cmd": [
             "cd docroot && patch -p1 <../patches/htaccess-ssl.patch"
         ],
