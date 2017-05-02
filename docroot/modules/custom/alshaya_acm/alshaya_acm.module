@@ -6,28 +6,40 @@
  */
 
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  // Route match.
+  $route_match = \Drupal::routeMatch();
+
+  // Change the title of the cart page.
+  if ($route_match->getRouteName() == 'acq_cart.cart') {
+    $request = \Drupal::request();
+
+    if ($route = $request->attributes->get(RouteObjectInterface::ROUTE_OBJECT)) {
+      $route->setDefault('_title', 'Basket');
+    }
+  }
+
   // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
   // Get the current cart.
-  $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+  $cart_storage = \Drupal::service('acq_cart.cart_storage');
+  $cart = $cart_storage->getCart();
 
   // Get current cart items.
   $cart_items = $cart->items();
 
   if (empty($cart_items)) {
-    // Set Form title.
-    $form['#title'] = t("Cart (%count)", ['%count' => 0]);
-
     // Add empty message wrapper container.
     $form['empty'] = [
       '#type' => 'container',
@@ -49,6 +61,13 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#url' => Url::fromRoute('<front>'),
     ];
 
+    // Add continue shopping link, that redirect user to homepage.
+    $form['empty']['continue_shopping_mobile'] = [
+      '#type' => 'link',
+      '#title' => t('Continue shopping'),
+      '#url' => Url::fromRoute('<front>'),
+    ];
+
     // Unset all other items.
     unset($form['cart']);
     unset($form['actions']['checkout']);
@@ -56,9 +75,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // Simply return, we don't want to process below code.
     return;
   }
-
-  // Change checkout button text to 'Secure Checkout'.
-  $form['actions']['checkout']['#value'] = t('Secure Checkout');
 
   // Add sub total price of product.
   $form['cart']['#header'][] = t('Sub total');
@@ -69,11 +85,12 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Get cart items by sku.
   $cart_item = alshaya_acm_get_cart_items_by_sku();
-  $product_count = 0;
+
+  // Flag for whether show the secure checkout button or not.
+  $secure_checkout_access = TRUE;
+
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
-      $product_count += $form['cart'][$id]['quantity']['#default_value'];
-
       $form['cart'][$id]['quantity']['#type'] = 'select';
       $form['cart'][$id]['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
 
@@ -94,7 +111,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       // Add remove link as suffix of quantity.
       $remove_url = Url::fromUserInput('/cart/remove/' . $id);
-      $form['cart'][$id]['quantity']['#suffix'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toString();
+      $form['cart'][$id]['quantity']['#suffix'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div id="stock-error-' . $id . '"></div>';
 
       // Load Images.
       $media = alshaya_acm_product_get_sku_media($id);
@@ -168,8 +185,37 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       ];
       $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price dark']];
       $form['cart'][$id]['delivery_options']['#wrapper_attributes'] = ['class' => ['delivery-option']];
+
+      // If there is at least one item out of scope, show the error.
+      $out_of_stock_message = '';
+
+      // SKU stock.
+      $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($id);
+      // If item is not available in stock.
+      if (!$sku_stock['is_in_stock']) {
+        // Basket out of stock error.
+        $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
+        $form['cart'][$id]['#attributes']['class'][] = 'sku-out-stock';
+        $secure_checkout_access = FALSE;
+      }
     }
   }
+
+  if ($secure_checkout_access) {
+    // Change checkout button text to 'Secure Checkout'.
+    $form['actions']['checkout']['#value'] = t('Secure Checkout');
+    $form['actions']['checkout']['#suffix'] = '</div>';
+    $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
+  }
+  else {
+    $form['actions']['checkout']['#access'] = FALSE;
+  }
+
+  // Out of stock error message.
+  $form['basket_out_of_stock_message'] = [
+    '#markup' => '<div id="out-of-stock-message">' . $out_of_stock_message . '</div>',
+    '#weight' => -1,
+  ];
 
   // Add wrapper to cart table for themeing.
   $form['cart']['#prefix'] = '<div id="table-cart-items">';
@@ -214,6 +260,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#url' => Url::fromRoute('<front>'),
       '#suffix' => '</div>',
     ];
+
+    unset($form['actions']['update']);
   }
 
   $form['coupon']['#type'] = 'hidden';
@@ -222,9 +270,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
 
   _alshaya_acm_format_cart_total($form, $cart);
-
-  // Set Form title.
-  $form['#title'] = t("Basket (%count)", ['%count' => $product_count]);
 }
 
 /**
@@ -249,7 +294,7 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     ];
   }
 
-  if ((float) $totals['discount'] > 0) {
+  if ((float) $totals['discount'] != 0) {
     $form['totals']['discount']['value'] = [
       '#markup' => alshaya_acm_price_format($totals['discount']),
     ];
@@ -293,6 +338,33 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   // Update cart with sku quantity.
   $cartStorage = \Drupal::service('acq_cart.cart_storage');
   $cart = $cartStorage->getCart();
+  $response = new AjaxResponse();
+
+  // Stock check.
+  $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku);
+
+  $error_message = '';
+
+  // If sku not available in stock.
+  if (!$sku_stock['is_in_stock']) {
+    $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
+    // If out of stock, remove/hide the secure checkout button.
+    $form['actions']['checkout']['#access'] = FALSE;
+    $form['actions']['continue_shopping_mobile']['#access'] = FALSE;
+    $form['cart'][$sku]['#attributes']['class'][] = 'sku-out-stock';
+    // Ajax response to update page section.
+    $response->addCommand(new HtmlCommand('#out-of-stock-message', $out_of_stock_message));
+    $response->addCommand(new ReplaceCommand('#secure-checkout-button', $form['actions']));
+    $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
+    return $response;
+  }
+  // If quantity we added for sku is more than what available in stock.
+  elseif ($sku_stock['quantity'] < $quantity) {
+    // Update the quantity and update error message.
+    $quantity = $sku_stock['quantity'];
+    $error_message = t('Sorry, we now only have @quantity of these available and we have updated your basket.', ['@quantity' => $quantity]);
+  }
+
   $cart->updateItemQuantity($sku, $quantity);
   $cartStorage->updateCart();
   $newcart = $cartStorage->getCart();
@@ -303,14 +375,38 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   // Update the sub total price of each product.
   $form['cart'][$sku]['sub_total']['#markup'] = alshaya_acm_price_format($quantity * $cart_item[$sku]['price']);
 
+  // Update the quantity select list.
+  $form['cart'][$sku]['quantity']['#value'] = $quantity;
+
   // Update form total values.
   _alshaya_acm_format_cart_total($form, $newcart);
 
-  $response = new AjaxResponse();
+  $cart_total = [];
+  $cart_total['totals'] = $form['totals'];
+  $cart_total['actions'] = $form['actions'];
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
-  $response->addCommand(new ReplaceCommand('#table-cart-totals', $form['totals']));
+  $response->addCommand(new ReplaceCommand('#table-cart-totals', $cart_total));
+  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
+
+  $response->addCommand(new ReplaceCommand('#stock-error-' . $sku, $error_message));
 
   return $response;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_acm_preprocess_page_title(&$variables) {
+  $route_match = \Drupal::routeMatch();
+
+  // Change cart page title with quantity count.
+  if ($route_match->getRouteName() == 'acq_cart.cart') {
+    $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+
+    $variables['title'] = [
+      '#markup' => t("Basket (%count)", ['%count' => $cart->getCartItemsCount()]),
+    ];
+  }
 }
 
 /**

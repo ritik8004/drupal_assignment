@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: node__department_page
+label: 'Content: Department Page'
+tags:
+  description: '[node:summary]'
+  title: '[node:field_product_category:entity:name] | [site:name]'
+  og_description: '[node:summary]'
+  og_locale_alternative: '[node:locale:alternate]'
+  og_title: '[node:field_product_category:entity:name]'

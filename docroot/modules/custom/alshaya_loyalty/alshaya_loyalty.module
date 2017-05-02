@@ -176,12 +176,11 @@ function alshaya_loyalty_register_user_set_privilege_card_number(array &$form, F
  */
 function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInterface $form_state) {
   if (\Drupal::currentUser()->isAuthenticated() && $apc_number = $form_state->getValue('privilege_card_number')) {
-
     // Clean the element value.
     $apc_number = _alshaya_loyalty_clean_card_number($apc_number);
 
     $user = User::load(\Drupal::currentUser()->id());
-    $user->get('field_privilege_card_number')->set(0, $apc_number);
+    $user->get('field_privilege_card_number')->set(0, $validation['value_start_with'] . $apc_number);
     $user->save();
   }
 }

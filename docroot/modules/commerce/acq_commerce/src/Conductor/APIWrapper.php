@@ -51,6 +51,47 @@ class APIWrapper {
   }
 
   /**
+   * Checks the stock for the given sku.
+   *
+   * @param string $sku
+   *   The sku id.
+   *
+   * @return array|mixed
+   *   Available stock detail.
+   *
+   * @throws \Exception
+   */
+  public function skuStockCheck($sku) {
+    $endpoint = "stock/$sku";
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $stock = [];
+
+    try {
+      // Cache id.
+      $cid = 'stock:' . $sku;
+
+      // If information is cached.
+      if ($cache = \Drupal::cache('data')->get($cid)) {
+        $stock = $cache->data;
+      }
+      else {
+        $stock = $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
+        $stock_check_proportion = \Drupal::config('acq_commerce.conductor')->get('stock_check_cache_proportion');
+        \Drupal::cache('data')->set($cid, $stock, $stock['quantity'] * $stock_check_proportion);
+      }
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $stock;
+  }
+
+  /**
    * Gets the user cart from a cart ID.
    *
    * @param int $cart_id

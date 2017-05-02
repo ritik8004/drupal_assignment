@@ -50,7 +50,7 @@
         open: function () {
           // ZoomIn ZoomOut in Gallery view with a draggable container.
           if ($('#full-image-wrapper').length > 0) {
-            $('#full-image').css({top: 0, left: 0});
+            $('#full-image').css({top: 0, left: -200});
 
             var maskWidth = $('#full-image-wrapper').width();
             var maskHeight = $('#full-image-wrapper').height();

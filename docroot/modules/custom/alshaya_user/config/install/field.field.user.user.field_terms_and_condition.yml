@@ -12,7 +12,7 @@ bundle: user
 label: 'Terms and condition'
 description: 'I would like to receive exclusive deals from Pottery Barn. By registering I agree to your <a href="">Terms and Conditions.</a>'
 required: false
-translatable: false
+translatable: true
 default_value:
   -
     value: 0

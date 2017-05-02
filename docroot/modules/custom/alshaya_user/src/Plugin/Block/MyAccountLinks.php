@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -28,6 +29,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
   protected $currentUser;
 
   /**
+   * The entity repository service.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * MyAccountNavBlock constructor.
    *
    * @param array $configuration
@@ -38,10 +46,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
    *   Plugin defination.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_account
    *   The current account object.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account, EntityRepositoryInterface $entity_repository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -52,7 +63,8 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('entity.repository')
     );
   }
 
@@ -120,7 +132,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
     // Change password link.
     $links['change_password'] = [
-      'text' => $this->t('Change password'),
+      'text' => $this->t('change password'),
       'route' => 'change_pwd_page.change_password_form',
       'options' => ['user' => $account->id()],
     ];
@@ -202,6 +214,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     $user = User::load($this->currentUser->id());
     $title = '';
     if ($user) {
+      $user = $this->entityRepository->getTranslationFromContext($user);
       $fname = $user->get('field_first_name')->getString();
       $lname = $user->get('field_last_name')->getString();
       if (!empty($fname)) {

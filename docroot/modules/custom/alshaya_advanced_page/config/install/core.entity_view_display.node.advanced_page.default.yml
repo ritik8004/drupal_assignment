@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.node.advanced_page.body
     - field.field.node.advanced_page.field_banner
+    - field.field.node.advanced_page.field_delivery_banner
     - field.field.node.advanced_page.field_meta_tags
     - field.field.node.advanced_page.field_promo_banner_full_width
     - field.field.node.advanced_page.field_promo_blocks
@@ -30,6 +31,14 @@ content:
     type: entity_reference_revisions_entity_view
     weight: 102
     label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+  field_delivery_banner:
+    type: entity_reference_revisions_entity_view
+    weight: 108
+    label: above
     settings:
       view_mode: default
       link: ''

@@ -196,7 +196,7 @@ display:
           value:
             min: ''
             max: ''
-            value: '2'
+            value: '1'
           group: 1
           exposed: false
           expose:

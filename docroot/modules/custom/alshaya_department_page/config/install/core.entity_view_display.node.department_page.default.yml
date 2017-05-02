@@ -34,6 +34,14 @@ content:
     weight: 0
     settings: {  }
     third_party_settings: {  }
+  sharethis:
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+  workbench_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   body: true
   field_product_category: true
