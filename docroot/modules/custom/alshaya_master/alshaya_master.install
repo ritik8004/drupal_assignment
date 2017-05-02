@@ -26,6 +26,9 @@ function alshaya_master_install() {
     'E-mail' => [
       'en' => 'Email address',
     ],
+    'E-mail' => [
+      'ar' => 'عنوان البريد الإلكتروني',
+    ],
     'Reset your password' => [
       'en' => 'Forgot password',
     ],
@@ -34,6 +37,12 @@ function alshaya_master_install() {
     ],
     'Arabic' => [
       'ar' => 'عربية',
+    ],
+    'sign in' => [
+      'ar' => 'تسجيل الدخول',
+    ],
+    'Forgot password' => [
+      'ar' => 'هل نسيت كلمة المرور',
     ],
   ];
   alshaya_i18n_save_translations($strings);
