@@ -80,6 +80,10 @@ header {
       bottom: -43px;
       #{$left}: 0;
       #{$right}: 0;
+
+      .form-item-keywords {
+        float: none !important;
+      }
     }
 
     @include breakpoint($only-mobile) {
@@ -190,6 +194,10 @@ header {
       position: relative;
       list-style: none;
     }
+  }
+
+  .form-item-sort-bef-combine {
+    display: none;
   }
 }
 
