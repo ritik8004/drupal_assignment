@@ -8,6 +8,12 @@
     }
   }
 
+  main {
+    @include breakpoint($only-tablet) {
+      padding-top: 2.5rem;
+    }
+  }
+
   .subtitle {
     border-bottom: 1px solid $white;
     margin-top: 1.25rem;
@@ -52,6 +58,10 @@
   .form-actions,
   .form-item {
     display: inline-block;
+  }
+
+  .c-input__bar {
+    display: none;
   }
 
   .form-item {

@@ -43,24 +43,26 @@ textarea {
     right: 50%;
   }
 
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="submit"],
-  input[type="tel"],
-  textarea {
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid $grey-ash;
-    padding: 0;
+  form:not(.alshaya-acm-customer-order-list-search) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="submit"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid $grey-ash;
+      padding: 0;
 
-    &:focus {
-      outline: 0 !important;
-    }
+      &:focus {
+        outline: 0 !important;
+      }
 
-    &:not(.error):focus ~ .c-input__bar::before,
-    &:not(.error):focus ~ .c-input__bar::after {
-      width: 50%;
+      &:not(.error):focus ~ .c-input__bar::before,
+      &:not(.error):focus ~ .c-input__bar::after {
+        width: 50%;
+      }
     }
   }
 

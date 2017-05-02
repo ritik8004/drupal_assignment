@@ -756,10 +756,36 @@
 }
 
 .change-pwd-form {
+  margin-bottom: 2rem;
+
   @extend .user-form;
+
+  @include breakpoint($desktop) {
+    margin-bottom: 12.125rem;
+  }
 
   .form-wrapper {
     padding-top: 1px;
+
+    .form-text {
+      color: $black;
+      margin-top: 0.56rem;
+      padding-bottom: 0.5rem;
+      font-size: 1.25rem;
+      letter-spacing: 0.312rem;
+    }
+
+    .form-item--error-message {
+      padding-top: 0.4375rem;
+    }
+
+    .form-item {
+      margin-top: 2.7em;
+    }
+  }
+
+  .form-actions {
+    margin-top: 0.7rem;
   }
 }
 

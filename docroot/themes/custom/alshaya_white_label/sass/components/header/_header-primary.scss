@@ -93,6 +93,7 @@ header {
     .form-item-keywords,
     .form-actions {
       display: inline-block;
+      float: none !important;
     }
 
     input[type="text"] {
@@ -120,6 +121,7 @@ header {
       text-align: center;
       margin-#{$left}: -5px;
       vertical-align: bottom;
+      display: inline-block;
     }
 
     label {
@@ -309,6 +311,7 @@ header {
 
     ul.menu {
       display: table;
+      width: 100%;
       margin: 0;
     }
 
