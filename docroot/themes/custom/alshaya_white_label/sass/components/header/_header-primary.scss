@@ -300,13 +300,12 @@ header {
     }
 
     ul.menu {
-      display: flex;
+      display: table;
       margin: 0;
     }
 
     li {
-      flex: 1;
-      display: inline-block;
+      display: table-cell;
       text-align: center;
       padding: 0.9375rem 0;
 
