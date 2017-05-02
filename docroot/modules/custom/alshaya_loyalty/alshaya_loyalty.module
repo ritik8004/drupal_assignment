@@ -117,9 +117,8 @@ function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, F
 function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $form_state, &$complete_form) {
   // Get current field.
   $field = end($element['#array_parents']);
-
+  // Get the field value.
   $field_val = $form_state->getValue($field);
-
   // Get the Element value.
   //
   // We need to check the value of the field is string or array and based on
@@ -144,10 +143,12 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
   // Validate the field if the value is not empty.
   if (!empty($element_value)) {
     $validation = alshaya_loyalty_get_validation_settings();
-
-    // Validate number against validation settings.
-    if (!alshaya_loyalty_check_valid_apc_number($element_value, $validation['length'], $validation['value_start_with'])) {
-      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
+    // Check if the value is only contains the settings value.
+    if ($element_value != $validation['value_start_with']) {
+      // Validate number against validation settings.
+      if (!alshaya_loyalty_check_valid_apc_number($element_value, $validation['length'], $validation['value_start_with'])) {
+        $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
+      }
     }
   }
 }
