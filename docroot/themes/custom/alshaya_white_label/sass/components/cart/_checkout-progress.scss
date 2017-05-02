@@ -1,0 +1,100 @@
+#block-checkoutprogress {
+  h2 {
+    display: none;
+  }
+
+  .checkout-progress {
+    counter-reset: counter;
+    list-style: none;
+    padding: 1em 0 2em;
+  }
+
+  .checkout-progress__step {
+    text-transform: capitalize;
+    width: 33%;
+    position: relative;
+    text-align: left;
+    font-size: 14px;
+    font-family: $body_font;
+
+    &::before {
+      position: relative;
+      display: inline-block;
+      z-index: 100;
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 2rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid;
+      line-height: 1.4rem;
+      text-align: center;
+      background-color: white;
+      border-radius: 100em;
+      counter-increment: counter;
+      content: counter(counter);
+    }
+
+    &::after {
+      position: absolute;
+      top: 17px;
+      bottom: 0;
+      z-index: 90;
+      left: 12em;
+      margin-left: 1.5px;
+      border: 1px solid $greyish;
+      content: "";
+      width: 10em;
+      height: 0;
+    }
+
+    a {
+      display: inline-block;
+    }
+
+    &:first-child {
+      display: none;
+    }
+  }
+
+  .checkout-progress__step.-next {
+    background: transparent;
+    color: $white-two;
+  }
+
+  .checkout-progress__step.-current {
+    background: transparent;
+    color: $black;
+    font-weight: bold;
+
+    &::before {
+      background: $marine-blue;
+      color: $white-five;
+    }
+  }
+
+  .checkout-progress__step.-previous {
+    background: transparent;
+    color: $brownish-grey;
+    border: 0;
+
+    @include icon(checkshape, before);
+
+    &::before {
+      font-size: 22px;
+      border: 0 none;
+      top: 4px;
+      color: $marine-blue;
+      margin-right: 1em;
+    }
+
+    a {
+      color: $marine-blue;
+    }
+  }
+}
+
+.alias--cart-checkout-login {
+  .block-acq-checkout-progress {
+    display: none;
+  }
+}

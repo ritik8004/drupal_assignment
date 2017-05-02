@@ -204,12 +204,14 @@
   }
 }
 
+header {
+  .form-item-sort-bef-combine {
+    display: none;
+  }
+}
+
 .alias--search {
   header {
-    .form-item-sort-bef-combine {
-      display: none;
-    }
-
     @include breakpoint($only-tablet) {
       .bef-exposed-form {
         .form-item-keywords {

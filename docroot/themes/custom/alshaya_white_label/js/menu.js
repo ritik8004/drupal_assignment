@@ -37,10 +37,9 @@
       });
 
       $('.hamburger--menu').click(function () {
-        $('.main--menu').show();
+        $('.main--menu').addClass('menu--active');
         $('html').addClass('html--overlay');
         $('body').addClass('mobile--overlay');
-        $('.mobile--close').addClass('block--display');
       });
 
       $('.c-menu-primary .mobile--search').click(function () {
@@ -65,7 +64,7 @@
 
       // @TODO: Refactor to reduce complexity.
       $('.mobile--close').on('click', function (e) {
-        $('.main--menu').hide();
+        $('.main--menu').removeClass('menu--active');
         $('.c-menu-secondary').removeClass('block--display');
         $('.shop').addClass('active');
         $('.account--logged_in').removeClass('active');
@@ -102,6 +101,7 @@
         $('.menu--one__list').removeClass('remove--toggle');
         $('.menu--one__list').addClass('block--display');
         $('.c-menu-secondary').addClass('remove--toggle');
+        $('.c-my-account-nav').addClass('remove--toggle');
       });
 
       $('.logged-in .account--logged_in').click(function () {
@@ -110,6 +110,7 @@
         $('.c-my-account-nav').addClass('block--display');
         $('.menu--one__list').addClass('remove--toggle');
         $('.menu--one__list').removeClass('block--display');
+        $('.c-my-account-nav').removeClass('remove--toggle');
         $('.c-my-account-nav').removeClass('remove--toggle');
       });
 
@@ -120,8 +121,8 @@
         $('.menu--one__list').removeClass('remove--toggle');
         $('.menu--one__list').addClass('block--display');
         $('.c-menu-secondary').addClass('remove--toggle');
+        $('.c-my-account-nav').removeClass('block--display');
       });
-
     }
   };
 

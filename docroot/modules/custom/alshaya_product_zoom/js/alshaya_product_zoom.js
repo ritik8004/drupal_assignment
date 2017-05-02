@@ -49,7 +49,6 @@
         dialogClass: 'dialog-product-image-gallery-container',
         open: function () {
           // ZoomIn ZoomOut in Gallery view with a draggable container.
-          // Make sure it always starts @ zero position for below calcs to work.
           if ($('#full-image-wrapper').length > 0) {
             $('#full-image').css({top: 0, left: 0});
 
@@ -64,30 +63,52 @@
             var y2 = imgPos.top;
 
             // Make image draggable inside the window.
-            $('#full-image').draggable({containment: [x1, y1, x2, y2]});
-            $('#full-image').css({cursor: 'move'});
-
+            var click = {x: 0, y: 0};
+            $('#full-image').draggable({
+              containment: [x1, y1, x2, y2],
+              start: function(event) {
+                click.x = event.clientX;
+                click.y = event.clientY;
+              },
+              drag: function(event, ui) {
+                // This is the parameter for scale().
+                var matrix = image.css('transform').match(/-?[\d\.]+/g);
+                var zoom = parseFloat(matrix[3]);
+                var original = ui.originalPosition;
+                // jQuery will simply use the same object we alter here.
+                ui.position = {
+                  left: ((event.clientX - click.x + original.left) / zoom),
+                  top:  (event.clientY - click.y + original.top ) / zoom
+                };
+              }
+            });
             // Zoom in and Zoom out buttons.
             var image = $('#full-image-wrapper img');
-            var imagesize = image.width();
-            var orignalwidth = imagesize;
             $('.zoomin').on('click', function () {
-              imagesize = imagesize + 25;
-              image.width(imagesize);
-              image.height('auto');
+              var current_scale = image.css('transform').match(/-?[\d\.]+/g);
+              current_scale = current_scale[3];
+              var scale = parseFloat(current_scale) + 0.25;
+              if(parseFloat(scale) < 1.75) {
+                image.css('transform', 'scale(' + scale + ')');
+                $('.zoomout').removeClass('disabled');
+              }
+              else {
+                $(this).addClass('disabled');
+              }
             });
-
             $('.zoomout').on('click', function () {
-              imagesize = imagesize - 25;
-              if (imagesize < orignalwidth) {
+              var current_scale = image.css('transform').match(/-?[\d\.]+/g);
+              current_scale = current_scale[3];
+              var scale = parseFloat(current_scale) - 0.25;
+              if (scale < 1) {
+                $(this).addClass('disabled');
                 return;
               }
-              image.width(imagesize);
-              image.height('auto');
+              image.css('transform', 'scale(' + scale + ')');
             });
 
             // Swap the big image inside slider-2 when clicking on thumbnail.
-            $('#product-image-gallery li').click(function () {
+            $('#product-image-gallery li').on('click', function () {
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
@@ -98,6 +119,7 @@
                 var bigImage = $(this).children('a').attr('href');
                 // Put the big image in our main container.
                 $('#full-image-wrapper img').attr('src', bigImage);
+                $('#full-image-wrapper img').css('transform', 'scale(1)');
                 $('#full-image-wrapper iframe').remove();
                 $('#full-image-wrapper img').show();
               }

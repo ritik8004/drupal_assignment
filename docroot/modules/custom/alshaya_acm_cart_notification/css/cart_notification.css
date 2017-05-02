@@ -1,0 +1,26 @@
+#edit-add-to-cart {
+  font-size: 0.8125rem;
+  background: #ff6d22;
+  text-transform: lowercase;
+  border-radius: 0;
+  padding: 9px 21px;
+  margin-top: 8px;
+}
+
+#edit-add-to-cart:focus {
+ outline: 0;
+}
+
+#edit-add-to-cart[data-style=expand-right][data-loading] {
+ padding-right: 2.875rem;
+}
+
+#edit-add-to-cart .ladda-spinner {
+   transform: scale(0.75);
+   top: 0.75rem;
+}
+
+#edit-add-to-cart ~ .ajax-progress-throbber {
+  display: none;
+}
+

@@ -109,6 +109,16 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
     $uid = $account->id();
 
     try {
+
+      $build['edit_account'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Edit account details'),
+        '#url' => Url::fromRoute('entity.user.edit_form', ['user' => $uid]),
+        '#attributes' => [
+          'class' => ['button', 'button-wide', 'edit-account'],
+        ],
+      ];
+
       // Get the orders of the user.
       $orders = alshaya_acm_customer_get_user_orders($email);
 

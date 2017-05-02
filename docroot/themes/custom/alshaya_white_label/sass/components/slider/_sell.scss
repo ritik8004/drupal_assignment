@@ -22,6 +22,11 @@
     color: $grey-ash;
     font-weight: normal;
     margin: 0.625rem 0;
+
+    @include breakpoint($desktop) {
+      padding-left: 1.56rem;
+      padding-right: 1.56rem;
+    }
   }
 
   .views-row {

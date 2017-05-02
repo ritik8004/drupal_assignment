@@ -43,6 +43,13 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $variables['attributes']['class'][] = isset($variables['node_type']) ? 'nodetype--' . $variables['node_type'] : '';
   // Logged in class.
   $variables['attributes']['class'][] = $variables['logged_in'] ? 'logged-in' : 'logged-out';
+  // Update the meta to include noscalable for iphone.
+  $html_head = &$variables['page']['#attached']['html_head'];
+  foreach ($html_head as $index => $val) {
+    if ($val[1] == 'viewport') {
+      $html_head[$index][0]['#attributes']['content'] .= ', user-scalable=no';
+    }
+  }
 }
 
 /**
@@ -199,7 +206,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
 function alshaya_white_label_preprocess_links__dropbutton__operations(&$variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
   // Unset/Remove operation links for address_book page.
-  if ($route_name == 'entity.profile.type.address_book.user_profile_form') {
+  if ($route_name == 'entity.profile.type.address_book.user_profile_form' || $route_name == 'entity.profile.type.address_book.user_profile_form.add' || $route_name == 'entity.profile.edit_form') {
     unset($variables['links']);
   }
 }
@@ -442,13 +449,17 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
     /* @var \Drupal\user\Entity\User $user */
     $user = $route_match->getParameter('user');
     if ($user) {
-      $fname = $user->get('field_first_name') ? (!empty($user->get('field_first_name')->getValue()) ? $user->get('field_first_name')->getValue()[0]['value'] : '') : '';
-      $lname = $user->get('field_last_name') ? (!empty($user->get('field_last_name')->getValue()) ? $user->get('field_last_name')->getValue()[0]['value'] : '') : '';
-      if (!empty($fname)) {
-        $variables['title'] = [
-          '#markup' => t('My Account'),
-        ];
-      }
+      $variables['title'] = [
+        '#markup' => t('My Account'),
+      ];
+    }
+  }
+  elseif ($route_match->getRouteName() == 'entity.user.edit_form') {
+    $user = $route_match->getParameter('user');
+    if ($user) {
+      $variables['title'] = [
+        '#markup' => t('Contact Details'),
+      ];
     }
   }
 
@@ -515,4 +526,15 @@ function alshaya_white_label_theme_suggestions_block_alter(array &$suggestions, 
 function alshaya_white_label_preprocess(&$variables, $hook) {
   global $base_url;
   $variables['site_base_path'] = $base_url . '/';
+}
+
+/**
+ * Implements THEMENAME_preprocess_input().
+ */
+function alshaya_white_label_preprocess_input(&$variables) {
+  // Attach library for privilege card input field.
+  if ($variables['element']['#id'] == 'edit-field-privilege-card-number-0-value') {
+    $variables['attributes']['class'][] = 'c-input__privilege-card';
+    $variables['#attached']['library'][] = 'alshaya_white_label/format_input';
+  }
 }

@@ -5,11 +5,14 @@
     padding-bottom: 0.75rem;
 
     @include breakpoint($tablet) {
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.7rem;
+      margin-top: 0.437rem;
     }
 
     @include breakpoint($desktop) {
+      margin-top: 0;
       margin-bottom: 1.9rem;
+      padding-bottom: 0.875rem;
     }
   }
 
@@ -19,6 +22,12 @@
 
   .block-local-tasks-block {
     display: none;
+  }
+}
+
+.c-user--node {
+  .subtitle {
+    border-bottom: 1px solid $white;
   }
 }
 
@@ -88,10 +97,34 @@
     margin: 4.5em 1.5em 1em;
   }
 
+  @include breakpoint($desktop) {
+    padding: 0.6em 0;
+    padding-left: 0.8rem;
+    margin: 4.5em auto 1em;
+  }
+
   .user-login-form {
     @include breakpoint($tablet) {
       position: relative;
       top: 0.5em;
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 24.8rem;
+    }
+
+    .form-text {
+      color: $black;
+
+      @include breakpoint($desktop) {
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    .form-type-password .form-text {
+      margin-top: 0.56rem;
+      font-size: 1.25rem;
+      letter-spacing: 0.312rem;
     }
   }
 
@@ -102,6 +135,10 @@
       top: -4.9rem;
       margin-left: 0;
     }
+
+    @include breakpoint($desktop) {
+      top: -4.5rem;
+    }
   }
 
   .user-login-form {
@@ -111,6 +148,10 @@
 
     .form-item {
       margin-top: 5.1em;
+
+      @include breakpoint($desktop) {
+        margin-top: 4.6em;
+      }
     }
 
     #edit-actions {
@@ -236,5 +277,27 @@
   .c-page-title {
     top: -3.5rem;
     margin-left: 0;
+  }
+}
+
+.l-two--sf {
+  &.c-address-book,
+  &.c-communication-preferences {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        max-width: 16.8125rem;
+        width: 24%;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 72%;
+        max-width: 57.5625rem;
+        float: right;
+      }
+    }
   }
 }

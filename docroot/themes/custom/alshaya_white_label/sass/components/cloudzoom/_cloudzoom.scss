@@ -7,6 +7,7 @@
 
   .cloudzoom__herocontainer {
     width: calc(100% - (92px + 1rem));
+    cursor: url(../imgs/icons/ic-search.svg), auto !important;
   }
 
   .cloudzoom__thumbnails {
@@ -32,6 +33,10 @@
 
       #lightSlider {
         margin-top: 50px;
+
+        &.pager-no {
+          margin-top: 0;
+        }
 
         li {
           overflow: hidden;
@@ -89,6 +94,12 @@
   .lSPager {
     @include u-visibility(none);
   }
+}
+
+#cloud-zoom-big {
+  top: 200px !important;
+  left: 100% !important;
+  border: 1px solid $white;
 }
 
 .mobilegallery {

@@ -1,6 +1,7 @@
 .dialog-product-image-gallery-container {
   @include breakpoint($only-tablet) {
     width: 720px !important;
+    height: 585px !important;
     left: calc((100% - 720px) / 2);
   }
 }
@@ -11,40 +12,102 @@
   }
 }
 
-.imagegallery {
-  &__wrapper {
-    max-width: 100%;
+.imagegallery__wrapper {
+  max-width: 100%;
 
-    @include clearfix;
+  @include clearfix;
 
-    @include breakpoint($desktop) {
-      @include u-visibility(flex);
-
-      align-items: stretch;
+  .lSSlideOuter {
+    .lSPager {
+      @include u-visibility(none);
     }
 
-    & > .lSSlideOuter {
+    @include breakpoint($only-tablet) {
+      width: 100%;
+      margin-right: 0;
+    }
+
+    @include breakpoint($desktop) {
+      float: left;
       width: 90px;
       margin-right: 1rem;
-      order: 1;
+    }
 
-      @include breakpoint($only-tablet) {
-        width: 100%;
-        margin-right: 0;
+    .lSSlideWrapper {
+      @include breakpoint($desktop) {
+        height: 600px !important;
+      }
 
-        & > .lSPager {
-          @include u-visibility(none);
+      .lSAction {
+        & > a {
+          @include u-visibility(block);
+
+          width: 100%;
+          left: 0;
+          height: 42px;
+          cursor: pointer;
+          position: absolute;
+          margin-top: 0;
+          margin-left: 0;
+          opacity: 1;
+          text-align: center;
+          font-size: 36px;
+        }
+
+        .lSPrev {
+          @include icon(chevronup);
+
+          top: 0;
+          background-color: $white-five;
+        }
+
+        .lSNext {
+          @include icon(chevrondown);
+
+          bottom: 0;
+          background-color: $white-five;
         }
       }
 
-      .lSSlideWrapper {
+      #product-image-gallery {
+        margin-top: 55px;
+
+        li {
+          img {
+            width: 100%;
+            height: auto;
+          }
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        height: 92px !important;
+
+        #product-image-gallery {
+          height: 92px !important;
+          margin-left: 60px;
+          margin-top: 0;
+
+          li {
+            width: 92px !important;
+            margin-right: 25px;
+            margin-bottom: 0 !important;
+            margin-top: 10px;
+
+            img {
+              width: 100%;
+              height: auto;
+            }
+          }
+        }
+
         .lSAction {
           & > a {
             @include u-visibility(block);
 
-            width: 100%;
+            width: 50px;
             left: 0;
-            height: 42px;
+            height: 72px;
             cursor: pointer;
             position: absolute;
             margin-top: 0;
@@ -52,103 +115,64 @@
             opacity: 1;
             text-align: center;
             font-size: 36px;
+            padding-top: 17px;
           }
 
           .lSPrev {
-            @include icon(chevronup);
+            @include icon(chevronleft);
 
-            top: 0;
+            top: 10px;
+            left: 0;
             background-color: $white-five;
           }
 
           .lSNext {
-            @include icon(chevrondown);
+            @include icon(chevronright);
 
-            bottom: 0;
+            left: 632px;
+            bottom: 10px;
             background-color: $white-five;
-          }
-        }
-
-        @include breakpoint($only-tablet) {
-          height: 92px !important;
-
-          #product-image-gallery {
-            height: 92px !important;
-            margin-left: 60px;
-
-            li {
-              width: 92px !important;
-              margin-right: 25px;
-              margin-bottom: 0 !important;
-              margin-top: 10px;
-            }
-          }
-
-          .lSAction {
-            & > a {
-              @include u-visibility(block);
-
-              width: 50px;
-              left: 0;
-              height: 72px;
-              cursor: pointer;
-              position: absolute;
-              margin-top: 0;
-              margin-left: 0;
-              opacity: 1;
-              text-align: center;
-              font-size: 36px;
-              padding-top: 17px;
-            }
-
-            .lSPrev {
-              @include icon(chevronleft);
-
-              top: 10px;
-              left: 0;
-              background-color: $white-five;
-            }
-
-            .lSNext {
-              @include icon(chevronright);
-
-              left: 632px;
-              bottom: 10px;
-              background-color: $white-five;
-            }
           }
         }
       }
     }
+  }
 
-    & > .imagegallery__full {
-      order: 2;
-      width: calc(100% - (92px + 1rem));
+  & > .imagegallery__full {
+    @include breakpoint($tablet) {
+      height: 450px !important;
+    }
 
-      @include breakpoint($tablet) {
-        height: 640px;
-      }
+    @include breakpoint($desktop) {
+      height: 600px !important;
+      float: right;
+      width: calc(100% - (92px + 1rem)) !important;
+    }
 
-      @include breakpoint($desktop) {
-        height: 725px;
-      }
+    img {
+      width: 100%;
+    }
 
-      img {
-        width: 100%;
-      }
-
-      iframe {
-        width: 100% !important;
-        height: 725px !important;
-      }
+    iframe {
+      width: 100% !important;
+      height: 725px !important;
     }
   }
 }
 
 #product-image-gallery-container {
+  @include breakpoint($tablet) {
+    height: 560px !important;
+  }
+
+  @include breakpoint($desktop) {
+    height: 645px !important;
+    padding: 1em 2em;
+  }
+
   .button__wrapper {
     position: absolute;
-    bottom: 0;
+    bottom: 30px;
     left: 50%;
 
     .zoomout,
@@ -158,6 +182,12 @@
       border-radius: 35px;
       border: none;
       font-size: 24px;
+      margin: 0 10px;
+      background-color: $white;
+
+      &.disabled {
+        background-color: $light-ash;
+      }
     }
 
     .zoomout {

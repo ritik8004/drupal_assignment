@@ -1,7 +1,6 @@
 @include breakpoint($desktop) {
   .no--desktop,
-  .toggle--sign.no--desktop,
-  .mobile--close {
+  .toggle--sign.no--desktop {
     display: none;
   }
 
@@ -662,8 +661,11 @@ header {
     border-bottom: 1px solid $white;
     margin-#{$left}: 0.625rem;
     margin-#{$right}: 0.625rem;
-    padding-top: 0.9375rem;
-    padding-bottom: 0.9375rem;
+    font-family: $alshaya-bold;
+    color: $marine-blue;
+    display: block;
+    font-size: 12px;
+    padding: 0.9375rem 0.625rem;
   }
 
   .menu--one__list-item {
@@ -738,7 +740,18 @@ header {
   .menu--two__list,
   .menu--three__list,
   .menu--four__list {
-    display: none;
+    will-change: transform;
+    transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
+    transition: transform 0.5s ease-in-out;
+    position: absolute;
+    top: 0;
+    display: block !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    height: auto !important;
+    background: $white-five;
   }
 
   .menu-two__link-wrapper a.menu-two__link {
@@ -747,11 +760,7 @@ header {
 
   .menu--two__list.menu__list--active {
     span.back--link {
-      font-family: alshaya-bold;
-      color: $marine-blue;
       display: block;
-      font-size: 12px;
-      padding: 0.9375rem 0.625rem;
     }
 
     .menu--three__list.menu__list--active {
@@ -787,7 +796,6 @@ header {
 }
 
 .mobile--close {
-  display: none;
   background: $white-five;
   position: fixed;
   top: 8px;
@@ -908,6 +916,26 @@ header {
 }
 
 .html--overlay {
-  overflow: hidden;
+  @include breakpoint($upto-desktop) {
+    overflow: hidden;
+  }
 }
 
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    display: block;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    transition: transform 0.5s ease-in-out;
+    transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
+    will-change: transform;
+  }
+
+  .menu--active,
+  .menu__list--active {
+    transform: translate(0, 0) !important;
+  }
+}

@@ -60,7 +60,11 @@
 
     .c-sidebar-second__region {
       @include breakpoint($desktop) {
-        padding-#{$left}: 6.95em;
+        padding-#{$left}: 6.5em;
+
+        p {
+          line-height: 1.3;
+        }
       }
     }
   }
@@ -70,8 +74,8 @@
   }
 
   #block-youllbeableto {
-    margin-top: 1.81rem;
-    margin-bottom: 4rem;
+    margin-top: 2.2rem;
+    margin-bottom: 4.1rem;
 
     @include breakpoint($only-tablet) {
       margin-top: -0.5rem;
@@ -79,7 +83,6 @@
 
     a {
       font-weight: bold;
-      padding-top: 0.45em;
       display: inline-block;
     }
   }
@@ -149,7 +152,7 @@
     }
 
     .field--name-body {
-      max-width: 11rem;
+      max-width: 12rem;
       float: $left;
       clear: $left;
     }
@@ -243,11 +246,11 @@
       display: none;
     }
 
-    label.form-required,
-    .form-type-textfield label,
-    .field--name-field-privilege-card-number label,
-    .form-item-privilege-card-number label,
-    .form-item-privilege-card-number2 label {
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error),
+    .field--name-field-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number2 label:not(.error) {
       font-size: 16px;
       color: $greyish;
       position: absolute;
@@ -318,11 +321,11 @@
     }
   }
 
-  .form-item input:focus ~ label,
-  .form-item input:not(:focus):valid ~ label,
-  .form-item input:active ~ label,
-  .form-item input:not(:active):valid ~ label,
-  .form-item input.error ~ label {
+  .form-item input:focus ~ label:not(.error),
+  .form-item input:not(:focus):valid ~ label:not(.error),
+  .form-item input:active ~ label:not(.error),
+  .form-item input:not(:active):valid ~ label:not(.error),
+  .form-item input.error ~ label:not(.error) {
     top: -1.25em;
     bottom: 0;
     #{$left}: 0;
@@ -356,7 +359,7 @@
     text-decoration: none;
     font-size: 0.75rem;
     font-weight: bold;
-    z-index: 999;
+    z-index: 2;
     width: 100%;
     text-align: center;
     color: $windows-blue;
@@ -455,12 +458,29 @@
       }
 
       a {
-        background-image: url(../imgs/icons/icon-chevron-#{$next}.svg);
-        background-color: transparent;
-        background-repeat: no-repeat;
-        background-position: percent-value(97%) center;
+        @include icon(chevron#{$right}, after) {
+          font-size: 1.875rem;
+          position: absolute;
+          #{$right}: 1rem;
+          border-radius: 100%;
+          color: $black;
+          padding: 2px;
+          padding-#{$left}: 4px;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 35px;
+          width: 35px;
+
+          @include breakpoint($only-mobile) {
+            background-color: $whisper-light;
+            #{$right}: 4rem;
+            top: 62%;
+          }
+        }
+
         display: block;
         border-bottom: 1px solid $whisper-dark;
+        position: relative;
 
         @include breakpoint($desktop) {
           width: 921px;

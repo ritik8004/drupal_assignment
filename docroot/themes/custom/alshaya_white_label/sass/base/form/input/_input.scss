@@ -1,0 +1,14 @@
+// Normalize input fields.
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="submit"],
+textarea {
+  border-radius: 0;
+  -webkit-appearance: none;
+
+  &:focus {
+    position: relative;
+    z-index: 1;
+  }
+}

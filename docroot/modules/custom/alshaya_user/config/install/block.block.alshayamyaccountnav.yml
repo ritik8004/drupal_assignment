@@ -1,5 +1,5 @@
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - alshaya_user
@@ -9,8 +9,8 @@ dependencies:
     - alshaya_white_label
 id: alshayamyaccountnav
 theme: alshaya_white_label
-region: pre_content
-weight: -19
+region: '-1'
+weight: -21
 provider: null
 plugin: alshaya_my_account_nav
 settings:
@@ -21,7 +21,7 @@ settings:
 visibility:
   request_path:
     id: request_path
-    pages: '/user/*'
+    pages: "/user/*\r\n/profile/*"
     negate: false
     context_mapping: {  }
   user_role:

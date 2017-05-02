@@ -297,3 +297,38 @@
     top: -1rem;
   }
 }
+
+.block-basket-horizontal-recommendation {
+  clear: both;
+  padding-top: 1rem;
+
+  @include breakpoint($tablet) {
+    padding-top: 3.19rem;
+  }
+
+  h2 {
+    color: $marine-blue;
+    margin-bottom: 1rem;
+    padding-bottom: 0.56rem;
+    font-family: $alshaya-bold;
+    font-size: 1.125rem;
+    font-weight: normal;
+    text-transform: lowercase;
+
+    @include breakpoint($tablet) {
+      margin-left: 2.75rem;
+    }
+  }
+
+  .view-product-slider {
+    max-width: 45rem;
+
+    @include breakpoint($desktop) {
+      max-width: 77.25rem;
+    }
+  }
+
+  .view-product-slider .views-row {
+    height: 18.75rem;
+  }
+}
