@@ -151,9 +151,11 @@
       pointer-events: none;
       position: absolute;
       text-align: center;
-      #{$right}: 10px;
-      width: 35px;
-      line-height: 2.0625rem;
+      #{$right}: 0.25rem;
+      display: block;
+      height: 2.1875rem;
+      width: 2.1875rem;
+      padding: 0.3125rem 0;
     }
   }
 
