@@ -8,7 +8,7 @@
 
   Drupal.behaviors.alshayaFacets = {
     attach: function (context, settings) {
-      $('.c-sidebar-first__region .block-facet--checkbox').each(function() {
+      $('.block-facet--checkbox').each(function() {
         // Prepend the text field before the checkboxes.
         $(this).find('ul').prepend('<input type="text" class="facets-search-input">').on('keyup', function () {
           var facetFilterKeyword = $(this).find('.facets-search-input').val();
