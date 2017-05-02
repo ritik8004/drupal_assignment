@@ -9,11 +9,11 @@
    * @prop {Drupal~behaviorAttach} attach
    *   All custom js for checkout flow.
    */
-  Drupal.behaviors.ZZ_alshaya_acm_checkout = {
+  Drupal.behaviors.ZZAlshayaAcmCheckout = {
     attach: function (context, settings) {
       // Select a payment method first to avoid 500 error when address ajax callback is called.
       // @TODO: Fix this to work flawlessly without doing such selections.
-      if ($('.form-item-payment-methods-payment-options input:selected').size() === 0) {
+      if ($('.form-item-payment-methods-payment-options input:selected').length() === 0) {
         $('.form-item-payment-methods-payment-options:first input').trigger('click');
       }
 
