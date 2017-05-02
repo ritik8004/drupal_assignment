@@ -190,14 +190,18 @@
               }
 
               &.js-facet-deactivate {
-                background-image: url("../imgs/icons/combined-shape.svg");
-                background-repeat: no-repeat;
-                background-size: 18px;
-                background-position-x: center;
-                background-position-y: center;
-                padding: 0.657rem 1.094rem;
+                @include icon(close, after) {
+                  position: absolute;
+                  top: 2.15%;
+                  left: 3.5%;
+                  color: $white-four;
+                }
+
                 color: transparent;
-                text-indent: -89rem;
+                font-size: 2.09rem;
+                width: 35px;
+                height: 35px;
+                position: relative;
               }
             }
           }
