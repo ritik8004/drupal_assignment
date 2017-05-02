@@ -41,6 +41,24 @@
           }
         });
       });
+
+      var inputFields = [
+        '.c-content input[type=password]',
+        '.c-content input[type=text]',
+        '.c-content input[type=email]',
+        '.c-content input[type=tel]',
+        '.c-content textarea'
+      ];
+
+      // Move input-bar adjacent to the input field for material design effect to work.
+      $(inputFields).each(function () {
+        $(this).on('focusout focus', function () {
+          if ($(this).next().hasClass('error')) {
+            var bar = $(this).parent().find('.c-input__bar');
+            $(this).after(bar);
+          }
+        });
+      });
     }
   };
 

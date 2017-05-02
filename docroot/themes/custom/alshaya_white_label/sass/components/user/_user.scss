@@ -304,13 +304,6 @@
       height: 1.563rem;
       outline: transparent;
       font-size: 16px;
-
-      &:focus,
-      &:active,
-      &.valid {
-        border-color: $windows-blue;
-        background: transparent;
-      }
     }
 
     @include breakpoint($desktop) {
@@ -661,6 +654,7 @@
   #{$right}: 0;
   font-size: 12px;
   color: $greyish;
+  z-index: 3;
 }
 
 .alias--user-login {
