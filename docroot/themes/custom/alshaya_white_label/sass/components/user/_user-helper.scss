@@ -113,7 +113,8 @@
       max-width: 24.8rem;
     }
 
-    .form-text {
+    .form-text,
+    .form-email {
       color: $black;
 
       @include breakpoint($desktop) {
@@ -161,7 +162,11 @@
 
   .c-sidebar-second {
     #block-youllbeableto {
-      margin-bottom: 3.23rem;
+      margin-bottom: 4.1rem;
+    }
+
+    h2 {
+      margin-bottom: 0.9375rem;
     }
   }
 }
@@ -277,6 +282,13 @@
   .c-page-title {
     top: -3.5rem;
     margin-left: 0;
+  }
+}
+
+.c-user-password {
+  .messages.messages--warning,
+  .messages.messages--error {
+    margin-top: 0;
   }
 }
 

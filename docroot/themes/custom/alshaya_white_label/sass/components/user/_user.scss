@@ -34,6 +34,7 @@
     position: absolute;
     top: -3.5rem;
     color: $marine-blue;
+    font-weight: normal;
 
     @include breakpoint($desktop) {
       top: -0.9rem;
@@ -51,11 +52,12 @@
       font-size: 14px;
       font-family: $alshaya-bold;
       text-transform: lowercase;
+      font-weight: normal;
     }
 
     p {
       color: $brownish-grey;
-      margin: 12px 0;
+      margin: 10px 0;
     }
 
     .c-sidebar-second__region {
@@ -63,7 +65,9 @@
         padding-#{$left}: 6.5em;
 
         p {
-          line-height: 1.3;
+          line-height: 1.2;
+          margin-top: 6px;
+          margin-bottom: 7px;
         }
       }
     }
@@ -83,6 +87,7 @@
 
     a {
       font-weight: bold;
+      padding-top: 0.25rem;
       display: inline-block;
     }
   }
@@ -148,7 +153,10 @@
       display: inline-block;
       float: $left;
       margin-top: 0;
-      margin-bottom: 0;
+
+      @include breakpoint($upto-desktop) {
+        margin-bottom: 0;
+      }
     }
 
     .field--name-body {
@@ -159,6 +167,7 @@
 
     p {
       line-height: 1.1rem;
+      margin-top: 0;
 
       > a {
         padding-top: 1em;
