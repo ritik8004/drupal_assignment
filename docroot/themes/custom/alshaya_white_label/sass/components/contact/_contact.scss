@@ -19,6 +19,7 @@
       font-size: 0.8125rem;
       color: $greyish;
       font-weight: normal;
+      z-index: 3;
     }
 
     #edit-message_counter {
@@ -47,7 +48,7 @@
     height: 1.563rem;
     outline: rgba(0, 0, 0, 0);
     font-size: 16px;
-    border-bottom: 1px solid $cerulean-two;
+    border-bottom: 1px solid $grey-ash;
   }
 
   input.error,
