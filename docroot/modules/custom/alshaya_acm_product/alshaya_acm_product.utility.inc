@@ -174,34 +174,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $skuEntity)
       'fullurl' => $original_image,
       'type' => 'image',
     ];
-    $thumbnails[] = [
-      'thumburl' => $imageSmall,
-      'mediumurl' => $imageMedium,
-      'zoomurl' => $imageZoom,
-      'fullurl' => $original_image,
-      'type' => 'image',
-    ];
-    $thumbnails[] = [
-      'thumburl' => $imageSmall,
-      'mediumurl' => $imageMedium,
-      'zoomurl' => $imageZoom,
-      'fullurl' => $original_image,
-      'type' => 'image',
-    ];
-    $thumbnails[] = [
-      'thumburl' => $imageSmall,
-      'mediumurl' => $imageMedium,
-      'zoomurl' => $imageZoom,
-      'fullurl' => $original_image,
-      'type' => 'image',
-    ];
-    $thumbnails[] = [
-      'thumburl' => $imageSmall,
-      'mediumurl' => $imageMedium,
-      'zoomurl' => $imageZoom,
-      'fullurl' => $original_image,
-      'type' => 'image',
-    ];
   }
   // @TODO: Get video data.
   $video = [];
