@@ -56,6 +56,10 @@ class GuestDeliveryHome extends AddressFormBase {
 
     $address_object = (object) $address;
 
+    if (empty($address_object->country)) {
+      $address_object = NULL;
+    }
+
     $form_state->setTemporaryValue('address', $address_object);
 
     $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
