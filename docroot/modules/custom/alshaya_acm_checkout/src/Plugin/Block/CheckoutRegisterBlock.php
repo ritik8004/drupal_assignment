@@ -102,6 +102,15 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $account->get('field_first_name')->setValue($order['firstname']);
     $account->get('field_last_name')->setValue($order['lastname']);
 
+    // Set the mobile number from last order details.
+    if (isset($order['shipping'], $order['shipping']['address'], $order['shipping']['address']['phone'])) {
+      $number = [
+        'value' => $order['shipping']['address']['phone'],
+      ];
+
+      $account->get('field_mobile_number')->setValue($number);
+    }
+
     $form = $this->entityFormBuilder->getForm($account, 'register');
 
     $form['title'] = [

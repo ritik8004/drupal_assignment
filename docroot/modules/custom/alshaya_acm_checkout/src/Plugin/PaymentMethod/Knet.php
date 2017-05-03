@@ -19,7 +19,7 @@ class Knet extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaymentSummary() {
-    return 'K-Net details here.';
+    return '';
   }
 
 }

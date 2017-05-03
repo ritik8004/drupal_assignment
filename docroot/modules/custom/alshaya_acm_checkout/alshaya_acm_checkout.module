@@ -49,5 +49,34 @@ function _alshaya_acm_checkout_clean_address($address) {
     }
   }
 
+  if (!empty($address['phone'])) {
+    $address['phone'] = _alshaya_acm_checkout_clean_address_phone($address['phone']);
+  }
+
   return $address;
+}
+
+/**
+ * Helper function to clean address phone number.
+ *
+ * @param mixed $phone
+ *   Phone string, array or object.
+ *
+ * @return string
+ *   Phone number in string.
+ */
+function _alshaya_acm_checkout_clean_address_phone($phone) {
+  $phone_string = '';
+
+  if (is_string($phone)) {
+    $phone_string = $phone;
+  }
+  elseif (is_object($phone)) {
+    $phone_string = \Drupal::service('mobile_number.util')->libUtil()->format($phone, 1);
+  }
+  elseif (is_array($phone)) {
+    $phone_string = $phone['value'];
+  }
+
+  return $phone_string;
 }

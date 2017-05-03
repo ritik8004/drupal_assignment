@@ -19,7 +19,7 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaymentSummary() {
-    return 'Cybersource details here.';
+    return '';
   }
 
 }

@@ -20,7 +20,7 @@ class Cashondelivery extends PaymentMethodBase implements PaymentMethodInterface
    * {@inheritdoc}
    */
   public function buildPaymentSummary() {
-    return 'Cash on Delivery details here.';
+    return '';
   }
 
   /**

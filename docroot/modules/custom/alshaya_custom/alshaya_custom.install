@@ -21,6 +21,9 @@ function alshaya_custom_install() {
   \Drupal::service('theme_installer')->install(['alshaya_white_label'], TRUE);
   \Drupal::configFactory()->getEditable('system.theme')->set('default', 'alshaya_white_label')->save(TRUE);
 
+  // Set default country to KW.
+  \Drupal::configFactory()->getEditable('system.date')->set('country.default', 'KW')->save();
+
   // Remove all roles created by Lightning.
   $coreRoles = [
     'anonymous',
