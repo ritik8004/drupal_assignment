@@ -25,6 +25,47 @@
   }
 }
 
+.field--name-field-skus {
+  .field--name-sku {
+    @include u-visibility(none);
+  }
+
+  .field--name-price {
+    @include u-visibility(none);
+  }
+
+  .form-item-configurables-size,
+  .form-item-configurables-color {
+    @include clearfix;
+
+    select {
+      border: none;
+      border-radius: 0;
+      padding: 5px 10px;
+      appearance: none;
+      width: 200px;
+      float: $right;
+    }
+  }
+
+  #configurable_ajax h2.field--name-name {
+    @include u-visibility(none);
+  }
+}
+
+.field--name-body {
+  h2.field__label {
+    font-size: 14px;
+    font-weight: bold;
+    color: $marine-blue;
+  }
+
+  p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
 .field--name {
   &-field-skus {
     .field {
@@ -52,6 +93,7 @@
       font-weight: 100;
     }
 
+    // hidding fields which cannot be themed as per the design.
     .sku-base-form {
       @include clearfix;
 
@@ -130,10 +172,23 @@
   }
 }
 
-.form-item-configurables-size label {
-  @include u-visibility(none);
+.form-item-configurables-color label {
+  float: $left;
+  margin-right: 20px;
+  width: 60px;
 }
 
+.form-item-configurables-size label {
+  float: $left;
+  margin-right: 20px;
+  width: 60px;
+
+  @include breakpoint($tablet) {
+    @include u-visibility(none);
+  }
+}
+
+#size-select-modal,
 #size-select {
   padding-left: 0;
 
@@ -182,10 +237,11 @@
 }
 
 .form-item-quantity {
-  float: left;
+  float: $left;
+  width: 150px;
 
   label {
-    float: left;
+    float: $left;
     padding: 5px 20px 5px 0;
   }
 
@@ -194,8 +250,7 @@
     border-radius: 0;
     padding: 5px 10px;
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     margin: 0 5px;
+    float: $left;
   }
 }

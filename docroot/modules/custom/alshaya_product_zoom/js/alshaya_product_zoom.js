@@ -17,6 +17,12 @@
         item: 5,
         verticalHeight: 500
       });
+      // Slider 1 - For Desktop - Image zoom.
+      $('#drupal-modal #lightSlider').lightSlider({
+        vertical: true,
+        item: 5,
+        verticalHeight: 500
+      });
       // Slider - 2 For Desktop - Image Gallery.
       $('#product-image-gallery').lightSlider({
         vertical: true,

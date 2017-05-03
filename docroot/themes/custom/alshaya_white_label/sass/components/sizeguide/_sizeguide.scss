@@ -1,0 +1,95 @@
+// Size Guide Link theme
+.size-guide-link {
+  float: right;
+  padding-top: 10px;
+}
+
+// Size Guide modal popup theming
+.ui-dialog {
+  height: 100vh !important;
+  width: 100vw !important;
+  top: 0 !important;
+  left: 0 !important;
+  background: rgba(0, 0, 0, 0.5);
+  padding: calc((100vh - 650px) / 2) calc((100vw - 1080px) / 2);
+  overflow: hidden;
+
+  .ui-dialog-titlebar {
+    padding: 0;
+
+    @include breakpoint($only-tablet) {
+      width: 94% !important;
+      margin: 0 auto;
+    }
+  }
+
+  .ui-dialog-content {
+    max-height: none !important;
+  }
+
+  #drupal-modal {
+    background: $white-five;
+    padding: 2em;
+
+    .sku-base-form {
+      padding: 20px 0;
+      border-bottom: 1px solid $white-two;
+    }
+
+    .more-content {
+      border-bottom: 1px solid $white-two;
+      margin: 0;
+      padding: 16px 0;
+      .link {
+        font-size: 14px;
+        font-weight: bold;
+        color: $marine-blue;
+      }
+      .arrow {
+        @include icon(chevronright);
+
+        font-size: 20px;
+        font-weight: bold;
+        color: $marine-blue;
+        position: absolute;
+        right: 0;
+      }
+
+    }
+
+    #lightSlider {
+      margin-top: 50px;
+      padding-left: 0;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+
+      &.pager-no {
+        margin-top: 0;
+      }
+
+      li {
+        overflow: hidden;
+
+        @include breakpoint($tablet) {
+          height: 60px !important;
+        }
+
+        @include breakpoint($desktop) {
+          height: 85px !important;
+          float: none !important;
+        }
+
+        &.active {
+          border: 1px solid;
+        }
+
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
