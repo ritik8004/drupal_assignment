@@ -14,20 +14,20 @@ targetEntityType: acq_sku
 bundle: configurable
 mode: search_result
 content:
-  attr_special_price:
-    label: hidden
-    type: string
-    weight: 3
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-  image:
+  attr_image:
     label: hidden
     type: image
     weight: 0
     settings:
       image_style: 291x288
       image_link: ''
+    third_party_settings: {  }
+  attr_special_price:
+    label: hidden
+    type: string
+    weight: 3
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
   name:
     type: string
@@ -48,5 +48,6 @@ hidden:
   crosssell: true
   field_configurable_attributes: true
   field_configured_skus: true
+  image: true
   sku: true
   upsell: true
