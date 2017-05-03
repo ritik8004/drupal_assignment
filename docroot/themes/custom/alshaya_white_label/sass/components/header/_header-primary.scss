@@ -56,11 +56,12 @@ header {
   }
 
   .region__header {
-    display: flex;
+    display: table;
+    width: 100%;
 
     > div {
-      flex: 1;
-      align-self: center;
+      display: table-cell;
+      vertical-align: middle;
     }
   }
 
@@ -73,10 +74,9 @@ header {
 
   #block-alshaya-white-label-search,
   .block-views-exposed-filter-blocksearch-page {
-    text-align: center;
-
     @include breakpoint($only-tablet) {
       position: absolute;
+      text-align: center;
       bottom: -43px;
       #{$left}: 0;
       #{$right}: 0;
@@ -383,14 +383,15 @@ header {
     }
 
     ul.menu--one__list {
-      display: flex !important;
+      display: table !important;
+      width: 100%;
       margin: 0;
       padding: 0;
       background: $white-five;
     }
 
     li.menu--one__list-item {
-      flex: 1;
+      display: table-cell;
       vertical-align: top;
       list-style: none;
       text-align: center;
