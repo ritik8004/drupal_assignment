@@ -118,6 +118,21 @@
   .c-products__item__link {
     color: $black;
   }
+
+  ul.js-pager__items {
+    text-align: center;
+    padding: 0;
+    list-style: none;
+    margin-bottom: 7.1rem;
+
+    a {
+      color: $marine-blue;
+      font-size: 0.813rem;
+      border: 1px solid $marine-blue;
+      padding: 0.563rem 7.12rem;
+      font-family: $alshaya-thin;
+    }
+  }
 }
 
 .c-facet__blocks__wrapper--mobile {
