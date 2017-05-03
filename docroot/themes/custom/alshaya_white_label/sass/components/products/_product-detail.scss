@@ -44,7 +44,7 @@
       padding: 5px 10px;
       appearance: none;
       width: 200px;
-      float: right;
+      float: $right;
     }
   }
 
@@ -173,13 +173,13 @@
 }
 
 .form-item-configurables-color label {
-  float: left;
+  float: $left;
   margin-right: 20px;
   width: 60px;
 }
 
 .form-item-configurables-size label {
-  float: left;
+  float: $left;
   margin-right: 20px;
   width: 60px;
 
@@ -236,11 +236,11 @@
 }
 
 .form-item-quantity {
-  float: left;
+  float: $left;
   width: 150px;
 
   label {
-    float: left;
+    float: $left;
     padding: 5px 20px 5px 0;
   }
 
@@ -250,6 +250,6 @@
     padding: 5px 10px;
     appearance: none;
     margin: 0 5px;
-    float: left;
+    float: $left;
   }
 }
