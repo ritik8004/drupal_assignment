@@ -16,7 +16,8 @@
           $('.region__content .region__sidebar-first #block-filterbar').addClass('mobile-filter-bar c-accordion');
           $('.mobile-filter-bar ul li.clear-all').insertAfter('.filter-menu-label .label');
           var countFilters = $('.mobile-filter-bar ul li').length;
-          $('<h2 class="applied-filter-count c-accordion__title">applied filters (' + countFilters + ')</h2>').insertBefore('.mobile-filter-bar ul');
+          $('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+            + '(' + countFilters + ')</h2>').insertBefore('.mobile-filter-bar ul');
 
           // Toggle the filter menu when click on the label.
           $('.filter-menu-label .label').click(function () {

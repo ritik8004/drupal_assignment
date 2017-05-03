@@ -10,7 +10,9 @@
     attach: function (context, settings) {
       $('.block-facet--checkbox').each(function() {
         // Prepend the text field before the checkboxes.
-        $(this).find('ul').prepend('<input type="text" class="facets-search-input">').on('keyup', function () {
+        $(this).find('ul').prepend('<input type="text" placeholder="'
+          + Drupal.t('Enter your Filter Name')
+          + '" class="facets-search-input">').on('keyup', function () {
           var facetFilterKeyword = $(this).find('.facets-search-input').val();
           if (facetFilterKeyword) {
             // Hide show more if above keyword has some data.
@@ -41,17 +43,25 @@
         });
       });
 
+      // Poll the DOM to check if the show more/less link is avaialble, before placing it inside the ul.
       var i = setInterval(function () {
         if ($('aside .block-facet--checkbox a.facets-soft-limit-link').length) {
-          console.log('hello world');
           clearInterval(i);
           $('aside .block-facet--checkbox').each(function() {
             var softLink = $(this).find('a.facets-soft-limit-link');
             softLink.insertAfter('aside .block-facet--checkbox ul li:last-child');
           });
         }
-        else {
-          console.log('hello world 1');
+      }, 100);
+
+      var j = setInterval(function () {
+        if ($('.region__content .region__sidebar-first .block-facet--checkbox a.facets-soft-limit-link').length) {
+          clearInterval(j);
+          $('.region__content .region__sidebar-first .block-facet--checkbox').each(function() {
+            var softLink = $(this).find('a.facets-soft-limit-link');
+            softLink.addClass('processed');
+            softLink.insertAfter($(this).find('ul li:last-child'));
+          });
         }
       }, 100);
     }

@@ -284,6 +284,11 @@
   }
 }
 
+.facets-soft-limit-link {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
 header {
   .form-item-sort-bef-combine {
     display: none;
@@ -298,6 +303,13 @@ header {
           float: none;
         }
       }
+    }
+  }
+
+  aside.c-sidebar-first {
+    .c-facet__blocks__wrapper {
+      margin-top: -0.65rem;
+      margin-left: -0.29rem;
     }
   }
 }
