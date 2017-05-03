@@ -1,17 +1,17 @@
 .cloudzoom {
   @include clearfix;
-  @include u-visibility(flex);
 
   max-width: 100%;
-  align-items: stretch;
 
   .cloudzoom__herocontainer {
     width: calc(100% - (92px + 1rem));
+    float: right;
   }
 
   .cloudzoom__thumbnails {
     width: 90px;
     margin-right: 1rem;
+    float: left;
 
     .lSSlideWrapper {
       @include breakpoint($only-tablet) {
@@ -32,6 +32,10 @@
 
       #lightSlider {
         margin-top: 50px;
+
+        &.pager-no {
+          margin-top: 0;
+        }
 
         li {
           overflow: hidden;
@@ -89,6 +93,16 @@
   .lSPager {
     @include u-visibility(none);
   }
+}
+
+#cloud-zoom-big {
+  top: 200px !important;
+  left: 105% !important;
+  border: 1px solid $white;
+}
+
+.cloudzoom .cloud-zoom-lens {
+  cursor: url(../imgs/assets/ic-zoom.png), auto !important;
 }
 
 .mobilegallery {
