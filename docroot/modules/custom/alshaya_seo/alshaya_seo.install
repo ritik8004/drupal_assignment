@@ -21,7 +21,7 @@ function alshaya_seo_install() {
   // og_locale_alternative.
   $node_config_factory = Drupal::configFactory()->getEditable('metatag.metatag_defaults.node');
   $node_tags = $node_config_factory->get('tags');
-  $node_tags['og_description'] = '[node:summary]';
+  $node_tags['og_description'] = '';
   $node_tags['og_locale_alternative'] = '[node:locale:alternate]';
   $node_config_factory->set('tags', $node_tags);
   $node_config_factory->save();
