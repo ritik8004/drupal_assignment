@@ -35,6 +35,8 @@ content:
       default_paragraph_type: promo_block
     third_party_settings: {  }
     type: entity_reference_paragraphs
+  translation:
+    weight: 10
 hidden:
   created: true
   status: true
