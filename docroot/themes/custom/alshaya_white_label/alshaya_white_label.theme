@@ -104,7 +104,7 @@ function alshaya_white_label_theme_suggestions_views_view_grid_alter(array &$sug
  * Implements template_view_unformatted_alter().
  */
 function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(array &$suggestions, &$variables) {
-  if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_3') {
+  if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'block_2') {
     // If store finder list view.
     $suggestions[] = "views_view_unformatted__store_list";
   }
@@ -546,7 +546,7 @@ function alshaya_white_label_preprocess(&$variables, $hook) {
  */
 function alshaya_white_label_preprocess_views_view_unformatted__store_list(&$variables) {
   // If store finder's list view.
-  if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_3') {
+  if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'block_2') {
     if (!empty($variables['rows'])) {
       foreach ($variables['rows'] as $key => $row) {
         if ($latitude_longitude = $row['content']['#row']->_entity->get('field_latitude_longitude')) {

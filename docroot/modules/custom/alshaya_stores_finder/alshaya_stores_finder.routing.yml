@@ -1,6 +1,12 @@
-alshaya_stores_finder.glossay:
+alshaya_stores_finder.glossary:
   path: '/store-glossay/{node}'
   defaults:
     _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::updateGlossaryView'
+  requirements:
+    _permission: 'access content'
+alshaya_stores_finder.view_toggle:
+  path: '/view-toggle/{view_type}'
+  defaults:
+    _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::toggleView'
   requirements:
     _permission: 'access content'

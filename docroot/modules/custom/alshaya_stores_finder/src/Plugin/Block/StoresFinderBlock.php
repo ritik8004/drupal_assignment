@@ -29,7 +29,7 @@ class StoresFinderBlock extends BlockBase {
     }
 
     return [
-      '#markup' => Link::createFromRoute($this->t('Find Store'), 'view.stores_finder.page_1', [], [
+      '#markup' => Link::createFromRoute($this->t('Find Store'), 'view.stores_finder.page_2', [], [
         'attributes' =>
           [
             'class' => ['stores-finder', $is_active],

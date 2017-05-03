@@ -24,12 +24,33 @@ class StoresFinderController extends ControllerBase {
    */
   public function updateGlossaryView(EntityInterface $node) {
     $response = new AjaxResponse();
-    $list_view = views_embed_view('stores_finder', 'page_3');
+    $list_view = views_embed_view('stores_finder', 'block_2');
     $response->addCommand(new HtmlCommand('.view-display-id-page_2', $list_view));
     // Firing click event.
     $response->addCommand(new InvokeCommand('#row-' . $node->id(), 'trigger', ['click']));
     // Adding class for selection.
     $response->addCommand(new InvokeCommand('#row-' . $node->id(), 'addClass', ['selected']));
+
+    return $response;
+  }
+
+  /**
+   * Toggle the view type based on the display.
+   *
+   * @param string $view_type
+   *   The of view.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response.
+   */
+  public function toggleView($view_type = 'list_view') {
+    $response = new AjaxResponse();
+    $display = 'block_2';
+    if ($view_type == 'map_view') {
+      $display = 'block_3';
+    }
+    $view = views_embed_view('stores_finder', $display);
+    $response->addCommand(new HtmlCommand('.view-display-id-page_2', $view));
 
     return $response;
   }
