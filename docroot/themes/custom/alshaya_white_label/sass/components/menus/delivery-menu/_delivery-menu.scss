@@ -16,12 +16,13 @@
 .c-delivery-menu__tab {
   text-align: center;
   list-style: none;
-  padding: 1px 0;
+  padding: 0.375rem 0;
   margin-left: auto;
   margin-right: auto;
   width: 326px;
   border: 1px solid $cerulean-two;
   box-shadow: 5px 5px 0 rgba(0, 132, 204, 0.15);
+  position: relative;
 
   @include breakpoint($only-mobile) {
     max-width: 100%;
@@ -48,27 +49,31 @@
   &:last-child {
     margin-right: 0;
   }
-}
 
-.c-delivery-menu__link {
-  display: block;
-  padding: 0.375rem 0;
-  text-decoration: none;
-  font-size: 18px;
-  font-family: $alshaya-bold;
-  color: $cerulean-two;
+  .field--name-field-title {
+    display: block;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: $alshaya-bold;
+    color: $cerulean-two;
 
-  @include breakpoint($only-mobile) {
-    font-size: 16px;
+    @include breakpoint($only-mobile) {
+      font-size: 16px;
+    }
   }
-}
 
-.c-delivery-menu__description {
-  font-size: 12px;
-  font-family: $alshaya-thin;
-  color: $cerulean-two;
+  .field--name-field-sub-title {
+    font-size: 12px;
+    font-family: $alshaya-thin;
+    color: $cerulean-two;
 
-  @include breakpoint($only-mobile) {
-    font-size: 10px;
+    @include breakpoint($only-mobile) {
+      font-size: 10px;
+    }
+  }
+
+  .field--name-field-link a {
+    @include u-image-replacement;
+    @include u-overlay-content;
   }
 }
