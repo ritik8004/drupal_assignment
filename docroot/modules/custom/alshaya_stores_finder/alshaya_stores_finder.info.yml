@@ -18,5 +18,6 @@ dependencies:
   - text
   - user
   - views
+  - views_infinite_scroll
   - workbench_moderation
 version: 8.x-1.0

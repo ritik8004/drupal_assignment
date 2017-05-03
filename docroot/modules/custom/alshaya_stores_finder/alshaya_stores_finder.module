@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_stores_finder_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'alshaya_stores_finder/store_finder';
+}

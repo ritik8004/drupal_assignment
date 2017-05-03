@@ -101,6 +101,20 @@ function alshaya_white_label_theme_suggestions_views_view_grid_alter(array &$sug
 }
 
 /**
+ * Implements template_view_unformatted_alter().
+ */
+function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(array &$suggestions, &$variables) {
+  if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_3') {
+    // If store finder list view.
+    $suggestions[] = "views_view_unformatted__store_list";
+  }
+  elseif ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_2') {
+    // If store finder glossary view.
+    $suggestions[] = "views_view_unformatted__store_glossay_list";
+  }
+}
+
+/**
  * Implements template_preprocess_profile().
  */
 function alshaya_white_label_preprocess_profile__address_book(&$variables) {
@@ -529,4 +543,23 @@ function alshaya_white_label_theme_suggestions_block_alter(array &$suggestions, 
 function alshaya_white_label_preprocess(&$variables, $hook) {
   global $base_url;
   $variables['site_base_path'] = $base_url . '/';
+}
+
+/**
+ * Implements hook_preprocess_views_view_unformatted().
+ */
+function alshaya_white_label_preprocess_views_view_unformatted__store_list(&$variables) {
+  // If store finder's list view.
+  if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_3') {
+    if (!empty($variables['rows'])) {
+      foreach ($variables['rows'] as $key => $row) {
+        if ($latitude_longitude = $row['content']['#row']->_entity->get('field_latitude_longitude')) {
+          $lat_lang_value = $latitude_longitude->getValue();
+          $variables['rows'][$key]['lat_long'] = $lat_lang_value[0];
+          $variables['rows'][$key]['nid'] = $row['content']['#row']->_entity->id();
+        }
+      }
+    }
+    $variables['store_map'] = views_embed_view('stores_finder', 'block_1');
+  }
 }
