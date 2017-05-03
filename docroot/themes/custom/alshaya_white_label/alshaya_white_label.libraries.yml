@@ -3,6 +3,7 @@ global_styles:
     theme:
       css/colors.css: {}
   js:
+    vendor/js/calc.min.js: {}
     js/accordion.js: {}
     js/menu.js: {}
     js/form.js: {}
