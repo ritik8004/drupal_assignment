@@ -28,5 +28,8 @@ function alshaya_acm_modules_installed($modules) {
     $config = \Drupal::configFactory()->getEditable('acq_commerce.conductor');
     $config->set('filter_root_category', TRUE);
     $config->save();
+
+    // Update the currency code to one required for the site.
+    \Drupal::configFactory()->getEditable('acq_commerce.currency')->set('currency_code', 'KWD')->save();
   }
 }
