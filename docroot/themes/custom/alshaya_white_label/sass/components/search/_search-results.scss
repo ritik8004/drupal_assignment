@@ -108,6 +108,7 @@
           font-size: 0.813rem;
           border: 1px solid $marine-blue;
           padding: 0.563rem 7.12rem;
+          font-family: $alshaya-thin;
         }
       }
     }
@@ -150,6 +151,55 @@
           @include breakpoint($tablet) {
             transform: translate(#{negate-value(-3.7)}rem, 0);
           }
+
+          .c-facet__blocks {
+            padding: 0.9rem 1rem;
+
+            .filter-menu-label {
+              margin-bottom: 0.82rem;
+
+              .label {
+                font-family: $alshaya-bold;
+                font-size: 0.817rem;
+                padding-left: 1.5rem;
+                color: $black;
+                float: #{$left};
+                margin-top: 7px;
+              }
+
+              @include icon(chevronleft, after) {
+                position: absolute;
+                top: 2%;
+                left: 1.3%;
+                font-size: 2rem;
+              }
+            }
+
+            li.clear-all {
+              list-style: none;
+              display: inline-block;
+              border: 1px solid $marine-blue-two;
+              margin-#{$left}: 5.6rem;
+              font-size: 12px;
+              text-align: center;
+              padding: 0.407rem 0.532rem;
+              font-family: alshaya-thin;
+              text-transform: lowercase;
+
+              a {
+                color: $cerulean-two;
+              }
+            }
+
+            .applied-filter-count {
+              font-family: $alshaya-bold;
+              color: $marine-blue-two;
+            }
+
+            .c-accordion__title.ui-state-active {
+              border-bottom: none;
+            }
+          }
         }
       }
     }
@@ -158,7 +208,10 @@
       overflow: hidden;
       margin-bottom: 1.125rem;
       padding-bottom: 0.75rem;
-      border-bottom: 1px solid $white;
+
+      @include breakpoint($tablet) {
+        border-bottom: 1px solid $white;
+      }
 
       ul {
         padding: 0;
@@ -235,6 +288,11 @@
   }
 }
 
+.facets-soft-limit-link {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
 header {
   .form-item-sort-bef-combine {
     display: none;
@@ -249,6 +307,13 @@ header {
           float: none;
         }
       }
+    }
+  }
+
+  aside.c-sidebar-first {
+    .c-facet__blocks__wrapper {
+      margin-top: -0.65rem;
+      margin-left: -0.29rem;
     }
   }
 }
