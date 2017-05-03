@@ -40,11 +40,13 @@
       border-bottom: 1px solid $white-two;
       margin: 0;
       padding: 16px 0;
+
       .link {
         font-size: 14px;
         font-weight: bold;
         color: $marine-blue;
       }
+
       .arrow {
         @include icon(chevronright);
 
@@ -54,7 +56,6 @@
         position: absolute;
         right: 0;
       }
-
     }
 
     #lightSlider {
