@@ -150,6 +150,10 @@
     .form-item {
       margin-top: 5.1em;
 
+      @include breakpoint($only-tablet) {
+        margin-top: 4rem;
+      }
+
       @include breakpoint($desktop) {
         margin-top: 4.6em;
       }
@@ -157,6 +161,10 @@
 
     #edit-actions {
       margin-top: 1.9rem;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 0.5rem;
+      }
     }
   }
 
