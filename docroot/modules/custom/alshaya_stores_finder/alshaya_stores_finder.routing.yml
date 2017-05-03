@@ -1,0 +1,6 @@
+alshaya_stores_finder.glossay:
+  path: '/store-glossay/{node}'
+  defaults:
+    _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::updateGlossarView'
+  requirements:
+    _permission: 'access content'

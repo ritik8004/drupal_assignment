@@ -108,10 +108,6 @@ function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(arra
     // If store finder list view.
     $suggestions[] = "views_view_unformatted__store_list";
   }
-  elseif ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_2') {
-    // If store finder glossary view.
-    $suggestions[] = "views_view_unformatted__store_glossay_list";
-  }
 }
 
 /**

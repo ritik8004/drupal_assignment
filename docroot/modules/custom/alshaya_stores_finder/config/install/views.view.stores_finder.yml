@@ -439,6 +439,126 @@ display:
         - 'config:field.storage.node.field_latitude_longitude'
         - 'config:field.storage.node.field_store_address'
         - 'config:field.storage.node.field_store_open_hours'
+  attachment_1:
+    display_plugin: attachment
+    id: attachment_1
+    display_title: 'glossary list view attachment'
+    position: 6
+    display_options:
+      display_extenders: {  }
+      display_description: ''
+      style:
+        type: maps_common
+        options:
+          geolocation_field: field_latitude_longitude
+          title_field: title
+          dynamic_map:
+            enabled: 0
+            update_handler: boundary_filter_field_latitude_longitude_boundary
+            hide_form: 0
+            views_refresh_delay: '1200'
+            update_target: attachment_1
+          centre:
+            first_row:
+              weight: 0
+              enable: false
+            fixed_value:
+              weight: 0
+              settings:
+                latitude: ''
+                longitude: ''
+              enable: false
+            client_location:
+              weight: 0
+              enable: false
+              settings:
+                update_map: '0'
+            boundary_filter_field_latitude_longitude_boundary:
+              enable: true
+              weight: 0
+            fit_bounds:
+              enable: true
+              weight: 0
+          show_raw_locations: 0
+          even_empty: 0
+          context_popup_content: ''
+          marker_clusterer: 0
+          marker_clusterer_image_path: ''
+          marker_clusterer_styles: ''
+          google_map_settings:
+            height: 400px
+            width: 100%
+            type: ROADMAP
+            zoom: '10'
+            maxZoom: 18
+            minZoom: 0
+            mapTypeControl: 1
+            streetViewControl: 1
+            zoomControl: 1
+            rotateControl: 0
+            fullscreenControl: 0
+            scrollwheel: 1
+            gestureHandling: auto
+            draggable: 1
+            preferScrollingToZooming: 0
+            disableDoubleClickZoom: 0
+            style: ''
+            info_auto_display: 0
+            marker_icon_path: ''
+            disableAutoPan: 1
+      defaults:
+        style: false
+        row: false
+        filters: false
+        filter_groups: false
+        header: false
+      row:
+        type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      displays:
+        page_2: page_2
+      attachment_position: after
+      filters:
+        status:
+          value: '1'
+          table: node_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: node
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+          group: 1
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          value:
+            store: store
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      header: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_latitude_longitude'
+        - 'config:field.storage.node.field_store_address'
+        - 'config:field.storage.node.field_store_open_hours'
   block_1:
     display_plugin: block
     id: block_1
@@ -1112,8 +1232,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '<a href="/store-glossay/{{ nid }}" class="use-ajax">{{ title }}</a>'
             make_link: false
             path: '/store-glossay/{{ nid }}'
             absolute: false
@@ -1153,7 +1273,7 @@ display:
           click_sort_column: value
           type: string
           settings:
-            link_to_entity: true
+            link_to_entity: false
           group_column: value
           group_columns: {  }
           group_rows: true
