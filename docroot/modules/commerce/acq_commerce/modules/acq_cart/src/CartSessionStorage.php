@@ -114,6 +114,11 @@ class CartSessionStorage implements CartStorageInterface {
       $update = $cart->getCart();
     }
 
+    // Don't tell conductor our stored totals for no reason.
+    if (isset($cart->totals)) {
+      unset($cart->totals);
+    }
+
     $cart = (object) \Drupal::service('acq_commerce.api')->updateCart($cart_id, $update);
 
     if (empty($cart)) {

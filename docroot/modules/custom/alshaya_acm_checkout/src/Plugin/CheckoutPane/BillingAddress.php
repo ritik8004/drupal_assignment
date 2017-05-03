@@ -139,19 +139,19 @@ class BillingAddress extends AddressFormBase {
 
     $values = $form_state->getValue($pane_form['#parents']);
 
-    $address_values = $values['address'];
     $address = [];
 
-    if ($form_state->getValue('same_as_shipping') == 1) {
+    if ($values['same_as_shipping'] == 1) {
       $address = $cart->getShipping();
     }
     else {
+      $address_values = $values['address'];
       array_walk_recursive($address_values, function ($value, $key) use (&$address) {
         $address[$key] = $value;
       });
     }
 
-    $cart->setBilling($address);
+    $cart->setBilling(_alshaya_acm_checkout_clean_address($address));
   }
 
 }

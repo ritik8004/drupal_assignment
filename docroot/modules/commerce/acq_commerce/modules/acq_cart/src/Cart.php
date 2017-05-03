@@ -434,11 +434,6 @@ class Cart implements CartInterface {
     if (isset($this->cart)) {
       $cart = $this->cart;
 
-      // Don't tell conductor our stored totals for no reason.
-      if (isset($cart->totals)) {
-        unset($cart->totals);
-      }
-
       // Don't set blank addresses, Magento doesn't like this.
       if (isset($cart->shipping) && empty($cart->shipping->street)) {
         unset($cart->shipping);

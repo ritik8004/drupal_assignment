@@ -165,6 +165,8 @@ class GuestDeliveryHome extends AddressFormBase {
   public static function generateShippingEstimates($address, array &$select) {
     $address = (array) $address;
 
+    $address = _alshaya_acm_checkout_clean_address($address);
+
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
 
     $shipping_methods = [];
@@ -229,6 +231,7 @@ class GuestDeliveryHome extends AddressFormBase {
     }
 
     $address_values = $values['address'];
+
     $address = [];
 
     array_walk_recursive($address_values, function ($value, $key) use (&$address) {
@@ -236,7 +239,7 @@ class GuestDeliveryHome extends AddressFormBase {
     });
 
     $cart = $this->getCart();
-    $cart->setShipping($address);
+    $cart->setShipping(_alshaya_acm_checkout_clean_address($address));
 
     if (empty($shipping_method)) {
       return;
