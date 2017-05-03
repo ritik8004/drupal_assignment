@@ -7,7 +7,6 @@
 
   .cloudzoom__herocontainer {
     width: calc(100% - (92px + 1rem));
-    cursor: url(../imgs/icons/ic-search.svg), auto !important;
   }
 
   .cloudzoom__thumbnails {
@@ -98,8 +97,12 @@
 
 #cloud-zoom-big {
   top: 200px !important;
-  left: 100% !important;
+  left: 105% !important;
   border: 1px solid $white;
+}
+
+.cloudzoom .cloud-zoom-lens {
+  cursor: url(../imgs/assets/ic-zoom.png), auto !important;
 }
 
 .mobilegallery {
