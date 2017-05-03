@@ -88,7 +88,7 @@
               var current_scale = image.css('transform').match(/-?[\d\.]+/g);
               current_scale = current_scale[3];
               var scale = parseFloat(current_scale) + 0.25;
-              if(parseFloat(scale) < 1.75) {
+              if(scale < 1.75) {
                 image.css('transform', 'scale(' + scale + ')');
                 $('.zoomout').removeClass('disabled');
               }
@@ -100,6 +100,7 @@
               var current_scale = image.css('transform').match(/-?[\d\.]+/g);
               current_scale = current_scale[3];
               var scale = parseFloat(current_scale) - 0.25;
+              $('.zoomin').removeClass('disabled');
               if (scale < 1) {
                 $(this).addClass('disabled');
                 return;
