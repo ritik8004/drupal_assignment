@@ -1,12 +1,25 @@
 .path--cart {
   #table-cart-items {
-    tr {
+    @include breakpoint($upto-tablet) {
+      margin-top: 20px;
+    }
+
+    table tr {
       td {
         @include breakpoint($upto-tablet) {
-          display: flex;
+          display: block;
 
           .item--bundle {
             display: none;
+          }
+
+          .dark {
+            font-weight: bold;
+
+            a {
+              font-size: 0.75rem;
+              font-weight: bold;
+            }
           }
         }
 
@@ -21,11 +34,16 @@
       th {
         @include breakpoint($upto-tablet) {
           display: none;
-
-          &:first-child {
-            display: flex;
-          }
         }
+      }
+    }
+
+    .delivery-options-mobile,
+    .quantity .form-type-select,
+    .tooltip--wrap {
+      @include breakpoint($upto-tablet) {
+        display: inline-block;
+        vertical-align: top;
       }
     }
   }
