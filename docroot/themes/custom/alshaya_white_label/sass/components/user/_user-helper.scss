@@ -293,7 +293,48 @@
   }
 }
 
-.c-user-password {
+.c-user-password.user-page {
+  @include breakpoint($upto-desktop) {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 1.5625rem;
+    margin-right: 1.5625rem;
+
+    .password--message {
+      font-size: 0.8125rem;
+    }
+
+    .form-wrapper {
+      margin-top: 1rem;
+    }
+  }
+
+  .user-pass .form-item {
+    input {
+      padding-bottom: 0.5rem;
+      margin-top: 0.56rem;
+    }
+  }
+
+  @include breakpoint($upto-tablet) {
+    margin-left: 0.5rem;
+    margin-top: 2.38em;
+    margin-right: 0.5rem;
+    padding-top: 1.5rem;
+
+    .user-pass .form-item {
+      margin-top: 2.7rem;
+    }
+
+    .password--message {
+      max-width: 14.0625rem;
+    }
+
+    .form-wrapper {
+      margin-top: 1.7rem;
+    }
+  }
+
   .messages.messages--warning,
   .messages.messages--error {
     margin-top: 0;

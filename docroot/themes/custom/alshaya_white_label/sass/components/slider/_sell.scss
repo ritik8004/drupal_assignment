@@ -1,6 +1,7 @@
 .view-product-slider {
   text-align: center;
   max-width: 19rem;
+  margin: auto;
   margin-bottom: 1.5rem;
 
   @include breakpoint($tablet) {
@@ -74,6 +75,14 @@
   }
 }
 
+.horizontal-crossell {
+  margin-top: 2.125rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 1.5rem;
+  }
+}
+
 .crossell-title {
   margin-bottom: 1rem;
   font-size: 0.875rem;
@@ -82,4 +91,71 @@
     font-size: 1.125rem;
     margin-left: 2.75rem;
   }
+}
+
+.sell--image,
+.sell-description {
+  width: 50%;
+  vertical-align: middle;
+}
+
+.sell--image img {
+  max-height: 10rem;
+}
+
+.mobile-only-block .sell-sku {
+  clear: both;
+
+  .field--name-name,
+  .field--name-attr-special-price {
+    display: none;
+  }
+
+  .sku-base-form {
+    .js-form-submit {
+      display: block;
+      float: none;
+      width: 100%;
+      clear: both;
+      font-size: 0.75rem;
+      text-transform: lowercase;
+      color: $white-five;
+    }
+
+    label {
+      display: block;
+      position: absolute;
+      top: -1.5625rem;
+      font-size: 0.6875rem;
+    }
+
+    .form-item-quantity {
+      @include select-wrapper(4.375rem);
+
+      float: right;
+      padding: 0;
+      margin-bottom: 1.5rem;
+      margin-top: 2.1875rem;
+
+      select {
+        @include select-style(4.375rem);
+      }
+    }
+  }
+}
+
+.mobile--only--sell {
+  width: 100%;
+
+  @include breakpoint($tablet) {
+    display: none;
+  }
+}
+
+.has--special--price {
+  text-decoration: line-through;
+}
+
+.special--price .price-wrapper {
+  color: $scarlet;
 }
