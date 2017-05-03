@@ -26,6 +26,27 @@
       @include u-visibility(none);
     }
   }
+
+  .form-item-mobile-number-mobile {
+    display: inline-block;
+  }
+
+  .form-item-mobile-number-mobile input {
+    width: 107px !important;
+
+    &::placeholder {
+      visibility: hidden;
+    }
+  }
+
+  #edit-mobile-number label {
+    top: -1.25em;
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+    font-size: 0.75rem;
+    position: absolute;
+  }
 }
 
 .contact-form,

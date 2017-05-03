@@ -319,6 +319,12 @@
         float: $left;
       }
     }
+
+    li {
+      @include clearfix;
+
+      margin-bottom: 1rem;
+    }
   }
 }
 
