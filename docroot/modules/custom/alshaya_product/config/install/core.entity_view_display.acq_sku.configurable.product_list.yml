@@ -26,6 +26,7 @@ content:
       link_to_entity: false
     third_party_settings: {  }
 hidden:
+  attr_image: true
   attr_special_price: true
   attributes: true
   crosssell: true
