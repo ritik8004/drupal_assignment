@@ -22,7 +22,7 @@ class StoresFinderController extends ControllerBase {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   Ajax response.
    */
-  public function updateGlossarView(EntityInterface $node) {
+  public function updateGlossaryView(EntityInterface $node) {
     $response = new AjaxResponse();
     $list_view = views_embed_view('stores_finder', 'page_3');
     $response->addCommand(new HtmlCommand('.view-display-id-page_2', $list_view));
