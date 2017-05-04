@@ -113,7 +113,7 @@ class CustomerController extends ControllerBase {
       }
     }
 
-    $build['order-list'] = [
+    $build = [
       '#theme' => 'user_order_list',
       '#search_form' => $searchForm,
       '#order_details' => $orderDetails,
