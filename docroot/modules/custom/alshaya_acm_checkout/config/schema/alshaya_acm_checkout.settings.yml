@@ -11,3 +11,6 @@ alshaya_acm_checkout.settings:
     checkout_guest_login:
       type: text_format
       label: 'Checkout login help'
+    checkout_terms_condition:
+      type: text_format
+      label: 'Checkout Terms and Conditions'
