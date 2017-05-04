@@ -16,7 +16,7 @@
   }
 
   #product-image-gallery-container {
-    background: $white;
+    background: $white-five;
   }
 }
 
@@ -182,6 +182,7 @@
 
     img {
       width: 100%;
+      left: 0 !important;
     }
 
     iframe {
