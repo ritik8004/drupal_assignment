@@ -25,13 +25,6 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       'views-exposed-form-stores-finder-page-3',
     ];
     if (in_array($form['#id'], $exposed_form_ids)) {
-      $active_class = '';
-      if ($form['#id'] == 'views-exposed-form-stores-finder-page-1') {
-        $active_class = 'active';
-      }
-      elseif ($form['#id'] == 'views-exposed-form-stores-finder-page-3') {
-        $active_class = 'active';
-      }
       $form['list_view'] = [
         '#title' => t('List view'),
         '#type' => 'link',
@@ -40,7 +33,6 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'list-view-link',
-            $active_class,
           ],
         ],
         '#weight' => 100,
@@ -53,7 +45,6 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'map-view-link',
-            $active_class,
           ],
         ],
         '#weight' => 100,

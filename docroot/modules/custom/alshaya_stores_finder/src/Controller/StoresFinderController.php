@@ -33,6 +33,12 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new InvokeCommand('#row-' . $node->id(), 'addClass', ['selected']));
     // Hide the map view exposed filter.
     $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
+    // Show the list view exposed filter.
+    $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'block']));
+    // Remove class.
+    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['list-view-exposed']));
+    // Add class.
+    $response->addCommand(new InvokeCommand('.list-view-link', 'addClass', ['active']));
 
     return $response;
   }
@@ -53,10 +59,14 @@ class StoresFinderController extends ControllerBase {
       $display = 'page_3';
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'none']));
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'block']));
+      $response->addCommand(new InvokeCommand('.map-view-link', 'addClass', ['active']));
+      $response->addCommand(new InvokeCommand('.list-view-link', 'removeClass', ['active']));
     }
     else {
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'block']));
+      $response->addCommand(new InvokeCommand('.list-view-link', 'addClass', ['active']));
+      $response->addCommand(new InvokeCommand('.map-view-link', 'removeClass', ['active']));
     }
     $view = views_embed_view('stores_finder', $display);
     $response->addCommand(new HtmlCommand('.view-display-id-page_2', $view));
