@@ -50,6 +50,7 @@
         );
         var currentsize = $('#drupal-modal .form-item-configurables-size select option:selected').text() === '- Select -' ? $('#drupal-modal .form-item-configurables-size select option:nth-child(2)').text() : $('#drupal-modal .form-item-configurables-size select option:selected').text();
         $('#drupal-modal #size-select-modal').before('<div><span class="size-label">Size : </span><span class="size-value">' + currentsize + '</span></div>');
+
       }
       $('#drupal-modal .form-item-configurables-size select').hide();
 

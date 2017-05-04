@@ -3,3 +3,4 @@ alshaya_search:
     js/alshaya_search.js: {}
   dependencies:
     - core/jquery
+    - core/drupalSettings

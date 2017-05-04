@@ -43,6 +43,13 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $variables['attributes']['class'][] = isset($variables['node_type']) ? 'nodetype--' . $variables['node_type'] : '';
   // Logged in class.
   $variables['attributes']['class'][] = $variables['logged_in'] ? 'logged-in' : 'logged-out';
+  // Update the meta to include noscalable for iphone.
+  $html_head = &$variables['page']['#attached']['html_head'];
+  foreach ($html_head as $index => $val) {
+    if ($val[1] == 'viewport') {
+      $html_head[$index][0]['#attributes']['content'] .= ', user-scalable=no';
+    }
+  }
 }
 
 /**
@@ -445,6 +452,14 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
     if ($user) {
       $variables['title'] = [
         '#markup' => t('My Account'),
+      ];
+    }
+  }
+  elseif ($route_match->getRouteName() == 'entity.user.edit_form') {
+    $user = $route_match->getParameter('user');
+    if ($user) {
+      $variables['title'] = [
+        '#markup' => t('Contact Details'),
       ];
     }
   }

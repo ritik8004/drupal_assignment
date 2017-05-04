@@ -34,6 +34,7 @@
     position: absolute;
     top: -3.5rem;
     color: $marine-blue;
+    font-weight: normal;
 
     @include breakpoint($desktop) {
       top: -0.9rem;
@@ -51,16 +52,23 @@
       font-size: 14px;
       font-family: $alshaya-bold;
       text-transform: lowercase;
+      font-weight: normal;
     }
 
     p {
       color: $brownish-grey;
-      margin: 12px 0;
+      margin: 10px 0;
     }
 
     .c-sidebar-second__region {
       @include breakpoint($desktop) {
-        padding-#{$left}: 6.95em;
+        padding-#{$left}: 6.5em;
+
+        p {
+          line-height: 1.2;
+          margin-top: 6px;
+          margin-bottom: 7px;
+        }
       }
     }
   }
@@ -70,8 +78,8 @@
   }
 
   #block-youllbeableto {
-    margin-top: 1.81rem;
-    margin-bottom: 4rem;
+    margin-top: 2.2rem;
+    margin-bottom: 4.1rem;
 
     @include breakpoint($only-tablet) {
       margin-top: -0.5rem;
@@ -79,7 +87,7 @@
 
     a {
       font-weight: bold;
-      padding-top: 0.45em;
+      padding-top: 0.25rem;
       display: inline-block;
     }
   }
@@ -145,17 +153,21 @@
       display: inline-block;
       float: $left;
       margin-top: 0;
-      margin-bottom: 0;
+
+      @include breakpoint($upto-desktop) {
+        margin-bottom: 0;
+      }
     }
 
     .field--name-body {
-      max-width: 11rem;
+      max-width: 12rem;
       float: $left;
       clear: $left;
     }
 
     p {
       line-height: 1.1rem;
+      margin-top: 0;
 
       > a {
         padding-top: 1em;
@@ -171,6 +183,10 @@
 
     @include breakpoint($desktop) {
       margin-top: 2.6em;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1.5rem;
     }
   }
 
@@ -202,6 +218,10 @@
     @include breakpoint($only-tablet) {
       margin-#{$left}: 1rem;
       margin-top: -0.6rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      margin-bottom: 2rem;
     }
   }
 
@@ -243,11 +263,11 @@
       display: none;
     }
 
-    label.form-required,
-    .form-type-textfield label,
-    .field--name-field-privilege-card-number label,
-    .form-item-privilege-card-number label,
-    .form-item-privilege-card-number2 label {
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error),
+    .field--name-field-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number2 label:not(.error) {
       font-size: 16px;
       color: $greyish;
       position: absolute;
@@ -292,13 +312,6 @@
       height: 1.563rem;
       outline: transparent;
       font-size: 16px;
-
-      &:focus,
-      &:active,
-      &.valid {
-        border-color: $windows-blue;
-        background: transparent;
-      }
     }
 
     @include breakpoint($desktop) {
@@ -318,11 +331,11 @@
     }
   }
 
-  .form-item input:focus ~ label,
-  .form-item input:not(:focus):valid ~ label,
-  .form-item input:active ~ label,
-  .form-item input:not(:active):valid ~ label,
-  .form-item input.error ~ label {
+  .form-item input:focus ~ label:not(.error),
+  .form-item input:not(:focus):valid ~ label:not(.error),
+  .form-item input:active ~ label:not(.error),
+  .form-item input:not(:active):valid ~ label:not(.error),
+  .form-item input.error ~ label:not(.error) {
     top: -1.25em;
     bottom: 0;
     #{$left}: 0;
@@ -356,7 +369,7 @@
     text-decoration: none;
     font-size: 0.75rem;
     font-weight: bold;
-    z-index: 999;
+    z-index: 2;
     width: 100%;
     text-align: center;
     color: $windows-blue;
@@ -455,12 +468,29 @@
       }
 
       a {
-        background-image: url(../imgs/icons/icon-chevron-#{$next}.svg);
-        background-color: transparent;
-        background-repeat: no-repeat;
-        background-position: percent-value(97%) center;
+        @include icon(chevron#{$right}, after) {
+          font-size: 1.875rem;
+          position: absolute;
+          #{$right}: 1rem;
+          border-radius: 100%;
+          color: $black;
+          padding: 2px;
+          padding-#{$left}: 4px;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 35px;
+          width: 35px;
+
+          @include breakpoint($only-mobile) {
+            background-color: $whisper-light;
+            #{$right}: 4rem;
+            top: 62%;
+          }
+        }
+
         display: block;
         border-bottom: 1px solid $whisper-dark;
+        position: relative;
 
         @include breakpoint($desktop) {
           width: 921px;
@@ -632,6 +662,7 @@
   #{$right}: 0;
   font-size: 12px;
   color: $greyish;
+  z-index: 3;
 }
 
 .alias--user-login {
@@ -733,10 +764,36 @@
 }
 
 .change-pwd-form {
+  margin-bottom: 2rem;
+
   @extend .user-form;
+
+  @include breakpoint($desktop) {
+    margin-bottom: 12.125rem;
+  }
 
   .form-wrapper {
     padding-top: 1px;
+
+    .form-text {
+      color: $black;
+      margin-top: 0.56rem;
+      padding-bottom: 0.5rem;
+      font-size: 1.25rem;
+      letter-spacing: 0.312rem;
+    }
+
+    .form-item--error-message {
+      padding-top: 0.4375rem;
+    }
+
+    .form-item {
+      margin-top: 2.7em;
+    }
+  }
+
+  .form-actions {
+    margin-top: 0.7rem;
   }
 }
 
@@ -763,6 +820,12 @@
 .path--user {
   .l-two--sf {
     margin-top: 40px;
+  }
+
+  @include breakpoint($only-mobile) {
+    .l-two--sf {
+      margin-top: 0;
+    }
   }
 
   .my-account-nav {

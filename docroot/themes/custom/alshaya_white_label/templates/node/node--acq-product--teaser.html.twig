@@ -7,7 +7,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 %}
 
 <article{{ attributes }}>
-  <a class="use-ajax" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'node': node.id}) }}">
+  <a class="use-ajax above-mobile-block" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'node': node.id}) }}">
     {% if content.image_url is not null %}
       <img src={{ content.image_url }} />
     {% endif %}
@@ -20,27 +20,58 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     {% endif %}
     {{ title_suffix }}
 
-    {{ content.price }}
+    {% if content.special_price %}
+      <div class="has--special--price">
+    {% else %}
+      <div class="price">
+    {% endif %}
+      {{ content.price }}
+    </div>
 
-    {{ content.special_price }}
+    {% if content.special_price %}
+      <div class="special--price">
+        {{ content.special_price }}
+      </div>
+    {% endif %}
   </a>
 
-  {% if content.image_url is not null %}
-    <img src={{ content.image_url }} />
-  {% endif %}
+  <table class="mobile--only--sell">
+    <tr>
+      <td class="sell--image">
+        {% if content.image_url is not null %}
+          <img src={{ content.image_url }} />
+        {% endif %}
+      </td>
 
-  {{ title_prefix }}
-  {% if not page %}
-    <h2{{ title_attributes.addClass("c-products__item__label") }}>
-      {{ label }}
-    </h2>
-  {% endif %}
-  {{ title_suffix }}
+      <td class="sell--description">
+        {{ title_prefix }}
+        {% if not page %}
+          <h2{{ title_attributes.addClass("c-products__item__label") }}>
+            {{ label }}
+          </h2>
+        {% endif %}
+        {{ title_suffix }}
 
-  {{ content.price }}
+        {% if content.special_price %}
+          <div class="has--special--price">
+        {% else %}
+          <div class="price">
+        {% endif %}
+          {{ content.price }}
+        </div>
 
-  {{ content.special_price }}
+        {% if content.special_price %}
+          <div class="special--price">
+            {{ content.special_price }}
+          </div>
+        {% endif %}
+      </td>
+    </tr>
 
-  {{ content.field_skus }}
-
+    <tr>
+      <td colspan="2" class="sell-sku">
+        {{ content.field_skus }}
+      </td>
+    </tr>
+  </table>
 </article>

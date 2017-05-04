@@ -7,17 +7,17 @@ dependencies:
 id: department_page_path_pattern
 label: 'Department page path pattern'
 type: 'canonical_entities:node'
-pattern: 'department/[node:field_product_category]'
+pattern: 'department-[node:title]'
 selection_criteria:
-  a1f430d7-cca0-48bf-bda3-cc0c93dc302a:
+  eb0b2a43-a125-4677-9aae-509cc6418eee:
     id: node_type
     bundles:
       department_page: department_page
     negate: false
     context_mapping:
       node: node
-    uuid: a1f430d7-cca0-48bf-bda3-cc0c93dc302a
-  c247b7c2-cf6e-448f-b84b-b21af6bba830:
+    uuid: eb0b2a43-a125-4677-9aae-509cc6418eee
+  083f3239-b555-4e62-bdbe-50fbfeaf4b66:
     id: language
     langcodes:
       en: en
@@ -25,7 +25,7 @@ selection_criteria:
     negate: false
     context_mapping:
       language: 'node:langcode:language'
-    uuid: c247b7c2-cf6e-448f-b84b-b21af6bba830
+    uuid: 083f3239-b555-4e62-bdbe-50fbfeaf4b66
 selection_logic: and
 weight: -8
 relationships:
