@@ -50,6 +50,10 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         ],
         '#weight' => 100,
       ];
+      $form['current_location'] = [
+        '#markup' => '<a href="javascript:;" class="current-location">' . t('Use my current location') . '</a>',
+        '#weight' => -1,
+      ];
     }
   }
 }

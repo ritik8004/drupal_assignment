@@ -40,6 +40,10 @@ class StoresFinderController extends ControllerBase {
     // Add class.
     $response->addCommand(new InvokeCommand('.list-view-link', 'addClass', ['active']));
 
+    // Add class.
+    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['current-view']));
+    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['current-view']));
+
     return $response;
   }
 
@@ -61,12 +65,16 @@ class StoresFinderController extends ControllerBase {
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'block']));
       $response->addCommand(new InvokeCommand('.map-view-link', 'addClass', ['active']));
       $response->addCommand(new InvokeCommand('.list-view-link', 'removeClass', ['active']));
+      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['current-view']));
+      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'addClass', ['current-view']));
     }
     else {
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'block']));
       $response->addCommand(new InvokeCommand('.list-view-link', 'addClass', ['active']));
       $response->addCommand(new InvokeCommand('.map-view-link', 'removeClass', ['active']));
+      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['current-view']));
+      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['current-view']));
     }
     $view = views_embed_view('stores_finder', $display);
     $response->addCommand(new HtmlCommand('.view-display-id-page_2', $view));

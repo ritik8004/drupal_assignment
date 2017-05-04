@@ -52,6 +52,55 @@
 
         });
       });
+
+      $('.current-location').on('click', function () {
+        // Start overlay here.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+        }
+        else {
+          alert('Your browser doesn\'t geolocation api.');
+        }
+        return false;
+      });
+
+      // Error callback.
+      var errorCallback = function (error) {
+        // Close overlay here.
+        alert('ERROR(' + error.code + '): ' + error.message);
+      };
+
+      // Success callback.
+      var successCallback = function (position) {
+        var x = position.coords.latitude;
+        var y = position.coords.longitude;
+        displayLocation(x, y);
+      };
+
+      function displayLocation(latitude, longitude) {
+        var request = new XMLHttpRequest();
+
+        var method = 'GET';
+        var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&sensor=true';
+        var async = true;
+
+        request.open(method, url, async);
+        request.onreadystatechange = function () {
+          if (request.readyState === 4 && request.status === 200) {
+            var data = JSON.parse(request.responseText);
+            var address = data.results[0];
+            if ($('.current-view').length) {
+              $('.current-view .ui-autocomplete-input').val(address.formatted_address);
+            }
+            else {
+              $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').val(address.formatted_address);
+            }
+          }
+        };
+        request.send();
+        // Close overlay here.
+      }
+
     }
   };
 
