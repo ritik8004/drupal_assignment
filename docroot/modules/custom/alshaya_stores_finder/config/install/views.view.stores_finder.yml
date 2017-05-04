@@ -409,7 +409,12 @@ display:
             label: ''
           granularity: second
       title: 'Find Stores'
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          plugin_id: result
       footer: {  }
       empty: {  }
       relationships: {  }
@@ -443,7 +448,8 @@ display:
         style: false
         row: false
       displays:
-        block_2: block_2
+        page_1: page_1
+        page_2: page_2
       sorts: {  }
       style:
         type: maps_common
@@ -525,29 +531,20 @@ display:
         - 'config:field.storage.node.field_latitude_longitude'
         - 'config:field.storage.node.field_store_address'
         - 'config:field.storage.node.field_store_open_hours'
-  block_2:
-    display_plugin: block
-    id: block_2
-    display_title: 'List view block'
-    position: 2
+  page_1:
+    display_plugin: page
+    id: page_1
+    display_title: 'List view page'
+    position: 5
     display_options:
       display_extenders: {  }
       display_description: ''
+      path: store-finder/list
       sorts: {  }
       defaults:
         sorts: false
-        exposed_form: false
         header: false
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
+        exposed_form: false
       header:
         result:
           id: result
@@ -559,33 +556,6 @@ display:
           empty: false
           content: '@total closest stores'
           plugin_id: result
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - 'user.node_grants:view'
-        - user.permissions
-      tags:
-        - 'config:field.storage.node.field_latitude_longitude'
-        - 'config:field.storage.node.field_store_address'
-        - 'config:field.storage.node.field_store_open_hours'
-  block_3:
-    display_plugin: block
-    id: block_3
-    display_title: 'map view block'
-    position: 3
-    display_options:
-      display_extenders: {  }
-      display_description: ''
-      sorts: {  }
-      defaults:
-        sorts: false
-        exposed_form: false
-        style: false
-        row: false
-        header: false
       exposed_form:
         type: basic
         options:
@@ -596,83 +566,7 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
-      style:
-        type: maps_common
-        options:
-          geolocation_field: field_latitude_longitude
-          title_field: none
-          dynamic_map:
-            enabled: 0
-            update_handler: boundary_filter_field_latitude_longitude_boundary
-            hide_form: 0
-            views_refresh_delay: '1200'
-            update_target: block_3
-          centre:
-            first_row:
-              weight: 0
-              enable: false
-            fixed_value:
-              weight: 0
-              settings:
-                latitude: ''
-                longitude: ''
-              enable: false
-            client_location:
-              weight: 0
-              enable: false
-              settings:
-                update_map: '0'
-            boundary_filter_field_latitude_longitude_boundary:
-              enable: true
-              weight: 0
-            fit_bounds:
-              enable: true
-              weight: 0
-          show_raw_locations: 0
-          even_empty: 0
-          context_popup_content: ''
-          marker_clusterer: 0
-          marker_clusterer_image_path: ''
-          marker_clusterer_styles: ''
-          google_map_settings:
-            height: 400px
-            width: 100%
-            type: ROADMAP
-            zoom: '10'
-            maxZoom: 18
-            minZoom: 0
-            mapTypeControl: 1
-            streetViewControl: 1
-            zoomControl: 1
-            rotateControl: 0
-            fullscreenControl: 0
-            scrollwheel: 1
-            gestureHandling: auto
-            draggable: 1
-            preferScrollingToZooming: 0
-            disableDoubleClickZoom: 0
-            style: ''
-            info_auto_display: 0
-            marker_icon_path: ''
-            disableAutoPan: 1
-      row:
-        type: fields
-        options:
-          default_field_elements: true
-          inline: {  }
-          separator: ''
-          hide_empty: false
-      header:
-        result:
-          id: result
-          table: views
-          field: result
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: false
-          content: '@total closest stores'
-          plugin_id: result
+      exposed_block: true
     cache_metadata:
       max-age: -1
       contexts:
@@ -1033,3 +927,118 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
+  page_3:
+    display_plugin: page
+    id: page_3
+    display_title: 'Map view page'
+    position: 6
+    display_options:
+      display_extenders: {  }
+      path: store-finder/map
+      display_description: ''
+      style:
+        type: maps_common
+        options:
+          geolocation_field: field_latitude_longitude
+          title_field: none
+          dynamic_map:
+            enabled: 0
+            update_handler: boundary_filter_field_latitude_longitude_boundary
+            hide_form: 0
+            views_refresh_delay: '1200'
+          centre:
+            first_row:
+              weight: 0
+              enable: false
+            fixed_value:
+              weight: 0
+              settings:
+                latitude: ''
+                longitude: ''
+              enable: false
+            client_location:
+              weight: 0
+              enable: false
+              settings:
+                update_map: '0'
+            boundary_filter_field_latitude_longitude_boundary:
+              enable: true
+              weight: 0
+            fit_bounds:
+              enable: true
+              weight: 0
+          show_raw_locations: 0
+          even_empty: 0
+          context_popup_content: ''
+          marker_clusterer: 0
+          marker_clusterer_image_path: ''
+          marker_clusterer_styles: ''
+          google_map_settings:
+            height: 400px
+            width: 100%
+            type: ROADMAP
+            zoom: '10'
+            maxZoom: 18
+            minZoom: 0
+            mapTypeControl: 1
+            streetViewControl: 1
+            zoomControl: 1
+            rotateControl: 0
+            fullscreenControl: 0
+            scrollwheel: 1
+            gestureHandling: auto
+            draggable: 1
+            preferScrollingToZooming: 0
+            disableDoubleClickZoom: 0
+            style: ''
+            info_auto_display: 0
+            marker_icon_path: ''
+            disableAutoPan: 1
+      defaults:
+        style: false
+        row: false
+        sorts: false
+        header: false
+        exposed_form: false
+      row:
+        type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      sorts: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          content: '@total closest stores'
+          plugin_id: result
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      exposed_block: true
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_latitude_longitude'
+        - 'config:field.storage.node.field_store_address'
+        - 'config:field.storage.node.field_store_open_hours'

@@ -20,13 +20,28 @@ function alshaya_stores_finder_page_attachments(array &$attachments) {
  */
 function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
-    if ($form['#id'] == 'views-exposed-form-stores-finder-block-3' || $form['#id'] == 'views-exposed-form-stores-finder-block-2') {
+    $exposed_form_ids = [
+      'views-exposed-form-stores-finder-page-1',
+      'views-exposed-form-stores-finder-page-3',
+    ];
+    if (in_array($form['#id'], $exposed_form_ids)) {
+      $active_class = '';
+      if ($form['#id'] == 'views-exposed-form-stores-finder-page-1') {
+        $active_class = 'active';
+      }
+      elseif ($form['#id'] == 'views-exposed-form-stores-finder-page-3') {
+        $active_class = 'active';
+      }
       $form['list_view'] = [
         '#title' => t('List view'),
         '#type' => 'link',
         '#url' => Url::fromRoute('alshaya_stores_finder.view_toggle', ['view_type' => 'list_view']),
         '#attributes' => [
-          'class' => ['use-ajax'],
+          'class' => [
+            'use-ajax',
+            'list-view-link',
+            $active_class,
+          ],
         ],
         '#weight' => 100,
       ];
@@ -35,7 +50,11 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#type' => 'link',
         '#url' => Url::fromRoute('alshaya_stores_finder.view_toggle', ['view_type' => 'map_view']),
         '#attributes' => [
-          'class' => ['use-ajax'],
+          'class' => [
+            'use-ajax',
+            'map-view-link',
+            $active_class,
+          ],
         ],
         '#weight' => 100,
       ];

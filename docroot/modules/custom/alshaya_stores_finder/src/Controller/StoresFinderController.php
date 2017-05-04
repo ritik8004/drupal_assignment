@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_stores_finder\Controller;
 
+use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -24,12 +25,14 @@ class StoresFinderController extends ControllerBase {
    */
   public function updateGlossaryView(EntityInterface $node) {
     $response = new AjaxResponse();
-    $list_view = views_embed_view('stores_finder', 'block_2');
+    $list_view = views_embed_view('stores_finder', 'page_1');
     $response->addCommand(new HtmlCommand('.view-display-id-page_2', $list_view));
     // Firing click event.
     $response->addCommand(new InvokeCommand('#row-' . $node->id(), 'trigger', ['click']));
     // Adding class for selection.
     $response->addCommand(new InvokeCommand('#row-' . $node->id(), 'addClass', ['selected']));
+    // Hide the map view exposed filter.
+    $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
 
     return $response;
   }
@@ -45,9 +48,15 @@ class StoresFinderController extends ControllerBase {
    */
   public function toggleView($view_type = 'list_view') {
     $response = new AjaxResponse();
-    $display = 'block_2';
+    $display = 'page_1';
     if ($view_type == 'map_view') {
-      $display = 'block_3';
+      $display = 'page_3';
+      $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'none']));
+      $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'block']));
+    }
+    else {
+      $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
+      $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'block']));
     }
     $view = views_embed_view('stores_finder', $display);
     $response->addCommand(new HtmlCommand('.view-display-id-page_2', $view));
