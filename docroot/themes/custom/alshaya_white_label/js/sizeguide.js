@@ -46,7 +46,7 @@
   Drupal.behaviors.sizeguidemodal = {
     attach: function (context, settings) {
 
-      // JS for converting select list to unformatted list in the sizeguide modal popup
+      // JS for converting select list to unformatted list in the sizeguide modal popup.
       if ($('#drupal-modal #size-select-modal').length === 0) {
         $('#drupal-modal .form-item-configurables-size select').after("<ul id='size-select-modal' />")
           .children('option').each(function (index, el) {
@@ -61,7 +61,7 @@
       }
       $('#drupal-modal .form-item-configurables-size select').hide();
 
-      // JS for triggering select option on clicking of list item in size list in the sizeguide modal popup
+      // JS for triggering select option on clicking of list item in size list in the sizeguide modal popup.
       $('#drupal-modal #size-select-modal li').click(function (event) {
         var size = $(this).text();
         $(this).siblings('li').removeClass('active');
