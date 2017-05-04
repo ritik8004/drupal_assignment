@@ -89,7 +89,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
       if ($translation->hasField('body') && ($items = $translation->get('body')) && !$items->isEmpty()) {
         $item = $items[0];
         // If the summary was requested and is not empty, use it.
-        if ($name == 'summary' && !empty($item->summary)) {
+        if (!empty($item->summary)) {
           $output = $item->summary_processed;
         }
         // Attempt to provide a suitable version of the 'body' field.
