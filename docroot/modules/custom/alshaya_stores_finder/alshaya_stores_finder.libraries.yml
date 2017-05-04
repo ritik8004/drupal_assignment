@@ -1,0 +1,5 @@
+store_finder:
+  js:
+    js/alshaya_store_finder.js: {}
+  dependencies:
+    - core/jquery
