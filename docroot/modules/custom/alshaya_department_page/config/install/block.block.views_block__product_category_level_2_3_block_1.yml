@@ -4,6 +4,7 @@ dependencies:
   config:
     - views.view.product_category_level_2_3
   module:
+    - system
     - views
   theme:
     - alshaya_white_label
@@ -20,4 +21,10 @@ settings:
   label_display: '0'
   views_label: ''
   items_per_page: none
-visibility: {  }
+  context_mapping: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: true
+    context_mapping: {  }
