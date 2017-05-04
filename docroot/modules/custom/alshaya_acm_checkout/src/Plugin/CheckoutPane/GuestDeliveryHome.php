@@ -77,6 +77,17 @@ class GuestDeliveryHome extends AddressFormBase {
       'value' => $pane_form['address']['phone']['#default_value'],
     ];
 
+    // Fix default value for region.
+    if ($region = $pane_form['address']['dynamic_parts']['region']['#default_value']) {
+      $region_options = $pane_form['address']['dynamic_parts']['region']['#options'];
+
+      if (!isset($region_options[$region])) {
+        if ($region_key = array_search($region, $region_options)) {
+          $pane_form['address']['dynamic_parts']['region']['#default_value'] = $region_key;
+        }
+      }
+    }
+
     // Block proceeding checkout until shipping method is chosen.
     $complete_form['actions']['next']['#states'] = [
       'invisible' => [
