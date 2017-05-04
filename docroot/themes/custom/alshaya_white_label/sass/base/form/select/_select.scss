@@ -1,0 +1,34 @@
+select::-ms-expand {
+  display: none;
+}
+
+@mixin select-style($select-width) {
+  -webkit-appearance: none;
+  border: 1px solid $white-two;
+  border-radius: 0;
+  background-color: $white-five;
+  padding: 0.5rem 1.5rem 0.5rem 0.35rem;
+  width: $select-width;
+  height: 2.1875rem;
+  font-size: 0.75rem;
+  outline: none;
+}
+
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
+  @include icon(chevrondown, after) {
+    border-#{$left}: 1px solid $white;
+    font-size: 1.75rem;
+    line-height: 2.1875rem;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-align: center;
+    background-color: $white-two;
+    width: 2.1875rem;
+  }
+}

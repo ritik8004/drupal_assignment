@@ -36,7 +36,7 @@ fields:
     cardinality: -1
     type: 'image'
     configurable: 0
-    visible_view: 0
+    visible_view: 1
     visible_form: 1
 
   # Field for small image attribute.

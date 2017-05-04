@@ -13,6 +13,7 @@ dependencies:
   - lightning_core
   - node
   - responsive_image
+  - search_api
   - search_api_db
   - system
   - taxonomy

@@ -37,6 +37,7 @@ function alshaya_acm_cart_notification_form_alter(&$form, FormStateInterface $fo
     // Attach the js file with the add to cart form.
     $form['#attached']['library'][] = 'core/drupal.ajax';
     $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+    $form['#attached']['library'][] = 'alshaya_acm_cart_notification/ladda';
     $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
   }
 }
@@ -136,6 +137,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   // Prepare the ajax Response.
   $response = new AjaxResponse();
   $response->addCommand(new HtmlCommand('#cart_notification', $html));
+  $response->addCommand(new InvokeCommand(NULL, 'stopSpinner'));
   $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
   return $response;
 }
@@ -162,4 +164,19 @@ function alshaya_acm_cart_notification_theme($existing, $type, $theme, $path) {
       'template' => 'add-to-cart-error',
     ],
   ];
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function alshaya_acm_cart_notification_theme_suggestions_input_alter(array &$suggestions, array $variables) {
+  $routmatch = \Drupal::routeMatch();
+  if ($routmatch->getRouteName() == 'entity.node.canonical') {
+    $node = \Drupal::request()->attributes->get('node');
+
+    if ($node->bundle() == 'acq_product' && $variables['element']['#id'] == 'edit-add-to-cart') {
+      $suggestions[] = 'input__add_to_cart';
+      $variables['element']['#attributes']['class'][] = 'ladda-button';
+    }
+  }
 }

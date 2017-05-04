@@ -6,6 +6,7 @@
  */
 
 use Drupal\views\ViewExecutable;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_views_pre_render().
@@ -13,10 +14,19 @@ use Drupal\views\ViewExecutable;
 function alshaya_search_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'search') {
     if (isset($view->getExposedInput()['keywords'])) {
-      $view->setTitle('Search results for "' . $view->getExposedInput()['keywords'] . '"');
+      $view->setTitle(t('Search results for "@keyword"', ['@keyword' => $view->getExposedInput()['keywords']]));
     }
 
     // Add search library to search page.
     $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form['#id'] == 'views-exposed-form-search-page') {
+    $form['keywords']['#attributes'] = ['data-bef-auto-submit-exclude' => ''];
   }
 }

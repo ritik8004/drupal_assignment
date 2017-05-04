@@ -22,7 +22,7 @@ module.exports = function (gulp, plugins, options) {
         outputStyle: 'expanded'
       }))
       .pipe(plugins.autoprefixer({
-        browsers: ['last 2 versions'],
+        browsers: ['last 4 versions'],
         cascade: false
       }))
       .pipe(plugins.plumber.stop())

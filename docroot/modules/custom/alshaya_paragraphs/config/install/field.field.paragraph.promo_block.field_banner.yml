@@ -18,7 +18,7 @@ field_name: field_banner
 entity_type: paragraph
 bundle: promo_block
 label: Image
-description: "Size of image to upload\r\n<ul>\r\n<li>1 row 1st col 2 row 2nd col\r\n<ol>\r\n<li>1st col promo block - 501x600</li>\r\n<li>2nd col promo block\t- 501x288</li>\r\n</ol>\r\n</li>\r\n<li>1 row 1 col - 1026x288</li>\r\n<li>1 row 3 col - 326x288</li>\r\n<li>Banner full width - 1284x424</li>\r\n<li>Related info - 420x192</li>\r\n</ul>"
+description: "Size of image to upload\r\n<ul>\r\n<li>1 row 1st col 2 row 2nd col\r\n<ol>\r\n<li>1st col promo block - 501x600</li>\r\n<li>2nd col promo block\t- 501x288</li>\r\n</ol>\r\n</li>\r\n<li>1 row 1 col - 1026x288</li>\r\n<li>1 row 3 col - 326x288</li>\r\n<li>Banner full width - 1284x424</li>\r\n<li>Related info - 420x192</li>\r\n<li>1 row 1 col dept - 921x256</li>\r\n<li>1 row 2 col 1-2 dept & 1 row 2 col 2-1 dept\r\n<ol>\r\n<li>1 row 2 col 1/3 - 291x256</li>\r\n<li>1 row 2 col 2/3\t- 606x256</li>\r\n</ol>\r\n</li>\r\n<li>1 row 2 col dept - 449x256</li>\r\n<li>1 row 3 col dept - 291x256</li>\r\n</ul>"
 required: false
 translatable: true
 default_value: {  }

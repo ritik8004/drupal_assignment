@@ -43,6 +43,6 @@ set classes = [
     {% endif %}
     {{ title_suffix }}
     {% block content %}
-        {{ content }}
+        {{ content|without('field_image') }}
     {% endblock %}
 </div>

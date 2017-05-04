@@ -29,6 +29,8 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+  translation:
+    weight: 10
 hidden:
   created: true
   status: true

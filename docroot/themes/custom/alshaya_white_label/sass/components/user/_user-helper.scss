@@ -5,11 +5,14 @@
     padding-bottom: 0.75rem;
 
     @include breakpoint($tablet) {
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.7rem;
+      margin-top: 0.437rem;
     }
 
     @include breakpoint($desktop) {
+      margin-top: 0;
       margin-bottom: 1.9rem;
+      padding-bottom: 0.875rem;
     }
   }
 
@@ -19,6 +22,12 @@
 
   .block-local-tasks-block {
     display: none;
+  }
+}
+
+.c-user--node {
+  .subtitle {
+    border-bottom: 1px solid $white;
   }
 }
 
@@ -88,10 +97,35 @@
     margin: 4.5em 1.5em 1em;
   }
 
+  @include breakpoint($desktop) {
+    padding: 0.6em 0;
+    padding-left: 0.8rem;
+    margin: 4.5em auto 1em;
+  }
+
   .user-login-form {
     @include breakpoint($tablet) {
       position: relative;
       top: 0.5em;
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 24.8rem;
+    }
+
+    .form-text,
+    .form-email {
+      color: $black;
+
+      @include breakpoint($desktop) {
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    .form-type-password .form-text {
+      margin-top: 0.56rem;
+      font-size: 1.25rem;
+      letter-spacing: 0.312rem;
     }
   }
 
@@ -102,6 +136,10 @@
       top: -4.9rem;
       margin-left: 0;
     }
+
+    @include breakpoint($desktop) {
+      top: -4.5rem;
+    }
   }
 
   .user-login-form {
@@ -111,16 +149,32 @@
 
     .form-item {
       margin-top: 5.1em;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 4rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 4.6em;
+      }
     }
 
     #edit-actions {
       margin-top: 1.9rem;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 0.5rem;
+      }
     }
   }
 
   .c-sidebar-second {
     #block-youllbeableto {
-      margin-bottom: 3.23rem;
+      margin-bottom: 4.1rem;
+    }
+
+    h2 {
+      margin-bottom: 0.9375rem;
     }
   }
 }
@@ -236,5 +290,75 @@
   .c-page-title {
     top: -3.5rem;
     margin-left: 0;
+  }
+}
+
+.c-user-password.user-page {
+  @include breakpoint($upto-desktop) {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 1.5625rem;
+    margin-right: 1.5625rem;
+
+    .password--message {
+      font-size: 0.8125rem;
+    }
+
+    .form-wrapper {
+      margin-top: 1rem;
+    }
+  }
+
+  .user-pass .form-item {
+    input {
+      padding-bottom: 0.5rem;
+      margin-top: 0.56rem;
+    }
+  }
+
+  @include breakpoint($upto-tablet) {
+    margin-left: 0.5rem;
+    margin-top: 2.38em;
+    margin-right: 0.5rem;
+    padding-top: 1.5rem;
+
+    .user-pass .form-item {
+      margin-top: 2.7rem;
+    }
+
+    .password--message {
+      max-width: 14.0625rem;
+    }
+
+    .form-wrapper {
+      margin-top: 1.7rem;
+    }
+  }
+
+  .messages.messages--warning,
+  .messages.messages--error {
+    margin-top: 0;
+  }
+}
+
+.l-two--sf {
+  &.c-address-book,
+  &.c-communication-preferences {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        max-width: 16.8125rem;
+        width: 24%;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 72%;
+        max-width: 57.5625rem;
+        float: right;
+      }
+    }
   }
 }

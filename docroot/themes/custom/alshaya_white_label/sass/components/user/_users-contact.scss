@@ -76,4 +76,15 @@
     max-width: 11.7rem;
     width: calc(50% - 12px);
   }
+
+  .mobile-number-field {
+    .form-item--error-message {
+      display: none;
+
+      &.is-visible {
+        display: block;
+        padding-top: 0.5rem;
+      }
+    }
+  }
 }
