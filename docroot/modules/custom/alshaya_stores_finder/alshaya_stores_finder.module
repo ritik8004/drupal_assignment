@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_page_attachments().
@@ -50,5 +51,22 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#weight' => 100,
       ];
     }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function alshaya_stores_finder_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() == 'stores_finder' && ($display_id === 'page_1' || $display_id === 'page_3')) {
+    $header_text = '';
+    $exposed_input = $view->getExposedInput();
+    if (!empty($exposed_input)) {
+      if (!empty($exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'])) {
+        $header_text = t('@total closest stores to') . ' ' . $exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'];
+      }
+    }
+
+    $view->setHandlerOption($display_id, 'header', 'result', 'content', $header_text);
   }
 }

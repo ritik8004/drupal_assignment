@@ -6,10 +6,10 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.store_finder = {
+  Drupal.behaviors.storeFinder = {
     attach: function (context, settings) {
 
-      $('.set-center-location').click(function () {
+      $('.set-center-location').on('click', function () {
         // Id of the row.
         var elementID = $(this).attr('id');
         Drupal.geolocation.loadGoogle(function () {
