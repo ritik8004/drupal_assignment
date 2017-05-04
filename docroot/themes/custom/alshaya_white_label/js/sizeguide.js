@@ -33,6 +33,13 @@
           }
         });
       });
+
+      $('#drupal-modal .field--name-body, #drupal-modal .sharethis-wrapper').wrapAll('<div class="modal-product-wrapper"></div>');
+      $('.modal-product-wrapper').before('<h3 class="more-content"><span class="link">' + Drupal.t('View full product details') + '</span><span class="arrow"></span></h3>');
+      $('.modal-product-wrapper').hide();
+      $('h3.more-content').click(function () {
+        $('.modal-product-wrapper').toggle();
+      });
     }
   };
 
