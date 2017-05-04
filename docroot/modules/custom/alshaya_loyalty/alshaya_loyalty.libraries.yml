@@ -1,5 +1,4 @@
 format_input:
-  version: VERSION
   js:
     js/format-input.js: {}
   dependencies:
