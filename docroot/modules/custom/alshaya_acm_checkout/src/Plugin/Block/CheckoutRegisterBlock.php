@@ -84,11 +84,8 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
 
     // @TODO: Remove the fix when we get the full order details.
     $order_id = str_replace('"', '', $order_data['id']);
-    $order_id = str_pad($order_id, 9, '0', STR_PAD_LEFT);
-
     $orders = alshaya_acm_customer_get_user_orders($email);
-
-    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
+    $order_index = array_search($order_id, array_column($orders, 'order_id'));
 
     if ($order_index === FALSE) {
       return [];
