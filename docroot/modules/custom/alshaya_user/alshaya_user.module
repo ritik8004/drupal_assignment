@@ -247,7 +247,6 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
   $element['country-code']['#value'] = $default_site_country;
   $options = $element['country-code']['#options'];
   $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
-  $element['mobile']['#required'] = TRUE;
 
   return $element;
 }
