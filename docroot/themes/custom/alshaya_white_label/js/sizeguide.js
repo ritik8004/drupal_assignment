@@ -17,7 +17,7 @@
             }
           }
         );
-        var currentsize = $('.form-item-configurables-size select option:selected').text();
+        var currentsize = $('.form-item-configurables-size select option:selected').text() === '- Select -' ? $('.form-item-configurables-size select option:nth-child(2)').text() : $('.form-item-configurables-size select option:selected').text();
         $('#size-select').before('<div><span class="size-label">Size : </span><span class="size-value">' + currentsize + '</span></div>');
       }
       $('.form-item-configurables-size select').hide();

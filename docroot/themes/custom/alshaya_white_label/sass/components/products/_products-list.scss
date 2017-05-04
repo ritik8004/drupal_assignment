@@ -32,6 +32,7 @@
     font-weight: normal;
     text-transform: lowercase;
     color: $cerulean-two;
+    margin-top: 0.45rem;
     font-family: $alshaya-thin;
 
     p {
@@ -117,6 +118,21 @@
   .c-products__item__link {
     color: $black;
   }
+
+  ul.js-pager__items {
+    text-align: center;
+    padding: 0;
+    list-style: none;
+    margin-bottom: 7.1rem;
+
+    a {
+      color: $marine-blue;
+      font-size: 0.813rem;
+      border: 1px solid $marine-blue;
+      padding: 0.563rem 7.12rem;
+      font-family: $alshaya-thin;
+    }
+  }
 }
 
 .c-facet__blocks__wrapper--mobile {
@@ -170,6 +186,14 @@
       top: 2.1875rem;
     }
 
+    @include breakpoint($only-mobile) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
     width: 16.8125rem;
     position: absolute;
     display: none;
@@ -209,6 +233,7 @@
   @include breakpoint($tablet) {
     &:first-child {
       transform: translate(#{negate-value(-3.7)}rem, 0);
+      float: #{$left};
     }
   }
 

@@ -319,6 +319,12 @@
         float: $left;
       }
     }
+
+    li {
+      @include clearfix;
+
+      margin-bottom: 1rem;
+    }
   }
 }
 
@@ -404,12 +410,16 @@ body.alias--cart {
   }
 
   h1 {
-    font-size: 24px;
+    font-size: 1.125rem;
     font-weight: normal;
     color: $cobalt-blue;
     border-bottom: 1px solid $white;
     margin-bottom: 12px;
     padding-bottom: 12px;
+
+    @include breakpoint($tablet) {
+      font-size: 1.5rem;
+    }
 
     em {
       font-style: inherit;
@@ -420,8 +430,10 @@ body.alias--cart {
     @extend %l-container--full;
   }
 
-  #table-cart-items table {
-    width: 100%;
+  #table-cart-items {
+    table {
+      width: 100%;
+    }
 
     thead {
       background: $white-three;
@@ -560,34 +572,11 @@ body.alias--cart {
       }
 
       select {
-        -webkit-appearance: none;
-        border: 1px solid $white-two;
-        border-radius: 0;
-        background-color: $white-five;
-        padding: 0.5rem 3.2rem 0.5rem 0.625rem;
-        width: 70px;
-        height: 35px;
-        font-size: 12px;
-        outline: none;
+        @include select-style(4.375rem);
       }
 
       .form-type-select {
-        width: 70px;
-        margin-bottom: 0.75rem;
-        position: relative;
-
-        @include icon(chevrondown, after) {
-          border-#{$left}: 1px solid $white;
-          font-size: 28px;
-          line-height: 35px;
-          pointer-events: none;
-          position: absolute;
-          right: 0;
-          top: 0;
-          text-align: center;
-          background-color: $white-two;
-          width: 35px;
-        }
+        @include select-wrapper(4.375rem);
       }
     }
   }
@@ -720,6 +709,10 @@ body.alias--cart {
 
   + #edit-privilege-card-wrapper {
     display: none;
+  }
+
+  #edit-continue-shopping {
+    display: block;
   }
 }
 

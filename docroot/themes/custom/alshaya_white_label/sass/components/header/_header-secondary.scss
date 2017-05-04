@@ -6,7 +6,7 @@
   @include breakpoint($upto-desktop) {
     background: $white-five;
     display: none;
-    position: absolute;
+    position: fixed;
     width: 80%;
     height: 100%;
     z-index: 4;
@@ -20,6 +20,10 @@
   background: $white-four;
   font-family: $alshaya-thin;
   text-transform: lowercase;
+
+  &.block--display {
+    z-index: 15;
+  }
 
   ul {
     @extend %list-clear;

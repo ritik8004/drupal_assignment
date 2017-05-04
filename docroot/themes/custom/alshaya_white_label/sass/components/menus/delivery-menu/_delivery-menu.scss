@@ -1,19 +1,32 @@
 .c-delivery-menu {
-  @extend %l-container--full;
-
-  background: $soft-blue;
-  padding: 0;
+  max-width: 1026px;
   text-transform: lowercase;
+  margin: 2em auto;
+  padding: 0;
+
+  @include breakpoint($only-tablet) {
+    padding-left: 2.5em;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 1em auto;
+  }
 }
 
 .c-delivery-menu__tab {
   text-align: center;
   list-style: none;
-  padding: 1px 0;
-  width: 100%;
-  float: #{$left};
+  padding: 0.375rem 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 326px;
+  border: 1px solid $cerulean-two;
+  box-shadow: 5px 5px 0 rgba(0, 132, 204, 0.15);
+  position: relative;
 
   @include breakpoint($only-mobile) {
+    max-width: 100%;
+
     &:nth-child(n + 2) {
       display: none;
     }
@@ -21,34 +34,46 @@
 
   @include breakpoint($only-tablet) {
     width: 50%;
-
-    &:first-child {
-      border-#{$right}: 1px solid $white-five;
-    }
+    max-width: 46%;
 
     &:last-child {
       display: none;
     }
   }
 
-  @include breakpoint($desktop) {
-    max-width: 26.5625rem;
-    width: 33.33%;
+  @include breakpoint($tablet) {
+    margin-right: 24px;
+    float: left;
+  }
 
-    &:nth-child(2) {
-      border-#{$right}: 1px solid $white-five;
-      border-#{$left}: 1px solid $white-five;
+  &:last-child {
+    margin-right: 0;
+  }
+
+  .field--name-field-title {
+    display: block;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: $alshaya-bold;
+    color: $cerulean-two;
+
+    @include breakpoint($only-mobile) {
+      font-size: 16px;
     }
   }
-}
 
-.c-delivery-menu__link {
-  color: $white-five;
-  display: block;
-  padding: 0.375rem 0;
-  text-decoration: none;
-}
+  .field--name-field-sub-title {
+    font-size: 12px;
+    font-family: $alshaya-thin;
+    color: $cerulean-two;
 
-.c-delivery-menu__description {
-  font-size: 0.875rem;
+    @include breakpoint($only-mobile) {
+      font-size: 10px;
+    }
+  }
+
+  .field--name-field-link a {
+    @include u-image-replacement;
+    @include u-overlay-content;
+  }
 }

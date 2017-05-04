@@ -9,7 +9,7 @@ id: user.user.field_privilege_card_number
 field_name: field_privilege_card_number
 entity_type: user
 bundle: user
-label: 'Privilege card number'
+label: 'Privilege card number (optional)'
 description: ''
 required: false
 translatable: false

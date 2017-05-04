@@ -71,11 +71,6 @@ function alshaya_custom_modules_installed($modules) {
     ->set('region', '-1')
     ->save();
 
-  // Unset the Block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_breadcrumbs')
-    ->set('region', '-1')
-    ->save();
-
   // Set the block configuration settings for system branding block.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_branding')
     ->set('settings.use_site_name', FALSE)

@@ -11,6 +11,20 @@
 
   ul {
     @extend %list-clear;
+
+    input[type="text"] {
+      border: 1px solid $white;
+      font-family: $alshaya-thin;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      width: 13rem;
+      margin: 0.45rem 0 1rem;
+    }
+
+    li {
+      margin-#{$left}: -1px;
+      margin-bottom: 0.8rem;
+    }
   }
 
   label {

@@ -1,4 +1,4 @@
 entity:
   id: 2
-  entity_type: 'node'
-  view_mode: 'full'
+  entity_type: node
+  view_mode: full

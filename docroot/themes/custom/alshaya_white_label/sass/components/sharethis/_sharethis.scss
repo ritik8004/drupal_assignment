@@ -2,10 +2,13 @@
 
 .sharethis-wrapper {
   & > span {
-    padding: 10px 10px 10px 0;
     font-size: 36px;
+    width: 18%;
+    display: inline-block;
+    text-align: center;
 
     &:hover {
+      cursor: pointer;
       color: $cherry;
     }
   }

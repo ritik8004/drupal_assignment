@@ -18,9 +18,10 @@
       $('.address--delete a').click(function () {
         $('body').addClass('modal-overlay');
 
-        setTimeout(function () {
+        $(document).ajaxComplete(function () {
           toggleOverlay('.ui-dialog-titlebar-close', 'modal-overlay');
-        }, 5000);
+          toggleOverlay('.ui-dialog-buttonpane .dialog-cancel', 'modal-overlay');
+        });
       });
     }
   };
