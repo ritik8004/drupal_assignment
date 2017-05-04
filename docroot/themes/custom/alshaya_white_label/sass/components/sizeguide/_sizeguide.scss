@@ -6,12 +6,12 @@
 
 // Size Guide modal popup theming
 .ui-dialog {
-  height: 100vh !important;
-  width: 100vw !important;
+  height: 100% !important;
+  width: 100% !important;
   top: 0 !important;
   left: 0 !important;
   background: rgba(0, 0, 0, 0.5);
-  padding: calc((100vh - 650px) / 2) calc((100vw - 1080px) / 2);
+  padding: 100px calc((100% - 1080px) / 2);
   overflow: hidden;
 
   .ui-dialog-titlebar {
