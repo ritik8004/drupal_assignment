@@ -160,12 +160,19 @@ function alshaya_loyalty_register_user_set_privilege_card_number(array &$form, F
   elseif ($apc_number = $form_state->getValue('field_privilege_card_number')) {
     $value = $apc_number[0]['value'];
   }
-
+  // Get the loyalty card number validation settings.
+  $validation = alshaya_loyalty_get_validation_settings();
   // Clean the element value.
-  $value = _alshaya_loyalty_clean_card_number($value);
-
-  if (isset($value)) {
-    $form_state->setValue('field_privilege_card_number', [['value' => $value]]);
+  $processed_value = _alshaya_loyalty_clean_card_number($value);
+  // If the field value is empty or not a valid apc number.
+  // Try to Get the value from temp store if exists.
+  if (empty($processed_value) || !alshaya_loyalty_check_valid_apc_number($processed_value, $validation['length'], $validation['value_start_with'])) {
+    $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_loyalty');
+    $processed_value = $temp_store->get('card_number') ? $temp_store->get('card_number') : NULL;
+  }
+  // Validate the final value to be stored.
+  if (!empty($processed_value) && alshaya_loyalty_check_valid_apc_number($processed_value, $validation['length'], $validation['value_start_with'])) {
+    $form_state->setValue('field_privilege_card_number', [['value' => $processed_value]]);
   }
 }
 
@@ -173,14 +180,21 @@ function alshaya_loyalty_register_user_set_privilege_card_number(array &$form, F
  * Save privilege card number for current user.
  */
 function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInterface $form_state) {
-  if (\Drupal::currentUser()->isAuthenticated() && $apc_number = $form_state->getValue('privilege_card_number')) {
+  if ($apc_number = $form_state->getValue('privilege_card_number')) {
     // Clean the element value.
     $apc_number = _alshaya_loyalty_clean_card_number($apc_number);
 
-    $user = User::load(\Drupal::currentUser()->id());
-    $user->get('field_privilege_card_number')->set(0, $validation['value_start_with'] . $apc_number);
-    $user->save();
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      $user = User::load(\Drupal::currentUser()->id());
+      $user->get('field_privilege_card_number')->set(0, $validation['value_start_with'] . $apc_number);
+      $user->save();
+    }
+    elseif (Drupal::currentUser()->isAnonymous()) {
+      $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_loyalty');
+      $temp_store->set('card_number', $apc_number);
+    }
   }
+
 }
 
 /**
@@ -197,7 +211,6 @@ function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInter
  *   Return true of false.
  */
 function alshaya_loyalty_check_valid_apc_number($value, $max_length, $value_start_with) {
-
   if (!is_numeric($value)) {
     return FALSE;
   }
@@ -219,16 +232,21 @@ function alshaya_loyalty_check_valid_apc_number($value, $max_length, $value_star
 function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $form_state) {
   $validation = alshaya_loyalty_get_validation_settings();
 
+  $default_value = NULL;
   if (\Drupal::currentUser()->isAuthenticated()) {
     $user = User::load(\Drupal::currentUser()->id());
     $card_number = $user->get('field_privilege_card_number')->getValue();
     $default_value = $card_number[0]['value'];
   }
+  elseif (Drupal::currentUser()->isAnonymous()) {
+    $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_loyalty');
+    $default_value = $temp_store->get('card_number') ? $temp_store->get('card_number') : NULL;
+  }
 
   $form['privilege_card_wrapper'] = [
     '#type' => 'details',
     '#title' => t('Enter a priviledge card number'),
-    '#open' => FALSE,
+    '#open' => $default_value ? TRUE : FALSE,
     '#weight' => 3,
     '#after_build' => ['alshaya_loyalty_privilege_card_wrapper_after_build'],
     '#prefix' => '<div id="details-privilege-card-wrapper">',
@@ -255,6 +273,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     ],
     '#element_validate' => [
       '_alshaya_loyalty_validate_field_value',
+      '_alshaya_loyalty_compare_field_values',
     ],
     '#ajax' => [
       'callback' => 'alshaya_loyalty_privilege_card_validation_ajax_callback',
@@ -262,12 +281,10 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
       'method' => 'replace',
       'wrapper' => 'details-privilege-card-wrapper',
     ],
-    '#limit_validation_errors' => [['privilege_card_number'],['privilege_card_number2']],
+    '#limit_validation_errors' => [['privilege_card_number'], ['privilege_card_number2']],
     '#default_value' => isset($default_value) ? $default_value : $validation['value_start_with'],
     '#disabled' => isset($default_value) ? TRUE : FALSE,
   ];
-
-  $form['#validate'][] = '_alshaya_loyalty_compare_field_values';
 
   _alshaya_loyalty_form_attachements($form, $form_state, $validation);
 }
@@ -311,7 +328,6 @@ function _alshaya_loyalty_compare_field_values(&$form, FormStateInterface $form_
   if (!empty($card1) && ($card1 != $card2)) {
     $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
   }
-  $card2 = $form_state->getValue('privilege_card_number2');
 }
 
 /**
