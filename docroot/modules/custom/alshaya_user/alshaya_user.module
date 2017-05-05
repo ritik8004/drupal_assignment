@@ -263,5 +263,10 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
   $options = $element['country-code']['#options'];
   $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
 
+  // Make mobile number required only for contact form.
+  if ($form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_contact_form') {
+    $element['mobile']['#required'] = TRUE;
+  }
+
   return $element;
 }
