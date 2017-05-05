@@ -63,6 +63,12 @@ header {
       display: table-cell;
       vertical-align: middle;
     }
+
+    @include breakpoint($only-mobile) {
+      .block-system-branding-block {
+        width: 50%;
+      }
+    }
   }
 
   form,
@@ -87,7 +93,7 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      display: none;
+      display: none !important;
     }
 
     .form-item-keywords,
