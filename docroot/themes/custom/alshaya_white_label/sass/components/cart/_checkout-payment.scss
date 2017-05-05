@@ -42,3 +42,26 @@
     padding: 1em;
   }
 }
+
+#edit-checkout-terms {
+  padding: 0.25rem 1.35rem;
+
+  legend {
+    display: none;
+  }
+
+  a {
+    color: $soft-blue;
+  }
+
+  .form-type-checkbox {
+    .option::before {
+      margin-right: 0.9em;
+      top: 0;
+    }
+
+    p {
+      width: 58%;
+    }
+  }
+}
