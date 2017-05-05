@@ -60,6 +60,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'barcode' => NULL,
       'order_details' => NULL,
       'products' => NULL,
+      'products_count' => NULL,
       'delivery_detail_notice' => NULL,
       'account' => NULL,
       'currency_code' => NULL,

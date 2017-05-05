@@ -403,6 +403,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
   $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
   $build['#products'] = $products;
+  $build['#products_count'] = count($build['#products']);
   // @TODO: MMCPA-641.
   $build['#delivery_detail_notice'] = t('Your order will be delivered between 1 and 3 days');
 

@@ -11,6 +11,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Element\PasswordConfirm;
 
 /**
@@ -226,6 +227,20 @@ function alshaya_user_form_change_pwd_form_process_pass(&$element, FormStateInte
     </div>';
 
   return $element;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_user_user_presave(EntityInterface $entity) {
+  // Remove leading zeroes to avoid issues of having unknown number type.
+  if ($values = $entity->get('field_mobile_number')->getValue()) {
+    foreach ($values as $index => $phone) {
+      $values[$index]['local_number'] = ltrim($phone['local_number'], 0);
+    }
+
+    $entity->get('field_mobile_number')->setValue($values);
+  }
 }
 
 /**

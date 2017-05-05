@@ -1,0 +1,32 @@
+diff --git a/modules/acq_cart/src/Cart.php b/modules/acq_cart/src/Cart.php
+index 5ec0479..cf9f736 100644
+--- a/modules/acq_cart/src/Cart.php
++++ b/modules/acq_cart/src/Cart.php
+@@ -435,11 +435,6 @@ public function getCart() {
+     if (isset($this->cart)) {
+       $cart = $this->cart;
+ 
+-      // Don't tell conductor our stored totals for no reason.
+-      if (isset($cart->totals)) {
+-        unset($cart->totals);
+-      }
+-
+       // Don't set blank addresses, Magento doesn't like this.
+       if (isset($cart->shipping) && empty($cart->shipping->street)) {
+         unset($cart->shipping);
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index 84b0c45..8153691 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -114,6 +114,11 @@ public function updateCart() {
+       $update = $cart->getCart();
+     }
+ 
++    // Don't tell conductor our stored totals for no reason.
++    if (isset($cart->totals)) {
++      unset($cart->totals);
++    }
++
+     $cart = (object) \Drupal::service('acq_commerce.api')->updateCart($cart_id, $update);
+ 
+     if (empty($cart)) {

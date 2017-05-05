@@ -215,7 +215,6 @@ class CustomerController extends ControllerBase {
       '#theme' => 'image',
       '#uri' => theme_get_setting('logo.url'),
     ];
-    $build['#products_count'] = count($build['#products']);
     $build['#theme'] = 'user_order_print';
 
     return $build;
@@ -241,12 +240,11 @@ class CustomerController extends ControllerBase {
 
     // @TODO: Remove the fix when we get the full order details.
     $order_id = str_replace('"', '', $order_data['id']);
-    $order_id = str_pad($order_id, 9, '0', STR_PAD_LEFT);
 
     // Get the orders to display for current user.
     $orders = alshaya_acm_customer_get_user_orders($email);
 
-    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
+    $order_index = array_search($order_id, array_column($orders, 'order_id'));
 
     if ($order_index === FALSE) {
       throw new NotFoundHttpException();
@@ -268,8 +266,7 @@ class CustomerController extends ControllerBase {
       '#theme' => 'image',
       '#uri' => theme_get_setting('logo.url'),
     ];
-    $build['#barcode'] = alshaya_acm_customer_get_barcode($order_id);
-    $build['#products_count'] = count($build['#products']);
+    $build['#barcode'] = alshaya_acm_customer_get_barcode($order['increment_id']);
     $build['#account'] = $account;
     $build['#theme'] = 'user_order_print';
 
