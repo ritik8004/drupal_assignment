@@ -20,6 +20,7 @@
   margin-bottom: 0;
   margin-top: 0;
   text-transform: lowercase;
+  outline: none;
 
   &::after {
     @include u-center--vertically;
