@@ -39,13 +39,15 @@
 
         li {
           overflow: hidden;
+          padding: 3px;
+          margin-bottom: 5px !important;
 
           @include breakpoint($tablet) {
             height: 60px !important;
           }
 
           @include breakpoint($desktop) {
-            height: 72px !important;
+            height: 80px !important;
           }
 
           &.active {
@@ -53,7 +55,9 @@
           }
 
           img {
-            width: 100%;
+            max-width: 100%;
+            width: 81px;
+            height: 72px;
           }
         }
       }
