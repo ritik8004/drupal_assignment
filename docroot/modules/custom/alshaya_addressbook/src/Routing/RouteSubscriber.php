@@ -19,10 +19,18 @@ class RouteSubscriber extends RouteSubscriberBase {
       $route->setDefault('_controller', '\Drupal\alshaya_addressbook\Controller\AlshayaAddressBookController::setDefault');
     }
 
-    // Change controller for address_book page.
+    // Change controller & title for address_book page.
     if ($route = $collection->get('entity.profile.type.address_book.user_profile_form')) {
+      $route->setDefault('_title_callback', '\Drupal\alshaya_addressbook\Routing\RouteSubscriber::addressBookPageTitle');
       $route->setDefault('_controller', '\Drupal\alshaya_addressbook\Controller\AlshayaAddressBookController::userProfileForm');
     }
+  }
+
+  /**
+   * Page title for address_book page.
+   */
+  public function addressBookPageTitle() {
+    return t('Address book');
   }
 
 }
