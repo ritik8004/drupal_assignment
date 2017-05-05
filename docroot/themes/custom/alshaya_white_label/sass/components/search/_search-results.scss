@@ -35,6 +35,10 @@
     }
 
     .view-id-search {
+      .view-header {
+        display: none;
+      }
+
       .views-row {
         float: $left;
         text-align: center;
