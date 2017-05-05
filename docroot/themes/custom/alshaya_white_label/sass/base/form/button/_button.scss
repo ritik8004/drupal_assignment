@@ -20,6 +20,7 @@
 .button {
   &.status-pending,
   &.status-delivered,
+  &.status-complete,
   &.status-processing,
   &.status-returned {
     font-family: $arial;
@@ -47,7 +48,8 @@
     background-color: $grey-ash;
   }
 
-  &.status-delivered {
+  &.status-delivered,
+  &.status-complete {
     background-color: $medium-green;
   }
 }
