@@ -260,8 +260,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#url' => Url::fromRoute('<front>'),
       '#suffix' => '</div>',
     ];
-
-    unset($form['actions']['update']);
   }
 
   $form['coupon']['#type'] = 'hidden';
