@@ -108,8 +108,8 @@ index ddbf25f..812d9d5 100644
 +        $field->setCardinality($field_info['cardinality']);
 +
 +
-+        $field->setDisplayConfigurable('form', (bool) $field_info['visible_form']);
-+        $field->setDisplayConfigurable('view', (bool) $field_info['visible_view']);
++        $field->setDisplayConfigurable('form', 1);
++        $field->setDisplayConfigurable('view', 1);
 +
 +        // We will use attr prefix to avoid conflicts with default base fields.
 +        $fields['attr_' . $field_info['machine_name']] = $field;

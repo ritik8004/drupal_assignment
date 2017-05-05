@@ -478,8 +478,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];
         $field->setCardinality($field_info['cardinality']);
 
-        $field->setDisplayConfigurable('form', (bool) $field_info['visible_form']);
-        $field->setDisplayConfigurable('view', (bool) $field_info['visible_view']);
+        $field->setDisplayConfigurable('form', 1);
+        $field->setDisplayConfigurable('view', 1);
 
         // We will use attr prefix to avoid conflicts with default base fields.
         $fields['attr_' . $machine_name] = $field;
