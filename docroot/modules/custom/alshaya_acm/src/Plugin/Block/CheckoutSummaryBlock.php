@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -162,6 +163,22 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         $file_uri = $image->getFileUri();
         $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
       }
+
+      // Check if we can find a parent SKU for this.
+      $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
+
+      if (is_object($parent_sku) && $parent_sku instanceof SKUInterface) {
+        /* @var \Drupal\node\Entity\Node $parent_node */
+        $parent_node = alshaya_acm_product_get_display_node($parent_sku->getSKU());
+        if ($parent_node) {
+          $item['name'] = [
+            '#title' => $parent_node->getTitle(),
+            '#type' => 'link',
+            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]),
+          ];
+        }
+      }
+
       // Create products array to be used in twig.
       $products[] = [
         'name' => $item['name'],
