@@ -16,9 +16,15 @@
           $('.region__content .region__sidebar-first #block-filterbar').addClass('mobile-filter-bar c-accordion');
           $('.mobile-filter-bar ul li.clear-all').insertAfter('.filter-menu-label .label');
           var countFilters = $('.mobile-filter-bar ul li').length;
-          $('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-            + '(' + countFilters + ')</h2>').insertBefore('.mobile-filter-bar ul');
-
+          if (countFilters === 0 && $.trim($('.mobile-filter-bar').html()).length === 0) {
+            $('.mobile-filter-bar').append('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+              + ' (' + countFilters + ')</h2>');
+            $('.mobile-filter-bar').addClass('empty');
+          }
+          else {
+            $('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+              + '(' + countFilters + ')</h2>').insertBefore('.mobile-filter-bar ul');
+          }
           // Toggle the filter menu when click on the label.
           $('.filter-menu-label .label').click(function () {
             $('.page-wrapper, .header--wrapper, .c-pre-content').toggleClass('show-overlay');
