@@ -34,7 +34,7 @@ body {
     }
 
     .blend {
-      background-color: #eee;
+      background-color: $whisper-ash;
 
       .delivery--method {
         margin-top: 1.7rem;
@@ -51,6 +51,15 @@ body {
   .product--count {
     border-top: 1px solid $white-five;
     border-bottom: 1px solid $white-five;
+  }
+
+  .sub-total-row .blend,
+  .delivery-charge-row .blend {
+    background: $white-four;
+  }
+
+  .total-row .warm--white {
+    background-color: $whisper-light;
   }
 }
 
