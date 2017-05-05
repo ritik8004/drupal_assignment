@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @ACQCheckoutPane(
  *   id = "guest_delivery_collect",
- *   label = @Translation("Click and Collect"),
+ *   label = @Translation("<h2>Click & Collect</h2><p>Collect your order in-store</p>"),
  *   defaultStep = "delivery",
  *   wrapperElement = "fieldset",
  * )
@@ -39,7 +39,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $pane_form['guest_delivery_collect']['summary'] = [
-      '#markup' => 'Click and collect',
+      '#markup' => $this->t('coming soon'),
     ];
 
     return $pane_form;

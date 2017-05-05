@@ -12,7 +12,7 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
  *
  * @ACQCheckoutPane(
  *   id = "guest_delivery_home",
- *   label = @Translation("Home delivery"),
+ *   label = @Translation("<h2>Home delivery</h2><p>Standard delivery for purchases over KD 250</p>"),
  *   defaultStep = "delivery",
  *   wrapperElement = "fieldset",
  * )
@@ -39,10 +39,6 @@ class GuestDeliveryHome extends AddressFormBase {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $pane_form['guest_delivery_home']['summary'] = [
-      '#markup' => $this->t('Standard delivery for purchases over KD 250'),
-    ];
-
     $pane_form['guest_delivery_home']['title'] = [
       '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
     ];
