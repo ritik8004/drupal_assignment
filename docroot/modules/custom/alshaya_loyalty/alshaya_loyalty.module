@@ -145,7 +145,7 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
     // Validate number against validation settings.
     if (($element_value != $validation['value_start_with'])
         && !alshaya_loyalty_check_valid_apc_number($element_value, $validation['length'], $validation['value_start_with'])) {
-      $form_state->setErrorByName($field, t("@number is not a valid privilege  card number.", ['@number' => $element_value]));
+      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
     }
   }
 }
