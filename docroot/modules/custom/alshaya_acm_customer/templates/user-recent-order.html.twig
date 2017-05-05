@@ -17,17 +17,17 @@
           <div class="light">{{ 'Total:' | t }} {{ order.items | length }} {{ 'items' | t }}</div>
 
           <div class="tablet-only">
-            <div class="button status-{{ order.status }}">{{ order.status }}</div>
+            <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
           </div>
       </td>
 
       <td class="mobile-only toggle--icon">
-          <div class="button status-{{ order.status }}">{{ order.status }}</div>
+          <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
           <div class="icon-ic_chevrondown"></div>
       </td>
 
       <td class="desktop-only">
-          <div class="button status-{{ order.status }}">{{ order.status }}</div>
+        <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
       </td>
 
       <td class="above-mobile toggle--icon">
