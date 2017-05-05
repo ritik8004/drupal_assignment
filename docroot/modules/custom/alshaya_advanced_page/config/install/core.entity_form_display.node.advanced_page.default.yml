@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.node.advanced_page.body
     - field.field.node.advanced_page.field_banner
+    - field.field.node.advanced_page.field_block
     - field.field.node.advanced_page.field_delivery_banner
     - field.field.node.advanced_page.field_meta_tags
     - field.field.node.advanced_page.field_promo_banner_full_width
@@ -12,6 +13,7 @@ dependencies:
     - field.field.node.advanced_page.field_slider
     - node.type.advanced_page
   module:
+    - block_field
     - field_group
     - metatag
     - paragraphs
@@ -95,11 +97,13 @@ content:
       summary_rows: 3
       placeholder: ''
     third_party_settings: {  }
+    region: content
   created:
     type: datetime_timestamp
     weight: 3
     settings: {  }
     third_party_settings: {  }
+    region: content
   field_banner:
     type: entity_reference_paragraphs
     weight: 8
@@ -111,6 +115,15 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
+  field_block:
+    weight: 112
+    settings:
+      plugin_id: ''
+      settings: {  }
+    third_party_settings: {  }
+    type: block_field_default
+    region: content
   field_delivery_banner:
     type: entity_reference_paragraphs
     weight: 111
@@ -122,11 +135,13 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
   field_meta_tags:
     weight: 110
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
+    region: content
   field_promo_banner_full_width:
     type: entity_reference_paragraphs
     weight: 9
@@ -138,6 +153,7 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
   field_promo_blocks:
     type: entity_reference_paragraphs
     weight: 13
@@ -149,6 +165,7 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
   field_related_info:
     type: entity_reference_paragraphs
     weight: 9
@@ -160,6 +177,7 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
   field_slider:
     type: entity_reference_paragraphs
     weight: 8
@@ -171,28 +189,33 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
   langcode:
     type: language_select
     weight: 1
     settings: {  }
     third_party_settings: {  }
+    region: content
   path:
     type: path
     weight: 6
     settings: {  }
     third_party_settings: {  }
+    region: content
   promote:
     type: boolean_checkbox
     settings:
       display_label: true
     weight: 4
     third_party_settings: {  }
+    region: content
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
     weight: 5
     third_party_settings: {  }
+    region: content
   title:
     type: string_textfield
     weight: 0
@@ -200,8 +223,10 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+    region: content
   translation:
     weight: 10
+    region: content
   uid:
     type: entity_reference_autocomplete
     weight: 2
@@ -210,4 +235,5 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+    region: content
 hidden: {  }

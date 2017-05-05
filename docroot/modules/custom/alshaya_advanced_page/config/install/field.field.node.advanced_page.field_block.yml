@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_block
+    - node.type.advanced_page
+  module:
+    - block_field
+id: node.advanced_page.field_block
+field_name: field_block
+entity_type: node
+bundle: advanced_page
+label: Block
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  plugin_ids: {  }
+field_type: block_field

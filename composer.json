@@ -40,7 +40,8 @@
         "drupal/search_api_autocomplete": "1.x-dev",
         "drupal/acquia_connector": "1.9.0",
         "drupal/better_exposed_filters": "3.x-dev",
-        "drupal/geolocation": "^1.10"
+        "drupal/geolocation": "^1.10",
+        "drupal/block_field": "^1.0@alpha"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
