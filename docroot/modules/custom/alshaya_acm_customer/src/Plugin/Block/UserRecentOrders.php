@@ -193,6 +193,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
               // Item name for order.
               $order['item_names'][] = $order['items'][$key]['name'];
+              $order['status'] = alshaya_acm_customer_get_order_status($order);
             }
           }
 
