@@ -1,0 +1,40 @@
+diff --git a/modules/acq_payment/src/Plugin/PaymentMethod/Cybersource.php b/modules/acq_payment/src/Plugin/PaymentMethod/Cybersource.php
+new file mode 100644
+index 0000000..cdb3755
+--- /dev/null
++++ b/modules/acq_payment/src/Plugin/PaymentMethod/Cybersource.php
+@@ -0,0 +1,33 @@
++<?php
++
++namespace Drupal\acq_payment\Plugin\PaymentMethod;
++
++use Drupal\Core\Form\FormStateInterface;
++
++/**
++ * Provides the Cybersource payment method.
++ *
++ * @ACQPaymentMethod(
++ *   id = "cybersource",
++ *   label = @Translation("Cybersource"),
++ * )
++ */
++class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildPaymentSummary() {
++    return $this->t('Cybersource details here.');
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
++    $pane_form = parent::buildPaneForm($pane_form, $form_state, $complete_form);
++
++    return $pane_form;
++  }
++
++}
+
