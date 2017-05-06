@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_checkout\Plugin\PaymentMethod;
+namespace Drupal\alshaya_acm_knet\Plugin\PaymentMethod;
 
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
