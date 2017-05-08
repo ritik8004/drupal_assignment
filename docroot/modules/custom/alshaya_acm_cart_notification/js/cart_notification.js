@@ -42,12 +42,16 @@
 
       $.fn.stopSpinner = function(data) {
         l.stop();
-        l.selector.addClass('hello-world');
-        $('.ladda-label').html(Drupal.t('Added'));
+        if (data === 'success') {
+          $('.ladda-label').html(Drupal.t('added!'));
+        }
+        else {
+          $('.ladda-label').html(Drupal.t('error!'));
+        }
         setTimeout(
           function() {
             $('.ladda-label').html(Drupal.t('add to cart'));
-          }, 1000);
+          }, 1700);
       };
     }
   };
