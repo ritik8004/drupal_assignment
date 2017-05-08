@@ -36,7 +36,7 @@
 
     .view-id-search {
       .view-header {
-        display: none;
+        @include u-visibility(none);
       }
 
       .views-row {
