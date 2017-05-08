@@ -4,22 +4,62 @@
   max-width: 100%;
 
   .cloudzoom__herocontainer {
-    width: calc(100% - (92px + 1rem));
-    float: right;
+    @include breakpoint($only-tablet) {
+      width: 100%;
+      float: none;
+    }
+
+    @include breakpoint($desktop) {
+      width: calc(100% - (92px + 1rem));
+      float: #{$right};
+    }
   }
 
   #cloud-zoom-wrap {
-    height: 504px;
+    @include breakpoint($only-tablet) {
+      height: 417px;
+    }
+
+    @include breakpoint($desktop) {
+      height: 504px;
+    }
+
+    #wrap {
+      width: 100%;
+    }
+
+    img {
+      width: 100%;
+    }
   }
 
   .cloudzoom__thumbnails {
-    width: 90px;
-    margin-right: 1rem;
-    float: left;
+    @include breakpoint($only-tablet) {
+      width: 100%;
+      float: none;
+      margin-right: none;
+      position: relative;
+    }
+
+    @include breakpoint($desktop) {
+      width: 90px;
+      margin-right: 1rem;
+      float: #{$left};
+      position: static;
+    }
 
     .lSSlideOuter {
-      padding-top: 48px;
-      padding-bottom: 50px;
+      @include breakpoint($only-tablet) {
+        padding: 0 60px;
+      }
+
+      @include breakpoint($desktop) {
+        padding: 42px 0;
+      }
+
+      &.noPager {
+        padding: 0;
+      }
 
       .lSSlideWrapper {
         position: static;
@@ -28,8 +68,15 @@
       #lightSlider {
         li {
           overflow: hidden;
-          padding: 3px;
-          margin-bottom: 5px !important;
+
+          @include breakpoint($only-tablet) {
+            padding: 1px;
+            line-height: 0;
+          }
+
+          @include breakpoint($desktop) {
+            padding: 3px;
+          }
 
           &.active {
             border: 1px solid;
@@ -37,46 +84,96 @@
 
           img {
             max-width: 100%;
-            width: 81px;
-            height: 72px;
+
+            @include breakpoint($only-tablet) {
+              width: 110px;
+              height: 100px;
+            }
+
+            @include breakpoint($desktop) {
+              width: 81px;
+              height: 72px;
+            }
           }
         }
       }
 
-      .lSAction {
-        & > a {
-          width: 100%;
-          display: block;
-          left: 0;
-          height: 42px;
-          cursor: pointer;
-          position: absolute;
-          margin-top: 0;
-          margin-left: 0;
-          opacity: 1;
-          text-align: center;
-          font-size: 15px;
-          color: $black-two;
+      @include breakpoint($only-tablet) {
+        .lSAction {
+          & > a {
+            width: 44px;
+            height: 96px;
+            bottom: 0;
+            margin-left: 0;
+            margin-right: 0;
+          }
 
-          &::before {
-            padding-top: 15px;
+          .lSPrev {
+            @include icon(chevronleft);
 
-            @include u-visibility(block);
+            left: 15px;
+            top: 20px;
+            background-color: $white-five;
+            text-align: center;
+            padding-top: 40px;
+
+            &::before {
+              @include u-center--vertically;
+            }
+          }
+
+          .lSNext {
+            @include icon(chevronright);
+
+            right: 10px;
+            top: 20px;
+            background-color: $white-five;
+            text-align: left;
+            padding-top: 40px;
+
+            &::before {
+              @include u-center--vertically;
+            }
           }
         }
+      }
 
-        .lSPrev {
-          @include icon(chevronup);
+      @include breakpoint($desktop) {
+        .lSAction {
+          & > a {
+            width: 100%;
+            display: block;
+            left: 0;
+            height: 42px;
+            cursor: pointer;
+            position: absolute;
+            margin-top: 0;
+            margin-left: 0;
+            opacity: 1;
+            text-align: center;
+            font-size: 15px;
+            color: $black-two;
 
-          top: 0;
-          background-color: $white-five;
-        }
+            &::before {
+              padding-top: 15px;
 
-        .lSNext {
-          @include icon(chevrondown);
+              @include u-visibility(block);
+            }
+          }
 
-          bottom: 0;
-          background-color: $white-five;
+          .lSPrev {
+            @include icon(chevronup);
+
+            top: 0;
+            background-color: $white-five;
+          }
+
+          .lSNext {
+            @include icon(chevrondown);
+
+            bottom: 0;
+            background-color: $white-five;
+          }
         }
       }
     }
@@ -88,8 +185,30 @@
 }
 
 .cloudzoom__image {
+  .mobile-hover-text {
+    @include breakpoint($only-tablet) {
+      @include u-visibility(block);
+    }
+
+    @include breakpoint($desktop) {
+      @include u-visibility(none);
+    }
+
+    width: 100%;
+    padding: 24px;
+    font-size: 12px;
+    text-align: center;
+    color: $brownish-grey;
+  }
+
   .hover-text {
-    @include u-visibility(block);
+    @include breakpoint($only-tablet) {
+      @include u-visibility(none);
+    }
+
+    @include breakpoint($desktop) {
+      @include u-visibility(block);
+    }
 
     width: 100%;
     padding: 24px;
@@ -100,9 +219,13 @@
 }
 
 #cloud-zoom-big {
-  top: 200px !important;
-  left: 105% !important;
+  top: 212px !important;
+  left: 102% !important;
   border: 1px solid $white;
+
+  @include breakpoint($only-tablet) {
+    @include u-visibility(none, true);
+  }
 }
 
 .cloudzoom .cloud-zoom-lens {
@@ -110,9 +233,63 @@
 }
 
 .mobilegallery {
+  padding-bottom: 50px;
+
+  .subtext {
+    width: 100%;
+    padding: 16px;
+    font-size: 12px;
+    text-align: center;
+    color: $white-five;
+    line-height: 1;
+    background: $black-two;
+    margin-top: -5px;
+
+    p {
+      margin: 3px;
+    }
+  }
+
+  .lSAction {
+    .lSPrev {
+      @include icon(chevronleft);
+
+      background: $white-five;
+      border-radius: 30px;
+      font-size: 30px;
+      text-align: center;
+      color: $black;
+    }
+
+    .lSNext {
+      @include icon(chevronright);
+
+      background: $white-five;
+      border-radius: 30px;
+      font-size: 30px;
+      text-align: center;
+      color: $black;
+    }
+  }
+
   & > .lSSlideOuter {
     & > .lSPager {
-      @include u-visibility(none);
+      position: absolute;
+      width: 100%;
+      top: 320px;
+
+      &.lSpg > li {
+        a {
+          background-color: $white-five;
+          border: 1px solid $marine-blue-two;
+        }
+
+        &.active {
+          a {
+            background-color: $marine-blue-two;
+          }
+        }
+      }
     }
   }
 }

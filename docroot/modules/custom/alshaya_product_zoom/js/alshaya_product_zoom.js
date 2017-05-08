@@ -12,11 +12,21 @@
         items.parent().css('float', 'left');
       }
       // Slider 1 - For Desktop - Image zoom.
-      $('#lightSlider').lightSlider({
-        vertical: true,
-        item: 5,
-        verticalHeight: 405
-      });
+      if ($(window).width() < 1025) {
+        $('#lightSlider').lightSlider({
+          vertical: false,
+          item: 3,
+          verticalHeight: 100
+        });
+      }
+      else {
+        $('#lightSlider').lightSlider({
+          vertical: true,
+          item: 5,
+          verticalHeight: 440
+        });
+      }
+
       // Slider 1 - For Desktop - Image zoom.
       $('#drupal-modal #lightSlider').lightSlider({
         vertical: true,
@@ -213,7 +223,7 @@
        * Toggles the product gallery based on screen width.
        */
       function toggleProductImageGallery() {
-        if ($(window).width() < 381) {
+        if ($(window).width() < 768) {
           $('.mobilegallery').show();
           $('.cloudzoom').hide();
         }
