@@ -16,7 +16,8 @@ textarea {
 }
 
 // Material design effect for input fields.
-.c-content {
+.c-content,
+.c-footer-primary {
   .c-input__bar {
     position: relative;
     display: block;
