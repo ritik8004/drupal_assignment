@@ -168,12 +168,14 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     if ($profile->access('update') && $profile->hasLinkTemplate('edit-form')) {
       $variables['edit_operation'] = [
         'title' => t('Edit'),
-        'url' => $profile->urlInfo('edit-form', [
-          'query' => [
-            'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
-          ],
-          'language' => $current_language,
-        ]),
+        'url' => Url::fromRoute('alshaya_addressbook.edit_address_ajax',
+          ['profile' => $profile->id(), 'js' => 'nojs'],
+          [
+            'attributes' => [
+              'class' => ['use-ajax'],
+              'rel' => 'address-book-form-wrapper',
+            ],
+          ]),
       ];
     }
 
