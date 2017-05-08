@@ -15,7 +15,7 @@
       $('#lightSlider').lightSlider({
         vertical: true,
         item: 5,
-        verticalHeight: 500
+        verticalHeight: 405
       });
       // Slider 1 - For Desktop - Image zoom.
       $('#drupal-modal #lightSlider').lightSlider({
