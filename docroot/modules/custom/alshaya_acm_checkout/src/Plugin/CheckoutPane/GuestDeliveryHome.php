@@ -39,6 +39,7 @@ class GuestDeliveryHome extends AddressFormBase {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
     $pane_form['guest_delivery_home']['title'] = [
       '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
     ];
