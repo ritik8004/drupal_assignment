@@ -142,6 +142,7 @@
 
             .filter-menu-label {
               margin-bottom: 0.82rem;
+
               @include u-visibility(inline-block);
 
               .label {
