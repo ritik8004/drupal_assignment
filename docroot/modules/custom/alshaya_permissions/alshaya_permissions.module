@@ -58,7 +58,7 @@ function alshaya_permissions_form_taxonomy_term_acq_product_category_form_alter(
 function alshaya_master_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   $current_user_id = \Drupal::currentUser()->id();
   if ($user = User::load($current_user_id)) {
-    if ($user->hasRole('reviewer')) {
+    if ($user->hasRole('reviewer') && isset($form['revision_log'])) {
       $form['revision_log']['#access'] = TRUE;
     }
   }
