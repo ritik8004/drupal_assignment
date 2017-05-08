@@ -77,9 +77,9 @@
       };
 
       function displayLocation(latitude, longitude) {
-        var geocoder = new google.maps.Geocoder;
+        var geocoder = new google.maps.Geocoder();
         var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
-        geocoder.geocode({'location': latlng}, function(results, status) {
+        geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
             if ($('.current-view').length) {
               $('.current-view .ui-autocomplete-input').val(results[1].formatted_address);
