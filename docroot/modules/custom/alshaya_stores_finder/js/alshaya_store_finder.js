@@ -59,7 +59,7 @@
           navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         }
         else {
-          alert('Your browser doesn\'t geolocation api.');
+          alert('Your browser doesn\'t geolocation.');
         }
         return false;
       });
@@ -67,7 +67,6 @@
       // Error callback.
       var errorCallback = function (error) {
         // Close overlay here.
-        alert('ERROR(' + error.code + '): ' + error.message);
       };
 
       // Success callback.
@@ -78,26 +77,18 @@
       };
 
       function displayLocation(latitude, longitude) {
-        var request = new XMLHttpRequest();
-
-        var method = 'GET';
-        var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude + '&sensor=true';
-        var async = true;
-
-        request.open(method, url, async);
-        request.onreadystatechange = function () {
-          if (request.readyState === 4 && request.status === 200) {
-            var data = JSON.parse(request.responseText);
-            var address = data.results[0];
+        var geocoder = new google.maps.Geocoder;
+        var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
             if ($('.current-view').length) {
-              $('.current-view .ui-autocomplete-input').val(address.formatted_address);
+              $('.current-view .ui-autocomplete-input').val(results[1].formatted_address);
             }
             else {
-              $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').val(address.formatted_address);
+              $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').val(results[1].formatted_address);
             }
           }
-        };
-        request.send();
+        });
         // Close overlay here.
       }
 
