@@ -6,6 +6,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\profile\Controller\ProfileController;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\profile\Entity\ProfileInterface;
 use Drupal\user\UserInterface;
 use Drupal\profile\Entity\ProfileTypeInterface;
 use Drupal\Core\Link;
@@ -85,7 +86,11 @@ class AlshayaAddressBookController extends ProfileController {
       $build['add_profile'] = Link::createFromRoute(
         $this->t('Add new @type', ['@type' => $profile_type->label()]),
         "alshaya_addressbook.add_address_ajax",
-        ['user' => \Drupal::currentUser()->id(), 'profile_type' => $profile_type->id()],
+        [
+          'user' => \Drupal::currentUser()->id(),
+          'profile_type' => $profile_type->id(),
+          'js' => 'nojs',
+        ],
         [
           'attributes' => [
             'class' => ['use-ajax'],
@@ -125,15 +130,40 @@ class AlshayaAddressBookController extends ProfileController {
    *   The user account.
    * @param \Drupal\profile\Entity\ProfileTypeInterface $profile_type
    *   The profile type entity for the profile.
-   * @param bool $ajax
+   * @param bool $js
    *   The ajax value.
    *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   The ajax response object.
+   * @return array|\Drupal\Core\Ajax\AjaxResponse
+   *   Return the form OR The ajax response object.
    */
-  public function addAddress(RouteMatchInterface $route_match, UserInterface $user, ProfileTypeInterface $profile_type, $ajax = FALSE) {
+  public function addAddress(RouteMatchInterface $route_match, UserInterface $user, ProfileTypeInterface $profile_type, $js = FALSE) {
     $form = parent::addProfile($route_match, $user, $profile_type);
+    if ($js == 'nojs') {
+      return $form;
+    }
+    $response = new AjaxResponse();
+    $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form));
+    return $response;
+  }
 
+  /**
+   * Provides the profile edit form.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   * @param \Drupal\profile\Entity\ProfileInterface $profile
+   *   The profile entity to edit.
+   * @param bool $js
+   *   The ajax value.
+   *
+   * @return array|\Drupal\Core\Ajax\AjaxResponse
+   *   Return the form OR The ajax response object.
+   */
+  public function editAddress(RouteMatchInterface $route_match, ProfileInterface $profile, $js = FALSE) {
+    $form = $this->entityFormBuilder()->getForm($profile, 'edit');
+    if ($js == 'nojs') {
+      return $form;
+    }
     $response = new AjaxResponse();
     $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form));
     return $response;

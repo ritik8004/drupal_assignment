@@ -25,6 +25,9 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
   $default_address = \Drupal::entityTypeManager()->getStorage('profile')
     ->loadByUser($user, 'address_book');
 
+  $form['#prefix'] = '<div id="address-book-form-open">';
+  $form['#suffix'] = '</div>';
+
   // If user doesn't have any default address yet.
   if (!$default_address) {
     $form['actions']['submit']['#access'] = FALSE;
@@ -35,6 +38,7 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
     $form['actions']['submit']['#value'] = t('Add');
     $form['actions']['submit']['#ajax'] = [
       'callback' => 'alshaya_addressbook_save_ajax_callback',
+      'wrapper' => 'address-book-form-open',
     ];
   }
 
@@ -50,13 +54,17 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
  * Submit Ajax callback to reload the page.
  */
 function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form_state) {
-  $entity = $form_state->getFormObject()->getEntity();
-  $response = new AjaxResponse();
-  $response->addCommand(new RedirectCommand(Url::fromRoute('entity.profile.type.address_book.user_profile_form', [
-    'user' => $entity->getOwnerId(),
-    'profile_type' => $entity->bundle(),
-  ])->toString()));
-  return $response;
+  if (!$form_state->getErrors()) {
+    $entity   = $form_state->getFormObject()->getEntity();
+    $response = new AjaxResponse();
+    $response->addCommand(new RedirectCommand(Url::fromRoute('entity.profile.type.address_book.user_profile_form', [
+      'user'         => $entity->getOwnerId(),
+      'profile_type' => $entity->bundle(),
+    ])->toString()));
+    return $response;
+  }
+
+  return $form;
 }
 
 /**
@@ -106,20 +114,18 @@ function alshaya_addressbook_user_view_alter(&$build) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_addressbook_form_profile_address_book_edit_form_alter(array &$form, FormStateInterface $form_state) {
-  $form['#title'] = t('Edit address');
-  // Render the active profiles.
-  $form['active_profiles'] = [
-    '#type' => 'view',
-    '#name' => 'profiles',
-    '#display_id' => 'profile_type_listing',
-    '#arguments' => [\Drupal::currentUser()->id(), 'address_book', 1],
-    '#embed' => TRUE,
-    '#title' => t('Active @type', ['@type' => 'Address Book']),
-    '#weight' => 100,
-    '#pre_render' => [
-      ['\Drupal\views\Element\View', 'preRenderViewElement'],
-      'profile_views_add_title_pre_render',
-    ],
+  $form['#prefix'] = '<div id="address-book-form-open">';
+  $form['#suffix'] = '</div>';
+
+  // Save profile form.
+  $form['actions']['submit']['#ajax'] = [
+    'callback' => 'alshaya_addressbook_save_ajax_callback',
+    'wrapper' => 'address-book-form-open',
+  ];
+  // Set default profile profile form.
+  $form['actions']['set_default']['#ajax'] = [
+    'callback' => 'alshaya_addressbook_save_ajax_callback',
+    'wrapper' => 'address-book-form-open',
   ];
 }
 

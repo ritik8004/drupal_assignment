@@ -1,14 +1,28 @@
 alshaya_addressbook.add_address_ajax:
-  path: 'user/{user}/{profile_type}/js/add'
+  path: 'user/{user}/{profile_type}/{js}/add'
   defaults:
     _controller: '\Drupal\alshaya_addressbook\Controller\AlshayaAddressBookController::addAddress'
-    _title: 'Add address ajax link'
-  requirements:
-      _permission: 'access content'
+    _title: 'Add Address'
   options:
+    operation: 'add'
     parameters:
       user:
         type: entity:user
       profile_type:
         type: entity:profile_type
+  requirements:
+    _profile_access_check: 'profile:{profile_type}'
+    js: 'nojs|ajax'
 
+alshaya_addressbook.edit_address_ajax:
+  path: 'profile/{profile}/{js}/edit'
+  defaults:
+    _controller: '\Drupal\alshaya_addressbook\Controller\AlshayaAddressBookController::editAddress'
+    _title: 'Edit Address'
+  options:
+    parameters:
+      profile:
+        type: entity:profile
+  requirements:
+    _entity_access: 'profile.edit'
+    js: 'nojs|ajax'
