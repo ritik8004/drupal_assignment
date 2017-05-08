@@ -11,7 +11,7 @@
 
     @include breakpoint($desktop) {
       width: calc(100% - (92px + 1rem));
-      float: right;
+      float: #{$right};
     }
   }
 
@@ -44,7 +44,7 @@
     @include breakpoint($desktop) {
       width: 90px;
       margin-right: 1rem;
-      float: left;
+      float: #{$left};
       position: static;
     }
 
