@@ -39,3 +39,16 @@
   outline: none;
   -webkit-appearance: none;
 }
+
+form {
+  .error,
+  .form-item--error-message {
+    font-size: 0.75rem;
+    color: $red-error;
+    padding-top: 0.3125rem;
+
+    strong {
+      font-weight: 400;
+    }
+  }
+}

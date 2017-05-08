@@ -31,6 +31,10 @@
     position: relative;
   }
 
+  .no--orders {
+    margin-bottom: 3.1rem;
+  }
+
   .order-search-form {
     border-bottom: 1px solid $whisper-dark;
     margin-top: 12px;
@@ -178,6 +182,16 @@
 
   button {
     @extend %button-brand;
+
+    width: 19rem;
+
+    @include breakpoint($tablet) {
+      width: 6.625rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 21.375rem;
+    }
   }
 }
 

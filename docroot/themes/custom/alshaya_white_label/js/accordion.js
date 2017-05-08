@@ -143,6 +143,33 @@
           listOrder.not($ub).parent().removeClass('open--accordion');
         });
       }
+
+      /**
+      * Toggles the Tabs.
+      */
+
+      if ($('.multistep-checkout').length) {
+        $('.tab-home-delivery').addClass('active--tab--head');
+        $('#edit-guest-delivery-home, #edit-member-delivery-home').addClass('active--tab--content');
+
+        $('.tab').click(function () {
+          $('.multistep-checkout .tab').removeClass('active--tab--head');
+          $('.multistep-checkout fieldset').removeClass('active--tab--content');
+
+          if ($(this).hasClass('tab-home-delivery')) {
+            $('.tab-home-delivery').addClass('active--tab--head');
+            $('#edit-guest-delivery-home, #edit-member-delivery-home').addClass('active--tab--content');
+          }
+          else if ($(this).hasClass('tab-click-collect')) {
+            $('.tab-click-collect').addClass('active--tab--head');
+            $('#edit-guest-delivery-collect, #edit-member-delivery-collect').addClass('active--tab--content');
+          }
+        });
+
+        $('.multistep-checkout legend').click(function () {
+          $(this).next('.fieldset-wrapper').slideToggle();
+        });
+      }
     }
   };
 
