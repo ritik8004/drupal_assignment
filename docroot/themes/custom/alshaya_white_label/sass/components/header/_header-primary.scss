@@ -697,7 +697,8 @@ header {
     color: $marine-blue;
     display: block;
     font-size: 12px;
-    padding: 0.9375rem 0.625rem;
+    padding: 0.9375rem 0.625rem 0.9375rem 0;
+    text-transform: lowercase;
   }
 
   .menu--one__list-item {
@@ -830,19 +831,20 @@ header {
 .mobile--close {
   background: $white-five;
   position: fixed;
-  top: 8px;
-  #{$left}: 81%;
-  width: 26px;
-  height: 26px;
+  top: 9px;
+  #{$left}: 81.5%;
+  width: 35px;
+  height: 32px;
   z-index: 12;
   text-align: center;
   padding-top: 4px;
 
   span {
-    background: url('../imgs/icons/ic-close.svg') no-repeat;
-    width: 17px;
-    height: 17px;
+    background: url('../imgs/icons/ic-close.svg') center center no-repeat;
+    width: 25px;
+    height: 25px;
     display: inline-block;
+    background-size: 17px;
   }
 }
 
