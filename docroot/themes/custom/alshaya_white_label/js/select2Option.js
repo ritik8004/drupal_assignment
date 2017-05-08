@@ -1,7 +1,8 @@
 /**
  * @file
- * jQuery Plugin to convert Select to Unformatted list.
+ * JQuery Plugin to convert Select to Unformatted list.
  */
+
 jQuery.fn.select2Option = function (options) {
   'use strict';
 
