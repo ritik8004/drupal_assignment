@@ -58,9 +58,7 @@
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         }
-        else {
-          alert('Your browser doesn\'t geolocation.');
-        }
+
         return false;
       });
 
