@@ -10,6 +10,11 @@
 
 .content {
   &__main {
+    @include breakpoint($tablet) {
+      width: 60%;
+      float: $left;
+    }
+
     @include breakpoint($desktop) {
       width: 70%;
       float: $left;
@@ -17,6 +22,12 @@
   }
 
   &__sidebar {
+    @include breakpoint($tablet) {
+      width: 40%;
+      float: $right;
+      padding: 0 1rem;
+    }
+
     @include breakpoint($desktop) {
       width: 30%;
       float: $right;
@@ -101,7 +112,7 @@
         padding: 0.5rem 0;
       }
 
-      input[type="submit"] {
+      button[type="submit"] {
         font-family: $alshaya-bold;
         background: $pumpkin-orange;
         border-radius: 0;
@@ -110,127 +121,7 @@
         border: 0;
         font-size: 0.813rem;
         float: left;
-      }
-    }
-  }
-}
-
-#color-select {
-  padding-left: 0;
-
-  li {
-    @include u-visibility(inline-block);
-
-    div {
-      @include u-visibility(block);
-      @include u-image-replacement;
-
-      height: 38px;
-      width: 38px;
-      margin: 6px 6px 6px 0;
-    }
-
-    .Orange {
-      background-color: $pumpkin-orange;
-    }
-
-    .Purple {
-      background-color: purple;
-    }
-
-    .White {
-      background-color: $white;
-    }
-
-    .unavailable {
-      position: relative;
-
-      &::before,
-      &::after {
-        content: "";
-        position: absolute;
-        z-index: 1;
-        background: $black;
-      }
-
-      &::before {
-        left: 50%;
-        width: 1px;
-        height: calc(100% * 1.414);
-        top: -21%;
-        transform: rotate(45deg);
-      }
-
-      &::after {
-        top: 50%;
-        left: -21%;
-        height: 1px;
-        width: calc(100% * 1.414);
-        transform: rotate(45deg);
-      }
-    }
-  }
-}
-
-.form-item-configurables-color label {
-  float: $left;
-  margin-right: 20px;
-  width: 60px;
-}
-
-.form-item-configurables-size label {
-  float: $left;
-  margin-right: 20px;
-  width: 60px;
-
-  @include breakpoint($tablet) {
-    @include u-visibility(none);
-  }
-}
-
-#size-select-modal,
-#size-select {
-  padding-left: 0;
-
-  li {
-    @include u-visibility(inline-block);
-
-    div {
-      @include u-visibility(block);
-
-      height: 38px;
-      width: 38px;
-      margin: 5px 5px 5px 0;
-      border: 1px solid $black;
-      text-align: center;
-      padding-top: 10px;
-    }
-
-    .unavailable {
-      position: relative;
-
-      &::before,
-      &::after {
-        content: "";
-        position: absolute;
-        z-index: -1;
-        background: $black;
-      }
-
-      &::before {
-        left: 50%;
-        width: 1px;
-        height: calc(100% * 1.414);
-        top: -21%;
-        transform: rotate(45deg);
-      }
-
-      &::after {
-        top: 50%;
-        left: -21%;
-        height: 1px;
-        width: calc(100% * 1.414);
-        transform: rotate(45deg);
+        position: static;
       }
     }
   }
@@ -252,5 +143,62 @@
     appearance: none;
     margin: 0 5px;
     float: $left;
+  }
+}
+
+.select2Option {
+  h4 {
+    margin: 0;
+  }
+
+  .select-buttons {
+    padding-left: 0;
+    margin-bottom: 0;
+    margin-top: 2px;
+
+    li {
+      list-style: none;
+
+      @include u-visibility(inline-block);
+
+      a {
+        @include u-visibility(block);
+
+        height: 38px;
+        width: 38px;
+        margin: 5px 5px 5px 0;
+        border: 1px solid $black;
+        text-align: center;
+        padding-top: 10px;
+      }
+
+      .unavailable {
+        position: relative;
+
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          z-index: -1;
+          background: $black;
+        }
+
+        &::before {
+          left: 50%;
+          width: 1px;
+          height: calc(100% * 1.414);
+          top: -21%;
+          transform: rotate(45deg);
+        }
+
+        &::after {
+          top: 50%;
+          left: -21%;
+          height: 1px;
+          width: calc(100% * 1.414);
+          transform: rotate(45deg);
+        }
+      }
+    }
   }
 }

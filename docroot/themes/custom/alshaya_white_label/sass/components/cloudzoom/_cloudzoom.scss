@@ -8,47 +8,28 @@
     float: right;
   }
 
+  #cloud-zoom-wrap {
+    height: 504px;
+  }
+
   .cloudzoom__thumbnails {
     width: 90px;
     margin-right: 1rem;
     float: left;
 
-    .lSSlideWrapper {
-      @include breakpoint($only-tablet) {
-        height: 442px !important;
-      }
+    .lSSlideOuter {
+      padding-top: 48px;
+      padding-bottom: 50px;
 
-      .lSSlideOuter {
-        .lSSlideWrapper {
-          @include breakpoint($only-tablet) {
-            height: 442px !important;
-          }
-
-          .lSAction {
-            @include u-visibility(none, true);
-          }
-        }
+      .lSSlideWrapper {
+        position: static;
       }
 
       #lightSlider {
-        margin-top: 50px;
-
-        &.pager-no {
-          margin-top: 0;
-        }
-
         li {
           overflow: hidden;
           padding: 3px;
           margin-bottom: 5px !important;
-
-          @include breakpoint($tablet) {
-            height: 60px !important;
-          }
-
-          @include breakpoint($desktop) {
-            height: 80px !important;
-          }
 
           &.active {
             border: 1px solid;
