@@ -39,7 +39,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $pane_form['guest_delivery_collect']['summary'] = [
-      '#markup' => $this->t('coming soon'),
+      '#markup' => $this->t('Coming soon'),
     ];
 
     return $pane_form;
