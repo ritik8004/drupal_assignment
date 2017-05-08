@@ -51,7 +51,7 @@
         setTimeout(
           function() {
             $('.ladda-label').html(Drupal.t('add to cart'));
-          }, 1700);
+          }, 3000);
       };
     }
   };
