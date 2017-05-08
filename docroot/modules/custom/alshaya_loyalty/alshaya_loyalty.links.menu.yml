@@ -4,3 +4,10 @@ alshaya_loyalty.loyalty_settings_form:
   description: 'Administer the validation criteria for privilege card number.'
   route_name: alshaya_loyalty.loyalty_settings_form
   weight: 1
+
+alshaya_loyalty.join_club_form:
+  title: 'Join Club content'
+  parent: user.admin_index
+  description: 'Configure Join the Club block content.'
+  weight: 10
+  route_name: alshaya_loyalty.join_club_form

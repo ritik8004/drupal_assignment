@@ -1,10 +1,7 @@
 langcode: en
 status: true
 dependencies:
-  content:
-    - 'block_content:basic:920c98f0-f0a3-462c-9d33-d459e20850ef'
   module:
-    - block_content
     - system
   theme:
     - alshaya_white_label
@@ -13,15 +10,12 @@ theme: alshaya_white_label
 region: sidebar_second
 weight: -11
 provider: null
-plugin: 'block_content:920c98f0-f0a3-462c-9d33-d459e20850ef'
+plugin: join_the_club
 settings:
-  id: 'block_content:920c98f0-f0a3-462c-9d33-d459e20850ef'
-  label: 'Join the club'
-  provider: block_content
+  id: join_the_club
+  label: 'Join the Club'
+  provider: alshaya_loyalty
   label_display: visible
-  status: true
-  info: ''
-  view_mode: full
 visibility:
   request_path:
     id: request_path

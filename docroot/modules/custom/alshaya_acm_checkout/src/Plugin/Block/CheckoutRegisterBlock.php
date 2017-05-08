@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 
+use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -130,6 +131,14 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $form['actions']['submit']['#value'] = $this->t('save');
 
     $build['form'] = $form;
+
+    // Add the following block only if alshaya_loyaty is enabled.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
+      // TODO: Add condition around this to check if promo card was entered by
+      // user in Basket. Also save that in user if it was entered.
+      $block = Block::load('jointheclub');
+      $build['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+    }
 
     return $build;
   }

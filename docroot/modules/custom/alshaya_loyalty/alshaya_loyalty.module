@@ -5,6 +5,7 @@
  * Module for for privilege card fields and validation.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
 use Drupal\webform\Element\WebformCreditCardNumber;
@@ -356,5 +357,18 @@ function alshaya_loyalty_preprocess_input(&$variables) {
   if (strpos($variables['element']['#name'], 'privilege_card_number') !== FALSE) {
     $variables['attributes']['class'][] = 'c-input__privilege-card ';
     $variables['#attached']['library'][] = 'alshaya_loyalty/format_input';
+  }
+}
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function alshaya_loyalty_preprocess_user(&$variables) {
+  /* @var \Drupal\user\Entity\User $user */
+  $user = $variables['user'];
+  $card = $user->get('field_privilege_card_number')->getString();
+  if (empty($card)) {
+    $block = Block::load('jointheclub');
+    $variables['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
   }
 }

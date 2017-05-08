@@ -34,8 +34,8 @@ set classes = [
 ]
 %}
 <div{{ attributes.addClass(classes) }}>
-    {% if content.field_image %}
-        {{ content.field_image }}
+    {% if content.image %}
+        <img src="{{ content.image }}" />
     {% endif %}
     {{ title_prefix }}
     {% if label %}
@@ -43,6 +43,6 @@ set classes = [
     {% endif %}
     {{ title_suffix }}
     {% block content %}
-        {{ content|without('field_image') }}
+        {{ content.description }}
     {% endblock %}
 </div>
