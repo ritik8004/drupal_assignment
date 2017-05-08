@@ -249,6 +249,7 @@
       background: $pumpkin-orange;
       margin-top: 1em;
       width: 100%;
+      text-transform: lowercase;
 
       @include breakpoint($tablet) {
         width: auto;
