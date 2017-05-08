@@ -97,14 +97,14 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
     }
 
     $current_step_index = array_search($current_step_id, $visible_step_ids);
+    if (\Drupal::currentUser()->isAnonymous()) {
+      $current_step_index--;
+    }
 
     // Get last step completed in the cart.
     $cart = $this->cartStorage->getCart();
     $cart_step_id = $cart->getCheckoutStep();
     $cart_step_index = array_search($cart_step_id, $visible_step_ids);
-    if (\Drupal::currentUser()->isAnonymous()) {
-      $cart_step_index--;
-    }
 
     $index = 0;
     foreach ($visible_steps as $step_id => $step_definition) {

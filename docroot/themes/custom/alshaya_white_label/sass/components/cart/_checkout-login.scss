@@ -4,7 +4,7 @@
   min-height: calc(100vh - 110px);
 
   @include breakpoint($tablet) {
-    margin: 1.5em auto 1em;
+    margin: 1.25em auto 1em;
   }
 
   h1 {
@@ -12,6 +12,7 @@
     padding-top: 0;
     padding-bottom: 0.75em;
     border-bottom: 1px solid $white;
+    margin-#{$left}: 0;
   }
 
   .multistep-checkout {
