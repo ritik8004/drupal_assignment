@@ -23,6 +23,7 @@
       });
 
       var btn = document.querySelector('#edit-add-to-cart');
+      btn.setAttribute( 'data-style', 'zoom-in');
       var l = Ladda.create(btn);
 
       btn.addEventListener('click', function() {
@@ -39,8 +40,18 @@
         }
       });
 
-      $.fn.stopSpinner = function() {
+      $.fn.stopSpinner = function(data) {
         l.stop();
+        if (data === 'success') {
+          $('.ladda-label').html(Drupal.t('added!'));
+        }
+        else {
+          $('.ladda-label').html(Drupal.t('error!'));
+        }
+        setTimeout(
+          function() {
+            $('.ladda-label').html(Drupal.t('add to cart'));
+          }, 3000);
       };
     }
   };

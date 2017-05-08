@@ -136,8 +136,9 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
 
   // Prepare the ajax Response.
   $response = new AjaxResponse();
+  $data = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
   $response->addCommand(new HtmlCommand('#cart_notification', $html));
-  $response->addCommand(new InvokeCommand(NULL, 'stopSpinner'));
+  $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
   $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
   return $response;
 }
