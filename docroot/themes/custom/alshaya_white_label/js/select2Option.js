@@ -1,3 +1,7 @@
+/**
+ * @file
+ * jQuery Plugin to convert Select to Unformatted list.
+ */
 jQuery.fn.select2Option = function (options) {
   'use strict';
 
@@ -29,7 +33,7 @@ jQuery.fn.select2Option = function (options) {
           liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
         }
 
-        // Mark current selection as "picked"
+        // Mark current selection as "picked".
         if ((!options || !options.noDefault) && $(this).attr('selected')) {
           liHtml.children('a, span').addClass('picked');
         }
