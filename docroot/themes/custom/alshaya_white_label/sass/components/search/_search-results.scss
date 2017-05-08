@@ -147,6 +147,8 @@
             .filter-menu-label {
               margin-bottom: 0.82rem;
 
+              @include u-visibility(inline-block);
+
               .label {
                 font-family: $alshaya-bold;
                 font-size: 0.817rem;
@@ -198,6 +200,12 @@
       margin-bottom: 1.125rem;
       padding-bottom: 0.75rem;
 
+      &.empty {
+        clear: both;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
       @include breakpoint($tablet) {
         border-bottom: 1px solid $white;
       }
@@ -221,6 +229,7 @@
               padding: 0.657rem 17px;
               text-align: center;
               vertical-align: middle;
+              height: 35px;
 
               &.facet-item__value {
                 float: #{$left};
