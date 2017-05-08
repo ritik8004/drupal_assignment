@@ -142,7 +142,7 @@
 
             .filter-menu-label {
               margin-bottom: 0.82rem;
-              display: inline-block;
+              @include u-visibility(inline-block);
 
               .label {
                 font-family: $alshaya-bold;
