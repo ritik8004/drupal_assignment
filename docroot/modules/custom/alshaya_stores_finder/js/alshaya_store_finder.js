@@ -52,6 +52,44 @@
 
         });
       });
+
+      $('.current-location').on('click', function () {
+        // Start overlay here.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+        }
+
+        return false;
+      });
+
+      // Error callback.
+      var errorCallback = function (error) {
+        // Close overlay here.
+      };
+
+      // Success callback.
+      var successCallback = function (position) {
+        var x = position.coords.latitude;
+        var y = position.coords.longitude;
+        displayLocation(x, y);
+      };
+
+      function displayLocation(latitude, longitude) {
+        var geocoder = new google.maps.Geocoder();
+        var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+        geocoder.geocode({location: latlng}, function (results, status) {
+          if (status === 'OK') {
+            if ($('.current-view').length) {
+              $('.current-view .ui-autocomplete-input').val(results[1].formatted_address);
+            }
+            else {
+              $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').val(results[1].formatted_address);
+            }
+          }
+        });
+        // Close overlay here.
+      }
+
     }
   };
 
