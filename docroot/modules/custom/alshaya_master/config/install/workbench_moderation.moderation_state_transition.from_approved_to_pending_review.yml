@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.approved
+    - workbench_moderation.moderation_state.needs_review
+id: from_approved_to_pending_review
+label: 'From Approved To Pending Review'
+stateFrom: approved
+stateTo: needs_review
+weight: -14

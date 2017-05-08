@@ -45,6 +45,8 @@ permissions:
   - 'use needs_review_needs_review transition'
   - 'use published_draft transition'
   - 'use published_published transition'
+  - 'use from_draft_to_approved transition'
+  - 'use from_approved_to_pending_review transition'
   - 'use text format rich_text'
   - 'view any unpublished content'
   - 'view latest version'
