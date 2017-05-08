@@ -21,6 +21,7 @@ content:
       image_style: 291x288
       image_link: ''
     third_party_settings: {  }
+    region: content
   attr_special_price:
     label: hidden
     type: string
@@ -28,6 +29,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    region: content
   name:
     type: string
     weight: 1
@@ -35,6 +37,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    region: content
   price:
     type: string
     weight: 2
@@ -42,7 +45,12 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    region: content
 hidden:
+  attr_color: true
+  attr_size: true
+  attr_small_image: true
+  attr_thumbnail: true
   attributes: true
   crosssell: true
   field_grouped_skus: true

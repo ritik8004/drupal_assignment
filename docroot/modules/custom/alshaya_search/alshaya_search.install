@@ -74,7 +74,15 @@ function alshaya_search_install() {
     ->save();
 
   // Disable Acquia Search View.
-  \Drupal::configFactory()->getEditable('views.view.acquia_search')
-    ->set('status', FALSE)
-    ->save();
+  $acquia_search_view = \Drupal::configFactory()->getEditable('views.view.acquia_search')->getRawData();
+  if (empty($acquia_search_view)) {
+    // Import Acquia Search View, and disable it.
+    ConfigHelper::forModule('acquia_search')
+      ->optional()
+      ->getEntity('view', 'acquia_search')
+      ->save();
+    \Drupal::configFactory()->getEditable('views.view.acquia_search')
+      ->set('status', FALSE)
+      ->save();
+  }
 }
