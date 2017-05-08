@@ -23,8 +23,10 @@ content:
       view_mode: search_result
     third_party_settings: {  }
     type: sku_formatter
+    region: content
   sharethis:
     weight: 10
+    region: content
 hidden:
   body: true
   field_category: true
