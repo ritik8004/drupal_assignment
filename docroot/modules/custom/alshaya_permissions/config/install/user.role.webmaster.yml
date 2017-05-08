@@ -64,3 +64,6 @@ permissions:
   - 'view latest version'
   - 'view the administration theme'
   - 'edit any department_page content'
+  - 'delete all revisions'
+  - 'revert all revisions'
+  - 'view all revisions'
