@@ -4,4 +4,5 @@ description: 'Custom permissions around Alshaya'
 package: 'Alshaya'
 core: 8.x
 dependencies:
+  - lightning_core
   - taxonomy_access_fix

@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.approved
+    - workbench_moderation.moderation_state.draft
+id: from_approved_to_draft
+label: 'From Approved To Draft'
+stateFrom: approved
+stateTo: draft
+weight: -13
