@@ -12,7 +12,6 @@
         items.parent().css('float', 'left');
       }
       // Slider 1 - For Desktop - Image zoom.
-      if ($(window).width > 381 ) {}
       $('#lightSlider').lightSlider({
         vertical: true,
         item: 5,
