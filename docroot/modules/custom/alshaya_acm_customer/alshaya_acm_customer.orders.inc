@@ -7,6 +7,7 @@
 
 use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
 use Drupal\acq_checkout\ACQAddressFormatter;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\image\Entity\ImageStyle;
@@ -191,6 +192,7 @@ function alshaya_acm_customer_get_order_total_quantity(array $order) {
  *   Processed order summary array.
  */
 function alshaya_acm_customer_get_processed_order_summary(array $order) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   $orderRow = [];
 
   $orderRow['orderId'] = $order['increment_id'];
@@ -198,6 +200,11 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
 
   // We will display the name of first order item.
   $item = reset($order['items']);
+  $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
+  if (is_object($parent_sku) && $parent_sku instanceof SKUInterface) {
+    $item['name'] = $parent_sku->label();
+  }
+
   $orderRow['name'] = Unicode::truncate($item['name'], 25, TRUE, TRUE);
 
   // Calculate total items in the order.
