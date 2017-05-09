@@ -42,7 +42,7 @@
 
       $.fn.stopSpinner = function(data) {
         l.stop();
-        if (data === 'success') {
+        if (data.message === 'success') {
           $('.ladda-label').html(Drupal.t('added!'));
         }
         else {
@@ -51,7 +51,7 @@
         setTimeout(
           function() {
             $('.ladda-label').html(Drupal.t('add to cart'));
-          }, 3000);
+          }, data.interval);
       };
     }
   };
