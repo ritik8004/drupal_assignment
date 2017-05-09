@@ -115,6 +115,21 @@ Or verify using this link: <a href="[user:registrationpassword-url]">[user:regis
 If you did not request this verification, please ignore this email. If you feel something is wrong, please contact our support team at <a href="mailto:[site:mail]">[site:mail]</a>.');
   $config->save();
 
+  // Set default body for password reset email.
+  $config = \Drupal::configFactory()->getEditable('user.mail');
+  $config->set('password_reset.body', '<h1>Hi [user:field_first_name:value]!</h1>
+
+A request to reset the password for your account has been made at [site:name].
+
+You may now log in by clicking this link or copying and pasting it into your browser:
+
+<a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
+
+This link can only be used once to log in and will lead you to a page where you can set your password. It expires after one day and nothing will happen if it\'s not used.
+
+--  [site:name] team');
+  $config->save();
+
   // Disable account activation mail.
   \Drupal::configFactory()->getEditable('user.settings')->set('notify.status_activated', FALSE)->save();
 }
