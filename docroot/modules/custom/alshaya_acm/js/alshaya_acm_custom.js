@@ -3,7 +3,7 @@
     attach: function (context, settings) {
       $(".acq-cart-summary .content-items").slideUp();
 
-      $(".acq-cart-summary .content-head").click(function() {
+      $(".acq-cart-summary .content-head").on('click', function() {
         $(this).parent().toggleClass("active--accordion");
         $(this).next().slideToggle();
       });
