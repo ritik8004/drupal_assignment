@@ -4,6 +4,7 @@ core: 8.x
 dependencies:
   - alshaya_advanced_page
   - alshaya_paragraphs
+  - alshaya_seo
   - block
   - content_translation
   - ctools
@@ -11,7 +12,6 @@ dependencies:
   - field
   - language
   - menu_ui
-  - metatag
   - node
   - paragraphs
   - path

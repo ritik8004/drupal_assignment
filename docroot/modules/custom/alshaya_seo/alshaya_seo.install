@@ -10,19 +10,35 @@
  */
 function alshaya_seo_install() {
   // Update global metatag defaults to include og_locale and og_site_name.
-  $global_config_factory = Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
-  $global_tags = $global_config_factory->get('tags');
-  $global_tags['og_locale'] = '[site:locale]';
-  $global_tags['og_site_name'] = '[site:name]';
-  $global_config_factory->set('tags', $global_tags);
-  $global_config_factory->save();
+  $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
+  $tags = $config_factory->get('tags');
+  $tags['title'] = '[current-page:title] | [site:name] [site:country]';
+  $tags['og_locale'] = '[site:locale]';
+  $tags['og_site_name'] = '[site:name]';
+  $config_factory->set('tags', $tags);
+  $config_factory->save();
 
   // Update node metatag defaults to include og_description and
   // og_locale_alternative.
-  $node_config_factory = Drupal::configFactory()->getEditable('metatag.metatag_defaults.node');
-  $node_tags = $node_config_factory->get('tags');
-  $node_tags['og_description'] = '';
-  $node_tags['og_locale_alternative'] = '[node:locale:alternate]';
-  $node_config_factory->set('tags', $node_tags);
-  $node_config_factory->save();
+  $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node');
+  $tags = $config_factory->get('tags');
+  $tags['title'] = '[node:title] | [site:name] [site:country]';
+  $tags['og_description'] = '';
+  $tags['og_locale_alternative'] = '[node:locale:alternate]';
+  $config_factory->set('tags', $tags);
+  $config_factory->save();
+
+  // Update terms metatag defaults.
+  $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term');
+  $tags = $config_factory->get('tags');
+  $tags['title'] = '[term:name] | [site:name] [site:country]';
+  $config_factory->set('tags', $tags);
+  $config_factory->save();
+
+  // Update user metatag defaults.
+  $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.user');
+  $tags = $config_factory->get('tags');
+  $tags['title'] = '[user:name] | [site:name] [site:country]';
+  $config_factory->set('tags', $tags);
+  $config_factory->save();
 }
