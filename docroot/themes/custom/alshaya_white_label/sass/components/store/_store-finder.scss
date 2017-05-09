@@ -1,0 +1,150 @@
+.path--store-finder {
+  .view-header {
+    font-size: 14px;
+    font-weight: bold;
+    color: $black;
+  }
+
+  .c-page-title {
+    margin-top: 3.563rem;
+    margin-bottom: 0.6875rem;
+  }
+
+  .c-content__region {
+    max-width: 77.25rem;
+    margin: auto;
+  }
+
+  .views-exposed-form {
+    display: table;
+    width: 100%;
+    border-top: 1px solid $white;
+    border-bottom: 1px solid $white;
+    padding: 0.6875rem 0;
+  }
+
+  .current-location,
+  .form-type-textfield,
+  .form-actions,
+  .label--location,
+  .list-view-link,
+  .map-view-link {
+    font-size: 12px;
+    display: table-cell;
+    max-width: 33%;
+    vertical-align: middle;
+    color: $cerulean-two;
+  }
+
+  .current-location,
+  .list-view-link,
+  .map-view-link,
+  .label--location {
+    &::before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      margin-#{$right}: 1rem;
+    }
+  }
+
+  .current-location::before {
+    background: url('../imgs/icons/current.png') no-repeat;
+    width: 38px;
+    height: 38px;
+  }
+
+  .label--location::before {
+    background: url('../imgs/icons/ic-search.svg') no-repeat;
+    width: 25px;
+    height: 25px;
+  }
+
+  .map-view-link::before {
+    background: url('../imgs/icons/map.png') no-repeat;
+    width: 42px;
+    height: 42px;
+  }
+
+  .list-view-link::before {
+    background: url('../imgs/icons/list.png') no-repeat;
+    width: 38px;
+    height: 28px;
+  }
+
+  .current-location {
+    padding: 0 1.875rem;
+    border-right: 1px solid $white;
+  }
+
+  .label--location {
+    padding-#{$left}: 1.5rem;
+    padding-#{$right}: 1rem;
+  }
+
+  .list-view-link,
+  .map-view-link {
+    padding-#{$left}: 4.375rem;
+  }
+
+  .active {
+    font-weight: bold;
+    color: $marine-blue-two;
+  }
+
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+    background: none;
+    border: 1px solid $white;
+    padding: 0.6875rem;
+  }
+
+  .block-views-exposed-filter-blockstores-finder-page-3,
+  .attachment-after {
+    display: none;
+  }
+
+  .view-content {
+    h3 {
+      font-size: 26px;
+      display: inline-block;
+      color: $black;
+      margin: 0;
+    }
+
+    .views-row {
+      margin-bottom: 1rem;
+
+      &.views-row-last {
+        margin-bottom: 3rem;
+      }
+
+      a {
+        color: $cerulean-two;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .view-display-id-page_1 {
+    .view-content,
+    .attachment-after {
+      display: block;
+    }
+
+    .view-content {
+      border-right: 1px solid $white;
+      margin-#{$right}: 0.6875rem;
+      padding-#{$right}: 0.6875rem;
+    }
+
+    .set-center-location {
+      background-color: $white-four;
+    }
+  }
+
+  .view-display-id-page_3 {
+    .view-content {
+      margin-bottom: 8.625rem;
+    }
+  }
+}

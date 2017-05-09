@@ -57,6 +57,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
 
       // Adding placeholder to the input field.
       $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
+      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#prefix'] = '<div class="label--location">' . t('Find stores nearest to') . '</div>';
+      unset($form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#description']);
     }
   }
 }
