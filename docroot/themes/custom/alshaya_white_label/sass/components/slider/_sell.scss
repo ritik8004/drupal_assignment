@@ -6,7 +6,7 @@
 
   @include breakpoint($tablet) {
     padding: 0 2.75rem;
-    margin-left: 0;
+    margin-#{$left}: 0;
   }
 
   @include breakpoint($desktop) {
@@ -25,8 +25,8 @@
     margin: 0.625rem 0;
 
     @include breakpoint($desktop) {
-      padding-left: 1.56rem;
-      padding-right: 1.56rem;
+      padding-#{$left}: 1.5rem;
+      padding-#{$right}: 0.7rem;
     }
   }
 
@@ -63,10 +63,10 @@
   }
 
   .views-row {
-    height: 24rem;
+    height: 22.5rem;
 
     @include breakpoint($tablet) {
-      height: 19.5rem;
+      height: 19rem;
     }
 
     .use-ajax {
@@ -83,19 +83,27 @@
 
   .owl-prev {
     @include breakpoint($tablet) {
-      left: -2.25rem;
+      left: -2.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      left: -1.875rem;
     }
   }
 
   .owl-next {
     @include breakpoint($tablet) {
-      right: -2.25rem;
+      right: -2.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      right: -3.2rem;
     }
   }
 
   .owl-prev::before,
   .owl-next::before {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 
   .owl-item img {
@@ -110,7 +118,7 @@
   .owl-prev,
   .owl-next {
     @include breakpoint($tablet) {
-      top: 25%;
+      top: 23%;
     }
   }
 }
@@ -124,13 +132,17 @@
 }
 
 .crossell-title {
-  margin-bottom: 1rem;
   font-size: 0.875rem;
   font-family: $alshaya-bold;
+  text-align: $left;
 
   @include breakpoint($tablet) {
     font-size: 1.125rem;
-    margin-left: 2.75rem;
+    margin-#{$left}: 2.7rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-#{$left}: 3.5rem;
   }
 }
 
@@ -171,18 +183,20 @@
       position: absolute;
       top: -1.5625rem;
       font-size: 0.6875rem;
-      padding: 0.3125rem 1.25rem 0.3125rem 0;
+      padding: 0.3125rem 0;
+      padding-#{$right}: 1.25rem;
+      #{$left}: 0;
     }
 
     .js-form-wrapper {
-      float: left;
+      float: $left;
 
       .form-type-select {
         @include select-wrapper(12.375rem);
 
         padding: 0;
         position: relative;
-        padding-bottom: 3.5rem;
+        padding-bottom: 3rem;
         margin-top: 2.1875rem;
       }
 
@@ -206,7 +220,7 @@
     .form-item-quantity {
       @include select-wrapper(4.375rem);
 
-      float: right;
+      float: $right;
       padding: 0;
       margin-bottom: 1.5rem;
       margin-top: 2.1875rem;
