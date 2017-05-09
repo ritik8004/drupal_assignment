@@ -53,6 +53,20 @@
       color: $greyish;
     }
   }
+
+  @include breakpoint($only-mobile) {
+    .mobile-number-field.form-item--error {
+      margin-bottom: 4rem;
+
+      .form-item-mobile-number-mobile {
+        .form-item--error-message {
+          position: absolute;
+          #{$left}: -5rem;
+          width: 21rem;
+        }
+      }
+    }
+  }
 }
 
 .contact-form,
