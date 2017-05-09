@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.approved
+    - workbench_moderation.moderation_state.published
+id: from_approved_to_published
+label: 'From Approved To published'
+stateFrom: approved
+stateTo: published
+weight: -11

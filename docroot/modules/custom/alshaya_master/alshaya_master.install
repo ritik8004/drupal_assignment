@@ -167,4 +167,9 @@ function alshaya_master_install() {
   \Drupal::configFactory()->getEditable('mailsystem.settings')
     ->set('defaults.formatter', 'mime_mail')
     ->save();
+
+  // Change needs review label to 'Pending review'.
+  \Drupal::configFactory()->getEditable('workbench_moderation.moderation_state.needs_review')
+    ->set('label', 'Pending review')
+    ->save();
 }
