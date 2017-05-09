@@ -13,32 +13,44 @@
       }
       // Slider 1 - For Desktop - Image zoom.
       if ($(window).width() < 1025) {
-        $('#lightSlider').lightSlider({
+        $('#lightSlider', context).lightSlider({
           vertical: false,
           item: 3,
           verticalHeight: 100
         });
+        // Slider 1 - For Desktop - Image zoom.
+        $('#drupal-modal #lightSlider', context).lightSlider({
+          vertical: false,
+          item: 3,
+          verticalHeight: 100
+        });
+        // Slider - 2 For Desktop - Image Gallery.
+        $('#product-image-gallery', context).lightSlider({
+          vertical: true,
+          item: 5,
+          verticalHeight: 500
+        });
       }
       else {
-        $('#lightSlider').lightSlider({
+        $('#lightSlider', context).lightSlider({
           vertical: true,
           item: 5,
           verticalHeight: 440
         });
+        // Slider 1 - For Desktop - Image zoom.
+        $('#drupal-modal #lightSlider', context).lightSlider({
+          vertical: true,
+          item: 5,
+          verticalHeight: 500
+        });
+        // Slider - 2 For Desktop - Image Gallery.
+        $('#product-image-gallery', context).lightSlider({
+          vertical: true,
+          item: 5,
+          verticalHeight: 500
+        });
       }
 
-      // Slider 1 - For Desktop - Image zoom.
-      $('#drupal-modal #lightSlider').lightSlider({
-        vertical: true,
-        item: 5,
-        verticalHeight: 500
-      });
-      // Slider - 2 For Desktop - Image Gallery.
-      $('#product-image-gallery').lightSlider({
-        vertical: true,
-        item: 5,
-        verticalHeight: 500
-      });
       // Slider - 3 For Mobile - Image Gallery.
       $('#product-image-gallery-mobile').lightSlider({
         item: 1,
@@ -184,7 +196,6 @@
       });
       // For Desktop slider, we add a iframe on click on the image.
       $('#lightSlider li').on('click', function () {
-        console.log($(this));
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var wrap = $('#cloud-zoom-wrap');
           // Get width & height of wrap.
@@ -194,11 +205,20 @@
           $('#yt-vi-container iframe').remove();
           appendVideoIframe($('#yt-vi-container'), URL, width, height);
           $('#cloud-zoom-wrap').hide();
+          $(this).siblings('.lslide').removeClass('active');
+          $(this).addClass('active');
         }
       });
 
       $('#lightSlider li img').on('click', function () {
         if ($(this).parent().hasClass('cloudzoom__thumbnails__image')) {
+          $(this).parent().parent().siblings('.lslide').removeClass('active');
+          $(this).parent().parent().addClass('active');
+        }
+      });
+
+      $('#product-image-gallery li img').on('click', function () {
+        if ($(this).parent().hasClass('imagegallery__thumbnails__image')) {
           $(this).parent().parent().siblings('.lslide').removeClass('active');
           $(this).parent().parent().addClass('active');
         }
@@ -220,7 +240,7 @@
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       /**
-       * Toggles the product gallery based on screen width.
+       * Toggles the product gallery based on screen width [between tab and mobile].
        */
       function toggleProductImageGallery() {
         if ($(window).width() < 768) {
