@@ -102,13 +102,15 @@ function alshaya_user_modules_installed($modules) {
   $config = \Drupal::configFactory()->getEditable('user_registrationpassword.settings');
   $config->set('registration', USER_REGISTRATIONPASSWORD_VERIFICATION_PASS);
   $config->set('register_subject', 'Welcome to [site:name]');
-  $config->set('register_body', '<h1>Hi [user:display-name]!</h1>
+  $config->set('register_body', '<h1>Hi [user:field_first_name:value]!</h1>
 
 You recently signed up for [site:name] Account.
 
 <b>Please verify your email address and activate your account by clicking the below link</b>
 
 <a class="button" href="[user:registrationpassword-url]">verify your email</a>
+
+Or verify using this link: <a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
 
 If you did not request this verification, please ignore this email. If you feel something is wrong, please contact our support team at <a href="mailto:[site:mail]">[site:mail]</a>.');
   $config->save();
