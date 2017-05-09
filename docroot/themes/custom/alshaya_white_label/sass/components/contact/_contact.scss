@@ -47,6 +47,11 @@
       opacity: 1;
       font-size: 0.75rem;
       position: absolute;
+
+      &.error {
+        top: 1.25rem;
+        width: 9rem;
+      }
     }
 
     .country-select {
