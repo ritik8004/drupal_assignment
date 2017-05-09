@@ -134,9 +134,13 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   // Get the rendered html to pass into HtmlCommand.
   $html = drupal_render($output);
 
+  // Get the interval we want to show the message for on our ladda button.
+  $interval = \Drupal::config('alshaya_acm_cart_notification.settings')->get('ajax_spinner_message_interval');
+  $data['interval'] = $interval;
+
   // Prepare the ajax Response.
   $response = new AjaxResponse();
-  $data = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
+  $data['message'] = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
   $response->addCommand(new HtmlCommand('#cart_notification', $html));
   $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
   $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
