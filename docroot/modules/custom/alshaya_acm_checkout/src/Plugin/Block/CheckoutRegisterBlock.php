@@ -6,6 +6,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -29,6 +30,13 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
   protected $entityTypeManager;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * The entity form builder.
    *
    * @var \Drupal\Core\Entity\EntityManagerInterface
@@ -48,11 +56,14 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
    *   The entity manager.
    * @param \Drupal\Core\Entity\EntityFormBuilderInterface $entityFormBuilder
    *   The entity form builder.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, EntityFormBuilderInterface $entityFormBuilder) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, EntityFormBuilderInterface $entityFormBuilder, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entityTypeManager;
     $this->entityFormBuilder = $entityFormBuilder;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -64,7 +75,8 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('entity.form_builder')
+      $container->get('entity.form_builder'),
+      $container->get('module_handler')
     );
   }
 
@@ -133,11 +145,12 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $build['form'] = $form;
 
     // Add the following block only if alshaya_loyaty is enabled.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
+    if ($this->moduleHandler->moduleExists('alshaya_loyalty')) {
       // TODO: Add condition around this to check if promo card was entered by
       // user in Basket. Also save that in user if it was entered.
       $block = Block::load('jointheclub');
       $build['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+      $build['joinclub']['#weight'] = 100;
     }
 
     return $build;

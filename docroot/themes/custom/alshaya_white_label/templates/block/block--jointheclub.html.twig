@@ -35,13 +35,15 @@ set classes = [
 %}
 <div{{ attributes.addClass(classes) }}>
     {% if content.image %}
-        <img src="{{ content.image }}" />
+      {{ content.image }}
     {% endif %}
+
     {{ title_prefix }}
     {% if label %}
         <h2{{ title_attributes }}>{{ label }}</h2>
     {% endif %}
     {{ title_suffix }}
+
     {% block content %}
         {{ content.description }}
     {% endblock %}
