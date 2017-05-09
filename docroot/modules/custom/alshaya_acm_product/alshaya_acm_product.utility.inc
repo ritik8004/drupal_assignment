@@ -115,13 +115,18 @@ function alshaya_acm_product_get_parent_sku_by_sku($sku) {
   $query->condition('field_configured_skus', $sku);
   $ids = $query->execute();
 
-  if (count($ids) != 1) {
+  // Not a configurable product.
+  if (count($ids) === 0) {
+    return NULL;
+  }
+  // Some issue in DATA.
+  elseif (count($ids) > 1) {
     \Drupal::logger('alshaya_acm_product')->error(
       'SKU @sku has no or multiple parent SKUs.',
       ['@sku' => $sku]
     );
 
-    throw new RuntimeException('No or multiple parent SKUs found');
+    throw new RuntimeException('Multiple parent SKUs found');
   }
 
   // Get the first id.
