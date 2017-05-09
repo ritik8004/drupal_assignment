@@ -3793,6 +3793,9 @@
                 "drupal": {
                     "version": "8.x-1.0-alpha9",
                     "datestamp": "1492681579"
+                },
+                "patches_applied": {
+                    "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
