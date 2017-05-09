@@ -32,18 +32,21 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     }
 
     $steps['delivery'] = [
-      'label' => $this->t('Choose delivery'),
+      'label' => $this->t('secure checkout'),
+      'title' => $this->t('Choose delivery'),
       'next_label' => $this->t('Continue to delivery options'),
       'previous_label' => $this->t('Return to delivery options'),
     ];
 
     $steps['payment'] = [
-      'label' => $this->t('Make payment'),
+      'label' => $this->t('secure checkout'),
+      'title' => $this->t('Make payment'),
       'next_label' => $this->t('Continue to payment'),
     ];
 
     $steps['confirmation'] = [
-      'label' => $this->t('Order confirmation'),
+      'label' => $this->t('secure checkout'),
+      'title' => $this->t('Order confirmation'),
       'next_label' => $this->t('place order'),
     ];
 

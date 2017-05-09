@@ -1,8 +1,11 @@
 (function ($) {
   Drupal.behaviors.alshaya_acm_js = {
     attach: function (context, settings) {
-      $(".acq-cart-summary .content").accordion({
-        collapsible: true
+      $(".acq-cart-summary .content-items").slideUp();
+
+      $(".acq-cart-summary .content-head").on('click', function() {
+        $(this).parent().toggleClass("active--accordion");
+        $(this).next().slideToggle();
       });
 
       $('#apply_coupon').on('click', function () {

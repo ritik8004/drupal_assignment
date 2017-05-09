@@ -44,6 +44,10 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#markup' => '<div class="tab tab-click-collect"><h2>' . $this->t('Click & Collect') . '</h2><p>' . $this->t('Collect your order in-store') . '</p></div>',
     ];
 
+    $pane_form['line_seperator'] = [
+      '#markup' => '<hr />',
+    ];
+
     return $pane_form;
   }
 
