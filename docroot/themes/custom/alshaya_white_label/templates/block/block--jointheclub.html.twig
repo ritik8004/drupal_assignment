@@ -34,15 +34,17 @@ set classes = [
 ]
 %}
 <div{{ attributes.addClass(classes) }}>
-    {% if content.field_image %}
-        {{ content.field_image }}
+    {% if content.image %}
+      {{ content.image }}
     {% endif %}
+
     {{ title_prefix }}
     {% if label %}
         <h2{{ title_attributes }}>{{ label }}</h2>
     {% endif %}
     {{ title_suffix }}
+
     {% block content %}
-        {{ content|without('field_image') }}
+        {{ content.description }}
     {% endblock %}
 </div>

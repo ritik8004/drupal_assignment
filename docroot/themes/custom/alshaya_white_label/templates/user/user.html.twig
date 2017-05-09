@@ -1,24 +1,39 @@
+
+
 <article{{ attributes }} class="account--dashboard">
-    <div class="subtitle">{{ 'Account Details' | t }}</div>
+  <div class="subtitle">{{ 'Account Details' | t }}</div>
+
+  {% if joinclub %}
+    <div class="account-content-wrapper has-join-club">
+  {% else %}
+    <div class="account-content-wrapper has-join-club">
+  {% endif %}
     <ul>
-        {% if email %}
-            <li class="email">
-                <div class="label dark">{{ 'Email address' | t }}</div>
-                <div class="light">{{ email }}</div>
-            </li>
-        {% endif %}
-        {% if contact_number is not empty %}
-            <li class="contact--number">
-                <div class="label dark">{{ 'Contact number' | t }}</div>
-                <div class="light">{{ contact_number }}</div>
-            </li>
-        {% endif %}
-        {% if privilege_card is not empty%}
-            <li class="card--number">
-                <div class="label black">{{ 'Privilege card number' | t }}</div>
-                <div class="light">{{ privilege_card }}</div>
-            </li>
-        {% endif %}
+      {% if email %}
+        <li class="email">
+          <div class="label dark">{{ 'Email address' | t }}</div>
+          <div class="light">{{ email }}</div>
+        </li>
+      {% endif %}
+      {% if contact_number is not empty %}
+        <li class="contact--number">
+          <div class="label dark">{{ 'Contact number' | t }}</div>
+          <div class="light">{{ contact_number }}</div>
+        </li>
+      {% endif %}
+      {% if privilege_card is not empty %}
+        <li class="card--number">
+          <div class="label black">{{ 'Privilege card number' | t }}</div>
+          <div class="light">{{ privilege_card }}</div>
+        </li>
+      {% endif %}
     </ul>
+  </div>
+
+  {% if joinclub %}
+    <div class="joinclub">
+      {{ joinclub }}
+    </div>
+  {% endif %}
 </article>
 
