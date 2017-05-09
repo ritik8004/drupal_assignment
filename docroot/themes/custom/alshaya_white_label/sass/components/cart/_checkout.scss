@@ -568,7 +568,7 @@ body.alias--cart {
         width: 68%;
         font-size: 12px;
         font-weight: bold;
-        color: $windows-blue;
+        color: $cerulean-two;
       }
 
       select {
@@ -587,6 +587,19 @@ body.alias--cart {
     @include breakpoint($tablet) {
       float: $right;
       margin-#{$right}: 7.5rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      font-size: 12px;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 12px;
+      text-align: $right;
+
+      table tr td:first-child {
+        padding-#{$right}: 1rem;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -615,6 +628,10 @@ body.alias--cart {
       td:first-child span {
         display: block;
         font-size: 12px;
+
+        @include breakpoint($only-mobile) {
+          font-size: 10px;
+        }
       }
 
       td:nth-child(2) {
@@ -642,6 +659,7 @@ body.alias--cart {
     background: $pumpkin-orange;
     margin-top: 1em;
     margin-bottom: 12px;
+    text-transform: lowercase;
 
     @include breakpoint($upto-tablet) {
       display: block;
