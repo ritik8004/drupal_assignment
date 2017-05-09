@@ -60,12 +60,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
 
     if (isset($tokens['country'])) {
-      $replacements[$tokens['country']] = '';
-
-      if ($selected_country = \Drupal::config('system.date')->get('country.default')) {
-        $full_country_list = \Drupal::service('country_manager')->getList();
-        $replacements[$tokens['country']] = $full_country_list[$selected_country];
-      }
+      $replacements[$tokens['country']] = _alshaya_seo_get_site_country_name();
     }
   }
 

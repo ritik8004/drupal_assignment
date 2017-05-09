@@ -33,10 +33,9 @@ class GoogleKnowledgeGraphConfigForm extends ConfigFormBase {
     $config = $this->config('alshaya_seo.google_knowledge_graph');
 
     $form['same_as'] = [
-      '#type' => 'text',
+      '#type' => 'textarea',
       '#title' => $this->t('Same As'),
       '#description' => $this->t('Enter one link per line if you have multiple links.'),
-      '#required' => FALSE,
       '#default_value' => $config->get('same_as') ? $config->get('same_as') : '',
     ];
 

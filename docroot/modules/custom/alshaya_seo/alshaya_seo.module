@@ -4,3 +4,77 @@
  * @file
  * Module file for seo.
  */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_seo_page_attachments(array &$attachments) {
+  $gkg_config = \Drupal::config('alshaya_seo.google_knowledge_graph');
+
+  $gkg_data = [];
+
+  $gkg_data['@context'] = 'http://schema.org';
+  // As checked in current prod, following text is not to be translated.
+  $gkg_data['@type'] = 'Organization';
+  $gkg_data['name'] = \Drupal::config('system.site')->get('name') . '' . _alshaya_seo_get_site_country_name();
+  $gkg_data['url'] = Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString();
+  $gkg_data['logo'] = Url::fromUserInput(theme_get_setting('logo.url'), ['absolute' => TRUE])->toString();
+
+  // Add all sameAs links as provided in Config.
+  if ($same_as = $gkg_config->get('same_as')) {
+    foreach (explode(PHP_EOL, $same_as) as $same_as_link) {
+      // Remove \r as well if string contains \r\n.
+      $same_as_link = trim($same_as_link, "\r");
+
+      if (!empty($same_as_link)) {
+        $gkg_data['sameAs'][] = $same_as_link;
+      }
+    }
+  }
+
+  // Add all contact options. Basic check added to have contact_type set in
+  // config to show the whole object.
+  if ($gkg_config->get('contact_telephone')) {
+    $contact['@type'] = 'ContactPoint';
+    $contact['telephone'] = $gkg_config->get('contact_telephone');
+    $contact['contactType'] = $gkg_config->get('contact_type');
+    $contact['areaServed'] = $gkg_config->get('contact_areaserved');
+    $contact['contactOption'] = $gkg_config->get('contact_option');
+
+    // Add all site languages as available language.
+    foreach (\Drupal::languageManager()->getLanguages() as $language) {
+      $contact['availableLanguage'][] = $language->getName();
+    }
+
+    // As required, we want it to be array of objects.
+    $gkg_data['contactPoint'][] = $contact;
+  }
+
+  $attachments['#attached']['html_head']['alshaya_seo'][] = [
+    '#type' => 'html_tag',
+    '#tag' => 'script',
+    '#attributes' => [
+      'type' => 'application/ld+json',
+    ],
+    // Adding PHP_EOL on both sides to make it look exactly same as expected.
+    '#value' => PHP_EOL . json_encode($gkg_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL,
+    '#weight' => 100,
+  ];
+}
+
+/**
+ * Helper function to get full country name from current site config.
+ *
+ * @return string
+ *   Country name or empty string.
+ */
+function _alshaya_seo_get_site_country_name() {
+  if ($selected_country = \Drupal::config('system.date')->get('country.default')) {
+    $full_country_list = \Drupal::service('country_manager')->getList();
+    return $full_country_list[$selected_country];
+  }
+
+  return '';
+}
