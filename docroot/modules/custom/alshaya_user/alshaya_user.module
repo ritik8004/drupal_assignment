@@ -12,7 +12,6 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Render\Element\PasswordConfirm;
 
 /**
  * Check if the current user has is only authenticated user.
@@ -41,7 +40,6 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $form['account']['mail']['#description'] = '';
   $form['account']['name']['#description'] = '';
   $form['account']['pass']['#description'] = '';
-  $form['account']['pass']['#after_build'][] = 'alshaya_user_process_password_confirm_after_build';
 
   // We don't want to show the terms and conditions field to logged in users.
   if (\Drupal::currentUser()->isAuthenticated()) {
@@ -78,6 +76,11 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
 
     $form['#validate'][] = 'alshaya_user_form_user_register_form_validate';
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+
+    // Change password_confirm field to normal password field.
+    $form['account']['pass']['#title'] = t('Password');
+    $form['account']['pass']['#type'] = 'password';
+    $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
   }
 }
 
@@ -163,22 +166,6 @@ function alshaya_user_preprocess_menu(&$variables) {
 }
 
 /**
- * After build process callback for updating password confirm form element.
- */
-function alshaya_user_process_password_confirm_after_build($element) {
-  // Get tooltip content from config.
-  $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
-
-  // Add tooltip as suffix to first element.
-  $element['pass1']['#suffix'] = '<div class="password-tooltip">
-      <div class="password-tooltip-icon">!</div>
-      <div class="password-tooltip-content">' . $tooltip . '</div>
-    </div>';
-
-  return $element;
-}
-
-/**
  * Implements hook_block_access().
  */
 function alshaya_user_block_access(Block $block, $operation, AccountInterface $account) {
@@ -202,36 +189,20 @@ function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $blo
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['account']['pass']['#process'][] = 'alshaya_user_form_change_pwd_form_process_pass';
+  // Change password_confirm field to normal password field.
+  $form['account']['pass']['#title'] = t('new password');
+  $form['account']['pass']['#type'] = 'password';
+  $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
+
   // Change current password title and submit button text.
   $form['account']['current_pass']['#title'] = t('current password');
   $form['actions']['submit']['#value'] = t('change password');
 
   // Set this as password policy module checks for the role element.
   $form['account']['roles']['#default_value'] = [];
+
   // Password policy validation.
   $form['#validate'][] = '_password_policy_user_profile_form_validate';
-}
-
-/**
- * Process functon to change elements of password_confirm type field.
- */
-function alshaya_user_form_change_pwd_form_process_pass(&$element, FormStateInterface $form_state, &$complete_form) {
-  // Change title for password field.
-  $element = PasswordConfirm::processPasswordConfirm($element, $form_state, $complete_form);
-  $element['pass1']['#title'] = t('new password');
-  $element['pass2']['#title'] = t('confirm password');
-
-  // Get tooltip content from config.
-  $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
-
-  // Add tooltip as suffix to first element.
-  $element['pass1']['#suffix'] = '<div class="password-tooltip">
-      <div class="password-tooltip-icon">!</div>
-      <div class="password-tooltip-content">' . $tooltip . '</div>
-    </div>';
-
-  return $element;
 }
 
 /**

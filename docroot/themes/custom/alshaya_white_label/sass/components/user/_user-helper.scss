@@ -234,6 +234,18 @@
       }
     }
 
+    .form-type-password {
+      @include breakpoint($desktop) {
+        margin-top: 4.4rem;
+
+        .c-input__bar {
+          position: absolute;
+          top: 25px;
+        }
+      }
+    }
+
+
     @include breakpoint($desktop) {
       margin-top: -2.65rem;
     }

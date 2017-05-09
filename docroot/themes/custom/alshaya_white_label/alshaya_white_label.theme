@@ -532,3 +532,26 @@ function alshaya_white_label_preprocess_views_view_unformatted__store_list(&$var
     }
   }
 }
+
+/**
+ * Implements THEMENAME_preprocess_input().
+ */
+function alshaya_white_label_preprocess_input(&$variables) {
+  $element = $variables['element'];
+  if (isset($element['#attributes']['data-twig-suggestion'])) {
+    // Get password tooltip content from config.
+    $tooltip = \Drupal::config('alshaya_user.settings')
+      ->get('password_tooltip.value');
+    $variables['password_tooltip'] = $tooltip;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_input_alter().
+ */
+function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array $variables) {
+  $element = $variables['element'];
+  if (isset($element['#attributes']['data-twig-suggestion'])) {
+    $suggestions[] = 'input__' . $element['#attributes']['data-twig-suggestion'];
+  }
+}
