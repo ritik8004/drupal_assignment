@@ -9,8 +9,8 @@
   Drupal.behaviors.unmaskPassword = {
     attach: function (context, settings) {
       var show = Drupal.t('Show');
-      var showPassword = Drupal.t('Show password');
-      var hidePassword = Drupal.t('Hide password');
+      var showPassword = Drupal.t('Show');
+      var hidePassword = Drupal.t('Hide');
       if (!$('.form-type-password-confirm').find('#unmask_password').length) {
         $('.form-type-password').append('<div id="unmask_password">' + show + '</div>');
       }

@@ -145,7 +145,7 @@
     a {
       font-weight: bold;
       text-transform: lowercase;
-      color: $cerulean;
+      color: $cerulean-two;
     }
 
     h2 {
@@ -249,6 +249,7 @@
       background: $pumpkin-orange;
       margin-top: 1em;
       width: 100%;
+      text-transform: lowercase;
 
       @include breakpoint($tablet) {
         width: auto;
@@ -371,7 +372,7 @@
   text-transform: lowercase;
 
   a {
-    color: $cerulean;
+    color: $cerulean-two;
   }
 
   span {
@@ -383,7 +384,7 @@
     background-size: 18px;
     position: relative;
     top: 0;
-    color: $cerulean;
+    color: $cerulean-two;
   }
 
   span.icon {

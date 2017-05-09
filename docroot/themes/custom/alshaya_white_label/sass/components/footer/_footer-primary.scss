@@ -107,7 +107,7 @@
 .c-footer-menu--category {
   h2 {
     font-size: 0.875rem;
-    color: $peacock-blue;
+    color: $marine-blue-two;
     font-family: $alshaya-bold;
     font-weight: normal;
     cursor: pointer;
@@ -193,7 +193,7 @@
   h2 {
     font-size: 14px;
     font-family: $alshaya-bold;
-    color: $peacock-blue;
+    color: $marine-blue-two;
     text-transform: lowercase;
     font-weight: normal;
 
@@ -263,7 +263,7 @@
     @extend %btn;
 
     font-family: $alshaya-bold;
-    background: $peacock-blue;
+    background: $marine-blue-two;
     position: absolute;
     #{$right}: 0;
     bottom: 0;

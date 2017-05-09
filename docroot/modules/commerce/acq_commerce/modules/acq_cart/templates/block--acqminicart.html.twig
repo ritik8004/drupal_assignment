@@ -1,8 +1,14 @@
 <div class="acq-mini-cart">
-  {% if currency_code_position == 'before' %}
-    <span class="total"><span class="prefix">{{ currency_format }}</span><span class="total--amount">{{ total }}</span></span>
-  {% else %}
-    <span class="total">{{ total }}<span class="prefix">{{ currency_format }}</span></span>
+  {% if total > 0 %}
+    {% if currency_code_position == 'before' %}
+      <span class="total"><span class="prefix">{{ currency_format }}</span><span class="total--amount">{{ total }}</span></span>
+    {% else %}
+      <span class="total">{{ total }}<span class="prefix">{{ currency_format }}</span></span>
+    {% endif %}
   {% endif %}
-  <a class="cart-link" href="{{ url('acq_cart.cart') }}"><span class="quantity">{{ quantity }}</span></a>
+  <a class="cart-link" href="{{ url('acq_cart.cart') }}">
+    {% if total > 0 %}
+      <span class="quantity">{{ quantity }}</span>
+    {% endif %}
+  </a>
 </div>

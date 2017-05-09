@@ -50,9 +50,9 @@ header {
   position: relative;
 
   .c-header__region {
-    margin: 1.875rem 1.5625rem;
+    margin: 1.3625rem 1.5625rem;
     margin-bottom: 0;
-    padding-bottom: 1.5625rem;
+    padding-bottom: 1.3625rem;
   }
 
   .region__header {
@@ -142,9 +142,9 @@ header {
   .block-cart-mini-block {
     font-size: 0.875rem;
     text-align: $right;
+    color: $black;
 
     .total {
-      font-weight: bold;
       display: inline-block;
       margin-#{$right}: 20px;
 
@@ -168,6 +168,10 @@ header {
       height: 32px;
       position: relative;
       margin-bottom: -2px;
+
+      @include breakpoint($only-mobile) {
+        background-size: 22px;
+      }
     }
 
     .quantity {
@@ -180,6 +184,13 @@ header {
       #{$left}: -4px;
       border-radius: 50%;
       padding: 5px 7px;
+
+      @include breakpoint($only-mobile) {
+        bottom: 4px;
+        #{$left}: -3px;
+        padding: 3px 5px;
+        font-size: 8px;
+      }
     }
   }
 }
@@ -686,7 +697,8 @@ header {
     color: $marine-blue;
     display: block;
     font-size: 12px;
-    padding: 0.9375rem 0.625rem;
+    padding: 0.9375rem 0.625rem 0.9375rem 0;
+    text-transform: lowercase;
   }
 
   .menu--one__list-item {
@@ -819,19 +831,20 @@ header {
 .mobile--close {
   background: $white-five;
   position: fixed;
-  top: 8px;
-  #{$left}: 81%;
-  width: 26px;
-  height: 26px;
+  top: 9px;
+  #{$left}: 81.5%;
+  width: 35px;
+  height: 32px;
   z-index: 12;
   text-align: center;
   padding-top: 4px;
 
   span {
-    background: url('../imgs/icons/ic-close.svg') no-repeat;
-    width: 17px;
-    height: 17px;
+    background: url('../imgs/icons/ic-close.svg') center center no-repeat;
+    width: 25px;
+    height: 25px;
     display: inline-block;
+    background-size: 17px;
   }
 }
 
@@ -856,12 +869,14 @@ header {
     font-size: 14px;
     padding: 1rem 2rem;
     display: table-cell;
+    text-align: center;
   }
 
   .active {
     font-family: $alshaya-bold;
     color: $marine-blue;
     background: $white-five;
+    text-align: center;
   }
 }
 
