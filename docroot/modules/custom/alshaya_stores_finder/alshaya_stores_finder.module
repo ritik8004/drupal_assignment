@@ -54,6 +54,9 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#markup' => '<a href="javascript:;" class="current-location">' . t('Use my current location') . '</a>',
         '#weight' => -1,
       ];
+
+      // Adding placeholder to the input field.
+      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
     }
   }
 }

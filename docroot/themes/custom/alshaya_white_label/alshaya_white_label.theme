@@ -527,6 +527,7 @@ function alshaya_white_label_preprocess_views_view_unformatted__store_list(&$var
           $lat_lang_value = $latitude_longitude->getValue();
           $variables['rows'][$key]['lat_long'] = $lat_lang_value[0];
           $variables['rows'][$key]['nid'] = $row['content']['#row']->_entity->id();
+          $variables['rows'][$key]['title'] = $row['content']['#row']->_entity->label();
         }
       }
     }

@@ -20,19 +20,45 @@ bundle: store
 mode: default
 content:
   field_latitude_longitude:
-    weight: 107
-    label: above
-    settings: {  }
+    weight: 5
+    label: hidden
+    settings:
+      title: ''
+      set_marker: '1'
+      common_map: ''
+      info_text: ''
+      use_overridden_map_settings: 0
+      google_map_settings:
+        type: ROADMAP
+        zoom: '10'
+        minZoom: 0
+        maxZoom: 18
+        rotateControl: 0
+        mapTypeControl: 1
+        streetViewControl: 1
+        zoomControl: 1
+        fullscreenControl: 0
+        scrollwheel: 1
+        disableDoubleClickZoom: 0
+        draggable: 1
+        height: 400px
+        width: 100%
+        info_auto_display: 1
+        marker_icon_path: ''
+        disableAutoPan: 1
+        style: ''
+        preferScrollingToZooming: 0
+        gestureHandling: auto
     third_party_settings: {  }
-    type: geolocation_latlng
+    type: geolocation_map
   field_meta_tags:
-    weight: 102
+    weight: 2
     label: above
     settings: {  }
     third_party_settings: {  }
     type: metatag_empty_formatter
   field_store_address:
-    weight: 106
+    weight: 3
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -52,7 +78,7 @@ content:
     third_party_settings: {  }
     type: string
   field_store_open_hours:
-    weight: 105
+    weight: 4
     label: above
     settings:
       link_to_entity: false
@@ -64,4 +90,6 @@ content:
     weight: 10
 hidden:
   body: true
+  field_store_locator_id: true
+  field_store_number: true
   langcode: true

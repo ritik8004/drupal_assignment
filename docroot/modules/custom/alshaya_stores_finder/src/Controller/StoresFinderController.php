@@ -82,4 +82,20 @@ class StoresFinderController extends ControllerBase {
     return $response;
   }
 
+  /**
+   * Get the store detail.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $node
+   *   Node object.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response.
+   */
+  public function storeDetail(EntityInterface $node) {
+    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node);
+    $response = new AjaxResponse();
+    $response->addCommand(new HtmlCommand('.view-display-id-page_2', $build));
+    return $response;
+  }
+
 }
