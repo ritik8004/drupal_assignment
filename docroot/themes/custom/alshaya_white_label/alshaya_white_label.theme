@@ -337,7 +337,7 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
         $prefix = $form['privilege_card_wrapper']['#prefix'];
         $suffix = $form['privilege_card_wrapper']['#suffix'];
         $prefix .= '<div class="privilege-card-wrapper">';
-        $prefix .= '<div class="privilege-card-wrapper-title">' . t('Already a privilege club card member?') . '</div>';
+        $prefix .= '<div class="privilege-card-wrapper-title">' . t('Privilege card number (Optional)') . '</div>';
         $form['privilege_card_wrapper']['#prefix'] = $prefix;
         $form['privilege_card_wrapper']['#suffix'] = '</div>' . $suffix;
         $form['privilege_card_wrapper']['#title'] = t('Enter card details');
