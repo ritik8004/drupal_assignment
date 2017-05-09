@@ -1,0 +1,4 @@
+alshaya_seo.google_knowledge_graph_form:
+  route_name: alshaya_seo.google_knowledge_graph_form
+  title: 'Google Knowledge Graph'
+  base_route: alshaya_seo.google_knowledge_graph_form
