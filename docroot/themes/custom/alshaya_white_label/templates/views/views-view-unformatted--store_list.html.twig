@@ -26,6 +26,7 @@
     default_row_class ? 'views-row',
     ]
     %}
+    <a class="use-ajax row-title" href="/store-detail/{{ row.nid }}">{{ row.title }}</a>
     <div class="set-center-location" id="row-{{ row.nid }}">
         <div{{ row.attributes.addClass(row_classes) }}>
             {{ row.content }}

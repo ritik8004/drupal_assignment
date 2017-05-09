@@ -10,3 +10,9 @@ alshaya_stores_finder.view_toggle:
     _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::toggleView'
   requirements:
     _permission: 'access content'
+alshaya_stores_finder.store_detail:
+  path: '/store-detail/{node}'
+  defaults:
+    _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::storeDetail'
+  requirements:
+    _permission: 'access content'
