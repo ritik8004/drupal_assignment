@@ -202,8 +202,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   }
 
   if ($secure_checkout_access) {
-    // Change checkout button text to 'Secure Checkout'.
-    $form['actions']['checkout']['#value'] = t('Secure Checkout');
+    // Change checkout button text to 'Checkout Securely'.
+    $form['actions']['checkout']['#value'] = t('Checkout Securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
   }
