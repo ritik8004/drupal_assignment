@@ -20,7 +20,7 @@ select::-ms-expand {
   position: relative;
 
   @include icon(chevrondown, after) {
-    border-#{$left}: 1px solid $white;
+    border-#{$left}: 1px solid $white-five;
     font-size: 1.75rem;
     line-height: 2.1875rem;
     pointer-events: none;
