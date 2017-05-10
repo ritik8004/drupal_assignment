@@ -27,7 +27,7 @@ $settings['alshaya_custom_shield_default_pass'] = 'AS_S';
 $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.acm.acquia.io/';
 $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.acm.acquia.io/';
 $config['acq_commerce.conductor']['verify_ssl'] = FALSE;
-$config['acq_commerce.conductor']['base_url'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+$config['acq_commerce.conductor']['base_url'] = 'https://sylvain-kolpzxy-pgplwghmuzhmm.us.magentosite.cloud';
 $config['acq_commerce.conductor']['media_path'] = 'media/catalog/product';
 
 // Recaptcha settings.
