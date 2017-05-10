@@ -21,6 +21,7 @@ function alshaya_acm_drush_command() {
     'aliases'     => ['aaops'],
     'options'     => [
       'limit' => 'Number of products to sync.',
+      'skus' => 'SKUs to import (like query).',
     ],
   ];
 
@@ -53,6 +54,14 @@ function drush_alshaya_acm_offline_products_sync() {
 
   module_load_include('data', 'alshaya_acm', 'includes/products');
   global $_alshaya_acm_products;
+
+  // Check if we need to import only specific SKUs.
+  $query = drush_get_option('skus', '');
+  if ($query) {
+    $_alshaya_acm_products = array_filter($_alshaya_acm_products, function ($sku) use ($query) {
+      return strpos($sku['sku'], $query) !== FALSE;
+    });
+  }
 
   $limit = (int) drush_get_option('limit', 0);
   if ($limit) {
