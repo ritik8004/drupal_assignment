@@ -29,13 +29,13 @@
     padding: 26px 28px 51px 16px;
 
     @include breakpoint($tablet) {
-      min-height: 13.75rem;
+      min-height: 13rem;
       padding: 26px 14px 37px 16px;
     }
 
     @include breakpoint($desktop) {
       padding: 26px 44px 53px 23px;
-      min-height: 14rem;
+      min-height: 13.5rem;
     }
   }
 
@@ -60,16 +60,29 @@
     float: left;
     padding-right: 26px;
     vertical-align: top;
-    width: 57%;
+    width: 55%;
+
+    @include breakpoint($tablet) {
+      width: 51%;
+    }
 
     @include breakpoint($desktop) {
       padding-right: 108px;
+      width: 59%;
     }
   }
 
   .address--delivery {
     float: left;
-    width: 43%;
+    width: 44%;
+
+    @include breakpoint($tablet) {
+      width: 48%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 41%;
+    }
   }
 
   .address--options {
@@ -90,20 +103,21 @@
   .address--controls {
     border-#{$right}: 1px solid $white;
     display: table-cell;
-    min-height: 49px;
-    padding: 14px;
+    min-height: 3.0625rem;
+    padding: 0.9375rem;
     vertical-align: middle;
 
     @include breakpoint($tablet) {
-      padding: 29px 14px;
+      padding: 1.375rem 0.875rem;
       min-height: 73px;
+      text-align: center;
     }
 
     @include breakpoint($desktop) {
       border: none;
       min-height: none;
       padding: 0;
-      padding-#{$right}: 20px;
+      padding-#{$right}: 1.25rem;
     }
 
     .ajax-progress-throbber {
@@ -114,18 +128,19 @@
   .address--primary {
     width: 151px;
     position: relative;
-    padding-#{$right}: 9px;
-    padding-#{$left}: 40px;
+    padding-#{$right}: 0.5625rem;
+    padding-#{$left}: 2.5rem;
+    text-align: left;
 
     @include breakpoint($tablet) {
       width: 106px;
-      padding-#{$left}: 50px;
+      padding-#{$left}: 2.4rem;
     }
 
     @include breakpoint($desktop) {
-      padding-#{$right}: 41px;
+      padding-#{$right}: 2.5625rem;
       width: auto;
-      padding-#{$left}: 26px;
+      padding-#{$left}: 1.625rem;
       text-indent: 0;
     }
 
@@ -134,13 +149,15 @@
       content: "";
       display: inline-block;
       vertical-align: middle;
-      width: 14px;
-      height: 14px;
+      width: 0.875rem;
+      height: 0.875rem;
       border-radius: 100%;
-      margin-#{$right}: 12px;
+      margin-#{$right}: 0.75rem;
       border: 1px solid;
       position: absolute;
-      #{$left}: 16px;
+      #{$left}: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
 
       @include breakpoint($desktop) {
         #{$left}: 0;
@@ -149,7 +166,7 @@
 
     span::before,
     a:hover::before {
-      border: 4px solid #3680cb;
+      border: 0.1875rem solid $windows-blue;
       background: white;
     }
   }
@@ -160,11 +177,16 @@
       display: block;
       text-transform: uppercase;
 
+      @include breakpoint($tablet) {
+        text-align: center;
+      }
+
       @include breakpoint($desktop) {
         border: 1px solid $black-two;
         display: inline-block;
         font-weight: 700;
-        padding: 10px 24px;
+        padding: 0.625rem 1.5rem;
+        min-width: 5.9375rem;
       }
 
       &:focus {
@@ -173,14 +195,26 @@
     }
   }
 
+  .address--edit {
+    text-align: center;
+  }
+
   .address--delete {
     border-#{$right}: none;
     padding-#{$right}: 0;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$right}: 0.9375rem;
+    }
   }
 
   .active {
     .address--data {
       background: $white-four;
+    }
+
+    .address--primary {
+      font-weight: 700;
     }
 
     .address--controls:last-child {
@@ -201,20 +235,66 @@
 
   .view-profiles .view-content {
     position: relative;
-    top: -20px;
+    top: -1.25rem;
+  }
+
+  .c-page-title {
+    margin-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 2.25rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-bottom: 1rem;
+      margin-bottom: 3rem;
+    }
   }
 
   .block-system > a {
     @extend %button-wide;
 
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 
     @include breakpoint($tablet) {
       display: inline-block;
       position: absolute;
-      top: -20px;
+      top: -1rem;
       #{$right}: 0;
+      min-width: 10.2rem;
+      text-transform: lowercase;
+    }
+
+    @include breakpoint($desktop) {
+      top: -0.3125rem;
+      min-width: 11.75rem;
+    }
+  }
+}
+
+.l-two--sf {
+  &.c-address-book {
+    @include breakpoint($only-tablet) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        max-width: 16.8125rem;
+        width: 23%;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 74%;
+        max-width: 57.5625rem;
+        float: right;
+      }
     }
   }
 }

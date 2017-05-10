@@ -50,6 +50,7 @@
 
     img {
       width: 80%;
+      max-width: 15.5rem;
 
       @include breakpoint($tablet) {
         margin-#{$left}: -2.6875rem;

@@ -388,7 +388,6 @@
 }
 
 .l-two--sf {
-  &.c-address-book,
   &.c-communication-preferences {
     .c-sidebar-first {
       @include breakpoint($only-tablet) {
