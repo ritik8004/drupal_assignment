@@ -135,6 +135,15 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
           ];
         }
       }
+      else {
+        /* @var \Drupal\node\Entity\Node $product_node */
+        $product_node = alshaya_acm_product_get_display_node($id);
+        $name = [
+          '#title' => $product_node->getTitle(),
+          '#type' => 'link',
+          '#url' => Url::fromRoute('entity.node.canonical', ['node' => $product_node->id()]),
+        ];
+      }
 
       $image = [];
       if (!empty($media)) {
