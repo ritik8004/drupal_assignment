@@ -33,5 +33,5 @@ processor_configs:
     weights:
       build: '-10'
     settings:
-      link_text: 'Clear all'
+      link_text: 'clear all'
 empty_behavior: null
