@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "edc8512a278d2908bf77903e4c31009f",
+    "hash": "688d9c5a789d735ae944855c9a574f53",
+    "content-hash": "2ef62895b2a771a109f3709912b52ceb",
     "packages": [
         {
             "name": "acquia/blt",
@@ -3793,6 +3794,9 @@
                 "drupal": {
                     "version": "8.x-1.0-alpha9",
                     "datestamp": "1492681579"
+                },
+                "patches_applied": {
+                    "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
