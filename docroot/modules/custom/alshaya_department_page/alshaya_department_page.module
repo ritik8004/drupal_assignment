@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -103,8 +104,9 @@ function _alshaya_department_page_get_department_node() {
   $route_match = \Drupal::routeMatch();
   // Load the processed parameter.
   if ($node = $route_match->getParameter('node')) {
-    // Check if the current node type is department_page.
-    if ($node->bundle() == 'department_page') {
+    // Check if the current node type is department_page. For revision related
+    // pages $node will have nid.
+    if ($node instanceof Node && $node->bundle() == 'department_page') {
       $result = $node;
     }
   }
