@@ -15,6 +15,7 @@ function alshaya_seo_install() {
   $tags['title'] = '[current-page:title] | [site:name] [site:country]';
   $tags['og_locale'] = '[site:locale]';
   $tags['og_site_name'] = '[site:name]';
+  $tags['canonical_url'] = '[current-page:url:absolute]';
   $config_factory->set('tags', $tags);
   $config_factory->save();
 
