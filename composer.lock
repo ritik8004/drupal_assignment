@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b21930faf0a61cae6a7fa3d53cdcb55b",
+    "content-hash": "a4141609af73048c7f4ec0aea01ed2d6",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2196,6 +2196,9 @@
                 "drupal": {
                     "version": "8.x-3.0-alpha2+15-dev",
                     "datestamp": "1492103042"
+                },
+                "patches_applied": {
+                    "Autosubmit ignores display-level Use AJAX setting": "https://www.drupal.org/files/issues/remove-pre-execute-method-2877139-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2212,7 +2215,8 @@
             "homepage": "https://www.drupal.org/project/better_exposed_filters",
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
-            }
+            },
+            "time": "2017-04-14 01:04:17"
         },
         {
             "name": "drupal/block_field",
@@ -3775,7 +3779,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/facets-8.x-1.0-alpha9.zip",
-                "reference": "8.x-1.0-alpha9",
+                "reference": null,
                 "shasum": "b0b1e1cc57bc2586cf1afb67c3a8ed24771f4738"
             },
             "require": {
@@ -3794,7 +3798,8 @@
                     "datestamp": "1492681579"
                 },
                 "patches_applied": {
-                    "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch"
+                    "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
+                    "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
