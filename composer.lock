@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "688d9c5a789d735ae944855c9a574f53",
-    "content-hash": "2ef62895b2a771a109f3709912b52ceb",
+    "content-hash": "b21930faf0a61cae6a7fa3d53cdcb55b",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2213,8 +2212,7 @@
             "homepage": "https://www.drupal.org/project/better_exposed_filters",
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
-            },
-            "time": "2017-04-14 01:04:17"
+            }
         },
         {
             "name": "drupal/block_field",
@@ -2227,7 +2225,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/block_field-8.x-1.0-alpha4.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha4",
                 "shasum": "40c024670c28e7b2ef50f891486c81ae1c722717"
             },
             "require": {
@@ -6041,7 +6039,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486729083"
+                    "datestamp": "1486726083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
