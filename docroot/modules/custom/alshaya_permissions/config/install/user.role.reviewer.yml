@@ -16,3 +16,4 @@ permissions:
   - 'view any unpublished content'
   - 'edit any advanced_page content'
   - 'edit any department_page content'
+  - 'access toolbar'
