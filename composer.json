@@ -148,7 +148,8 @@
     "scripts": {
         "blt-alias": "blt install-alias -Dcreate_alias=true",
         "post-drupal-scaffold-cmd": [
-            "cd docroot && patch -p1 <../patches/htaccess-ssl.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-acsf.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",

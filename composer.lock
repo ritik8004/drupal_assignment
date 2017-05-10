@@ -2043,7 +2043,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486736883"
+                    "datestamp": "1486737287"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4258,6 +4258,10 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
+                    "name": "Dave Reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                },
+                {
                     "name": "Drupal Media Team",
                     "homepage": "https://www.drupal.org/user/3260690"
                 },
@@ -5683,7 +5687,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta2",
-                    "datestamp": "1492189143"
+                    "datestamp": "1493403543"
                 },
                 "patches_applied": {
                     "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
@@ -5960,8 +5964,16 @@
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
+                    "name": "badjava",
+                    "homepage": "https://www.drupal.org/user/83372"
+                },
+                {
                     "name": "chx",
                     "homepage": "https://www.drupal.org/user/9446"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "kalman.hosszu",
@@ -6053,6 +6065,10 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
+                },
+                {
+                    "name": "miteshmap",
+                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -12463,7 +12479,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork Maintainer"
+                    "role": "Fork maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
