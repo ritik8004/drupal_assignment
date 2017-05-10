@@ -16,6 +16,9 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Implements hook_acq_sku_product_node_alter().
@@ -250,4 +253,19 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   return $dynamic_parts;
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_acm_product_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'page_title_block' block on PDP page.
+  if ($operation == 'view' && $block->getPluginId() == 'page_title_block') {
+    $route = \Drupal::routeMatch();
+    if ($route->getRouteName() == 'entity.node.canonical') {
+      /* @var \Drupal\node\Entity\Node $node */
+      $node = $route->getParameter('node');
+      return AccessResult::forbiddenIf($node->bundle() == 'acq_product');
+    }
+  }
 }
