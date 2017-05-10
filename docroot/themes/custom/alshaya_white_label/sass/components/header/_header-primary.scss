@@ -50,9 +50,13 @@ header {
   position: relative;
 
   .c-header__region {
-    margin: 1.3625rem 1.5625rem;
+    margin: 1.3625rem auto;
     margin-bottom: 0;
-    padding-bottom: 1.3625rem;
+    padding-bottom: 1.15rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    @include container(1284px);
   }
 
   .region__header {
@@ -977,5 +981,15 @@ header {
   .menu--active,
   .menu__list--active {
     transform: translate(0, 0) !important;
+  }
+}
+
+.c-pre-content__region {
+  @include breakpoint($desktop) {
+    .region__pre-content {
+      @include container(1284px);
+
+      margin: 0 auto;
+    }
   }
 }

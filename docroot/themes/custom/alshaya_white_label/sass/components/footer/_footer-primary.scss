@@ -64,7 +64,7 @@
   }
 
   .l-container {
-    @include container(67.625rem);
+    @include container(64.35rem);
   }
 
   &__region {
@@ -92,6 +92,7 @@
     display: block;
     padding: 0.875rem 0;
     text-decoration: none;
+    text-transform: lowercase;
     font-family: $alshaya-thin;
 
     @include breakpoint($tablet) {

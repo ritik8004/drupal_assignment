@@ -15,6 +15,12 @@
 
   @include breakpoint($desktop) {
     text-align: $right;
+
+    .c-menu-secondary__region {
+      @include container(1284px);
+
+      margin: 0 auto;
+    }
   }
 
   background: $white-four;
