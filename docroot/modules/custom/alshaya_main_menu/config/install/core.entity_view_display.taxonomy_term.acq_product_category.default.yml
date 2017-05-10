@@ -5,6 +5,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_category_include_menu
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
+    - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - taxonomy.vocabulary.acq_product_category
   module:
     - text
@@ -23,4 +24,5 @@ hidden:
   field_category_include_menu: true
   field_commerce_id: true
   field_main_menu_highlight: true
+  field_promotion_banner: true
   langcode: true
