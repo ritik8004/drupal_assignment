@@ -2,6 +2,7 @@
   .user-form {
     @include breakpoint($desktop) {
       margin-top: -1.5rem;
+      margin-bottom: 6.25rem;
     }
 
     .field--name-field-mobile-number {
