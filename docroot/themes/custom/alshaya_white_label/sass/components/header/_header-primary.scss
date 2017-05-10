@@ -477,6 +477,7 @@ header {
 
     .menu--two__list-item {
       line-height: 1;
+      max-width: 13.13rem;
 
       > .menu-two__link-wrapper {
         font-family: $alshaya-bold;
@@ -549,7 +550,7 @@ header {
         background: $white-five;
         top: 0;
         padding-#{$left}: 16rem;
-        margin-top: 1.5625rem;
+        padding-top: 1.5625rem;
 
         p {
           display: none;
