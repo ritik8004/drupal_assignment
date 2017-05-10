@@ -26,6 +26,7 @@
   &.messages--status,
   &.messages--warning,
   &.messages--error {
+    box-shadow: none;
     font-family: $arial;
     font-size: 0.75rem;
     margin: 1rem 0;
