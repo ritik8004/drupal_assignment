@@ -87,10 +87,12 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
     foreach ($configurableFields as $key => $field) {
       $fieldKey = 'attr_' . $key;
 
-      $configurableFieldValues[$fieldKey] = [
-        'label' => $skuEntity->get($fieldKey)->getFieldDefinition()->getLabel(),
-        'value' => $skuEntity->get($fieldKey)->getString(),
-      ];
+      if ($skuEntity->get($fieldKey)->getString()) {
+        $configurableFieldValues[$fieldKey] = [
+          'label' => $skuEntity->get($fieldKey)->getFieldDefinition()->getLabel(),
+          'value' => $skuEntity->get($fieldKey)->getString(),
+        ];
+      }
     }
 
   }
