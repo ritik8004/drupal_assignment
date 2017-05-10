@@ -38,6 +38,7 @@ function alshaya_install() {
     'alshaya_seo',
     'alshaya_stores_finder',
     'alshaya_user',
+    'google_tag',
   ];
 
   foreach ($modules as $module) {
