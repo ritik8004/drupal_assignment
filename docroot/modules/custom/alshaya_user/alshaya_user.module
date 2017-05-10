@@ -246,3 +246,22 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
 
   return $element;
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for page templates.
+ */
+function alshaya_user_preprocess_page_title(&$variables) {
+  // Add back link for my account page sub links.
+  $current_path = \Drupal::service('path.current')->getPath();
+  if (strpos($current_path, '/user') !== FALSE && $user = \Drupal::request()->attributes->get('user')) {
+    $arg = explode('/', $current_path);
+    if (!empty($arg[3])) {
+      $variables['title_prefix']['back_link'] = [
+        '#markup' => '<a href="#" class="back-link" id="back-link">Back</a>',
+        '#weight' => 100,
+      ];
+
+      $variables['#attached']['library'][] = 'alshaya_user/navigate_link';
+    }
+  }
+}
