@@ -703,6 +703,13 @@
 
   @include breakpoint($desktop) {
     margin-bottom: 12.125rem;
+
+    .form-type-password {
+      .c-input__bar {
+        position: absolute;
+        top: 34px;
+      }
+    }
   }
 
   .form-wrapper {
