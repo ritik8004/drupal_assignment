@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Alshaya master module file.
+ */
+
+use Drupal\Core\Block\BlockPluginInterface;
+
+/**
+ * Implements hook_block_build_alter().
+ */
+function alshaya_master_block_build_alter(array &$build, BlockPluginInterface $block) {
+  if ($block->getPluginId() == 'system_branding_block') {
+    $build['#cache']['contexts'][] = 'url.path';
+  }
+}
