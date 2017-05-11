@@ -41,7 +41,8 @@
         "drupal/acquia_connector": "1.9.0",
         "drupal/better_exposed_filters": "3.x-dev",
         "drupal/geolocation": "^1.10",
-        "drupal/block_field": "^1.0@alpha"
+        "drupal/block_field": "^1.0@alpha",
+        "drupal/google_tag": "1.x-dev"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
