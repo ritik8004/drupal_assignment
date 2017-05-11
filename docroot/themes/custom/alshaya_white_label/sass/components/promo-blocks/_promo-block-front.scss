@@ -20,11 +20,13 @@
     height: auto;
   }
 
-  .field--name-field-banner img {
-    max-height: 476px;
-  }
-
   .c-content__banner {
     margin-bottom: 1.5rem;
+  }
+}
+
+.c-content__slider {
+  .field--name-field-banner img {
+    max-height: 476px;
   }
 }
