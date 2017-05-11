@@ -57,6 +57,13 @@ header {
     padding-right: 1.5rem;
 
     @include container(1284px);
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0.75rem;
+      padding-bottom: 0;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
   }
 
   .region__header {
@@ -210,6 +217,10 @@ header {
 .c-menu-primary {
   .region__menu-primary {
     margin-top: 0.9375rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+    }
   }
 
   .block-system-menublock {
@@ -294,7 +305,7 @@ header {
         content: ' ';
         display: inline-block;
         vertical-align: middle;
-        margin-#{$right}: 10px;
+        margin-#{$right}: 0.625rem;
       }
     }
 
@@ -318,11 +329,21 @@ header {
   @include breakpoint($only-mobile) {
     display: block;
 
+    a {
+      padding-left: 0.625rem;
+    }
+
     .store {
       &:hover {
         &::before {
           background: url('../imgs/icons/store--big--hover.svg');
         }
+      }
+    }
+
+    .mobile--search {
+      &::before {
+        margin-#{$right}: 0.3125rem;
       }
     }
 
@@ -343,7 +364,7 @@ header {
     li {
       display: table-cell;
       text-align: center;
-      padding: 0.9375rem 0;
+      padding: 0.875rem 0;
 
       &:hover {
         background: $marine-blue;
@@ -422,7 +443,7 @@ header {
       text-align: center;
       border-top: 1px solid $white;
       border-bottom: 1px solid $white;
-      padding: 10px;
+      padding: 0.625rem;
       text-transform: lowercase;
 
       &.active {
@@ -524,7 +545,7 @@ header {
           width: 8px;
           height: 17px;
           position: absolute;
-          #{$right}: 10px;
+          #{$right}: 0.625rem;
           top: 39%;
         }
 

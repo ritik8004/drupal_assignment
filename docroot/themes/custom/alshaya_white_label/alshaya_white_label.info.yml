@@ -8,8 +8,8 @@ regions:
   menu_primary: 'Menu Primary'
   menu_secondary: 'Menu Secondary'
   header: Header
-  breadcrumb: Breadcrumb
   pre_content: 'Pre content'
+  breadcrumb: Breadcrumb
   content: Content
   sidebar_first: 'Sidebar first'
   sidebar_second: 'Sidebar second'
