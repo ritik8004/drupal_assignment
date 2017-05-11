@@ -31,11 +31,11 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
   // If user doesn't have any default address yet.
   if (!$default_address) {
     $form['actions']['submit']['#access'] = FALSE;
-    $form['actions']['set_default']['#value'] = t('Add');
+    $form['actions']['set_default']['#value'] = t('Add Address');
   }
   else {
     $form['actions']['set_default']['#access'] = FALSE;
-    $form['actions']['submit']['#value'] = t('Add');
+    $form['actions']['submit']['#value'] = t('Add Address');
     $form['actions']['submit']['#ajax'] = [
       'callback' => 'alshaya_addressbook_save_ajax_callback',
       'wrapper' => 'address-book-form-open',
