@@ -16,11 +16,19 @@
 {% set attributes = attributes.addClass('site-branding') %}
 {% block content %}
     {% if site_logo %}
-      <h1 class="site-brand-home">
-        <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
+      {% if is_front %}
+        <h1 class="site-brand-home">
+          <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
+              <img src="{{ site_logo }}" alt="{{ 'Home'|t }}"/>
+          </a>
+        </h1>
+      {% else %}
+        <div class="site-brand-home">
+          <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
             <img src="{{ site_logo }}" alt="{{ 'Home'|t }}"/>
-        </a>
-      </h1>
+          </a>
+        </div>
+      {% endif %}
     {% endif %}
     {% if site_name or site_slogan %}
         <div class="site-branding-text">
