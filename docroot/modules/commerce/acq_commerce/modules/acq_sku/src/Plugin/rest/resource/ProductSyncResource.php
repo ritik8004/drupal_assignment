@@ -153,6 +153,13 @@ class ProductSyncResource extends ResourceBase {
         continue;
       }
 
+      // Don't import configurable SKU if it has no configurable options.
+      if ($product['type'] == 'configurable' && empty($product['extension']['configurable_product_options'])) {
+        $this->logger->error('Empty configurable options for SKU: @sku', ['@sku' => $product['sku']]);
+        $failed++;
+        continue;
+      }
+
       $query = $this->queryFactory->get('acq_sku')
         ->condition('sku', $product['sku']);
       $nids = $query->execute();
