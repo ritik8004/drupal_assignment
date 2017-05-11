@@ -1,6 +1,9 @@
-.c-front__node {
+.c-content__container {
   @include breakpoint($only-mobile) {
-    @include container(304px);
+    @include container(100%);
+
+    padding-left: 8px;
+    padding-right: 8px;
   }
 
   @include breakpoint($only-tablet) {
@@ -9,6 +12,12 @@
 
   @include breakpoint($desktop) {
     @include container(1026px);
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 476px;
   }
 
   .c-content__banner {
