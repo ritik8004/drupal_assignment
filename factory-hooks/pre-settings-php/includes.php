@@ -17,6 +17,9 @@ if (empty($config_directories)) {
   // Configuration directories.
   $dir = dirname(DRUPAL_ROOT);
   $config_directories['sync'] = $dir . "/config/$site_dir";
+
+  // Public file path.
+  $settings['file_public_path'] = $dir . "docroot/sites/default/files";
 }
 
 // Default credentials.
