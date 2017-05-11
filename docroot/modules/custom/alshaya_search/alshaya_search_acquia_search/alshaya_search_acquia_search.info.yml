@@ -1,0 +1,11 @@
+name: 'Alshaya Search - Acquia search'
+description: 'Contains search config for Alshaya related to Acquia search'
+type: module
+core: 8.x
+dependencies:
+  - acquia_connector
+  - acquia_search
+  - search_api
+  - search_api_autocomplete
+version: 8.x-1.0
+package: Alshaya

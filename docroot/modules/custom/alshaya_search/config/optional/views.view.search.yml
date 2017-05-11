@@ -217,7 +217,7 @@ display:
           plugin_id: search_api_fulltext
         search_api_language:
           id: search_api_language
-          table: search_api_index_local_solr
+          table: search_api_index_acquia_search_index
           field: search_api_language
           relationship: none
           group_type: group

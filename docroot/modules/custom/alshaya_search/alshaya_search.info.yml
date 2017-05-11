@@ -4,8 +4,6 @@ type: module
 core: 8.x
 dependencies:
   - acq_sku
-  - acquia_connector
-  - acquia_search
   - alshaya_image_styles
   - better_exposed_filters
   - block
@@ -17,7 +15,6 @@ dependencies:
   - node
   - search_api
   - search_api_autocomplete
-  - search_api_solr
   - system
   - taxonomy
   - user
