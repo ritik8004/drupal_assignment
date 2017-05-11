@@ -98,6 +98,9 @@
             },
             "drupal/better_exposed_filters": {
                 "Autosubmit ignores display-level Use AJAX setting": "https://www.drupal.org/files/issues/remove-pre-execute-method-2877139-3.patch"
+            },
+            "drupal/core": {
+                "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-17.patch"
             }
         },
         "installer-paths": {
