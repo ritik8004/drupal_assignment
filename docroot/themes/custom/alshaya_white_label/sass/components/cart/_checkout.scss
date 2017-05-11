@@ -742,8 +742,10 @@ body.alias--cart {
     display: none;
   }
 
-  #edit-continue-shopping {
-    display: block;
+  #edit-continue-shopping-mobile {
+    color: $white-five;
+    background: $pumpkin-orange;
+    border: 1px solid $pumpkin-orange;
   }
 }
 

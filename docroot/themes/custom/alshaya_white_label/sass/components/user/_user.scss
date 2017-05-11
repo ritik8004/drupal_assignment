@@ -131,7 +131,11 @@
     }
 
     p {
-      margin: 9px 0;
+      margin: 0.4rem 0;
+
+      @include breakpoint($tablet) {
+        margin: 0.5rem 0;
+      }
     }
   }
 
@@ -151,7 +155,6 @@
     h2 {
       max-width: 12rem;
       display: inline-block;
-      float: $left;
       margin-top: 0;
 
       @include breakpoint($upto-desktop) {
@@ -161,17 +164,37 @@
 
     .field--name-body {
       max-width: 12rem;
-      float: $left;
-      clear: $left;
+    }
+
+    .field--name-field-image {
+      margin-bottom: 1rem;
+
+      @include breakpoint($desktop) {
+        float: $right;
+        margin-bottom: 0;
+      }
+
+      img {
+        @include breakpoint($desktop) {
+          margin-#{$right}: 0.8rem;
+          margin-top: 0.3rem;
+        }
+      }
     }
 
     p {
       line-height: 1.1rem;
-      margin-top: 0;
+
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
 
       > a {
-        padding-top: 1em;
         display: inline-block;
+
+        @include breakpoint($desktop) {
+          padding-top: 0.2rem;
+        }
       }
     }
   }
@@ -385,6 +408,10 @@
     position: relative;
     top: 0;
     color: $cerulean-two;
+
+    @include breakpoint($upto-desktop) {
+      vertical-align: bottom;
+    }
   }
 
   span.icon {
@@ -406,6 +433,7 @@
 
     &-reward {
       background-image: url("../imgs/icons/ic-like.svg");
+      background-size: contain;
     }
 
     &-heart {

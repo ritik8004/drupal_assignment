@@ -6,8 +6,9 @@ label: 304x132
 effects:
   e0e58dfe-c135-4799-adbd-0f96854f4aa2:
     uuid: e0e58dfe-c135-4799-adbd-0f96854f4aa2
-    id: image_scale_and_crop
+    id: image_scale
     weight: 1
     data:
       width: 304
       height: 132
+      upscale: false

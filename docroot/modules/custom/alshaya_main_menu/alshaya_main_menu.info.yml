@@ -3,6 +3,8 @@ type: module
 core: 8.x
 dependencies:
   - alshaya_department_page
+  - alshaya_image_styles
+  - alshaya_main_menu
   - block
   - content_translation
   - entity_browser
@@ -21,3 +23,4 @@ dependencies:
   - views
   - workbench_moderation
 version: 8.x-1.0
+package: Alshaya

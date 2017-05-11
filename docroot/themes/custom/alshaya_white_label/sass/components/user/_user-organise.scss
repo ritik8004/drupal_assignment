@@ -1,0 +1,74 @@
+.c-user-register {
+  main {
+    .user-register-form {
+      @include breakpoint($desktop) {
+        max-width: 24.625rem;
+      }
+    }
+  }
+
+  &.user-page .c-sidebar-second .c-sidebar-second__region {
+    @include breakpoint($desktop) {
+      padding-#{$left}: 5.3rem;
+    }
+
+    #block-onlineexclusiveheadingovertwolinesneverthree p {
+      margin-bottom: 0.75rem;
+    }
+  }
+}
+
+.c-user-register,
+.c-user-login {
+  .c-sidebar-second #block-jointheclub {
+    margin-top: 0.5rem;
+    padding-top: 1.5rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 3.6rem;
+      padding-top: 3.6rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 4.2rem;
+      padding-top: 4.2rem;
+    }
+
+    h2 {
+      margin-bottom: 0.7rem;
+      margin-top: -0.1875rem;
+
+      @include breakpoint($upto-tablet) {
+        color: $marine-blue-two;
+      }
+
+      @include breakpoint($tablet) {
+        margin-top: 0;
+        margin-bottom: 0.8rem;
+      }
+    }
+
+    img {
+      width: 80%;
+      max-width: 15.5rem;
+
+      @include breakpoint($tablet) {
+        margin-#{$left}: -2.6875rem;
+      }
+
+      @include breakpoint($desktop) {
+        float: $right;
+        width: 58%;
+        margin-#{$left}: 0;
+      }
+    }
+
+    a {
+      margin-top: 0.8em;
+
+      @include breakpoint($tablet) {
+        margin-top: 1.1em;
+      }
+    }
+  }
+}

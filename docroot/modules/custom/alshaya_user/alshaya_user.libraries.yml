@@ -1,7 +1,0 @@
-navigate_link:
-  js:
-    js/navigate-link.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
-    - core/jquery.once
