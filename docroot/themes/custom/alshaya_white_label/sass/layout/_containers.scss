@@ -48,7 +48,8 @@
 .l-column--two-1050 {
   @extend %l-container--center;
 
-  padding: 0 0.5rem;
+  margin-left: 0.5rem !important;
+  margin-right: 0.5rem !important;
 
   main {
     @include breakpoint($tablet) {
