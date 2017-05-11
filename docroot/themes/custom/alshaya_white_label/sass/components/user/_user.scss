@@ -223,7 +223,7 @@
   .field--name-field-first-name,
   .field--name-field-last-name {
     @include breakpoint($desktop) {
-      float: left;
+      float: $left;
       max-width: 186px;
       width: calc(50% - 12px);
     }
@@ -231,7 +231,7 @@
 
   .field--name-field-first-name {
     @include breakpoint($desktop) {
-      margin-#{$right}: 1.25rem;
+      margin-#{$right}: 1.4rem;
     }
   }
 
@@ -506,7 +506,7 @@
 
           @include breakpoint($only-mobile) {
             background-color: $white-smoke;
-            #{$right}: 4rem;
+            #{$right}: 3rem;
             top: 62%;
           }
         }

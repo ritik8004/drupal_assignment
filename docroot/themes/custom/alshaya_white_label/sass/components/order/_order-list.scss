@@ -83,6 +83,7 @@
 
       @include breakpoint($tablet) {
         display: block;
+        pointer-events: none;
         position: absolute;
         top: -30px;
       }
@@ -97,12 +98,12 @@
     position: relative;
 
     @include icon(chevrondown, after) {
-      border-#{$left}: 1px solid $white;
+      border-#{$left}: 1px solid $white-five;
       font-size: 28px;
       line-height: 35px;
-      padding-#{$right}: 3px;
       pointer-events: none;
       position: absolute;
+      text-align: center;
       #{$right}: 0;
       width: 35px;
     }
@@ -198,6 +199,10 @@
 .recent__orders--list {
   margin-bottom: 0;
   border-bottom: 1px solid $white;
+
+  &:first-child {
+    border-top-width: 1px;
+  }
 
   &:last-child {
     border-width: 2px;
@@ -340,4 +345,77 @@
   font-size: 0.75rem;
   text-transform: lowercase;
   font-weight: bold;
+}
+
+.alshaya-acm-customer-order-list-search {
+  @include breakpoint($upto-tablet) {
+    text-align: $left;
+    position: relative;
+
+    .form-item-search {
+      width: 49%;
+      margin-#{$right}: 1.5%;
+
+      input {
+        -webkit-animation: fadeEffect 2s;
+        animation: fadeEffect 2s;
+        display: none;
+        position: absolute;
+        width: calc(100% + 1rem);
+        top: 2.875rem;
+        #{$left}: -0.5rem;
+        #{$right}: 0;
+        border: 0.5625rem solid $white;
+        padding: 1rem 0.5rem 0.9375rem 1rem;
+        background: $white-five;
+      }
+
+      label {
+        display: block;
+        background-color: $whisper-dark;
+        border: 1px solid $whisper-dark;
+        padding-#{$left}: 0.625rem;
+        width: 100%;
+        position: relative;
+        line-height: 2.0625rem;
+        color: $grey-ash;
+
+        @include icon(search, before) {
+          pointer-events: none;
+          text-align: center;
+          font-size: 1.875rem;
+          margin-#{$right}: 0.3125rem;
+          display: inline-block;
+          vertical-align: middle;
+          padding: 0;
+        }
+      }
+    }
+
+    .form-type-select {
+      width: 48%;
+
+      select {
+        width: 100%;
+      }
+    }
+
+    .form-actions {
+      display: none;
+    }
+
+    &.active--search {
+      margin-bottom: 4.3125rem;
+
+      .form-item-search {
+        label {
+          background-color: transparent;
+        }
+
+        input {
+          display: block;
+        }
+      }
+    }
+  }
 }
