@@ -1,4 +1,5 @@
-.c-content__container {
+.c-content__container,
+.c-content__banner {
   @include breakpoint($only-mobile) {
     @include container(100%);
 

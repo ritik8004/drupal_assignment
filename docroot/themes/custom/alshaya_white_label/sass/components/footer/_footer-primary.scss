@@ -45,7 +45,7 @@
 
   .footer--categories {
     @include breakpoint($only-tablet) {
-      margin-#{$right}: 3.5rem;
+      margin-#{$right}: 3.25rem;
     }
   }
 
@@ -77,7 +77,7 @@
   @extend %list-clear;
 
   @include breakpoint($desktop) {
-    margin-#{$right}: 2.6rem;
+    margin-#{$right}: 3.4rem;
     float: $left;
     width: calc(50% - 2.6rem);
 
@@ -97,7 +97,7 @@
 
     @include breakpoint($tablet) {
       color: $brownish-grey;
-      line-height: 2.14;
+      line-height: 2.16;
       padding: 0;
     }
   }
@@ -116,6 +116,7 @@
 
     @include breakpoint($tablet) {
       pointer-events: none;
+      margin-bottom: 0.28rem;
     }
 
     @include breakpoint($desktop) {
@@ -164,20 +165,13 @@
 .c-footer-menu--about {
   @include breakpoint($desktop) {
     float: $left;
-    margin-#{$left}: 1.3rem;
-    width: calc(40% - 1.3rem);
+    margin-#{$left}: 2.2rem;
   }
 }
 
 .c-footer-menu--about .c-footer-menu {
   @include breakpoint($desktop) {
     min-width: 9.4rem;
-  }
-}
-
-.c-footer-menu--help .c-footer-menu {
-  @include breakpoint($desktop) {
-    min-width: 5.4rem;
   }
 }
 
@@ -189,6 +183,19 @@
     max-width: 21.875rem;
     margin: 0;
     display: inline-block;
+    margin-#{$right}: 2.3rem;
+
+    .newsletter-block-label {
+      font-family: $alshaya-thin;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    margin-right: 0;
+
+    .newsletter-block-label {
+      font-family: $arial;
+    }
   }
 
   h2 {
@@ -206,10 +213,6 @@
   form {
     position: relative;
     max-width: 100%;
-
-    @include breakpoint($tablet) {
-      min-width: 22.312rem;
-    }
   }
 
   .form-item {
@@ -272,7 +275,11 @@
     z-index: 2;
 
     @include breakpoint($tablet) {
-      #{$right}: 4.125rem;
+      #{$right}: 1.125rem;
+    }
+
+    @include breakpoint($desktop) {
+      #{$right}: 0.125rem;
     }
   }
 }
@@ -295,7 +302,7 @@
 
   @include breakpoint($desktop) {
     float: $left;
-    margin-#{$left}: 2rem;
+    margin-#{$left}: 3.25rem;
     width: calc(60% - 2rem);
   }
 
@@ -305,9 +312,9 @@
 }
 
 .newsletter-block-label {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.5;
-  font-family: $alshaya-thin;
+  font-family: $arial;
   text-transform: lowercase;
 
   @include breakpoint($only-mobile) {
@@ -315,7 +322,7 @@
   }
 
   @include breakpoint($desktop-wide) {
-    width: 22.312rem;
+    width: 18.312rem;
   }
 }
 
@@ -335,6 +342,10 @@
     li {
       display: inline-block;
       padding: 0 5px;
+
+      @include breakpoint($only-tablet) {
+        padding: 0;
+      }
 
       &:first-child {
         &::after {
@@ -378,6 +389,14 @@
   clear: both;
   overflow: hidden;
 
+  @include breakpoint($desktop) {
+    margin-left: 2.5rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-left: 0;
+  }
+
   .c-social-links {
     @include breakpoint($tablet) {
       margin-top: 2.812rem;
@@ -388,6 +407,10 @@
 
 .language--switcher {
   @include breakpoint($tablet) {
+    margin-top: 2.2rem;
+  }
+
+  @include breakpoint($desktop) {
     margin-top: 1.875rem;
   }
 }
