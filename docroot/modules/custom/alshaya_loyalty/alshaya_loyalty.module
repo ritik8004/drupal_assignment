@@ -247,8 +247,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   $default_value = NULL;
   if (\Drupal::currentUser()->isAuthenticated()) {
     $user = User::load(\Drupal::currentUser()->id());
-    $card_number = $user->get('field_privilege_card_number')->getValue();
-    $default_value = $card_number[0]['value'];
+    $default_value = $user->get('field_privilege_card_number')->getString();
   }
   elseif (\Drupal::currentUser()->isAnonymous()) {
     $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_loyalty');
@@ -365,7 +364,7 @@ function _alshaya_loyalty_form_attachements(&$form, FormStateInterface $form_sta
  */
 function alshaya_loyalty_preprocess_input(&$variables) {
   // Attach library for privilege card input field.
-  if (strpos($variables['element']['#name'], 'privilege_card_number') !== FALSE) {
+  if (isset($variables['element'], $variables['element']['#name']) && strpos($variables['element']['#name'], 'privilege_card_number') !== FALSE) {
     $variables['attributes']['class'][] = 'c-input__privilege-card ';
     $variables['#attached']['library'][] = 'alshaya_loyalty/format_input';
   }
