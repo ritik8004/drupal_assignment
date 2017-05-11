@@ -59,6 +59,7 @@ To prepare your local env:
 * Install Ansible: `brew install ansible`
 * Run:
   * `composer install`
+  * `composer blt-alias`
   * `blt vm`
   * `blt refresh:local`
   * `drush @alshaya.local uli`
