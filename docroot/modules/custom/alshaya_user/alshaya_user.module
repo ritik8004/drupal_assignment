@@ -257,11 +257,11 @@ function alshaya_user_preprocess_page_title(&$variables) {
     $arg = explode('/', $current_path);
     if (!empty($arg[3])) {
       $variables['title_prefix']['back_link'] = [
-        '#markup' => '<a href="#" class="back-link" id="back-link">Back</a>',
+        '#markup' => Link::createFromRoute('back', 'entity.user.canonical', ['user' => $user->id()], [
+          'attributes' => ['class' => ['back-link']],
+        ])->toString(),
         '#weight' => 100,
       ];
-
-      $variables['#attached']['library'][] = 'alshaya_user/navigate_link';
     }
   }
 }
