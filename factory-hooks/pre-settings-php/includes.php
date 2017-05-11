@@ -19,7 +19,7 @@ if (empty($config_directories)) {
   $config_directories['sync'] = $dir . "/config/$site_dir";
 
   // Public file path.
-  $settings['file_public_path'] = $dir . "docroot/sites/default/files";
+  $settings['file_public_path'] = '/tmp';
 }
 
 // Default credentials.
