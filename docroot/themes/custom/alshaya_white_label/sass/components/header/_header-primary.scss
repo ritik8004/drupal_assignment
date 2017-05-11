@@ -1,3 +1,5 @@
+
+
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
@@ -210,6 +212,7 @@ header {
 .c-menu-primary {
   .region__menu-primary {
     margin-top: 0.9375rem;
+    margin-bottom: 0.9375rem;
   }
 
   .block-system-menublock {
@@ -383,8 +386,10 @@ header {
     display: block !important;
   }
 
-  ul {
-    padding: 0;
+  @include breakpoint($upto-desktop) {
+    ul {
+      padding: 0;
+    }
   }
 
   li {
@@ -411,8 +416,8 @@ header {
       display: table !important;
       width: 100%;
       margin: 0;
-      padding: 0;
       background: $white-five;
+      padding: 0 calc((100% - 1284px) / 2);
     }
 
     li.menu--one__list-item {
@@ -420,8 +425,7 @@ header {
       vertical-align: top;
       list-style: none;
       text-align: center;
-      border-top: 1px solid $white;
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $white-five;
       padding: 10px;
       text-transform: lowercase;
 
@@ -436,7 +440,6 @@ header {
 
       &:hover {
         border-top: 2px solid $marine-blue;
-        border-bottom: 0;
 
         ul.menu--two__list {
           display: block;
@@ -458,18 +461,36 @@ header {
         display: none;
       }
     }
+
+    ul.menu--one__list {
+      &:hover {
+        li.menu--one__list-item {
+          &:hover {
+            border-bottom: 1px solid $white-five;
+          }
+
+          &:not(:hover) {
+            border-top: 2px solid $white-five;
+            border-bottom: 1px solid $white;
+          }
+        }
+      }
+    }
   }
 
   .menu--two__list {
     position: absolute;
     width: 100%;
     text-align: $left;
-    top: 40px;
+    top: 41px;
     #{$left}: 0;
     #{$left}: 0;
-    padding-top: 1.5625rem !important;
     background: $white-five;
     z-index: 10;
+    padding-top: 1.5625rem !important;
+    padding-left: calc((100% - 1284px) / 2);
+    padding-right: calc((100% - 1284px) / 2);
+    min-height: 350px;
 
     a {
       color: $peacock-blue;
@@ -985,12 +1006,17 @@ header {
   }
 }
 
-.c-pre-content__region {
-  @include breakpoint($desktop) {
-    .region__pre-content {
-      @include container(1284px);
+// .c-pre-content__region {
+//   @include breakpoint($desktop) {
+//     .region__pre-content {
+//       @include container(1284px);
 
-      margin: 0 auto;
-    }
-  }
+//       margin: 0 auto;
+//     }
+//   }
+// }
+
+.c-pre-content__region {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
