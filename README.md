@@ -55,6 +55,8 @@ as possible to the configuration of the Prod env.
 
 To prepare your local env:
 * Install Virtualbox and Vagrant.
+  * `vagrant plugin install vagrant-vbguest`
+  * `vagrant plugin install vagrant-hostsupdater`
 * Install Yarn `npm i -g yarn`.
 * Install Ansible: `brew install ansible`
 * Run:

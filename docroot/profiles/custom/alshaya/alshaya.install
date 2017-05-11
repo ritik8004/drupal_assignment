@@ -12,6 +12,10 @@ function alshaya_install() {
   // Add code here perform additional site information tasks, generate sample
   // content, etc.
 
+  // Prerequisite for google_tag module.
+  $uri = "public://google_tag";
+  file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
+
   $modules = [
     'alshaya_custom',
     'alshaya_addressbook',
