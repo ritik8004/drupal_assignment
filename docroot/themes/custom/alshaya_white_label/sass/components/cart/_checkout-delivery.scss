@@ -32,118 +32,8 @@
         display: none;
       }
 
-      fieldset {
-        -webkit-animation: fadeEffect 2s;
-        animation: fadeEffect 2s;
-        width: 100%;
-        padding: 0;
-        margin: auto;
-        margin-top: 0;
-
-        @include breakpoint($tablet) {
-          border: 1px solid $light-greyish;
-          padding: 1.5rem 1.375rem;
-          display: none;
-        }
-
-        &.active--tab--content {
-          display: block;
-        }
-
-        input {
-          color: $black;
-        }
-
-        @include breakpoint($tablet) {
-          margin: 0;
-
-          &.active--tab--content {
-            top: -2px;
-            position: relative;
-            border-width: 2px;
-            border-color: $greyish;
-          }
-        }
-
-        .form-wrapper,
-        .form-item {
-          margin-top: 2.5rem;
-        }
-
-        .mobile-number-field {
-          label:not(.error) {
-            font-size: 0.75rem;
-          }
-
-          .form-item {
-            margin-top: 1.0625rem;
-            vertical-align: top;
-          }
-
-          .form-type-select {
-            padding-top: 3px;
-          }
-        }
-
-        #address_wrapper {
-          padding: 0;
-          max-width: 24.75rem;
-          margin-top: 0;
-
-          @include breakpoint($desktop) {
-            margin-top: 1.2rem;
-          }
-
-          .form-item input {
-            padding-bottom: 0.5rem;
-            margin-top: 0.5rem;
-          }
-
-          .form-item--error + .form-item {
-            margin-top: 1.6rem;
-          }
-        }
-
-        .delivery--notice {
-          display: none;
-        }
-
-        legend {
-          padding: 0.4rem 1em;
-          margin-bottom: 0;
-
-          @include breakpoint($tablet) {
-            display: none;
-          }
-
-          span {
-            color: $marine-blue-two;
-          }
-        }
-
-        .title {
-          color: #003971;
-          font-size: 16px;
-          font-family: $alshaya-bold;
-          padding-bottom: 0.4375rem;
-          border-bottom: 1px solid #ddd;
-        }
-
-        .fieldset-wrapper {
-          @include breakpoint($upto-tablet) {
-            display: none;
-            border: 1px solid $light-greyish;
-            padding: 1.375rem;
-            border-top: 0;
-          }
-
-          @include breakpoint($tablet) {
-            display: block !important;
-          }
-        }
-      }
-
-      .form-item-guest-delivery-home-address-street2 {
+      .form-item-guest-delivery-home-address-street2,
+      .form-item-billing-address-address-street2 {
         label {
           display: none;
         }
@@ -158,6 +48,23 @@
         display: inline-block;
         max-width: 11.7rem;
         width: calc(50% - 12px);
+      }
+
+      fieldset {
+        .mobile-number-field {
+          label:not(.error) {
+            font-size: 0.75rem;
+          }
+
+          .form-item {
+            margin-top: 1.0625rem;
+            vertical-align: top;
+          }
+
+          .form-type-select {
+            padding-top: 3px;
+          }
+        }
       }
 
       .tab,
@@ -222,32 +129,34 @@
         }
       }
     }
-  }
 
-  .tabs--content {
-    margin-top: 0.4375rem;
+    .tabs--content {
+      .fieldset-wrapper .form-item .form-item.form-item-billing-address-address-phone-country-code,
+      .form-item-guest-delivery-home-address-phone-country-code {
+        display: inline-block;
+        width: auto;
 
-    .form-item-guest-delivery-home-address-phone-country-code {
-      display: inline-block;
-      width: auto;
-
-      &::after {
-        content: none;
+        &::after {
+          content: none;
+        }
       }
-    }
-  }
 
-  .form-item-guest-delivery-home-address-phone-mobile {
-    display: inline-block;
-    width: 9.4rem;
-    margin-#{$left}: -0.3125rem;
+      .fieldset-wrapper .form-item .form-item.form-item-billing-address-address-phone-mobile,
+      .form-item-guest-delivery-home-address-phone-mobile {
+        display: inline-block;
+        width: 9.4rem;
+        margin-#{$left}: -0.3125rem;
 
-    input {
-      position: relative;
-      width: 14.4rem;
+        input {
+          position: relative;
+          width: 11.4rem;
+          padding-bottom: 0.5rem;
+          margin-top: 0.5rem;
 
-      @include breakpoint($tablet) {
-        width: 7rem;
+          @include breakpoint($tablet) {
+            width: 7rem;
+          }
+        }
       }
     }
   }
@@ -350,6 +259,112 @@
       @include breakpoint($desktop) {
         width: 3.5rem;
       }
+    }
+  }
+}
+
+.user-page.c-delivery-checkout {
+  main {
+    form {
+      fieldset {
+        -webkit-animation: fadeEffect 2s;
+        animation: fadeEffect 2s;
+        width: 100%;
+        padding: 0;
+        margin: auto;
+        margin-top: 0;
+
+        @include breakpoint($tablet) {
+          border: 1px solid $light-greyish;
+          padding: 1.5rem 1.375rem;
+          display: none;
+        }
+
+        &.active--tab--content {
+          display: block;
+        }
+
+        input {
+          color: $black;
+        }
+
+        @include breakpoint($tablet) {
+          margin: 0;
+
+          &.active--tab--content {
+            top: -2px;
+            position: relative;
+            border-width: 2px;
+            border-color: $greyish;
+          }
+        }
+
+        .form-wrapper,
+        .form-item {
+          margin-top: 2.5rem;
+        }
+
+        #address_wrapper {
+          padding: 0;
+          max-width: 24.75rem;
+          margin-top: 0;
+
+          @include breakpoint($desktop) {
+            margin-top: 1.2rem;
+          }
+
+          .form-item input {
+            padding-bottom: 0.5rem;
+            margin-top: 0.5rem;
+          }
+
+          .form-item--error + .form-item {
+            margin-top: 1.6rem;
+          }
+        }
+
+        .delivery--notice {
+          display: none;
+        }
+
+        legend {
+          padding: 0.4rem 1em;
+          margin-bottom: 0;
+
+          @include breakpoint($tablet) {
+            display: none;
+          }
+
+          span {
+            color: $marine-blue-two;
+          }
+        }
+
+        .title {
+          color: #003971;
+          font-size: 16px;
+          font-family: $alshaya-bold;
+          padding-bottom: 0.4375rem;
+          border-bottom: 1px solid #ddd;
+        }
+
+        .fieldset-wrapper {
+          @include breakpoint($upto-tablet) {
+            display: none;
+            border: 1px solid $light-greyish;
+            padding: 1.375rem;
+            border-top: 0;
+          }
+
+          @include breakpoint($tablet) {
+            display: block !important;
+          }
+        }
+      }
+    }
+
+    .tabs--content {
+      margin-top: 0.4375rem;
     }
   }
 }
