@@ -42,4 +42,11 @@ function alshaya_seo_install() {
   $tags['title'] = '[user:name] | [site:name] [site:country]';
   $config_factory->set('tags', $tags);
   $config_factory->save();
+
+  // Update sitemap config.
+  $config_factory = \Drupal::configFactory()->getEditable('simple_sitemap.settings');
+  $config_factory->set('cron_generate', FALSE);
+  $config_factory->set('max_links', 20000);
+  $config_factory->set('skip_untranslated', TRUE);
+  $config_factory->save();
 }
