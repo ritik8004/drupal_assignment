@@ -34,4 +34,4 @@ services:
       - '@class_resolver'
       - '@element_info'
       - '@theme.manager'
-      - '@?csrf_token'
+      - '@csrf_token'

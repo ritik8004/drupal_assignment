@@ -22,7 +22,7 @@ index 3f6395a..43a2c4b 100644
 +      - '@class_resolver'
 +      - '@element_info'
 +      - '@theme.manager'
-+      - '@?csrf_token'
++      - '@csrf_token'
 diff --git a/modules/acq_sku/src/Entity/Controller/SKUViewBuilder.php b/modules/acq_sku/src/Entity/Controller/SKUViewBuilder.php
 index da2782d..f08d05f 100644
 --- a/modules/acq_sku/src/Entity/Controller/SKUViewBuilder.php
