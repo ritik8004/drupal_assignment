@@ -1,13 +1,9 @@
 .path--store-finder {
+
   .view-header {
     font-size: 14px;
     font-weight: bold;
     color: $black;
-  }
-
-  .c-page-title {
-    margin-top: 3.563rem;
-    margin-bottom: 0.6875rem;
   }
 
   .c-content__region {
@@ -15,25 +11,22 @@
     margin: auto;
   }
 
-  .views-exposed-form {
-    display: table;
-    width: 100%;
-    border-top: 1px solid $white;
-    border-bottom: 1px solid $white;
-    padding: 0.6875rem 0;
+  .c-page-title {
+    font-weight: normal;
   }
 
-  .current-location,
-  .form-type-textfield,
-  .form-actions,
-  .label--location,
-  .list-view-link,
-  .map-view-link {
-    font-size: 12px;
-    display: table-cell;
-    max-width: 33%;
-    vertical-align: middle;
-    color: $cerulean-two;
+
+  input {
+    &.form-autocomplete {
+      font-size: 12px;
+    }
+
+    &#edit-submit-stores-finder  {
+      background: url('../imgs/icons/current.svg');
+      border: none;
+      background-repeat: no-repeat;
+      text-indent: -9999px;
+    }
   }
 
   .current-location,
@@ -44,14 +37,14 @@
       content: '';
       display: inline-block;
       vertical-align: middle;
-      margin-#{$right}: 1rem;
+      margin-#{$right}: 0.6875rem;
     }
   }
 
   .current-location::before {
-    background: url('../imgs/icons/current.png') no-repeat;
-    width: 38px;
-    height: 38px;
+    background: url('../imgs/icons/current.svg') no-repeat;
+    width: 26px;
+    height: 26px;
   }
 
   .label--location::before {
@@ -61,20 +54,15 @@
   }
 
   .map-view-link::before {
-    background: url('../imgs/icons/map.png') no-repeat;
-    width: 42px;
-    height: 42px;
+    background: url('../imgs/icons/map.svg') no-repeat;
+    width: 26px;
+    height: 23px;
   }
 
   .list-view-link::before {
-    background: url('../imgs/icons/list.png') no-repeat;
-    width: 38px;
-    height: 28px;
-  }
-
-  .current-location {
-    padding: 0 1.875rem;
-    border-right: 1px solid $white;
+    background: url('../imgs/icons/list.svg') no-repeat;
+    width: 26px;
+    height: 16px;
   }
 
   .label--location {
@@ -93,7 +81,6 @@
   }
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
-    background: none;
     border: 1px solid $white;
     padding: 0.6875rem;
   }
@@ -125,26 +112,99 @@
     }
   }
 
-  .view-display-id-page_1 {
-    .view-content,
-    .attachment-after {
-      display: block;
-    }
-
-    .view-content {
-      border-right: 1px solid $white;
-      margin-#{$right}: 0.6875rem;
-      padding-#{$right}: 0.6875rem;
-    }
-
-    .set-center-location {
-      background-color: $white-four;
-    }
-  }
-
   .view-display-id-page_3 {
     .view-content {
       margin-bottom: 8.625rem;
+    }
+  }
+
+  .current-location,
+  .form-type-textfield,
+  .form-actions,
+  .label--location,
+  .list-view-link,
+  .map-view-link {
+    color: $cerulean-two;
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-content__region {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .c-page-title {
+      border-bottom: 1px solid $white;
+      margin-bottom: 0.6875rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .current-location {
+      display: block;
+      font-size: 12px;
+      text-align: center;
+      border: 1px solid $cerulean-two;
+      padding: 0.3125rem 0;
+      margin-bottom: 1rem;
+    }
+
+    .label--location,
+    #edit-list-view,
+    #edit-map-view {
+      display: none;
+    }
+
+    input.form-autocomplete {
+      border: 1px solid $greyish !important;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .c-page-title {
+      margin-top: 3.563rem;
+      margin-bottom: 0.6875rem;
+    }
+
+    .block-views-exposed-filter-blockstores-finder-page-3,
+    .attachment-after {
+      display: none;
+    }
+
+    .c-content__region .views-exposed-form {
+      width: 100%;
+      border-top: 1px solid $white;
+      border-bottom: 1px solid $white;
+      padding: 0.6875rem 0;
+    }
+
+    .current-location,
+    .form-type-textfield,
+    .form-actions,
+    .label--location,
+    .list-view-link,
+    .map-view-link {
+      font-size: 14px;
+      display: table-cell;
+      max-width: 33%;
+      vertical-align: middle;
+      color: $cerulean-two;
+    }
+
+    .view-display-id-page_1 {
+      .view-content,
+      .attachment-after {
+        display: block;
+      }
+
+      .view-content {
+        border-right: 1px solid $white;
+        margin-#{$right}: 0.6875rem;
+        padding-#{$right}: 0.6875rem;
+      }
+
+      .set-center-location {
+        background-color: $white-four;
+      }
     }
   }
 }
