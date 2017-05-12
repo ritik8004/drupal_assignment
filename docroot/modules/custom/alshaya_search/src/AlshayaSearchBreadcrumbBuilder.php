@@ -15,8 +15,8 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   /**
    * {@inheritdoc}
    */
-  public function applies(RouteMatchInterface $attributes) {
-    $parameters = $attributes->getParameters()->all();
+  public function applies(RouteMatchInterface $route_match) {
+    $parameters = $route_match->getParameters()->all();
     if (!empty($parameters['view_id'])) {
       return $parameters['view_id'] == 'search';
     }
@@ -30,11 +30,17 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb->addLink(Link::createFromRoute('Home', '<front>'));
 
     $queryString = explode('&', \Drupal::request()->getQueryString());
+
+    // If on search page but no filter.
+    if (empty($queryString[0])) {
+      $breadcrumb->addLink(Link::createFromRoute(t('Search'), '<none>'));
+    }
+
     foreach ($queryString as $string) {
       $query = explode('=', $string);
       if ($query[0] == 'keywords') {
         $breadcrumb->addLink(Link::createFromRoute('Search results for "' . $query[1] . '"', '<none>'));
-        $breadcrumb->addCacheableDependency(['url.path']);
+        $breadcrumb->mergeCacheMaxAge(0);
         return $breadcrumb;
       }
     }
