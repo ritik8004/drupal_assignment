@@ -1,0 +1,5 @@
+services:
+ alshaya_stores_finder.breadcrumb:
+   class: Drupal\alshaya_stores_finder\Breadcrumb\AlshayaStoresFinderBreadcrumbBuilder
+   tags:
+    - { name: breadcrumb_builder, priority: 100 }
