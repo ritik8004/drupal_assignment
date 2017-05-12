@@ -27,7 +27,7 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute('Home', '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute('Home', '<none>'));
 
     $queryString = explode('&', \Drupal::request()->getQueryString());
 

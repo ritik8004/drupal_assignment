@@ -33,12 +33,12 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
-    $breadcrumb->addLink(Link::createFromRoute(t('My Account'), 'entity.user.canonical', ['user' => \Drupal::currentUser()->id()]));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<none>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('My Account'), '<none>'));
     if ($route_match->getRouteName() != 'entity.user.canonical') {
       $request = \Drupal::request();
       $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
-      $breadcrumb->addLink(Link::createFromRoute($title, '<front>'));
+      $breadcrumb->addLink(Link::createFromRoute($title, '<none>'));
     }
     $breadcrumb->addCacheableDependency(['url.path']);
 

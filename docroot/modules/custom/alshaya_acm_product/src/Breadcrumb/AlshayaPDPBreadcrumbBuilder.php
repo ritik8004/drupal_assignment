@@ -27,7 +27,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<none>'));
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
     if ($field_category = $node->get('field_category')) {
@@ -36,7 +36,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       foreach (array_reverse($parents) as $term) {
         $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
         $breadcrumb->addCacheableDependency($term);
-        $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
+        $breadcrumb->addLink(Link::createFromRoute($term->getName(), '<none>'));
       }
 
       // This breadcrumb builder is based on a route parameter, and hence it
@@ -46,7 +46,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     $request = \Drupal::request();
     $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
-    $breadcrumb->addLink(Link::createFromRoute($title, $route_match->getRouteName(), ['node' => $node->id()]));
+    $breadcrumb->addLink(Link::createFromRoute($title, '<none>'));
 
     return $breadcrumb;
   }
