@@ -28,9 +28,6 @@ function alshaya_user_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
-
-  // Set alshaya_user weight to load hook_user_login_form_alter at last.
-  module_set_weight('alshaya_user', 10);
 }
 
 /**
