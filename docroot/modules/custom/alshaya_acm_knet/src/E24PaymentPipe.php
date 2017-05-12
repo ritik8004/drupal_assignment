@@ -530,7 +530,7 @@ class E24PaymentPipe {
       throw new \RuntimeException('Cannot read data from zip file.');
     }
 
-    unlink($this->getResourcePath() . 'resource.cgz');
+    unlink($this->resourcePath . 'resource.cgz');
 
     return $this->parseSettings($s);
   }
@@ -539,11 +539,11 @@ class E24PaymentPipe {
    * Helper function to create readable zip.
    */
   protected function createReadableZip() {
-    $filenameInput = $this->getResourcePath() . 'resource.cgn';
+    $filenameInput = $this->resourcePath . 'resource.cgn';
     $handleInput = fopen($filenameInput, 'r');
     $contentsInput = fread($handleInput, filesize($filenameInput));
 
-    $filenameOutput = $this->getResourcePath() . 'resource.cgz';
+    $filenameOutput = $this->resourcePath . 'resource.cgz';
     @unlink($filenameOutput);
     $handleOutput = fopen($filenameOutput, 'w');
 
@@ -566,7 +566,7 @@ class E24PaymentPipe {
   protected function readZip() {
     $s = '';
 
-    $filenameInput = $this->getResourcePath() . 'resource.cgz';
+    $filenameInput = $this->resourcePath . 'resource.cgz';
 
     $i = 0;
 
@@ -580,7 +580,7 @@ class E24PaymentPipe {
     }
 
     if (strlen($this->error) === 0) {
-      $xmlNameInput = $this->resourcePath . $this->getAlias() . '.xml';
+      $xmlNameInput = $this->resourcePath . $this->alias . '.xml';
       $xmlHandleInput = fopen($xmlNameInput, 'r');
       $xmlContentsInput = fread($xmlHandleInput, filesize($xmlNameInput));
       fclose($xmlHandleInput);
