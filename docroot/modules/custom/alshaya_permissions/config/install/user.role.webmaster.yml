@@ -67,3 +67,4 @@ permissions:
   - 'delete all revisions'
   - 'revert all revisions'
   - 'view all revisions'
+  - 'administer robots.txt'

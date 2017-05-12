@@ -8,6 +8,7 @@ dependencies:
   - metatag
   - metatag_open_graph
   - node
+  - robotstxt
   - simple_sitemap
   - token
 version: 8.x-1.0
