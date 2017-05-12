@@ -10,6 +10,7 @@ regions:
   header: Header
   pre_content: 'Pre content'
   breadcrumb: Breadcrumb
+  hero_content: 'Hero Content'
   content: Content
   sidebar_first: 'Sidebar first'
   sidebar_second: 'Sidebar second'
