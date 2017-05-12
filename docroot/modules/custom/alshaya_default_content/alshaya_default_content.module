@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_default_content_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'modules_installed') {
+    $group = $implementations['alshaya_default_content'];
+    unset($implementations['alshaya_default_content']);
+    $implementations['alshaya_default_content'] = $group;
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_default_content_modules_installed($modules) {
+  if (in_array('alshaya_default_content', $modules)) {
+    // Exclude home page node from sitemap.
+    $entity_details = \Drupal::config('alshaya_master.home')->get('entity');
+
+    \Drupal::service('simple_sitemap.generator')->setEntityInstanceSettings($entity_details['entity_type'], $entity_details['id'], [
+      'index' => 0,
+      'priority' => 0.5,
+      'changefreq' => 'never',
+    ]);
+  }
+}

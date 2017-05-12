@@ -4,4 +4,4 @@ dependencies: {  }
 id: order_date
 label: 'Order Date'
 locked: false
-pattern: 'd M. Y @ H:i'
+pattern: 'd M. Y @ H\hi'

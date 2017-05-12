@@ -51,6 +51,15 @@ modules:
   test:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
+  uat:
+    enable: [acquia_connector, shield]
+    uninstall: [devel, views_ui]
+  qa:
+    enable: [acquia_connector, shield]
+    uninstall: [devel, views_ui]
+  pprod:
+    enable: [acquia_connector, shield]
+    uninstall: [devel, views_ui]
   prod:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]

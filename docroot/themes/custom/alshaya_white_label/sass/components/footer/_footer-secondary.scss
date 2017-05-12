@@ -2,7 +2,7 @@
   background: $white-four;
   font-size: 0.6875rem;
   position: relative;
-  z-index: 3;
+  z-index: 2;
 
   @include breakpoint($tablet) {
     height: 4.375rem;

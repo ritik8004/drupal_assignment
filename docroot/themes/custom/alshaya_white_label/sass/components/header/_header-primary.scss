@@ -313,6 +313,10 @@ header {
     @include breakpoint($only-tablet) {
       margin-bottom: 1.188rem;
     }
+
+    @include breakpoint($tablet) {
+      margin-bottom: 0.9375rem;
+    }
   }
 
   .block-system-menublock {
@@ -1053,6 +1057,12 @@ header {
 .logged-in {
   .account {
     display: none;
+  }
+
+  .c-menu-primary {
+    a {
+      padding-left: 0;
+    }
   }
 
   .toggle--sign {

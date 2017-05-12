@@ -4,7 +4,7 @@
   padding-bottom: 2.25rem;
   position: relative;
   background: $white-five;
-  z-index: 3;
+  z-index: 2;
 
   @include breakpoint($tablet) {
     padding: 1.25em 1.5em;
