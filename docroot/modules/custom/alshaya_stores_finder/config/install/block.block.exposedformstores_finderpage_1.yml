@@ -11,7 +11,7 @@ dependencies:
 id: exposedformstores_finderpage_1
 theme: alshaya_white_label
 region: content
-weight: 0
+weight: -15
 provider: null
 plugin: 'views_exposed_filter_block:stores_finder-page_1'
 settings:
