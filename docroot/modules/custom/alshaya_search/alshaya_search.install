@@ -58,10 +58,12 @@ function alshaya_search_install() {
     ->set('visibility', [
       'request_path' => [
         'id' => 'request_path',
-        'pages' => '/search',
+        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*",
         'negate' => FALSE,
         'context_mapping' => [],
       ],
     ])
+    ->set('region', 'pre_content')
+    ->set('weight', '-25')
     ->save();
 }
