@@ -3,3 +3,36 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
+
+.by--alphabet {
+	position: relative;
+	margin-bottom: 3rem;
+
+	h3,
+	.rows {
+		display: inline-block;
+		vertical-align: top;
+	}
+
+	h3 {
+		font-weight: normal;
+		color: $marine-blue;
+		line-height: 1.6;
+		width: 1.563rem;
+	}
+
+	.rows {
+		font-size: 14px;
+		line-height: 232%;
+		margin-#{$left}: 2.375rem;
+
+		a {
+			color: $grey-ash;
+
+			&:hover {
+				color: #032760;
+				text-decoration: underline;
+			}
+		}
+	}
+}

@@ -79,7 +79,7 @@ content:
     type: string
   field_store_open_hours:
     weight: 4
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
