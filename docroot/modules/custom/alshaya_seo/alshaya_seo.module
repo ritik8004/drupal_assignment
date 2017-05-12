@@ -97,6 +97,5 @@ function alshaya_seo_robotstxt() {
     'Disallow: */catalog/category/view/',
     'Disallow: */catalog/product/view/',
     'Disallow: */catalogsearch/',
-    'Allow: */sitemap.xml/*',
   ];
 }
