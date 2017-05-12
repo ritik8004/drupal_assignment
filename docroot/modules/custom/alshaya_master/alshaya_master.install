@@ -29,9 +29,6 @@ function alshaya_master_install() {
     'E-mail' => [
       'ar' => 'عنوان البريد الإلكتروني',
     ],
-    'Reset your password' => [
-      'en' => 'Forgot password',
-    ],
     'Create' => [
       'ar' => 'تسجيل',
     ],
@@ -43,6 +40,39 @@ function alshaya_master_install() {
     ],
     'Forgot password' => [
       'ar' => 'هل نسيت كلمة المرور',
+    ],
+    'First Name' => [
+      'ar' => 'الاسم الأول',
+    ],
+    'Last Name' => [
+      'ar' => 'اسم العائلة',
+    ],
+    'Privilege card number (Optional)' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
+    ],
+    'Privilege Card Number (optional)' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
+    ],
+    'Privilege Card Number' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات',
+    ],
+    'you’ll be able to' => [
+      'ar' => 'سجل الآن',
+    ],
+    'online exclusive heading over two lines never three' => [
+      'ar' => 'عرض خاص 2 مقابل 20 د.ك',
+    ],
+    'forgot password' => [
+      'ar' => 'هل نسيت كلمة السر',
+    ],
+    'Please enter your email address.' => [
+      'ar' => 'يرجى إدخال عنوان البريد الإلكتروني',
+    ],
+    'We will send you an email with a password reminder.' => [
+      'ar' => 'سنرسل إليك بريداً إلكترونياً بكلمة السر الخاصة بك',
+    ],
+    'Enter your email address' => [
+      'ar' => 'أدخل بريدك الإلكتروني',
     ],
   ];
   alshaya_i18n_save_translations($strings);
