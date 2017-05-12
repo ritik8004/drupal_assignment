@@ -81,9 +81,6 @@
 
   <div class="clearfix">
     <div{{ attributes.addClass('l-container') }}>
-      {% if messages %}
-        <div class="c-drupal-messages">{{ messages }}</div>
-      {% endif %}
 
       {% if page.sidebar_first %}
         <aside class="c-sidebar-first">
@@ -96,7 +93,7 @@
 
       <main>
 
-        {% if title or tabs or action_links %}
+        {% if title or messages or tabs or action_links %}
           <div class="c-content__header">
 
             {% if page.highlighted %}
@@ -114,6 +111,7 @@
             {% endif %}
 
             {{ title_suffix }}
+            {{ messages }}
             {{ page.help }}
 
             {% if tabs %}
