@@ -10,5 +10,26 @@
   .c-page-title__description {
     display: none;
   }
+
+  .content {
+    .c-promo__items--department img {
+      width: 100%;
+    }
+  }
 }
 
+.nodetype--department_page {
+  @include breakpoint($only-mobile) {
+    .c-hero-content__region {
+      margin-top: 1rem;
+    }
+
+    .block-page-title-block {
+      @include u-visibility(none);
+    }
+
+    .c-department {
+      margin-top: 0;
+    }
+  }
+}

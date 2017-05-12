@@ -11,12 +11,12 @@
 .c-delivery-menu__tab {
   text-align: center;
   list-style: none;
-  padding: 0.375rem 0;
+  padding: 0.8125rem 0;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
   border: 1px solid $cerulean-two;
-  box-shadow: 5px 5px 0 rgba(0, 132, 204, 0.15);
+  box-shadow: 5px 5px 0 0 $shadow;
   position: relative;
 
   @include breakpoint($only-mobile) {
@@ -35,6 +35,20 @@
 
   &:last-child {
     margin-right: 0;
+  }
+
+  @include breakpoint($only-tablet) {
+    width: 48.6%;
+    margin-right: 3%;
+
+    &:nth-child(2) {
+      margin-right: 0;
+      width: 48.4%;
+    }
+
+    &:last-child {
+      @include u-visibility(none);
+    }
   }
 
   .field--name-field-title {
@@ -62,5 +76,28 @@
   .field--name-field-link a {
     @include u-image-replacement;
     @include u-overlay-content;
+  }
+
+  .c-delivery-menu__title {
+    font-family: $alshaya-bold;
+    font-size: 1.125rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1rem;
+    }
+
+    a {
+      color: $cerulean-two;
+    }
+
+    .c-delivery-menu__description {
+      font-family: $alshaya-thin;
+      font-size: 0.75rem;
+      margin-top: -1px;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.625rem;
+      }
+    }
   }
 }

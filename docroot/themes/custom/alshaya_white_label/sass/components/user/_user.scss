@@ -762,6 +762,10 @@
 
   .form-actions {
     margin-top: 0.7rem;
+
+    @include breakpoint($desktop) {
+      margin-top: 0;
+    }
   }
 }
 
