@@ -21,3 +21,17 @@ services:
 
   acq_sku.download_images_queue:
     class: Drupal\acq_sku\DownloadImagesQueue
+
+  acq_sku.form_builder:
+    class: Drupal\acq_sku\Form\AcqSkuFormBuilder
+    arguments:
+      - '@form_validator'
+      - '@form_submitter'
+      - '@form_cache'
+      - '@module_handler'
+      - '@event_dispatcher'
+      - '@request_stack'
+      - '@class_resolver'
+      - '@element_info'
+      - '@theme.manager'
+      - '@?csrf_token'
