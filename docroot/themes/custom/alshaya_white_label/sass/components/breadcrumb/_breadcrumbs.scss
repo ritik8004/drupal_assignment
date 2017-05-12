@@ -26,4 +26,8 @@
       }
     }
   }
+
+  @include breakpoint($mobile) {
+    display: none;
+  }
 }

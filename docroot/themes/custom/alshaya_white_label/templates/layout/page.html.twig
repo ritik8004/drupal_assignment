@@ -40,7 +40,18 @@
   </div>
   <!-- /menu-primary -->
 
-  <!-- ______________________ BREADCRUMB _______________________ -->
+  <!-- ______________________ Pre content _______________________ -->
+  {% if page.pre_content %}
+    <div class="c-pre-content">
+      <div class="l-container">
+        <div class="c-pre-content__region">
+          {{ page.pre_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+    <!-- ______________________ BREADCRUMB _______________________ -->
 
   {% if page.breadcrumb %}
     <div class="c-breadcrumb">
@@ -52,17 +63,6 @@
     </div>
   {% endif %}
   <!-- /breadcrumb -->
-
-  <!-- ______________________ Pre content _______________________ -->
-  {% if page.pre_content %}
-    <div class="c-pre-content">
-      <div class="l-container">
-        <div class="c-pre-content__region">
-          {{ page.pre_content }}
-        </div>
-      </div>
-    </div>
-  {% endif %}
 
   <!-- ______________________ MAIN _______________________ -->
 

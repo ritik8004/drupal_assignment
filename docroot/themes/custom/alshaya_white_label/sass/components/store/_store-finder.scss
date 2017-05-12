@@ -5,35 +5,29 @@
     color: $black;
   }
 
-  .c-page-title {
-    margin-top: 3.563rem;
-    margin-bottom: 0.6875rem;
-  }
-
   .c-content__region {
     max-width: 77.25rem;
     margin: auto;
   }
 
-  .views-exposed-form {
-    display: table;
-    width: 100%;
-    border-top: 1px solid $white;
-    border-bottom: 1px solid $white;
-    padding: 0.6875rem 0;
+  .c-page-title {
+    font-weight: normal;
   }
 
-  .current-location,
-  .form-type-textfield,
-  .form-actions,
-  .label--location,
-  .list-view-link,
-  .map-view-link {
-    font-size: 12px;
-    display: table-cell;
-    max-width: 33%;
-    vertical-align: middle;
-    color: $cerulean-two;
+  input {
+    &.form-autocomplete {
+      font-size: 12px;
+    }
+
+    &#edit-submit-stores-finder {
+      background: url('../imgs/icons/store-search.svg');
+      border: none;
+      background-repeat: no-repeat;
+      text-indent: -9999px;
+      width: 20px;
+      margin-top: -32px;
+      right: 18px;
+    }
   }
 
   .current-location,
@@ -44,14 +38,14 @@
       content: '';
       display: inline-block;
       vertical-align: middle;
-      margin-#{$right}: 1rem;
+      margin-#{$right}: 0.6875rem;
     }
   }
 
   .current-location::before {
-    background: url('../imgs/icons/current.png') no-repeat;
-    width: 38px;
-    height: 38px;
+    background: url('../imgs/icons/current.svg') no-repeat;
+    width: 26px;
+    height: 26px;
   }
 
   .label--location::before {
@@ -61,20 +55,15 @@
   }
 
   .map-view-link::before {
-    background: url('../imgs/icons/map.png') no-repeat;
-    width: 42px;
-    height: 42px;
+    background: url('../imgs/icons/map.svg') no-repeat;
+    width: 26px;
+    height: 23px;
   }
 
   .list-view-link::before {
-    background: url('../imgs/icons/list.png') no-repeat;
-    width: 38px;
-    height: 28px;
-  }
-
-  .current-location {
-    padding: 0 1.875rem;
-    border-right: 1px solid $white;
+    background: url('../imgs/icons/list.svg') no-repeat;
+    width: 26px;
+    height: 16px;
   }
 
   .label--location {
@@ -93,7 +82,6 @@
   }
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
-    background: none;
     border: 1px solid $white;
     padding: 0.6875rem;
   }
@@ -103,48 +91,211 @@
     display: none;
   }
 
-  .view-content {
+  .view-display-id-page_3 {
+    .view-content {
+      margin-bottom: 8.625rem;
+    }
+  }
+
+  .current-location,
+  .form-type-textfield,
+  .form-actions,
+  .label--location,
+  .list-view-link,
+  .map-view-link {
+    color: $cerulean-two;
+  }
+
+  .by--alphabet {
+    position: relative;
+    margin-bottom: 3rem;
+
+    h3,
+    .rows {
+      display: inline-block;
+      vertical-align: top;
+    }
+
     h3 {
       font-size: 26px;
-      display: inline-block;
-      color: $black;
+      font-weight: normal;
+      color: $marine-blue;
+      line-height: 1.6;
+      width: 1.563rem;
       margin: 0;
     }
 
-    .views-row {
-      margin-bottom: 1rem;
-
-      &.views-row-last {
-        margin-bottom: 3rem;
-      }
+    .rows {
+      font-size: 14px;
+      line-height: 232%;
+      margin-#{$left}: 2.375rem;
 
       a {
-        color: $cerulean-two;
-        font-size: 14px;
+        color: $grey-ash;
+
+        &:hover {
+          color: $marine-blue;
+          text-decoration: underline;
+        }
       }
+    }
+  }
+
+  .list-view-locator {
+    font-size: 14px;
+    background: $white-four;
+    padding: 1rem 0;
+    padding-bottom: 0;
+    margin-bottom: 1rem;
+
+    .row-title {
+      font-weight: bold;
+      color: $marine-blue;
+      padding: 0 3.438rem;
+    }
+
+    .views-field-field-store-address,
+    .views-field-field-store-open-hours {
+      border-bottom: 1px solid $white;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1rem;
+
+      .field-content {
+        padding: 0 3.438rem;
+      }
+    }
+
+    .open--hours {
+      margin-top: 0.9rem;
+    }
+
+    .views-field-field-store-open-hours {
+      margin-bottom: 0;
+    }
+
+    .views-field-field-store-open-hours {
+      .hours--label {
+        position: relative;
+        color: $cerulean-two;
+
+        &::after {
+          position: absolute;
+          content: '';
+          background: url('../imgs/icons/store--down.svg');
+          display: inline-block;
+          width: 17px;
+          height: 7px;
+          top: 5px;
+          right: 0;
+        }
+
+        &.open {
+          border-bottom: 0;
+
+          &::after {
+            transform: scaleY(-1);
+          }
+        }
+      }
+
+      .open--hours {
+        display: none;
+        line-height: 1.57;
+      }
+    }
+
+    .lat-lng {
+      display: none;
     }
   }
 
   .view-display-id-page_1 {
-    .view-content,
-    .attachment-after {
+    margin-top: 1.5rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-content__region {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .c-page-title {
+      border-bottom: 1px solid $white;
+      margin-bottom: 0.6875rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .current-location {
       display: block;
+      font-size: 12px;
+      text-align: center;
+      border: 1px solid $cerulean-two;
+      padding: 0.3125rem 0;
+      margin-bottom: 1rem;
     }
 
-    .view-content {
-      border-right: 1px solid $white;
-      margin-#{$right}: 0.6875rem;
-      padding-#{$right}: 0.6875rem;
+    .label--location,
+    #edit-list-view,
+    #edit-map-view {
+      display: none;
     }
 
-    .set-center-location {
-      background-color: $white-four;
+    input.form-autocomplete {
+      border: 1px solid $greyish !important;
     }
   }
 
-  .view-display-id-page_3 {
-    .view-content {
-      margin-bottom: 8.625rem;
+  @include breakpoint($tablet) {
+    .c-page-title {
+      margin-top: 3.563rem;
+      margin-bottom: 0.6875rem;
+    }
+
+    .block-views-exposed-filter-blockstores-finder-page-3,
+    .attachment-after {
+      display: none;
+    }
+
+    .c-content__region .views-exposed-form {
+      width: 100%;
+      border-top: 1px solid $white;
+      border-bottom: 1px solid $white;
+      padding: 0.6875rem 0;
+    }
+
+    .current-location,
+    .form-type-textfield,
+    .form-actions,
+    .label--location,
+    .list-view-link,
+    .map-view-link {
+      font-size: 14px;
+      display: table-cell;
+      max-width: 33%;
+      vertical-align: middle;
+      color: $cerulean-two;
+    }
+
+    .view-display-id-page_1 {
+      .view-content,
+      .attachment-after {
+        display: block;
+      }
+    }
+
+    .attachment-after {
+      width: 73%;
+      display: inline-block !important;
+      vertical-align: top;
+    }
+
+    .view-display-id-page_1 > .view-content {
+      max-width: 19.69rem;
+      display: inline-block;
+      border-right: 1px solid $white;
+      vertical-align: top;
+      margin-#{$right}: 0.6875rem;
+      padding-#{$right}: 0.6875rem;
     }
   }
 }
