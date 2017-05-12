@@ -29,6 +29,9 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute('Home', '<none>'));
 
+    $breadcrumb->mergeCacheMaxAge(0);
+    $breadcrumb->addCacheableDependency(['url.path']);
+
     $queryString = explode('&', \Drupal::request()->getQueryString());
 
     // If on search page but no filter.
@@ -40,7 +43,6 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $query = explode('=', $string);
       if ($query[0] == 'keywords') {
         $breadcrumb->addLink(Link::createFromRoute('Search results for "' . $query[1] . '"', '<none>'));
-        $breadcrumb->mergeCacheMaxAge(0);
         return $breadcrumb;
       }
     }
