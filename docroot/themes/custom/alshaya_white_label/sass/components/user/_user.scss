@@ -277,6 +277,10 @@
       @include breakpoint($tablet) {
         width: auto;
       }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.563rem;
+      }
     }
 
     .description {
@@ -758,10 +762,18 @@
     .form-item {
       margin-top: 2.7em;
     }
+
+    .form-item-pass {
+      margin-top: 2.563rem;
+    }
   }
 
   .form-actions {
     margin-top: 0.7rem;
+
+    @include breakpoint($desktop) {
+      margin-top: 0;
+    }
   }
 }
 
