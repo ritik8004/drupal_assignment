@@ -1,14 +1,9 @@
-.c-front .l-one--w {
-  @include breakpoint($only-mobile) {
+.c-front.l-one--w {
+  @include breakpoint($mobile) {
     @include container(100%);
-  }
 
-  @include breakpoint($only-tablet) {
-    @include container(100%);
-  }
-
-  @include breakpoint($desktop) {
-    @include container(100%);
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
