@@ -170,6 +170,16 @@
           $(this).next('.fieldset-wrapper').slideToggle();
         });
       }
+
+      /**
+      * Toggles the Search on Order list.
+      */
+
+      if ($('.alshaya-acm-customer-order-list-search').length) {
+        $('.alshaya-acm-customer-order-list-search label').on('click', function () {
+          $('.alshaya-acm-customer-order-list-search').toggleClass('active--search');
+        });
+      }
     }
   };
 
