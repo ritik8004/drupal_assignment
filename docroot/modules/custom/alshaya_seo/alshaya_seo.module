@@ -81,3 +81,22 @@ function _alshaya_seo_get_site_country_name() {
 
   return '';
 }
+
+/**
+ * Implements hook_robotstxt().
+ */
+function alshaya_seo_robotstxt() {
+  return [
+    'User-agent: *',
+    'Disallow: /*.js$',
+    'Disallow: /*.css$',
+    'Disallow: /*.php$',
+    'Disallow: /*?p=*&',
+    'Disallow: /*?SID=',
+    'Disallow: */index.php/*',
+    'Disallow: */catalog/category/view/',
+    'Disallow: */catalog/product/view/',
+    'Disallow: */catalogsearch/',
+    'Allow: */sitemap.xml/*',
+  ];
+}
