@@ -1,0 +1,5 @@
+services:
+ alshaya_acm_product.breadcrumb:
+   class: Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   tags:
+    - { name: breadcrumb_builder, priority: 100 }
