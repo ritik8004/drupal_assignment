@@ -8,6 +8,19 @@
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_acm_customer_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    $group = $implementations['alshaya_acm_customer'];
+    unset($implementations['alshaya_acm_customer']);
+    $implementations['alshaya_acm_customer'] = $group;
+  }
+}
 
 /**
  * Implements hook_theme().
@@ -100,5 +113,231 @@ function alshaya_acm_customer_block_access(Block $block, $operation, AccountInte
   if ($operation == 'view' && $block->id() == 'userrecentorders') {
     $current_route = \Drupal::routeMatch()->getRouteName();
     return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
+  }
+}
+
+/**
+ * Implements hook_acq_commerce_update_customer_api_request_alter().
+ */
+function alshaya_acm_customer_acq_commerce_update_customer_api_request(array &$request_options) {
+  if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($request_options['form_params']['customer[email]']);
+
+    if (!empty($user)) {
+      $user_data = \Drupal::service('user.data');
+      if ($preference = $user_data->get('user', $user->id(), 'communication_preference')) {
+        \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+        $request_options['form_params']['customer[extension][communication_preference]'] = alshaya_acm_customer_get_communication_preference_api_value($preference);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'user_login_form') {
+    $key = array_search('email_registration_user_login_validate', $form['name']['#element_validate']);
+    $form['name']['#element_validate'][$key] = 'alshaya_acm_customer_user_email_validate';
+
+    array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
+
+    $key = array_search('::validateFinal', $form['#validate']);
+    $form['#validate'][$key] = 'alshaya_acm_customer_user_login_validate_final';
+  }
+
+  if ($form_id == 'user_communication_preference') {
+    $form['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
+  }
+}
+
+/**
+ * Common submit callback to update user data after changes.
+ */
+function alshaya_acm_customer_update_customer_after_submit($form, FormStateInterface $form_state) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+
+  if ($user = $form_state->get('user')) {
+    alshaya_acm_customer_update_customer_data($user);
+  }
+}
+
+/**
+ * Element validate callback for user login name field.
+ *
+ * Update email address error msg.
+ */
+function alshaya_acm_customer_user_email_validate($form, FormStateInterface $form_state) {
+  $mail = $form_state->getValue('name');
+  if (!empty($mail)) {
+    try {
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+
+      $customer = $api_wrapper->getCustomer($mail);
+
+      if (!empty($customer) && !empty($customer['customer_id'])) {
+        // We got a valid customer found, we will validate password in API.
+        return;
+      }
+
+    }
+    catch (\Exception $e) {
+      // Do nothing, could be admin user.
+    }
+
+    $config = \Drupal::config('email_registration.settings');
+
+    if ($user = user_load_by_mail($mail)) {
+      $form_state->setValue('name', $user->getAccountName());
+    }
+    elseif (!$config->get('login_with_username')) {
+      $form_state->setErrorByName('name', t('Invalid email address.'));
+    }
+  }
+}
+
+/**
+ * Validate callback to authenticate user against Magento.
+ */
+function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$form_state) {
+  $mail = $form_state->getValue('name');
+  $pass = $form_state->getValue('pass');
+
+  try {
+    $api_wrapper = \Drupal::service('acq_commerce.api');
+
+    $customer = $api_wrapper->authenticateCustomer($mail, $pass);
+
+    if (!empty($customer) && !empty($customer['customer_id'])) {
+      // Check if user exists in Drupal.
+      if ($user = user_load_by_mail($mail)) {
+        // Simply do nothing.
+      }
+      // Create user.
+      else {
+        /** @var \Drupal\user\Entity\User $user */
+        $user = \Drupal::entityTypeManager()->getStorage('user')->create([]);
+        $user->enforceIsNew();
+
+        // Activate the user by default.
+        $user->activate();
+
+        // Set the email.
+        $user->setEmail($customer['email']);
+
+        // For Alshaya we know we are using email_registration module.
+        $user->setUsername('email_registration_' . user_password());
+
+        // Set a strong password.
+        $user->setPassword(user_password(25));
+
+        // Set fields.
+        $user->get('field_first_name')->setValue($customer['firstname']);
+        $user->get('field_last_name')->setValue($customer['lastname']);
+        $user->get('acq_customer_id')->setValue($customer['customer_id']);
+
+        // Invoke the alter hook to allow all modules to update the account.
+        \Drupal::moduleHandler()->alter('alshaya_acm_customer_update_account', $user, $customer);
+
+        $user->save();
+
+        // Special case for communication_preference handled below.
+        if (isset($customer['extension'], $customer['extension']['communication_preference'])) {
+          \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+          $preference = alshaya_acm_customer_get_communication_preference_drupal_value($customer['extension']['communication_preference']);
+          $user_data = \Drupal::service('user.data');
+          $user_data->set('user', $user->id(), 'communication_preference', $preference);
+        }
+      }
+
+      $form_state->setValidationComplete(TRUE);
+
+      // Some how this is not working so we set temporary and set uid again in
+      // final validate function.
+      $form_state->set('uid', $user->id());
+      $form_state->setTemporaryValue('uid', $user->id());
+    }
+  }
+  catch (\Exception $e) {
+    if ($e->getCode() == 404) {
+      // Do nothing, could be admin user.
+    }
+    else {
+      $form_state->setErrorByName('pass', t('Invalid password.'));
+    }
+  }
+}
+
+/**
+ * Validate callback: for user login form.
+ *
+ * Change the error messages as per the request, Show separate error msg
+ * for username and password field.
+ *
+ * @see \Drupal\user\Form\UserLoginForm::validateFinal();
+ */
+function alshaya_acm_customer_user_login_validate_final(array &$form, FormStateInterface $form_state) {
+  $flood = \Drupal::getContainer()->get('flood');
+
+  // If user is not already validated by Magento code.
+  if (!$form_state->getTemporaryValue('uid')) {
+    $flood_config = \Drupal::configFactory()->getEditable('user.flood');
+
+    // Always register an IP-based failed login event.
+    $flood->register('user.failed_login_ip', $flood_config->get('ip_window'));
+
+    // Register a per-user failed login event.
+    if ($flood_control_user_identifier = $form_state->get('flood_control_user_identifier')) {
+      $flood->register('user.failed_login_user', $flood_config->get('user_window'), $flood_control_user_identifier);
+    }
+
+    if ($flood_control_triggered = $form_state->get('flood_control_triggered')) {
+      if ($flood_control_triggered == 'user') {
+        $form_state->setErrorByName('name', \Drupal::translation()->formatPlural($flood_config->get('user_limit'), 'There has been more than one failed login attempt for this account. It is temporarily blocked. Try again later or <a href=":url">request a new password</a>.', 'There have been more than @count failed login attempts for this account. It is temporarily blocked. Try again later or <a href=":url">request a new password</a>.', [':url' => Url::fromRoute('user.pass')->toString()]));
+      }
+      else {
+        // We did not find a uid, so the limit is IP-based.
+        $form_state->setErrorByName('name', t('Too many failed login attempts from your IP address. This IP address is temporarily blocked. Try again later or <a href=":url">request a new password</a>.', [':url' => Url::fromRoute('user.pass')->toString()]));
+      }
+    }
+    else {
+      // Don't do anything if there are errors.
+      if ($form_state->getErrors()) {
+        return;
+      }
+
+      // Use $form_state->getUserInput() in the error message to guarantee
+      // that we send exactly what the user typed in. The value from
+      // $form_state->getValue() may have been modified by validation
+      // handlers that ran earlier than this one.
+      $user_input = $form_state->getUserInput();
+      $query = isset($user_input['name']) ? ['name' => $user_input['name']] : [];
+
+      $userStorage = \Drupal::getContainer()->get('entity.manager')->getStorage('user');
+
+      if ($accounts = $userStorage->loadByProperties($query)) {
+        $form_state->setErrorByName('pass', t('Invalid password.'));
+        \Drupal::logger('user')->notice('Login attempt failed for %user.', ['%user' => $form_state->getValue('name')]);
+      }
+      else {
+        $form_state->setErrorByName('name', t('Invalid email address.'));
+        $form_state->setErrorByName('pass', t('Invalid password.'));
+        // If the username entered is not a valid user,
+        // only store the IP address.
+        \Drupal::logger('user')->notice('Login attempt failed from %ip.', ['%ip' => \Drupal::request()->getClientIp()]);
+      }
+    }
+  }
+  elseif ($flood_control_user_identifier = $form_state->get('flood_control_user_identifier')) {
+    // Clear past failures for this user so as not to block a user who might
+    // log in and out more than once in an hour.
+    $flood->clear('user.failed_login_user', $flood_control_user_identifier);
+  }
+
+  // Set the uid for submitForm to login the user.
+  if ($form_state->getTemporaryValue('uid')) {
+    $form_state->set('uid', $form_state->getTemporaryValue('uid'));
   }
 }
