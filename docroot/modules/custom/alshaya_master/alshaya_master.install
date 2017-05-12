@@ -172,4 +172,18 @@ function alshaya_master_install() {
   \Drupal::configFactory()->getEditable('workbench_moderation.moderation_state.needs_review')
     ->set('label', 'Pending review')
     ->save();
+
+  // Set breadcrumbs block to show only on Search page.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_breadcrumbs')
+    ->set('visibility', [
+      'request_path' => [
+        'id' => 'request_path',
+        'pages' => "<front>\r\n/user/login\r\n/user/register",
+        'negate' => TRUE,
+        'context_mapping' => [],
+      ],
+    ])
+    ->set('region', 'pre_content')
+    ->set('weight', '-25')
+    ->save();
 }

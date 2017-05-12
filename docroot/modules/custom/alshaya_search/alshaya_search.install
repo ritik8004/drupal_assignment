@@ -53,17 +53,4 @@ function alshaya_search_install() {
   user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
   user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);
 
-  // Set breadcrumbs block to show only on Search page.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_breadcrumbs')
-    ->set('visibility', [
-      'request_path' => [
-        'id' => 'request_path',
-        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*",
-        'negate' => FALSE,
-        'context_mapping' => [],
-      ],
-    ])
-    ->set('region', 'pre_content')
-    ->set('weight', '-25')
-    ->save();
 }
