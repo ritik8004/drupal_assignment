@@ -123,6 +123,13 @@
         $('.c-menu-secondary').addClass('remove--toggle');
         $('.c-my-account-nav').removeClass('block--display');
       });
+
+      // Toggle Function for Store Locator.
+      var $storeHours = $('.hours--label');
+      $storeHours.on('click', function () {
+        $(this).next().toggle();
+        $('.hours--label').toggleClass('open');
+      });
     }
   };
 

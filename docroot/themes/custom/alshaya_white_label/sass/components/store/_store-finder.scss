@@ -1,5 +1,4 @@
 .path--store-finder {
-
   .view-header {
     font-size: 14px;
     font-weight: bold;
@@ -15,17 +14,19 @@
     font-weight: normal;
   }
 
-
   input {
     &.form-autocomplete {
       font-size: 12px;
     }
 
-    &#edit-submit-stores-finder  {
-      background: url('../imgs/icons/current.svg');
+    &#edit-submit-stores-finder {
+      background: url('../imgs/icons/store-search.svg');
       border: none;
       background-repeat: no-repeat;
       text-indent: -9999px;
+      width: 20px;
+      margin-top: -32px;
+      right: 18px;
     }
   }
 
@@ -90,28 +91,6 @@
     display: none;
   }
 
-  .view-content {
-    h3 {
-      font-size: 26px;
-      display: inline-block;
-      color: $black;
-      margin: 0;
-    }
-
-    .views-row {
-      margin-bottom: 1rem;
-
-      &.views-row-last {
-        margin-bottom: 3rem;
-      }
-
-      a {
-        color: $cerulean-two;
-        font-size: 14px;
-      }
-    }
-  }
-
   .view-display-id-page_3 {
     .view-content {
       margin-bottom: 8.625rem;
@@ -125,6 +104,113 @@
   .list-view-link,
   .map-view-link {
     color: $cerulean-two;
+  }
+
+  .by--alphabet {
+    position: relative;
+    margin-bottom: 3rem;
+
+    h3,
+    .rows {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: normal;
+      color: $marine-blue;
+      line-height: 1.6;
+      width: 1.563rem;
+      margin: 0;
+    }
+
+    .rows {
+      font-size: 14px;
+      line-height: 232%;
+      margin-#{$left}: 2.375rem;
+
+      a {
+        color: $grey-ash;
+
+        &:hover {
+          color: $marine-blue;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .list-view-locator {
+    font-size: 14px;
+    background: $white-four;
+    padding: 1rem 0;
+    padding-bottom: 0;
+    margin-bottom: 1rem;
+
+    .row-title {
+      font-weight: bold;
+      color: $marine-blue;
+      padding: 0 3.438rem;
+    }
+
+    .views-field-field-store-address,
+    .views-field-field-store-open-hours {
+      border-bottom: 1px solid $white;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1rem;
+
+      .field-content {
+        padding: 0 3.438rem;
+      }
+    }
+
+    .open--hours {
+      margin-top: 0.9rem;
+    }
+
+    .views-field-field-store-open-hours {
+      margin-bottom: 0;
+    }
+
+    .views-field-field-store-open-hours {
+      .hours--label {
+        position: relative;
+        color: $cerulean-two;
+
+        &::after {
+          position: absolute;
+          content: '';
+          background: url('../imgs/icons/store--down.svg');
+          display: inline-block;
+          width: 17px;
+          height: 7px;
+          top: 5px;
+          right: 0;
+        }
+
+        &.open {
+          border-bottom: 0;
+
+          &::after {
+            transform: scaleY(-1);
+          }
+        }
+      }
+
+      .open--hours {
+        display: none;
+        line-height: 1.57;
+      }
+    }
+
+    .lat-lng {
+      display: none;
+    }
+  }
+
+  .view-display-id-page_1 {
+    margin-top: 1.5rem;
   }
 
   @include breakpoint($only-mobile) {
@@ -195,16 +281,21 @@
       .attachment-after {
         display: block;
       }
+    }
 
-      .view-content {
-        border-right: 1px solid $white;
-        margin-#{$right}: 0.6875rem;
-        padding-#{$right}: 0.6875rem;
-      }
+    .attachment-after {
+      width: 73%;
+      display: inline-block !important;
+      vertical-align: top;
+    }
 
-      .set-center-location {
-        background-color: $white-four;
-      }
+    .view-display-id-page_1 > .view-content {
+      max-width: 19.69rem;
+      display: inline-block;
+      border-right: 1px solid $white;
+      vertical-align: top;
+      margin-#{$right}: 0.6875rem;
+      padding-#{$right}: 0.6875rem;
     }
   }
 }
