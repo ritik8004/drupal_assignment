@@ -8,7 +8,7 @@ dependencies:
     - acq_sku
     - search_api
     - node
-id: local_solr
+id: acquia_search_index
 name: 'Local Solr'
 description: ''
 read_only: false

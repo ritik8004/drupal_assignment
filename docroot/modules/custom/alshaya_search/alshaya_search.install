@@ -6,56 +6,48 @@
  */
 
 use Drupal\lightning_core\ConfigHelper;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_install().
  */
 function alshaya_search_install() {
-  // Set new config for acquia search index.
-  $search_api_index = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_search') . '/config/optional/search_api.index.acquia_search_index.yml'));
-  \Drupal::configFactory()
-    ->getEditable('search_api.index.acquia_search_index')
-    ->setData($search_api_index)
+  if (!isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
+  }
+  else {
+    \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
+  }
+
+  $search_view = \Drupal::configFactory()->getEditable('views.view.search');
+
+  if ($search_view->getRawData()) {
+    $search_view->delete();
+  }
+
+  ConfigHelper::forModule('alshaya_search')
+    ->optional()
+    ->getEntity('view', 'search')
     ->save();
 
-  if (!isset($_ENV['AH_SITE_NAME'])) {
+  ConfigHelper::forModule('alshaya_search')
+    ->optional()
+    ->getEntity('facets_summary', 'filter_bar')
+    ->save();
 
-    // Enable Solr Server and Index.
-    ConfigHelper::forModule('alshaya_search')
-      ->optional()
-      ->getEntity('search_api_server', 'solr')
-      ->save();
+  ConfigHelper::forModule('alshaya_search')
+    ->optional()
+    ->getEntity('block', 'filterbar')
+    ->save();
 
-    ConfigHelper::forModule('alshaya_search')
-      ->optional()
-      ->getEntity('search_api_index', 'local_solr')
-      ->save();
+  ConfigHelper::forModule('alshaya_search')
+    ->optional()
+    ->getEntity('block', 'exposedformsearchpage_2')
+    ->save();
 
-    // Update search view settings.
-    $search_view = \Drupal::configFactory()->getEditable('views.view.search');
-    $search_view_display = $search_view->get('display');
-    $search_view_display['default']['display_options']['row']['options']['view_modes']['entity:node']['acq_product'] = 'search_result';
-    $search_view_display['default']['display_options']['fields']['rendered']['table'] = 'search_api_index_local_solr';
-    $search_view_display['default']['display_options']['filters']['search_api_fulltext']['table'] = 'search_api_index_local_solr';
-    $search_view_display['default']['display_options']['sorts']['search_api_relevance']['table'] = 'search_api_index_local_solr';
-
-    $search_view->set('base_table', 'search_api_index_local_solr')
-      ->set('dependencies', [
-        'config' => [
-          'search_api.index.local_solr',
-        ],
-        'module' => [
-          'search_api',
-        ],
-      ])
-      ->set('display', $search_view_display)
-      ->save();
-
-    \Drupal::configFactory()->getEditable('search_api_autocomplete.search_api_autocomplete.search_api_views_search')
-      ->set('index_id', 'local_solr')
-      ->save();
-  }
+  ConfigHelper::forModule('alshaya_search')
+    ->optional()
+    ->getEntity('block', 'exposedformsearchpage_3')
+    ->save();
 
   // Allow anonymous and authenticated users to use autocomplete.
   user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
@@ -72,17 +64,4 @@ function alshaya_search_install() {
       ],
     ])
     ->save();
-
-  // Disable Acquia Search View.
-  $acquia_search_view = \Drupal::configFactory()->getEditable('views.view.acquia_search')->getRawData();
-  if (empty($acquia_search_view)) {
-    // Import Acquia Search View, and disable it.
-    ConfigHelper::forModule('acquia_search')
-      ->optional()
-      ->getEntity('view', 'acquia_search')
-      ->save();
-    \Drupal::configFactory()->getEditable('views.view.acquia_search')
-      ->set('status', FALSE)
-      ->save();
-  }
 }
