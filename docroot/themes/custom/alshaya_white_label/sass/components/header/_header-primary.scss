@@ -309,6 +309,10 @@ header {
       margin-top: 0;
       margin-bottom: 0;
     }
+
+    @include breakpoint($only-tablet) {
+      margin-bottom: 1.188rem;
+    }
   }
 
   .block-system-menublock {
