@@ -1,0 +1,7 @@
+name: 'Alshaya ACM K-Net'
+type: module
+description: 'Contains K-Net payment method plugin and related code.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm_checkout

@@ -5,6 +5,8 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_acq_checkout_pane_pane_info_alter().
  */
@@ -14,6 +16,22 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
   unset($definitions['shipping_information']);
   unset($definitions['review']);
   unset($definitions['completion_message']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Add markup to show selected card type.
+  if (isset($form['payment_methods'], $form['payment_methods']['payment_details'], $form['payment_methods']['payment_details']['cc_number'])) {
+    $form['payment_methods']['payment_details']['cc_number']['#suffix'] = '
+      <div class="card-types-wrapper">
+        <span class="card-type card-type-visa"></span>
+        <span class="card-type card-type-mastercard"></span>
+        <span class="card-type card-type-diners-club"></span>
+      </div>
+    ';
+  }
 }
 
 /**
