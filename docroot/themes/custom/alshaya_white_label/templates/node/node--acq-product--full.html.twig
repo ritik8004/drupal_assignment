@@ -37,7 +37,11 @@ set classes = [
     <div class="content__sidebar">
       {{ content.field_skus }}
       {{ content.body }}
-      {{ content.sharethis }}
+      {% if sku_out_of_stock is empty %}
+        <div class="out-of-stock {{ sku_out_of_stock }}">{{ content.sharethis }}</div>
+      {% else %}
+        {{ content.sharethis }}
+      {% endif %}
 
       {% if content.cross_sell %}
         <div class="horizontal-crossell mobile-only-block">
