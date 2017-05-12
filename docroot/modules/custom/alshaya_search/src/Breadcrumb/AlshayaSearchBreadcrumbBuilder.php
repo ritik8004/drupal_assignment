@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_search;
+namespace Drupal\alshaya_search\Breadcrumb;
 
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
