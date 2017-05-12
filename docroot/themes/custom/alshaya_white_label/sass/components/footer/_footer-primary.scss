@@ -182,6 +182,14 @@
 .alshaya-newsletter-subscribe {
   margin: 1em 0.5rem 2.9rem;
 
+  @include breakpoint($only-mobile) {
+    margin-top: 1.813rem;
+
+    .newsletter-block-label {
+      font-family: $alshaya-thin;
+    }
+  }
+
   @include breakpoint($tablet) {
     float: $right;
     max-width: 21.875rem;
@@ -264,6 +272,10 @@
 
     @include breakpoint($tablet) {
       margin-top: 1.7rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1.75rem;
     }
   }
 

@@ -87,7 +87,7 @@
 
     @include breakpoint($desktop) {
       color: $greyish;
-      display: inline-block;
+      display: block;
       padding: 0.075rem 1.625rem 0.075rem 0.9375rem;
       height: 1.5rem;
       font-size: 0.6875rem;

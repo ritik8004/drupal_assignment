@@ -68,7 +68,7 @@ header {
       padding-bottom: 1.5rem;
 
       .block-system-branding-block {
-        h1 img {
+        .site-brand-home img {
           width: 13rem;
         }
       }
@@ -95,7 +95,7 @@ header {
 
     @include breakpoint($desktop) {
       .block-system-branding-block {
-        h1 {
+        .site-brand-home {
           min-width: 328px;
         }
       }
@@ -424,7 +424,7 @@ header {
     display: block;
 
     a {
-      padding-left: 0.625rem;
+      padding-#{$left}: 0.625rem;
     }
 
     .store {
