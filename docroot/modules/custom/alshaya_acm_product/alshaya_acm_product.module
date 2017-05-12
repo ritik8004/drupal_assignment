@@ -161,6 +161,17 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+
+  // Get SKU id.
+  $sku_stock = [];
+  $sku_entity = SKU::load($form['sku_id']['#value']);
+  if ($sku_entity) {
+    if ($sku = $sku_entity->getSku()) {
+      // SKU stock.
+      $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku);
+    }
+  }
+
   if (isset($form['ajax']) && isset($form['ajax']['configurables'])) {
 
     if ($form['ajax']['configurables']['size']) {
@@ -211,30 +222,26 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
     }
 
-    // Get SKU id.
-    $sku_entity = SKU::load($form['sku_id']['#value']);
-    if ($sku_entity) {
-      if ($sku = $sku_entity->getSku()) {
-        // SKU stock.
-        $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku);
-        // If item is not available in stock.
-        if (!$sku_stock['is_in_stock']) {
-          $form['quantity'] = [
-            '#markup' => '<div class="quantity">Quantity</div>',
-          ];
-          $form['ajax']['configurables']['size'] = [
-            '#markup' => '<div class="size">' . t('Size') . '</div>',
-          ];
-          $form['ajax']['configurables']['color'] = [
-            '#markup' => '<div class="size">' . t('Color') . '</div>',
-          ];
-          $form['add_to_cart'] = [
-            '#markup' => '<div class="add-to-cart button">' . t('Out of stock') . '</div>',
-          ];
-        }
-      }
+    // If item is not available in stock.
+    if (!empty($sku_stock) && !$sku_stock['is_in_stock']) {
+      $form['ajax']['configurables']['size'] = [
+        '#markup' => '<div class="size">' . t('Size') . '</div>',
+      ];
+      $form['ajax']['configurables']['color'] = [
+        '#markup' => '<div class="size">' . t('Color') . '</div>',
+      ];
     }
 
+  }
+
+  // Stock check for quantity.
+  if (!empty($sku_stock) && !$sku_stock['is_in_stock']) {
+    $form['quantity'] = [
+      '#markup' => '<div class="quantity">Quantity</div>',
+    ];
+    $form['add_to_cart'] = [
+      '#markup' => '<div class="add-to-cart button">' . t('Out of stock') . '</div>',
+    ];
   }
 
   $form['#attached']['library'][] = 'alshaya_acm_product/product_view';
