@@ -196,8 +196,15 @@ function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInter
     if ($apc_number != $validation['value_start_with']) {
       if (\Drupal::currentUser()->isAuthenticated()) {
         $user = User::load(\Drupal::currentUser()->id());
-        $user->get('field_privilege_card_number')->set(0, $apc_number);
+        $user->get('field_privilege_card_number')->setValue($apc_number);
         $user->save();
+
+        // This will be enabled by default but to avoid adding it to dependency.
+        if (\Drupal::moduleHandler()->moduleExists('alshaya_acm_customer')) {
+          // Update the data in Magento.
+          \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+          alshaya_acm_customer_update_customer_data($user->getEmail());
+        }
       }
       elseif (Drupal::currentUser()->isAnonymous()) {
         $temp_store->set('card_number', $apc_number);

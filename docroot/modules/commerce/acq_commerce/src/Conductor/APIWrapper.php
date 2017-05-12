@@ -276,15 +276,17 @@ class APIWrapper {
    *   Customer last name.
    * @param string $email
    *   Customer e-mail.
+   * @param string $password
+   *   Optional password.
    *
    * @return array
    *   New customer array.
    */
-  public function createCustomer($first_name, $last_name, $email) {
+  public function createCustomer($first_name, $last_name, $email, $password = '') {
     // First check if the user exists in Magento.
     try {
       if ($existingCustomer = $this->getCustomer($email)) {
-        return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email);
+        return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email, $password);
       }
     }
     catch (\Exception $e) {
@@ -292,7 +294,7 @@ class APIWrapper {
       // already in magento.
     }
 
-    return $this->updateCustomer(NULL, $first_name, $last_name, $email);
+    return $this->updateCustomer(NULL, $first_name, $last_name, $email, $password);
   }
 
   /**
@@ -306,14 +308,16 @@ class APIWrapper {
    *   Customer last name.
    * @param string $email
    *   Customer e-mail.
+   * @param string $password
+   *   Optional password.
    *
    * @return array
    *   New customer array.
    */
-  public function updateCustomer($customer_id, $first_name, $last_name, $email) {
+  public function updateCustomer($customer_id, $first_name, $last_name, $email, $password = '') {
     $endpoint = "customer";
 
-    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $first_name, $last_name, $email) {
+    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $first_name, $last_name, $email, $password) {
       if (!empty($customer_id)) {
         $opt['form_params']['customer[customer_id]'] = $customer_id;
       }
@@ -322,6 +326,13 @@ class APIWrapper {
       $opt['form_params']['customer[lastname]'] = $last_name;
       $opt['form_params']['customer[email]'] = $email;
 
+      if (!empty($password)) {
+        $opt['form_params']['customer[password]'] = $password;
+      }
+
+      // Invoke the alter hook to allow all modules to update the customer data.
+      \Drupal::moduleHandler()->alter('acq_commerce_update_customer_api_request', $opt);
+
       return ($client->post($endpoint, $opt));
     };
 
@@ -329,6 +340,46 @@ class APIWrapper {
 
     try {
       $customer = $this->tryAgentRequest($doReq, 'updateCustomer', 'customer');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $customer;
+  }
+
+  /**
+   * Authenticate customer.
+   *
+   * @param string $email
+   *   Customer e-mail.
+   * @param string $password
+   *   Password.
+   *
+   * @return array
+   *   New customer array.
+   */
+  public function authenticateCustomer($email, $password) {
+    // First verify that the customer exists.
+    try {
+      $customer = $this->getCustomer($email);
+    }
+    catch (\Exception $e) {
+      throw new \Exception('No customer found with specified email address.', 404);
+    }
+
+    $endpoint = 'customer/' . $email;
+
+    $doReq = function ($client, $opt) use ($endpoint, $password) {
+      $opt['form_params']['password'] = $password;
+
+      return ($client->post($endpoint, $opt));
+    };
+
+    $customer = [];
+
+    try {
+      $customer = $this->tryAgentRequest($doReq, 'authenticateCustomer', 'customer');
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());

@@ -119,7 +119,7 @@ function alshaya_acm_customer_block_access(Block $block, $operation, AccountInte
 /**
  * Implements hook_acq_commerce_update_customer_api_request_alter().
  */
-function alshaya_acm_customer_acq_commerce_update_customer_api_request(array &$request_options) {
+function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(array &$request_options) {
   if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
     /** @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($request_options['form_params']['customer[email]']);
@@ -151,6 +151,10 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   if ($form_id == 'user_communication_preference') {
     $form['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
   }
+
+  if ($form_id == 'user_form' && \Drupal::currentUser()->isAuthenticated()) {
+    $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
+  }
 }
 
 /**
@@ -159,8 +163,9 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 function alshaya_acm_customer_update_customer_after_submit($form, FormStateInterface $form_state) {
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
+  /** @var \Drupal\user\Entity\User $user */
   if ($user = $form_state->get('user')) {
-    alshaya_acm_customer_update_customer_data($user);
+    alshaya_acm_customer_update_customer_data($user->getEmail());
   }
 }
 
@@ -211,9 +216,12 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
     $customer = $api_wrapper->authenticateCustomer($mail, $pass);
 
     if (!empty($customer) && !empty($customer['customer_id'])) {
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+
       // Check if user exists in Drupal.
       if ($user = user_load_by_mail($mail)) {
-        // Simply do nothing.
+        // Update the data in Drupal to match the values in Magento.
+        alshaya_acm_customer_update_user_data($user, $customer);
       }
       // Create user.
       else {
@@ -233,23 +241,8 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
         // Set a strong password.
         $user->setPassword(user_password(25));
 
-        // Set fields.
-        $user->get('field_first_name')->setValue($customer['firstname']);
-        $user->get('field_last_name')->setValue($customer['lastname']);
-        $user->get('acq_customer_id')->setValue($customer['customer_id']);
-
-        // Invoke the alter hook to allow all modules to update the account.
-        \Drupal::moduleHandler()->alter('alshaya_acm_customer_update_account', $user, $customer);
-
-        $user->save();
-
-        // Special case for communication_preference handled below.
-        if (isset($customer['extension'], $customer['extension']['communication_preference'])) {
-          \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-          $preference = alshaya_acm_customer_get_communication_preference_drupal_value($customer['extension']['communication_preference']);
-          $user_data = \Drupal::service('user.data');
-          $user_data->set('user', $user->id(), 'communication_preference', $preference);
-        }
+        // Update the data in Drupal to match the values in Magento.
+        alshaya_acm_customer_update_user_data($user, $customer);
       }
 
       $form_state->setValidationComplete(TRUE);
