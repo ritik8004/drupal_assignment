@@ -508,6 +508,12 @@ body.alias--cart {
             }
           }
         }
+
+        &.price {
+          @include breakpoint($only-tablet) {
+            width: 7.2rem;
+          }
+        }
       }
 
       td.name {
@@ -521,7 +527,7 @@ body.alias--cart {
 
       td.blend {
         background: $white-four;
-        width: 7.06rem;
+        width: 8rem;
 
         @include breakpoint($tablet) {
           background: $white-smoke-light;
@@ -541,13 +547,14 @@ body.alias--cart {
 
         @include breakpoint($tablet) {
           width: 7.6rem;
-          padding-left: 0.63rem;
-          padding-right: 0;
+          padding-#{$left}: 0.63rem;
+          padding-#{$right}: 0;
         }
 
         @include breakpoint($desktop) {
           width: 16.8rem;
           padding: 1rem;
+          padding-#{$left}: 3.5rem;
         }
       }
 
@@ -599,7 +606,7 @@ body.alias--cart {
 
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 7.5rem;
+      margin-#{$right}: 7.25rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -617,6 +624,16 @@ body.alias--cart {
 
     @include breakpoint($desktop) {
       margin-#{$right}: 16.7rem;
+    }
+
+    #edit-continue-shopping-mobile {
+      @include breakpoint($desktop) {
+        display: block;
+        font-weight: normal;
+        border: 0;
+        padding: 0;
+        color: $cerulean-two;
+      }
     }
 
     table {
@@ -640,10 +657,10 @@ body.alias--cart {
     tr:last-child {
       td:first-child span {
         display: block;
-        font-size: 12px;
+        font-size: 0.625rem;
 
-        @include breakpoint($only-mobile) {
-          font-size: 10px;
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
         }
       }
 
@@ -655,12 +672,24 @@ body.alias--cart {
 
     tr > td {
       @include breakpoint($tablet) {
-        padding-right: 1rem;
-        width: 7.06rem;
+        padding-#{$right}: 1rem;
+        width: 7.5rem;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        height: 38px;
+        vertical-align: middle;
+
+        &:first-child {
+          padding-right: 0.75rem;
+        }
       }
 
       @include breakpoint($desktop) {
         width: 10.8rem;
+
+        &:first-child {
+          padding-#{$right}: 2.9375rem;
+        }
       }
     }
   }

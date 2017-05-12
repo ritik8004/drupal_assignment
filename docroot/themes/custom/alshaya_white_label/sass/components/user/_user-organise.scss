@@ -18,9 +18,10 @@
   }
 }
 
-.c-user-register,
-.c-user-login {
-  .c-sidebar-second #block-jointheclub {
+.c-user-register .c-sidebar-second,
+.c-user-login .c-sidebar-second,
+.order-confirmation {
+  #block-jointheclub {
     margin-top: 0.5rem;
     padding-top: 1.5rem;
 

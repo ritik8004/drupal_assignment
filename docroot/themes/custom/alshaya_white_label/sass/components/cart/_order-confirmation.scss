@@ -1,4 +1,10 @@
 .order-confirmation {
+  &.l-two--sf main {
+    @include breakpoint($desktop) {
+      float: $left;
+    }
+  }
+
   .order-summary,
   .barcode--wrapper p {
     font-size: 12px;
@@ -13,8 +19,45 @@
       font-size: 16px;
       color: $marine-blue;
       padding-bottom: 0.5em;
-      border-bottom: 1px solid $white;
       margin-bottom: 1em;
+    }
+  }
+
+  .user-register-form {
+    @include breakpoint($tablet) {
+      float: $left;
+      width: 55%;
+    }
+  }
+
+  .block-checkout-register-block {
+    clear: both;
+
+    #block-jointheclub {
+      margin-#{$left}: 0;
+      border-top: 0;
+      padding-#{$left}: 0;
+      width: 44%;
+      float: $right;
+      font-size: 12px;
+
+      h2 {
+        font-size: 14px;
+      }
+
+      @include breakpoint($only-tablet) {
+        text-align: center;
+        text-indent: 2rem;
+        width: 42%;
+
+        img {
+          margin-left: 0;
+        }
+
+        a {
+          text-indent: 0;
+        }
+      }
     }
   }
 }
@@ -24,4 +67,7 @@
   border: 1px solid $marine-blue;
   float: $right;
   padding: 1em;
+  margin-#{$right}: 78px;
+  width: 29%;
+  text-align: center;
 }

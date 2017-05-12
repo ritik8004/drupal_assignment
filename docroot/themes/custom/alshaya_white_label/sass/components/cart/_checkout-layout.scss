@@ -17,10 +17,6 @@
     }
 
     @include breakpoint($desktop) {
-      width: 71.51%;
-    }
-
-    @include breakpoint($desktop-wide) {
       width: 74.51%;
     }
   }
@@ -34,7 +30,8 @@
     }
 
     @include breakpoint($desktop) {
-      width: 291px;
+      max-width: 291px;
+      width: 25%;
     }
 
     .c-sidebar-second__region {
@@ -52,7 +49,7 @@
 
     @include breakpoint($tablet) {
       padding-top: 1em;
-      padding-bottom: 0.56em;
+      padding-bottom: 0.8em;
     }
 
     a {

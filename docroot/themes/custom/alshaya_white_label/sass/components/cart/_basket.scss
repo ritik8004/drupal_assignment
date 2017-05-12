@@ -35,6 +35,16 @@
         @include breakpoint($upto-tablet) {
           display: none;
         }
+
+        &:last-child {
+          @include breakpoint($only-tablet) {
+            font-size: 0;
+          }
+
+          @include breakpoint($desktop) {
+            text-align: center;
+          }
+        }
       }
     }
 
@@ -208,6 +218,20 @@
   .delivery-option {
     font-size: 0.75rem;
   }
+
+  .promo-continue-shopping-wrapper {
+    #edit-continue-shopping {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+  }
+
+  &.alias--cart h1 {
+    @include breakpoint($only-tablet) {
+      margin-bottom: 1.75rem;
+    }
+  }
 }
 
 .promo-continue-shopping-wrapper {
@@ -215,18 +239,18 @@
     border-top: 1px solid $white;
     margin-top: 33px;
     float: $left;
-    width: 17.43rem;
+    width: 19.56rem;
     margin-bottom: 4.56rem;
   }
 
-  @include breakpoint($desktop) {
-    width: 19.56rem;
-  }
-
   summary {
-    padding: 1rem 0;
+    padding: 1rem;
     position: relative;
     outline: none;
+
+    @include breakpoint($tablet) {
+      padding: 1rem 1.5rem;
+    }
 
     @include icon(chevrondown, after) {
       position: absolute;
@@ -246,17 +270,16 @@
     position: relative;
     font-size: 0.875rem;
 
-    @include breakpoint($tablet) {
-      padding-#{$left}: 1rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding-#{$left}: 1.5rem;
+    .form-item-privilege-card-number2 {
+      border-top: 0;
     }
   }
 
   .form-item {
     position: relative;
+    border-top: 1px solid $white;
+    padding: 0 1.5rem;
+    padding-top: 0.2rem;
   }
 
   details[open] summary {
@@ -286,11 +309,10 @@
     color: $black;
     text-shadow: none;
     width: 100%;
-    margin-top: 1.125rem;
+    margin-top: 2.3rem;
     vertical-align: bottom;
-    margin-bottom: 0.625rem;
     outline: none;
-    padding: 4px 0;
+    padding-bottom: 0.5rem !important;
     position: relative;
     z-index: 1;
 
@@ -304,15 +326,17 @@
   }
 
   #apply_coupon {
-    position: absolute;
-    bottom: 2.1rem;
-    #{$right}: 0;
-    padding: 6px 11px;
+    display: inline-block;
+    margin-bottom: 14px;
+    padding: 9px 30px;
     background: $pumpkin-orange;
     color: $white-five;
-    text-transform: capitalize;
-    z-index: 2;
     cursor: pointer;
+    margin-#{$left}: 1rem;
+
+    @include breakpoint($only-tablet) {
+      margin-#{$left}: 1.5rem;
+    }
   }
 
   .form-item--error-message {
