@@ -1,5 +1,24 @@
 //Error messages
 .messages {
+  @include breakpoint($mobile) {
+    @include container(100%);
+
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    margin: 0.5rem auto;
+  }
+
+  @include breakpoint($tablet) {
+    @include container(100%);
+
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include breakpoint($desktop) {
+    @include container(100%);
+  }
+
   span {
     display: block;
     margin-#{$left}: 2rem;
@@ -40,7 +59,7 @@
     box-shadow: none;
     font-family: $arial;
     font-size: 0.75rem;
-    margin: 1rem 0;
+    //margin: 1rem 0;
     padding: 0.66rem 1.5625rem;
     font-weight: 700;
 

@@ -9,6 +9,7 @@ regions:
   menu_secondary: 'Menu Secondary'
   header: Header
   pre_content: 'Pre content'
+  messages: Message
   breadcrumb: Breadcrumb
   hero_content: 'Hero Content'
   content: Content
