@@ -4,6 +4,6 @@ services:
    tags:
     - { name: breadcrumb_builder, priority: 100 }
  alshaya_plp.breadcrumb:
-    class: Drupal\alshaya_search\Breadcrumb\AlshayaPLPBreadcrumbBuilder
-    tags:
-     - { name: breadcrumb_builder, priority: 100 }
+   class: Drupal\alshaya_search\Breadcrumb\AlshayaPLPBreadcrumbBuilder
+   tags:
+    - { name: breadcrumb_builder, priority: 10001 }

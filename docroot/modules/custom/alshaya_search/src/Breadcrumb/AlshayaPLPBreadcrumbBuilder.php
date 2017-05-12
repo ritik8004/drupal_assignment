@@ -17,8 +17,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function applies(RouteMatchInterface $route_match) {
     // Breadcrumb for 'plp' pages.
-    return $route_match->getRouteName() == 'entity.taxonomy_term.canonical'
-    && $route_match->getParameter('taxonomy_term') instanceof TermInterface;
+    return $route_match->getRouteName() == 'entity.taxonomy_term.canonical';
   }
 
   /**
@@ -27,10 +26,16 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<none>'));
-    $request = \Drupal::request();
-    $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
-    $breadcrumb->addLink(Link::createFromRoute($title, '<none>'));
-    $breadcrumb->addCacheableDependency(['url.path']);
+    $term = $route_match->getParameter('taxonomy_term');
+    $breadcrumb->addCacheableDependency($term);
+    $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term->id());
+    foreach (array_reverse($parents) as $term) {
+      $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+      $breadcrumb->addCacheableDependency($term);
+      $breadcrumb->addLink(Link::createFromRoute($term->getName(), '<none>'));
+    }
+
+    $breadcrumb->addCacheContexts(['route']);
 
     return $breadcrumb;
   }
