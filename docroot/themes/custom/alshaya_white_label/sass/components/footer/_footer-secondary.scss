@@ -21,6 +21,7 @@
 .c-footer-secondary__region {
   @include breakpoint($tablet) {
     float: $left;
+    width: 100%;
   }
 }
 

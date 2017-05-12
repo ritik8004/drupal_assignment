@@ -58,10 +58,26 @@ header {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 
+    @include breakpoint($desktop) {
+      margin-top: 2.125rem;
+      padding-bottom: 1.75rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1.063rem;
+      padding-bottom: 1.5rem;
+
+      .block-system-branding-block {
+        h1 img {
+          width: 13rem;
+        }
+      }
+    }
+
     @include container(1284px);
 
     @include breakpoint($only-mobile) {
-      margin-top: 0.75rem;
+      margin-top: 0.4375rem;
       padding-bottom: 0;
       padding-left: 0.5rem;
       padding-right: 0.5rem;
@@ -77,9 +93,41 @@ header {
       vertical-align: middle;
     }
 
+    @include breakpoint($desktop) {
+      .block-system-branding-block {
+        h1 {
+          min-width: 328px;
+        }
+      }
+
+      .block-views-exposed-filter-blocksearch-page {
+        form {
+          margin-top: -4px;
+        }
+
+        input[type="text"] {
+          width: 272px;
+          padding-top: 2px;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .block-views-exposed-filter-blocksearch-page {
+        input[type="text"] {
+          width: 10.38rem;
+          padding-top: 2px;
+
+          &::placeholder {
+            font-size: 0.625rem;
+          }
+        }
+      }
+    }
+
     @include breakpoint($only-mobile) {
       .block-system-branding-block {
-        width: 50%;
+        width: 53%;
       }
     }
   }
@@ -166,7 +214,7 @@ header {
         float: $left;
         display: inline-block;
         vertical-align: bottom;
-        margin-#{$right}: 6px;
+        margin-#{$right}: 0.4375rem;
       }
 
       .total--amount {
@@ -184,11 +232,23 @@ header {
 
       @include breakpoint($only-mobile) {
         background-size: 22px;
+        width: 23px;
       }
     }
 
     .cart-link-total {
       color: $black;
+      display: inline-block;
+      float: $left;
+      margin-top: 6px;
+      margin-right: 2px;
+    }
+
+    @include breakpoint($desktop) {
+      .acq-mini-cart {
+        max-width: 164px;
+        float: right;
+      }
     }
 
     .quantity {
@@ -210,6 +270,30 @@ header {
       }
     }
   }
+
+  @include breakpoint($desktop) {
+    #mini-cart-wrapper {
+      min-width: 10.44rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    #mini-cart-wrapper {
+      min-width: 8.625rem;
+      float: $right;
+      margin-top: -7px;
+
+      .cart-link-total {
+        margin-right: -4px;
+        margin-top: 0.8125rem;
+        font-size: 0.75rem;
+
+        .prefix {
+          margin-right: 0.5625rem;
+        }
+      }
+    }
+  }
 }
 
 /*
@@ -220,6 +304,11 @@ header {
   .region__menu-primary {
     margin-top: 0.9375rem;
     margin-bottom: 0.9375rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
   }
 
   .block-system-menublock {
@@ -299,6 +388,8 @@ header {
       color: $brownish-grey;
       font-size: 12px;
       display: block;
+      text-transform: lowercase;
+      font-family: $alshaya-thin;
 
       &::before {
         content: ' ';
@@ -363,7 +454,7 @@ header {
     li {
       display: table-cell;
       text-align: center;
-      padding: 0.875rem 0;
+      padding: 0.875rem 0.875rem 0.5rem 0;
 
       &:hover {
         background: $marine-blue;
