@@ -3,6 +3,7 @@
   margin-bottom: 0.375rem;
   font-weight: bold;
   font-family: $alshaya-bold;
+  text-transform: lowercase;
 
   a {
     color: $marine-blue;
@@ -16,6 +17,7 @@
 .c-category-list__item {
   font-size: 0.75rem;
   line-height: 2;
+  text-transform: lowercase;
 
   a {
     color: #666;
