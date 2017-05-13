@@ -79,7 +79,7 @@ index f2f3f10..8b66cc5 100644
  
 +          case 'text_long':
 +            $value = isset($field['serialize']) ? serialize($value) : $value;
-+            $sku->{$field_key}->setValue(serialize($value));
++            $sku->{$field_key}->setValue($value);
 +            break;
 +
 +          case 'image':

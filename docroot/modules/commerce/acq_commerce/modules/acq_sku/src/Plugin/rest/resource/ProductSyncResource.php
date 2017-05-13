@@ -470,7 +470,7 @@ class ProductSyncResource extends ResourceBase {
 
           case 'text_long':
             $value = isset($field['serialize']) ? serialize($value) : $value;
-            $sku->{$field_key}->setValue(serialize($value));
+            $sku->{$field_key}->setValue($value);
             break;
 
           case 'image':
