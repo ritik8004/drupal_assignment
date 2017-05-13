@@ -43,6 +43,7 @@ function acq_sku_preprocess_acq_sku(&$variables) {
  * @param array $fields
  *   An associative array containing field_machine_name as key and following
  *   data in value:
+ *   - parent: (Required) Parent key in the array where to look for data.
  *   - label: (Required) Label to be used for admin forms and display.
  *   - description: Description of the field to be used in admin forms.
  *   - cardinality: Number of values allowed to be stored.
@@ -51,6 +52,7 @@ function acq_sku_preprocess_acq_sku(&$variables) {
  *   - configurable: Whether the field is part of configurable options.
  *   - visible_view: Whether the field should be visible while viewing content.
  *   - visible_form: Whether the field should be visible in form.
+ *   - serialize: (Optional) Should the data be stored as serialized.
  */
 function acq_sku_add_base_fields(array $fields) {
   // Get the fields from config.

@@ -237,6 +237,9 @@ class ProductSyncResource extends ResourceBase {
       // Update the fields based on the values from attributes.
       $this->updateAttributeFields($sku, $product['attributes']);
 
+      // Update the fields based on the values from extension.
+      $this->updateExtensionFields($sku, $product['extension']);
+
       // Update upsell linked SKUs.
       $this->updateLinkedSkus('upsell', $sku, $product['linked']);
 
@@ -453,11 +456,64 @@ class ProductSyncResource extends ResourceBase {
       if (isset($additionalFields[$key])) {
         $field = $additionalFields[$key];
 
+        if ($field['parent'] != 'attributes') {
+          continue;
+        }
+
         $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
         $field_key = 'attr_' . $key;
 
         switch ($field['type']) {
           case 'string':
+            $sku->{$field_key}->setValue($value);
+            break;
+
+          case 'text_long':
+            $value = isset($field['serialize']) ? serialize($value) : $value;
+            $sku->{$field_key}->setValue(serialize($value));
+            break;
+
+          case 'image':
+            // We will manage this post save.
+            break;
+        }
+      }
+    }
+  }
+
+  /**
+   * Update extension fields.
+   *
+   * Update the fields based on the values from extension.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   The root SKU.
+   * @param array $attributes
+   *   The attributes to set.
+   */
+  private function updateExtensionFields(SKU $sku, array $attributes) {
+    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+
+    // Loop through all the attributes available for this particular SKU.
+    foreach ($attributes as $key => $value) {
+      // Check if attribute is required by us.
+      if (isset($additionalFields[$key])) {
+        $field = $additionalFields[$key];
+
+        if ($field['parent'] != 'extension') {
+          continue;
+        }
+
+        $field_key = 'attr_' . $key;
+
+        switch ($field['type']) {
+          case 'string':
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+            $sku->{$field_key}->setValue($value);
+            break;
+
+          case 'text_long':
+            $value = isset($field['serialize']) ? serialize($value) : $value;
             $sku->{$field_key}->setValue($value);
             break;
 
@@ -493,10 +549,6 @@ class ProductSyncResource extends ResourceBase {
         $field_key = 'attr_' . $key;
 
         switch ($field['type']) {
-          case 'string':
-            // Already managed in pre-save.
-            break;
-
           case 'image':
             // Initialise queue manager if not already done.
             if (empty($this->downloadImagesQueueManager)) {
