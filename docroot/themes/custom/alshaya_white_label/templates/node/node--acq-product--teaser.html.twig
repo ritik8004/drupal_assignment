@@ -8,8 +8,8 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
 <article{{ attributes }}>
   <a class="use-ajax above-mobile-block" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'node': node.id}) }}">
-    {% if content.image_url is not null %}
-      <img src={{ content.image_url }} />
+    {% if content.image is not null %}
+      {{ content.image }}
     {% endif %}
 
     {{ title_prefix }}

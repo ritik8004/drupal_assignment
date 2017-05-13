@@ -107,15 +107,24 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       alshaya_acm_product_get_gallery($build, $skuEntity);
+
+      $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder($skuEntity->getEntityTypeId());
+      $build['short_description'] = !empty($skuEntity->get('attr_short_description')->getString()) ? $viewBuilder->viewField($skuEntity->get('attr_short_description')) : [];
+
     }
     elseif ($view_mode == 'teaser') {
 
       // Get the image.
       $build['image_url'] = [];
-      $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
+      $sku_media = alshaya_acm_product_get_sku_media($skuEntity, TRUE);
       if ($sku_media) {
-        $imageEntity = array_shift($sku_media);
-        $build['image_url']['#markup'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
+        $build['image'] = [
+          '#theme' => 'image_style',
+          '#style_name' => '192x168',
+          '#uri' => $sku_media['file']->getFileUri(),
+          '#title' => $sku_media['label'],
+          '#alt' => $sku_media['label'],
+        ];
       }
 
       // Get the price.
@@ -133,16 +142,23 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           '#price' => $special_price,
         ];
       }
+
+      $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder($skuEntity->getEntityTypeId());
+      $build['short_description'] = !empty($skuEntity->get('attr_short_description')->getString()) ? $viewBuilder->viewField($skuEntity->get('attr_short_description')) : [];
     }
     elseif ($view_mode == 'modal') {
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
       $build['image_url'] = NULL;
       $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
+
       if ($sku_media) {
         $imageEntity = array_shift($sku_media);
         $build['image_url']['#markup'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
       }
+
+      $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder($skuEntity->getEntityTypeId());
+      $build['short_description'] = !empty($skuEntity->get('attr_short_description')->getString()) ? $viewBuilder->viewField($skuEntity->get('attr_short_description')) : [];
     }
   }
 }
