@@ -158,7 +158,7 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
 
@@ -176,9 +176,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     if ($form['ajax']['configurables']['size']) {
       // We show the size guide link if available as prefix.
-      if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')
-        ->get('size_guide_link')
-      ) {
+      if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
         try {
           $options = [
             'attributes' => [
