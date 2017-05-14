@@ -20,7 +20,7 @@ function alshaya_install() {
 
   // Enable shield and acquia_connector where needed.
   if (isset($_ENV['AH_SITE_NAME'])) {
-    \Drupal::service('module_installer')->install(['shield', 'acquia_connector']);
+    \Drupal::service('module_installer')->install(['shield', 'acquia_connector', 'acquia_search']);
 
     \Drupal::getContainer()->get('config.factory')
       ->getEditable('shield.settings')
