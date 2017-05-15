@@ -130,11 +130,20 @@ class AlshayaBulkUploadRedirect extends FormBase {
     // Include product utility file to use helper functions.
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
+    // Redirect storage.
+    $redirect_repository = \Drupal::service('redirect.repository');
+
     foreach ($redirect_chunk as $redirect) {
       // Get the node/product of the sku.
       $node = alshaya_acm_product_get_display_node($redirect[0]);
       // If node object.
       if ($node && $node instanceof NodeInterface) {
+        // If redirect already exists for the given source, no need to process.
+        $redirect_exists = $redirect_repository->findBySourcePath($redirect[1]);
+        if ($redirect_exists && !empty($redirect_exists)) {
+          continue;
+        }
+
         $redirect_entity = [
           'redirect_source' => $redirect[1],
           'redirect_redirect' => 'entity:node/' . $node->id(),
