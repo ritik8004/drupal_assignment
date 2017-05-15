@@ -438,7 +438,7 @@ function alshaya_acm_get_cart_items_by_sku() {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['quantity']['#type'] = 'select';

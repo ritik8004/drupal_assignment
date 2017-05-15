@@ -5,6 +5,8 @@
  * Install, update and uninstall hooks for the Lightning Extender subprofile.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_install().
  */
@@ -15,6 +17,19 @@ function alshaya_install() {
   // Prerequisite for google_tag module.
   $uri = "public://google_tag";
   file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
+
+  // Enable shield and acquia_connector where needed.
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['shield', 'acquia_connector', 'acquia_search']);
+
+    \Drupal::getContainer()->get('config.factory')
+      ->getEditable('shield.settings')
+      ->set('allow_cli', TRUE)
+      ->set('user', Settings::get('alshaya_custom_shield_default_user'))
+      ->set('pass', Settings::get('alshaya_custom_shield_default_pass'))
+      ->set('print', '')
+      ->save();
+  }
 
   $modules = [
     'alshaya_custom',

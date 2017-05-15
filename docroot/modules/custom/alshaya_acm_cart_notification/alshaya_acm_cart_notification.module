@@ -15,31 +15,28 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
-function alshaya_acm_cart_notification_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
+function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Altering Sku base form, which is the form implementation for Simple,
   // Grouped and Configurable products.
-  if ($form_id == 'sku_base_form') {
-    // Adding a form element a placeholder to populate as a cart notification.
-    $form['cart_notification_modal'] = [
-      '#markup' => '',
-      '#prefix' => '<div id = "cart_notification">',
-      '#suffix' => '</div>',
-    ];
+  // Adding a form element a placeholder to populate as a cart notification.
+  $form['cart_notification_modal'] = [
+    '#markup' => '',
+    '#prefix' => '<div id = "cart_notification">',
+    '#suffix' => '</div>',
+  ];
 
-    $form['add_to_cart']['#ajax'] = [
-      'callback' => 'alshaya_acm_cart_notification_form_submit',
-      'wrapper' => 'cart_notification',
-    ];
+  $form['add_to_cart']['#ajax'] = [
+    'callback' => 'alshaya_acm_cart_notification_form_submit',
+    'wrapper' => 'cart_notification',
+  ];
 
-    // Attach the js file with the add to cart form.
-    $form['#attached']['library'][] = 'core/drupal.ajax';
-    $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-    $form['#attached']['library'][] = 'alshaya_acm_cart_notification/ladda';
-    $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
-  }
+  // Attach the js file with the add to cart form.
+  $form['#attached']['library'][] = 'core/drupal.ajax';
+  $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+  $form['#attached']['library'][] = 'alshaya_acm_cart_notification/ladda';
+  $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
 }
 
 /**

@@ -9,13 +9,24 @@
     }
   }
 
+  .item-list__comma-list {
+    padding-#{$left}: 1.8rem;
+  }
+
+  .messages__list {
+    padding-#{$left}: 0.8rem;
+  }
+
   ul {
-    padding-#{$left}: 3.8rem;
     display: block;
 
     li {
       display: list-item;
       margin: 0.4rem 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
     }
 
     a {
@@ -55,7 +66,7 @@
     }
 
     @include breakpoint($desktop) {
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
     }
   }
 
@@ -72,9 +83,21 @@
     color: $white-five;
 
     @include icon(warning);
+
+    ul {
+      display: block;
+      text-indent: 0;
+      list-style: inherit;
+    }
   }
 
   &.messages--error > div {
-    display: inline;
+    display: inline-block;
+    text-indent: 0;
+    vertical-align: top;
+
+    @include breakpoint($tablet) {
+      width: calc(100% - 3.125rem);
+    }
   }
 }

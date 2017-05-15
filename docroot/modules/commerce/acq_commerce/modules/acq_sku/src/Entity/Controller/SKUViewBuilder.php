@@ -28,8 +28,11 @@ class SKUViewBuilder extends EntityViewBuilder {
 
     // Allow blocking of add to cart render.
     if (!isset($build['#no_add_to_cart']) || !($build['#no_add_to_cart'])) {
-      $build['add_to_cart'] = \Drupal::formBuilder()
-        ->getForm($plugin, $sku);
+      /**
+       * @TODO: remove custom form_builder once
+       *   https://www.drupal.org/node/766146 is fixed.
+       */
+      $build['add_to_cart'] = \Drupal::service('acq_sku.form_builder')->getForm($plugin, $sku);
       $build['add_to_cart']['#weight'] = 50;
     }
 
