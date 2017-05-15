@@ -12,6 +12,8 @@
   ul {
     @extend %list-clear;
 
+    padding-top: 20px;
+
     input[type="text"] {
       border: 1px solid $white;
       font-family: $alshaya-thin;
