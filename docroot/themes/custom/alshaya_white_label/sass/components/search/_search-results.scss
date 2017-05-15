@@ -126,6 +126,10 @@
               @include breakpoint($desktop) {
                 width: 9.4rem;
               }
+
+              @include breakpoint($only-tablet) {
+                width: 7.813rem;
+              }
             }
 
             label {
@@ -308,6 +312,12 @@ header,
     .c-facet__blocks__wrapper {
       margin-top: -0.65rem;
       margin-left: -0.29rem;
+    }
+
+    .c-accordion__title {
+      &::after {
+        #{$right}: 0.375rem;
+      }
     }
   }
 }
