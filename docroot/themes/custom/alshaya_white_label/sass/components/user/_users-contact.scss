@@ -1,7 +1,7 @@
 .c-user-edit {
   .user-form {
     @include breakpoint($desktop) {
-      margin-top: -1.5rem;
+      margin-top: -0.125rem;
       margin-bottom: 6.25rem;
     }
 
@@ -85,6 +85,35 @@
       &.is-visible {
         display: block;
         padding-top: 0.5rem;
+      }
+    }
+  }
+
+  .c-page-title {
+    padding-bottom: 17px;
+
+    @include breakpoint($only-tablet) {
+      padding-bottom: 11px;
+    }
+  }
+
+  #user-form {
+    @include breakpoint($tablet) {
+      #edit-submit {
+        width: 5.688rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      max-width: 25rem;
+      margin-top: -13px;
+
+      #edit-account {
+        margin-top: 4.375rem;
+      }
+
+      .field--name-field-privilege-card-number {
+        margin-top: 3rem;
       }
     }
   }
