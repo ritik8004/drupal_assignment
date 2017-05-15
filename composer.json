@@ -44,7 +44,8 @@
         "drupal/block_field": "^1.0@alpha",
         "drupal/google_tag": "1.x-dev",
         "drupal/simple_sitemap": "2.x-dev",
-        "drupal/robotstxt": "^1.1"
+        "drupal/robotstxt": "^1.1",
+        "drupal/redirect": "^1.0@alpha"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
