@@ -4,7 +4,7 @@
   min-height: calc(100vh - 110px);
 
   @include breakpoint($tablet) {
-    margin: 1.25em auto 1em;
+    margin: 0.7em auto 1em;
   }
 
   h1 {

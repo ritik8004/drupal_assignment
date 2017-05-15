@@ -55,7 +55,8 @@
         #{$right}: 0;
         color: $marine-blue-two;
         position: absolute;
-        top: calc(50% - 0.5rem);
+        top: 50%;
+        transform: translateY(-50%);
         font-size: 1.125rem;
         cursor: pointer;
         pointer-events: none;
