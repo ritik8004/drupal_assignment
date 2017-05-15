@@ -3,7 +3,7 @@
 }
 
 %l-container--center {
-  @include container(65.625rem);
+  @include container(65.35rem);
 }
 
 // One Column
@@ -48,8 +48,8 @@
 .l-column--two-1050 {
   @extend %l-container--center;
 
-  padding-left: 0.5rem !important;
-  padding-right: 0.5rem !important;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 
   main {
     @include breakpoint($tablet) {

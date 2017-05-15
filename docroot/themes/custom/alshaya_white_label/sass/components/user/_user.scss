@@ -16,7 +16,7 @@
 .user-page {
   border-top: 1px solid $white;
   margin: 4.5em auto 1em;
-  padding-top: 1em;
+  padding: 1em 0;
   position: relative;
 
   @include breakpoint($only-mobile) {
@@ -341,7 +341,7 @@
 
     @include breakpoint($desktop) {
       .form-email {
-        margin-top: 9px;
+        //margin-top: 9px;
       }
     }
 
@@ -375,6 +375,22 @@
       margin-#{$right}: 0.5em;
       position: relative;
       top: 0.125rem;
+    }
+  }
+
+  &.c-change-password,
+  &.c-user-edit {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+
+    @include breakpoint($tablet) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    @include breakpoint($desktop) {
+      padding-left: 1.5em;
+      padding-right: 1.5em;
     }
   }
 }
