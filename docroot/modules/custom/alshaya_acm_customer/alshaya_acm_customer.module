@@ -9,6 +9,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -156,6 +157,10 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   if ($form_id == 'user_form' && \Drupal::currentUser()->isAuthenticated()) {
     $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
   }
+
+  if ($form_id == 'change_pwd_form') {
+    $form['#submit'][] = 'alshaya_acm_customer_update_password';
+  }
 }
 
 /**
@@ -261,4 +266,32 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
   // We also process default authentication code.
   call_user_func_array($form_state->prepareCallback('::validateAuthentication'), [&$form, &$form_state]);
+}
+
+/**
+ * Additional submit callback for change password form to update it on Magento.
+ */
+function alshaya_acm_customer_update_password(array &$form, FormStateInterface &$form_state) {
+  // Use the current logged in user by default.
+  $user = \Drupal::currentUser();
+
+  // Try to get user from build info.
+  $build_info = $form_state->getBuildInfo();
+  if (isset($build_info['args'], $build_info['args'][0]) && $build_info['args'][0] instanceof UserInterface) {
+    $user = $build_info['args'][0];
+  }
+
+  $roles = $user->getRoles();
+
+  // For all users except just authenticated, we store password only in Drupal.
+  if (count($roles) > 1) {
+    return;
+  }
+
+  // Get password from user's input.
+  $pass = $form_state->getValue('pass');
+
+  // Update customer data with new password.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+  alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
 }

@@ -12,8 +12,10 @@ use Drupal\user\Entity\User;
  *
  * @param string $mail
  *   User's email address.
+ * @param string $password
+ *   Optional password to update password on Magento.
  */
-function alshaya_acm_customer_update_customer_data($mail) {
+function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
   // Get the fresh user object.
   /** @var \Drupal\user\Entity\User $user */
   $user = user_load_by_mail($mail);
@@ -24,7 +26,8 @@ function alshaya_acm_customer_update_customer_data($mail) {
     $user->get('acq_customer_id')->getString(),
     $user->get('field_first_name')->getString(),
     $user->get('field_last_name')->getString(),
-    $user->getEmail()
+    $user->getEmail(),
+    $password
   );
 }
 
