@@ -2,7 +2,7 @@
   <tbody class="recent__orders--body">
     <tr class="order-summary-row">
       <td>
-        <div class="light">{{ 'Order ID:' | t }}</div>
+        <div class="light">{{ 'Order ID' | t }}</div>
         <div class="dark">{{ order.id }}</div>
         <div class="light">{{ order.date }}</div>
 
@@ -44,7 +44,7 @@
         <td>
           <div class="dark">{{ item.name }}</div>
           <div class="light">{{ 'Item code' | t }} {{ item.sku }}</div>
-          <div class="light">{{ 'Qty:' | t }} {{ item.ordered }}</div>
+          <div class="light">{{ 'Qty' | t }}: {{ item.ordered }}</div>
 
           <div class="tablet-only">
             <div class="light">{{ 'Unit Price' | t }}</div>

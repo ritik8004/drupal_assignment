@@ -29,9 +29,6 @@ function alshaya_master_install() {
     'E-mail' => [
       'ar' => 'عنوان البريد الإلكتروني',
     ],
-    'Reset your password' => [
-      'en' => 'Forgot password',
-    ],
     'Create' => [
       'ar' => 'تسجيل',
     ],
@@ -43,6 +40,138 @@ function alshaya_master_install() {
     ],
     'Forgot password' => [
       'ar' => 'هل نسيت كلمة المرور',
+    ],
+    'First Name' => [
+      'ar' => 'الاسم الأول',
+    ],
+    'Last Name' => [
+      'ar' => 'اسم العائلة',
+    ],
+    'Privilege card number (Optional)' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
+    ],
+    'Privilege Card Number (optional)' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
+    ],
+    'Privilege Card Number' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات',
+    ],
+    'Privilege card number' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات',
+    ],
+    'you’ll be able to' => [
+      'ar' => 'سجل الآن',
+    ],
+    'online exclusive heading over two lines never three' => [
+      'ar' => 'عرض خاص 2 مقابل 20 د.ك',
+    ],
+    'forgot password' => [
+      'ar' => 'هل نسيت كلمة السر',
+    ],
+    'Please enter your email address.' => [
+      'ar' => 'يرجى إدخال عنوان البريد الإلكتروني',
+    ],
+    'We will send you an email with a password reminder.' => [
+      'ar' => 'سنرسل إليك بريداً إلكترونياً بكلمة السر الخاصة بك',
+    ],
+    'Enter your email address' => [
+      'ar' => 'أدخل بريدك الإلكتروني',
+    ],
+    'my account' => [
+      'ar' => 'حسابي',
+    ],
+    'orders' => [
+      'ar' => 'الطلبيات',
+    ],
+    'contact details' => [
+      'ar' => 'تفاصيل الاتصال',
+    ],
+    'address book' => [
+      'ar' => 'سجل العناوين ',
+    ],
+    'communication preferences' => [
+      'ar' => 'تفضيلات التواصل',
+    ],
+    'change password' => [
+      'ar' => 'تغيير كلمة السر',
+    ],
+    'My Account' => [
+      'ar' => 'حسابي',
+    ],
+    'edit account details' => [
+      'ar' => 'تعديل معلومات الحساب',
+    ],
+    'recent orders' => [
+      'ar' => 'أحدث الطلبيات',
+    ],
+    'You don\'t have any orders to display.' => [
+      'ar' => 'لا توجد طلبيات لعرضها',
+    ],
+    'go shopping' => [
+      'ar' => 'اذهب للتسوق',
+    ],
+    'account details' => [
+      'ar' => 'تفاصيل الحساب',
+    ],
+    'Contact number' => [
+      'ar' => 'رقم الاتصال',
+    ],
+    'Order Total' => [
+      'ar' => 'المبلغ الإجمالي للطلبية',
+    ],
+    'pending' => [
+      'ar' => 'قيد الانتظار',
+    ],
+    'delivered' => [
+      'ar' => 'تم التوصيل',
+    ],
+    'refunded' => [
+      'ar' => 'تم استرداد قيمة المبلغ',
+    ],
+    'Order ID' => [
+      'ar' => 'رقم التعريف الخاص بالطلبية',
+    ],
+    'Total' => [
+      'ar' => 'الإجمالي',
+    ],
+    'Unit Price' => [
+      'ar' => 'سعر القطعة',
+    ],
+    'Item code' => [
+      'ar' => 'رمز القطعة',
+    ],
+    'Qty' => [
+      'ar' => 'الكمية',
+    ],
+    'View all orders' => [
+      'ar' => 'عرض كل الطلبيات',
+    ],
+    'Enter card details' => [
+      'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
+    ],
+    'I would like to receive exclusive deals from Pottery Barn. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.' => [
+      'ar' => '.<a href="/terms" target="_blank">الشروط والأحكام</a> أرغب في استلام عروض حصرية من بوتري بارن. تسجيل بياناتك يعني موافقتك على',
+    ],
+    '@title is required.' => [
+      'ar' => '@title يرجى إدخال',
+    ],
+    '@title does not contain a valid email.' => [
+      'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
+    ],
+    '@number is not a valid privilege card number.' => [
+      'ar' => '@number رقم بطاقة نادي الامتيازات غير صحيح',
+    ],
+    'connect with us' => [
+      'ar' => 'تواصل معنا',
+    ],
+    'get email offers and the latest news from @site_name' => [
+      'ar' => '@site_name احصل على أحدث العروض الحصرية عبر عنوان البريد الإكتروني',
+    ],
+    'submit' => [
+      'ar' => 'إرسال',
+    ],
+    'search item or keyword' => [
+      'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
     ],
   ];
   alshaya_i18n_save_translations($strings);

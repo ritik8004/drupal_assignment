@@ -34,7 +34,7 @@ class NewsLetterForm extends FormBase {
       '#type' => 'email',
       '#required' => TRUE,
       '#placeholder' => $this->t('Enter your email address'),
-      '#prefix' => '<div class="newsletter-block-label">' . $this->t('Get email offers and the latest news from @site_name', ['@site_name' => $site_name]) . '</div>',
+      '#prefix' => '<div class="newsletter-block-label">' . $this->t('get email offers and the latest news from @site_name', ['@site_name' => $site_name]) . '</div>',
     ];
     $form['submit'] = [
       '#type' => 'submit',

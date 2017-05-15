@@ -264,4 +264,7 @@ function alshaya_user_preprocess_page_title(&$variables) {
       ];
     }
   }
+  elseif ($current_path == '/user/password') {
+    $variables['title'] = t('forgot password');
+  }
 }
