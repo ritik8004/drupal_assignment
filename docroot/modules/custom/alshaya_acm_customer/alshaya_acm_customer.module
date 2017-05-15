@@ -238,8 +238,8 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
         // For Alshaya we know we are using email_registration module.
         $user->setUsername('email_registration_' . user_password());
 
-        // Set a strong password.
-        $user->setPassword(user_password(25));
+        // Set a password entered by user for login.
+        $user->setPassword($pass);
 
         // Update the data in Drupal to match the values in Magento.
         alshaya_acm_customer_update_user_data($user, $customer);
