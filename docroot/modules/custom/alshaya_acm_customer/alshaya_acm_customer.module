@@ -139,14 +139,31 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
  */
 function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'user_login_form') {
-    $key = array_search('email_registration_user_login_validate', $form['name']['#element_validate']);
-    unset($form['name']['#element_validate'][$key]);
-
-    array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
+    // Disable element validate for email, we will call lafter if required.
+    if ($key = array_search('email_registration_user_login_validate', $form['name']['#element_validate'])) {
+      unset($form['name']['#element_validate'][$key]);
+    }
 
     // Disable validateAuthentication here, we will call later if required.
     if ($key = array_search('::validateAuthentication', $form['#validate'])) {
       unset($form['#validate'][$key]);
+    }
+
+    array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
+  }
+
+  if ($form_id == 'user_register_form') {
+    if (\Drupal::currentUser()->isAnonymous()) {
+      // Disable default validateForm here, we will call later if required.
+      if ($key = array_search('::validateForm', $form['#validate'])) {
+        unset($form['#validate'][$key]);
+      }
+
+      array_unshift($form['#validate'], 'alshaya_acm_customer_register_validate');
+
+      if ($key = array_search('::save', $form['actions']['submit']['#submit'])) {
+        $form['actions']['submit']['#submit'][$key] = 'alshaya_acm_customer_register_submit_save';
+      }
     }
   }
 
@@ -236,6 +253,9 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
         if ($user = user_load_by_mail($mail)) {
           // Update the data in Drupal to match the values in Magento.
           alshaya_acm_customer_update_user_data($user, $customer);
+
+          $form_state->set('uid', $user->id());
+          return;
         }
         // Create user.
         else {
@@ -259,8 +279,6 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
           alshaya_acm_customer_update_user_data($user, $customer);
         }
 
-        // Some how this is not working so we set temporary and set uid again in
-        // final validate function.
         $form_state->set('uid', $user->id());
         return;
       }
@@ -275,6 +293,60 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
   // We also process default authentication code.
   call_user_func_array($form_state->prepareCallback('::validateAuthentication'), [&$form, &$form_state]);
+}
+
+/**
+ * Validate callback for user registration form to validate against Magento.
+ */
+function alshaya_acm_customer_register_validate(array &$form, FormStateInterface &$form_state) {
+  $mail = $form_state->getValue('mail');
+
+  try {
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('acq_commerce.api');
+
+    $customer = $api_wrapper->getCustomer($mail);
+
+    if (!empty($customer) && !empty($customer['customer_id'])) {
+      $form_state->setErrorByName('mail', t('The email address @email is already taken.', ['@email' => $mail]));
+    }
+  }
+  catch (\Exception $e) {
+    // Do nothing, we will do other validations after this try/catch.
+  }
+
+  // Process default validation if no errors found.
+  if (!$form_state->getErrors()) {
+    call_user_func_array($form_state->prepareCallback('::validateForm'), [&$form, &$form_state]);
+  }
+}
+
+/**
+ * Submit callback for user registration form to create customer in Magento.
+ *
+ * Here we set password into separate value in form_state and set strong
+ * password and we create customer in Magento. We also update acq_customer_id.
+ */
+function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterface &$form_state) {
+  $pass = $form_state->getValue('pass');
+  $form_state->setValue('pass', user_password(25));
+
+  // Call the ::save method of Drupal first to get account created in Drupal.
+  call_user_func_array($form_state->prepareCallback('::save'), [&$form, &$form_state]);
+
+  // Get form storage.
+  $storage = $form_state->getStorage();
+
+  // Get the new user account object from storage.
+  /** @var \Drupal\user\Entity\User $user */
+  $user = $storage['user'];
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+  $customer = alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
+
+  // Save acq_customer_id in Drupal for later use.
+  $user->get('acq_customer_id')->setValue($customer['customer_id']);
+  $user->save();
 }
 
 /**
