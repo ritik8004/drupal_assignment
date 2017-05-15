@@ -95,7 +95,7 @@ index 5e37081..37b0811 100644
        return ($client->post($endpoint, $opt));
      };
  
-@@ -338,6 +349,46 @@ public function updateCustomer($customer_id, $first_name, $last_name, $email) {
+@@ -338,6 +349,38 @@ public function updateCustomer($customer_id, $first_name, $last_name, $email) {
    }
  
    /**
@@ -110,14 +110,6 @@ index 5e37081..37b0811 100644
 +   *   New customer array.
 +   */
 +  public function authenticateCustomer($email, $password) {
-+    // First verify that the customer exists.
-+    try {
-+      $customer = $this->getCustomer($email);
-+    }
-+    catch (\Exception $e) {
-+      throw new \Exception('No customer found with specified email address.', 404);
-+    }
-+
 +    $endpoint = 'customer/' . $email;
 +
 +    $doReq = function ($client, $opt) use ($endpoint, $password) {

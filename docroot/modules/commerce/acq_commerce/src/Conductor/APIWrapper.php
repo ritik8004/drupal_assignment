@@ -360,14 +360,6 @@ class APIWrapper {
    *   New customer array.
    */
   public function authenticateCustomer($email, $password) {
-    // First verify that the customer exists.
-    try {
-      $customer = $this->getCustomer($email);
-    }
-    catch (\Exception $e) {
-      throw new \Exception('No customer found with specified email address.', 404);
-    }
-
     $endpoint = 'customer/' . $email;
 
     $doReq = function ($client, $opt) use ($endpoint, $password) {
