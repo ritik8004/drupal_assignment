@@ -14,9 +14,13 @@
     font-weight: bold;
     color: $black;
 
+    &:last-of-type a {
+      font-weight: bold;
+    }
+
     a {
       font-weight: normal;
-      color: $light-ash;
+      color: $black;
 
       &::after {
         content: '>';
