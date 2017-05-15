@@ -371,19 +371,15 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   foreach ($order['items'] as $item) {
     $product = $item;
     $product['total'] = number_format($item['ordered'] * $item['price'], 3);
+    $product['attributes'] = [];
 
-    try {
-      // Check if we can find a parent SKU for this.
-      $parentSku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
-
+    // Check if we can find a parent SKU for this to get proper name.
+    if ($parentSku = alshaya_acm_product_get_parent_sku_by_sku($item['sku'])) {
       // We will use the parent SKU name for display.
       $product['name'] = $parentSku->label();
 
       // Try to find attributes to display for this product.
       $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
-    }
-    catch (\Exception $e) {
-      // Current SKU seems to be a simple one, we don't need to do anything.
     }
 
     $product['image'] = '';

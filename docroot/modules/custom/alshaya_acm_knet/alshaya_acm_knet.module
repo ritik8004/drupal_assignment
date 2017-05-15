@@ -13,7 +13,9 @@ use Drupal\alshaya_acm_knet\E24PaymentPipe;
  * Implements hook_alshaya_acm_checkout_pre_place_order().
  */
 function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
-  // @TODO: Redirect to K-Net.
+  // @TODO: Redirect to K-Net if selected.
+  return;
+
   $pipe = new E24PaymentPipe();
 
   $pipe->setCurrency(KNET_CURRENCY_KWD);
