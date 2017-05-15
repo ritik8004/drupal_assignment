@@ -10,6 +10,7 @@ dependencies:
   - field
   - file
   - image
+  - lightning_workflow
   - node
   - system
   - text

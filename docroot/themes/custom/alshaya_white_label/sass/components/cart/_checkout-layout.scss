@@ -8,17 +8,15 @@
   }
 
   main {
-    float: $left;
+    @include breakpoint($tablet) {
+      float: $left;
+    }
 
     @include breakpoint($only-tablet) {
-      width: 66%;
+      width: 65%;
     }
 
     @include breakpoint($desktop) {
-      width: 71.51%;
-    }
-
-    @include breakpoint($desktop-wide) {
       width: 74.51%;
     }
   }
@@ -32,7 +30,8 @@
     }
 
     @include breakpoint($desktop) {
-      width: 291px;
+      max-width: 291px;
+      width: 25%;
     }
 
     .c-sidebar-second__region {
@@ -50,16 +49,16 @@
 
     @include breakpoint($tablet) {
       padding-top: 1em;
-      padding-bottom: 1em;
+      padding-bottom: 0.8em;
     }
 
     a {
-      width: 40.5%;
+      width: 50.5%;
       margin-#{$left}: 0.25em;
 
       @include breakpoint($tablet) {
-        width: 50%;
-        margin-#{$left}: 1em;
+        width: 26%;
+        margin-#{$left}: 0.8em;
       }
 
       @include breakpoint($desktop) {

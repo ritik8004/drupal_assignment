@@ -5,6 +5,8 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_acq_checkout_pane_pane_info_alter().
  */
@@ -14,4 +16,85 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
   unset($definitions['shipping_information']);
   unset($definitions['review']);
   unset($definitions['completion_message']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Add markup to show selected card type.
+  if (isset($form['payment_methods'], $form['payment_methods']['payment_details'], $form['payment_methods']['payment_details']['cc_number'])) {
+    $form['payment_methods']['payment_details']['cc_number']['#suffix'] = '
+      <div class="card-types-wrapper">
+        <span class="card-type card-type-visa"></span>
+        <span class="card-type card-type-mastercard"></span>
+        <span class="card-type card-type-diners-club"></span>
+      </div>
+    ';
+  }
+}
+
+/**
+ * Helper function to clean address array.
+ *
+ * @param mixed $address
+ *   Address array or object.
+ *
+ * @return array
+ *   Cleaned address array.
+ */
+function _alshaya_acm_checkout_clean_address($address) {
+  $address = (array) $address;
+
+  $allowed_fields = [
+    'firstname',
+    'first_name',
+    'lastname',
+    'last_name',
+    'email',
+    'phone',
+    'street',
+    'street2',
+    'city',
+    'region',
+    'postcode',
+    'country',
+  ];
+
+  foreach ($address as $key => $value) {
+    if (!in_array($key, $allowed_fields)) {
+      unset($address[$key]);
+    }
+  }
+
+  if (!empty($address['phone'])) {
+    $address['phone'] = _alshaya_acm_checkout_clean_address_phone($address['phone']);
+  }
+
+  return $address;
+}
+
+/**
+ * Helper function to clean address phone number.
+ *
+ * @param mixed $phone
+ *   Phone string, array or object.
+ *
+ * @return string
+ *   Phone number in string.
+ */
+function _alshaya_acm_checkout_clean_address_phone($phone) {
+  $phone_string = '';
+
+  if (is_string($phone)) {
+    $phone_string = $phone;
+  }
+  elseif (is_object($phone)) {
+    $phone_string = \Drupal::service('mobile_number.util')->libUtil()->format($phone, 1);
+  }
+  elseif (is_array($phone)) {
+    $phone_string = $phone['value'];
+  }
+
+  return $phone_string;
 }

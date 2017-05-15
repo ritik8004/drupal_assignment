@@ -6,29 +6,29 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class CurrencySettingsForm
+ * Class CurrencySettingsForm.
+ *
  * @package Drupal\acq_commerce\Form
  * @ingroup acq_commerce
  */
 class CurrencySettingsForm extends ConfigFormBase {
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'acq_commerce_currency_settings';
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function getEditableConfigNames()
-  {
+  public function getEditableConfigNames() {
     return ['acq_commerce.currency'];
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
@@ -41,31 +41,32 @@ class CurrencySettingsForm extends ConfigFormBase {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('acq_commerce.currency');
-    $form['currency_code'] = array(
+    $form['currency_code'] = [
       '#type' => 'textfield',
       '#description' => $this->t('ISO 4217 standard currency code.'),
       '#title' => $this->t('ISO currency code'),
       '#required' => TRUE,
       '#default_value' => $config->get('currency_code'),
-    );
+    ];
 
-    $options = array(
+    $options = [
       'before' => $this->t('Before Price'),
       'after' => $this->t('After Price'),
-     );
-    $form['currency_code_position'] = array(
+    ];
+    $form['currency_code_position'] = [
       '#type' => 'radios',
       '#title' => t('Currency Code Position'),
       '#default_value' => $config->get('currency_code_position'),
       '#options' => $options,
       '#description' => $this->t('The position for the currency code.'),
       '#required' => TRUE,
-    );
+    ];
 
     return parent::buildForm($form, $form_state);
   }
+
 }

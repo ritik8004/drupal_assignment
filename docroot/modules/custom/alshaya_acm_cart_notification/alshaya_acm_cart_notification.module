@@ -15,31 +15,28 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
-function alshaya_acm_cart_notification_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
+function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Altering Sku base form, which is the form implementation for Simple,
   // Grouped and Configurable products.
-  if ($form_id == 'sku_base_form') {
-    // Adding a form element a placeholder to populate as a cart notification.
-    $form['cart_notification_modal'] = [
-      '#markup' => '',
-      '#prefix' => '<div id = "cart_notification">',
-      '#suffix' => '</div>',
-    ];
+  // Adding a form element a placeholder to populate as a cart notification.
+  $form['cart_notification_modal'] = [
+    '#markup' => '',
+    '#prefix' => '<div id = "cart_notification">',
+    '#suffix' => '</div>',
+  ];
 
-    $form['add_to_cart']['#ajax'] = [
-      'callback' => 'alshaya_acm_cart_notification_form_submit',
-      'wrapper' => 'cart_notification',
-    ];
+  $form['add_to_cart']['#ajax'] = [
+    'callback' => 'alshaya_acm_cart_notification_form_submit',
+    'wrapper' => 'cart_notification',
+  ];
 
-    // Attach the js file with the add to cart form.
-    $form['#attached']['library'][] = 'core/drupal.ajax';
-    $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-    $form['#attached']['library'][] = 'alshaya_acm_cart_notification/ladda';
-    $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
-  }
+  // Attach the js file with the add to cart form.
+  $form['#attached']['library'][] = 'core/drupal.ajax';
+  $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+  $form['#attached']['library'][] = 'alshaya_acm_cart_notification/ladda';
+  $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
 }
 
 /**
@@ -134,10 +131,15 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   // Get the rendered html to pass into HtmlCommand.
   $html = drupal_render($output);
 
+  // Get the interval we want to show the message for on our ladda button.
+  $interval = \Drupal::config('alshaya_acm_cart_notification.settings')->get('ajax_spinner_message_interval');
+  $data['interval'] = $interval;
+
   // Prepare the ajax Response.
   $response = new AjaxResponse();
+  $data['message'] = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
   $response->addCommand(new HtmlCommand('#cart_notification', $html));
-  $response->addCommand(new InvokeCommand(NULL, 'stopSpinner'));
+  $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
   $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
   return $response;
 }

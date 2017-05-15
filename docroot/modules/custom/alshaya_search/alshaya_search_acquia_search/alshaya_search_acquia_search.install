@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya Search - Acquia Search.
+ */
+
+use Drupal\lightning_core\ConfigHelper;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_search_acquia_search_install() {
+  // Set new config for acquia search index.
+  $search_api_index = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_search_acquia_search') . '/config/optional/search_api.index.acquia_search_index.yml'));
+
+  \Drupal::configFactory()
+    ->getEditable('search_api.index.acquia_search_index')
+    ->setData($search_api_index)
+    ->save();
+
+  // Disable Acquia Search View.
+  $acquia_search_view = \Drupal::configFactory()->getEditable('views.view.acquia_search')->getRawData();
+
+  if (empty($acquia_search_view)) {
+    // Import Acquia Search View, and disable it.
+    ConfigHelper::forModule('acquia_search')
+      ->optional()
+      ->getEntity('view', 'acquia_search')
+      ->save();
+  }
+
+  \Drupal::configFactory()->getEditable('views.view.acquia_search')
+    ->set('status', FALSE)
+    ->save();
+}

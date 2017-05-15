@@ -57,14 +57,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // Add the continue shopping button in same container.
     $form['empty']['continue_shopping'] = [
       '#type' => 'link',
-      '#title' => t('Continue shopping'),
+      '#title' => t('Go shopping'),
       '#url' => Url::fromRoute('<front>'),
     ];
 
     // Add continue shopping link, that redirect user to homepage.
     $form['empty']['continue_shopping_mobile'] = [
       '#type' => 'link',
-      '#title' => t('Continue shopping'),
+      '#title' => t('Go shopping'),
       '#url' => Url::fromRoute('<front>'),
     ];
 
@@ -120,8 +120,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $sku_attributes = alshaya_acm_product_get_sku_configurable_values($id);
 
       $name = [];
+
       // Get parent sku of the sku.
       $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($id);
+
       if ($parent_sku) {
         /* @var \Drupal\node\Entity\Node $parent_node */
         $parent_node = alshaya_acm_product_get_display_node($parent_sku->getSKU());
@@ -132,6 +134,15 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
             '#url' => Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]),
           ];
         }
+      }
+      else {
+        /* @var \Drupal\node\Entity\Node $product_node */
+        $product_node = alshaya_acm_product_get_display_node($id);
+        $name = [
+          '#title' => $product_node->getTitle(),
+          '#type' => 'link',
+          '#url' => Url::fromRoute('entity.node.canonical', ['node' => $product_node->id()]),
+        ];
       }
 
       $image = [];
@@ -202,8 +213,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   }
 
   if ($secure_checkout_access) {
-    // Change checkout button text to 'Secure Checkout'.
-    $form['actions']['checkout']['#value'] = t('Secure Checkout');
+    // Change checkout button text to 'Checkout Securely'.
+    $form['actions']['checkout']['#value'] = t('Checkout Securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
   }
@@ -260,8 +271,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#url' => Url::fromRoute('<front>'),
       '#suffix' => '</div>',
     ];
-
-    unset($form['actions']['update']);
   }
 
   $form['coupon']['#type'] = 'hidden';
@@ -429,12 +438,20 @@ function alshaya_acm_get_cart_items_by_sku() {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['quantity']['#type'] = 'select';
   $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
   unset($form['quantity']['#size']);
+
+  if (isset($form['ajax'], $form['ajax']['configurables'])) {
+    foreach ($form['ajax']['configurables'] as $key => $form_item) {
+      if (is_array($form_item) && isset($form_item['#type']) && $form_item['#type'] == 'select') {
+        $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @attribute', ['@attribute' => strtolower($form_item['#title'])]);
+      }
+    }
+  }
 }
 
 /**

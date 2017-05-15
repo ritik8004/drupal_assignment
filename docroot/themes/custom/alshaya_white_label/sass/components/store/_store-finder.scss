@@ -1,0 +1,359 @@
+.path--store-finder {
+  .view-header {
+    font-size: 14px;
+    font-weight: bold;
+    color: $black;
+  }
+
+  .c-content__region {
+    max-width: 77.25rem;
+    margin: auto;
+  }
+
+  .c-page-title {
+    font-weight: normal;
+  }
+
+  input {
+    &.form-autocomplete {
+      font-size: 12px;
+    }
+
+    &#edit-submit-stores-finder {
+      background: url('../imgs/icons/store-search.svg');
+      border: none;
+      background-repeat: no-repeat;
+      text-indent: -9999px;
+      width: 20px;
+
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        #{$right}: 10px;
+        margin-top: -29px;
+      }
+    }
+  }
+
+  .current-location,
+  .list-view-link,
+  .map-view-link,
+  .label--location {
+    &::before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      margin-#{$right}: 0.6875rem;
+    }
+  }
+
+  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+    padding-#{$right}: 1.563rem;
+  }
+
+  .current-location::before {
+    background: url('../imgs/icons/current.svg') no-repeat;
+    width: 26px;
+    height: 26px;
+  }
+
+  .label--location::before {
+    background: url('../imgs/icons/ic-search.svg') no-repeat;
+    width: 25px;
+    height: 25px;
+  }
+
+  .map-view-link::before {
+    background: url('../imgs/icons/map.svg') no-repeat;
+    width: 26px;
+    height: 23px;
+  }
+
+  .list-view-link::before {
+    background: url('../imgs/icons/list.svg') no-repeat;
+    width: 26px;
+    height: 16px;
+  }
+
+  .label--location {
+    padding-#{$left}: 1.5rem;
+    padding-#{$right}: 1rem;
+  }
+
+  .list-view-link,
+  .map-view-link {
+    width: 186px;
+    text-align: center;
+    padding: 1.563rem 0;
+
+    &:hover,
+    &.active {
+      border: 1px solid $marine-blue-two;
+    }
+  }
+
+  .active {
+    font-weight: bold;
+    color: $marine-blue-two;
+  }
+
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+    background: none;
+    max-width: 23.13rem;
+    border: 1px solid $white;
+    padding: 0.6875rem;
+  }
+
+  .block-views-exposed-filter-blockstores-finder-page-3,
+  .attachment-after {
+    display: none;
+  }
+
+  .view-display-id-page_3 {
+    .view-content {
+      margin-bottom: 8.625rem;
+    }
+  }
+
+  .current-location,
+  .form-type-textfield,
+  .c-content__region .form-actions,
+  .label--location,
+  .list-view-link,
+  .map-view-link {
+    color: $cerulean-two;
+  }
+
+  .by--alphabet {
+    position: relative;
+    margin-bottom: 3rem;
+
+    h3,
+    .rows {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    h3 {
+      font-size: 26px;
+      font-weight: normal;
+      color: $marine-blue;
+      line-height: 1.6;
+      width: 1.563rem;
+      margin: 0;
+    }
+
+    .rows {
+      font-size: 14px;
+      line-height: 232%;
+      margin-#{$left}: 2.375rem;
+
+      a {
+        color: $grey-ash;
+
+        &:hover {
+          color: $marine-blue;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .list-view-locator {
+    font-size: 14px;
+    background: $white-four;
+    padding: 1rem 0;
+    padding-bottom: 0;
+    margin-bottom: 1.625rem;
+
+    .row-title {
+      font-weight: bold;
+      color: $marine-blue;
+      padding: 0 3.438rem;
+    }
+
+    .views-field-field-store-address,
+    .views-field-field-store-open-hours {
+      border-bottom: 1px solid $white;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1rem;
+
+      .field-content {
+        padding: 0 3.438rem;
+      }
+    }
+
+    .open--hours {
+      margin-top: 0.9rem;
+    }
+
+    .views-field-field-store-open-hours {
+      margin-bottom: 0;
+    }
+
+    .views-field-field-store-open-hours {
+      .hours--label {
+        position: relative;
+        color: $cerulean-two;
+
+        &::after {
+          position: absolute;
+          content: '';
+          background: url('../imgs/icons/store--down.svg');
+          display: inline-block;
+          width: 17px;
+          height: 7px;
+          top: 5px;
+          #{$right}: 0;
+        }
+
+        &.open {
+          border-bottom: 0;
+
+          &::after {
+            transform: scaleY(-1);
+          }
+        }
+      }
+
+      .open--hours {
+        display: none;
+        line-height: 1.57;
+      }
+    }
+
+    .lat-lng {
+      display: none;
+    }
+  }
+
+  .view-display-id-page_1 {
+    margin-top: 1.5rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-content__region {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .c-page-title {
+      border-bottom: 1px solid $white;
+      margin-bottom: 0.6875rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .current-location {
+      display: block;
+      font-size: 12px;
+      text-align: center;
+      border: 1px solid $cerulean-two;
+      padding: 0.3125rem 0;
+      margin-bottom: 1rem;
+    }
+
+    .label--location,
+    #edit-list-view,
+    #edit-map-view {
+      display: none;
+    }
+
+    input.form-autocomplete {
+      border: 1px solid $greyish !important;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .c-page-title {
+      margin-top: 3.563rem;
+      margin-bottom: 0.6875rem;
+    }
+
+    .attachment-after {
+      display: none;
+    }
+
+    .block-views-exposed-filter-blockstores-finder-page-3,
+    .attachment-after {
+      display: none;
+    }
+
+    .c-content__region .views-exposed-form {
+      width: 100%;
+      border-top: 1px solid $white;
+      border-bottom: 1px solid $white;
+      padding: 0.6875rem 0;
+    }
+
+    .current-location,
+    .c-content__region .form-type-textfield,
+    .c-content__region .form-actions,
+    .label--location,
+    .list-view-link,
+    .map-view-link {
+      font-size: 14px;
+      display: table-cell;
+      max-width: 33%;
+      vertical-align: middle;
+      color: $cerulean-two;
+    }
+
+    .view-display-id-page_1 {
+      .view-content,
+      .attachment-after {
+        display: inline-block;
+      }
+    }
+
+    .attachment-after {
+      width: 73%;
+      vertical-align: top;
+    }
+
+    .view-display-id-page_1 > .view-content {
+      max-width: 19.69rem;
+      display: inline-block;
+      border-#{$right}: 1px solid $white;
+      vertical-align: top;
+      margin-#{$right}: 0.6875rem;
+      padding-#{$right}: 0.6875rem;
+    }
+
+    .c-content__region #edit-actions {
+      position: relative;
+
+      input {
+        position: absolute;
+        #{$right}: 35px;
+        bottom: 7px;
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    .c-content__region {
+      position: relative;
+      margin-right: 0.5rem;
+      margin-left: 0.5rem;
+
+      .current-location {
+        position: absolute;
+        #{$right}: 0;
+        top: -35px;
+      }
+
+      #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+        width: 15.5rem;
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .current-location {
+      padding: 1.625rem 1.875rem;
+    }
+
+    #edit-submit-stores-finder {
+      bottom: 27px !important;
+    }
+  }
+}

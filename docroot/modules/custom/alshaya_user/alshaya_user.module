@@ -11,7 +11,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Render\Element\PasswordConfirm;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Check if the current user has is only authenticated user.
@@ -40,7 +40,6 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $form['account']['mail']['#description'] = '';
   $form['account']['name']['#description'] = '';
   $form['account']['pass']['#description'] = '';
-  $form['account']['pass']['#after_build'][] = 'alshaya_user_process_password_confirm_after_build';
 
   // We don't want to show the terms and conditions field to logged in users.
   if (\Drupal::currentUser()->isAuthenticated()) {
@@ -77,6 +76,11 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
 
     $form['#validate'][] = 'alshaya_user_form_user_register_form_validate';
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+
+    // Change password_confirm field to normal password field.
+    $form['account']['pass']['#title'] = t('Password');
+    $form['account']['pass']['#type'] = 'password';
+    $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
   }
 }
 
@@ -147,29 +151,18 @@ function alshaya_user_preprocess_menu(&$variables) {
   if (\Drupal::currentUser()->isAuthenticated()) {
     // Loop through all the links.
     foreach ($variables['items'] as $key => &$item) {
-      // We want to process only the register link.
-      if ($item['url']->getRouteName() == 'user.register' || $item['url']->getRouteName() == 'user.login') {
-        // Hide the register link for authenticated user.
-        unset($variables['items'][$key]);
+      try {
+        // We want to process only the register link.
+        if ($item['url']->getRouteName() == 'user.register' || $item['url']->getRouteName() == 'user.login') {
+          // Hide the register link for authenticated user.
+          unset($variables['items'][$key]);
+        }
+      }
+      catch (\Exception $e) {
+        // Do nothing, issue may be with external link.
       }
     }
   }
-}
-
-/**
- * After build process callback for updating password confirm form element.
- */
-function alshaya_user_process_password_confirm_after_build($element) {
-  // Get tooltip content from config.
-  $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
-
-  // Add tooltip as suffix to first element.
-  $element['pass1']['#suffix'] = '<div class="password-tooltip">
-      <div class="password-tooltip-icon">!</div>
-      <div class="password-tooltip-content">' . $tooltip . '</div>
-    </div>';
-
-  return $element;
 }
 
 /**
@@ -196,36 +189,34 @@ function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $blo
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['account']['pass']['#process'][] = 'alshaya_user_form_change_pwd_form_process_pass';
+  // Change password_confirm field to normal password field.
+  $form['account']['pass']['#title'] = t('new password');
+  $form['account']['pass']['#type'] = 'password';
+  $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
+
   // Change current password title and submit button text.
   $form['account']['current_pass']['#title'] = t('current password');
   $form['actions']['submit']['#value'] = t('change password');
 
   // Set this as password policy module checks for the role element.
   $form['account']['roles']['#default_value'] = [];
+
   // Password policy validation.
   $form['#validate'][] = '_password_policy_user_profile_form_validate';
 }
 
 /**
- * Process functon to change elements of password_confirm type field.
+ * Implements hook_ENTITY_TYPE_presave().
  */
-function alshaya_user_form_change_pwd_form_process_pass(&$element, FormStateInterface $form_state, &$complete_form) {
-  // Change title for password field.
-  $element = PasswordConfirm::processPasswordConfirm($element, $form_state, $complete_form);
-  $element['pass1']['#title'] = t('new password');
-  $element['pass2']['#title'] = t('confirm password');
+function alshaya_user_user_presave(EntityInterface $entity) {
+  // Remove leading zeroes to avoid issues of having unknown number type.
+  if ($values = $entity->get('field_mobile_number')->getValue()) {
+    foreach ($values as $index => $phone) {
+      $values[$index]['local_number'] = ltrim($phone['local_number'], 0);
+    }
 
-  // Get tooltip content from config.
-  $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
-
-  // Add tooltip as suffix to first element.
-  $element['pass1']['#suffix'] = '<div class="password-tooltip">
-      <div class="password-tooltip-icon">!</div>
-      <div class="password-tooltip-content">' . $tooltip . '</div>
-    </div>';
-
-  return $element;
+    $entity->get('field_mobile_number')->setValue($values);
+  }
 }
 
 /**
@@ -248,5 +239,29 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
   $options = $element['country-code']['#options'];
   $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
 
+  // Make mobile number required only for contact form.
+  if ($form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_contact_form') {
+    $element['mobile']['#required'] = TRUE;
+  }
+
   return $element;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page templates.
+ */
+function alshaya_user_preprocess_page_title(&$variables) {
+  // Add back link for my account page sub links.
+  $current_path = \Drupal::service('path.current')->getPath();
+  if (strpos($current_path, '/user') !== FALSE && $user = \Drupal::request()->attributes->get('user')) {
+    $arg = explode('/', $current_path);
+    if (!empty($arg[3])) {
+      $variables['title_prefix']['back_link'] = [
+        '#markup' => Link::createFromRoute('back', 'entity.user.canonical', ['user' => $user->id()], [
+          'attributes' => ['class' => ['back-link']],
+        ])->toString(),
+        '#weight' => 100,
+      ];
+    }
+  }
 }

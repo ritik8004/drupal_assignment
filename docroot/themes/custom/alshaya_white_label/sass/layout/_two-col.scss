@@ -1,17 +1,18 @@
 .l-two--sf {
-  @include container(80.25rem);
+  @include breakpoint($mobile) {
+    @include container(100%);
 
-  @include breakpoint($only-mobile) {
-    @include container(304px);
-  }
-
-  @include breakpoint($only-tablet) {
-    @include container(720px);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   @include breakpoint($tablet) {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+
+  @include breakpoint($desktop) {
+    @include container(80.25rem);
   }
 
   .c-sidebar-first {
@@ -32,5 +33,23 @@
       max-width: 57.5625rem;
       float: $right;
     }
+  }
+}
+
+.c-hero-content .l-container {
+  @include breakpoint($mobile) {
+    @include container(100%);
+
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  @include breakpoint($tablet) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include breakpoint($desktop) {
+    @include container(80.25rem);
   }
 }

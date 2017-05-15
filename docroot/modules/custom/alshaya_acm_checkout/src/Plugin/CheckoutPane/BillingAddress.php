@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\AddressFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\mobile_number\MobileNumberUtilInterface;
 
 /**
  * Provides the billing address form.
@@ -57,21 +58,44 @@ class BillingAddress extends AddressFormBase {
         'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
       ],
+      '#default_value' => 1,
     ];
+
+    // By default we want to use same address as shipping.
+    $same_as_shipping = 1;
 
     if ($form_state->getValues()) {
       $values = $form_state->getValue($pane_form['#parents']);
-      $same_as_shipping = $values['same_as_shipping'];
-      if ($same_as_shipping == 1) {
-        $form_state->setTemporaryValue('address', $cart->getShipping());
-      }
+      $same_as_shipping = (int) $values['same_as_shipping'];
     }
 
-    $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
+    if ($same_as_shipping === 1) {
+      $form_state->setTemporaryValue('address', $cart->getShipping());
 
-    $pane_form['address']['first_name']['#weight'] = -10;
-    $pane_form['address']['last_name']['#weight'] = -9;
-    $pane_form['address']['phone']['#weight'] = 0;
+      // Add empty wrapper to use when we click on No.
+      $pane_form['address'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => ['address_wrapper'],
+        ],
+      ];
+    }
+    else {
+      $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
+
+      // Do required changes in weight.
+      $pane_form['address']['first_name']['#weight'] = -10;
+      $pane_form['address']['last_name']['#weight'] = -9;
+      $pane_form['address']['phone']['#weight'] = 0;
+
+      // Update the phone number to mobile_number field instead of textfield.
+      $pane_form['address']['phone']['#type'] = 'mobile_number';
+      $pane_form['address']['phone']['#title_display'] = 'above';
+      $pane_form['address']['phone']['#verify'] = MobileNumberUtilInterface::MOBILE_NUMBER_VERIFY_NONE;
+      $pane_form['address']['phone']['#default_value'] = [
+        'value' => $pane_form['address']['phone']['#default_value'],
+      ];
+    }
 
     return $pane_form;
   }
@@ -125,19 +149,24 @@ class BillingAddress extends AddressFormBase {
 
     $values = $form_state->getValue($pane_form['#parents']);
 
-    $address_values = $values['address'];
     $address = [];
 
-    if ($form_state->getValue('same_as_shipping') == 1) {
+    if ($values['same_as_shipping'] == 1) {
       $address = $cart->getShipping();
     }
     else {
+      $address_values = $values['address'];
+
+      if (!empty($address_values['phone'])) {
+        $address_values['phone'] = _alshaya_acm_checkout_clean_address_phone($address_values['phone']);
+      }
+
       array_walk_recursive($address_values, function ($value, $key) use (&$address) {
         $address[$key] = $value;
       });
     }
 
-    $cart->setBilling($address);
+    $cart->setBilling(_alshaya_acm_checkout_clean_address($address));
   }
 
 }

@@ -1,0 +1,32 @@
+{% if label_hidden %}
+    {% if multiple %}
+        <div{{ attributes }}>
+            <div class="hours--label">{{ 'Opening Hours'|t }}</div>
+            <div class="open--hours">
+                {% for item in items %}
+                    <div{{ item.attributes }}>{{ item.content }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        {% for item in items %}
+            <div{{ attributes }}>{{ item.content }}</div>
+        {% endfor %}
+    {% endif %}
+{% else %}
+    <div{{ attributes }}>
+        <div{{ title_attributes }}>{{ label }}</div>
+        {% if multiple %}
+        <div>
+            {% endif %}
+            <div class="hours--label">{{ 'Opening Hours'|t }}</div>
+            <div class="open--hours">
+                {% for item in items %}
+                    <div{{ item.attributes }}>{{ item.content }}</div>
+                {% endfor %}
+                {% if multiple %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endif %}

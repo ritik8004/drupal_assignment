@@ -13,7 +13,7 @@ third_party_settings:
     enabled: true
     allowed_moderation_states:
       - published
-      - archived
+      - approved
       - draft
       - needs_review
     default_moderation_state: draft

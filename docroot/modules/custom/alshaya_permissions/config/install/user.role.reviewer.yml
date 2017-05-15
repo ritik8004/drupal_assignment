@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_core
+third_party_settings:
+  lightning_core:
+    description: ''
+id: reviewer
+label: Reviewer
+weight: 14
+is_admin: null
+permissions:
+  - 'use from_pending_review_to_approved transition'
+  - 'use needs_review_draft transition'
+  - 'view any unpublished content'
+  - 'edit any advanced_page content'
+  - 'edit any department_page content'
+  - 'access toolbar'

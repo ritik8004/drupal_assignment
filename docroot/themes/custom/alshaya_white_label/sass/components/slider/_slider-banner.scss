@@ -1,6 +1,12 @@
 .c-content__slider {
   text-align: center;
 
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 476px;
+  }
+
   @include breakpoint($tablet) {
     margin-bottom: 1.5rem;
   }
@@ -85,7 +91,7 @@
   color: $marine-blue-two;
   border: 1px solid currentColor;
   display: inline-block;
-  margin: 1.75rem 0.75rem;
+  margin: 1em 0.75em;
 
   &.active {
     background: currentColor;

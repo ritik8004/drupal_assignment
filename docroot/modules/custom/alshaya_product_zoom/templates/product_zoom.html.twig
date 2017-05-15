@@ -1,5 +1,12 @@
 <div id="product-zoom-container">
   <div class="cloudzoom">
+    <div class="cloudzoom__herocontainer">
+      <div id="cloud-zoom-wrap" class="cloudzoom__image">
+        <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
+          <img src="{{ mainImage.mediumurl }}"/><span class="hover-text">{{ 'Hover over image to zoom'|t }}</span><span class="mobile-hover-text">{{ 'Double tap image to zoom'|t }}</span></a>
+      </div>
+      <div id="yt-vi-container" class= "cloudzoom__video"></div>
+    </div>
     <div class="cloudzoom__thumbnails">
       <ul id="lightSlider" class="{{ pager_flag }}">
       {% for thumbs in thumbnails %}
@@ -20,13 +27,6 @@
         {% endif %}
       {% endfor %}
       </ul>
-    </div>
-    <div class="cloudzoom__herocontainer">
-      <div id="cloud-zoom-wrap" class="cloudzoom__image">
-        <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
-          <img src="{{ mainImage.mediumurl }}"/></a>
-      </div>
-      <div id="yt-vi-container" class= "cloudzoom__video"></div>
     </div>
   </div>
   <div class="mobilegallery">
@@ -49,7 +49,7 @@
         {% endif %}
       {% endfor %}
     </ul>
-    <span class="subtext">{{ 'Pinch to Zoom'|t }}</span>
+    <div class="subtext"><p>{{ 'Tap to enlarge'|t }}</p><p>{{ 'Swipe to view more images'|t }}</p></div>
   </div>
   <div id="product-image-gallery-container" class="imagegallery" style="display: none;">
     <div class="imagegallery__wrapper">
@@ -84,7 +84,7 @@
       </ul>
     </div>
     <div class="button__wrapper">
-      <button class="zoomout"></button ><button class="zoomin"></button >
+      <button class="zoomin"></button><button class="zoomout"></button>
     </div>
   </div>
 </div>

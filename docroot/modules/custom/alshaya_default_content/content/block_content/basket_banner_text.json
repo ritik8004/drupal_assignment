@@ -1,0 +1,123 @@
+{
+  "_links": {
+    "self": {
+      "href": "http:\/\/local.alshaya.com\/en\/block\/6?_format=hal_json"
+    },
+    "type": {
+      "href": "http:\/\/drupal.org\/rest\/type\/block_content\/basic"
+    },
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
+      {
+        "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json",
+        "lang": "en"
+      }
+    ]
+  },
+  "id": [
+    {
+      "value": 6
+    }
+  ],
+  "uuid": [
+    {
+      "value": "f42b2da3-366f-4143-8b91-e90e0fa3c082"
+    }
+  ],
+  "revision_id": [
+    {
+      "value": 6
+    }
+  ],
+  "langcode": [
+    {
+      "value": "en",
+      "lang": "en"
+    }
+  ],
+  "type": [
+    {
+      "target_id": "basic"
+    }
+  ],
+  "info": [
+    {
+      "value": "Basket Promotion message",
+      "lang": "en"
+    }
+  ],
+  "changed": [
+    {
+      "value": 1494420469,
+      "lang": "en"
+    }
+  ],
+  "revision_created": [
+    {
+      "value": 1494420469
+    }
+  ],
+  "revision_translation_affected": [
+    {
+      "value": true,
+      "lang": "en"
+    }
+  ],
+  "default_langcode": [
+    {
+      "value": true,
+      "lang": "en"
+    }
+  ],
+  "content_translation_source": [
+    {
+      "value": "und",
+      "lang": "en"
+    }
+  ],
+  "content_translation_outdated": [
+    {
+      "value": false,
+      "lang": "en"
+    }
+  ],
+  "_embedded": {
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
+      {
+        "_links": {
+          "self": {
+            "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+          },
+          "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+          }
+        },
+        "uuid": [
+          {
+            "value": "35fbd728-a604-4ca0-8852-c0f29eef8d82"
+          }
+        ],
+        "lang": "en"
+      }
+    ]
+  },
+  "content_translation_status": [
+    {
+      "value": true,
+      "lang": "en"
+    }
+  ],
+  "content_translation_created": [
+    {
+      "value": 1494420469,
+      "lang": "en"
+    }
+  ],
+  "body": [
+    {
+      "value": "<p>Get 10 KWD Discount for every 50 KWD purchase.<\/p>\r\n",
+      "format": "rich_text",
+      "summary": "",
+      "lang": "en"
+    }
+  ]
+}

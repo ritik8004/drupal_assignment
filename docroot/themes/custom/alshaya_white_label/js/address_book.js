@@ -11,7 +11,7 @@
 
       function toggleOverlay(button, className) {
         $(button).click(function () {
-          $('body').toggleClass(className);
+          $('body').removeClass(className);
         });
       }
 

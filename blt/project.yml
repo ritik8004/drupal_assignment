@@ -3,7 +3,7 @@ project:
   prefix: MMCPA
   human_name: Alshaya
   profile:
-    name: lightning
+    name: alshaya
   local:
     protocol: http
     hostname: 'local.${project.machine_name}.com'
@@ -34,7 +34,10 @@ target-hooks:
   post-setup-build:
     dir: '${docroot}'
     command: 'echo ''No post-setup build configured.'''
-import: null
+  post-deploy:
+    dir: '${docroot}'
+    command: 'echo ''No post-deploy build configured.'''
+import: '${repo.root}/blt/setup.local.xml'
 modules:
   local:
     enable: [dblog, devel, seckit, views_ui]
@@ -48,25 +51,26 @@ modules:
   test:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
+  uat:
+    enable: [acquia_connector, shield]
+    uninstall: [devel, views_ui]
+  qa:
+    enable: [acquia_connector, shield]
+    uninstall: [devel, views_ui]
+  pprod:
+    enable: [acquia_connector, shield]
+    uninstall: [devel, views_ui]
   prod:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
 behat:
-  # If true, Selenium standalone server will be launched with Behat.
   launch-selenium: false
-  # If true, PhantomJS GhostDriver will be launched with Behat.
   launch-phantomjs: true
-  # An array of paths with behat tests that should be executed.
   paths:
     - '${repo.root}/tests/behat'
   tags: '~ajax&&~experimental&&~lightningextension&&~example'
-
 multisite:
   name:
     - g
-# Disabling security update check.
-disable-targets:
-  tests:
-    security-updates: true
-
-import: '${repo.root}/blt/setup.local.xml'
+cm:
+  strategy: features

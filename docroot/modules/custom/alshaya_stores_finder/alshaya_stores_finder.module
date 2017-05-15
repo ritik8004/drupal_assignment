@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_stores_finder_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'alshaya_stores_finder/store_finder';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    $exposed_form_ids = [
+      'views-exposed-form-stores-finder-page-1',
+      'views-exposed-form-stores-finder-page-3',
+    ];
+    if (in_array($form['#id'], $exposed_form_ids)) {
+      $form['list_view'] = [
+        '#title' => t('List view'),
+        '#type' => 'link',
+        '#url' => Url::fromRoute('alshaya_stores_finder.view_toggle', ['view_type' => 'list_view']),
+        '#attributes' => [
+          'class' => [
+            'use-ajax',
+            'list-view-link',
+          ],
+        ],
+        '#weight' => 100,
+      ];
+      $form['map_view'] = [
+        '#title' => t('Map view'),
+        '#type' => 'link',
+        '#url' => Url::fromRoute('alshaya_stores_finder.view_toggle', ['view_type' => 'map_view']),
+        '#attributes' => [
+          'class' => [
+            'use-ajax',
+            'map-view-link',
+          ],
+        ],
+        '#weight' => 100,
+      ];
+      $form['current_location'] = [
+        '#markup' => '<a href="javascript:;" class="current-location">' . t('Use my current location') . '</a>',
+        '#weight' => -1,
+      ];
+
+      // Adding placeholder to the input field.
+      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
+      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#prefix'] = '<div class="label--location">' . t('Find stores nearest to') . '</div>';
+      unset($form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#description']);
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function alshaya_stores_finder_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() == 'stores_finder' && ($display_id === 'page_1' || $display_id === 'page_3')) {
+    $header_text = '';
+    $exposed_input = $view->getExposedInput();
+    if (!empty($exposed_input)) {
+      if (!empty($exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'])) {
+        $header_text = t('@total closest stores to') . ' ' . $exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'];
+      }
+    }
+
+    $view->setHandlerOption($display_id, 'header', 'result', 'content', $header_text);
+  }
+}

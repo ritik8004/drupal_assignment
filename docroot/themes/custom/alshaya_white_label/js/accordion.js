@@ -10,17 +10,30 @@
     attach: function (context, settings) {
       function mobileFilterMenu() {
         if ($(window).width() < 381) {
-          $('<div class="filter-menu-label"><span class="label">filter</span></div>').insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
-          var blockFilterBar = $('#block-filterbar').clone();
-          $(blockFilterBar).insertBefore('.region__content .c-facet__blocks .region__sidebar-first div:first-child');
-          $('.region__content .region__sidebar-first #block-filterbar').addClass('mobile-filter-bar c-accordion');
-          $('.mobile-filter-bar ul li.clear-all').insertAfter('.filter-menu-label .label');
-          var countFilters = $('.mobile-filter-bar ul li').length;
-          $('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-            + '(' + countFilters + ')</h2>').insertBefore('.mobile-filter-bar ul');
-
+          var facetBlocks = $('.c-facet__blocks__wrapper .c-facet__blocks');
+          var filterLabel = facetBlocks.find('.filter-menu-label');
+          if (filterLabel.length) {
+            // Already exists, dont create again.
+          }
+          else {
+            $('<div class="filter-menu-label"><span class="label">filter</span></div>').insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
+            var blockFilterBar = $('#block-filterbar').clone();
+            $(blockFilterBar).insertBefore('.region__content .c-facet__blocks .region__sidebar-first div:first-child');
+            $('.region__content .region__sidebar-first #block-filterbar').addClass('mobile-filter-bar c-accordion');
+            $('.mobile-filter-bar ul li.clear-all').insertAfter('.filter-menu-label .label');
+            var countFilters = $('.mobile-filter-bar ul li').length;
+            if (countFilters === 0 && $.trim($('.mobile-filter-bar').html()).length === 0) {
+              $('.mobile-filter-bar').append('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+                + ' (' + countFilters + ')</h2>');
+              $('.mobile-filter-bar').addClass('empty');
+            }
+            else {
+              $('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+                + '(' + countFilters + ')</h2>').insertBefore('.mobile-filter-bar ul');
+            }
+          }
           // Toggle the filter menu when click on the label.
-          $('.filter-menu-label .label').click(function () {
+          $('.filter-menu-label .label').on('click', function () {
             $('.page-wrapper, .header--wrapper, .c-pre-content').toggleClass('show-overlay');
             $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
             $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
@@ -135,6 +148,43 @@
           listOrder.not($ub).hide();
           $ub.parent().toggleClass('open--accordion');
           listOrder.not($ub).parent().removeClass('open--accordion');
+        });
+      }
+
+      /**
+      * Toggles the Tabs.
+      */
+
+      if ($('.c-delivery-checkout .multistep-checkout').length) {
+        $('.tab-home-delivery').addClass('active--tab--head');
+        $('#edit-guest-delivery-home, #edit-member-delivery-home').addClass('active--tab--content');
+
+        $('.tab').click(function () {
+          $('.multistep-checkout .tab').removeClass('active--tab--head');
+          $('.multistep-checkout fieldset').removeClass('active--tab--content');
+
+          if ($(this).hasClass('tab-home-delivery')) {
+            $('.tab-home-delivery').addClass('active--tab--head');
+            $('#edit-guest-delivery-home, #edit-member-delivery-home').addClass('active--tab--content');
+          }
+          else if ($(this).hasClass('tab-click-collect')) {
+            $('.tab-click-collect').addClass('active--tab--head');
+            $('#edit-guest-delivery-collect, #edit-member-delivery-collect').addClass('active--tab--content');
+          }
+        });
+
+        $('.multistep-checkout legend').click(function () {
+          $(this).next('.fieldset-wrapper').slideToggle();
+        });
+      }
+
+      /**
+      * Toggles the Search on Order list.
+      */
+
+      if ($('.alshaya-acm-customer-order-list-search').length) {
+        $('.alshaya-acm-customer-order-list-search label').on('click', function () {
+          $('.alshaya-acm-customer-order-list-search').toggleClass('active--search');
         });
       }
     }

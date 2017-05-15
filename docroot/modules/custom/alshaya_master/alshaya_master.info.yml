@@ -21,4 +21,5 @@ dependencies:
   - sharethis
   - system
   - views
+  - workbench_moderation
 version: 8.x-1.0

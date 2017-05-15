@@ -227,7 +227,6 @@ class Cart implements CartInterface {
    * @return int
    *   Return total number of items in the cart.
    */
-
   public function getCartItemsCount() {
     return $this->cartTotalCount;
   }
@@ -434,11 +433,6 @@ class Cart implements CartInterface {
   public function getCart() {
     if (isset($this->cart)) {
       $cart = $this->cart;
-
-      // Don't tell conductor our stored totals for no reason.
-      if (isset($cart->totals)) {
-        unset($cart->totals);
-      }
 
       // Don't set blank addresses, Magento doesn't like this.
       if (isset($cart->shipping) && empty($cart->shipping->street)) {

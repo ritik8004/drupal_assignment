@@ -5,7 +5,6 @@
  * Contains general hooks and alters.
  */
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
@@ -60,6 +59,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'barcode' => NULL,
       'order_details' => NULL,
       'products' => NULL,
+      'products_count' => NULL,
       'delivery_detail_notice' => NULL,
       'account' => NULL,
       'currency_code' => NULL,
@@ -90,16 +90,6 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
   ];
 
   return $items;
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_acm_customer_form_multistep_default_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // When we reach the final step, clear cache of orders list for the user.
-  if (empty($form['actions']) || empty($form['actions']['next']) || empty((string) $form['actions']['next']['#value'])) {
-    \Drupal::cache()->delete('orders_list_' . \Drupal::currentUser()->id());
-  }
 }
 
 /**

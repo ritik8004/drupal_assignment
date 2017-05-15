@@ -9,7 +9,7 @@ dependencies:
     - alshaya_white_label
 id: deliverybanner
 theme: alshaya_white_label
-region: pre_content
+region: hero_content
 weight: -18
 provider: null
 plugin: 'system_menu_block:delivery-banner'
@@ -20,4 +20,9 @@ settings:
   label_display: '0'
   level: 1
   depth: 0
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: "<front>\r\n/cart/checkout/*\r\n/checkout/*"
+    negate: true
+    context_mapping: {  }

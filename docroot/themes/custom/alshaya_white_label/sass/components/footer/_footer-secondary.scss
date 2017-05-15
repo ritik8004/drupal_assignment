@@ -2,7 +2,7 @@
   background: $white-four;
   font-size: 0.6875rem;
   position: relative;
-  z-index: 3;
+  z-index: 2;
 
   @include breakpoint($tablet) {
     height: 4.375rem;
@@ -14,14 +14,14 @@
   }
 
   .l-container {
-    // @extend %l-container--full;
-    @include container(67.625rem);
+    @include container(64.35rem);
   }
 }
 
 .c-footer-secondary__region {
   @include breakpoint($tablet) {
     float: $left;
+    width: 100%;
   }
 }
 
@@ -38,8 +38,17 @@
     background: white;
   }
 
+  @include breakpoint($desktop) {
+    float: $left;
+    margin-right: 0;
+  }
+
   @include breakpoint($only-tablet) {
     margin-#{$right}: 0;
+
+    ul {
+      margin-top: 4px;
+    }
   }
 
   ul {
@@ -84,12 +93,20 @@
 
   @include breakpoint($only-tablet) {
     max-width: 59%;
+
+    .field--name-body {
+      p {
+        font-size: 0.625rem;
+        margin-top: 1rem;
+      }
+    }
   }
 
   @include breakpoint($tablet) {
     height: 4.375rem;
     display: table;
     float: $right;
+    margin-right: 1rem;
   }
 
   @include breakpoint($only-mobile) {
@@ -99,6 +116,7 @@
 
   p {
     margin-top: 0;
+    color: $black;
     margin-bottom: 0;
   }
 
@@ -107,5 +125,10 @@
       display: table-cell;
       vertical-align: middle;
     }
+  }
+
+  @include breakpoint($desktop) {
+    width: 56%;
+    margin-right: 9.5rem;
   }
 }

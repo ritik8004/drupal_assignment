@@ -1,0 +1,5 @@
+services:
+ alshaya_advanced_page.breadcrumb:
+   class: Drupal\alshaya_advanced_page\Breadcrumb\AlshayaStaticPageBreadcrumbBuilder
+   tags:
+    - { name: breadcrumb_builder, priority: 100 }

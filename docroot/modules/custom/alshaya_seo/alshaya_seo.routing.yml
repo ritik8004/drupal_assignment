@@ -1,0 +1,7 @@
+alshaya_seo.google_knowledge_graph_form:
+  path: '/admin/config/search/google-knowledge-graph'
+  defaults:
+    _form: '\Drupal\alshaya_seo\Form\GoogleKnowledgeGraphConfigForm'
+    _title: 'Google Knowledge Graph'
+  requirements:
+    _permission: 'access administration pages'

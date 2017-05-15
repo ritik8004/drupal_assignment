@@ -162,34 +162,34 @@
             <div class="tablet-only">
               <div class="light">{{ "Unit price"|t }}</div>
               {% if currency_code_position == 'before' %}
-                <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
+                <span class="currency-code dark prefix">{{ currency_code }}</span><span class="dark">{{ product.total }}</span>
               {% else %}
-                {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
+                <span class="dark">{{ product.total }}</span><span class="currency-code dark suffix">{{ currency_code }}</span>
               {% endif %}
             </div>
             <div class="mobile-only">
               <div class="light">{{ "Total"|t }}</div>
               {% if currency_code_position == 'before' %}
-                <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
+                <span class="currency-code dark prefix">{{ currency_code }}</span><span class="dark">{{ product.total }}</span>
               {% else %}
-                {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
+                <span class="dark">{{ product.total }}</span><span class="currency-code dark suffix">{{ currency_code }}</span>
               {% endif %}
             </div>
           </td>
           <td class="desktop-only">
             <div class="light">{{ "Unit price"|t }}</div>
             {% if currency_code_position == 'before' %}
-              <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
+              <span class="currency-code dark prefix">{{ currency_code }}</span><span class="dark">{{ product.total }}</span>
             {% else %}
-              {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
+              <span class="dark">{{ product.total }}</span><span class="currency-code dark suffix">{{ currency_code }}</span>
             {% endif %}
           </td>
           <td class="above-mobile blend">
             <div class="light">{{ "Total"|t }}</div>
             {% if currency_code_position == 'before' %}
-              <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
+              <span class="currency-code dark prefix">{{ currency_code }}</span><span class="dark">{{ product.total }}</span>
             {% else %}
-              {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
+              <span class="dark">{{ product.total }}</span><span class="currency-code dark suffix">{{ currency_code }}</span>
             {% endif %}
           </td>
 

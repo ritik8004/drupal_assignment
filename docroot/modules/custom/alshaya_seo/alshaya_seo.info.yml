@@ -2,10 +2,13 @@ name: 'Alshaya SEO'
 description: 'Code around custom SEO requirements of Alshaya.'
 type: module
 core: 8.x
-package: 'Alshaya'
+package: Alshaya
 dependencies:
   - alshaya_i18n
+  - metatag
   - metatag_open_graph
   - node
+  - robotstxt
+  - simple_sitemap
   - token
 version: 8.x-1.0

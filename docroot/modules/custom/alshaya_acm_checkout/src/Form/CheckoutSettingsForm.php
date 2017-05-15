@@ -32,6 +32,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('checkout_guest_summary', $form_state->getValue('checkout_guest_summary'));
     $config->set('checkout_guest_email_usage', $form_state->getValue('checkout_guest_email_usage'));
     $config->set('checkout_guest_login', $form_state->getValue('checkout_guest_login'));
+    $config->set('checkout_terms_condition', $form_state->getValue('checkout_terms_condition'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -67,6 +68,14 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Checkout login help'),
       '#required' => TRUE,
       '#default_value' => $config->get('checkout_guest_login.value'),
+    ];
+
+    $form['checkout_terms_condition'] = [
+      '#type' => 'text_format',
+      '#format' => 'rich_text',
+      '#title' => $this->t('Checkout Terms and Conditions'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('checkout_terms_condition.value'),
     ];
 
     return $form;

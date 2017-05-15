@@ -5,3 +5,11 @@ alshaya_loyalty.loyalty_settings_form:
     _title: 'Custom loyalty settings'
   requirements:
     _permission: 'access administration pages'
+
+alshaya_loyalty.join_club_form:
+  path: '/admin/config/people/join-club'
+  defaults:
+    _form: '\Drupal\alshaya_loyalty\Form\JoinClubConfigForm'
+    _title: 'Join Club content'
+  requirements:
+    _permission: 'access administration pages'

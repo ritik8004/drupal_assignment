@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_customer\Plugin\Block;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
@@ -95,7 +96,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    * {@inheritdoc}
    */
   public function build() {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     $build = [];
 
@@ -166,7 +168,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
-              $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
               // Load sku from item_id that we have in $item.
               $media = alshaya_acm_product_get_sku_media($item['sku']);
               if (!empty($media)) {
@@ -192,7 +193,14 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               ];
 
               // Item name for order.
-              $order['item_names'][] = $order['items'][$key]['name'];
+              $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($order['items'][$key]['sku']);
+              if (is_object($parent_sku) && $parent_sku instanceof SKUInterface) {
+                $order['item_names'][] = $parent_sku->label();
+              }
+              else {
+                $order['item_names'][] = $order['items'][$key]['name'];
+              }
+              $order['status'] = alshaya_acm_customer_get_order_status($order);
             }
           }
 

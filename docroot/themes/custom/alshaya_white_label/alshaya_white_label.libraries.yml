@@ -69,4 +69,5 @@ autosize:
 
 sizeguide:
   js:
+    js/select2Option.js: {}
     js/sizeguide.js: {}

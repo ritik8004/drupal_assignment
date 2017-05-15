@@ -13,4 +13,5 @@
  */
 function alshaya_admin_uninstall() {
   Drupal::configFactory()->getEditable('views.view.content_product.yml')->delete();
+  \Drupal::configFactory()->getEditable('views.view.content.yml')->delete();
 }

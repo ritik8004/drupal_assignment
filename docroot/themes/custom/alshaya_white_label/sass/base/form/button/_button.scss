@@ -9,7 +9,8 @@
   text-align: center;
 }
 
-%button-brand {
+%button-brand,
+.brand-button {
   border: 1px solid $marine-blue-two;
   color: $marine-blue-two;
   font-size: 12px;
@@ -20,6 +21,7 @@
 .button {
   &.status-pending,
   &.status-delivered,
+  &.status-complete,
   &.status-processing,
   &.status-returned {
     font-family: $arial;
@@ -47,7 +49,8 @@
     background-color: $grey-ash;
   }
 
-  &.status-delivered {
+  &.status-delivered,
+  &.status-complete {
     background-color: $medium-green;
   }
 }

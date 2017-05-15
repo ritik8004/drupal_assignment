@@ -1,0 +1,37 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.acquia_search_index
+    - views.view.search
+  module:
+    - search_api
+id: filter_bar
+name: 'Filter Bar'
+facets:
+  color:
+    checked: true
+    label: Color
+    separator: ', '
+    show_count: true
+    weight: 0
+  price:
+    checked: true
+    label: Price
+    separator: ', '
+    show_count: true
+    weight: 0
+facet_source_id: 'search_api:views_page__search__page'
+processor_configs:
+  hide_when_not_rendered:
+    processor_id: hide_when_not_rendered
+    weights:
+      build: '10'
+    settings: {  }
+  reset_facets:
+    processor_id: reset_facets
+    weights:
+      build: '-10'
+    settings:
+      link_text: 'clear all'
+empty_behavior: null

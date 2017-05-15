@@ -2,11 +2,12 @@
   text-align: center;
   max-width: 19rem;
   margin: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.4rem;
 
   @include breakpoint($tablet) {
     padding: 0 2.75rem;
-    margin-left: 0;
+    margin-#{$left}: 0;
+    margin-bottom: 1.5rem;
   }
 
   @include breakpoint($desktop) {
@@ -25,13 +26,52 @@
     margin: 0.625rem 0;
 
     @include breakpoint($desktop) {
-      padding-left: 1.56rem;
-      padding-right: 1.56rem;
+      padding-#{$left}: 1.5rem;
+      padding-#{$right}: 0.7rem;
+    }
+  }
+
+  .owl-dots {
+    position: relative;
+    margin-top: 0.625rem;
+
+    @include breakpoint($tablet) {
+      display: none;
+    }
+
+    .owl-dot {
+      width: 2.8125rem;
+      height: 0.3125rem;
+      border: 0;
+      border-radius: 0.25rem;
+      color: $greyish;
+      display: inline-block;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      top: -0.1875rem;
+    }
+
+    &::before {
+      content: "";
+      background: $whisper-light;
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 
   .views-row {
-    height: 19.5rem;
+    @include breakpoint($tablet) {
+      height: 18.1rem;
+    }
+
+    .use-ajax {
+      outline: transparent;
+    }
   }
 
   .price-wrapper {
@@ -43,19 +83,27 @@
 
   .owl-prev {
     @include breakpoint($tablet) {
-      left: -2.25rem;
+      left: -2.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      left: -1.875rem;
     }
   }
 
   .owl-next {
     @include breakpoint($tablet) {
-      right: -2.25rem;
+      right: -2.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      right: -3.2rem;
     }
   }
 
   .owl-prev::before,
   .owl-next::before {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 
   .owl-item img {
@@ -70,7 +118,7 @@
   .owl-prev,
   .owl-next {
     @include breakpoint($tablet) {
-      top: 25%;
+      top: 24%;
     }
   }
 }
@@ -83,13 +131,25 @@
   }
 }
 
+.horizontal-crossell,
+.horizontal-upell {
+  @include breakpoint($tablet) {
+    margin-bottom: 3.75rem;
+  }
+}
+
 .crossell-title {
-  margin-bottom: 1rem;
   font-size: 0.875rem;
+  font-family: $alshaya-bold;
+  text-align: $left;
 
   @include breakpoint($tablet) {
     font-size: 1.125rem;
-    margin-left: 2.75rem;
+    margin-#{$left}: 2.7rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-#{$left}: 3.5rem;
   }
 }
 
@@ -120,6 +180,9 @@
       font-size: 0.75rem;
       text-transform: lowercase;
       color: $white-five;
+      background: $tomato;
+      border: none;
+      padding: 0.656rem;
     }
 
     label {
@@ -127,18 +190,56 @@
       position: absolute;
       top: -1.5625rem;
       font-size: 0.6875rem;
+      padding: 0.3125rem 0;
+      padding-#{$right}: 1.25rem;
+      #{$left}: 0;
+    }
+
+    .js-form-wrapper {
+      float: $left;
+
+      .form-type-select {
+        @include select-wrapper(12.375rem);
+
+        padding: 0;
+        position: relative;
+        padding-bottom: 3rem;
+        margin-top: 2.1875rem;
+
+        .ajax-progress {
+          display: none;
+        }
+      }
+
+      select {
+        @include select-style(12.375rem);
+
+        background-color: $whisper-dark;
+      }
+    }
+
+    .form-item-configurables-size {
+      select {
+        display: block !important;
+      }
+
+      .select2Option {
+        display: none;
+      }
     }
 
     .form-item-quantity {
       @include select-wrapper(4.375rem);
 
-      float: right;
+      float: $right;
       padding: 0;
       margin-bottom: 1.5rem;
       margin-top: 2.1875rem;
 
       select {
         @include select-style(4.375rem);
+
+        background-color: $whisper-dark;
       }
     }
   }
@@ -158,4 +259,9 @@
 
 .special--price .price-wrapper {
   color: $scarlet;
+}
+
+.owl-prev.disabled::before,
+.owl-next.disabled::before {
+  color: $whisper-dark;
 }

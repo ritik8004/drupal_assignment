@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya Search.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_search_local_search_install() {
+  // Update search view settings.
+  $search_view = \Drupal::configFactory()->getEditable('views.view.search');
+  $search_view_display = $search_view->get('display');
+  $search_view_display['default']['display_options']['row']['options']['view_modes']['entity:node']['acq_product'] = 'search_result';
+  $search_view_display['default']['display_options']['fields']['rendered']['table'] = 'search_api_index_acquia_search_index';
+  $search_view_display['default']['display_options']['filters']['search_api_fulltext']['table'] = 'search_api_index_acquia_search_index';
+  $search_view_display['default']['display_options']['sorts']['search_api_relevance']['table'] = 'search_api_index_acquia_search_index';
+
+  $search_view->set('display', $search_view_display)->save();
+}

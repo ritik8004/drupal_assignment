@@ -39,13 +39,36 @@
     }
   }
 
-  #edit-mobile-number label {
-    top: -1.25em;
-    bottom: 0;
-    left: 0;
-    opacity: 1;
-    font-size: 0.75rem;
-    position: absolute;
+  #edit-mobile-number {
+    label {
+      top: -1.25em;
+      bottom: 0;
+      left: 0;
+      opacity: 1;
+      font-size: 0.75rem;
+      position: absolute;
+
+      &.error {
+        top: 1.25rem;
+        width: 9rem;
+      }
+    }
+
+    .country-select {
+      color: $greyish;
+    }
+  }
+
+  .mobile-number-field.form-item--error {
+    margin-bottom: 4rem;
+
+    .form-item-mobile-number-mobile {
+      .form-item--error-message {
+        position: absolute;
+        #{$left}: -5rem;
+        width: 21rem;
+      }
+    }
   }
 }
 
@@ -174,5 +197,9 @@
 
   .form-type-radio {
     margin-bottom: 0;
+  }
+
+  legend {
+    color: $black;
   }
 }

@@ -3,30 +3,93 @@ status: true
 dependencies:
   config:
     - field.field.node.store.body
+    - field.field.node.store.field_latitude_longitude
     - field.field.node.store.field_meta_tags
+    - field.field.node.store.field_store_address
+    - field.field.node.store.field_store_locator_id
+    - field.field.node.store.field_store_number
+    - field.field.node.store.field_store_open_hours
     - node.type.store
   module:
+    - geolocation
     - metatag
-    - text
     - user
 id: node.store.default
 targetEntityType: node
 bundle: store
 mode: default
 content:
-  body:
+  field_latitude_longitude:
+    weight: 5
     label: hidden
-    type: text_default
-    weight: 101
-    settings: {  }
+    settings:
+      title: ''
+      set_marker: '1'
+      common_map: ''
+      info_text: ''
+      use_overridden_map_settings: 0
+      google_map_settings:
+        type: ROADMAP
+        zoom: '10'
+        minZoom: 0
+        maxZoom: 18
+        rotateControl: 0
+        mapTypeControl: 1
+        streetViewControl: 1
+        zoomControl: 1
+        fullscreenControl: 0
+        scrollwheel: 1
+        disableDoubleClickZoom: 0
+        draggable: 1
+        height: 400px
+        width: 100%
+        info_auto_display: 1
+        marker_icon_path: ''
+        disableAutoPan: 1
+        style: ''
+        preferScrollingToZooming: 0
+        gestureHandling: auto
     third_party_settings: {  }
+    type: geolocation_map
   field_meta_tags:
-    weight: 102
+    weight: 2
     label: above
     settings: {  }
     third_party_settings: {  }
     type: metatag_empty_formatter
+  field_store_address:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_store_locator_id:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_store_number:
+    weight: 104
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_store_open_hours:
+    weight: 4
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
   links:
     weight: 100
+  sharethis:
+    weight: 10
 hidden:
+  body: true
+  field_store_locator_id: true
+  field_store_number: true
   langcode: true

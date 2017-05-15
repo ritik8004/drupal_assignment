@@ -11,7 +11,7 @@
  outline: 0;
 }
 
-#edit-add-to-cart[data-style=expand-right][data-loading] {
+#edit-add-to-cart[data-style=zoom-in][data-loading] {
  padding-right: 2.875rem;
 }
 

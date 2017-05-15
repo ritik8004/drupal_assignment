@@ -59,6 +59,11 @@
           }
         });
       });
+
+      // Handling error for mobile number fields.
+      if ($('.mobile-number-field').find('.form-item-mobile-number-mobile').hasClass('form-item--error')) {
+        $('.mobile-number-field').addClass('form-item--error');
+      }
     }
   };
 

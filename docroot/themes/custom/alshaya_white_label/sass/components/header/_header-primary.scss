@@ -1,3 +1,5 @@
+
+
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
@@ -50,9 +52,36 @@ header {
   position: relative;
 
   .c-header__region {
-    margin: 1.875rem 1.5625rem;
+    margin: 1.3625rem auto;
     margin-bottom: 0;
-    padding-bottom: 1.5625rem;
+    padding-bottom: 1.15rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    @include breakpoint($desktop) {
+      margin-top: 2.125rem;
+      padding-bottom: 1.75rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1.063rem;
+      padding-bottom: 1.5rem;
+
+      .block-system-branding-block {
+        .site-brand-home img {
+          width: 13rem;
+        }
+      }
+    }
+
+    @include container(1284px);
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0.4375rem;
+      padding-bottom: 0;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
   }
 
   .region__header {
@@ -62,6 +91,44 @@ header {
     > div {
       display: table-cell;
       vertical-align: middle;
+    }
+
+    @include breakpoint($desktop) {
+      .block-system-branding-block {
+        .site-brand-home {
+          min-width: 328px;
+        }
+      }
+
+      .block-views-exposed-filter-blocksearch-page {
+        form {
+          margin-top: -4px;
+        }
+
+        input[type="text"] {
+          width: 272px;
+          padding-top: 2px;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .block-views-exposed-filter-blocksearch-page {
+        input[type="text"] {
+          width: 10.38rem;
+          padding-top: 2px;
+
+          &::placeholder {
+            font-size: 0.625rem;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .block-system-branding-block {
+        width: 53%;
+      }
     }
   }
 
@@ -87,7 +154,7 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      display: none;
+      display: none !important;
     }
 
     .form-item-keywords,
@@ -136,9 +203,9 @@ header {
   .block-cart-mini-block {
     font-size: 0.875rem;
     text-align: $right;
+    color: $black;
 
     .total {
-      font-weight: bold;
       display: inline-block;
       margin-#{$right}: 20px;
 
@@ -147,7 +214,7 @@ header {
         float: $left;
         display: inline-block;
         vertical-align: bottom;
-        margin-#{$right}: 6px;
+        margin-#{$right}: 0.4375rem;
       }
 
       .total--amount {
@@ -162,6 +229,26 @@ header {
       height: 32px;
       position: relative;
       margin-bottom: -2px;
+
+      @include breakpoint($only-mobile) {
+        background-size: 22px;
+        width: 23px;
+      }
+    }
+
+    .cart-link-total {
+      color: $black;
+      display: inline-block;
+      float: $left;
+      margin-top: 6px;
+      margin-right: 2px;
+    }
+
+    @include breakpoint($desktop) {
+      .acq-mini-cart {
+        max-width: 164px;
+        float: right;
+      }
     }
 
     .quantity {
@@ -174,6 +261,37 @@ header {
       #{$left}: -4px;
       border-radius: 50%;
       padding: 5px 7px;
+
+      @include breakpoint($only-mobile) {
+        bottom: 4px;
+        #{$left}: -3px;
+        padding: 3px 5px;
+        font-size: 8px;
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    #mini-cart-wrapper {
+      min-width: 10.44rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    #mini-cart-wrapper {
+      min-width: 8.625rem;
+      float: $right;
+      margin-top: -7px;
+
+      .cart-link-total {
+        margin-right: -4px;
+        margin-top: 0.8125rem;
+        font-size: 0.75rem;
+
+        .prefix {
+          margin-right: 0.5625rem;
+        }
+      }
     }
   }
 }
@@ -185,6 +303,20 @@ header {
 .c-menu-primary {
   .region__menu-primary {
     margin-top: 0.9375rem;
+    margin-bottom: 0.9375rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-bottom: 1.188rem;
+    }
+
+    @include breakpoint($tablet) {
+      margin-bottom: 0.9375rem;
+    }
   }
 
   .block-system-menublock {
@@ -264,12 +396,14 @@ header {
       color: $brownish-grey;
       font-size: 12px;
       display: block;
+      text-transform: lowercase;
+      font-family: $alshaya-thin;
 
       &::before {
         content: ' ';
         display: inline-block;
         vertical-align: middle;
-        margin-#{$right}: 10px;
+        margin-#{$right}: 0.625rem;
       }
     }
 
@@ -293,11 +427,21 @@ header {
   @include breakpoint($only-mobile) {
     display: block;
 
+    a {
+      padding-#{$left}: 0.625rem;
+    }
+
     .store {
       &:hover {
         &::before {
           background: url('../imgs/icons/store--big--hover.svg');
         }
+      }
+    }
+
+    .mobile--search {
+      &::before {
+        margin-#{$right}: 0.3125rem;
       }
     }
 
@@ -318,7 +462,7 @@ header {
     li {
       display: table-cell;
       text-align: center;
-      padding: 0.9375rem 0;
+      padding: 0.875rem 0.875rem 0.5rem 0;
 
       &:hover {
         background: $marine-blue;
@@ -358,8 +502,10 @@ header {
     display: block !important;
   }
 
-  ul {
-    padding: 0;
+  @include breakpoint($upto-desktop) {
+    ul {
+      padding: 0;
+    }
   }
 
   li {
@@ -386,8 +532,8 @@ header {
       display: table !important;
       width: 100%;
       margin: 0;
-      padding: 0;
       background: $white-five;
+      padding: 0 calc((100% - 1284px) / 2);
     }
 
     li.menu--one__list-item {
@@ -395,9 +541,8 @@ header {
       vertical-align: top;
       list-style: none;
       text-align: center;
-      border-top: 1px solid $white;
-      border-bottom: 1px solid $white;
-      padding: 10px;
+      border-bottom: 1px solid $white-five;
+      padding: 0.625rem;
       text-transform: lowercase;
 
       &.active {
@@ -411,7 +556,6 @@ header {
 
       &:hover {
         border-top: 2px solid $marine-blue;
-        border-bottom: 0;
 
         ul.menu--two__list {
           display: block;
@@ -433,18 +577,36 @@ header {
         display: none;
       }
     }
+
+    ul.menu--one__list {
+      &:hover {
+        li.menu--one__list-item {
+          &:hover {
+            border-bottom: 1px solid $white-five;
+          }
+
+          &:not(:hover) {
+            border-top: 2px solid $white-five;
+            border-bottom: 1px solid $white;
+          }
+        }
+      }
+    }
   }
 
   .menu--two__list {
     position: absolute;
     width: 100%;
     text-align: $left;
-    top: 40px;
+    top: 41px;
     #{$left}: 0;
     #{$left}: 0;
-    padding-top: 1.5625rem !important;
     background: $white-five;
     z-index: 10;
+    padding-top: 1.5625rem !important;
+    padding-left: calc((100% - 1284px) / 2);
+    padding-right: calc((100% - 1284px) / 2);
+    min-height: 350px;
 
     a {
       color: $peacock-blue;
@@ -456,6 +618,7 @@ header {
 
     .menu--two__list-item {
       line-height: 1;
+      max-width: 13.13rem;
 
       > .menu-two__link-wrapper {
         font-family: $alshaya-bold;
@@ -498,7 +661,7 @@ header {
           width: 8px;
           height: 17px;
           position: absolute;
-          #{$right}: 10px;
+          #{$right}: 0.625rem;
           top: 39%;
         }
 
@@ -521,13 +684,14 @@ header {
 
       .menu--three__list {
         width: 100%;
+        min-height: 100%;
         vertical-align: top;
         margin-bottom: 1.563rem;
         position: absolute;
         background: $white-five;
         top: 0;
         padding-#{$left}: 16rem;
-        margin-top: 1.5625rem;
+        padding-top: 1.5625rem;
 
         p {
           display: none;
@@ -679,7 +843,8 @@ header {
     color: $marine-blue;
     display: block;
     font-size: 12px;
-    padding: 0.9375rem 0.625rem;
+    padding: 0.9375rem 0.625rem 0.9375rem 0;
+    text-transform: lowercase;
   }
 
   .menu--one__list-item {
@@ -812,19 +977,20 @@ header {
 .mobile--close {
   background: $white-five;
   position: fixed;
-  top: 8px;
-  #{$left}: 81%;
-  width: 26px;
-  height: 26px;
+  top: 9px;
+  #{$left}: 81.5%;
+  width: 35px;
+  height: 32px;
   z-index: 12;
   text-align: center;
   padding-top: 4px;
 
   span {
-    background: url('../imgs/icons/ic-close.svg') no-repeat;
-    width: 17px;
-    height: 17px;
+    background: url('../imgs/icons/ic-close.svg') center center no-repeat;
+    width: 25px;
+    height: 25px;
     display: inline-block;
+    background-size: 17px;
   }
 }
 
@@ -847,14 +1013,16 @@ header {
 
     font-family: $alshaya-thin;
     font-size: 14px;
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
     display: table-cell;
+    text-align: center;
   }
 
   .active {
     font-family: $alshaya-bold;
     color: $marine-blue;
     background: $white-five;
+    text-align: center;
   }
 }
 
@@ -889,6 +1057,12 @@ header {
 .logged-in {
   .account {
     display: none;
+  }
+
+  .c-menu-primary {
+    a {
+      padding-left: 0;
+    }
   }
 
   .toggle--sign {
@@ -951,5 +1125,12 @@ header {
   .menu--active,
   .menu__list--active {
     transform: translate(0, 0) !important;
+  }
+}
+
+.c-pre-content__region {
+  @include breakpoint($desktop) {
+    border-top: 1px solid $white;
+    border-bottom: 1px solid $white;
   }
 }

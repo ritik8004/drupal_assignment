@@ -1,3 +1,36 @@
+.c-order-list.l-two--sf,
+.c-user--node.l-two--sf,
+.user-page.l-two--sf,
+.c-change-password.l-two--sf {
+  .c-sidebar-first {
+    @include breakpoint($only-mobile) {
+      padding-top: 0;
+
+      @include u-visibility(none);
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-top: 1em;
+
+      @include u-visibility(block);
+    }
+
+    @include breakpoint($tablet) {
+      width: 21.76%;
+      max-width: 16.8125rem;
+      float: $left;
+    }
+  }
+
+  main {
+    @include breakpoint($tablet) {
+      width: 74.51%;
+      max-width: 57.5625rem;
+      float: $right;
+    }
+  }
+}
+
 .captcha {
   font-size: 12px;
   color: $greyish;
@@ -16,7 +49,7 @@
 .user-page {
   border-top: 1px solid $white;
   margin: 4.5em auto 1em;
-  padding-top: 1em;
+  padding: 1em 0;
   position: relative;
 
   @include breakpoint($only-mobile) {
@@ -131,7 +164,11 @@
     }
 
     p {
-      margin: 9px 0;
+      margin: 0.4rem 0;
+
+      @include breakpoint($tablet) {
+        margin: 0.5rem 0;
+      }
     }
   }
 
@@ -145,13 +182,12 @@
     a {
       font-weight: bold;
       text-transform: lowercase;
-      color: $cerulean;
+      color: $cerulean-two;
     }
 
     h2 {
       max-width: 12rem;
       display: inline-block;
-      float: $left;
       margin-top: 0;
 
       @include breakpoint($upto-desktop) {
@@ -161,17 +197,37 @@
 
     .field--name-body {
       max-width: 12rem;
-      float: $left;
-      clear: $left;
+    }
+
+    .field--name-field-image {
+      margin-bottom: 1rem;
+
+      @include breakpoint($desktop) {
+        float: $right;
+        margin-bottom: 0;
+      }
+
+      img {
+        @include breakpoint($desktop) {
+          margin-#{$left}: 0.8rem;
+          margin-top: 0.3rem;
+        }
+      }
     }
 
     p {
       line-height: 1.1rem;
-      margin-top: 0;
+
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
 
       > a {
-        padding-top: 1em;
         display: inline-block;
+
+        @include breakpoint($desktop) {
+          padding-top: 0.2rem;
+        }
       }
     }
   }
@@ -194,13 +250,20 @@
     @include breakpoint($desktop) {
       clear: both;
       padding-top: 1px;
+      margin-top: 3.813rem;
+    }
+  }
+
+  .field--name-field-privilege-card-number {
+    @include breakpoint($desktop) {
+      margin-top: 2.938rem;
     }
   }
 
   .field--name-field-first-name,
   .field--name-field-last-name {
     @include breakpoint($desktop) {
-      float: left;
+      float: $left;
       max-width: 186px;
       width: calc(50% - 12px);
     }
@@ -208,7 +271,7 @@
 
   .field--name-field-first-name {
     @include breakpoint($desktop) {
-      margin-#{$right}: 1.25rem;
+      margin-#{$right}: 1.4rem;
     }
   }
 
@@ -249,9 +312,14 @@
       background: $pumpkin-orange;
       margin-top: 1em;
       width: 100%;
+      text-transform: lowercase;
 
       @include breakpoint($tablet) {
         width: auto;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.563rem;
       }
     }
 
@@ -293,16 +361,6 @@
       }
     }
 
-    .error,
-    .form-item--error-message {
-      font-size: 12px;
-      color: $red-error;
-
-      strong {
-        font-weight: 400;
-      }
-    }
-
     .text-full,
     .form-email,
     .form-text {
@@ -316,7 +374,7 @@
 
     @include breakpoint($desktop) {
       .form-email {
-        margin-top: 9px;
+        //margin-top: 9px;
       }
     }
 
@@ -352,6 +410,22 @@
       top: 0.125rem;
     }
   }
+
+  &.c-change-password,
+  &.c-user-edit {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+
+    @include breakpoint($tablet) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    @include breakpoint($desktop) {
+      padding-left: 1.5em;
+      padding-right: 1.5em;
+    }
+  }
 }
 
 .user-login-form {
@@ -359,7 +433,7 @@
 
   & > a {
     @include breakpoint($tablet) {
-      #{$left}: 9em;
+      #{$left}: 10em;
       bottom: 0.75em;
       width: auto;
     }
@@ -381,7 +455,7 @@
   text-transform: lowercase;
 
   a {
-    color: $cerulean;
+    color: $cerulean-two;
   }
 
   span {
@@ -393,7 +467,11 @@
     background-size: 18px;
     position: relative;
     top: 0;
-    color: $cerulean;
+    color: $cerulean-two;
+
+    @include breakpoint($upto-desktop) {
+      vertical-align: bottom;
+    }
   }
 
   span.icon {
@@ -415,6 +493,7 @@
 
     &-reward {
       background-image: url("../imgs/icons/ic-like.svg");
+      background-size: contain;
     }
 
     &-heart {
@@ -458,6 +537,10 @@
 
       @include breakpoint($only-mobile) {
         height: 143px;
+
+        &:nth-child(even) {
+          background-color: $whisper-light;
+        }
       }
 
       background-color: $white-five;
@@ -482,8 +565,8 @@
           width: 35px;
 
           @include breakpoint($only-mobile) {
-            background-color: $whisper-light;
-            #{$right}: 4rem;
+            background-color: $white-smoke;
+            #{$right}: 3rem;
             top: 62%;
           }
         }
@@ -590,7 +673,7 @@
           width: 300px;
 
           @include breakpoint($only-mobile) {
-            width: 180px;
+            width: 10.5rem;
           }
 
           @include breakpoint($only-tablet) {
@@ -673,68 +756,6 @@
   }
 }
 
-.password-tooltip-icon {
-  position: absolute;
-  top: -25px;
-  #{$right}: 0;
-  background: #0084cc;
-  width: 13px;
-  height: 13px;
-  text-align: center;
-  border-radius: 100%;
-  font-size: 10px;
-  color: white;
-  font-weight: normal;
-}
-
-.password-tooltip:hover .password-tooltip-content {
-  display: block;
-}
-
-.password-tooltip-content {
-  background: #f0f6fc;
-  border: 2px solid #0084cc;
-  padding: 10px;
-  position: absolute;
-  top: 0;
-  #{$right}: 0;
-  z-index: 1;
-  max-width: 300px;
-  float: $right;
-}
-
-.password-tooltip-content ul {
-  list-style: none;
-  display: block;
-  padding-left: 0;
-  font-size: 10px;
-  color: #666;
-  margin: 0;
-}
-
-.password-tooltip-content {
-  background: #f0f6fc;
-  border: 1px solid #0084cc;
-  display: none;
-}
-
-.password-tooltip-content::after,
-.password-tooltip-content::before {
-  @extend %tooltip-before-after;
-
-  #{$right}: 2px;
-}
-
-.password-tooltip-content::after {
-  @extend %tooltip-after;
-}
-
-.password-tooltip-content::before {
-  @extend %tooltip-before;
-
-  #{$right}: 1px;
-}
-
 //Email verification page.
 .alias--user-register-complete {
   .c-page-title {
@@ -770,6 +791,13 @@
 
   @include breakpoint($desktop) {
     margin-bottom: 12.125rem;
+
+    .form-type-password {
+      .c-input__bar {
+        position: absolute;
+        top: 34px;
+      }
+    }
   }
 
   .form-wrapper {
@@ -790,10 +818,18 @@
     .form-item {
       margin-top: 2.7em;
     }
+
+    .form-item-pass {
+      margin-top: 2.563rem;
+    }
   }
 
   .form-actions {
     margin-top: 0.7rem;
+
+    @include breakpoint($desktop) {
+      margin-top: 0;
+    }
   }
 }
 
@@ -938,12 +974,13 @@
   }
 
   .c-order-help {
-    background: #e8eff5;
-    margin-top: 3.1rem;
+    background: $pale-grey;
+    margin-top: 1.5rem;
     margin-bottom: 3.45rem;
     padding: 1.25rem 1rem;
 
     @include breakpoint($tablet) {
+      margin-top: 3.1rem;
       padding: 1.5rem;
     }
   }

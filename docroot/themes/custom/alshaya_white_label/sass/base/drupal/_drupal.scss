@@ -1,1 +1,6 @@
-/* stylelint-disabled */ // Remove this line on adding content.
+.ui-autocomplete-loading {
+  background-image: url(../imgs/icons/MC-loader.svg) !important;
+  background-size: contain;
+  background-position: 100% center !important;
+  background-repeat: no-repeat !important;
+}

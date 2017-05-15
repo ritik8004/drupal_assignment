@@ -1,0 +1,33 @@
+.c-breadcrumb {
+  background: $white-four;
+
+  ol {
+    max-width: 80.25rem;
+    margin: auto;
+    padding: 0.9375rem 1.5rem;
+    font-size: 10px;
+  }
+
+  li {
+    list-style: none;
+    display: inline-block;
+    font-weight: bold;
+    color: $black;
+
+    a {
+      font-weight: normal;
+      color: $light-ash;
+
+      &::after {
+        content: '>';
+        vertical-align: middle;
+        padding-right: 0.3125rem;
+        padding-left: 0.3125rem;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+}
