@@ -2,15 +2,16 @@
 .c-user--node.l-two--sf,
 .user-page.l-two--sf,
 .c-change-password.l-two--sf {
-
   .c-sidebar-first {
     @include breakpoint($only-mobile) {
       padding-top: 0;
+
       @include u-visibility(none);
     }
 
     @include breakpoint($only-tablet) {
       padding-top: 1em;
+
       @include u-visibility(block);
     }
 
