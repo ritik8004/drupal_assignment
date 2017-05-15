@@ -6,21 +6,16 @@
     "type": {
       "href": "http:\/\/drupal.org\/rest\/type\/block_content\/basic"
     },
-    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/revision_user": [
-      {
-        "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
-      }
-    ],
     "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
       {
         "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json",
-        "lang": "en"
+        "lang": "ar"
       }
     ]
   },
   "id": [
     {
-      "value": "5"
+      "value": 5
     }
   ],
   "uuid": [
@@ -30,13 +25,17 @@
   ],
   "revision_id": [
     {
-      "value": "5"
+      "value": 5
     }
   ],
   "langcode": [
     {
       "value": "en",
       "lang": "en"
+    },
+    {
+      "value": "ar",
+      "lang": "ar"
     }
   ],
   "type": [
@@ -48,37 +47,68 @@
     {
       "value": "My Account - Need Help",
       "lang": "en"
+    },
+    {
+      "value": "My Account - Need Help (Arabic)",
+      "lang": "ar"
     }
   ],
   "changed": [
     {
-      "value": "1491802729",
+      "value": 1491802729,
       "lang": "en"
+    },
+    {
+      "value": 1494832255,
+      "lang": "ar"
     }
   ],
   "revision_created": [
     {
-      "value": "1491802729"
+      "value": 1491802729
+    }
+  ],
+  "revision_translation_affected": [
+    {
+      "value": true,
+      "lang": "en"
+    },
+    {
+      "value": true,
+      "lang": "ar"
+    }
+  ],
+  "default_langcode": [
+    {
+      "value": true,
+      "lang": "en"
+    },
+    {
+      "value": false,
+      "lang": "ar"
+    }
+  ],
+  "content_translation_source": [
+    {
+      "value": "und",
+      "lang": "en"
+    },
+    {
+      "value": "en",
+      "lang": "ar"
+    }
+  ],
+  "content_translation_outdated": [
+    {
+      "value": false,
+      "lang": "en"
+    },
+    {
+      "value": false,
+      "lang": "ar"
     }
   ],
   "_embedded": {
-    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/revision_user": [
-      {
-        "_links": {
-          "self": {
-            "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
-          },
-          "type": {
-            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
-          }
-        },
-        "uuid": [
-          {
-            "value": "ad260618-6524-4411-a571-db55dc1cbdda"
-          }
-        ]
-      }
-    ],
     "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
       {
         "_links": {
@@ -91,47 +121,31 @@
         },
         "uuid": [
           {
-            "value": "ad260618-6524-4411-a571-db55dc1cbdda"
+            "value": "8ee787ec-5ef3-4c69-8f15-7156aa68a2e5"
           }
         ],
-        "lang": "en"
+        "lang": "ar"
       }
     ]
   },
-  "revision_translation_affected": [
-    {
-      "value": "1",
-      "lang": "en"
-    }
-  ],
-  "default_langcode": [
-    {
-      "value": "1",
-      "lang": "en"
-    }
-  ],
-  "content_translation_source": [
-    {
-      "value": "und",
-      "lang": "en"
-    }
-  ],
-  "content_translation_outdated": [
-    {
-      "value": "0",
-      "lang": "en"
-    }
-  ],
   "content_translation_status": [
     {
-      "value": "1",
+      "value": true,
       "lang": "en"
+    },
+    {
+      "value": true,
+      "lang": "ar"
     }
   ],
   "content_translation_created": [
     {
-      "value": "1491802729",
+      "value": 1491802729,
       "lang": "en"
+    },
+    {
+      "value": 1494832188,
+      "lang": "ar"
     }
   ],
   "body": [
@@ -140,6 +154,12 @@
       "format": "rich_text",
       "summary": "",
       "lang": "en"
+    },
+    {
+      "value": "<p>\u0647\u0644 \u062a\u062d\u062a\u0627\u062c \u0625\u0644\u0649 \u0645\u0633\u0627\u0639\u062f\u0629 \u0641\u064a \u0637\u0644\u0628\u064a\u062a\u0643<\/p>\r\n\r\n<ul>\r\n\t<li><a href=\"\/contact\">\u062e\u062f\u0645\u0629 \u0627\u0644\u0632\u0628\u0627\u0626\u0646 <\/a><\/li>\r\n\t<li><a href=\"\/contact\">\u0633\u064a\u0627\u0633\u064a\u0629 \u0627\u0644\u0627\u0633\u062a\u0631\u062c\u0627\u0639 \u0627\u0648\u0646\u0644\u0627\u064a\u0646 \u0648\u0641\u064a \u0627\u0644\u0645\u062d\u0644\u0627\u062a&nbsp;<\/a><\/li>\r\n\t<li><a href=\"\/contact\">\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u062a\u0648\u0635\u064a\u0644<\/a><\/li>\r\n<\/ul>\r\n",
+      "format": "rich_text",
+      "summary": "",
+      "lang": "ar"
     }
   ]
 }

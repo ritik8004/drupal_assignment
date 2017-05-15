@@ -13,7 +13,7 @@ provider: null
 plugin: alshaya_newsletter_subscription
 settings:
   id: alshaya_newsletter_subscription
-  label: 'Connect with us'
+  label: 'connect with us'
   provider: alshaya_newsletter
   label_display: visible
   post_to_link: ''
