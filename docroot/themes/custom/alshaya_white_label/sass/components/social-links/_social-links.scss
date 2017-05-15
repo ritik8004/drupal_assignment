@@ -11,14 +11,14 @@
 
   li {
     display: inline-block;
-    margin-#{$right}: 0.8rem;
+    margin-#{$right}: 0.5625rem;
   }
 
   [class^="c-social-links--"] {
     @include u-image-replacement;
 
     &::before {
-      font-size: 1.7rem;
+      font-size: 1.938rem;
       color: $marine-blue-two;
     }
   }

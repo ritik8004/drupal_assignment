@@ -217,6 +217,13 @@
     @include breakpoint($desktop) {
       clear: both;
       padding-top: 1px;
+      margin-top: 3.813rem;
+    }
+  }
+
+  .field--name-field-privilege-card-number {
+    @include breakpoint($desktop) {
+      margin-top: 2.938rem;
     }
   }
 
