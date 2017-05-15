@@ -106,10 +106,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       alshaya_acm_product_get_gallery($build, $sku_entity);
-
-      $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder($sku_entity->getEntityTypeId());
-      $build['short_description'] = !empty($sku_entity->get('attr_short_description')->getString()) ? $viewBuilder->viewField($sku_entity->get('attr_short_description')) : [];
-
     }
     elseif ($view_mode == 'teaser') {
 
@@ -141,9 +137,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           '#price' => $special_price,
         ];
       }
-
-      $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder($sku_entity->getEntityTypeId());
-      $build['short_description'] = !empty($sku_entity->get('attr_short_description')->getString()) ? $viewBuilder->viewField($sku_entity->get('attr_short_description')) : [];
     }
     elseif ($view_mode == 'modal') {
       // Get the image.
@@ -160,9 +153,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           '#alt' => $sku_media['label'],
         ];
       }
-
-      $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder($sku_entity->getEntityTypeId());
-      $build['short_description'] = !empty($sku_entity->get('attr_short_description')->getString()) ? $viewBuilder->viewField($sku_entity->get('attr_short_description')) : [];
     }
   }
 }
