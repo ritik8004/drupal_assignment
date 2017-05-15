@@ -89,7 +89,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
     // My account link.
     $links['my_account'] = [
-      'text' => $this->t('My account'),
+      'text' => $this->t('my account'),
       'route' => 'entity.user.canonical',
       'options' => ['user' => $account->id()],
     ];
@@ -100,21 +100,21 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
     // Orders link.
     $links['orders'] = [
-      'text' => $this->t('Orders'),
+      'text' => $this->t('orders'),
       'route' => 'acq_customer.orders',
       'options' => ['user' => $account->id()],
     ];
 
     // Contact details link.
     $links['contact_details'] = [
-      'text' => $this->t('Contact details'),
+      'text' => $this->t('contact details'),
       'route' => 'entity.user.edit_form',
       'options' => ['user' => $account->id()],
     ];
 
     // Address book link.
     $links['address_book'] = [
-      'text' => $this->t('Address book'),
+      'text' => $this->t('address book'),
       'route' => 'entity.profile.type.address_book.user_profile_form',
       'options' => [
         'user' => $account->id(),
@@ -125,7 +125,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     // Communication preferences link.
     // TODO: Update the route name once link is available.
     $links['communication_preference'] = [
-      'text' => $this->t('Communication preferences'),
+      'text' => $this->t('communication preferences'),
       'route' => 'alshaya_user.user_communication_preference',
       'options' => ['user' => $account->id()],
     ];

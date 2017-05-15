@@ -114,7 +114,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
       $build['edit_account'] = [
         '#type' => 'link',
-        '#title' => $this->t('Edit account details'),
+        '#title' => $this->t('edit account details'),
         '#url' => Url::fromRoute('entity.user.edit_form', ['user' => $uid]),
         '#attributes' => [
           'class' => ['button', 'button-wide', 'edit-account'],
@@ -126,7 +126,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
       // Recent order text.
       $build['recent_order_title'] = [
-        '#markup' => '<h2 class="subtitle">' . $this->t("Recent Orders") . '</h2>',
+        '#markup' => '<h2 class="subtitle">' . $this->t("recent orders") . '</h2>',
       ];
 
       // If no order available for the user.
@@ -136,7 +136,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
         ];
         $build['go_shopping'] = [
           '#type' => 'link',
-          '#title' => $this->t('GO SHOPPING'),
+          '#title' => $this->t('go shopping'),
           '#url' => Url::fromRoute('<front>'),
         ];
       }
