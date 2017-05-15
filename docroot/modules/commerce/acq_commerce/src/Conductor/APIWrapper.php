@@ -276,17 +276,15 @@ class APIWrapper {
    *   Customer last name.
    * @param string $email
    *   Customer e-mail.
-   * @param string $password
-   *   Optional password.
    *
    * @return array
    *   New customer array.
    */
-  public function createCustomer($first_name, $last_name, $email, $password = '') {
+  public function createCustomer($first_name, $last_name, $email) {
     // First check if the user exists in Magento.
     try {
       if ($existingCustomer = $this->getCustomer($email)) {
-        return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email, $password);
+        return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email);
       }
     }
     catch (\Exception $e) {
@@ -294,7 +292,7 @@ class APIWrapper {
       // already in magento.
     }
 
-    return $this->updateCustomer(NULL, $first_name, $last_name, $email, $password);
+    return $this->updateCustomer(NULL, $first_name, $last_name, $email);
   }
 
   /**
@@ -308,16 +306,14 @@ class APIWrapper {
    *   Customer last name.
    * @param string $email
    *   Customer e-mail.
-   * @param string $password
-   *   Optional password.
    *
    * @return array
    *   New customer array.
    */
-  public function updateCustomer($customer_id, $first_name, $last_name, $email, $password = '') {
+  public function updateCustomer($customer_id, $first_name, $last_name, $email) {
     $endpoint = "customer";
 
-    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $first_name, $last_name, $email, $password) {
+    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $first_name, $last_name, $email) {
       if (!empty($customer_id)) {
         $opt['form_params']['customer[customer_id]'] = $customer_id;
       }
@@ -325,10 +321,6 @@ class APIWrapper {
       $opt['form_params']['customer[firstname]'] = $first_name;
       $opt['form_params']['customer[lastname]'] = $last_name;
       $opt['form_params']['customer[email]'] = $email;
-
-      if (!empty($password)) {
-        $opt['form_params']['customer[password]'] = $password;
-      }
 
       // Invoke the alter hook to allow all modules to update the customer data.
       \Drupal::moduleHandler()->alter('acq_commerce_update_customer_api_request', $opt);

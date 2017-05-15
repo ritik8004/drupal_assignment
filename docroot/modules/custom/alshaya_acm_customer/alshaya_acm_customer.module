@@ -134,7 +134,7 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_alter().
  */
 function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'user_login_form') {
