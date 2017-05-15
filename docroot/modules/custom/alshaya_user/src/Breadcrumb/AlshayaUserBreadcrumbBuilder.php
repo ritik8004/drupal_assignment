@@ -32,7 +32,7 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     if ($route_match->getRouteName() != 'entity.user.canonical') {
       $request = \Drupal::request();
       $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
-      $breadcrumb->addLink(Link::createFromRoute($title, $route_match, $this->myAccountRoutes()[$route_match]));
+      $breadcrumb->addLink(Link::createFromRoute($title, $route_match->getRouteName(), $this->myAccountRoutes()[$route_match->getRouteName()]));
     }
     $breadcrumb->addCacheableDependency(['url.path']);
 
@@ -52,7 +52,7 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
         'user' => $current_user_id,
       ],
       'acq_customer.orders' => [
-        'orders' => $current_user_id,
+        'user' => $current_user_id,
       ],
       'entity.user.edit_form' => [
         'user' => $current_user_id,
