@@ -16,8 +16,8 @@ function alshaya_addressbook_modules_installed($modules) {
   }
 
   $role = Role::load('authenticated');
-  $role->grantPermission('add own address_book profile');
-  $role->grantPermission('edit own address_book profile');
+  $role->grantPermission('create address_book profile');
+  $role->grantPermission('update own address_book profile');
   $role->grantPermission('delete own address_book profile');
   $role->grantPermission('view own address_book profile');
   $role->save();
