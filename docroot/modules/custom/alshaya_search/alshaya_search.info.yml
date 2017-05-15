@@ -5,6 +5,7 @@ core: 8.x
 dependencies:
   - acq_sku
   - alshaya_image_styles
+  - alshaya_product_zoom
   - better_exposed_filters
   - block
   - facets
@@ -20,6 +21,5 @@ dependencies:
   - taxonomy
   - user
   - views
-  - views_infinite_scroll
 version: 8.x-1.0
 package: Alshaya

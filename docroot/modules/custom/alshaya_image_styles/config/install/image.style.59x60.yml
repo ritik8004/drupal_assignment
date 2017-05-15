@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 59x60
+label: 59x60
+effects:
+  ea45fb7f-f376-47fe-a2ea-e7cd8b8e0a6a:
+    uuid: ea45fb7f-f376-47fe-a2ea-e7cd8b8e0a6a
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 59
+      height: 60
