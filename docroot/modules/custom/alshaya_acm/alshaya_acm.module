@@ -150,7 +150,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         $image = [
           '#theme' => 'image_style',
           '#style_name' => '137x144',
-          '#uri' => current($media)->getFileUri(),
+          '#uri' => current($media)['file']->getFileUri(),
         ];
       }
 
