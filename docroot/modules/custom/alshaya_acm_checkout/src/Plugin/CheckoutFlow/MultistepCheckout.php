@@ -202,7 +202,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
         // Invoke hook to allow other modules to process before order is finally
         // placed.
-        \Drupal::moduleHandler()->invokeAll('hook_alshaya_acm_checkout_pre_place_order', $cart);
+        \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);
 
         $this->cartStorage->pushCart();
         $cart_id = $this->cartStorage->getCartId();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_knet\Form;
+namespace Drupal\alshaya_acm_knet\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 
