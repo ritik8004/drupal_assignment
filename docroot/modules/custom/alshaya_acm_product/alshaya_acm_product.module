@@ -14,7 +14,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
@@ -69,12 +68,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     $sku = $entity->get('field_skus')->first()->getString();
-    $skuEntity = SKU::loadFromSku($sku);
+    $sku_entity = SKU::loadFromSku($sku);
 
     if ($view_mode == 'full') {
 
       // Get up sell block for the product.
-      $items = $skuEntity->get('upsell')->getValue();
+      $items = $sku_entity->get('upsell')->getValue();
 
       if (!empty($items)) {
         $up_sell_skus = array_column($items, 'value');
@@ -85,7 +84,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       // Get cross sell block for the product.
-      $items = $skuEntity->get('crosssell')->getValue();
+      $items = $sku_entity->get('crosssell')->getValue();
 
       if (!empty($items)) {
         $cross_sell_skus = array_column($items, 'value');
@@ -96,7 +95,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       // Get cross sell block for the product.
-      $items = $skuEntity->get('related')->getValue();
+      $items = $sku_entity->get('related')->getValue();
 
       if (!empty($items)) {
         $related_skus = array_column($items, 'value');
@@ -106,28 +105,33 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['related']['#weight'] = 11;
       }
 
-      alshaya_acm_product_get_gallery($build, $skuEntity);
+      alshaya_acm_product_get_gallery($build, $sku_entity);
     }
     elseif ($view_mode == 'teaser') {
 
       // Get the image.
       $build['image_url'] = [];
-      $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
+      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
       if ($sku_media) {
-        $imageEntity = array_shift($sku_media);
-        $build['image_url']['#markup'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
+        $build['image'] = [
+          '#theme' => 'image_style',
+          '#style_name' => '192x168',
+          '#uri' => $sku_media['file']->getFileUri(),
+          '#title' => $sku_media['label'],
+          '#alt' => $sku_media['label'],
+        ];
       }
 
       // Get the price.
       $build['price'] = [
         '#theme' => 'alshaya_acm_price',
-        '#price' => $skuEntity->get('price')->getString(),
+        '#price' => $sku_entity->get('price')->getString(),
       ];
 
       // Get the special price.
       // @TODO: Calculate discount and pass it once we have some realistic data.
       $build['special_price'] = NULL;
-      if ($special_price = $skuEntity->get('attr_special_price')->getString()) {
+      if ($special_price = $sku_entity->get('attr_special_price')->getString()) {
         $build['special_price'] = [
           '#theme' => 'alshaya_acm_price',
           '#price' => $special_price,
@@ -138,10 +142,16 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
       $build['image_url'] = NULL;
-      $sku_media = alshaya_acm_product_get_sku_media($skuEntity);
+      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
+
       if ($sku_media) {
-        $imageEntity = array_shift($sku_media);
-        $build['image_url']['#markup'] = ImageStyle::load('192x168')->buildUrl($imageEntity->getFileUri());
+        $build['image'] = [
+          '#theme' => 'image_style',
+          '#style_name' => '192x168',
+          '#uri' => $sku_media['file']->getFileUri(),
+          '#title' => $sku_media['label'],
+          '#alt' => $sku_media['label'],
+        ];
       }
     }
   }
@@ -305,9 +315,9 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
 function alshaya_acm_product_preprocess_node(&$variables) {
   if ($variables['node']->bundle() == 'acq_product') {
     if ($sku = $variables['node']->get('field_skus')) {
-      $skuEntity = SKU::loadFromSku($sku->first()->getString());
+      $sku_entity = SKU::loadFromSku($sku->first()->getString());
       // SKU stock.
-      $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($skuEntity->getSku());
+      $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku_entity->getSku());
       $variables['sku_out_of_stock'] = (bool) $sku_stock['is_in_stock'];
     }
   }

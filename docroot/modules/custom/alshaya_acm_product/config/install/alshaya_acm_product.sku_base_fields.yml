@@ -1,6 +1,7 @@
 fields:
   # Field for color attribute.
   color:
+    parent: 'attributes'
     label: 'Color'
     description: 'Color attribute for the product.'
     cardinality: -1
@@ -11,6 +12,7 @@ fields:
 
   # Field for size attribute.
   size:
+    parent: 'attributes'
     label: 'Size'
     description: 'Size attribute for the product.'
     cardinality: -1
@@ -21,6 +23,7 @@ fields:
 
   # Field for special_price attribute.
   special_price:
+    parent: 'attributes'
     label: 'Special price'
     description: 'Special price attribute for the product.'
     cardinality: 1
@@ -31,6 +34,7 @@ fields:
 
   # Field for base image attribute.
   image:
+    parent: 'attributes'
     label: 'Image'
     description: 'Base image attribute for the product.'
     cardinality: -1
@@ -39,22 +43,25 @@ fields:
     visible_view: 0
     visible_form: 1
 
-  # Field for small image attribute.
-  small_image:
-    label: 'Small image'
-    description: 'Small image attribute for the product.'
+  # Field to store media info.
+  short_description:
+    parent: 'attributes'
+    label: 'Short description'
+    description: 'Store the short description here.'
     cardinality: -1
-    type: 'image'
+    type: 'text_long'
     configurable: 0
     visible_view: 0
     visible_form: 1
 
-  # Field for thumbnail image attribute.
-  thumbnail:
-    label: 'Thumbnail'
-    description: 'Thumbnail image attribute for the product.'
+  # Field to store media info.
+  media:
+    parent: 'extension'
+    label: 'Media'
+    description: 'Store all the media files info.'
     cardinality: -1
-    type: 'image'
+    type: 'text_long'
     configurable: 0
     visible_view: 0
     visible_form: 1
+    serialize: 1
