@@ -378,16 +378,25 @@
 
 body.alias--cart {
   .page-standard.l-container {
-    max-width: 19rem;
     margin: auto;
     margin-top: 2rem;
 
+    @include breakpoint($mobile) {
+      @include container(100%);
+
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
     @include breakpoint($tablet) {
-      max-width: 45rem;
+      @include container(100%);
+
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
     }
 
     @include breakpoint($desktop) {
-      max-width: 77.25rem;
+      @include container($desktop-wide);
     }
 
     #edit-actions {
