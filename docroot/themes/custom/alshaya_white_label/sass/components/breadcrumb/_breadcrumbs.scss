@@ -27,7 +27,7 @@
     }
   }
 
-  @include breakpoint($mobile) {
+  @include breakpoint($only-mobile) {
     display: none;
   }
 }

@@ -183,7 +183,7 @@ function alshaya_master_install() {
         'context_mapping' => [],
       ],
     ])
-    ->set('region', 'pre_content')
-    ->set('weight', '-25')
+    ->set('region', 'breadcrumb')
+    ->set('weight', '-26')
     ->save();
 }
