@@ -193,6 +193,15 @@
             .c-accordion__title.ui-state-active {
               border-bottom: none;
             }
+
+            .c-accordion {
+              margin-left: 0;
+              margin-right: 0;
+
+              .c-accordion__title::after {
+                #{$right}: 0;
+              }
+            }
           }
         }
       }
