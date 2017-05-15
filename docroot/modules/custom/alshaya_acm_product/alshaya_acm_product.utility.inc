@@ -87,7 +87,7 @@ function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
           }
           catch (\Exception $e) {
             \Drupal::logger('alshaya_acm_product')->error($e->getMessage());
-
+            continue;
           }
         }
 
