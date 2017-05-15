@@ -159,7 +159,16 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id == 'change_pwd_form') {
-    $form['#submit'][] = 'alshaya_acm_customer_update_password';
+    $form['#validate'][] = 'alshaya_acm_customer_change_pwd_form_validate_password';
+    $form['#submit'][] = 'alshaya_acm_customer_change_pwd_form_update_password';
+
+    if ($key = array_search('::validateForm', $form['#validate'])) {
+      unset($form['#validate'][$key]);
+    }
+
+    if ($key = array_search('::submitForm', $form['#submit'])) {
+      unset($form['#submit'][$key]);
+    }
   }
 }
 
@@ -269,9 +278,16 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 }
 
 /**
- * Additional submit callback for change password form to update it on Magento.
+ * Validate callback for change password form to validate against Magento.
+ *
+ * If the user is non-commerce user, it fallbacks to default validation.
  */
-function alshaya_acm_customer_update_password(array &$form, FormStateInterface &$form_state) {
+function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, FormStateInterface &$form_state) {
+  $current_pass_input = trim($form_state->getValue('current_pass'));
+  if (empty($current_pass_input)) {
+    return;
+  }
+
   // Use the current logged in user by default.
   $user = \Drupal::currentUser();
 
@@ -285,11 +301,53 @@ function alshaya_acm_customer_update_password(array &$form, FormStateInterface &
 
   // For all users except just authenticated, we store password only in Drupal.
   if (count($roles) > 1) {
+    call_user_func_array($form_state->prepareCallback('::validateForm'), [&$form, &$form_state]);
+    return;
+  }
+
+  try {
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('acq_commerce.api');
+
+    $customer = $api_wrapper->authenticateCustomer($user->getEmail(), $current_pass_input);
+
+    // If a valid customer array is returned, it means current pass is valid.
+    if (!empty($customer) && !empty($customer['customer_id'])) {
+      return;
+    }
+  }
+  catch (\Exception $e) {
+    // Do nothing, we will set the error message below.
+  }
+
+  $form_state->setErrorByName('current_pass', t('The current password you provided is incorrect.'));
+}
+
+/**
+ * Submit callback for change password form to update it on Magento.
+ *
+ * If the user is non-commerce user, it fallbacks to default submition.
+ */
+function alshaya_acm_customer_change_pwd_form_update_password(array &$form, FormStateInterface &$form_state) {
+  // Use the current logged in user by default.
+  $user = \Drupal::currentUser();
+
+  // Try to get user from build info.
+  $build_info = $form_state->getBuildInfo();
+  if (isset($build_info['args'], $build_info['args'][0]) && $build_info['args'][0] instanceof UserInterface) {
+    $user = $build_info['args'][0];
+  }
+
+  $roles = $user->getRoles();
+
+  // For all users except just authenticated, we store password only in Drupal.
+  if (count($roles) > 1) {
+    call_user_func_array($form_state->prepareCallback('::submitForm'), [&$form, &$form_state]);
     return;
   }
 
   // Get password from user's input.
-  $pass = $form_state->getValue('pass');
+  $pass = trim($form_state->getValue('pass'));
 
   // Update customer data with new password.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
