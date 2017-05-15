@@ -60,7 +60,7 @@ class AlshayaBulkUploadRedirect extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $fid = $form_state->getValue('file')[0];
-    $langcode = $form_state->getValue()['language'];
+    $langcode = !empty($form_state->getValue('language')) ? $form_state->getValue('language') : 'en';
     if ($file = File::load($fid)) {
       // Get file uri.
       $csv_uri = $file->getFileUri();
@@ -87,9 +87,6 @@ class AlshayaBulkUploadRedirect extends FormBase {
         }
         // Close file handler.
         fclose($handle);
-
-        // Include product utility file to use helper functions.
-        \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
         // Prepare batch.
         $batch = [
@@ -130,6 +127,9 @@ class AlshayaBulkUploadRedirect extends FormBase {
    *   Context array.
    */
   public static function processBatch(array $redirect_chunk, $langcode, array &$context) {
+    // Include product utility file to use helper functions.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
     foreach ($redirect_chunk as $redirect) {
       // Get the node/product of the sku.
       $node = alshaya_acm_product_get_display_node($redirect[0]);
@@ -137,7 +137,7 @@ class AlshayaBulkUploadRedirect extends FormBase {
       if ($node && $node instanceof NodeInterface) {
         $redirect_entity = [
           'redirect_source' => $redirect[1],
-          'redirect_redirect' => 'entity:/node/' . $node->id(),
+          'redirect_redirect' => 'entity:node/' . $node->id(),
           'status_code' => '301',
           'language' => $langcode,
         ];
