@@ -9,6 +9,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 
 /**
@@ -139,13 +140,17 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
  */
 function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'user_login_form') {
-    // Disable element validate for email, we will call lafter if required.
-    if ($key = array_search('email_registration_user_login_validate', $form['name']['#element_validate'])) {
-      unset($form['name']['#element_validate'][$key]);
+    if (isset($form['name'], $form['name']['#element_validate'])) {
+      // Disable element validate for email, we will call lafter if required.
+      $key = array_search('email_registration_user_login_validate', $form['name']['#element_validate']);
+      if ($key !== FALSE) {
+        unset($form['name']['#element_validate'][$key]);
+      }
     }
 
     // Disable validateAuthentication here, we will call later if required.
-    if ($key = array_search('::validateAuthentication', $form['#validate'])) {
+    $key = array_search('::validateAuthentication', $form['#validate']);
+    if ($key !== FALSE) {
       unset($form['#validate'][$key]);
     }
 
@@ -155,13 +160,15 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   if ($form_id == 'user_register_form') {
     if (\Drupal::currentUser()->isAnonymous()) {
       // Disable default validateForm here, we will call later if required.
-      if ($key = array_search('::validateForm', $form['#validate'])) {
+      $key = array_search('::validateForm', $form['#validate']);
+      if ($key !== FALSE) {
         unset($form['#validate'][$key]);
       }
 
       array_unshift($form['#validate'], 'alshaya_acm_customer_register_validate');
 
-      if ($key = array_search('::save', $form['actions']['submit']['#submit'])) {
+      $key = array_search('::save', $form['actions']['submit']['#submit']);
+      if ($key !== FALSE) {
         $form['actions']['submit']['#submit'][$key] = 'alshaya_acm_customer_register_submit_save';
       }
     }
@@ -179,11 +186,13 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
     $form['#validate'][] = 'alshaya_acm_customer_change_pwd_form_validate_password';
     $form['#submit'][] = 'alshaya_acm_customer_change_pwd_form_update_password';
 
-    if ($key = array_search('::validateForm', $form['#validate'])) {
+    $key = array_search('::validateForm', $form['#validate']);
+    if ($key !== FALSE) {
       unset($form['#validate'][$key]);
     }
 
-    if ($key = array_search('::submitForm', $form['#submit'])) {
+    $key = array_search('::submitForm', $form['#submit']);
+    if ($key !== FALSE) {
       unset($form['#submit'][$key]);
     }
   }
@@ -215,7 +224,7 @@ function alshaya_acm_customer_user_email_validate($form, FormStateInterface $for
       $form_state->setValue('name', $user->getAccountName());
     }
     elseif (!$config->get('login_with_username')) {
-      $form_state->setErrorByName('name', t('Invalid email address.'));
+      $form_state->setErrorByName('name', t('Unrecognized username or password. <a href=":password">Forgot your password?</a>', [':password' => Url::fromRoute('user.pass')->toString()]));
     }
   }
 }
@@ -249,8 +258,8 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       if (!empty($customer) && !empty($customer['customer_id'])) {
         \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
-        // Check if user exists in Drupal.
-        if ($user = user_load_by_mail($mail)) {
+        // Check if user exists in Drupal. We have already loaded this above.
+        if (!empty($user)) {
           // Update the data in Drupal to match the values in Magento.
           alshaya_acm_customer_update_user_data($user, $customer);
 
@@ -424,4 +433,5 @@ function alshaya_acm_customer_change_pwd_form_update_password(array &$form, Form
   // Update customer data with new password.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
   alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
+  drupal_set_message($this->t('Your password has been changed.'));
 }
