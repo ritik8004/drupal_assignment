@@ -18,6 +18,7 @@ dependencies:
   - filter
   - mailsystem
   - mimemail
+  - redirect
   - sharethis
   - system
   - views

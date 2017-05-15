@@ -5,3 +5,10 @@ alshaya_master.home:
     _title: 'Home'
   requirements:
     _access: 'TRUE'
+alshaya_master.redirect_bulk_upload:
+  path: '/admin/config/search/redirect/redirect-bulk-add'
+  defaults:
+    _form: '\Drupal\alshaya_master\Form\AlshayaBulkUploadRedirect'
+    _title: 'Bulk add redirects'
+  requirements:
+    _permission: 'administer redirects'
