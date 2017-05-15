@@ -1,0 +1,10 @@
+.nodetype--advanced_page {
+  .field--name-body p {
+    font-size: 0.875rem;
+    line-height: 2.29em;
+  }
+
+  .block-page-title-block {
+    @include u-visibility(none);
+  }
+}
