@@ -418,11 +418,6 @@
     padding-right: 0.5em;
 
     @include breakpoint($tablet) {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    @include breakpoint($desktop) {
       padding-left: 1.5em;
       padding-right: 1.5em;
     }
