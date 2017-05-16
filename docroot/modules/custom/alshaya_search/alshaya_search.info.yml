@@ -13,6 +13,7 @@ dependencies:
   - image
   - lightning_core
   - node
+  - panelizer
   - search_api
   - search_api_autocomplete
   - system
