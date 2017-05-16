@@ -22,7 +22,7 @@
         event.stopPropagation();
       });
 
-      var btn = document.querySelector('#edit-add-to-cart');
+      var btn = document.querySelector('#edit-add-to-cart--2');
       btn.setAttribute( 'data-style', 'zoom-in');
       var l = Ladda.create(btn);
 
@@ -43,10 +43,10 @@
       $.fn.stopSpinner = function(data) {
         l.stop();
         if (data.message === 'success') {
-          $('.ladda-label').html(Drupal.t('added!'));
+          $('.ladda-label').html(Drupal.t('added'));
         }
         else {
-          $('.ladda-label').html(Drupal.t('error!'));
+          $('.ladda-label').html(Drupal.t('error'));
         }
         setTimeout(
           function() {

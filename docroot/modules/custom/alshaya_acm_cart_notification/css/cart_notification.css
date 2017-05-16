@@ -1,26 +1,32 @@
-#edit-add-to-cart {
-  font-size: 0.8125rem;
+#edit-add-to-cart--2 {
+  font-size: 0.75rem;
   background: #ff6d22;
   text-transform: lowercase;
+  font-family: arial, sans-serif;
   border-radius: 0;
-  padding: 9px 21px;
+  padding: 0.665rem 1.313rem;
   margin-top: 8px;
+  position: relative;
+  width: 6.563rem;
+  font-weight:bold;
+  color: #fff;
+  max-height: 35px;
 }
 
-#edit-add-to-cart:focus {
+#edit-add-to-cart--2:focus {
  outline: 0;
 }
 
-#edit-add-to-cart[data-style=zoom-in][data-loading] {
+#edit-add-to-cart--2[data-style=zoom-in][data-loading] {
  padding-right: 2.875rem;
 }
 
-#edit-add-to-cart .ladda-spinner {
-   transform: scale(0.75);
+#edit-add-to-cart--2 .ladda-spinner {
+   transform: scale(0.85);
    top: 0.75rem;
 }
 
-#edit-add-to-cart ~ .ajax-progress-throbber {
+#edit-add-to-cart--2 ~ .ajax-progress-throbber {
   display: none;
 }
 
