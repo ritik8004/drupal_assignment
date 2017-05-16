@@ -110,6 +110,9 @@ function alshaya_master_install() {
     'change password' => [
       'ar' => 'تغيير كلمة السر',
     ],
+    'Change Password' => [
+      'ar' => 'تغيير كلمة السر',
+    ],
     'My Account' => [
       'ar' => 'حسابي',
     ],
@@ -211,6 +214,21 @@ function alshaya_master_install() {
     ],
     'add address' => [
       'ar' => 'أضف عنواناً',
+    ],
+    'Delivery address' => [
+      'ar' => 'عنوان التوصيل',
+    ],
+    'Primary address' => [
+      'ar' => 'عنوان التوصيل الأساسي',
+    ],
+    'Add new @type' => [
+      'ar' => 'إضافة @type جديد',
+    ],
+    'current password' => [
+      'ar' => 'كلمة السر الحالية',
+    ],
+    'new password' => [
+      'ar' => 'كلمة السر الجديدة',
     ],
   ];
   alshaya_i18n_save_translations($strings);
