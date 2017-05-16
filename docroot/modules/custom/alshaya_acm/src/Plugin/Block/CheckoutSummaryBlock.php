@@ -6,6 +6,7 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\file\FileInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
@@ -160,8 +161,10 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       // If we have image for the product.
       if (!empty($media)) {
         $image = array_shift($media);
-        $file_uri = $image['file']->getFileUri();
-        $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
+        if (is_object($image['file']) && $image['file'] instanceof FileInterface) {
+          $file_uri = $image['file']->getFileUri();
+          $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
+        }
       }
 
       // Check if we can find a parent SKU for this.

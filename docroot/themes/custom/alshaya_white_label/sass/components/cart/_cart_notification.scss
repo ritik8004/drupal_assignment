@@ -1,15 +1,17 @@
 #cart_notification {
   z-index: 999;
   position: absolute;
-  top: 8.35rem;
-  #{$right}: 1.95rem;
+  top: 8rem;
+  #{$right}: calc((100% - 1218px) / 2);
 
   @include breakpoint($only-tablet) {
-    top: 6.35rem;
+    top: 4.625rem;
+    #{$right}: calc((100% - 704px) / 2);
   }
 
   @include breakpoint($only-mobile) {
-    top: 5.35rem;
+    top: 3.063rem;
+    #{$right}: calc((100% - 300px) / 2);
   }
 
   .notification,
