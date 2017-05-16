@@ -172,7 +172,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               $media = alshaya_acm_product_get_sku_media($item['sku']);
               if (!empty($media)) {
                 $image = array_shift($media);
-                $file_uri = $image->getFileUri();
+                $file_uri = $image['file']->getFileUri();
                 $order['items'][$key]['sku_attr_image'] = [
                   '#theme' => 'image_style',
                   '#style_name' => 'checkout_summary_block_thumbnail',
