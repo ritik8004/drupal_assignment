@@ -130,6 +130,8 @@
         $(this).next().toggle();
         $('.hours--label').toggleClass('open');
       });
+
+      $('.nodetype--store .field--name-field-store-address, .nodetype--store .hours--label, .nodetype--store .open--hours').wrapAll('<div class="store--wrapper" />');
     }
   };
 
