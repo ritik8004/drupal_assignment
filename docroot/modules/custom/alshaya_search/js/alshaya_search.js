@@ -95,6 +95,26 @@
           $(this).find('.alshaya_search_slider').hide();
         }
       );
+
+      // Change the image on Mouse hover.
+      $('.alshaya_search_slider img').hover(
+        function() {
+          $(this)
+            .closest('.alshaya_search_gallery')
+            .find('.alshaya_search_mainimage img')
+            .attr('src', $(this).attr('rel'));
+        },
+        function() {
+          $(this)
+            .closest('.alshaya_search_gallery')
+            .find('.alshaya_search_mainimage img')
+            .attr('src', $(this)
+              .parent()
+              .parent()
+              .find('li:first-child img')
+              .attr('rel'));
+        }
+      );
     }
   };
 

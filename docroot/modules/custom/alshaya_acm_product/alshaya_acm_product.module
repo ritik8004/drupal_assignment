@@ -18,6 +18,7 @@ use Drupal\node\NodeInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements hook_acq_sku_product_node_alter().
@@ -157,16 +158,29 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     elseif ($view_mode == 'search_result') {
       // Get the image.
       $build['image_url'] = [];
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
-      if ($sku_media) {
-        $build['image'] = [
-          '#theme' => 'image_style',
-          '#style_name' => '192x168',
-          '#uri' => $sku_media['file']->getFileUri(),
-          '#title' => $sku_media['label'],
-          '#alt' => $sku_media['label'],
-        ];
+      $sku_media = alshaya_acm_product_get_sku_media($sku_entity);
+      foreach ($sku_media as $delta => $media_item) {
+        if ($media_item['media_type'] == 'image') {
+          $file_uri = $media_item['file']->getFileUri();
+
+          $thumbImg = ImageStyle::load('59x60')->buildUrl($file_uri);
+          $mainImg = ImageStyle::load('291x288')->buildUrl($file_uri);
+          $thumbnails[] = [
+            'thumburl' => $thumbImg,
+            'url' => $mainImg,
+          ];
+        }
       }
+      $build['image'] = [
+        '#theme' => 'alshaya_search_gallery',
+        '#mainImage' => $thumbnails[0]['url'],
+        '#thumbnails' => $thumbnails,
+        '#attached' => [
+          'library' => [
+            'alshaya_search/alshaya_search',
+          ],
+        ],
+      ];
 
       // Get the price.
       $build['price'] = [
