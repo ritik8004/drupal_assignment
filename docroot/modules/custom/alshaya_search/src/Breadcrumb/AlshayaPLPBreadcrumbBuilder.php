@@ -25,14 +25,14 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<none>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
     $term = $route_match->getParameter('taxonomy_term');
     $breadcrumb->addCacheableDependency($term);
     $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term->id());
     foreach (array_reverse($parents) as $term) {
       $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
       $breadcrumb->addCacheableDependency($term);
-      $breadcrumb->addLink(Link::createFromRoute($term->getName(), '<none>'));
+      $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
     }
 
     $breadcrumb->addCacheContexts(['route']);
