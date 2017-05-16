@@ -47,19 +47,19 @@
 
       // Poll the DOM to check if the show more/less link is avaialble, before placing it inside the ul.
       var i = setInterval(function () {
-        if ($('aside .block-facet--checkbox a.facets-soft-limit-link').length) {
+        if ($('.c-search aside .block-facet--checkbox a.facets-soft-limit-link').length) {
           clearInterval(i);
-          $('aside .block-facet--checkbox').each(function() {
+          $('aside .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.insertAfter('aside .block-facet--checkbox ul li:last-child');
+            softLink.insertAfter($(this).find('ul li:last-child'));
           });
         }
       }, 100);
 
       var j = setInterval(function () {
-        if ($('.region__content .region__sidebar-first .block-facet--checkbox a.facets-soft-limit-link').length) {
+        if ($('.c-search .region__content .region__sidebar-first .block-facet--checkbox a.facets-soft-limit-link').length) {
           clearInterval(j);
-          $('.region__content .region__sidebar-first .block-facet--checkbox').each(function() {
+          $('.region__content .region__sidebar-first .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
             softLink.addClass('processed');
             softLink.insertAfter($(this).find('ul li:last-child'));
