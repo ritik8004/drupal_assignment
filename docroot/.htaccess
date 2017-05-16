@@ -70,14 +70,8 @@ AddEncoding gzip svgz
   RewriteEngine on
 
 
-  # Remove .html from url.
-  RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
-  RewriteRule ^ /%1 [NC,L,R]
-  RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^ %{REQUEST_URI}.html [NC,L]
-
-  # Rewrite rule for redirecting old urls.
-  RewriteRule ^kwt-([a-z]{2})/(.*)$ /$1/$2 [R=301,L]
+  # Rewrite rule to remove .html and remove kwt-* from url.
+  RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
 
   # Remove trailing slash from all URLs (except home, which is practically not possible).
   RewriteCond %{REQUEST_FILENAME} !-d
