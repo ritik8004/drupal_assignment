@@ -341,6 +341,10 @@
 
       @include breakpoint($desktop) {
         margin-top: 1.75rem;
+
+        .field--type-image {
+          float: $right;
+        }
       }
 
       @include breakpoint($tablet) {
