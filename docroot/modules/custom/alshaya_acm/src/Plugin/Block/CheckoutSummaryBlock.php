@@ -160,7 +160,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       // If we have image for the product.
       if (!empty($media)) {
         $image = array_shift($media);
-        $file_uri = $image->getFileUri();
+        $file_uri = $image['file']->getFileUri();
         $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
       }
 
