@@ -64,8 +64,8 @@ modules:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
 behat:
-  launch-selenium: false
-  launch-phantomjs: true
+  launch-selenium: true
+  launch-phantomjs: false
   paths:
     - '${repo.root}/tests/behat'
   tags: '~ajax&&~experimental&&~lightningextension&&~example'
