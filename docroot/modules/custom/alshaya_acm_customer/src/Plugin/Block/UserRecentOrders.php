@@ -168,11 +168,12 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
-              // Load sku from item_id that we have in $item.
-              $media = alshaya_acm_product_get_sku_media($item['sku']);
-              if (!empty($media)) {
-                $image = array_shift($media);
-                $file_uri = $image['file']->getFileUri();
+              // Load the first image.
+              // @TODO: This seems duplicate, need to check and reduce duplicate
+              // code, ref: alshaya_acm_customer.orders.inc.
+              $media_image = alshaya_acm_product_get_sku_media($item['sku'], TRUE);
+              if (!empty($media_image)) {
+                $file_uri = $media_image['file']->getFileUri();
                 $order['items'][$key]['sku_attr_image'] = [
                   '#theme' => 'image_style',
                   '#style_name' => 'checkout_summary_block_thumbnail',
