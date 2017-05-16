@@ -223,6 +223,8 @@ class Configurable extends SKUPluginBase {
         \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
       catch (\Exception $e) {
+        // Remove item from cart.
+        $cart->removeItemFromCart($tree_pointer->getSku());
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
         $event = new AddToCartErrorEvent($e);
