@@ -155,14 +155,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     foreach ($items as $item) {
       $img = '';
 
-      // Load sku from item_id that we have in $item.
-      $media = alshaya_acm_product_get_sku_media($item['sku']);
+      // Load the first image.
+      $media_image = alshaya_acm_product_get_sku_media($item['sku'], TRUE);
 
       // If we have image for the product.
-      if (!empty($media)) {
-        $image = array_shift($media);
-        if (is_object($image['file']) && $image['file'] instanceof FileInterface) {
-          $file_uri = $image['file']->getFileUri();
+      if (!empty($media_image)) {
+        if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
+          $file_uri = $media_image['file']->getFileUri();
           $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
         }
       }

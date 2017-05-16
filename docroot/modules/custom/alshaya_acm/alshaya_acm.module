@@ -113,8 +113,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $remove_url = Url::fromUserInput('/cart/remove/' . $id);
       $form['cart'][$id]['quantity']['#suffix'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div id="stock-error-' . $id . '"></div>';
 
-      // Load Images.
-      $media = alshaya_acm_product_get_sku_media($id);
+      // Load the first image.
+      $media_image = alshaya_acm_product_get_sku_media($id, TRUE);
 
       // Get SKU attributes.
       $sku_attributes = alshaya_acm_product_get_sku_configurable_values($id);
@@ -146,11 +146,11 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       }
 
       $image = [];
-      if (!empty($media)) {
+      if (!empty($media_image)) {
         $image = [
           '#theme' => 'image_style',
           '#style_name' => '137x144',
-          '#uri' => current($media)['file']->getFileUri(),
+          '#uri' => $media_image['file']->getFileUri(),
         ];
       }
 
