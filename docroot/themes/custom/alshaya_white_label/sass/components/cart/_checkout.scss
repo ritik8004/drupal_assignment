@@ -390,7 +390,7 @@ body.alias--cart {
       max-width: 77.25rem;
     }
 
-    #edit-actions {
+    .edit-actions {
       clear: both;
       float: $right;
       display: inline-grid;
@@ -694,8 +694,8 @@ body.alias--cart {
     }
   }
 
-  #edit-update,
-  #edit-checkout {
+  .edit-update,
+  .edit-checkout {
     @extend %btn;
 
     background: $pumpkin-orange;

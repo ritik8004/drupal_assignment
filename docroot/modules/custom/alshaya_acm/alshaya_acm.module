@@ -228,6 +228,11 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#weight' => -1,
   ];
 
+  // Add class to checkout and update button as well as actions.
+  $form['actions']['update']['#attributes']['class'][] = 'edit-update';
+  $form['actions']['checkout']['#attributes']['class'][] = 'edit-checkout';
+  $form['actions']['#attributes']['class'][] = 'edit-actions';
+
   // Add wrapper to cart table for themeing.
   $form['cart']['#prefix'] = '<div id="table-cart-items">';
   $form['cart']['#suffix'] = '</div>';
