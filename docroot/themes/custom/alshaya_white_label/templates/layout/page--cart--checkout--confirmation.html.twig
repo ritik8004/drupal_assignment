@@ -3,16 +3,29 @@
 
     <!-- ______________________ BREADCRUMB _______________________ -->
 
-    {% if page.breadcrumb %}
-        <div class="c-breadcrumb">
-            <div class="l-container">
-                <div class="c-breadcrumb__region">
-                    {{ page.breadcrumb }}
-                </div>
-            </div>
-        </div>
-    {% endif %}
+  {% if page.breadcrumb %}
+      <div class="c-breadcrumb">
+          <div class="l-container">
+              <div class="c-breadcrumb__region">
+                {{ page.breadcrumb }}
+              </div>
+          </div>
+      </div>
+  {% endif %}
     <!-- /breadcrumb -->
+
+    <!-- ______________________ HERO CONTENT _______________________ -->
+
+  {% if page.hero_content %}
+      <div class="c-hero-content">
+          <div class="l-container">
+              <div class="c-hero-content__region">
+                {{ page.hero_content }}
+              </div>
+          </div>
+      </div>
+  {% endif %}
+    <!-- /hero content -->
 
     <!-- ______________________ MAIN _______________________ -->
      <h1 class="site-brand-home">
