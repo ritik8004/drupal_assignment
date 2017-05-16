@@ -36,13 +36,13 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     // If on search page but no filter.
     if (empty($queryString[0])) {
-      $breadcrumb->addLink(Link::createFromRoute(t('Search'), 'views.view.search'));
+      $breadcrumb->addLink(Link::createFromRoute(t('Search'), $route_match->getRouteName()));
     }
 
     foreach ($queryString as $string) {
       $query = explode('=', $string);
       if ($query[0] == 'keywords') {
-        $breadcrumb->addLink(Link::createFromRoute('Search results for "' . $query[1] . '"', 'views.view.search'));
+        $breadcrumb->addLink(Link::createFromRoute('Search results for "' . $query[1] . '"', $route_match->getRouteName()));
         return $breadcrumb;
       }
     }
