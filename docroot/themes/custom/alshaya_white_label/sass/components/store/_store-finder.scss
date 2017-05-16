@@ -4,6 +4,7 @@
     font-size: 14px;
     font-weight: bold;
     color: $black;
+    margin-bottom: 1.563rem;
   }
 
   .c-content__region {
@@ -182,6 +183,7 @@
 
     .row-title {
       font-weight: bold;
+      display: block;
       color: $marine-blue;
       padding: 0 3.438rem;
     }
@@ -282,6 +284,11 @@
     .c-page-title {
       margin-top: 1rem;
       margin-bottom: 0.79rem;
+    }
+
+    .by--alphabet {
+      width: 50%;
+      float: $left;
     }
 
     .attachment-after {
@@ -421,7 +428,7 @@
   }
 }
 
-.nodetype--store {
+.node--type-store {
   .content > .store--wrapper {
     max-width: 25%;
     display: inline-block;

@@ -131,7 +131,7 @@
         $('.hours--label').toggleClass('open');
       });
 
-      $('.nodetype--store .field--name-field-store-address, .nodetype--store .hours--label, .nodetype--store .open--hours').wrapAll('<div class="store--wrapper" />');
+      $('.node--type-store .field--name-field-store-address, .node--type-store .hours--label, .node--type-store .open--hours').wrapAll('<div class="store--wrapper" />');
     }
   };
 
