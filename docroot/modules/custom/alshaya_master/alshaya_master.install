@@ -44,7 +44,13 @@ function alshaya_master_install() {
     'First Name' => [
       'ar' => 'الاسم الأول',
     ],
+    'First name' => [
+      'ar' => 'الاسم الأول',
+    ],
     'Last Name' => [
+      'ar' => 'اسم العائلة',
+    ],
+    'Last name' => [
       'ar' => 'اسم العائلة',
     ],
     'Privilege card number (Optional)' => [
@@ -58,6 +64,9 @@ function alshaya_master_install() {
     ],
     'Privilege card number' => [
       'ar' => 'رقم بطاقة نادي الامتيازات',
+    ],
+    'Privilege card number (optional)' => [
+      'ar' => '',
     ],
     'you’ll be able to' => [
       'ar' => 'سجل الآن',
@@ -86,7 +95,13 @@ function alshaya_master_install() {
     'contact details' => [
       'ar' => 'تفاصيل الاتصال',
     ],
+    'Contact Details' => [
+      'ar' => 'تفاصيل الاتصال',
+    ],
     'address book' => [
+      'ar' => 'سجل العناوين ',
+    ],
+    'Address book' => [
       'ar' => 'سجل العناوين ',
     ],
     'communication preferences' => [
@@ -172,6 +187,30 @@ function alshaya_master_install() {
     ],
     'search item or keyword' => [
       'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
+    ],
+    'Total: @count items.' => [
+      'ar' => 'الإجمالي: عدد القطع @count',
+    ],
+    'View order details' => [
+      'ar' => 'عرض تفاصيل الطلبية',
+    ],
+    'Orders' => [
+      'ar' => 'الطلبيات',
+    ],
+    'All Orders' => [
+      'ar' => 'كل الطلبيات',
+    ],
+    'Search orders by' => [
+      'ar' => 'البحث عن الطلبية',
+    ],
+    'You haven’t ordered anything recently.' => [
+      'ar' => 'لم يتم تسجيل أي طلبية مؤخرًا',
+    ],
+    'Mobile Number' => [
+      'ar' => 'رقم الجوال',
+    ],
+    'add address' => [
+      'ar' => 'أضف عنواناً',
     ],
   ];
   alshaya_i18n_save_translations($strings);

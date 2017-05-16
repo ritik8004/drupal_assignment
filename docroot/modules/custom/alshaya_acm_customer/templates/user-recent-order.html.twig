@@ -8,15 +8,26 @@
 
         <div class="mobile-only">
           <div class="dark order--items">{{ order.item_names | join(', ') }}</div>
-          <div class="light">{{ 'Total:' | t }} {{ order.items | length }} {{ 'items' | t }}</div>
+          <div class="light">
+            {% set count = order.items | length %}
+            {% trans %}
+            Total: {{ count }} items.
+            {% endtrans %}
+          </div>
         </div>
       </td>
 
       <td class="above-mobile">
-          <div class="dark order--items">{{ order.item_names | join(', ') }}</div>
-          <div class="light">{{ 'Total:' | t }} {{ order.items | length }} {{ 'items' | t }}</div>
+        <div class="dark order--items">{{ order.item_names | join(', ') }}</div>
+        <div class="light">
+          {% set count = order.items | length %}
+          {% trans %}
+          Total: {{ count }} items.
+          {% endtrans %}
+        </div>
 
-          <div class="tablet-only">
+
+        <div class="tablet-only">
             <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
           </div>
       </td>
