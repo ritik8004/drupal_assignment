@@ -205,7 +205,7 @@ function alshaya_master_install() {
 
   // Set the Status Messages block.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_messages')
-    ->set('region', 'content')
+    ->set('region', 'hero_content')
     ->set('weight', -14)
     ->save();
 
