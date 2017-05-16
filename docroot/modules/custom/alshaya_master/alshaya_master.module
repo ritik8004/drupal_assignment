@@ -27,7 +27,7 @@ function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterf
     if (isset($build_info['args'][0]) && ($theme = $build_info['args'][0])) {
       $form['email_logo'] = [
         '#type' => 'details',
-        '#title' => t('E-mail Logo image'),
+        '#title' => t('E-mail logo image'),
         '#open' => TRUE,
       ];
 
