@@ -8,6 +8,14 @@
     }
   }
 
+  &.l-two--sf .c-sidebar-first {
+    .c-sidebar-first__region {
+      @include breakpoint($only-tablet) {
+        padding-top: 1.5rem;
+      }
+    }
+  }
+
   main {
     @include breakpoint($only-tablet) {
       padding-top: 2.5rem;
