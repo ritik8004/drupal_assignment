@@ -196,8 +196,15 @@ function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInter
     if ($apc_number != $validation['value_start_with']) {
       if (\Drupal::currentUser()->isAuthenticated()) {
         $user = User::load(\Drupal::currentUser()->id());
-        $user->get('field_privilege_card_number')->set(0, $apc_number);
+        $user->get('field_privilege_card_number')->setValue($apc_number);
         $user->save();
+
+        // This will be enabled by default but to avoid adding it to dependency.
+        if (\Drupal::moduleHandler()->moduleExists('alshaya_acm_customer')) {
+          // Update the data in Magento.
+          \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+          alshaya_acm_customer_update_customer_data($user->getEmail());
+        }
       }
       elseif (Drupal::currentUser()->isAnonymous()) {
         $temp_store->set('card_number', $apc_number);
@@ -380,5 +387,31 @@ function alshaya_loyalty_preprocess_user(&$variables) {
   if (empty($card)) {
     $block = Block::load('jointheclub');
     $variables['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_account_alter().
+ */
+function alshaya_loyalty_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
+  // Update privilege card number if available in customer data.
+  if (isset($customer['extension'], $customer['extension']['loyalty_card_number'])) {
+    $user->get('field_privilege_card_number')->setValue($customer['extension']['loyalty_card_number']);
+  }
+}
+
+/**
+ * Implements hook_acq_commerce_update_customer_api_request_alter().
+ */
+function alshaya_loyalty_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+  if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($request_options['form_params']['customer[email]']);
+
+    if (!empty($user)) {
+      if ($privilege_card_number = $user->get('field_privilege_card_number')->getString()) {
+        $request_options['form_params']['customer[extension][loyalty_card_number]'] = $privilege_card_number;
+      }
+    }
   }
 }
