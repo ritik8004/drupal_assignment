@@ -119,6 +119,10 @@
       margin-top: -0.5rem;
     }
 
+    @include breakpoint($only-mobile) {
+      margin-top: 1.75rem;
+    }
+
     a {
       font-weight: bold;
       padding-top: 0.25rem;
