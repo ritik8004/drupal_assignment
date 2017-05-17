@@ -384,12 +384,10 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
     $product['image'] = '';
 
-    // Load sku from item_id that we have in $item.
-    $media_image = alshaya_acm_product_get_sku_media($item['sku'], TRUE);
-
+    // Load the first image.
+    $file_uri = alshaya_acm_get_product_display_image($item['sku']);
     // If we have image for the product.
-    if (!empty($media_image)) {
-      $file_uri = $media_image['file']->getFileUri();
+    if (!empty($file_uri)) {
       $product['image'] = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
     }
 
