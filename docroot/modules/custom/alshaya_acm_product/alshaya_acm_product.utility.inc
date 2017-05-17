@@ -394,14 +394,13 @@ function alshaya_acm_product_get_display_node($sku) {
  *   Return string of uri or Null if not found.
  */
 function alshaya_acm_get_product_display_image($sku) {
-  // Load sku from item_id that we have in $item.
-  $media = alshaya_acm_product_get_sku_media($sku);
+  // Load the first image.
+  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
 
   // If we have image for the product.
-  if (!empty($media)) {
-    $image = array_shift($media);
-    if (is_object($image['file']) && $image['file'] instanceof FileInterface) {
-      $file_uri = $image['file']->getFileUri();
+  if (!empty($media_image)) {
+    if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
+      $file_uri = $media_image['file']->getFileUri();
       return $file_uri;
     }
   }
