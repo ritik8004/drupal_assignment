@@ -380,7 +380,6 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   }
   catch (\Exception $e) {
     $cart->addItemToCart($sku, -$quantity);
-    _acq_cart_remove_zero_quantity_item($cart);
   }
 
   $newcart = $cartStorage->getCart();
