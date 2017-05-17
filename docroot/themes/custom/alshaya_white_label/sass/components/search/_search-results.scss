@@ -104,6 +104,40 @@
           }
         }
       }
+
+      .view-content,
+      nav.pager {
+        @include clearfix;
+      }
+
+      nav.pager {
+        .js-pager__items {
+          width: 32%;
+          margin: 8rem auto 2.1rem;
+
+          @include breakpoint($only-mobile) {
+            width: 57%;
+          }
+
+          @include clearfix;
+        }
+
+        .pager__item {
+          float: $left;
+          margin-#{$right}: 1.5rem;
+
+          &.is-active {
+            a {
+              font-family: $alshaya-bold;
+            }
+          }
+
+          a {
+            border: 0;
+            padding: 0;
+          }
+        }
+      }
     }
 
     .block-views-exposed-filter-blocksearch-page {
