@@ -4,6 +4,55 @@
       @include breakpoint($desktop) {
         max-width: 24.625rem;
       }
+
+      .privilege-card-wrapper-title {
+        font-family: $alshaya-bold;
+        font-size: 14px;
+        color: $dark-sand;
+        padding-left: 5px;
+        padding-top: 10px;
+        border-top: 1px solid $white;
+        text-transform: lowercase;
+      }
+
+      #edit-privilege-card-wrapper {
+        margin-top: 0;
+
+        summary {
+          padding-left: 5px;
+          padding-bottom: 10px;
+          font-size: 12px;
+          color: $white;
+          text-transform: lowercase;
+          border-bottom: 1px solid $white;
+        }
+
+        label,
+        .form-item-privilege-card-number2,
+        .form-item-privilege-card-number {
+          padding-left: 5px;
+          color: $white;
+          font-size: 12px;
+
+          input {
+            &::-webkit-input-placeholder {
+              color: $white;
+            }
+
+            &::-moz-placeholder {
+              color: $white;
+            }
+
+            &:-ms-input-placeholder {
+              color: $white;
+            }
+
+            &:-moz-placeholder {
+              color: $white;
+            }
+          }
+        }
+      }
     }
   }
 
