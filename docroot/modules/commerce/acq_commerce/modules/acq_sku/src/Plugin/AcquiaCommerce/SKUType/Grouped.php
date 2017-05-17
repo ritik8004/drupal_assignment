@@ -98,8 +98,9 @@ class Grouped extends SKUPluginBase {
     catch (\Exception $e) {
       // Remove item from cart.
       foreach ($skus as $sku => $quantity) {
-        $cart->removeItemFromCart($sku);
+        $cart->addItemToCart($sku, -$quantity);
       }
+
       // Dispatch event so action can be taken.
       $dispatcher = \Drupal::service('event_dispatcher');
       $event = new AddToCartErrorEvent($e);
