@@ -463,6 +463,10 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   // We need to change the markup for submit button.
   // @see alshaya_white_label_theme_suggestions_input_alter().
   $form['add_to_cart']['#attributes']['data-twig-suggestion'] = 'addtocart';
+
+  // Adding classes to add to cart button and quanity field.
+  $form['add_to_cart']['#attributes']['class'][] = 'edit-add-to-cart';
+  $form['quantity']['#attributes']['class'][] = 'edit-quantity';
 }
 
 /**
