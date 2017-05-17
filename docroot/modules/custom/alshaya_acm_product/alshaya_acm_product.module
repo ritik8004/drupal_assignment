@@ -123,21 +123,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
 
-      // Get the price.
-      $build['price'] = [
-        '#theme' => 'alshaya_acm_price',
-        '#price' => $sku_entity->get('price')->getString(),
-      ];
-
-      // Get the special price.
-      // @TODO: Calculate discount and pass it once we have some realistic data.
-      $build['special_price'] = NULL;
-      if ($special_price = $sku_entity->get('attr_special_price')->getString()) {
-        $build['special_price'] = [
-          '#theme' => 'alshaya_acm_price',
-          '#price' => $special_price,
-        ];
-      }
+      _alshaya_acm_product_build_price($build, $sku_entity);
     }
     elseif ($view_mode == 'modal') {
       // Get the image.
@@ -182,21 +168,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ],
       ];
 
-      // Get the price.
-      $build['price'] = [
-        '#theme' => 'alshaya_acm_price',
-        '#price' => $sku_entity->get('price')->getString(),
-      ];
-
-      // Get the special price.
-      // @TODO: Calculate discount and pass it once we have some realistic data.
-      $build['special_price'] = NULL;
-      if ($special_price = $sku_entity->get('attr_special_price')->getString()) {
-        $build['special_price'] = [
-          '#theme' => 'alshaya_acm_price',
-          '#price' => $special_price,
-        ];
-      }
+      _alshaya_acm_product_build_price($build, $sku_entity);
     }
   }
 }
@@ -364,5 +336,45 @@ function alshaya_acm_product_preprocess_node(&$variables) {
       $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku_entity->getSku());
       $variables['sku_out_of_stock'] = (bool) $sku_stock['is_in_stock'];
     }
+  }
+}
+
+/**
+ * Helper function to add price, final_price and discount info in build array.
+ *
+ * @param array $build
+ *   Build array to modify.
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU entity to use for getting price.
+ */
+function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
+  // Get the price, discounted price and discount.
+  $build['price'] = $build['final_price'] = $build['discount'] = [];
+
+  if ($price = (float) $sku_entity->get('price')->getString()) {
+    $build['price'] = [
+      '#theme' => 'alshaya_acm_price',
+      '#price' => $price,
+    ];
+
+    // Get the discounted price.
+    if ($final_price = (float) $sku_entity->get('final_price')->getString()) {
+      $build['final_price'] = [
+        '#theme' => 'alshaya_acm_price',
+        '#price' => $final_price,
+      ];
+
+      // Get discount if discounted price available.
+      $discount = (($price - $final_price) * 100) / $price;
+      $build['discount'] = [
+        '#markup' => t('Save @discount', ['@discount' => $discount . '%']),
+      ];
+    }
+  }
+  elseif ($final_price = (float) $sku_entity->get('final_price')->getString()) {
+    $build['price'] = [
+      '#theme' => 'alshaya_acm_price',
+      '#price' => $final_price,
+    ];
   }
 }
