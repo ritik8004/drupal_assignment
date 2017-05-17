@@ -37,6 +37,25 @@ class AlshayaI18nLanguages {
   }
 
   /**
+   * Function to get hreflang lang/country code from langcode.
+   *
+   * @param string $langcode
+   *   Langcode for which we want the locale.
+   *
+   * @return string
+   *   Hreflang lang/country if found, empty string otherwise.
+   */
+  public static function getHrefLangCountry($langcode) {
+    if ($hreflangcode = self::getLocale($langcode)) {
+      $hreflangcode = strtolower($hreflangcode);
+      $hreflangcode = str_replace('_', '-', $hreflangcode);
+      return $hreflangcode;
+    }
+
+    return '';
+  }
+
+  /**
    * Function to get langcode from locale.
    *
    * @param string $locale
