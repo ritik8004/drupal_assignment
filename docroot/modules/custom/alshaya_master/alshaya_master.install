@@ -230,6 +230,27 @@ function alshaya_master_install() {
     'new password' => [
       'ar' => 'كلمة السر الجديدة',
     ],
+    'Find Stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Find stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Map view' => [
+      'ar' => 'عرض الخريطة',
+    ],
+    'List view' => [
+      'ar' => 'عرض القائمة',
+    ],
+    'Use my current location' => [
+      'ar' => 'إستخدم موقعي الحالي',
+    ],
+    'Opening Hours' => [
+      'ar' => 'ساعات العمل',
+    ],
+    'Email verification required' => [
+      'ar' => 'التحقق من أصحية البريد الإلكتروني',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
