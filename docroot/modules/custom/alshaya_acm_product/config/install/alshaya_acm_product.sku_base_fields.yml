@@ -21,17 +21,6 @@ fields:
     visible_view: 0
     visible_form: 1
 
-  # Field for special_price attribute.
-  special_price:
-    parent: 'attributes'
-    label: 'Special price'
-    description: 'Special price attribute for the product.'
-    cardinality: 1
-    type: 'string'
-    configurable: 0
-    visible_view: 1
-    visible_form: 1
-
   # Field for base image attribute.
   image:
     parent: 'attributes'
