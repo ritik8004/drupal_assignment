@@ -6,6 +6,19 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function alshaya_loyalty_install() {
+  $strings = [
+    'Join the club' => [
+      'ar' => 'نادي الامتيازات',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Set user account form display settings.
  *
  * Implements hook_modules_installed().
