@@ -1499,7 +1499,7 @@ display:
           empty: false
           tokenize: false
           content:
-            value: 'Select store to see details'
+            value: 'select a store to see details'
             format: mail_text
           plugin_id: text
       sorts:

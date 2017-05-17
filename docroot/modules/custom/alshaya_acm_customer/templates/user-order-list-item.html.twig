@@ -27,8 +27,9 @@
         {% endtrans %}
       </div>
       <div class="light order-quantity">
+        {% set count = order.quantity %}
         {% trans %}
-        Total: {{ order.quantity }} items
+        Total: {{ count }} items.
         {% endtrans %}
       </div>
     </div>
@@ -41,8 +42,9 @@
         {% endtrans %}
       </div>
       <div class="light order-quantity">
+        {% set count = order.quantity %}
         {% trans %}
-        Total: {{ order.quantity }} items
+        Total: {{ count }} items.
         {% endtrans %}
       </div>
     </div>
@@ -55,10 +57,10 @@
     <div class="light totale-label">{{ "Order Total"|t }}</div>
     <div class="dark order-total">
       {% if currency_code_position == 'before' %}
-        <span class="currency-code prefix">{{ currency_code }}</span>{{ order.total }}
+        <span class="currency-code prefix">{{ currency_code | t }} </span> {{ order.total }}
       {% else %}
         {{ order.total }}<span
-              class="currency-code suffix">{{ currency_code }}</span>
+              class="currency-code suffix">{{ currency_code | t }}</span>
       {% endif %}
     </div>
   </div>

@@ -108,6 +108,9 @@
             },
             "drupal/core": {
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-17.patch"
+            },
+            "drupal/password_policy": {
+                "Error message is not translatable": "https://www.drupal.org/files/issues/password_policy_error_translate-2878784-2.patch"
             }
         },
         "installer-paths": {

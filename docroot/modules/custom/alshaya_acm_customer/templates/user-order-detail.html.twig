@@ -32,9 +32,10 @@
               {% endtrans %}
             </div>
             <div class="light">
+              {% set count = order.quantity %}
               {% trans %}
-                    Total: {{ order.quantity }} items
-                    {% endtrans %}
+              Total: {{ count }} items.
+              {% endtrans %}
             </div>
           </div>
         </td>
@@ -46,9 +47,10 @@
             {% endtrans %}
           </div>
           <div class="light">
+            {% set count = order.quantity %}
             {% trans %}
-                  Total: {{ order.quantity }} items
-                  {% endtrans %}
+            Total: {{ count }} items.
+            {% endtrans %}
           </div>
 
           <div class="tablet-only">
