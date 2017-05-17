@@ -1,0 +1,57 @@
+.add-to-cart.out-of-stock {
+  width: 6.563rem;
+  height: 2.188rem;
+  background-color: $cherry;
+  font-family: $alshaya-thin;
+  font-size: 0.75rem;
+  color: $white-two;
+  text-transform: lowercase;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  margin-top: 1.375rem;
+  padding: 0.5rem 0;
+}
+
+.quantity.out-of-stock {
+  opacity: 0.4;
+  font-family: $arial;
+  font-size: 0.6875rem;
+  color: $grey-ash;
+  float: $left;
+  width: 6.688rem;
+
+  div {
+    margin-top: 10px;
+  }
+
+  span {
+    background: $whisper-dark;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    color: $black;
+    max-width: 2.188rem;
+    max-height: 2.188rem;
+
+    &.dash {
+      margin-#{$right}: 1px;
+      padding: 0.719rem 0.98rem;
+      clear: both;
+    }
+
+    &.arrow {
+      @include icon(chevrondown, after) {
+        position: absolute;
+        top: 3px;
+        #{$right}: 2px;
+      }
+
+      width: 35px;
+      height: 35px;
+      position: relative;
+      font-size: 1.875rem;
+      font-weight: normal;
+    }
+  }
+}

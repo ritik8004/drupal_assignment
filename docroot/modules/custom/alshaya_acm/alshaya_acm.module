@@ -200,10 +200,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // If there is at least one item out of scope, show the error.
       $out_of_stock_message = '';
 
-      // SKU stock.
-      $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($id);
       // If item is not available in stock.
-      if (!$sku_stock['is_in_stock']) {
+      if (!alshaya_acm_is_product_in_stock($id)) {
         // Basket out of stock error.
         $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
         $form['cart'][$id]['#attributes']['class'][] = 'sku-out-stock';
@@ -227,6 +225,11 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#markup' => '<div id="out-of-stock-message">' . $out_of_stock_message . '</div>',
     '#weight' => -1,
   ];
+
+  // Add class to checkout and update button as well as actions.
+  $form['actions']['update']['#attributes']['class'][] = 'edit-update';
+  $form['actions']['checkout']['#attributes']['class'][] = 'edit-checkout';
+  $form['actions']['#attributes']['class'][] = 'edit-actions';
 
   // Add wrapper to cart table for themeing.
   $form['cart']['#prefix'] = '<div id="table-cart-items">';
@@ -272,6 +275,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       '#suffix' => '</div>',
     ];
   }
+
+  // Add class to continut shopping link.
+  $form['actions']['continue_shopping_mobile']['#attributes']['class'][] = 'edit-continue-shopping-mobile';
 
   $form['coupon']['#type'] = 'hidden';
 
@@ -348,14 +354,13 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $cartStorage = \Drupal::service('acq_cart.cart_storage');
   $cart = $cartStorage->getCart();
   $response = new AjaxResponse();
-
-  // Stock check.
-  $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku);
-
   $error_message = '';
 
+  // Get the stock for the current sku.
+  $sku_stock = alshaya_acm_get_product_stock($sku);
+
   // If sku not available in stock.
-  if (!$sku_stock['is_in_stock']) {
+  if (!alshaya_acm_is_product_in_stock($sku)) {
     $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
     // If out of stock, remove/hide the secure checkout button.
     $form['actions']['checkout']['#access'] = FALSE;
@@ -368,7 +373,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     return $response;
   }
   // If quantity we added for sku is more than what available in stock.
-  elseif ($sku_stock['quantity'] < $quantity) {
+  elseif (is_array($sku_stock) && $sku_stock['quantity'] < $quantity) {
     // Update the quantity and update error message.
     $quantity = $sku_stock['quantity'];
     $error_message = t('Sorry, we now only have @quantity of these available and we have updated your basket.', ['@quantity' => $quantity]);
@@ -564,4 +569,53 @@ function _alshaya_acm_get_cart_quantity_options() {
   }
 
   return $cartQuantityOptions;
+}
+
+/**
+ * Get the stock info of given sku.
+ *
+ * @param string|object $sku
+ *   The Sku string or Sku object.
+ * @param bool $bool
+ *   Return only boolean value if true.
+ *
+ * @return bool|array
+ *   Return the stock response or boolean value.
+ */
+function alshaya_acm_get_product_stock($sku, $bool = FALSE) {
+  $stock = &drupal_static(__FUNCTION__, []);
+  // Get the sku.
+  $sku = is_object($sku) ? $sku->getSku() : $sku;
+  if (!isset($stock[$sku])) {
+    $stock[$sku] = NULL;
+
+    // Stock check.
+    $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku);
+
+    if (empty($sku_stock) || (!empty($sku_stock) && !$sku_stock['is_in_stock'])) {
+      $stock[$sku] = NULL;
+    }
+    elseif (isset($sku_stock['is_in_stock'])) {
+      $stock[$sku] = $sku_stock;
+    }
+  }
+  return $stock[$sku];
+}
+
+/**
+ * Check if product is in stock for the given sku.
+ *
+ * @param string|object $sku
+ *   The Sku string or Sku object.
+ *
+ * @return bool
+ *   Return true if stock exists, else false.
+ */
+function alshaya_acm_is_product_in_stock($sku) {
+  $valid_stock = FALSE;
+  $sku_stock = alshaya_acm_get_product_stock($sku);
+  if (!empty($sku_stock)) {
+    $valid_stock = (bool) $sku_stock['is_in_stock'];
+  }
+  return $valid_stock;
 }
