@@ -37,6 +37,38 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
 }
 
 /**
+ * Helper function to create user in Drupal.
+ *
+ * @param array $customer
+ *   Customer data recieved from Magento.
+ *
+ * @return \Drupal\user\Entity\User
+ *   User object.
+ */
+function alshaya_acm_customer_create_drupal_user(array $customer) {
+  /** @var \Drupal\user\Entity\User $user */
+  $user = \Drupal::entityTypeManager()->getStorage('user')->create([]);
+  $user->enforceIsNew();
+
+  // Activate the user by default.
+  $user->activate();
+
+  // Set the email.
+  $user->setEmail($customer['email']);
+
+  // For Alshaya we know we are using email_registration module.
+  $user->setUsername('email_registration_' . user_password());
+
+  // Set a password entered by user for login.
+  $user->setPassword(user_password(25));
+
+  // Update the data in Drupal to match the values in Magento.
+  alshaya_acm_customer_update_user_data($user, $customer);
+
+  return $user;
+}
+
+/**
  * Update changes from Magento to Drupal.
  *
  * @param \Drupal\user\Entity\User $user
