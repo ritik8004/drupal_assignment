@@ -2,6 +2,8 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\Core\Logger\RfcLogLevel;
+
 /**
  * APIWrapper class.
  */
@@ -85,7 +87,8 @@ class APIWrapper {
       }
     }
     catch (ConductorException $e) {
-      throw new \Exception($e->getMessage(), $e->getCode());
+      // Log the stock error, do not throw error if stock info is missing.
+      \Drupal::logger('acq_commerce')->log(RfcLogLevel::ERROR, 'Unable to get the stock for @sku : @message', ['@sku' => $sku, '@message' => $e->getMessage()]);
     }
 
     return $stock;

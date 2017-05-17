@@ -201,17 +201,8 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-
   // Get SKU id.
-  $sku_stock = [];
   $sku_entity = SKU::load($form['sku_id']['#value']);
-  if ($sku_entity) {
-    if ($sku = $sku_entity->getSku()) {
-      // SKU stock.
-      $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku);
-    }
-  }
-
   if (isset($form['ajax']) && isset($form['ajax']['configurables'])) {
 
     if ($form['ajax']['configurables']['size']) {
@@ -261,7 +252,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     }
 
     // If item is not available in stock.
-    if (!empty($sku_stock) && !$sku_stock['is_in_stock']) {
+    if (!alshaya_acm_get_product_stock($sku_entity)) {
       $form['ajax']['configurables']['size'] = [
         '#markup' => '<div class="size">' . t('Size') . '</div>',
       ];
@@ -269,11 +260,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         '#markup' => '<div class="size">' . t('Color') . '</div>',
       ];
     }
-
   }
 
   // Stock check for quantity.
-  if (!empty($sku_stock) && !$sku_stock['is_in_stock']) {
+  if (!alshaya_acm_get_product_stock($sku_entity)) {
     $form['quantity'] = [
       '#markup' => '<div class="quantity out-of-stock">' . t('Quantity') . '<div><span class="dash">-</span><span class="arrow"></span></div></div>',
     ];
@@ -347,8 +337,7 @@ function alshaya_acm_product_preprocess_node(&$variables) {
     if ($sku = $variables['node']->get('field_skus')) {
       $sku_entity = SKU::loadFromSku($sku->first()->getString());
       // SKU stock.
-      $sku_stock = \Drupal::service('acq_commerce.api')->skuStockCheck($sku_entity->getSku());
-      $variables['sku_out_of_stock'] = (bool) $sku_stock['is_in_stock'];
+      $variables['sku_out_of_stock'] = alshaya_acm_get_product_stock($sku_entity, TRUE);
     }
   }
 }
