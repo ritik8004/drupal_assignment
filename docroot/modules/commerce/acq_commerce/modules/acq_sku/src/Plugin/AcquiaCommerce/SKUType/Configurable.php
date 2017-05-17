@@ -226,7 +226,6 @@ class Configurable extends SKUPluginBase {
         // Remove item from cart.
         $cart->addItemToCart($tree_pointer->getSku(), -$quantity);
         $cart->addItemToCart($tree['parent']->getSKU(), -$quantity);
-        _acq_cart_remove_zero_quantity_item($cart);
 
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
