@@ -6,6 +6,20 @@
  */
 
 use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_addressbook_install() {
+  // Save permission of address_book for authenticated user.
+  $role = Role::load(RoleInterface::AUTHENTICATED_ID);
+  $role->grantPermission('create address_book profile');
+  $role->grantPermission('update own address_book profile');
+  $role->grantPermission('delete own address_book profile');
+  $role->grantPermission('view own address_book profile');
+  $role->save();
+}
 
 /**
  * Implements hook_modules_installed().
@@ -14,13 +28,6 @@ function alshaya_addressbook_modules_installed($modules) {
   if (!in_array('alshaya_addressbook', $modules)) {
     return;
   }
-
-  $role = Role::load('authenticated');
-  $role->grantPermission('add own address_book profile');
-  $role->grantPermission('edit own address_book profile');
-  $role->grantPermission('delete own address_book profile');
-  $role->grantPermission('view own address_book profile');
-  $role->save();
 
   $config_factory = \Drupal::configFactory();
   // Profile view.
@@ -44,5 +51,4 @@ function alshaya_addressbook_modules_installed($modules) {
 
   // Save the configuration.
   $profile_view->set('display', $display)->save();
-
 }

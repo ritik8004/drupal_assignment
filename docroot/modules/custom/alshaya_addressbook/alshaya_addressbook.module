@@ -93,7 +93,7 @@ function alshaya_addressbook_element_info_alter(array &$info) {
  */
 function alshaya_addressbook_profile_access(EntityInterface $entity, $operation, AccountInterface $account) {
   // If the address is default address, not allow user to delete it.
-  if ($operation == 'delete' && $entity->getType() == 'address_book') {
+  if ($operation == 'delete' && $entity->bundle() == 'address_book') {
     if ($entity->isDefault() && $entity->getOwnerId() == $account->id()) {
       return AccessResult::forbidden();
     }
