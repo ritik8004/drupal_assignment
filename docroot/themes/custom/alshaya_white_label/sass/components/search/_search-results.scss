@@ -115,6 +115,10 @@
           width: 32%;
           margin: 8rem auto 2.1rem;
 
+          @include breakpoint($only-mobile) {
+            width: 57%;
+          }
+
           @include clearfix;
         }
 
