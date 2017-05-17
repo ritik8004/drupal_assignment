@@ -37,7 +37,7 @@ set classes = [
     <div class="content__sidebar">
       {{ content.field_skus }}
       {{ content.body }}
-      {% if sku_out_of_stock is empty %}
+      {% if sku_out_of_stock %}
         <div class="out-of-stock {{ sku_out_of_stock }}">{{ content.sharethis }}</div>
       {% else %}
         {{ content.sharethis }}

@@ -31,17 +31,18 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
     if ($field_category = $node->get('field_category')) {
-      $category = $field_category->first()->getValue();
-      $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($category['target_id']);
-      foreach (array_reverse($parents) as $term) {
-        $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-        $breadcrumb->addCacheableDependency($term);
-        $breadcrumb->addLink(Link::createFromRoute($term->getName(), '<none>'));
+      if ($field_category->first()) {
+        $category = $field_category->first()->getValue();
+        $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($category['target_id']);
+        foreach (array_reverse($parents) as $term) {
+          $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+          $breadcrumb->addCacheableDependency($term);
+          $breadcrumb->addLink(Link::createFromRoute($term->getName(), '<none>'));
+        }
+        // This breadcrumb builder is based on a route parameter, and hence it
+        // depends on the 'route' cache context.
+        $breadcrumb->addCacheContexts(['route']);
       }
-
-      // This breadcrumb builder is based on a route parameter, and hence it
-      // depends on the 'route' cache context.
-      $breadcrumb->addCacheContexts(['route']);
     }
 
     $request = \Drupal::request();
