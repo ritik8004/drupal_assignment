@@ -6,19 +6,6 @@
  */
 
 /**
- * Implements hook_install().
- */
-function alshaya_loyalty_install() {
-  $strings = [
-    'Join the club' => [
-      'ar' => 'نادي الامتيازات',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
  * Set user account form display settings.
  *
  * Implements hook_modules_installed().
@@ -27,6 +14,15 @@ function alshaya_loyalty_modules_installed(array $modules) {
   if (!in_array('alshaya_loyalty', $modules)) {
     return;
   }
+
+  $strings = [
+    'Join the club' => [
+      'en' => 'Join the club',
+      'ar' => 'نادي الامتيازات',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 
   // Rebuild user entity form display for field_privilege_card_number field.
   $user_form_display = \Drupal::entityTypeManager()->getStorage('entity_form_display')->load('user.user.default');

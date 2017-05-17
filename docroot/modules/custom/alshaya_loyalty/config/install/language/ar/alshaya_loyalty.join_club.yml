@@ -1,3 +1,2 @@
 join_club_description:
   value: "<p><span class=\"icon-win\">&nbsp;</span>اربح جوائز مدهشة</p>\r\n\r\n<p><span class=\"icon-reward\">&nbsp;</span>احصل على مكافآت حصرية</p>\r\n\r\n<p><span class=\"icon-heart\">&nbsp;</span>كُن أول من يعلم</p>\r\n\r\n<p><a href=\"\">مزيد من المعلومات</a></p>\r\n"
-  format: 'rich_text'
