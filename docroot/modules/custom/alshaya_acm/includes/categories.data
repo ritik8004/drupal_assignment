@@ -3500,6 +3500,57 @@ array (
         array (
         ),
       ),
+      11 => 
+      array (
+        'category_id' => 211,
+        'parent_id' => 2,
+        'name' => 'Promotions',
+        'position' => 12,
+        'level' => 2,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 212,
+            'parent_id' => 211,
+            'name' => '20% off',
+            'position' => 1,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 213,
+            'parent_id' => 211,
+            'name' => 'Buy one get one free',
+            'position' => 2,
+            'level' => 3,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
     ),
     'extension' => 
     array (
