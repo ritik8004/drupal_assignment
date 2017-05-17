@@ -1,0 +1,14 @@
+<div class="alshaya_search_gallery">
+  <div class="alshaya_search_mainimage">
+    <img src="{{ mainImage }}" />
+  </div>
+  <div class="alshaya_search_slider">
+    <ul id="lightSlider">
+      {% for thumbs in thumbnails %}
+        <li>
+          <img src="{{ thumbs.thumburl }}" rel="{{ thumbs.url }}" />
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

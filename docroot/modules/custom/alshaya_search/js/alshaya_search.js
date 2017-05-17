@@ -68,4 +68,54 @@
       }, 100);
     }
   };
+
+  Drupal.behaviors.searchSlider = {
+    attach: function (context, settings) {
+      // Hide the slider.
+      $('.alshaya_search_gallery .alshaya_search_slider').each(function() {
+        $(this).hide();
+      });
+      $('.alshaya_search_gallery .lSPager').each(function() {
+        $(this).hide();
+      });
+
+      // Convert the list to slider.
+      $('#lightSlider', context).lightSlider({
+        vertical: false,
+        item: 4,
+        verticalHeight: 60
+      });
+
+      // Show/Hide the slider on Mouse hover.
+      $('.alshaya_search_gallery').hover(
+        function() {
+          $(this).find('.alshaya_search_slider').show();
+        },
+        function() {
+          $(this).find('.alshaya_search_slider').hide();
+        }
+      );
+
+      // Change the image on Mouse hover.
+      $('.alshaya_search_slider img').hover(
+        function() {
+          $(this)
+            .closest('.alshaya_search_gallery')
+            .find('.alshaya_search_mainimage img')
+            .attr('src', $(this).attr('rel'));
+        },
+        function() {
+          $(this)
+            .closest('.alshaya_search_gallery')
+            .find('.alshaya_search_mainimage img')
+            .attr('src', $(this)
+              .parent()
+              .parent()
+              .find('li:first-child img')
+              .attr('rel'));
+        }
+      );
+    }
+  };
+
 })(jQuery);

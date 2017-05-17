@@ -9,14 +9,8 @@ dependencies:
     - field.field.node.acq_product.field_skus
     - node.type.acq_product
   module:
-    - panelizer
     - user
-third_party_settings:
-  panelizer:
-    enable: false
-    custom: false
-    allow: false
-    default: default
+third_party_settings: {}
 id: node.acq_product.search_result
 targetEntityType: node
 bundle: acq_product

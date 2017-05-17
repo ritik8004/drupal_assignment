@@ -4,3 +4,4 @@ alshaya_search:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - alshaya_product_zoom/lightslider
