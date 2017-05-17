@@ -331,13 +331,14 @@
     }
   }
 
-  @include breakpoint($only-tablet) {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
   #block-alshaya-white-label-content {
     display: block;
+  }
+
+  .block-page-title-block {
+    @include breakpoint($tablet) {
+      width: 73%;
+    }
   }
 }
 
