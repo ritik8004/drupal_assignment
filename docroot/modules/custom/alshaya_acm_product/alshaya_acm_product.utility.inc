@@ -10,6 +10,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 
 /**
  * Utility function to return media files for a product.
@@ -381,4 +382,33 @@ function alshaya_acm_product_get_display_node($sku) {
   $nid = reset($result);
 
   return Node::load($nid);
+}
+
+/**
+ * Helper function to get the product display image.
+ *
+ * @param mixed $sku
+ *   SKU text or full entity object.
+ *
+ * @return null|string
+ *   Return string of uri or Null if not found.
+ */
+function alshaya_acm_get_product_display_image($sku) {
+  // Load the first image.
+  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+
+  // If we have image for the product.
+  if (!empty($media_image)) {
+    if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
+      $file_uri = $media_image['file']->getFileUri();
+      return $file_uri;
+    }
+  }
+  // Sometimes sku created for size only, such sku don't have any image. only
+  // parent sku has image. In such cases get the image of parent sku.
+  elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
+    return alshaya_acm_get_product_display_image($parent_sku);
+  }
+
+  return NULL;
 }

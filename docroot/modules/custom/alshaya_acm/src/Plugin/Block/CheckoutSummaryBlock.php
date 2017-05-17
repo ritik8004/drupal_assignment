@@ -6,7 +6,6 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\file\FileInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
@@ -156,14 +155,10 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $img = '';
 
       // Load the first image.
-      $media_image = alshaya_acm_product_get_sku_media($item['sku'], TRUE);
-
+      $file_uri = alshaya_acm_get_product_display_image($item['sku']);
       // If we have image for the product.
-      if (!empty($media_image)) {
-        if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
-          $file_uri = $media_image['file']->getFileUri();
-          $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
-        }
+      if (!empty($file_uri)) {
+        $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
       }
 
       // Check if we can find a parent SKU for this.
