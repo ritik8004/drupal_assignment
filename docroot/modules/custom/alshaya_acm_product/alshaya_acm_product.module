@@ -359,13 +359,18 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
 
     // Get the discounted price.
     if ($final_price = (float) $sku_entity->get('final_price')->getString()) {
+      // Final price could be same as price, we dont need to show discount then.
+      if ($final_price >= $price) {
+        return;
+      }
+
       $build['final_price'] = [
         '#theme' => 'alshaya_acm_price',
         '#price' => $final_price,
       ];
 
       // Get discount if discounted price available.
-      $discount = (($price - $final_price) * 100) / $price;
+      $discount = floor((($price - $final_price) * 100) / $price);
       $build['discount'] = [
         '#markup' => t('Save @discount', ['@discount' => $discount . '%']),
       ];
