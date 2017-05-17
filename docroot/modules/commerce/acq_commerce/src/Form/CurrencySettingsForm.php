@@ -50,7 +50,7 @@ class CurrencySettingsForm extends ConfigFormBase {
       '#description' => $this->t('ISO 4217 standard currency code.'),
       '#title' => $this->t('ISO currency code'),
       '#required' => TRUE,
-      '#default_value' => $this->t($config->get('currency_code')),
+      '#default_value' => $config->get('currency_code'),
     ];
 
     $options = [
