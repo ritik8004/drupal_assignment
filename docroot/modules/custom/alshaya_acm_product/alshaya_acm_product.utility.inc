@@ -394,7 +394,7 @@ function alshaya_acm_product_get_display_node($sku) {
  *   Return string of uri or Null if not found.
  */
 function alshaya_acm_get_product_display_image($sku) {
-  // Load sku from item_id that we have in $item.
+  // Load the first image.
   $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
 
   // If we have image for the product.
