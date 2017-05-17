@@ -374,8 +374,15 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     $error_message = t('Sorry, we now only have @quantity of these available and we have updated your basket.', ['@quantity' => $quantity]);
   }
 
-  $cart->updateItemQuantity($sku, $quantity);
-  $cartStorage->updateCart();
+  try {
+    $cart->updateItemQuantity($sku, $quantity);
+    $cartStorage->updateCart();
+  }
+  catch (\Exception $e) {
+    $cart->addItemToCart($sku, -$quantity);
+    _acq_cart_remove_zero_quantity_item($cart);
+  }
+
   $newcart = $cartStorage->getCart();
 
   // Get cart items by sku.

@@ -5,6 +5,8 @@
  * Provides base hooks to the cart functionality of Acquia Commerce connector.
  */
 
+use Drupal\acq_cart\CartInterface;
+
 /**
  * Implements hook_preprocess_HOOK().
  */
@@ -40,4 +42,22 @@ function acq_cart_theme($existing, $type, $theme, $path) {
       'template' => 'block--acqminicart',
     ],
   ];
+}
+
+/**
+ * Remove items from cart having 0 quantity.
+ *
+ * @param \Drupal\acq_cart\CartInterface $cart
+ *   Cart object.
+ */
+function _acq_cart_remove_zero_quantity_item(CartInterface $cart) {
+  $cart_items = $cart->items();
+  // If item has 0 quantity, remove it.
+  if (!empty($cart_items)) {
+    foreach ($cart_items as $item) {
+      if ($item['qty'] < 1) {
+        $cart->removeItemFromCart($item['sku']);
+      }
+    }
+  }
 }
