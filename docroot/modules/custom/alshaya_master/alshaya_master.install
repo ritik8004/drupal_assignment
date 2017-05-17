@@ -251,6 +251,9 @@ function alshaya_master_install() {
     'Email verification required' => [
       'ar' => 'التحقق من أصحية البريد الإلكتروني',
     ],
+    'Search results for "@keyword"' => [
+      'ar' => 'نتائج البحث عن "@keyword"',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
