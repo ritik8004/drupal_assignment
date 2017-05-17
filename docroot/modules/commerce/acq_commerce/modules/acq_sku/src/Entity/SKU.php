@@ -345,6 +345,18 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['special_price'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Special Price'))
+      ->setDescription(t('Special Price of this SKU.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['final_price'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Final Price'))
+      ->setDescription(t('Final Price of this SKU.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['crosssell'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Cross sell SKU'))
       ->setDescription(t('Reference to all Cross sell SKUs.'))
