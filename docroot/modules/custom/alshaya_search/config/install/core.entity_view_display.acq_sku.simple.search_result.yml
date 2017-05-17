@@ -11,14 +11,6 @@ targetEntityType: acq_sku
 bundle: simple
 mode: search_result
 content:
-  attr_special_price:
-    label: hidden
-    type: string
-    weight: 3
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    region: content
   image:
     type: image
     weight: 0
