@@ -1,10 +1,18 @@
-.l-two--sf.checkout {
-  @include breakpoint($only-mobile) {
-    max-width: 390px;
+.page-standard.l-container.l-two--sf.checkout {
+  @include breakpoint($mobile) {
+    @include container(100%);
+
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
-  @include breakpoint($only-tablet) {
-    max-width: 1020px;
+  @include breakpoint($tablet) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include breakpoint($desktop) {
+    @include container(80.25rem);
   }
 
   main {
@@ -13,11 +21,12 @@
     }
 
     @include breakpoint($only-tablet) {
-      width: 65%;
+      width: 64.5%;
     }
 
     @include breakpoint($desktop) {
       width: 74.51%;
+      max-width: 57.5625rem;
     }
   }
 
@@ -26,12 +35,12 @@
     float: $right;
 
     @include breakpoint($tablet) {
-      width: 234px;
+      width: 32.5%;
     }
 
     @include breakpoint($desktop) {
-      max-width: 291px;
-      width: 25%;
+      width: 21.76%;
+      max-width: 16.8125rem;
     }
 
     .c-sidebar-second__region {
@@ -42,7 +51,6 @@
 
 .path--cart {
   .site-brand-home {
-    //border-bottom: 1px solid $white;
     padding-bottom: 0.25em;
     margin: 0 auto;
     padding-top: 0.25em;
@@ -64,6 +72,7 @@
       @include breakpoint($desktop) {
         width: 100%;
         max-width: 1284px;
+        margin: 0 auto;
       }
     }
   }

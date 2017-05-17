@@ -53,7 +53,8 @@ class AlshayaProfileForm extends ProfileForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $profile_type = $this->entity->getType();
+    $entity = $this->entity;
+    $profile_type = $this->entity->bundle();
 
     // If address book profile.
     if ($profile_type == 'address_book') {

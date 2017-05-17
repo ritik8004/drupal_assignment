@@ -112,28 +112,28 @@
             });
             // Zoom in and Zoom out buttons.
             var image = $('#full-image-wrapper img');
+            var img_scale = 1;
             $('.zoomin').on('click', function () {
-              var current_scale = image.css('transform').match(/-?[\d\.]+/g);
-              current_scale = current_scale[3];
-              var scale = parseFloat(current_scale) + 0.25;
-              if(scale < 1.75) {
-                image.css('transform', 'scale(' + scale + ')');
+              if(img_scale < 1.75) {
+                img_scale = img_scale + 0.25;
+
+                image.css('transform', 'scale(' + img_scale + ')');
                 $('.zoomout').removeClass('disabled');
               }
               else {
                 $(this).addClass('disabled');
               }
+
             });
             $('.zoomout').on('click', function () {
-              var current_scale = image.css('transform').match(/-?[\d\.]+/g);
-              current_scale = current_scale[3];
-              var scale = parseFloat(current_scale) - 0.25;
-              $('.zoomin').removeClass('disabled');
-              if (scale < 1) {
+              if (img_scale <= 1) {
                 $(this).addClass('disabled');
                 return;
+              } else {
+                img_scale = img_scale - 0.25;
+                $('.zoomin').removeClass('disabled');
+                image.css('transform', 'scale(' + img_scale + ')');
               }
-              image.css('transform', 'scale(' + scale + ')');
             });
 
             // Swap the big image inside slider-2 when clicking on thumbnail.

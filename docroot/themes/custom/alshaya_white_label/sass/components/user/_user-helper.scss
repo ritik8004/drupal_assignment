@@ -223,6 +223,10 @@
     @include breakpoint($upto-tablet) {
       padding-top: 1.8rem;
     }
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 2.063rem;
+    }
   }
 
   .messages.drupal-messages {
@@ -259,6 +263,10 @@
 
   .c-content__region .user-form {
     margin-top: -0.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+    }
 
     .form-wrapper,
     .form-item {
@@ -314,6 +322,10 @@
     #edit-actions {
       margin-top: 0.477rem;
       margin-bottom: 4rem;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
     }
 
     .field--name-field-first-name {

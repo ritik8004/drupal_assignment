@@ -399,7 +399,7 @@ body.alias--cart {
       @include container($desktop-wide);
     }
 
-    #edit-actions {
+    .edit-actions {
       clear: both;
       float: $right;
       display: inline-grid;
@@ -635,7 +635,7 @@ body.alias--cart {
       margin-#{$right}: 16.7rem;
     }
 
-    #edit-continue-shopping-mobile {
+    .edit-continue-shopping-mobile {
       @include breakpoint($desktop) {
         display: block;
         font-weight: normal;
@@ -703,8 +703,8 @@ body.alias--cart {
     }
   }
 
-  #edit-update,
-  #edit-checkout {
+  .edit-update,
+  .edit-checkout {
     @extend %btn;
 
     background: $pumpkin-orange;
@@ -723,7 +723,7 @@ body.alias--cart {
   }
 
   #edit-continue-shopping,
-  #edit-continue-shopping-mobile {
+  .edit-continue-shopping-mobile {
     font-size: 12px;
     font-weight: bold;
     border: 1px solid $marine-blue-two;
@@ -745,7 +745,7 @@ body.alias--cart {
     }
   }
 
-  #edit-continue-shopping-mobile {
+  .edit-continue-shopping-mobile {
     @include breakpoint($tablet) {
       display: none;
     }
@@ -780,7 +780,7 @@ body.alias--cart {
     display: none;
   }
 
-  #edit-continue-shopping-mobile {
+  .edit-continue-shopping-mobile {
     color: $white-five;
     background: $pumpkin-orange;
     border: 1px solid $pumpkin-orange;
