@@ -5,6 +5,21 @@
  * Custom installation for alshaya_loyalty.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_loyalty_install() {
+  $strings = [
+    'Join the club' => [
+      'ar' => 'نادي الامتيازات',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
 /**
  * Set user account form display settings.
  *
@@ -15,15 +30,17 @@ function alshaya_loyalty_modules_installed(array $modules) {
     return;
   }
 
-  $strings = [
-    'Join the club' => [
-      'en' => 'Join the club',
-      'ar' => 'نادي الامتيازات',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-
+  // Set new config for acquia search index.
+  try {
+    $join_club_ar = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_loyalty') . '/config/install/language/ar/alshaya_loyalty.join_club.yml'));
+    $collection_ar = \Drupal::service('config.storage')->createCollection('language.ar');
+    // Write to the collection.
+    $collection_ar->write('alshaya_loyalty.join_club', $join_club_ar);
+  }
+  catch (Exception $e) {
+    var_dump($e->getMessage());
+    die();
+  }
   // Rebuild user entity form display for field_privilege_card_number field.
   $user_form_display = \Drupal::entityTypeManager()->getStorage('entity_form_display')->load('user.user.default');
   $user_form_display
