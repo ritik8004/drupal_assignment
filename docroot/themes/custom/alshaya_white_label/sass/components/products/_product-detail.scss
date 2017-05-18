@@ -164,13 +164,17 @@
       a {
         @include u-visibility(block);
 
-        height: 38px;
-        width: 38px;
         margin: 5px 5px 5px 0;
         border: 1px solid $black;
         text-align: center;
-        padding-top: 7px;
+        padding: 7px;
         font-size: 10px;
+
+        &.picked {
+          color: $white;
+          font-weight: bold;
+          background: $marine-blue;
+        }
       }
 
       .unavailable {
