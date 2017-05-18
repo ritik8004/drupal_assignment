@@ -7,6 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 
 /**
@@ -77,7 +78,7 @@ class StoresFinderController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['current-view']));
     }
     $view = views_embed_view('stores_finder', $display);
-    $response->addCommand(new HtmlCommand('.view-display-id-page_2', $view));
+    $response->addCommand(new ReplaceCommand('.view-stores-finder:first', $view));
 
     return $response;
   }
@@ -94,7 +95,7 @@ class StoresFinderController extends ControllerBase {
   public function storeDetail(EntityInterface $node) {
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node);
     $response = new AjaxResponse();
-    $response->addCommand(new HtmlCommand('.view-display-id-page_2', $build));
+    $response->addCommand(new ReplaceCommand('.view-stores-finder:first', $build));
     return $response;
   }
 

@@ -125,6 +125,35 @@ function alshaya_white_label_preprocess_views_view_field__stores_finder__page_1_
 }
 
 /**
+ * Implements hook_preprocess_views_view_field().
+ */
+function alshaya_white_label_preprocess_views_view_field__stores_finder__page_3__field_store_open_hours(&$variables) {
+  /* @var \Drupal\node\Entity\Node $node */
+  $node = $variables['row']->_entity;
+  $output = $node->field_store_open_hours->view('default');
+  $variables['output'] = $output;
+}
+
+/**
+ * Implements hook_preprocess_views_view_field().
+ */
+function alshaya_white_label_preprocess_views_view_field__stores_finder__attachment_1__field_store_open_hours(&$variables) {
+  /* @var \Drupal\node\Entity\Node $node */
+  $node = $variables['row']->_entity;
+  $output = $node->field_store_open_hours->view('default');
+  $variables['output'] = $output;
+}
+
+/**
+ * Implemnets hook_preprocess_field().
+ */
+function alshaya_white_label_preprocess_field__node__field_store_open_hours__store(&$variables) {
+  if ($lat_lng = $variables['element']['#object']->get('field_latitude_longitude')) {
+    $variables['lat_lng'] = $lat_lng[0];
+  }
+}
+
+/**
  * Implements template_preprocess_profile().
  */
 function alshaya_white_label_preprocess_profile__address_book(&$variables) {
@@ -569,12 +598,6 @@ function alshaya_white_label_preprocess_input(&$variables) {
 function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array $variables) {
   $element = $variables['element'];
   if (isset($element['#attributes']['data-twig-suggestion'])) {
-    if ($element['#attributes']['data-twig-suggestion'] == 'userregisterformpassword') {
-      $suggestions[] = 'input__' . $element['#attributes']['data-twig-suggestion'];
-    }
-
-    if ($element['#attributes']['data-twig-suggestion'] == 'addtocart') {
-      $suggestions[] = 'input__add_to_cart';
-    }
+    $suggestions[] = 'input__' . $element['#attributes']['data-twig-suggestion'];
   }
 }
