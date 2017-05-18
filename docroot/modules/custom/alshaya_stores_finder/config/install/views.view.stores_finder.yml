@@ -1292,7 +1292,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="/store-glossay/{{ nid }}" class="use-ajax">{{ title }}</a>'
+            text: '<a href="{{ url(''alshaya_stores_finder.glossary'', {''node'': nid|raw}) }}" class="use-ajax">{{ title }}</a>'
             make_link: false
             path: '/store-glossay/{{ nid }}'
             absolute: false
