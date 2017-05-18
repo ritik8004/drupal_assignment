@@ -89,6 +89,12 @@
   .form-type-select {
     @include form-selector-wrap;
 
+    &::after {
+      #{$right}: -1px;
+      top: -0.5625rem;
+      background: $white-five;
+    }
+
     .form-select {
       @include form-selector(1.56rem);
     }
