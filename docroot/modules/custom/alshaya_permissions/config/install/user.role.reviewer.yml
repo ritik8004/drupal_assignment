@@ -17,3 +17,4 @@ permissions:
   - 'edit any advanced_page content'
   - 'edit any department_page content'
   - 'access toolbar'
+  - 'view the administration theme'
