@@ -32,12 +32,23 @@ fields:
     visible_view: 0
     visible_form: 1
 
-  # Field to store media info.
+  # Field to short description.
   short_description:
     parent: 'attributes'
     label: 'Short description'
     description: 'Store the short description here.'
-    cardinality: -1
+    cardinality: 1
+    type: 'text_long'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  # Field to bullet points (part of description).
+  bullet_points:
+    parent: 'attributes'
+    label: 'Bullet points'
+    description: 'Store the bullet points here.'
+    cardinality: 1
     type: 'text_long'
     configurable: 0
     visible_view: 0
