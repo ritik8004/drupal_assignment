@@ -438,6 +438,11 @@
       width: auto;
     }
 
+    @include breakpoint($desktop) {
+      #{$left}: 9em;
+      bottom: 0.7em;
+    }
+
     position: absolute;
     bottom: -3.5em;
     text-decoration: none;
