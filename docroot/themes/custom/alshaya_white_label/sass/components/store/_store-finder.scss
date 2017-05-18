@@ -5,11 +5,56 @@
     font-weight: bold;
     color: $black;
     margin-bottom: 1.563rem;
+
+    @include breakpoint($mobile) {
+      margin-bottom: 0;
+      border-bottom: 1px solid $white;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .view-on--map {
+      display: none;
+    }
   }
 
   .c-content__region {
     max-width: 77.25rem;
     margin: auto;
+
+    .region__content {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .form--inline {
+      #edit-actions {
+        position: absolute;
+        display: inline-block;
+        float: $left;
+        top: 36px;
+      }
+
+      @include breakpoint($desktop) {
+        #edit-actions {
+          #{$left}: 62%;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        #edit-actions {
+          #{$left}: 59%;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        #edit-actions {
+          top: inherit;
+          #{$right}: 1rem;
+          margin-top: 0.625rem;
+        }
+      }
+    }
   }
 
   .c-page-title {
@@ -46,12 +91,6 @@
       background-repeat: no-repeat;
       text-indent: -9999px;
       width: 20px;
-
-      @include breakpoint($only-mobile) {
-        position: absolute;
-        #{$right}: 10px;
-        margin-top: -29px;
-      }
     }
   }
 
@@ -98,7 +137,6 @@
 
   .list-view-link,
   .map-view-link {
-    width: 186px;
     text-align: center;
     padding: 1.563rem 0;
 
@@ -143,6 +181,10 @@
     position: relative;
     margin-bottom: 3rem;
 
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+    }
+
     h3,
     .rows {
       display: inline-block;
@@ -156,12 +198,42 @@
       line-height: 1.6;
       width: 1.563rem;
       margin: 0;
+
+      @include breakpoint($only-mobile) {
+        display: none !important;
+      }
     }
 
     .rows {
       font-size: 14px;
       line-height: 232%;
       margin-#{$left}: 2.375rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-#{$left}: 0;
+
+        a {
+          color: $cerulean-two !important;
+          display: block;
+          width: 100%;
+          padding: 1rem 0;
+          border-bottom: 1px solid $white;
+          line-height: 1;
+
+          &::after {
+            position: absolute;
+            content: '';
+            background: url('../imgs/icons/ic-chevron-70.svg');
+            background-repeat: no-repeat;
+            display: inline-block;
+            width: 7px;
+            height: 16px;
+            top: 0.9rem;
+            #{$right}: 0;
+          }
+        }
+      }
 
       a {
         color: $grey-ash;
@@ -185,17 +257,15 @@
       font-weight: bold;
       display: block;
       color: $marine-blue;
-      padding: 0 3.438rem;
+      padding: 0 3.25rem;
     }
 
-    .views-field-field-store-address,
-    .views-field-field-store-open-hours {
+    .views-field-field-store-address {
       border-bottom: 1px solid $white;
       padding-bottom: 1.5rem;
-      margin-bottom: 1rem;
 
       .field-content {
-        padding: 0 3.438rem;
+        padding: 0 3.25rem;
       }
     }
 
@@ -204,33 +274,49 @@
     }
 
     .views-field-field-store-open-hours {
-      margin-bottom: 0;
+      .hours--wrapper,
+      .view-on--map,
+      .get--directions {
+        border-bottom: 1px solid $white;
+        padding: 1rem 1rem 1rem 3.25rem;
+      }
+
+      a {
+        display: block;
+      }
     }
 
     .views-field-field-store-open-hours {
-      .hours--label {
+      .hours--label,
+      .get--directions {
         position: relative;
         color: $cerulean-two;
+        cursor: pointer;
 
         &::after {
           position: absolute;
           content: '';
-          background: url('../imgs/icons/store--down.svg');
+          background: url('../imgs/icons/ic-chevron-70.svg');
+          background-repeat: no-repeat;
           display: inline-block;
-          width: 17px;
-          height: 7px;
-          top: 5px;
+          width: 7px;
+          height: 16px;
+          top: 0;
           #{$right}: 0;
-          transform: rotate(270deg);
         }
 
         &.open {
           border-bottom: 0;
 
           &::after {
-            transform: scaleY(-1);
+            transform: rotate(90deg);
           }
         }
+      }
+
+      .get--directions::after {
+        top: 1rem;
+        right: 1rem;
       }
 
       .open--hours {
@@ -249,9 +335,8 @@
   }
 
   @include breakpoint($only-mobile) {
-    .c-content__region {
-      margin-left: 0.5rem;
-      margin-right: 0.5rem;
+    .get--directions {
+      display: none;
     }
 
     .c-page-title {
@@ -280,7 +365,30 @@
     }
   }
 
+  @include breakpoint($only-tablet) {
+    .current-location {
+      width: 20% !important;
+    }
+
+    .form--inline > .store-finder--wrapper {
+      width: 48%;
+
+      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+        width: 51% !important;
+      }
+    }
+
+    #edit-list-view,
+    #edit-map-view {
+      width: 16%;
+    }
+  }
+
   @include breakpoint($tablet) {
+    .view-display-id-page_2 > .view-content {
+      padding: 1.875rem;
+    }
+
     .c-page-title {
       margin-top: 1rem;
       margin-bottom: 0.79rem;
@@ -305,19 +413,41 @@
       border-top: 1px solid $white;
       border-bottom: 1px solid $white;
       padding: 0.6875rem 0;
+      position: relative;
     }
 
     .current-location,
-    .c-content__region .form-type-textfield,
-    .c-content__region .form-actions,
-    .label--location,
+    .store-finder--wrapper,
     .list-view-link,
     .map-view-link {
       font-size: 14px;
-      display: table-cell;
-      max-width: 33%;
-      vertical-align: middle;
-      color: $cerulean-two;
+      float: $left;
+    }
+
+    .label--location {
+      max-width: 180px;
+      float: $left;
+    }
+
+    .current-location,
+    .label--location {
+      margin: 1.625rem 0;
+    }
+
+    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+      position: relative;
+      margin: 1.125rem 0;
+    }
+
+    .current-location {
+      padding: 0 1.875rem;
+      border-right: 1px solid $white;
+    }
+
+    .current-location,
+    .list-view-link,
+    .map-view-link {
+      width: 16%;
     }
 
     .view-display-id-page_1 {
@@ -328,83 +458,38 @@
     }
 
     .attachment-after {
-      width: 73%;
+      width: 71%;
       vertical-align: top;
+
+      @include breakpoint($only-tablet) {
+        max-width: 66%;
+      }
     }
 
     .view-display-id-page_1 > .view-content {
-      max-width: 25%;
+      max-width: 27%;
       display: inline-block;
-      max-height: 19.69rem;
+      max-height: 25rem;
       overflow-y: scroll;
       border-#{$right}: 1px solid $white;
       vertical-align: top;
       margin-#{$right}: 0.6875rem;
       padding-#{$right}: 0.6875rem;
       float: $left;
-    }
 
-    .c-content__region #edit-actions {
-      position: relative;
-
-      input {
-        position: absolute;
-        #{$right}: 35px;
-        bottom: 7px;
-        z-index: 99;
+      @include breakpoint($only-tablet) {
+        max-width: 32%;
       }
-    }
-  }
-
-  @include breakpoint($only-tablet) {
-    .c-content__region {
-      position: relative;
-      margin-right: 0.5rem;
-      margin-left: 0.5rem;
-
-      .current-location {
-        position: absolute;
-        #{$right}: 0;
-        top: -35px;
-      }
-
-      #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
-        width: 15.5rem;
-      }
-
-      #edit-list-view,
-      #edit-map-view {
-        width: 8rem;
-        padding: 1rem 0;
-      }
-
-      #edit-actions {
-        input {
-          bottom: 17px;
-        }
-      }
-
-      #edit-actions {
-        width: 3%;
-      }
-    }
-
-    .label--location,
-    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-    #edit-list-view,
-    #edit-map-view {
-      width: 25%;
     }
   }
 
   @include breakpoint($desktop) {
-    .view-header {
-      margin-top: 1.5rem;
+    .form--inline > .store-finder--wrapper {
+      width: 52%;
     }
 
-    .current-location {
-      padding: 1.625rem 1.875rem;
-      border-right: 1px solid $white;
+    .view-header {
+      margin-top: 1.5rem;
     }
 
     #edit-submit-stores-finder {
@@ -414,23 +499,23 @@
     .c-content__region {
       margin-bottom: 8.625rem;
     }
+  }
 
-    #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
-      background: none;
-      max-width: 23.13rem;
-      border: 1px solid $white;
-      padding: 0.6875rem;
-    }
-
+  .store-finder--wrapper {
     .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
-      padding-#{$right}: 1.563rem;
+      float: $left;
+      width: 66%;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
     }
   }
 }
 
 .node--type-store {
   .content > .store--wrapper {
-    max-width: 25%;
+    max-width: 27%;
     display: inline-block;
     max-height: 19.69rem;
     overflow-y: scroll;
@@ -500,7 +585,7 @@
   }
 
   .field--name-field-latitude-longitude {
-    width: 73%;
+    width: 71%;
     display: inline-block;
     border-#{$left}: 1px solid $white;
     padding-#{$left}: 0.6875rem;
@@ -514,5 +599,58 @@
   .field--name-field-store-locator-id,
   .field--name-field-store-number {
     display: none;
+  }
+}
+
+//Individual store theming
+.individual--store {
+  .view-content {
+    max-width: 27%;
+    display: inline-block;
+    max-height: 19.69rem;
+    overflow-y: scroll;
+    border-#{$right}: 1px solid $white;
+    vertical-align: top;
+    margin-#{$right}: 0.6875rem;
+    padding-#{$right}: 0.6875rem;
+    float: $left;
+
+    @include breakpoint($only-mobile) {
+      border-right: 0;
+      margin-#{$right}: 0;
+      padding-#{$right}: 0;
+      float: none;
+      max-width: 100%;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .map--store {
+    float: $left;
+    width: 71%;
+    vertical-align: top;
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+}
+
+.geolocation-common-map-container {
+  .hours--wrapper {
+    position: relative;
+  }
+
+  .hours--label,
+  .view-on--map,
+  .get--directions {
+    color: $cerulean-two;
+    cursor: pointer;
+    margin-top: 0.5625rem;
+  }
+
+  .open--hours {
+    line-height: 1.57;
   }
 }

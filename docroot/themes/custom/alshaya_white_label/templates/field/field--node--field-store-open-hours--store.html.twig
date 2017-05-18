@@ -1,5 +1,6 @@
 {% if label_hidden %}
     {% if multiple %}
+        <div class="hours--wrapper">
         <div{{ attributes }}>
             <div class="hours--label">{{ 'Opening Hours'|t }}</div>
             <div class="open--hours">
@@ -7,6 +8,7 @@
                     <div{{ item.attributes }}>{{ item.content }}</div>
                 {% endfor %}
             </div>
+        </div>
         </div>
     {% else %}
         {% for item in items %}
@@ -17,7 +19,7 @@
     <div{{ attributes }}>
         <div{{ title_attributes }}>{{ label }}</div>
         {% if multiple %}
-        <div>
+        <div class="hours--wrapper">
             {% endif %}
             <div class="hours--label">{{ 'Opening Hours'|t }}</div>
             <div class="open--hours">
@@ -30,3 +32,17 @@
         {% endif %}
     </div>
 {% endif %}
+<div class="view-on--map">
+    <a href="http://maps.google.com/?q={{ lat_lng.lat }},{{ lat_lng.lng }}" target='_blank'>
+    {% trans %}
+        View on map
+    {% endtrans %}
+    </a>
+</div>
+<div class="get--directions">
+    <a href="https://www.google.com/maps/dir/Current+Location/{{ lat_lng.lat }},{{ lat_lng.lng }}" target='_blank'>
+        {% trans %}
+        Get directions
+        {% endtrans %}
+    </a>
+</div>
