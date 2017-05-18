@@ -14,6 +14,10 @@
     font-weight: bold;
     color: $black;
 
+    &:last-of-type {
+      font-weight: bold;
+    }
+
     &:last-of-type a {
       font-weight: bold;
     }
@@ -21,13 +25,17 @@
     a {
       font-weight: normal;
       color: $black;
+    }
 
-      &::after {
-        content: '>';
-        vertical-align: middle;
-        padding-right: 0.3125rem;
-        padding-left: 0.3125rem;
-      }
+    &::after {
+      content: '>';
+      vertical-align: middle;
+      padding-right: 0.3125rem;
+      padding-left: 0.3125rem;
+    }
+
+    &:last-of-type::after {
+      display: none;
     }
   }
 

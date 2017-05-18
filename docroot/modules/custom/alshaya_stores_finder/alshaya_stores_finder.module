@@ -51,13 +51,13 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#weight' => 100,
       ];
       $form['current_location'] = [
-        '#markup' => '<a href="javascript:;" class="current-location">' . t('Use my current location') . '</a>',
+        '#markup' => '<a href="javascript:;" class="current-location">' . t('Near me') . '</a>',
         '#weight' => -1,
       ];
 
       // Adding placeholder to the input field.
       $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
-      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#prefix'] = '<div class="label--location">' . t('Find stores nearest to') . '</div>';
+      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#prefix'] = '<div class="label--location">' . t('Find stores near') . '</div>';
       unset($form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#description']);
     }
   }

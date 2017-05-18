@@ -131,7 +131,10 @@
         $('.hours--label').toggleClass('open');
       });
 
-      $('.node--type-store .field--name-field-store-address, .node--type-store .hours--label, .node--type-store .open--hours').wrapAll('<div class="store--wrapper" />');
+      $('.label--location').each(function (index) {
+        $(this).next('.form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api').andSelf().wrapAll("<div class='store-finder--wrapper' />");
+      });
+
     }
   };
 

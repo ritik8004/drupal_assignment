@@ -23,6 +23,6 @@ settings:
 visibility:
   request_path:
     id: request_path
-    pages: "/store-finder\r\n/store-finder/map"
+    pages: "/store-finder\r\n/store-finder/map\r\n/store-finder/list"
     negate: false
     context_mapping: {  }
