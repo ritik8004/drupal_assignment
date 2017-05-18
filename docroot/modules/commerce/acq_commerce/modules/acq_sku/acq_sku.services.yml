@@ -19,9 +19,6 @@ services:
       - '@logger.factory'
       - 'acq_product_category'
 
-  acq_sku.download_images_queue:
-    class: Drupal\acq_sku\DownloadImagesQueue
-
   acq_sku.form_builder:
     class: Drupal\acq_sku\Form\AcqSkuFormBuilder
     arguments:

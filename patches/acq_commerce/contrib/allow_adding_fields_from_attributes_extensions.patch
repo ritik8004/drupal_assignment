@@ -1,19 +1,20 @@
 diff --git a/modules/acq_sku/acq_sku.module b/modules/acq_sku/acq_sku.module
-index d7fa1ab..8604e09 100644
+index d9263b9..c0c96aa 100755
 --- a/modules/acq_sku/acq_sku.module
 +++ b/modules/acq_sku/acq_sku.module
-@@ -33,3 +33,48 @@ function acq_sku_preprocess_acq_sku(&$variables) {
+@@ -37,3 +37,50 @@ function acq_sku_preprocess_acq_sku(&$variables) {
    }
-
+ 
  }
 +
 +/**
 + * Function to allow custom modules to add base fields for acq_sku entity type.
 + *
 + * @param array $fields
-+ *   An associative array containing fields, each field must have:
-+ *   - machine_name: This must be the same as the attribute key.
-+ *   - label: Label to be used for admin forms and display.
++ *   An associative array containing field_machine_name as key and following
++ *   data in value:
++ *   - parent: (Required) Parent key in the array where to look for data.
++ *   - label: (Required) Label to be used for admin forms and display.
 + *   - description: Description of the field to be used in admin forms.
 + *   - cardinality: Number of values allowed to be stored.
 + *   - type: Type of the field.
@@ -21,6 +22,7 @@ index d7fa1ab..8604e09 100644
 + *   - configurable: Whether the field is part of configurable options.
 + *   - visible_view: Whether the field should be visible while viewing content.
 + *   - visible_form: Whether the field should be visible in form.
++ *   - serialize: (Optional) Should the data be stored as serialized.
 + */
 +function acq_sku_add_base_fields(array $fields) {
 +  // Get the fields from config.
@@ -30,19 +32,19 @@ index d7fa1ab..8604e09 100644
 +  // Initialise with array if required.
 +  $additionalFields = empty($additionalFields) || !is_array($additionalFields) ? [] : $additionalFields;
 +
-+  foreach ($fields as $field) {
++  foreach ($fields as $machine_name => $field) {
 +    // Confirm we have minimum required data available to create the fields.
-+    if (empty($field['machine_name']) || empty($field['label'])) {
-+      throw new \Exception('Fields machine name and Label cannot be empty.');
++    if (empty($field['label'])) {
++      throw new \Exception('Field Label cannot be empty.');
 +    }
 +
 +    // Check if the field is already available in config.
-+    if (isset($additionalFields[$field['machine_name']])) {
++    if (isset($additionalFields[$machine_name])) {
 +      throw new \Exception('Field machine name used already.');
 +    }
 +
 +    // Add the field to storedFields so we store them to config.
-+    $additionalFields[$field['machine_name']] = $field;
++    $additionalFields[$machine_name] = $field;
 +  }
 +
 +  // Store the fields in config.
@@ -52,24 +54,27 @@ index d7fa1ab..8604e09 100644
 +  \Drupal::service("entity.definition_update_manager")->applyUpdates();
 +}
 diff --git a/modules/acq_sku/src/Entity/SKU.php b/modules/acq_sku/src/Entity/SKU.php
-index ddbf25f..812d9d5 100644
+index 0de4ab1..d106b41 100755
 --- a/modules/acq_sku/src/Entity/SKU.php
 +++ b/modules/acq_sku/src/Entity/SKU.php
-@@ -334,6 +334,64 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+@@ -315,6 +315,84 @@ class SKU extends ContentEntityBase implements SKUInterface {
        ->setLabel(t('Changed'))
        ->setDescription(t('The time that the entity was last edited.'));
-
+ 
 +    // Get all the fields added by other modules and add them as base fields.
 +    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
 +
++    // Get the default weight increment value from variables.
++    $defaultWeightIncrement = \Drupal::state()->get('acq_sku.base_field_weight_increment', 20);
++
 +    // Check if we have additional fields to be added as base fields.
 +    if (!empty($additionalFields) && is_array($additionalFields)) {
-+      foreach ($additionalFields as $field_info) {
++      foreach ($additionalFields as $machine_name => $field_info) {
 +        // Initialise the field variable.
 +        $field = NULL;
 +
 +        // Showing the fields at the bottom.
-+        $weight = 20 + count($fields);
++        $weight = $defaultWeightIncrement + count($fields);
 +
 +        switch ($field_info['type']) {
 +          case 'string':
@@ -90,6 +95,25 @@ index ddbf25f..812d9d5 100644
 +              ]);
 +            }
 +            break;
++
++          case 'text_long':
++            $field = BaseFieldDefinition::create('text_long');
++
++            if ($field_info['visible_view']) {
++              $field->setDisplayOptions('view', [
++                'label' => 'hidden',
++                'type' => 'text_default',
++                'weight' => $weight,
++              ]);
++            }
++
++            if ($field_info['visible_form']) {
++              $field->setDisplayOptions('form', [
++                'type' => 'text_textfield',
++                'weight' => $weight,
++              ]);
++            }
++            break;
 +        }
 +
 +        // Check if we don't have the field type defined yet.
@@ -97,63 +121,65 @@ index ddbf25f..812d9d5 100644
 +          throw new \RuntimeException('Field type not defined yet, please contact TA.');
 +        }
 +
-+        $field->setLabel(t($field_info['label']));
++        $field->setLabel($field_info['label']);
 +
 +        // Update cardinality with default value if empty.
 +        $field_info['description'] = empty($field_info['description']) ? 1 : $field_info['description'];
-+        $field->setDescription(t($field_info['description']));
++        $field->setDescription($field_info['description']);
 +
 +        // Update cardinality with default value if empty.
 +        $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];
 +        $field->setCardinality($field_info['cardinality']);
 +
-+
 +        $field->setDisplayConfigurable('form', 1);
 +        $field->setDisplayConfigurable('view', 1);
 +
 +        // We will use attr prefix to avoid conflicts with default base fields.
-+        $fields['attr_' . $field_info['machine_name']] = $field;
++        $fields['attr_' . $machine_name] = $field;
 +      }
 +    }
 +
      return $fields;
    }
- }
+ 
 diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
-index 03210ef..69427a4 100644
+index 1ce1d0c..3212cc3 100755
 --- a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
 +++ b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
-@@ -191,6 +191,9 @@ public function post(array $products = [])
-         $sku->price->value = $product['price'];
-         $sku->attributes = $this->formatProductAttributes($product['attributes']);
-
-+        // Update the fields based on the values from attributes.
-+        $this->updateAttributeFields($sku, $product['attributes']);
+@@ -3,6 +3,7 @@
+ namespace Drupal\acq_sku\Plugin\rest\resource;
+ 
+ use Drupal\acq_sku\CategoryRepositoryInterface;
++use Drupal\acq_sku\Entity\SKU;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Entity\Query\QueryFactory;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+@@ -231,6 +232,12 @@ class ProductSyncResource extends ResourceBase {
+         $created++;
+       }
+ 
++      // Update the fields based on the values from attributes.
++      $this->updateAttributeFields($sku, $product['attributes']);
 +
-         // Update upsell linked SKUs.
-         $this->updateLinkedSkus('upsell', $sku, $product['linked']);
-
-@@ -212,6 +215,9 @@ public function post(array $products = [])
-           'attributes' => $this->formatProductAttributes($product['attributes']),
-         ));
-
-+        // Update the fields based on the values from attributes.
-+        $this->updateAttributeFields($sku, $product['attributes']);
++      // Update the fields based on the values from extension.
++      $this->updateExtensionFields($sku, $product['extension']);
 +
-         // Update upsell linked SKUs.
-         $this->updateLinkedSkus('upsell', $sku, $product['linked']);
-
-@@ -400,4 +406,29 @@ private function updateLinkedSkus($type, SKU &$sku, array $linked) {
+       $plugin_manager = \Drupal::service('plugin.manager.sku');
+       $plugin_definition = $plugin_manager->pluginFromSKU($sku);
+ 
+@@ -366,4 +373,84 @@ class ProductSyncResource extends ResourceBase {
      }
    }
-
+ 
 +  /**
-+   * updateAttributeFields
++   * Update attribute fields.
 +   *
 +   * Update the fields based on the values from attributes.
 +   *
-+   * @param SKU $sku
++   * @param Drupal\acq_sku\Entity\SKU $sku
++   *   The root SKU.
 +   * @param array $attributes
++   *   The attributes to set.
 +   */
 +  private function updateAttributeFields(SKU $sku, array $attributes) {
 +    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
@@ -164,10 +190,63 @@ index 03210ef..69427a4 100644
 +      if (isset($additionalFields[$key])) {
 +        $field = $additionalFields[$key];
 +
++        if ($field['parent'] != 'attributes') {
++          continue;
++        }
++
 +        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
++        $field_key = 'attr_' . $key;
++
++        switch ($field['type']) {
++          case 'string':
++            $sku->{$field_key}->setValue($value);
++            break;
++
++          case 'text_long':
++            $value = isset($field['serialize']) ? serialize($value) : $value;
++            $sku->{$field_key}->setValue($value);
++            break;
++        }
++      }
++    }
++  }
++
++  /**
++   * Update extension fields.
++   *
++   * Update the fields based on the values from extension.
++   *
++   * @param \Drupal\acq_sku\Entity\SKU $sku
++   *   The root SKU.
++   * @param array $attributes
++   *   The attributes to set.
++   */
++  private function updateExtensionFields(SKU $sku, array $attributes) {
++    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
++
++    // Loop through all the attributes available for this particular SKU.
++    foreach ($attributes as $key => $value) {
++      // Check if attribute is required by us.
++      if (isset($additionalFields[$key])) {
++        $field = $additionalFields[$key];
++
++        if ($field['parent'] != 'extension') {
++          continue;
++        }
 +
 +        $field_key = 'attr_' . $key;
-+        $sku->{$field_key}->setValue($value);
++
++        switch ($field['type']) {
++          case 'string':
++            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
++            $sku->{$field_key}->setValue($value);
++            break;
++
++          case 'text_long':
++            $value = isset($field['serialize']) ? serialize($value) : $value;
++            $sku->{$field_key}->setValue($value);
++            break;
++        }
 +      }
 +    }
 +  }
