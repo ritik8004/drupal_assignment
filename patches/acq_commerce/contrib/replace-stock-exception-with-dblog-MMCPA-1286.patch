@@ -1,7 +1,7 @@
-diff --git a/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php b/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
 index 5e37081..63e97d3 100644
---- a/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
-+++ b/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
 @@ -2,6 +2,8 @@
  
  namespace Drupal\acq_commerce\Conductor;

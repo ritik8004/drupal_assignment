@@ -106,17 +106,6 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  uri:
-    label: 'SKUs » SKU Reference » Image » File » URI'
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_image:entity:uri'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-        - file
   title:
     label: Title
     datasource_id: 'entity:node'
