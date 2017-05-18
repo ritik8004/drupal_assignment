@@ -47,8 +47,7 @@
   }
 
   #edit-billing-address-same-as-shipping {
-
-    @include breakpoint($mobile){
+    @include breakpoint($mobile) {
       padding-#{$left}: 0;
     }
 
