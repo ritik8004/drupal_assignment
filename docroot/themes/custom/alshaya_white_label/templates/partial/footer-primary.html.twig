@@ -6,7 +6,7 @@
         <div class="language--switcher mobile-only-block">
           {{ page.footer_primary.languageswitcher_2 }}
         </div>
-        {{ page.footer_primary|without('views_block__footer_categories_block_footer_categories', 'aboutbrand', 'help', 'languageswitcher_2', 'sociallinks') }}
+        {{ page.footer_primary|without('shopby', 'aboutbrand', 'help', 'languageswitcher_2', 'sociallinks') }}
 
         <div class="footer--social above-mobile-block">
           {{ page.footer_primary.sociallinks }}
@@ -19,7 +19,7 @@
 
       <div class="footer--menu">
         <div class="footer--categories">
-          {{ page.footer_primary.views_block__footer_categories_block_footer_categories }}
+          {{ page.footer_primary.shopby }}
         </div>
 
         <div class="footer--abouthelp">
