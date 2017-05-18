@@ -4,16 +4,3 @@
  * @file
  * Module file.
  */
-
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-
-/**
- * Implements hook_ENTITY_TYPE_view_alter().
- */
-function alshaya_product_acq_sku_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  // Remove/Hide the 'add to cart' form from product list/search page.
-  if ($build['#view_mode'] == 'product_list' || $build['#view_mode'] == 'search_result') {
-    $build['#no_add_to_cart'] = TRUE;
-  }
-}

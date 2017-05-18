@@ -107,6 +107,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       alshaya_acm_product_get_gallery($build, $sku_entity);
+
+      _alshaya_acm_product_build_price($build, $sku_entity);
+
+      $build['item_code']['#markup'] = $sku;
+
+      $build['description']['#markup'] = $entity->get('body')->getValue()[0]['value'];
+
+      $build['short_description']['#markup'] = $sku_entity->get('attr_short_description')->getString() . $sku_entity->get('attr_bullet_points')->getString();
     }
     elseif ($view_mode == 'teaser') {
 
@@ -178,8 +186,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
  */
 function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
   // Remove/Hide the 'add to cart' form from product list/search page.
-  if ($build['#view_mode'] == 'teaser') {
+  if ($build['#view_mode'] == 'search_result') {
     $build['#no_add_to_cart'] = TRUE;
+  }
+
+  // Show the price inside the SKU display when in full view mode.
+  if ($build['#view_mode'] == 'full') {
+    unset($build['name']);
+    unset($build['price']);
   }
 }
 
