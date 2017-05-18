@@ -100,7 +100,7 @@
 
   @include breakpoint($desktop) {
     padding: 0.6em 0;
-    margin: 4.5em auto 1em;
+    margin: 4.813rem auto 1em;
   }
 
   .messages__wrapper {
@@ -108,6 +108,12 @@
 
     @include breakpoint($tablet) {
       width: 98%;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .block-system-main-block {
+      margin-left: 0.5rem;
     }
   }
 
@@ -119,6 +125,7 @@
 
     @include breakpoint($desktop) {
       max-width: 24.8rem;
+      top: 0.8125rem;
     }
 
     .form-text,
@@ -146,6 +153,7 @@
 
     @include breakpoint($desktop) {
       top: -4.5rem;
+      margin-left: 6px;
     }
   }
 
@@ -162,7 +170,7 @@
       }
 
       @include breakpoint($desktop) {
-        margin-top: 5.2em;
+        margin-top: 4.438rem;
       }
     }
 
@@ -179,6 +187,10 @@
 
       input {
         font-size: 0.75rem;
+
+        @include breakpoint($desktop) {
+          width: 91px;
+        }
       }
     }
   }

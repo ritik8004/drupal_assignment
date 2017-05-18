@@ -60,7 +60,7 @@ header {
 
     @include breakpoint($desktop) {
       margin-top: 2.125rem;
-      padding-bottom: 1.75rem;
+      padding-bottom: 2rem;
     }
 
     @include breakpoint($only-tablet) {
