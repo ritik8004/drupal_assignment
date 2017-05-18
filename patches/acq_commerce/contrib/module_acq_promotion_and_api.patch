@@ -1,0 +1,656 @@
+diff --git a/modules/acq_promotion/acq_promotion.api.php b/modules/acq_promotion/acq_promotion.api.php
+new file mode 100644
+index 0000000..146c581
+--- /dev/null
++++ b/modules/acq_promotion/acq_promotion.api.php
+@@ -0,0 +1,30 @@
++<?php
++
++/**
++ * @file
++ * Hooks specific to the acq_promotion module.
++ */
++
++/**
++ * @addtogroup hooks
++ * @{
++ */
++
++/**
++ * Alter promotion node before it is saved during insert or update.
++ *
++ * Promotion data from API is passed here to allow other modules to read from
++ * the data provided by API and update promotion node accordingly.
++ *
++ * @param \Drupal\node\NodeInterface $node
++ *   Node to alter.
++ * @param array $promotion
++ *   Array containing details provided by API.
++ */
++function hook_acq_promotion_promotion_node_alter(Drupal\node\NodeInterface $node, array $promotion) {
++
++}
++
++/**
++ * @} End of "addtogroup hooks".
++ */
+diff --git a/modules/acq_promotion/acq_promotion.drush.inc b/modules/acq_promotion/acq_promotion.drush.inc
+new file mode 100644
+index 0000000..52145a9
+--- /dev/null
++++ b/modules/acq_promotion/acq_promotion.drush.inc
+@@ -0,0 +1,32 @@
++<?php
++
++/**
++ * @file
++ * Provides drush commands for the promotions of Acquia Commerce connector.
++ */
++
++/**
++ * Implements hook_drush_command().
++ */
++function acq_promotion_drush_command() {
++  $commands = [];
++
++  $commands['sync-commerce-promotions'] = [
++    'description' => 'Run a full synchronization of all commerce promotion records.',
++    'aliases'     => ['acspm'],
++    'examples'    => [
++      'drush acspm' => 'Run a full synchronization of all available promotions.',
++    ],
++  ];
++
++  return ($commands);
++}
++
++/**
++ * Implements drush product sync command.
++ */
++function drush_acq_promotion_sync_commerce_promotions() {
++  drush_print(dt('Synchronizing all commerce promotions, this usually takes some time...'));
++  \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
++  drush_print(dt('Done.'));
++}
+diff --git a/modules/acq_promotion/acq_promotion.info.yml b/modules/acq_promotion/acq_promotion.info.yml
+new file mode 100644
+index 0000000..01a19b4
+--- /dev/null
++++ b/modules/acq_promotion/acq_promotion.info.yml
+@@ -0,0 +1,7 @@
++name: Acquia Commerce Promotion
++type: module
++description: This module provides Promotions functionality to the Acquia Commerce Connector.
++core: 8.x
++package: Commerce
++dependencies:
++  - acq_sku
+diff --git a/modules/acq_promotion/acq_promotion.install b/modules/acq_promotion/acq_promotion.install
+new file mode 100644
+index 0000000..51f37ce
+--- /dev/null
++++ b/modules/acq_promotion/acq_promotion.install
+@@ -0,0 +1,6 @@
++<?php
++
++/**
++ * @file
++ * Contains install hooks for acq_promotion.
++ */
+diff --git a/modules/acq_promotion/acq_promotion.module b/modules/acq_promotion/acq_promotion.module
+new file mode 100644
+index 0000000..1e6b60b
+--- /dev/null
++++ b/modules/acq_promotion/acq_promotion.module
+@@ -0,0 +1,9 @@
++<?php
++
++/**
++ * @file
++ * Acquia Commerce promotions module file.
++ *
++ * Provides base hooks to the promotions functionality of Acquia Commerce
++ * connector.
++ */
+diff --git a/modules/acq_promotion/acq_promotion.services.yml b/modules/acq_promotion/acq_promotion.services.yml
+new file mode 100644
+index 0000000..f9c4cc5
+--- /dev/null
++++ b/modules/acq_promotion/acq_promotion.services.yml
+@@ -0,0 +1,7 @@
++services:
++  acq_promotion.promotions_manager:
++    class: Drupal\acq_promotion\AcqPromotionsManager
++    arguments:
++      - '@entity_type.manager'
++      - '@acq_commerce.api'
++      - '@logger.factory'
+diff --git a/modules/acq_promotion/config/install/core.base_field_override.node.acq_promotion.promote.yml b/modules/acq_promotion/config/install/core.base_field_override.node.acq_promotion.promote.yml
+new file mode 100644
+index 0000000..9ce5870
+--- /dev/null
++++ b/modules/acq_promotion/config/install/core.base_field_override.node.acq_promotion.promote.yml
+@@ -0,0 +1,21 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - node.type.acq_promotion
++id: node.acq_promotion.promote
++field_name: promote
++entity_type: node
++bundle: acq_promotion
++label: 'Promoted to front page'
++description: ''
++required: false
++translatable: true
++default_value:
++  -
++    value: 0
++default_value_callback: ''
++settings:
++  on_label: 'On'
++  off_label: 'Off'
++field_type: boolean
+diff --git a/modules/acq_promotion/config/install/core.base_field_override.node.acq_promotion.title.yml b/modules/acq_promotion/config/install/core.base_field_override.node.acq_promotion.title.yml
+new file mode 100644
+index 0000000..2927c61
+--- /dev/null
++++ b/modules/acq_promotion/config/install/core.base_field_override.node.acq_promotion.title.yml
+@@ -0,0 +1,17 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - node.type.acq_promotion
++id: node.acq_promotion.title
++field_name: title
++entity_type: node
++bundle: acq_promotion
++label: Name
++description: ''
++required: true
++translatable: true
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: string
+diff --git a/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml b/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml
+new file mode 100644
+index 0000000..ab1379f
+--- /dev/null
++++ b/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml
+@@ -0,0 +1,91 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.field.node.acq_promotion.field_acq_promotion_data
++    - field.field.node.acq_promotion.field_acq_promotion_description
++    - field.field.node.acq_promotion.field_acq_promotion_rule_id
++    - node.type.acq_promotion
++  module:
++    - path
++    - text
++    - workbench_moderation
++id: node.acq_promotion.default
++targetEntityType: node
++bundle: acq_promotion
++mode: default
++content:
++  created:
++    type: datetime_timestamp
++    weight: 10
++    region: content
++    settings: {  }
++    third_party_settings: {  }
++  field_acq_promotion_data:
++    weight: 39
++    settings:
++      rows: 5
++      placeholder: ''
++    third_party_settings: {  }
++    type: string_textarea
++    region: content
++  field_acq_promotion_description:
++    weight: 32
++    settings:
++      rows: 5
++      placeholder: ''
++    third_party_settings: {  }
++    type: text_textarea
++    region: content
++  field_acq_promotion_rule_id:
++    weight: 33
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++    type: string_textfield
++    region: content
++  langcode:
++    type: language_select
++    weight: 2
++    region: content
++    settings: {  }
++    third_party_settings: {  }
++  path:
++    type: path
++    weight: 30
++    region: content
++    settings: {  }
++    third_party_settings: {  }
++  promote:
++    type: boolean_checkbox
++    settings:
++      display_label: true
++    weight: 15
++    region: content
++    third_party_settings: {  }
++  sticky:
++    type: boolean_checkbox
++    settings:
++      display_label: true
++    weight: 16
++    region: content
++    third_party_settings: {  }
++  title:
++    type: string_textfield
++    weight: -5
++    region: content
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++  uid:
++    type: entity_reference_autocomplete
++    weight: 5
++    settings:
++      match_operator: CONTAINS
++      size: 60
++      placeholder: ''
++    region: content
++    third_party_settings: {  }
++hidden: {  }
+diff --git a/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml b/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
+new file mode 100644
+index 0000000..41135b0
+--- /dev/null
++++ b/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
+@@ -0,0 +1,37 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.field.node.acq_promotion.field_acq_promotion_data
++    - field.field.node.acq_promotion.field_acq_promotion_description
++    - field.field.node.acq_promotion.field_acq_promotion_rule_id
++    - node.type.acq_promotion
++  module:
++    - text
++    - user
++id: node.acq_promotion.default
++targetEntityType: node
++bundle: acq_promotion
++mode: default
++content:
++  field_acq_promotion_description:
++    weight: 2
++    label: above
++    settings: {  }
++    third_party_settings: {  }
++    type: text_default
++    region: content
++  links:
++    weight: 1
++    region: content
++    settings: {  }
++    third_party_settings: {  }
++  sharethis:
++    weight: 0
++    region: content
++    settings: {  }
++    third_party_settings: {  }
++hidden:
++  field_acq_promotion_rule_id: true
++  field_acq_promotion_data: true
++  langcode: true
+diff --git a/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_data.yml b/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_data.yml
+new file mode 100644
+index 0000000..00a19ff
+--- /dev/null
++++ b/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_data.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.node.field_acq_promotion_data
++    - node.type.acq_promotion
++id: node.acq_promotion.field_acq_promotion_data
++field_name: field_acq_promotion_data
++entity_type: node
++bundle: acq_promotion
++label: Data
++description: ''
++required: true
++translatable: false
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: string_long
+diff --git a/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_description.yml b/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_description.yml
+new file mode 100644
+index 0000000..19b1cf5
+--- /dev/null
++++ b/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_description.yml
+@@ -0,0 +1,20 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.node.field_acq_promotion_description
++    - node.type.acq_promotion
++  module:
++    - text
++id: node.acq_promotion.field_acq_promotion_description
++field_name: field_acq_promotion_description
++entity_type: node
++bundle: acq_promotion
++label: Description
++description: ''
++required: false
++translatable: false
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: text_long
+diff --git a/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_rule_id.yml b/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_rule_id.yml
+new file mode 100644
+index 0000000..6a16840
+--- /dev/null
++++ b/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_rule_id.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.node.field_acq_promotion_rule_id
++    - node.type.acq_promotion
++id: node.acq_promotion.field_acq_promotion_rule_id
++field_name: field_acq_promotion_rule_id
++entity_type: node
++bundle: acq_promotion
++label: 'Rule ID'
++description: ''
++required: true
++translatable: false
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: string
+diff --git a/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_data.yml b/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_data.yml
+new file mode 100644
+index 0000000..1b24dbd
+--- /dev/null
++++ b/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_data.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - node
++id: node.field_acq_promotion_data
++field_name: field_acq_promotion_data
++entity_type: node
++type: string_long
++settings:
++  case_sensitive: false
++module: core
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_description.yml b/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_description.yml
+new file mode 100644
+index 0000000..c8f89cd
+--- /dev/null
++++ b/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_description.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - node
++    - text
++id: node.field_acq_promotion_description
++field_name: field_acq_promotion_description
++entity_type: node
++type: text_long
++settings: {  }
++module: text
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_rule_id.yml b/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_rule_id.yml
+new file mode 100644
+index 0000000..0c52e7b
+--- /dev/null
++++ b/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_rule_id.yml
+@@ -0,0 +1,20 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - node
++id: node.field_acq_promotion_rule_id
++field_name: field_acq_promotion_rule_id
++entity_type: node
++type: string
++settings:
++  max_length: 255
++  is_ascii: false
++  case_sensitive: false
++module: core
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/modules/acq_promotion/config/install/language.content_settings.node.acq_promotion.yml b/modules/acq_promotion/config/install/language.content_settings.node.acq_promotion.yml
+new file mode 100644
+index 0000000..4b37f11
+--- /dev/null
++++ b/modules/acq_promotion/config/install/language.content_settings.node.acq_promotion.yml
+@@ -0,0 +1,10 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - node.type.acq_promotion
++id: node.acq_promotion
++target_entity_type_id: node
++target_bundle: acq_promotion
++default_langcode: site_default
++language_alterable: false
+diff --git a/modules/acq_promotion/config/install/node.type.acq_promotion.yml b/modules/acq_promotion/config/install/node.type.acq_promotion.yml
+new file mode 100644
+index 0000000..f05202c
+--- /dev/null
++++ b/modules/acq_promotion/config/install/node.type.acq_promotion.yml
+@@ -0,0 +1,17 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - menu_ui
++third_party_settings:
++  menu_ui:
++    available_menus:
++      - main
++    parent: 'main:'
++name: Promotion
++type: acq_promotion
++description: ''
++help: ''
++new_revision: true
++preview_mode: 1
++display_submitted: false
+diff --git a/modules/acq_promotion/src/AcqPromotionsManager.php b/modules/acq_promotion/src/AcqPromotionsManager.php
+new file mode 100644
+index 0000000..134ca93
+--- /dev/null
++++ b/modules/acq_promotion/src/AcqPromotionsManager.php
+@@ -0,0 +1,110 @@
++<?php
++
++namespace Drupal\acq_promotion;
++
++use Drupal\acq_commerce\Conductor\APIWrapper;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Logger\LoggerChannelFactoryInterface;
++
++/**
++ * Class AcqPromotionsManager.
++ */
++class AcqPromotionsManager {
++
++  /**
++   * Node Entity Storage.
++   *
++   * @var \Drupal\node\NodeStorageInterface
++   */
++  private $nodeStorage;
++
++  /**
++   * The api wrapper.
++   *
++   * @var \Drupal\acq_commerce\Conductor\APIWrapper
++   */
++  protected $apiWrapper;
++
++  /**
++   * Constructs a new AcqPromotionsManager object.
++   *
++   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
++   *   EntityTypeManager object.
++   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
++   *   The api wrapper.
++   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
++   *   LoggerFactory object.
++   */
++  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
++    $this->nodeStorage = $entity_type_manager->getStorage('node');
++    $this->apiWrapper = $api_wrapper;
++    $this->logger = $logger_factory->get('acq_promotion');
++  }
++
++  /**
++   * Sync promotions from API to Drupal.
++   */
++  public function syncPromotions() {
++    $promotions = $this->apiWrapper->getPromotions();
++
++    foreach ($promotions as $promotion) {
++      // @TODO: Add basic validations to remove junk data here.
++      $this->syncPromotion($promotion);
++    }
++  }
++
++  /**
++   * Create/Update promotion from API data to Drupal.
++   *
++   * @param array $promotion
++   *   Promotion data from API.
++   */
++  protected function syncPromotion(array $promotion) {
++    // Load associated product display node.
++    $query = $this->nodeStorage->getQuery();
++    $query->condition('type', 'acq_promotion');
++    $query->condition('field_acq_promotion_rule_id', $promotion['rule_id']);
++
++    $nids = $query->execute();
++
++    // Create promotion.
++    if (empty($nids)) {
++      $node = $this->nodeStorage->create([
++        'type' => 'acq_promotion',
++      ]);
++
++      $node->get('field_acq_promotion_rule_id')->setValue($promotion['rule_id']);
++
++      $this->logger->info('Creating promotion for rule id @rule_id', ['@rule_id' => $promotion['rule_id']]);
++    }
++    // Update promotion.
++    else {
++      // Log a message for admin to check errors in data.
++      if (count($nids) > 1) {
++        $this->logger->critical('Multiple nodes found for rule id @rule_id', ['@rule_id' => $promotion['rule_id']]);
++      }
++
++      // We will use only the first matching node.
++      $node = $this->nodeStorage->load(reset($nids));
++
++      $this->logger->info('Updating promotion for rule id @rule_id', ['@rule_id' => $promotion['rule_id']]);
++    }
++
++    // Set the name into title.
++    $node->get('title')->setValue($promotion['name']);
++
++    // Set the description.
++    $node->get('field_acq_promotion_description')->setValue(['value' => $promotion['description'], 'format' => 'rich_text']);
++
++    // Set the status.
++    $node->setPublished((bool) $promotion['status']);
++
++    // Store everything as serialized string in DB.
++    $node->get('field_acq_promotion_data')->setValue(serialize($promotion));
++
++    // Invoke the alter hook to allow modules to update the node from API data.
++    \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $node, $promotion);
++
++    $node->save();
++  }
++}
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
+index 380912c..65f9901 100644
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
+@@ -465,6 +465,31 @@ public function getCategories() {
+   }
+ 
+   /**
++   * Fetches all promotions.
++   *
++   * @return array
++   *   Array of promotions.
++   */
++  public function getPromotions() {
++    $endpoint = 'promotions/category';
++
++    $doReq = function ($client, $opt) use ($endpoint) {
++      return ($client->get($endpoint, $opt));
++    };
++
++    $result = [];
++
++    try {
++      $result = $this->tryAgentRequest($doReq, 'getPromotions', 'promotions');
++    }
++    catch (ConductorException $e) {
++      throw new \Exception($e->getMessage(), $e->getCode());
++    }
++
++    return $result;
++  }
++
++  /**
+    * Gets products by updated time.
+    *
+    * @param \DateTime $date_time

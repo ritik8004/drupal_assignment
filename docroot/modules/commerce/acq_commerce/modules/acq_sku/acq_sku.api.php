@@ -5,11 +5,6 @@
  * Hooks specific to the acq_sku module.
  */
 
-use Drupal\node\NodeInterface;
-use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Xss;
-use Drupal\Core\Access\AccessResult;
-
 /**
  * @addtogroup hooks
  * @{
@@ -19,7 +14,7 @@ use Drupal\Core\Access\AccessResult;
  * Alter product node before it is saved during insert or update.
  *
  * Product data from API is passed here to allow other modules to read from
- * the data provided API and update product node accordingly.
+ * the data provided by API and update product node accordingly.
  *
  * @param \Drupal\node\NodeInterface $node
  *   Node to alter.
