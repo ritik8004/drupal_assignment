@@ -1,7 +1,10 @@
 .user-page.checkout-delivery.checkout-payment {
   .multistep-checkout {
-    border: 1px solid #adadad;
     margin-top: 0.75em;
+
+    @include breakpoint($tablet) {
+      border: 1px solid $white;
+    }
 
     fieldset {
       width: 100%;
@@ -42,10 +45,34 @@
   .fieldset-wrapper {
     padding: 1em;
   }
+
+  #edit-billing-address-same-as-shipping {
+    @include breakpoint($mobile) {
+      padding-#{$left}: 0;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 1em;
+
+      @include u-visibility(inline);
+    }
+  }
+
+  .js-form-type-radio {
+    @include u-visibility(inline-block);
+
+    @include breakpoint($desktop) {
+      margin-top: 0;
+    }
+
+    label.option {
+      top: 0;
+    }
+  }
 }
 
 #edit-checkout-terms {
-  padding: 0.25rem 1.35rem;
+  padding: 0.25rem 1rem;
 
   legend {
     display: none;
@@ -57,12 +84,13 @@
 
   .form-type-checkbox {
     .option::before {
-      margin-right: 0.9em;
+      margin-#{$right}: 0.9em;
       top: 0;
-    }
+      float: left;
 
-    p {
-      width: 58%;
+      p {
+        margin-#{$left}: 35px;
+      }
     }
   }
 }

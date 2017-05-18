@@ -30,3 +30,64 @@
     }
   }
 }
+
+.account--dashboard {
+  .account-content-wrapper {
+    &.has-join-club {
+      li {
+        @include breakpoint($desktop) {
+          width: 100%;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        width: 50%;
+        float: $left;
+      }
+    }
+  }
+
+  #block-jointheclub {
+    @include breakpoint($desktop) {
+      width: 50%;
+      float: $right;
+    }
+
+    h2 {
+      color: $dark-sand;
+      font-size: 14px;
+      font-family: "alshaya-bold";
+      text-transform: lowercase;
+      font-weight: normal;
+    }
+
+    img {
+      width: 80%;
+      max-width: 15.5rem;
+
+      @include breakpoint($tablet) {
+        margin-#{$left}: -2.6875rem;
+      }
+
+      @include breakpoint($desktop) {
+        float: $right;
+        width: 58%;
+        margin-#{$left}: 0;
+      }
+    }
+
+    p {
+      font-size: 12px;
+      margin: 5px 0;
+    }
+
+    a {
+      margin-top: 0.8em;
+
+      @include breakpoint($tablet) {
+        margin-top: 1.1em;
+      }
+    }
+  }
+}
+
