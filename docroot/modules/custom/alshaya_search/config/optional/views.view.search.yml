@@ -96,7 +96,7 @@ display:
         type: default
         options:
           grouping: {  }
-          row_class: ''
+          row_class: c-products__item
           default_row_class: true
           uses_fields: false
       row:

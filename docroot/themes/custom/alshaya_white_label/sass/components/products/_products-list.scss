@@ -91,9 +91,12 @@
     .field--name-name {
       margin-top: 0;
       margin-bottom: 0.875rem;
-      color: $grey-ash;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
+
+      a {
+        color: $grey-ash;
+      }
 
       @include breakpoint($tablet) {
         font-size: 0.875rem;
@@ -102,6 +105,12 @@
 
     .field--name-price {
       font-size: 0.75rem;
+
+      &.special-price-exists {
+        color: $scarlet;
+        text-decoration: line-through;
+        margin-#{$right}: 4px;
+      }
 
       @include breakpoint($tablet) {
         font-size: 0.9375rem;
