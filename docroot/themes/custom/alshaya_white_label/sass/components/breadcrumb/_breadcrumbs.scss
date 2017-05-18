@@ -4,7 +4,7 @@
   ol {
     max-width: 80.25rem;
     margin: auto;
-    padding: 0.9375rem 1.5rem;
+    padding: 0.875rem 1.5rem;
     font-size: 10px;
   }
 
@@ -12,17 +12,24 @@
     list-style: none;
     display: inline-block;
     font-weight: bold;
-    color: $black;
+    text-transform: lowercase;
 
     &:last-of-type a {
       font-weight: bold;
+      color: $breadcrumb-active;
+
+      &::after {
+        content: '';
+      }
     }
 
     a {
       font-weight: normal;
-      color: $black;
+      color: $greyish;
+      font-family: $arial;
 
       &::after {
+        color: $greyish;
         content: '>';
         vertical-align: middle;
         padding-right: 0.3125rem;
