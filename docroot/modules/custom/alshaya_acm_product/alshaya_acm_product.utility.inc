@@ -9,7 +9,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
-use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 
 /**
@@ -65,117 +64,11 @@ function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
     return [];
   }
 
-  if ($media_data = $sku_entity->get('attr_media')->getString()) {
-    $update_sku = FALSE;
-
-    $media_data_full = unserialize($media_data);
-
-    if (empty($media_data_full)) {
-      return [];
-    }
-
-    // @TODO: Remove this hard coded fix after getting answer why we have empty
-    // second array index and why all media come in first array index.
-    $media_data = reset($media_data_full);
-
-    foreach ($media_data as &$data) {
-      if ($data['media_type'] == 'image') {
-        if (empty($data['fid'])) {
-          try {
-            // Prepare the File object when we access it the first time.
-            $data['fid'] = alshaya_acm_product_download_sku_media_image($data, $sku_entity);
-            $update_sku = TRUE;
-          }
-          catch (\Exception $e) {
-            \Drupal::logger('alshaya_acm_product')->error($e->getMessage());
-            continue;
-          }
-        }
-
-        $data['file'] = File::load($data['fid']);
-
-        if (empty($data['label'])) {
-          $data['label'] = $sku_entity->label();
-        }
-      }
-
-      $media[$data['position']] = $data;
-    }
-
-    if ($update_sku) {
-      // @TODO: Remove this hard coded fix after getting answer why we have
-      // empty second array index and why all media come in first array index.
-      $media_data_full[0] = $media_data;
-      $sku_entity->get('attr_media')->setValue(serialize($media_data_full));
-      $sku_entity->save();
-    }
-  }
-
-  // Sort them by position again to ensure it works everytime.
-  ksort($media);
-
   if ($first_image_only) {
-    // We loop through all the media items and return the first image.
-    foreach ($media as $media_item) {
-      if ($media_item['media_type'] == 'image') {
-        return $media_item;
-      }
-    }
-
-    // We didn't find any image media so returning null.
-    return NULL;
+    return $sku_entity->getThumbnail();
   }
 
-  return $media;
-}
-
-/**
- * Function to save image file into public dir.
- *
- * @param array $data
- *   File data.
- * @param \Drupal\acq_sku\Entity\SKU $sku
- *   SKU entity.
- *
- * @return int
- *   File id.
- */
-function alshaya_acm_product_download_sku_media_image(array $data, SKU $sku) {
-  // Preparing args for all info/error messages.
-  $args = ['@file' => $data['file'], '@sku_id' => $sku->id()];
-
-  // Download the file contents.
-  $file_data = file_get_contents($data['file']);
-
-  // Check to ensure errors like 404, 403, etc. are catched and empty file
-  // not saved in SKU.
-  if (empty($file_data)) {
-    throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
-  }
-
-  // Get the path part in the url, remove hostname.
-  $path = parse_url($data['file'], PHP_URL_PATH);
-
-  // Remove slashes from start and end.
-  $path = trim($path, '/');
-
-  // Get the file name.
-  $file_name = basename($path);
-
-  // Prepare the directory path.
-  $directory = 'public://acm/' . str_replace('/' . $file_name, '', $path);
-
-  // Prepare the directory.
-  file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-
-  // Save the file as file entity.
-  /** @var \Drupal\file\Entity\File $file */
-  if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
-    return $file->id();
-  }
-  else {
-    throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
-  }
+  return $sku_entity->getMedia();
 }
 
 /**

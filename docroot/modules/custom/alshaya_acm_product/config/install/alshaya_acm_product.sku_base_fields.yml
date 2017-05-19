@@ -42,15 +42,3 @@ fields:
     configurable: 0
     visible_view: 0
     visible_form: 1
-
-  # Field to store media info.
-  media:
-    parent: 'extension'
-    label: 'Media'
-    description: 'Store all the media files info.'
-    cardinality: -1
-    type: 'text_long'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-    serialize: 1

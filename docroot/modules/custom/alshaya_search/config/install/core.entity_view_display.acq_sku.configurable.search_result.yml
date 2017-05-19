@@ -40,7 +40,6 @@ content:
     region: content
 hidden:
   attr_color: true
-  attr_media: true
   attr_short_description: true
   attr_size: true
   attributes: true

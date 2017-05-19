@@ -54,10 +54,188 @@ index d9263b9..c0c96aa 100755
 +  \Drupal::service("entity.definition_update_manager")->applyUpdates();
 +}
 diff --git a/modules/acq_sku/src/Entity/SKU.php b/modules/acq_sku/src/Entity/SKU.php
-index 0de4ab1..d106b41 100755
+index 0de4ab1..383f67d 100755
 --- a/modules/acq_sku/src/Entity/SKU.php
 +++ b/modules/acq_sku/src/Entity/SKU.php
-@@ -315,6 +315,84 @@ class SKU extends ContentEntityBase implements SKUInterface {
+@@ -7,6 +7,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
+ use Drupal\Core\Entity\ContentEntityBase;
+ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\acq_commerce\SKUInterface;
++use Drupal\file\Entity\File;
+ use Drupal\user\UserInterface;
+ 
+ /**
+@@ -50,6 +51,13 @@ use Drupal\user\UserInterface;
+ class SKU extends ContentEntityBase implements SKUInterface {
+ 
+   /**
++   * Processed media array.
++   *
++   * @var array
++   */
++  protected $media_data = [];
++
++  /**
+    * {@inheritdoc}
+    *
+    * When a new entity instance is added, set the user_id entity reference to
+@@ -77,6 +85,138 @@ class SKU extends ContentEntityBase implements SKUInterface {
+   }
+ 
+   /**
++   * Function to return media files for a SKU.
++   *
++   * @param bool $reset
++   *   Flag to reset cache and generate array again from serialized string.
++   *
++   * @return array
++   *   Array of media files.
++   */
++  public function getMedia($reset = FALSE) {
++    if (!$reset && !empty($this->media_data)) {
++      return $this->media_data;
++    }
++
++    if ($media_data = $this->get('media')->getString()) {
++      $update_sku = FALSE;
++
++      $media_data_full = unserialize($media_data);
++
++      if (empty($media_data_full)) {
++        return [];
++      }
++
++      // @TODO: Remove this hard coded fix after getting answer why we have empty
++      // second array index and why all media come in first array index.
++      $media_data = reset($media_data_full);
++
++      foreach ($media_data as &$data) {
++        if ($data['media_type'] == 'image') {
++          if (empty($data['fid'])) {
++            try {
++              // Prepare the File object when we access it the first time.
++              $data['fid'] = $this->downloadMediaImage($data);
++              $update_sku = TRUE;
++            }
++            catch (\Exception $e) {
++              \Drupal::logger('acq_sku')->error($e->getMessage());
++              continue;
++            }
++          }
++
++          $data['file'] = File::load($data['fid']);
++
++          if (empty($data['label'])) {
++            $data['label'] = $this->label();
++          }
++        }
++
++        $this->media_data[$data['position']] = $data;
++      }
++
++      if ($update_sku) {
++        // @TODO: Remove this hard coded fix after getting answer why we have
++        // empty second array index and why all media come in first array index.
++        $media_data_full[0] = $media_data;
++        $this->get('media')->setValue(serialize($media_data_full));
++        $this->save();
++      }
++    }
++
++    // Sort them by position again to ensure it works everytime.
++    ksort($this->media_data);
++
++    return $this->media_data;
++  }
++
++  /**
++   * Function to save image file into public dir.
++   *
++   * @param array $data
++   *   File data.
++   *
++   * @return int
++   *   File id.
++   */
++  protected function downloadMediaImage(array $data) {
++    // Preparing args for all info/error messages.
++    $args = ['@file' => $data['file'], '@sku_id' => $this->id()];
++
++    // Download the file contents.
++    $file_data = file_get_contents($data['file']);
++
++    // Check to ensure errors like 404, 403, etc. are catched and empty file
++    // not saved in SKU.
++    if (empty($file_data)) {
++      throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
++    }
++
++    // Get the path part in the url, remove hostname.
++    $path = parse_url($data['file'], PHP_URL_PATH);
++
++    // Remove slashes from start and end.
++    $path = trim($path, '/');
++
++    // Get the file name.
++    $file_name = basename($path);
++
++    // Prepare the directory path.
++    $directory = 'public://media/' . str_replace('/' . $file_name, '', $path);
++
++    // Prepare the directory.
++    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
++
++    // Save the file as file entity.
++    /** @var \Drupal\file\Entity\File $file */
++    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
++      return $file->id();
++    }
++    else {
++      throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
++    }
++  }
++
++  /**
++   * Function to return first image from media files for a SKU.
++   *
++   * @return array
++   *   Array of media files.
++   */
++  public function getThumbnail() {
++    $media = $this->getMedia();
++
++    // We loop through all the media items and return the first image.
++    foreach ($media as $media_item) {
++      if ($media_item['media_type'] == 'image') {
++        return $media_item;
++      }
++    }
++
++    return [];
++  }
++
++  /**
+    * Get plugin instance for current object.
+    *
+    * @return null|object
+@@ -296,6 +436,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
+       ->setDisplayConfigurable('form', TRUE)
+       ->setDisplayConfigurable('view', TRUE);
+ 
++    $fields['media'] = BaseFieldDefinition::create('text_long')
++      ->setLabel(t('Media'))
++      ->setDescription(t('Store all the media files info.'))
++      ->setDisplayOptions('form', [
++        'type' => 'text_textfield',
++        'weight' => 8,
++      ])
++      ->setDisplayConfigurable('form', TRUE)
++      ->setDisplayConfigurable('view', TRUE);
++
+     $fields['attributes'] = BaseFieldDefinition::create('key_value')
+       ->setLabel(t('Attributes'))
+       ->setDescription(t('Non-Drupal native product data.'))
+@@ -315,6 +465,84 @@ class SKU extends ContentEntityBase implements SKUInterface {
        ->setLabel(t('Changed'))
        ->setDescription(t('The time that the entity was last edited.'));
  
@@ -143,7 +321,7 @@ index 0de4ab1..d106b41 100755
    }
  
 diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
-index 1ce1d0c..3212cc3 100755
+index 1ce1d0c..32da378 100755
 --- a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
 +++ b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
 @@ -3,6 +3,7 @@
@@ -154,7 +332,24 @@ index 1ce1d0c..3212cc3 100755
  use Drupal\Core\Entity\EntityTypeManagerInterface;
  use Drupal\Core\Entity\Query\QueryFactory;
  use Drupal\Core\Config\ConfigFactoryInterface;
-@@ -231,6 +232,12 @@ class ProductSyncResource extends ResourceBase {
+@@ -203,6 +204,8 @@ class ProductSyncResource extends ResourceBase {
+ 
+         $sku->attributes = $this->formatProductAttributes($product['attributes']);
+ 
++        $sku->media = serialize($product['extension']['media']);
++
+         $this->logger->info(
+           'Updating product SKU @sku.',
+           ['@sku' => $product['sku']]
+@@ -219,6 +222,7 @@ class ProductSyncResource extends ResourceBase {
+           'special_price' => $product['special_price'],
+           'final_price' => $product['final_price'],
+           'attributes' => $this->formatProductAttributes($product['attributes']),
++          'media' => serialize($product['extension']['media']),
+         ]);
+ 
+         $display = $this->createDisplayNode($product);
+@@ -231,6 +235,12 @@ class ProductSyncResource extends ResourceBase {
          $created++;
        }
  
@@ -167,7 +362,7 @@ index 1ce1d0c..3212cc3 100755
        $plugin_manager = \Drupal::service('plugin.manager.sku');
        $plugin_definition = $plugin_manager->pluginFromSKU($sku);
  
-@@ -366,4 +373,84 @@ class ProductSyncResource extends ResourceBase {
+@@ -366,4 +376,84 @@ class ProductSyncResource extends ResourceBase {
      }
    }
  
