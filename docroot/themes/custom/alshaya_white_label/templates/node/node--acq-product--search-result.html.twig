@@ -7,7 +7,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 <article {{ attributes.addClass(classes) }}>
 
   <div class="content">
-    {{ content.image }}
+    <a href="{{ url }}">{{ content.image }}</a>
 
     <h2{{ title_attributes }} class="field--name-name">
       <a href="{{ url }}">{{ label }}</a>
