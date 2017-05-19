@@ -37,7 +37,7 @@
 
       @include breakpoint($desktop) {
         #edit-actions {
-          #{$left}: 62%;
+          #{$left}: 62% !important;
         }
       }
 
@@ -127,7 +127,8 @@
   .list-view-link::before {
     background: url('../imgs/icons/list.svg') no-repeat;
     width: 26px;
-    height: 16px;
+    height: 23px;
+    vertical-align: top;
   }
 
   .label--location {
@@ -340,9 +341,12 @@
     }
 
     .c-page-title {
-      border-bottom: 1px solid $white;
       margin-bottom: 0.6875rem;
       padding-bottom: 0.5rem;
+
+      @include breakpoint($only-mobile) {
+        border-bottom: 1px solid $white;
+      }
     }
 
     .current-location {
