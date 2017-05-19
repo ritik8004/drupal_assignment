@@ -30,7 +30,7 @@ class AlshayaAddressBookController extends ProfileController {
     $profile = $routeMatch->getParameter('profile');
 
     // If not address book, use default handling.
-    if ($profile->getType() != 'address_book') {
+    if ($profile->bundle() != 'address_book') {
       return parent::setDefault($routeMatch);
     }
 

@@ -19,7 +19,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    */
   public function getDescription() {
     // If not address book profile.
-    if ($this->entity->getType() != 'address_book') {
+    if ($this->entity->bundle() != 'address_book') {
       return parent::getDescription();
     }
 
@@ -31,7 +31,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    */
   public function getConfirmText() {
     // If not address book profile.
-    if ($this->entity->getType() != 'address_book') {
+    if ($this->entity->bundle() != 'address_book') {
       return parent::getDescription();
     }
 
@@ -43,7 +43,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    */
   public function getQuestion() {
     // If not address book profile.
-    if ($this->entity->getType() != 'address_book') {
+    if ($this->entity->bundle() != 'address_book') {
       return parent::getQuestion();
     }
 
@@ -55,7 +55,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    */
   public function getCancelText() {
     // If not address book profile.
-    if ($this->entity->getType() != 'address_book') {
+    if ($this->entity->bundle() != 'address_book') {
       return parent::getDescription();
     }
 
@@ -67,7 +67,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    */
   protected function getDeletionMessage() {
     // If not address book profile.
-    if ($this->entity->getType() != 'address_book') {
+    if ($this->entity->bundle() != 'address_book') {
       return parent::getDescription();
     }
 
@@ -79,7 +79,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-    if ($this->entity->getType() != 'address_book') {
+    if ($this->entity->bundle() != 'address_book') {
       return $form;
     }
 
