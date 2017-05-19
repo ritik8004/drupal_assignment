@@ -204,6 +204,8 @@ class ProductSyncResource extends ResourceBase {
 
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
+        $sku->media = serialize($product['extension']['media']);
+
         $this->logger->info(
           'Updating product SKU @sku.',
           ['@sku' => $product['sku']]
@@ -220,6 +222,7 @@ class ProductSyncResource extends ResourceBase {
           'special_price' => $product['special_price'],
           'final_price' => $product['final_price'],
           'attributes' => $this->formatProductAttributes($product['attributes']),
+          'media' => serialize($product['extension']['media']),
         ]);
 
         $display = $this->createDisplayNode($product);
