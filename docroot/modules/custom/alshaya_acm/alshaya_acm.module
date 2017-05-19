@@ -508,6 +508,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'price' => '',
         'currency_format' => '',
         'currency_code_position' => '',
+        'special_price' => '',
       ],
     ],
     'alshaya_cart_product_name' => [

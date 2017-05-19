@@ -161,18 +161,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       if ($sku_media) {
         $build['image'] = [
           '#theme' => 'image_style',
-          '#style_name' => '192x168',
+          '#style_name' => '291x288',
           '#uri' => $sku_media['file']->getFileUri(),
           '#title' => $sku_media['label'],
           '#alt' => $sku_media['label'],
         ];
       }
-
-      // Get the price.
-      $build['price'] = [
-        '#theme' => 'alshaya_acm_price',
-        '#price' => $sku_entity->get('price')->getString(),
-      ];
 
       // Get the special price.
       // @TODO: Calculate discount and pass it once we have some realistic data.
@@ -181,6 +175,21 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['special_price'] = [
           '#theme' => 'alshaya_acm_price',
           '#price' => $special_price,
+          '#special_price' => 'special-price',
+        ];
+
+        // Get the price.
+        $build['price'] = [
+          '#theme' => 'alshaya_acm_price',
+          '#price' => $sku_entity->get('price')->getString(),
+          '#special_price' => 'special-price-exists',
+        ];
+      }
+      else {
+        // Get the price.
+        $build['price'] = [
+          '#theme' => 'alshaya_acm_price',
+          '#price' => $sku_entity->get('price')->getString(),
         ];
       }
     }
