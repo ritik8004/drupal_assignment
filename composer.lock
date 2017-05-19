@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "deb27005ef4556173ff2c0515af82e0e",
-    "content-hash": "c7a121b5ca668b3ba4b7632998c7b42c",
+    "hash": "9f8378f568c3165b5a90a753530e6ea5",
+    "content-hash": "e8860c54530ccb56a84660dab211dede",
     "packages": [
         {
             "name": "acquia/blt",
@@ -5247,7 +5247,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/password_policy-8.x-3.0-alpha3.zip",
-                "reference": null,
+                "reference": "8.x-3.0-alpha3",
                 "shasum": "efe3ac404276ab2274b29393e55f6a4b7fb58681"
             },
             "require": {
