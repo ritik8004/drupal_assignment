@@ -12,11 +12,11 @@ use Drupal\file\Entity\File;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides 'Join the Club' block.
+ * Provides 'Join the club' block.
  *
  * @Block(
  *   id = "join_the_club",
- *   admin_label = @Translation("Join the Club")
+ *   admin_label = @Translation("Join the club")
  * )
  */
 class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {

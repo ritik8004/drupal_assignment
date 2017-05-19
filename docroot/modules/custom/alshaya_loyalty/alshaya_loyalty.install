@@ -6,6 +6,22 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function alshaya_loyalty_install() {
+  $strings = [
+    'Join the club' => [
+      'ar' => 'نادي الامتيازات',
+    ],
+    "<p><span class=\"icon-win\">&nbsp;</span>Win exciting prizes</p>\r\n\r\n<p><span class=\"icon-reward\">&nbsp;</span>Unlock exclusive rewards</p>\r\n\r\n<p><span class=\"icon-heart\">&nbsp;</span>Be the first to know</p>\r\n\r\n<p><a href=\"\">Learn more</a></p>\r\n" => [
+      'ar' => "<p><span class=\"icon-win\">&nbsp;</span>اربح جوائز مدهشة</p>\r\n\r\n<p><span class=\"icon-reward\">&nbsp;</span>احصل على مكافآت حصرية</p>\r\n\r\n<p><span class=\"icon-heart\">&nbsp;</span>كُن أول من يعلم</p>\r\n\r\n<p><a href=\"\">مزيد من المعلومات</a></p>\r\n",
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Set user account form display settings.
  *
  * Implements hook_modules_installed().
