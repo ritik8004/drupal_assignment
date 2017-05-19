@@ -47,12 +47,13 @@
     }
   }
 
-  #block-jointheclub {
+  .joinclub {
     @include breakpoint($desktop) {
-      width: 50%;
-      float: $right;
+      padding-#{$left}: 2.375rem;
     }
+  }
 
+  #block-jointheclub {
     h2 {
       color: $dark-sand;
       font-size: 14px;
