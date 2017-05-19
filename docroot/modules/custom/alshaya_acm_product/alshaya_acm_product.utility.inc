@@ -11,6 +11,7 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
+use Drupal\Component\Render\FormattableMarkup;
 
 /**
  * Utility function to return media files for a product.
