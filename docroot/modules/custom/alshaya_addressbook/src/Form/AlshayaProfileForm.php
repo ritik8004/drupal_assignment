@@ -18,7 +18,7 @@ class AlshayaProfileForm extends ProfileForm {
   protected function actions(array $form, FormStateInterface $form_state) {
     $element = parent::actions($form, $form_state);
 
-    if ($this->entity->getType() == 'address_book') {
+    if ($this->entity->bundle() == 'address_book') {
       $user_id = $this->currentUser()->id();
       $element['cancel_button'] = [
         '#type' => 'link',
