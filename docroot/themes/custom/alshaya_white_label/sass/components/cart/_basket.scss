@@ -180,9 +180,10 @@
     margin: 0;
 
     @include icon(infomation, after) {
-      margin-#{$left}: 0.5rem;
+      margin-#{$left}: 0.3rem;
       vertical-align: middle;
       font-weight: bold;
+      font-size: 1rem;
 
       @include breakpoint($desktop) {
         margin-#{$left}: 1rem;

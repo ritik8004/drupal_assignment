@@ -129,3 +129,41 @@
 .delivery-type {
   border-bottom: 1px solid $white;
 }
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-login {
+  .site-brand-home {
+    @extend .l-one--w;
+
+    border-bottom: 1px solid $white-three;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+
+    @include breakpoint($tablet) {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    a {
+      margin-#{$left}: 0;
+      width: 52.5%;
+
+      @include breakpoint($tablet) {
+        width: 29%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 50.5%;
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-login {
+  .l-one--w.checkout-login {
+    @include breakpoint($tablet) {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+}

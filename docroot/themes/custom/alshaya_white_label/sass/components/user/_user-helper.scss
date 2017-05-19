@@ -461,4 +461,21 @@
       }
     }
   }
+
+  &.order-detail {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        width: 22%;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 74.5%;
+        float: right;
+      }
+    }
+  }
 }
