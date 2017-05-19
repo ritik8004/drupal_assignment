@@ -393,8 +393,8 @@ function alshaya_acm_product_get_display_node($sku) {
  * @param mixed $sku
  *   SKU text or full entity object.
  *
- * @return null|string
- *   Return string of uri or Null if not found.
+ * @return null|array
+ *   Return array with file uri and label or Null if not found.
  */
 function alshaya_acm_get_product_display_image($sku) {
   // Load the first image.
@@ -404,7 +404,10 @@ function alshaya_acm_get_product_display_image($sku) {
   if (!empty($media_image)) {
     if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
       $file_uri = $media_image['file']->getFileUri();
-      return $file_uri;
+      return [
+        'uri' => $file_uri,
+        'label' => $media_image['label'],
+      ];
     }
   }
   // Sometimes sku created for size only, such sku don't have any image. only
