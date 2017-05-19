@@ -66,65 +66,67 @@ function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
     return [];
   }
 
-  if ($media_data = $sku_entity->get('attr_media')->getString()) {
-    $update_sku = FALSE;
+  if (!empty($sku_entity->attr_media)) {
+    if ($media_data = $sku_entity->get('attr_media')->getString()) {
+      $update_sku = FALSE;
 
-    $media_data_full = unserialize($media_data);
+      $media_data_full = unserialize($media_data);
 
-    if (empty($media_data_full)) {
-      return [];
-    }
+      if (empty($media_data_full)) {
+        return [];
+      }
 
-    // @TODO: Remove this hard coded fix after getting answer why we have empty
-    // second array index and why all media come in first array index.
-    $media_data = reset($media_data_full);
+      // @TODO: Remove this hard coded fix after getting answer why we have empty
+      // second array index and why all media come in first array index.
+      $media_data = reset($media_data_full);
 
-    foreach ($media_data as &$data) {
-      if ($data['media_type'] == 'image') {
-        if (empty($data['fid'])) {
-          try {
-            // Prepare the File object when we access it the first time.
-            $data['fid'] = alshaya_acm_product_download_sku_media_image($data, $sku_entity);
-            $update_sku = TRUE;
+      foreach ($media_data as &$data) {
+        if ($data['media_type'] == 'image') {
+          if (empty($data['fid'])) {
+            try {
+              // Prepare the File object when we access it the first time.
+              $data['fid'] = alshaya_acm_product_download_sku_media_image($data, $sku_entity);
+              $update_sku = TRUE;
+            }
+            catch (\Exception $e) {
+              \Drupal::logger('alshaya_acm_product')->error($e->getMessage());
+              continue;
+            }
           }
-          catch (\Exception $e) {
-            \Drupal::logger('alshaya_acm_product')->error($e->getMessage());
-            continue;
+
+          $data['file'] = File::load($data['fid']);
+
+          if (empty($data['label'])) {
+            $data['label'] = $sku_entity->label();
           }
         }
 
-        $data['file'] = File::load($data['fid']);
+        $media[$data['position']] = $data;
+      }
 
-        if (empty($data['label'])) {
-          $data['label'] = $sku_entity->label();
+      if ($update_sku) {
+        // @TODO: Remove this hard coded fix after getting answer why we have
+        // empty second array index and why all media come in first array index.
+        $media_data_full[0] = $media_data;
+        $sku_entity->get('attr_media')->setValue(serialize($media_data_full));
+        $sku_entity->save();
+      }
+    }
+
+    // Sort them by position again to ensure it works everytime.
+    ksort($media);
+
+    if ($first_image_only) {
+      // We loop through all the media items and return the first image.
+      foreach ($media as $media_item) {
+        if ($media_item['media_type'] == 'image') {
+          return $media_item;
         }
       }
 
-      $media[$data['position']] = $data;
+      // We didn't find any image media so returning null.
+      return NULL;
     }
-
-    if ($update_sku) {
-      // @TODO: Remove this hard coded fix after getting answer why we have
-      // empty second array index and why all media come in first array index.
-      $media_data_full[0] = $media_data;
-      $sku_entity->get('attr_media')->setValue(serialize($media_data_full));
-      $sku_entity->save();
-    }
-  }
-
-  // Sort them by position again to ensure it works everytime.
-  ksort($media);
-
-  if ($first_image_only) {
-    // We loop through all the media items and return the first image.
-    foreach ($media as $media_item) {
-      if ($media_item['media_type'] == 'image') {
-        return $media_item;
-      }
-    }
-
-    // We didn't find any image media so returning null.
-    return NULL;
   }
 
   return $media;

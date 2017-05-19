@@ -205,7 +205,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
     $item['name'] = $parent_sku->label();
   }
 
-  $orderRow['name'] = Unicode::truncate($item['name'], 25, TRUE, TRUE);
+  $orderRow['name'] = Unicode::truncate($item['name'], 25, FALSE, TRUE);
 
   // Calculate total items in the order.
   $orderRow['quantity'] = alshaya_acm_customer_get_order_total_quantity($order);
