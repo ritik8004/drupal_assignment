@@ -99,9 +99,12 @@ function alshaya_captcha_form_alter(array &$form, FormStateInterface $form_state
       }
 
       // If flood not exceeds threshold.
-      if ($flood->isAllowed($flood_event, $flood_threshold)) {
+      if ($flood->isAllowed($flood_event, $flood_threshold - 1)) {
         unset($form['captcha']);
         $form['#validate'][] = '_alshaya_captcha_form_validate';
+      }
+      else {
+        $form['#validate'][] = '_alshaya_captcha_form_after_threshold_validate';
       }
 
       $form['#submit'][] = '_alshaya_captcha_form_submit';
@@ -121,10 +124,22 @@ function _alshaya_captcha_form_validate(&$form, FormStateInterface $form_state) 
 }
 
 /**
- * Form submit handler to clear the flood.
+ * Form validation handler to remove captcha error if not required.
  */
-function _alshaya_captcha_form_submit(&$form, FormStateInterface $form_state) {
-  // If successful, clear flood.
-  $flood = $form_state->get('flood');
-  $flood->clear('alshaya_captcha_' . $form['#id']);
+function _alshaya_captcha_form_after_threshold_validate(&$form, FormStateInterface $form_state) {
+  $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_captcha');
+  $captcha_error_count = $temp_store->get('captcha_error_count');
+  if (is_null($captcha_error_count)) {
+    $captcha_error_count = 0;
+    $temp_store->set('captcha_error_count', $captcha_error_count + 1);
+    $errors = $form_state->getErrors();
+    if (isset($errors['captcha_response'])) {
+      $form['captcha_error_count'] = $form['captcha_error_count'] + 1;
+      $form_state->clearErrors();
+      unset($errors['captcha_response']);
+      foreach ($errors as $field_name => $error) {
+        $form_state->setErrorByName($field_name, $error);
+      }
+    }
+  }
 }
