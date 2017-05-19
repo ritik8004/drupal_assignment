@@ -46,6 +46,21 @@
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
       });
 
+      // Hide mobile search box, when clicked anywhere else.
+      $(window).on('click', function (e) {
+        if (!$(e.target).is('.c-menu-primary .mobile--search')) {
+          // Check if element is Visible.
+          if ($('.c-menu-primary #block-exposedformsearchpage').is(':visible')) {
+            $('.c-menu-primary #block-exposedformsearchpage').hide();
+          }
+        }
+      });
+
+      // Stop event from inside container to propogate out.
+      $('.c-menu-primary #block-exposedformsearchpage').on('click', function (event) {
+        event.stopPropagation();
+      });
+
       $('.menu--one__list-item.has-child').each(function () {
         $('.menu--one__list-item.has-child').mouseenter(function () {
           $('.menu--two__list li:first', this).addClass('first--child_open');
