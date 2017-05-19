@@ -4769,7 +4769,7 @@
                     "datestamp": "1485902197"
                 },
                 "patches_applied": {
-                    "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-9.patch"
+                    "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-14.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
