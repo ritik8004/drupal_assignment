@@ -403,8 +403,6 @@
   }
 
   .form-type-checkbox .option {
-    top: 0 !important;
-
     &::before {
       margin-#{$right}: 0.5em;
       position: relative;
