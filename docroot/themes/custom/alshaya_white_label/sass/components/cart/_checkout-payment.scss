@@ -91,7 +91,7 @@
       &::before {
         margin-#{$right}: 0.9em;
         top: 0;
-        float: left;
+        float: $left;
       }
     }
 
