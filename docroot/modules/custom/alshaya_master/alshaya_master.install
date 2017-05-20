@@ -252,6 +252,33 @@ function alshaya_master_install() {
     'Search results for "@keyword"' => [
       'ar' => 'نتائج البحث عن "@keyword"',
     ],
+    'new customers' => [
+      'ar' => 'زبائن جدد',
+    ],
+    'checkout as guest' => [
+      'ar' => 'إتمام عملية الشراء كزبون زائر',
+    ],
+    'Your email will be used only to send you information about your order.' => [
+      'ar' => 'سيتم استخدام عنوان البريد الإلكتروني الخاص بك فقط عند إرسال تفاصيل الطلبية',
+    ],
+    '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p><ul><li>Express checkout</li><li>Personalized offers</li><li>Favorite list</li><li>Order history</li><li>And more…</li></ul>' => [
+      'ar' => '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p><ul><li>إتمام عملية الشراء السريعة</li><li>العروض الحصرية الخاصة بك</li><li>قائمة المنتجات المفضلة</li><li>سجل الطلبيات</li><li>المزيد</li></ul>',
+    ],
+    'Checkout' => [
+      'ar' => 'إتمام عملية الشراء',
+    ],
+    'Cart' => [
+      'ar' => 'عربة التسوق',
+    ],
+    'Welcome' => [
+      'ar' => 'أهلا بك',
+    ],
+    'returning customers' => [
+      'ar' => 'الزبائن العائدون',
+    ],
+    'Sign in to speed up the checkout process. It is the fastest way to review your selections, access your Address Book, and submit your order.' => [
+      'ar' => 'يرجى تسجيل الدخول لتسريع عملية الشراء ومراجعة اختياراتك والدخول لسجل عناوينك وإتمام عملية الشراء',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
