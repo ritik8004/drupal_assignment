@@ -2,8 +2,10 @@
 
 namespace Drupal\alshaya_newsletter\Form;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class NewsLetterForm.
@@ -11,11 +13,11 @@ use Drupal\Core\Form\FormStateInterface;
 class NewsLetterForm extends FormBase {
 
   /**
-   * Post to link from block configuration.
+   * The api wrapper.
    *
-   * @var array
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
    */
-  protected $postURL;
+  protected $apiWrapper;
 
   /**
    * {@inheritdoc}
@@ -25,23 +27,41 @@ class NewsLetterForm extends FormBase {
   }
 
   /**
+   * Class constructor.
+   *
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   The api wrapper.
+   */
+  public function __construct(APIWrapper $api_wrapper) {
+    $this->apiWrapper = $api_wrapper;
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $post_url = NULL) {
-    $this->postURL = $post_url;
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('acq_commerce.api')
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $site_name = $this->config('system.site')->get('name');
+
     $form['email'] = [
       '#type' => 'email',
       '#required' => TRUE,
       '#placeholder' => $this->t('Enter your email address'),
       '#prefix' => '<div class="newsletter-block-label">' . $this->t('get email offers and the latest news from @site_name', ['@site_name' => $site_name]) . '</div>',
     ];
+
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('submit'),
     ];
-
-    $form['#action'] = isset($this->postURL['subscription_post_url']) ? $this->postURL['subscription_post_url'] : '';
 
     return $form;
   }
@@ -50,7 +70,22 @@ class NewsLetterForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Just implementation.
+    try {
+      $response = $this->apiWrapper->subscribeNewsletter($form_state->getValue('email'));
+      // @TODO: Check if want to display a different message to users who
+      // are already subscribed.
+      // Status 0 means user is already subscribed.
+      // If user is subscribed now, it will return 1.
+      if ($response['status'] === 0) {
+        drupal_set_message($this->t('Thank you for signing up to receive our emails.'), 'success');
+      }
+      else {
+        drupal_set_message($this->t('Thank you for signing up to receive our emails.'), 'success');
+      }
+    }
+    catch (\Exception $e) {
+      drupal_set_message($this->t('Something went wrong, please try again later.'), 'warning');
+    }
   }
 
 }

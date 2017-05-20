@@ -532,6 +532,29 @@ class APIWrapper {
   }
 
   /**
+   * Function to subscribe an email for newsletter.
+   *
+   * @param string $email
+   *   E-Mail to subscribe.
+   */
+  public function subscribeNewsletter($email) {
+    $endpoint = 'newsletter/subscribe';
+
+    $doReq = function ($client, $opt) use ($endpoint, $email) {
+      $opt['form_params']['email'] = $email;
+
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      return $this->tryAgentRequest($doReq, 'subscribeNewsletter');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
    * Preforms a test call to conductor.
    *
    * @return array

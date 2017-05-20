@@ -16,6 +16,4 @@ settings:
   label: 'connect with us'
   provider: alshaya_newsletter
   label_display: visible
-  post_to_link: ''
-  subscription_post_url: ''
 visibility: {  }
