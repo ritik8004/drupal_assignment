@@ -111,12 +111,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       // Get the image.
       $build['image_url'] = [];
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
+      $sku_media = alshaya_acm_get_product_display_image($sku_entity);
       if ($sku_media) {
         $build['image'] = [
           '#theme' => 'image_style',
           '#style_name' => '192x168',
-          '#uri' => $sku_media['file']->getFileUri(),
+          '#uri' => $sku_media['uri'],
           '#title' => $sku_media['label'],
           '#alt' => $sku_media['label'],
         ];
@@ -142,13 +142,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
       $build['image_url'] = NULL;
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
+      $sku_media = alshaya_acm_get_product_display_image($sku_entity);
 
       if ($sku_media) {
         $build['image'] = [
           '#theme' => 'image_style',
           '#style_name' => '192x168',
-          '#uri' => $sku_media['file']->getFileUri(),
+          '#uri' => $sku_media['uri'],
           '#title' => $sku_media['label'],
           '#alt' => $sku_media['label'],
         ];
@@ -157,12 +157,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     elseif ($view_mode == 'search_result') {
       // Get the image.
       $build['image_url'] = [];
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
+      $sku_media = alshaya_acm_get_product_display_image($sku_entity);
       if ($sku_media) {
         $build['image'] = [
           '#theme' => 'image_style',
           '#style_name' => '291x288',
-          '#uri' => $sku_media['file']->getFileUri(),
+          '#uri' => $sku_media['uri'],
           '#title' => $sku_media['label'],
           '#alt' => $sku_media['label'],
         ];

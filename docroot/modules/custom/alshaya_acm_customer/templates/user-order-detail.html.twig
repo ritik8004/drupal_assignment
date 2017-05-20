@@ -11,7 +11,7 @@
  * @ingroup themeable
  */
 #}
-
+{% set ordercount = order.quantity %}
 <div>
   <a href="{{ print_link }}" target="_blank" class="button-wide print--button">{{ "print"|t }}</a>
 </div>
@@ -33,8 +33,10 @@
             </div>
             <div class="light">
               {% trans %}
-                    Total: {{ order.quantity }} items
-                    {% endtrans %}
+                Total: {{ order.quantity }} item
+              {% plural ordercount %}
+                Total: {{ order.quantity }} items
+              {% endtrans %}
             </div>
           </div>
         </td>
@@ -47,8 +49,10 @@
           </div>
           <div class="light">
             {% trans %}
-                  Total: {{ order.quantity }} items
-                  {% endtrans %}
+              Total: {{ order.quantity }} item
+            {% plural ordercount %}
+              Total: {{ order.quantity }} items
+            {% endtrans %}
           </div>
 
           <div class="tablet-only">
