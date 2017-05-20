@@ -609,8 +609,9 @@
           }
 
           @include breakpoint($only-tablet) {
-            width: 200px;
+            width: 10.5rem;
             height: 96px;
+            padding-#{$left}: 0.5rem;
 
             .second {
               display: none;
@@ -669,11 +670,15 @@
         }
 
         .first {
-          width: 125px;
+          @include breakpoint($desktop) {
+            width: 125px;
+          }
         }
 
         .second {
-          width: 300px;
+          @include breakpoint($desktop) {
+            width: 18.75rem;
+          }
 
           @include breakpoint($only-mobile) {
             width: 10.5rem;

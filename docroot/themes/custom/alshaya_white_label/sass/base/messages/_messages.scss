@@ -113,6 +113,7 @@
     display: inline-block;
     text-indent: 0;
     vertical-align: top;
+    padding-top: 0.1875rem;
 
     @include breakpoint($tablet) {
       width: calc(100% - 3.125rem);

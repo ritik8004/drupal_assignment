@@ -3,20 +3,87 @@
     @include breakpoint($desktop) {
       float: $left;
     }
+
+    .user-register-form {
+      margin-top: 3rem;
+    }
+
+    #edit-account {
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .user__order--detail {
+    margin-bottom: 1.1875rem;
+
+    .order-details-row .blend,
+    .order-details-row .tablet-blend {
+      @include breakpoint($tablet) {
+        width: 9.875rem;
+      }
+    }
   }
 
   .order-summary,
   .barcode--wrapper p {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .order-summary {
-    margin-bottom: 1em;
+    margin-top: 1.875rem;
+    margin-bottom: 2.8125rem;
+    background-color: $pale-grey;
+    padding: 1.125rem;
+    padding-#{$left}: 1.3rem;
+    padding-#{$right}: 1.5rem;
+    font-size: 0.875rem;
+    color: $cerulean-two;
+
+    @include breakpoint($tablet) {
+      display: table;
+      width: 100%;
+    }
+  }
+
+  .order-id-details {
+    @include breakpoint($tablet) {
+      display: table-cell;
+      width: 50%;
+    }
+
+    @include icon(infomation, before) {
+      font-size: 2rem;
+      display: inline-block;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+  }
+
+  .order-print-button {
+    margin-top: 1rem;
+    text-align: center;
+
+    @include breakpoint($tablet) {
+      margin-top: 0;
+      display: table-cell;
+      width: 50%;
+      text-align: right;
+    }
+  }
+
+  .order-print-button a {
+    display: inline-block;
+    background: $white-five;
+    padding: 0.4375rem 2.4rem;
+    font-weight: bold;
+    border: solid 1px $marine-blue;
   }
 
   .user-register-form {
     > div:first-child {
-      font-size: 16px;
+      font-size: 1rem;
       color: $marine-blue;
       padding-bottom: 0.5em;
       margin-bottom: 1em;
@@ -32,14 +99,20 @@
 
   .block-checkout-register-block {
     clear: both;
+    overflow: hidden;
 
     #block-jointheclub {
       margin-#{$left}: 0;
       border-top: 0;
       padding-#{$left}: 0;
-      width: 44%;
-      float: $right;
       font-size: 12px;
+      text-align: center;
+
+      @include breakpoint($tablet) {
+        width: 44%;
+        float: $right;
+        text-align: $left;
+      }
 
       h2 {
         font-size: 14px;
@@ -63,11 +136,35 @@
 }
 
 #edit-confirmation-continue-shopping {
-  font-size: 12px;
+  font-size: 0.75rem;
   border: 1px solid $marine-blue;
   float: $right;
-  padding: 1em;
-  margin-#{$right}: 78px;
-  width: 29%;
+  padding: 0.5rem 1em;
+  width: 100%;
   text-align: center;
+  text-transform: lowercase;
+  font-weight: bold;
+
+  @include breakpoint($tablet) {
+    margin-#{$right}: 3.25rem;
+    width: 9.875rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-#{$right}: 8.3125rem;
+  }
+}
+
+.confirmation__signup--title {
+  color: $black;
+  font-weight: bold;
+  border-bottom: 1px solid $white;
+  padding-bottom: 0.5rem;
+  margin-bottom: 2.3125rem;
+}
+
+.confirmation__signup--description {
+  font-size: 0.875rem;
+  color: $black;
+  font-weight: bold;
 }

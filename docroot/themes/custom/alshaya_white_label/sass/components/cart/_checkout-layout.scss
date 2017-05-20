@@ -1,4 +1,5 @@
-.page-standard.l-container.l-two--sf.checkout {
+.page-standard.l-container.l-two--sf.checkout,
+.page-standard.l-container.order-confirmation {
   @include breakpoint($mobile) {
     @include container(100%);
 
@@ -39,8 +40,8 @@
     }
 
     @include breakpoint($desktop) {
-      width: 21.76%;
-      max-width: 16.8125rem;
+      width: 24.76%;
+      max-width: 18.2rem;
     }
 
     .c-sidebar-second__region {
@@ -56,8 +57,13 @@
     padding-top: 0.5rem;
 
     @include breakpoint($tablet) {
+      padding-top: 1.5rem;
+      padding-bottom: 1.2rem;
+    }
+
+    @include breakpoint($desktop) {
       padding-top: 2rem;
-      padding-bottom: 1.6rem;
+      padding-bottom: 1.8rem;
     }
 
     a {
@@ -131,7 +137,9 @@
 }
 
 .alias--cart-checkout-delivery,
-.alias--cart-checkout-login {
+.alias--cart-checkout-login,
+.alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation {
   .site-brand-home {
     @extend .l-one--w;
 

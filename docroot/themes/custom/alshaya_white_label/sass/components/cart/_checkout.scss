@@ -284,17 +284,17 @@
   .caption {
     font-size: 14px;
     background: $white-three;
-    padding: 1.563rem 1.25rem;
+    padding: 1rem 1.25rem;
 
     .title {
       color: $black-two;
-      font-weight: bold;
     }
 
     a {
       text-decoration: none;
       float: $right;
       font-weight: bold;
+      font-size: 0.75rem;
       color: $cerulean-two;
     }
   }
@@ -302,7 +302,7 @@
   .content-head {
     width: 100%;
     background: $white-four;
-    padding: 1em;
+    padding: 1em 1.5rem;
     font-size: 14px;
     position: relative;
 

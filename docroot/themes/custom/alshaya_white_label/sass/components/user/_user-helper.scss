@@ -474,7 +474,7 @@
     main {
       @include breakpoint($only-tablet) {
         width: 74.5%;
-        float: right;
+        float: $right;
       }
     }
   }
