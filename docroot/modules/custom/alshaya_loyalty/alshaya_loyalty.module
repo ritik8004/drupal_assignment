@@ -148,8 +148,11 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
     // Validate number against validation settings.
     if (($element_value != $validation['value_start_with'])
         && !alshaya_loyalty_check_valid_apc_number($element_value, $validation['length'], $validation['value_start_with'])) {
-      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
+      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => alshaya_loyalty_format_card_number($element_value)]));
     }
+  }
+  else {
+    $form_state->setValue($field, NULL);
   }
 }
 
@@ -385,4 +388,42 @@ function alshaya_loyalty_preprocess_user(&$variables) {
     $block = Block::load('jointheclub');
     $variables['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
   }
+}
+
+/**
+ * Format loyalty card number.
+ *
+ * @param string $number
+ *   The loyalty card number.
+ *
+ * @return string
+ *   Return the formatted string.
+ */
+function alshaya_loyalty_format_card_number($number) {
+  $number = str_replace(['-', ' '], '', $number);
+  $cc_length = strlen($number);
+  $processed_number = substr($number, -4);
+
+  for ($i = $cc_length - 5; $i >= 0; $i--) {
+    $calc = ((($i + 1) - $cc_length) % 4);
+    if ($calc == 0) {
+      $processed_number = '-' . $processed_number;
+    }
+    $processed_number = $number[$i] . $processed_number;
+  }
+
+  return $processed_number;
+}
+
+/**
+ * Mask Loyalty card number.
+ *
+ * @param string $number
+ *   The loyalty card number.
+ *
+ * @return string
+ *   Return masked string of card number.
+ */
+function alshaya_loyalty_mask_card_number($number) {
+  return 'XXXX-XXXX-XXXX-' . substr($number, -4);
 }
