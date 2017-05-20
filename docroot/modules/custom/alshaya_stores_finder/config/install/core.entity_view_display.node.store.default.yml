@@ -31,6 +31,7 @@ content:
       info_text: ''
       use_overridden_map_settings: 0
       google_map_settings:
+        height: 815px
         type: ROADMAP
         zoom: '10'
         minZoom: 0
@@ -46,7 +47,7 @@ content:
         height: 400px
         width: 100%
         info_auto_display: 1
-        marker_icon_path: ''
+        marker_icon_path: /themes/custom/alshaya_white_label/imgs/icons/google-map-marker.svg
         disableAutoPan: 1
         style: ''
         preferScrollingToZooming: 0

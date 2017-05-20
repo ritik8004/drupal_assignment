@@ -143,13 +143,9 @@
       var $storeHours = $('.hours--label');
       $storeHours.on('click', function () {
         $(this).next().toggle();
-        $('.hours--label').toggleClass('open');
+        $(this, $storeHours).toggleClass('open');
+        $(this).next().toggleClass('selector--hours');
       });
-
-      $('.label--location').each(function (index) {
-        $(this).next('.form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api').andSelf().wrapAll("<div class='store-finder--wrapper' />");
-      });
-
     }
   };
 
