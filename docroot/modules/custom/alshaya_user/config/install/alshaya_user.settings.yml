@@ -1,5 +1,5 @@
 terms_conditions:
-  value: 'I would like to receive exclusive deals from Pottery Barn. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.'
+  value: 'I would like to receive exclusive deals from Mothercare. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.'
   format: 'rich_text'
 user_register_complete:
   value: "<span>You're almost done.</span><span>We've sent a verification email to <a href='mailto:[email]'>[email]</a>.</span><div>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</div><span>It is also your final step in the sign up process.</span>"

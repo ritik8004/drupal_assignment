@@ -165,8 +165,8 @@ function alshaya_master_install() {
     'Enter card details' => [
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
-    'I would like to receive exclusive deals from Pottery Barn. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.' => [
-      'ar' => '.<a href="/terms" target="_blank">الشروط والأحكام</a> أرغب في استلام عروض حصرية من بوتري بارن. تسجيل بياناتك يعني موافقتك على',
+    'I would like to receive exclusive deals from Mothercare. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.' => [
+      'ar' => '<a href="/terms">الشروط والأحكام</a> أرغب في استلام عروض حصرية من مذركير&nbsp;تسجيل بياناتك يعني موافقتك على الشروط والأحكام',
     ],
     '@title is required.' => [
       'ar' => '@title يرجى إدخال',
