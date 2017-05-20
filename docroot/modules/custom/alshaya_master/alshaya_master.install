@@ -413,7 +413,7 @@ function alshaya_master_install() {
     ->set('visibility', [
       'request_path' => [
         'id' => 'request_path',
-        'pages' => "<front>\r\n/user/login\r\n/user/register",
+        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*",
         'negate' => TRUE,
         'context_mapping' => [],
       ],
