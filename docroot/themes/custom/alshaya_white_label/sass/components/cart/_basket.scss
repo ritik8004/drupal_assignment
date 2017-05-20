@@ -222,7 +222,7 @@
 
   .promo-continue-shopping-wrapper {
     #edit-continue-shopping {
-      @include breakpoint($desktop) {
+      @include breakpoint($tablet) {
         display: none;
       }
     }
@@ -238,10 +238,15 @@
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
     border-top: 1px solid $white;
-    margin-top: 33px;
+    margin-top: 1.25rem;
     float: $left;
-    width: 19.56rem;
+    width: 17.56rem;
     margin-bottom: 4.56rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 2.0625rem;
+    width: 19.56rem;
   }
 
   summary {
@@ -352,20 +357,31 @@
   padding-top: 1rem;
 
   @include breakpoint($tablet) {
-    padding-top: 3.19rem;
+    padding-top: 3.1rem;
   }
 
-  h2 {
+  @include breakpoint($desktop) {
+    padding-top: 2.7rem;
+  }
+
+  & > h2 {
     color: $marine-blue;
-    margin-bottom: 1rem;
+    margin-bottom: 0.3rem;
     padding-bottom: 0.56rem;
     font-family: $alshaya-bold;
-    font-size: 1.125rem;
+    font-size: 1rem;
+    margin-#{$left}: 0.875rem;
     font-weight: normal;
     text-transform: lowercase;
 
     @include breakpoint($tablet) {
-      margin-left: 2.75rem;
+      font-size: 0.875rem;
+      margin-bottom: 0.6rem;
+      margin-#{$left}: 2.75rem;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 1.125rem;
     }
   }
 
@@ -375,9 +391,68 @@
     @include breakpoint($desktop) {
       max-width: 77.25rem;
     }
+
+    .owl-carousel .owl-item img {
+      max-width: 11.625rem;
+
+      @include breakpoint($upto-desktop) {
+        min-height: 10rem;
+        object-fit: contain;
+      }
+    }
+
+    .c-products__item__label {
+      @include breakpoint($desktop) {
+        margin-bottom: 0.875rem;
+      }
+    }
+
+    .owl-prev,
+    .owl-next {
+      @include breakpoint($tablet) {
+        top: 19.7%;
+      }
+    }
+
+    .owl-prev {
+      @include breakpoint($desktop) {
+        left: -2.2rem;
+      }
+    }
+
+    .owl-next {
+      @include breakpoint($desktop) {
+        right: -2.7rem;
+      }
+    }
+
+    .owl-dots .owl-dot {
+      color: $marine-blue-two;
+    }
   }
 
   .view-product-slider .views-row {
     height: 18.75rem;
+  }
+}
+
+#block-basketpromotionmessage {
+  background: $rosy-pink;
+  color: $white-four;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.875rem;
+  letter-spacing: 0.0125rem;
+
+  @include breakpoint($desktop) {
+    padding: 0.8125rem 1.5625rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.75rem;
+
+    @include breakpoint($desktop) {
+      font-size: 0.9375rem;
+    }
   }
 }

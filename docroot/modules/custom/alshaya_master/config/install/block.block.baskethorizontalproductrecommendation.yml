@@ -14,7 +14,7 @@ provider: null
 plugin: basket_horizontal_recommendation
 settings:
   id: basket_horizontal_recommendation
-  label: 'Product Recommendation'
+  label: 'Horizontal Recommendations'
   provider: alshaya_acm
   label_display: visible
 visibility:

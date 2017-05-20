@@ -456,7 +456,7 @@ body.alias--cart {
       }
 
       @include breakpoint($tablet) {
-        margin-#{$right}: -2.4rem;
+        margin-#{$right}: -3.4rem;
       }
 
       @include breakpoint($desktop) {
@@ -681,7 +681,7 @@ body.alias--cart {
 
     .edit-continue-shopping-mobile,
     #edit-continue-shopping-mobile {
-      @include breakpoint($desktop) {
+      @include breakpoint($tablet) {
         display: block;
         font-weight: normal;
         border: 0;
@@ -754,7 +754,8 @@ body.alias--cart {
 
     background: $pumpkin-orange;
     margin-top: 1em;
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
+    min-width: 10.8125rem;
     text-transform: lowercase;
 
     @include breakpoint($upto-tablet) {
@@ -762,7 +763,12 @@ body.alias--cart {
       width: 100%;
     }
 
+    @include breakpoint($tablet) {
+      margin-top: 1.4em;
+    }
+
     @include breakpoint($desktop) {
+      margin-top: 1em;
       width: 10.8rem;
     }
   }
