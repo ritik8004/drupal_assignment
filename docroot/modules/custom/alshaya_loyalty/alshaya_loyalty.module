@@ -101,6 +101,8 @@ function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, F
     }
   }
 
+  $form['field_privilege_card_number']['widget'][0]['value']['#maxlength'] = 19;
+
   // Validate privilege card number.
   $form['field_privilege_card_number']['#element_validate'] = [
     '_alshaya_loyalty_validate_field_value',
@@ -267,6 +269,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   $form['privilege_card_wrapper']['privilege_card_number'] = [
     '#type' => 'textfield',
     '#title' => t('Privilege Card Number'),
+    '#maxlength' => 19,
     '#element_validate' => [
       '_alshaya_loyalty_validate_field_value',
     ],
@@ -277,6 +280,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
     '#type' => 'textfield',
     '#title' => t('Re-enter Privilege Card Number'),
+    '#maxlength' => 19,
     '#states' => [
       'required' => [
         ':input[name="privilege_card_number"]' => ['empty' => FALSE],
