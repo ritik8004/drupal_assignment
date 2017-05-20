@@ -21,11 +21,6 @@ function alshaya_seo_token_info() {
     'description' => t('Locale (en_US) for the currently visited page.'),
   ];
 
-  $info['tokens']['site']['country'] = [
-    'name' => 'country',
-    'description' => t('Site Country.'),
-  ];
-
   $info['tokens']['node']['locale:alternate'] = [
     'name' => 'locale:alternate',
     'description' => t('Alternate locale available for the node.'),
@@ -57,10 +52,6 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
   if ($type == 'site') {
     if (isset($tokens['locale'])) {
       $replacements[$tokens['locale']] = AlshayaI18nLanguages::getLocale($langcode);
-    }
-
-    if (isset($tokens['country'])) {
-      $replacements[$tokens['country']] = _alshaya_seo_get_site_country_name();
     }
   }
 
