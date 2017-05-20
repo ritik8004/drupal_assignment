@@ -16,6 +16,7 @@ dependencies:
   - block_content
   - clientside_validation_jquery
   - filter
+  - inline_form_errors
   - mailsystem
   - mimemail
   - redirect
