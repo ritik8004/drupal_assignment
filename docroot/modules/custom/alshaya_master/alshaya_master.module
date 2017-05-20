@@ -150,6 +150,27 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
   if (isset($build_info['args'][0])) {
     $theme = $build_info['args'][0];
   }
+
+  if (!empty($values['logo_upload'])) {
+    $filename = file_unmanaged_copy($values['logo_upload']->getFileUri());
+    $values['default_logo'] = 0;
+    $values['logo_path'] = $filename;
+  }
+
+  // If the user entered a path relative to the system files directory for
+  // a logo or favicon, store a public:// URI so the theme system can handle it.
+  if (!empty($values['logo_path'])) {
+    $values['logo_path'] = alshaya_master_validate_path($values['logo_path']);
+  }
+
+  // Save different logo for language.
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $themeConfig = \Drupal::languageManager()->getLanguageConfigOverride($langcode, $theme . '.settings');
+  $themeConfig->set('logo.path', $values['logo_path'])->save();
+  $form_state->unsetValue('logo_path');
+  $form_state->unsetValue('logo_upload');
+
+  // Save email logo.
   $settings = ['email_logo_upload', 'email_logo_path'];
   foreach ($settings as $setting_name) {
     ${$setting_name} = $form_state->getValue($setting_name);
@@ -167,10 +188,12 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
     $logo_path = alshaya_master_validate_path($email_logo_path);
   }
 
-  $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $theme);
-  $config->set('email_logo_path', $logo_path);
-  $config->set('email_logo_url', file_create_url($logo_path));
-  $config->save();
+  if (isset($logo_path)) {
+    $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $theme);
+    $config->set('email_logo_path', $logo_path);
+    $config->set('email_logo_url', file_create_url($logo_path));
+    $config->save();
+  }
 }
 
 /**
