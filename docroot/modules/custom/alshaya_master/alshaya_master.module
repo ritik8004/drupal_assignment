@@ -18,6 +18,13 @@ function alshaya_master_block_build_alter(array &$build, BlockPluginInterface $b
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function alshaya_master_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#error_no_message'] = TRUE;
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterface $form_state, $form_id) {

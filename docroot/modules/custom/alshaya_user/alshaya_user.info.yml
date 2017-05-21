@@ -12,7 +12,6 @@ dependencies:
   - datetime
   - email_registration
   - field
-  - inline_form_errors
   - mobile_number
   - path
   - system
