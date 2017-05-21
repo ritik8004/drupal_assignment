@@ -116,18 +116,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $build['short_description']['#markup'] = $sku_entity->get('attr_short_description')->getString() . $sku_entity->get('attr_bullet_points')->getString();
     }
     elseif ($view_mode == 'teaser') {
-
       // Get the image.
-      $build['image_url'] = [];
+      $build['image'] = [];
+
       $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
+
       if ($sku_media) {
-        $build['image'] = [
-          '#theme' => 'image_style',
-          '#style_name' => '192x168',
-          '#uri' => $sku_media['file']->getFileUri(),
-          '#title' => $sku_media['label'],
-          '#alt' => $sku_media['label'],
-        ];
+        $build['image'] = alshaya_acm_product_get_sku_image($sku_media, '192x168');
       }
 
       _alshaya_acm_product_build_price($build, $sku_entity);
@@ -139,34 +134,32 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
 
       if ($sku_media) {
-        $build['image'] = [
-          '#theme' => 'image_style',
-          '#style_name' => '192x168',
-          '#uri' => $sku_media['file']->getFileUri(),
-          '#title' => $sku_media['label'],
-          '#alt' => $sku_media['label'],
-        ];
+        $build['image'] = alshaya_acm_product_get_sku_image($sku_media, '192x168');
       }
     }
     elseif ($view_mode == 'search_result') {
       // Get the image.
       $build['image_url'] = [];
       $sku_media = alshaya_acm_product_get_sku_media($sku_entity);
-      foreach ($sku_media as $delta => $media_item) {
-        if ($media_item['media_type'] == 'image') {
-          $file_uri = $media_item['file']->getFileUri();
 
-          $thumbImg = ImageStyle::load('59x60')->buildUrl($file_uri);
-          $mainImg = ImageStyle::load('291x288')->buildUrl($file_uri);
-          $thumbnails[] = [
-            'thumburl' => $thumbImg,
-            'url' => $mainImg,
-          ];
+      $search_main_image = [];
+
+      // Loop through all media items and prepare thumbnails array.
+      foreach ($sku_media as $delta => $media_item) {
+        // For now we are displaying only image slider on search results page
+        // and PLP.
+        if ($media_item['media_type'] == 'image') {
+          if (empty($search_main_image)) {
+            $search_main_image = alshaya_acm_product_get_sku_image($media_item, '291x288');
+          }
+
+          $thumbnails[] = alshaya_acm_product_get_sku_image($media_item, '59x60', '291x288');
         }
       }
+
       $build['image'] = [
         '#theme' => 'alshaya_search_gallery',
-        '#mainImage' => $thumbnails[0]['url'],
+        '#mainImage' => $search_main_image,
         '#thumbnails' => $thumbnails,
         '#attached' => [
           'library' => [

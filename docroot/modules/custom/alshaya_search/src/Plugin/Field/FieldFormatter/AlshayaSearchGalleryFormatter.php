@@ -10,6 +10,9 @@ use Drupal\image\Entity\ImageStyle;
 /**
  * Plugin implementation of the 'alshaya_search_gallery' formatter.
  *
+ * @TODO: Need to check if this is used anywhere, if yes - need to update it
+ * to include alt/title tags.
+ *
  * @FieldFormatter(
  *   id = "alshaya_search_gallery",
  *   label = @Translation("Alshaya Search Gallery"),

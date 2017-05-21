@@ -72,6 +72,35 @@ function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
 }
 
 /**
+ * Get Image tag from media item array.
+ *
+ * @param array $media
+ *   Media array containing image details.
+ * @param string $image_style
+ *   Image style to apply to the image.
+ * @param string $rel_image_style
+ *   For some sliders we may want full/big image url in rel.
+ *
+ * @return array
+ *   Image build array.
+ */
+function alshaya_acm_product_get_sku_image(array $media, $image_style = '', $rel_image_style = '') {
+  $image = [
+    '#theme' => 'image_style',
+    '#style_name' => $image_style,
+    '#uri' => $media['file']->getFileUri(),
+    '#title' => $media['label'],
+    '#alt' => $media['label'],
+  ];
+
+  if ($rel_image_style) {
+    $image['#attributes']['rel'] = ImageStyle::load($rel_image_style)->buildUrl($image['#uri']);
+  }
+
+  return $image;
+}
+
+/**
  * Utility function to return media files for a SKU.
  *
  * @param mixed $sku
@@ -182,18 +211,17 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       // Show original full image in the modal inside a draggable container.
       $original_image = $media_item['file']->url();
 
-      if (empty($main_image)) {
-        $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-        $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-        $main_image = [
-          'zoomurl' => $image_zoom,
-          'mediumurl' => $image_medium,
-        ];
-      }
-
       $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
       $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+      if (empty($main_image)) {
+        $main_image = [
+          'zoomurl' => $image_zoom,
+          'mediumurl' => $image_medium,
+          'label' => $media_item['label'],
+        ];
+      }
 
       $thumbnails[] = [
         'thumburl' => $image_small,

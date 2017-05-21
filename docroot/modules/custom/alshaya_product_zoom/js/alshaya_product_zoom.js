@@ -2,6 +2,10 @@
   'use strict';
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
+      // Remove unwanted attributes in slider for users.
+      $('.gallery-wrapper #cloud-zoom img').removeAttr('title');
+      $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
+
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
@@ -171,6 +175,7 @@
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       // Fetch Vimeo thumbnail via a GET call. Vimeo doesnot give thumbnails via URL like YT.
+      // @TODO: Can we do this in PHP?
       $('#lightSlider li.cloudzoom__thumbnails__video.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
         var vimeoVideoUrl = $(this).attr('data-iframe');
         var match = /vimeo.*\/(\d+)/i.exec(vimeoVideoUrl);
