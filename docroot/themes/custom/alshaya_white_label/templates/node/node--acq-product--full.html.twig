@@ -66,14 +66,15 @@ set classes = [
 
       <div class="description-wrapper">
         <div class="content--description">
-          <h2 class="field__label">{{ 'Product Description:'|t }}</h2>
+          <span class="close">Close</span>
+          <h2 class="field__label">{{ 'Product Description'|t }}</h2>
           {{ content.description }}
         </div>
       </div>
 
       <div class="short-description-wrapper">
         <div class="content--short-description">
-          <h2 class="field__label">{{ 'Product Description:'|t }}</h2>
+          <h2 class="field__label">{{ 'Product Description'|t }}</h2>
           {{ content.short_description }}
           <span class="read-more-description-link">{{ 'Read more'|t }}</span>
         </div>
@@ -84,6 +85,44 @@ set classes = [
       {% else %}
         {{ content.sharethis }}
       {% endif %}
+
+      <div class="delivery-options-wrapper">
+        <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+        <div class="content">
+          <div class="home-delivery c-accordion-delivery-options">
+            <h2 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'For orders over KWD99'|t }}</span></h2>
+            <div class="c-accordion_content">
+              <div class="delivery-option-content standard">
+                <span class="delivery-option-title">{{ 'Standard delivery (within 4 working days)'|t }}</span>
+                <ul>
+                  <li>{{ 'Orders over KWD 1234'|t }} <span>{{ 'FREE'|t }}</span></li>
+                  <li>{{ 'Orders under KWD 1234'|t }} <span>{{ 'KWD 123.1234'|t }}</span></li>
+                </ul>
+              </div>
+              <div class="delivery-option-content next-day">
+                <span class="delivery-option-title">{{ 'Next day delivery (ordered before 9pm)'|t }}</span>
+                <ul>
+                  <li>{{ 'All orders'|t }} <span>{{ 'FREE'|t }}</span>/li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="click-collect c-accordion-delivery-options">
+            <h2 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h2>
+            <div class="c-accordion_content">
+              <div class="delivery-option-content standard">
+                <span class="line-1">{{ 'This service is FREE of charge'|t }}</span>
+                <span class="line-2">{{ 'Collect the order from store in 99 hours'|t }}</span>
+                <form class="search-store">
+                  <label>{{ 'Check in-store availability'|t }}</label>
+                  <input type="text" name="store-name" placeholder="{{ 'Enter your area'|t }}">
+                  <input type="submit" name="search-store" value="{{ 'Search Stores'|t }}">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {% if content.cross_sell %}
         <div class="horizontal-crossell mobile-only-block">
