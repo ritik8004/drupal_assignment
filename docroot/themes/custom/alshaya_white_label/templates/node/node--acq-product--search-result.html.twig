@@ -13,9 +13,23 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
       <a href="{{ url }}">{{ label }}</a>
     </h2>
 
-    {{ content.price }}
+    {% if content.final_price %}
+      <div class="has--special--price">
+    {% else %}
+      <div class="price">
+    {% endif %}
+      {{ content.price }}
+    </div>
 
-    {{ content.special_price }}
+    {% if content.final_price %}
+      <div class="special--price">
+        {{ content.final_price }}
+      </div>
+
+      <div class="price--discount">
+        {{ content.discount }}
+      </div>
+    {% endif %}
   </div>
   <!-- /content -->
 </article>
