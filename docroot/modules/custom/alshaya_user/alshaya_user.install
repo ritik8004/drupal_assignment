@@ -147,6 +147,6 @@ This link can only be used once to log in and will lead you to a page where you 
 
 لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها.
 
-الفريق [site:name] --');
+ [site:name] فريق دعم زبائن موقع');
   $reset_password_mail->save();
 }
