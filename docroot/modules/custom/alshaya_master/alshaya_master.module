@@ -7,6 +7,9 @@
 
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Implements hook_block_build_alter().
@@ -256,4 +259,25 @@ function alshaya_master_get_email_logo($theme = NULL) {
   }
 
   return $cache[$theme];
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_master_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'breadcrumb' block on some pages.
+  if ($operation == 'view' && $block->getPluginId() == 'system_breadcrumb_block') {
+    $current_route = \Drupal::routeMatch()->getRouteName();
+    $forbidden_routes = [
+      'user.login',
+      'user.register',
+      'user.pass',
+      'user.cancel_confirm',
+      'user.reset.login',
+      'user.reset.form',
+      'user.reset',
+    ];
+    $front_page = \Drupal::service('path.matcher')->isFrontPage();
+    return AccessResult::forbiddenIf(in_array($current_route, $forbidden_routes) || $front_page);
+  }
 }
