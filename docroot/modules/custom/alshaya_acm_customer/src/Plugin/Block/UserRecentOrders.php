@@ -168,17 +168,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
-
               // Load the first image.
-              $sku_media = alshaya_acm_get_product_display_image($item['sku']);
-              // If we have image for the product.
-              if (!empty($sku_media['uri'])) {
-                $order['items'][$key]['sku_attr_image'] = [
-                  '#theme' => 'image_style',
-                  '#style_name' => 'checkout_summary_block_thumbnail',
-                  '#uri' => $sku_media['uri'],
-                ];
-              }
+              $order['items'][$key]['image'] = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
               // Total price.
               $order['items'][$key]['total_price'] = [
@@ -200,6 +191,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               else {
                 $order['item_names'][] = $order['items'][$key]['name'];
               }
+
               $order['status'] = alshaya_acm_customer_get_order_status($order);
             }
           }

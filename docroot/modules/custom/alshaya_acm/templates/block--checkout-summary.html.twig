@@ -10,7 +10,7 @@
         {% for key, product in products %}
           <li>
             <div class="left">
-              <img src="{{ product.imgurl }}"/>
+              {{ product.image }}
             </div>
             <div class="right">
               <span class="product-name">{{ product.name }}</span>

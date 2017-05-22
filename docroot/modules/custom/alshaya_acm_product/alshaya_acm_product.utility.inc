@@ -310,26 +310,26 @@ function alshaya_acm_product_get_display_node($sku) {
  *
  * @param mixed $sku
  *   SKU text or full entity object.
+ * @param string $image_style
+ *   Image style to apply to the image.
  *
- * @return null|string
+ * @return array
  *   Return string of uri or Null if not found.
  */
-function alshaya_acm_get_product_display_image($sku) {
+function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   // Load the first image.
   $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
 
   // If we have image for the product.
   if (!empty($media_image)) {
     if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
-      $file_uri = $media_image['file']->getFileUri();
-      return $file_uri;
+      return alshaya_acm_product_get_sku_image($media_image, $image_style);
     }
   }
-  // Sometimes sku created for size only, such sku don't have any image. only
-  // parent sku has image. In such cases get the image of parent sku.
+  // If no image found, check once for parent product as well.
   elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
-    return alshaya_acm_get_product_display_image($parent_sku);
+    return alshaya_acm_get_product_display_image($parent_sku, $image_style);
   }
 
-  return NULL;
+  return [];
 }

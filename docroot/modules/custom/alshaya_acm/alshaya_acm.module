@@ -114,7 +114,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $form['cart'][$id]['quantity']['#suffix'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div id="stock-error-' . $id . '"></div>';
 
       // Load the first image.
-      $sku_media = alshaya_acm_get_product_display_image($id);
+      $sku_image = alshaya_acm_get_product_display_image($id, '137x144');
 
       // Get SKU attributes.
       $sku_attributes = alshaya_acm_product_get_sku_configurable_values($id);
@@ -145,15 +145,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ];
       }
 
-      $image = [];
-      if (!empty($sku_media['uri'])) {
-        $image = [
-          '#theme' => 'image_style',
-          '#style_name' => '137x144',
-          '#uri' => $sku_media['uri'],
-        ];
-      }
-
       // TODO: Get delivery options from conductor.
       $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
       $product_delivery_options .= '<div class="tooltip--wrap">';
@@ -171,7 +162,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         '#theme' => 'alshaya_cart_product_name',
         '#sku_attributes' => $sku_attributes,
         '#name' => $name,
-        '#image' => $image,
+        '#image' => $sku_image,
         '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
         '#item_code' => $id,
         '#include_in_bundle' => t('Items included in bundle'),

@@ -8,7 +8,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Provides a 'CheckoutSummaryBlock' block.
@@ -152,14 +151,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $cart_count = 0;
 
     foreach ($items as $item) {
-      $img = '';
-
       // Load the first image.
-      $sku_media = alshaya_acm_get_product_display_image($item['sku']);
-      // If we have image for the product.
-      if (!empty($sku_media['uri'])) {
-        $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($sku_media['uri']);
-      }
+      $image = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
       // Check if we can find a parent SKU for this.
       $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
@@ -179,7 +172,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       // Create products array to be used in twig.
       $products[] = [
         'name' => $item['name'],
-        'imgurl' => $img,
+        'image' => $image,
         'qty' => $item['qty'],
         'total' => $item['price'],
       ];
