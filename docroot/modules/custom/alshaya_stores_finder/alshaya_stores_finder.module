@@ -14,6 +14,8 @@ use Drupal\views\ViewExecutable;
  */
 function alshaya_stores_finder_page_attachments(array &$attachments) {
   $attachments['#attached']['library'][] = 'alshaya_stores_finder/store_finder';
+  $site_country = _alshaya_custom_get_site_level_country_code();
+  $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googleGeocodingAPI']['components'] = ['country' => $site_country];
 }
 
 /**
@@ -36,7 +38,7 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
             'list-view-link',
           ],
         ],
-        '#weight' => 100,
+        '#weight' => 7,
       ];
       $form['map_view'] = [
         '#title' => t('Map view'),
@@ -48,16 +50,33 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
             'map-view-link',
           ],
         ],
-        '#weight' => 100,
+        '#weight' => 8,
       ];
       $form['current_location'] = [
         '#markup' => '<a href="javascript:;" class="current-location">' . t('Near me') . '</a>',
-        '#weight' => -1,
+        '#weight' => 1,
       ];
+
+      $form['prefix_wrapper'] = [
+        '#markup' => '<div class="store-finder--wrapper">',
+        '#weight' => 2,
+      ];
+
+      $form['store_near_me'] = [
+        '#markup' => '<div class="label--location">' . t('Find stores near') . '</div><div class="input--wrapper">',
+        '#weight' => 3,
+      ];
+
+      $form['suffix_wrapper'] = [
+        '#markup' => '</div></div>',
+        '#weight' => 6,
+      ];
+
+      $form['field_latitude_longitude_boundary']['#weight'] = 4;
 
       // Adding placeholder to the input field.
       $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
-      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#prefix'] = '<div class="label--location">' . t('Find stores near') . '</div>';
+      $form['actions']['#weight'] = 5;
       unset($form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#description']);
     }
   }

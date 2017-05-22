@@ -492,7 +492,7 @@ display:
           marker_clusterer_image_path: ''
           marker_clusterer_styles: ''
           google_map_settings:
-            height: 400px
+            height: 815px
             width: 100%
             type: ROADMAP
             zoom: '10'
@@ -510,7 +510,7 @@ display:
             disableDoubleClickZoom: 0
             style: ''
             info_auto_display: 0
-            marker_icon_path: ''
+            marker_icon_path: /themes/custom/alshaya_white_label/imgs/icons/google-map-marker.svg
             disableAutoPan: 1
       row:
         type: fields
@@ -804,6 +804,7 @@ display:
         filter_groups: false
         fields: false
         pager: false
+        empty: false
       header:
         result:
           id: result
@@ -1189,6 +1190,20 @@ display:
           views_infinite_scroll:
             button_text: 'Load More'
             automatically_load_content: false
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: false
+          content:
+            value: 'Sorry, there are no stores or locations available to display'
+            format: mail_text
+          plugin_id: text
     cache_metadata:
       max-age: -1
       contexts:
@@ -1615,7 +1630,7 @@ display:
             disableDoubleClickZoom: 0
             style: ''
             info_auto_display: 0
-            marker_icon_path: ''
+            marker_icon_path: /themes/custom/alshaya_white_label/imgs/icons/google-map-marker.svg
             disableAutoPan: 1
       defaults:
         style: false
@@ -1626,6 +1641,7 @@ display:
         filters: false
         filter_groups: false
         fields: false
+        empty: false
       row:
         type: fields
         options:
@@ -1998,6 +2014,20 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: false
+          content:
+            value: 'Sorry, there are no stores or locations available to display'
+            format: mail_text
+          plugin_id: text
     cache_metadata:
       max-age: -1
       contexts:
