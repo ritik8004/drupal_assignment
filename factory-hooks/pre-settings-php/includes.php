@@ -25,6 +25,16 @@ $settings['alshaya_custom_shield_default_pass'] = 'AS_S';
 
 // Conductor settings.
 $env = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_ENV['AH_SITE_ENVIRONMENT'] : 'local';
+
+// 01 is prefixed most of the time so we don't get proper env here.
+// Clean the env, we do it only for dev and test.
+if (strpos($env, 'dev') !== FALSE) {
+  $env = 'dev';
+}
+elseif (strpos($env, 'test') !== FALSE) {
+  $env = 'test';
+}
+
 switch ($env) {
   case 'local':
   case 'dev':
@@ -33,7 +43,6 @@ switch ($env) {
     $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.acm.acquia.io/';
     break;
 
-  case 'uat':
   default:
     $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.alshaya.acm.acquia.io/';
     $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.alshaya.acm.acquia.io/';
