@@ -58,6 +58,46 @@
       }
 
       /**
+       * Place the search count from view header in different locations based on resolution.
+       */
+      function placeSearchCount() {
+        var viewHeader = $('.c-search .view-search .view-header');
+        viewHeader.addClass('search-count');
+        var searchCount = $('.c-content__region .search-count');
+        // For mobile
+        if ($(window).width() < 768) {
+          $('.block-page-title-block').addClass('mobile');
+          searchCount.removeClass('tablet');
+          if (viewHeader.length) {
+            if (!$('.c-content__region .search-count.only-mobile').length) {
+              viewHeader.insertBefore('.c-content__region .block-views-exposed-filter-blocksearch-page');
+
+            }
+          }
+          else {
+            if (!$('.c-content__region .search-count.only-mobile').length) {
+              searchCount.insertBefore('.c-content__region .block-views-exposed-filter-blocksearch-page');
+            }
+          }
+          searchCount.addClass('only-mobile');
+        }
+        // For tablet and desktop.
+        else {
+          $('.block-page-title-block').removeClass('mobile');
+          searchCount.removeClass('only-mobile');
+          if (viewHeader.length) {
+            viewHeader.insertBefore('.c-content__region .region__content > #block-filterbar');
+          }
+          else {
+            if (!$('.c-content__region .search-count.tablet').length) {
+              searchCount.insertBefore('.c-content__region .region__content > #block-filterbar');
+            }
+          }
+          searchCount.addClass('tablet');
+        }
+      }
+
+      /**
        * Toggles the footer accordions.
        */
 
@@ -104,9 +144,6 @@
           });
         }
 
-        $('.c-search .view-search .view-header').addClass('search-count');
-        $('.c-search .view-search .view-header').insertBefore('#block-filterbar');
-
         // Hiding the filter border if there are no filters.
         var checkFilter = $.trim($('.c-search .region__content .block-facets-summary-blockfilter-bar').html());
         if (checkFilter.length) {
@@ -123,8 +160,10 @@
         // Clone the filter bar and add it to the filter menu on mobile.
         // Show mobile slider only on mobile resolution.
         mobileFilterMenu();
+        placeSearchCount();
         $(window).on('resize', function (e) {
           mobileFilterMenu();
+          placeSearchCount();
         });
 
         $('.c-facet__blocks').accordion({
