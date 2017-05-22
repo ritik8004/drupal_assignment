@@ -74,7 +74,7 @@ class NewsLetterForm extends FormBase {
       '#value' => $this->t('sign up'),
       '#ajax' => [
         'event' => 'click',
-        'callback' => '::validateForm',
+        'callback' => '::submitFormAjax',
         'wrapper' => 'footer-newsletter-form-wrapper',
         'progress' => [],
       ],
@@ -86,7 +86,7 @@ class NewsLetterForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function submitFormAjax(array &$form, FormStateInterface $form_state) {
     if (!$form_state->hasAnyErrors()) {
       try {
         $subscription = $this->apiWrapper->subscribeNewsletter($form_state->getValue('email'));
