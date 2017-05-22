@@ -131,6 +131,23 @@
           header: '.c-accordion__title',
           heightStyle: 'content'
         });
+
+        // Accordion for delivery option section on PDP.
+        $('.c-accordion-delivery-options').accordion({
+          heightStyle: 'content',
+          collapsible: true,
+          active: false
+        });
+
+        // Toggle for Product description.
+        $('.c-pdp .description-wrapper').hide();
+        $('.c-pdp .short-description-wrapper .read-more-description-link').on('click', function () {
+          $('.c-pdp .description-wrapper').slideToggle();
+        });
+
+        $('.c-pdp .description-wrapper .close').on('click', function () {
+          $('.c-pdp .description-wrapper').slideToggle();
+        });
       }
 
       /**
