@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_promotion') {
+    if ($view_mode == 'full') {
+      // @TODO: Add products here.
+      // Get the category id for the promotion.
+      if ($data_value = $entity->get('field_acq_promotion_data')->getValue()) {
+        /** @var \Drupal\acq_sku\ConductorCategoryRepository $category_repo */
+        $category_repo = \Drupal::service('acq_sku.category_repo');
+        $data = unserialize($data_value[0]['value']);
+
+        $category_ids = [];
+
+        if (isset($data['condition'], $data['condition']['conditions'])) {
+          foreach ($data['condition']['conditions'] as $condition) {
+            if ($condition['attribute'] == 'category_ids') {
+              if ($category_id = $category_repo->loadCategoryTerm($condition['value'])) {
+                $category_ids[] = $category_id->id();
+              }
+            }
+          }
+        }
+
+        if ($category_ids) {
+          $build['products'] = views_embed_view('alshaya_product_list', 'block_1', implode('+', $category_ids));
+        }
+      }
+    }
+  }
+}

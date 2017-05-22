@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_promotion_install() {
+  // Syncronize all promotions during install.
+  \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
+}
