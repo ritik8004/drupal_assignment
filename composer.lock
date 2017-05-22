@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f56608affdd03d8fc8967fa0a1323ef",
+    "content-hash": "9e728610f47f1af334e3cd65bea7c224",
     "packages": [
         {
             "name": "acquia/blt",
@@ -4769,7 +4769,7 @@
                     "datestamp": "1485902197"
                 },
                 "patches_applied": {
-                    "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-9.patch"
+                    "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-14.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
