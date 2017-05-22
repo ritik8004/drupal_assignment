@@ -99,9 +99,12 @@ function alshaya_captcha_form_alter(array &$form, FormStateInterface $form_state
       }
 
       // If flood not exceeds threshold.
-      if ($flood->isAllowed($flood_event, $flood_threshold)) {
+      if ($flood->isAllowed($flood_event, $flood_threshold - 1)) {
         unset($form['captcha']);
         $form['#validate'][] = '_alshaya_captcha_form_validate';
+      }
+      else {
+        $form['#validate'][] = '_alshaya_captcha_form_after_threshold_validate';
       }
 
       $form['#submit'][] = '_alshaya_captcha_form_submit';
@@ -121,10 +124,24 @@ function _alshaya_captcha_form_validate(&$form, FormStateInterface $form_state) 
 }
 
 /**
- * Form submit handler to clear the flood.
+ * Form validation handler to remove captcha error if not required.
  */
-function _alshaya_captcha_form_submit(&$form, FormStateInterface $form_state) {
-  // If successful, clear flood.
-  $flood = $form_state->get('flood');
-  $flood->clear('alshaya_captcha_' . $form['#id']);
+function _alshaya_captcha_form_after_threshold_validate(&$form, FormStateInterface $form_state) {
+  // If there is any error.
+  if ($errors = $form_state->getErrors()) {
+    // Get flood instance and flood event name.
+    $flood = $form_state->get('flood');
+    $flood_event = 'alshaya_captcha_' . $form['#id'] . '_captch_fail_message';
+    if ($flood->isAllowed($flood_event, 1)) {
+      $flood->register($flood_event);
+      // Remove/Unset any captcha error message if any (only for first fail).
+      if (isset($errors['captcha_response'])) {
+        $form_state->clearErrors();
+        unset($errors['captcha_response']);
+        foreach ($errors as $field_name => $error) {
+          $form_state->setErrorByName($field_name, $error);
+        }
+      }
+    }
+  }
 }

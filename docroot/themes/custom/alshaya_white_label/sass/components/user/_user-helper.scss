@@ -100,7 +100,7 @@
 
   @include breakpoint($desktop) {
     padding: 0.6em 0;
-    margin: 4.5em auto 1em;
+    margin: 4.813rem auto 1em;
   }
 
   .messages__wrapper {
@@ -108,6 +108,12 @@
 
     @include breakpoint($tablet) {
       width: 98%;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .block-system-main-block {
+      margin-left: 0.5rem;
     }
   }
 
@@ -119,6 +125,7 @@
 
     @include breakpoint($desktop) {
       max-width: 24.8rem;
+      top: 0.8125rem;
     }
 
     .form-text,
@@ -146,6 +153,7 @@
 
     @include breakpoint($desktop) {
       top: -4.5rem;
+      margin-left: 6px;
     }
   }
 
@@ -162,7 +170,7 @@
       }
 
       @include breakpoint($desktop) {
-        margin-top: 5.2em;
+        margin-top: 4.438rem;
       }
     }
 
@@ -179,6 +187,10 @@
 
       input {
         font-size: 0.75rem;
+
+        @include breakpoint($desktop) {
+          width: 91px;
+        }
       }
     }
   }
@@ -199,6 +211,10 @@
 
       @include breakpoint($desktop) {
         margin-bottom: 4.1rem;
+
+        .field--type-image {
+          float: $right;
+        }
       }
 
       p {
@@ -353,10 +369,6 @@
 
       @include breakpoint($desktop) {
         margin-top: 1.75rem;
-
-        .field--type-image {
-          float: $right;
-        }
       }
 
       @include breakpoint($tablet) {
@@ -446,6 +458,23 @@
         width: 72%;
         max-width: 57.5625rem;
         float: right;
+      }
+    }
+  }
+
+  &.order-detail {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        width: 22%;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 74.5%;
+        float: $right;
       }
     }
   }

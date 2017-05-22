@@ -12,14 +12,14 @@
       $('.block-basket-horizontal-recommendation .owl-carousel').owlCarousel({
         loop: false,
         responsiveClass: true,
-        dots: false,
+        dots: true,
         responsive: {
           0: {
             items: 1,
             nav: false
           },
           768: {
-            items: 3,
+            items: 4,
             nav: true
           },
           1024: {

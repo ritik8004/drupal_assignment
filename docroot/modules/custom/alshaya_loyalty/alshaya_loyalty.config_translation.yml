@@ -5,7 +5,7 @@ alshaya_loyalty.loyalty_settings_form:
     - alshaya_loyalty.settings
 
 alshaya_loyalty.join_club:
-  title: 'Join the Club content'
+  title: 'Join the club content'
   base_route_name: alshaya_loyalty.join_club_form
   names:
     - alshaya_loyalty.join_club

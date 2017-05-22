@@ -350,6 +350,7 @@
     @extend %list-clear;
 
     padding: 0;
+    direction: ltr;
 
     @include breakpoint($only-mobile) {
       text-align: center;
@@ -357,33 +358,39 @@
 
     li {
       display: inline-block;
-      padding: 0 5px;
+      padding: 0 2px;
 
       @include breakpoint($only-tablet) {
         padding: 0;
       }
 
       &:first-child {
+        position: relative;
+
         &::after {
           content: "";
           position: absolute;
-          border-top: 1px solid $peacock-blue;
+          border-top: 2px solid $peacock-blue;
           width: 14px;
           transform: rotate(-70deg);
           transform-origin: 0% 0%;
           top: 1em;
+          right: -10px;
+          color: $blue-two;
         }
       }
 
       a {
         font-size: 14px;
         text-transform: lowercase;
-        color: $peacock-blue;
+        color: $blue-two;
         margin: 0 5px;
+        text-decoration: underline;
       }
 
       &.is-active a {
         color: $brownish-grey;
+        text-decoration: none;
       }
     }
   }

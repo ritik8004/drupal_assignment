@@ -1,0 +1,22 @@
+{% set classes = [
+'node',
+'node--type-' ~ node.bundle|clean_class,
+view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+] %}
+
+<article {{ attributes.addClass(classes) }}>
+
+  <div class="content">
+    <a href="{{ url }}">{{ content.image }}</a>
+
+    <h2{{ title_attributes }} class="field--name-name">
+      <a href="{{ url }}">{{ label }}</a>
+    </h2>
+
+    {{ content.price }}
+
+    {{ content.special_price }}
+  </div>
+  <!-- /content -->
+</article>
+<!-- /article #node -->

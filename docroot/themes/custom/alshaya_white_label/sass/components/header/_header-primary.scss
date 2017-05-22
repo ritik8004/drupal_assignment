@@ -60,7 +60,7 @@ header {
 
     @include breakpoint($desktop) {
       margin-top: 2.125rem;
-      padding-bottom: 1.75rem;
+      padding-bottom: 2rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -209,16 +209,16 @@ header {
       display: inline-block;
       margin-#{$right}: 20px;
 
-      .prefix {
-        font-weight: normal;
-        float: $left;
-        display: inline-block;
-        vertical-align: bottom;
-        margin-#{$right}: 0.4375rem;
+      span {
+        &:first-child {
+          margin-#{$right}: 0.4375rem;
+        }
       }
 
-      .total--amount {
-        float: $right;
+      .prefix {
+        font-weight: normal;
+        display: inline-block;
+        vertical-align: bottom;
       }
     }
 
@@ -246,8 +246,7 @@ header {
 
     @include breakpoint($desktop) {
       .acq-mini-cart {
-        max-width: 164px;
-        float: right;
+        float: $right;
       }
     }
 

@@ -22,26 +22,29 @@
         event.stopPropagation();
       });
 
-      var btn = document.querySelector('#edit-add-to-cart--2');
-      btn.setAttribute( 'data-style', 'zoom-in');
-      var l = Ladda.create(btn);
+      // Create a new instance of ladda for the specified button
+      $('.edit-add-to-cart').attr( 'data-style', 'zoom-in');
+      var l = $('.edit-add-to-cart').ladda();
 
-      btn.addEventListener('click', function() {
-        l.start();
+      $('.edit-add-to-cart').on('click', function() {
+        // Start loading
+        l.ladda( 'start' );
       });
 
-      btn.addEventListener('mousedown', function() {
-        l.start();
+      $('.edit-add-to-cart').on('mousedown', function() {
+        // Start loading
+        l.ladda( 'start' );
       });
 
-      btn.addEventListener('keydown', function(event) {
+      $('.edit-add-to-cart').on('keydown', function(event) {
         if (event.keyCode == 13 || event.keyCode == 32) {
-          l.start();
+          // Start loading
+          l.ladda('start');
         }
       });
 
       $.fn.stopSpinner = function(data) {
-        l.stop();
+        l.ladda('stop');
         if (data.message === 'success') {
           $('.ladda-label').html(Drupal.t('added'));
         }

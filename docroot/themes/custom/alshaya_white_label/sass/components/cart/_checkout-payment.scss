@@ -1,7 +1,10 @@
 .user-page.checkout-delivery.checkout-payment {
   .multistep-checkout {
-    border: 1px solid #adadad;
     margin-top: 0.75em;
+
+    @include breakpoint($tablet) {
+      border: 1px solid $white;
+    }
 
     fieldset {
       width: 100%;
@@ -42,10 +45,34 @@
   .fieldset-wrapper {
     padding: 1em;
   }
+
+  #edit-billing-address-same-as-shipping {
+    @include breakpoint($mobile) {
+      padding-#{$left}: 0;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 1em;
+
+      @include u-visibility(inline);
+    }
+  }
+
+  .js-form-type-radio {
+    @include u-visibility(inline-block);
+
+    @include breakpoint($desktop) {
+      margin-top: 0;
+    }
+
+    label.option {
+      top: 0;
+    }
+  }
 }
 
 #edit-checkout-terms {
-  padding: 0.25rem 1.35rem;
+  padding: 0.25rem 1rem;
 
   legend {
     display: none;
@@ -56,13 +83,67 @@
   }
 
   .form-type-checkbox {
-    .option::before {
-      margin-right: 0.9em;
-      top: 0;
+    .option {
+      @include breakpoint($desktop) {
+        top: 0;
+      }
+
+      &::before {
+        margin-#{$right}: 0.9em;
+        top: 0;
+        float: $left;
+      }
     }
 
     p {
-      width: 58%;
+      @include breakpoint($upto-desktop) {
+        margin-#{$left}: 2rem;
+      }
     }
+  }
+}
+
+#payment_details {
+  margin-top: 0;
+  padding: 0.25rem 1rem;
+
+  .form-item-payment-methods-payment-details-cc-number {
+    width: 12.5rem;
+  }
+
+  .form-item-payment-methods-payment-details-cc-exp-year,
+  .form-item-payment-methods-payment-details-cc-exp-month {
+    float: $left;
+    width: 105px;
+    height: 35px;
+    border: 1px solid $white;
+    margin-#{$right}: 10px;
+
+    label {
+      float: $left;
+      padding: 5px 20px 5px 0;
+    }
+
+    &::after {
+      top: 0;
+      background: $white;
+    }
+
+    #edit-payment-methods-payment-details-cc-exp-year,
+    #edit-payment-methods-payment-details-cc-exp-month {
+      border: none;
+      border-radius: 0;
+      padding: 4px 10px;
+      appearance: none;
+      margin: 0 5px;
+      float: $left;
+    }
+  }
+
+  .form-item-payment-methods-payment-details-cc-cvv {
+    width: 5.3125rem;
+    clear: both;
+    margin-top: 8em;
+    margin-bottom: 1em;
   }
 }

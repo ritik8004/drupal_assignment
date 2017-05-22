@@ -194,6 +194,10 @@
     text-transform: lowercase;
     font-weight: normal;
     font-family: $alshaya-bold;
+
+    &.my-account-title {
+      display: none;
+    }
   }
 
   position: fixed;

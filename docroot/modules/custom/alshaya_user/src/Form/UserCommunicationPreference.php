@@ -92,13 +92,8 @@ class UserCommunicationPreference extends FormBase {
 
     // Display mobile as communication preference if not empty.
     if (!empty($account->field_mobile_number->getValue())) {
-      // Get mobile values.
-      $mobile_raw = $account->field_mobile_number->getValue()[0];
-      // Get phonenumber object.
-      $mobile_value = $this->mobileUtil->getMobileNumber($mobile_raw['value']);
-
       $options['mobile'] = $this->t('Mobile (@mobile)', [
-        '@mobile' => $this->mobileUtil->libUtil()->format($mobile_value, 1),
+        '@mobile' => $this->formatMobileNumber($this->mobileUtil, $account),
       ]);
     }
 
@@ -115,6 +110,30 @@ class UserCommunicationPreference extends FormBase {
     $form['actions']['submit'] = ['#type' => 'submit', '#value' => $this->t('Save')];
 
     return $form;
+  }
+
+  /**
+   * Format mobile number.
+   *
+   * @param object $mobileUtil
+   *   The MobileNumber util service object.
+   * @param object $account
+   *   The user account object.
+   *
+   * @return string|null
+   *   Return formatted mobile number or null if empty.
+   */
+  public static function formatMobileNumber($mobileUtil, $account) {
+    // Display mobile as communication preference if not empty.
+    if (empty($account->field_mobile_number->getValue())) {
+      return NULL;
+    }
+    // Get mobile values.
+    $mobile_raw = $account->field_mobile_number->getValue()[0];
+    // Get phonenumber object.
+    $mobile_value = $mobileUtil->getMobileNumber($mobile_raw['value']);
+
+    return $mobileUtil->libUtil()->format($mobile_value, 1);
   }
 
   /**

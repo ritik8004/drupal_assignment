@@ -116,12 +116,12 @@
         font-family: $alshaya-bold;
         background: $pumpkin-orange;
         border-radius: 0;
-        color: $white-two;
+        color: $white-three;
         padding: 0.625rem 1.6rem;
         border: 0;
         font-size: 0.813rem;
         float: left;
-        position: static;
+        text-transform: lowercase;
       }
     }
   }
@@ -164,13 +164,17 @@
       a {
         @include u-visibility(block);
 
-        height: 38px;
-        width: 38px;
         margin: 5px 5px 5px 0;
         border: 1px solid $black;
         text-align: center;
-        padding-top: 7px;
+        padding: 7px;
         font-size: 10px;
+
+        &.picked {
+          color: $white;
+          font-weight: bold;
+          background: $marine-blue;
+        }
       }
 
       .unavailable {

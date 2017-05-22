@@ -114,7 +114,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $form['cart'][$id]['quantity']['#suffix'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div id="stock-error-' . $id . '"></div>';
 
       // Load the first image.
-      $media_image = alshaya_acm_product_get_sku_media($id, TRUE);
+      $sku_media = alshaya_acm_get_product_display_image($id);
 
       // Get SKU attributes.
       $sku_attributes = alshaya_acm_product_get_sku_configurable_values($id);
@@ -146,11 +146,11 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       }
 
       $image = [];
-      if (!empty($media_image)) {
+      if (!empty($sku_media['uri'])) {
         $image = [
           '#theme' => 'image_style',
           '#style_name' => '137x144',
-          '#uri' => $media_image['file']->getFileUri(),
+          '#uri' => $sku_media['uri'],
         ];
       }
 
@@ -255,6 +255,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
     '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
+    '#default_value' => !empty($form_state->getValue('promotion')) ? $form_state->getValue('promotion') : '',
   ];
 
   if (!empty($cart_items)) {
@@ -466,6 +467,10 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   // We need to change the markup for submit button.
   // @see alshaya_white_label_theme_suggestions_input_alter().
   $form['add_to_cart']['#attributes']['data-twig-suggestion'] = 'addtocart';
+
+  // Adding classes to add to cart button and quanity field.
+  $form['add_to_cart']['#attributes']['class'][] = 'edit-add-to-cart';
+  $form['quantity']['#attributes']['class'][] = 'edit-quantity';
 }
 
 /**
@@ -510,6 +515,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'price' => '',
         'currency_format' => '',
         'currency_code_position' => '',
+        'special_price' => '',
       ],
     ],
     'alshaya_cart_product_name' => [

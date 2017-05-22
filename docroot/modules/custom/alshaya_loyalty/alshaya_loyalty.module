@@ -101,6 +101,8 @@ function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, F
     }
   }
 
+  $form['field_privilege_card_number']['widget'][0]['value']['#maxlength'] = 19;
+
   // Validate privilege card number.
   $form['field_privilege_card_number']['#element_validate'] = [
     '_alshaya_loyalty_validate_field_value',
@@ -146,8 +148,11 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
     // Validate number against validation settings.
     if (($element_value != $validation['value_start_with'])
         && !alshaya_loyalty_check_valid_apc_number($element_value, $validation['length'], $validation['value_start_with'])) {
-      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
+      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => alshaya_loyalty_format_card_number($element_value)]));
     }
+  }
+  else {
+    $form_state->setValue($field, NULL);
   }
 }
 
@@ -196,15 +201,8 @@ function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInter
     if ($apc_number != $validation['value_start_with']) {
       if (\Drupal::currentUser()->isAuthenticated()) {
         $user = User::load(\Drupal::currentUser()->id());
-        $user->get('field_privilege_card_number')->setValue($apc_number);
+        $user->get('field_privilege_card_number')->set(0, $apc_number);
         $user->save();
-
-        // This will be enabled by default but to avoid adding it to dependency.
-        if (\Drupal::moduleHandler()->moduleExists('alshaya_acm_customer')) {
-          // Update the data in Magento.
-          \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-          alshaya_acm_customer_update_customer_data($user->getEmail());
-        }
       }
       elseif (Drupal::currentUser()->isAnonymous()) {
         $temp_store->set('card_number', $apc_number);
@@ -388,6 +386,44 @@ function alshaya_loyalty_preprocess_user(&$variables) {
     $block = Block::load('jointheclub');
     $variables['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
   }
+}
+
+/**
+ * Format loyalty card number.
+ *
+ * @param string $number
+ *   The loyalty card number.
+ *
+ * @return string
+ *   Return the formatted string.
+ */
+function alshaya_loyalty_format_card_number($number) {
+  $number = str_replace(['-', ' '], '', $number);
+  $cc_length = strlen($number);
+  $processed_number = substr($number, -4);
+
+  for ($i = $cc_length - 5; $i >= 0; $i--) {
+    $calc = ((($i + 1) - $cc_length) % 4);
+    if ($calc == 0) {
+      $processed_number = '-' . $processed_number;
+    }
+    $processed_number = $number[$i] . $processed_number;
+  }
+
+  return $processed_number;
+}
+
+/**
+ * Mask Loyalty card number.
+ *
+ * @param string $number
+ *   The loyalty card number.
+ *
+ * @return string
+ *   Return masked string of card number.
+ */
+function alshaya_loyalty_mask_card_number($number) {
+  return 'XXXX-XXXX-XXXX-' . substr($number, -4);
 }
 
 /**

@@ -5,6 +5,7 @@
  * Theme specific functionality.
  */
 
+use Drupal\alshaya_user\Form\UserCommunicationPreference;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
@@ -513,9 +514,11 @@ function alshaya_white_label_preprocess_user(&$variables) {
   /* @var \Drupal\user\Entity\User $user */
   $user = $variables['user'];
   if ($user) {
+    $mobile_util = \Drupal::getContainer()->get('mobile_number.util');
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
-    $variables['contact_number'] = $user->get('field_mobile_number') ? (!empty($user->get('field_mobile_number')->getValue()) ? $user->get('field_mobile_number')->getValue()[0]['value'] : '') : '';
-    $variables['privilege_card'] = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
+    $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user);
+    $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
+    $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
   }
 }
 
@@ -598,7 +601,12 @@ function alshaya_white_label_preprocess_input(&$variables) {
 function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array $variables) {
   $element = $variables['element'];
   if (isset($element['#attributes']['data-twig-suggestion'])) {
-    $suggestions[] = 'input__' . $element['#attributes']['data-twig-suggestion'];
+    if ($element['#attributes']['data-twig-suggestion'] == 'userregisterformpassword') {
+      $suggestions[] = 'input__' . $element['#attributes']['data-twig-suggestion'];
+    }
+    if ($element['#attributes']['data-twig-suggestion'] == 'addtocart') {
+      $suggestions[] = 'input__add_to_cart';
+    }
   }
 }
 

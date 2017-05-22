@@ -18,7 +18,6 @@ use Drupal\node\NodeInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements hook_acq_sku_product_node_alter().
@@ -120,12 +119,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       // Get the image.
       $build['image_url'] = [];
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
+      $sku_media = alshaya_acm_get_product_display_image($sku_entity);
       if ($sku_media) {
         $build['image'] = [
           '#theme' => 'image_style',
           '#style_name' => '192x168',
-          '#uri' => $sku_media['file']->getFileUri(),
+          '#uri' => $sku_media['uri'],
           '#title' => $sku_media['label'],
           '#alt' => $sku_media['label'],
         ];
@@ -137,13 +136,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
       $build['image_url'] = NULL;
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
+      $sku_media = alshaya_acm_get_product_display_image($sku_entity);
 
       if ($sku_media) {
         $build['image'] = [
           '#theme' => 'image_style',
           '#style_name' => '192x168',
-          '#uri' => $sku_media['file']->getFileUri(),
+          '#uri' => $sku_media['uri'],
           '#title' => $sku_media['label'],
           '#alt' => $sku_media['label'],
         ];
@@ -152,31 +151,41 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     elseif ($view_mode == 'search_result') {
       // Get the image.
       $build['image_url'] = [];
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity);
-      foreach ($sku_media as $delta => $media_item) {
-        if ($media_item['media_type'] == 'image') {
-          $file_uri = $media_item['file']->getFileUri();
-
-          $thumbImg = ImageStyle::load('59x60')->buildUrl($file_uri);
-          $mainImg = ImageStyle::load('291x288')->buildUrl($file_uri);
-          $thumbnails[] = [
-            'thumburl' => $thumbImg,
-            'url' => $mainImg,
-          ];
-        }
+      $sku_media = alshaya_acm_get_product_display_image($sku_entity);
+      if ($sku_media) {
+        $build['image'] = [
+          '#theme' => 'image_style',
+          '#style_name' => '291x288',
+          '#uri' => $sku_media['uri'],
+          '#title' => $sku_media['label'],
+          '#alt' => $sku_media['label'],
+        ];
       }
-      $build['image'] = [
-        '#theme' => 'alshaya_search_gallery',
-        '#mainImage' => $thumbnails[0]['url'],
-        '#thumbnails' => $thumbnails,
-        '#attached' => [
-          'library' => [
-            'alshaya_search/alshaya_search',
-          ],
-        ],
-      ];
 
-      _alshaya_acm_product_build_price($build, $sku_entity);
+      // Get the special price.
+      // @TODO: Calculate discount and pass it once we have some realistic data.
+      $build['special_price'] = NULL;
+      if ($special_price = $sku_entity->get('attr_special_price')->getString()) {
+        $build['special_price'] = [
+          '#theme' => 'alshaya_acm_price',
+          '#price' => $special_price,
+          '#special_price' => 'special-price',
+        ];
+
+        // Get the price.
+        $build['price'] = [
+          '#theme' => 'alshaya_acm_price',
+          '#price' => $sku_entity->get('price')->getString(),
+          '#special_price' => 'special-price-exists',
+        ];
+      }
+      else {
+        // Get the price.
+        $build['price'] = [
+          '#theme' => 'alshaya_acm_price',
+          '#price' => $sku_entity->get('price')->getString(),
+        ];
+      }
     }
   }
 }
@@ -186,7 +195,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
  */
 function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
   // Remove/Hide the 'add to cart' form from product list/search page.
-  if ($build['#view_mode'] == 'search_result') {
+  if ($build['#view_mode'] == 'teaser') {
     $build['#no_add_to_cart'] = TRUE;
   }
 

@@ -1,10 +1,10 @@
 {% if currency_code_position == 'before' %}
-  <span class="price-wrapper">
+  <span class="price-wrapper field--name-price {{ special_price }}">
     <span class="price-currency prefix">{{ currency_format|t }}</span>
     <span class="price-amount">{{ price }}</span>
   </span>
 {% else %}
-  <span class="price-wrapper">
+  <span class="price-wrapper field--name-price {{ special_price }}">
     <span class="price-amount">{{ price }}</span>
     <span class="price-currency suffix">{{ currency_format|t }}</span>
   </span>

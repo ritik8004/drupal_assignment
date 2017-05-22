@@ -407,8 +407,6 @@
   }
 
   .form-type-checkbox .option {
-    top: 0 !important;
-
     &::before {
       margin-#{$right}: 0.5em;
       position: relative;
@@ -436,6 +434,11 @@
       #{$left}: 10em;
       bottom: 0.75em;
       width: auto;
+    }
+
+    @include breakpoint($desktop) {
+      #{$left}: 9em;
+      bottom: 0.7em;
     }
 
     position: absolute;
@@ -606,8 +609,9 @@
           }
 
           @include breakpoint($only-tablet) {
-            width: 200px;
+            width: 10.5rem;
             height: 96px;
+            padding-#{$left}: 0.5rem;
 
             .second {
               display: none;
@@ -666,11 +670,15 @@
         }
 
         .first {
-          width: 125px;
+          @include breakpoint($desktop) {
+            width: 125px;
+          }
         }
 
         .second {
-          width: 300px;
+          @include breakpoint($desktop) {
+            width: 18.75rem;
+          }
 
           @include breakpoint($only-mobile) {
             width: 10.5rem;
@@ -866,7 +874,7 @@
 
   .my-account-nav {
     list-style: none;
-    padding-left: 0;
+    padding-#{$left}: 0;
     margin: 0;
     color: $matterhorn;
     font-size: 14px;
@@ -980,7 +988,6 @@
     padding: 1.25rem 1rem;
 
     @include breakpoint($tablet) {
-      margin-top: 3.1rem;
       padding: 1.5rem;
     }
   }
@@ -1001,8 +1008,9 @@
   summary {
     outline: transparent;
     color: $brownish-grey;
+    position: relative;
 
-    @include icon(chevronup, after) {
+    @include icon(chevrondown, after) {
       font-size: 1.563em;
       top: 0.25em;
       position: relative;
@@ -1012,9 +1020,27 @@
     &::-webkit-details-marker {
       display: none;
     }
+
+    &::after {
+      position: absolute;
+      top: -15px;
+      left: 90%;
+      font-size: 22px;
+      color: $black;
+    }
   }
 
   details[open] summary {
-    @include icon(chevrondown, after);
+    position: relative;
+
+    @include icon(chevronup, after);
+
+    &::after {
+      position: absolute;
+      top: -15px;
+      left: 90%;
+      font-size: 22px;
+      color: $black;
+    }
   }
 }
