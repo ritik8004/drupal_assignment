@@ -10,6 +10,11 @@
     @include breakpoint($tablet) {
       margin-bottom: 36px;
     }
+
+    @include breakpoint($desktop) {
+      padding-bottom: 1rem;
+      margin-bottom: 2.625rem;
+    }
   }
 
   .region__content {
@@ -26,6 +31,11 @@
       display: block;
     }
 
+    @include breakpoint($desktop) {
+      top: -0.5rem;
+      min-width: 11.5625rem;
+    }
+
     &:hover {
       color: $white-five;
     }
@@ -39,8 +49,8 @@
   font-size: 12px;
   margin-bottom: 88px;
 
-  @include breakpoint($tablet) {
-    font-size: 14px;
+  @include breakpoint($desktop) {
+    font-size: 0.875rem;
   }
 
   .light {
@@ -50,6 +60,16 @@
   .dark {
     color: $black-two;
     font-weight: 700;
+  }
+
+  .font-small {
+    font-size: 0.75rem;
+  }
+
+  .order-transaction {
+    @include breakpoint($tablet) {
+      width: 23%;
+    }
   }
 
   .empty--cell {
@@ -71,32 +91,39 @@
   }
 
   .delivery-details-row {
-    font-size: 0.812rem;
+    font-size: 0.8125rem;
     font-weight: 700;
     border-top: 1px solid $white-five;
     border-bottom: 1px solid $white-five;
 
-    @include breakpoint($tablet) {
-      font-size: 15px;
+    @include breakpoint($desktop) {
+      font-size: 0.9375rem;
     }
 
     td {
       background: $solitude;
       padding: 20px 16px;
       padding-#{$left}: 56px;
-      text-indent: -40px;
+      text-indent: -2.5rem;
       vertical-align: middle;
 
       .icon-ic_infomation {
-        font-size: 24px;
+        font-size: 1.9375rem;
         font-weight: 700;
-        margin-#{$right}: 1rem;
+        margin-#{$right}: 0.7rem;
         vertical-align: middle;
       }
 
       @include breakpoint($tablet) {
-        padding: 28px 22px;
+        padding: 1.125rem 1.375rem;
         padding-#{$left}: 56px;
+        text-indent: -2.125rem;
+      }
+
+      &.blend {
+        @include breakpoint($only-tablet) {
+          padding-left: 0;
+        }
       }
     }
 
@@ -126,6 +153,12 @@
 
   .order-item-row {
     border-bottom: 1px solid $white;
+
+    .order__product--image {
+      @include breakpoint($only-tablet) {
+        padding-#{$right}: 0.125rem;
+      }
+    }
 
     img {
       min-width: 128px;
@@ -178,6 +211,10 @@
       @include breakpoint($tablet) {
         padding: 22px 24px;
       }
+
+      @include breakpoint($desktop) {
+        vertical-align: middle;
+      }
     }
 
     .mobile-only {
@@ -190,6 +227,16 @@
 
     .blend {
       background: $whisper;
+
+      @include breakpoint($tablet) {
+        width: 17.4%;
+      }
+    }
+  }
+
+  .order__summary--status {
+    @include breakpoint($tablet) {
+      width: 19.8%;
     }
   }
 
@@ -198,6 +245,10 @@
 
     .blend {
       background: $solitude;
+
+      @include breakpoint($tablet) {
+        padding-right: 10px;
+      }
     }
 
     .mobile-only {

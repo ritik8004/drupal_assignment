@@ -53,12 +53,8 @@
       margin-top: 0;
       padding-bottom: 0;
       position: absolute;
-      top: -1rem;
-      #{$right}: 0;
-    }
-
-    @include breakpoint($desktop) {
       top: -0.5rem;
+      #{$right}: 0;
     }
   }
 }
@@ -117,6 +113,10 @@
     }
 
     @include breakpoint($tablet) {
+      margin-#{$left}: 4px;
+    }
+
+    @include breakpoint($desktop) {
       margin-#{$left}: 23px;
     }
   }
@@ -132,11 +132,12 @@
     min-width: 135px;
 
     @include breakpoint($tablet) {
-      min-width: 185px;
+      min-width: 162px;
     }
 
     @include breakpoint($desktop) {
       margin-#{$left}: 12px;
+      min-width: 185px;
     }
   }
 
@@ -145,12 +146,9 @@
     padding: 10px 8px 9px 16px;
     width: 125px;
 
-    @include breakpoint($tablet) {
-      width: 153px;
-    }
-
     @include breakpoint($desktop) {
       margin-#{$left}: 28px;
+      width: 153px;
     }
   }
 

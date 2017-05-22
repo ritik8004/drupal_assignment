@@ -283,18 +283,18 @@
 .acq-cart-summary {
   .caption {
     font-size: 14px;
-    background: $white-five;
-    padding: 1.563rem 1.25rem;
+    background: $white-three;
+    padding: 1rem 1.25rem;
 
     .title {
       color: $black-two;
-      font-weight: bold;
     }
 
     a {
       text-decoration: none;
       float: $right;
       font-weight: bold;
+      font-size: 0.75rem;
       color: $cerulean-two;
     }
   }
@@ -302,7 +302,7 @@
   .content-head {
     width: 100%;
     background: $white-four;
-    padding: 1em;
+    padding: 1em 1.5rem;
     font-size: 14px;
     position: relative;
 
@@ -318,7 +318,7 @@
 
   .active--accordion {
     .content-head {
-      @include icon(chevronup, after);
+      @include icon(chevron#{$right}, after);
     }
   }
 
@@ -335,15 +335,61 @@
 
     li {
       @include clearfix;
+    }
+  }
 
-      margin-bottom: 1rem;
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    width: 100%;
+    list-style: none;
+    display: inline-block;
+    border: 1px solid $white;
+    padding: 1.563rem;
+  }
+
+  .left {
+    float: $left;
+    width: 30%;
+  }
+
+  .right {
+    float: $right;
+    width: 70%;
+    padding-#{$left}: 1.4rem;
+
+    a,
+    span {
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    > span {
+      display: block;
+    }
+
+    .product-name {
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .product-total {
+      font-weight: 700;
+    }
+
+    .product-qty {
+      color: $greyish;
+      margin-bottom: 3px;
     }
   }
 }
 
 .totals {
   font-size: 14px;
-  background: $white-five;
+  background: $white-three;
   padding: 1.563rem 1.25rem;
 
   table {
@@ -378,16 +424,23 @@
 
 body.alias--cart {
   .page-standard.l-container {
-    max-width: 19rem;
     margin: auto;
     margin-top: 2rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 
     @include breakpoint($tablet) {
-      max-width: 45rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
     }
 
     @include breakpoint($desktop) {
       max-width: 77.25rem;
+    }
+
+    @include breakpoint($desktop-wide) {
+      padding-left: 0;
+      padding-right: 0;
     }
 
     .edit-actions {
@@ -403,7 +456,7 @@ body.alias--cart {
       }
 
       @include breakpoint($tablet) {
-        margin-#{$right}: -2.4rem;
+        margin-#{$right}: -3.4rem;
       }
 
       @include breakpoint($desktop) {
@@ -449,7 +502,7 @@ body.alias--cart {
     }
 
     thead {
-      background: $white-five;
+      background: $white-three;
 
       th {
         font-weight: normal;
@@ -546,13 +599,13 @@ body.alias--cart {
         }
 
         @include breakpoint($tablet) {
-          width: 7.6rem;
+          width: 16.3%;
           padding-#{$left}: 0.63rem;
           padding-#{$right}: 0;
         }
 
         @include breakpoint($desktop) {
-          width: 16.8rem;
+          width: 21.75%;
           padding: 1rem;
           padding-#{$left}: 3.5rem;
         }
@@ -606,7 +659,7 @@ body.alias--cart {
 
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 7.25rem;
+      margin-#{$right}: 16.3%;
     }
 
     @include breakpoint($only-tablet) {
@@ -623,11 +676,12 @@ body.alias--cart {
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 16.7rem;
+      margin-#{$right}: 21.7%;
     }
 
-    .edit-continue-shopping-mobile {
-      @include breakpoint($desktop) {
+    .edit-continue-shopping-mobile,
+    #edit-continue-shopping-mobile {
+      @include breakpoint($tablet) {
         display: block;
         font-weight: normal;
         border: 0;
@@ -700,7 +754,8 @@ body.alias--cart {
 
     background: $pumpkin-orange;
     margin-top: 1em;
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
+    min-width: 10.8125rem;
     text-transform: lowercase;
 
     @include breakpoint($upto-tablet) {
@@ -708,12 +763,18 @@ body.alias--cart {
       width: 100%;
     }
 
+    @include breakpoint($tablet) {
+      margin-top: 1.4em;
+    }
+
     @include breakpoint($desktop) {
+      margin-top: 1em;
       width: 10.8rem;
     }
   }
 
   #edit-continue-shopping,
+  #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
     font-size: 12px;
     font-weight: bold;
@@ -736,7 +797,8 @@ body.alias--cart {
     }
   }
 
-  .edit-continue-shopping-mobile {
+  .edit-continue-shopping-mobile,
+  #edit-continue-shopping-mobile {
     @include breakpoint($tablet) {
       display: none;
     }
@@ -760,7 +822,7 @@ body.alias--cart {
 
   a {
     margin: auto;
-    max-width: 30rem;
+    max-width: 32rem;
 
     @include breakpoint($tablet) {
       max-width: 10.81rem;
@@ -771,6 +833,7 @@ body.alias--cart {
     display: none;
   }
 
+  #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
     color: $white-five;
     background: $pumpkin-orange;
