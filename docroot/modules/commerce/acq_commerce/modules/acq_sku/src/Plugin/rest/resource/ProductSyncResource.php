@@ -59,13 +59,6 @@ class ProductSyncResource extends ResourceBase {
   private $queryFactory;
 
   /**
-   * Queue of images to download.
-   *
-   * @var DownloadImagesQueue
-   */
-  private $downloadImagesQueueManager = NULL;
-
-  /**
    * Construct.
    *
    * @param array $configuration
@@ -206,7 +199,12 @@ class ProductSyncResource extends ResourceBase {
 
         $sku->name->value = $product['name'];
         $sku->price->value = $product['price'];
+        $sku->special_price->value = $product['special_price'];
+        $sku->final_price->value = $product['final_price'];
+
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
+
+        $sku->media = serialize($product['extension']['media']);
 
         $this->logger->info(
           'Updating product SKU @sku.',
@@ -221,7 +219,10 @@ class ProductSyncResource extends ResourceBase {
           'sku' => $product['sku'],
           'name' => html_entity_decode($product['name']),
           'price' => $product['price'],
+          'special_price' => $product['special_price'],
+          'final_price' => $product['final_price'],
           'attributes' => $this->formatProductAttributes($product['attributes']),
+          'media' => serialize($product['extension']['media']),
         ]);
 
         $display = $this->createDisplayNode($product);
@@ -259,9 +260,6 @@ class ProductSyncResource extends ResourceBase {
       }
 
       $sku->save();
-
-      // Update fields based on the values from attributes that require SKU id.
-      $this->updateAttributeFieldsPostSave($sku, $product['attributes']);
 
       if ($display) {
         $display->save();
@@ -472,10 +470,6 @@ class ProductSyncResource extends ResourceBase {
             $value = isset($field['serialize']) ? serialize($value) : $value;
             $sku->{$field_key}->setValue($value);
             break;
-
-          case 'image':
-            // We will manage this post save.
-            break;
         }
       }
     }
@@ -515,52 +509,6 @@ class ProductSyncResource extends ResourceBase {
           case 'text_long':
             $value = isset($field['serialize']) ? serialize($value) : $value;
             $sku->{$field_key}->setValue($value);
-            break;
-
-          case 'image':
-            // We will manage this post save.
-            break;
-        }
-      }
-    }
-  }
-
-  /**
-   * Update attribute fields post save.
-   *
-   * Update the fields based on the values from attributes.
-   * We need the SKU id for some cases which will be handled in this.
-   *
-   * @param Drupal\acq_sku\Entity\SKU $sku
-   *   The root SKU.
-   * @param array $attributes
-   *   The attributes to set.
-   */
-  private function updateAttributeFieldsPostSave(SKU $sku, array $attributes) {
-    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
-
-    // Loop through all the attributes available for this particular SKU.
-    foreach ($attributes as $key => $value) {
-      // Check if attribute is required by us.
-      if (isset($additionalFields[$key])) {
-        $field = $additionalFields[$key];
-
-        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
-        $field_key = 'attr_' . $key;
-
-        switch ($field['type']) {
-          case 'image':
-            // Initialise queue manager if not already done.
-            if (empty($this->downloadImagesQueueManager)) {
-              $this->downloadImagesQueueManager = \Drupal::service('acq_sku.download_images_queue');
-            }
-
-            // @TODO: Enhance the process by checking if the same image is
-            // already there during update.
-            foreach ($value as $index => $val) {
-              $this->downloadImagesQueueManager->addItem($sku->id(), $field_key, $index, $val);
-            }
-
             break;
         }
       }

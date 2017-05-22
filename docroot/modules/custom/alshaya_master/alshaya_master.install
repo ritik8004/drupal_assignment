@@ -25,8 +25,6 @@ function alshaya_master_install() {
     ],
     'E-mail' => [
       'en' => 'Email address',
-    ],
-    'E-mail' => [
       'ar' => 'عنوان البريد الإلكتروني',
     ],
     'Create' => [
@@ -44,7 +42,13 @@ function alshaya_master_install() {
     'First Name' => [
       'ar' => 'الاسم الأول',
     ],
+    'First name' => [
+      'ar' => 'الاسم الأول',
+    ],
     'Last Name' => [
+      'ar' => 'اسم العائلة',
+    ],
+    'Last name' => [
       'ar' => 'اسم العائلة',
     ],
     'Privilege card number (Optional)' => [
@@ -58,6 +62,9 @@ function alshaya_master_install() {
     ],
     'Privilege card number' => [
       'ar' => 'رقم بطاقة نادي الامتيازات',
+    ],
+    'Privilege card number (optional)' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
     ],
     'you’ll be able to' => [
       'ar' => 'سجل الآن',
@@ -86,13 +93,22 @@ function alshaya_master_install() {
     'contact details' => [
       'ar' => 'تفاصيل الاتصال',
     ],
+    'Contact Details' => [
+      'ar' => 'تفاصيل الاتصال',
+    ],
     'address book' => [
+      'ar' => 'سجل العناوين ',
+    ],
+    'Address book' => [
       'ar' => 'سجل العناوين ',
     ],
     'communication preferences' => [
       'ar' => 'تفضيلات التواصل',
     ],
     'change password' => [
+      'ar' => 'تغيير كلمة السر',
+    ],
+    'Change Password' => [
       'ar' => 'تغيير كلمة السر',
     ],
     'My Account' => [
@@ -149,8 +165,8 @@ function alshaya_master_install() {
     'Enter card details' => [
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
-    'I would like to receive exclusive deals from Pottery Barn. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.' => [
-      'ar' => '.<a href="/terms" target="_blank">الشروط والأحكام</a> أرغب في استلام عروض حصرية من بوتري بارن. تسجيل بياناتك يعني موافقتك على',
+    'I would like to receive exclusive deals from Mothercare. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.' => [
+      'ar' => '<a href="/terms">الشروط والأحكام</a> أرغب في استلام عروض حصرية من مذركير&nbsp;تسجيل بياناتك يعني موافقتك على الشروط والأحكام',
     ],
     '@title is required.' => [
       'ar' => '@title يرجى إدخال',
@@ -172,6 +188,96 @@ function alshaya_master_install() {
     ],
     'search item or keyword' => [
       'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
+    ],
+    'Total: @count items.' => [
+      'ar' => 'الإجمالي: عدد القطع @count',
+    ],
+    'View order details' => [
+      'ar' => 'عرض تفاصيل الطلبية',
+    ],
+    'Orders' => [
+      'ar' => 'الطلبيات',
+    ],
+    'All Orders' => [
+      'ar' => 'كل الطلبيات',
+    ],
+    'Search orders by' => [
+      'ar' => 'البحث عن الطلبية',
+    ],
+    'You haven’t ordered anything recently.' => [
+      'ar' => 'لم يتم تسجيل أي طلبية مؤخرًا',
+    ],
+    'Mobile Number' => [
+      'ar' => 'رقم الجوال',
+    ],
+    'add address' => [
+      'ar' => 'أضف عنواناً',
+    ],
+    'Delivery address' => [
+      'ar' => 'عنوان التوصيل',
+    ],
+    'Primary address' => [
+      'ar' => 'عنوان التوصيل الأساسي',
+    ],
+    'Add new @type' => [
+      'ar' => 'إضافة @type جديد',
+    ],
+    'current password' => [
+      'ar' => 'كلمة السر الحالية',
+    ],
+    'new password' => [
+      'ar' => 'كلمة السر الجديدة',
+    ],
+    'Find Stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Find stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Map view' => [
+      'ar' => 'عرض الخريطة',
+    ],
+    'List view' => [
+      'ar' => 'عرض القائمة',
+    ],
+    'Use my current location' => [
+      'ar' => 'إستخدم موقعي الحالي',
+    ],
+    'Opening Hours' => [
+      'ar' => 'ساعات العمل',
+    ],
+    'Email verification required' => [
+      'ar' => 'التحقق من أصحية البريد الإلكتروني',
+    ],
+    'Search results for "@keyword"' => [
+      'ar' => 'نتائج البحث عن "@keyword"',
+    ],
+    'new customers' => [
+      'ar' => 'زبائن جدد',
+    ],
+    'checkout as guest' => [
+      'ar' => 'إتمام عملية الشراء كزبون زائر',
+    ],
+    'Your email will be used only to send you information about your order.' => [
+      'ar' => 'سيتم استخدام عنوان البريد الإلكتروني الخاص بك فقط عند إرسال تفاصيل الطلبية',
+    ],
+    '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p><ul><li>Express checkout</li><li>Personalized offers</li><li>Favorite list</li><li>Order history</li><li>And more…</li></ul>' => [
+      'ar' => '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p><ul><li>إتمام عملية الشراء السريعة</li><li>العروض الحصرية الخاصة بك</li><li>قائمة المنتجات المفضلة</li><li>سجل الطلبيات</li><li>المزيد</li></ul>',
+    ],
+    'Checkout' => [
+      'ar' => 'إتمام عملية الشراء',
+    ],
+    'Cart' => [
+      'ar' => 'عربة التسوق',
+    ],
+    'Welcome' => [
+      'ar' => 'أهلا بك',
+    ],
+    'returning customers' => [
+      'ar' => 'الزبائن العائدون',
+    ],
+    'Sign in to speed up the checkout process. It is the fastest way to review your selections, access your Address Book, and submit your order.' => [
+      'ar' => 'يرجى تسجيل الدخول لتسريع عملية الشراء ومراجعة اختياراتك والدخول لسجل عناوينك وإتمام عملية الشراء',
     ],
   ];
   alshaya_i18n_save_translations($strings);

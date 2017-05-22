@@ -7,6 +7,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\file\Entity\File;
 use Drupal\user\UserInterface;
 
 /**
@@ -50,6 +51,13 @@ use Drupal\user\UserInterface;
 class SKU extends ContentEntityBase implements SKUInterface {
 
   /**
+   * Processed media array.
+   *
+   * @var array
+   */
+  protected $media_data = [];
+
+  /**
    * {@inheritdoc}
    *
    * When a new entity instance is added, set the user_id entity reference to
@@ -74,6 +82,138 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   public function getSku() {
     return $this->get('sku')->value;
+  }
+
+  /**
+   * Function to return media files for a SKU.
+   *
+   * @param bool $reset
+   *   Flag to reset cache and generate array again from serialized string.
+   *
+   * @return array
+   *   Array of media files.
+   */
+  public function getMedia($reset = FALSE) {
+    if (!$reset && !empty($this->media_data)) {
+      return $this->media_data;
+    }
+
+    if ($media_data = $this->get('media')->getString()) {
+      $update_sku = FALSE;
+
+      $media_data_full = unserialize($media_data);
+
+      if (empty($media_data_full)) {
+        return [];
+      }
+
+      // @TODO: Remove this hard coded fix after getting answer why we have empty
+      // second array index and why all media come in first array index.
+      $media_data = reset($media_data_full);
+
+      foreach ($media_data as &$data) {
+        if ($data['media_type'] == 'image') {
+          if (empty($data['fid'])) {
+            try {
+              // Prepare the File object when we access it the first time.
+              $data['fid'] = $this->downloadMediaImage($data);
+              $update_sku = TRUE;
+            }
+            catch (\Exception $e) {
+              \Drupal::logger('acq_sku')->error($e->getMessage());
+              continue;
+            }
+          }
+
+          $data['file'] = File::load($data['fid']);
+
+          if (empty($data['label'])) {
+            $data['label'] = $this->label();
+          }
+        }
+
+        $this->media_data[$data['position']] = $data;
+      }
+
+      if ($update_sku) {
+        // @TODO: Remove this hard coded fix after getting answer why we have
+        // empty second array index and why all media come in first array index.
+        $media_data_full[0] = $media_data;
+        $this->get('media')->setValue(serialize($media_data_full));
+        $this->save();
+      }
+    }
+
+    // Sort them by position again to ensure it works everytime.
+    ksort($this->media_data);
+
+    return $this->media_data;
+  }
+
+  /**
+   * Function to save image file into public dir.
+   *
+   * @param array $data
+   *   File data.
+   *
+   * @return int
+   *   File id.
+   */
+  protected function downloadMediaImage(array $data) {
+    // Preparing args for all info/error messages.
+    $args = ['@file' => $data['file'], '@sku_id' => $this->id()];
+
+    // Download the file contents.
+    $file_data = file_get_contents($data['file']);
+
+    // Check to ensure errors like 404, 403, etc. are catched and empty file
+    // not saved in SKU.
+    if (empty($file_data)) {
+      throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
+    }
+
+    // Get the path part in the url, remove hostname.
+    $path = parse_url($data['file'], PHP_URL_PATH);
+
+    // Remove slashes from start and end.
+    $path = trim($path, '/');
+
+    // Get the file name.
+    $file_name = basename($path);
+
+    // Prepare the directory path.
+    $directory = 'public://media/' . str_replace('/' . $file_name, '', $path);
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    // Save the file as file entity.
+    /** @var \Drupal\file\Entity\File $file */
+    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+      return $file->id();
+    }
+    else {
+      throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
+    }
+  }
+
+  /**
+   * Function to return first image from media files for a SKU.
+   *
+   * @return array
+   *   Array of media files.
+   */
+  public function getThumbnail() {
+    $media = $this->getMedia();
+
+    // We loop through all the media items and return the first image.
+    foreach ($media as $media_item) {
+      if ($media_item['media_type'] == 'image') {
+        return $media_item;
+      }
+    }
+
+    return [];
   }
 
   /**
@@ -345,6 +485,18 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['special_price'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Special Price'))
+      ->setDescription(t('Special Price of this SKU.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['final_price'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Final Price'))
+      ->setDescription(t('Final Price of this SKU.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['crosssell'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Cross sell SKU'))
       ->setDescription(t('Reference to all Cross sell SKUs.'))
@@ -386,6 +538,17 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayOptions('form', [
         'type' => 'image_image',
         'weight' => -9,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+
+    $fields['media'] = BaseFieldDefinition::create('text_long')
+      ->setLabel(t('Media'))
+      ->setDescription(t('Store all the media files info.'))
+      ->setDisplayOptions('form', [
+        'type' => 'text_textfield',
+        'weight' => 8,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -458,24 +621,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
             if ($field_info['visible_form']) {
               $field->setDisplayOptions('form', [
                 'type' => 'text_textfield',
-                'weight' => $weight,
-              ]);
-            }
-            break;
-
-          case 'image':
-            $field = BaseFieldDefinition::create('image');
-            if ($field_info['visible_view']) {
-              $field->setDisplayOptions('view', [
-                'label' => 'hidden',
-                'type' => 'image',
-                'weight' => $weight,
-              ]);
-            }
-
-            if ($field_info['visible_form']) {
-              $field->setDisplayOptions('form', [
-                'type' => 'image_image',
                 'weight' => $weight,
               ]);
             }

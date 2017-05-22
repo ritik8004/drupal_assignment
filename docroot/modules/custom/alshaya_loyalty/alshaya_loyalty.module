@@ -272,7 +272,6 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   $form['privilege_card_wrapper']['privilege_card_number'] = [
     '#type' => 'textfield',
     '#title' => t('Privilege Card Number'),
-    '#maxlength' => 19,
     '#element_validate' => [
       '_alshaya_loyalty_validate_field_value',
     ],
@@ -283,7 +282,6 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
     '#type' => 'textfield',
     '#title' => t('Re-enter Privilege Card Number'),
-    '#maxlength' => 19,
     '#states' => [
       'required' => [
         ':input[name="privilege_card_number"]' => ['empty' => FALSE],
@@ -426,4 +424,30 @@ function alshaya_loyalty_format_card_number($number) {
  */
 function alshaya_loyalty_mask_card_number($number) {
   return 'XXXX-XXXX-XXXX-' . substr($number, -4);
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_account_alter().
+ */
+function alshaya_loyalty_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
+  // Update privilege card number if available in customer data.
+  if (isset($customer['extension'], $customer['extension']['loyalty_card_number'])) {
+    $user->get('field_privilege_card_number')->setValue($customer['extension']['loyalty_card_number']);
+  }
+}
+
+/**
+ * Implements hook_acq_commerce_update_customer_api_request_alter().
+ */
+function alshaya_loyalty_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+  if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($request_options['form_params']['customer[email]']);
+
+    if (!empty($user)) {
+      if ($privilege_card_number = $user->get('field_privilege_card_number')->getString()) {
+        $request_options['form_params']['customer[extension][loyalty_card_number]'] = $privilege_card_number;
+      }
+    }
+  }
 }

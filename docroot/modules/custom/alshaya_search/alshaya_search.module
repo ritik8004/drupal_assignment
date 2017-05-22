@@ -30,3 +30,18 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
     $form['keywords']['#attributes'] = ['data-bef-auto-submit-exclude' => ''];
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_search_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_search_gallery' => [
+      'variables' => [
+        'mainImage' => '',
+        'thumbnails' => '',
+      ],
+      'template' => 'alshaya_search_gallery',
+    ],
+  ];
+}

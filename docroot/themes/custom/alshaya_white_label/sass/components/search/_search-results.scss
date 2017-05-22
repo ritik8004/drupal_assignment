@@ -103,6 +103,16 @@
             font-size: 0.875rem;
           }
         }
+
+        .c-products__item__link {
+          .alshaya_search_slider {
+            display: none;
+
+            .lSPager {
+              display: none;
+            }
+          }
+        }
       }
 
       .view-content,

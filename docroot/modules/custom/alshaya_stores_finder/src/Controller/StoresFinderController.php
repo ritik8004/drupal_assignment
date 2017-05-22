@@ -93,6 +93,8 @@ class StoresFinderController extends ControllerBase {
    *   Ajax response.
    */
   public function storeDetail(EntityInterface $node) {
+    // Get the correct translated version of node.
+    $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node);
     $response = new AjaxResponse();
     $response->addCommand(new ReplaceCommand('.view-stores-finder:first', $build));

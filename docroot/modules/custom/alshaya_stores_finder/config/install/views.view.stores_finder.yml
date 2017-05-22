@@ -1316,7 +1316,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="/store-glossay/{{ nid }}" class="use-ajax">{{ title }}</a>'
+            text: '<a href="{{ url(''alshaya_stores_finder.glossary'', {''node'': nid|raw}) }}" class="use-ajax">{{ title }}</a>'
             make_link: false
             path: '/store-glossay/{{ nid }}'
             absolute: false
@@ -1523,7 +1523,7 @@ display:
           empty: false
           tokenize: false
           content:
-            value: 'Select store to see details'
+            value: 'select a store to see details'
             format: mail_text
           plugin_id: text
       sorts:

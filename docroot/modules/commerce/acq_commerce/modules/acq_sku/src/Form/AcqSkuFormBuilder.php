@@ -6,11 +6,15 @@ use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * TODO: remove this class once https://www.drupal.org/node/766146 is fixed
+ * TODO: remove this class once https://www.drupal.org/node/766146 is fixed.
  *
  * Class AcqSkuFormBuilder.
  */
 class AcqSkuFormBuilder extends FormBuilder {
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId($form_arg, FormStateInterface &$form_state) {
     $form_id = parent::getFormId($form_arg, $form_state);
 
@@ -40,4 +44,5 @@ class AcqSkuFormBuilder extends FormBuilder {
 
     return $form_id;
   }
+
 }

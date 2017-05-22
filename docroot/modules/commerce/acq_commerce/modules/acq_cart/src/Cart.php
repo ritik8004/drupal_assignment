@@ -139,7 +139,12 @@ class Cart implements CartInterface {
 
       if ($item['sku'] == $sku) {
         $new_qty = (int) $item['qty'] + (int) $quantity;
-        $this->updateItemQuantity($sku, $new_qty);
+        if ($new_qty > 0) {
+          $this->updateItemQuantity($sku, $new_qty);
+        }
+        else {
+          $this->removeItemFromCart($sku);
+        }
         return;
       }
     }

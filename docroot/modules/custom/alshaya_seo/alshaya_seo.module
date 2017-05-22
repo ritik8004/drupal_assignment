@@ -5,6 +5,7 @@
  * Module file for seo.
  */
 
+use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Url;
 
 /**
@@ -98,4 +99,24 @@ function alshaya_seo_robotstxt() {
     'Disallow: */catalog/product/view/',
     'Disallow: */catalogsearch/',
   ];
+}
+
+/**
+ * Implements hook_simple_sitemap_links_alter().
+ */
+function alshaya_seo_simple_sitemap_links_alter(&$links) {
+  foreach ($links as &$link) {
+    // We don't want to use langcode but want to use the country code for
+    // that language. Altering data here.
+    if (isset($link['alternate_urls'])) {
+      $alternate_urls = $link['alternate_urls'];
+
+      foreach ($alternate_urls as $language_id => $alternate_url) {
+        if ($hreflangcode = AlshayaI18nLanguages::getHrefLangCountry($language_id)) {
+          unset($link['alternate_urls'][$language_id]);
+          $link['alternate_urls'][$hreflangcode] = $alternate_url;
+        }
+      }
+    }
+  }
 }

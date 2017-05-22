@@ -6,7 +6,7 @@ fields:
     description: 'Color attribute for the product.'
     cardinality: -1
     type: 'string'
-    configurable: 1
+    configurable: 0
     visible_view: 0
     visible_form: 1
 
@@ -21,47 +21,24 @@ fields:
     visible_view: 0
     visible_form: 1
 
-  # Field for special_price attribute.
-  special_price:
-    parent: 'attributes'
-    label: 'Special price'
-    description: 'Special price attribute for the product.'
-    cardinality: 1
-    type: 'string'
-    configurable: 0
-    visible_view: 1
-    visible_form: 1
-
-  # Field for base image attribute.
-  image:
-    parent: 'attributes'
-    label: 'Image'
-    description: 'Base image attribute for the product.'
-    cardinality: -1
-    type: 'image'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
   # Field to store media info.
   short_description:
     parent: 'attributes'
     label: 'Short description'
     description: 'Store the short description here.'
-    cardinality: -1
+    cardinality: 1
     type: 'text_long'
     configurable: 0
     visible_view: 0
     visible_form: 1
 
-  # Field to store media info.
-  media:
-    parent: 'extension'
-    label: 'Media'
-    description: 'Store all the media files info.'
-    cardinality: -1
+  # Field to bullet points (part of description).
+  bullet_points:
+    parent: 'attributes'
+    label: 'Bullet points'
+    description: 'Store the bullet points here.'
+    cardinality: 1
     type: 'text_long'
     configurable: 0
     visible_view: 0
     visible_form: 1
-    serialize: 1

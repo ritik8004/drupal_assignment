@@ -35,8 +35,50 @@ set classes = [
 
     </div>
     <div class="content__sidebar">
-      {{ content.field_skus }}
-      {{ content.body }}
+      <div class="basic-details-wrapper">
+        <h1>{{ label }}</h1>
+
+        {% if content.final_price %}
+          <div class="has--special--price">
+        {% else %}
+          <div class="price">
+        {% endif %}
+          {{ content.price }}
+        </div>
+
+        {% if content.final_price %}
+          <div class="special--price">
+            {{ content.final_price }}
+          </div>
+
+          <div class="price--discount">
+            ({{ content.discount }})
+          </div>
+        {% endif %}
+
+        <div class="content--item-code">
+          <span class="field__label">{{ 'Item Code:'|t }}</span>
+          {{ content.item_code }}
+        </div>
+
+        {{ content.field_skus }}
+      </div>
+
+      <div class="description-wrapper">
+        <div class="content--description">
+          <h2 class="field__label">{{ 'Product Description:'|t }}</h2>
+          {{ content.description }}
+        </div>
+      </div>
+
+      <div class="short-description-wrapper">
+        <div class="content--short-description">
+          <h2 class="field__label">{{ 'Product Description:'|t }}</h2>
+          {{ content.short_description }}
+          <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+        </div>
+      </div>
+
       {% if sku_out_of_stock %}
         <div class="out-of-stock {{ sku_out_of_stock }}">{{ content.sharethis }}</div>
       {% else %}
