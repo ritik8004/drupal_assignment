@@ -414,7 +414,7 @@ function alshaya_master_install() {
       'request_path' => [
         'id' => 'request_path',
         'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*",
-        'negate' => TRUE,
+        'negate' => FALSE,
         'context_mapping' => [],
       ],
     ])

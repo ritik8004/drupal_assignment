@@ -124,6 +124,15 @@ function _alshaya_captcha_form_validate(&$form, FormStateInterface $form_state) 
 }
 
 /**
+ * Form submit handler to clear the flood.
+ */
+function _alshaya_captcha_form_submit(&$form, FormStateInterface $form_state) {
+  // If successful, clear flood.
+  $flood = $form_state->get('flood');
+  $flood->clear('alshaya_captcha_' . $form['#id']);
+}
+
+/**
  * Form validation handler to remove captcha error if not required.
  */
 function _alshaya_captcha_form_after_threshold_validate(&$form, FormStateInterface $form_state) {
