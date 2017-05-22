@@ -54,3 +54,28 @@ function alshaya_search_install() {
   user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);
 
 }
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_search_modules_installed($modules) {
+  if (!in_array('alshaya_search', $modules)) {
+    return;
+  }
+  $search_view = \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'views.view.search');
+  $search_view->set('display.default.display_options.exposed_form.options.exposed_sorts_label', 'رتب حسب');
+  $search_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'التطابق تنازلي|التقارب
+الاسم تنازلي|الاسم من ي إلى أ
+الاسم تصاعدي|الاسم من أ إلى ي
+السعر تنازلي|السعر من عالي إلى منخفض
+السعر تصاعدي|السعر من منخفض إلى عالي"');
+  $search_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');
+  $search_view->set('display.default.display_options.exposed_form.options.sort_desc_label', 'تنازلي');
+  $search_view->set('display.default.display_options.sorts.search_api_relevance.expose.label', 'التطابق');
+  $search_view->set('display.default.display_options.sorts.price.expose.label', 'السعر');
+  $search_view->set('display.default.display_options.sorts.title.expose.label', 'الاسم');
+  $search_view->set('display.default.display_options.empty.area.content.value', "<p>لا يوجد نتائج لبحثك</p>\r\n");
+  $search_view->set('display.default.display_options.header.result.content', '@total القطع');
+  $search_view->save();
+}

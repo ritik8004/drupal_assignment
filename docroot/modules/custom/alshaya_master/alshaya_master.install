@@ -279,6 +279,77 @@ function alshaya_master_install() {
     'Sign in to speed up the checkout process. It is the fastest way to review your selections, access your Address Book, and submit your order.' => [
       'ar' => 'يرجى تسجيل الدخول لتسريع عملية الشراء ومراجعة اختياراتك والدخول لسجل عناوينك وإتمام عملية الشراء',
     ],
+    'ID, name, SKU' => [
+      'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
+    ],
+    'Company' => [
+      'ar' => 'الشركة',
+    ],
+    'Street address' => [
+      'en' => 'Street',
+      'ar' => 'الشارع',
+    ],
+    'City' => [
+      'ar' => 'المدينة',
+    ],
+    'Postal code' => [
+      'ar' => 'الرمز البريدي',
+    ],
+    'Telephone' => [
+      'ar' => 'الهاتف',
+    ],
+    'The phone number %value provided for %field is not a valid mobile number for country %country.' => [
+      'en' => 'The Mobile number %value provided for %field is not a valid mobile number.',
+      'ar' => 'رقم الجوال field% المدخل في value% غير صحيح',
+    ],
+    'Delivery to' => [
+      'ar' => 'توصيل إلى',
+    ],
+    'Address' => [
+      'ar' => 'العنوان',
+    ],
+    'Account' => [
+      'ar' => 'الحساب',
+    ],
+    'The current password you provided is incorrect.' => [
+      'ar' => 'كلمة السر الخاصة بك غير صحيحة',
+    ],
+    'e.g. Salmiya' => [
+      'ar' => 'مثلاً: السالمية',
+    ],
+    'Find stores nearest to' => [
+      'ar' => 'ابحث عن المحلات القريبة إليك',
+    ],
+    'select a store to see details' => [
+      'ar' => 'اختر محل لمعرفة التفاصيل',
+    ],
+    'Store address' => [
+      'ar' => 'عنوان المحل',
+    ],
+    'Store Number' => [
+      'ar' => 'رقم المحل',
+    ],
+    'Further instructions have been sent to your email address.' => [
+      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
+    ],
+    'Please agree to the Terms and Conditions.' => [
+      'ar' => 'يرجى الموافقة على الشروط والأحكام',
+    ],
+    '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four passwords were not allowed.</li></ul>' => [
+      'ar' => '<ul><li>كلمة السر الخاصة بك يجب أن تتكون من 7 عناصر أو أكثر</li><li>كلمة السر الخاصة بك يجب أن تحتوي على عنصر خاص واحد أو أكثر</li><li>كلمة السر الخاصة بك يجب أن يجب أن تحتوي على عنصر رقمي واحد أو أكثر</li><li>كلمة السر الخاصة بك يجب أن تكون دون مسافات</li><li>لم يتم السماح بالمحاولات الأربعة السابقة</li></ul>',
+    ],
+    '<p>You\'re almost done.</p><p>We\'ve sent a verification email to <a href="mailto:[email]">[email]</a>.</p><p>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</p><p>It is also your final step in the sign up process.</p>' => [
+      'ar' => '<p>أنت على وشك آلإنتهاء!</p><p>لقد تم إرسال رسالة تحقق إلكترونية إلى&nbsp;<a href="mailto:[email]">[email]</a></p><p>عند ضغطك على رابط عنوان البريد الإلكتروني، يتيح لنا معرفة أن البريد الإلكتروني صالح الفعالية و لك</p><p>كما أن هذه تعتبر آخر خطوة في عملية التسجيل</p>',
+    ],
+    '@total items' => [
+      'ar' => '@total القطع',
+    ],
+    'Price' => [
+      'ar' => 'السعر',
+    ],
+    'Enter your filter name' => [
+      'ar' => 'إدخال اسم الاختيار',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
