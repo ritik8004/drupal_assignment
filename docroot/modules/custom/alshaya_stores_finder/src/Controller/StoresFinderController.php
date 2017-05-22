@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_stores_finder\Controller;
 
+use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
@@ -9,6 +10,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Url;
 
 /**
  * Class StoresFinderController.
@@ -68,6 +70,8 @@ class StoresFinderController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.list-view-link', 'removeClass', ['active']));
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['current-view']));
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'addClass', ['current-view']));
+      // Remove store title from breadcrumb.
+      $response->addCommand(new InvokeCommand(NULL, 'updateStoreFinderBreadcrumb'));
     }
     else {
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
@@ -76,6 +80,8 @@ class StoresFinderController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.map-view-link', 'removeClass', ['active']));
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['current-view']));
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['current-view']));
+      // Remove store title from breadcrumb.
+      $response->addCommand(new InvokeCommand(NULL, 'updateStoreFinderBreadcrumb'));
     }
     $view = views_embed_view('stores_finder', $display);
     $response->addCommand(new ReplaceCommand('.view-stores-finder:first', $view));
@@ -98,6 +104,12 @@ class StoresFinderController extends ControllerBase {
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node);
     $response = new AjaxResponse();
     $response->addCommand(new ReplaceCommand('.view-stores-finder:first', $build));
+
+    // Add store finder title in breadcrumb.
+    $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString();
+    $store_finder_node_li = '<li><a href="' . $url . '">' . $node->getTitle() . '</a></li>';
+    $response->addCommand(new AppendCommand('.block-system-breadcrumb-block ol', $store_finder_node_li));
+
     return $response;
   }
 

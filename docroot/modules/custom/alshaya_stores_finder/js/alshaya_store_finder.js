@@ -90,6 +90,17 @@
         // Close overlay here.
       }
 
+      // Remove the store node title from breadcrumb.
+      $.fn.updateStoreFinderBreadcrumb = function(data) {
+        var breadcrumb = $('.block-system-breadcrumb-block').length;
+        if (breadcrumb > 0) {
+          var li_count = $('.block-system-breadcrumb-block ol li').length;
+          if (li_count > 2) {
+            $('.block-system-breadcrumb-block ol li:last').remove();
+          }
+        }
+      };
+
     }
   };
 

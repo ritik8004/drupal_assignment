@@ -271,7 +271,13 @@ function alshaya_master_block_access(Block $block, $operation, AccountInterface 
     $forbidden_routes = [
       'user.login',
       'user.register',
+      'user.pass',
+      'user.cancel_confirm',
+      'user.reset.login',
+      'user.reset.form',
+      'user.reset',
     ];
-    return AccessResult::forbiddenIf(in_array($current_route, $forbidden_routes));
+    $front_page = \Drupal::service('path.matcher')->isFrontPage();
+    return AccessResult::forbiddenIf(in_array($current_route, $forbidden_routes) || $front_page);
   }
 }
