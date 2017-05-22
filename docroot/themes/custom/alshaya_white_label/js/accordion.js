@@ -9,7 +9,7 @@
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
       function mobileFilterMenu() {
-        if ($(window).width() < 381) {
+        if ($(window).width() < 768) {
           var facetBlocks = $('.c-facet__blocks__wrapper .c-facet__blocks');
           var filterLabel = facetBlocks.find('.filter-menu-label');
           if (filterLabel.length) {
