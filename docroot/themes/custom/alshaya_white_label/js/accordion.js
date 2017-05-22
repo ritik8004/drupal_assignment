@@ -140,13 +140,14 @@
         });
 
         // Toggle for Product description.
-        $('.c-pdp .description-wrapper').hide();
+        var descwrapper = $('.c-pdp .description-wrapper');
+        descwrapper.hide();
         $('.c-pdp .short-description-wrapper .read-more-description-link').on('click', function () {
-          $('.c-pdp .description-wrapper').slideToggle();
+          descwrapper.slideToggle();
         });
 
         $('.c-pdp .description-wrapper .close').on('click', function () {
-          $('.c-pdp .description-wrapper').slideToggle();
+          descwrapper.slideToggle();
         });
       }
 
