@@ -4,11 +4,12 @@
   text-transform: lowercase;
   font-family: arial, sans-serif;
   border-radius: 0;
-  padding: 0.665rem 1.313rem;
+  padding: 0.665rem 1.223rem;
   position: relative;
   font-weight:bold;
   color: #fff;
   max-height: 35px;
+  max-width: 6.563rem;
 }
 
 .edit-add-to-cart:focus {
