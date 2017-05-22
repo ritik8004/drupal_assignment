@@ -447,3 +447,15 @@ index 1ce1d0c..32da378 100755
 +  }
 +
  }
+diff --git a/modules/acq_sku/src/Entity/SKU.php b/modules/acq_sku/src/Entity/SKU.php
+index ced6bb4..9d010ba 100644
+--- a/modules/acq_sku/src/Entity/SKU.php
++++ b/modules/acq_sku/src/Entity/SKU.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\acq_sku\Entity;
+ 
++use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\Field\BaseFieldDefinition;
+ use Drupal\Core\Entity\ContentEntityBase;
