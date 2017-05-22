@@ -1,0 +1,49 @@
+diff --git a/docroot/modules/commerce/acq_commerce/acq_commerce.services.yml b/docroot/modules/commerce/acq_commerce/acq_commerce.services.yml
+index 87a9243..fb7aeff 100644
+--- a/docroot/modules/commerce/acq_commerce/acq_commerce.services.yml
++++ b/docroot/modules/commerce/acq_commerce/acq_commerce.services.yml
+@@ -5,7 +5,7 @@ services:
+ 
+   acq_commerce.api:
+     class: Drupal\acq_commerce\Conductor\APIWrapper
+-    arguments: ['@acq_commerce.client_factory']
++    arguments: ['@acq_commerce.client_factory', '@logger.factory']
+ 
+   acq_commerce.ingest_api:
+     class: Drupal\acq_commerce\Conductor\IngestAPIWrapper
+diff --git a/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php b/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
+index ac37acb..e81be8f 100644
+--- a/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
++++ b/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
+@@ -2,7 +2,7 @@
+ 
+ namespace Drupal\acq_commerce\Conductor;
+ 
+-use Drupal\Core\Logger\RfcLogLevel;
++use Drupal\Core\Logger\LoggerChannelFactory;
+ 
+ /**
+  * APIWrapper class.
+@@ -16,9 +16,12 @@ class APIWrapper {
+    *
+    * @param ClientFactory $client_factory
+    *   ClientFactory object.
++   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
++   *   Object of LoggerFactory.
+    */
+-  public function __construct(ClientFactory $client_factory) {
++  public function __construct(ClientFactory $client_factory, LoggerChannelFactory $logger_factory) {
+     $this->clientFactory = $client_factory;
++    $this->logger = $logger_factory->get('acq_sku');
+   }
+ 
+   /**
+@@ -88,7 +91,7 @@ public function skuStockCheck($sku) {
+     }
+     catch (ConductorException $e) {
+       // Log the stock error, do not throw error if stock info is missing.
+-      \Drupal::logger('acq_commerce')->log(RfcLogLevel::ERROR, 'Unable to get the stock for @sku : @message', ['@sku' => $sku, '@message' => $e->getMessage()]);
++      $this->logger->emergency('Unable to get the stock for @sku : @message', ['@sku' => $sku, '@message' => $e->getMessage()]);
+     }
+ 
+     return $stock;
