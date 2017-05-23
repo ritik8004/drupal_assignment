@@ -3,6 +3,18 @@
 
   .region__content {
     position: relative;
+
+    .block-views-blockplp-promotional-banner-block-1 {
+      margin-bottom: 24px;
+
+      ~ .filter--mobile {
+        top: 21rem;
+
+        @include breakpoint($only-tablet) {
+          top: 16.75rem;
+        }
+      }
+    }
   }
 
   .c-page-title {
