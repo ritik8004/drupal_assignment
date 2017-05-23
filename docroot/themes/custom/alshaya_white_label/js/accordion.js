@@ -252,6 +252,7 @@
       if ($('.multistep-checkout .user__order--detail').length) {
         $('.collapse-row').slideUp();
         $('.product--count').on('click', function () {
+          $('#edit-confirmation-continue-shopping').toggleClass('expanded-table');
           $(this).toggleClass('expanded-row');
           $(this).nextAll('.collapse-row').slideToggle();
         });

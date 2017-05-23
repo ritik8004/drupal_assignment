@@ -8,7 +8,7 @@ dependencies:
     - alshaya_white_label
 id: customerservice
 theme: alshaya_white_label
-region: content
+region: post_content
 weight: 1
 provider: null
 plugin: customer_service_block

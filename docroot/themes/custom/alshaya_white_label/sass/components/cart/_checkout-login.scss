@@ -13,10 +13,15 @@
 
   h1 {
     position: relative;
-    padding-top: 0;
-    padding-bottom: 0.75em;
+    padding-top: 0.25rem;
+    padding-bottom: 0.55rem;
     border-bottom: 1px solid $white;
     margin-#{$left}: 0;
+
+    @include breakpoint($tablet) {
+      padding-top: 0;
+      padding-bottom: 0.75em;
+    }
   }
 
   .multistep-checkout {
