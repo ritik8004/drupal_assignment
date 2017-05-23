@@ -67,16 +67,13 @@ class NewsLetterForm extends FormBase {
       $form['email']['#suffix'] = '<div class="subscription-status">' . $display_message . '</div>';
     }
 
-    $form['actions']['#type'] = 'actions';
-
-    $form['actions']['submit'] = [
+    $form['newsletter'] = [
       '#type' => 'submit',
       '#value' => $this->t('sign up'),
       '#ajax' => [
         'event' => 'click',
         'callback' => '::submitFormAjax',
         'wrapper' => 'footer-newsletter-form-wrapper',
-        'progress' => [],
       ],
     ];
 
