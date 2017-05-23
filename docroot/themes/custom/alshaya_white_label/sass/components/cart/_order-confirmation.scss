@@ -32,8 +32,8 @@
   }
 
   .order-summary {
-    margin-top: 1.875rem;
-    margin-bottom: 2.8125rem;
+    margin-top: 1.42rem;
+    margin-bottom: 2rem;
     background-color: $pale-grey;
     padding: 1.125rem;
     padding-#{$left}: 1.3rem;
@@ -51,6 +51,11 @@
     @include breakpoint($tablet) {
       display: table-cell;
       width: 50%;
+      word-spacing: 0.125rem;
+    }
+
+    strong {
+      margin-#{$left}: 0.625rem;
     }
 
     @include icon(infomation, before) {
@@ -76,9 +81,11 @@
   .order-print-button a {
     display: inline-block;
     background: $white-five;
-    padding: 0.4375rem 2.4rem;
+    padding: 0.4375rem 2.1rem;
     font-weight: bold;
     border: solid 1px $marine-blue;
+    font-size: 0.8125rem;
+    word-spacing: 0.125rem;
   }
 
   .user-register-form {
@@ -105,7 +112,7 @@
       margin-#{$left}: 0;
       border-top: 0;
       padding-#{$left}: 0;
-      font-size: 12px;
+      font-size: 0.75rem;
       text-align: center;
 
       @include breakpoint($tablet) {
@@ -133,6 +140,61 @@
       }
     }
   }
+
+  .blend .delivery--method {
+    padding-top: 1rem;
+  }
+
+  .font-small {
+    font-size: 0.75rem;
+  }
+
+  .product--count {
+    td {
+      position: relative;
+      padding: 0.875rem 1.375rem;
+
+      @include icon(chevrondown, after) {
+        position: absolute;
+        #{$right}: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2.125rem;
+      }
+    }
+
+    &.expanded-row td {
+      @include icon(chevronup, after);
+    }
+  }
+
+  .user-register-form .form-item label.active-label:not(.error) {
+    top: -1.25em;
+    bottom: 0;
+    #{$left}: 0;
+    opacity: 1;
+    font-size: 0.75rem;
+  }
+
+  .subtitle {
+    border-bottom: 1px solid $white;
+    margin-bottom: 0.75rem;
+  }
+
+  .multistep-checkout {
+    border-top: 0;
+
+    #edit-confirmation {
+      margin-top: 1.4rem;
+    }
+  }
+
+  .barcode--wrapper {
+    svg {
+      width: 6rem;
+      max-height: 4.375rem;
+    }
+  }
 }
 
 #edit-confirmation-continue-shopping {
@@ -156,11 +218,11 @@
 }
 
 .confirmation__signup--title {
-  color: $black;
-  font-weight: bold;
+  color: $marine-blue-two;
   border-bottom: 1px solid $white;
   padding-bottom: 0.5rem;
   margin-bottom: 2.3125rem;
+  text-transform: lowercase;
 }
 
 .confirmation__signup--description {

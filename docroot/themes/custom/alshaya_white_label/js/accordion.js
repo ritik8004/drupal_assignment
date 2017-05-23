@@ -206,6 +206,18 @@
         });
       }
 
+      /**
+      * Toggles the Order confirmation table.
+      */
+
+      if ($('.multistep-checkout .user__order--detail').length) {
+        $('.collapse-row').slideUp();
+        $('.product--count').on('click', function () {
+          $(this).toggleClass('expanded-row');
+          $(this).nextAll('.collapse-row').slideToggle();
+        });
+      }
+
       // Poll the DOM to check if the show more/less link is avaialble, before placing it inside the ul.
       var i = setInterval(function () {
         if ($('.c-plp-only aside .block-facet--checkbox a.facets-soft-limit-link').length) {
