@@ -9,7 +9,7 @@ dependencies:
     - alshaya_white_label
 id: alshayamyaccountnav
 theme: alshaya_white_label
-region: '-1'
+region: menu_primary
 weight: -21
 provider: null
 plugin: alshaya_my_account_nav
