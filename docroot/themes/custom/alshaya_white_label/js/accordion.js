@@ -64,7 +64,7 @@
         var viewHeader = $('.c-search .view-search .view-header');
         viewHeader.addClass('search-count');
         var searchCount = $('.c-content__region .search-count');
-        // For mobile
+        // For mobile.
         if ($(window).width() < 768) {
           $('.block-page-title-block').addClass('mobile');
           searchCount.removeClass('tablet');
