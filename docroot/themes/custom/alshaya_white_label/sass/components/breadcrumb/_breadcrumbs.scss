@@ -21,6 +21,8 @@
     &:last-of-type a {
       font-weight: bold;
       color: $breadcrumb-active;
+      pointer-events: none;
+      cursor: default;
     }
 
     a {
