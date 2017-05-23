@@ -13,4 +13,25 @@ function alshaya_acm_checkout_install() {
   $configFactory = Drupal::configFactory()->getEditable('acq_checkout.settings');
   $configFactory->set('checkout_flow_plugin', 'multistep_checkout');
   $configFactory->save();
+
+  // If alshaya_i18n is already enabled, call the hook implementation manually.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_i18n')) {
+    alshaya_acm_checkout_modules_installed(['alshaya_i18n']);
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_acm_checkout_modules_installed($modules) {
+  if (in_array('alshaya_i18n', $modules)) {
+    // Array of language translation strings.
+    $strings = [
+      'CUSTOMER SERVICE' => [
+        'ar' => 'خدمة العملاء',
+      ],
+    ];
+
+    alshaya_i18n_save_translations($strings);
+  }
 }
