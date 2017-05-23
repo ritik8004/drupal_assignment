@@ -3,9 +3,7 @@ type: module
 core: 8.x
 description: 'Advanced Page CT and related settings.'
 dependencies:
-  - alshaya_department_page
   - alshaya_paragraphs
-  - alshaya_permissions
   - block
   - block_field
   - captcha

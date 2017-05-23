@@ -8,7 +8,6 @@ dependencies:
     - system.menu.admin
     - user.role.administrator
     - user.role.reviewer
-    - user.role.webmaster
   module:
     - node
     - user
@@ -32,7 +31,6 @@ display:
         options:
           role:
             administrator: administrator
-            webmaster: webmaster
             reviewer: reviewer
       cache:
         type: tag
@@ -574,7 +572,7 @@ display:
           group_type: group
           admin_label: ''
           label: ''
-          exclude: false
+          exclude: true
           alter:
             alter_text: false
             text: ''
