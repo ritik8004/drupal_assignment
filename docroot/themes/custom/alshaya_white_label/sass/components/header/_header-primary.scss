@@ -157,10 +157,12 @@ header {
       display: none !important;
     }
 
-    .form-item-keywords,
-    .form-actions {
-      display: inline-block;
-      float: none !important;
+    @include breakpoint($upto-desktop) {
+      .form-item-keywords,
+      .form-actions {
+        display: inline-block;
+        float: none !important;
+      }
     }
 
     input[type="text"] {
