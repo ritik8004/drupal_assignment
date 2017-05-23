@@ -14,7 +14,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_promotion') {
     if ($view_mode == 'full') {
-      // @TODO: Add products here.
       // Get the category id for the promotion.
       if ($data_value = $entity->get('field_acq_promotion_data')->getValue()) {
         /** @var \Drupal\acq_sku\ConductorCategoryRepository $category_repo */
