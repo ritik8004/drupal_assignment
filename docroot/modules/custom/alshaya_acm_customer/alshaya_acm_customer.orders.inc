@@ -227,7 +227,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $orderRow['quantity'] = alshaya_acm_customer_get_order_total_quantity($order);
 
   // Format total to have max 3 decimals as per mockup.
-  $orderRow['total'] = number_format($order['totals']['grand'], 3);
+  $orderRow['total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   // Calculate status of order based on status of items.
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
@@ -257,12 +257,12 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   // @TODO: MMCPA-641.
   $orderDetails['delivery_method'] = $order['shipping']['method']['carrier_code'];
-  $orderDetails['delivery_charge'] = $order['shipping']['method']['amount'];
+  $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
 
   $orderDetails['payment_method'] = $order['payment']['method_title'];
 
-  $orderDetails['sub_total'] = $order['totals']['sub'];
-  $orderDetails['order_total'] = $order['totals']['grand'];
+  $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
+  $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   return $orderDetails;
 }
@@ -386,7 +386,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $products = [];
   foreach ($order['items'] as $item) {
     $product = $item;
-    $product['total'] = number_format($item['ordered'] * $item['price'], 3);
+    $product['price'] = alshaya_acm_price_format($item['price']);
+    $product['total'] = alshaya_acm_price_format($item['ordered'] * $item['price']);
     $product['attributes'] = [];
 
     // Check if we can find a parent SKU for this to get proper name.
@@ -406,10 +407,6 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $products[] = $product;
   }
 
-  // Get the currency code and position.
-  $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
-  $currencyCodePosition = \Drupal::config('acq_commerce.currency')->get('currency_code_position');
-
   $build = [];
 
   $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
@@ -418,9 +415,6 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $build['#products_count'] = count($build['#products']);
   // @TODO: MMCPA-641.
   $build['#delivery_detail_notice'] = t('your order will be delivered between 1 and 3 days');
-
-  $build['#currency_code'] = $currencyCode;
-  $build['#currency_code_position'] = $currencyCodePosition;
 
   return $build;
 }

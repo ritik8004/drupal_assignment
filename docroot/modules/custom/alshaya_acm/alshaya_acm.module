@@ -313,24 +313,6 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
 }
 
 /**
- * Wrapper function to format price value with currency.
- *
- * @param float $price
- *   Price value.
- *
- * @return mixed|null
- *   Return rendered theme with html for price.
- */
-function alshaya_acm_price_format($price) {
-  $output = [
-    '#theme' => 'alshaya_acm_price',
-    '#price' => $price,
-  ];
-
-  return render($output);
-}
-
-/**
  * Ajax callback: Update cart item's sub total and cart's total / sub total.
  */
 function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $form_state) {
@@ -548,6 +530,25 @@ function template_preprocess_alshaya_acm_price(array &$variables) {
 
   $variables['currency_format'] = $currency_format;
   $variables['currency_code_position'] = $currency_code_position;
+  $variables['price'] = number_format($variables['price'], 3);
+}
+
+/**
+ * Wrapper function to format price value with currency.
+ *
+ * @param float $price
+ *   Price value.
+ *
+ * @return mixed|null
+ *   Return rendered theme with html for price.
+ */
+function alshaya_acm_price_format($price) {
+  $output = [
+    '#theme' => 'alshaya_acm_price',
+    '#price' => $price,
+  ];
+
+  return render($output);
 }
 
 /**
