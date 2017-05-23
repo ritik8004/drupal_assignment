@@ -23,6 +23,14 @@ function alshaya_stores_finder_page_attachments(array &$attachments) {
  */
 function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
+
+    $active_class = '';
+    $current_route_name = \Drupal::routeMatch()->getRouteName();
+    // If store-finder glossary view page.
+    if ($current_route_name == 'view.stores_finder.page_2') {
+      $active_class = 'active';
+    }
+
     $exposed_form_ids = [
       'views-exposed-form-stores-finder-page-1',
       'views-exposed-form-stores-finder-page-3',
@@ -36,6 +44,7 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'list-view-link',
+            $active_class,
           ],
         ],
         '#weight' => 7,

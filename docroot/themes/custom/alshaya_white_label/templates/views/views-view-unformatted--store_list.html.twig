@@ -27,7 +27,7 @@
     ]
     %}
     <div class="list-view-locator row-{{ row.nid }}">
-        <div class="store-row--counter">{{ row.counter }}</div><a class="use-ajax row-title" href="/store-detail/{{ row.nid }}">{{ row.title }}</a>
+        <div class="store-row--counter">{{ row.counter }}</div><a class="use-ajax row-title" href="{{ url('alshaya_stores_finder.store_detail', {'node': row.nid}) }}">{{ row.title }}</a>
         <div class="set-center-location" id="row-{{ row.nid }}">
             <div{{ row.attributes.addClass(row_classes) }}>
                 {{ row.content }}
