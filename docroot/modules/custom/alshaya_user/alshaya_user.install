@@ -75,6 +75,7 @@ function alshaya_user_modules_installed($modules) {
     'settings' => [
       'default_country' => 'KW',
       'countries' => [],
+      'placeholder' => ' ',
     ],
     'third_party_settings' => [],
   ];
