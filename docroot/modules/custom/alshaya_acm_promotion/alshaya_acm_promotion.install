@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -10,5 +11,9 @@
  */
 function alshaya_acm_promotion_install() {
   // Syncronize all promotions during install.
-  \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
+  // @TODO: Need to refactor a lot before getting this work as it creates
+  // duplicate nid issue (home page node is created in alshaya_default_content
+  // with nid 2. Once this is working, need to remove ignore file comment
+  // from top.
+  // \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
 }

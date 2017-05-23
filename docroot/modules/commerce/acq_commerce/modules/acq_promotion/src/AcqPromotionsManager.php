@@ -87,6 +87,11 @@ class AcqPromotionsManager {
       // We will use only the first matching node.
       $node = $this->nodeStorage->load(reset($nids));
 
+      if (serialize($promotion) == $node->get('field_acq_promotion_data')->getString()) {
+        // Promotion data from API matches what is already stored, not updating.
+        return;
+      }
+
       $this->logger->info('Updating promotion for rule id @rule_id', ['@rule_id' => $promotion['rule_id']]);
     }
 

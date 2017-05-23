@@ -507,7 +507,7 @@ new file mode 100644
 index 0000000..134ca93
 --- /dev/null
 +++ b/modules/acq_promotion/src/AcqPromotionsManager.php
-@@ -0,0 +1,110 @@
+@@ -0,0 +1,115 @@
 +<?php
 +
 +namespace Drupal\acq_promotion;
@@ -596,6 +596,11 @@ index 0000000..134ca93
 +
 +      // We will use only the first matching node.
 +      $node = $this->nodeStorage->load(reset($nids));
++
++      if (serialize($promotion) == $node->get('field_acq_promotion_data')->getString()) {
++        // Promotion data from API matches what is already stored, not updating.
++        return;
++      }
 +
 +      $this->logger->info('Updating promotion for rule id @rule_id', ['@rule_id' => $promotion['rule_id']]);
 +    }
