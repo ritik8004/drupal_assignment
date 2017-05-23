@@ -165,7 +165,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         '#image' => $sku_image,
         '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
         '#item_code' => $id,
-        '#include_in_bundle' => t('Items included in bundle'),
         '#available_delivery_methods' => [
           '#markup' => $product_delivery_options,
         ],

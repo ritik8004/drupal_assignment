@@ -197,15 +197,6 @@ class Configurable extends SKUPluginBase {
         implode(', ', $label_parts)
       );
 
-      $cart->addRawItemToCart([
-        'name' => $label,
-        'sku' => $tree['parent']->getSKU(),
-        'qty' => $quantity,
-        'options' => [
-          'configurable_item_options' => $options,
-        ],
-      ]);
-
       drupal_set_message(
         t('Added @quantity of @name to the cart.',
           [
@@ -225,7 +216,6 @@ class Configurable extends SKUPluginBase {
       catch (\Exception $e) {
         // Remove item from cart.
         $cart->addItemToCart($tree_pointer->getSku(), -$quantity);
-        $cart->addItemToCart($tree['parent']->getSKU(), -$quantity);
 
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
