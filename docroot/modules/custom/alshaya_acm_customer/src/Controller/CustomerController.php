@@ -50,7 +50,7 @@ class CustomerController extends ControllerBase {
 
     // Initialising order details array to array.
     $orderDetails = [];
-
+    $nextPageButton = [];
     $noOrdersFoundMessage = ['#markup' => ''];
     $help_block = NULL;
 
@@ -73,8 +73,6 @@ class CustomerController extends ControllerBase {
 
       // Get the orders to display for current page.
       $ordersPaged = array_slice($orders, $offset, $itemsPerPage, TRUE);
-
-      $nextPageButton = [];
 
       if (count($orders) > $offset + $itemsPerPage) {
         // Get all the query parameters we currently have.
