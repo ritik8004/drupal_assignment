@@ -243,6 +243,11 @@
   .order-details-row {
     background: $pale-grey;
 
+    .delivery--method,
+    .tablet-blend {
+      word-break: break-all;
+    }
+
     .blend {
       background: $solitude;
 

@@ -8,7 +8,7 @@
 
   Drupal.behaviors.formsInput = {
     attach: function (context, settings) {
-      $('.profile-form input, .c-user-edit .user-form input, .order-confirmation .user-register-form input').each(function () {
+      $('.profile-form input, .c-user-edit .user-form input, .user-login-form input, .order-confirmation .user-register-form input').each(function () {
         if ($.trim($(this).val()).length !== 0) {
           $(this).parent().find('label').last().addClass('active-label');
         }

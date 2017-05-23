@@ -44,7 +44,7 @@
   <div class="order-summary">
     <div class="order-id-details">
       {% trans %}
-        Your order number is {{ order.orderId }}
+        Your order number is <strong>{{ order.orderId }}</strong>
       {% endtrans %}
     </div>
 
@@ -54,56 +54,50 @@
 
   </div>
 
+  <h2 class="subtitle">{{ "order details"|t }}</h2>
+
   <table class="user__order--detail">
     <tbody>
-      {% if delivery_detail_notice %}
-      <tr class="delivery-details-row">
-        <td colspan="3" class="above-mobile">
-          <span class="icon-ic_infomation"></span>{{ delivery_detail_notice }}
-        </td>
-        <td colspan="2" class="mobile-only">
-          <span class="icon-ic_infomation"></span>{{ delivery_detail_notice }}
-        </td>
-        <td class="above-mobile blend">&nbsp;</td>
-        <td class="desktop-only empty--cell">&nbsp;</td>
-      </tr>
-      {% endif %}
-
       <tr class="order-details-row">
         <td>
-          <div class="label">{{ "Delivery to"|t }}</div>
+          <div class="label font-small">{{ "Delivery to"|t }}</div>
           <div class="dark">{{ order_details.delivery_to }}</div>
           <div class="contact">
-            <div class="label">{{ "Contact no."|t }}</div>
+            <div class="label font-small">{{ "Contact no."|t }}</div>
             <div class="dark">{{ order_details.contact_no }}</div>
           </div>
 
           <div class="mobile-only payment--details">
-            <div class="label">{{ "Payment method"|t }}</div>
+            <div class="label font-small">{{ "Payment method"|t }}</div>
             <div class="dark">{{ order_details.payment_method }}</div>
           </div>
         </td>
         <td>
-          <div class="label">{{ "Delivery address"|t }}</div>
+          <div class="label font-small">{{ "Delivery address"|t }}</div>
           <div class="dark">{{ order_details.delivery_address }}</div>
 
           <div class="mobile-only delivery--method">
-            <div class="label">{{ "Delivery method"|t }}</div>
+            <div class="label font-small">{{ "Delivery method"|t }}</div>
             <div class="dark">{{ order_details.delivery_method }}</div>
           </div>
         </td>
         <td class="above-mobile tablet-blend">
-          <div class="label">{{ "Delivery method"|t }}</div>
-          <div class="dark">{{ order_details.delivery_method }}</div>
+          {#<div class="label">{{ "Delivery method"|t }}</div>
+          <div class="dark">{{ order_details.delivery_method }}</div>#}
 
           <div class="tablet-only">
-            <div class="label">{{ "Payment method"|t }}</div>
+            <div class="label font-small">{{ "Payment method"|t }}</div>
             <div class="dark">{{ order_details.payment_method }}</div>
           </div>
         </td>
         <td class="desktop-only blend">
-          <div class="label">{{ "Payment method"|t }}</div>
+          <div class="label font-small">{{ "Payment method"|t }}</div>
           <div class="dark">{{ order_details.payment_method }}</div>
+
+          <div class="above-mobile delivery--method">
+            <div class="label font-small">{{ "Delivery method"|t }}</div>
+            <div class="dark">{{ order_details.delivery_method }}</div>
+          </div>
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
@@ -117,7 +111,7 @@
       </tr>
 
       {% for product in products %}
-        <tr class="order-item-row">
+        <tr class="order-item-row collapse-row">
           <td>
             {% if product.image %}
               {{ product.image }}
@@ -184,7 +178,7 @@
         </tr>
       {% endfor %}
 
-      <tr class="sub-total-row">
+      <tr class="sub-total-row collapse-row">
         <td class="desktop-only">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
         <td>{{ "Sub total"|t }}</td>
@@ -198,7 +192,7 @@
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
 
-      <tr class="delivery-charge-row">
+      <tr class="delivery-charge-row collapse-row">
         <td class="desktop-only">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
         <td>{{ "Delivery charge"|t }}</td>
@@ -212,7 +206,7 @@
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
 
-      <tr class="total-row">
+      <tr class="total-row collapse-row">
         <td class="desktop-only">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
         <td>

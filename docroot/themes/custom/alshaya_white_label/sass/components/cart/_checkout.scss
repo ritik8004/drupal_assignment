@@ -429,13 +429,6 @@ body.alias--cart {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 
-    @include breakpoint($mobile) {
-      @include container(100%);
-
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
-
     @include breakpoint($tablet) {
       @include container(100%);
 
@@ -445,11 +438,6 @@ body.alias--cart {
 
     @include breakpoint($desktop) {
       @include container($desktop-wide);
-    }
-
-    @include breakpoint($desktop-wide) {
-      padding-left: 0;
-      padding-right: 0;
     }
 
     .edit-actions {

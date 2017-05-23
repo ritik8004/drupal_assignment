@@ -501,6 +501,20 @@
 
     &-heart {
       background-image: url("../imgs/icons/ic-speech-bubble.svg");
+      position: relative;
+      top: 0.1875rem;
+
+      @include breakpoint($desktop) {
+        top: 0;
+      }
+    }
+
+    &-win,
+    &-reward,
+    &-heart {
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: -0.5625rem;
+      }
     }
   }
 }

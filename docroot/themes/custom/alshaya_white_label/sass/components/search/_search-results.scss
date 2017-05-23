@@ -414,3 +414,16 @@ header,
     }
   }
 }
+
+.search-api-autocomplete-suggestion {
+  font-size: 0.75rem;
+
+  @include breakpoint($only-tablet) {
+    font-size: 0.625rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 0.625rem;
+    font-weight: 700;
+  }
+}

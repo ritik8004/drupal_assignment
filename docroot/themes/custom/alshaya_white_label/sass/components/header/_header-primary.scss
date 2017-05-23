@@ -108,6 +108,11 @@ header {
         input[type="text"] {
           width: 272px;
           padding-top: 2px;
+          font-size: 0.75rem;
+
+          &::placeholder {
+            font-size: 0.75rem;
+          }
         }
       }
     }
@@ -117,6 +122,7 @@ header {
         input[type="text"] {
           width: 10.38rem;
           padding-top: 2px;
+          font-size: 0.625rem;
 
           &::placeholder {
             font-size: 0.625rem;

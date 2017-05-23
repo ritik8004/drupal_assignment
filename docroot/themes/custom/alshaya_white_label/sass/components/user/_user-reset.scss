@@ -1,0 +1,59 @@
+body[class*=" alias--user-reset-"] .l-two--sf {
+  margin-top: 0;
+  padding-top: 1rem;
+
+  @include breakpoint($tablet) {
+    padding-top: 1.5rem;
+  }
+
+  main {
+    width: 100%;
+    max-width: 65.35rem;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+    display: block;
+  }
+
+  .c-page-title {
+    font-size: 1.125rem;
+
+    @include breakpoint($tablet) {
+      font-size: 1.375rem;
+    }
+  }
+
+  .block-page-title-block {
+    clear: both;
+  }
+
+  .user-pass-reset {
+    margin-bottom: 4rem;
+    font-size: 0.8125rem;
+
+    @include breakpoint($tablet) {
+      font-size: 0.875rem;
+    }
+
+    .form-actions {
+      @include breakpoint($tablet) {
+        margin-bottom: 7.5em;
+      }
+    }
+
+    .form-submit {
+      color: $white-five;
+      padding: 0.625rem 1.6rem;
+      border: 0;
+      font-size: 0.813rem;
+      background: $pumpkin-orange;
+      margin-top: 1em;
+      width: 100%;
+      text-transform: lowercase;
+
+      @include breakpoint($tablet) {
+        width: auto;
+      }
+    }
+  }
+}
