@@ -354,6 +354,17 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
   // Save acq_customer_id in Drupal for later use.
   $user->get('acq_customer_id')->setValue($customer['customer_id']);
   $user->save();
+
+  // Subscribe user to newsletter.
+  /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
+  $apiWrapper = \Drupal::service('acq_commerce.api');
+
+  try {
+    $apiWrapper->subscribeNewsletter($user->getEmail());
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_acm_customer')->error('Error occurred while subscribing @email during registration. Error message: @error', ['@email' => $user->getEmail(), '@error' => $e->getMessage()]);
+  }
 }
 
 /**
