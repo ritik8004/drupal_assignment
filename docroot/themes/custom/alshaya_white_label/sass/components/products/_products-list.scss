@@ -196,6 +196,10 @@
     font-weight: normal;
     margin: 0;
 
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 1rem;
+    }
+
     &.is-active {
       background: $white-five;
       position: relative;
@@ -209,6 +213,7 @@
 
     @include breakpoint($only-tablet) {
       top: 2.1875rem;
+      #{$right}: -8.938rem;
     }
 
     @include breakpoint($only-mobile) {
