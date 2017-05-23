@@ -121,9 +121,19 @@
       }
 
       nav.pager {
+        float: $left;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+
         .js-pager__items {
-          width: 32%;
           margin: 8rem auto 2.1rem;
+          clear: $left;
+          float: $left;
+          list-style: none;
+          position: relative;
+          #{$left}: 50%;
+          text-align: center;
 
           @include breakpoint($only-mobile) {
             width: 57%;
@@ -135,6 +145,9 @@
         .pager__item {
           float: $left;
           margin-#{$right}: 1.5rem;
+          display: block;
+          position: relative;
+          #{$right}: 50%;
 
           &.is-active {
             a {
