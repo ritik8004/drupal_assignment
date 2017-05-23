@@ -47,8 +47,6 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
     'variables' => [
       'order' => NULL,
       'order_detail_link' => NULL,
-      'currency_code' => NULL,
-      'currency_code_position' => NULL,
     ],
   ];
 
@@ -61,8 +59,6 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'products' => NULL,
       'delivery_detail_notice' => NULL,
       'account' => NULL,
-      'currency_code' => NULL,
-      'currency_code_position' => NULL,
       'print_link' => NULL,
     ],
   ];
@@ -77,8 +73,6 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'products_count' => NULL,
       'delivery_detail_notice' => NULL,
       'account' => NULL,
-      'currency_code' => NULL,
-      'currency_code_position' => NULL,
       'print_link' => NULL,
     ],
   ];
@@ -94,8 +88,6 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'products_count' => NULL,
       'delivery_detail_notice' => NULL,
       'account' => NULL,
-      'currency_code' => NULL,
-      'currency_code_position' => NULL,
     ],
   ];
 

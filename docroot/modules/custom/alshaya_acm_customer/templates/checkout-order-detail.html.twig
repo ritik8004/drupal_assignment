@@ -142,36 +142,20 @@
 
             <div class="tablet-only">
               <div class="light">{{ "Unit price"|t }}</div>
-              {% if currency_code_position == 'before' %}
-                <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
-              {% else %}
-                {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
-              {% endif %}
+              {{ product.price }}
             </div>
             <div class="mobile-only">
               <div class="light">{{ "Total"|t }}</div>
-              {% if currency_code_position == 'before' %}
-                <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
-              {% else %}
-                {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
-              {% endif %}
+              {{ product.total }}
             </div>
           </td>
           <td class="desktop-only">
             <div class="light">{{ "Unit price"|t }}</div>
-            {% if currency_code_position == 'before' %}
-              <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
-            {% else %}
-              {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
-            {% endif %}
+            {{ product.price }}
           </td>
           <td class="above-mobile blend">
             <div class="light">{{ "Total"|t }}</div>
-            {% if currency_code_position == 'before' %}
-              <span class="currency-code dark prefix">{{ currency_code }}</span>{{ product.total }}
-            {% else %}
-              {{ product.total }}<span class="currency-code dark suffix">{{ currency_code }}</span>
-            {% endif %}
+            {{ product.total }}
           </td>
 
           <td class="above-mobile empty--cell">&nbsp;</td>
@@ -183,11 +167,7 @@
         <td class="above-mobile">&nbsp;</td>
         <td>{{ "Sub total"|t }}</td>
         <td class="blend">
-          {% if currency_code_position == 'before' %}
-            <span class="currency-code prefix">{{ currency_code }}</span>{{ order_details.sub_total }}
-          {% else %}
-            {{ order_details.sub_total }}<span class="currency-code suffix">{{ currency_code }}</span>
-          {% endif %}
+          {{ order_details.sub_total }}
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
@@ -197,11 +177,7 @@
         <td class="above-mobile">&nbsp;</td>
         <td>{{ "Delivery charge"|t }}</td>
         <td class="blend">
-          {% if currency_code_position == 'before' %}
-            <span class="currency-code prefix">{{ currency_code }}</span>{{ order_details.delivery_charge }}
-          {% else %}
-            {{ order_details.delivery_charge }}<span class="currency-code suffix">{{ currency_code }}</span>
-          {% endif %}
+          {{ order_details.delivery_charge }}
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
@@ -214,11 +190,7 @@
         </td>
         <td class="warm--white">
           <div class="dark">
-            {% if currency_code_position == 'before' %}
-              <span class="currency-code prefix">{{ currency_code }}</span>{{ order_details.order_total }}
-            {% else %}
-              {{ order_details.order_total }}<span class="currency-code suffix">{{ currency_code }}</span>
-            {% endif %}
+            {{ order_details.order_total }}
           </div>
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
