@@ -67,7 +67,7 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
           return TRUE;
         }
         // Search by SKU.
-        elseif (stripos($orderItem['sku'], $search) > -1) {
+        elseif (stripos(alshaya_acm_customer_clean_sku($orderItem['sku']), alshaya_acm_customer_clean_sku($search)) > -1) {
           return TRUE;
         }
       }
@@ -89,6 +89,23 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
   }
 
   return $orders;
+}
+
+/**
+ * Clean up sku values by removing spaces and dashes.
+ *
+ * @param string $sku
+ *   The sku string.
+ *
+ * @return string
+ *   Return cleaned string without spaces and dashes.
+ */
+function alshaya_acm_customer_clean_sku($sku) {
+  // Convert whitespaces and underscore to dash.
+  $string = preg_replace("/[\s_]/", "-", $sku);
+  // Clean up multiple dashes or whitespaces.
+  $string = preg_replace("/[\s-]+/", "", $string);
+  return $string;
 }
 
 /**
