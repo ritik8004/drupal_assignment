@@ -28,7 +28,7 @@
   text-transform: lowercase;
 
   &.block--display {
-    z-index: 15;
+    z-index: 1000;
   }
 
   ul {
@@ -205,7 +205,7 @@
   top: 5.6875rem;
   background: $white-five;
   height: 100%;
-  z-index: 10;
+  z-index: 1000;
   padding: 0;
 
   a {
@@ -240,6 +240,55 @@
       width: 6px;
       height: 10px;
       top: 20px;
+    }
+  }
+}
+
+.contains-sublink .menu__link {
+  @include breakpoint($upto-desktop) {
+    pointer-events: none;
+  }
+}
+
+.menu--three__list-item {
+  .menu--three__link {
+    position: relative;
+
+    @include breakpoint($upto-desktop) {
+      @include icon(chevron#{$right}, after) {
+        position: absolute;
+        color: $marine-blue;
+        #{$right}: 0;
+        font-size: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  .contains-sublink .menu--three__link {
+    &::after {
+      @include breakpoint($upto-desktop) {
+        content: none;
+      }
+    }
+  }
+}
+
+.navbar-fixed-top {
+  @include breakpoint($desktop) {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    border-bottom: 1px solid $white;
+  }
+}
+
+.block-alshaya-main-menu .active--menu--links {
+  li.menu--one__list-item ul.menu--two__list {
+    @include breakpoint($desktop) {
+      display: block;
+      transition: all ease-in 0s;
     }
   }
 }

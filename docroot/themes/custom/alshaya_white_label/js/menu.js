@@ -17,14 +17,15 @@
 
         if (submenu.length > 0) {
           $(this).addClass('has-child');
+          linkWrapper.addClass('contains-sublink');
           linkWrapper.after('<span class="menu__in"></span>');
           submenu.prepend('<span class="menu__list-item back--link"><span class="menu__back"></span> <span>' + link.text() + ' </span> </span> ');
         }
       });
 
-      var $menuIn = $('.menu__in');
+      var $menuIn = $('.has-child .menu__link-wrapper');
       $menuIn.click(function () {
-        $(this).next().toggleClass('menu__list--active');
+        $(this).next('.menu__in').next().toggleClass('menu__list--active');
       });
 
       var $menuBack = $('.back--link');
@@ -148,6 +149,42 @@
         $(this, $storeHours).toggleClass('open');
         $(this).next().toggleClass('selector--hours');
       });
+
+      /**
+      * Add active state to the menu.
+      */
+
+      if ($('.block-alshaya-main-menu').length) {
+        var parent = $('.block-alshaya-main-menu li.menu--one__list-item');
+
+        $('.block-alshaya-main-menu').mouseenter(function () {
+          setTimeout(function () {
+            $(parent).parent().addClass('active--menu--links');
+          }, 500);
+        });
+
+        $('.block-alshaya-main-menu').mouseleave(function () {
+          $(parent).parent().removeClass('active--menu--links');
+        });
+      }
+
+      /**
+      * Make Header sticky on scroll.
+      */
+
+      if ($('.block-alshaya-main-menu').length) {
+        var position = $('.block-alshaya-main-menu').offset().top;
+        var nav = $('.block-alshaya-main-menu');
+
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > position) {
+            nav.addClass('navbar-fixed-top');
+          }
+          else {
+            nav.removeClass('navbar-fixed-top');
+          }
+        });
+      }
     }
   };
 

@@ -487,7 +487,9 @@ header {
     li {
       display: table-cell;
       text-align: center;
-      padding: 0.875rem 0.875rem 0.5rem 0;
+      padding: 0.875rem 0;
+      padding-bottom: 0.5rem;
+      padding-#{$right}: 0.875rem;
 
       &:hover,
       &.search-active {
@@ -576,8 +578,9 @@ header {
       list-style: none;
       text-align: center;
       border-bottom: 1px solid $white-five;
-      padding: 0.625rem;
+      padding: 0.55rem 0.625rem;
       text-transform: lowercase;
+      height: 2.5625rem;
 
       &.active {
         background: $white-five !important;
@@ -592,7 +595,11 @@ header {
         border-top: 2px solid $marine-blue;
 
         ul.menu--two__list {
-          display: block;
+          visibility: visible;
+          opacity: 1;
+          z-index: 1;
+          transform: translateY(0%);
+          transition-delay: 0s, 0s, 0.3s;
         }
 
         a.menu--one__link {
@@ -607,8 +614,20 @@ header {
         text-decoration: none;
       }
 
-      ul {
+      ul ul {
         display: none;
+      }
+
+      ul.menu--two__list {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        top: 100%;
+        #{$left}: 0;
+        width: 100%;
+        transform: translateY(-2.5rem);
+        z-index: -1;
+        transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.1s;
       }
     }
 
@@ -718,6 +737,7 @@ header {
 
       .menu--three__list {
         width: 100%;
+        max-width: 80.25rem;
         min-height: 100%;
         vertical-align: top;
         margin-bottom: 1.563rem;
@@ -734,6 +754,7 @@ header {
         li {
           padding: 0.3125rem 0;
           vertical-align: top;
+          width: 12rem;
 
           a {
             color: $brownish-grey;
@@ -764,6 +785,7 @@ header {
 
   .menu--four__list {
     display: block !important;
+    padding-#{$left}: 0;
   }
 
   .level--three {
@@ -877,7 +899,9 @@ header {
     color: $marine-blue;
     display: block;
     font-size: 12px;
-    padding: 0.9375rem 0.625rem 0.9375rem 0;
+    padding: 0.9375rem 0;
+    padding-bottom: 0.9375rem;
+    padding-#{$right}: 0.625rem;
     text-transform: lowercase;
   }
 
@@ -899,6 +923,7 @@ header {
 
     .menu__in {
       margin-top: -30px;
+      margin-#{$right}: 0.4rem;
     }
 
     .menu--three__list-item {
@@ -937,6 +962,7 @@ header {
     width: 7px;
     height: 11px;
     display: inline-block;
+    pointer-events: none;
   }
 
   .menu__list--active {
@@ -954,7 +980,7 @@ header {
   .menu--three__list,
   .menu--four__list {
     will-change: transform;
-    transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
+    transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
     transition: transform 0.5s ease-in-out;
     position: absolute;
     top: 0;
@@ -967,7 +993,7 @@ header {
     background: $white-five;
   }
 
-  .menu-two__link-wrapper a.menu-two__link {
+  .menu-two__link-wrapper.contains-sublink .menu--three__link {
     color: $marine-blue;
   }
 
@@ -982,7 +1008,7 @@ header {
       }
 
       .menu--three__list-item .menu__in {
-        margin-#{$right}: 0.625rem;
+        margin-#{$right}: 0.9375rem;
       }
 
       .menu--four__list {
