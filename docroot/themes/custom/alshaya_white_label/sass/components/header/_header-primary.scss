@@ -1139,7 +1139,7 @@ header {
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 999;
+    z-index: 9;
     transition: transform 0.5s ease-in-out;
     transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
     will-change: transform;
@@ -1148,12 +1148,6 @@ header {
   .menu--active,
   .menu__list--active {
     transform: translate(0, 0) !important;
-  }
-}
-
-@include breakpoint($only-mobile) {
-  .main--menu {
-    height: 93%;
   }
 }
 
