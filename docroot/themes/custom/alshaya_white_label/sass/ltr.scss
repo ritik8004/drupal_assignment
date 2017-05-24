@@ -26,3 +26,6 @@
 
 // States are variations that are usually applied via js, such as `.is-active`.
 @import "state/**/*";
+
+// Importing browser specific hot fixes.
+@import "hotfix";
