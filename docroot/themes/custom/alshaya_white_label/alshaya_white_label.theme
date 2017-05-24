@@ -384,15 +384,17 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
 
     case "user_register_form":
       if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
-        $prefix = $form['privilege_card_wrapper']['#prefix'];
-        $suffix = $form['privilege_card_wrapper']['#suffix'];
-        $prefix .= '<div class="privilege-card-wrapper">';
-        $prefix .= '<div class="privilege-card-wrapper-title">' . t('Privilege card number (Optional)') . '</div>';
-        $form['privilege_card_wrapper']['#prefix'] = $prefix;
-        $form['privilege_card_wrapper']['#suffix'] = '</div>' . $suffix;
-        $form['privilege_card_wrapper']['#title'] = t('Enter card details');
-        $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
-        $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+        if (isset($form['privilege_card_wrapper'])) {
+          $prefix = $form['privilege_card_wrapper']['#prefix'];
+          $suffix = $form['privilege_card_wrapper']['#suffix'];
+          $prefix .= '<div class="privilege-card-wrapper">';
+          $prefix .= '<div class="privilege-card-wrapper-title">' . t('Privilege card number (Optional)') . '</div>';
+          $form['privilege_card_wrapper']['#prefix'] = $prefix;
+          $form['privilege_card_wrapper']['#suffix'] = '</div>' . $suffix;
+          $form['privilege_card_wrapper']['#title'] = t('Enter card details');
+          $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
+          $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+        }
       }
       $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
       break;
@@ -525,6 +527,16 @@ function alshaya_white_label_preprocess_user(&$variables) {
     $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user);
     $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
     $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
+
+    $module_handler = \Drupal::moduleHandler();
+    if ($module_handler->moduleExists('alshaya_loyalty')) {
+      // Get loyalty settings.
+      $loyalty_settings = alshaya_loyalty_get_validation_settings();
+      // If site has loyalty 'off'.
+      if (!$loyalty_settings['enable_disable_loyality']) {
+        $variables['privilege_card'] = '';
+      }
+    }
   }
 }
 

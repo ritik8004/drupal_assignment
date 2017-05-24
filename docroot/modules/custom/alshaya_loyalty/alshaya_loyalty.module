@@ -9,6 +9,8 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
 use Drupal\webform\Element\WebformCreditCardNumber;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
  * Get validation settings stored for validation.
@@ -25,6 +27,7 @@ function alshaya_loyalty_get_validation_settings() {
     $loyalty = [
       'length' => $config->get('apcn_max_length'),
       'value_start_with' => $config->get('apcn_value_starts_with'),
+      'enable_disable_loyality' => $config->get('enable_disable_loyality'),
     ];
   }
 
@@ -49,6 +52,8 @@ function _alshaya_loyalty_clean_card_number($value) {
  */
 function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $add_privilege_fields = FALSE;
+  // Get loyalty settings.
+  $loyality_settings = alshaya_loyalty_get_validation_settings();
 
   switch ($form_id) {
     // Add privilege card number fields to cart form.
@@ -79,13 +84,22 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
       break;
 
     case 'user_form':
-      _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
+      // Allow loyalty only if its enabled.
+      if ($loyality_settings['enable_disable_loyality']) {
+        _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
+      }
+      else {
+        $form['field_privilege_card_number']['#access'] = FALSE;
+      }
       break;
   }
 
-  // Add privilege card number fields to the form.
-  if ($add_privilege_fields) {
-    alshaya_loyalty_add_privilege_card_fields($form, $form_state);
+  // Allow loyalty only if its enabled.
+  if ($loyality_settings['enable_disable_loyality']) {
+    // Add privilege card number fields to the form.
+    if ($add_privilege_fields) {
+      alshaya_loyalty_add_privilege_card_fields($form, $form_state);
+    }
   }
 }
 
@@ -448,6 +462,28 @@ function alshaya_loyalty_acq_commerce_update_customer_api_request_alter(array &$
       if ($privilege_card_number = $user->get('field_privilege_card_number')->getString()) {
         $request_options['form_params']['customer[extension][loyalty_card_number]'] = $privilege_card_number;
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_loyalty_user_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  $build['#cache']['tags'][] = 'loyality-on-off';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * For the 'checkout order confirmation' step.
+ */
+function alshaya_loyalty_preprocess_checkout_order_detail(&$variables) {
+  if (!empty($variables['account']['privilege_card_number'])) {
+    $loyalty_settings = alshaya_loyalty_get_validation_settings();
+    // If site has loyalty 'off'.
+    if (!$loyalty_settings['enable_disable_loyality']) {
+      $variables['account']['privilege_card_number'] = '';
     }
   }
 }
