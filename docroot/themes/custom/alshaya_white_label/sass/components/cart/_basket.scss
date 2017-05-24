@@ -56,6 +56,12 @@
         vertical-align: top;
       }
     }
+
+    @include breakpoint($tablet) {
+      .delivery-options-mobile {
+        @include u-visibility(none);
+      }
+    }
   }
 
   .customer-cart-form {
