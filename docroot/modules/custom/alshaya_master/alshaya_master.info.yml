@@ -4,6 +4,8 @@ core: 8.x
 package: Alshaya
 description: 'Master module for updating the core settings.'
 dependencies:
+  - alshaya_department_page
+  - alshaya_permissions
   - acq_cart
   - acq_checkout
   - alshaya_acm
