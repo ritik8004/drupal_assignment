@@ -1,3 +1,9 @@
+/*
+ * Theming of product detail page.
+ */
+
+
+// Layout of the detail page
 .nodetype--acq_product {
   .region__content {
     margin: 20px 0;
@@ -31,10 +37,55 @@
     @include breakpoint($desktop) {
       width: 30%;
       float: $right;
+      padding: 0 1.5rem;
+    }
+  }
+
+  &__title_wrapper {
+    @include breakpoint($tablet) {
+      width: 40%;
+      float: $right;
       padding: 0 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 30%;
+      float: $right;
+      padding: 0 1.5rem;
     }
   }
 }
+
+
+// Title wrapper
+
+.content {
+  &__title_wrapper {
+    h1,
+    h1 span {
+      font-family: $alshaya-thin;
+      font-size: 18px;
+      font-weight: 100;
+    }
+    .price {
+      font-size: 15px;
+      color: $scarlet;
+    }
+    .content--item-code {
+      font-size: 11px;
+      color: $brownish-grey;
+    }
+  }
+}
+
+
+// Megazoom and light slider
+
+
+// SideBar content theming
+
+
+
 
 .field--name-field-skus {
   .field--name-sku {
@@ -59,18 +110,84 @@
     }
   }
 
+  .form-item-configurables-size {
+    label {
+      @include u-visibility(none);
+    }
+  }
+
+
+
   #configurable_ajax h2.field--name-name {
     @include u-visibility(none);
+  }
+
+  .form-item-quantity {
+    float: $left;
+    width: 150px;
+
+    label {
+      float: $left;
+      padding: 5px 20px 5px 0;
+    }
+
+    #edit-quantity {
+      border: none;
+      border-radius: 0;
+      padding: 5px 10px;
+      appearance: none;
+      margin: 0 5px;
+      float: $left;
+
+      @include icon()
+    }
+  }
+
+  .quantity.out-of-stock {
+    opacity: 0.4;
+    font-family: $arial;
+    font-size: 0.6875rem;
+    color: $grey-ash;
+    float: $left;
+    width: 6.688rem;
+
+    div {
+      margin-top: 10px;
+    }
+
+    span {
+      background: $whisper-dark;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      color: $black;
+      max-width: 2.188rem;
+      max-height: 2.188rem;
+
+      &.dash {
+        margin-#{$right}: 1px;
+        padding: 0.719rem 0.98rem;
+        clear: both;
+      }
+
+      &.arrow {
+        @include icon(chevrondown, after) {
+          position: absolute;
+          top: 3px;
+          #{$right}: 2px;
+        }
+
+        width: 35px;
+        height: 35px;
+        position: relative;
+        font-size: 1.875rem;
+        font-weight: normal;
+      }
+    }
   }
 }
 
 .field--name-body {
-  h2.field__label {
-    font-size: 14px;
-    font-weight: bold;
-    color: $marine-blue;
-  }
-
   p {
     font-size: 12px;
     line-height: 1.5;
@@ -125,28 +242,12 @@
   }
 }
 
-.form-item-quantity {
-  float: $left;
-  width: 150px;
-
-  label {
-    float: $left;
-    padding: 5px 20px 5px 0;
-  }
-
-  #edit-quantity {
-    border: none;
-    border-radius: 0;
-    padding: 5px 10px;
-    appearance: none;
-    margin: 0 5px;
-    float: $left;
-  }
-}
 
 .select2Option {
   h4 {
     margin: 0;
+    font-size: 11px;
+    font-weight: 100;
   }
 
   .select-buttons {

@@ -4,7 +4,6 @@
   img {
     width: 100%;
     height: auto;
-    max-height: 476px;
   }
 
   @include breakpoint($tablet) {

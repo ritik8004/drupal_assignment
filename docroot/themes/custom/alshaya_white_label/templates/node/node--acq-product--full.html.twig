@@ -9,6 +9,33 @@ set classes = [
 
 <article{{ attributes }}>
   <div class="acq-content-product">
+    <div class="content__title_wrapper">
+      <h1>{{ label }}</h1>
+
+      {% if content.final_price %}
+        <div class="has--special--price">
+      {% else %}
+        <div class="price">
+      {% endif %}
+        {{ content.price }}
+      </div>
+
+      {% if content.final_price %}
+        <div class="special--price">
+          {{ content.final_price }}
+        </div>
+
+        <div class="price--discount">
+          ({{ content.discount }})
+        </div>
+      {% endif %}
+
+      <div class="content--item-code">
+        <span class="field__label">{{ 'Item Code:'|t }}</span>
+        {{ content.item_code }}
+      </div>
+    </div>
+    
     <div class="content__main">
       {{ content.gallery }}
 
@@ -36,31 +63,6 @@ set classes = [
     </div>
     <div class="content__sidebar">
       <div class="basic-details-wrapper">
-        <h1>{{ label }}</h1>
-
-        {% if content.final_price %}
-          <div class="has--special--price">
-        {% else %}
-          <div class="price">
-        {% endif %}
-          {{ content.price }}
-        </div>
-
-        {% if content.final_price %}
-          <div class="special--price">
-            {{ content.final_price }}
-          </div>
-
-          <div class="price--discount">
-            ({{ content.discount }})
-          </div>
-        {% endif %}
-
-        <div class="content--item-code">
-          <span class="field__label">{{ 'Item Code:'|t }}</span>
-          {{ content.item_code }}
-        </div>
-
         {{ content.field_skus }}
       </div>
 
