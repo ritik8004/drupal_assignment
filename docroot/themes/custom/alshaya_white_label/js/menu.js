@@ -44,20 +44,22 @@
 
       $('.c-menu-primary .mobile--search').click(function () {
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
+        $(this).parent().toggleClass('search-active');
       });
 
       // Hide mobile search box, when clicked anywhere else.
-      $(window).on('click', function (e) {
+      $(window).bind('click touchstart', function (e) {
         if (!$(e.target).is('.c-menu-primary .mobile--search')) {
           // Check if element is Visible.
           if ($('.c-menu-primary #block-exposedformsearchpage').is(':visible')) {
             $('.c-menu-primary #block-exposedformsearchpage').hide();
+            $('.c-menu-primary .mobile--search').parent().toggleClass('search-active');
           }
         }
       });
 
       // Stop event from inside container to propogate out.
-      $('.c-menu-primary #block-exposedformsearchpage').on('click', function (event) {
+      $('.c-menu-primary #block-exposedformsearchpage').bind('click touchstart', function (event) {
         event.stopPropagation();
       });
 
