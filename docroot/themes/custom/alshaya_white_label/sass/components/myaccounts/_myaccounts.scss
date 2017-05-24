@@ -22,10 +22,14 @@
         font-size: 0.875rem;
       }
 
-      &.active,
-      &:hover {
+      &.active {
         color: $marine-blue;
         font-weight: bold;
+      }
+
+      &:hover {
+        color: $cerulean-two;
+        text-decoration: underline;
       }
     }
   }
