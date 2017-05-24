@@ -14,21 +14,21 @@ set classes = [
 
       {% if content.cross_sell %}
         <div class="horizontal-crossell above-mobile-block">
-          <h2 class="subtitle crossell-title">{{ "Horizontal Cross Sell"|t}}</h2>
+          <h3 class="subtitle crossell-title">{{ "Horizontal Cross Sell"|t}}</h3>
           {{ content.cross_sell }}
         </div>
       {% endif %}
 
       {% if content.up_sell %}
         <div class="horizontal-upell above-mobile-block">
-          <h2 class="subtitle crossell-title">{{ "Horizontal up Sell"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "Horizontal up Sell"|t }}</h3>
           {{ content.up_sell }}
         </div>
       {% endif %}
 
       {% if content.related %}
         <div class="horizontal-upell above-mobile-block">
-          <h2 class="subtitle crossell-title">{{ "Related"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "Related"|t }}</h3>
           {{ content.related }}
         </div>
       {% endif %}
@@ -90,7 +90,7 @@ set classes = [
         <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
         <div class="content">
           <div class="home-delivery c-accordion-delivery-options">
-            <h2 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'For orders over KWD99'|t }}</span></h2>
+            <h3 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'For orders over KWD99'|t }}</span></h3>
             <div class="c-accordion_content">
               <div class="delivery-option-content standard">
                 <span class="delivery-option-title">{{ 'Standard delivery (within 4 working days)'|t }}</span>
@@ -110,7 +110,7 @@ set classes = [
 
           {% if store_finder_enable_search is not empty %}
             <div class="click-collect c-accordion-delivery-options">
-              <h2 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h2>
+              <h3 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h3>
               <div class="c-accordion_content">
                 <div class="delivery-option-content standard">
                   <span class="line-1">{{ 'This service is FREE of charge'|t }}</span>
@@ -130,21 +130,21 @@ set classes = [
 
       {% if content.cross_sell %}
         <div class="horizontal-crossell mobile-only-block">
-          <h2 class="subtitle crossell-title">{{ "Horizontal Cross Sell"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "Horizontal Cross Sell"|t }}</h3>
           {{ content.cross_sell }}
         </div>
       {% endif %}
 
       {% if content.up_sell %}
         <div class="horizontal-upell mobile-only-block">
-          <h2 class="subtitle crossell-title">{{ "Horizontal up Sell"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "Horizontal up Sell"|t }}</h3>
           {{ content.up_sell }}
         </div>
       {% endif %}
 
       {% if content.related %}
         <div class="horizontal-upell mobile-only-block">
-          <h2 class="subtitle crossell-title">{{ "Related"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "Related"|t }}</h3>
           {{ content.related }}
         </div>
       {% endif %}

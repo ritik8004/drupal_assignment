@@ -81,7 +81,7 @@
   }
 
   .c-sidebar-second {
-    h2 {
+    h3 {
       color: $marine-blue;
       font-size: 14px;
       font-family: $alshaya-bold;
@@ -157,7 +157,7 @@
       }
     }
 
-    h2 {
+    h3 {
       color: $dark-sand;
       margin-bottom: 0.1rem;
     }
@@ -190,7 +190,7 @@
       color: $cerulean-two;
     }
 
-    h2 {
+    h3 {
       max-width: 12rem;
       display: inline-block;
       margin-top: 0;
@@ -895,7 +895,7 @@
   }
 
   .block-alshaya-user:not(.c-my-account-nav) {
-    h2 {
+    h3 {
       @include u-visibility(none);
     }
 

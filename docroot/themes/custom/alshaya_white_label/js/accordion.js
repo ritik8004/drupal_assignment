@@ -23,13 +23,13 @@
             $('.mobile-filter-bar ul li.clear-all').insertAfter('.filter-menu-label .label');
             var countFilters = $('.mobile-filter-bar ul li').length;
             if (countFilters === 0 && $.trim($('.mobile-filter-bar').html()).length === 0) {
-              $('.mobile-filter-bar').append('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-                + ' (' + countFilters + ')</h2>');
+              $('.mobile-filter-bar').append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+                + ' (' + countFilters + ')</h3>');
               $('.mobile-filter-bar').addClass('empty');
             }
             else {
-              $('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-                + '(' + countFilters + ')</h2>').insertBefore('.mobile-filter-bar ul');
+              $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+                + '(' + countFilters + ')</h3>').insertBefore('.mobile-filter-bar ul');
             }
           }
           // Toggle the filter menu when click on the label.
