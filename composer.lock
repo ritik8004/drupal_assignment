@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e728610f47f1af334e3cd65bea7c224",
+    "content-hash": "7cbdbf98e431a3cf8df61dfb6b766e27",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1652,7 +1652,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.10",
-                    "datestamp": "1493037542"
+                    "datestamp": "1495479183"
                 },
                 "patches_applied": {
                     "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
@@ -2043,7 +2043,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486737287"
+                    "datestamp": "1495109886"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2081,7 +2081,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/back_to_top-8.x-1.0-beta2.zip",
-                "reference": "8.x-1.0-beta2",
+                "reference": null,
                 "shasum": "387923041fa13e4eb09dbfbf301ca22646e5447f"
             },
             "require": {
@@ -2095,6 +2095,9 @@
                 "drupal": {
                     "version": "8.x-1.0-beta2",
                     "datestamp": "1471598939"
+                },
+                "patches_applied": {
+                    "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4309,10 +4312,6 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
-                    "name": "Dave Reid",
-                    "homepage": "https://www.drupal.org/user/53892"
-                },
-                {
                     "name": "Drupal Media Team",
                     "homepage": "https://www.drupal.org/user/3260690"
                 },
@@ -4500,7 +4499,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.3",
-                    "datestamp": "1494333185"
+                    "datestamp": "1495556283"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5846,7 +5845,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta2",
-                    "datestamp": "1493403543"
+                    "datestamp": "1492189143"
                 },
                 "patches_applied": {
                     "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
@@ -6123,16 +6122,8 @@
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
-                    "name": "badjava",
-                    "homepage": "https://www.drupal.org/user/83372"
-                },
-                {
                     "name": "chx",
                     "homepage": "https://www.drupal.org/user/9446"
-                },
-                {
-                    "name": "japerry",
-                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "kalman.hosszu",
@@ -6260,7 +6251,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486729083"
+                    "datestamp": "1486726083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6274,10 +6265,6 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
-                },
-                {
-                    "name": "miteshmap",
-                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -12653,7 +12640,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork maintainer"
+                    "role": "Fork Maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
