@@ -163,7 +163,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             // Theme the order total grands with currency.
             $order['totals']['grand'] = [
               '#theme' => 'alshaya_acm_price',
-              '#price' => isset($order['totals']) ? number_format($order['totals']['grand'], 3) : 0,
+              '#price' => isset($order['totals']) ? $order['totals']['grand'] : 0,
             ];
 
             // Iterate over each order item.
@@ -174,13 +174,13 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               // Total price.
               $order['items'][$key]['total_price'] = [
                 '#theme' => 'alshaya_acm_price',
-                '#price' => number_format($order['items'][$key]['price'] * $order['items'][$key]['ordered'], 3),
+                '#price' => ($order['items'][$key]['price'] * $order['items'][$key]['ordered']),
               ];
 
               // Unit price.
               $order['items'][$key]['price'] = [
                 '#theme' => 'alshaya_acm_price',
-                '#price' => number_format($order['items'][$key]['price'], 3),
+                '#price' => $order['items'][$key]['price'],
               ];
 
               // Item name for order.

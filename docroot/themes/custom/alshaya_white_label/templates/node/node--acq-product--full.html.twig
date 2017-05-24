@@ -107,20 +107,24 @@ set classes = [
               </div>
             </div>
           </div>
-          <div class="click-collect c-accordion-delivery-options">
-            <h2 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h2>
-            <div class="c-accordion_content">
-              <div class="delivery-option-content standard">
-                <span class="line-1">{{ 'This service is FREE of charge'|t }}</span>
-                <span class="line-2">{{ 'Collect the order from store in 99 hours'|t }}</span>
-                <form class="search-store">
-                  <label>{{ 'Check in-store availability'|t }}</label>
-                  <input type="text" name="store-name" placeholder="{{ 'Enter your area'|t }}">
-                  <input type="submit" name="search-store" value="{{ 'Search Stores'|t }}">
-                </form>
+
+          {% if store_finder_enable_search is not empty %}
+            <div class="click-collect c-accordion-delivery-options">
+              <h2 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h2>
+              <div class="c-accordion_content">
+                <div class="delivery-option-content standard">
+                  <span class="line-1">{{ 'This service is FREE of charge'|t }}</span>
+                  <span class="line-2">{{ 'Collect the order from store in 99 hours'|t }}</span>
+                  <form class="search-store">
+                    <label>{{ 'Check in-store availability'|t }}</label>
+                    <input type="text" name="store-name" placeholder="{{ 'Enter your area'|t }}">
+                    <input type="submit" name="search-store" value="{{ 'Search Stores'|t }}">
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
+          {% endif %}
+
         </div>
       </div>
 

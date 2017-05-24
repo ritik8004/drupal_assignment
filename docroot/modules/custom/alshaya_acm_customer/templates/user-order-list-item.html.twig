@@ -6,8 +6,6 @@
  *
  * Available variables:
  * - order: Processed information for single order.
- * - currency_code: Currency code.
- * - currency_code_position: Currency code position.
  *
  * @ingroup themeable
  */
@@ -58,12 +56,7 @@
   <div class="fourth">
     <div class="light totale-label">{{ "Order Total"|t }}</div>
     <div class="dark order-total">
-      {% if currency_code_position == 'before' %}
-        <span class="currency-code prefix">{{ currency_code }}</span>{{ order.total }}
-      {% else %}
-        {{ order.total }}<span
-              class="currency-code suffix">{{ currency_code }}</span>
-      {% endif %}
+      {{ order.total }}
     </div>
   </div>
 </a>

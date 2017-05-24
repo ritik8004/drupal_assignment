@@ -10,4 +10,7 @@ checkout_guest_login:
 checkout_terms_condition:
   value: '<p>I confirm that I have read and accept the <a href="#">Privacy Policy</a> and <a href="#">Terms &amp; Conditions</a> of purchase. Read our <a href="#">Return Policy</a></p>'
   format: 'rich_text'
+checkout_customer_service:
+  value: '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from 9:30am to 8:30pm Monday to Sunday</span></p>'
+  format: 'rich_text'
 langcode: en

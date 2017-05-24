@@ -165,7 +165,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         '#image' => $sku_image,
         '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
         '#item_code' => $id,
-        '#include_in_bundle' => t('Items included in bundle'),
         '#available_delivery_methods' => [
           '#markup' => $product_delivery_options,
         ],
@@ -310,24 +309,6 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
   $form['totals']['grand']['value'] = [
     '#markup' => alshaya_acm_price_format($totals['grand']),
   ];
-}
-
-/**
- * Wrapper function to format price value with currency.
- *
- * @param float $price
- *   Price value.
- *
- * @return mixed|null
- *   Return rendered theme with html for price.
- */
-function alshaya_acm_price_format($price) {
-  $output = [
-    '#theme' => 'alshaya_acm_price',
-    '#price' => $price,
-  ];
-
-  return render($output);
 }
 
 /**
@@ -548,6 +529,25 @@ function template_preprocess_alshaya_acm_price(array &$variables) {
 
   $variables['currency_format'] = $currency_format;
   $variables['currency_code_position'] = $currency_code_position;
+  $variables['price'] = number_format($variables['price'], 3);
+}
+
+/**
+ * Wrapper function to format price value with currency.
+ *
+ * @param float $price
+ *   Price value.
+ *
+ * @return mixed|null
+ *   Return rendered theme with html for price.
+ */
+function alshaya_acm_price_format($price) {
+  $output = [
+    '#theme' => 'alshaya_acm_price',
+    '#price' => $price,
+  ];
+
+  return render($output);
 }
 
 /**
