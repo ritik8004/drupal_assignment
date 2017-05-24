@@ -112,6 +112,9 @@
             },
             "drupal/password_policy": {
                 "Error message is not translatable": "https://www.drupal.org/files/issues/password_policy_error_translate-2878784-2.patch"
+            },
+            "drupal/back_to_top": {
+                "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch"
             }
         },
         "installer-paths": {
