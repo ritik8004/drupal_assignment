@@ -25,6 +25,7 @@ function alshaya_loyalty_get_validation_settings() {
     $loyalty = [
       'length' => $config->get('apcn_max_length'),
       'value_start_with' => $config->get('apcn_value_starts_with'),
+      'enable_disable_loyality' => $config->get('enable_disable_loyality'),
     ];
   }
 
@@ -49,6 +50,8 @@ function _alshaya_loyalty_clean_card_number($value) {
  */
 function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $add_privilege_fields = FALSE;
+  // Get loyalty settings.
+  $loyality_settings = alshaya_loyalty_get_validation_settings();
 
   switch ($form_id) {
     // Add privilege card number fields to cart form.
@@ -79,13 +82,22 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
       break;
 
     case 'user_form':
-      _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
+      // Allow loyalty only if its enabled.
+      if ($loyality_settings['enable_disable_loyality']) {
+        _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
+      }
+      else {
+        $form['field_privilege_card_number']['#access'] = FALSE;
+      }
       break;
   }
 
-  // Add privilege card number fields to the form.
-  if ($add_privilege_fields) {
-    alshaya_loyalty_add_privilege_card_fields($form, $form_state);
+  // Allow loyalty only if its enabled.
+  if ($loyality_settings['enable_disable_loyality']) {
+    // Add privilege card number fields to the form.
+    if ($add_privilege_fields) {
+      alshaya_loyalty_add_privilege_card_fields($form, $form_state);
+    }
   }
 }
 

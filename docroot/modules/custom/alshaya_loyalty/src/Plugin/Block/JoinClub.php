@@ -83,27 +83,31 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function build() {
-    $join_club_content = $this->configFactory->get('alshaya_loyalty.join_club');
 
     $build = [];
 
-    if ($image_fid = $join_club_content->get('join_club_image.fid')) {
-      $image_file = File::load($image_fid);
-      $image_path = $image_file->getFileUri();
-    }
-    else {
-      // Default image.
-      $image_path = drupal_get_path('module', 'alshaya_loyalty') . '/images/alshaya-priv-card.jpg';
-    }
+    // If loyalty enabled on site.
+    $loyality_settings = alshaya_loyalty_get_validation_settings();
+    if ($loyality_settings['enable_disable_loyality']) {
+      $join_club_content = $this->configFactory->get('alshaya_loyalty.join_club');
+      if ($image_fid = $join_club_content->get('join_club_image.fid')) {
+        $image_file = File::load($image_fid);
+        $image_path = $image_file->getFileUri();
+      }
+      else {
+        // Default image.
+        $image_path = drupal_get_path('module', 'alshaya_loyalty') . '/images/alshaya-priv-card.jpg';
+      }
 
-    $build['image'] = [
-      '#theme' => 'image',
-      '#uri' => $image_path,
-      '#title' => $this->label(),
-      '#alt' => $this->label(),
-    ];
+      $build['image'] = [
+        '#theme' => 'image',
+        '#uri' => $image_path,
+        '#title' => $this->label(),
+        '#alt' => $this->label(),
+      ];
 
-    $build['description']['#markup'] = $join_club_content->get('join_club_description.value');
+      $build['description']['#markup'] = $join_club_content->get('join_club_description.value');
+    }
 
     return $build;
   }
@@ -113,6 +117,13 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['user', 'route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), ['loyality-on-off']);
   }
 
 }
