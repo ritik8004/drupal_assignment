@@ -44,7 +44,7 @@ function alshaya_i18n_preprocess_page(&$variables) {
   // If cookie is not available, means user is visiting first time.
   if (is_null($cookie)) {
     $variables['already_not_visited'] = TRUE;
-    // Set the cookie.
-    user_cookie_save(['already_visited' => 1]);
+    // Set the cookie for 30 days.
+    setrawcookie('Drupal.visitor.already_visited', rawurlencode(1), REQUEST_TIME + 2592000, '/');
   }
 }
