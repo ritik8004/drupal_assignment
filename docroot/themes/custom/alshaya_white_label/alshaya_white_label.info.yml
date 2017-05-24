@@ -38,3 +38,9 @@ libraries-override:
     css:
       component:
         assets/vendor/jquery.ui/themes/base/accordion.css: false
+  geolocation/geolocation.commonmap:
+    js:
+      js/geolocation-common-map.js: js/geolocation/alshaya_geolocation_common_map.js
+  geolocation/geolocation.formatter.googlemap:
+    js:
+      js/geolocation-formatter-googlemap.js: js/geolocation/alshaya_geolocation_formatter_googlemap.js
