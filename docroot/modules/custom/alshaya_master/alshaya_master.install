@@ -360,7 +360,7 @@ function alshaya_master_install() {
     ->getEditable('alshaya_white_label.settings')
     ->setData([
       'logo' => [
-        'path' => 'themes/custom/alshaya_white_label/logo.png',
+        'path' => 'themes/custom/alshaya_white_label/mothercare-logo.svg',
       ],
     ])
     ->save();

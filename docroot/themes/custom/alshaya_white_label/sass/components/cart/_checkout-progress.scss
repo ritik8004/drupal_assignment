@@ -257,9 +257,15 @@
 }
 
 .order-confirmation {
-  .block-acm-checkout-progress .checkout-progress {
-    @include breakpoint($only-tablet) {
-      margin-top: 1.5rem;
+  .block-acm-checkout-progress {
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: -0.125rem;
+    }
+
+    .checkout-progress {
+      @include breakpoint($only-tablet) {
+        margin-top: 1.5rem;
+      }
     }
   }
 
