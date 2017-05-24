@@ -16,7 +16,7 @@ provider: null
 plugin: 'facet_block:color'
 settings:
   id: 'facet_block:color'
-  label: Color
+  label: Colour
   provider: facets
   label_display: visible
 visibility:

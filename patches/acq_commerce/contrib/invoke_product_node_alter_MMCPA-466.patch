@@ -3,18 +3,13 @@ new file mode 100644
 index 0000000..2be6bcd
 --- /dev/null
 +++ b/modules/acq_sku/acq_sku.api.php
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,30 @@
 +<?php
 +
 +/**
 + * @file
 + * Hooks specific to the acq_sku module.
 + */
-+
-+use Drupal\node\NodeInterface;
-+use Drupal\Component\Utility\Html;
-+use Drupal\Component\Utility\Xss;
-+use Drupal\Core\Access\AccessResult;
 +
 +/**
 + * @addtogroup hooks
@@ -25,7 +20,7 @@ index 0000000..2be6bcd
 + * Alter product node before it is saved during insert or update.
 + *
 + * Product data from API is passed here to allow other modules to read from
-+ * the data provided API and update product node accordingly.
++ * the data provided by API and update product node accordingly.
 + *
 + * @param \Drupal\node\NodeInterface $node
 + *   Node to alter.

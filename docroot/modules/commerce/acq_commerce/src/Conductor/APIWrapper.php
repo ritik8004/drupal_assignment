@@ -468,6 +468,31 @@ class APIWrapper {
   }
 
   /**
+   * Fetches all promotions.
+   *
+   * @return array
+   *   Array of promotions.
+   */
+  public function getPromotions() {
+    $endpoint = 'promotions/category';
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $result = [];
+
+    try {
+      $result = $this->tryAgentRequest($doReq, 'getPromotions', 'promotions');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $result;
+  }
+
+  /**
    * Gets products by updated time.
    *
    * @param \DateTime $date_time

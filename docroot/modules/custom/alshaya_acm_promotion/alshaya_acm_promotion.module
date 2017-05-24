@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_promotion') {
+    if ($view_mode == 'full') {
+      // Get the category id for the promotion.
+      if ($data_value = $entity->get('field_acq_promotion_data')->getString()) {
+        /** @var \Drupal\acq_sku\ConductorCategoryRepository $category_repo */
+        $category_repo = \Drupal::service('acq_sku.category_repo');
+        $data = unserialize($data_value);
+
+        $category_ids = [];
+
+        if (isset($data['condition'], $data['condition']['conditions'])) {
+          foreach ($data['condition']['conditions'] as $condition) {
+            if ($condition['attribute'] == 'category_ids') {
+              if ($category_id = $category_repo->loadCategoryTerm($condition['value'])) {
+                $category_ids[] = $category_id->id();
+                continue;
+              }
+            }
+
+            // Show the promotion page only for currently supported conditions.
+            \Drupal::logger('alshaya_acm_promotion')->error('Unsupported condition type encountered: @attribute', ['@attribute', $condition['attribute']]);
+            $category_ids = [];
+            break;
+          }
+        }
+
+        if ($category_ids) {
+          $build['products'] = views_embed_view('alshaya_product_list', 'block_1', implode('+', $category_ids));
+          $build['products']['#weight'] = 100;
+        }
+        else {
+          // Lets now show the page for now, we don't support it yet.
+          throw new NotFoundHttpException();
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_profile_installed().
+ */
+function alshaya_acm_promotion_alshaya_profile_installed(array $modules) {
+  // Sync the promotions.
+  \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
+}

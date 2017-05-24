@@ -1,0 +1,22 @@
+uuid: 1d407ce3-d3c5-4ff4-9831-1ab7e1782b14
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.skus_sku_reference_display_price
+  module:
+    - facets
+  theme:
+    - alshaya_white_label
+id: skusskureferencedisplayprice_promotion
+theme: alshaya_white_label
+region: sidebar_first
+weight: -22
+provider: null
+plugin: 'facet_block:skus_sku_reference_display_price'
+settings:
+  id: 'facet_block:skus_sku_reference_display_price'
+  label: Price
+  provider: facets
+  label_display: visible
+visibility: {  }
