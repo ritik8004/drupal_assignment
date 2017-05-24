@@ -142,7 +142,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       if ($route_parameter_value->getVocabularyId() == 'acq_product_category') {
         // Get all parents of the given term.
         $parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($route_parameter_value->id());
-        array_pop($parents);
+
         if (!empty($parents)) {
           /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
           $root_parent_term = end($parents);
@@ -151,12 +151,16 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
           }
         }
       }
-
     }
 
     return [
       '#theme' => 'alshaya_main_menu_level1',
       '#term_tree' => $term_data,
+      '#cache' => [
+        'contexts' => [
+          'url.path',
+        ],
+      ],
     ];
   }
 
