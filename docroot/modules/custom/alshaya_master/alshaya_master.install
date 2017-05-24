@@ -357,19 +357,6 @@ function alshaya_master_install() {
       'en' => 'Mobile number',
       'ar' => 'رقم الجوال',
     ],
-    'select_your_preference_of_channel_of_communication: \'#type\': radios \'#title\': \'Select your prefered communication channel\' \'#default_value\': Email \'#title_display\': inline \'#options\': Email: Email Mobile: Mobile \'#required\': true first_name: \'#type\': textfield \'#title\': \'First name\' \'#required\': true last_name: \'#type\': textfield \'#title\': \'Last name\' \'#required\': true mobile_number: \'#type\': mobile_number \'#title\': \'Mobile number\' \'#verify\': none \'#required\': true email: \'#type\': email \'#title\': \'Email Address\' \'#required\': true message: \'#type\': textarea \'#title\': \'Message (Optional)\' \'#field_suffix\': \'220\' \'#counter_type\': character \'#counter_maximum\': \'220\' \'#counter_message\': \' \'' => [
-      'ar' => 'first_name:
-  \'#title\': \'الاسم الأول\'
-last_name:
-  \'#title\': \'اسم العائلة\'
-mobile_number:
-  \'#title\': \'رقم الجوال\'
-email:
-  \'#title\': \'عنوان البريد الإلكتروني\'
-message:
-  \'#title\': \'رسالة نصية: (اختياري)\'
-',
-    ],
   ];
   alshaya_i18n_save_translations($strings);
 
