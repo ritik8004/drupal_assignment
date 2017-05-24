@@ -527,6 +527,16 @@ function alshaya_white_label_preprocess_user(&$variables) {
     $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user);
     $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
     $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
+
+    $module_handler = \Drupal::moduleHandler();
+    if ($module_handler->moduleExists('alshaya_loyalty')) {
+      // Get loyalty settings.
+      $loyalty_settings = alshaya_loyalty_get_validation_settings();
+      // If site has loyalty 'off'.
+      if (!$loyalty_settings['enable_disable_loyality']) {
+        $variables['privilege_card'] = '';
+      }
+    }
   }
 }
 
