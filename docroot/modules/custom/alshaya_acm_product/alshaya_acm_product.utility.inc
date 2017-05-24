@@ -333,3 +333,31 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
 
   return [];
 }
+
+/**
+ * Helper function to get child skus for a configurable sku from tree.
+ *
+ * @param array $tree
+ *   Tree containing configurable options and SKU objects.
+ * @param array $configurables
+ *   Configurable values array.
+ *
+ * @return null|SKU
+ *   Null or SKU instance.
+ */
+function alshaya_acm_product_get_selected_option_sku(array $tree, array $configurables) {
+  $tree_pointer = &$tree['options'];
+
+  foreach ($configurables as $key => $value) {
+    if (empty($value)) {
+      continue;
+    }
+
+    // Move the tree pointer if the selection is valid.
+    if (isset($tree_pointer["$key:$value"])) {
+      return $tree_pointer["$key:$value"];
+    }
+  }
+
+  return NULL;
+}
