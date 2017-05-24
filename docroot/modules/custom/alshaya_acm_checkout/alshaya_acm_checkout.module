@@ -98,3 +98,22 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
 
   return $phone_string;
 }
+
+/**
+ * Implements hook_alshaya_profile_installed().
+ */
+function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
+  if (in_array('alshaya_i18n', $modules)) {
+    // Array of language translation strings.
+    $strings = [
+      'CUSTOMER SERVICE' => [
+        'ar' => 'خدمة العملاء',
+      ],
+      '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from 9:30am to 8:30pm Monday to Sunday</span></p>' => [
+        'ar' => '<p>الكويت <span class="light">+965 XXX XX XX</span></p><p>المناطق الأخرى <span class="light">8 (800) XXX XX X</span></p><p><span class="light">نحن منفتحون من 9:30 صباحا إلى 8:30 مساء من الاثنين إلى الأحد</span></p>',
+      ],
+    ];
+
+    alshaya_i18n_save_translations($strings);
+  }
+}

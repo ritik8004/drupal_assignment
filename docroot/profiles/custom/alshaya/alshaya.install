@@ -64,4 +64,6 @@ function alshaya_install() {
   foreach ($modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
   }
+
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', [$modules]);
 }

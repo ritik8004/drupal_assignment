@@ -51,3 +51,11 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_profile_installed().
+ */
+function alshaya_acm_promotion_alshaya_profile_installed(array $modules) {
+  // Sync the promotions.
+  \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
+}

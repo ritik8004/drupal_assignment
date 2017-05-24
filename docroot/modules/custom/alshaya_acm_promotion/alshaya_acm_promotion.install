@@ -5,15 +5,3 @@
  * @file
  * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
  */
-
-/**
- * Implements hook_install().
- */
-function alshaya_acm_promotion_install() {
-  // Syncronize all promotions during install.
-  // @TODO: Need to refactor a lot before getting this work as it creates
-  // duplicate nid issue (home page node is created in alshaya_default_content
-  // with nid 2. Once this is working, need to remove ignore file comment
-  // from top.
-  // \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
-}
