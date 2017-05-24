@@ -489,11 +489,20 @@ header {
       text-align: center;
       padding: 0.875rem 0.875rem 0.5rem 0;
 
-      &:hover {
+      &:hover,
+      &.search-active {
         background: $marine-blue;
 
         a {
           color: $white-five;
+        }
+      }
+
+      &.search-active {
+        .mobile--search {
+          &::before {
+            background: url('../imgs/icons/ic-search--hover.svg');
+          }
         }
       }
 
