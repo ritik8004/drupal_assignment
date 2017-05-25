@@ -173,7 +173,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     $build = [];
 
     $build['my_account_title'] = [
-      '#markup' => '<h2 class="my-account-title">' . $this->getTitle() . '</h2>',
+      '#markup' => '<h3 class="my-account-title">' . $this->getTitle() . '</h3>',
     ];
 
     $build['my_account_links'] = [
