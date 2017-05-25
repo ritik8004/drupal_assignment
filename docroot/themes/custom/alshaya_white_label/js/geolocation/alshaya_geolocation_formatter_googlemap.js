@@ -32,7 +32,7 @@
     };
 
     /**
-     * Runs after the Google Maps API is available
+     * Runs after the Google Maps API is available.
      *
      * @param {GeolocationMap[]} mapSettings - The geolocation map objects.
      * @param {object} context - The html context.
