@@ -68,17 +68,21 @@ set classes = [
 
       <div class="description-wrapper">
         <div class="content--description">
-          <span class="close">Close</span>
+          <span class="close"></span>
           <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-          {{ content.description }}
+          <div class="field__content">
+            {{ content.description }}
+          </div>
         </div>
       </div>
 
       <div class="short-description-wrapper">
         <div class="content--short-description">
           <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-          {{ content.short_description }}
-          <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+          <div class="field__content-wrapper">
+            <span class="field__content">{{ content.short_description }}</span>
+            <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+          </div>
         </div>
       </div>
 
@@ -90,33 +94,33 @@ set classes = [
 
       <div class="delivery-options-wrapper">
         <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
-        <div class="content">
+        <div class="field__content">
           <div class="home-delivery c-accordion-delivery-options">
             <h3 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'For orders over KWD99'|t }}</span></h3>
             <div class="c-accordion_content">
               <div class="delivery-option-content standard">
-                <span class="delivery-option-title">{{ 'Standard delivery (within 4 working days)'|t }}</span>
+                <div class="delivery-option-title"><strong>{{ 'Standard delivery'|t }} </strong><span>{{ '(within 4 working days)'|t }}</span></div>
                 <ul>
                   <li>{{ 'Orders over KWD 1234'|t }} <span>{{ 'FREE'|t }}</span></li>
                   <li>{{ 'Orders under KWD 1234'|t }} <span>{{ 'KWD 123.1234'|t }}</span></li>
                 </ul>
               </div>
               <div class="delivery-option-content next-day">
-                <span class="delivery-option-title">{{ 'Next day delivery (ordered before 9pm)'|t }}</span>
+                <div class="delivery-option-title"><strong>{{ 'Next day delivery '|t }} </strong><span>{{ '(ordered before 9pm)'|t }}</span></div>
                 <ul>
-                  <li>{{ 'All orders'|t }} <span>{{ 'FREE'|t }}</span>/li>
+                  <li>{{ 'All orders'|t }} <span>{{ 'FREE'|t }}</span></li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {% if store_finder_enable_search is not empty %}
+          {#{% if store_finder_enable_search is not empty %}#}
             <div class="click-collect c-accordion-delivery-options">
-              <h3 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h3>
+              <h2 class="c-accordion__title">{{ 'Click and Collect'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h2>
               <div class="c-accordion_content">
-                <div class="delivery-option-content standard">
-                  <span class="line-1">{{ 'This service is FREE of charge'|t }}</span>
-                  <span class="line-2">{{ 'Collect the order from store in 99 hours'|t }}</span>
+                <div class="click-collect-content standard">
+                  <div class="text line-1"><span>{{ 'This service is '|t }}</span><strong>{{ 'FREE'|t }}</strong><span>{{ ' of charge.'|t }}</span></div>
+                  <div class="text line-2"><span>{{ 'Collect the order from store in '|t }}</span><strong>{{ '99 hours'|t }}</strong></div>
                   <form class="search-store">
                     <label>{{ 'Check in-store availability'|t }}</label>
                     <input type="text" name="store-name" placeholder="{{ 'Enter your area'|t }}">
@@ -125,7 +129,7 @@ set classes = [
                 </div>
               </div>
             </div>
-          {% endif %}
+          {#{% endif %}#}
 
         </div>
       </div>

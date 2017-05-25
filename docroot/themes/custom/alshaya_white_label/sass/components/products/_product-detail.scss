@@ -2,7 +2,6 @@
  * Theming of product detail page.
  */
 
-
 // Layout of the detail page
 .nodetype--acq_product {
   .region__content {
@@ -12,6 +11,10 @@
 
 .acq-content-product {
   @include clearfix;
+
+  @include breakpoint($tablet) {
+    position: relative;
+  }
 }
 
 .content {
@@ -28,6 +31,14 @@
   }
 
   &__sidebar {
+    @include breakpoint($mobile) {
+      position: relative;
+    }
+
+    @include breakpoint($tablet) {
+      position: static;
+    }
+
     @include breakpoint($tablet) {
       width: 40%;
       float: $right;
@@ -56,9 +67,7 @@
   }
 }
 
-
 // Title wrapper
-
 .content {
   &__title_wrapper {
     h1,
@@ -67,25 +76,21 @@
       font-size: 18px;
       font-weight: 100;
     }
+
     .price {
       font-size: 15px;
       color: $scarlet;
     }
+
     .content--item-code {
       font-size: 11px;
       color: $brownish-grey;
+      padding-bottom: 15px;
     }
   }
 }
 
-
-// Megazoom and light slider
-
-
 // SideBar content theming
-
-
-
 
 .field--name-field-skus {
   .field--name-sku {
@@ -116,8 +121,6 @@
     }
   }
 
-
-
   #configurable_ajax h2.field--name-name {
     @include u-visibility(none);
   }
@@ -138,59 +141,276 @@
       appearance: none;
       margin: 0 5px;
       float: $left;
+    }
+  }
+}
 
-      @include icon()
+.description-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 504px;
+  border: 1px solid $marine-blue;
+  padding: 20px;
+  background: $white-five;
+  overflow: hidden;
+  width: 100%;
+
+  @include breakpoint($tablet) {
+    width: 38%;
+  }
+
+  @include breakpoint($desktop) {
+    width: 29%;
+  }
+
+  .close {
+    @include icon(close);
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 35px;
+    width: 35px;
+    font-size: 30px;
+    text-align: center;
+    color: $white-two;
+    background-color: $marine-blue;
+  }
+
+  .field {
+    &__label {
+      font-size: 14px;
+      font-family: $alshaya-bold;
+      color: $marine-blue;
+      margin-top: 0;
+    }
+
+    &__content {
+      font-size: 12px;
+      line-height: 1.5;
+      overflow: scroll;
+      height: 430px;
     }
   }
 
-  .quantity.out-of-stock {
-    opacity: 0.4;
+  a {
     font-family: $arial;
-    font-size: 0.6875rem;
-    color: $grey-ash;
-    float: $left;
-    width: 6.688rem;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.83;
+    color: $windows-blue;
+  }
 
-    div {
-      margin-top: 10px;
+  strong {
+    font-weight: bold;
+    color: $black;
+  }
+
+  h3 {
+    font-family: $alshaya-bold;
+    color: $marine-blue;
+    font-weight: bold;
+    font-size: 12px;
+    float: $left;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .description-section,
+  .address {
+    border-top: 1px solid $white;
+    padding: 10px 0;
+    line-height: 1.5;
+
+    @include clearfix;
+  }
+
+  .low-stock-indicator {
+    font-family: $arial;
+    font-size: 12px;
+    font-weight: bold;
+    color: $pumpkin-orange;
+    float: $right;
+  }
+
+  .text {
+    clear: both;
+    padding-top: 15px;
+  }
+}
+
+.short-description-wrapper {
+  .field {
+    &__label {
+      font-size: 14px;
+      font-family: $alshaya-bold;
+      color: $marine-blue;
     }
 
-    span {
-      background: $whisper-dark;
-      display: inline-block;
-      vertical-align: middle;
-      text-align: center;
-      color: $black;
-      max-width: 2.188rem;
-      max-height: 2.188rem;
+    &__content {
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  }
 
-      &.dash {
-        margin-#{$right}: 1px;
-        padding: 0.719rem 0.98rem;
-        clear: both;
+  .read-more-description-link {
+    font-family: $arial;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.83;
+    color: $windows-blue;
+  }
+}
+
+.delivery-options-wrapper {
+  .field {
+    &__label {
+      font-size: 14px;
+      font-family: $alshaya-bold;
+      color: $marine-blue;
+    }
+  }
+
+  .c-accordion {
+    &-delivery-options {
+      border-bottom: 1px solid $white;
+    }
+
+    &__title {
+      font-family: $arial;
+      font-size: 14px;
+      color: $black;
+      line-height: 2;
+      text-transform: capitalize;
+
+      &.ui-state-active {
+        border-bottom: none;
       }
 
-      &.arrow {
-        @include icon(chevrondown, after) {
-          position: absolute;
-          top: 3px;
-          #{$right}: 2px;
+      .subtitle {
+        @include u-visibility(block);
+
+        font-family: $arial;
+        font-size: 11px;
+        color: $greyish;
+        line-height: 1;
+      }
+    }
+
+    &_content {
+      .standard {
+        .delivery-option-title {
+          @include icon(delivery, before);
+
+          &::before {
+            color: $black;
+            font-size: 22px;
+            line-height: 1;
+            vertical-align: bottom;
+          }
+        }
+      }
+
+      .next-day {
+        .delivery-option-title {
+          @include icon(nextdaydelivery, before);
+
+          &::before {
+            color: $black;
+            font-size: 22px;
+            line-height: 1;
+            vertical-align: bottom;
+          }
+        }
+      }
+
+      .delivery-option {
+        &-content {
+          font-family: $arial;
+          font-size: 11px;
+          line-height: 1.64;
+          color: $greyish;
+
+          ul {
+            li {
+              @include clearfix;
+
+              span {
+                float: $right;
+                font-weight: bold;
+              }
+            }
+          }
         }
 
-        width: 35px;
-        height: 35px;
-        position: relative;
-        font-size: 1.875rem;
-        font-weight: normal;
+        &-title {
+          font-family: $arial;
+          line-height: 1.5;
+
+          strong {
+            font-size: 12px;
+            color: $black;
+          }
+
+          span {
+            font-size: 11px;
+            color: $brownish-grey;
+          }
+        }
       }
     }
   }
 }
 
-.field--name-body {
-  p {
+.click-collect {
+  .c-accordion__title {
+    border-top: none;
+  }
+
+  &-content {
+    font-family: $arial;
     font-size: 12px;
-    line-height: 1.5;
+    line-height: 2;
+    color: $brownish-grey;
+    padding-bottom: 20px;
+
+    @include clearfix;
+
+    strong {
+      font-weight: bold;
+    }
+  }
+
+  .click-collect-content .search-store {
+    label {
+      @include clearfix;
+    }
+
+    input[type="text"] {
+      float: $left;
+      width: 162px;
+      height: 35px;
+      padding: 5px;
+      border: solid 1px $white;
+    }
+
+    input[type="submit"] {
+      float: $right;
+      width: 6.563rem;
+      height: 2.188rem;
+      background-color: $cerulean-two;
+      font-family: $alshaya-thin;
+      appearance: none;
+      font-size: 0.75rem;
+      color: $white-two;
+      text-transform: lowercase;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: none;
+    }
   }
 }
 
@@ -241,7 +461,6 @@
     }
   }
 }
-
 
 .select2Option {
   h4 {
@@ -305,13 +524,4 @@
       }
     }
   }
-}
-
-.description-wrapper {
-  background: #fff;
-  position: absolute;
-  top: 17rem;
-  width: 20rem;
-  height: 21rem;
-  overflow-y: auto;
 }
