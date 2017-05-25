@@ -23,6 +23,8 @@ use Drupal\Core\Access\AccessResult;
  */
 function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, array $product) {
   $visible = $product['visibility'] == 1;
+  $description = (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '';
+  $node->get('body')->setValue($description);
   $node->setPublished($visible);
 }
 
@@ -110,7 +112,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       $build['item_code']['#markup'] = $sku;
 
-      $build['description']['#markup'] = $entity->get('body')->getValue()[0]['value'];
+      $build['description']['#markup'] = '';
+      if ($body = $entity->get('body')->getValue()) {
+        $build['description']['#markup'] = $body[0]['value'];
+      }
 
       $build['short_description']['#markup'] = $sku_entity->get('attr_short_description')->getString() . $sku_entity->get('attr_bullet_points')->getString();
     }
