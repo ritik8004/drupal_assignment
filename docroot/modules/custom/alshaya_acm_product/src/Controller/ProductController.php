@@ -26,4 +26,22 @@ class ProductController extends ControllerBase {
     return $build;
   }
 
+  /**
+   * Page callback for size guide modal.
+   */
+  public function sizeGuideModal() {
+    $product_config = \Drupal::config('alshaya_acm_product.settings');
+    $size_guide_enabled = $product_config->get('size_guide_link');
+    $build = [];
+
+    // If size guide is enabled on site.
+    if ($size_guide_enabled) {
+      $size_guide_content = $product_config->get('size_guide_modal_content.value');
+      $build = [
+        '#markup' => $size_guide_content,
+      ];
+    }
+    return $build;
+  }
+
 }

@@ -1,2 +1,5 @@
-size_guide_link: ''
+size_guide_link: 0
 langcode: en
+size_guide_modal_content:
+  format: rich_text
+  value: ''
