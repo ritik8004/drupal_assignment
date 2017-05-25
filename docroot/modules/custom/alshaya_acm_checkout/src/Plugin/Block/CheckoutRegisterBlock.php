@@ -165,4 +165,11 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
       ->addCacheTags(\Drupal::config('user.settings')->getCacheTags());
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
 }
