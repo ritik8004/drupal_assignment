@@ -134,21 +134,29 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     $route_name = $this->routeMatch->getRouteName();
+
     // If /taxonomy/term/tid page.
     if ($route_name == 'entity.taxonomy_term.canonical') {
       /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
-      $route_parameter_value = $this->routeMatch->getParameter('taxonomy_term');
-      // If term is of 'acq_product_category' vocabulary.
-      if ($route_parameter_value->getVocabularyId() == 'acq_product_category') {
-        // Get all parents of the given term.
-        $parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($route_parameter_value->id());
+      $term = $this->routeMatch->getParameter('taxonomy_term');
+    }
+    // If it's a department page.
+    elseif ($route_name == 'entity.node.canonical') {
+      $node = $this->routeMatch->getParameter('node');
+      $terms = $node->get('field_product_category')->getValue();
+      $term = $this->entityManager->getStorage('taxonomy_term')->load($terms[0]['target_id']);
+    }
 
-        if (!empty($parents)) {
-          /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
-          $root_parent_term = end($parents);
-          if (isset($term_data[$root_parent_term->id()])) {
-            $term_data[$root_parent_term->id()]['class'] = 'active';
-          }
+    // If term is of 'acq_product_category' vocabulary.
+    if ($term->getVocabularyId() == 'acq_product_category') {
+      // Get all parents of the given term.
+      $parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($term->id());
+
+      if (!empty($parents)) {
+        /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
+        $root_parent_term = end($parents);
+        if (isset($term_data[$root_parent_term->id()])) {
+          $term_data[$root_parent_term->id()]['class'] = 'active';
         }
       }
     }
