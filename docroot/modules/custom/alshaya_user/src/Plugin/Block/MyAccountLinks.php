@@ -168,6 +168,15 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
           ],
         ];
       }
+
+      // Add class for my account.
+      if ($key == 'my_account') {
+        $items[$key]['#wrapper_attributes'] = [
+          'class' => [
+            'my-account',
+          ],
+        ];
+      }
     }
 
     $build = [];

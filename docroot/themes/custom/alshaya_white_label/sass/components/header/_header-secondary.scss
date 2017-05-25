@@ -194,10 +194,6 @@
     text-transform: lowercase;
     font-weight: normal;
     font-family: $alshaya-bold;
-
-    &.my-account-title {
-      display: none;
-    }
   }
 
   position: fixed;
@@ -240,6 +236,10 @@
       width: 6px;
       height: 10px;
       top: 20px;
+    }
+
+    &.my-account {
+      display: none;
     }
   }
 }
