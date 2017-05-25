@@ -41,7 +41,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     $steps['payment'] = [
       'label' => $this->t('secure checkout'),
       'title' => $this->t('Make payment'),
-      'next_label' => $this->t('Continue to payment'),
+      'next_label' => $this->t('proceed to payment'),
     ];
 
     $steps['confirmation'] = [

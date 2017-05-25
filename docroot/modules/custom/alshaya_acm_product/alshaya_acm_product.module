@@ -210,6 +210,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // Add custom ajax callback for configurables to refresh the gallery.
         $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
 
+        $configurable['#options_attributes'] = [];
+
         // Check if it is a dropdown, we disable the options for which we don't
         // have stock.
         if (isset($configurable['#options'])) {

@@ -90,13 +90,6 @@ class GuestDeliveryHome extends AddressFormBase {
       $pane_form['address']['dynamic_parts']['region']['#access'] = !empty($region_options);
     }
 
-    // Block proceeding checkout until shipping method is chosen.
-    $complete_form['actions']['next']['#states'] = [
-      'invisible' => [
-        '#shipping_methods_wrapper' => ['value' => ''],
-      ],
-    ];
-
     $pane_form['address']['email'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Email Address'),
@@ -106,25 +99,25 @@ class GuestDeliveryHome extends AddressFormBase {
       '#default_value' => !empty($address->email) ? $address->email : '',
     ];
 
-    $pane_form['address']['shipping_methods'] = [
-      '#type' => 'select',
-      '#title' => t('Shipping Methods'),
-      '#empty_option' => t('Available Shipping Methods'),
-      '#default_value' => $cart->getShippingMethodAsString(),
-      '#validated' => TRUE,
-      '#attributes' => [
-        'id' => ['shipping_methods_wrapper'],
-      ],
-    ];
+    $shipping_methods = self::generateShippingEstimates($address);
+    $default_shipping = $cart->getShippingMethodAsString();
+    if (!empty($shipping_methods) && !empty($default_shipping)) {
+      $default_shipping = array_keys($shipping_methods)[0];
+    }
 
-    GuestDeliveryHome::generateShippingEstimates(
-      $address,
-      $pane_form['address']['shipping_methods']
-    );
+    $pane_form['address']['shipping_methods'] = [
+      '#type' => 'radios',
+      '#title' => t('Shipping Methods'),
+      '#default_value' => $default_shipping,
+      '#validated' => TRUE,
+      '#options' => $shipping_methods,
+      '#prefix' => '<div id="shipping_methods_wrapper">',
+      '#suffix' => '</div>',
+    ];
 
     $complete_form['actions']['get_shipping_methods'] = [
       '#type' => 'button',
-      '#value' => $this->t('Estimate Shipping'),
+      '#value' => $this->t('deliver to this address'),
       '#ajax' => [
         'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
@@ -156,10 +149,8 @@ class GuestDeliveryHome extends AddressFormBase {
     unset($address_values['email']);
     $address = self::getAddressFromValues($address_values);
 
-    self::generateShippingEstimates(
-      $address,
-      $address_fields['shipping_methods']
-    );
+    $address_fields['shipping_methods']['#options'] = self::generateShippingEstimates($address);
+    $address_fields['shipping_methods']['#default_value'] = array_keys($address_fields['shipping_methods']['#options'])[0];
 
     return $address_fields;
   }
@@ -169,10 +160,12 @@ class GuestDeliveryHome extends AddressFormBase {
    *
    * @param array|object $address
    *   Array of object of address.
-   * @param array $select
-   *   Selected method.
+   *
+   * @return array
+   *   Available shipping methods.
    */
-  public static function generateShippingEstimates($address, array &$select) {
+  public static function generateShippingEstimates($address) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
     $address = (array) $address;
 
     $address = _alshaya_acm_checkout_clean_address($address);
@@ -180,34 +173,37 @@ class GuestDeliveryHome extends AddressFormBase {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
 
     $shipping_methods = [];
+    $shipping_method_options = [];
 
     if (!empty($address) && !empty($address['country'])) {
       $shipping_methods = \Drupal::service('acq_commerce.api')->getShippingEstimates($cart->id(), $address);
     }
 
-    if (empty($shipping_methods)) {
-      $select['#suffix'] = t('No shipping methods found, please check your address and try again.');
-      return;
-    }
-    else {
-      unset($select['#suffix']);
+    if (!empty($shipping_methods)) {
+      foreach ($shipping_methods as $method) {
+        // Key needs to hold both carrier and method.
+        $key = implode(',', [$method['carrier_code'], $method['method_code']]);
+
+        // @TODO: Currently what we get back in orders is first 32 characters
+        // and concatenated by underscore.
+        $code = substr(implode('_', [$method['carrier_code'], $method['method_code']]), 0, 32);
+        $name = $method['method_title'];
+
+        $term = alshaya_acm_checkout_load_shipping_method($code, $name, $method['amount']);
+
+        $method_name = '
+          <div class="shipping-method-name">
+            <div class="shipping-method-title">' . $term->getName() . '</div>
+            <div class="shipping-method-price">' . $term->get('field_shipping_method_price')->getString() . '</div>
+            <div class="shipping-method-description">' . $term->get('description')->getString() . '</div>
+          </div>
+        ';
+
+        $shipping_method_options[$key] = $method_name;
+      }
     }
 
-    foreach ($shipping_methods as $method) {
-      // Key needs to hold both carrier and method.
-      $key = implode(',', [$method['carrier_code'], $method['method_code']]);
-
-      $name = t(
-        '@carrier — @method (@price)',
-        [
-          '@carrier' => $method['carrier_title'],
-          '@method' => $method['method_title'],
-          '@price' => $method['amount'] ? $method['amount'] : t('Free'),
-        ]
-      );
-
-      $select['#options'][$key] = $name;
-    }
+    return $shipping_method_options;
   }
 
   /**
