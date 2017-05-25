@@ -12,13 +12,11 @@
  *   Shipping method code.
  * @param string $name
  *   Name of shipping method, available during checkout.
- * @param string $price
- *   Price of shipping method, available during checkout.
  *
  * @return \Drupal\Core\Entity\EntityInterface|null
  *   Loaded term object.
  */
-function alshaya_acm_checkout_load_shipping_method($code, $name = '', $price = '') {
+function alshaya_acm_checkout_load_shipping_method($code, $name = '') {
   $save_term = FALSE;
   $logger = \Drupal::logger('alshaya_acm_checkout');
   $taxonomy_term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -59,14 +57,6 @@ function alshaya_acm_checkout_load_shipping_method($code, $name = '', $price = '
   if (!empty($name) && $name != $term->getName()) {
     $term->setName($name);
     $save_term = TRUE;
-
-    // Not checking on price as price could be empty for free methods.
-    $price_value = empty($price) ? '' : $price;
-
-    if ($price_value != $term->get('field_shipping_method_price')->getString()) {
-      $term->get('field_shipping_method_price')->setValue($price_value);
-      $save_term = TRUE;
-    }
   }
 
   // Save the term only if required.

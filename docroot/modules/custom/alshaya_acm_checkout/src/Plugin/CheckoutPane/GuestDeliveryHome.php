@@ -30,9 +30,7 @@ class GuestDeliveryHome extends AddressFormBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [
-      'weight' => 1,
-    ] + parent::defaultConfiguration();
+    return ['weight' => 1] + parent::defaultConfiguration();
   }
 
   /**
@@ -188,15 +186,9 @@ class GuestDeliveryHome extends AddressFormBase {
         // and concatenated by underscore.
         $code = substr(implode('_', [$method['carrier_code'], $method['method_code']]), 0, 32);
         $name = $method['method_title'];
+        $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
 
-        $term = alshaya_acm_checkout_load_shipping_method($code, $name, $method['amount']);
-
-        if ($price = $term->get('field_shipping_method_price')->getString()) {
-          $price = alshaya_acm_price_format($price);
-        }
-        else {
-          $price = t('FREE');
-        }
+        $term = alshaya_acm_checkout_load_shipping_method($code, $name);
 
         $method_name = '
           <div class="shipping-method-name">

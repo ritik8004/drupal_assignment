@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.field.taxonomy_term.shipping_method.field_shipping_method_code
     - field.field.taxonomy_term.shipping_method.field_shipping_method_desc
-    - field.field.taxonomy_term.shipping_method.field_shipping_method_price
     - taxonomy.vocabulary.shipping_method
   module:
     - text
@@ -30,14 +29,6 @@ content:
     region: content
   field_shipping_method_desc:
     weight: 3
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-    region: content
-  field_shipping_method_price:
-    weight: 2
     label: above
     settings:
       link_to_entity: false
