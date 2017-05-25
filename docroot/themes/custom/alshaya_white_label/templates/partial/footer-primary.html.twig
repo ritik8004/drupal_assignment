@@ -4,15 +4,12 @@
 
       <div class="primary--footer--right">
 
-        {% if already_not_visited is not empty %}
-          <div class="language--switcher mobile-only-block first-time-visit">
-            {{ page.footer_primary.languageswitcher_2 }}
-          </div>
-        {% else %}
-          <div class="language--switcher mobile-only-block">
-            {{ page.footer_primary.languageswitcher_2 }}
-          </div>
-        {% endif %}
+        <div class="language--switcher mobile-only-block only-first-time" style="display: none;">
+          {{ page.footer_primary.languageswitcher_2 }}
+        </div>
+        <div class="language--switcher mobile-only-block">
+          {{ page.footer_primary.languageswitcher_2 }}
+        </div>
 
         {{ page.footer_primary|without('shopby', 'aboutbrand', 'help', 'languageswitcher_2', 'sociallinks') }}
 
