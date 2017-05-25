@@ -369,6 +369,15 @@ function alshaya_master_install() {
     'sign up' => [
       'ar' => 'سجل الآن',
     ],
+    'help' => [
+      'ar' => 'هل تحتاج إلى مساعدة؟',
+    ],
+    'about brand' => [
+      'ar' => 'حول مذركير',
+    ],
+    'Shop by' => [
+      'ar' => 'التسوق حسب القسم',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
