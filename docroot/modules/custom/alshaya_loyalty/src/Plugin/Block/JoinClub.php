@@ -87,8 +87,8 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
     $build = [];
 
     // If loyalty enabled on site.
-    $loyality_settings = alshaya_loyalty_get_validation_settings();
-    if ($loyality_settings['enable_disable_loyality']) {
+    $loyalty_settings = alshaya_loyalty_get_validation_settings();
+    if ($loyalty_settings['enable_disable_loyalty']) {
       $join_club_content = $this->configFactory->get('alshaya_loyalty.join_club');
       if ($image_fid = $join_club_content->get('join_club_image.fid')) {
         $image_file = File::load($image_fid);
@@ -123,7 +123,7 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['loyality-on-off']);
+    return Cache::mergeTags(parent::getCacheTags(), ['loyalty-on-off']);
   }
 
 }
