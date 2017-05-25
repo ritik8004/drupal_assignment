@@ -378,6 +378,9 @@ function alshaya_master_install() {
     'Shop by' => [
       'ar' => 'التسوق حسب القسم',
     ],
+    'shop by' => [
+      'ar' => 'التسوق حسب القسم',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
