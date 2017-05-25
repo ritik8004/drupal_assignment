@@ -370,7 +370,7 @@
     padding-top: 2.7rem;
   }
 
-  & > h2 {
+  & > h3 {
     color: $marine-blue;
     margin-bottom: 0.3rem;
     padding-bottom: 0.56rem;
@@ -416,6 +416,10 @@
     .owl-prev,
     .owl-next {
       @include breakpoint($tablet) {
+        top: 20.3%;
+      }
+
+      @include breakpoint($desktop) {
         top: 19.7%;
       }
     }
@@ -427,7 +431,7 @@
     }
 
     .owl-next {
-      @include breakpoint($desktop) {
+      @include breakpoint($tablet) {
         right: -2.7rem;
       }
     }
