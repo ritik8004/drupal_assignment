@@ -10,7 +10,7 @@ entity_type: taxonomy_term
 bundle: shipping_method
 label: Price
 description: ''
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''

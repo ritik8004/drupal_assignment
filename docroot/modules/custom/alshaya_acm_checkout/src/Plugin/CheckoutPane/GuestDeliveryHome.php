@@ -191,10 +191,17 @@ class GuestDeliveryHome extends AddressFormBase {
 
         $term = alshaya_acm_checkout_load_shipping_method($code, $name, $method['amount']);
 
+        if ($price = $term->get('field_shipping_method_price')->getString()) {
+          $price = alshaya_acm_price_format($price);
+        }
+        else {
+          $price = t('FREE');
+        }
+
         $method_name = '
           <div class="shipping-method-name">
             <div class="shipping-method-title">' . $term->getName() . '</div>
-            <div class="shipping-method-price">' . $term->get('field_shipping_method_price')->getString() . '</div>
+            <div class="shipping-method-price">' . $price . '</div>
             <div class="shipping-method-description">' . $term->get('description')->getString() . '</div>
           </div>
         ';
