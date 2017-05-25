@@ -10,7 +10,7 @@
  * @ingroup themeable
  */
 #}
-{% set ordercount = order.quantity %}
+{% set count = order.quantity %}
 <a href="{{ order_detail_link }}">
   <div class="first-second wrapper">
     <div class="first">
@@ -26,9 +26,7 @@
       </div>
       <div class="light order-quantity">
         {% trans %}
-          Total: {{ order.quantity }} item
-        {% plural ordercount %}
-          Total: {{ order.quantity }} items
+          Total: {{ count }} items
         {% endtrans %}
       </div>
     </div>
@@ -42,9 +40,7 @@
       </div>
       <div class="light order-quantity">
         {% trans %}
-          Total: {{ order.quantity }} item
-        {% plural ordercount %}
-          Total: {{ order.quantity }} items
+          Total: {{ count }} items
         {% endtrans %}
       </div>
     </div>
