@@ -202,7 +202,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   if ($secure_checkout_access) {
     // Change checkout button text to 'Checkout Securely'.
-    $form['actions']['checkout']['#value'] = t('Checkout Securely');
+    $form['actions']['checkout']['#value'] = t('checkout securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
   }
@@ -252,7 +252,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // Add continue shopping link, that redirect user to homepage.
     $form['continue_shopping'] = [
       '#type' => 'link',
-      '#title' => t('Continue shopping'),
+      '#title' => t('continue shopping'),
       '#url' => Url::fromRoute('<front>'),
       '#weight' => 4,
       '#suffix' => '</div>',
@@ -261,7 +261,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // Add continue shopping link, that redirect user to homepage.
     $form['actions']['continue_shopping_mobile'] = [
       '#type' => 'link',
-      '#title' => t('Continue shopping'),
+      '#title' => t('continue shopping'),
       '#url' => Url::fromRoute('<front>'),
       '#suffix' => '</div>',
     ];
