@@ -350,6 +350,13 @@ function alshaya_master_install() {
     'Enter your filter name' => [
       'ar' => 'إدخال اسم الاختيار',
     ],
+    'Contact us' => [
+      'ar' => 'اتصل بنا',
+    ],
+    'Phone number' => [
+      'en' => 'Mobile number',
+      'ar' => 'رقم الجوال',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

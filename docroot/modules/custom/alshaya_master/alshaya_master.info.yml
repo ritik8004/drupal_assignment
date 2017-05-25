@@ -26,4 +26,5 @@ dependencies:
   - system
   - views
   - workbench_moderation
+  - alshaya_contact
 version: 8.x-1.0
