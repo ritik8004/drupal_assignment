@@ -447,6 +447,24 @@ function alshaya_master_install() {
     'Horizontal Recommendations' => [
       'ar' => 'توصيات',
     ],
+    'Loading ...' => [
+      'ar' => 'تحميل...',
+    ],
+    'Item %sku has been removed from cart.' => [
+      'ar' => 'تمت إزالة العنصر %sku من السلة.',
+    ],
+    'Your shopping basket is empty' => [
+      'ar' => 'حقيبة التسوق الخاصة بك فارغة',
+    ],
+    'Sorry, we now only have @quantity of these available and we have updated your basket.' => [
+      'ar' => 'عفوًا، تبقى لدينا فقط @quantity قطعة واحدة و لقد قمنا بتحديث حقيبة تسوقك ',
+    ],
+    'add to cart' => [
+      'ar' => 'أضف إلى السلة',
+    ],
+    '@name field is required.' => [
+      'ar' => '@name يرجى إدخال',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

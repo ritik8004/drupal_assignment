@@ -57,14 +57,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // Add the continue shopping button in same container.
     $form['empty']['continue_shopping'] = [
       '#type' => 'link',
-      '#title' => t('Go shopping'),
+      '#title' => t('go shopping'),
       '#url' => Url::fromRoute('<front>'),
     ];
 
     // Add continue shopping link, that redirect user to homepage.
     $form['empty']['continue_shopping_mobile'] = [
       '#type' => 'link',
-      '#title' => t('Go shopping'),
+      '#title' => t('go shopping'),
       '#url' => Url::fromRoute('<front>'),
     ];
 
