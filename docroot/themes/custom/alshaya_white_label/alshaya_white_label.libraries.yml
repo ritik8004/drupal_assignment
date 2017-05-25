@@ -13,6 +13,7 @@ global_styles:
     - core/jquery
     - core/jquery.ui.accordion
     - core/jquery.ui.tabs
+    - core/jquery.cookie
 
 ltr_styles:
   css:
