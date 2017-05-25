@@ -59,9 +59,8 @@ function alshaya_acm_checkout_load_shipping_method($code, $name = '', $price = '
   if (!empty($name) && $name != $term->getName()) {
     $term->setName($name);
     $save_term = TRUE;
-  }
 
-  if (!empty($price)) {
+    // Not checking on price as price could be empty for free methods.
     $price_value = empty($price) ? t('Free') : $price;
 
     if ($price_value != $term->get('field_shipping_method_price')->getString()) {
