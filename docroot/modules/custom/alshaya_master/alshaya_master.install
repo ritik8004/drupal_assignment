@@ -189,7 +189,7 @@ function alshaya_master_install() {
     'search item or keyword' => [
       'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
     ],
-    'Total: @count items.' => [
+    'Total: @count items' => [
       'ar' => 'الإجمالي: عدد القطع @count',
     ],
     'View order details' => [
@@ -349,6 +349,18 @@ function alshaya_master_install() {
     ],
     'Enter your filter name' => [
       'ar' => 'إدخال اسم الاختيار',
+    ],
+    'Show more' => [
+      'ar' => 'عرض المزيد',
+    ],
+    'Show less' => [
+      'ar' => 'عرض أقل',
+    ],
+    'show more' => [
+      'ar' => 'عرض المزيد',
+    ],
+    'sign up' => [
+      'ar' => 'سجل الآن',
     ],
   ];
   alshaya_i18n_save_translations($strings);
