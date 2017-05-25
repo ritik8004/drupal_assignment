@@ -86,7 +86,15 @@ class APIWrapper {
       else {
         $stock = $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
         $stock_check_proportion = \Drupal::config('acq_commerce.conductor')->get('stock_check_cache_proportion');
-        \Drupal::cache('data')->set($cid, $stock, $stock['quantity'] * $stock_check_proportion);
+
+        // Calculate the time in seconds (config contains in minutes).
+        $time = $stock['quantity'] ? $stock['quantity'] * $stock_check_proportion * 60 : $stock_check_proportion * 60;
+
+        // Calculate the timestamp when we want the cache to expire.
+        $expire = \Drupal::time()->getRequestTime() + $time;
+
+        // Set the stock in cache.
+        \Drupal::cache('data')->set($cid, $stock, $expire);
       }
     }
     catch (ConductorException $e) {
