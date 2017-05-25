@@ -63,10 +63,6 @@ class NewsLetterForm extends FormBase {
       '#prefix' => '<div class="newsletter-block-label">' . $this->t('get email offers and the latest news from @site_name', ['@site_name' => $site_name]) . '</div>',
     ];
 
-    if ($display_message = $form_state->get('display_message')) {
-      $form['email']['#suffix'] = '<div class="subscription-status">' . $display_message . '</div>';
-    }
-
     $form['newsletter'] = [
       '#type' => 'submit',
       '#value' => $this->t('sign up'),
@@ -87,6 +83,7 @@ class NewsLetterForm extends FormBase {
     if (!$form_state->hasAnyErrors()) {
       try {
         $subscription = $this->apiWrapper->subscribeNewsletter($form_state->getValue('email'));
+
         if ($subscription['status'] === 0) {
           $message = '<span class="message error">' . $this->t('This email address is already subscribed.') . '</span>';
         }
@@ -98,8 +95,7 @@ class NewsLetterForm extends FormBase {
         $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
       }
 
-      $form_state->set('display_message', $message);
-      $form_state->setRebuild();
+      $form['email']['#suffix'] = '<div class="subscription-status">' . $message . '</div>';
     }
 
     return $form;
