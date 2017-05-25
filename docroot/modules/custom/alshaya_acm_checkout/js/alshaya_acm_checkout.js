@@ -60,7 +60,7 @@
       }
 
 
-      if (typeof typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.beforeSendAcmCheckout === 'undefined') {
+      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.beforeSendAcmCheckout === 'undefined') {
         Drupal.Ajax.prototype.beforeSendAcmCheckout = Drupal.Ajax.prototype.beforeSend;
         Drupal.Ajax.prototype.successAcmCheckout = Drupal.Ajax.prototype.success;
 
