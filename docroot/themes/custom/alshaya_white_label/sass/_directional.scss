@@ -93,6 +93,7 @@ $last-child: if-ltr(":last-child", ":first-child");
   }
 }
 
+$arial: if-ltr($arial, $alshaya-arabic-regular);
 $alshaya-bold: if-ltr($alshaya-bold, $alshaya-arabic-bold);
 $alshaya-arabic-bold: if-ltr($alshaya-arabic-bold, $alshaya-bold);
 $alshaya-thin: if-ltr($alshaya-thin, $alshaya-arabic-thin);

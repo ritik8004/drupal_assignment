@@ -15,14 +15,21 @@
 
 @font-face {
   font-family: 'alshaya-arabic-thin';
-  src: url('../fonts/alshaya-arabic-thin.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-thin.woff') format('woff'), url('../fonts/alshaya-arabic-thin.ttf')  format('truetype'), url('../fonts/alshaya-arabic-thin.svg#NotoKufiArabic-Bold') format('svg');
+  src: url('../fonts/alshaya-cairo-light.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-cairo-light.woff') format('woff'), url('../fonts/alshaya-cairo-light.ttf')  format('truetype'), url('../fonts/alshaya-cairo-light.svg#Cairo-Light') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'alshaya-arabic-bold';
-  src: url('../fonts/alshaya-arabic-bold.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-bold.woff') format('woff'), url('../fonts/alshaya-arabic-bold.ttf')  format('truetype'), url('../fonts/alshaya-arabic-bold.svg#NotoKufiArabic-Bold') format('svg');
+  src: url('../fonts/alshaya-cairo-bold.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-cairo-bold.woff') format('woff'), url('../fonts/alshaya-cairo-bold.ttf')  format('truetype'), url('../fonts/alshaya-cairo-bold.svg#Cairo-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'alshaya-arabic-regular';
+  src: url('../fonts/alshaya-cairo-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-cairo-regular.woff') format('woff'), url('../fonts/alshaya-cairo-regular.ttf')  format('truetype'), url('../fonts/alshaya-cairo-regular.svg#Cairo-Regular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -47,6 +54,8 @@ $alshaya-arabic-bold-nodir: 'alshaya-arabic-bold';
 
 $alshaya-arabic-thin: 'alshaya-arabic-thin';
 $alshaya-arabic-thin-nodir: 'alshaya-thin';
+
+$alshaya-arabic-regular: 'alshaya-arabic-regular';
 
 $alshaya-icons: 'alshaya-icons';
 $arial: 'arialmt', arial, sans-serif;
