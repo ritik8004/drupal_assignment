@@ -53,17 +53,17 @@ class LoyaltyConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('apcn_value_starts_with') ? $config->get('apcn_value_starts_with') : 6362544,
     ];
 
-    // Loyality on/off feature.
-    $form['loyality_on_off'] = [
+    // Loyalty on/off feature.
+    $form['loyalty_on_off'] = [
       '#type' => 'details',
-      '#title' => $this->t('Loyality ON/OFF'),
+      '#title' => $this->t('Loyalty ON/OFF'),
       '#open' => FALSE,
     ];
-    $form['loyality_on_off']['enable_disable_loyality'] = [
+    $form['loyalty_on_off']['enable_disable_loyalty'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Enable or disable loyality on site'),
+      '#title' => $this->t('Enable or disable loyalty on site'),
       '#required' => TRUE,
-      '#default_value' => $config->get('enable_disable_loyality'),
+      '#default_value' => $config->get('enable_disable_loyalty'),
       '#options' => [0 => $this->t('Disable'), 1 => $this->t('Enable')],
     ];
 
@@ -77,11 +77,11 @@ class LoyaltyConfigForm extends ConfigFormBase {
     $config = $this->config('alshaya_loyalty.settings');
     $config->set('apcn_max_length', $form_state->getValue('max_length'));
     $config->set('apcn_value_starts_with', $form_state->getValue('value_starts_with'));
-    $config->set('enable_disable_loyality', $form_state->getValue('enable_disable_loyality'));
+    $config->set('enable_disable_loyalty', $form_state->getValue('enable_disable_loyalty'));
     $config->save();
 
     // Invalidate the cache tag.
-    $tags = ['loyality-on-off'];
+    $tags = ['loyalty-on-off'];
     Cache::invalidateTags($tags);
 
     return parent::submitForm($form, $form_state);
