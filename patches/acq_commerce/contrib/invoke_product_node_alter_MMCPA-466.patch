@@ -38,14 +38,14 @@ diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/
 index 9d2362a..4931fd1 100644
 --- a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
 +++ b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
-@@ -288,6 +288,9 @@ private function createDisplayNode(array $product)
+@@ -298,6 +298,9 @@ private function createDisplayNode(array $product)
 
      $node->setPublished(FALSE);
 
 +    // Invoke the alter hook to allow all modules to update the node.
 +    \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
 +
-     return($node);
+     return $node;
    }
 
 @@ -358,6 +361,10 @@ private function updateNodeCategories(array $nids, array $product)
