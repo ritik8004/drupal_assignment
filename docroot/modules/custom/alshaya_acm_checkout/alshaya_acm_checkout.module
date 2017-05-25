@@ -16,6 +16,7 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
   unset($definitions['shipping_information']);
   unset($definitions['review']);
   unset($definitions['completion_message']);
+  unset($definitions['payment_methods']);
 }
 
 /**

@@ -1,0 +1,39 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.shipping_method.field_shipping_method_code
+    - field.field.taxonomy_term.shipping_method.field_shipping_method_desc
+    - taxonomy.vocabulary.shipping_method
+  module:
+    - text
+id: taxonomy_term.shipping_method.default
+targetEntityType: taxonomy_term
+bundle: shipping_method
+mode: default
+content:
+  description:
+    label: hidden
+    type: text_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_shipping_method_code:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_shipping_method_desc:
+    weight: 3
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden:
+  langcode: true
