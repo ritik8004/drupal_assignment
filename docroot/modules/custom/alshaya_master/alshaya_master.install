@@ -219,6 +219,9 @@ function alshaya_master_install() {
     'Delivery address' => [
       'ar' => 'عنوان التوصيل',
     ],
+    'Delivery Address' => [
+      'ar' => 'عنوان التوصيل',
+    ],
     'Primary address' => [
       'ar' => 'عنوان التوصيل الأساسي',
     ],
@@ -584,6 +587,27 @@ function alshaya_master_install() {
     ],
     'Address Line 1' => [
       'ar' => 'العنوان الأول',
+    ],
+    'Change' => [
+      'ar' => 'تغيير',
+    ],
+    'Payment Options' => [
+      'ar' => 'خيارات الدفع',
+    ],
+    'Is the delivery address the same as your billing address?' => [
+      'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
+    ],
+    '<p>I confirm that I have read and accept the <a href="#">Privacy Policy</a> and <a href="#">Terms &amp; Conditions</a> of purchase. Read our <a href="#">Return Policy</a></p>' => [
+      'ar' => 'أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا',
+    ],
+    'Billing address' => [
+      'ar' => 'عنوان تحرير الفاتورة',
+    ],
+    'place order' => [
+      'ar' => 'سجل الطلبية',
+    ],
+    'Return to delivery options' => [
+      'ar' => 'العودة إلى خيارات التسليم',
     ],
   ];
   alshaya_i18n_save_translations($strings);
