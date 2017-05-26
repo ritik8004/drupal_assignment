@@ -9,6 +9,13 @@ use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Url;
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_seo_preprocess_html(&$variables) {
+  $variables['attributes']['gtm-currency'] = \Drupal::config('acq_commerce.currency')->get('currency_code');
+}
+
+/**
  * Implements hook_page_attachments().
  */
 function alshaya_seo_page_attachments(array &$attachments) {
@@ -69,6 +76,14 @@ function alshaya_seo_page_attachments(array &$attachments) {
 }
 
 /**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_seo_page_attachments_alter(&$page) {
+  // Attach the gtm library on every page.
+  $page['#attached']['library'][] = 'alshaya_seo/gtm';
+}
+
+/**
  * Implements hook_robotstxt().
  */
 function alshaya_seo_robotstxt() {
@@ -102,6 +117,21 @@ function alshaya_seo_simple_sitemap_links_alter(&$links) {
           $link['alternate_urls'][$hreflangcode] = $alternate_url;
         }
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_seo_preprocess_node(&$variables) {
+  if ($variables['view_mode'] == 'teaser' || $variables['view_mode'] == 'search_result') {
+    /** @var \Drupal\node\Entity\Node $entity */
+    $entity = $variables['node'];
+
+    if ($entity->bundle() == 'acq_product') {
+      \Drupal::moduleHandler()->loadInclude('alshaya_seo', 'inc', 'alshaya_seo.gtm');
+      $variables['gtm_attributes']['#markup'] = alshaya_seo_gtm_prepare_product_attributes_prepare_string(alshaya_seo_gtm_prepare_product_attributes($entity));
     }
   }
 }
