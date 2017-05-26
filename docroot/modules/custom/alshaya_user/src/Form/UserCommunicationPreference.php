@@ -100,7 +100,7 @@ class UserCommunicationPreference extends FormBase {
     $preference = $this->userData->get('user', $this->user_profile->id(), 'communication_preference');
 
     $form['communication_preference'] = [
-      '#type' => 'radios',
+      '#type' => 'checkboxes',
       '#title' => $this->t('Select your preferred communication channel'),
       '#options' => $options,
       '#default_value' => $preference ? $preference : 'email',
