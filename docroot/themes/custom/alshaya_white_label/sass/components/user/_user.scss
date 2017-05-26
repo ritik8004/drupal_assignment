@@ -35,6 +35,10 @@
   font-size: 12px;
   color: $greyish;
   margin-top: 1.5rem;
+
+  + .captcha-inline-error {
+    display: none;
+  }
 }
 
 .messages--error {
