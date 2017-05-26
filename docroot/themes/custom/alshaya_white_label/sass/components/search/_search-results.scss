@@ -469,3 +469,11 @@ header,
 .form-autocomplete.ui-autocomplete-loading {
   background-size: 2rem;
 }
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page {
+    .form-item-keywords {
+      float: $left;
+    }
+  }
+}
