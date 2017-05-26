@@ -15,7 +15,7 @@
     .field-suffix {
       position: absolute;
       top: 0.125rem;
-      right: 0;
+      #{$right}: 0;
       font-size: 0.8125rem;
       color: $greyish;
       font-weight: normal;
