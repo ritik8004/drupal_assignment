@@ -381,6 +381,90 @@ function alshaya_master_install() {
     'shop by' => [
       'ar' => 'التسوق حسب القسم',
     ],
+    'Basket (@count)' => [
+      'ar' => 'حقيبة التسوق (%count)',
+    ],
+    'Basket' => [
+      'ar' => 'حقيبة التسوق',
+    ],
+    'has been added to your cart.' => [
+      'ar' => 'تم إضافة القطعة/القطع إلى حقيبتك',
+    ],
+    'view cart' => [
+      'ar' => 'عرض العربة',
+    ],
+    'Some items in your basket are out of stock. Please remove them to proceed.' => [
+      'ar' => 'بعض القطع في حقيبة تسوقك نفذت من المخزون و تم إزالتها من حقيبة تسوقك',
+    ],
+    'Sub total' => [
+      'ar' => 'المبلغ',
+    ],
+    'Quantity' => [
+      'ar' => 'الكمية',
+    ],
+    'Product' => [
+      'ar' => 'المنتج',
+    ],
+    'Available delivery options' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Home delivery in @days days on orders over @amount' => [
+      'ar' => 'خدمة التوصيل للمنازل خلال @days أيام للطلبيات التي تزيد عن @amount د.ك.',
+    ],
+    'Collect the order in store from @days days' => [
+      'ar' => 'استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى @days أيام',
+    ],
+    'Home Delivery' => [
+      'ar' => 'خدمة التوصيل للمنزل',
+    ],
+    'Click and Collect' => [
+      'ar' => 'اختر واستلم',
+    ],
+    'checkout securely' => [
+      'ar' => 'إتمام عملية الشراء بأمان',
+    ],
+    'continue shopping' => [
+      'ar' => 'تابع التسوق',
+    ],
+    'Add a promo code' => [
+      'ar' => 'هل لديك رمز عرض ؟',
+    ],
+    'Enter a priviledge card number' => [
+      'ar' => 'رقم نادي الامتيازات',
+    ],
+    'Promotion code' => [
+      'ar' => 'شفرة الترقية',
+    ],
+    'apply' => [
+      'ar' => 'تطبيق',
+    ],
+    'Re-enter Privilege Card Number' => [
+      'ar' => 'يرجى إدخال رقم بطاقة نادي الامتيازات ثانيةً',
+    ],
+    'Your cart has been updated.' => [
+      'ar' => 'تم تحديث عربة التسوق',
+    ],
+    'Horizontal Recommendations' => [
+      'ar' => 'توصيات',
+    ],
+    'Loading ...' => [
+      'ar' => 'تحميل...',
+    ],
+    'Item %sku has been removed from cart.' => [
+      'ar' => 'تمت إزالة العنصر %sku من السلة.',
+    ],
+    'Your shopping basket is empty' => [
+      'ar' => 'حقيبة التسوق الخاصة بك فارغة',
+    ],
+    'Sorry, we now only have @quantity of these available and we have updated your basket.' => [
+      'ar' => 'عفوًا، تبقى لدينا فقط @quantity قطعة واحدة و لقد قمنا بتحديث حقيبة تسوقك ',
+    ],
+    'add to cart' => [
+      'ar' => 'أضف إلى السلة',
+    ],
+    '@name field is required.' => [
+      'ar' => '@name يرجى إدخال',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
