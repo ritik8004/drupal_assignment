@@ -229,6 +229,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
                 $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
               }
             }
+            // For some reason we don't have proper data for the option.
+            else {
+              $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
+            }
           }
         }
 
