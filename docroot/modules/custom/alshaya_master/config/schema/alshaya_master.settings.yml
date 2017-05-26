@@ -8,3 +8,6 @@ alshaya_master.theme.*:
     email_logo_url:
       type: string
       label: 'Email logo url'
+    maintenance_mode_rich_message:
+      type: text_format
+      label: 'Message to display when in maintenance mode'
