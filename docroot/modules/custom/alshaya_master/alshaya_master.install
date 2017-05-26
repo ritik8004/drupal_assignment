@@ -576,6 +576,15 @@ function alshaya_master_install() {
     'Choose delivery' => [
       'ar' => 'التأكيد',
     ],
+    'delivery information' => [
+      'ar' => 'معلومات التوصيل',
+    ],
+    'Email Address' => [
+      'ar' => 'عنوان البريد الإلكتروني',
+    ],
+    'Address Line 1' => [
+      'ar' => 'العنوان الأول',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
