@@ -1,0 +1,6 @@
+services:
+  alshaya_master.403_subscriber:
+    class: Drupal\alshaya_master\EventSubscriber\Alshaya403ExceptionSubscriber
+    arguments: ['@current_user']
+    tags:
+      - { name: event_subscriber }
