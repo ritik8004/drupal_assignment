@@ -492,6 +492,9 @@ function alshaya_master_install() {
     'Quantity: @product.ordered' => [
       'ar' => 'الكمية: @product.ordered',
     ],
+    'Item code: @product.sku' => [
+      'ar' => 'رمز القطعة: @product.sku',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
