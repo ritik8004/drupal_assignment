@@ -14,9 +14,18 @@
 
   main {
     margin-bottom: 3.2rem;
+    overflow: hidden;
 
     @include breakpoint($desktop) {
       margin-bottom: 8rem;
+    }
+  }
+
+  .current-view {
+    @include breakpoint($only-mobile) {
+      #views-exposed-form-stores-finder-page-1 {
+        display: none;
+      }
     }
   }
 
@@ -52,7 +61,7 @@
     #edit-actions {
       position: absolute;
       #{$right}: 2%;
-      top: 1.6rem;
+      top: 0.5rem;
 
       @include breakpoint($tablet) {
         #{$right}: 5%;
@@ -62,10 +71,6 @@
       @include breakpoint($desktop) {
         #{$right}: 3%;
         top: 1.6rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        top: 0.6rem;
       }
     }
   }
@@ -208,7 +213,7 @@
     padding: 0.85rem 0;
 
     @include breakpoint($desktop) {
-      padding: 1.625rem 0;
+      padding: 1.595rem 0;
     }
   }
 
@@ -216,7 +221,7 @@
     padding: 0.675rem 0;
 
     @include breakpoint($desktop) {
-      padding: 1.469rem 0;
+      padding: 1.47rem 0;
     }
   }
 
@@ -238,7 +243,10 @@
     padding-#{$right}: 2.125rem;
     font-size: 0.75rem;
     color: $grey-ash;
-    max-width: 23.125rem;
+
+    @include breakpoint($tablet) {
+      max-width: 23.125rem;
+    }
   }
 
   .view-display-id-page_3 {
@@ -260,10 +268,6 @@
 
     @include breakpoint($tablet) {
       padding-bottom: 3rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding-bottom: 6rem;
     }
 
     h3,
@@ -341,7 +345,11 @@
       font-weight: bold;
       display: block;
       color: $marine-blue;
-      padding: 0 3.25rem;
+      padding: 0 3.5rem;
+
+      @include breakpoint($tablet) {
+        padding: 0 3.25rem;
+      }
     }
 
     .views-field-field-store-address {
@@ -349,12 +357,25 @@
       padding-bottom: 1.5rem;
 
       .field-content {
-        padding: 0 3.25rem;
+        padding: 0 3.5rem;
+
+        @include breakpoint($tablet) {
+          padding: 0 3.25rem;
+          padding-#{$right}: 2.5rem;
+        }
       }
     }
 
     .open--hours {
-      margin-top: 0.9rem;
+      margin-top: 1rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 0.9rem;
+      }
+
+      div {
+        margin-bottom: 0.0625rem;
+      }
     }
 
     .views-field-field-store-open-hours {
@@ -362,7 +383,12 @@
       .view-on--map,
       .get--directions {
         border-bottom: 1px solid $white;
-        padding: 1rem 1rem 1rem 3.25rem;
+        padding: 1rem;
+        padding-#{$left}: 3.5rem;
+
+        @include breakpoint($tablet) {
+          padding-#{$left}: 3.25rem;
+        }
       }
 
       a {
@@ -433,8 +459,11 @@
     }
   }
 
-  .view-display-id-page_1 {
-    margin-top: 1.5rem;
+  .view-display-id-page_1,
+  .view-display-id-page_2 {
+    @include breakpoint($tablet) {
+      margin-top: 1.5rem;
+    }
   }
 
   @include breakpoint($only-mobile) {
@@ -536,12 +565,15 @@
       width: 50%;
       float: $left;
 
-      &:first-child {
+      &:nth-child(odd) {
         border-#{$right}: 1px solid $white;
+        clear: both;
       }
 
-      &:last-child {
+      &:nth-child(even) {
         padding-#{$left}: 1.5625rem;
+        border-#{$left}: 1px solid $white;
+        margin-#{$left}: -1px;
       }
     }
 
@@ -591,27 +623,31 @@
     }
 
     .attachment-after {
-      width: 71%;
+      width: 72.5%;
       vertical-align: top;
 
       @include breakpoint($only-tablet) {
-        max-width: 66%;
+        width: 61.5%;
       }
     }
 
     .view-display-id-page_1 > .view-content {
-      max-width: 27%;
       display: inline-block;
       max-height: 51rem;
       overflow-y: scroll;
-      border-#{$right}: 1px solid $white;
       vertical-align: top;
-      margin-#{$right}: 0.6875rem;
-      padding-#{$right}: 0.6875rem;
+      max-width: 26.5%;
+      margin-#{$right}: 1%;
       float: $left;
 
+      @include breakpoint($desktop) {
+        border-#{$right}: 1px solid $white;
+        padding-right: 1%;
+      }
+
       @include breakpoint($only-tablet) {
-        max-width: 32%;
+        max-width: 35.8%;
+        margin-#{$right}: 2.7%;
       }
     }
   }
@@ -664,7 +700,7 @@
     .by--alphabet {
       width: 49%;
 
-      &:last-child {
+      &:nth-child(even) {
         padding-#{$left}: 4.5625rem;
       }
     }
@@ -786,15 +822,18 @@
 //Individual store theming
 .individual--store {
   .view-content {
-    max-width: 27%;
+    max-width: 35.8%;
     display: inline-block;
     max-height: 51rem;
     overflow-y: scroll;
-    border-#{$right}: 1px solid $white;
     vertical-align: top;
-    margin-#{$right}: 0.6875rem;
-    padding-#{$right}: 0.6875rem;
+    margin-#{$right}: 2.7%;
     float: $left;
+
+    @include breakpoint($desktop) {
+      max-width: 25.5%;
+      margin-#{$right}: 2%;
+    }
 
     @include breakpoint($only-mobile) {
       border-#{$right}: 0;
@@ -827,8 +866,12 @@
 
   .map--store {
     float: $left;
-    width: 71%;
+    width: 61.5%;
     vertical-align: top;
+
+    @include breakpoint($desktop) {
+      width: 72.5%;
+    }
 
     @include breakpoint($only-mobile) {
       display: none;
