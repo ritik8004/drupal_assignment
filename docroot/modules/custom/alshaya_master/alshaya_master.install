@@ -423,6 +423,9 @@ function alshaya_master_install() {
     'Click and Collect' => [
       'ar' => 'اختر واستلم',
     ],
+    'Click & Collect' => [
+      'ar' => 'اختر واستلم',
+    ],
     'checkout securely' => [
       'ar' => 'إتمام عملية الشراء بأمان',
     ],
@@ -536,6 +539,42 @@ function alshaya_master_install() {
     ],
     'Related' => [
       'ar' => 'ذات صلة',
+    ],
+    'secure checkout' => [
+      'ar' => 'إتمام عملية الشراء بأمان',
+    ],
+    'Secure Checkout' => [
+      'ar' => 'إتمام عملية الشراء بأمان',
+    ],
+    'Order Summary' => [
+      'ar' => 'ملخص الطلبية',
+    ],
+    'Items in your basket' => [
+      'ar' => 'القطع في حقيبة تسوقك',
+    ],
+    'Before Delivery' => [
+      'ar' => 'قبل التوصيل',
+    ],
+    'Make payment' => [
+      'ar' => 'الدفع',
+    ],
+    'Order confirmation' => [
+      'ar' => 'تأكيد الطلبية',
+    ],
+    'Home delivery' => [
+      'ar' => 'خدمة التوصيل للمنزل',
+    ],
+    'deliver to this address' => [
+      'ar' => 'توصيل إلى هذا العنوان',
+    ],
+    'proceed to payment' => [
+      'ar' => 'تابع للدفع',
+    ],
+    'Back to basket' => [
+      'ar' => 'العودة إلى حقيبة التسوق',
+    ],
+    'Choose delivery' => [
+      'ar' => 'التأكيد',
     ],
   ];
   alshaya_i18n_save_translations($strings);
