@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Ajax\InvokeCommand;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -111,7 +112,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       // Add remove link as suffix of quantity.
       $remove_url = Url::fromUserInput('/cart/remove/' . $id);
-      $form['cart'][$id]['quantity']['#suffix'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div id="stock-error-' . $id . '"></div>';
+      $form['cart'][$id]['quantity']['#prefix'] = '<div class="select-quantity-' . str_replace(' ', '-', $id) . '">';
+      $form['cart'][$id]['quantity']['#suffix'] = '</div>' . Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div class="inline-stock-error" id="stock-error-' . str_replace(' ', '-', $id) . '"></div>';
 
       // Load the first image.
       $sku_image = alshaya_acm_get_product_display_image($id, '137x144');
@@ -193,7 +195,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // If item is not available in stock.
       if (!alshaya_acm_is_product_in_stock($id)) {
         // Basket out of stock error.
-        $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
+        $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
         $form['cart'][$id]['#attributes']['class'][] = 'sku-out-stock';
         $secure_checkout_access = FALSE;
       }
@@ -334,7 +336,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
 
   // If sku not available in stock.
   if (!alshaya_acm_is_product_in_stock($sku)) {
-    $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
+    $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
     // If out of stock, remove/hide the secure checkout button.
     $form['actions']['checkout']['#access'] = FALSE;
     $form['actions']['continue_shopping_mobile']['#access'] = FALSE;
@@ -380,8 +382,8 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $cart_total));
   $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
-
-  $response->addCommand(new ReplaceCommand('#stock-error-' . $sku, $error_message));
+  $response->addCommand(new InvokeCommand('.select-quantity-' . str_replace(' ', '-', $sku), 'addClass', ['stock-quantity-error']));
+  $response->addCommand(new HtmlCommand('#stock-error-' . str_replace(' ', '-', $sku), $error_message));
 
   return $response;
 }
