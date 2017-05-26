@@ -495,6 +495,48 @@ function alshaya_master_install() {
     'Item code: @product.sku' => [
       'ar' => 'رمز القطعة: @product.sku',
     ],
+    'Item Code' => [
+      'ar' => 'رمز القطعة',
+    ],
+    'Product Description' => [
+      'ar' => 'وصف المنتج',
+    ],
+    'Read more' => [
+      'ar' => 'اقرأ المزيد',
+    ],
+    'Delivery Options' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Standard delivery' => [
+      'ar' => 'التوصيل العادي',
+    ],
+    'FREE' => [
+      'ar' => 'مجاناً',
+    ],
+    'Next day delivery' => [
+      'ar' => 'خدمة التوصيل في اليوم التالي',
+    ],
+    'All orders' => [
+      'ar' => 'كل الطلبيات',
+    ],
+    'Enter your area' => [
+      'ar' => 'إدخال المنطقة',
+    ],
+    'Search Stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Hover over image to zoom' => [
+      'ar' => 'حرك مؤشر الماوس فوق الصورة للتكبير',
+    ],
+    'Horizontal Cross Sell' => [
+      'ar' => 'الأفقي الصليب بيع',
+    ],
+    'Horizontal up Sell' => [
+      'ar' => 'أفقي حتى بيع',
+    ],
+    'Related' => [
+      'ar' => 'ذات صلة',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
