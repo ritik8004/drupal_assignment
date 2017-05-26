@@ -153,6 +153,9 @@ function alshaya_master_install() {
     'Unit Price' => [
       'ar' => 'سعر القطعة',
     ],
+    'Unit price' => [
+      'ar' => 'سعر القطعة',
+    ],
     'Item code' => [
       'ar' => 'رمز القطعة',
     ],
@@ -382,7 +385,7 @@ function alshaya_master_install() {
       'ar' => 'التسوق حسب القسم',
     ],
     'Basket (@count)' => [
-      'ar' => 'حقيبة التسوق (%count)',
+      'ar' => 'حقيبة التسوق (@count)',
     ],
     'Basket' => [
       'ar' => 'حقيبة التسوق',
@@ -464,6 +467,30 @@ function alshaya_master_install() {
     ],
     '@name field is required.' => [
       'ar' => '@name يرجى إدخال',
+    ],
+    'Order Total <span>(Before Delivery)</span>' => [
+      'ar' => 'المبلغ الإجمالي للطلبية <span>(قبل التوصيل)</span>',
+    ],
+    'Basket (%count)' => [
+      'ar' => 'حقيبة التسوق (%count)',
+    ],
+    'print' => [
+      'ar' => 'طباعة',
+    ],
+    'Payment method' => [
+      'ar' => 'طريقة الدفع',
+    ],
+    'Delivery method' => [
+      'ar' => 'طريقة التوصيل',
+    ],
+    'Shipping & Billing Address' => [
+      'ar' => 'عنوان اتوصيل و عنوان تحرير الفاتورة',
+    ],
+    'Delivery charge' => [
+      'ar' => 'رسوم التوصيل',
+    ],
+    'Quantity: @product.ordered' => [
+      'ar' => 'الكمية: @product.ordered',
     ],
   ];
   alshaya_i18n_save_translations($strings);
