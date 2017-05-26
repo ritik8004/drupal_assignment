@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a single Drupal page while offline.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_page__404()
+ *
+ * @ingroup themeable
+ */
+#}
+<div>
+    {% if message_404 is not empty %}
+        {{ message_404|raw }}
+    {% endif %}
+    {% if image_404 is not empty %}
+        {{ image_404 }}
+    {% endif %}
+</div>

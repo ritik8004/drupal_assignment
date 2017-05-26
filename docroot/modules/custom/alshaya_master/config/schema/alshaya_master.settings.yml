@@ -11,3 +11,6 @@ alshaya_master.theme.*:
     maintenance_mode_rich_message:
       type: text_format
       label: 'Message to display when in maintenance mode'
+    404_message:
+      type: text_format
+      label: '404 Text'

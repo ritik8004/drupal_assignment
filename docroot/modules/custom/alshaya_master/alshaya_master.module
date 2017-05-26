@@ -50,7 +50,7 @@ function alshaya_master_form_system_site_maintenance_mode_alter(&$form, FormStat
   $form['maintenance_mode_image'] = [
     '#type' => 'managed_file',
     '#title' => t('Upload image'),
-    '#upload_location' => 'public://',
+    '#upload_location' => 'public://maintenance_mode_image/',
     '#default_value' => $default_file,
     '#upload_validators'  => [
       'file_validate_extensions' => ['png gif jpg jpeg apng svg'],

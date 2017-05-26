@@ -3,3 +3,6 @@ email_logo:
 maintenance_mode_rich_message:
   value: ''
   format: rich_text
+404_message:
+  value: ''
+  format: rich_text

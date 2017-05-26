@@ -431,6 +431,14 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
+  // For 404 page.
+  $http_error_suggestions = [
+    'system.404' => 'page__404',
+  ];
+  if (isset($http_error_suggestions[$routmatch->getRouteName()])) {
+    $suggestions[] = 'page__404';
+  }
+
   // Check if we are on node page.
   if ($routmatch->getRouteName() == 'entity.node.canonical') {
     $node = Drupal::request()->attributes->get('node');
@@ -652,6 +660,27 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
   if (!empty($image)) {
     if ($file = file_load($image)) {
       $variables['maintenance_image'] = [
+        '#theme' => 'image_style',
+        '#style_name' => '1284x424',
+        '#uri' => $file->getFileUri(),
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page__404().
+ */
+function alshaya_white_label_preprocess_page__404(&$variables) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $config = \Drupal::config('alshaya_master.settings');
+  $maintenance_text = $config->get('404_message');
+  $image = $config->get('404_image.' . $langcode);
+  $variables['message_404'] = $maintenance_text;
+  $variables['image_404'] = '';
+  if (!empty($image)) {
+    if ($file = file_load($image)) {
+      $variables['image_404'] = [
         '#theme' => 'image_style',
         '#style_name' => '1284x424',
         '#uri' => $file->getFileUri(),
