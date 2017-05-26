@@ -450,13 +450,17 @@
       }
 
       button[type="submit"] {
-        font-family: $alshaya-bold;
+        font-family: $arial;
+        font-weight: bold;
+        font-size: 12px;
         background: $pumpkin-orange;
         border-radius: 0;
         color: $white-five;
         border: 0;
         float: left;
         text-transform: lowercase;
+        padding: 0.66rem 1.3701rem;
+        position: relative;
       }
     }
   }
