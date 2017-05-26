@@ -23,8 +23,10 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
   translation:
     weight: 10
+    region: content
 hidden:
   created: true
   status: true

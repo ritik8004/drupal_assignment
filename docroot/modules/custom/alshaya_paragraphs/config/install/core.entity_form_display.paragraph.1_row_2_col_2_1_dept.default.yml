@@ -24,6 +24,7 @@ content:
       default_paragraph_type: ''
     third_party_settings: {  }
     type: entity_reference_paragraphs
+    region: content
   field_1_row_2_col_2:
     weight: 6
     settings:
@@ -35,8 +36,10 @@ content:
       default_paragraph_type: promo_block
     third_party_settings: {  }
     type: entity_reference_paragraphs
+    region: content
   translation:
     weight: 10
+    region: content
 hidden:
   created: true
   status: true
