@@ -435,6 +435,9 @@ function alshaya_master_install() {
     'continue shopping' => [
       'ar' => 'تابع التسوق',
     ],
+    'Continue shopping' => [
+      'ar' => 'تابع التسوق',
+    ],
     'Add a promo code' => [
       'ar' => 'هل لديك رمز عرض ؟',
     ],
@@ -608,6 +611,33 @@ function alshaya_master_install() {
     ],
     'Return to delivery options' => [
       'ar' => 'العودة إلى خيارات التسليم',
+    ],
+    '<p>Thank you for shopping online with us, <strong class="dark--text">@account.first_name @account.last_name</strong></p>' => [
+      'ar' => '<p>شكراً لتسوقكم معنا عبز الموقع، <strong class="dark--text">@account.first_name @account.last_name</strong></p>',
+    ],
+    '<p>You’ll receive an email addressed to <strong class="dark--text">@account.mail</strong> conﬁrming your order</p>' => [
+      'ar' => '<p>ستصلك رسالة تأكيد لطلبيتك بعد قليل على <strong class="dark--text">@account.mail</strong>.</p>',
+    ],
+    'print confirmation' => [
+      'ar' => 'اطبع التأكيد',
+    ],
+    'Your order number is <strong>@order.orderId</strong>' => [
+      'ar' => 'رقم طلبيتك هو: <strong>@order.orderId</strong>',
+    ],
+    'order details' => [
+      'ar' => 'تفاصيل الطلبية',
+    ],
+    'Product details (@products_count)' => [
+      'ar' => 'تفاصيل المنتج (@products_count)',
+    ],
+    'Your account' => [
+      'ar' => 'الحساب الخاص بك',
+    ],
+    'Save your details to make shopping easier next time' => [
+      'ar' => 'احفظ التفاصيل الخاصة بك لتسهيل تسوقك المرة القادمة',
+    ],
+    'save' => [
+      'ar' => 'وفر',
     ],
   ];
   alshaya_i18n_save_translations($strings);
