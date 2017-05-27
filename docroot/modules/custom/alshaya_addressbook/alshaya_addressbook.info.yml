@@ -5,6 +5,7 @@ dependencies:
   - address
   - block
   - field
+  - mobile_number
   - profile
   - system
   - telephone
