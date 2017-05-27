@@ -3,3 +3,7 @@ services:
     class: Drupal\alshaya_addressbook\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+  alshaya_addressbook.route_subscriber:
+    class: Drupal\alshaya_addressbook\EventSubscriber\AddressFormatSubscriber
+    tags:
+      - { name: event_subscriber }

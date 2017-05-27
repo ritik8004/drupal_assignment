@@ -169,7 +169,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
 
   if ($profile) {
     $values = $profile->get('field_address')->getValue();
-    $telephone = $profile->get('field_telephone')->getValue();
+    $telephone = $profile->get('field_mobile_number')->getValue();
     $variables['delivery_to'] = '';
     $variables['delivery_address'] = '';
     $variables['contact_no'] = '';

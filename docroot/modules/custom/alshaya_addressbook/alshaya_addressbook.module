@@ -48,6 +48,9 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
 
   // Set the default country.
   $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = $default_site_country;
+
+  // Alter the profile add form.
+  _alshaya_addressbook_form_alter($form, $form_state);
 }
 
 /**
@@ -127,6 +130,9 @@ function alshaya_addressbook_form_profile_address_book_edit_form_alter(array &$f
     'callback' => 'alshaya_addressbook_save_ajax_callback',
     'wrapper' => 'address-book-form-open',
   ];
+
+  // Alter the profile edit form.
+  _alshaya_addressbook_form_alter($form, $form_state);
 }
 
 /**
@@ -176,4 +182,65 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
 
   // Save the translation.
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Altering the address book form.
+ */
+function _alshaya_addressbook_form_alter(&$form, FormStateInterface $form_state) {
+  // Get site level country code.
+  $default_site_country = _alshaya_custom_get_site_level_country_code();
+
+  // If default country is 'KW'.
+  if ($default_site_country == 'KW') {
+    $form['field_address']['widget'][0]['address']['#after_build'][] = '_alshaya_address_book_after_build';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_addressbook_form_profile_address_book_form_alter(&$form, FormStateInterface $form_state) {
+  // Alter the profile form if embed somewhere.
+  _alshaya_addressbook_form_alter($form, $form_state);
+}
+
+/**
+ * After build for the address book add/edit form.
+ */
+function _alshaya_address_book_after_build($element, FormStateInterface $form_state) {
+  $element['locality']['#title'] = t('Emirate/city');
+  $element['administrative_area']['#title'] = t('Area');
+  $element['administrative_area']['#theme'] = 'select';
+  $element['administrative_area']['#type'] = 'select';
+  $element['administrative_area']['#options'] = ['' => t('Select Area')] + _alshaya_addressbook_area_list();
+  $element['address_line1']['#title'] = t('Street name/number');
+  $element['dependent_locality']['#title'] = t('Building name/number');
+  $element['organization']['#title'] = t('Block');
+  $element['address_line2']['#title'] = t('Floor (optional)');
+  $element['address_line2']['#title_display'] = 'before';
+  return $element;
+}
+
+/**
+ * Returns list of areas for a given country.
+ *
+ * @param string $country_code
+ *   The country code.
+ *
+ * @return array
+ *   List or areas.
+ */
+function _alshaya_addressbook_area_list($country_code = 'KW') {
+  $term_tree = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree('area_list', 0, NULL, TRUE);
+  $area_list = [];
+  if (!empty($term_tree)) {
+    /* \Drupal\taxonomy\Entity\Term $term */
+    foreach ($term_tree as $term) {
+      $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+      $area_list[$term->id()] = $term->getName();
+    }
+  }
+
+  return $area_list;
 }
