@@ -1,0 +1,11 @@
+<input{{ attributes }} />{{ children }}
+
+<div class="address-area-datalist">
+    {% if data_list_items is not empty %}
+        <datalist id="{{ attributes.list }}">
+            {% for item in data_list_items %}
+                <option>{{ item }}</option>
+            {% endfor %}
+        </datalist>
+    {% endif %}
+</div>
