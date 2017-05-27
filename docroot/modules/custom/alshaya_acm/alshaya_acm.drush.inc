@@ -25,12 +25,7 @@ function alshaya_acm_drush_command() {
     ],
   ];
 
-  $commands['alshaya-acm-translation-sync'] = [
-    'description' => 'Imports translaton from the codebase.',
-    'aliases'     => ['aats'],
-  ];
-
-  return($commands);
+  return $commands;
 }
 
 /**
@@ -93,16 +88,6 @@ function drush_alshaya_acm_offline_products_sync() {
     // Process chunk.
     $resource->post($products);
   }
-
-  drush_print(dt('Done.'));
-}
-
-/**
- * Implements drush translation sync command.
- */
-function drush_alshaya_acm_translation_sync() {
-  drush_print(dt('Synchronizing translations, please wait...'));
-  alshaya_contact_translations();
 
   drush_print(dt('Done.'));
 }
