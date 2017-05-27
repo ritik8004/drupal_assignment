@@ -4,6 +4,7 @@ namespace Drupal\alshaya_addressbook\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\address\Event\AddressFormatEvent;
+use Drupal\address\Event\AddressEvents;
 
 /**
  * Class AddressFormatSubscriber.
