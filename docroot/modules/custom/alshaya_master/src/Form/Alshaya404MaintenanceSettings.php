@@ -23,7 +23,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_master.settings'];
+    return ['alshaya_master.maintenanace_404_settings'];
   }
 
   /**
@@ -31,7 +31,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-    $config = $this->config('alshaya_master.settings');
+    $config = $this->config('alshaya_master.maintenanace_404_settings');
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
     $form['404_container'] = [
@@ -42,7 +42,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => $this->t('404 Text'),
-      '#default_value' => $config->get('404_message'),
+      '#default_value' => $config->get('404_message.value'),
     ];
 
     $default_404_file = !empty($config->get('404_image.' . $langcode)) ? [$config->get('404_image.' . $langcode)] : [];
@@ -64,7 +64,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => t('Message to display when in maintenance mode'),
-      '#default_value' => $config->get('maintenance_mode_rich_message'),
+      '#default_value' => $config->get('maintenance_mode_rich_message.value'),
     ];
 
     $default_maintenanace_file = !empty($config->get('maintenance_mode_image.' . $langcode)) ? [$config->get('maintenance_mode_image.' . $langcode)] : [];
@@ -84,7 +84,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_master.settings');
+    $config = $this->config('alshaya_master.maintenanace_404_settings');
 
     $values = $form_state->getValues();
     $fid_404 = '';
@@ -118,9 +118,9 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
 
     // Get current langcode.
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $config->set('404_message', $values['404_message']['value']);
+    $config->set('404_message', $values['404_message']);
     $config->set('404_image.' . $langcode, $fid_404);
-    $config->set('maintenance_mode_rich_message', $values['maintenance_mode_rich_message']['value']);
+    $config->set('maintenance_mode_rich_message', $values['maintenance_mode_rich_message']);
     $config->set('maintenance_mode_image.' . $langcode, $fid_maintenance);
     $config->save();
 
