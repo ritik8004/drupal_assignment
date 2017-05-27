@@ -2,4 +2,742 @@ size_guide_link: 0
 langcode: en
 size_guide_modal_content:
   format: rich_text
-  value: ''
+  value: '<div class="modal-body">
+          <h6>Please select the category you require</h6>
+          <div class="top-size-image">
+          <div style="width: 33%; float: left;"><a href="#content-maternity"><img src="http://www.mothercare.com.kw/media/wysiwyg/size_guide/size_guide_1.jpg" alt=""></a></div>
+          <div style="width: 33%; float: left;"><a href="#content-baby"><img src="http://www.mothercare.com.kw/media/wysiwyg/size_guide/size_guide_2.jpg" alt=""></a></div>
+          <div style="width: 33%; float: left;"><a href="#content-footwear"><img src="http://www.mothercare.com.kw/media/wysiwyg/size_guide/size_guide_3.jpg" alt=""></a></div>
+          <div class="clearfix">&nbsp;</div>
+          </div>
+          <div class="size-guide-pop-up">
+          <div class="size-category">
+          <div class="clearfix">&nbsp;</div>
+          <p>&nbsp;</p>
+          <h6 id="content-maternity">Maternity size guide</h6>
+          <p>We understand that bumps come in all shapes and sizes and want to help you get the best fit possible so you look great and feel great throughout this exciting time. Take a look at our guide below for help with getting the perfect fit.</p>
+          <div class="size-image-section"><img src="http://www.mothercare.com.kw/media/wysiwyg/size_guide/women-size.jpg" alt=""></div>
+          <div class="size-content-section">
+          <h5>Clothing (all measurements are in centimeters)</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="7">Size conversion</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Size conversion</th>
+          <td colspan="2">S</td>
+          <td colspan="2">M</td>
+          <td colspan="2">L</td>
+          <td>XL</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Russian size</td>
+          </tr>
+          <tr><th>Russian size</th>
+          <td>42-44</td>
+          <td>44-46</td>
+          <td>46-48</td>
+          <td>48-50</td>
+          <td>50-52</td>
+          <td>52-54</td>
+          <td>54-56</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">UK size</td>
+          </tr>
+          <tr><th>UK size</th>
+          <td>8</td>
+          <td>10</td>
+          <td>12</td>
+          <td>14</td>
+          <td>16</td>
+          <td>18</td>
+          <td>20</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">European size</td>
+          </tr>
+          <tr><th>European size</th>
+          <td>36</td>
+          <td>38</td>
+          <td>40</td>
+          <td>42</td>
+          <td>44</td>
+          <td>46</td>
+          <td>48</td>
+          </tr>
+          </tbody>
+          </table>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="7">Bust size</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Bust size</th>
+          <td colspan="2">86 - 91</td>
+          <td colspan="2">96 - 101</td>
+          <td colspan="2">106 - 113</td>
+          <td>111 - 116</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Full bust (pre pregnancy)</td>
+          </tr>
+          <tr><th>Full bust (pre pregnancy)</th>
+          <td>82</td>
+          <td>87</td>
+          <td>92</td>
+          <td>97</td>
+          <td>102</td>
+          <td>107</td>
+          <td>12</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Full bust</td>
+          </tr>
+          <tr><th>Full bust</th>
+          <td>86</td>
+          <td>91</td>
+          <td>96</td>
+          <td>101</td>
+          <td>106</td>
+          <td>111</td>
+          <td>116</td>
+          </tr>
+          </tbody>
+          </table>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="7">Hip size</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Hip size</th>
+          <td colspan="2">93 - 98</td>
+          <td colspan="2">103 - 108</td>
+          <td colspan="2">113 - 118</td>
+          <td>11 - 123</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Waist (pre pregnancy)</td>
+          </tr>
+          <tr><th>Waist (pre pregnancy)</th>
+          <td>64.5</td>
+          <td>69.5</td>
+          <td>74.5</td>
+          <td>79.5</td>
+          <td>84.5</td>
+          <td>89.5</td>
+          <td>94.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Bump <br> (early stages - 3rd trimester)</td>
+          </tr>
+          <tr><th>Bump <br> (early stages - 3rd trimester)</th>
+          <td>87 - 96</td>
+          <td>92 - 101</td>
+          <td>97 -106</td>
+          <td>102 - 111</td>
+          <td>107 - 116</td>
+          <td>112 - 121</td>
+          <td>117 - 126</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Low hip (pre pregnancy)</td>
+          </tr>
+          <tr><th>Low hip (pre pregnancy)</th>
+          <td>89</td>
+          <td>94</td>
+          <td>99</td>
+          <td>104</td>
+          <td>109</td>
+          <td>117</td>
+          <td>119</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Low hip</td>
+          </tr>
+          <tr><th>Low hip</th>
+          <td>93</td>
+          <td>98</td>
+          <td>103</td>
+          <td>108</td>
+          <td>113</td>
+          <td>118</td>
+          <td>123</td>
+          </tr>
+          </tbody>
+          </table>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="7">Thigh</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Thigh</th>
+          <td>52</td>
+          <td>55</td>
+          <td>57.5</td>
+          <td>61</td>
+          <td>64</td>
+          <td>67</td>
+          <td>70</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Inside leg (petite)</td>
+          </tr>
+          <tr><th>Inside leg (petite)</th>
+          <td>74</td>
+          <td>74</td>
+          <td>74</td>
+          <td>74</td>
+          <td>74</td>
+          <td>74</td>
+          <td>74</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Inside leg (standard)</td>
+          </tr>
+          <tr><th>Inside leg (standard)</th>
+          <td>79</td>
+          <td>79</td>
+          <td>79</td>
+          <td>79</td>
+          <td>79</td>
+          <td>79</td>
+          <td>79</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">Inside leg (longer length)</td>
+          </tr>
+          <tr><th>Inside leg (longer length)</th>
+          <td>84</td>
+          <td>84</td>
+          <td>84</td>
+          <td>84</td>
+          <td>84</td>
+          <td>84</td>
+          <td>84</td>
+          </tr>
+          </tbody>
+          </table>
+          <h5>Bra Band</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="7">cm</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">cm</th>
+          <td>70</td>
+          <td>75</td>
+          <td>80</td>
+          <td>85</td>
+          <td>90</td>
+          <td>95</td>
+          <td>100</td>
+          </tr>
+          </tbody>
+          </table>
+          <h5>Cup size</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="7">Size</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Size</th>
+          <td>A</td>
+          <td>B</td>
+          <td>C</td>
+          <td>D</td>
+          <td>E</td>
+          <td>F</td>
+          <td>G</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="7">cm</td>
+          </tr>
+          <tr><th>cm</th>
+          <td>10 - 12</td>
+          <td>13 - 15</td>
+          <td>15 - 17</td>
+          <td>18 - 20</td>
+          <td>20 - 22</td>
+          <td>23 - 25</td>
+          <td>26 - 28</td>
+          </tr>
+          </tbody>
+          </table>
+          <h5>Hosiery sizing</h5>
+          <h5>UK &amp; EUR Skirt size / Hip m/ments</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="4">Height</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head no-border">Height</th>
+          <td>Size 8-10 (36-38)</td>
+          <td>Size 12-14 (40-42)</td>
+          <td>Size 16-18 (44-46)</td>
+          <td>Size 20+ (48+)</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head no-border">&nbsp;</th>
+          <td>88 - 92 cms</td>
+          <td>96 - 101 cms</td>
+          <td>106 - 111 cms</td>
+          <td>117 - 123 cms</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">150 - 160cms</td>
+          </tr>
+          <tr><th>150 - 160cms</th>
+          <td>S</td>
+          <td>M</td>
+          <td>M</td>
+          <td>L</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">163 - 170cms</td>
+          </tr>
+          <tr><th>163 - 170cms</th>
+          <td>M</td>
+          <td>M</td>
+          <td>L</td>
+          <td>XL</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">173 - 178cms</td>
+          </tr>
+          <tr><th>173 - 178cms</th>
+          <td>M</td>
+          <td>L</td>
+          <td>L</td>
+          <td>XL</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">178 - 183cms</td>
+          </tr>
+          <tr><th>178 - 183cms</th>
+          <td>L</td>
+          <td>L</td>
+          <td>XL</td>
+          <td>XL</td>
+          </tr>
+          </tbody>
+          </table>
+          </div>
+          <div class="clearfix">&nbsp;</div>
+          <h6 id="content-baby">Clothing size guide</h6>
+          <p>We’ve made it as easy as ABC to get the perfect fit for your precious little ones. Follow our guide below for great results every time.</p>
+          <div class="size-image-section"><img src="http://www.mothercare.com.kw/media/wysiwyg/size_guide/baby-size.jpg" alt=""></div>
+          <div class="size-content-section">
+          <h5>Baby &amp; Toddler (boys/girls)</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="5">Age</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Age</th>
+          <td>Height (cm)</td>
+          <td>Weight (kg)</td>
+          <td>Chest (cm)</td>
+          <td>Waist (cm)</td>
+          <td>Hips (cm)</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="5">Newborn</td>
+          </tr>
+          <tr><th>Newborn</th>
+          <td>56</td>
+          <td>4.5</td>
+          <td>NA</td>
+          <td>NA</td>
+          <td>NA</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="5">0-3 months</td>
+          </tr>
+          <tr><th>0-3 months</th>
+          <td>62</td>
+          <td>6.5</td>
+          <td>NA</td>
+          <td>NA</td>
+          <td>NA</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="5">3-6 months</td>
+          </tr>
+          <tr><th>3-6 months</th>
+          <td>68</td>
+          <td>8</td>
+          <td>42.25</td>
+          <td>47</td>
+          <td>47</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="5">6-9 months</td>
+          </tr>
+          <tr><th>6-9 months</th>
+          <td>74</td>
+          <td>9</td>
+          <td>47.5</td>
+          <td>49</td>
+          <td>49</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="5">9-12 months</td>
+          </tr>
+          <tr><th>9-12 months</th>
+          <td>80</td>
+          <td>10</td>
+          <td>49</td>
+          <td>51.5</td>
+          <td>51.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="5">12-18 months</td>
+          </tr>
+          <tr><th>12-18 months</th>
+          <td>86</td>
+          <td>NA</td>
+          <td>50.5</td>
+          <td>54</td>
+          <td>54</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="5">1.5-2 years</td>
+          </tr>
+          <tr><th>1.5-2 years</th>
+          <td>92</td>
+          <td>NA</td>
+          <td>53</td>
+          <td>56</td>
+          <td>56</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="5">2-3 years</td>
+          </tr>
+          <tr><th>2-3 years</th>
+          <td>98</td>
+          <td>NA</td>
+          <td>55.5</td>
+          <td>58</td>
+          <td>58</td>
+          </tr>
+          </tbody>
+          </table>
+          <h5>Kids (boys/girls)</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="4">Age</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Age</th>
+          <td>Height (cm)</td>
+          <td>Chest (cm)</td>
+          <td>Waist (cm)</td>
+          <td>Hips (cm)</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">3-4 years</td>
+          </tr>
+          <tr><th>3-4 years</th>
+          <td>104</td>
+          <td>57</td>
+          <td>54</td>
+          <td>60</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">4-5 years</td>
+          </tr>
+          <tr><th>4-5 years</th>
+          <td>110</td>
+          <td>58.5</td>
+          <td>54.5</td>
+          <td>62.25</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th></tr>
+          <tr><th>5-6 years</th>
+          <td>116</td>
+          <td>60</td>
+          <td>55</td>
+          <td>64.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">6-7 years</td>
+          </tr>
+          <tr><th>6-7 years</th>
+          <td>122</td>
+          <td>62.25</td>
+          <td>57</td>
+          <td>67.25</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">7-8 years</td>
+          </tr>
+          <tr><th>7-8 years</th>
+          <td>128</td>
+          <td>64.5</td>
+          <td>59</td>
+          <td>70</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">8-9 years</td>
+          </tr>
+          <tr><th>8-9 years</th>
+          <td>134</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="4">9-10 years</td>
+          </tr>
+          <tr><th>9-10 years</th>
+          <td>140</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          </tr>
+          </tbody>
+          </table>
+          <h5>Premature/Newborn(boys/girls)</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="2">Size</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Size</th>
+          <td>Height (cm)</td>
+          <td>Weight (kg)</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="2">Early baby</td>
+          </tr>
+          <tr><th>Early baby</th>
+          <td>n/a</td>
+          <td>2.3/5.0</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="2">Tiny baby</td>
+          </tr>
+          <tr><th>Tiny baby</th>
+          <td>50</td>
+          <td>3.4/7.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="2">Newborn</td>
+          </tr>
+          <tr><th>Newborn</th>
+          <td>56</td>
+          <td>4.5/10.0</td>
+          </tr>
+          </tbody>
+          </table>
+          </div>
+          <div class="clearfix">&nbsp;</div>
+          <h6 id="content-footwear">Footwear size guide</h6>
+          <p>Getting the correct shoe size for your little ones is never easy, so that’s why we’ve pulled together an easy to use guide for the perfect footwear fit.</p>
+          <div class="size-image-section"><img src="http://www.mothercare.com.kw/media/wysiwyg/size_guide/footwear-size.jpg" alt=""></div>
+          <div class="size-content-section">
+          <h5>Crawlers (Age)</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="3">Age</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Age</th>
+          <td>Foot Length (mm)</td>
+          <td>UK Size</td>
+          <td>Euro Size</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">6 - 9 months</td>
+          </tr>
+          <tr><th>6 - 9 months</th>
+          <td>106</td>
+          <td>2</td>
+          <td>18</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">9 - 12 months</td>
+          </tr>
+          <tr><th>9 - 12 months</th>
+          <td>115</td>
+          <td>3</td>
+          <td>19</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">12 - 18 months</td>
+          </tr>
+          <tr><th>12 - 18 months</th>
+          <td>123</td>
+          <td>4</td>
+          <td>20.5</td>
+          </tr>
+          </tbody>
+          </table>
+          <h5>First Walkers (Age)</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="3">Age</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Age</th>
+          <td>Foot Length (mm)</td>
+          <td>UK Size</td>
+          <td>Euro Size</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">9 - 12 months</td>
+          </tr>
+          <tr><th>9 - 12 months</th>
+          <td>106</td>
+          <td>2</td>
+          <td>18</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">12 - 18 months</td>
+          </tr>
+          <tr><th>12 - 18 months</th>
+          <td>115</td>
+          <td>3</td>
+          <td>19</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">18 - 24 months</td>
+          </tr>
+          <tr><th>18 - 24 months</th>
+          <td>123</td>
+          <td>4</td>
+          <td>20.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">24 - 30 months</td>
+          </tr>
+          <tr><th>24 - 30 months</th>
+          <td>130</td>
+          <td>5</td>
+          <td>21</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">30 - 36 months</td>
+          </tr>
+          <tr><th>30 - 36 months</th>
+          <td>138</td>
+          <td>6</td>
+          <td>23</td>
+          </tr>
+          </tbody>
+          </table>
+          <h5>Childrens Footwear (Age)</h5>
+          <table class="size-table" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+          <tr class="heading"><th>&nbsp;</th>
+          <td class="main-head" colspan="3">Age</td>
+          </tr>
+          <tr class="heading-desktop"><th class="main-head">Age</th>
+          <td>Foot Length (mm)</td>
+          <td>UK Size</td>
+          <td>Euro Size</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">1 year</td>
+          </tr>
+          <tr><th>1 year</th>
+          <td>123</td>
+          <td>4</td>
+          <td>20.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">1 - 1.5 year</td>
+          </tr>
+          <tr><th>1 - 1.5 year</th>
+          <td>130</td>
+          <td>5</td>
+          <td>21</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">1.5 - 2 year</td>
+          </tr>
+          <tr><th>1.5 - 2 year</th>
+          <td>138</td>
+          <td>6</td>
+          <td>23</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">2.5 - 3 year</td>
+          </tr>
+          <tr><th>2.5 - 3 year</th>
+          <td>146</td>
+          <td>7</td>
+          <td>24</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">3.5 - 4 year</td>
+          </tr>
+          <tr><th>3.5 - 4 year</th>
+          <td>153</td>
+          <td>8</td>
+          <td>25.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">4 - 4.5 year</td>
+          </tr>
+          <tr><th>4 - 4.5 year</th>
+          <td>161</td>
+          <td>9</td>
+          <td>26.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">4.5 - 5 year</td>
+          </tr>
+          <tr><th>4.5 - 5 year</th>
+          <td>169</td>
+          <td>10</td>
+          <td>28</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">5.5 - 6.5 year</td>
+          </tr>
+          <tr><th>5.5 - 6.5 year</th>
+          <td>176</td>
+          <td>11</td>
+          <td>29</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">6.5 - 7.5 year</td>
+          </tr>
+          <tr><th>6.5 - 7.5 year</th>
+          <td>184</td>
+          <td>12</td>
+          <td>30.5</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">7.5 - 8 year</td>
+          </tr>
+          <tr><th>7.5 - 8 year</th>
+          <td>192</td>
+          <td>13</td>
+          <td>32</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">8 - 9 year</td>
+          </tr>
+          <tr><th>8 - 9 year</th>
+          <td>200</td>
+          <td>1</td>
+          <td>33</td>
+          </tr>
+          <tr class="heading"><th>&nbsp;</th>
+          <td colspan="3">9 - 10 year</td>
+          </tr>
+          <tr><th>9 - 10 year</th>
+          <td>209</td>
+          <td>2</td>
+          <td>39</td>
+          </tr>
+          </tbody>
+          </table>
+          </div>
+          </div>
+          </div>
+          <div class="clearfix">&nbsp;</div>
+          </div>
+          </div>'
