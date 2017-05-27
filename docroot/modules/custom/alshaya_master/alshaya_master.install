@@ -639,6 +639,9 @@ function alshaya_master_install() {
     'save' => [
       'ar' => 'وفر',
     ],
+    'Back to top' => [
+      'ar' => 'عودة إلى الأعلى',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
