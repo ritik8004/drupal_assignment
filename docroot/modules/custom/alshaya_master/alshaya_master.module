@@ -9,8 +9,6 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\file\Entity\File;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Access\AccessResult;
 
 /**
@@ -35,58 +33,7 @@ function alshaya_master_form_alter(&$form, FormStateInterface $form_state, $form
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_master_form_system_site_maintenance_mode_alter(&$form, FormStateInterface $form_state) {
-  $config = \Drupal::configFactory()->getEditable('alshaya_master.settings');
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $form['maintenance_mode_message']['#access'] = FALSE;
-
-  $form['maintenance_mode_rich_message'] = [
-    '#type' => 'text_format',
-    '#format' => 'rich_text',
-    '#title' => t('Message to display when in maintenance mode'),
-    '#default_value' => $config->get('maintenance_mode_rich_message'),
-  ];
-
-  $default_file = !empty($config->get('maintenance_mode_image.' . $langcode)) ? [$config->get('maintenance_mode_image.' . $langcode)] : [];
-  $form['maintenance_mode_image'] = [
-    '#type' => 'managed_file',
-    '#title' => t('Upload image'),
-    '#upload_location' => 'public://maintenance_mode_image/',
-    '#default_value' => $default_file,
-    '#upload_validators'  => [
-      'file_validate_extensions' => ['png gif jpg jpeg apng svg'],
-    ],
-  ];
-
-  $form['#submit'][] = '_alshaya_master_maintenance_mode_submit';
-}
-
-/**
- * Submit handler for the 'maintenance_mode' form.
- */
-function _alshaya_master_maintenance_mode_submit(&$form, FormStateInterface $form_state) {
-  $values = $form_state->getValues();
-  $fid = '';
-  if (!empty($values['maintenance_mode_image'])) {
-    $file = File::load($values['maintenance_mode_image'][0]);
-    if ($file) {
-      $file->setPermanent();
-      $file->save();
-      $fid = $file->id();
-      // Add file usage otherwise file will be gone in next garbage collection.
-      \Drupal::service('file.usage')->add($file, 'alshaya_master', 'system_maintenance', 1);
-      // Create image style derivative.
-      $style = ImageStyle::load('1284x424');
-      $destination = $style->buildUri($file->getFileUri());
-      $style->createDerivative($file->getFileUri(), $destination);
-    }
-  }
-
-  // Get current langcode.
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $config = \Drupal::configFactory()->getEditable('alshaya_master.settings');
-  $config->set('maintenance_mode_rich_message', $values['maintenance_mode_rich_message']['value']);
-  $config->set('maintenance_mode_image.' . $langcode, $fid);
-  $config->save();
 }
 
 /**
