@@ -389,3 +389,39 @@ function alshaya_acm_product_get_selected_option_sku(array $tree, array $configu
 
   return NULL;
 }
+
+/**
+ * Utility function to check if product is available for home delivery.
+ *
+ * @param mixed $sku
+ *   SKU string or full object.
+ *
+ * @return bool
+ *   Flag if the product is available for click and collect or not.
+ */
+function alshaya_acm_product_available_home_delivery($sku) {
+  // @TODO: For now it is always available. We may get a field later.
+  // Check MMCSP-903 comments for more details.
+  return TRUE;
+}
+
+/**
+ * Utility function to check if product is available for click and collect.
+ *
+ * @param mixed $sku
+ *   SKU string or full object.
+ *
+ * @return bool
+ *   Flag if the product is available for click and collect or not.
+ */
+function alshaya_acm_product_available_click_collect($sku) {
+  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+
+  $sts = (int) $sku_entity->get('attr_ship_to_store')->getString();
+  $rnc = (int) $sku_entity->get('attr_reserve_and_collect')->getString();
+
+  // Product could be either available for ship to store or for reserve and
+  // collect. In both cases click and collect option will be considered as
+  // available.
+  return ($sts || $rnc);
+}

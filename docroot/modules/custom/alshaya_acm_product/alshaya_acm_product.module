@@ -19,6 +19,25 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_acm_product_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['pdp_delivery_option'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'title' => NULL,
+      'title_price' => NULL,
+      'subtitle' => NULL,
+      'options' => [],
+    ],
+  ];
+
+  return $items;
+}
+
+/**
  * Implements hook_acq_sku_product_node_alter().
  */
 function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, array $product) {
@@ -118,6 +137,42 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       $build['short_description']['#markup'] = $sku_entity->get('attr_short_description')->getString() . $sku_entity->get('attr_bullet_points')->getString();
+
+      // Initialise home delivery variable.
+      $build['home_delivery'] = [];
+
+      // Check if home delivery is available for this product.
+      // @TODO: ELSE: Do we need to show that home delivery is not available?
+      if (alshaya_acm_product_available_home_delivery($sku)) {
+        $home_delivery_config = \Drupal::config()->get('alshaya_acm_product.home_delivery');
+
+        $home_delivery_options = [];
+        $home_delivery_config_options = $home_delivery_config->get('options');
+
+        foreach ($home_delivery_config_options as $home_delivery_config_option) {
+          $home_delivery_option['icon_class'] = $home_delivery_config_option['icon_class'];
+          $home_delivery_option['title'] = $home_delivery_config_option['title'];
+          $home_delivery_option['subtitle'] = $home_delivery_config_option['subtitle'];
+
+          foreach ($home_delivery_config_option['price_options'] as $price_option) {
+            $home_delivery_option['price_options'][] = [
+              'title' => $price_option['title'],
+              'price' => alshaya_acm_price_get_formatted_price($price_option['price']),
+            ];
+          }
+
+          $home_delivery_options[] = $home_delivery_option;
+        }
+
+        // @TODO: Next day delivery not done for now.
+        $build['home_delivery'] = [
+          '#theme' => 'pdp_delivery_option',
+          '#title' => $home_delivery_config->get('title'),
+          '#subtitle' => $home_delivery_config->get('subtitle'),
+          '#title_price' => alshaya_acm_price_get_formatted_price($home_delivery_config->get('price')),
+          '#options' => $home_delivery_options,
+        ];
+      }
     }
     elseif ($view_mode == 'teaser') {
       // Get the image.
