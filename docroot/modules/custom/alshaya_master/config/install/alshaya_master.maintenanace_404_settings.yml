@@ -2,5 +2,5 @@ maintenance_mode_rich_message:
   value: '<p>Site is currently under maintenance. We should be back shortly. Thank you for your patience.</p>'
   format: rich_text
 404_message:
-  value: '<p>Sorry unable to found the resource.</p>'
+  value: '<p>Sorry unable to find the resource.</p>'
   format: rich_text
