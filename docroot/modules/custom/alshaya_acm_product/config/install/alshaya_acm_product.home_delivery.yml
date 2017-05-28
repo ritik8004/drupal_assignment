@@ -3,7 +3,7 @@ subtitle: 'For orders over KWD99'
 title_price: 0
 options:
   1:
-    icon_class: 'standard-delivery-icon',
+    icon_class: 'standard-delivery-icon'
     title: 'Standard Delivery'
     subtitle: 'within 4 working days'
     price_options:
