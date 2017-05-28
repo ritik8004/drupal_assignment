@@ -132,6 +132,9 @@ function alshaya_user_form_user_login_form_alter(&$form, FormStateInterface $for
 
   // Change submit button text.
   $form['actions']['submit']['#value'] = t('sign in');
+
+  // Attach the JS library.
+  $form['#attached']['library'][] = 'alshaya_user/user_login';
 }
 
 /**

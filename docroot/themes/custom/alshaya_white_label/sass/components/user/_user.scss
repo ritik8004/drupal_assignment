@@ -455,6 +455,12 @@
     text-align: center;
     color: $windows-blue;
   }
+
+  .form-type-email {
+    .form-item--error-message {
+      display: none;
+    }
+  }
 }
 
 #block-youllbeableto,
