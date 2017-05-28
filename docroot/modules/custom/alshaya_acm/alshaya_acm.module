@@ -550,6 +550,26 @@ function alshaya_acm_price_format($price) {
 }
 
 /**
+ * Wrapper function to format price value with currency.
+ *
+ * It also does an additional check for free and returns FREE as text if price
+ * is 0.
+ *
+ * @param mixed $price
+ *   Price value.
+ *
+ * @return mixed|null
+ *   Return rendered theme with html for price.
+ */
+function alshaya_acm_price_get_formatted_price($price) {
+  if (empty($price)) {
+    return t('FREE');
+  }
+
+  return alshaya_acm_price_format($price);
+}
+
+/**
  * Helper function to get cart quantity options.
  */
 function _alshaya_acm_get_cart_quantity_options() {

@@ -1,0 +1,21 @@
+<div class="{{ title|clean_class }} c-accordion-delivery-options">
+  <h3 class="c-accordion__title">
+    {{ title }}
+    <span class="title-price">{{ title_price }}</span>
+    <span class="subtitle">{{ subtitle }}</span>
+  </h3>
+  <div class="c-accordion_content">
+    {% for option in options %}
+      <div class="delivery-option-content">
+        <div class="delivery-option-title {{ option.icon_class }}">
+          <strong>{{ option.title }} </strong>
+          <span>{{ option.subtitle }}</span></div>
+        <ul>
+          {% for price_option in option.price_options %}
+            <li>{{ price_option.title }} <span>{{ price_option.price }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</div>
