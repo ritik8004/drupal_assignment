@@ -284,7 +284,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
 
   $form['privilege_card_wrapper'] = [
     '#type' => 'details',
-    '#title' => t('Enter a priviledge card number'),
+    '#title' => t('Enter a privilege card number'),
     '#open' => $default_value ? TRUE : FALSE,
     '#weight' => 3,
     '#after_build' => ['alshaya_loyalty_privilege_card_wrapper_after_build'],
