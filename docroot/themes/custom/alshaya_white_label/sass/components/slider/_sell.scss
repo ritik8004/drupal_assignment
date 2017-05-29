@@ -135,7 +135,7 @@
     @include breakpoint($upto-desktop) {
       max-width: 10rem;
       min-height: 10rem;
-      object-fit: contain;
+      object-fit: cover;
     }
   }
 
