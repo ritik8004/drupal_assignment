@@ -29,6 +29,10 @@
     @include breakpoint($desktop) {
       width: 33%;
     }
+
+    .language--switcher.only-first-time {
+      display: none !important;
+    }
   }
 
   .footer--categories,

@@ -121,7 +121,7 @@ header {
       .block-views-exposed-filter-blocksearch-page {
         input[type="text"] {
           width: 10.38rem;
-          padding-top: 4px;
+          padding-top: 0.625rem;
           font-size: 0.625rem;
 
           &::placeholder {
@@ -197,6 +197,10 @@ header {
       margin-#{$left}: 0;
       vertical-align: bottom;
       display: inline-block;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: -5px;
+      }
     }
 
     label {

@@ -41,6 +41,19 @@
     }
   }
 
+  .continue--shopping--mobile {
+    background-color: $white-five;
+
+    td {
+      padding: 0;
+      padding-top: 1rem;
+    }
+
+    @include breakpoint($tablet) {
+      display: none !important;
+    }
+  }
+
   .order__unit--price {
     @include breakpoint($only-tablet) {
       width: 8.375rem;
@@ -268,9 +281,22 @@
     }
   }
 
+  .right--align {
+    text-align: $right;
+  }
+
   .product--count {
-    border-bottom: 1px solid $white-five;
-    border-top: 1px solid $white-five;
+    border-top: 0.625rem solid $white-five;
+    font-size: 0.875rem;
+
+    @include breakpoint($tablet) {
+      border-bottom: 1px solid $white-five;
+      border-top: 1px solid $white-five;
+    }
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.75rem;
+    }
 
     td {
       position: relative;
@@ -405,6 +431,7 @@
   }
 }
 
+.order-confirmation .continue--shopping--mobile a,
 #edit-confirmation-continue-shopping {
   font-size: 0.75rem;
   font-family: $alshaya-bold;

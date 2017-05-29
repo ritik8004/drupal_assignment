@@ -267,6 +267,10 @@
     position: relative;
 
     @include breakpoint($tablet) {
+      padding-bottom: 2rem;
+    }
+
+    @include breakpoint($tablet) {
       padding-bottom: 3rem;
     }
 
@@ -277,7 +281,8 @@
     }
 
     h3 {
-      font-size: 26px;
+      font-size: 1.625rem;
+      font-family: $alshaya-bold;
       font-weight: normal;
       color: $marine-blue;
       line-height: 1.6;
@@ -561,20 +566,22 @@
       margin-bottom: 0.79rem;
     }
 
-    .by--alphabet {
+    .c-side {
       width: 50%;
       float: $left;
+    }
 
-      &:nth-child(odd) {
-        border-#{$right}: 1px solid $white;
-        clear: both;
-      }
+    .c-side:nth-child(odd) {
+      border-#{$right}: 1px solid $white;
+      clear: both;
+    }
 
-      &:nth-child(even) {
-        padding-#{$left}: 1.5625rem;
-        border-#{$left}: 1px solid $white;
-        margin-#{$left}: -1px;
-      }
+    .view-content .c-side.c-side-3,
+    .c-side:nth-child(even) {
+      padding-#{$left}: 1.5625rem;
+      border-#{$left}: 1px solid $white;
+      margin-#{$left}: -1px;
+      clear: none;
     }
 
     .attachment-after {
@@ -697,12 +704,13 @@
       max-width: 38.4375;
     }
 
-    .by--alphabet {
+    .c-side {
       width: 49%;
+    }
 
-      &:nth-child(even) {
-        padding-#{$left}: 4.5625rem;
-      }
+    .view-content .c-side.c-side-3,
+    .c-side:nth-child(even) {
+      padding-#{$left}: 4.5625rem;
     }
 
     .view-header {

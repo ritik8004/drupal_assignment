@@ -117,6 +117,12 @@
         </td>
       </tr>
 
+      <tr class="collapse-row continue--shopping--mobile">
+      <td colspan="2">
+        <a href="{{ url('<front>') }}">{{ 'Continue shopping'|t }}</a>
+        </td>
+      </tr>
+
       {% for product in products %}
         <tr class="order-item-row collapse-row">
           <td class="order__product--image">
@@ -174,7 +180,7 @@
       <tr class="sub-total-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
-        <td>{{ "Sub total"|t }}</td>
+        <td class="right--align">{{ "Sub total"|t }}</td>
         <td class="blend">
           {{ order_details.sub_total }}
         </td>
@@ -184,7 +190,7 @@
       <tr class="delivery-charge-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
-        <td>{{ "Delivery charge"|t }}</td>
+        <td class="right--align">{{ "Delivery charge"|t }}</td>
         <td class="blend">
           {{ order_details.delivery_charge }}
         </td>
@@ -195,7 +201,7 @@
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
         <td>
-          <div class="dark upcase">{{ "Order Total"|t }}</div>
+          <div class="dark right--align upcase">{{ "Order Total"|t }}</div>
         </td>
         <td class="warm--white">
           <div class="dark">

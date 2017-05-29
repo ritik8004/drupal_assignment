@@ -52,20 +52,6 @@
 
 .path--cart {
   .site-brand-home {
-    padding-bottom: 0.2rem;
-    margin: 0 auto;
-    padding-top: 1rem;
-
-    @include breakpoint($tablet) {
-      padding-top: 1.5rem;
-      padding-bottom: 1.2rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding-top: 2rem;
-      padding-bottom: 1.8rem;
-    }
-
     a {
       width: 50.5%;
       margin-#{$left}: 0.25em;
@@ -97,7 +83,7 @@
 
     &::after {
       #{$right}: -1px;
-      top: -0.5625rem;
+      top: -0.75rem;
       background: $white-five;
     }
 
@@ -144,12 +130,17 @@
     @extend .l-one--w;
 
     border-bottom: 1px solid $white-three;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding: 1rem 0.5rem 0.2rem;
+    margin: 0 auto;
 
     @include breakpoint($tablet) {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
+      padding: 1.5rem;
+      padding-bottom: 1.2rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-top: 2rem;
+      padding-bottom: 1.8rem;
     }
 
     a {
@@ -174,6 +165,7 @@
 
       @include breakpoint($desktop) {
         font-size: 0.875rem;
+        line-height: 2.8125rem;
       }
 
       .secure__checkout--label {
@@ -200,6 +192,10 @@
         vertical-align: middle;
         border-radius: 100%;
         text-align: center;
+
+        &::before {
+          font-weight: bold;
+        }
       }
     }
   }
