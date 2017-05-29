@@ -133,13 +133,13 @@
       color: $black;
 
       @include breakpoint($desktop) {
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.15rem;
       }
     }
 
     .form-type-password .form-text {
-      font-size: 1.25rem;
-      letter-spacing: 0.312rem;
+      font-size: 1rem;
+      letter-spacing: 0.1875rem;
     }
   }
 
