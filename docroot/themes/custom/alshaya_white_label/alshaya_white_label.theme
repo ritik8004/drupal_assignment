@@ -432,10 +432,7 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
   }
 
   // For 404 page.
-  $http_error_suggestions = [
-    'system.404' => 'page__404',
-  ];
-  if (isset($http_error_suggestions[$routmatch->getRouteName()])) {
+  if ($routmatch->getRouteName() == 'system.404') {
     $suggestions[] = 'page__404';
   }
 
