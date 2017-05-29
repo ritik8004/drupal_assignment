@@ -134,7 +134,7 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
         $product_image = "";
         $product_description = "";
         $price = "";
-        $currency = \Drupal::configFactory()->get('acq_commerce.currency');
+        $currency = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
 
         // If sku name is available.
         if ($sku_entity->get('name')) {
