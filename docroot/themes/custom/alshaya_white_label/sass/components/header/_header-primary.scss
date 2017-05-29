@@ -991,6 +991,8 @@ header {
     z-index: 1000;
     height: auto !important;
     background: $white-five;
+    padding-bottom: 4em !important;
+    overflow-y: scroll;
   }
 
   .menu-two__link-wrapper.contains-sublink .menu--three__link {
