@@ -110,9 +110,10 @@ body {
 
     .value {
       color: $grey-ash;
-      padding-#{$right}: 0.9rem;
       top: -4px;
       position: relative;
+      font-size: 12px;
+      letter-spacing: 5px;
     }
   }
 }

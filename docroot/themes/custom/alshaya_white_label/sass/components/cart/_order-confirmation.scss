@@ -39,6 +39,12 @@
         padding: 0.625rem;
       }
     }
+
+    td {
+      .price-wrapper .price-currency {
+        font-weight: bold;
+      }
+    }
   }
 
   .order__unit--price {
