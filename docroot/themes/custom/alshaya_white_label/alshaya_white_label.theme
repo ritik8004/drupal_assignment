@@ -11,6 +11,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_preprocess_html().
@@ -189,6 +190,13 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     // Get country list.
     $country_list = \Drupal::service('address.country_repository')->getList();
 
+    $administrative_area = $values[0]['administrative_area'];
+    if (!empty($administrative_area)) {
+      $term = Term::load($administrative_area);
+      $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+      $administrative_area = $term->getName();
+    }
+
     // Address info.
     $variables['delivery_address'] = [
       'organization' => $values[0]['organization'],
@@ -198,7 +206,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
       'sorting_code' => $values[0]['sorting_code'],
       'dependent_locality' => $values[0]['dependent_locality'],
       'locality' => $values[0]['locality'],
-      'administrative_area' => $values[0]['administrative_area'],
+      'administrative_area' => $administrative_area,
       'country' => $country_list[$values[0]['country_code']],
     ];
 
