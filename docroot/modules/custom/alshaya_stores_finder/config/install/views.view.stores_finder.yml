@@ -9,6 +9,7 @@ dependencies:
   module:
     - better_exposed_filters
     - geolocation
+    - key_value_field
     - node
     - user
     - views_infinite_scroll

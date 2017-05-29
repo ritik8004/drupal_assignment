@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_stores_finder\Controller;
 
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Controller\ControllerBase;
@@ -9,12 +10,51 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class StoresFinderController.
  */
 class StoresFinderController extends ControllerBase {
+
+  /**
+   * API Wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $apiWrapper;
+
+  /**
+   * Entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
+   * StoresFinderController constructor.
+   *
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   Api wrapper.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity repository.
+   */
+  public function __construct(AlshayaApiWrapper $api_wrapper, EntityRepositoryInterface $entity_repository) {
+    $this->apiWrapper = $api_wrapper;
+    $this->entityRepository = $entity_repository;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('alshaya_api.api'),
+      $container->get('entity.repository')
+    );
+  }
 
   /**
    * Ajax request on store finder map view.
@@ -108,7 +148,7 @@ class StoresFinderController extends ControllerBase {
    */
   public function storeDetail(EntityInterface $node) {
     // Get the correct translated version of node.
-    $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
+    $node = $this->entityRepository->getTranslationFromContext($node);
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node);
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('.view-stores-finder:first', $build));
@@ -119,6 +159,28 @@ class StoresFinderController extends ControllerBase {
     $store_finder_node_li = '<li><a href="' . $url . '">' . $node->getTitle() . '</a></li>';
     $response->addCommand(new AppendCommand('.block-system-breadcrumb-block ol', $store_finder_node_li));
 
+    return $response;
+  }
+
+  /**
+   * Get stores for a product near user's location.
+   *
+   * @param string $sku
+   *   SKU to check for stores.
+   * @param float $lat
+   *   User's latitude.
+   * @param float $lon
+   *   User's longitude.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response.
+   */
+  public function getProductStores($sku, $lat, $lon) {
+    $stores = $this->apiWrapper->getProductStores($sku, $lat, $lon);
+
+    ndebug($stores);
+
+    $response = new AjaxResponse();
     return $response;
   }
 

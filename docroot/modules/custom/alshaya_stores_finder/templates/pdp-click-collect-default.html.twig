@@ -1,0 +1,20 @@
+<div id="pdp-stores-container" class="click-collect c-accordion-delivery-options" sku="{{ sku }}" type="{{ type }}">
+  <h3 class="c-accordion__title">
+    {{ title }}
+    <span class="title-price">{{ title_price }}</span>
+    <span class="subtitle">{{ subtitle }}</span>
+  </h3>
+  <div class="c-accordion_content">
+    <div class="click-collect-content">
+      <div class="text">
+        {{ help_text|raw }}
+      </div>
+
+      <form class="search-store">
+        <label>{{ 'Check in-store availability'|t }}</label>
+        <input type="text" id="cc-store-name" placeholder="{{ 'Enter your area'|t }}">
+        <input type="button" name="cc-search-store" value="{{ 'Search Stores'|t }}">
+      </form>
+    </div>
+  </div>
+</div>

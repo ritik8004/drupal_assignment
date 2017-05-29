@@ -31,6 +31,21 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Function to get all the stores from the API.
+   *
+   * @return mixed
+   *   Stores array.
+   */
+  public function getStores() {
+    $endpoint = 'storeLocator/search';
+
+    $response = $this->invokeApi($endpoint, [], 'GET');
+    $stores = json_decode($response, TRUE);
+
+    return $stores;
+  }
+
+  /**
    * Function to get click and collect stores available nearby for a product.
    *
    * @param string $sku
@@ -41,6 +56,13 @@ class AlshayaApiWrapper {
    *   Longitude of user.
    */
   public function getProductStores($sku, $lat, $lon) {
+    if (\Drupal::state()->get('store_development_mode', 0)) {
+      $lat = 29;
+      $lon = 48;
+    }
+
+    $sku = urlencode($sku);
+
     $endpoint = 'click-and-collect/stores/product/' . $sku . '/lat/' . $lat . '/lon/' . $lon;
     $response = $this->invokeApi($endpoint, [], 'GET');
     $stores = json_decode($response, TRUE);
@@ -74,14 +96,14 @@ class AlshayaApiWrapper {
       'oauth_version' => '1.0',
     ];
 
-    $oauth_data['oauth_signature'] = self::sign($method, $url, $oauth_data, $this->config->get('consumer_secret'), $this->config->get('access_token_secret'));
+    $signature = self::sign($method, $url, $oauth_data, $this->config->get('consumer_secret'), $this->config->get('access_token_secret'));
 
     $curl = curl_init();
 
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($curl, CURLOPT_HTTPHEADER, [
-      'Authorization: OAuth ' . http_build_query($oauth_data, '', ','),
+      'Authorization: Bearer ' . $signature,
     ]);
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -115,8 +137,8 @@ class AlshayaApiWrapper {
    *   Signed value.
    */
   protected static function sign($method, $url, array $data, $consumerSecret, $tokenSecret) {
-    $url = urlEncodeAsZend($url);
-    $data = urlEncodeAsZend(http_build_query($data, '', '&'));
+    $url = self::urlEncodeAsZend($url);
+    $data = self::urlEncodeAsZend(http_build_query($data, '', '&'));
     $data = implode('&', [$method, $url, $data]);
     $secret = implode('&', [$consumerSecret, $tokenSecret]);
     return base64_encode(hash_hmac('sha1', $data, $secret, TRUE));

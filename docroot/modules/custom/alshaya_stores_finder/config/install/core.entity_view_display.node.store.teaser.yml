@@ -3,13 +3,12 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.store.body
     - field.field.node.store.field_latitude_longitude
     - field.field.node.store.field_meta_tags
     - field.field.node.store.field_store_address
     - field.field.node.store.field_store_locator_id
-    - field.field.node.store.field_store_number
     - field.field.node.store.field_store_open_hours
+    - field.field.node.store.field_store_phone
     - node.type.store
   module:
     - user
@@ -20,14 +19,15 @@ mode: teaser
 content:
   links:
     weight: 100
+    region: content
   sharethis:
     weight: 10
+    region: content
 hidden:
-  body: true
   field_latitude_longitude: true
   field_meta_tags: true
   field_store_address: true
   field_store_locator_id: true
-  field_store_number: true
   field_store_open_hours: true
+  field_store_phone: true
   langcode: true

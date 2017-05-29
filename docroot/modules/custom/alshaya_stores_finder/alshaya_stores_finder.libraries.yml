@@ -3,3 +3,12 @@ store_finder:
     js/alshaya_store_finder.js: {}
   dependencies:
     - core/jquery
+
+pdp:
+  js:
+    js/alshaya_store_finder.pdp.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupal.ajax
