@@ -1,4 +1,10 @@
 .c-contact {
+  &.l-one--w {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 6.438rem;
+    }
+  }
+
   .c-page-title {
     border-bottom: 1px solid $white;
     margin-bottom: 0.75rem;
