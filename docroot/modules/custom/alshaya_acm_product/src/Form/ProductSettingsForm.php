@@ -47,9 +47,9 @@ class ProductSettingsForm extends ConfigFormBase {
     $form['size_guide_link'] = [
       '#type' => 'radios',
       '#title' => $this->t('Enable Size Guide link'),
-      '#required' => FALSE,
+      '#required' => TRUE,
       '#default_value' => $config->get('size_guide_link'),
-      '#options' => [0 => $this->t('Disbale'), 1 => $this->t('Enable')],
+      '#options' => [0 => $this->t('Disable'), 1 => $this->t('Enable')],
     ];
 
     $form['size_guide_modal_content'] = [
