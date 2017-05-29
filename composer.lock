@@ -2925,7 +2925,7 @@
             "type": "drupal-core",
             "extra": {
                 "patches_applied": {
-                    "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-17.patch",
+                    "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                     "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/no_reliable_method-2752961-29.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
