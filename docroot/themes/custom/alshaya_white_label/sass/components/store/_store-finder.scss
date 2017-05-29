@@ -576,10 +576,12 @@
       clear: both;
     }
 
+    .view-content .c-side.c-side-3,
     .c-side:nth-child(even) {
       padding-#{$left}: 1.5625rem;
       border-#{$left}: 1px solid $white;
       margin-#{$left}: -1px;
+      clear: none;
     }
 
     .attachment-after {
@@ -706,6 +708,7 @@
       width: 49%;
     }
 
+    .view-content .c-side.c-side-3,
     .c-side:nth-child(even) {
       padding-#{$left}: 4.5625rem;
     }
