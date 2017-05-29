@@ -103,7 +103,7 @@ class UserCommunicationPreference extends FormBase {
       '#type' => 'checkboxes',
       '#title' => $this->t('Select your preferred communication channel'),
       '#options' => $options,
-      '#default_value' => $preference ? $preference : 'email',
+      '#default_value' => $preference ?: ['email'],
     ];
 
     $form['actions'] = ['#type' => 'actions'];
