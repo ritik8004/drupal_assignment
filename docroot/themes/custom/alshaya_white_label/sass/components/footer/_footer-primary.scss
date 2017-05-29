@@ -1,6 +1,6 @@
 .c-footer-primary {
   border-top: 2px solid $peacock-blue;
-  padding-top: 16px;
+  padding-top: 1rem;
   padding-bottom: 2.25rem;
   position: relative;
   background: $white-five;
@@ -17,17 +17,19 @@
   }
 
   @include breakpoint($desktop) {
-    padding-top: 0.875rem;
+    padding-top: 0.75rem;
     margin-top: 2rem;
   }
 
   .primary--footer--right {
     @include breakpoint($tablet) {
       float: $right;
+      margin-#{$right}: 0.3125rem;
     }
 
     @include breakpoint($desktop) {
       width: 33%;
+      margin-#{$right}: 0;
     }
 
     .language--switcher.only-first-time {
@@ -134,12 +136,12 @@
 
     @include breakpoint($only-mobile) {
       margin: 0;
-      padding: 0.938rem 0;
+      padding: 0.875rem 0;
       position: relative;
 
       @include icon(chevron#{$right}, after) {
         position: absolute;
-        #{$right}: 0;
+        #{$right}: 0.33rem;
         font-size: 1.875rem;
         top: 50%;
         transform: translateY(-50%);
@@ -192,6 +194,9 @@
 
     .newsletter-block-label {
       font-family: $alshaya-thin;
+      font-size: 0.875rem;
+      line-height: 1.4;
+      padding: 0 1rem;
     }
   }
 
@@ -208,7 +213,7 @@
   }
 
   @include breakpoint($desktop) {
-    margin-right: 0;
+    margin-#{$right}: 0;
 
     .newsletter-block-label {
       font-family: $arial;
@@ -221,9 +226,11 @@
     color: $marine-blue-two;
     text-transform: lowercase;
     font-weight: normal;
+    margin-bottom: 0.75rem;
 
     @include breakpoint($only-mobile) {
       text-align: center;
+      margin-bottom: 0.625rem;
     }
   }
 
@@ -287,16 +294,19 @@
   .form-submit {
     @extend %btn;
 
-    font-family: $alshaya-bold;
+    font-family: $alshaya-thin;
     background: $marine-blue-two;
     position: absolute;
+    font-size: 0.75rem;
     #{$right}: 0;
     bottom: 0;
+    padding: 0.625rem 1.5rem;
     border-radius: 0;
     z-index: 2;
 
     @include breakpoint($tablet) {
       #{$right}: 1.125rem;
+      font-size: 0.8125rem;
     }
 
     @include breakpoint($desktop) {
@@ -356,6 +366,7 @@
 
     padding: 0;
     direction: ltr;
+    text-align: $left;
 
     @include breakpoint($only-mobile) {
       text-align: center;
@@ -377,11 +388,15 @@
           position: absolute;
           border-top: 2px solid $peacock-blue;
           width: 14px;
-          transform: rotate(-70deg);
+          transform: rotate(-73deg);
           transform-origin: 0% 0%;
           top: 1em;
-          right: -10px;
+          right: -8px;
           color: $blue-two;
+
+          @include breakpoint($only-tablet) {
+            right: -11px;
+          }
         }
       }
 
@@ -389,7 +404,7 @@
         font-size: 14px;
         text-transform: lowercase;
         color: $blue-two;
-        margin: 0 5px;
+        margin: 0 0.4rem;
         text-decoration: underline;
       }
 
@@ -418,24 +433,29 @@
   overflow: hidden;
 
   @include breakpoint($desktop) {
-    margin-left: 2.5rem;
+    margin-#{$left}: 2.5rem;
   }
 
   @include breakpoint($only-tablet) {
-    margin-left: 0;
+    margin-#{$left}: 0;
   }
 
   .c-social-links {
     @include breakpoint($tablet) {
-      margin-top: 2.812rem;
+      margin-top: 2.7rem;
       padding-left: 0.312rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.6rem;
+      padding-#{$left}: 0.1rem;
     }
   }
 }
 
 .language--switcher {
   @include breakpoint($tablet) {
-    margin-top: 2.2rem;
+    margin-top: 2rem;
   }
 
   @include breakpoint($desktop) {

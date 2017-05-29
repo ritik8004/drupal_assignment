@@ -457,7 +457,7 @@ header {
     display: block;
 
     a {
-      padding-#{$left}: 0.625rem;
+      padding: 0.875rem 0.875rem 0.5rem 0.625rem;
     }
 
     .store {
@@ -491,9 +491,7 @@ header {
     li {
       display: table-cell;
       text-align: center;
-      padding: 0.875rem 0;
-      padding-bottom: 0.5rem;
-      padding-#{$right}: 0.875rem;
+      padding: 0;
 
       &:hover,
       &.search-active {
