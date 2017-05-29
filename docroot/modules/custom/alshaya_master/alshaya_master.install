@@ -441,11 +441,11 @@ function alshaya_master_install() {
     'Add a promo code' => [
       'ar' => 'هل لديك رمز عرض ؟',
     ],
-    'Enter a priviledge card number' => [
-      'ar' => 'رقم نادي الامتيازات',
+    'Enter a privilege card number' => [
+      'ar' => 'أدخل رقم بطاقة نادي الامتيازات',
     ],
     'Promotion code' => [
-      'ar' => 'شفرة الترقية',
+      'ar' => 'رمز العرض',
     ],
     'apply' => [
       'ar' => 'تطبيق',
@@ -454,10 +454,10 @@ function alshaya_master_install() {
       'ar' => 'يرجى إدخال رقم بطاقة نادي الامتيازات ثانيةً',
     ],
     'Your cart has been updated.' => [
-      'ar' => 'تم تحديث عربة التسوق',
+      'ar' => 'قطعة/قطع أضيفت إلى سلة تسوقك',
     ],
     'Horizontal Recommendations' => [
-      'ar' => 'توصيات',
+      'ar' => 'ما ننصح به',
     ],
     'Loading ...' => [
       'ar' => 'تحميل...',
@@ -469,7 +469,7 @@ function alshaya_master_install() {
       'ar' => 'حقيبة التسوق الخاصة بك فارغة',
     ],
     'Sorry, we now only have @quantity of these available and we have updated your basket.' => [
-      'ar' => 'عفوًا، تبقى لدينا فقط @quantity قطعة واحدة و لقد قمنا بتحديث حقيبة تسوقك ',
+      'ar' => 'عفواً، لم يتبق سوى quantity@ قطع من هذا المنتج و لقد قمنا بتحديث حقيبة تسوقك',
     ],
     'add to cart' => [
       'ar' => 'أضف إلى السلة',
@@ -523,13 +523,13 @@ function alshaya_master_install() {
       'ar' => 'مجاناً',
     ],
     'Next day delivery' => [
-      'ar' => 'خدمة التوصيل في اليوم التالي',
+      'ar' => 'التوصيل في اليوم التالي',
     ],
     'All orders' => [
       'ar' => 'كل الطلبيات',
     ],
     'Enter your area' => [
-      'ar' => 'إدخال المنطقة',
+      'ar' => 'أدخل المنطقة',
     ],
     'Search Stores' => [
       'ar' => 'البحث عن المحلات',
@@ -537,11 +537,11 @@ function alshaya_master_install() {
     'Hover over image to zoom' => [
       'ar' => 'حرك مؤشر الماوس فوق الصورة للتكبير',
     ],
-    'Horizontal Cross Sell' => [
-      'ar' => 'الأفقي الصليب بيع',
+    'Customers also bought' => [
+      'ar' => 'الزبائن اشتروا أيضاً',
     ],
-    'Horizontal up Sell' => [
-      'ar' => 'أفقي حتى بيع',
+    'You may also like' => [
+      'ar' => 'قد يعجبك أيضاً',
     ],
     'Related' => [
       'ar' => 'ذات صلة',
@@ -610,7 +610,7 @@ function alshaya_master_install() {
       'ar' => 'سجل الطلبية',
     ],
     'Return to delivery options' => [
-      'ar' => 'العودة إلى خيارات التسليم',
+      'ar' => 'العودة إلى خيارات التوصيل',
     ],
     '<p>Thank you for shopping online with us, <strong class="dark--text">@account.first_name @account.last_name</strong></p>' => [
       'ar' => '<p>شكراً لتسوقكم معنا عبز الموقع، <strong class="dark--text">@account.first_name @account.last_name</strong></p>',
@@ -631,7 +631,7 @@ function alshaya_master_install() {
       'ar' => 'تفاصيل المنتج (@products_count)',
     ],
     'Your account' => [
-      'ar' => 'الحساب الخاص بك',
+      'ar' => 'حسابك',
     ],
     'Save your details to make shopping easier next time' => [
       'ar' => 'احفظ التفاصيل الخاصة بك لتسهيل تسوقك المرة القادمة',
@@ -640,7 +640,7 @@ function alshaya_master_install() {
       'ar' => 'وفر',
     ],
     'Back to top' => [
-      'ar' => 'عودة إلى الأعلى',
+      'ar' => 'الرجوع إلى أعلى',
     ],
   ];
   alshaya_i18n_save_translations($strings);
