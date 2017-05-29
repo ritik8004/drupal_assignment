@@ -13,7 +13,7 @@
       var items = $('.cloud-zoom:not(cloud-zoom-processed), .cloudzoom__thumbnails__image:not(cloud-zoom-processed)', context);
       if (items.length) {
         items.addClass('cloud-zoom-processed').CloudZoom();
-        items.parent().css('float', 'left');
+        // items.parent().css('float', 'left');
       }
       // Slider 1 - For Desktop - Image zoom.
       if ($(window).width() < 1025) {
@@ -28,12 +28,6 @@
           item: 3,
           verticalHeight: 100
         });
-        // Slider - 2 For Desktop - Image Gallery.
-        $('#product-image-gallery', context).lightSlider({
-          vertical: true,
-          item: 5,
-          verticalHeight: 500
-        });
       }
       else {
         $('#lightSlider', context).lightSlider({
@@ -45,13 +39,7 @@
         $('#drupal-modal #lightSlider', context).lightSlider({
           vertical: true,
           item: 5,
-          verticalHeight: 500
-        });
-        // Slider - 2 For Desktop - Image Gallery.
-        $('#product-image-gallery', context).lightSlider({
-          vertical: true,
-          item: 5,
-          verticalHeight: 500
+          verticalHeight: 440
         });
       }
 
@@ -80,6 +68,23 @@
         height: 768,
         dialogClass: 'dialog-product-image-gallery-container',
         open: function () {
+
+          if ($(window).width() < 1025) {
+            $('#product-image-gallery', context).lightSlider({
+              vertical: false,
+              item: 5,
+              loop: true,
+              verticalHeight: 100
+            }).refresh();
+          } else {
+            $('#product-image-gallery', context).lightSlider({
+              vertical: true,
+              item: 5,
+              loop: true,
+              verticalHeight: 440
+            });
+          }
+
           // ZoomIn ZoomOut in Gallery view with a draggable container.
           if ($('#full-image-wrapper').length > 0) {
             $('#full-image').css({top: 0, left: -200});
