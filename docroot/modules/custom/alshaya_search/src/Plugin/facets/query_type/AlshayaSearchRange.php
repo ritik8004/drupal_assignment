@@ -41,7 +41,7 @@ class AlshayaSearchRange extends QueryTypeRangeBase {
    */
   public function calculateResultFilter($value) {
     $granularity = $this->getGranularity();
-    if ($value < $granularity) {
+    if ($value <= $granularity) {
       $displayValue = $this->t('under @granularity', ['@granularity' => $granularity]);
     }
     else {
