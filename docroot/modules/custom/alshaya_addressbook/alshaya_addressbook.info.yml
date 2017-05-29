@@ -8,6 +8,7 @@ dependencies:
   - mobile_number
   - profile
   - system
+  - taxonomy
   - telephone
   - views
   - workbench_moderation
