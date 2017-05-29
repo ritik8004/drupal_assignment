@@ -38,7 +38,7 @@ class ProductController extends ControllerBase {
     if ($size_guide_enabled) {
       $size_guide_content = $product_config->get('size_guide_modal_content.value');
       $build = [
-        '#markup' => $size_guide_content,
+        '#markup' => '<div class="size-guide-content">' . $size_guide_content . '</div>',
       ];
     }
     return $build;
