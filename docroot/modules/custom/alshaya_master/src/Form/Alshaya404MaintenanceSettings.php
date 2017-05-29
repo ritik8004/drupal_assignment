@@ -56,22 +56,22 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
       ],
     ];
 
-    $form['maintenanace_container'] = [
+    $form['maintenance_container'] = [
       '#type' => 'details',
       '#title' => $this->t('Maintenanace mode content'),
     ];
-    $form['maintenanace_container']['maintenance_mode_rich_message'] = [
+    $form['maintenance_container']['maintenance_mode_rich_message'] = [
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => t('Message to display when in maintenance mode'),
       '#default_value' => $config->get('maintenance_mode_rich_message.value'),
     ];
 
-    $default_maintenanace_file = !empty($config->get('maintenance_mode_image.' . $langcode)) ? [$config->get('maintenance_mode_image.' . $langcode)] : [];
-    $form['maintenanace_container']['maintenance_mode_image'] = [
+    $default_maintenanace_file = !empty($config->get('maintenance_mode_image')) ? [$config->get('maintenance_mode_image')] : [];
+    $form['maintenance_container']['maintenance_mode_image'] = [
       '#type' => 'managed_file',
       '#title' => t('Upload image'),
-      '#upload_location' => 'public://maintenance_mode_image/' . $langcode . '/',
+      '#upload_location' => 'public://maintenance_mode_image/',
       '#default_value' => $default_maintenanace_file,
       '#upload_validators'  => [
         'file_validate_extensions' => ['png gif jpg jpeg apng svg'],
@@ -121,7 +121,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
     $config->set('404_message', $values['404_message']);
     $config->set('404_image.' . $langcode, $fid_404);
     $config->set('maintenance_mode_rich_message', $values['maintenance_mode_rich_message']);
-    $config->set('maintenance_mode_image.' . $langcode, $fid_maintenance);
+    $config->set('maintenance_mode_image', $fid_maintenance);
     $config->save();
 
     return parent::submitForm($form, $form_state);
