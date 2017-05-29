@@ -75,9 +75,82 @@
   }
 
   main {
-    @include breakpoint($upto-tablet) {
-      display: none;
+    @include breakpoint($only-mobile) {
+      #block-alshaya-white-label-page-title,
+      #block-alshaya-white-label-local-tasks,
+      #block-userrecentorders,
+      #block-myaccountneedhelp,
+      article .subtitle,
+      article .account-content-wrapper {
+        display: none;
+      }
+
+      .account--dashboard .joinclub {
+        float: none;
+        width: auto;
+        text-align: center;
+      }
     }
+  }
+
+  &.l-two--sf {
+    @include breakpoint($only-mobile) {
+      article.account--dashboard {
+        margin-bottom: 2.5rem;
+      }
+
+      aside.c-sidebar-first {
+        display: block;
+        margin-bottom: 1.375rem;
+
+        .my-account-mobile-title1 {
+          display: block;
+          font-family: $alshaya-bold;
+          color: $marine-blue;
+          font-size: 1.125rem;
+          margin-bottom: 0.1875rem;
+        }
+
+        .my-account-mobile-title2 {
+          display: block;
+          opacity: 0.6;
+          font-family: $arial;
+          font-size: 0.875rem;
+          color: $black;
+          font-weight: normal;
+          margin-top: 0;
+          margin-bottom: 0.5rem;
+        }
+
+        li {
+          &.my-account {
+            display: none;
+
+            + li a {
+              border-top: 1px solid $white;
+            }
+          }
+
+          a {
+            color: $grey-ash;
+            font-size: 0.875rem;
+            text-transform: capitalize;
+
+            &::after {
+              #{$right}: 0.3125rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-menu-primary,
+.c-sidebar-first {
+  .block-alshaya-my-account-links .my-account-mobile-title1,
+  .block-alshaya-my-account-links .my-account-mobile-title2 {
+    display: none;
   }
 }
 
