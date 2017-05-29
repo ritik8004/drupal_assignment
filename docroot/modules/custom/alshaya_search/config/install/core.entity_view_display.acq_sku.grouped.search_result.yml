@@ -38,11 +38,15 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  attr_bullet_points: true
   attr_color: true
   attr_short_description: true
   attr_size: true
   attributes: true
   crosssell: true
   field_grouped_skus: true
+  final_price: true
+  media: true
   sku: true
+  special_price: true
   upsell: true

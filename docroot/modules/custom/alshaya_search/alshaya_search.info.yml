@@ -16,6 +16,7 @@ dependencies:
   - node
   - search_api
   - search_api_autocomplete
+  - search_api_spellcheck
   - system
   - taxonomy
   - user

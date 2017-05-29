@@ -6,6 +6,7 @@ dependencies:
   module:
     - better_exposed_filters
     - search_api
+    - search_api_spellcheck
 id: search
 label: Search
 module: views
@@ -301,6 +302,17 @@ display:
           empty: false
           content: '@total items'
           plugin_id: result
+        search_api_spellcheck:
+          id: search_api_spellcheck
+          table: views
+          field: search_api_spellcheck
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          search_api_spellcheck_title: 'Did you mean:'
+          search_api_spellcheck_hide_on_result: 1
+          plugin_id: search_api_spellcheck
       footer: {  }
       empty:
         area:
