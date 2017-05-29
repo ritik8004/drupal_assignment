@@ -7,6 +7,8 @@
 
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Url;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\file\Entity\File;
 
 /**
  * Implements hook_page_attachments().
@@ -52,6 +54,9 @@ function alshaya_seo_page_attachments(array &$attachments) {
     // As required, we want it to be array of objects.
     $gkg_data['contactPoint'][] = $contact;
   }
+
+  // Add/Edit rich snippet for the PDP page.
+  $gkg_data = _alshaya_seo_pdp_rich_snippet($gkg_data);
 
   $attachments['#attached']['html_head']['alshaya_seo'] = [
     [
@@ -104,4 +109,74 @@ function alshaya_seo_simple_sitemap_links_alter(&$links) {
       }
     }
   }
+}
+
+/**
+ * Adding google rich snippet to product.
+ *
+ * @param array $snippet
+ *   Rich snippet array.
+ *
+ * @return array
+ *   Rich snippet array.
+ */
+function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
+  $route_match = \Drupal::routeMatch();
+  if ($route_match->getRouteName() == 'entity.node.canonical') {
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $route_match->getParameter('node');
+    // If 'product' node.
+    if ($node && $node->getType() == 'acq_product') {
+      if ($sku_field = $node->get('field_skus')) {
+        $sku_id = $sku_field->first()->getString();
+        $sku_entity = SKU::loadFromSku($sku_id);
+        $product_title = "";
+        $product_image = "";
+        $product_description = "";
+        $price = "";
+        $currency = \Drupal::configFactory()->get('acq_commerce.currency');
+
+        // If sku name is available.
+        if ($sku_entity->get('name')) {
+          $product_title = $sku_entity->get('name')->getString();
+        }
+
+        // If sku short description is available.
+        if ($sku_entity->get('attr_short_description')) {
+          $product_description = $sku_entity->get('attr_short_description')->getValue()[0]['value'];
+        }
+
+        // If sku price is available.
+        if ($sku_entity->get('price')) {
+          $price = $sku_entity->get('price')->getString();
+        }
+
+        // If sku image is available.
+        if ($sku_entity->get('image')) {
+          if ($image_id = $sku_entity->get('image')->getValue()[0]['target_id']) {
+            if ($image = File::load($image_id)) {
+              $product_image = file_create_url($image->getFileUri());
+            }
+          }
+        }
+
+        // Prepare rich snippet.
+        $snippet['@type'] = 'Product';
+        $snippet['name'] = $product_title;
+        $snippet['description'] = $product_description;
+        $snippet['image'] = $product_image;
+        $snippet['brand'] = [
+          '@type' => 'Thing',
+          'name' => \Drupal::config('system.site')->get('name'),
+        ];
+        $snippet['offers'] = [
+          '@type' => "Offer",
+          'priceCurrency' => $currency,
+          'price' => $price,
+        ];
+      }
+    }
+  }
+
+  return $snippet;
 }
