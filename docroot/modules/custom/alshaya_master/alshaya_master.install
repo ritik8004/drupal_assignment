@@ -168,8 +168,8 @@ function alshaya_master_install() {
     'Enter card details' => [
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
-    'I would like to receive exclusive deals from Mothercare. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.' => [
-      'ar' => '<a href="/terms">الشروط والأحكام</a> أرغب في استلام عروض حصرية من مذركير&nbsp;تسجيل بياناتك يعني موافقتك على الشروط والأحكام',
+    '<p>I would like to receive exclusive deals from Mothercare.</p><p>By registering I agree to your <a href="/terms">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>أرغب في استلام عروض حصرية من مذركير</p><p>تسجيل بياناتك يعني موافقتك على الشروط والأحكام&nbsp;<a href="/terms">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
       'ar' => '@title يرجى إدخال',
