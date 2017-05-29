@@ -152,6 +152,7 @@
       @include breakpoint($upto-tablet) {
         padding-#{$left}: 1.25rem;
         padding-bottom: 0.9rem;
+        margin-top: 1rem;
       }
     }
   }
