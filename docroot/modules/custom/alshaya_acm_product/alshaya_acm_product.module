@@ -259,6 +259,39 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  // Including the utility file.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+  // Get cart items by sku.
+  $cart_item = alshaya_acm_get_cart_items_by_sku();
+
+  foreach ($form['cart'] as $id => $item) {
+    if (is_array($item) && isset($item['quantity'])) {
+
+      // TODO: Get delivery options from conductor.
+      $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
+      $product_delivery_options .= '<div class="tooltip--wrap">';
+      $product_delivery_options .= '<div class="contains--tooltip">';
+      $product_delivery_options .= '<p class="home-delivery tooltip--head">' . t('Home Delivery') . '</p>';
+      $product_delivery_options .= '<p class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<p>';
+      $product_delivery_options .= '</div>';
+      $product_delivery_options .= '<div class="contains--tooltip">';
+      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click & Collect') . '</p>';
+      $product_delivery_options .= '<p class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</p>';
+      $product_delivery_options .= '</div>';
+      $product_delivery_options .= '</div>';
+
+      $form['cart'][$id]['delivery_options'] = [
+        '#markup' => $product_delivery_options,
+      ];
+    }
+  }
+}
+
+/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {

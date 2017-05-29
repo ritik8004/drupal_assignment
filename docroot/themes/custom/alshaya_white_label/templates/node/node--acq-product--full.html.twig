@@ -97,23 +97,9 @@ set classes = [
         <div class="field__content">
           {{ content.home_delivery }}
 
-          {#{% if store_finder_enable_search is not empty %}#}
-            <div class="click-collect c-accordion-delivery-options">
-              <h2 class="c-accordion__title">{{ 'Click and Collect'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h2>
-              <div class="c-accordion_content">
-                <div class="click-collect-content standard">
-                  <div class="text line-1"><span>{{ 'This service is '|t }}</span><strong>{{ 'FREE'|t }}</strong><span>{{ ' of charge.'|t }}</span></div>
-                  <div class="text line-2"><span>{{ 'Collect the order from store in '|t }}</span><strong>{{ '99 hours'|t }}</strong></div>
-                  <form class="search-store">
-                    <label>{{ 'Check in-store availability'|t }}</label>
-                    <input type="text" name="store-name" placeholder="{{ 'Enter your area'|t }}">
-                    <input type="submit" name="search-store" value="{{ 'Search Stores'|t }}">
-                  </form>
-                </div>
-              </div>
-            </div>
-          {#{% endif %}#}
-
+          {% if content.click_and_collect %}
+            {{ content.click_and_collect }}
+          {% endif %}
         </div>
       </div>
 
