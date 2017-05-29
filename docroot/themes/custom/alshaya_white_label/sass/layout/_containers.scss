@@ -72,7 +72,7 @@
     @include breakpoint($tablet) {
       width: 50%;
       float: $right;
-      margin-bottom: 3.125rem;
+      padding-bottom: 3.125rem;
 
       &__region {
         max-width: 13.25rem;
