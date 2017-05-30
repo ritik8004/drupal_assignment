@@ -792,6 +792,7 @@
 .alias--user-register-complete {
   .c-page-title {
     font-family: $alshaya-bold;
+    font-weight: normal;
 
     @include breakpoint($only-tablet) {
       padding: 0 1rem;

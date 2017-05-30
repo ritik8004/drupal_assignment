@@ -61,6 +61,7 @@
   fieldset legend span {
     font-size: 14px;
     font-family: $alshaya-bold;
+    font-weight: normal;
     color: $marine-blue-two;
 
     @include breakpoint($only-mobile) {

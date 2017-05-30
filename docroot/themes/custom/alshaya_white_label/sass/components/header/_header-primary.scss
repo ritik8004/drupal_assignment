@@ -606,6 +606,7 @@ header {
 
         a.menu--one__link {
           font-family: $alshaya-bold;
+          font-weight: normal;
           color: $marine-blue;
         }
       }
@@ -677,6 +678,7 @@ header {
 
       > .menu-two__link-wrapper {
         font-family: $alshaya-bold;
+        font-weight: normal;
         display: inline-block;
         padding: 1.5rem 1.563rem;
         width: 210px;
@@ -686,6 +688,7 @@ header {
 
         a {
           font-family: $alshaya-bold;
+          font-weight: normal;
           color: $marine-blue;
 
           &:hover {
@@ -835,6 +838,7 @@ header {
 
     .title {
       font-family: $alshaya-bold;
+      font-weight: normal;
       display: block;
       font-size: 14px;
       color: $marine-blue;
@@ -898,6 +902,7 @@ header {
     margin-#{$left}: 0.625rem;
     margin-#{$right}: 0.625rem;
     font-family: $alshaya-bold;
+    font-weight: normal;
     color: $marine-blue;
     display: block;
     font-size: 12px;
@@ -1073,6 +1078,7 @@ header {
   .one {
     @include breakpoint($only-tablet) {
       font-family: $alshaya-bold;
+      font-weight: normal;
     }
 
     font-family: $alshaya-thin;
@@ -1084,6 +1090,7 @@ header {
 
   .active {
     font-family: $alshaya-bold;
+    font-weight: normal;
     color: $marine-blue;
     background: $white-five;
     text-align: center;

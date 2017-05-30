@@ -240,6 +240,7 @@
     background-color: $white-five;
     border-top: 2px solid $marine-blue-two;
     font-family: $alshaya-bold;
+    font-weight: normal;
     text-transform: lowercase;
 
     .light {
@@ -251,6 +252,7 @@
 
       .light {
         font-family: $alshaya-bold;
+        font-weight: normal;
         color: $black;
       }
     }
