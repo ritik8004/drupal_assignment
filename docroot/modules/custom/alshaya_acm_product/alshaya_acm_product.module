@@ -375,8 +375,7 @@ function _alshaya_acm_product_get_size_guide_link() {
         'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
       ],
     ];
-    $size_guide_link = 'alshaya_acm_product.size_guide_modal';
-    $url = Url::fromRoute($size_guide_link, [], $options);
+    $url = Url::fromRoute('alshaya_acm_product.size_guide_modal', [], $options);
     $link = Link::fromTextAndUrl(t('Size Guide'), $url);
     return $link->toString();
   }
