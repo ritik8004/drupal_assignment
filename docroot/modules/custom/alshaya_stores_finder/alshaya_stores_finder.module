@@ -29,8 +29,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
 
     $active_class = '';
     $current_route_name = \Drupal::routeMatch()->getRouteName();
-    // If store-finder glossary view page.
-    if ($current_route_name == 'view.stores_finder.page_2') {
+    // If store-finder glossary or list view page.
+    if ($current_route_name == 'view.stores_finder.page_2' || $current_route_name == 'view.stores_finder.page_1') {
       $active_class = 'active';
     }
 
