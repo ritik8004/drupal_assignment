@@ -135,6 +135,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
       $build['image_url'] = NULL;
+
+      alshaya_acm_product_get_gallery($build, $sku_entity);
+
       $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
 
       if ($sku_media) {

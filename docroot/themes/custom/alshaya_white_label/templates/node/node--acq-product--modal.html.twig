@@ -7,15 +7,59 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 %}
 
 <article{{ attributes }}>
-  {{ title_prefix }}
-  {% if not page %}
-    <h2{{ title_attributes.addClass("c-products__item__label") }}>
-      {{ label }}
-    </h2>
-  {% endif %}
-  {{ title_suffix }}
+  <div class="acq-content-product">
+    <div class="content__title_wrapper">
+      {{ title_prefix }}
+      {% if not page %}
+        <h2{{ title_attributes.addClass("c-products__item__label") }}>
+          {{ label }}
+        </h2>
+      {% endif %}
+      {{ title_suffix }}
 
-  {{ content }}
+      {% if content.final_price %}
+      <div class="has--special--price">
+        {% else %}
+        <div class="price">
+          {% endif %}
+          {{ content.price }}
+        </div>
 
-  <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ "View Full Product Details"|t }}</a>
+        {% if content.final_price %}
+          <div class="special--price">
+            {{ content.final_price }}
+          </div>
+
+          <div class="price--discount">
+            ({{ content.discount }})
+          </div>
+        {% endif %}
+
+        <div class="content--item-code">
+          <span class="field__label">{{ 'Item Code'|t }}:</span>
+          {{ content.item_code }}
+        </div>
+      </div>
+
+      <div class="content__main">
+        {% if content.gallery is not null %}
+          {{ content.gallery }}
+        {% endif %}
+      </div>
+
+      <div class="content__sidebar">
+        <div class="basic-details-wrapper">
+          {{ content.field_skus }}
+        </div>
+
+        {% if sku_out_of_stock %}
+          <div class="out-of-stock {{ sku_out_of_stock }}">{{ content.sharethis }}</div>
+        {% else %}
+          {{ content.sharethis }}
+        {% endif %}
+
+        <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ "View Full Product Details"|t }}</a>
+
+      </div>
+    </div>
 </article>
