@@ -36,12 +36,12 @@ body.ucbrowser {
     #block-mobilenavigation {
       ul.menu {
         li:first-child {
-          float: left;
+          float: $left;
           height: 20px;
         }
 
         li:last-child {
-          float: right;
+          float: $right;
           height: 20px;
         }
       }
