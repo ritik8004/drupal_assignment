@@ -141,7 +141,20 @@ class AlshayaBulkUploadRedirect extends FormBase {
         // If redirect already exists for the given source, no need to process.
         $redirect_exists = $redirect_repository->findBySourcePath($redirect[1]);
         if ($redirect_exists && !empty($redirect_exists)) {
-          continue;
+          $continue = FALSE;
+          /* @var \Drupal\redirect\Entity\Redirect $redirect_object*/
+          foreach ($redirect_exists as $redirect_object) {
+            // If redirect exist for the given language.
+            if ($langcode == $redirect_object->get('language')->getValue()[0]['value']) {
+              $continue = TRUE;
+              break;
+            }
+          }
+
+          // If redirect already exists for the given langcode, skip further.
+          if ($continue) {
+            continue;
+          }
         }
 
         $redirect_entity = [
