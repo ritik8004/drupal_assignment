@@ -499,7 +499,7 @@
         }
       }
 
-      .unavailable {
+      &.disabled {
         position: relative;
 
         &::before,

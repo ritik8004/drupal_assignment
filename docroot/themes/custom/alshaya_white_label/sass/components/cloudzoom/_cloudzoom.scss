@@ -62,12 +62,16 @@
         position: relative;
       }
 
-      @include breakpoint($desktop) {
-        padding: 42px 0;
-      }
-
       &.noPager {
         padding: 0;
+
+        @include breakpoint($only-tablet) {
+          max-width: 312px;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        padding: 42px 0;
       }
 
       .lSSlideWrapper {
@@ -162,6 +166,7 @@
             text-align: center;
             font-size: 22px;
             color: $black-two;
+            z-index: 0;
 
             &::before {
               padding-top: 10px;

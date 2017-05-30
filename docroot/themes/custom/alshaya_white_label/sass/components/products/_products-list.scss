@@ -155,8 +155,14 @@
     }
   }
 
-  .block-system-main-block .feed-icons {
-    display: none;
+  .block-system-main-block {
+    .view-content {
+      display: none;
+    }
+
+    .feed-icons {
+      display: none;
+    }
   }
 }
 

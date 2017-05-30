@@ -1129,16 +1129,46 @@ header {
     }
   }
 
+  &.toolbar-fixed {
+    &.toolbar-horizontal {
+      .toggle--sign {
+        top: 79px;
+      }
+
+      ul.menu--one__list {
+        top: 129px;
+      }
+
+      .mobile--close {
+        top: 89px;
+      }
+    }
+
+    &.toolbar-vertical {
+      .toggle--sign {
+        top: 40px;
+      }
+
+      ul.menu--one__list {
+        top: 90px;
+      }
+
+      .mobile--close {
+        top: 50px;
+      }
+    }
+  }
+
   .toggle--sign {
-    top: 40px;
+    top: 0;
   }
 
   ul.menu--one__list {
-    top: 90px;
+    top: 50px;
   }
 
   .mobile--close {
-    top: 50px;
+    top: 10px;
   }
 
   @include breakpoint($desktop) {

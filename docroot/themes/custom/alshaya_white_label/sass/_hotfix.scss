@@ -31,6 +31,22 @@ body.ucbrowser {
       top: 45%;
     }
   }
+
+  @include breakpoint($tablet) {
+    #block-mobilenavigation {
+      ul.menu {
+        li:first-child {
+          float: $left;
+          height: 20px;
+        }
+
+        li:last-child {
+          float: $right;
+          height: 20px;
+        }
+      }
+    }
+  }
 }
 
 /**
