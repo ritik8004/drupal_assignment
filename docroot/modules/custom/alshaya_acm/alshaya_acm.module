@@ -604,6 +604,17 @@ function _alshaya_acm_get_cart_quantity_options() {
  */
 function alshaya_acm_get_product_stock($sku, $bool = FALSE) {
   $stock = &drupal_static(__FUNCTION__, []);
+
+  // TODO: Remove this after go live probably.
+  global $_alshaya_acm_disable_stock_check;
+  if ($_alshaya_acm_disable_stock_check) {
+    return [
+      'stock_id' => 2,
+      'quantity' => 10,
+      'is_in_stock' => TRUE,
+    ];
+  }
+
   // Get the sku.
   $sku = is_object($sku) ? $sku->getSku() : $sku;
   if (!isset($stock[$sku])) {
