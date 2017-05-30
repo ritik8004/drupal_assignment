@@ -276,11 +276,46 @@
 }
 
 .navbar-fixed-top {
-  @include breakpoint($desktop) {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: $white-five;
+}
+
+.mobile--overlay .branding__menu {
+  position: relative;
+  z-index: 5;
+
+  &.navbar-fixed-top {
     position: fixed;
+
+    &::before {
+      background: rgba(0, 0, 0, 0.48);
+    }
+  }
+
+  &::before {
+    content: '';
+    background: rgba(133, 133, 133, 0.27);
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 6;
     top: 0;
-    width: 100%;
-    border-bottom: 1px solid $white;
+    bottom: 0;
+  }
+}
+
+.header--fixed {
+  margin-top: 5.3125rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 8.125rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 9.75rem;
   }
 }
 
