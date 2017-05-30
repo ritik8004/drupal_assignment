@@ -8,56 +8,66 @@
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\alshaya_acm_knet\E24PaymentPipe;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_alshaya_acm_checkout_pre_place_order().
  */
 function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
-  // @TODO: Redirect to K-Net if selected.
-  return;
+  $knet_settings = \Drupal::config('alshaya_acm_knet.settings');
 
   $pipe = new E24PaymentPipe();
 
   $pipe->setCurrency(KNET_CURRENCY_KWD);
   $pipe->setLanguage(KNET_LANGUAGE_EN);
 
-  $pipe->setResponseUrl('https://local.mothercare.com.kw/knet/response.php');
-  $pipe->setErrorUrl('https://local.mothercare.com.kw/knet/error.php');
+  $pipe->setResponseUrl(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE])->toString());
+  $pipe->setErrorUrl(Url::fromRoute('alshaya_acm_knet.error', ['cart_id' => $cart->id()], ['absolute' => TRUE])->toString());
 
   // @TODO: Make this dynamic.
-  $pipe->setAmt('20');
+  $totals = $cart->totals();
+  $pipe->setAmt($totals['grand']);
 
-  // @TODO: Make this configurable.
-  $pipe->setResourcePath('/var/www/alshaya/knet-resource/test/');
+  if ($knet_settings->get('resource_path')) {
+    $pipe->setResourcePath($knet_settings->get('resource_path'));
+  }
+  else {
+    $pipe->setResourcePath(DRUPAL_ROOT . '/../knet-resource/dev/');
+  }
+
 
   // Set your alias name here.
   // @TODO: Make this configurable.
   $pipe->setAlias('alshaya');
 
-  // @TODO: This can be the cart id.
-  $pipe->setTrackId(rand(1000, 9999));//generate the random number here
+  $pipe->setTrackId($cart->id());
 
-  // @TODO: Make this proper.
-  $pipe->setUdf1($_GET['name']);
-  $pipe->setUdf2($_GET['address']);
-  $pipe->setUdf3($_GET['postal']);
-  $pipe->setUdf4('UDF 4');
-  $pipe->setUdf5('UDF 5');
+
+  $user_id = \Drupal::currentUser()->isAnonymous() ? 0 : \Drupal::currentUser()->id();
+  // Set user id.
+  $pipe->setUdf1($user_id);
+//  $pipe->setUdf2('');
+//  $pipe->setUdf3($_GET['postal']);
+//  $pipe->setUdf4('UDF 4');
+//  $pipe->setUdf5('UDF 5');
 
   // Get results.
   if ($pipe->performPaymentInitialization()) {
     // @TODO: Log this too, also store the payment id for later use.
-    $payID = $pipe->getPaymentId();
-    $payURL = $pipe->getRedirectUrl();
-    print $payURL . '?PaymentID=' . $payID;
+    $cart->setPaymentMethodData([
+      'payment_id' => $pipe->getPaymentId(),
+    ]);
+
+    $response = new RedirectResponse($pipe->getRedirectUrl());
+    $response->send();
     exit;
-    echo $pipe->getDebugMsg();
-    header('location:' . $payURL);
   }
   else {
     // @TODO: Log this.
     echo '<br>' . $pipe->getErrorMsg();
     echo '<br>' . $pipe->getDebugMsg();
+    die();
     // header('location: https://www.yourURL.com/error.php');
   }
 }

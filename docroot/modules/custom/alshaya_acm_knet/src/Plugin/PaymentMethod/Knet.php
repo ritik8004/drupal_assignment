@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_knet\Plugin\PaymentMethod;
 
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides the K-Net payment method.
@@ -20,6 +21,22 @@ class Knet extends PaymentMethodBase implements PaymentMethodInterface {
    */
   public function buildPaymentSummary() {
     return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildPaymentForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    // K-Net doesn't need any payment details.
+    return $pane_form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $cart = $this->getCart();
+    $cart->setPaymentMethodData([]);
   }
 
 }

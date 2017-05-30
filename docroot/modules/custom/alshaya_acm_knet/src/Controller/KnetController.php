@@ -36,7 +36,9 @@ class KnetController extends ControllerBase {
       $result_params = '?PaymentID=' . $paymentId . '&Result=' . $presult . '&PostDate=' . $postdate . '&TranID=' . $tranid . '&Auth=' . $auth . '&Ref=' . $ref . '&TrackID=' . $trackid . '&UDF1=' . $udf1 . '&UDF2=' . $udf2 . '&UDF3=' . $udf3 . '&UDF4=' . $udf4 . '&UDF5=' . $udf5;
 
     }
-    echo 'REDIRECT=' . $result_url . $result_params;
+
+    print 'REDIRECT=' . $result_url . $result_params;
+    exit;
   }
 
   /**
@@ -45,19 +47,9 @@ class KnetController extends ControllerBase {
    * @return array
    *   Build array.
    */
-  public function error() {
+  public function error($cart_id) {
+    // @TODO: Update the cart payment method and redirect user to payment page.
     $paymentID = $_GET['PaymentID'];
-    $result = $_GET['Result'];
-    $postdate = $_GET['PostDate'];
-    $tranid = $_GET['TranID'];
-    $auth = $_GET['Auth'];
-    $ref = $_GET['Ref'];
-    $trackid = $_GET['TrackID'];
-    $udf1 = $_GET['UDF1'];
-    $udf2 = $_GET['UDF2'];
-    $udf3 = $_GET['UDF3'];
-    $udf4 = $_GET['UDF4'];
-    $udf5 = $_GET['UDF5'];
 
     $build = [
       '#markup' => $this->t('Some error occurred.'),
