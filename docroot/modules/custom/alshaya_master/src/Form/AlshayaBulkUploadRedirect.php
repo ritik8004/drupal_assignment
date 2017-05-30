@@ -139,8 +139,9 @@ class AlshayaBulkUploadRedirect extends FormBase {
       // If node object.
       if ($node && $node instanceof NodeInterface) {
         // If redirect already exists for the given source, no need to process.
-        $redirect_exists = $redirect_repository->findBySourcePath($redirect[1]);
-        if ($redirect_exists && !empty($redirect_exists)) {
+        $redirect_exists = $redirect_repository->findMatchingRedirect($redirect[1], [], $langcode);
+        // If redirect already exists.
+        if ($redirect_exists) {
           continue;
         }
 
