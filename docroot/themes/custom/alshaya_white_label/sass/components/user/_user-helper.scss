@@ -276,7 +276,7 @@
     }
 
     #block-youllbeableto {
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.5rem;
 
       @include breakpoint($tablet) {
         margin-bottom: 3.4rem;
@@ -315,8 +315,8 @@
 
     @include breakpoint($only-mobile) {
       margin-bottom: 2.063rem;
-      padding-top: 1rem;
-      margin-top: 2.6rem;
+      padding-top: 1.8rem;
+      margin-top: 2.8rem;
     }
   }
 
@@ -325,7 +325,7 @@
   }
 
   .c-page-title {
-    top: -3.7rem;
+    top: -4.7rem;
 
     @include breakpoint($tablet) {
       top: -5.5rem;
@@ -447,7 +447,8 @@
       margin-bottom: 1.3rem;
 
       @include breakpoint($only-mobile) {
-        margin-top: 1.4rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
       }
 
       @include breakpoint($desktop) {
