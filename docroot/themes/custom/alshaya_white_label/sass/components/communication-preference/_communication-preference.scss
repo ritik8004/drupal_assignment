@@ -52,4 +52,14 @@ form.user-communication-preference {
   input[checked=checked]:checked + label {
     font-weight: bold;
   }
+
+  input[type=checkbox] {
+    ~ label[for=edit-communication-preference-email] {
+      font-size: 0.875rem;
+
+      &::before {
+        padding-right: 1.188rem;
+      }
+    }
+  }
 }

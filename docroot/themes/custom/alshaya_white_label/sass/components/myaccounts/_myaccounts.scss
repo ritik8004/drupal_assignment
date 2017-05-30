@@ -33,6 +33,10 @@
       }
     }
   }
+
+  .block:first-child {
+    margin-top: 0.3rem;
+  }
 }
 
 .account--dashboard {
