@@ -662,6 +662,7 @@ function alshaya_master_install() {
   // Save default logo for email.
   $config_factory->getEditable('alshaya_master.theme.alshaya_white_label')
     ->set('email_logo_path', $site_logo . '.png')
+    ->set('email_logo_url', file_create_url($site_logo . '.png'))
     ->save();
 
   // Set /home page as site front page.

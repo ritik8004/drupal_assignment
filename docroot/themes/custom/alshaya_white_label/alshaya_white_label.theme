@@ -636,5 +636,8 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
  */
 function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $email_logo = alshaya_master_get_email_logo('alshaya_white_label');
+  if (empty($email_logo['logo_url'])) {
+    $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
+  }
   $variables['email_logo'] = $email_logo['logo_url'];
 }
