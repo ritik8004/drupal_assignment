@@ -169,7 +169,7 @@
       };
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
-      $('.cloudzoom #cloud-zoom-wrap').on('click', function () {
+      $('.acq-content-product .cloudzoom #cloud-zoom-wrap').on('click', function () {
         myDialog.show();
         myDialog.showModal();
       });
