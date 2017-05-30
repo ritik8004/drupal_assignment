@@ -246,7 +246,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#prefix' => '<div class="promo-continue-shopping-wrapper">',
   ];
 
-  $form['coupon']['#type'] = 'hidden';
+  unset($form['coupon']);
   $form['promotion_code_wrapper']['coupon'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
