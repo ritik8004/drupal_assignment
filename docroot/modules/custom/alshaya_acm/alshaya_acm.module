@@ -246,11 +246,12 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#prefix' => '<div class="promo-continue-shopping-wrapper">',
   ];
 
-  $form['promotion_code_wrapper']['promotion'] = [
+  unset($form['coupon']);
+  $form['promotion_code_wrapper']['coupon'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
     '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
-    '#default_value' => !empty($form_state->getValue('promotion')) ? $form_state->getValue('promotion') : '',
+    '#default_value' => !empty($form_state->getValue('coupon')) ? $form_state->getValue('coupon') : '',
   ];
 
   if (!empty($cart_items)) {
@@ -274,8 +275,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Add class to continut shopping link.
   $form['actions']['continue_shopping_mobile']['#attributes']['class'][] = 'edit-continue-shopping-mobile';
-
-  $form['coupon']['#type'] = 'hidden';
 
   // Attach library, to cater to Coupon submit button.
   $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
