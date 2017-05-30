@@ -31,6 +31,25 @@
     }
   }
 
+  .quantity.out-of-stock {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.75rem;
+      padding: 0;
+      position: relative;
+      padding-bottom: 0;
+      float: $right;
+      margin-top: 0.875rem;
+      color: $black;
+      text-align: $left;
+    }
+  }
+
+  .add-to-cart.out-of-stock {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+
   .owl-dots {
     position: relative;
     margin-top: 0.625rem;
@@ -116,7 +135,7 @@
     @include breakpoint($upto-desktop) {
       max-width: 10rem;
       min-height: 10rem;
-      object-fit: contain;
+      object-fit: cover;
     }
   }
 
@@ -146,6 +165,7 @@
 .subtitle.crossell-title {
   font-size: 0.875rem;
   font-family: $alshaya-bold;
+  font-weight: normal;
   text-align: $left;
   margin-bottom: 0.3rem;
 
@@ -198,6 +218,10 @@
       background: $tomato;
       border: none;
       padding: 0.656rem;
+
+      @include breakpoint($only-mobile) {
+        max-width: 100%;
+      }
     }
 
     label {

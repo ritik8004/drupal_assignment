@@ -6,6 +6,7 @@
 
     @include breakpoint($upto-tablet) {
       text-align: center;
+      padding-#{$left}: 0.5rem;
     }
   }
 

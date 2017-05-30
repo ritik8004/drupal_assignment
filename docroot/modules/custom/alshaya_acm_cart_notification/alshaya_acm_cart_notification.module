@@ -113,7 +113,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#image' => $image,
       '#product_name' => $product_name,
       '#link' => $url,
-      '#link_text' => t('View Cart.'),
+      '#link_text' => t('view cart'),
     ];
   }
 

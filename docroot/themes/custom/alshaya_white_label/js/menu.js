@@ -145,7 +145,7 @@
       // Toggle Function for Store Locator.
       var $storeHours = $('.hours--label');
       $storeHours.on('click', function () {
-        $(this).next().toggle();
+        $(this).next().slideToggle();
         $(this, $storeHours).toggleClass('open');
         $(this).next().toggleClass('selector--hours');
       });
@@ -172,16 +172,18 @@
       * Make Header sticky on scroll.
       */
 
-      if ($('.block-alshaya-main-menu').length) {
-        var position = $('.block-alshaya-main-menu').offset().top;
-        var nav = $('.block-alshaya-main-menu');
+      if ($('.branding__menu').length) {
+        var position = $('.branding__menu').offset().top;
+        var nav = $('.branding__menu');
 
         $(window).scroll(function () {
           if ($(this).scrollTop() > position) {
+            $('body').addClass('header--fixed');
             nav.addClass('navbar-fixed-top');
           }
           else {
             nav.removeClass('navbar-fixed-top');
+            $('body').removeClass('header--fixed');
           }
         });
       }

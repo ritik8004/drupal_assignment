@@ -10,7 +10,6 @@ dependencies:
     - node.type.acq_product
   module:
     - user
-third_party_settings: {}
 id: node.acq_product.search_result
 targetEntityType: node
 bundle: acq_product

@@ -99,7 +99,7 @@ class GuestDeliveryHome extends AddressFormBase {
 
     $shipping_methods = self::generateShippingEstimates($address);
     $default_shipping = $cart->getShippingMethodAsString();
-    if (!empty($shipping_methods) && !empty($default_shipping)) {
+    if (!empty($shipping_methods) && empty($default_shipping)) {
       $default_shipping = array_keys($shipping_methods)[0];
     }
 

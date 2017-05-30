@@ -156,7 +156,13 @@
   }
 
   .block-system-main-block {
-    display: none;
+    .view-content {
+      display: none;
+    }
+
+    .feed-icons {
+      display: none;
+    }
   }
 }
 

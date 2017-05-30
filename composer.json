@@ -46,7 +46,8 @@
         "drupal/simple_sitemap": "2.x-dev",
         "drupal/robotstxt": "^1.1",
         "drupal/redirect": "^1.0@alpha",
-        "drupal/form_options_attributes": "^1.0"
+        "drupal/form_options_attributes": "^1.0",
+        "drupal/search_api_spellcheck": "dev-8.x-1.x"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -69,6 +70,10 @@
                     "type": "zip"
                 }
             }
+        },
+        "nuvoleweb": {
+            "type": "git",
+            "url": "https://github.com/nuvoleweb/search_api_spellcheck.git"
         }
     },
     "autoload-dev": {
@@ -108,7 +113,7 @@
                 "Autosubmit ignores display-level Use AJAX setting": "https://www.drupal.org/files/issues/remove-pre-execute-method-2877139-3.patch"
             },
             "drupal/core": {
-                "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-17.patch",
+                "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch"
             },
             "drupal/password_policy": {

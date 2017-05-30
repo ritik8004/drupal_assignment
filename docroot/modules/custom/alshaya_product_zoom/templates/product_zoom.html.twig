@@ -3,7 +3,7 @@
     <div class="cloudzoom__herocontainer">
       <div id="cloud-zoom-wrap" class="cloudzoom__image">
         <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
-          <img src="{{ mainImage.mediumurl }}" alt="{{ mainImage.label }}" title="{{ mainImage.label }}" />
+          <div class="img-wrap"><img src="{{ mainImage.mediumurl }}" alt="{{ mainImage.label }}" title="{{ mainImage.label }}" /></div>
           <span class="hover-text">{{ 'Hover over image to zoom'|t }}</span><span class="mobile-hover-text">{{ 'Double tap image to zoom'|t }}</span>
         </a>
       </div>

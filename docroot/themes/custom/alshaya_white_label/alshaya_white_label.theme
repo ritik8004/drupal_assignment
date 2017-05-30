@@ -375,11 +375,11 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       break;
 
     case "user_login_form":
-      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "change_pwd_form":
-      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "user_register_form":
@@ -396,11 +396,11 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
           $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
         }
       }
-      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "webform_submission_alshaya_contact_form":
-      $form['#attached']['library'] = ['alshaya_white_label/autosize_textarea'];
+      $form['#attached']['library'][] = 'alshaya_white_label/autosize_textarea';
       $form['elements']['message']['#rows'] = 1;
       $form['elements']['message']['#attributes']['maxlength'] = 220;
       break;
@@ -636,5 +636,8 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
  */
 function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $email_logo = alshaya_master_get_email_logo('alshaya_white_label');
+  if (empty($email_logo['logo_url'])) {
+    $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
+  }
   $variables['email_logo'] = $email_logo['logo_url'];
 }

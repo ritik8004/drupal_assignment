@@ -185,6 +185,10 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       '#markup' => '<h3 class="my-account-title">' . $this->getTitle() . '</h3>',
     ];
 
+    $build['my_account_mobile_title'] = [
+      '#markup' => '<h3 class="my-account-mobile-title1">' . $this->t('my account') . '</h3><h4 class="my-account-mobile-title2">' . $this->getSubtitle() . '</h4>',
+    ];
+
     $build['my_account_links'] = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
@@ -228,6 +232,27 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $lname = $user->get('field_last_name')->getString();
       if (!empty($fname)) {
         $title = $this->t('Welcome, @fname @lname', ['@fname' => $fname, '@lname' => $lname]);
+      }
+    }
+
+    return $title;
+  }
+
+  /**
+   * Get the dynamic value as subtitle for the block, to be shown in mobile.
+   *
+   * @return string
+   *   Title for the block.
+   */
+  public function getSubtitle() {
+    $user = User::load($this->currentUser->id());
+    $title = '';
+    if ($user) {
+      $user = $this->entityRepository->getTranslationFromContext($user);
+      $fname = $user->get('field_first_name')->getString();
+      $lname = $user->get('field_last_name')->getString();
+      if (!empty($fname)) {
+        $title = $this->t('logged in as @fname @lname', ['@fname' => $fname, '@lname' => $lname]);
       }
     }
 

@@ -31,7 +31,7 @@
         .form-item-privilege-card-number2,
         .form-item-privilege-card-number {
           padding-left: 5px;
-          color: $white;
+          color: $grey-shade;
           font-size: 12px;
 
           input {
@@ -72,7 +72,7 @@
 .order-confirmation {
   #block-jointheclub {
     margin-top: 0.5rem;
-    padding-top: 1.5rem;
+    padding-top: 1.4rem;
 
     @include breakpoint($tablet) {
       margin-top: 3.6rem;
@@ -152,6 +152,7 @@
       @include breakpoint($upto-tablet) {
         padding-#{$left}: 1.25rem;
         padding-bottom: 0.9rem;
+        margin-top: 1rem;
       }
     }
   }

@@ -22,7 +22,7 @@ class AlshayaSearchRange extends QueryTypeRangeBase {
    */
   public function calculateRange($value) {
     $granularity = $this->getGranularity();
-    if ($value < $granularity) {
+    if ($value <= $granularity) {
       $startValue = 0;
       $endValue = $granularity;
     }
@@ -41,7 +41,9 @@ class AlshayaSearchRange extends QueryTypeRangeBase {
    */
   public function calculateResultFilter($value) {
     $granularity = $this->getGranularity();
-    if ($value < $granularity) {
+    // Setting inital raw value to 0.
+    $rawValue = 0;
+    if ($value <= $granularity) {
       $displayValue = $this->t('under @granularity', ['@granularity' => $granularity]);
     }
     else {
@@ -52,11 +54,12 @@ class AlshayaSearchRange extends QueryTypeRangeBase {
       }
       else {
         $displayValue = (($granularity * $divisor) + 1) . ' - ' . ($granularity * ($divisor + 1));
+        $rawValue = $value - ($value % $this->getGranularity());
       }
     }
     return [
       'display' => $displayValue,
-      'raw' => $value - ($value % $this->getGranularity()) ,
+      'raw' => $rawValue,
     ];
   }
 

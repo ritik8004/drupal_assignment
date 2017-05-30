@@ -75,9 +75,82 @@
   }
 
   main {
-    @include breakpoint($upto-tablet) {
-      display: none;
+    @include breakpoint($only-mobile) {
+      #block-alshaya-white-label-page-title,
+      #block-alshaya-white-label-local-tasks,
+      #block-userrecentorders,
+      #block-myaccountneedhelp,
+      article .subtitle,
+      article .account-content-wrapper {
+        display: none;
+      }
+
+      .account--dashboard .joinclub {
+        float: none;
+        width: auto;
+        text-align: center;
+      }
     }
+  }
+
+  &.l-two--sf {
+    @include breakpoint($only-mobile) {
+      article.account--dashboard {
+        margin-bottom: 2.5rem;
+      }
+
+      aside.c-sidebar-first {
+        display: block;
+        margin-bottom: 1.375rem;
+
+        .my-account-mobile-title1 {
+          display: block;
+          font-family: $alshaya-bold;
+          color: $marine-blue;
+          font-size: 1.125rem;
+          margin-bottom: 0.1875rem;
+        }
+
+        .my-account-mobile-title2 {
+          display: block;
+          opacity: 0.6;
+          font-family: $arial;
+          font-size: 0.875rem;
+          color: $black;
+          font-weight: normal;
+          margin-top: 0;
+          margin-bottom: 0.5rem;
+        }
+
+        li {
+          &.my-account {
+            display: none;
+
+            + li a {
+              border-top: 1px solid $white;
+            }
+          }
+
+          a {
+            color: $grey-ash;
+            font-size: 0.875rem;
+            text-transform: capitalize;
+
+            &::after {
+              #{$right}: 0.3125rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-menu-primary,
+.c-sidebar-first {
+  .block-alshaya-my-account-links .my-account-mobile-title1,
+  .block-alshaya-my-account-links .my-account-mobile-title2 {
+    display: none;
   }
 }
 
@@ -133,13 +206,13 @@
       color: $black;
 
       @include breakpoint($desktop) {
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.15rem;
       }
     }
 
     .form-type-password .form-text {
-      font-size: 1.25rem;
-      letter-spacing: 0.312rem;
+      font-size: 1rem;
+      letter-spacing: 0.1875rem;
     }
   }
 
@@ -203,7 +276,7 @@
     }
 
     #block-youllbeableto {
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.5rem;
 
       @include breakpoint($tablet) {
         margin-bottom: 3.4rem;
@@ -242,8 +315,8 @@
 
     @include breakpoint($only-mobile) {
       margin-bottom: 2.063rem;
-      padding-top: 2rem;
-      margin-top: 2.6rem;
+      padding-top: 1.8rem;
+      margin-top: 2.8rem;
     }
   }
 
@@ -374,7 +447,8 @@
       margin-bottom: 1.3rem;
 
       @include breakpoint($only-mobile) {
-        margin-top: 1.4rem;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
       }
 
       @include breakpoint($desktop) {
@@ -504,17 +578,23 @@ main .user-register-form {
     }
 
     .form-type-checkbox {
-      padding-#{$left}: 2rem;
+      padding-#{$left}: 1.8rem;
       line-height: 1.3;
       color: $grey-ash;
 
       @include breakpoint($tablet) {
+        padding-#{$left}: 2rem;
         line-height: 1;
       }
 
       label::before {
-        margin-#{$left}: -2rem;
-        margin-#{$right}: 1rem;
+        margin-#{$left}: -1.8rem;
+        margin-#{$right}: 0.8rem;
+
+        @include breakpoint($tablet) {
+          margin-#{$left}: -2rem;
+          margin-#{$right}: 1rem;
+        }
       }
     }
   }
@@ -531,6 +611,32 @@ main .user-register-form {
 
       @include breakpoint($desktop) {
         margin-top: 0;
+      }
+    }
+  }
+}
+
+.c-user-login.user-page,
+.c-user-register {
+  .c-sidebar-second #block-youllbeableto {
+    @include breakpoint($only-mobile) {
+      h2 {
+        margin-bottom: 15px;
+      }
+
+      span.icon-wish {
+        margin-#{$left}: -34px;
+      }
+
+      span {
+        margin-#{$left}: -12px;
+        vertical-align: middle;
+        height: 15px;
+        background-size: contain;
+      }
+
+      p {
+        margin: 0.6rem 0;
       }
     }
   }

@@ -43,8 +43,8 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
   <table class="mobile--only--sell">
     <tr>
       <td class="sell--image">
-        {% if content.image_url is not null %}
-          <img src={{ content.image_url }} />
+        {% if content.image is not null %}
+          {{ content.image }}
         {% endif %}
       </td>
 

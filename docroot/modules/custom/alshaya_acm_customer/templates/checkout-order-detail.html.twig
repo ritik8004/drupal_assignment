@@ -67,7 +67,7 @@
           <div class="label font-small">{{ "Delivery to"|t }}</div>
           <div class="dark">{{ order_details.delivery_to }}</div>
           <div class="contact">
-            <div class="label font-small">{{ "Contact no."|t }}</div>
+            <div class="label font-small">{{ "Contact number"|t }}</div>
             <div class="dark">{{ order_details.contact_no }}</div>
           </div>
 
@@ -114,6 +114,12 @@
           {% trans %}
           Product details ({{ products_count }})
           {% endtrans %}
+        </td>
+      </tr>
+
+      <tr class="collapse-row continue--shopping--mobile">
+      <td colspan="2">
+        <a href="{{ url('<front>') }}">{{ 'Continue shopping'|t }}</a>
         </td>
       </tr>
 
@@ -174,7 +180,7 @@
       <tr class="sub-total-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
-        <td>{{ "Sub total"|t }}</td>
+        <td class="right--align">{{ "Sub total"|t }}</td>
         <td class="blend">
           {{ order_details.sub_total }}
         </td>
@@ -184,7 +190,7 @@
       <tr class="delivery-charge-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
-        <td>{{ "Delivery charge"|t }}</td>
+        <td class="right--align">{{ "Delivery charge"|t }}</td>
         <td class="blend">
           {{ order_details.delivery_charge }}
         </td>
@@ -195,7 +201,7 @@
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
         <td>
-          <div class="dark">{{ "ORDER TOTAL"|t }}</div>
+          <div class="dark right--align upcase">{{ "Order Total"|t }}</div>
         </td>
         <td class="warm--white">
           <div class="dark">

@@ -171,6 +171,11 @@ function _alshaya_captcha_form_after_threshold_validate(&$form, FormStateInterfa
 function _alshaya_captcha_form_no_delay_captcha_validate(&$form, FormStateInterface $form_state) {
   if ($errors = $form_state->getErrors()) {
     if (isset($errors['captcha_response'])) {
+      // If captcha response is empty (user didn't use the captcha).
+      if (empty($_POST['g-recaptcha-response'])) {
+        $errors['captcha_response'] = t('Please fill the captcha.');
+      }
+
       $form['captcha']['#suffix'] = '<div class="form-item--error-message captcha-inline-error">' . $errors['captcha_response'] . '</div>';
     }
   }

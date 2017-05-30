@@ -24,6 +24,10 @@
   .user__order--detail {
     margin-bottom: 1.1875rem;
 
+    @include breakpoint($only-tablet) {
+      margin-bottom: 2rem;
+    }
+
     .order-details-row .blend,
     .order-details-row .tablet-blend {
       @include breakpoint($desktop) {
@@ -34,6 +38,25 @@
         width: 8.375rem;
         padding: 0.625rem;
       }
+    }
+
+    td {
+      .price-wrapper .price-currency {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .continue--shopping--mobile {
+    background-color: $white-five;
+
+    td {
+      padding: 0;
+      padding-top: 1rem;
+    }
+
+    @include breakpoint($tablet) {
+      display: none !important;
     }
   }
 
@@ -63,8 +86,8 @@
 
   .order-summary {
     @include breakpoint($tablet) {
-      margin-top: 1.42rem;
-      margin-bottom: 3.4rem;
+      margin-top: 0.7rem;
+      margin-bottom: 2.7rem;
       background-color: $pale-grey;
       padding: 1.125rem;
       padding-#{$left}: 1.3rem;
@@ -73,6 +96,11 @@
       color: $cerulean-two;
       display: table;
       width: 100%;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1.42rem;
+      margin-bottom: 3.4rem;
     }
   }
 
@@ -96,8 +124,12 @@
     @include icon(infomation, before) {
       font-size: 2rem;
       display: inline-block;
-      margin-right: 0.4rem;
+      margin-#{$right}: 0.4rem;
       vertical-align: middle;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 1.4rem;
+      }
     }
   }
 
@@ -106,7 +138,7 @@
     @include breakpoint($only-mobile) {
       background-color: $pale-grey;
       padding: 1.125rem;
-      padding-#{$left}: 1.3rem;
+      padding-#{$left}: 0.8rem;
       padding-#{$right}: 1.5rem;
       font-size: 0.875rem;
       color: $cerulean-two;
@@ -170,6 +202,12 @@
         margin-top: 2.5rem;
       }
     }
+
+    .form-actions.form-wrapper {
+      @include breakpoint($only-tablet) {
+        margin-top: 0.5rem;
+      }
+    }
   }
 
   .block-checkout-register-block {
@@ -202,6 +240,10 @@
 
       h3 {
         font-size: 0.875rem;
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: 0.7rem;
+        }
       }
 
       @include breakpoint($only-tablet) {
@@ -234,15 +276,33 @@
   .label.font-small {
     font-size: 0.75rem;
     margin-bottom: 0;
+    color: $cerulean-two;
   }
 
   td .contact {
-    margin-top: 2rem;
+    margin-top: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2rem;
+    }
+  }
+
+  .right--align {
+    text-align: $right;
   }
 
   .product--count {
-    border-bottom: 1px solid $white-five;
-    border-top: 1px solid $white-five;
+    border-top: 0.625rem solid $white-five;
+    font-size: 0.875rem;
+
+    @include breakpoint($tablet) {
+      border-bottom: 1px solid $white-five;
+      border-top: 1px solid $white-five;
+    }
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.75rem;
+    }
 
     td {
       position: relative;
@@ -377,18 +437,20 @@
   }
 }
 
+.order-confirmation .continue--shopping--mobile a,
 #edit-confirmation-continue-shopping {
   font-size: 0.75rem;
+  font-family: $alshaya-bold;
+  font-weight: normal;
   border: 1px solid $marine-blue;
   float: $right;
   padding: 0.5rem 1em;
   width: 100%;
   text-align: center;
   text-transform: lowercase;
-  font-weight: bold;
 
   @include breakpoint($tablet) {
-    margin-#{$right}: 6rem;
+    margin-#{$right}: 6.1rem;
     width: 9.875rem;
   }
 
@@ -405,11 +467,12 @@
 
 .confirmation__signup--title {
   color: $marine-blue-two;
+  font-family: $alshaya-bold;
+  font-weight: normal;
   border-bottom: 1px solid $white;
   padding-bottom: 0.5rem;
   margin-bottom: 2.3125rem;
   text-transform: lowercase;
-  font-weight: 700;
 
   @include breakpoint($tablet) {
     top: 0.2rem;

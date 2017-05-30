@@ -11,7 +11,7 @@ bundle: 1_row_3_col_delivery_banner
 label: 'Sub title'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

@@ -10,7 +10,6 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 
 /**
@@ -148,6 +147,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
     }
 
     array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
+    $form['#validate'][] = 'alshaya_acm_customer_login_post_validate';
   }
 
   if ($form_id == 'user_register_form') {
@@ -221,7 +221,29 @@ function alshaya_acm_customer_user_email_validate($form, FormStateInterface $for
       $form_state->setValue('name', $user->getAccountName());
     }
     elseif (!$config->get('login_with_username')) {
-      $form_state->setErrorByName('name', t('Unrecognized username or password. <a href=":password">Forgot your password?</a>', [':password' => Url::fromRoute('user.pass')->toString()]));
+      $form_state->setErrorByName('name', t('Unrecognized email address or password.'));
+    }
+  }
+}
+
+/**
+ * Post validate callback to set proper messages.
+ */
+function alshaya_acm_customer_login_post_validate(array &$form, FormStateInterface &$form_state) {
+  // Do something here only if we have errors.
+  if ($all_errors = $form_state->getErrors()) {
+    // Clear all errors before setting them as expected.
+    $form_state->clearErrors();
+
+    // Set error without name ref for name error.
+    if (isset($all_errors['name'])) {
+      drupal_set_message($all_errors['name'], 'error');
+      unset($all_errors['name']);
+    }
+
+    // Set all other errors.
+    foreach ($all_errors as $field_name => $error) {
+      $form_state->setErrorByName($field_name, $error);
     }
   }
 }
