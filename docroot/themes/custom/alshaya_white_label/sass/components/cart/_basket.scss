@@ -156,15 +156,17 @@
       font-size: 0.625rem;
       position: absolute;
       z-index: 1;
-      padding: 5px 11px;
-      top: 1.25rem;
-      #{$right}: 5rem;
+      padding: 10px 11px;
+      top: 1rem;
+      #{$left}: -4.5rem;
+      color: $windows-blue;
       background-color: $alice-blue;
       border: 1px solid $cerulean-two;
+      border-radius: 2px;
       width: 10.81rem;
 
-      @include breakpoint($upto-desktop) {
-        #{$right}: 0;
+      @include breakpoint($desktop) {
+        #{$left}: 1.1rem;
       }
     }
 
@@ -209,21 +211,28 @@
     @extend %tooltip-before-after;
 
     @include breakpoint($desktop) {
-      #{$right}: 36px;
+      #{$right}: 5rem;
     }
   }
 
   .tooltip::after {
     @extend %tooltip-after;
+
+    border-bottom-width: 7px;
+
+    @include breakpoint($desktop) {
+      #{$right}: 5.05rem;
+    }
   }
 
   .tooltip::before {
     #{$right}: 3px;
+    border-bottom-width: 8px;
 
     @extend %tooltip-before;
 
     @include breakpoint($desktop) {
-      #{$right}: 35px;
+      #{$right}: 5rem;
     }
   }
 
