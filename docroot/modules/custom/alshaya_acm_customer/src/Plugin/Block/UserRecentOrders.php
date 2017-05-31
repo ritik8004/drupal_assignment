@@ -208,9 +208,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       \Drupal::logger('alshaya_acm_customer')->error($e->getMessage());
     }
 
-    // @Todo - Determine caching strategy for the block.
-    $build['#cache']['max-age'] = 0;
-
     return $build;
   }
 
@@ -219,6 +216,15 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    // Get uid of current user.
+    $uid = $this->currentUser->id();
+    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $uid . ':orders']);
   }
 
 }
