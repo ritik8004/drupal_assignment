@@ -109,9 +109,6 @@
             "drupal/simple_sitemap": {
                 "Implement changefreq functionality": "https://www.drupal.org/files/issues/2875538-5.patch"
             },
-            "drupal/better_exposed_filters": {
-                "Autosubmit ignores display-level Use AJAX setting": "https://www.drupal.org/files/issues/remove-pre-execute-method-2877139-3.patch"
-            },
             "drupal/core": {
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch"
