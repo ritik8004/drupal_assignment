@@ -208,6 +208,9 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       \Drupal::logger('alshaya_acm_customer')->error($e->getMessage());
     }
 
+    // @Todo - Determine caching strategy for the block.
+    $build['#cache']['max-age'] = 0;
+
     return $build;
   }
 
