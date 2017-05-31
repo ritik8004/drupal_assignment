@@ -791,4 +791,9 @@ function alshaya_master_install() {
     ->set('region', 'breadcrumb')
     ->set('weight', '-26')
     ->save();
+
+  // Set the access-denied page to '/user'.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('page.403', '/user')
+    ->save();
 }
