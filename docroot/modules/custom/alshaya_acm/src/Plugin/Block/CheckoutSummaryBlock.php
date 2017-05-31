@@ -185,8 +185,14 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     // Discount.
+    $discount = NULL;
     if ((float) $totals['discount'] > 0) {
       $discount = alshaya_acm_price_format($totals['discount']);
+    }
+
+    $shipping = NULL;
+    if ((float) $totals['shipping'] != 0) {
+      $shipping = alshaya_acm_price_format($totals['shipping']);
     }
 
     // Grand Total or Order total.
@@ -203,6 +209,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#subtotal' => $subtotal,
       '#tax' => $tax,
       '#discount' => $discount,
+      '#shipping' => $shipping,
       '#ordertotal' => $order_total,
       '#delivery_address' => $shipping_address_string,
       '#delivery_method' => $shipping_method_string,

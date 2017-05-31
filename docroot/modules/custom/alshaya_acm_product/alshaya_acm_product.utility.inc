@@ -294,6 +294,10 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 function alshaya_acm_product_get_display_node($sku) {
   $sku = is_object($sku) ? $sku->getSKU() : $sku;
 
+  if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
+    $sku = $parent_sku->getSku();
+  }
+
   $query = \Drupal::entityQuery('node')
     ->condition('type', 'acq_product')
     ->condition('field_skus', $sku)

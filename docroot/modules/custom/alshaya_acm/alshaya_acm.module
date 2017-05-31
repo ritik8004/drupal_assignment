@@ -318,6 +318,10 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     ];
   }
 
+  if ((float) $totals['shipping'] != 0) {
+    $totals['grand'] -= $totals['shipping'];
+  }
+
   $form['totals']['grand']['value'] = [
     '#markup' => alshaya_acm_price_format($totals['grand']),
   ];
@@ -500,6 +504,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'products' => '',
         'subtotal' => '',
         'tax' => '',
+        'shipping' => '',
         'discount' => '',
         'ordertotal' => '',
         'currency_format' => '',
