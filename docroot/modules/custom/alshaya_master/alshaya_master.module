@@ -12,6 +12,18 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
+ * Implements hook_editor_js_settings_alter().
+ */
+function alshaya_master_editor_js_settings_alter(array &$settings) {
+  if (isset($settings['editor']['formats']['rich_text'])) {
+    // Remove the editor's built in context menu.
+    // context menu is dependent on tableTools and tableResize plugins, so need
+    // to remove those too.
+    $settings['editor']['formats']['rich_text']['editorSettings']['removePlugins'] = 'contextmenu,tabletools,tableresize';
+  }
+}
+
+/**
  * Implements hook_block_build_alter().
  */
 function alshaya_master_block_build_alter(array &$build, BlockPluginInterface $block) {
