@@ -289,12 +289,17 @@
   }
 
   .lSAction {
+    & > a {
+      height: 35px;
+      width: 35px;
+    }
+
     .lSPrev {
       @include icon(chevronleft);
 
       background: $white-five;
-      border-radius: 30px;
-      font-size: 30px;
+      border-radius: 35px;
+      font-size: 35px;
       text-align: center;
       color: $black;
     }
@@ -303,8 +308,8 @@
       @include icon(chevronright);
 
       background: $white-five;
-      border-radius: 30px;
-      font-size: 30px;
+      border-radius: 35px;
+      font-size: 35px;
       text-align: center;
       color: $black;
     }
