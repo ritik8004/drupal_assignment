@@ -474,6 +474,7 @@
   p {
     margin: 0;
     font-size: 0.75rem;
+    font-family: $arial;
 
     @include breakpoint($desktop) {
       font-size: 0.9375rem;
