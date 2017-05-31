@@ -642,6 +642,12 @@ function alshaya_master_install() {
     'Back to top' => [
       'ar' => 'الرجوع إلى أعلى',
     ],
+    'The password does not satisfy the password policies.' => [
+      'ar' => 'كلمة السر غير مطابقة لسياسات كلمة السر',
+    ],
+    '%name is not recognized as a username or an email address.' => [
+      'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
