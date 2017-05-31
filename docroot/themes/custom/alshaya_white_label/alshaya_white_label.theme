@@ -633,6 +633,9 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
     if ($element['#attributes']['data-twig-suggestion'] == 'addtocart') {
       $suggestions[] = 'input__add_to_cart';
     }
+    if ($element['#attributes']['data-twig-suggestion'] == 'newsletter') {
+      $suggestions[] = 'input__newsletter_submit';
+    }
   }
 }
 
