@@ -218,8 +218,8 @@
       */
 
       if ($('.checkout .multistep-checkout').length) {
-        $('.tab-home-delivery').addClass('active--tab--head');
-        $('#edit-guest-delivery-home, #edit-member-delivery-home').addClass('active--tab--content');
+        $('.tab-home-delivery, .tab-new-customer').addClass('active--tab--head');
+        $('#edit-guest-delivery-home, #edit-member-delivery-home, #edit-checkout-guest').addClass('active--tab--content');
 
         $('.tab').click(function () {
           $('.multistep-checkout .tab').removeClass('active--tab--head');
@@ -232,6 +232,14 @@
           else if ($(this).hasClass('tab-click-collect')) {
             $('.tab-click-collect').addClass('active--tab--head');
             $('#edit-guest-delivery-collect, #edit-member-delivery-collect').addClass('active--tab--content');
+          }
+          else if ($(this).hasClass('tab-new-customer')) {
+            $('.tab-new-customer').addClass('active--tab--head');
+            $('#edit-checkout-guest').addClass('active--tab--content');
+          }
+          else if ($(this).hasClass('tab-returning-customer')) {
+            $('.tab-returning-customer').addClass('active--tab--head');
+            $('#edit-checkout-login').addClass('active--tab--content');
           }
         });
 
