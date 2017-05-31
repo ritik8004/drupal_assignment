@@ -8,4 +8,4 @@ newsletter_js:
   dependencies:
     - core/jquery
     - core/drupal
-    - alshaya_acm_cart_notification/ladda
+    - alshaya_master/ladda

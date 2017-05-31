@@ -37,7 +37,7 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
   // Attach the js file with the add to cart form.
   $form['#attached']['library'][] = 'core/drupal.ajax';
   $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-  $form['#attached']['library'][] = 'alshaya_acm_cart_notification/ladda';
+  $form['#attached']['library'][] = 'alshaya_master/ladda';
   $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
 }
 

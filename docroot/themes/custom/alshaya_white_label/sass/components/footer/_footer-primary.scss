@@ -300,7 +300,8 @@
   .form-submit {
     @extend %btn;
 
-    font-family: $alshaya-thin;
+    font-family: $alshaya-bold;
+    font-weight: normal;
     background: $marine-blue-two;
     position: absolute;
     font-size: 0.75rem;
