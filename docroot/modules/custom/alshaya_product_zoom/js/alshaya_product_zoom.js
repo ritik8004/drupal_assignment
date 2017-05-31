@@ -20,12 +20,14 @@
         $('#lightSlider', context).lightSlider({
           vertical: false,
           item: 3,
+          loop: true,
           verticalHeight: 100
         });
         // Slider 1 - For Desktop - Image zoom.
         $('#drupal-modal #lightSlider', context).lightSlider({
           vertical: false,
           item: 3,
+          loop: true,
           verticalHeight: 100
         });
       }
@@ -33,12 +35,14 @@
         $('#lightSlider', context).lightSlider({
           vertical: true,
           item: 5,
+          loop: true,
           verticalHeight: 440
         });
         // Slider 1 - For Desktop - Image zoom.
         $('#drupal-modal #lightSlider', context).lightSlider({
           vertical: true,
           item: 5,
+          loop: true,
           verticalHeight: 440
         });
       }

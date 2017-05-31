@@ -420,6 +420,7 @@
 
   &.c-change-password,
   &.c-user-edit {
+    padding-top: 0;
     padding-left: 0.5em;
     padding-right: 0.5em;
 
@@ -454,12 +455,6 @@
     width: 100%;
     text-align: center;
     color: $windows-blue;
-  }
-
-  .form-type-email {
-    .form-item--error-message {
-      display: none;
-    }
   }
 }
 
@@ -871,6 +866,7 @@
   border: 0;
 
   .c-page-title {
+    padding-top: 0.2rem;
     border-bottom: 1px solid $white-three;
     position: static;
     padding-bottom: 10px;

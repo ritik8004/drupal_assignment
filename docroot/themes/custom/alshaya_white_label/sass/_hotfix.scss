@@ -24,11 +24,11 @@ body.ucbrowser {
   .owl-prev,
   .owl-next {
     @include breakpoint($tablet) {
-      top: 47%;
+      top: 47% !important;
     }
 
     @include breakpoint($only-mobile) {
-      top: 45%;
+      top: 45% !important;
     }
   }
 

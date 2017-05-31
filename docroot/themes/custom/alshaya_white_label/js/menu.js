@@ -94,14 +94,17 @@
         $('.remove--toggle').removeClass('remove--toggle');
       });
 
-      $('.menu--one__list-item.has-child').hover(
-        function () {
+      var header_timer;
+      $('.main--menu').on('mouseover', function () {
+        header_timer = setTimeout(function () {
           $('body').addClass('overlay');
-        },
-        function () {
-          $('body').removeClass('overlay');
-        }
-      );
+        }, 600);
+      });
+
+      $('.main--menu').on('mouseout', function () {
+        clearTimeout(header_timer);
+        $('body').removeClass('overlay');
+      });
 
       $('.logged-out .account').click(function () {
         $('.account').addClass('active');
@@ -187,6 +190,9 @@
           }
         });
       }
+
+      // Add class for three level navigation.
+      $('.menu--one__list-item:not(:has(.menu--four__list-item))').addClass('has--three-levels');
     }
   };
 

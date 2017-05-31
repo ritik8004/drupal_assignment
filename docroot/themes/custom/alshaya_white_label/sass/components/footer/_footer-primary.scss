@@ -209,6 +209,9 @@
 
     .newsletter-block-label {
       font-family: $alshaya-thin;
+      position: relative;
+      text-indent: -1.625rem;
+      #{$left}: 1.625rem;
     }
   }
 
@@ -217,6 +220,8 @@
 
     .newsletter-block-label {
       font-family: $arial;
+      text-indent: -2.5rem;
+      #{$left}: 2.5rem;
     }
   }
 
@@ -305,7 +310,7 @@
     z-index: 2;
 
     @include breakpoint($tablet) {
-      #{$right}: 1.125rem;
+      #{$right}: 1rem;
       font-size: 0.8125rem;
     }
 
