@@ -539,3 +539,10 @@
     }
   }
 }
+
+#table-cart-totals,
+#table-cart-items {
+  .price-wrapper .price-amount {
+    float: right;
+  }
+}
