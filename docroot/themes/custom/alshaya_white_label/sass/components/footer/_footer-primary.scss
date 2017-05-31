@@ -312,6 +312,34 @@
     @include breakpoint($desktop) {
       #{$right}: 0.125rem;
     }
+
+    &:focus {
+      position: absolute;
+    }
+  }
+
+  #footer-newsletter-form-wrapper {
+    position: absolute;
+    width: 100%;
+
+    @include breakpoint($tablet) {
+      width: 18.19rem;
+      max-width: 18.18rem;
+    }
+  }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $marine-blue-two;
+  }
+
+  .subscription-status .success {
+    background: $tealish;
+    color: $white-four;
+    font-size: 0.75rem;
+    padding: 0.3125rem 0.875rem;
+    margin-top: 0.1875rem;
+    font-weight: bold;
+    display: block;
   }
 }
 
@@ -380,31 +408,33 @@
         padding: 0;
       }
 
+      &.en {
+        font-family: $alshaya-thin;
+      }
+
       &:first-child {
         position: relative;
 
-        &::after {
-          content: "";
-          position: absolute;
-          border-top: 2px solid $peacock-blue;
-          width: 14px;
-          transform: rotate(-73deg);
-          transform-origin: 0% 0%;
-          top: 1em;
-          right: -8px;
-          color: $blue-two;
+        a {
+          margin-#{$right}: 0.6875rem;
+          margin-#{$left}: 0.4375rem;
+          margin-top: 0;
+          margin-bottom: 0;
+        }
 
-          @include breakpoint($only-tablet) {
-            right: -11px;
-          }
+        &::after {
+          content: "|";
+          position: absolute;
+          #{$right}: -2px;
+          color: $marine-blue-two;
         }
       }
 
       a {
-        font-size: 14px;
+        font-size: 0.875rem;
         text-transform: lowercase;
         color: $blue-two;
-        margin: 0 0.4rem;
+        margin: 0 0.6875rem;
         text-decoration: underline;
       }
 
@@ -442,7 +472,7 @@
 
   .c-social-links {
     @include breakpoint($tablet) {
-      margin-top: 2.7rem;
+      margin-top: 1.813rem;
       padding-left: 0.312rem;
     }
 
@@ -455,7 +485,7 @@
 
 .language--switcher {
   @include breakpoint($tablet) {
-    margin-top: 2rem;
+    margin-top: 0.75rem;
   }
 
   @include breakpoint($desktop) {
@@ -466,6 +496,10 @@
 .region__footer-primary {
   @include breakpoint($tablet) {
     padding-left: 0.312rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    max-width: 21.94rem;
   }
 }
 
