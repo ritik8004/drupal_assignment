@@ -24,10 +24,6 @@
       height: 400px;
     }
 
-    @include breakpoint($desktop) {
-      height: 504px;
-    }
-
     #wrap {
       width: 100%;
     }
@@ -117,6 +113,7 @@
             width: 44px;
             height: 96px;
             bottom: 0;
+            font-size: 30px;
             margin-#{$left}: 0;
             margin-#{$right}: 0;
           }
@@ -124,7 +121,7 @@
           .lSPrev {
             @include icon(chevronleft);
 
-            left: 15px;
+            left: 5px;
             top: 20px;
             background-color: $white-five;
             text-align: center;

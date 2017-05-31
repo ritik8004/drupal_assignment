@@ -1,4 +1,4 @@
-{ attach_library('alshaya_white_label/sizeguide') }}
+{{ attach_library('alshaya_white_label/sizeguide') }}
 
 {%
 set classes = [
@@ -55,12 +55,10 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         </div>
 
         {% if sku_out_of_stock %}
-          <div class="out-of-stock {{ sku_out_of_stock }}">{{ content.sharethis }}</div>
-        {% else %}
-          {{ content.sharethis }}
+          <div class="out-of-stock {{ sku_out_of_stock }}"></div>
         {% endif %}
 
-        <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ "View Full Product Details"|t }}</a>
+        <a class="full-prod-link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ "View Full Product Details"|t }}</a>
 
       </div>
     </div>

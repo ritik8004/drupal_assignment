@@ -1,6 +1,5 @@
 .view-product-slider {
   text-align: center;
-  max-width: 19rem;
   margin: auto;
   margin-bottom: 2.4rem;
 
@@ -8,14 +7,6 @@
     padding: 0 2.75rem;
     margin-#{$left}: 0;
     margin-bottom: 1.5rem;
-  }
-
-  @include breakpoint($desktop) {
-    max-width: 44.5rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    max-width: 26rem;
   }
 
   .c-products__item__label {
@@ -87,7 +78,7 @@
 
   .views-row {
     @include breakpoint($tablet) {
-      height: 18.1rem;
+      //height: 18.1rem;
     }
 
     .use-ajax {
@@ -312,5 +303,140 @@
 
   @include breakpoint($desktop) {
     margin-top: 6px;
+  }
+}
+
+// Theming modal window for the cross-sell and up sell
+#drupal-modal {
+  .contextual-region {
+    position: static;
+  }
+}
+
+.acq-content-product-modal {
+  .content {
+    &__main {
+      @include breakpoint($tablet) {
+        width: 60%;
+        float: $left;
+      }
+
+      @include breakpoint($desktop) {
+        width: 70%;
+        float: $left;
+      }
+    }
+
+    &__sidebar {
+      @include breakpoint($mobile) {
+        position: relative;
+      }
+
+      @include breakpoint($tablet) {
+        position: static;
+      }
+
+      @include breakpoint($tablet) {
+        width: 40%;
+        float: $right;
+        padding: 0 1rem;
+      }
+
+      @include breakpoint($desktop) {
+        width: 30%;
+        float: $right;
+        padding: 0 1.5rem;
+      }
+    }
+  }
+
+  .cloudzoom__image {
+    .img-wrap {
+      overflow: hidden;
+
+      @include breakpoint($tablet) {
+        height: 350px;
+      }
+
+      @include breakpoint($desktop) {
+        height: 421px;
+      }
+    }
+  }
+
+  .hover-text {
+    @include u-visibility(none);
+  }
+
+  .c-products__item__label {
+    font-family: $alshaya-thin;
+    font-size: 18px;
+    font-weight: 100;
+    margin-top: 0;
+  }
+
+  .form-item-quantity {
+    float: $left;
+    width: 150px;
+
+    label {
+      float: $left;
+      padding: 5px 20px 5px 0;
+    }
+
+    .edit-quantity {
+      border: none;
+      border-radius: 0;
+      padding: 5px 10px;
+      appearance: none;
+      margin: 0 5px;
+      float: $left;
+    }
+  }
+
+  .full-prod-link {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    padding: 15px 0;
+    border-top: 1px solid $white;
+    border-bottom: 1px solid $white;
+    margin-bottom: 1.5em;
+    font-family: $arial;
+    font-size: 14px;
+    font-weight: bold;
+    color: $marine-blue;
+    line-height: 1.8rem;
+    text-align: $left;
+
+    @include breakpoint($tablet) {
+      width: 35%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 25%;
+    }
+
+    @include if-ltr {
+      @include icon(chevronright, after);
+
+      &::after {
+        float: $right;
+        font-size: 30px;
+        line-height: 1;
+        vertical-align: top;
+      }
+    }
+
+    @include if-rtl {
+      @include icon(chevronright, before);
+
+      &::before {
+        float: $right;
+        font-size: 30px;
+        line-height: 1;
+        vertical-align: top;
+      }
+    }
   }
 }

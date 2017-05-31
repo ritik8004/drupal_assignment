@@ -454,7 +454,7 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
     foreach ($form['ajax']['configurables'] as $key => $form_item) {
       if (is_array($form_item) && isset($form_item['#type']) && $form_item['#type'] == 'select') {
-        $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @attribute', ['@attribute' => strtolower($form_item['#title'])]);
+        $form['ajax']['configurables'][$key]['#empty_option'] = t('@attribute', ['@attribute' => strtolower($form_item['#title'])]);
       }
     }
   }

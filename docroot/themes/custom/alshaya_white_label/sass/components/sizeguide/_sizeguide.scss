@@ -11,8 +11,15 @@
   top: 0 !important;
   left: 0 !important;
   background: rgba(0, 0, 0, 0.5);
-  padding: 100px calc((100% - 1080px) / 2);
   overflow: hidden;
+
+  @include breakpoint($tablet) {
+    padding: calc((100vh - 576px) / 2) calc((100vw - 768px) / 2);
+  }
+
+  @include breakpoint($desktop) {
+    padding: calc((100vh - 568px) / 2) calc((100vw - 1080px) / 2);
+  }
 
   .ui-dialog-titlebar {
     padding: 0;
@@ -31,67 +38,5 @@
     background: $white-five;
     padding: 2em;
     overflow: hidden;
-
-    .sku-base-form {
-      padding: 20px 0;
-      border-bottom: 1px solid $white-two;
-    }
-
-    .more-content {
-      border-bottom: 1px solid $white-two;
-      margin: 0;
-      padding: 16px 0;
-
-      .link {
-        font-size: 14px;
-        font-weight: bold;
-        color: $marine-blue;
-      }
-
-      .arrow {
-        @include icon(chevronright);
-
-        font-size: 20px;
-        font-weight: bold;
-        color: $marine-blue;
-        position: absolute;
-        right: 0;
-      }
-    }
-
-    #lightSlider {
-      margin-top: 50px;
-      padding-left: 0;
-
-      img {
-        width: 100%;
-        height: auto;
-      }
-
-      &.pager-no {
-        margin-top: 0;
-      }
-
-      li {
-        overflow: hidden;
-
-        @include breakpoint($tablet) {
-          height: 60px !important;
-        }
-
-        @include breakpoint($desktop) {
-          height: 85px !important;
-          float: none !important;
-        }
-
-        &.active {
-          border: 1px solid;
-        }
-
-        img {
-          width: 100%;
-        }
-      }
-    }
   }
 }

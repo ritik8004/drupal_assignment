@@ -10,22 +10,18 @@
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)', context);
-      if (items.length) {
-        items.addClass('cloud-zoom-processed').CloudZoom();
-      }
 
-      var modalitems = $('.acq-content-product-modal .cloud-zoom:not(modal-cloud-zoom-processed), .acq-content-product-modal .cloudzoom__thumbnails__image:not(modal-cloud-zoom-processed)', context);
-      if (modalitems.length) {
-        modalitems.addClass('modal-cloud-zoom-processed').CloudZoom();
+
+      var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)');
+      if (items.length) {
+        items.addClass('cloud-zoom-processed', context).CloudZoom();
       }
 
       // Slider 1 - For Desktop - Image zoom.
       if ($(window).width() < 1025) {
-        $('.acq-content-product #lightSlider', context).lightSlider({
+        $('#lightSlider', context).lightSlider({
           vertical: false,
           item: 3,
-          loop: true,
           verticalHeight: 100
         });
         // Slider 1 - For Desktop - Image zoom.
@@ -214,7 +210,7 @@
         }
       });
       // For Desktop slider, we add a iframe on click on the image.
-      $('.acq-content-product #lightSlider li', context).on('click', function () {
+      $('#lightSlider li', context).on('click', function () {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var wrap = $('#cloud-zoom-wrap');
           // Get width & height of wrap.
@@ -237,6 +233,29 @@
         }
       });
 
+      $('.acq-content-product-modal #lightSlider li', context).on('click', function () {
+        if ($(this).hasClass('cloudzoom__thumbnails__video')) {
+          var wrap = $('.acq-content-product-modal #cloud-zoom-wrap');
+          // Get width & height of wrap.
+          var width = wrap.width();
+          var height = wrap.height();
+          var URL = $(this).attr('data-iframe');
+          $('.acq-content-product-modal #yt-vi-container iframe').remove();
+          appendVideoIframe($('.acq-content-product-modal #yt-vi-container'), URL, width, height);
+          $('#cloud-zoom-wrap').hide();
+        }
+        else {
+          var bigImage = $(this).children('a').attr('href');
+          // Put the big image in our main container.
+          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
+          $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
+          $('.acq-content-product-modal #cloud-zoom-wrap iframe').remove();
+          $('.acq-content-product-modal #cloud-zoom-wrap img').show();
+        }
+        // Stop the browser from loading the image in a new tab.
+        return false;
+      });
+
       $('#product-image-gallery li img', context).on('click', function () {
         if ($(this).parent().hasClass('imagegallery__thumbnails__image')) {
           $(this).parent().parent().siblings('.lslide').removeClass('active');
@@ -251,8 +270,6 @@
           playerIframe.remove();
           $('#cloud-zoom-wrap').show();
         }
-        // $(this).siblings('.active').removeClass('active');
-        // $(this).addClass('active');
       });
 
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
