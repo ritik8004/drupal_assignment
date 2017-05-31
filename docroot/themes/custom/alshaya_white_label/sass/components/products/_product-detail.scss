@@ -487,7 +487,8 @@
 
       @include u-visibility(inline-block);
 
-      a {
+      a,
+      span {
         @include u-visibility(block);
 
         margin: 5px 5px 5px 0;
@@ -506,28 +507,10 @@
       &.disabled {
         position: relative;
 
-        &::before,
-        &::after {
-          content: "";
-          position: absolute;
-          z-index: -1;
-          background: $black;
-        }
-
-        &::before {
-          left: 50%;
-          width: 1px;
-          height: calc(100% * 1.414);
-          top: -21%;
-          transform: rotate(45deg);
-        }
-
-        &::after {
-          top: 50%;
-          left: -21%;
-          height: 1px;
-          width: calc(100% * 1.414);
-          transform: rotate(45deg);
+        a,
+        span {
+          background: url("../imgs/icons/disabled.png") no-repeat;
+          background-size: 100% 100%;
         }
       }
     }
