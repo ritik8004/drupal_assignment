@@ -240,6 +240,7 @@ function alshaya_acm_customer_login_post_validate(array &$form, FormStateInterfa
     // Set error without name ref for name error.
     if (isset($all_errors['name'])) {
       drupal_set_message($all_errors['name'], 'error');
+      $form_state->setErrorByName('custom', $all_errors['name']);
       unset($all_errors['name']);
     }
 
