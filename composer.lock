@@ -6429,6 +6429,9 @@
                 "drupal": {
                     "version": "8.x-1.0-alpha1",
                     "datestamp": "1472948339"
+                },
+                "patches_applied": {
+                    "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-8.xalpha1-10.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
