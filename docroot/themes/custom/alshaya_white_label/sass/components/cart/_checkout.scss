@@ -238,7 +238,7 @@
   }
 
   .form-item-billing-information-address-first-name {
-    padding-right: 1rem;
+    padding-#{$right}: 1rem;
   }
 
   .form-item-billing-information-address-first-name,
@@ -519,12 +519,8 @@ body.alias--cart {
         }
       }
 
-      &:nth-child(2n) {
+      &:hover {
         background: rgba(247, 247, 247, 0.72);
-
-        td:last-child {
-          background: $white-four;
-        }
       }
 
       th {
@@ -564,14 +560,58 @@ body.alias--cart {
             width: 7.2rem;
           }
         }
+
+        &.delivery-option {
+          padding-top: 0;
+        }
       }
 
       td.name {
         width: 18.75rem;
-        padding-right: 4px;
+        padding-#{$right}: 4px;
+        display: table-cell;
 
         @include breakpoint($desktop) {
           width: 25rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          width: auto;
+          padding-bottom: 0;
+        }
+
+        div.image {
+          @include breakpoint($only-mobile) {
+            width: 8rem;
+            height: 9rem;
+            margin-#{$right}: 1rem;
+          }
+        }
+
+        div.items {
+          @include breakpoint($only-mobile) {
+            width: 48%;
+            padding-left: 0;
+            margin-bottom: 2.8rem;
+
+            a {
+              width: auto;
+            }
+          }
+        }
+      }
+
+      td.quantity {
+        @include breakpoint($only-mobile) {
+          float: none;
+          margin-#{$left}: 9rem;
+          margin-top: -2.8rem;
+          padding-#{$right}: 0;
+
+          > div:first-child {
+            display: inline-block;
+          }
         }
       }
 
@@ -643,6 +683,8 @@ body.alias--cart {
 
       select {
         @include select-style(4.375rem);
+
+        text-indent: 0.4rem;
       }
 
       .form-type-select {
@@ -673,7 +715,7 @@ body.alias--cart {
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 21.7%;
+      margin-#{$right}: 21.6%;
     }
 
     .edit-continue-shopping-mobile,
@@ -700,9 +742,13 @@ body.alias--cart {
     td:last-child {
       background: $white-four;
       color: $black;
-      margin-left: 1rem;
+      margin-#{$left}: 1rem;
       padding: 1rem;
       text-align: $left;
+
+      @include breakpoint($desktop) {
+        padding: 1.5rem;
+      }
     }
 
     tr:last-child {
@@ -724,14 +770,14 @@ body.alias--cart {
     tr > td {
       @include breakpoint($tablet) {
         padding-#{$right}: 1rem;
-        width: 7.5rem;
+        width: 8rem;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         height: 38px;
         vertical-align: middle;
 
         &:first-child {
-          padding-right: 0.75rem;
+          padding-#{$right}: 0.75rem;
         }
       }
 
