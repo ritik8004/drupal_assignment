@@ -78,6 +78,7 @@
 
     .price-currency.prefix {
       padding-right: 0.5rem;
+      float: $left;
 
       @include breakpoint($tablet) {
         padding-right: 0;
@@ -543,6 +544,6 @@
 #table-cart-totals,
 #table-cart-items {
   .price-wrapper .price-amount {
-    float: right;
+    float: $left;
   }
 }
