@@ -217,7 +217,7 @@
       * Toggles the Tabs.
       */
 
-      if ($('.c-delivery-checkout .multistep-checkout').length) {
+      if ($('.checkout .multistep-checkout').length) {
         $('.tab-home-delivery').addClass('active--tab--head');
         $('#edit-guest-delivery-home, #edit-member-delivery-home').addClass('active--tab--content');
 
