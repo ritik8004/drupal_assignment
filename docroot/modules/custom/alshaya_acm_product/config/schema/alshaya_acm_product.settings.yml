@@ -3,5 +3,8 @@ alshaya_acm_product.settings:
   label: 'Alshaya ACM Product settings'
   mapping:
     size_guide_link:
-      type: text
-      label: 'Size Guide link'
+      type: integer
+      label: 'Enable Size Guide link'
+    size_guide_modal_content:
+      type: text_format
+      label: 'Size guide content'
