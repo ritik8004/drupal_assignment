@@ -42,7 +42,7 @@
   ],
   "link": [
     {
-      "uri": "internal:\/store",
+      "uri": "internal:\/store-finder",
       "title": "",
       "options": {
         "attributes": {
