@@ -156,7 +156,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $product_delivery_options .= '<p class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<p>';
       $product_delivery_options .= '</div>';
       $product_delivery_options .= '<div class="contains--tooltip">';
-      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click and Collect') . '</p>';
+      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click & Collect') . '</p>';
       $product_delivery_options .= '<p class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</p>';
       $product_delivery_options .= '</div>';
       $product_delivery_options .= '</div>';
