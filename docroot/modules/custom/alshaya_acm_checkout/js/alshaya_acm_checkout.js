@@ -39,6 +39,57 @@
           }
         });
       });
+
+      // Show/hide fields based on availability of shipping methods.
+      if ($('#shipping_methods_wrapper').length) {
+        if ($('#shipping_methods_wrapper input:radio').length > 0) {
+          $('#shipping_methods_wrapper fieldset').show();
+          $('[data-drupal-selector="edit-actions-get-shipping-methods"]').hide();
+          $('[data-drupal-selector="edit-actions-next"]').show();
+
+          // Select the first method by default.
+          if ($('#shipping_methods_wrapper input[type="radio"]:checked').length === 0) {
+            $('#shipping_methods_wrapper input[type="radio"]:first').trigger('click');
+          }
+        }
+        else {
+          $('#shipping_methods_wrapper fieldset').hide();
+          $('[data-drupal-selector="edit-actions-get-shipping-methods"]').show();
+          $('[data-drupal-selector="edit-actions-next"]').hide();
+        }
+      }
+
+
+      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.beforeSendAcmCheckout === 'undefined') {
+        Drupal.Ajax.prototype.beforeSendAcmCheckout = Drupal.Ajax.prototype.beforeSend;
+        Drupal.Ajax.prototype.successAcmCheckout = Drupal.Ajax.prototype.success;
+
+        // See docroot/core/misc/ajax.js > Drupal.Ajax.prototype.beforeSend()
+        Drupal.Ajax.prototype.beforeSend = function (xmlhttprequest, options) {
+          // Invoke the original function.
+          this.beforeSendAcmCheckout(xmlhttprequest, options);
+
+          // Disable submit button.
+          $('#edit-actions .form-submit').each(function () {
+            if ($(this).prop('disabled') === false) {
+              $(this).addClass('acm-checkout-ajax-disabled');
+              $(this).prop('disabled', true);
+            }
+          });
+        };
+
+        // See docroot/core/misc/ajax.js > Drupal.Ajax.prototype.success()
+        Drupal.Ajax.prototype.success = function (response, status) {
+          // Invoke the original function.
+          this.successAcmCheckout(response, status);
+
+          // Disable submit button.
+          $('.acm-checkout-ajax-disabled').each(function () {
+            $(this).removeClass('acm-checkout-ajax-disabled');
+            $(this).prop('disabled', false);
+          });
+        };
+      }
     }
   };
 

@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * @file
+ * Acquia Commerce promotions module file.
+ *
+ * Provides base hooks to the promotions functionality of Acquia Commerce
+ * connector.
+ */

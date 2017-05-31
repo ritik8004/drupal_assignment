@@ -75,9 +75,82 @@
   }
 
   main {
-    @include breakpoint($upto-tablet) {
-      display: none;
+    @include breakpoint($only-mobile) {
+      #block-alshaya-white-label-page-title,
+      #block-alshaya-white-label-local-tasks,
+      #block-userrecentorders,
+      #block-myaccountneedhelp,
+      article .subtitle,
+      article .account-content-wrapper {
+        display: none;
+      }
+
+      .account--dashboard .joinclub {
+        float: none;
+        width: auto;
+        text-align: center;
+      }
     }
+  }
+
+  &.l-two--sf {
+    @include breakpoint($only-mobile) {
+      article.account--dashboard {
+        margin-bottom: 2.5rem;
+      }
+
+      aside.c-sidebar-first {
+        display: block;
+        margin-bottom: 1.375rem;
+
+        .my-account-mobile-title1 {
+          display: block;
+          font-family: $alshaya-bold;
+          color: $marine-blue;
+          font-size: 1.125rem;
+          margin-bottom: 0.1875rem;
+        }
+
+        .my-account-mobile-title2 {
+          display: block;
+          opacity: 0.6;
+          font-family: $arial;
+          font-size: 0.875rem;
+          color: $black;
+          font-weight: normal;
+          margin-top: 0;
+          margin-bottom: 0.5rem;
+        }
+
+        li {
+          &.my-account {
+            display: none;
+
+            + li a {
+              border-top: 1px solid $white;
+            }
+          }
+
+          a {
+            color: $grey-ash;
+            font-size: 0.875rem;
+            text-transform: capitalize;
+
+            &::after {
+              #{$right}: 0.3125rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-menu-primary,
+.c-sidebar-first {
+  .block-alshaya-my-account-links .my-account-mobile-title1,
+  .block-alshaya-my-account-links .my-account-mobile-title2 {
+    display: none;
   }
 }
 
@@ -89,8 +162,8 @@
 
 .c-user-login.user-page {
   @include breakpoint($only-mobile) {
-    margin-top: 2.5em;
-    padding-top: 1.8rem;
+    margin-top: 2.8rem;
+    padding-top: 1.6rem;
   }
 
   @include breakpoint($tablet) {
@@ -100,7 +173,7 @@
 
   @include breakpoint($desktop) {
     padding: 0.6em 0;
-    margin: 4.5em auto 1em;
+    margin: 4.813rem auto 1em;
   }
 
   .messages__wrapper {
@@ -108,6 +181,12 @@
 
     @include breakpoint($tablet) {
       width: 98%;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .block-system-main-block {
+      margin-left: 0.5rem;
     }
   }
 
@@ -119,6 +198,7 @@
 
     @include breakpoint($desktop) {
       max-width: 24.8rem;
+      top: 0.8125rem;
     }
 
     .form-text,
@@ -126,13 +206,13 @@
       color: $black;
 
       @include breakpoint($desktop) {
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.15rem;
       }
     }
 
     .form-type-password .form-text {
-      font-size: 1.25rem;
-      letter-spacing: 0.312rem;
+      font-size: 1rem;
+      letter-spacing: 0.1875rem;
     }
   }
 
@@ -146,6 +226,7 @@
 
     @include breakpoint($desktop) {
       top: -4.5rem;
+      margin-left: 6px;
     }
   }
 
@@ -162,7 +243,7 @@
       }
 
       @include breakpoint($desktop) {
-        margin-top: 5.2em;
+        margin-top: 4.438rem;
       }
     }
 
@@ -179,6 +260,10 @@
 
       input {
         font-size: 0.75rem;
+
+        @include breakpoint($desktop) {
+          width: 91px;
+        }
       }
     }
   }
@@ -191,7 +276,7 @@
     }
 
     #block-youllbeableto {
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.5rem;
 
       @include breakpoint($tablet) {
         margin-bottom: 3.4rem;
@@ -199,6 +284,10 @@
 
       @include breakpoint($desktop) {
         margin-bottom: 4.1rem;
+
+        .field--type-image {
+          float: $right;
+        }
       }
 
       p {
@@ -212,7 +301,7 @@
       }
     }
 
-    h2 {
+    h3 {
       margin-bottom: 0.9375rem;
     }
   }
@@ -226,6 +315,8 @@
 
     @include breakpoint($only-mobile) {
       margin-bottom: 2.063rem;
+      padding-top: 1.8rem;
+      margin-top: 2.8rem;
     }
   }
 
@@ -307,10 +398,14 @@
     }
 
     .field--name-field-terms-and-condition {
-      margin-top: 1.38rem;
+      @include breakpoint($desktop) {
+        margin-top: 1.38rem;
+      }
 
       .form-item-field-terms-and-condition-value {
-        margin-top: 0;
+        @include breakpoint($upto-desktop) {
+          margin-top: 0;
+        }
 
         a {
           color: $cerulean-two;
@@ -351,12 +446,13 @@
     #block-youllbeableto {
       margin-bottom: 1.3rem;
 
+      @include breakpoint($only-mobile) {
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+      }
+
       @include breakpoint($desktop) {
         margin-top: 1.75rem;
-
-        .field--type-image {
-          float: $right;
-        }
       }
 
       @include breakpoint($tablet) {
@@ -446,6 +542,101 @@
         width: 72%;
         max-width: 57.5625rem;
         float: right;
+      }
+    }
+  }
+
+  &.order-detail {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        width: 22%;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 74.5%;
+        float: $right;
+      }
+    }
+  }
+}
+
+.c-user-register main .user-register-form.user-form,
+main .user-register-form {
+  .field--name-field-terms-and-condition {
+    margin-top: 2.2rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1rem;
+    }
+
+    .form-type-checkbox {
+      padding-#{$left}: 1.8rem;
+      line-height: 1.3;
+      color: $grey-ash;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: 2rem;
+        line-height: 1;
+      }
+
+      label::before {
+        margin-#{$left}: -1.8rem;
+        margin-#{$right}: 0.8rem;
+
+        @include breakpoint($tablet) {
+          margin-#{$left}: -2rem;
+          margin-#{$right}: 1rem;
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    margin-top: 0.5rem;
+
+    .form-submit {
+      margin-top: 0;
+
+      @include breakpoint($tablet) {
+        margin-top: 0.2rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.c-user-login.user-page,
+.c-user-register {
+  .c-sidebar-second #block-youllbeableto {
+    @include breakpoint($only-mobile) {
+      h2 {
+        margin-bottom: 15px;
+      }
+
+      span.icon-wish {
+        margin-#{$left}: -34px;
+      }
+
+      span {
+        margin-#{$left}: -12px;
+        vertical-align: middle;
+        height: 15px;
+        background-size: contain;
+      }
+
+      p {
+        margin: 0.6rem 0;
       }
     }
   }

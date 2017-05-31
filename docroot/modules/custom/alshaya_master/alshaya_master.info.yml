@@ -4,6 +4,8 @@ core: 8.x
 package: Alshaya
 description: 'Master module for updating the core settings.'
 dependencies:
+  - alshaya_department_page
+  - alshaya_permissions
   - acq_cart
   - acq_checkout
   - alshaya_acm
@@ -16,6 +18,7 @@ dependencies:
   - block_content
   - clientside_validation_jquery
   - filter
+  - inline_form_errors
   - mailsystem
   - mimemail
   - redirect
@@ -23,4 +26,5 @@ dependencies:
   - system
   - views
   - workbench_moderation
+  - alshaya_contact
 version: 8.x-1.0

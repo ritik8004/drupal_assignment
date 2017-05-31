@@ -9,7 +9,7 @@
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
       function mobileFilterMenu() {
-        if ($(window).width() < 381) {
+        if ($(window).width() < 768) {
           var facetBlocks = $('.c-facet__blocks__wrapper .c-facet__blocks');
           var filterLabel = facetBlocks.find('.filter-menu-label');
           if (filterLabel.length) {
@@ -23,13 +23,13 @@
             $('.mobile-filter-bar ul li.clear-all').insertAfter('.filter-menu-label .label');
             var countFilters = $('.mobile-filter-bar ul li').length;
             if (countFilters === 0 && $.trim($('.mobile-filter-bar').html()).length === 0) {
-              $('.mobile-filter-bar').append('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-                + ' (' + countFilters + ')</h2>');
+              $('.mobile-filter-bar').append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+                + ' (' + countFilters + ')</h3>');
               $('.mobile-filter-bar').addClass('empty');
             }
             else {
-              $('<h2 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-                + '(' + countFilters + ')</h2>').insertBefore('.mobile-filter-bar ul');
+              $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+                + '(' + countFilters + ')</h3>').insertBefore('.mobile-filter-bar ul');
             }
           }
           // Toggle the filter menu when click on the label.
@@ -55,6 +55,46 @@
           var contextualLink = $(this).find(body).next();
           $(this).append(contextualLink);
         });
+      }
+
+      /**
+       * Place the search count from view header in different locations based on resolution.
+       */
+      function placeSearchCount() {
+        var viewHeader = $('.c-search .view-search .view-header');
+        viewHeader.addClass('search-count');
+        var searchCount = $('.c-content__region .search-count');
+        // For mobile.
+        if ($(window).width() < 768) {
+          $('.block-page-title-block').addClass('mobile');
+          searchCount.removeClass('tablet');
+          if (viewHeader.length) {
+            if (!$('.c-content__region .search-count.only-mobile').length) {
+              viewHeader.insertBefore('.c-content__region .block-views-exposed-filter-blocksearch-page');
+
+            }
+          }
+          else {
+            if (!$('.c-content__region .search-count.only-mobile').length) {
+              searchCount.insertBefore('.c-content__region .block-views-exposed-filter-blocksearch-page');
+            }
+          }
+          searchCount.addClass('only-mobile');
+        }
+        // For tablet and desktop.
+        else {
+          $('.block-page-title-block').removeClass('mobile');
+          searchCount.removeClass('only-mobile');
+          if (viewHeader.length) {
+            viewHeader.insertBefore('.c-content__region .region__content > #block-filterbar');
+          }
+          else {
+            if (!$('.c-content__region .search-count.tablet').length) {
+              searchCount.insertBefore('.c-content__region .region__content > #block-filterbar');
+            }
+          }
+          searchCount.addClass('tablet');
+        }
       }
 
       /**
@@ -104,9 +144,6 @@
           });
         }
 
-        $('.c-search .view-search .view-header').addClass('search-count');
-        $('.c-search .view-search .view-header').insertBefore('#block-filterbar');
-
         // Hiding the filter border if there are no filters.
         var checkFilter = $.trim($('.c-search .region__content .block-facets-summary-blockfilter-bar').html());
         if (checkFilter.length) {
@@ -123,14 +160,39 @@
         // Clone the filter bar and add it to the filter menu on mobile.
         // Show mobile slider only on mobile resolution.
         mobileFilterMenu();
+        placeSearchCount();
         $(window).on('resize', function (e) {
           mobileFilterMenu();
+          placeSearchCount();
         });
 
         $('.c-facet__blocks').accordion({
           header: '.c-accordion__title',
           heightStyle: 'content'
         });
+
+        // Accordion for delivery option section on PDP.
+        $('.c-accordion-delivery-options').accordion({
+          heightStyle: 'content',
+          collapsible: true,
+          active: false
+        });
+
+        // Toggle for Product description.
+        var descwrapper = $('.c-pdp .description-wrapper');
+        descwrapper.hide();
+        $('.c-pdp .short-description-wrapper .read-more-description-link').on('click', function () {
+          descwrapper.slideToggle();
+        });
+
+        $('.c-pdp .description-wrapper .close').on('click', function () {
+          descwrapper.slideToggle();
+        });
+
+        // Add class to promotional banner view block if it is not empty.
+        if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
+          $('.block-views-blockplp-promotional-banner-block-1').addClass('promo-banner');
+        }
       }
 
       /**
@@ -155,7 +217,7 @@
       * Toggles the Tabs.
       */
 
-      if ($('.c-delivery-checkout .multistep-checkout').length) {
+      if ($('.checkout .multistep-checkout').length) {
         $('.tab-home-delivery').addClass('active--tab--head');
         $('#edit-guest-delivery-home, #edit-member-delivery-home').addClass('active--tab--content');
 
@@ -185,6 +247,19 @@
       if ($('.alshaya-acm-customer-order-list-search').length) {
         $('.alshaya-acm-customer-order-list-search label').on('click', function () {
           $('.alshaya-acm-customer-order-list-search').toggleClass('active--search');
+        });
+      }
+
+      /**
+      * Toggles the Order confirmation table.
+      */
+
+      if ($('.multistep-checkout .user__order--detail').length) {
+        $('.collapse-row').slideUp();
+        $('.product--count').on('click', function () {
+          $('#edit-confirmation-continue-shopping').toggleClass('expanded-table');
+          $(this).toggleClass('expanded-row');
+          $(this).nextAll('.collapse-row').slideToggle();
         });
       }
 

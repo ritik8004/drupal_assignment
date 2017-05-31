@@ -10,3 +10,6 @@ alshaya_loyalty.settings:
     apcn_value_starts_with:
       type: string
       label: 'Value starts with'
+    enable_disable_loyalty:
+      type: integer
+      label: 'Enable or disable loyalty on site'

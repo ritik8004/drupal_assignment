@@ -2,7 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
-use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\Core\Logger\LoggerChannelFactory;
 
 /**
  * APIWrapper class.
@@ -16,9 +16,12 @@ class APIWrapper {
    *
    * @param ClientFactory $client_factory
    *   ClientFactory object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+   *   Object of LoggerFactory.
    */
-  public function __construct(ClientFactory $client_factory) {
+  public function __construct(ClientFactory $client_factory, LoggerChannelFactory $logger_factory) {
     $this->clientFactory = $client_factory;
+    $this->logger = $logger_factory->get('acq_sku');
   }
 
   /**
@@ -83,12 +86,20 @@ class APIWrapper {
       else {
         $stock = $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
         $stock_check_proportion = \Drupal::config('acq_commerce.conductor')->get('stock_check_cache_proportion');
-        \Drupal::cache('data')->set($cid, $stock, $stock['quantity'] * $stock_check_proportion);
+
+        // Calculate the time in seconds (config contains in minutes).
+        $time = $stock['quantity'] ? $stock['quantity'] * $stock_check_proportion * 60 : $stock_check_proportion * 60;
+
+        // Calculate the timestamp when we want the cache to expire.
+        $expire = \Drupal::time()->getRequestTime() + $time;
+
+        // Set the stock in cache.
+        \Drupal::cache('data')->set($cid, $stock, $expire);
       }
     }
     catch (ConductorException $e) {
       // Log the stock error, do not throw error if stock info is missing.
-      \Drupal::logger('acq_commerce')->log(RfcLogLevel::ERROR, 'Unable to get the stock for @sku : @message', ['@sku' => $sku, '@message' => $e->getMessage()]);
+      $this->logger->emergency('Unable to get the stock for @sku : @message', ['@sku' => $sku, '@message' => $e->getMessage()]);
     }
 
     return $stock;
@@ -465,6 +476,31 @@ class APIWrapper {
   }
 
   /**
+   * Fetches all promotions.
+   *
+   * @return array
+   *   Array of promotions.
+   */
+  public function getPromotions() {
+    $endpoint = 'promotions/category';
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $result = [];
+
+    try {
+      $result = $this->tryAgentRequest($doReq, 'getPromotions', 'promotions');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $result;
+  }
+
+  /**
    * Gets products by updated time.
    *
    * @param \DateTime $date_time
@@ -529,6 +565,29 @@ class APIWrapper {
     }
 
     return $result;
+  }
+
+  /**
+   * Function to subscribe an email for newsletter.
+   *
+   * @param string $email
+   *   E-Mail to subscribe.
+   */
+  public function subscribeNewsletter($email) {
+    $endpoint = 'newsletter/subscribe';
+
+    $doReq = function ($client, $opt) use ($endpoint, $email) {
+      $opt['form_params']['email'] = $email;
+
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      return $this->tryAgentRequest($doReq, 'subscribeNewsletter');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
   }
 
   /**

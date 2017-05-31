@@ -4,6 +4,55 @@
       @include breakpoint($desktop) {
         max-width: 24.625rem;
       }
+
+      .privilege-card-wrapper-title {
+        font-family: $alshaya-bold;
+        font-size: 14px;
+        color: $dark-sand;
+        padding-left: 5px;
+        padding-top: 10px;
+        border-top: 1px solid $white;
+        text-transform: lowercase;
+      }
+
+      #edit-privilege-card-wrapper {
+        margin-top: 0;
+
+        summary {
+          padding-left: 5px;
+          padding-bottom: 10px;
+          font-size: 12px;
+          color: $white;
+          text-transform: lowercase;
+          border-bottom: 1px solid $white;
+        }
+
+        label,
+        .form-item-privilege-card-number2,
+        .form-item-privilege-card-number {
+          padding-left: 5px;
+          color: $grey-shade;
+          font-size: 12px;
+
+          input {
+            &::-webkit-input-placeholder {
+              color: $white;
+            }
+
+            &::-moz-placeholder {
+              color: $white;
+            }
+
+            &:-ms-input-placeholder {
+              color: $white;
+            }
+
+            &:-moz-placeholder {
+              color: $white;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -23,7 +72,7 @@
 .order-confirmation {
   #block-jointheclub {
     margin-top: 0.5rem;
-    padding-top: 1.5rem;
+    padding-top: 1.4rem;
 
     @include breakpoint($tablet) {
       margin-top: 3.6rem;
@@ -35,7 +84,7 @@
       padding-top: 4.2rem;
     }
 
-    h2 {
+    h3 {
       margin-bottom: 0.7rem;
       margin-top: -0.1875rem;
 
@@ -45,6 +94,10 @@
 
       @include breakpoint($tablet) {
         margin-top: 0;
+        margin-bottom: 0.5rem;
+      }
+
+      @include breakpoint($desktop) {
         margin-bottom: 0.8rem;
       }
     }
@@ -68,7 +121,11 @@
       margin-top: 0.8em;
 
       @include breakpoint($tablet) {
-        margin-top: 1.1em;
+        margin-top: 0.4rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 0.2rem;
       }
     }
   }
@@ -95,6 +152,7 @@
       @include breakpoint($upto-tablet) {
         padding-#{$left}: 1.25rem;
         padding-bottom: 0.9rem;
+        margin-top: 1rem;
       }
     }
   }

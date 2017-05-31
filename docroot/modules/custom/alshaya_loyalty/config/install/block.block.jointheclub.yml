@@ -13,7 +13,7 @@ provider: null
 plugin: join_the_club
 settings:
   id: join_the_club
-  label: 'Join the Club'
+  label: 'Join the club'
   provider: alshaya_loyalty
   label_display: visible
 visibility:

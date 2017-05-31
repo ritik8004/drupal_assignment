@@ -1,3 +1,7 @@
 .is-hidden {
   @include u-visibility(none);
 }
+
+.upcase {
+  text-transform: uppercase;
+}

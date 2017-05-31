@@ -124,12 +124,12 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $form = $this->entityFormBuilder->getForm($account, 'register');
 
     $form['title'] = [
-      '#markup' => '<div>' . $this->t('your account') . '</div>',
+      '#markup' => '<div class="confirmation__signup--title">' . $this->t('Your account') . '</div>',
       '#weight' => -99,
     ];
 
     $form['description'] = [
-      '#markup' => '<div>' . $this->t('Save your details to make shopping easier next time') . '</div>',
+      '#markup' => '<div class="confirmation__signup--description">' . $this->t('Save your details to make shopping easier next time') . '</div>',
       '#weight' => -98,
     ];
 
@@ -163,6 +163,13 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     return AccessResult::allowedIf($account->isAnonymous() && (\Drupal::config('user.settings')->get('register') != USER_REGISTER_ADMINISTRATORS_ONLY))
       ->addCacheContexts(['user.roles'])
       ->addCacheTags(\Drupal::config('user.settings')->getCacheTags());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
   }
 
 }

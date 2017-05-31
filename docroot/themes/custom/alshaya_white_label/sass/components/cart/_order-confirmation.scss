@@ -3,20 +3,187 @@
     @include breakpoint($desktop) {
       float: $left;
     }
+
+    .user-register-form {
+      margin-top: 1.6rem;
+
+      @include breakpoint($tablet) {
+        max-width: 24.8rem;
+        width: 55%;
+        margin-#{$left}: 0;
+      }
+    }
+
+    #edit-account {
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
+    }
   }
 
-  .order-summary,
+  .user__order--detail {
+    margin-bottom: 1.1875rem;
+
+    @include breakpoint($only-tablet) {
+      margin-bottom: 2rem;
+    }
+
+    .order-details-row .blend,
+    .order-details-row .tablet-blend {
+      @include breakpoint($desktop) {
+        width: 9.875rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 8.375rem;
+        padding: 0.625rem;
+      }
+    }
+
+    td {
+      .price-wrapper .price-currency {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .continue--shopping--mobile {
+    background-color: $white-five;
+
+    td {
+      padding: 0;
+      padding-top: 1rem;
+    }
+
+    @include breakpoint($tablet) {
+      display: none !important;
+    }
+  }
+
+  .order__unit--price {
+    @include breakpoint($only-tablet) {
+      width: 8.375rem;
+      padding: 1.375rem 0.625rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 9.0625rem;
+    }
+  }
+
   .barcode--wrapper p {
-    font-size: 12px;
+    font-size: 0.875rem;
+    margin-bottom: 0.6rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 0.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.75rem;
+    }
   }
 
   .order-summary {
-    margin-bottom: 1em;
+    @include breakpoint($tablet) {
+      margin-top: 0.7rem;
+      margin-bottom: 2.7rem;
+      background-color: $pale-grey;
+      padding: 1.125rem;
+      padding-#{$left}: 1.3rem;
+      padding-#{$right}: 1.5rem;
+      font-size: 0.875rem;
+      color: $cerulean-two;
+      display: table;
+      width: 100%;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1.42rem;
+      margin-bottom: 3.4rem;
+    }
+  }
+
+  .order-id-details {
+    margin-top: 1.68rem;
+    margin-bottom: 1.875rem;
+    padding-#{$left}: 0.9rem;
+
+    @include breakpoint($tablet) {
+      margin: 0;
+      display: table-cell;
+      width: 50%;
+      word-spacing: 0.125rem;
+      padding-#{$left}: 0;
+    }
+
+    strong {
+      margin-#{$left}: 0.625rem;
+    }
+
+    @include icon(infomation, before) {
+      font-size: 2rem;
+      display: inline-block;
+      margin-#{$right}: 0.4rem;
+      vertical-align: middle;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 1.4rem;
+      }
+    }
+  }
+
+  .order-id-details,
+  .order-print-button {
+    @include breakpoint($only-mobile) {
+      background-color: $pale-grey;
+      padding: 1.125rem;
+      padding-#{$left}: 0.8rem;
+      padding-#{$right}: 1.5rem;
+      font-size: 0.875rem;
+      color: $cerulean-two;
+    }
+  }
+
+  .order-print-button {
+    margin-top: 1rem;
+    margin-bottom: 1.65rem;
+    text-align: center;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 0;
+      margin-top: 0;
+      display: table-cell;
+      width: 50%;
+      text-align: right;
+    }
+  }
+
+  .order-print-button a {
+    display: inline-block;
+    background: $white-five;
+    padding: 0.4375rem 2.1rem;
+    font-weight: bold;
+    border: solid 1px $marine-blue;
+    font-size: 0.8125rem;
+    word-spacing: 0.125rem;
+  }
+
+  tr td {
+    @include breakpoint($only-tablet) {
+      padding: 22px 1.25rem;
+    }
+  }
+
+  tr .order-item-row img {
+    @include breakpoint($only-tablet) {
+      max-width: 6.25rem;
+    }
   }
 
   .user-register-form {
     > div:first-child {
-      font-size: 16px;
+      font-size: 1rem;
       color: $marine-blue;
       padding-bottom: 0.5em;
       margin-bottom: 1em;
@@ -28,27 +195,62 @@
       float: $left;
       width: 55%;
     }
+
+    .form-wrapper,
+    .form-item {
+      @include breakpoint($only-tablet) {
+        margin-top: 2.5rem;
+      }
+    }
+
+    .form-actions.form-wrapper {
+      @include breakpoint($only-tablet) {
+        margin-top: 0.5rem;
+      }
+    }
   }
 
   .block-checkout-register-block {
     clear: both;
+    overflow: hidden;
+    position: relative;
+
+    @include breakpoint($tablet) {
+      padding-top: 2.8rem;
+      margin-top: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-top: 4.1rem;
+    }
 
     #block-jointheclub {
       margin-#{$left}: 0;
       border-top: 0;
       padding-#{$left}: 0;
-      width: 44%;
-      float: $right;
-      font-size: 12px;
+      font-size: 0.75rem;
+      text-align: center;
 
-      h2 {
-        font-size: 14px;
+      @include breakpoint($tablet) {
+        width: 45.5%;
+        float: $right;
+        text-align: $left;
+        margin-top: 1.25rem;
+      }
+
+      h3 {
+        font-size: 0.875rem;
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: 0.7rem;
+        }
       }
 
       @include breakpoint($only-tablet) {
         text-align: center;
         text-indent: 2rem;
         width: 42%;
+        padding-top: 0.5rem;
 
         img {
           margin-left: 0;
@@ -57,17 +259,235 @@
         a {
           text-indent: 0;
         }
+
+        h3,
+        p {
+          text-align: $left;
+          padding-#{$left}: 20%;
+        }
       }
+    }
+  }
+
+  .blend .delivery--method {
+    padding-top: 1rem;
+  }
+
+  .label.font-small {
+    font-size: 0.75rem;
+    margin-bottom: 0;
+    color: $cerulean-two;
+  }
+
+  td .contact {
+    margin-top: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2rem;
+    }
+  }
+
+  .right--align {
+    text-align: $right;
+  }
+
+  .product--count {
+    border-top: 0.625rem solid $white-five;
+    font-size: 0.875rem;
+
+    @include breakpoint($tablet) {
+      border-bottom: 1px solid $white-five;
+      border-top: 1px solid $white-five;
+    }
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.75rem;
+    }
+
+    td {
+      position: relative;
+      padding: 0.875rem 1.375rem;
+
+      @include icon(chevrondown, after) {
+        position: absolute;
+        #{$right}: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2.125rem;
+      }
+    }
+
+    &.expanded-row td {
+      @include icon(chevronup, after);
+    }
+  }
+
+  .user-register-form .form-item label.active-label:not(.error) {
+    top: -1.25em;
+    bottom: 0;
+    #{$left}: 0;
+    opacity: 1;
+    font-size: 0.75rem;
+  }
+
+  form:not(.alshaya-acm-customer-order-list-search) .form-item input {
+    padding-bottom: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .password-tooltip + .c-input__bar {
+    display: none;
+  }
+
+  .subtitle {
+    border-bottom: 1px solid $white;
+    margin-bottom: 0.75rem;
+  }
+
+  &.user-page.checkout-login .multistep-checkout {
+    border-top: 0;
+
+    #edit-confirmation {
+      margin-top: 2rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 1.4rem;
+      }
+    }
+  }
+
+  .barcode--wrapper {
+    font-size: 0;
+
+    .inner--wrap {
+      width: 100%;
+
+      @include breakpoint($tablet) {
+        width: 80%;
+      }
+
+      @include breakpoint($only-tablet) {
+        padding-top: 0.4375rem;
+        vertical-align: top;
+      }
+
+      .dark--text {
+        @include breakpoint($only-mobile) {
+          display: block;
+        }
+      }
+    }
+
+    .print--barcode {
+      font-size: 0.75rem;
+
+      &.above-mobile {
+        @include breakpoint($only-mobile) {
+          display: none;
+        }
+      }
+    }
+
+    svg {
+      width: 6rem;
+      max-height: 4.375rem;
+    }
+  }
+
+  .mobile-only.print--barcode {
+    text-align: center;
+
+    svg {
+      max-height: 4.875rem;
+    }
+
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+
+  .order__delivery-details {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 0.4375rem;
+    }
+  }
+
+  .order__product--image {
+    @include breakpoint($only-mobile) {
+      padding-#{$right}: 0.4375rem;
+    }
+  }
+
+  tr .empty--cell {
+    @include breakpoint($only-tablet) {
+      width: 6rem;
+    }
+  }
+
+  main .user-register-form {
+    .field--name-field-terms-and-condition .form-type-checkbox {
+      @include breakpoint($desktop) {
+        margin-top: 2rem;
+      }
+    }
+
+    .form-submit {
+      padding: 0.625rem 2.0625rem;
     }
   }
 }
 
+.order-confirmation .continue--shopping--mobile a,
 #edit-confirmation-continue-shopping {
-  font-size: 12px;
+  font-size: 0.75rem;
+  font-family: $alshaya-bold;
+  font-weight: normal;
   border: 1px solid $marine-blue;
   float: $right;
-  padding: 1em;
-  margin-#{$right}: 78px;
-  width: 29%;
+  padding: 0.5rem 1em;
+  width: 100%;
   text-align: center;
+  text-transform: lowercase;
+
+  @include breakpoint($tablet) {
+    margin-#{$right}: 6.1rem;
+    width: 9.875rem;
+  }
+
+  &.expanded-table {
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: 4.5rem;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    margin-#{$right}: 8.375rem;
+  }
+}
+
+.confirmation__signup--title {
+  color: $marine-blue-two;
+  font-family: $alshaya-bold;
+  font-weight: normal;
+  border-bottom: 1px solid $white;
+  padding-bottom: 0.5rem;
+  margin-bottom: 2.3125rem;
+  text-transform: lowercase;
+
+  @include breakpoint($tablet) {
+    top: 0.2rem;
+    position: absolute;
+    width: 100%;
+    #{$right}: 0;
+  }
+
+  @include breakpoint($desktop) {
+    top: 1.5625rem;
+  }
+}
+
+.confirmation__signup--description {
+  font-size: 0.875rem;
+  color: $black;
+  font-weight: bold;
 }

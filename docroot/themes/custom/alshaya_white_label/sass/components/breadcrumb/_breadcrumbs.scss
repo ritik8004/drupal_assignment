@@ -4,7 +4,7 @@
   ol {
     max-width: 80.25rem;
     margin: auto;
-    padding: 0.9375rem 1.5rem;
+    padding: 0.875rem 1.5rem;
     font-size: 10px;
   }
 
@@ -12,7 +12,7 @@
     list-style: none;
     display: inline-block;
     font-weight: bold;
-    color: $black;
+    text-transform: lowercase;
 
     &:last-of-type {
       font-weight: bold;
@@ -20,15 +20,19 @@
 
     &:last-of-type a {
       font-weight: bold;
+      color: $breadcrumb-active;
+      pointer-events: none;
+      cursor: default;
     }
 
     a {
       font-weight: normal;
-      color: $black;
+      color: $greyish;
     }
 
     &::after {
       content: '>';
+      color: $greyish;
       vertical-align: middle;
       padding-right: 0.3125rem;
       padding-left: 0.3125rem;

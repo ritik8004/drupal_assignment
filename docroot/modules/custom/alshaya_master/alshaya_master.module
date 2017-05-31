@@ -7,6 +7,9 @@
 
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Implements hook_block_build_alter().
@@ -15,6 +18,22 @@ function alshaya_master_block_build_alter(array &$build, BlockPluginInterface $b
   if ($block->getPluginId() == 'system_branding_block') {
     $build['#cache']['contexts'][] = 'url.path';
   }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_master_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (!in_array($form_id, ['customer_cart_form'])) {
+    $form['#error_no_message'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_master_form_system_site_maintenance_mode_alter(&$form, FormStateInterface $form_state) {
+  $form['maintenance_mode_message']['#access'] = FALSE;
 }
 
 /**
@@ -150,6 +169,27 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
   if (isset($build_info['args'][0])) {
     $theme = $build_info['args'][0];
   }
+
+  if (!empty($values['logo_upload'])) {
+    $filename = file_unmanaged_copy($values['logo_upload']->getFileUri());
+    $values['default_logo'] = 0;
+    $values['logo_path'] = $filename;
+  }
+
+  // If the user entered a path relative to the system files directory for
+  // a logo or favicon, store a public:// URI so the theme system can handle it.
+  if (!empty($values['logo_path'])) {
+    $values['logo_path'] = alshaya_master_validate_path($values['logo_path']);
+  }
+
+  // Save different logo for language.
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $themeConfig = \Drupal::languageManager()->getLanguageConfigOverride($langcode, $theme . '.settings');
+  $themeConfig->set('logo.path', $values['logo_path'])->save();
+  $form_state->unsetValue('logo_path');
+  $form_state->unsetValue('logo_upload');
+
+  // Save email logo.
   $settings = ['email_logo_upload', 'email_logo_path'];
   foreach ($settings as $setting_name) {
     ${$setting_name} = $form_state->getValue($setting_name);
@@ -167,10 +207,12 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
     $logo_path = alshaya_master_validate_path($email_logo_path);
   }
 
-  $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $theme);
-  $config->set('email_logo_path', $logo_path);
-  $config->set('email_logo_url', file_create_url($logo_path));
-  $config->save();
+  if (isset($logo_path)) {
+    $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $theme);
+    $config->set('email_logo_path', $logo_path);
+    $config->set('email_logo_url', file_create_url($logo_path));
+    $config->save();
+  }
 }
 
 /**
@@ -222,8 +264,31 @@ function alshaya_master_get_email_logo($theme = NULL) {
   if (empty($cache[$theme])) {
     $config = \Drupal::configFactory()->get('alshaya_master.theme.' . $theme);
     $cache[$theme]['logo_path'] = $config->get('email_logo_path');
-    $cache[$theme]['logo_url'] = $config->get('email_logo_url');
+    if (!empty($cache[$theme]['logo_path'])) {
+      $cache[$theme]['logo_url'] = file_create_url($config->get('email_logo_path'));
+    }
   }
 
   return $cache[$theme];
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_master_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'breadcrumb' block on some pages.
+  if ($operation == 'view' && $block->getPluginId() == 'system_breadcrumb_block') {
+    $current_route = \Drupal::routeMatch()->getRouteName();
+    $forbidden_routes = [
+      'user.login',
+      'user.register',
+      'user.pass',
+      'user.cancel_confirm',
+      'user.reset.login',
+      'user.reset.form',
+      'user.reset',
+    ];
+    $front_page = \Drupal::service('path.matcher')->isFrontPage();
+    return AccessResult::forbiddenIf(in_array($current_route, $forbidden_routes) || $front_page);
+  }
 }

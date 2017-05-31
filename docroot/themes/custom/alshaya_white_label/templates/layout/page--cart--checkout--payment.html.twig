@@ -28,11 +28,15 @@
     <!-- /hero content -->
 
     <!-- ______________________ MAIN _______________________ -->
-    <h1 class="site-brand-home">
+    <div class="site-brand-home">
       <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
         <img src="/themes/custom/alshaya_white_label/mothercare-logo.svg" alt="{{ 'Home'|t }}"/>
       </a>
-    </h1>
+
+      <div class="secure__checkout--block">
+        <span class="secure__checkout--label">{{ "Secure Checkout"|t }}</span><span class="icon-ic_login"></span>
+      </div>
+    </div>
     <div class="clearfix page-wrapper">
         <div{{ attributes.addClass('l-container') }}>
             <main>
@@ -63,6 +67,18 @@
     <!-- /main -->
 
     <!-- ______________________ Post content _______________________ -->
+
+    {% if page.post_content %}
+      <div class="c-post-content">
+        <div class="l-container">
+          <div class="c-post-content__region">
+            {{ page.post_content }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+  <!-- ______________________ FOOTER SECONDARY _______________________ -->
 
     {% if page.footer_secondary %}
         <div class="c-footer-secondary">

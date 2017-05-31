@@ -163,33 +163,24 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             // Theme the order total grands with currency.
             $order['totals']['grand'] = [
               '#theme' => 'alshaya_acm_price',
-              '#price' => isset($order['totals']) ? number_format($order['totals']['grand'], 3) : 0,
+              '#price' => isset($order['totals']) ? $order['totals']['grand'] : 0,
             ];
 
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
-
               // Load the first image.
-              $file_uri = alshaya_acm_get_product_display_image($item['sku']);
-              // If we have image for the product.
-              if (!empty($file_uri)) {
-                $order['items'][$key]['sku_attr_image'] = [
-                  '#theme' => 'image_style',
-                  '#style_name' => 'checkout_summary_block_thumbnail',
-                  '#uri' => $file_uri,
-                ];
-              }
+              $order['items'][$key]['image'] = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
               // Total price.
               $order['items'][$key]['total_price'] = [
                 '#theme' => 'alshaya_acm_price',
-                '#price' => number_format($order['items'][$key]['price'] * $order['items'][$key]['ordered'], 3),
+                '#price' => ($order['items'][$key]['price'] * $order['items'][$key]['ordered']),
               ];
 
               // Unit price.
               $order['items'][$key]['price'] = [
                 '#theme' => 'alshaya_acm_price',
-                '#price' => number_format($order['items'][$key]['price'], 3),
+                '#price' => $order['items'][$key]['price'],
               ];
 
               // Item name for order.
@@ -200,6 +191,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               else {
                 $order['item_names'][] = $order['items'][$key]['name'];
               }
+
               $order['status'] = alshaya_acm_customer_get_order_status($order);
             }
           }
@@ -224,6 +216,15 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    // Get uid of current user.
+    $uid = $this->currentUser->id();
+    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $uid . ':orders']);
   }
 
 }

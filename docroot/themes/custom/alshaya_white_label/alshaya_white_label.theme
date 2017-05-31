@@ -5,6 +5,7 @@
  * Theme specific functionality.
  */
 
+use Drupal\alshaya_user\Form\UserCommunicationPreference;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
@@ -49,6 +50,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
     if ($val[1] == 'viewport') {
       $html_head[$index][0]['#attributes']['content'] .= ', user-scalable=no';
     }
+  }
+
+  $current_route = \Drupal::routeMatch()->getRouteName();
+  // If store finder glossary view.
+  if ($current_route == 'view.stores_finder.page_2') {
+    $variables['attributes']['class'][] = 'store-finder-view';
   }
 }
 
@@ -368,30 +375,32 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       break;
 
     case "user_login_form":
-      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "change_pwd_form":
-      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "user_register_form":
       if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
-        $prefix = $form['privilege_card_wrapper']['#prefix'];
-        $suffix = $form['privilege_card_wrapper']['#suffix'];
-        $prefix .= '<div class="privilege-card-wrapper">';
-        $prefix .= '<div class="privilege-card-wrapper-title">' . t('Privilege card number (Optional)') . '</div>';
-        $form['privilege_card_wrapper']['#prefix'] = $prefix;
-        $form['privilege_card_wrapper']['#suffix'] = '</div>' . $suffix;
-        $form['privilege_card_wrapper']['#title'] = t('Enter card details');
-        $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
-        $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+        if (isset($form['privilege_card_wrapper'])) {
+          $prefix = $form['privilege_card_wrapper']['#prefix'];
+          $suffix = $form['privilege_card_wrapper']['#suffix'];
+          $prefix .= '<div class="privilege-card-wrapper">';
+          $prefix .= '<div class="privilege-card-wrapper-title">' . t('Privilege card number (Optional)') . '</div>';
+          $form['privilege_card_wrapper']['#prefix'] = $prefix;
+          $form['privilege_card_wrapper']['#suffix'] = '</div>' . $suffix;
+          $form['privilege_card_wrapper']['#title'] = t('Enter card details');
+          $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
+          $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Privilege Card Number');
+        }
       }
-      $form['#attached']['library'] = ['alshaya_white_label/unmask_password'];
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "webform_submission_alshaya_contact_form":
-      $form['#attached']['library'] = ['alshaya_white_label/autosize_textarea'];
+      $form['#attached']['library'][] = 'alshaya_white_label/autosize_textarea';
       $form['elements']['message']['#rows'] = 1;
       $form['elements']['message']['#attributes']['maxlength'] = 220;
       break;
@@ -422,6 +431,11 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
+  // For 404 page.
+  if ($routmatch->getRouteName() == 'system.404') {
+    $suggestions[] = 'page__404';
+  }
+
   // Check if we are on node page.
   if ($routmatch->getRouteName() == 'entity.node.canonical') {
     $node = Drupal::request()->attributes->get('node');
@@ -430,9 +444,11 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     if ($node->bundle() == 'department_page') {
       $suggestions[] = 'page__department';
     }
-
-    if ($node->bundle() == 'acq_product') {
+    elseif ($node->bundle() == 'acq_product') {
       $suggestions[] = 'page__pdp';
+    }
+    elseif ($node->bundle() == 'acq_promotion') {
+      $suggestions[] = 'page__plp';
     }
   }
 
@@ -513,9 +529,21 @@ function alshaya_white_label_preprocess_user(&$variables) {
   /* @var \Drupal\user\Entity\User $user */
   $user = $variables['user'];
   if ($user) {
+    $mobile_util = \Drupal::getContainer()->get('mobile_number.util');
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
-    $variables['contact_number'] = $user->get('field_mobile_number') ? (!empty($user->get('field_mobile_number')->getValue()) ? $user->get('field_mobile_number')->getValue()[0]['value'] : '') : '';
-    $variables['privilege_card'] = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
+    $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user);
+    $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
+    $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
+
+    $module_handler = \Drupal::moduleHandler();
+    if ($module_handler->moduleExists('alshaya_loyalty')) {
+      // Get loyalty settings.
+      $loyalty_settings = alshaya_loyalty_get_validation_settings();
+      // If site has loyalty 'off'.
+      if (!$loyalty_settings['enable_disable_loyalty']) {
+        $variables['privilege_card'] = '';
+      }
+    }
   }
 }
 
@@ -571,6 +599,7 @@ function alshaya_white_label_preprocess_views_view_unformatted__store_list(&$var
           $variables['rows'][$key]['lat_long'] = $lat_lang_value[0];
           $variables['rows'][$key]['nid'] = $row['content']['#row']->_entity->id();
           $variables['rows'][$key]['title'] = $row['content']['#row']->_entity->label();
+          $variables['rows'][$key]['counter'] = $key + 1;
         }
       }
     }
@@ -598,7 +627,12 @@ function alshaya_white_label_preprocess_input(&$variables) {
 function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array $variables) {
   $element = $variables['element'];
   if (isset($element['#attributes']['data-twig-suggestion'])) {
-    $suggestions[] = 'input__' . $element['#attributes']['data-twig-suggestion'];
+    if ($element['#attributes']['data-twig-suggestion'] == 'userregisterformpassword') {
+      $suggestions[] = 'input__' . $element['#attributes']['data-twig-suggestion'];
+    }
+    if ($element['#attributes']['data-twig-suggestion'] == 'addtocart') {
+      $suggestions[] = 'input__add_to_cart';
+    }
   }
 }
 
@@ -607,5 +641,49 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
  */
 function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $email_logo = alshaya_master_get_email_logo('alshaya_white_label');
+  if (empty($email_logo['logo_url'])) {
+    $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
+  }
   $variables['email_logo'] = $email_logo['logo_url'];
+}
+
+/**
+ * Implements hook_preprocess_maintenance_page().
+ */
+function alshaya_white_label_preprocess_maintenance_page(&$variables) {
+  $config = \Drupal::config('alshaya_master.maintenanace_404_settings');
+  $maintenance_text = $config->get('maintenance_mode_rich_message');
+  $image = $config->get('maintenance_mode_image');
+  $variables['maintenance_text'] = $maintenance_text['value'];
+  $variables['maintenance_image'] = '';
+  if (!empty($image)) {
+    if ($file = file_load($image)) {
+      $variables['maintenance_image'] = [
+        '#theme' => 'image_style',
+        '#style_name' => '1284x424',
+        '#uri' => $file->getFileUri(),
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page__404().
+ */
+function alshaya_white_label_preprocess_page__404(&$variables) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $config = \Drupal::config('alshaya_master.maintenanace_404_settings');
+  $text_404 = $config->get('404_message');
+  $image = $config->get('404_image.' . $langcode);
+  $variables['message_404'] = $text_404['value'];
+  $variables['image_404'] = '';
+  if (!empty($image)) {
+    if ($file = file_load($image)) {
+      $variables['image_404'] = [
+        '#theme' => 'image_style',
+        '#style_name' => '1284x424',
+        '#uri' => $file->getFileUri(),
+      ];
+    }
+  }
 }

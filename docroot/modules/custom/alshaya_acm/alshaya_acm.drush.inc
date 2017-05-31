@@ -25,7 +25,7 @@ function alshaya_acm_drush_command() {
     ],
   ];
 
-  return($commands);
+  return $commands;
 }
 
 /**

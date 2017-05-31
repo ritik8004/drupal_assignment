@@ -1,15 +1,25 @@
 {
   "_links": {
     "self": {
-      "href": "http:\/\/local.alshaya.com\/block\/1?_format=hal_json"
+      "href": "http:\/\/local.alshaya.com\/en\/block\/1?_format=hal_json"
     },
     "type": {
       "href": "http:\/\/drupal.org\/rest\/type\/block_content\/basic"
-    }
+    },
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
+      {
+        "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json",
+        "lang": "en"
+      },
+      {
+        "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json",
+        "lang": "ar"
+      }
+    ]
   },
   "id": [
     {
-      "value": "1"
+      "value": 1
     }
   ],
   "uuid": [
@@ -19,13 +29,17 @@
   ],
   "revision_id": [
     {
-      "value": "1"
+      "value": 1
     }
   ],
   "langcode": [
     {
       "value": "en",
       "lang": "en"
+    },
+    {
+      "value": "ar",
+      "lang": "ar"
     }
   ],
   "type": [
@@ -37,37 +51,135 @@
     {
       "value": "Copyright",
       "lang": "en"
+    },
+    {
+      "value": "Copyright",
+      "lang": "ar"
     }
   ],
   "changed": [
     {
-      "value": "1490069505",
+      "value": 1490069505,
       "lang": "en"
+    },
+    {
+      "value": 1495701496,
+      "lang": "ar"
     }
   ],
   "revision_created": [
     {
-      "value": "1490018860"
+      "value": 1490018860
     }
   ],
   "revision_translation_affected": [
     {
-      "value": "1",
+      "value": true,
       "lang": "en"
+    },
+    {
+      "value": true,
+      "lang": "ar"
     }
   ],
   "default_langcode": [
     {
-      "value": "1",
+      "value": true,
       "lang": "en"
+    },
+    {
+      "value": false,
+      "lang": "ar"
+    }
+  ],
+  "content_translation_source": [
+    {
+      "value": "und",
+      "lang": "en"
+    },
+    {
+      "value": "en",
+      "lang": "ar"
+    }
+  ],
+  "content_translation_outdated": [
+    {
+      "value": false,
+      "lang": "en"
+    },
+    {
+      "value": false,
+      "lang": "ar"
+    }
+  ],
+  "_embedded": {
+    "http:\/\/drupal.org\/rest\/relation\/block_content\/basic\/content_translation_uid": [
+      {
+        "_links": {
+          "self": {
+            "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+          },
+          "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+          }
+        },
+        "uuid": [
+          {
+            "value": "a9814586-c869-4c45-8cc3-66e78a482a4e"
+          }
+        ],
+        "lang": "en"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "http:\/\/local.alshaya.com\/en\/user\/1?_format=hal_json"
+          },
+          "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+          }
+        },
+        "uuid": [
+          {
+            "value": "a9814586-c869-4c45-8cc3-66e78a482a4e"
+          }
+        ],
+        "lang": "ar"
+      }
+    ]
+  },
+  "content_translation_status": [
+    {
+      "value": true,
+      "lang": "en"
+    },
+    {
+      "value": true,
+      "lang": "ar"
+    }
+  ],
+  "content_translation_created": [
+    {
+      "value": 1495691916,
+      "lang": "en"
+    },
+    {
+      "value": 1495701496,
+      "lang": "ar"
     }
   ],
   "body": [
     {
-      "value": "<p>\u00a9 Copyright Mothercare UK Limited 2016 Registered in England no. 533087, VAT Reg no 440 6445 66 Registered ofﬁce: Cherry Tree Road, Watford, Hertfordshire, WD24 6SH<\/p>\r\n",
+      "value": "<p>\u00a9 Copyright Mothercare UK Limited 2016 Registered in England no. 533087, VAT Reg no 440 6445 66 Registered of\ufb01ce: Cherry Tree Road, Watford, Hertfordshire, WD24 6SH<\/p>\r\n",
       "format": "rich_text",
       "summary": "",
       "lang": "en"
+    },
+    {
+      "value": "<p>\u062d\u0642\u0648\u0642 \u0627\u0644\u0646\u0634\u0631 \u0645\u062d\u0641\u0648\u0638\u0629 \u0644\u0634\u0631\u0643\u0629 \u0645\u0630\u0631\u0643\u064a\u0631 \u0627\u0644\u0645\u062d\u062f\u0648\u062f\u0629 \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0645\u062a\u062d\u062f\u0629 2015 | \u0645\u0630\u0631\u0643\u064a\u0631 \u0627\u0644\u0645\u062d\u062f\u0648\u062f\u0629 \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0645\u062a\u062d\u062f\u0629 (\u0634\u0631\u0643\u0629 \u062e\u0627\u0635\u0629 \u0645\u062d\u062f\u0648\u062f\u0629)<\/p>\r\n\r\n<p>\u0645\u0633\u062c\u0644\u0629 \u0641\u064a \u0625\u0646\u062c\u0644\u062a\u0631\u0627 \u0628\u0631\u0642\u0645 533087 . \u0631\u0642\u0645 \u062a\u0633\u062c\u064a\u0644 \u0636\u0631\u064a\u0628\u0629 \u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0645\u0636\u0627\u0641\u0629 66 6445 440&nbsp;<\/p>\r\n\r\n<p>\u0645\u0643\u062a\u0628 \u0627\u0644\u062a\u0633\u062c\u064a\u0644: \u0634\u064a\u0631\u064a \u062a\u0631\u064a \u0631\u0648\u062f\u060c \u0648\u0627\u062a\u0641\u0648\u0631\u062f\u060c \u0647\u064a\u0631\u062a\u0641\u0648\u0631\u062f\u0634\u0627\u064a\u0631\u060c WD24 6SH<\/p>\r\n",
+      "format": "rich_text",
+      "summary": "",
+      "lang": "ar"
     }
   ]
 }

@@ -1,11 +1,17 @@
 // share fields on product detail page
-
 .sharethis-wrapper {
+  text-align: $left;
+
   & > span {
-    font-size: 36px;
-    width: 18%;
     display: inline-block;
-    text-align: center;
+    height: 25px;
+    width: 25px;
+    background-size: contain;
+    margin: 5px 20px 5px 0;
+
+    &:last-child {
+      margin: 5px 0;
+    }
 
     &:hover {
       cursor: pointer;
@@ -14,22 +20,42 @@
   }
 
   .st_facebook_custom {
-    @include icon(facebook);
+    background-image: url(../imgs/social-icons/pdp/ic-facebook.png);
+
+    &:hover {
+      background-image: url('../imgs/social-icons/pdp/ic-facebookselect.png');
+    }
   }
 
   .st_twitter_custom {
-    @include icon(twitter);
+    background-image: url(../imgs/social-icons/pdp/ic-twitter.png);
+
+    &:hover {
+      background-image: url('../imgs/social-icons/pdp/ic-twitterselect.png');
+    }
   }
 
   .st_pinterest_custom {
-    @include icon(pinterest);
+    background-image: url(../imgs/social-icons/pdp/ic-pinterest.png);
+
+    &:hover {
+      background-image: url('../imgs/social-icons/pdp/ic-pinterestselect.png');
+    }
   }
 
   .st_instagram_custom {
-    @include icon(instagram);
+    background-image: url(../imgs/social-icons/pdp/ic-instagram.png);
+
+    &:hover {
+      background-image: url('../imgs/social-icons/pdp/ic-instagramselect.png');
+    }
   }
 
   .st_youtube_custom {
-    @include icon(youtube);
+    background-image: url(../imgs/social-icons/pdp/ic-youtube.png);
+
+    &:hover {
+      background-image: url('../imgs/social-icons/pdp/ic-youtubeselect.png');
+    }
   }
 }

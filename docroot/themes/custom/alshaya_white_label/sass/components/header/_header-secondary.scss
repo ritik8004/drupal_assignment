@@ -24,11 +24,10 @@
   }
 
   background: $white-four;
-  font-family: $alshaya-thin;
   text-transform: lowercase;
 
   &.block--display {
-    z-index: 15;
+    z-index: 1000;
   }
 
   ul {
@@ -79,6 +78,8 @@
   }
 
   a {
+    font-family: $alshaya-thin;
+
     @include breakpoint($upto-desktop) {
       color: $grey-ash;
       display: block;
@@ -185,7 +186,7 @@
     @extend %list-clear;
   }
 
-  h2 {
+  h3 {
     color: $marine-blue-two;
     font-size: 12px;
     padding: 0.94rem 0;
@@ -201,7 +202,7 @@
   top: 5.6875rem;
   background: $white-five;
   height: 100%;
-  z-index: 10;
+  z-index: 1000;
   padding: 0;
 
   a {
@@ -236,6 +237,94 @@
       width: 6px;
       height: 10px;
       top: 20px;
+    }
+
+    &.my-account {
+      display: none;
+    }
+  }
+}
+
+.contains-sublink .menu__link {
+  @include breakpoint($upto-desktop) {
+    pointer-events: none;
+  }
+}
+
+.menu--three__list-item {
+  .menu--three__link {
+    position: relative;
+
+    @include breakpoint($upto-desktop) {
+      @include icon(chevron#{$right}, after) {
+        position: absolute;
+        color: $marine-blue;
+        #{$right}: 0;
+        font-size: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  .contains-sublink .menu--three__link {
+    &::after {
+      @include breakpoint($upto-desktop) {
+        content: none;
+      }
+    }
+  }
+}
+
+.navbar-fixed-top {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: $white-five;
+}
+
+.mobile--overlay .branding__menu {
+  position: relative;
+  z-index: 5;
+
+  &.navbar-fixed-top {
+    position: fixed;
+
+    &::before {
+      background: rgba(0, 0, 0, 0.48);
+    }
+  }
+
+  &::before {
+    content: '';
+    background: rgba(133, 133, 133, 0.27);
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 6;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+.header--fixed {
+  margin-top: 5.3125rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 8.125rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 9.75rem;
+  }
+}
+
+.block-alshaya-main-menu .active--menu--links {
+  li.menu--one__list-item ul.menu--two__list {
+    @include breakpoint($desktop) {
+      display: block;
+      transition: all ease-in 0s;
     }
   }
 }

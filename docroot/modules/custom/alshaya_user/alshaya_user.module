@@ -12,6 +12,7 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Check if the current user has is only authenticated user.
@@ -131,6 +132,9 @@ function alshaya_user_form_user_login_form_alter(&$form, FormStateInterface $for
 
   // Change submit button text.
   $form['actions']['submit']['#value'] = t('sign in');
+
+  // Attach the JS library.
+  $form['#attached']['library'][] = 'alshaya_user/user_login';
 }
 
 /**
@@ -266,5 +270,31 @@ function alshaya_user_preprocess_page_title(&$variables) {
   }
   elseif ($current_path == '/user/password') {
     $variables['title'] = t('forgot password');
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_account_alter().
+ */
+function alshaya_user_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
+  // Update phone_number if available in customer data.
+  if (isset($customer['extension'], $customer['extension']['phone_number'])) {
+    $user->get('field_mobile_number')->setValue($customer['extension']['phone_number']);
+  }
+}
+
+/**
+ * Implements hook_acq_commerce_update_customer_api_request_alter().
+ */
+function alshaya_user_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+  if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($request_options['form_params']['customer[email]']);
+
+    if (!empty($user)) {
+      if ($phone_number = $user->get('field_mobile_number')->getValue()) {
+        $request_options['form_params']['customer[extension][phone_number]'] = $phone_number[0]['value'];
+      }
+    }
   }
 }

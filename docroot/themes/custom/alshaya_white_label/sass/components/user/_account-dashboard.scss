@@ -19,8 +19,13 @@
     font-size: 1rem;
     color: $marine-blue;
 
+    @include breakpoint($tablet) {
+      font-size: 0.875rem;
+    }
+
     @include breakpoint($desktop) {
       margin-bottom: 1.125rem;
+      font-size: 1rem;
     }
   }
 
@@ -33,12 +38,22 @@
 
   li {
     font-size: 0.875rem;
-    margin-bottom: 1.375rem;
+    margin-bottom: 2rem;
 
     @include breakpoint($desktop) {
       display: inline-block;
       margin-bottom: 0;
       width: 33%;
+    }
+
+    div {
+      @include breakpoint($tablet) {
+        font-size: 0.75rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 0.875rem !important;
+      }
     }
   }
 
@@ -69,18 +84,23 @@
     width: 50%;
 
     #block-jointheclub {
-      h2 {
+      h3 {
         font-family: $alshaya-bold;
         font-size: 0.875rem;
         color: $dark-sand;
         margin-top: 0;
       }
 
+      @include breakpoint($only-tablet) {
+        margin-top: -0.75em;
+      }
+
       p {
         font-family: $arial;
         font-size: 0.75rem;
         color: $grey-ash;
-        margin: 10px 0;
+        margin: 8px 0;
+        text-transform: initial;
       }
 
       a {
@@ -94,6 +114,7 @@
 
         @include breakpoint($tablet) {
           margin-#{$left}: -2.6875rem;
+          width: 85%;
         }
 
         @include breakpoint($desktop) {

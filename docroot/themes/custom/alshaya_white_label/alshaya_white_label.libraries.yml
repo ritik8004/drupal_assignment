@@ -4,14 +4,17 @@ global_styles:
       css/colors.css: {}
   js:
     vendor/js/calc.min.js: {}
+    js/custom.js: {}
     js/accordion.js: {}
     js/menu.js: {}
     js/form.js: {}
     js/address_book.js: {}
+    js/one_time_language_slider.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion
     - core/jquery.ui.tabs
+    - core/jquery.cookie
 
 ltr_styles:
   css:
@@ -71,3 +74,7 @@ sizeguide:
   js:
     js/select2Option.js: {}
     js/sizeguide.js: {}
+
+ucfix:
+  js:
+    js/ucfix.js: {}

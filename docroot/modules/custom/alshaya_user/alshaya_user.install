@@ -75,6 +75,7 @@ function alshaya_user_modules_installed($modules) {
     'settings' => [
       'default_country' => 'KW',
       'countries' => [],
+      'placeholder' => ' ',
     ],
     'third_party_settings' => [],
   ];
@@ -132,4 +133,21 @@ This link can only be used once to log in and will lead you to a page where you 
 
   // Disable account activation mail.
   \Drupal::configFactory()->getEditable('user.settings')->set('notify.status_activated', FALSE)->save();
+
+  // Set reset password mail translation.
+  $reset_password_mail = \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'user.mail');
+  $reset_password_mail->set('password_reset.subject', 'معلومات تسجيل الدخول البديلة ل [user:display-name] في [site:name]');
+  $reset_password_mail->set('password_reset.body', '<h1>![user:field_first_name:value] مرحبا</h1>
+
+[site:name] تم طلب إعادة تعيين كلمة المرور لحسابك في
+
+يمكنك الآن تسجيل الدخول بالنقر على هذا الرابط أو نسخه ولصقه في المتصفح:
+
+<a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
+
+لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها.
+
+ [site:name] فريق دعم زبائن موقع');
+  $reset_password_mail->save();
 }

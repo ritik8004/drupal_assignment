@@ -2,6 +2,10 @@
   'use strict';
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
+      // Remove unwanted attributes in slider for users.
+      $('.gallery-wrapper #cloud-zoom img').removeAttr('title');
+      $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
+
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
@@ -9,45 +13,37 @@
       var items = $('.cloud-zoom:not(cloud-zoom-processed), .cloudzoom__thumbnails__image:not(cloud-zoom-processed)', context);
       if (items.length) {
         items.addClass('cloud-zoom-processed').CloudZoom();
-        items.parent().css('float', 'left');
+        // items.parent().css('float', 'left');
       }
       // Slider 1 - For Desktop - Image zoom.
       if ($(window).width() < 1025) {
         $('#lightSlider', context).lightSlider({
           vertical: false,
           item: 3,
+          loop: true,
           verticalHeight: 100
         });
         // Slider 1 - For Desktop - Image zoom.
         $('#drupal-modal #lightSlider', context).lightSlider({
           vertical: false,
           item: 3,
+          loop: true,
           verticalHeight: 100
-        });
-        // Slider - 2 For Desktop - Image Gallery.
-        $('#product-image-gallery', context).lightSlider({
-          vertical: true,
-          item: 5,
-          verticalHeight: 500
         });
       }
       else {
         $('#lightSlider', context).lightSlider({
           vertical: true,
           item: 5,
+          loop: true,
           verticalHeight: 440
         });
         // Slider 1 - For Desktop - Image zoom.
         $('#drupal-modal #lightSlider', context).lightSlider({
           vertical: true,
           item: 5,
-          verticalHeight: 500
-        });
-        // Slider - 2 For Desktop - Image Gallery.
-        $('#product-image-gallery', context).lightSlider({
-          vertical: true,
-          item: 5,
-          verticalHeight: 500
+          loop: true,
+          verticalHeight: 440
         });
       }
 
@@ -76,6 +72,23 @@
         height: 768,
         dialogClass: 'dialog-product-image-gallery-container',
         open: function () {
+
+          if ($(window).width() < 1025) {
+            $('#product-image-gallery', context).lightSlider({
+              vertical: false,
+              item: 5,
+              loop: true,
+              verticalHeight: 100
+            }).refresh();
+          } else {
+            $('#product-image-gallery', context).lightSlider({
+              vertical: true,
+              item: 5,
+              loop: true,
+              verticalHeight: 440
+            });
+          }
+
           // ZoomIn ZoomOut in Gallery view with a draggable container.
           if ($('#full-image-wrapper').length > 0) {
             $('#full-image').css({top: 0, left: -200});
@@ -171,6 +184,7 @@
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       // Fetch Vimeo thumbnail via a GET call. Vimeo doesnot give thumbnails via URL like YT.
+      // @TODO: Can we do this in PHP?
       $('#lightSlider li.cloudzoom__thumbnails__video.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
         var vimeoVideoUrl = $(this).attr('data-iframe');
         var match = /vimeo.*\/(\d+)/i.exec(vimeoVideoUrl);

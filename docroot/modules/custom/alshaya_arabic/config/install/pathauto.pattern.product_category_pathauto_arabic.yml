@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - ctools
+    - language
+    - taxonomy
+id: product_category_pathauto_arabic
+label: 'Product category pathauto arabic'
+type: 'canonical_entities:taxonomy_term'
+pattern: '/[term:name]/[term:parents:reverse-join-path]'
+selection_criteria:
+  7d67e45f-9665-4f72-a8bc-061801a2f92a:
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      acq_product_category: acq_product_category
+    negate: false
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    uuid: 7d67e45f-9665-4f72-a8bc-061801a2f92a
+  6fe525fe-5032-4111-8af4-876d3c95cbaa:
+    id: language
+    langcodes:
+      ar: ar
+    negate: false
+    context_mapping:
+      language: 'taxonomy_term:langcode:language'
+    uuid: 6fe525fe-5032-4111-8af4-876d3c95cbaa
+selection_logic: and
+weight: -10
+relationships:
+  'taxonomy_term:langcode:language':
+    label: Language

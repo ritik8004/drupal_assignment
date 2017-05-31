@@ -1,0 +1,65 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .menu--two__list {
+      -webkit-column-count: 3;
+      -moz-column-count: 3;
+      column-count: 3;
+      max-height: 21.875rem;
+      padding-#{$right}: 51%;
+      padding-bottom: 3rem;
+
+      .menu--two__list-item .menu--three__list {
+        padding-#{$left}: 0;
+        padding-top: 0;
+        position: static;
+      }
+    }
+
+    .highlights {
+      position: absolute;
+      #{$left}: 49.5%;
+      top: 1.5625;
+      width: 50%;
+    }
+
+    .menu--two__list .menu--two__list-item > .menu-two__link-wrapper {
+      background: transparent;
+      padding: 0;
+      margin-bottom: 2px;
+
+      &::after {
+        content: none;
+      }
+
+      a {
+        color: $marine-blue !important;
+      }
+    }
+
+    .menu--three__list-item > .menu-two__link-wrapper a {
+      font-size: 0.75rem !important;
+      color: $grey-ash !important;
+      font-family: $arial !important;
+    }
+
+    .menu--two__list .menu--three__list-item {
+      display: block;
+      margin-bottom: 0;
+    }
+
+    .menu--two__list .menu--two__list-item {
+      max-width: none;
+      display: inline-block;
+      vertical-align: top;
+      padding-#{$left}: 1.5rem;
+    }
+  }
+}
+
+.block-alshaya-main-menu .has--three-levels {
+  &.menu--one__list-item ul ul {
+    @include breakpoint($desktop) {
+      display: block;
+    }
+  }
+}

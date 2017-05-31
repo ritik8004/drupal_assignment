@@ -10,7 +10,6 @@ use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\user\UserInterface;
 
 /**
@@ -68,7 +67,7 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
           return TRUE;
         }
         // Search by SKU.
-        elseif (stripos($orderItem['sku'], $search) > -1) {
+        elseif (stripos(alshaya_acm_customer_clean_sku($orderItem['sku']), alshaya_acm_customer_clean_sku($search)) > -1) {
           return TRUE;
         }
       }
@@ -90,6 +89,23 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
   }
 
   return $orders;
+}
+
+/**
+ * Clean up sku values by removing spaces and dashes.
+ *
+ * @param string $sku
+ *   The sku string.
+ *
+ * @return string
+ *   Return cleaned string without spaces and dashes.
+ */
+function alshaya_acm_customer_clean_sku($sku) {
+  // Convert whitespaces and underscore to dash.
+  $string = preg_replace("/[\s_]/", "-", $sku);
+  // Clean up multiple dashes or whitespaces.
+  $string = preg_replace("/[\s-]+/", "", $string);
+  return $string;
 }
 
 /**
@@ -205,13 +221,13 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
     $item['name'] = $parent_sku->label();
   }
 
-  $orderRow['name'] = Unicode::truncate($item['name'], 25, TRUE, TRUE);
+  $orderRow['name'] = Unicode::truncate($item['name'], 25, FALSE, TRUE);
 
   // Calculate total items in the order.
   $orderRow['quantity'] = alshaya_acm_customer_get_order_total_quantity($order);
 
   // Format total to have max 3 decimals as per mockup.
-  $orderRow['total'] = number_format($order['totals']['grand'], 3);
+  $orderRow['total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   // Calculate status of order based on status of items.
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
@@ -239,14 +255,15 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['delivery_address'] = $address_formatter->render((object) $order['shipping']['address']);
   $orderDetails['billing_address'] = $address_formatter->render((object) $order['billing']);
 
-  // @TODO: MMCPA-641.
-  $orderDetails['delivery_method'] = $order['shipping']['method']['carrier_code'];
-  $orderDetails['delivery_charge'] = $order['shipping']['method']['amount'];
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
+  $shippingTerm = alshaya_acm_checkout_load_shipping_method($order['shipping']['method']['carrier_code']);
+  $orderDetails['delivery_method'] = $shippingTerm->getName();
+  $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
 
   $orderDetails['payment_method'] = $order['payment']['method_title'];
 
-  $orderDetails['sub_total'] = $order['totals']['sub'];
-  $orderDetails['order_total'] = $order['totals']['grand'];
+  $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
+  $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   return $orderDetails;
 }
@@ -370,7 +387,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $products = [];
   foreach ($order['items'] as $item) {
     $product = $item;
-    $product['total'] = number_format($item['ordered'] * $item['price'], 3);
+    $product['price'] = alshaya_acm_price_format($item['price']);
+    $product['total'] = alshaya_acm_price_format($item['ordered'] * $item['price']);
     $product['attributes'] = [];
 
     // Check if we can find a parent SKU for this to get proper name.
@@ -385,18 +403,10 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $product['image'] = '';
 
     // Load the first image.
-    $file_uri = alshaya_acm_get_product_display_image($item['sku']);
-    // If we have image for the product.
-    if (!empty($file_uri)) {
-      $product['image'] = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($file_uri);
-    }
+    $product['image'] = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
     $products[] = $product;
   }
-
-  // Get the currency code and position.
-  $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
-  $currencyCodePosition = \Drupal::config('acq_commerce.currency')->get('currency_code_position');
 
   $build = [];
 
@@ -404,11 +414,10 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
   $build['#products'] = $products;
   $build['#products_count'] = count($build['#products']);
-  // @TODO: MMCPA-641.
-  $build['#delivery_detail_notice'] = t('your order will be delivered between 1 and 3 days');
 
-  $build['#currency_code'] = $currencyCode;
-  $build['#currency_code_position'] = $currencyCodePosition;
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
+  $shippingTerm = alshaya_acm_checkout_load_shipping_method($order['shipping']['method']['carrier_code']);
+  $build['#delivery_detail_notice'] = $shippingTerm->get('field_shipping_method_desc')->getString();
 
   return $build;
 }

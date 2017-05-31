@@ -238,7 +238,7 @@
   }
 
   .form-item-billing-information-address-first-name {
-    padding-right: 1rem;
+    padding-#{$right}: 1rem;
   }
 
   .form-item-billing-information-address-first-name,
@@ -284,17 +284,17 @@
   .caption {
     font-size: 14px;
     background: $white-three;
-    padding: 1.563rem 1.25rem;
+    padding: 1rem 1.25rem;
 
     .title {
       color: $black-two;
-      font-weight: bold;
     }
 
     a {
       text-decoration: none;
       float: $right;
       font-weight: bold;
+      font-size: 0.75rem;
       color: $cerulean-two;
     }
   }
@@ -302,7 +302,7 @@
   .content-head {
     width: 100%;
     background: $white-four;
-    padding: 1em;
+    padding: 1em 1.5rem;
     font-size: 14px;
     position: relative;
 
@@ -318,7 +318,7 @@
 
   .active--accordion {
     .content-head {
-      @include icon(chevronup, after);
+      @include icon(chevron#{$right}, after);
     }
   }
 
@@ -335,8 +335,54 @@
 
     li {
       @include clearfix;
+    }
+  }
 
-      margin-bottom: 1rem;
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    width: 100%;
+    list-style: none;
+    display: inline-block;
+    border: 1px solid $white;
+    padding: 1.563rem;
+  }
+
+  .left {
+    float: $left;
+    width: 30%;
+  }
+
+  .right {
+    float: $right;
+    width: 70%;
+    padding-#{$left}: 1.4rem;
+
+    a,
+    span {
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    > span {
+      display: block;
+    }
+
+    .product-name {
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .product-total {
+      font-weight: 700;
+    }
+
+    .product-qty {
+      color: $greyish;
+      margin-bottom: 3px;
     }
   }
 }
@@ -380,13 +426,8 @@ body.alias--cart {
   .page-standard.l-container {
     margin: auto;
     margin-top: 2rem;
-
-    @include breakpoint($mobile) {
-      @include container(100%);
-
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 
     @include breakpoint($tablet) {
       @include container(100%);
@@ -402,7 +443,7 @@ body.alias--cart {
     .edit-actions {
       clear: both;
       float: $right;
-      display: inline-grid;
+      display: block;
       margin-top: 0.5rem;
       margin-bottom: 1rem;
 
@@ -412,7 +453,7 @@ body.alias--cart {
       }
 
       @include breakpoint($tablet) {
-        margin-#{$right}: -2.4rem;
+        margin-#{$right}: -3.4rem;
       }
 
       @include breakpoint($desktop) {
@@ -478,12 +519,8 @@ body.alias--cart {
         }
       }
 
-      &:nth-child(2n) {
+      &:hover {
         background: rgba(247, 247, 247, 0.72);
-
-        td:last-child {
-          background: $white-four;
-        }
       }
 
       th {
@@ -523,14 +560,58 @@ body.alias--cart {
             width: 7.2rem;
           }
         }
+
+        &.delivery-option {
+          padding-top: 0;
+        }
       }
 
       td.name {
         width: 18.75rem;
-        padding-right: 4px;
+        padding-#{$right}: 4px;
+        display: table-cell;
 
         @include breakpoint($desktop) {
           width: 25rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          width: auto;
+          padding-bottom: 0;
+        }
+
+        div.image {
+          @include breakpoint($only-mobile) {
+            width: 8rem;
+            height: 9rem;
+            margin-#{$right}: 1rem;
+          }
+        }
+
+        div.items {
+          @include breakpoint($only-mobile) {
+            width: 48%;
+            padding-left: 0;
+            margin-bottom: 2.8rem;
+
+            a {
+              width: auto;
+            }
+          }
+        }
+      }
+
+      td.quantity {
+        @include breakpoint($only-mobile) {
+          float: none;
+          margin-#{$left}: 9rem;
+          margin-top: -2.8rem;
+          padding-#{$right}: 0;
+
+          > div:first-child {
+            display: inline-block;
+          }
         }
       }
 
@@ -555,13 +636,13 @@ body.alias--cart {
         }
 
         @include breakpoint($tablet) {
-          width: 7.6rem;
+          width: 16.3%;
           padding-#{$left}: 0.63rem;
           padding-#{$right}: 0;
         }
 
         @include breakpoint($desktop) {
-          width: 16.8rem;
+          width: 21.75%;
           padding: 1rem;
           padding-#{$left}: 3.5rem;
         }
@@ -602,6 +683,8 @@ body.alias--cart {
 
       select {
         @include select-style(4.375rem);
+
+        text-indent: 0.4rem;
       }
 
       .form-type-select {
@@ -615,7 +698,7 @@ body.alias--cart {
 
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 7.25rem;
+      margin-#{$right}: 16.3%;
     }
 
     @include breakpoint($only-tablet) {
@@ -632,11 +715,12 @@ body.alias--cart {
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 16.7rem;
+      margin-#{$right}: 21.6%;
     }
 
-    .edit-continue-shopping-mobile {
-      @include breakpoint($desktop) {
+    .edit-continue-shopping-mobile,
+    #edit-continue-shopping-mobile {
+      @include breakpoint($tablet) {
         display: block;
         font-weight: normal;
         border: 0;
@@ -658,9 +742,13 @@ body.alias--cart {
     td:last-child {
       background: $white-four;
       color: $black;
-      margin-left: 1rem;
+      margin-#{$left}: 1rem;
       padding: 1rem;
       text-align: $left;
+
+      @include breakpoint($desktop) {
+        padding: 1.5rem;
+      }
     }
 
     tr:last-child {
@@ -682,14 +770,14 @@ body.alias--cart {
     tr > td {
       @include breakpoint($tablet) {
         padding-#{$right}: 1rem;
-        width: 7.5rem;
+        width: 8rem;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         height: 38px;
         vertical-align: middle;
 
         &:first-child {
-          padding-right: 0.75rem;
+          padding-#{$right}: 0.75rem;
         }
       }
 
@@ -709,20 +797,28 @@ body.alias--cart {
 
     background: $pumpkin-orange;
     margin-top: 1em;
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
+    min-width: 10.8125rem;
     text-transform: lowercase;
+    font-family: $arial;
 
     @include breakpoint($upto-tablet) {
       display: block;
       width: 100%;
     }
 
+    @include breakpoint($tablet) {
+      margin-top: 1.4em;
+    }
+
     @include breakpoint($desktop) {
+      margin-top: 1em;
       width: 10.8rem;
     }
   }
 
   #edit-continue-shopping,
+  #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
     font-size: 12px;
     font-weight: bold;
@@ -731,6 +827,7 @@ body.alias--cart {
     padding: 0.625rem 1.6rem;
     text-align: center;
     text-transform: lowercase;
+    font-family: $arial;
 
     @include breakpoint($tablet) {
       max-width: 173px;
@@ -745,7 +842,8 @@ body.alias--cart {
     }
   }
 
-  .edit-continue-shopping-mobile {
+  .edit-continue-shopping-mobile,
+  #edit-continue-shopping-mobile {
     @include breakpoint($tablet) {
       display: none;
     }
@@ -769,7 +867,7 @@ body.alias--cart {
 
   a {
     margin: auto;
-    max-width: 30rem;
+    max-width: 32rem;
 
     @include breakpoint($tablet) {
       max-width: 10.81rem;
@@ -780,10 +878,12 @@ body.alias--cart {
     display: none;
   }
 
+  #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
     color: $white-five;
     background: $pumpkin-orange;
     border: 1px solid $pumpkin-orange;
+    font-weight: normal;
   }
 }
 
@@ -792,6 +892,7 @@ body.alias--cart {
   margin-top: 35px;
   font-weight: bold;
   color: $black;
+  font-family: $arial;
   font-size: 14px;
 
   @include breakpoint($tablet) {

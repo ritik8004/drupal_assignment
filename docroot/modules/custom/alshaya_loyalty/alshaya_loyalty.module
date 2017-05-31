@@ -9,6 +9,8 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
 use Drupal\webform\Element\WebformCreditCardNumber;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
  * Get validation settings stored for validation.
@@ -25,6 +27,7 @@ function alshaya_loyalty_get_validation_settings() {
     $loyalty = [
       'length' => $config->get('apcn_max_length'),
       'value_start_with' => $config->get('apcn_value_starts_with'),
+      'enable_disable_loyalty' => $config->get('enable_disable_loyalty'),
     ];
   }
 
@@ -49,8 +52,19 @@ function _alshaya_loyalty_clean_card_number($value) {
  */
 function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $add_privilege_fields = FALSE;
+  // Get loyalty settings.
+  $loyalty_settings = alshaya_loyalty_get_validation_settings();
 
   switch ($form_id) {
+    case 'field_storage_config_edit_form':
+      if ($form_state->getFormObject()->getEntity()->getType() == 'string') {
+        if ($form_state->get('field_config')->getName() == 'field_privilege_card_number') {
+          $form['settings']['max_length']['#default_value'] = 19;
+          $form['settings']['max_length']['#disabled'] = TRUE;
+        }
+      }
+      break;
+
     // Add privilege card number fields to cart form.
     case 'customer_cart_form':
       // Get the current cart.
@@ -79,13 +93,22 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
       break;
 
     case 'user_form':
-      _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
+      // Allow loyalty only if its enabled.
+      if ($loyalty_settings['enable_disable_loyalty']) {
+        _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
+      }
+      else {
+        $form['field_privilege_card_number']['#access'] = FALSE;
+      }
       break;
   }
 
-  // Add privilege card number fields to the form.
-  if ($add_privilege_fields) {
-    alshaya_loyalty_add_privilege_card_fields($form, $form_state);
+  // Allow loyalty only if its enabled.
+  if ($loyalty_settings['enable_disable_loyalty']) {
+    // Add privilege card number fields to the form.
+    if ($add_privilege_fields) {
+      alshaya_loyalty_add_privilege_card_fields($form, $form_state);
+    }
   }
 }
 
@@ -100,6 +123,8 @@ function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, F
       $form['field_privilege_card_number']['widget'][0]['value']['#default_value'] = $validation['value_start_with'];
     }
   }
+
+  $form['field_privilege_card_number']['widget'][0]['value']['#maxlength'] = 19;
 
   // Validate privilege card number.
   $form['field_privilege_card_number']['#element_validate'] = [
@@ -146,8 +171,11 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
     // Validate number against validation settings.
     if (($element_value != $validation['value_start_with'])
         && !alshaya_loyalty_check_valid_apc_number($element_value, $validation['length'], $validation['value_start_with'])) {
-      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => $element_value]));
+      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => alshaya_loyalty_format_card_number($element_value)]));
     }
+  }
+  else {
+    $form_state->setValue($field, NULL);
   }
 }
 
@@ -196,15 +224,8 @@ function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInter
     if ($apc_number != $validation['value_start_with']) {
       if (\Drupal::currentUser()->isAuthenticated()) {
         $user = User::load(\Drupal::currentUser()->id());
-        $user->get('field_privilege_card_number')->setValue($apc_number);
+        $user->get('field_privilege_card_number')->set(0, $apc_number);
         $user->save();
-
-        // This will be enabled by default but to avoid adding it to dependency.
-        if (\Drupal::moduleHandler()->moduleExists('alshaya_acm_customer')) {
-          // Update the data in Magento.
-          \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-          alshaya_acm_customer_update_customer_data($user->getEmail());
-        }
       }
       elseif (Drupal::currentUser()->isAnonymous()) {
         $temp_store->set('card_number', $apc_number);
@@ -263,7 +284,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
 
   $form['privilege_card_wrapper'] = [
     '#type' => 'details',
-    '#title' => t('Enter a priviledge card number'),
+    '#title' => t('Enter a privilege card number'),
     '#open' => $default_value ? TRUE : FALSE,
     '#weight' => 3,
     '#after_build' => ['alshaya_loyalty_privilege_card_wrapper_after_build'],
@@ -274,16 +295,18 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   $form['privilege_card_wrapper']['privilege_card_number'] = [
     '#type' => 'textfield',
     '#title' => t('Privilege Card Number'),
+    '#maxlength' => 19,
     '#element_validate' => [
       '_alshaya_loyalty_validate_field_value',
     ],
-    '#default_value' => isset($default_value) ? $default_value : $validation['value_start_with'],
-    '#disabled' => isset($default_value) && \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE,
+    '#default_value' => !empty($default_value) ? $default_value : $validation['value_start_with'],
+    '#disabled' => !empty($default_value) && \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE,
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
     '#type' => 'textfield',
     '#title' => t('Re-enter Privilege Card Number'),
+    '#maxlength' => 19,
     '#states' => [
       'required' => [
         ':input[name="privilege_card_number"]' => ['empty' => FALSE],
@@ -300,8 +323,8 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
       'wrapper' => 'details-privilege-card-wrapper',
     ],
     '#limit_validation_errors' => [['privilege_card_number'], ['privilege_card_number2']],
-    '#default_value' => isset($default_value) ? $default_value : $validation['value_start_with'],
-    '#disabled' => isset($default_value) && \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE,
+    '#default_value' => !empty($default_value) ? $default_value : $validation['value_start_with'],
+    '#disabled' => !empty($default_value) && \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE,
   ];
 
   _alshaya_loyalty_form_attachements($form, $form_state, $validation);
@@ -391,6 +414,44 @@ function alshaya_loyalty_preprocess_user(&$variables) {
 }
 
 /**
+ * Format loyalty card number.
+ *
+ * @param string $number
+ *   The loyalty card number.
+ *
+ * @return string
+ *   Return the formatted string.
+ */
+function alshaya_loyalty_format_card_number($number) {
+  $number = str_replace(['-', ' '], '', $number);
+  $cc_length = strlen($number);
+  $processed_number = substr($number, -4);
+
+  for ($i = $cc_length - 5; $i >= 0; $i--) {
+    $calc = ((($i + 1) - $cc_length) % 4);
+    if ($calc == 0) {
+      $processed_number = '-' . $processed_number;
+    }
+    $processed_number = $number[$i] . $processed_number;
+  }
+
+  return $processed_number;
+}
+
+/**
+ * Mask Loyalty card number.
+ *
+ * @param string $number
+ *   The loyalty card number.
+ *
+ * @return string
+ *   Return masked string of card number.
+ */
+function alshaya_loyalty_mask_card_number($number) {
+  return 'XXXX-XXXX-XXXX-' . substr($number, -4);
+}
+
+/**
  * Implements hook_alshaya_acm_customer_update_account_alter().
  */
 function alshaya_loyalty_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
@@ -412,6 +473,28 @@ function alshaya_loyalty_acq_commerce_update_customer_api_request_alter(array &$
       if ($privilege_card_number = $user->get('field_privilege_card_number')->getString()) {
         $request_options['form_params']['customer[extension][loyalty_card_number]'] = $privilege_card_number;
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_loyalty_user_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  $build['#cache']['tags'][] = 'loyalty-on-off';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * For the 'checkout order confirmation' step.
+ */
+function alshaya_loyalty_preprocess_checkout_order_detail(&$variables) {
+  if (!empty($variables['account']['privilege_card_number'])) {
+    $loyalty_settings = alshaya_loyalty_get_validation_settings();
+    // If site has loyalty 'off'.
+    if (!$loyalty_settings['enable_disable_loyalty']) {
+      $variables['account']['privilege_card_number'] = '';
     }
   }
 }

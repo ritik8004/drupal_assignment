@@ -11,7 +11,7 @@
 
     @include breakpoint($desktop) {
       width: calc(100% - (92px + 1rem));
-      float: #{$right};
+      float: $right;
     }
 
     #yt-vi-container {
@@ -21,7 +21,7 @@
 
   #cloud-zoom-wrap {
     @include breakpoint($only-tablet) {
-      height: 417px;
+      height: 400px;
     }
 
     @include breakpoint($desktop) {
@@ -38,31 +38,40 @@
   }
 
   .cloudzoom__thumbnails {
+    clear: $left;
+
     @include breakpoint($only-tablet) {
       width: 100%;
       float: none;
-      margin-right: none;
+      margin-#{$right}: none;
       position: relative;
     }
 
     @include breakpoint($desktop) {
       width: 90px;
-      margin-right: 1rem;
-      float: #{$left};
+      margin-#{$right}: 1rem;
+      float: $left;
       position: static;
     }
 
     .lSSlideOuter {
       @include breakpoint($only-tablet) {
         padding: 0 60px;
-      }
-
-      @include breakpoint($desktop) {
-        padding: 42px 0;
+        max-width: 432px;
+        margin: 0 auto;
+        position: relative;
       }
 
       &.noPager {
         padding: 0;
+
+        @include breakpoint($only-tablet) {
+          max-width: 312px;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        padding: 42px 0;
       }
 
       .lSSlideWrapper {
@@ -108,8 +117,8 @@
             width: 44px;
             height: 96px;
             bottom: 0;
-            margin-left: 0;
-            margin-right: 0;
+            margin-#{$left}: 0;
+            margin-#{$right}: 0;
           }
 
           .lSPrev {
@@ -132,7 +141,7 @@
             right: 10px;
             top: 20px;
             background-color: $white-five;
-            text-align: left;
+            text-align: $left;
             padding-top: 40px;
 
             &::before {
@@ -152,14 +161,15 @@
             cursor: pointer;
             position: absolute;
             margin-top: 0;
-            margin-left: 0;
+            margin-#{$left}: 0;
             opacity: 1;
             text-align: center;
-            font-size: 22px;
+            font-size: 30px;
             color: $black-two;
+            z-index: 0;
 
             &::before {
-              padding-top: 10px;
+              padding-top: 5px;
 
               @include u-visibility(block);
             }
@@ -189,6 +199,18 @@
 }
 
 .cloudzoom__image {
+  .img-wrap {
+    @include breakpoint($tablet) {
+      height: 360px;
+      overflow: hidden;
+    }
+
+    @include breakpoint($desktop) {
+      height: 515px;
+      overflow: hidden;
+    }
+  }
+
   .mobile-hover-text {
     @include breakpoint($only-tablet) {
       @include u-visibility(block);
@@ -199,7 +221,7 @@
     }
 
     width: 100%;
-    padding: 24px;
+    padding: 1rem;
     font-size: 12px;
     text-align: center;
     color: $brownish-grey;
@@ -223,8 +245,18 @@
 }
 
 #cloud-zoom-big {
-  top: 212px !important;
-  left: 102% !important;
+  top: 210px !important;
+
+  @include if-rtl {
+    right: 103% !important;
+    left: auto !important;
+  }
+
+  @include if-ltr {
+    left: 103% !important;
+    right: auto !important;
+  }
+
   border: 1px solid $white;
 
   @include breakpoint($only-tablet) {
@@ -233,7 +265,7 @@
 }
 
 .cloudzoom .cloud-zoom-lens {
-  cursor: url(../imgs/assets/ic-zoom.png), auto !important;
+  cursor: url(../imgs/assets/ic-zoom.svg) 100 100, auto !important;
 }
 
 .mobilegallery {
@@ -257,12 +289,17 @@
   }
 
   .lSAction {
+    & > a {
+      height: 35px;
+      width: 35px;
+    }
+
     .lSPrev {
       @include icon(chevronleft);
 
       background: $white-five;
-      border-radius: 30px;
-      font-size: 30px;
+      border-radius: 35px;
+      font-size: 35px;
       text-align: center;
       color: $black;
     }
@@ -271,8 +308,8 @@
       @include icon(chevronright);
 
       background: $white-five;
-      border-radius: 30px;
-      font-size: 30px;
+      border-radius: 35px;
+      font-size: 35px;
       text-align: center;
       color: $black;
     }

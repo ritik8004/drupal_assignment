@@ -10,23 +10,22 @@ label: 'Product category pathauto'
 type: 'canonical_entities:taxonomy_term'
 pattern: '/[term:parents:join-path]/[term:name]'
 selection_criteria:
-  3cc6c843-5f9b-4492-8c76-f588b845c99c:
+  b2d29496-8343-4c30-b6db-3e2b3709ff4d:
     id: 'entity_bundle:taxonomy_term'
     bundles:
       acq_product_category: acq_product_category
     negate: false
     context_mapping:
       taxonomy_term: taxonomy_term
-    uuid: 3cc6c843-5f9b-4492-8c76-f588b845c99c
-  5b606706-2bbe-45fd-8a90-9379e096e28d:
+    uuid: b2d29496-8343-4c30-b6db-3e2b3709ff4d
+  d5165cac-55cb-40f6-baa2-02137b4ff48d:
     id: language
     langcodes:
-      ar: ar
       en: en
     negate: false
     context_mapping:
       language: 'taxonomy_term:langcode:language'
-    uuid: 5b606706-2bbe-45fd-8a90-9379e096e28d
+    uuid: d5165cac-55cb-40f6-baa2-02137b4ff48d
 selection_logic: and
 weight: -10
 relationships:

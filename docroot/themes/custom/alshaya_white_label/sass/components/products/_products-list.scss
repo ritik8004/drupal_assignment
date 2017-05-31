@@ -3,6 +3,18 @@
 
   .region__content {
     position: relative;
+
+    .block-views-blockplp-promotional-banner-block-1.promo-banner {
+      margin-bottom: 24px;
+
+      ~ .filter--mobile {
+        top: 21rem;
+
+        @include breakpoint($only-tablet) {
+          top: 16.75rem;
+        }
+      }
+    }
   }
 
   .c-page-title {
@@ -91,9 +103,12 @@
     .field--name-name {
       margin-top: 0;
       margin-bottom: 0.875rem;
-      color: $grey-ash;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
+
+      a {
+        color: $grey-ash;
+      }
 
       @include breakpoint($tablet) {
         font-size: 0.875rem;
@@ -102,6 +117,12 @@
 
     .field--name-price {
       font-size: 0.75rem;
+
+      &.special-price-exists {
+        color: $scarlet;
+        text-decoration: line-through;
+        margin-#{$right}: 4px;
+      }
 
       @include breakpoint($tablet) {
         font-size: 0.9375rem;
@@ -135,7 +156,13 @@
   }
 
   .block-system-main-block {
-    display: none;
+    .view-content {
+      display: none;
+    }
+
+    .feed-icons {
+      display: none;
+    }
   }
 }
 
@@ -175,6 +202,10 @@
     font-weight: normal;
     margin: 0;
 
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 1rem;
+    }
+
     &.is-active {
       background: $white-five;
       position: relative;
@@ -188,6 +219,7 @@
 
     @include breakpoint($only-tablet) {
       top: 2.1875rem;
+      #{$right}: -8.938rem;
     }
 
     @include breakpoint($only-mobile) {

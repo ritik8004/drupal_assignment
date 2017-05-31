@@ -31,10 +31,6 @@ class CustomerController extends ControllerBase {
     // Get items to show per page from config.
     $itemsPerPage = \Drupal::config('alshaya_acm_customer.orders_config')->get('items_per_page');
 
-    // Get the currency code and position.
-    $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
-    $currencyCodePosition = \Drupal::config('acq_commerce.currency')->get('currency_code_position');
-
     // Build account details array.
     $account = [];
     $account['first_name'] = $user->get('field_first_name')->getString();
@@ -50,7 +46,7 @@ class CustomerController extends ControllerBase {
 
     // Initialising order details array to array.
     $orderDetails = [];
-
+    $nextPageButton = [];
     $noOrdersFoundMessage = ['#markup' => ''];
     $help_block = NULL;
 
@@ -73,8 +69,6 @@ class CustomerController extends ControllerBase {
 
       // Get the orders to display for current page.
       $ordersPaged = array_slice($orders, $offset, $itemsPerPage, TRUE);
-
-      $nextPageButton = [];
 
       if (count($orders) > $offset + $itemsPerPage) {
         // Get all the query parameters we currently have.
@@ -101,8 +95,6 @@ class CustomerController extends ControllerBase {
           '#theme' => 'user_order_list_item',
           '#order' => alshaya_acm_customer_get_processed_order_summary($order),
           '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $user->id(), 'order_id' => $order['increment_id']])->toString(),
-          '#currency_code' => $currencyCode,
-          '#currency_code_position' => $currencyCodePosition,
         ];
       }
 

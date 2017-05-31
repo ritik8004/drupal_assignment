@@ -64,12 +64,12 @@ jQuery.fn.select2Option = function (options) {
       $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span');
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
-        clickedOption.removeAttr('selected');
+        clickedOption.removeProp('selected');
       }
       else {
         buttonsHtml.find('a, span').removeClass('picked');
         $(this).addClass('picked');
-        clickedOption.attr('selected', 'selected');
+        clickedOption.prop('selected', true);
       }
       select.trigger('change');
     });

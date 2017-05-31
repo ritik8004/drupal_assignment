@@ -270,16 +270,15 @@
       top: -0.3125rem;
       min-width: 11.75rem;
     }
+
+    + .form-item {
+      overflow: hidden;
+    }
   }
 }
 
 .l-two--sf {
   &.c-address-book {
-    @include breakpoint($only-tablet) {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
     .c-sidebar-first {
       @include breakpoint($only-tablet) {
         display: block;

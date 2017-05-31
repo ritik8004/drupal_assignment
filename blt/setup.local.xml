@@ -26,5 +26,7 @@
   <target name="refresh:local:drupal"
           description="Reinstall local dev environment."
           depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:products">
+    <echo>Add translations from code post drush si.</echo>
+    <drush command="aiota" assume="yes" alias="${drush.alias}" passthru="false" />
   </target>
 </project>

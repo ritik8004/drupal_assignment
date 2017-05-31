@@ -27,7 +27,7 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute('Home', '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
 
     $breadcrumb->mergeCacheMaxAge(0);
     $breadcrumb->addCacheableDependency(['url.path']);
@@ -42,7 +42,7 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     foreach ($queryString as $string) {
       $query = explode('=', $string);
       if ($query[0] == 'keywords') {
-        $breadcrumb->addLink(Link::createFromRoute('Search results for "' . $query[1] . '"', $route_match->getRouteName()));
+        $breadcrumb->addLink(Link::createFromRoute(t('Search results for "@keyword"', ['@keyword' => urldecode($query[1])]), '<none>'));
         return $breadcrumb;
       }
     }

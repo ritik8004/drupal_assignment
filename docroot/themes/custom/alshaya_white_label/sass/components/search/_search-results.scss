@@ -1,4 +1,8 @@
 .c-search {
+  @include breakpoint($only-mobile) {
+    padding-top: 1.375rem;
+  }
+
   .region__content {
     position: relative;
 
@@ -104,14 +108,8 @@
           }
         }
 
-        .c-products__item__link {
-          .alshaya_search_slider {
-            display: none;
-
-            .lSPager {
-              display: none;
-            }
-          }
+        .lSPager {
+          display: none;
         }
       }
 
@@ -121,9 +119,19 @@
       }
 
       nav.pager {
+        float: $left;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+
         .js-pager__items {
-          width: 32%;
           margin: 8rem auto 2.1rem;
+          clear: $left;
+          float: $left;
+          list-style: none;
+          position: relative;
+          #{$left}: 50%;
+          text-align: center;
 
           @include breakpoint($only-mobile) {
             width: 57%;
@@ -135,6 +143,9 @@
         .pager__item {
           float: $left;
           margin-#{$right}: 1.5rem;
+          display: block;
+          position: relative;
+          #{$right}: 50%;
 
           &.is-active {
             a {
@@ -246,6 +257,12 @@
               margin-left: 0;
               margin-right: 0;
 
+              @include breakpoint($only-tablet) {
+                ul {
+                  padding-top: 0;
+                }
+              }
+
               .c-accordion__title::after {
                 #{$right}: 0;
               }
@@ -330,6 +347,15 @@
       }
     }
 
+    .mobile-filter-bar,
+    .filter-menu-label {
+      display: none;
+
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
+
     .view-header.search-count {
       margin-top: 0.9rem;
       margin-bottom: 0.75rem;
@@ -338,6 +364,18 @@
       padding-bottom: 9px;
       border-bottom: 1px solid $white;
       font-family: $alshaya-thin;
+    }
+  }
+
+  .block-page-title-block.mobile {
+    + .view-header.search-count {
+      margin-top: 5px;
+    }
+
+    h1 {
+      border-bottom: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
   }
 
@@ -411,6 +449,31 @@ header,
     a {
       font-family: $alshaya-thin;
       color: $brownish-grey;
+    }
+  }
+}
+
+.search-api-autocomplete-suggestion {
+  font-size: 0.75rem;
+
+  @include breakpoint($only-tablet) {
+    font-size: 0.625rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 0.625rem;
+    font-weight: 700;
+  }
+}
+
+.form-autocomplete.ui-autocomplete-loading {
+  background-size: 2rem;
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page {
+    .form-item-keywords {
+      float: $left;
     }
   }
 }

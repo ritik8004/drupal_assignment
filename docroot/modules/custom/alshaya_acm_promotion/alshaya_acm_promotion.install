@@ -1,0 +1,7 @@
+<?php
+// @codingStandardsIgnoreFile
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
+ */

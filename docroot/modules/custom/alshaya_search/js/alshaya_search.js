@@ -12,7 +12,7 @@
         if ($(this).find('.facets-search-input').length === 0) {
           // Prepend the text field before the checkboxes, if not exists.
           $(this).find('ul').prepend('<input type="text" placeholder="'
-            + Drupal.t('Enter your Filter Name')
+            + Drupal.t('Enter your filter name')
             + '" class="facets-search-input">').on('keyup', function () {
             var facetFilterKeyword = $(this).find('.facets-search-input').val();
             if (facetFilterKeyword) {
@@ -71,19 +71,16 @@
 
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
-      // Hide the slider.
-      $('.alshaya_search_gallery .alshaya_search_slider').each(function() {
-        $(this).hide();
-      });
-      $('.alshaya_search_gallery .lSPager').each(function() {
-        $(this).hide();
-      });
-
       // Convert the list to slider.
-      $('#lightSlider', context).lightSlider({
-        vertical: false,
-        item: 4,
-        verticalHeight: 60
+      $('.search-lightSlider').each(function() {
+        var gallery = $(this);
+        gallery.lightSlider({
+          vertical: false,
+          onSliderLoad: function() {
+            gallery.closest('.alshaya_search_slider').hide();
+            gallery.css('height', '64px');
+          }
+        });
       });
 
       // Show/Hide the slider on Mouse hover.

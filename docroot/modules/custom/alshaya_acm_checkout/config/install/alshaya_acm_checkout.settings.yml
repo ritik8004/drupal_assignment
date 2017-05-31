@@ -1,5 +1,5 @@
 checkout_guest_summary:
-  value: '<p>You will have the oppotunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p><ul><li>Express checkout</li><li>Personalized offers</li><li>Favorite list</li><li>Order history</li><li>And more…</li></ul>'
+  value: '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p><ul><li>Express checkout</li><li>Personalized offers</li><li>Favorite list</li><li>Order history</li><li>And more…</li></ul>'
   format: 'rich_text'
 checkout_guest_email_usage:
   value: 'Your email will be used only to send you information about your order.'
@@ -9,5 +9,8 @@ checkout_guest_login:
   format: 'rich_text'
 checkout_terms_condition:
   value: '<p>I confirm that I have read and accept the <a href="#">Privacy Policy</a> and <a href="#">Terms &amp; Conditions</a> of purchase. Read our <a href="#">Return Policy</a></p>'
+  format: 'rich_text'
+checkout_customer_service:
+  value: '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from 9:30am to 8:30pm Monday to Sunday</span></p>'
   format: 'rich_text'
 langcode: en

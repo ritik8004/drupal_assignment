@@ -134,29 +134,43 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     $route_name = $this->routeMatch->getRouteName();
+    $term = NULL;
     // If /taxonomy/term/tid page.
     if ($route_name == 'entity.taxonomy_term.canonical') {
       /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
-      $route_parameter_value = $this->routeMatch->getParameter('taxonomy_term');
-      // If term is of 'acq_product_category' vocabulary.
-      if ($route_parameter_value->getVocabularyId() == 'acq_product_category') {
-        // Get all parents of the given term.
-        $parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($route_parameter_value->id());
-        array_pop($parents);
-        if (!empty($parents)) {
-          /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
-          $root_parent_term = end($parents);
-          if (isset($term_data[$root_parent_term->id()])) {
-            $term_data[$root_parent_term->id()]['class'] = 'active';
-          }
+      $term = $this->routeMatch->getParameter('taxonomy_term');
+    }
+    // If it's a department page.
+    elseif ($route_name == 'entity.node.canonical') {
+      $node = $this->routeMatch->getParameter('node');
+      if ($node->bundle() == 'department_page') {
+        $terms = $node->get('field_product_category')->getValue();
+        $term = $this->entityManager->getStorage('taxonomy_term')->load($terms[0]['target_id']);
+      }
+    }
+
+    // If term is of 'acq_product_category' vocabulary.
+    if (is_object($term) && $term->getVocabularyId() == 'acq_product_category') {
+      // Get all parents of the given term.
+      $parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($term->id());
+
+      if (!empty($parents)) {
+        /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
+        $root_parent_term = end($parents);
+        if (isset($term_data[$root_parent_term->id()])) {
+          $term_data[$root_parent_term->id()]['class'] = 'active';
         }
       }
-
     }
 
     return [
       '#theme' => 'alshaya_main_menu_level1',
       '#term_tree' => $term_data,
+      '#cache' => [
+        'contexts' => [
+          'url.path',
+        ],
+      ],
     ];
   }
 

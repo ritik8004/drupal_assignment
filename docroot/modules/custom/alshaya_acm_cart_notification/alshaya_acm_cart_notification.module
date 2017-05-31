@@ -11,7 +11,6 @@ use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Url;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 
 /**
@@ -96,22 +95,15 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     // Include the utility file to get product image.
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
-    // Initialise the image variable to be used in output array.
-    $image = NULL;
-
     // Check for product type as they have different data structures.
     if ($type == 'configurable') {
       // If we have a child_sku available.
       $child_sku = SKU::loadFromSku($form_state->getTemporaryValue('child_sku'));
-      $sku_media = alshaya_acm_product_get_sku_media($child_sku, TRUE);
+      $image = alshaya_acm_get_product_display_image($child_sku, 'cart_notification_thumbnail');
     }
     // Product Type - Simple.
     else {
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
-    }
-    // In local or for some weired product we may not have an image.
-    if (!empty($sku_media)) {
-      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($sku_media['file']->getFileUri());
+      $image = alshaya_acm_get_product_display_image($sku_entity, 'cart_notification_thumbnail');
     }
 
     // Use the template to render the HTML.
@@ -121,7 +113,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#image' => $image,
       '#product_name' => $product_name,
       '#link' => $url,
-      '#link_text' => t('View Cart.'),
+      '#link_text' => t('view cart'),
     ];
   }
 

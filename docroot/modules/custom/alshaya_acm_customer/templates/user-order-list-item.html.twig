@@ -6,13 +6,11 @@
  *
  * Available variables:
  * - order: Processed information for single order.
- * - currency_code: Currency code.
- * - currency_code_position: Currency code position.
  *
  * @ingroup themeable
  */
 #}
-
+{% set count = order.quantity %}
 <a href="{{ order_detail_link }}">
   <div class="first-second wrapper">
     <div class="first">
@@ -27,9 +25,8 @@
         {% endtrans %}
       </div>
       <div class="light order-quantity">
-        {% set count = order.quantity %}
         {% trans %}
-        Total: {{ count }} items.
+          Total: {{ count }} items
         {% endtrans %}
       </div>
     </div>
@@ -42,9 +39,8 @@
         {% endtrans %}
       </div>
       <div class="light order-quantity">
-        {% set count = order.quantity %}
         {% trans %}
-        Total: {{ count }} items.
+          Total: {{ count }} items
         {% endtrans %}
       </div>
     </div>
@@ -56,12 +52,7 @@
   <div class="fourth">
     <div class="light totale-label">{{ "Order Total"|t }}</div>
     <div class="dark order-total">
-      {% if currency_code_position == 'before' %}
-        <span class="currency-code prefix">{{ currency_code | t }} </span> {{ order.total }}
-      {% else %}
-        {{ order.total }}<span
-              class="currency-code suffix">{{ currency_code | t }}</span>
-      {% endif %}
+      {{ order.total }}
     </div>
   </div>
 </a>

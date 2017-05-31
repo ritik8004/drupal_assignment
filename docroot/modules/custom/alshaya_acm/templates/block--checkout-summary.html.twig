@@ -10,25 +10,16 @@
         {% for key, product in products %}
           <li>
             <div class="left">
-              <img src="{{ product.imgurl }}"/>
+              {{ product.image }}
             </div>
             <div class="right">
               <span class="product-name">{{ product.name }}</span>
               <span class="product-qty">
-                <span class="label">{% trans %}Quantity: {% endtrans %}</span>
+                <span class="label">{% trans %}Quantity{% endtrans %}: </span>
                 {{ product.qty }}
               </span>
-              {% if currency_code_position == 'before' %}
-                <span class="product-total">
-                  <span class="prefix">{{ currency_format }}</span>
-                  <span class="total--amount">{{ product.total }}</span></span>
-              {% else %}
-                <span class="product-total">
-                  <span class="total--amount">{{ product.total }}</span>
-                  <span class="prefix">{{ currency_format }}</span>
-                </span>
+              {{ product.total }}
             </div>
-            {% endif %}
           </li>
         {% endfor %}
       </ul>
@@ -39,34 +30,14 @@
     {#Sub total#}
     <div class="sub-total">
       <span>{% trans %}Sub total{% endtrans %}</span>
-      {% if currency_code_position == 'before' %}
-      <span class="total">
-        <span class="prefix">{{ currency_format }}</span>
-        <span class="total--amount">{{ subtotal }}</span>
-      </span>
-      {% else %}
-      <span class="total">
-        <span class="total--amount">{{ subtotal }}</span>
-        <span class="prefix">{{ currency_format }}</span>
-      </span>
-      {% endif %}
+      {{ subtotal }}
     </div>
 
     {#Tax#}
     {% if tax > 0 %}
       <div class="tax-total">
         {% trans %}Tax{% endtrans %}
-        {% if currency_code_position == 'before' %}
-        <span class="total">
-          <span class="prefix">{{ currency_format }}</span>
-          <span class="total--amount">{{ tax }}</span>
-        </span>
-        {% else %}
-        <span class="total">
-          <span class="total--amount">{{ tax }}</span>
-          <span class="prefix">{{ currency_format }}</span>
-        </span>
-        {% endif %}
+        {{ tax }}
       </div>
     {% endif %}
 
@@ -74,34 +45,14 @@
     {% if discount > 0 %}
       <div class="discount-total">
         {% trans %}Discount{% endtrans %}
-        {% if currency_code_position == 'before' %}
-        <span class="total">
-          <span class="prefix">{{ currency_format }}</span>
-          <span class="total--amount">{{ discount }}</span>
-        </span>
-        {% else %}
-        <span class="total">
-          <span class="total--amount">{{ discount }}</span>
-          <span class="prefix">{{ currency_format }}</span>
-        </span>
-        {% endif %}
+        {{ discount }}
       </div>
     {% endif %}
 
     {#Order total#}
     <div class="order-total">
       <span>{% trans %}Order Total{% endtrans %}</span>
-      {% if currency_code_position == 'before' %}
-      <span class="total">
-        <span class="prefix">{{ currency_format }}</span>
-        <span class="total--amount">{{ ordertotal }}</span>
-      </span>
-      {% else %}
-      <span class="total">
-        <span class="total--amount">{{ ordertotal }}</span>
-        <span class="prefix">{{ currency_format }}</span>
-      </span>
-      {% endif %}
+      {{ ordertotal }}
     </div>
     <span class="status">{% trans %}Before Delivery{% endtrans %}</span>
   </div>

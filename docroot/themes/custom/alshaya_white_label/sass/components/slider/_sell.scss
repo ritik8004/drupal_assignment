@@ -31,9 +31,30 @@
     }
   }
 
+  .quantity.out-of-stock {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.75rem;
+      padding: 0;
+      position: relative;
+      padding-bottom: 0;
+      float: $right;
+      margin-top: 0.875rem;
+      color: $black;
+      text-align: $left;
+    }
+  }
+
+  .add-to-cart.out-of-stock {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+
   .owl-dots {
     position: relative;
     margin-top: 0.625rem;
+    display: table;
+    width: 100%;
 
     @include breakpoint($tablet) {
       display: none;
@@ -45,11 +66,11 @@
       border: 0;
       border-radius: 0.25rem;
       color: $greyish;
-      display: inline-block;
+      display: table-cell;
       margin: 0;
       position: relative;
       z-index: 1;
-      top: -0.1875rem;
+      top: 0;
     }
 
     &::before {
@@ -106,19 +127,22 @@
     font-size: 2rem;
   }
 
-  .owl-item img {
-    width: auto;
+  .owl-carousel .owl-item img {
+    width: 100%;
     margin: auto;
+    max-width: 11.625rem;
 
     @include breakpoint($upto-desktop) {
       max-width: 10rem;
+      min-height: 10rem;
+      object-fit: cover;
     }
   }
 
   .owl-prev,
   .owl-next {
     @include breakpoint($tablet) {
-      top: 24%;
+      top: 21.7%;
     }
   }
 }
@@ -138,14 +162,18 @@
   }
 }
 
-.crossell-title {
+.subtitle.crossell-title {
   font-size: 0.875rem;
   font-family: $alshaya-bold;
+  font-weight: normal;
   text-align: $left;
+  margin-bottom: 0.3rem;
 
   @include breakpoint($tablet) {
     font-size: 1.125rem;
     margin-#{$left}: 2.7rem;
+    margin-bottom: 0.6rem;
+    letter-spacing: 1px;
   }
 
   @include breakpoint($desktop) {
@@ -159,11 +187,18 @@
   vertical-align: middle;
 }
 
+.sell-description {
+  @include breakpoint($upto-tablet) {
+    vertical-align: top;
+    padding-top: 1.4375rem;
+  }
+}
+
 .sell--image img {
   max-height: 10rem;
 }
 
-.mobile-only-block .sell-sku {
+.mobile--only--sell .sell-sku {
   clear: both;
 
   .field--name-name,
@@ -183,6 +218,10 @@
       background: $tomato;
       border: none;
       padding: 0.656rem;
+
+      @include breakpoint($only-mobile) {
+        max-width: 100%;
+      }
     }
 
     label {
@@ -257,11 +296,21 @@
   text-decoration: line-through;
 }
 
+.price--discount span,
 .special--price .price-wrapper {
   color: $scarlet;
 }
 
-.owl-prev.disabled::before,
-.owl-next.disabled::before {
-  color: $whisper-dark;
+.price--discount {
+  margin-top: 9px;
+  font-size: 10px;
+
+  @include breakpoint($tablet) {
+    margin-top: 12px;
+    font-size: 11px;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 6px;
+  }
 }

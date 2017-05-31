@@ -12,6 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\RemoveCommand;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -57,14 +59,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // Add the continue shopping button in same container.
     $form['empty']['continue_shopping'] = [
       '#type' => 'link',
-      '#title' => t('Go shopping'),
+      '#title' => t('go shopping'),
       '#url' => Url::fromRoute('<front>'),
     ];
 
     // Add continue shopping link, that redirect user to homepage.
     $form['empty']['continue_shopping_mobile'] = [
       '#type' => 'link',
-      '#title' => t('Go shopping'),
+      '#title' => t('go shopping'),
       '#url' => Url::fromRoute('<front>'),
     ];
 
@@ -111,10 +113,11 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       // Add remove link as suffix of quantity.
       $remove_url = Url::fromUserInput('/cart/remove/' . $id);
-      $form['cart'][$id]['quantity']['#suffix'] = Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div id="stock-error-' . $id . '"></div>';
+      $form['cart'][$id]['quantity']['#prefix'] = '<div class="select-quantity-' . str_replace(' ', '-', $id) . '">';
+      $form['cart'][$id]['quantity']['#suffix'] = '</div>' . Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div class="inline-stock-error" id="stock-error-' . str_replace(' ', '-', $id) . '"></div>';
 
       // Load the first image.
-      $media_image = alshaya_acm_product_get_sku_media($id, TRUE);
+      $sku_image = alshaya_acm_get_product_display_image($id, '137x144');
 
       // Get SKU attributes.
       $sku_attributes = alshaya_acm_product_get_sku_configurable_values($id);
@@ -145,15 +148,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ];
       }
 
-      $image = [];
-      if (!empty($media_image)) {
-        $image = [
-          '#theme' => 'image_style',
-          '#style_name' => '137x144',
-          '#uri' => $media_image['file']->getFileUri(),
-        ];
-      }
-
       // TODO: Get delivery options from conductor.
       $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
       $product_delivery_options .= '<div class="tooltip--wrap">';
@@ -162,7 +156,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $product_delivery_options .= '<p class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<p>';
       $product_delivery_options .= '</div>';
       $product_delivery_options .= '<div class="contains--tooltip">';
-      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click and Collect') . '</p>';
+      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click & Collect') . '</p>';
       $product_delivery_options .= '<p class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</p>';
       $product_delivery_options .= '</div>';
       $product_delivery_options .= '</div>';
@@ -171,10 +165,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         '#theme' => 'alshaya_cart_product_name',
         '#sku_attributes' => $sku_attributes,
         '#name' => $name,
-        '#image' => $image,
+        '#image' => $sku_image,
         '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
         '#item_code' => $id,
-        '#include_in_bundle' => t('Items included in bundle'),
         '#available_delivery_methods' => [
           '#markup' => $product_delivery_options,
         ],
@@ -203,7 +196,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // If item is not available in stock.
       if (!alshaya_acm_is_product_in_stock($id)) {
         // Basket out of stock error.
-        $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
+        $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
         $form['cart'][$id]['#attributes']['class'][] = 'sku-out-stock';
         $secure_checkout_access = FALSE;
       }
@@ -212,19 +205,29 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   if ($secure_checkout_access) {
     // Change checkout button text to 'Checkout Securely'.
-    $form['actions']['checkout']['#value'] = t('Checkout Securely');
+    $form['actions']['checkout']['#value'] = t('checkout securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
+
+    // Add checkout button on top.
+    $form['actions_top'] = [
+      '#type' => 'container',
+      '#weight' => -100,
+    ];
+
+    $form['actions_top']['checkout_top']['#markup'] = '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>';
   }
   else {
     $form['actions']['checkout']['#access'] = FALSE;
   }
 
   // Out of stock error message.
-  $form['basket_out_of_stock_message'] = [
-    '#markup' => '<div id="out-of-stock-message">' . $out_of_stock_message . '</div>',
-    '#weight' => -1,
-  ];
+  if (!empty($out_of_stock_message)) {
+    $form['basket_out_of_stock_message'] = [
+      '#markup' => '<div id="out-of-stock-message">' . $out_of_stock_message . '</div>',
+      '#weight' => -1,
+    ];
+  }
 
   // Add class to checkout and update button as well as actions.
   $form['actions']['update']['#attributes']['class'][] = 'edit-update';
@@ -251,17 +254,19 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#prefix' => '<div class="promo-continue-shopping-wrapper">',
   ];
 
-  $form['promotion_code_wrapper']['promotion'] = [
+  unset($form['coupon']);
+  $form['promotion_code_wrapper']['coupon'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
     '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
+    '#default_value' => !empty($form_state->getValue('coupon')) ? $form_state->getValue('coupon') : '',
   ];
 
   if (!empty($cart_items)) {
     // Add continue shopping link, that redirect user to homepage.
     $form['continue_shopping'] = [
       '#type' => 'link',
-      '#title' => t('Continue shopping'),
+      '#title' => t('continue shopping'),
       '#url' => Url::fromRoute('<front>'),
       '#weight' => 4,
       '#suffix' => '</div>',
@@ -270,7 +275,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // Add continue shopping link, that redirect user to homepage.
     $form['actions']['continue_shopping_mobile'] = [
       '#type' => 'link',
-      '#title' => t('Continue shopping'),
+      '#title' => t('continue shopping'),
       '#url' => Url::fromRoute('<front>'),
       '#suffix' => '</div>',
     ];
@@ -278,8 +283,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Add class to continut shopping link.
   $form['actions']['continue_shopping_mobile']['#attributes']['class'][] = 'edit-continue-shopping-mobile';
-
-  $form['coupon']['#type'] = 'hidden';
 
   // Attach library, to cater to Coupon submit button.
   $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
@@ -321,24 +324,6 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
 }
 
 /**
- * Wrapper function to format price value with currency.
- *
- * @param float $price
- *   Price value.
- *
- * @return mixed|null
- *   Return rendered theme with html for price.
- */
-function alshaya_acm_price_format($price) {
-  $output = [
-    '#theme' => 'alshaya_acm_price',
-    '#price' => $price,
-  ];
-
-  return render($output);
-}
-
-/**
  * Ajax callback: Update cart item's sub total and cart's total / sub total.
  */
 function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $form_state) {
@@ -358,16 +343,18 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
 
   // Get the stock for the current sku.
   $sku_stock = alshaya_acm_get_product_stock($sku);
+  // Css method to add/remove class from quantity select list.
+  $select_quantity_class_method = 'removeClass';
 
   // If sku not available in stock.
   if (!alshaya_acm_is_product_in_stock($sku)) {
-    $out_of_stock_message = t('Some items in your basket are out of stock. Please remove them to proceed.');
+    $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
     // If out of stock, remove/hide the secure checkout button.
     $form['actions']['checkout']['#access'] = FALSE;
     $form['actions']['continue_shopping_mobile']['#access'] = FALSE;
     $form['cart'][$sku]['#attributes']['class'][] = 'sku-out-stock';
     // Ajax response to update page section.
-    $response->addCommand(new HtmlCommand('#out-of-stock-message', $out_of_stock_message));
+    $response->addCommand(new InvokeCommand(NULL, 'updateOutOfStockDom', [$out_of_stock_message]));
     $response->addCommand(new ReplaceCommand('#secure-checkout-button', $form['actions']));
     $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
     return $response;
@@ -377,6 +364,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     // Update the quantity and update error message.
     $quantity = $sku_stock['quantity'];
     $error_message = t('Sorry, we now only have @quantity of these available and we have updated your basket.', ['@quantity' => $quantity]);
+    $select_quantity_class_method = 'addClass';
   }
 
   try {
@@ -407,8 +395,23 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $cart_total));
   $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
+  $response->addCommand(new InvokeCommand('.select-quantity-' . str_replace(' ', '-', $sku), $select_quantity_class_method, ['stock-quantity-error']));
+  $response->addCommand(new HtmlCommand('#stock-error-' . str_replace(' ', '-', $sku), $error_message));
 
-  $response->addCommand(new ReplaceCommand('#stock-error-' . $sku, $error_message));
+  // Again check all item in basket if they are out of stock or not. If no item
+  // out of stock, then remove the out of stock error message div.
+  $remove_out_of_stock_div = TRUE;
+  foreach ($cart_item as $item) {
+    if (!alshaya_acm_is_product_in_stock($item['sku'])) {
+      $remove_out_of_stock_div = FALSE;
+      break;
+    }
+  }
+
+  // Remove out of stock error message.
+  if ($remove_out_of_stock_div) {
+    $response->addCommand(new RemoveCommand('#out-of-stock-message'));
+  }
 
   return $response;
 }
@@ -466,6 +469,10 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   // We need to change the markup for submit button.
   // @see alshaya_white_label_theme_suggestions_input_alter().
   $form['add_to_cart']['#attributes']['data-twig-suggestion'] = 'addtocart';
+
+  // Adding classes to add to cart button and quanity field.
+  $form['add_to_cart']['#attributes']['class'][] = 'edit-add-to-cart';
+  $form['quantity']['#attributes']['class'][] = 'edit-quantity';
 }
 
 /**
@@ -510,6 +517,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'price' => '',
         'currency_format' => '',
         'currency_code_position' => '',
+        'special_price' => '',
       ],
     ],
     'alshaya_cart_product_name' => [
@@ -551,6 +559,25 @@ function template_preprocess_alshaya_acm_price(array &$variables) {
 
   $variables['currency_format'] = $currency_format;
   $variables['currency_code_position'] = $currency_code_position;
+  $variables['price'] = number_format($variables['price'], 3);
+}
+
+/**
+ * Wrapper function to format price value with currency.
+ *
+ * @param float $price
+ *   Price value.
+ *
+ * @return mixed|null
+ *   Return rendered theme with html for price.
+ */
+function alshaya_acm_price_format($price) {
+  $output = [
+    '#theme' => 'alshaya_acm_price',
+    '#price' => $price,
+  ];
+
+  return render($output);
 }
 
 /**
@@ -584,6 +611,17 @@ function _alshaya_acm_get_cart_quantity_options() {
  */
 function alshaya_acm_get_product_stock($sku, $bool = FALSE) {
   $stock = &drupal_static(__FUNCTION__, []);
+
+  // TODO: Remove this after go live probably.
+  global $_alshaya_acm_disable_stock_check;
+  if ($_alshaya_acm_disable_stock_check) {
+    return [
+      'stock_id' => 2,
+      'quantity' => 10,
+      'is_in_stock' => TRUE,
+    ];
+  }
+
   // Get the sku.
   $sku = is_object($sku) ? $sku->getSku() : $sku;
   if (!isset($stock[$sku])) {

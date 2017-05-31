@@ -11,7 +11,7 @@
           <div class="light">
             {% set count = order.items | length %}
             {% trans %}
-            Total: {{ count }} items.
+            Total: {{ count }} items
             {% endtrans %}
           </div>
         </div>
@@ -22,7 +22,7 @@
         <div class="light">
           {% set count = order.items | length %}
           {% trans %}
-          Total: {{ count }} items.
+          Total: {{ count }} items
           {% endtrans %}
         </div>
 
@@ -50,12 +50,12 @@
 
     {% for item in order.items %}
       <tr class="order-item-row">
-        <td>{{  item.sku_attr_image }}</td>
+        <td>{{ item.image }}</td>
 
         <td>
           <div class="dark">{{ item.name }}</div>
           <div class="light">{{ 'Item code' | t }} {{ item.sku }}</div>
-          <div class="light">{{ 'Qty' | t }}: {{ item.ordered }}</div>
+          <div class="light">{{ 'Quantity' | t }}: {{ item.ordered }}</div>
 
           <div class="tablet-only">
             <div class="light">{{ 'Unit Price' | t }}</div>

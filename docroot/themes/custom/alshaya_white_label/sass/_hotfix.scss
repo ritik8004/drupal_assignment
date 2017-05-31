@@ -1,0 +1,54 @@
+/**
+  * This file contains css browser specific hot-fix
+ */
+
+/**
+  * IE - Specific issues and hacks for them.
+ */
+
+body.ie {
+  header {
+    #views-exposed-form-search-page {
+      .form-item-keywords,
+      .form-actions {
+        display: inline;
+      }
+    }
+  }
+}
+
+/**
+  * UC Browser - Specific issues and hacks for them.
+ */
+body.ucbrowser {
+  .owl-prev,
+  .owl-next {
+    @include breakpoint($tablet) {
+      top: 47% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: 45% !important;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    #block-mobilenavigation {
+      ul.menu {
+        li:first-child {
+          float: $left;
+          height: 20px;
+        }
+
+        li:last-child {
+          float: $right;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+
+/**
+  * Opera - Specific issues and hacks for them.
+ */

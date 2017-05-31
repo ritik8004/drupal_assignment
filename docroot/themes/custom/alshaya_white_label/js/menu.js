@@ -17,14 +17,15 @@
 
         if (submenu.length > 0) {
           $(this).addClass('has-child');
+          linkWrapper.addClass('contains-sublink');
           linkWrapper.after('<span class="menu__in"></span>');
           submenu.prepend('<span class="menu__list-item back--link"><span class="menu__back"></span> <span>' + link.text() + ' </span> </span> ');
         }
       });
 
-      var $menuIn = $('.menu__in');
+      var $menuIn = $('.has-child .menu__link-wrapper');
       $menuIn.click(function () {
-        $(this).next().toggleClass('menu__list--active');
+        $(this).next('.menu__in').next().toggleClass('menu__list--active');
       });
 
       var $menuBack = $('.back--link');
@@ -44,6 +45,23 @@
 
       $('.c-menu-primary .mobile--search').click(function () {
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
+        $(this).parent().toggleClass('search-active');
+      });
+
+      // Hide mobile search box, when clicked anywhere else.
+      $(window).bind('click touchstart', function (e) {
+        if (!$(e.target).is('.c-menu-primary .mobile--search')) {
+          // Check if element is Visible.
+          if ($('.c-menu-primary #block-exposedformsearchpage').is(':visible')) {
+            $('.c-menu-primary #block-exposedformsearchpage').hide();
+            $('.c-menu-primary .mobile--search').parent().toggleClass('search-active');
+          }
+        }
+      });
+
+      // Stop event from inside container to propogate out.
+      $('.c-menu-primary #block-exposedformsearchpage').bind('click touchstart', function (event) {
+        event.stopPropagation();
       });
 
       $('.menu--one__list-item.has-child').each(function () {
@@ -76,14 +94,17 @@
         $('.remove--toggle').removeClass('remove--toggle');
       });
 
-      $('.menu--one__list-item.has-child').hover(
-        function () {
+      var header_timer;
+      $('.main--menu').on('mouseover', function () {
+        header_timer = setTimeout(function () {
           $('body').addClass('overlay');
-        },
-        function () {
-          $('body').removeClass('overlay');
-        }
-      );
+        }, 600);
+      });
+
+      $('.main--menu').on('mouseout', function () {
+        clearTimeout(header_timer);
+        $('body').removeClass('overlay');
+      });
 
       $('.logged-out .account').click(function () {
         $('.account').addClass('active');
@@ -127,14 +148,51 @@
       // Toggle Function for Store Locator.
       var $storeHours = $('.hours--label');
       $storeHours.on('click', function () {
-        $(this).next().toggle();
-        $('.hours--label').toggleClass('open');
+        $(this).next().slideToggle();
+        $(this, $storeHours).toggleClass('open');
+        $(this).next().toggleClass('selector--hours');
       });
 
-      $('.label--location').each(function (index) {
-        $(this).next('.form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api').andSelf().wrapAll("<div class='store-finder--wrapper' />");
-      });
+      /**
+      * Add active state to the menu.
+      */
 
+      if ($('.block-alshaya-main-menu').length) {
+        var parent = $('.block-alshaya-main-menu li.menu--one__list-item');
+
+        $('.block-alshaya-main-menu').mouseenter(function () {
+          setTimeout(function () {
+            $(parent).parent().addClass('active--menu--links');
+          }, 500);
+        });
+
+        $('.block-alshaya-main-menu').mouseleave(function () {
+          $(parent).parent().removeClass('active--menu--links');
+        });
+      }
+
+      /**
+      * Make Header sticky on scroll.
+      */
+
+      if ($('.branding__menu').length) {
+        var position = $('.branding__menu').offset().top;
+        var nav = $('.branding__menu');
+
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > position) {
+            $('body').addClass('header--fixed');
+            nav.addClass('navbar-fixed-top');
+          }
+          else {
+            nav.removeClass('navbar-fixed-top');
+            $('body').removeClass('header--fixed');
+          }
+        });
+      }
+
+      // Add class for three level navigation.
+      $('.menu--one__list-item:not(:has(.menu--four__list-item))').addClass('has--three-levels');
     }
   };
 

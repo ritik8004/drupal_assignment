@@ -4,15 +4,24 @@
   min-height: calc(100vh - 110px);
 
   @include breakpoint($tablet) {
-    margin: 0.7em auto 1em;
+    margin: 1.2rem auto 1em;
+  }
+
+  @include breakpoint($desktop) {
+    margin: 0.38em auto 1em;
   }
 
   h1 {
     position: relative;
-    padding-top: 0;
-    padding-bottom: 0.75em;
+    padding-top: 0.25rem;
+    padding-bottom: 0.55rem;
     border-bottom: 1px solid $white;
     margin-#{$left}: 0;
+
+    @include breakpoint($tablet) {
+      padding-top: 0;
+      padding-bottom: 0.75em;
+    }
   }
 
   .multistep-checkout {
@@ -52,6 +61,7 @@
   fieldset legend span {
     font-size: 14px;
     font-family: $alshaya-bold;
+    font-weight: normal;
     color: $marine-blue-two;
 
     @include breakpoint($only-mobile) {
