@@ -1,0 +1,18 @@
+diff --git a/acq_cart/acq_cart.module b/acq_cart/acq_cart.module
+index c52eb9209..b3dca5c3f 100644
+--- a/acq_cart/acq_cart.module
++++ b/acq_cart/acq_cart.module
+@@ -41,3 +41,13 @@ function acq_cart_theme($existing, $type, $theme, $path) {
+     ],
+   ];
+ }
++
++/**
++ * Implements hook_user_logout().
++ */
++function acq_cart_user_logout($account) {
++  $cookies = \Drupal::request()->cookies->all();
++  if (isset($cookies['Drupal_visitor_acq_cart_id'])) {
++    user_cookie_delete('acq_cart_id');
++  }
++}
