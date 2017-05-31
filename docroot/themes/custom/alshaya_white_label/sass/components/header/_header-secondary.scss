@@ -24,7 +24,6 @@
   }
 
   background: $white-four;
-  font-family: $alshaya-thin;
   text-transform: lowercase;
 
   &.block--display {
@@ -79,6 +78,8 @@
   }
 
   a {
+    font-family: $alshaya-thin;
+
     @include breakpoint($upto-desktop) {
       color: $grey-ash;
       display: block;
