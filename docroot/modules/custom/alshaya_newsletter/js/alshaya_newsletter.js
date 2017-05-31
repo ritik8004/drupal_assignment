@@ -21,7 +21,7 @@
         }
         setTimeout(
           function() {
-            $('.ladda-label').html(Drupal.t('submit'));
+            $('.ladda-label').html(Drupal.t('sign up'));
           }, data.interval);
       };
     }
