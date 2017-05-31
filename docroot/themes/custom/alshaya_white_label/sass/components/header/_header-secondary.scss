@@ -52,12 +52,12 @@
   li {
     @include breakpoint($upto-desktop) {
       @include icon(chevronright, after) {
-        #{$right}: 0;
+        #{$right}: 4px;
         color: $marine-blue-two;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 1.125rem;
+        font-size: 1.313rem;
         cursor: pointer;
         pointer-events: none;
       }
@@ -232,7 +232,7 @@
       content: '';
       background: url(../imgs/icons/ic-chevronright-copy-9.svg);
       position: absolute;
-      #{$right}: 3px;
+      #{$right}: 0;
       width: 6px;
       height: 10px;
       top: 20px;

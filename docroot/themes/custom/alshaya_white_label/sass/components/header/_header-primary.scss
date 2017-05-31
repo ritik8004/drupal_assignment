@@ -417,7 +417,8 @@ header {
 
     .mobile--menu {
       float: $left;
-      margin-#{$left}: 1.5625rem;
+      padding: 1rem 1.5625rem;
+      margin-top: -1rem;
     }
   }
 
@@ -951,7 +952,7 @@ header {
   .menu__in {
     background: url('../imgs/icons/ic-chevronright-copy-9.svg') no-repeat;
     float: $right;
-    margin-top: -14px;
+    margin-top: -8px;
   }
 
   .menu__back {
