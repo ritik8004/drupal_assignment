@@ -14,6 +14,16 @@
 
       $.fn.stopNewsletterSpinner = function(data) {
         l.ladda('stop');
+        if (data.message === 'success') {
+          $('.ladda-label').html(Drupal.t('added'));
+        }
+        else {
+          $('.ladda-label').html(Drupal.t('error'));
+        }
+        setTimeout(
+          function() {
+            $('.ladda-label').html(Drupal.t('submit'));
+          }, data.interval);
       };
     }
   };

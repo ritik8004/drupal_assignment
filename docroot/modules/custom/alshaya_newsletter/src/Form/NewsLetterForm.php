@@ -92,25 +92,33 @@ class NewsLetterForm extends FormBase {
 
         if ($subscription['status'] === 0) {
           $message = '<span class="message error">' . $this->t('This email address is already subscribed.') . '</span>';
+          $data['message'] = 'failure';
         }
         else {
           $message = '<span class="message success">' . $this->t('Thank you for your subscription.') . '</span>';
+          $data['message'] = 'success';
         }
       }
       catch (\Exception $e) {
         $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
+        $data['message'] = 'failure';
       }
 
       $html = '<div class="subscription-status">' . $message . '</div>';
     }
     else {
+      $data['message'] = 'failure';
       $html = '<div class="subscription-status"><span class="message error">' . $this->t('Please enter an email address') . '</span></div>';
     }
+
+    // Get the interval we want to show the message for on our ladda button.
+    $interval = \Drupal::config('alshaya_acm_cart_notification.settings')->get('ajax_spinner_message_interval');
+    $data['interval'] = $interval;
 
     // Prepare the ajax Response.
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('#footer-newsletter-form-wrapper', $html));
-    $response->addCommand(new InvokeCommand(NULL, 'stopNewsletterSpinner'));
+    $response->addCommand(new InvokeCommand(NULL, 'stopNewsletterSpinner', [$data]));
     return $response;
   }
 
