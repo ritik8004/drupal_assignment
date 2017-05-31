@@ -754,6 +754,7 @@ body.alias--cart {
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
     text-transform: lowercase;
+    font-family: $arial;
 
     @include breakpoint($upto-tablet) {
       display: block;
@@ -780,6 +781,7 @@ body.alias--cart {
     padding: 0.625rem 1.6rem;
     text-align: center;
     text-transform: lowercase;
+    font-family: $arial;
 
     @include breakpoint($tablet) {
       max-width: 173px;
@@ -844,6 +846,7 @@ body.alias--cart {
   margin-top: 35px;
   font-weight: bold;
   color: $black;
+  font-family: $arial;
   font-size: 14px;
 
   @include breakpoint($tablet) {
