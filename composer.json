@@ -93,6 +93,9 @@
             "drupal/search_api_solr": {
                 "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
             },
+            "drupal/search_api_autocomplete": {
+                "Failed site install due to missing search_api_autocomplete config dependency": "https://www.drupal.org/files/issues/2824390-15.patch"
+            },
             "drupal/metatag": {
                 "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-14.patch"
             },
@@ -105,6 +108,9 @@
             },
             "drupal/simple_sitemap": {
                 "Implement changefreq functionality": "https://www.drupal.org/files/issues/2875538-5.patch"
+            },
+            "drupal/better_exposed_filters": {
+                "Autosubmit ignores display-level Use AJAX setting": "https://www.drupal.org/files/issues/remove-pre-execute-method-2877139-3.patch"
             },
             "drupal/core": {
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
