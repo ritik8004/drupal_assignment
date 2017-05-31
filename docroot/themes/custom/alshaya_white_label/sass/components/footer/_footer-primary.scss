@@ -177,6 +177,7 @@
   @include breakpoint($desktop) {
     float: $left;
     margin-#{$left}: 2.2rem;
+    max-width: 80px;
   }
 }
 
