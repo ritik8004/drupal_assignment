@@ -10,14 +10,19 @@
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      var items = $('.cloud-zoom:not(cloud-zoom-processed), .cloudzoom__thumbnails__image:not(cloud-zoom-processed)', context);
+      var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)', context);
       if (items.length) {
         items.addClass('cloud-zoom-processed').CloudZoom();
-        // items.parent().css('float', 'left');
       }
+
+      var modalitems = $('.acq-content-product-modal .cloud-zoom:not(modal-cloud-zoom-processed), .acq-content-product-modal .cloudzoom__thumbnails__image:not(modal-cloud-zoom-processed)', context);
+      if (modalitems.length) {
+        modalitems.addClass('modal-cloud-zoom-processed').CloudZoom();
+      }
+
       // Slider 1 - For Desktop - Image zoom.
       if ($(window).width() < 1025) {
-        $('#lightSlider', context).lightSlider({
+        $('.acq-content-product #lightSlider', context).lightSlider({
           vertical: false,
           item: 3,
           verticalHeight: 100
@@ -146,7 +151,7 @@
             });
 
             // Swap the big image inside slider-2 when clicking on thumbnail.
-            $('#product-image-gallery li').on('click', function () {
+            $('#product-image-gallery li', context).on('click', function () {
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
@@ -196,7 +201,7 @@
 
       // Support Youtube & Vimeo videos in slider.
       // For Mobile slider we only insert, no need to remove it.
-      $('#product-image-gallery-mobile li').on('click', function () {
+      $('#product-image-gallery-mobile li', context).on('click', function () {
         if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
           var href = $(this).attr('data-iframe');
           $(this).children('img').hide();
@@ -205,7 +210,7 @@
         }
       });
       // For Desktop slider, we add a iframe on click on the image.
-      $('#lightSlider li').on('click', function () {
+      $('.acq-content-product #lightSlider li', context).on('click', function () {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var wrap = $('#cloud-zoom-wrap');
           // Get width & height of wrap.
@@ -220,21 +225,22 @@
         }
       });
 
-      $('#lightSlider li img').on('click', function () {
-        if ($(this).parent().hasClass('cloudzoom__thumbnails__image')) {
-          $(this).parent().parent().siblings('.lslide').removeClass('active');
-          $(this).parent().parent().addClass('active');
+      $('#lightSlider li a', context).on('click', function (e) {
+        e.preventDefault();
+        if ($(this).hasClass('cloudzoom__thumbnails__image')) {
+          $(this).parent().siblings('.lslide').removeClass('active');
+          $(this).parent().addClass('active');
         }
       });
 
-      $('#product-image-gallery li img').on('click', function () {
+      $('#product-image-gallery li img', context).on('click', function () {
         if ($(this).parent().hasClass('imagegallery__thumbnails__image')) {
           $(this).parent().parent().siblings('.lslide').removeClass('active');
           $(this).parent().parent().addClass('active');
         }
       });
       // For Desktop slider, we remove the iframe when we want to zoom another image.
-      $('#lightSlider li a.cloudzoom__thumbnails__image').on('click', function () {
+      $('#lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
         var playerIframe = $('#yt-vi-container iframe');
         // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
         if (playerIframe.length > 0) {
