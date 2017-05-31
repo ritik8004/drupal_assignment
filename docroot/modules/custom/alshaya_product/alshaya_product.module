@@ -4,3 +4,16 @@
  * @file
  * Module file.
  */
+
+/**
+ * Implements hook_alshaya_profile_installed().
+ */
+function alshaya_product_alshaya_profile_installed(array $modules) {
+  if ($term_view_config = \Drupal::configFactory()->getEditable('views.view.taxonomy_term')) {
+    $term_view_config->set('display.default.display_options.access', [
+      'type' => 'taxonomy_term_plp',
+      'options' => [],
+    ]);
+    $term_view_config->save();
+  }
+}
