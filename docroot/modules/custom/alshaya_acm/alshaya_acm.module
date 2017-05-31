@@ -208,6 +208,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     $form['actions']['checkout']['#value'] = t('checkout securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
+
+    // Add checkout button on top.
+    $form['actions_top'] = [
+      '#type' => 'container',
+      '#weight' => -100,
+    ];
+
+    $form['actions_top']['checkout_top']['#markup'] = '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>';
   }
   else {
     $form['actions']['checkout']['#access'] = FALSE;
