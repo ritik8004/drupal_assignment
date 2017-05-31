@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm\Plugin\Block;
+namespace Drupal\alshaya_acm_product\Plugin\Block;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Block\BlockBase;
@@ -58,15 +58,41 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function build() {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    $view_skus = [];
+
     // Get current cart skus.
-    $cartSkus = $this->cartStorage->getCartSkus();
-    if (!empty($cartSkus)) {
-      // Get all cross sell SKU.
-      $items = SKU::getCrossSellSkus($cartSkus);
+    if ($cart = $this->cartStorage->getCart()) {
+      $skus = [];
+      $items = $cart->items();
+
+      foreach ($items as $item) {
+        if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($item['sku'])) {
+          $skus[] = $parent_sku->getSku();
+        }
+        else {
+          $skus[] = $item['sku'];
+        }
+      }
     }
 
-    if (!empty($items)) {
-      return views_embed_view('product_slider', 'block_product_slider', implode(',', $items));
+    foreach ($skus as $sku) {
+      if ($sku_entity = SKU::loadFromSku($sku)) {
+        $cross_sell_skus = $sku_entity->getCrossSell();
+        foreach ($cross_sell_skus as $cross_sell_sku) {
+          $view_skus[] = $cross_sell_sku['value'];
+        }
+      }
+    }
+
+    if (!empty($view_skus)) {
+      // Get all cross sell SKU.
+      $view_skus = array_diff($view_skus, $skus);
+    }
+
+    if (!empty($view_skus)) {
+      return views_embed_view('product_slider', 'block_product_slider', implode(',', $view_skus));
     }
 
     return [];
