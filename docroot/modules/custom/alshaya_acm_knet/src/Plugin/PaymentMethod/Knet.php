@@ -19,6 +19,20 @@ class Knet extends PaymentMethodBase implements PaymentMethodInterface {
   /**
    * {@inheritdoc}
    */
+  public function isVisible() {
+    if ($knet_settings = \Drupal::config('alshaya_acm_knet.settings')) {
+      if ($knet_settings->get('resource_path')) {
+        return TRUE;
+      }
+    }
+
+    \Drupal::logger('alshaya_acm_knet')->critical('Please configure knet settings.');
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildPaymentSummary() {
     return '';
   }

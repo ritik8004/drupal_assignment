@@ -32,9 +32,6 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
   if ($knet_settings->get('resource_path')) {
     $pipe->setResourcePath($knet_settings->get('resource_path'));
   }
-  else {
-    $pipe->setResourcePath(DRUPAL_ROOT . '/../knet-resource/dev/');
-  }
 
 
   // Set your alias name here.
@@ -43,10 +40,8 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
 
   $pipe->setTrackId($cart->id());
 
-
-  $user_id = \Drupal::currentUser()->isAnonymous() ? 0 : \Drupal::currentUser()->id();
   // Set user id.
-  $pipe->setUdf1($user_id);
+  $pipe->setUdf1(\Drupal::currentUser()->id());
 //  $pipe->setUdf2('');
 //  $pipe->setUdf3($_GET['postal']);
 //  $pipe->setUdf4('UDF 4');
@@ -68,6 +63,5 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
     echo '<br>' . $pipe->getErrorMsg();
     echo '<br>' . $pipe->getDebugMsg();
     die();
-    // header('location: https://www.yourURL.com/error.php');
   }
 }
