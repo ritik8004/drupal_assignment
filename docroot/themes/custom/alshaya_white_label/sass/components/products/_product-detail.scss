@@ -118,6 +118,10 @@
       @include u-visibility(none);
     }
 
+    .throbber {
+      @include u-visibility(none);
+    }
+
     @include breakpoint($only-tablet) {
       select.form-select {
         background-color: $whisper-dark;
@@ -494,11 +498,16 @@
   }
 }
 
+.ladda-button[data-style=zoom-in] .ladda-label {
+  position: static;
+}
+
 .select2Option {
   h4 {
     margin: 0;
     font-size: 11px;
     font-weight: 100;
+    text-transform: capitalize;
   }
 
   .select-buttons {
@@ -515,10 +524,10 @@
       span {
         @include u-visibility(block);
 
-        margin: 5px 5px 5px 0;
+        margin: 5px 8px 5px 0;
         border: 1px solid $black;
         text-align: center;
-        padding: 7px;
+        padding: 12px;
         font-size: 10px;
 
         &.picked {
@@ -529,8 +538,6 @@
       }
 
       &.disabled {
-        position: relative;
-
         a,
         span {
           background: url("../imgs/icons/disabled.png") no-repeat;
