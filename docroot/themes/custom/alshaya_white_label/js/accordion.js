@@ -34,7 +34,7 @@
           }
           // Toggle the filter menu when click on the label.
           $('.filter-menu-label .label').on('click', function () {
-            $('.page-wrapper, .header--wrapper, .c-pre-content').toggleClass('show-overlay');
+            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu').toggleClass('show-overlay');
             $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
             $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
           });
@@ -149,7 +149,7 @@
             $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
           }
           facetLabel.click(function () {
-            $('.page-wrapper, .header--wrapper, .c-pre-content').toggleClass('show-overlay');
+            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu').toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
             facetBlock.toggle();
           });
