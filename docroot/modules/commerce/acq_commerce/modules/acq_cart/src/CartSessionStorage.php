@@ -162,6 +162,9 @@ class CartSessionStorage implements CartStorageInterface {
   public function createCart() {
     $customer_id = NULL;
 
+    // @TODO: It seems this customer_id is never used by Magento.
+    // We may need to edit Magento code to associate the cart if customer_id is
+    // given or use the associate endpoint.
     if (!\Drupal::currentUser()->isAnonymous()) {
       $customer_id = \Drupal::currentUser()->getAccount()->acq_customer_id;
     }
@@ -171,6 +174,27 @@ class CartSessionStorage implements CartStorageInterface {
     $cart = new Cart($cart);
     $this->addCart($cart);
     return $cart;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function associateCart($customer_id) {
+    // We first update the session cart.
+    $cart = $this->session->get(self::STORAGE_KEY);
+    if (!$cart) {
+      return;
+    }
+
+    $data = [
+      'cart_id' => $cart->id(),
+      'customer_id' => $customer_id,
+    ];
+    $cart->convertToCustomerCart($data);
+    $this->session->set(self::STORAGE_KEY, $cart);
+
+    // Then we notify the commerce backend about the association.
+    \Drupal::service('acq_commerce.api')->associateCart($cart->id(), $cart->customerId());
   }
 
 }
