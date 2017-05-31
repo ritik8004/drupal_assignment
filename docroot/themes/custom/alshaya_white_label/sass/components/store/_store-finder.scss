@@ -2,13 +2,12 @@
 .nodetype--store {
   .view-header {
     font-size: 14px;
-    font-weight: bold;
     color: $black;
     margin-bottom: 1.563rem;
 
     @include breakpoint($only-mobile) {
-      margin-bottom: 0;
-      border-bottom: 1px solid $white;
+      margin-top: 1.1rem;
+      margin-bottom: 1.4rem;
     }
   }
 

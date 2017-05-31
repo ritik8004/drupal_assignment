@@ -191,10 +191,7 @@
         });
       }
 
-      /**
-      * Add class for 3 level navigation.
-      */
-
+      // Add class for three level navigation.
       $('.menu--one__list-item:not(:has(.menu--four__list-item))').addClass('has--three-levels');
     }
   };
