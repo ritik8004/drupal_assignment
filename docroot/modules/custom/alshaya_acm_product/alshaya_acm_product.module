@@ -372,36 +372,14 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
 function _alshaya_acm_product_get_size_guide_link() {
   // Check if we have the configuration set.
   if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
-    try {
-      $options = [
-        'attributes' => [
-          'class' => ['size-guide-link'],
-          'target' => '_blank',
-        ],
-      ];
-
-      // Try as external url.
-      $url = Url::fromUri($size_guide_link, $options);
-    }
-    catch (Exception $e) {
-      try {
-        $options = [
-          'attributes' => [
-            'class' => ['use-ajax', 'size-guide-link'],
-            'data-dialog-type' => 'modal',
-            'data-dialog-options' => Json::encode(['width' => 'auto']),
-          ],
-        ];
-
-        // Try as internal url.
-        $url = Url::fromUserInput($size_guide_link, $options);
-      }
-      catch (Exception $e) {
-        \Drupal::logger('alshaya_acm_product')->error('Invalid size guide link: @link', ['@link' => $size_guide_link]);
-        return '';
-      }
-    }
-
+    $options = [
+      'attributes' => [
+        'class' => ['size-guide-link', 'use-ajax'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
+      ],
+    ];
+    $url = Url::fromRoute('alshaya_acm_product.size_guide_modal', [], $options);
     $link = Link::fromTextAndUrl(t('Size Guide'), $url);
     return $link->toString();
   }
