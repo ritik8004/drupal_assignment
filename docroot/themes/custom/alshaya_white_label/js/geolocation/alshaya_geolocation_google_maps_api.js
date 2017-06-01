@@ -281,9 +281,6 @@
             Drupal.geolocation.maps_api_loading = false;
           });
       }
-      else {
-        console.error('Geolocation - Google map url not set.'); // eslint-disable-line no-console.
-      }
     }
     else {
       // Google Maps loaded. Run callback.
