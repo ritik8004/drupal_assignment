@@ -1079,3 +1079,15 @@
     }
   }
 }
+
+.alias--user-login,
+.alias--user-register {
+  @include breakpoint($only-mobile) {
+    .user-page {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
