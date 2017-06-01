@@ -5,15 +5,43 @@
  * Module file.
  */
 
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+
 /**
- * Implements hook_alshaya_profile_installed().
+ * Implements hook_views_query_alter().
  */
-function alshaya_product_alshaya_profile_installed(array $modules) {
-  if ($term_view_config = \Drupal::configFactory()->getEditable('views.view.taxonomy_term')) {
-    $term_view_config->set('display.default.display_options.access', [
-      'type' => 'taxonomy_term_plp',
-      'options' => [],
-    ]);
-    $term_view_config->save();
+function alshaya_product_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if ($view->id() == 'taxonomy_term' && \Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    // Get the term from args.
+    /** @var \Drupal\taxonomy\Entity\Term $term */
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+
+    // Remove content for product category page.
+    if ($term->getVocabularyId() == 'acq_product_category') {
+      foreach ($query->where as &$condition_group) {
+        foreach ($condition_group['conditions'] as &$condition) {
+          if ($condition['field'] == 'taxonomy_index.tid = :taxonomy_index_tid') {
+            $condition['value'][':taxonomy_index_tid'] = -1;
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_execute().
+ */
+function alshaya_product_views_pre_execute(ViewExecutable $view) {
+  if ($view->id() == 'taxonomy_term' && \Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    // Get the term from args.
+    /** @var \Drupal\taxonomy\Entity\Term $term */
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+
+    // Remove feeds for product category page.
+    if ($term->getVocabularyId() == 'acq_product_category') {
+      unset($view->feedIcons);
+    }
   }
 }
