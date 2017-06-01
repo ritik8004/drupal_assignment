@@ -594,7 +594,6 @@ header {
           z-index: 1;
           transform: translateY(0%);
           transition-delay: 0.7s;
-          -webkit-transition-delay: 0.7s;
         }
       }
 
@@ -953,12 +952,13 @@ header {
   .menu__in {
     background: url('../imgs/icons/ic-chevronright-copy-9.svg') no-repeat;
     float: $right;
-    margin-top: -8px;
+    margin-top: -0.75rem;
   }
 
   .menu__back {
     background: url('../imgs/icons/ic-chevronleft.svg') no-repeat;
     margin-#{$right}: 0.625rem;
+    vertical-align: middle;
   }
 
   .menu__in,
@@ -1139,33 +1139,31 @@ header {
     }
   }
 
-  &.toolbar-fixed {
-    &.toolbar-horizontal {
-      .toggle--sign {
-        top: 79px;
-      }
-
-      ul.menu--one__list {
-        top: 129px;
-      }
-
-      .mobile--close {
-        top: 89px;
-      }
+  &.toolbar-horizontal {
+    .toggle--sign {
+      top: 79px;
     }
 
-    &.toolbar-vertical {
-      .toggle--sign {
-        top: 40px;
-      }
+    ul.menu--one__list {
+      top: 129px;
+    }
 
-      ul.menu--one__list {
-        top: 90px;
-      }
+    .mobile--close {
+      top: 89px;
+    }
+  }
 
-      .mobile--close {
-        top: 50px;
-      }
+  &.toolbar-vertical {
+    .toggle--sign {
+      top: 40px;
+    }
+
+    ul.menu--one__list {
+      top: 90px;
+    }
+
+    .mobile--close {
+      top: 50px;
     }
   }
 
