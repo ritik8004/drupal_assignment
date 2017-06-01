@@ -11,12 +11,27 @@
 function alshaya_i18n_save_translations($strings) {
   // Loop through each string for translation.
   foreach ($strings as $source => $translations) {
+    // Translation context.
+    $context = !empty($translations['context']) ? $translations['context'] : '';
+    // Removing key so to create no problem in looping.
+    unset($translations['context']);
     // First create the translation source entry.
-    \Drupal::service('locale.storage')->createString(['source' => $source])->save();
+    $source_param = [
+      'source' => $source,
+    ];
+    // If context is available.
+    if (!empty($context)) {
+      $source_param += ['context' => $context];
+    }
+    \Drupal::service('locale.storage')->createString($source_param)->save();
 
     // Loop through all translations and save them.
     foreach ($translations as $langcode => $translation) {
       $conditions = ['source' => $source];
+      // If context is available.
+      if (!empty($context)) {
+        $conditions += ['context' => $context];
+      }
       $options = ['translated' => FALSE, 'untranslated' => TRUE];
 
       // Look for existing translation sources.
@@ -24,7 +39,15 @@ function alshaya_i18n_save_translations($strings) {
       foreach ($data as $key => $value) {
         if (isset($value->source) && $value->source == $source) {
           // Save translation.
-          $target = \Drupal::service('locale.storage')->createTranslation(['lid' => $value->lid, 'language' => $langcode]);
+          $params = [
+            'lid' => $value->lid,
+            'language' => $langcode,
+          ];
+          // If context is available.
+          if (!empty($context)) {
+            $params += ['context' => $context];
+          }
+          $target = \Drupal::service('locale.storage')->createTranslation($params);
           $target->setPlurals([$translation])
             ->setCustomized()
             ->save();
