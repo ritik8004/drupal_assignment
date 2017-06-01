@@ -1,0 +1,56 @@
+diff --git amodules/acq_cart/src/Cart.php bmodules/acq_cart/src/Cart.php
+index 1f2e3d9d..431bd3f7 100644
+--- amodules/acq_cart/src/Cart.php
++++ bmodules/acq_cart/src/Cart.php
+@@ -435,6 +435,24 @@ public function setCoupon($coupon) {
+   /**
+    * {@inheritdoc}
+    */
++  public function getLoyalty() {
++    if (isset($this->cart, $this->cart->extension, $this->cart->extension->loyalty)) {
++      return $this->cart->extension->loyalty;
++    }
++
++    return '';
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setLoyalty($loyalty_number) {
++    $this->cart->extension['loyalty'] = $loyalty_number;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
+   public function getCart() {
+     if (isset($this->cart)) {
+       $cart = $this->cart;
+diff --git amodules/acq_cart/src/CartInterface.php bmodules/acq_cart/src/CartInterface.php
+index fe0b257a..2558bab2 100644
+--- amodules/acq_cart/src/CartInterface.php
++++ bmodules/acq_cart/src/CartInterface.php
+@@ -245,6 +245,22 @@ public function getCoupon();
+   public function setCoupon($coupon);
+ 
+   /**
++   * Gets the loyalty number.
++   *
++   * @return string
++   *   The loyalty number.
++   */
++  public function getLoyalty();
++
++  /**
++   * Set the loyalty number.
++   *
++   * @param string $loyalty_number
++   *   The loyalty number.
++   */
++  public function setLoyalty($loyalty_number);
++
++  /**
+    * Converts this cart to the customer cart provided.
+    *
+    * @param array $cart

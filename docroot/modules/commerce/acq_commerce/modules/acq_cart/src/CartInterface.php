@@ -245,6 +245,22 @@ interface CartInterface {
   public function setCoupon($coupon);
 
   /**
+   * Gets the loyalty number.
+   *
+   * @return string
+   *   The loyalty number.
+   */
+  public function getLoyalty();
+
+  /**
+   * Set the loyalty number.
+   *
+   * @param string $loyalty_number
+   *   The loyalty number.
+   */
+  public function setLoyalty($loyalty_number);
+
+  /**
    * Converts this cart to the customer cart provided.
    *
    * @param array $cart

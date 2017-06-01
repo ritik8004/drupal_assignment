@@ -435,6 +435,24 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function getLoyalty() {
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension->loyalty)) {
+      return $this->cart->extension->loyalty;
+    }
+
+    return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLoyalty($loyalty_number) {
+    $this->cart->extension['loyalty'] = $loyalty_number;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCart() {
     if (isset($this->cart)) {
       $cart = $this->cart;
