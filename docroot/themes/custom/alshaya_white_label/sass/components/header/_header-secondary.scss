@@ -289,14 +289,13 @@
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 999;
     background-color: $white-five;
   }
 }
 
 .mobile--overlay .branding__menu {
-  position: relative;
   z-index: 5;
+  background: transparent;
 
   &.navbar-fixed-top {
     position: fixed;
@@ -325,12 +324,12 @@
 }
 
 body {
-  @include breakpoint($upto-tablet) {
+  @include breakpoint($only-mobile) {
     margin-top: 5.3125rem;
   }
 
-  @include breakpoint($upto-desktop) {
-    margin-top: 8.125rem;
+  @include breakpoint($only-tablet) {
+    margin-top: 8.6875rem;
   }
 }
 

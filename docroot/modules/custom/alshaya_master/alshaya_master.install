@@ -172,7 +172,7 @@ function alshaya_master_install() {
       'ar' => '<p>أرغب في استلام عروض حصرية من مذركير</p><p>تسجيل بياناتك يعني موافقتك على الشروط والأحكام&nbsp;<a href="/terms">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
-      'ar' => '@title يرجى إدخال',
+      'ar' => 'يرجى إدخال @title',
     ],
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
@@ -475,7 +475,7 @@ function alshaya_master_install() {
       'ar' => 'أضف إلى السلة',
     ],
     '@name field is required.' => [
-      'ar' => '@name يرجى إدخال',
+      'ar' => 'يرجى إدخال @name',
     ],
     'Order Total <span>(Before Delivery)</span>' => [
       'ar' => 'المبلغ الإجمالي للطلبية <span>(قبل التوصيل)</span>',
@@ -647,6 +647,21 @@ function alshaya_master_install() {
     ],
     '%name is not recognized as a username or an email address.' => [
       'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
+    ],
+    'Find stores near' => [
+      'ar' => 'ابحث عن المحلات القريبة',
+    ],
+    'Near me' => [
+      'ar' => 'القريبة إليك',
+    ],
+    'Get directions' => [
+      'ar' => 'احصل على الاتجاهات',
+    ],
+    'View on map' => [
+      'ar' => 'عرض على الخريطة',
+    ],
+    'Sorry, there are no stores or locations available to display.' => [
+      'ar' => 'عفواً، لا توجد محلات أو مواقع لعرضها',
     ],
   ];
   alshaya_i18n_save_translations($strings);

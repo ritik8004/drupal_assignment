@@ -1127,8 +1127,14 @@ header {
   }
 
   .c-menu-primary {
-    a {
-      padding-left: 0;
+    @include breakpoint($only-mobile) {
+      .my-account-nav a {
+        padding: 0;
+      }
+
+      a {
+        padding-left: 0;
+      }
     }
   }
 
