@@ -26,11 +26,11 @@
       if ($(window).width() > 1024) {
         var clickedOption = $('.acq-content-product .form-item-configurables-size .select2Option li a.picked');
         $('.acq-content-product .form-item-configurables-size .select2Option').find('.list-title .selected-text').remove();
-        $('.acq-content-product .form-item-configurables-size .select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span');
+        $('.acq-content-product .form-item-configurables-size .select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
 
         var clickedOption2 = $('.acq-content-product-modal .form-item-configurables-size .select2Option li a.picked');
         $('.acq-content-product-modal .form-item-configurables-size .select2Option').find('.list-title .selected-text').remove();
-        $('.acq-content-product-modal .form-item-configurables-size .select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption2.text() + '</span');
+        $('.acq-content-product-modal .form-item-configurables-size .select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption2.text() + '</span>');
       }
     }
   };
