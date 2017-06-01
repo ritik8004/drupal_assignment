@@ -296,6 +296,13 @@
   text-decoration: line-through;
 }
 
+.node--view-mode-search-result {
+  .has--special--price,
+  .special--price {
+    display: inline;
+  }
+}
+
 .price--discount span,
 .special--price .price-wrapper {
   color: $scarlet;
@@ -304,6 +311,7 @@
 .price--discount {
   margin-top: 9px;
   font-size: 10px;
+  color: $scarlet;
 
   @include breakpoint($tablet) {
     margin-top: 12px;
