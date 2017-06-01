@@ -173,6 +173,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       ];
 
       _alshaya_acm_product_build_price($build, $sku_entity);
+
+      if (!alshaya_acm_is_product_in_stock($sku_entity)) {
+        $build['out_of_stock'] = [
+          '#markup' => t('out of stock'),
+        ];
+      }
     }
   }
 }
