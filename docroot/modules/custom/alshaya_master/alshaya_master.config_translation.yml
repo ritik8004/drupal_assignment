@@ -1,0 +1,5 @@
+alshaya_master.maintenanace_404_settings:
+  title: '404 and Maintenance mode content'
+  base_route_name: alshaya_master.404_maintenance_setting
+  names:
+    - alshaya_master.maintenanace_404_settings

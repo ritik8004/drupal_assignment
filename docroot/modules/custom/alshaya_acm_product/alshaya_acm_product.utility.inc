@@ -142,7 +142,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  * @param mixed $sku
  *   SKU text or full entity object.
  *
- * @return object
+ * @return \Drupal\acq_sku\Entity\SKU
  *   Loaded SKU entity.
  */
 function alshaya_acm_product_get_parent_sku_by_sku($sku) {

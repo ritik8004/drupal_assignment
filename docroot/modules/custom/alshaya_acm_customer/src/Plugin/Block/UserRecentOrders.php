@@ -218,4 +218,13 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    // Get uid of current user.
+    $uid = $this->currentUser->id();
+    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $uid . ':orders']);
+  }
+
 }

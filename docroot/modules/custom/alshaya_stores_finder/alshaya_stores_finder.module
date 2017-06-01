@@ -111,7 +111,7 @@ function alshaya_stores_finder_views_pre_view(ViewExecutable $view, $display_id,
     $exposed_input = $view->getExposedInput();
     if (!empty($exposed_input)) {
       if (!empty($exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'])) {
-        $header_text = t('@total closest stores to') . ' ' . $exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'];
+        $header_text = t('@total closest stores to') . ' ' . '<strong>' . $exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'] . '</strong>';
       }
     }
 

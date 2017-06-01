@@ -1538,8 +1538,8 @@ display:
           empty: false
           tokenize: false
           content:
-            value: 'select a store to see details'
-            format: mail_text
+            value: '<strong><span>select a store to see details</span></strong>'
+            format: rich_text
           plugin_id: text
       sorts:
         title:

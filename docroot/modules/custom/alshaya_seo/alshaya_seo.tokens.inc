@@ -96,8 +96,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
         else {
           $output = $item->processed;
         }
-
-        $replacements[$original] = text_summary($output, $item->format, $size);
+        $replacements[$original] = text_summary($output, 'plain_text', $size);
       }
     }
   }

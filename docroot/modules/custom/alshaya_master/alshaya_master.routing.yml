@@ -12,3 +12,9 @@ alshaya_master.redirect_bulk_upload:
     _title: 'Bulk add redirects'
   requirements:
     _permission: 'administer redirects'
+alshaya_master.404_maintenance_setting:
+  path: '/admin/config/404-maintenanace-settings'
+  defaults:
+    _form: '\Drupal\alshaya_master\Form\Alshaya404MaintenanceSettings'
+  requirements:
+    _permission: 'administer content'

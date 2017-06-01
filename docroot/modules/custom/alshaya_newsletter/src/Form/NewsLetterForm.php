@@ -6,6 +6,9 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 
 /**
  * Class NewsLetterForm.
@@ -51,9 +54,6 @@ class NewsLetterForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $site_name = $this->config('system.site')->get('name');
 
-    $form['#prefix'] = '<div id="footer-newsletter-form-wrapper">';
-    $form['#suffix'] = '</div>';
-
     $form['email'] = [
       '#title' => $this->t('Email address'),
       '#title_display' => 'invisible',
@@ -71,8 +71,15 @@ class NewsLetterForm extends FormBase {
         'callback' => '::submitFormAjax',
         'wrapper' => 'footer-newsletter-form-wrapper',
       ],
+      '#suffix' => '<div id="footer-newsletter-form-wrapper"></div>',
+      '#attributes' => [
+        'class' => ['edit-newsletter'],
+        'data-twig-suggestion' => 'newsletter',
+        'data-style' => 'zoom-in',
+      ],
     ];
 
+    $form['#attached']['library'][] = 'alshaya_newsletter/newsletter_js';
     return $form;
   }
 
@@ -86,19 +93,34 @@ class NewsLetterForm extends FormBase {
 
         if ($subscription['status'] === 0) {
           $message = '<span class="message error">' . $this->t('This email address is already subscribed.') . '</span>';
+          $data['message'] = 'failure';
         }
         else {
           $message = '<span class="message success">' . $this->t('Thank you for your subscription.') . '</span>';
+          $data['message'] = 'success';
         }
       }
       catch (\Exception $e) {
         $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
+        $data['message'] = 'failure';
       }
 
-      $form['email']['#suffix'] = '<div class="subscription-status">' . $message . '</div>';
+      $html = '<div class="subscription-status">' . $message . '</div>';
+    }
+    else {
+      $data['message'] = 'failure';
+      $html = '<div class="subscription-status"><span class="message error">' . $this->t('Please enter an email address') . '</span></div>';
     }
 
-    return $form;
+    // Get the interval we want to show the message for on our ladda button.
+    $interval = \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
+    $data['interval'] = $interval;
+
+    // Prepare the ajax Response.
+    $response = new AjaxResponse();
+    $response->addCommand(new HtmlCommand('#footer-newsletter-form-wrapper', $html));
+    $response->addCommand(new InvokeCommand(NULL, 'stopNewsletterSpinner', [$data]));
+    return $response;
   }
 
   /**
