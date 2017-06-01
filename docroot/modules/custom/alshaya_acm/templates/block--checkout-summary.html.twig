@@ -42,10 +42,18 @@
     {% endif %}
 
     {#Discount#}
-    {% if discount > 0 %}
-      <div class="discount-total">
+    {% if discount %}
+      <div class="sub-total discount-total">
         {% trans %}Discount{% endtrans %}
         {{ discount }}
+      </div>
+    {% endif %}
+
+    {#Shipping#}
+    {% if shipping %}
+      <div class="sub-total discount-shipping">
+        <span>{{ 'Delivery'|t }}</span>
+        {{ shipping }}
       </div>
     {% endif %}
 
@@ -54,7 +62,10 @@
       <span>{% trans %}Order Total{% endtrans %}</span>
       {{ ordertotal }}
     </div>
-    <span class="status">{% trans %}Before Delivery{% endtrans %}</span>
+
+    {% if shipping is empty %}
+      <span class="status">{% trans %}Before Delivery{% endtrans %}</span>
+    {% endif %}
   </div>
 
   {% if delivery_method %}
