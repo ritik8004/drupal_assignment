@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab0d6bf8a684a6089f721dad88351252",
+    "content-hash": "34e150c23ead9c85d30524ca8433591c",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2097,7 +2097,8 @@
                     "datestamp": "1471598939"
                 },
                 "patches_applied": {
-                    "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch"
+                    "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
+                    "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-11.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3751,7 +3752,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1495814284"
+                    "datestamp": "1485790085"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4354,10 +4355,6 @@
                 {
                     "name": "Berdir",
                     "homepage": "https://www.drupal.org/user/214652"
-                },
-                {
-                    "name": "Dave Reid",
-                    "homepage": "https://www.drupal.org/user/53892"
                 },
                 {
                     "name": "Drupal Media Team",
@@ -5893,7 +5890,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta2",
-                    "datestamp": "1493403543"
+                    "datestamp": "1492189143"
                 },
                 "patches_applied": {
                     "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
@@ -6194,16 +6191,8 @@
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
-                    "name": "badjava",
-                    "homepage": "https://www.drupal.org/user/83372"
-                },
-                {
                     "name": "chx",
                     "homepage": "https://www.drupal.org/user/9446"
-                },
-                {
-                    "name": "japerry",
-                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "kalman.hosszu",
@@ -6345,10 +6334,6 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
-                },
-                {
-                    "name": "miteshmap",
-                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -6658,7 +6643,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.0-beta12",
-                    "datestamp": "1492798443"
+                    "datestamp": "1496265842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7705,7 +7690,7 @@
             "version": "1.15.0",
             "dist": {
                 "type": "zip",
-                "url": "http://jqueryvalidation.org/files/jquery-validation-1.15.0.zip",
+                "url": "https://jqueryvalidation.org/files/jquery-validation-1.15.0.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -12727,7 +12712,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork maintainer"
+                    "role": "Fork Maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
