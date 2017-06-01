@@ -1,6 +1,6 @@
 /**
  * @file
- *   Javascript for the geolocation module.
+ * Javascript for the geolocation module.
  */
 
 /**
@@ -238,7 +238,7 @@
    * Provides the callback that is called when maps loads.
    */
   Drupal.geolocation.googleCallback = function () {
-    // Ensure callbacks array;
+    // Ensure callbacks array.
     Drupal.geolocation.googleCallbacks = Drupal.geolocation.googleCallbacks || [];
 
     // Wait until the window load event to try to use the maps library.
@@ -275,7 +275,6 @@
 
       Drupal.geolocation.maps_api_loading = true;
       // Google Maps isn't loaded so lazy load Google Maps.
-
       if (typeof drupalSettings.geolocation.google_map_url !== 'undefined') {
         $.getScript(drupalSettings.geolocation.google_map_url)
           .done(function () {
@@ -283,7 +282,7 @@
           });
       }
       else {
-        console.error('Geolocation - Google map url not set.'); // eslint-disable-line no-console
+        console.error('Geolocation - Google map url not set.'); // eslint-disable-line no-console.
       }
     }
     else {
@@ -359,11 +358,12 @@
   };
 
   /**
-   * Set/Update a marker on a map
+   * Set/Update a marker on a map.
    *
    * @param {GeolocationMap} map - The settings object that contains all of the necessary metadata for this map.
    * @param {GoogleMarkerSettings} markerSettings - Marker settings.
    * @param {Boolean} [skipInfoWindow=false] - Skip attaching InfoWindow.
+   *
    * @return {GoogleMarker} - Created marker.
    */
   Drupal.geolocation.setMapMarker = function (map, markerSettings, skipInfoWindow) {
