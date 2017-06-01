@@ -690,3 +690,16 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_facets_summary_item_list().
+ */
+function alshaya_white_label_preprocess_facets_summary_item_list(&$variables) {
+  // Move clear-all link item to the end of the array & attach clear-all class.
+  if (count($variables['items']) > 0) {
+    $variables['items'][0]['attributes']->addClass('clear-all');
+    $clear_all_item = $variables['items'][0];
+    array_splice($variables['items'], 0, 1);
+    $variables['items'][] = $clear_all_item;
+  }
+}
