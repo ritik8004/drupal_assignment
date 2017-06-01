@@ -648,6 +648,21 @@ function alshaya_master_install() {
     '%name is not recognized as a username or an email address.' => [
       'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
     ],
+    'Find stores near' => [
+      'ar' => 'ابحث عن المحلات القريبة',
+    ],
+    'Near me' => [
+      'ar' => 'القريبة إليك',
+    ],
+    'Get directions' => [
+      'ar' => 'احصل على الاتجاهات',
+    ],
+    'View on map' => [
+      'ar' => 'عرض على الخريطة',
+    ],
+    'Sorry, there are no stores or locations available to display.' => [
+      'ar' => 'عفواً، لا توجد محلات أو مواقع لعرضها',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

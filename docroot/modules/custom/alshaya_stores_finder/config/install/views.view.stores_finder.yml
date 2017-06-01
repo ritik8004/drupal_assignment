@@ -1201,7 +1201,7 @@ display:
           empty: true
           tokenize: false
           content:
-            value: 'Sorry, there are no stores or locations available to display'
+            value: 'Sorry, there are no stores or locations available to display.'
             format: mail_text
           plugin_id: text
     cache_metadata:
@@ -2025,7 +2025,7 @@ display:
           empty: true
           tokenize: false
           content:
-            value: 'Sorry, there are no stores or locations available to display'
+            value: 'Sorry, there are no stores or locations available to display.'
             format: mail_text
           plugin_id: text
     cache_metadata:
