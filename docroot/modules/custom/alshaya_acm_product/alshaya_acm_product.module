@@ -328,7 +328,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
 
   if ($price = (float) $sku_entity->get('price')->getString()) {
     $build['price'] = [
-      '#theme' => 'alshaya_acm_price',
+      '#theme' => 'acq_commerce_price',
       '#price' => $price,
     ];
 
@@ -340,7 +340,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
       }
 
       $build['final_price'] = [
-        '#theme' => 'alshaya_acm_price',
+        '#theme' => 'acq_commerce_price',
         '#price' => $final_price,
       ];
 
@@ -353,7 +353,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
   }
   elseif ($final_price = (float) $sku_entity->get('final_price')->getString()) {
     $build['price'] = [
-      '#theme' => 'alshaya_acm_price',
+      '#theme' => 'acq_commerce_price',
       '#price' => $final_price,
     ];
   }

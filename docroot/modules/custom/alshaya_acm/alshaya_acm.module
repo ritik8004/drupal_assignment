@@ -517,14 +517,6 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'block--checkout-summary',
     ],
-    'alshaya_acm_price' => [
-      'variables' => [
-        'price' => '',
-        'currency_format' => '',
-        'currency_code_position' => '',
-        'special_price' => '',
-      ],
-    ],
     'alshaya_cart_product_name' => [
       'variables' => [
         'sku_attributes' => '',
@@ -540,34 +532,6 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Format price value with currency.
- *
- * Default template: alshaya-acm-price.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - price: a price value.
- *   - currency_format: Currency format.
- *   - currency_code_position: Currency code position with amount.
- *
- * @see alshaya_acm_price_format()
- */
-function template_preprocess_alshaya_acm_price(array &$variables) {
-  // Fetch the config.
-  $config = \Drupal::configFactory()->get('acq_commerce.currency');
-
-  // Fetch the currency format from the config factor.
-  $currency_format = $config->get('currency_code');
-
-  // Fetch the currency code position.
-  $currency_code_position = $config->get('currency_code_position');
-
-  $variables['currency_format'] = $currency_format;
-  $variables['currency_code_position'] = $currency_code_position;
-  $variables['price'] = number_format($variables['price'], 3);
-}
-
-/**
  * Wrapper function to format price value with currency.
  *
  * @param float $price
@@ -578,7 +542,7 @@ function template_preprocess_alshaya_acm_price(array &$variables) {
  */
 function alshaya_acm_price_format($price) {
   $output = [
-    '#theme' => 'alshaya_acm_price',
+    '#theme' => 'acq_commerce_price',
     '#price' => $price,
   ];
 
@@ -661,4 +625,15 @@ function alshaya_acm_is_product_in_stock($sku) {
     $valid_stock = (bool) $sku_stock['is_in_stock'];
   }
   return $valid_stock;
+}
+
+/**
+ * Implements hook_alshaya_onetime_translation_add().
+ */
+function alshaya_acm_alshaya_i18n_onetime_translation_add() {
+  // Translate currency code in config.
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
+  $config->set('currency_code', 'د٠ك٠');
+  $config->set('currency_code_position', 'after');
+  $config->save();
 }

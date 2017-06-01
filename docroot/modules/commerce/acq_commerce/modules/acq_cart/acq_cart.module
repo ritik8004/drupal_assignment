@@ -34,8 +34,6 @@ function acq_cart_theme($existing, $type, $theme, $path) {
       'variables' => [
         'quantity' => 0,
         'total' => NULL,
-        'currency_format' => $currency_format,
-        'currency_code_position' => $currency_code_position,
       ],
       'template' => 'block--acqminicart',
     ],
