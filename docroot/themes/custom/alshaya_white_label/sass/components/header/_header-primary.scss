@@ -417,7 +417,8 @@ header {
 
     .mobile--menu {
       float: $left;
-      margin-#{$left}: 1.5625rem;
+      padding: 1rem 1.5625rem;
+      margin-top: -1rem;
     }
   }
 
@@ -478,14 +479,6 @@ header {
       }
     }
 
-    .mobile--menu {
-      &:hover {
-        &::before {
-          background: url('../imgs/icons/mobile-menu--hover.svg');
-        }
-      }
-    }
-
     ul.menu {
       display: table;
       width: 100%;
@@ -497,7 +490,10 @@ header {
       text-align: center;
       padding: 0;
 
-      &:hover,
+      &:hover {
+        background: none;
+      }
+
       &.search-active {
         background: $marine-blue;
 
@@ -519,12 +515,6 @@ header {
           background: url('../imgs/icons/ic-search.svg');
           width: 22px;
           height: 22px;
-        }
-
-        &:hover {
-          &::before {
-            background: url('../imgs/icons/ic-search--hover.svg');
-          }
         }
       }
     }
@@ -962,7 +952,7 @@ header {
   .menu__in {
     background: url('../imgs/icons/ic-chevronright-copy-9.svg') no-repeat;
     float: $right;
-    margin-top: -14px;
+    margin-top: -8px;
   }
 
   .menu__back {
@@ -1137,8 +1127,14 @@ header {
   }
 
   .c-menu-primary {
-    a {
-      padding-left: 0;
+    @include breakpoint($only-mobile) {
+      .my-account-nav a {
+        padding: 0;
+      }
+
+      a {
+        padding-left: 0;
+      }
     }
   }
 

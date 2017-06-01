@@ -78,6 +78,7 @@
 
     .price-currency.prefix {
       padding-right: 0.5rem;
+      float: $left;
 
       @include breakpoint($tablet) {
         padding-right: 0;
@@ -474,6 +475,7 @@
   p {
     margin: 0;
     font-size: 0.75rem;
+    font-family: $arial;
 
     @include breakpoint($desktop) {
       font-size: 0.9375rem;
@@ -536,5 +538,12 @@
       #{$right}: 3px !important;
       top: 2px !important;
     }
+  }
+}
+
+#table-cart-totals,
+#table-cart-items {
+  .price-wrapper .price-amount {
+    float: $left;
   }
 }

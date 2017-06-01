@@ -172,7 +172,7 @@ function alshaya_master_install() {
       'ar' => '<p>أرغب في استلام عروض حصرية من مذركير</p><p>تسجيل بياناتك يعني موافقتك على الشروط والأحكام&nbsp;<a href="/terms">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
-      'ar' => '@title يرجى إدخال',
+      'ar' => 'يرجى إدخال @title',
     ],
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
@@ -475,7 +475,7 @@ function alshaya_master_install() {
       'ar' => 'أضف إلى السلة',
     ],
     '@name field is required.' => [
-      'ar' => '@name يرجى إدخال',
+      'ar' => 'يرجى إدخال @name',
     ],
     'Order Total <span>(Before Delivery)</span>' => [
       'ar' => 'المبلغ الإجمالي للطلبية <span>(قبل التوصيل)</span>',
@@ -642,6 +642,27 @@ function alshaya_master_install() {
     'Back to top' => [
       'ar' => 'الرجوع إلى أعلى',
     ],
+    'The password does not satisfy the password policies.' => [
+      'ar' => 'كلمة السر غير مطابقة لسياسات كلمة السر',
+    ],
+    '%name is not recognized as a username or an email address.' => [
+      'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
+    ],
+    'Find stores near' => [
+      'ar' => 'ابحث عن المحلات القريبة',
+    ],
+    'Near me' => [
+      'ar' => 'القريبة إليك',
+    ],
+    'Get directions' => [
+      'ar' => 'احصل على الاتجاهات',
+    ],
+    'View on map' => [
+      'ar' => 'عرض على الخريطة',
+    ],
+    'Sorry, there are no stores or locations available to display.' => [
+      'ar' => 'عفواً، لا توجد محلات أو مواقع لعرضها',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
@@ -783,12 +804,17 @@ function alshaya_master_install() {
     ->set('visibility', [
       'request_path' => [
         'id' => 'request_path',
-        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*",
+        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*\r\n/contact",
         'negate' => FALSE,
         'context_mapping' => [],
       ],
     ])
     ->set('region', 'breadcrumb')
     ->set('weight', '-26')
+    ->save();
+
+  // Set the access-denied page to '/user'.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('page.403', '/user')
     ->save();
 }

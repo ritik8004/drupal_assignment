@@ -138,3 +138,38 @@ function alshaya_addressbook_entity_type_alter(array &$entity_types) {
   $entity_types['profile']->setFormClass('add', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
   $entity_types['profile']->setFormClass('edit', 'Drupal\alshaya_addressbook\Form\AlshayaProfileForm');
 }
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
+  $strings = [
+    'First name' => [
+      'ar' => 'First name ar',
+      'context' => 'Address label',
+    ],
+    'Last name' => [
+      'ar' => 'Last name ar',
+      'context' => 'Address label',
+    ],
+    'Company' => [
+      'ar' => 'Company ar',
+      'context' => 'Address label',
+    ],
+    'Street address' => [
+      'ar' => 'Street address ar',
+      'context' => 'Address label',
+    ],
+    'City' => [
+      'ar' => 'City ar',
+      'context' => 'Address label',
+    ],
+    'Postal code' => [
+      'ar' => 'Postal code ar',
+      'context' => 'Address label',
+    ],
+  ];
+
+  // Save the translation.
+  alshaya_i18n_save_translations($strings);
+}

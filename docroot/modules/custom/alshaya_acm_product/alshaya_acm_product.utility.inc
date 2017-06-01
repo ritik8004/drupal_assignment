@@ -142,7 +142,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  * @param mixed $sku
  *   SKU text or full entity object.
  *
- * @return object
+ * @return \Drupal\acq_sku\Entity\SKU
  *   Loaded SKU entity.
  */
 function alshaya_acm_product_get_parent_sku_by_sku($sku) {
@@ -293,6 +293,10 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
  */
 function alshaya_acm_product_get_display_node($sku) {
   $sku = is_object($sku) ? $sku->getSKU() : $sku;
+
+  if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
+    $sku = $parent_sku->getSku();
+  }
 
   $query = \Drupal::entityQuery('node')
     ->condition('type', 'acq_product')

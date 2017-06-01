@@ -208,6 +208,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     $form['actions']['checkout']['#value'] = t('checkout securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
+
+    // Add checkout button on top.
+    $form['actions_top'] = [
+      '#type' => 'container',
+      '#weight' => -100,
+    ];
+
+    $form['actions_top']['checkout_top']['#markup'] = '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>';
   }
   else {
     $form['actions']['checkout']['#access'] = FALSE;
@@ -308,6 +316,10 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     $form['totals']['discount']['value'] = [
       '#markup' => alshaya_acm_price_format($totals['discount']),
     ];
+  }
+
+  if ((float) $totals['shipping'] != 0) {
+    $totals['grand'] -= $totals['shipping'];
   }
 
   $form['totals']['grand']['value'] = [
@@ -492,6 +504,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'products' => '',
         'subtotal' => '',
         'tax' => '',
+        'shipping' => '',
         'discount' => '',
         'ordertotal' => '',
         'currency_format' => '',

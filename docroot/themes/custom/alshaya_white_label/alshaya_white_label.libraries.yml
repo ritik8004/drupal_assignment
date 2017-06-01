@@ -4,6 +4,7 @@ global_styles:
       css/colors.css: {}
   js:
     vendor/js/calc.min.js: {}
+    js/back_to_top.js: {}
     js/custom.js: {}
     js/accordion.js: {}
     js/menu.js: {}
