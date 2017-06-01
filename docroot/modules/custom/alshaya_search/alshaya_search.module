@@ -53,7 +53,7 @@ function alshaya_search_theme($existing, $type, $theme, $path) {
  * Implements hook_facets_search_api_query_type_mapping_alter().
  */
 function alshaya_search_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types) {
-  if ($backend_plugin_id == 'search_api_solr') {
+  if (in_array($backend_plugin_id, ['search_api_solr', 'search_api_db'])) {
     $query_types['range'] = 'alshaya_search_range';
   }
 }

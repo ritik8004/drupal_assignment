@@ -8,7 +8,6 @@ dependencies:
   module:
     - taxonomy
     - acq_sku
-    - file
     - search_api
     - node
 id: product
