@@ -18,7 +18,7 @@
   }
 
   @include breakpoint($desktop) {
-    padding: calc((100vh - 568px) / 2) calc((100vw - 1080px) / 2);
+    padding: calc((100vh - 556px) / 2) calc((100vw - 1080px) / 2);
   }
 
   .ui-dialog-titlebar {
@@ -38,5 +38,13 @@
     background: $white-five;
     padding: 2em;
     overflow: hidden;
+
+    @include breakpoint($tablet) {
+      height: 576px !important;
+    }
+
+    @include breakpoint($desktop) {
+      height: 556px !important;
+    }
   }
 }
