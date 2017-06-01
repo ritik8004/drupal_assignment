@@ -137,17 +137,15 @@
           facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile').addClass('is-filter');
           if ($('body').hasClass('path--search')) {
             mainBlock.before(facetBlockWrapper);
-            var searchFilter = $('.c-search #views-exposed-form-search-page');
-            searchFilter.wrapAll('<div class="view-filters is-filter">');
-            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
-            $('.block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper').insertBefore('.view-filters.is-filter');
           }
           else {
             mainBlock.after(facetBlockWrapper);
-            var viewFilter = $('.c-products-list .view-filters');
-            viewFilter.addClass('is-filter');
-            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
           }
+          var searchFilter = $('.c-plp #views-exposed-form-search-page');
+          searchFilter.wrapAll('<div class="view-filters is-filter">');
+          $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
+          $('.block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper').insertBefore('.view-filters.is-filter');
+
           facetLabel.click(function () {
             $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu').toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
