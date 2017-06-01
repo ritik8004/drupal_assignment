@@ -369,7 +369,7 @@
           line-height: 1;
           position: relative;
 
-          @include icon(chevronright, after) {
+          @include icon(chevron#{$right}, after) {
             position: absolute;
             display: inline-block;
             color: $black;

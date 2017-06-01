@@ -24,12 +24,13 @@
   .primary--footer--right {
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 1.313rem;
+      margin-#{$right}: 1rem;
     }
 
     @include breakpoint($desktop) {
       width: 33%;
       margin-#{$right}: 0;
+      padding-#{$right}: 0.4rem;
     }
 
     .language--switcher.only-first-time {
@@ -67,11 +68,12 @@
 
     @include breakpoint($desktop) {
       width: 67%;
+      padding-#{$left}: 1rem;
     }
   }
 
   .l-container {
-    @include container(64.35rem);
+    @include container(66.35rem);
   }
 
   &__region {
@@ -202,27 +204,28 @@
   }
 
   @include breakpoint($tablet) {
-    float: $right;
-    max-width: 21.875rem;
+    float: $left;
+    max-width: 20.98rem;
     margin: 0;
     display: inline-block;
-    margin-#{$right}: 2.3rem;
 
     .newsletter-block-label {
       font-family: $alshaya-thin;
       position: relative;
-      text-indent: -1.625rem;
-      #{$left}: 1.625rem;
     }
   }
 
+  @include breakpoint($only-tablet) {
+    min-width: 20.72rem;
+  }
+
   @include breakpoint($desktop) {
+    max-width: 18.98rem;
+    margin-#{$left}: 2.2rem;
     margin-#{$right}: 0;
 
     .newsletter-block-label {
       font-family: $arial;
-      text-indent: -2.5rem;
-      #{$left}: 2.5rem;
     }
   }
 
@@ -312,12 +315,12 @@
     z-index: 2;
 
     @include breakpoint($tablet) {
-      #{$right}: 0;
+      #{$right}: 2.55rem;
       font-size: 0.8125rem;
     }
 
     @include breakpoint($desktop) {
-      #{$right}: 0.125rem;
+      #{$right}: 0;
     }
 
     &:focus {
@@ -386,10 +389,6 @@
   @include breakpoint($only-mobile) {
     text-align: center;
   }
-
-  @include breakpoint($desktop-wide) {
-    width: 18.312rem;
-  }
 }
 
 .c-footer-primary .language-switcher-language-url {
@@ -423,29 +422,43 @@
         position: relative;
 
         a {
-          margin-#{$right}: 0.6875rem;
+          margin-#{$right}: 0.4375rem;
           margin-#{$left}: 0.4375rem;
           margin-top: 0;
           margin-bottom: 0;
+
+          @include breakpoint($desktop) {
+            margin-#{$right}: 0.6875rem;
+          }
         }
 
         &::after {
           content: "|";
           position: absolute;
-          #{$right}: -2px;
+          right: -2px;
+          left: auto;
           color: $marine-blue-two;
+          font-size: 1rem;
         }
       }
 
       a {
         font-size: 0.875rem;
         text-transform: lowercase;
-        color: $blue-two;
-        margin: 0 0.6875rem;
+        color: $marine-blue-two;
+        margin: 0 0.4375rem;
         text-decoration: underline;
+
+        @include breakpoint($upto-desktop) {
+          font-family: $arial;
+        }
+
+        @include breakpoint($tablet) {
+          margin: 0 0.6875rem;
+        }
       }
 
-      &.is-active a {
+      &.en a {
         color: $brownish-grey;
         text-decoration: none;
       }
@@ -479,7 +492,7 @@
 
   .c-social-links {
     @include breakpoint($tablet) {
-      margin-top: 1.813rem;
+      margin-top: 2.75rem;
       padding-left: 0.312rem;
     }
 
@@ -492,7 +505,7 @@
 
 .language--switcher {
   @include breakpoint($tablet) {
-    margin-top: 0.75rem;
+    margin-top: 1.75rem;
   }
 
   @include breakpoint($desktop) {
