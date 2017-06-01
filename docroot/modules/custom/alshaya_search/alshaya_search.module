@@ -17,7 +17,7 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
       $view->setTitle(t('Search results for "@keyword"', ['@keyword' => $view->getExposedInput()['keywords']]));
     }
     else {
-      $view->setTitle(t('Search results.'));
+      $view->setTitle(t('Search results'));
     }
 
     // Add search library to search page.

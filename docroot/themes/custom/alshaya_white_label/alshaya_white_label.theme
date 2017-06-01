@@ -431,6 +431,11 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 
+  // For 404 page.
+  if ($routmatch->getRouteName() == 'system.404') {
+    $suggestions[] = 'page__404';
+  }
+
   // Check if we are on node page.
   if ($routmatch->getRouteName() == 'entity.node.canonical') {
     $node = Drupal::request()->attributes->get('node');
@@ -628,6 +633,9 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
     if ($element['#attributes']['data-twig-suggestion'] == 'addtocart') {
       $suggestions[] = 'input__add_to_cart';
     }
+    if ($element['#attributes']['data-twig-suggestion'] == 'newsletter') {
+      $suggestions[] = 'input__newsletter_submit';
+    }
   }
 }
 
@@ -640,4 +648,45 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
     $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
   }
   $variables['email_logo'] = $email_logo['logo_url'];
+}
+
+/**
+ * Implements hook_preprocess_maintenance_page().
+ */
+function alshaya_white_label_preprocess_maintenance_page(&$variables) {
+  $config = \Drupal::config('alshaya_master.maintenanace_404_settings');
+  $maintenance_text = $config->get('maintenance_mode_rich_message');
+  $image = $config->get('maintenance_mode_image');
+  $variables['maintenance_text'] = $maintenance_text['value'];
+  $variables['maintenance_image'] = '';
+  if (!empty($image)) {
+    if ($file = file_load($image)) {
+      $variables['maintenance_image'] = [
+        '#theme' => 'image_style',
+        '#style_name' => '1284x424',
+        '#uri' => $file->getFileUri(),
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page__404().
+ */
+function alshaya_white_label_preprocess_page__404(&$variables) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $config = \Drupal::config('alshaya_master.maintenanace_404_settings');
+  $text_404 = $config->get('404_message');
+  $image = $config->get('404_image.' . $langcode);
+  $variables['message_404'] = $text_404['value'];
+  $variables['image_404'] = '';
+  if (!empty($image)) {
+    if ($file = file_load($image)) {
+      $variables['image_404'] = [
+        '#theme' => 'image_style',
+        '#style_name' => '1284x424',
+        '#uri' => $file->getFileUri(),
+      ];
+    }
+  }
 }

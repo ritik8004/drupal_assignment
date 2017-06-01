@@ -12,6 +12,18 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
+ * Implements hook_editor_js_settings_alter().
+ */
+function alshaya_master_editor_js_settings_alter(array &$settings) {
+  if (isset($settings['editor']['formats']['rich_text'])) {
+    // Remove the editor's built in context menu.
+    // context menu is dependent on tableTools and tableResize plugins, so need
+    // to remove those too.
+    $settings['editor']['formats']['rich_text']['editorSettings']['removePlugins'] = 'contextmenu,tabletools,tableresize';
+  }
+}
+
+/**
  * Implements hook_block_build_alter().
  */
 function alshaya_master_block_build_alter(array &$build, BlockPluginInterface $block) {
@@ -27,6 +39,13 @@ function alshaya_master_form_alter(&$form, FormStateInterface $form_state, $form
   if (!in_array($form_id, ['customer_cart_form'])) {
     $form['#error_no_message'] = TRUE;
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_master_form_system_site_maintenance_mode_alter(&$form, FormStateInterface $form_state) {
+  $form['maintenance_mode_message']['#access'] = FALSE;
 }
 
 /**

@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  module:
-    - alshaya_acm
-    - system
   theme:
     - alshaya_white_label
 id: baskethorizontalproductrecommendation
@@ -15,7 +12,7 @@ plugin: basket_horizontal_recommendation
 settings:
   id: basket_horizontal_recommendation
   label: 'Horizontal Recommendations'
-  provider: alshaya_acm
+  provider: alshaya_acm_product
   label_display: visible
 visibility:
   request_path:

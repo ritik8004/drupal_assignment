@@ -5,16 +5,3 @@ cart_notification_js:
   dependencies:
     - core/jquery
     - core/drupal
-ladda:
-  version: 1.x
-  js:
-    js/spin.min.js: {}
-    js/ladda.min.js: {}
-    js/ladda.jquery.min.js: {}
-  css:
-    theme:
-      css/ladda.min.css: {}
-      css/cart_notification.css: {}
-  dependencies:
-    - core/jquery
-    - core/drupal

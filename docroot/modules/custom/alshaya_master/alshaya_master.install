@@ -642,6 +642,12 @@ function alshaya_master_install() {
     'Back to top' => [
       'ar' => 'الرجوع إلى أعلى',
     ],
+    'The password does not satisfy the password policies.' => [
+      'ar' => 'كلمة السر غير مطابقة لسياسات كلمة السر',
+    ],
+    '%name is not recognized as a username or an email address.' => [
+      'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
@@ -783,12 +789,17 @@ function alshaya_master_install() {
     ->set('visibility', [
       'request_path' => [
         'id' => 'request_path',
-        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*",
+        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*\r\n/contact",
         'negate' => FALSE,
         'context_mapping' => [],
       ],
     ])
     ->set('region', 'breadcrumb')
     ->set('weight', '-26')
+    ->save();
+
+  // Set the access-denied page to '/user'.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('page.403', '/user')
     ->save();
 }

@@ -146,10 +146,9 @@
       });
 
       // Toggle Function for Store Locator.
-      var $storeHours = $('.hours--label');
-      $storeHours.on('click', function () {
+      $(document).on('click', '.hours--label', function () {
         $(this).next().slideToggle();
-        $(this, $storeHours).toggleClass('open');
+        $(this).toggleClass('open');
         $(this).next().toggleClass('selector--hours');
       });
 
