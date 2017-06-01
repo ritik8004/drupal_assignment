@@ -1,7 +1,7 @@
-diff --git amodules/acq_cart/src/Cart.php bmodules/acq_cart/src/Cart.php
+diff --git a/modules/acq_cart/src/Cart.php b/modules/acq_cart/src/Cart.php
 index 1f2e3d9d..431bd3f7 100644
---- amodules/acq_cart/src/Cart.php
-+++ bmodules/acq_cart/src/Cart.php
+--- a/modules/acq_cart/src/Cart.php
++++ b/modules/acq_cart/src/Cart.php
 @@ -435,6 +435,24 @@ public function setCoupon($coupon) {
    /**
     * {@inheritdoc}
@@ -27,10 +27,10 @@ index 1f2e3d9d..431bd3f7 100644
    public function getCart() {
      if (isset($this->cart)) {
        $cart = $this->cart;
-diff --git amodules/acq_cart/src/CartInterface.php bmodules/acq_cart/src/CartInterface.php
+diff --git a/modules/acq_cart/src/CartInterface.php b/modules/acq_cart/src/CartInterface.php
 index fe0b257a..2558bab2 100644
---- amodules/acq_cart/src/CartInterface.php
-+++ bmodules/acq_cart/src/CartInterface.php
+--- a/modules/acq_cart/src/CartInterface.php
++++ b/modules/acq_cart/src/CartInterface.php
 @@ -245,6 +245,22 @@ public function getCoupon();
    public function setCoupon($coupon);
  
