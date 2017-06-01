@@ -1065,3 +1065,17 @@
     }
   }
 }
+
+.alias--user-register {
+  @include breakpoint($only-tablet) {
+    .l-column--two-1050 {
+      margin-right: 24px;
+      margin-left: 24px;
+    }
+
+    .user-register-form,
+    h1.c-page-title {
+      margin-#{$left}: 0;
+    }
+  }
+}
