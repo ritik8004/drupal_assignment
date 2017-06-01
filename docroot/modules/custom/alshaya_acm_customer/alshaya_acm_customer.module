@@ -121,10 +121,9 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
 
     if (!empty($user)) {
       $user_data = \Drupal::service('user.data');
-      if ($preference = $user_data->get('user', $user->id(), 'communication_preference')) {
-        \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-        $request_options['form_params']['customer[extension][communication_preference]'] = alshaya_acm_customer_get_communication_preference_api_value($preference);
-      }
+      $preference = $user_data->get('user', $user->id(), 'communication_preference');
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+      $request_options['form_params']['customer[extension][communication_preference]'] = alshaya_acm_customer_get_communication_preference_api_value($preference);
     }
   }
 }
