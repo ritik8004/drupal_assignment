@@ -105,6 +105,7 @@
             "drupal/facets": {
                 "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
                 "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
+                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-23.patch",
                 "Fix undefined index:active in facets_system_breadcrumb_alter()": "https://www.drupal.org/files/issues/undefIndexActive_2869850.2.patch"
             },
             "drupal/simple_sitemap": {
@@ -112,7 +113,9 @@
             },
             "drupal/core": {
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
-                "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch"
+                "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
+                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-1.patch",
+                "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch"
             },
             "drupal/password_policy": {
                 "Error message is not translatable": "https://www.drupal.org/files/issues/password_policy_error_translate-2878784-2.patch"
