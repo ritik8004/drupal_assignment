@@ -71,16 +71,6 @@ class AlshayaSearchGalleryFormatter extends ResponsiveImageFormatter {
         'url' => $mainImg,
       ];
 
-      $thumbnails[] = [
-        'thumburl' => $thumbImg,
-        'url' => $mainImg,
-      ];
-
-      $thumbnails[] = [
-        'thumburl' => $thumbImg,
-        'url' => $mainImg,
-      ];
-
     }
     $elements = [
       '#theme' => 'alshaya_search_gallery',
