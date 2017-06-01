@@ -106,13 +106,18 @@
     }
 
     .field--name-name {
-      margin-top: 0;
-      margin-bottom: 0.875rem;
+      margin-top: 9px;
+      margin-bottom: 9px;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
 
       a {
         color: $grey-ash;
+
+        &:hover {
+          color: $cerulean-two;
+          text-decoration: underline;
+        }
       }
 
       @include breakpoint($tablet) {
