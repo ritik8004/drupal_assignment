@@ -131,18 +131,63 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       $build['item_code']['#markup'] = $sku;
 
-      $build['description']['#markup'] = '';
+      $build['short_description']['#markup'] = '';
       if ($body = $entity->get('body')->getValue()) {
-        $build['description']['#markup'] = $body[0]['value'];
+        $build['short_description']['#markup'] = $body[0]['value'];
       }
 
-      $build['short_description']['#markup'] = $sku_entity->get('attr_short_description')->getString() . $sku_entity->get('attr_bullet_points')->getString();
+      $at_glance['label'] = t('At a glance');
+      $at_glance['value'] = $sku_entity->get('attr_at_glance')->getString();
+
+      $description['label'] = t('Features and benefits');
+      $description['value'] = $build['short_description']['#markup'];
+      $description['value'] .= $sku_entity->get('attr_bullet_points')->getString();
+
+      $specifications['label'] = t('Specifications');
+      $specifications['value'] = [
+        "#theme" => 'item_list',
+        '#items' => [],
+      ];
+
+      // @TODO: Get values for all instead of ids.
+      if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
+        $specifications['value']['#items'][] = t('Style Code: @value', [
+          '@value' => $attr_style_code,
+        ]);
+      }
+
+      if ($attr_color = $sku_entity->get('attr_color')->getString()) {
+        $specifications['value']['#items'][] = t('Color: @value', [
+          '@value' => $attr_color,
+        ]);
+      }
+
+      if ($attr_season = $sku_entity->get('attr_season')->getString()) {
+        $specifications['value']['#items'][] = t('Season: @value', [
+          '@value' => $attr_season,
+        ]);
+      }
+
+      if ($attr_brand = $sku_entity->get('attr_brand')->getString()) {
+        $specifications['value']['#items'][] = t('Product brand: @value', [
+          '@value' => $attr_brand,
+        ]);
+      }
+
+      $whats_in_box['label'] = t("What's In The Box");
+      $whats_in_box['value'] = $sku_entity->get('attr_whats_in_the_box')->getString();
+
+      // Prepare full description in required sequence.
+      // Check comments in MMCPA-218 for sequence requirements.
+      $build['description'][] = $at_glance;
+      $build['description'][] = $description;
+      $build['description'][] = $specifications;
+      $build['description'][] = $whats_in_box;
 
       // Initialise home delivery variable.
       $build['home_delivery'] = [];
 
       // Check if home delivery is available for this product.
-      // @TODO: ELSE: Do we need to show that home delivery is not available?
       if (alshaya_acm_product_available_home_delivery($sku)) {
         $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
 

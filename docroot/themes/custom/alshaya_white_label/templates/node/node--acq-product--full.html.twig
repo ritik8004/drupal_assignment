@@ -71,7 +71,21 @@ set classes = [
           <span class="close"></span>
           <h2 class="field__label">{{ 'Product Description'|t }}</h2>
           <div class="field__content">
-            {{ content.description }}
+            {%  for desc in content.description  %}
+              {% if desc.value %}
+                <div class="desc-wrapper">
+                  {% if desc.label %}
+                    <div class="desc-label">
+                      {{ desc.label }}
+                    </div>
+                  {% endif %}
+
+                  <div class="desc-value">
+                    {{ desc.value|raw }}
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
           </div>
         </div>
       </div>
