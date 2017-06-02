@@ -122,7 +122,7 @@
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
-                "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-11.patch"
+                "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch"
             },
             "drupal/user_registrationpassword": {
                 "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-8.xalpha1-10.patch"
