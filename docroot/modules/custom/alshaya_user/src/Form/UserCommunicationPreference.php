@@ -119,11 +119,15 @@ class UserCommunicationPreference extends FormBase {
    *   The MobileNumber util service object.
    * @param object $account
    *   The user account object.
+   * @param int $format
+   *   The preferable mobile number format.
+   *
+   * @see \libphonenumber\PhoneNumberFormat
    *
    * @return string|null
    *   Return formatted mobile number or null if empty.
    */
-  public static function formatMobileNumber($mobileUtil, $account) {
+  public static function formatMobileNumber($mobileUtil, $account, $format = 1) {
     // Display mobile as communication preference if not empty.
     if (empty($account->field_mobile_number->getValue())) {
       return NULL;
@@ -133,7 +137,7 @@ class UserCommunicationPreference extends FormBase {
     // Get phonenumber object.
     $mobile_value = $mobileUtil->getMobileNumber($mobile_raw['value']);
 
-    return $mobileUtil->libUtil()->format($mobile_value, 1);
+    return $mobileUtil->libUtil()->format($mobile_value, $format);
   }
 
   /**
