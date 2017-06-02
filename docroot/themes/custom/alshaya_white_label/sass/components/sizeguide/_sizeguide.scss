@@ -18,7 +18,7 @@
   }
 
   @include breakpoint($desktop) {
-    padding: calc((100vh - 556px) / 2) calc((100vw - 1080px) / 2);
+    padding: calc((100vh - 556px) / 2) calc((100vw - 1026px) / 2);
   }
 
   .ui-dialog-titlebar {
@@ -36,7 +36,7 @@
 
   #drupal-modal {
     background: $white-five;
-    padding: 2em;
+    padding: 1.5em;
     overflow: hidden;
 
     @include breakpoint($tablet) {

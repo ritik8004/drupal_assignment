@@ -10,6 +10,14 @@
 }
 
 .acq-content-product {
+  @include if-ltr {
+    direction: ltr;
+  }
+
+  @include if-rtl {
+    direction: rtl;
+  }
+
   @include clearfix;
 
   @include breakpoint($tablet) {
@@ -118,7 +126,7 @@
       @include u-visibility(none);
     }
 
-    .throbber {
+    .ajax-progress-throbber {
       @include u-visibility(none);
     }
 
@@ -143,6 +151,34 @@
         display: inline;
         font-size: 35px;
         margin-#{$left}: 1px;
+      }
+
+      @include if-ltr {
+        @include icon(chevrondown, after);
+
+        &::after {
+          background-color: $whisper-dark;
+          height: 35px;
+          font-family: $arial;
+          color: $black;
+          display: inline;
+          font-size: 35px;
+          margin-#{$left}: 1px;
+        }
+      }
+
+      @include if-rtl {
+        @include icon(chevrondown, before);
+
+        &::before {
+          background-color: $whisper-dark;
+          height: 35px;
+          font-family: $arial;
+          color: $black;
+          display: inline;
+          font-size: 35px;
+          margin-#{$left}: 1px;
+        }
       }
     }
   }
@@ -174,7 +210,7 @@
 .description-wrapper {
   position: absolute;
   top: 0;
-  right: 0;
+  #{$right}: 0;
   height: 504px;
   border: 1px solid $marine-blue;
   padding: 20px;
@@ -195,7 +231,7 @@
 
     position: absolute;
     top: 0;
-    right: 0;
+    #{$right}: 0;
     height: 35px;
     width: 35px;
     font-size: 30px;
@@ -503,6 +539,8 @@
 }
 
 .select2Option {
+  text-align: $left;
+
   h4 {
     margin: 0;
     font-size: 11px;
@@ -511,7 +549,7 @@
   }
 
   .select-buttons {
-    padding-left: 0;
+    padding-#{$left}: 0;
     margin-bottom: 0;
     margin-top: 2px;
 
