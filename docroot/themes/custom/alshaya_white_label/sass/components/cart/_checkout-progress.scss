@@ -22,8 +22,8 @@
     }
 
     @include breakpoint($desktop) {
-      padding: 0.7rem 0 0;
-      padding-#{$left}: 1.425rem;
+      padding: 0.9rem 0 0;
+      padding-#{$left}: 1.6rem;
       margin-bottom: 1.2rem;
     }
   }
@@ -275,6 +275,10 @@
 
     @include breakpoint($only-tablet) {
       font-weight: normal;
+    }
+
+    .checkout-progress__step:last-child.-current {
+      color: $black-two;
     }
 
     &::after {
