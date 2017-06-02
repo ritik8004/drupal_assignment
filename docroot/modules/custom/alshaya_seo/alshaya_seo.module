@@ -132,18 +132,13 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
         $sku_entity = SKU::loadFromSku($sku_id);
         $product_title = "";
         $product_image = "";
-        $product_description = "";
+        $product_description = _alshaya_seo_get_node_meta_description();
         $final_price = "";
         $currency = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
 
         // If sku name is available.
         if ($sku_entity->get('name')) {
           $product_title = $sku_entity->get('name')->getString();
-        }
-
-        // If sku short description is available.
-        if ($sku_entity->get('attr_short_description')) {
-          $product_description = $sku_entity->get('attr_short_description')->getValue()[0]['value'];
         }
 
         // If final price is available.
@@ -180,4 +175,29 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
   }
 
   return $snippet;
+}
+
+/**
+ * Get the meta tag description.
+ *
+ * @return string
+ *   Meta tag description.
+ */
+function _alshaya_seo_get_node_meta_description() {
+  $meta_description = '';
+  // Get meta tag for the route.
+  $meta_tags = metatag_get_tags_from_route();
+  if (!empty($meta_tags)) {
+    $tags = $meta_tags['#attached']['html_head'];
+    if (!empty($tags)) {
+      foreach ($tags as $tag) {
+        // If meta description tag.
+        if ($tag[1] == 'description') {
+          $meta_description = $tag[0]['#attributes']['content'];
+        }
+      }
+    }
+  }
+
+  return $meta_description;
 }
