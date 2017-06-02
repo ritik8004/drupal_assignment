@@ -125,7 +125,7 @@
                 "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch"
             },
             "drupal/user_registrationpassword": {
-                "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-8.xalpha1-10.patch"
+                "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-13.patch"
             }
         },
         "installer-paths": {
