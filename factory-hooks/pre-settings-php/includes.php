@@ -41,13 +41,11 @@ switch ($env) {
     $_alshaya_acm_disable_stock_check = TRUE;
   case 'dev':
   case 'test':
-    $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.acm.acquia.io/';
-    $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.acm.acquia.io/';
+    $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
     break;
 
   default:
-    $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.alshaya.acm.acquia.io/';
-    $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.alshaya.acm.acquia.io/';
+    $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
     break;
 }
 
