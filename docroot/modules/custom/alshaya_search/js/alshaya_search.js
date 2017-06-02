@@ -84,7 +84,7 @@
       });
 
       // Show/Hide the slider on Mouse hover.
-      $('.alshaya_search_gallery').hover(
+      $('.c-products__item').hover(
         function() {
           $(this).find('.alshaya_search_slider').show();
         },
