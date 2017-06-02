@@ -133,7 +133,7 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
         $product_title = "";
         $product_image = "";
         $product_description = "";
-        $price = "";
+        $final_price = "";
         $currency = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
 
         // If sku name is available.
@@ -146,9 +146,9 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
           $product_description = $sku_entity->get('attr_short_description')->getValue()[0]['value'];
         }
 
-        // If sku price is available.
-        if ($sku_entity->get('price')) {
-          $price = $sku_entity->get('price')->getString();
+        // If final price is available.
+        if ($sku_entity->get('final_price')) {
+          $final_price = (float) $sku_entity->get('final_price')->getString();
         }
 
         // If sku image is available.
@@ -165,6 +165,7 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
         $snippet['name'] = $product_title;
         $snippet['description'] = $product_description;
         $snippet['image'] = $product_image;
+        // @Todo: Change this once brand field is available.
         $snippet['brand'] = [
           '@type' => 'Thing',
           'name' => \Drupal::config('system.site')->get('name'),
@@ -172,7 +173,7 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
         $snippet['offers'] = [
           '@type' => "Offer",
           'priceCurrency' => $currency,
-          'price' => $price,
+          'price' => $final_price,
         ];
       }
     }
