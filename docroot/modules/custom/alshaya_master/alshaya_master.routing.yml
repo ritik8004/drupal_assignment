@@ -18,3 +18,10 @@ alshaya_master.404_maintenance_setting:
     _form: '\Drupal\alshaya_master\Form\Alshaya404MaintenanceSettings'
   requirements:
     _permission: 'administer content'
+alshaya_master.sitemap:
+  path: '/sitemap'
+  defaults:
+    _controller: '\Drupal\alshaya_master\Controller\HomeController::siteMap'
+    _title: 'site map'
+  requirements:
+    _access: 'TRUE'

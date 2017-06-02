@@ -32,4 +32,17 @@ class HomeController extends ControllerBase {
     return $build;
   }
 
+  /**
+   * Controller for the site map.
+   */
+  public function siteMap() {
+    $data = $data = _alshaya_custom_get_category_term_data(0, 1, FALSE);
+    $build = [
+      '#theme' => 'alshaya_sitemap',
+      '#term_tree' => $data,
+    ];
+
+    return $build;
+  }
+
 }

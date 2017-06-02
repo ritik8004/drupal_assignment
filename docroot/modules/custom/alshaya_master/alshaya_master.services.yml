@@ -1,0 +1,5 @@
+services:
+ alshaya_master.sitemap_breadcrumb:
+   class: Drupal\alshaya_master\Breadcrumb\AlshayaSiteMapBreadcrumb
+   tags:
+    - { name: breadcrumb_builder, priority: 100 }
