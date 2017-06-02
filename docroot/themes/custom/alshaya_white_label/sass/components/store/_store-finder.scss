@@ -97,7 +97,7 @@
       top: 0;
       height: 2.1875rem;
       padding-#{$right}: 1rem;
-      padding-top: 0.45rem;
+      padding-top: 0.3rem;
       border: 1px solid $greyish;
       border-#{$left}: 0;
       z-index: 1;
@@ -188,6 +188,9 @@
       background-repeat: no-repeat;
       text-indent: -9999px;
       width: 20px;
+      height: 25px;
+      padding: 0;
+      background-size: contain;
     }
   }
 
@@ -216,35 +219,54 @@
     margin-#{$right}: 0.4rem;
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 0.1875rem;
+      margin-#{$right}: 0.3875rem;
     }
   }
 
-  .map-view-link::before {
-    background: url('../imgs/icons/map.svg') no-repeat;
-    width: 1.625rem;
-    height: 1.4375rem;
-    margin-#{$right}: 0.6rem;
-    margin-#{$left}: 0.3125rem;
+  .map-view-link {
+    &::before {
+      background: url('../imgs/icons/map.svg') no-repeat;
+      width: 1.625rem;
+      height: 1.4375rem;
+      margin-#{$right}: 0.6rem;
+      margin-#{$left}: 0.3125rem;
 
-    @include breakpoint($desktop) {
-      margin-#{$left}: 0.1875rem;
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0.1875rem;
+      }
+    }
+
+    &:hover::before,
+    &.active::before {
+      background: url('../imgs/icons/map-active.svg') no-repeat;
     }
   }
 
-  .list-view-link::before {
-    background: url('../imgs/icons/list.svg') no-repeat;
-    width: 1.625rem;
-    height: 1.125rem;
-    vertical-align: top;
+  .list-view-link {
+    &::before {
+      background: url('../imgs/icons/list.svg') no-repeat;
+      width: 1.625rem;
+      height: 0.8rem;
+      vertical-align: middle;
 
-    @include breakpoint($desktop) {
-      margin-#{$left}: 0.625rem;
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 0.7rem;
+        margin-#{$left}: -0.25rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0.625rem;
+      }
+    }
+
+    &:hover::before,
+    &.active::before {
+      background: url('../imgs/icons/list-active.svg') no-repeat;
     }
   }
 
   .label--location {
-    padding-#{$left}: 1.5rem;
+    padding-#{$left}: 1.3rem;
     padding-#{$right}: 1rem;
 
     @include breakpoint($desktop) {
@@ -282,7 +304,6 @@
   }
 
   .active {
-    font-weight: bold;
     color: $marine-blue-two;
   }
 
@@ -651,7 +672,7 @@
       @include breakpoint($desktop) {
         max-height: 51rem;
         border-#{$right}: 1px solid $white;
-        padding-right: 1%;
+        padding-#{$right}: 1%;
       }
 
       @include breakpoint($only-tablet) {
@@ -859,6 +880,18 @@
     }
   }
 
+  .hours--wrapper {
+    .open--hours {
+      display: block;
+    }
+
+    .hours--label {
+      @include icon(chevronup, after) {
+        color: $marine-blue-two;
+      }
+    }
+  }
+
   .map--store {
     float: $left;
     width: 61.5%;
@@ -877,18 +910,26 @@
 .path--store-finder,
 .nodetype--store {
   .hours--wrapper {
-    .hours--label::after {
-      transform: rotate(90deg);
-    }
+    .hours--label.open {
+      @include icon(chevrondown, after) {
+        color: $marine-blue-two;
+      }
 
-    .hours--label.open::after {
-      transform: rotate(0deg) !important;
+      &::after {
+        transform: none;
+      }
     }
 
     .open--hours {
       @include breakpoint($only-mobile) {
         margin-top: 0.9rem;
       }
+    }
+  }
+
+  .hours--label.open {
+    + .open--hours {
+      display: block;
     }
   }
 
@@ -921,18 +962,28 @@
     }
   }
 
-  .hours--label::after {
-    background: url('../imgs/icons/ic-chevron-70.svg');
-    width: 7px;
-    height: 16px;
+  .hours--label {
+    @include icon(chevron#{$right}, after) {
+      position: absolute;
+      display: inline-block;
+      color: $cerulean-two;
+      font-size: 1.875rem;
+      top: -0.5rem;
+      #{$right}: -0.7rem;
+
+      @include breakpoint($tablet) {
+        #{$right}: -0.4375rem;
+      }
+    }
   }
 
   .view-on--map::after {
-    background: url('../imgs/icons/map.png');
-    width: 18px;
+    background: url('../imgs/icons/map.png') no-repeat;
+    width: 21px;
     height: 17px;
     top: 1rem;
     #{$right}: 0.8rem;
+    background-size: cover;
   }
 
   .get--directions div::after {
@@ -960,14 +1011,18 @@
   .get--directions {
     color: $cerulean-two;
     cursor: pointer;
-    margin-top: 0.5625rem;
   }
 
-  .hours--label::after {
-    #{$right}: 7px;
+  .hours--wrapper,
+  .view-on--map,
+  .get--directions {
+    padding: 1rem;
+    padding-#{$left}: 0;
+    padding-top: 0;
   }
 
   .open--hours {
     line-height: 1.57;
+    margin-top: 0.9rem;
   }
 }
