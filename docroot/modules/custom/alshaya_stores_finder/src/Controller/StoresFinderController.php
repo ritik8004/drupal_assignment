@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_stores_finder\Controller;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\CssCommand;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -40,10 +42,13 @@ class StoresFinderController extends ControllerBase {
    *   Api wrapper.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity repository.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
-  public function __construct(AlshayaApiWrapper $api_wrapper, EntityRepositoryInterface $entity_repository) {
+  public function __construct(AlshayaApiWrapper $api_wrapper, EntityRepositoryInterface $entity_repository, ConfigFactoryInterface $config_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->entityRepository = $entity_repository;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -52,7 +57,8 @@ class StoresFinderController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_api.api'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('config.factory')
     );
   }
 
@@ -176,11 +182,43 @@ class StoresFinderController extends ControllerBase {
    *   Ajax response.
    */
   public function getProductStores($sku, $lat, $lon) {
-    $stores = $this->apiWrapper->getProductStores($sku, $lat, $lon);
-
-    ndebug($stores);
-
     $response = new AjaxResponse();
+
+    if ($sku_entity = SKU::loadFromSku($sku)) {
+      \Drupal::moduleHandler()->loadInclude('alshaya_stores_finder', 'inc', 'alshaya_stores_finder.utility');
+
+      if ($stores = alshaya_stores_finder_get_product_stores($sku, $lat, $lon)) {
+        $top_three = [];
+        $top_three['#theme'] = 'pdp_click_collect_top_stores';
+        $top_three['#stores'] = array_slice($stores, 0, 3);
+        $top_three['#has_more'] = count($stores) > 3 ? t('Other stores nearby') : '';
+
+        $response->addCommand(new HtmlCommand('.click-collect-top-stores', render($top_three)));
+        $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'hide'));
+
+        if ($top_three['#has_more']) {
+          $config = $this->configFactory->get('alshaya_stores_finder.settings');
+          $all_stores = [];
+          $all_stores['#theme'] = 'pdp_click_collect_all_stores';
+          $all_stores['#stores'] = $stores;
+          $all_stores['#title'] = $config->get('pdp_click_collect_title');
+          $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
+          $response->addCommand(new HtmlCommand('.click-collect-all-stores', render($all_stores)));
+        }
+        else {
+          $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
+          $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
+        }
+      }
+      else {
+        $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
+        $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'show'));
+
+        $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
+        $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
+      }
+    }
+
     return $response;
   }
 

@@ -1,0 +1,17 @@
+<span class="close-inline-modal">close</span>
+
+<div class="all-stores-info">
+  {{ title }}
+  <span class="subtitle">{{ subtitle }}</span>
+</div>
+
+<ul>
+  {% for store in stores %}
+    <li>
+      <div class="store-low-stock">{{ store.low_stock_text }}</div>
+      <div class="store-name">{{ store.name }}</div>
+      <div class="store-address">{{ store.address }}</div>
+      <div class="store-delivery-time">{{ store.delivery_time  }}</div>
+    </li>
+  {% endfor %}
+</ul>

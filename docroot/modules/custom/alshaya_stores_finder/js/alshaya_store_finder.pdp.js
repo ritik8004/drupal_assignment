@@ -32,6 +32,18 @@
         catch (e) {
         }
       });
+
+      $('.other-stores-link').once('bind-events').each(function () {
+        $(this).bind('click', function () {
+          $('.click-collect-all-stores').slideToggle();
+        });
+      });
+
+      $('.close-inline-modal').once('bind-events').each(function () {
+        $(this).bind('click', function () {
+          $(this).parents('.inline-modal-wrapper:first').slideToggle();
+        });
+      });
     }
   };
 
@@ -51,9 +63,7 @@
 
       $.ajax({
         url: Drupal.url('stores/product/' + sku + '/' + asf_coords.latitude + '/' + asf_coords.longitude),
-        success: function(data) {
-          var response = JSON.parse(data);
-
+        success: function(response) {
           // Create a Drupal.Ajax object without associating an element, a
           // progress indicator or a URL.
           var ajax_object = Drupal.ajax({
