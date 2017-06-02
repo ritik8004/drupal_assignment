@@ -431,7 +431,12 @@ header,
   z-index: 99;
   background: $white-five;
   border: 1px solid $white;
-  border-top-width: 0;
+
+  @include breakpoint($only-mobile) {
+    z-index: 99999;
+    position: fixed !important;
+    top: 130px !important;
+  }
 
   li.ui-menu-item {
     display: inherit;
