@@ -124,7 +124,7 @@
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch"
             },
             "drupal/user_registrationpassword": {
-                "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-8.xalpha1-10.patch"
+                "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-13.patch"
             }
         },
         "installer-paths": {

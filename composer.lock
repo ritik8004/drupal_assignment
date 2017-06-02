@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab0d6bf8a684a6089f721dad88351252",
+    "content-hash": "5938fe3f76cb28577479fc4d253f5691",
     "packages": [
         {
             "name": "acquia/blt",
@@ -6432,7 +6432,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/user_registrationpassword-8.x-1.0-alpha1.zip",
-                "reference": "8.x-1.0-alpha1",
+                "reference": null,
                 "shasum": "0ce78e541ea3867d6faf4c8bfbc572429bb28446"
             },
             "require": {
@@ -6448,7 +6448,7 @@
                     "datestamp": "1472948339"
                 },
                 "patches_applied": {
-                    "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-8.xalpha1-10.patch"
+                    "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-13.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
