@@ -5,7 +5,7 @@
 // Layout of the detail page
 .nodetype--acq_product {
   .region__content {
-    margin: 20px 0;
+    margin: 1.25rem 0;
   }
 }
 
@@ -81,19 +81,19 @@
     h1,
     h1 span {
       font-family: $alshaya-thin;
-      font-size: 18px;
+      font-size: 1.125rem;
       font-weight: 100;
     }
 
     .price {
-      font-size: 15px;
+      font-size: 0.9375rem;
       color: $scarlet;
     }
 
     .content--item-code {
-      font-size: 11px;
+      font-size: 0.6875rem;
       color: $brownish-grey;
-      padding-bottom: 15px;
+      padding-bottom: 1rem;
     }
   }
 }
@@ -116,7 +116,7 @@
     select {
       border: none;
       border-radius: 0;
-      padding: 5px 10px;
+      padding: 0.3125rem 0.625rem;
       appearance: none;
     }
   }
@@ -133,9 +133,9 @@
     @include breakpoint($only-tablet) {
       select.form-select {
         background-color: $whisper-dark;
-        height: 35px;
+        height: 2.188rem;
         font-family: $arial;
-        font-size: 12px;
+        font-size: 0.75rem;
         color: $black;
         display: inline-block;
         float: $left;
@@ -145,11 +145,11 @@
 
       &::after {
         background-color: $whisper-dark;
-        height: 35px;
+        height: 2.188rem;
         font-family: $arial;
         color: $black;
         display: inline;
-        font-size: 35px;
+        font-size: 2.188rem;
         margin-#{$left}: 1px;
       }
 
@@ -158,12 +158,12 @@
 
         &::after {
           background-color: $whisper-dark;
-          height: 35px;
+          height: 2.188rem;
           font-family: $arial;
           color: $black;
           display: inline;
-          font-size: 35px;
-          margin-#{$left}: 1px;
+          font-size: 2.188rem;
+          margin-#{$left}: 0.0625rem;
         }
       }
 
@@ -172,12 +172,12 @@
 
         &::before {
           background-color: $whisper-dark;
-          height: 35px;
+          height: 2.188rem;
           font-family: $arial;
           color: $black;
           display: inline;
-          font-size: 35px;
-          margin-#{$left}: 1px;
+          font-size: 2.188rem;
+          margin-#{$left}: 0.0625rem;
         }
       }
     }
@@ -189,19 +189,19 @@
 
   .form-item-quantity {
     float: $left;
-    width: 150px;
+    width: 9.375rem;
 
     label {
       float: $left;
-      padding: 5px 20px 5px 0;
+      padding: 0.3125rem 1.25rem 0.3125rem 0;
     }
 
     .edit-quantity {
       border: none;
       border-radius: 0;
-      padding: 5px 10px;
+      padding: 0.3125rem 0.625rem;
       appearance: none;
-      margin: 0 5px;
+      margin: 0 0.3125rem;
       float: $left;
     }
   }
@@ -211,9 +211,9 @@
   position: absolute;
   top: 0;
   #{$right}: 0;
-  height: 504px;
+  height: 31.5rem;
   border: 1px solid $marine-blue;
-  padding: 20px;
+  padding: 1.25rem;
   background: $white-five;
   overflow: hidden;
   width: 100%;
@@ -232,8 +232,8 @@
     position: absolute;
     top: 0;
     #{$right}: 0;
-    height: 35px;
-    width: 35px;
+    height: 2.188rem;
+    width: 2.188rem;
     font-size: 30px;
     text-align: center;
     color: $white-two;
@@ -242,7 +242,7 @@
 
   .field {
     &__label {
-      font-size: 14px;
+      font-size: 0.875rem;
       font-family: $alshaya-bold;
       font-weight: normal;
       color: $marine-blue;
@@ -250,7 +250,7 @@
     }
 
     &__content {
-      font-size: 12px;
+      font-size: 0.75rem;
       line-height: 1.5;
       overflow: scroll;
       height: 430px;
@@ -259,7 +259,7 @@
 
   a {
     font-family: $arial;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: bold;
     line-height: 1.83;
     color: $windows-blue;
@@ -274,7 +274,7 @@
     font-family: $alshaya-bold;
     font-weight: normal;
     color: $marine-blue;
-    font-size: 12px;
+    font-size: 0.75rem;
     float: $left;
     margin-top: 0;
     margin-bottom: 0;
@@ -283,7 +283,7 @@
   .description-section,
   .address {
     border-top: 1px solid $white;
-    padding: 10px 0;
+    padding: 0.625rem 0;
     line-height: 1.5;
 
     @include clearfix;
@@ -291,7 +291,7 @@
 
   .low-stock-indicator {
     font-family: $arial;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: bold;
     color: $pumpkin-orange;
     float: $right;
@@ -299,28 +299,28 @@
 
   .text {
     clear: both;
-    padding-top: 15px;
+    padding-top: 0.9375rem;
   }
 }
 
 .short-description-wrapper {
   .field {
     &__label {
-      font-size: 14px;
+      font-size: 0.875rem;
       font-family: $alshaya-bold;
       font-weight: normal;
       color: $marine-blue;
     }
 
     &__content {
-      font-size: 12px;
+      font-size: 0.75rem;
       line-height: 1.5;
     }
   }
 
   .read-more-description-link {
     font-family: $arial;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: bold;
     line-height: 1.83;
     color: $windows-blue;
@@ -331,7 +331,7 @@
 .delivery-options-wrapper {
   .field {
     &__label {
-      font-size: 14px;
+      font-size: 0.875rem;
       font-family: $alshaya-bold;
       font-weight: normal;
       color: $marine-blue;
@@ -345,7 +345,7 @@
 
     &__title {
       font-family: $arial;
-      font-size: 14px;
+      font-size: 0.875rem;
       color: $black;
       line-height: 2;
       text-transform: capitalize;
@@ -359,7 +359,7 @@
         @include u-visibility(block);
 
         font-family: $arial;
-        font-size: 11px;
+        font-size: 0.6875rem;
         color: $greyish;
         line-height: 1;
       }
@@ -372,7 +372,7 @@
 
           &::before {
             color: $black;
-            font-size: 22px;
+            font-size: 1.375rem;
             line-height: 1;
             vertical-align: bottom;
           }
@@ -385,7 +385,7 @@
 
           &::before {
             color: $black;
-            font-size: 22px;
+            font-size: 1.375rem;
             line-height: 1;
             vertical-align: bottom;
           }
@@ -395,7 +395,7 @@
       .delivery-option {
         &-content {
           font-family: $arial;
-          font-size: 11px;
+          font-size: 0.6875rem;
           line-height: 1.64;
           color: $greyish;
 
@@ -416,12 +416,12 @@
           line-height: 1.5;
 
           strong {
-            font-size: 12px;
+            font-size: 0.75rem;
             color: $black;
           }
 
           span {
-            font-size: 11px;
+            font-size: 0.6875rem;
             color: $brownish-grey;
           }
         }
@@ -437,10 +437,10 @@
 
   &-content {
     font-family: $arial;
-    font-size: 12px;
+    font-size: 0.75rem;
     line-height: 2;
     color: $brownish-grey;
-    padding-bottom: 20px;
+    padding-bottom: 1.25rem;
 
     @include clearfix;
 
@@ -457,8 +457,8 @@
     input[type="text"] {
       float: $left;
       width: 162px;
-      height: 35px;
-      padding: 5px;
+      height: 2.188rem;
+      padding: 0.3125rem;
       border: solid 1px $white;
     }
 
@@ -491,7 +491,7 @@
       &__label {
         @include u-visibility(inline);
 
-        font-size: 14px;
+        font-size: 0.875rem;
         font-family: $alshaya-bold;
         font-weight: normal;
         color: $peacock-blue;
@@ -505,7 +505,7 @@
 
     h2 {
       font-family: $alshaya-thin;
-      font-size: 18px;
+      font-size: 1.125rem;
       font-weight: 100;
     }
 
@@ -520,7 +520,7 @@
       button[type="submit"] {
         font-family: $arial;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 0.75rem;
         background: $pumpkin-orange;
         border-radius: 0;
         color: $white-five;
@@ -543,9 +543,8 @@
 
   h4 {
     margin: 0;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 100;
-    text-transform: capitalize;
   }
 
   .select-buttons {
@@ -562,11 +561,11 @@
       span {
         @include u-visibility(block);
 
-        margin: 5px 8px 5px 0;
+        margin: 0.3125rem 8px 0.3125rem 0;
         border: 1px solid $black;
         text-align: center;
-        padding: 12px;
-        font-size: 10px;
+        padding: 0.75rem;
+        font-size: 0.625rem;
 
         &.picked {
           color: $white;

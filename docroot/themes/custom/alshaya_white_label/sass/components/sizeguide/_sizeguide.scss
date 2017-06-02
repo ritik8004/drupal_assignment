@@ -14,11 +14,11 @@
   overflow: hidden;
 
   @include breakpoint($tablet) {
-    padding: calc((100vh - 576px) / 2) calc((100vw - 768px) / 2);
+    padding: calc((100vh - 36rem) / 2) calc((100vw - 48rem) / 2);
   }
 
   @include breakpoint($desktop) {
-    padding: calc((100vh - 556px) / 2) calc((100vw - 1026px) / 2);
+    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2);
   }
 
   .ui-dialog-titlebar {
@@ -40,11 +40,11 @@
     overflow: hidden;
 
     @include breakpoint($tablet) {
-      height: 576px !important;
+      height: 36rem !important;
     }
 
     @include breakpoint($desktop) {
-      height: 556px !important;
+      height: 34.75rem !important;
     }
   }
 }
