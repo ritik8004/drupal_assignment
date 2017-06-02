@@ -3,6 +3,14 @@
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
       $('#edit-sort-bef-combine option[value="search_api_relevance ASC"]').remove();
+      // Do not allow search form submit on empty search text.
+      var selectors = 'form[data-bef-auto-submit-full-form], [data-bef-auto-submit-full-form] form, [data-bef-auto-submit]';
+
+      $(selectors, context).find('[data-bef-auto-submit-click]').click(function() {
+        if($.trim($(selectors, context).find('input[name="keywords"]').val()) === "undefined") {
+          return false;
+        }
+      });
     }
   };
 

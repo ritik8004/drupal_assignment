@@ -30,6 +30,7 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
  */
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-search-page') {
+    $form['#attached']['library'][] = 'alshaya_search/alshaya_search';
     $form['keywords']['#attributes'] = ['data-bef-auto-submit-exclude' => ''];
   }
 }
