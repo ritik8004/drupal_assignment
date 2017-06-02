@@ -121,7 +121,7 @@
           .lSPrev {
             @include icon(chevronleft);
 
-            left:0.3125rem;
+            left: 0.3125rem;
             top: 1.25rem;
             background-color: $white-five;
             text-align: center;
@@ -166,7 +166,7 @@
             z-index: 0;
 
             &::before {
-              padding-top:0.3125rem;
+              padding-top: 0.3125rem;
 
               @include u-visibility(block);
             }
