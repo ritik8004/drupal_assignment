@@ -56,7 +56,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *
    * @var array
    */
-  protected $media_data = [];
+  protected $mediaData = [];
 
   /**
    * {@inheritdoc}
@@ -95,8 +95,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Array of media files.
    */
   public function getMedia($reset = FALSE) {
-    if (!$reset && !empty($this->media_data)) {
-      return $this->media_data;
+    if (!$reset && !empty($this->mediaData)) {
+      return $this->mediaData;
     }
 
     if ($media_data = $this->get('media')->getString()) {
@@ -133,7 +133,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           }
         }
 
-        $this->media_data[$data['position']] = $data;
+        $this->mediaData[$data['position']] = $data;
       }
 
       if ($update_sku) {
@@ -146,9 +146,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
 
     // Sort them by position again to ensure it works everytime.
-    ksort($this->media_data);
+    ksort($this->mediaData);
 
-    return $this->media_data;
+    return $this->mediaData;
   }
 
   /**
@@ -542,7 +542,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
-
 
     $fields['media'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Media'))

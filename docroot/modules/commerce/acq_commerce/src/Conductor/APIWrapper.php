@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 
 /**
@@ -16,11 +17,14 @@ class APIWrapper {
    *
    * @param ClientFactory $client_factory
    *   ClientFactory object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   ConfigFactoryInterface object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
-   *   Object of LoggerFactory.
+   *   LoggerChannelFactory object.
    */
-  public function __construct(ClientFactory $client_factory, LoggerChannelFactory $logger_factory) {
+  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LoggerChannelFactory $logger_factory) {
     $this->clientFactory = $client_factory;
+    $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_sku');
   }
 
@@ -32,9 +36,12 @@ class APIWrapper {
    *
    * @return object
    *   Contains the new cart object.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function createCart($customer_id = NULL) {
-    $endpoint = 'cart/create';
+    $endpoint = $this->apiVersion . '/agent/cart/create';
 
     $doReq = function ($client, $opt) use ($endpoint, $customer_id) {
       if (!empty($customer_id)) {
@@ -67,7 +74,7 @@ class APIWrapper {
    * @throws \Exception
    */
   public function skuStockCheck($sku) {
-    $endpoint = "stock/$sku";
+    $endpoint = $this->apiVersion . "/agent/stock/$sku";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -113,9 +120,12 @@ class APIWrapper {
    *
    * @return array
    *   Contains the retrieved cart array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getCart($cart_id) {
-    $endpoint = "cart/$cart_id";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -143,9 +153,12 @@ class APIWrapper {
    *
    * @return array
    *   Full updated cart after submission.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function updateCart($cart_id, $cart) {
-    $endpoint = "cart/$cart_id";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id";
 
     $doReq = function ($client, $opt) use ($endpoint, $cart) {
       $opt['json'] = $cart;
@@ -173,9 +186,12 @@ class APIWrapper {
    *
    * @return array
    *   Result returned back from the conductor.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function placeOrder($cart_id) {
-    $endpoint = "cart/$cart_id/place";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/place";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->post($endpoint, $opt));
@@ -201,9 +217,12 @@ class APIWrapper {
    *
    * @return array
    *   If successful, returns a array of shipping methods.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getShippingMethods($cart_id) {
-    $endpoint = "cart/$cart_id/shipping";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/shipping";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -231,9 +250,12 @@ class APIWrapper {
    *
    * @return array
    *   Array of estimates and methods.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getShippingEstimates($cart_id, array $address) {
-    $endpoint = "cart/$cart_id/estimate";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/estimate";
 
     $doReq = function ($client, $opt) use ($endpoint, $address) {
       $opt['json'] = $address;
@@ -261,9 +283,12 @@ class APIWrapper {
    *
    * @return array
    *   Array of methods.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getPaymentMethods($cart_id) {
-    $endpoint = "cart/$cart_id/payments";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/payments";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -327,9 +352,12 @@ class APIWrapper {
    *
    * @return array
    *   New customer array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function updateCustomer($customer_id, $first_name, $last_name, $email, $password = NULL) {
-    $endpoint = "customer";
+    $endpoint = $this->apiVersion . "/agent/customer";
 
     $doReq = function ($client, $opt) use ($endpoint, $customer_id, $first_name, $last_name, $email, $password) {
       if (!empty($customer_id)) {
@@ -374,7 +402,7 @@ class APIWrapper {
    *   New customer array.
    */
   public function authenticateCustomer($email, $password) {
-    $endpoint = 'customer/' . $email;
+    $endpoint = $this->apiVersion . "/agent/customer/" . $email;
 
     $doReq = function ($client, $opt) use ($endpoint, $password) {
       $opt['form_params']['password'] = $password;
@@ -402,9 +430,12 @@ class APIWrapper {
    *
    * @return array
    *   Customer array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getCustomer($email) {
-    $endpoint = "customer/$email";
+    $endpoint = $this->apiVersion . "/agent/customer/$email";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -430,9 +461,12 @@ class APIWrapper {
    *
    * @return array
    *   Orders array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getCustomerOrders($email) {
-    $endpoint = "customer/orders/$email";
+    $endpoint = $this->apiVersion . "/agent/customer/orders/$email";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -455,9 +489,12 @@ class APIWrapper {
    *
    * @return array
    *   Array of product categories.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getCategories() {
-    $endpoint = "categories";
+    $endpoint = $this->apiVersion . "/agent/categories";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -482,7 +519,7 @@ class APIWrapper {
    *   Array of promotions.
    */
   public function getPromotions() {
-    $endpoint = 'promotions/category';
+    $endpoint = $this->apiVersion . "/agent/promotions/category";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -508,9 +545,12 @@ class APIWrapper {
    *
    * @return array
    *   Array of products.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getProductsByUpdatedDate(\DateTime $date_time) {
-    $endpoint = "products";
+    $endpoint = $this->apiVersion . "/agent/products";
 
     $doReq = function ($client, $opt) use ($endpoint, $date_time) {
       $opt['query']['updated'] = $date_time->format('Y-m-d H:i:s');
@@ -547,9 +587,12 @@ class APIWrapper {
    *
    * @return string
    *   Payment token.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getPaymentToken($method) {
-    $endpoint = "cart/token/$method";
+    $endpoint = $this->apiVersion . "/agent/cart/token/$method";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -574,7 +617,7 @@ class APIWrapper {
    *   E-Mail to subscribe.
    */
   public function subscribeNewsletter($email) {
-    $endpoint = 'newsletter/subscribe';
+    $endpoint = $this->apiVersion . "/agent/newsletter/subscribe";
 
     $doReq = function ($client, $opt) use ($endpoint, $email) {
       $opt['form_params']['email'] = $email;
@@ -595,9 +638,12 @@ class APIWrapper {
    *
    * @return array
    *   Test request result.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function systemWatchdog() {
-    $endpoint = "system/wd";
+    $endpoint = $this->apiVersion . "/agent/system/wd";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
