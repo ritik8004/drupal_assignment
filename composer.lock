@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "15adde78509b28f859cd883bdaf437f8",
+    "content-hash": "93e58430eff36125d57ea9addf749c95",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2187,7 +2187,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/better_exposed_filters",
-                "reference": "0d8bc3fdd87ef41cb095cd7cb742f374213c4efb"
+                "reference": "d2de2d079c059017483410da84ca7c802177d7b3"
             },
             "require": {
                 "drupal/core": "*"
@@ -2198,8 +2198,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha2+19-dev",
-                    "datestamp": "1495474984"
+                    "version": "8.x-3.0-alpha2+20-dev",
+                    "datestamp": "1495477983"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2217,7 +2217,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-05-22 18:30:20"
+            "time": "2017-06-01 19:19:16"
         },
         {
             "name": "drupal/block_field",
@@ -6417,7 +6417,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/user_registrationpassword-8.x-1.0-alpha1.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha1",
                 "shasum": "0ce78e541ea3867d6faf4c8bfbc572429bb28446"
             },
             "require": {
