@@ -104,17 +104,60 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    * {@inheritdoc}
    */
   public function cartName($sku, array $cart) {
+    // For all configurable products we will have sku of simple variant only
+    // in cart so we add a check if parent is available, process cartName of
+    // that.
+    if ($parent_sku = $this->getParentSku($sku)) {
+      $plugin_manager = \Drupal::service('plugin.manager.sku');
+      $plugin = $plugin_manager->pluginInstanceFromType($parent_sku->bundle());
+
+      $label = $plugin->cartName($sku, $cart);
+    }
+    else {
+      $label = $sku->label();
+    }
+
     $display_node = $this->getDisplayNode($sku);
     $url = $display_node->toUrl();
-    $link = Link::fromTextAndUrl($sku->label(), $url);
+    $link = Link::fromTextAndUrl($label, $url);
     $renderArray = $link->toRenderable();
     return render($renderArray);
+  }
+
+  /**
+   * Get parent of current product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Current product.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU|null
+   *   Parent product or null if not found.
+   */
+  public function getParentSku(SKU $sku) {
+    $query = \Drupal::database()->select('acq_sku', 'acq_sku');
+    $query->addField('acq_sku', 'sku');
+    $query->join(
+      'acq_sku__field_configured_skus',
+      'child_sku', 'acq_sku.id = child_sku.entity_id'
+    );
+    $query->condition("child_sku.field_configured_skus_value", $sku->getSku());
+    $parent_sku = $query->execute()->fetchField();
+
+    if (empty($parent_sku)) {
+      return NULL;
+    }
+
+    return SKU::loadFromSku($parent_sku);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getDisplayNode(SKU $sku) {
+    if ($parent_sku = $this->getParentSku($sku)) {
+      $sku = $parent_sku;
+    }
+
     $query = \Drupal::entityQuery('node')
       ->condition('type', 'acq_product')
       ->condition('field_skus', $sku->getSku())
