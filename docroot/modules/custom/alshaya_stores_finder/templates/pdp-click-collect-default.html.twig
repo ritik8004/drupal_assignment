@@ -5,9 +5,20 @@
     <span class="subtitle">{{ subtitle }}</span>
   </h3>
   <div class="c-accordion_content">
-    <div class="click-collect-content">
+    {% if type == 'configurable' %}
+      <div class="click-collect-empty-selection">
+        <div class="text">
+          {{ help_text|raw }}
+          {{ select_option_text|raw }}
+        </div>
+      </div>
+      <div class="click-collect-form" style="display: none;">
+    {% else %}
+      <div class="click-collect-form">
+    {% endif %}
       <div class="text">
         {{ help_text|raw }}
+        <p>{{ subtitle }}</p>
       </div>
 
       <form class="search-store">
@@ -16,5 +27,9 @@
         <input type="button" name="cc-search-store" value="{{ 'Search Stores'|t }}">
       </form>
     </div>
+
+    <div class="click-collect-top-stores"></div>
   </div>
 </div>
+
+<div class="click-collect-all-stores inline-modal-wrapper" style="display: none;"></div>

@@ -1,16 +1,11 @@
 title: 'Home Delivery'
 subtitle: 'For orders over KWD99'
 title_price: 0
-options:
-  1:
-    icon_class: 'standard-delivery-icon'
-    title: 'Standard Delivery'
-    subtitle: 'within 4 working days'
-    price_options:
-      1:
-        title: 'Orders over KWD 1234'
-        price: 0
-      2:
-        title: 'Orders under KWD 1234'
-        price: 123.1234
+options_standard_icon_class: 'standard-delivery-icon'
+options_standard_title: 'Standard Delivery'
+options_standard_subtitle: 'within 4 working days'
+options_standard_price_options_one_title: 'Orders over KWD 1234'
+options_standard_price_options_one_price: 0
+options_standard_price_options_two_title: 'Orders under KWD 1234'
+options_standard_price_options_two_price: 123.1234
 langcode: en

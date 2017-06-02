@@ -168,7 +168,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ],
       ];
       $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price dark']];
-      $form['cart'][$id]['delivery_options']['#wrapper_attributes'] = ['class' => ['delivery-option']];
 
       // If there is at least one item out of scope, show the error.
       $out_of_stock_message = '';

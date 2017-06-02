@@ -1,0 +1,17 @@
+<ul>
+  {% for store in stores %}
+    <li>
+      <div class="store-sequence">{{ store.sequence }}</div>
+      <div class="store-name">{{ store.name }}</div>
+      <div class="store-address">{{ store.address }}</div>
+      <div class="store-delivery-time">{{ store.delivery_time  }}</div>
+      <div class="store-low-stock">{{ store.low_stock_text }}</div>
+    </li>
+  {% endfor %}
+</ul>
+
+{% if has_more %}
+  <div class="other-stores-link">
+    {{ has_more }}
+  </div>
+{% endif %}

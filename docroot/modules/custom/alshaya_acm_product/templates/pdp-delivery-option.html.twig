@@ -5,17 +5,21 @@
     <span class="subtitle">{{ subtitle }}</span>
   </h3>
   <div class="c-accordion_content">
-    {% for option in options %}
-      <div class="delivery-option-content">
-        <div class="delivery-option-title {{ option.icon_class }}">
-          <strong>{{ option.title }} </strong>
-          <span>{{ option.subtitle }}</span></div>
+    <div class="delivery-option-content">
+      <div class="delivery-option-title {{ options_standard_icon_class }}">
+        <strong>{{ options_standard_title }} </strong>
+        <span>{{ options_standard_subtitle }}</span></div>
+
         <ul>
-          {% for price_option in option.price_options %}
-            <li>{{ price_option.title }} <span>{{ price_option.price }}</span></li>
-          {% endfor %}
+          <li>
+            {{ options_standard_price_options_one_title }}
+            <span>{{ options_standard_price_options_one_price }}</span>
+          </li>
+          <li>
+            {{ options_standard_price_options_two_title }}
+            <span>{{ options_standard_price_options_two_price }}</span>
+          </li>
         </ul>
-      </div>
-    {% endfor %}
+    </div>
   </div>
 </div>

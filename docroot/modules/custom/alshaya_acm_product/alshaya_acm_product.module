@@ -34,6 +34,15 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['basket_delivery_option'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'title' => NULL,
+      'tooltip' => NULL,
+      'type' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -310,28 +319,31 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
   // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
-  // Get cart items by sku.
-  $cart_item = alshaya_acm_get_cart_items_by_sku();
+  $config = \Drupal::config('alshaya_acm_product.basket_delivery');
 
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
+      $home_delivery = [];
+      $home_delivery['#theme'] = 'basket_delivery_option';
+      $home_delivery['#title'] = $config->get('home_delivery_title');
+      $home_delivery['#tooltip'] = $config->get('home_delivery_tooltip');
+      $home_delivery['#type'] = alshaya_acm_product_available_home_delivery($id) ? 'home-delivery' : 'home-delivery not-available';
 
-      // TODO: Get delivery options from conductor.
-      $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
-      $product_delivery_options .= '<div class="tooltip--wrap">';
-      $product_delivery_options .= '<div class="contains--tooltip">';
-      $product_delivery_options .= '<p class="home-delivery tooltip--head">' . t('Home Delivery') . '</p>';
-      $product_delivery_options .= '<p class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<p>';
-      $product_delivery_options .= '</div>';
-      $product_delivery_options .= '<div class="contains--tooltip">';
-      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click & Collect') . '</p>';
-      $product_delivery_options .= '<p class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</p>';
-      $product_delivery_options .= '</div>';
-      $product_delivery_options .= '</div>';
+      $click_collect_delivery = [];
+      $click_collect_delivery['#theme'] = 'basket_delivery_option';
+      $click_collect_delivery['#title'] = $config->get('click_collect_title');
+      $click_collect_delivery['#tooltip'] = $config->get('click_collect_tooltip');
+      $click_collect_delivery['#type'] = alshaya_acm_product_available_click_collect($id) ? 'click-collect' : 'click-collect not-available';
+
+      $delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
+      $delivery_options .= isset($home_delivery) ? render($home_delivery) : '';
+      $delivery_options .= isset($click_collect_delivery) ? render($click_collect_delivery) : '';
 
       $form['cart'][$id]['delivery_options'] = [
-        '#markup' => $product_delivery_options,
+        '#markup' => $delivery_options,
       ];
+
+      $form['cart'][$id]['delivery_options']['#wrapper_attributes'] = ['class' => ['delivery-option']];
     }
   }
 }

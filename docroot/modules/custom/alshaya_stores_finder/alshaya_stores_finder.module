@@ -31,6 +31,23 @@ function alshaya_stores_finder_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['pdp_click_collect_all_stores'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'title' => NULL,
+      'subtitle' => NULL,
+      'stores' => NULL,
+    ],
+  ];
+
+  $items['pdp_click_collect_top_stores'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'stores' => NULL,
+      'has_more' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
