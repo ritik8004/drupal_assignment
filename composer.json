@@ -32,7 +32,6 @@
         "drupal/back_to_top": "^1.0@beta",
         "drupal/change_pwd_page": "^1.0@beta",
         "drupal/mobile_number": "^1.0@alpha",
-        "drupal/barcodes": "^1.6",
         "drupal/sharethis": "^2.0@beta",
         "drupal/mailsystem": "^4.1",
         "drupal/mimemail": "1.x-dev",
