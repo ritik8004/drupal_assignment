@@ -54,6 +54,7 @@ class CartSessionStorage implements CartStorageInterface {
    */
   public function addCart(CartInterface $cart) {
     $this->session->set(self::STORAGE_KEY, $cart);
+    $cookies = \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', $cart->id());
     user_cookie_save([
       'acq_cart_id' => $cart->id(),
     ]);

@@ -1,0 +1,24 @@
+diff --git a/modules/acq_cart/src/Cart.php b/modules/acq_cart/src/Cart.php
+index 1f2e3d9..88805f2 100644
+--- a/modules/acq_cart/src/Cart.php
++++ b/modules/acq_cart/src/Cart.php
+@@ -459,6 +459,7 @@ public function getCart() {
+   public function convertToCustomerCart(array $cart) {
+     $this->cart->cart_id = $cart['cart_id'];
+     $this->cart->customer_id = $cart['customer_id'];
++    $this->cart->customer_email = $cart['customer_email'];
+   }
+ 
+   /**
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index 58d7a14..901707d 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -54,6 +54,7 @@ public function getCartId() {
+    */
+   public function addCart(CartInterface $cart) {
+     $this->session->set(self::STORAGE_KEY, $cart);
++    $cookies = \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', $cart->id());
+     user_cookie_save([
+       'acq_cart_id' => $cart->id(),
+     ]);

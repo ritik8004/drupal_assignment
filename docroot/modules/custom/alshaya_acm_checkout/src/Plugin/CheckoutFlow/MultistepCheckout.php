@@ -217,10 +217,8 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         // Clear orders list cache if user is logged in.
         if (\Drupal::currentUser()->isAnonymous()) {
           // Store the email address of customer in tempstore.
-          $cart = $this->cartStorage->getCart();
-          $shipping = $cart->getShipping();
-          $email = $shipping->email;
-          $temp_store->set('email', $shipping->email);
+          $email = alshaya_acm_checkout_get_cart_email($cart->id());
+          $temp_store->set('email', $email);
         }
         else {
           $email = \Drupal::currentUser()->getEmail();

@@ -57,7 +57,6 @@ function _alshaya_acm_checkout_clean_address($address) {
     'first_name',
     'lastname',
     'last_name',
-    'email',
     'phone',
     'street',
     'street2',
@@ -71,6 +70,11 @@ function _alshaya_acm_checkout_clean_address($address) {
     if (!in_array($key, $allowed_fields)) {
       unset($address[$key]);
     }
+  }
+
+  if (!empty($address['region'])) {
+    $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country']);
+    $address['region'] = $address['region_id'];
   }
 
   if (!empty($address['phone'])) {
@@ -122,4 +126,73 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
 
     alshaya_i18n_save_translations($strings);
   }
+}
+
+/**
+ * Helper function to get region code.
+ *
+ * @param string $region
+ *   Region to get region code for. It could be region code itself.
+ * @param string $country_code
+ *   Country code.
+ *
+ * @return mixed|string
+ *   Region code.
+ */
+function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = 'US') {
+  $subdivision_repo = \Drupal::service('address.subdivision_repository');
+  $regions = $subdivision_repo->getList([$country_code]);
+
+  // Country has no regions.
+  if (empty($regions)) {
+    return '';
+  }
+
+  // Region is already the code.
+  if (isset($regions[$region])) {
+    return $region;
+  }
+
+  // Region is name and we have the code.
+  if ($region_key = array_search($region, $regions)) {
+    return $region_key;
+  }
+
+  // Invalid value for region, we log warning and return empty string.
+  \Drupal::logger('alshaya_acm_checkout')->warning('Invalid region @region passed for country code @country_code', ['@region' => $region, '@country_code' => $country_code]);
+
+  return '';
+}
+
+/**
+ * Wrapper function to save email of user in cookies.
+ *
+ * This email is associated with the cart and is be used for anonymous users.
+ *
+ * @param int $cart_id
+ *   Cart id.
+ * @param string $email
+ *   Email.
+ */
+function alshaya_acm_checkout_save_cart_email($cart_id, $email) {
+  $key = 'cart_' . $cart_id;
+  user_cookie_save([$key => base64_encode($email)]);
+}
+
+/**
+ * Wrapper function to get email of user from cookies.
+ *
+ * This email is associated with the cart and is be used for anonymous users.
+ *
+ * @param int $cart_id
+ *   Cart id.
+ */
+function alshaya_acm_checkout_get_cart_email($cart_id) {
+  $key = 'Drupal_visitor_cart_' . $cart_id;
+
+  if ($email = \Drupal::request()->cookies->get($key)) {
+    return base64_decode($email);
+  }
+
+  return '';
 }
