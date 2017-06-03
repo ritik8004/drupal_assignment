@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_stores_finder\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -22,11 +22,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class StoresFinderController extends ControllerBase {
 
   /**
-   * API Wrapper.
+   * Stores Finder Utility service object.
    *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
    */
-  protected $apiWrapper;
+  protected $storesFinderUtility;
 
   /**
    * Entity repository.
@@ -38,15 +38,15 @@ class StoresFinderController extends ControllerBase {
   /**
    * StoresFinderController constructor.
    *
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
-   *   Api wrapper.
+   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $stores_finder_utility
+   *   Stores Finder Utility service object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity repository.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    */
-  public function __construct(AlshayaApiWrapper $api_wrapper, EntityRepositoryInterface $entity_repository, ConfigFactoryInterface $config_factory) {
-    $this->apiWrapper = $api_wrapper;
+  public function __construct(StoresFinderUtility $stores_finder_utility, EntityRepositoryInterface $entity_repository, ConfigFactoryInterface $config_factory) {
+    $this->storesFinderUtility = $stores_finder_utility;
     $this->entityRepository = $entity_repository;
     $this->configFactory = $config_factory;
   }
@@ -56,7 +56,7 @@ class StoresFinderController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_api.api'),
+      $container->get('alshaya_stores_finder.utility'),
       $container->get('entity.repository'),
       $container->get('config.factory')
     );
@@ -185,9 +185,7 @@ class StoresFinderController extends ControllerBase {
     $response = new AjaxResponse();
 
     if ($sku_entity = SKU::loadFromSku($sku)) {
-      \Drupal::moduleHandler()->loadInclude('alshaya_stores_finder', 'inc', 'alshaya_stores_finder.utility');
-
-      if ($stores = alshaya_stores_finder_get_product_stores($sku, $lat, $lon)) {
+      if ($stores = $this->storesFinderUtility->getSkuStores($sku, $lat, $lon)) {
         $top_three = [];
         $top_three['#theme'] = 'pdp_click_collect_top_stores';
         $top_three['#stores'] = array_slice($stores, 0, 3);
