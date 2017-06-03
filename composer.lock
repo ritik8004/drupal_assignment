@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "93e58430eff36125d57ea9addf749c95",
+    "content-hash": "630f7952d5b487a2383dc8779edd8483",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2043,7 +2043,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486736883"
+                    "datestamp": "1486737287"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2127,58 +2127,6 @@
             "homepage": "https://www.drupal.org/project/back_to_top",
             "support": {
                 "source": "http://cgit.drupalcode.org/back_to_top"
-            }
-        },
-        {
-            "name": "drupal/barcodes",
-            "version": "1.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupal.org/project/barcodes",
-                "reference": "8.x-1.6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/barcodes-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "f89f7e24992feae9702c78bf4f9ea6e0b32d9e2d"
-            },
-            "require": {
-                "drupal/core": "~8.0",
-                "tecnickcom/tc-lib-barcode": "^1.9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1477500839"
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "julien",
-                    "homepage": "https://www.drupal.org/user/177445"
-                },
-                {
-                    "name": "sanduhrs",
-                    "homepage": "https://www.drupal.org/user/28074"
-                }
-            ],
-            "description": "Generate Barcodes of differebt types.",
-            "homepage": "https://www.drupal.org/project/barcodes",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/barcodes",
-                "issues": "https://www.drupal.org/project/issues/barcodes"
             }
         },
         {
@@ -4357,6 +4305,10 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
+                    "name": "Dave Reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                },
+                {
                     "name": "Drupal Media Team",
                     "homepage": "https://www.drupal.org/user/3260690"
                 },
@@ -5890,7 +5842,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta2",
-                    "datestamp": "1492189143"
+                    "datestamp": "1493403543"
                 },
                 "patches_applied": {
                     "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
@@ -6191,8 +6143,16 @@
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
+                    "name": "badjava",
+                    "homepage": "https://www.drupal.org/user/83372"
+                },
+                {
                     "name": "chx",
                     "homepage": "https://www.drupal.org/user/9446"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "kalman.hosszu",
@@ -6320,7 +6280,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486726083"
+                    "datestamp": "1486729083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6334,6 +6294,10 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
+                },
+                {
+                    "name": "miteshmap",
+                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -10840,159 +10804,6 @@
             "time": "2017-05-01T14:31:55+00:00"
         },
         {
-            "name": "tecnickcom/tc-lib-barcode",
-            "version": "1.15.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tecnickcom/tc-lib-barcode.git",
-                "reference": "18b8b9224c995cd9d7518e8551be833cbc31b323"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-barcode/zipball/18b8b9224c995cd9d7518e8551be833cbc31b323",
-                "reference": "18b8b9224c995cd9d7518e8551be833cbc31b323",
-                "shasum": ""
-            },
-            "require": {
-                "ext-bcmath": "*",
-                "ext-date": "*",
-                "ext-gd": "*",
-                "ext-pcre": "*",
-                "php": ">=5.4",
-                "tecnickcom/tc-lib-color": "^1.12.6"
-            },
-            "require-dev": {
-                "apigen/apigen": "^4.1.2",
-                "bartlett/php-compatinfo": "^5.0.4",
-                "pdepend/pdepend": "^2.5.0",
-                "phploc/phploc": "^2.1.5 || ^3.0.1",
-                "phpmd/phpmd": "^2.6.0",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0",
-                "sebastian/phpcpd": "^2.0.4 || 3.0.0",
-                "squizlabs/php_codesniffer": "^2.8.0 || ^3.0.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Com\\Tecnick\\Barcode\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Nicola Asuni",
-                    "email": "info@tecnick.com",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP library to generate linear and bidimensional barcodes",
-            "homepage": "http://www.tecnick.com",
-            "keywords": [
-                "3 of 9",
-                "ANSI MH10.8M-1983",
-                "CBC",
-                "CODABAR",
-                "CODE 11",
-                "CODE 128 A B C",
-                "CODE 39",
-                "CODE 93",
-                "EAN 13",
-                "EAN 8",
-                "ECC200",
-                "Intelligent Mail Barcode",
-                "Interleaved 2 of 5",
-                "KIX",
-                "Klant",
-                "MSI",
-                "Onecode",
-                "PHARMACODE",
-                "PHARMACODE TWO-TRACKS",
-                "POSTNET",
-                "RMS4CC",
-                "Standard 2 of 5",
-                "UPC-A",
-                "UPC-E",
-                "USD-3",
-                "USPS-B-3200",
-                "USS-93",
-                "barcode",
-                "datamatrix",
-                "pdf417",
-                "planet",
-                "qr-code",
-                "royal mail",
-                "tc-lib-barcode",
-                "upc"
-            ],
-            "time": "2017-02-12T13:51:39+00:00"
-        },
-        {
-            "name": "tecnickcom/tc-lib-color",
-            "version": "1.12.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tecnickcom/tc-lib-color.git",
-                "reference": "8921acc8e9c26bdc32c9b08989d42e428af6c660"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-color/zipball/8921acc8e9c26bdc32c9b08989d42e428af6c660",
-                "reference": "8921acc8e9c26bdc32c9b08989d42e428af6c660",
-                "shasum": ""
-            },
-            "require": {
-                "ext-pcre": "*",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "apigen/apigen": "^4.1.2",
-                "bartlett/php-compatinfo": "^5.0.4",
-                "pdepend/pdepend": "^2.5.0",
-                "phploc/phploc": "^2.1.5 || ^3.0.1",
-                "phpmd/phpmd": "^2.6.0",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0",
-                "sebastian/phpcpd": "^2.0.4 || 3.0.0",
-                "squizlabs/php_codesniffer": "^2.8.0 || ^3.0.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Com\\Tecnick\\Color\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Nicola Asuni",
-                    "email": "info@tecnick.com",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP library to manipulate various color representations",
-            "homepage": "http://www.tecnick.com",
-            "keywords": [
-                "cmyk",
-                "color",
-                "colors",
-                "colour",
-                "colours",
-                "hsl",
-                "hsla",
-                "javascript",
-                "rgb",
-                "rgba",
-                "tc-lib-color",
-                "web"
-            ],
-            "time": "2017-02-12T12:07:38+00:00"
-        },
-        {
             "name": "twig/twig",
             "version": "v1.33.2",
             "source": {
@@ -12712,7 +12523,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork Maintainer"
+                    "role": "Fork maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",

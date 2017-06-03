@@ -169,6 +169,7 @@ class CustomerController extends ControllerBase {
     $order = $orders[$order_index];
 
     $build = alshaya_acm_customer_build_order_detail($order);
+    $build['order'] = $order;
 
     // Build account details array.
     $account = [];
@@ -200,7 +201,7 @@ class CustomerController extends ControllerBase {
     // Get order details and add more information for print.
     $build = $this->orderDetail($user, $order_id);
 
-    $build['#barcode'] = alshaya_acm_customer_get_barcode(str_pad($order_id, 9, '0', STR_PAD_LEFT));
+    $build['#barcode'] = alshaya_acm_customer_get_barcode($build['order']);
     $build['#account']['mail'] = $user->get('mail')->getString();
     $build['#account']['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
     $build['#site_logo'] = [
@@ -258,7 +259,7 @@ class CustomerController extends ControllerBase {
       '#theme' => 'image',
       '#uri' => theme_get_setting('logo.url'),
     ];
-    $build['#barcode'] = alshaya_acm_customer_get_barcode($order['increment_id']);
+    $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#account'] = $account;
     $build['#theme'] = 'user_order_print';
 
