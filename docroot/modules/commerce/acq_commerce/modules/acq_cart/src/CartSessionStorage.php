@@ -54,6 +54,8 @@ class CartSessionStorage implements CartStorageInterface {
    */
   public function addCart(CartInterface $cart) {
     $this->session->set(self::STORAGE_KEY, $cart);
+    // Update cookies cache in Drupal to use new one.
+    \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', $cart->id());
     user_cookie_save([
       'acq_cart_id' => $cart->id(),
     ]);
