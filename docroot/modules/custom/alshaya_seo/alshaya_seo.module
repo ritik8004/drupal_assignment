@@ -8,7 +8,6 @@
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Url;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\file\Entity\File;
 
 /**
  * Implements hook_page_attachments().
@@ -131,7 +130,11 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
         $sku_id = $sku_field->first()->getString();
         $sku_entity = SKU::loadFromSku($sku_id);
         $product_title = "";
-        $product_image = "";
+
+        // Including the utility file.
+        \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+        $product_image = _alshaya_acm_get_product_display_image_url($sku_entity);
+
         $product_description = _alshaya_seo_get_node_meta_description();
         $final_price = "";
         $currency = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
@@ -144,15 +147,6 @@ function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
         // If final price is available.
         if ($sku_entity->get('final_price')) {
           $final_price = (float) $sku_entity->get('final_price')->getString();
-        }
-
-        // If sku image is available.
-        if ($sku_entity->get('image')) {
-          if ($image_id = $sku_entity->get('image')->getValue()[0]['target_id']) {
-            if ($image = File::load($image_id)) {
-              $product_image = file_create_url($image->getFileUri());
-            }
-          }
         }
 
         // Prepare rich snippet.
