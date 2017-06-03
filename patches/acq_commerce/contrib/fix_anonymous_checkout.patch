@@ -14,11 +14,12 @@ diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/
 index 58d7a14..901707d 100644
 --- a/modules/acq_cart/src/CartSessionStorage.php
 +++ b/modules/acq_cart/src/CartSessionStorage.php
-@@ -54,6 +54,7 @@ public function getCartId() {
+@@ -54,6 +54,8 @@ public function getCartId() {
     */
    public function addCart(CartInterface $cart) {
      $this->session->set(self::STORAGE_KEY, $cart);
-+    $cookies = \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', $cart->id());
+     // Update cookies cache in Drupal to use new one.
++    \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', $cart->id());
      user_cookie_save([
        'acq_cart_id' => $cart->id(),
      ]);

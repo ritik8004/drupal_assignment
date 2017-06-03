@@ -73,6 +73,7 @@ function _alshaya_acm_checkout_clean_address($address) {
   }
 
   if (!empty($address['region'])) {
+    // TODO: We may just require region and not region_id, need to verify later.
     $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country']);
     $address['region'] = $address['region_id'];
   }
