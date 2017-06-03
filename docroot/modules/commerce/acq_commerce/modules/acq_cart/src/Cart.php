@@ -87,6 +87,16 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function customerEmail() {
+    if (isset($this->cart, $this->cart->customer_email)) {
+      return $this->cart->customer_email;
+    }
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function totals() {
     if (isset($this->cart, $this->cart->totals)) {
       return $this->cart->totals;

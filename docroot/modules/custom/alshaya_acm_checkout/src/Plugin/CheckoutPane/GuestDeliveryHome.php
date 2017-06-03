@@ -89,7 +89,7 @@ class GuestDeliveryHome extends AddressFormBase {
       '#required' => TRUE,
       '#attributes' => ['placeholder' => [$this->t('Email Address')]],
       '#weight' => -8,
-      '#default_value' => alshaya_acm_checkout_get_cart_email($cart->id()),
+      '#default_value' => $cart->customerEmail(),
     ];
 
     $shipping_methods = self::generateShippingEstimates($address);
@@ -275,7 +275,6 @@ class GuestDeliveryHome extends AddressFormBase {
     $cart->convertToCustomerCart($customer_cart);
     \Drupal::service('acq_cart.cart_storage')->addCart($cart);
     \Drupal::service('acq_cart.cart_storage')->updateCart();
-    alshaya_acm_checkout_save_cart_email($customer_cart['cart_id'], $email);
   }
 
   /**

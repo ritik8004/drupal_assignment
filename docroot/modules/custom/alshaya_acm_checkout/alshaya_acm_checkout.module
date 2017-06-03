@@ -164,36 +164,3 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
 
   return '';
 }
-
-/**
- * Wrapper function to save email of user in cookies.
- *
- * This email is associated with the cart and is be used for anonymous users.
- *
- * @param int $cart_id
- *   Cart id.
- * @param string $email
- *   Email.
- */
-function alshaya_acm_checkout_save_cart_email($cart_id, $email) {
-  $key = 'cart_' . $cart_id;
-  user_cookie_save([$key => base64_encode($email)]);
-}
-
-/**
- * Wrapper function to get email of user from cookies.
- *
- * This email is associated with the cart and is be used for anonymous users.
- *
- * @param int $cart_id
- *   Cart id.
- */
-function alshaya_acm_checkout_get_cart_email($cart_id) {
-  $key = 'Drupal_visitor_cart_' . $cart_id;
-
-  if ($email = \Drupal::request()->cookies->get($key)) {
-    return base64_decode($email);
-  }
-
-  return '';
-}
