@@ -1,0 +1,6 @@
+services:
+  alshaya_custom.term_route_context:
+    class: Drupal\alshaya_custom\ContextProvider\TermRouteContext
+    arguments: ['@current_route_match']
+    tags:
+      - { name: 'context_provider' }
