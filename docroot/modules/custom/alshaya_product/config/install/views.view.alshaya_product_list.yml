@@ -6,6 +6,7 @@ dependencies:
   module:
     - better_exposed_filters
     - search_api
+    - views_infinite_scroll
 id: alshaya_product_list
 label: 'Alshaya product list'
 module: views
@@ -59,17 +60,13 @@ display:
                 reset_label: ''
                 is_secondary: false
       pager:
-        type: full
+        type: infinite_scroll
         options:
           items_per_page: 15
           offset: 0
           id: 0
+          query_type: POST
           total_pages: null
-          tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
-            first: '« First'
-            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -78,7 +75,12 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          quantity: 9
+          tags:
+            previous: '‹ Previous'
+            next: 'Next ›'
+          views_infinite_scroll:
+            button_text: 'Load More'
+            automatically_load_content: false
       style:
         type: default
         options:
