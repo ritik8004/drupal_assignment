@@ -292,6 +292,10 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
           \Drupal::service('acq_cart.cart_storage')->addCart($cart);
         }
+        // Otherwise, associate the current cart with the authenticated user.
+        else {
+          \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id']);
+        }
 
         // Check if user exists in Drupal. We have already loaded this above.
         if (!empty($user)) {
