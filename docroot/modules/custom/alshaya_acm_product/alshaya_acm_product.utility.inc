@@ -400,7 +400,6 @@ function alshaya_acm_product_get_selected_option_sku(array $tree, array $configu
  *   Flag if the product is available for click and collect or not.
  */
 function alshaya_acm_product_available_home_delivery($sku) {
-  // @TODO: For now it is always available. We may get a field later.
   // Check MMCSP-903 comments for more details.
   return TRUE;
 }

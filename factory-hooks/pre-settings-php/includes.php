@@ -41,11 +41,27 @@ switch ($env) {
     $_alshaya_acm_disable_stock_check = TRUE;
   case 'dev':
   case 'test':
+    $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
+    $config['alshaya_api.settings']['consumer_key'] = 'o6hdclkp8553h6r86a7wri2289j7spoa';
+    $config['alshaya_api.settings']['consumer_secret'] = 'eamlm6tpmpju9gwk2st6hbed1i5h184a';
+    $config['alshaya_api.settings']['access_token'] = 'mffooaoteilvex7nh163b47l4hhm54pn';
+    $config['alshaya_api.settings']['access_token_secret'] = 'h32bsfv7gnsjf9frbk2n06v67nrffgw1';
+    $config['alshaya_api.settings']['verify_ssl'] = 0;
+
     $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.acm.acquia.io/';
     $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.acm.acquia.io/';
     break;
 
   default:
+    $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
+    $config['alshaya_api.settings']['consumer_key'] = 'o6hdclkp8553h6r86a7wri2289j7spoa';
+    $config['alshaya_api.settings']['consumer_secret'] = 'eamlm6tpmpju9gwk2st6hbed1i5h184a';
+    $config['alshaya_api.settings']['access_token'] = 'mffooaoteilvex7nh163b47l4hhm54pn';
+    $config['alshaya_api.settings']['access_token_secret'] = 'h32bsfv7gnsjf9frbk2n06v67nrffgw1';
+    $config['alshaya_api.settings']['verify_ssl'] = FALSE;
+
     $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.alshaya.acm.acquia.io/';
     $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.alshaya.acm.acquia.io/';
     break;

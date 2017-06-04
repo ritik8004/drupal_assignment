@@ -105,8 +105,8 @@ class AlshayaApiWrapper {
     curl_setopt($curl, CURLOPT_HTTPHEADER, [
       'Authorization: Bearer ' . $signature,
     ]);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->config->get('verify_ssl'));
 
     if ($method == 'POST') {
       curl_setopt($curl, CURLOPT_POST, TRUE);

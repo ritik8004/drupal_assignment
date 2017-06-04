@@ -1,6 +1,6 @@
 name: 'Alshaya ACM K-Net'
 type: module
-description: 'Contains K-Net payment method plugin and related code.'
+description: 'Contains wrappers to APIs exposed by Magento (bypass Conductor).'
 package: 'Alshaya'
 core: 8.x
 dependencies:
