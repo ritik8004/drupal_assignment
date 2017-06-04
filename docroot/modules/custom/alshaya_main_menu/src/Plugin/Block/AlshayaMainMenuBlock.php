@@ -10,6 +10,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\alshaya_main_menu\ProductCategoryTree;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -72,6 +73,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $languageManager;
 
   /**
+   * Product category tree.
+   *
+   * @var \Drupal\alshaya_main_menu\ProductCategoryTree
+   */
+  protected $productCateoryTree;
+
+  /**
    * AlshayaMegaMenuBlock constructor.
    *
    * @param array $configuration
@@ -90,14 +98,17 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Database connection.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language
    *   The Language manager.
+   * @param \Drupal\alshaya_main_menu\ProductCategoryTree $product_category_tree
+   *   Product category tree.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository, RouteMatchInterface $route_match, Connection $connection, LanguageManagerInterface $language) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository, RouteMatchInterface $route_match, Connection $connection, LanguageManagerInterface $language, ProductCategoryTree $product_category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityManager = $entity_manager;
     $this->entityRepository = $entity_repository;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
     $this->languageManager = $language;
+    $this->productCateoryTree = $product_category_tree;
   }
 
   /**
@@ -112,7 +123,8 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('entity.repository'),
       $container->get('current_route_match'),
       $container->get('database'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('alshaya_main_menu.product_category_tree')
     );
   }
 
@@ -175,7 +187,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function getCacheTags() {
     // Processed vocabulary data.
-    $data = \Drupal::service('alshaya_main_menu.product_category_tree')->getCategoryTree();
+    $data = $this->productCateoryTree->getCategoryTree();
     $this->termData = $data;
 
     return Cache::mergeTags(
