@@ -175,7 +175,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function getCacheTags() {
     // Processed vocabulary data.
-    $data = _alshaya_custom_get_category_term_data(0, 1, TRUE);
+    $data = \Drupal::service('alshaya_main_menu.product_category_tree')->getCategoryTree();
     $this->termData = $data;
 
     return Cache::mergeTags(

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_master\Breadcrumb;
+namespace Drupal\alshaya_seo\Breadcrumb;
 
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
@@ -16,7 +16,7 @@ class AlshayaSiteMapBreadcrumb implements BreadcrumbBuilderInterface {
    * {@inheritdoc}
    */
   public function applies(RouteMatchInterface $route_match) {
-    return $route_match->getRouteName() == 'alshaya_master.sitemap';
+    return $route_match->getRouteName() == 'alshaya_seo.sitemap';
   }
 
   /**
@@ -25,7 +25,7 @@ class AlshayaSiteMapBreadcrumb implements BreadcrumbBuilderInterface {
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
-    $breadcrumb->addLink(Link::createFromRoute(t('Site map'), 'alshaya_master.sitemap'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Site map'), 'alshaya_seo.sitemap'));
     $breadcrumb->addCacheableDependency(['url.path']);
     return $breadcrumb;
   }
