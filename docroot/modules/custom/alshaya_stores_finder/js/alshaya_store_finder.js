@@ -58,7 +58,6 @@
         $('.alias--store-finder').addClass('overlay');
 
         if (navigator.geolocation) {
-
           navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         }
 
