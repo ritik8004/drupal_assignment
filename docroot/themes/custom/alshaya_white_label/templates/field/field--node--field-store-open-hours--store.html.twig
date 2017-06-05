@@ -5,10 +5,7 @@
         <div class="hours--label">{{ 'Opening Hours'|t }}</div>
         <div class="open--hours">
           {% for item in items %}
-            <div{{ item.attributes }}>
-              <span class="open-hours-label">{{ item.key }}</span>
-              <span class="open-hours-time">{{ item.value }}</span>
-            </div>
+            <div{{ item.attributes }}>{{ item.content }}</div>
           {% endfor %}
         </div>
       </div>
