@@ -142,7 +142,7 @@
       });
 
       // Toggle Function for Store Locator.
-      $(document).on('click', '.hours--label', function () {
+      $(document).off().on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
 
