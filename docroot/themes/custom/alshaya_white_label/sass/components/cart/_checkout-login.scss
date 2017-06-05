@@ -1,7 +1,6 @@
 .user-page.checkout-login {
   border: 0;
   margin: 0 auto 1em;
-  min-height: calc(100vh - 110px);
 
   @include breakpoint($tablet) {
     margin: 1.2rem auto 1em;

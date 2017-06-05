@@ -145,9 +145,7 @@
 
       // Toggle Function for Store Locator.
       $(document).on('click', '.hours--label', function () {
-        $(this).next().slideToggle();
         $(this).toggleClass('open');
-        $(this).next().toggleClass('selector--hours');
       });
 
       /**
