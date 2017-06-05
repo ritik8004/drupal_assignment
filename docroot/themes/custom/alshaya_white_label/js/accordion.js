@@ -186,11 +186,11 @@
         var descwrapper = $('.c-pdp .description-wrapper');
         descwrapper.hide();
         $('.c-pdp .short-description-wrapper .read-more-description-link').on('click', function () {
-          descwrapper.slideToggle();
+          descwrapper.toggle('slow');
         });
 
         $('.c-pdp .description-wrapper .close').on('click', function () {
-          descwrapper.slideToggle();
+          descwrapper.toggle('slow');
         });
 
         // Add class to promotional banner view block if it is not empty.
