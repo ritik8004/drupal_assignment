@@ -124,29 +124,6 @@ Tel: 182-12-12
 <a href="www.mothercare.com.kw">www.mothercare.com.kw</a>');
   $config->save();
 
-  // Set signup mail translation.
-  $signup_mail = \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'user_registrationpassword.mail');
-  $signup_mail->set('register_withpassword.subject', '[site:name] على موقع [user:field_first_name:value] تفاصيل حساب');
-  $signup_mail->set('register_withpassword.body', '<h1>مرحباً [user:field_first_name:value],</h1>
-
-أهلاً بك في موقع [site:name] و شكراً على الانضمام إلينا.
-
-لقد قمت بالتسجيل عن طريق عنوان البريد الإلكتروني: [user:mail]
-
-:يمكنك الآن تسجيل الدخول والتحقق من حسابك بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
-<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
-
-نتمنى لك تجربة تسوق ممتعة مع موقع [site:name].
-
-إذا كان لديك أي سؤال، يرجى الاطلاع على صفحة <a href="[site:url]">FAQs page</a> هنا أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن.
-
-مع أطيب التحيات،
-فريق عمل [site:name]
-هاتف:12-12-182
-<a href="www.mothercare.com.kw">www.mothercare.com.kw</a>');
-  $signup_mail->save();
-
   // Set default body for password reset email.
   $config = \Drupal::configFactory()->getEditable('user.mail');
   $config->set('password_reset.subject', 'Replacement login information for [user:field_first_name:value] at [site:name]');
@@ -162,24 +139,4 @@ This link can only be used once to log in and will lead you to a page where you 
 
 --  [site:name] team');
   $config->save();
-
-  // Disable account activation mail.
-  \Drupal::configFactory()->getEditable('user.settings')->set('notify.status_activated', FALSE)->save();
-
-  // Set reset password mail translation.
-  $reset_password_mail = \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'user.mail');
-  $reset_password_mail->set('password_reset.subject', '[site:name] على موقع [user:field_first_name:value] معلومات تسجيل الدخول البديلة للمستخدم');
-  $reset_password_mail->set('password_reset.body', '<h1>,[user:field_first_name:value] أهلاً بك </h1>
-
-.[site:name] تم إجراء طلب لإعادة تعيين كلمة المرور لحسابك على موقع
-
-:يمكنك الآن تسجيل الدخول بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
-
-<a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
-
-لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها.
-
-[site:name] فريق عمل --');
-  $reset_password_mail->save();
 }
