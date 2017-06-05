@@ -81,7 +81,7 @@ fields:
 
   collection:
     parent: 'attributes'
-    label: 'At a glance'
+    label: 'Collection'
     description: 'Part of description.'
     cardinality: 1
     type: 'string'
