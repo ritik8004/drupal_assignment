@@ -185,45 +185,6 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
 }
 
 /**
- * Implements hook_alshaya_i18n_onetime_translation_add().
- */
-function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
-  $strings = [
-    'First name' => [
-      'ar' => 'الاسم الأول',
-      'context' => 'Address label',
-    ],
-    'Last name' => [
-      'ar' => 'اسم العائلة',
-      'context' => 'Address label',
-    ],
-    'Company' => [
-      'ar' => 'الشركة',
-      'context' => 'Address label',
-    ],
-    'Street address' => [
-      'en' => 'Street',
-      'context' => 'Address label',
-    ],
-    'Street address' => [
-      'ar' => 'الشارع',
-      'context' => 'Address label',
-    ],
-    'City' => [
-      'ar' => 'المدينة',
-      'context' => 'Address label',
-    ],
-    'Postal code' => [
-      'ar' => 'الرمز البريدي',
-      'context' => 'Address label',
-    ],
-  ];
-
-  // Save the translation.
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
  * Altering the address book form.
  */
 function _alshaya_addressbook_form_alter(&$form, FormStateInterface $form_state) {
