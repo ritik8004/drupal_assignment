@@ -1,0 +1,63 @@
+﻿Boys ,Boy
+Girls ,Girl
+diaper ,nappy
+dress ,dresses
+matress ,matresses
+towel ,towels ,bathtowel
+cot ,crib ,bed
+chair ,seat ,stool
+hats ,hat ,beanie ,cap
+pushchair ,pram ,stroller
+Accessory, Accessories
+Pyjama , Pyjamas
+T-Shirt ,T-shirts
+Slipper,Slippers
+Sleepsuit ,Sleepsuits
+Maternity ,Motherhood
+Bottle ,Bottles
+Bouncer ,Bouncers
+Jogger ,Joggers
+short ,Shorts
+Blanket ,Blankets
+Top ,Tops
+Nursing Top ,Nursing Tops
+Trousers ,pants
+Skirt ,Skirts
+Baby Monitor ,Baby Monitors
+Sock ,Socks
+Cup Holder ,Cups Holder
+Shoe ,Shoes
+Boots ,Canvas Shoes
+Backpack ,Changing Bag
+Teat ,Teats ,nipple
+Baby Bath ,Baby Baths
+Wardrobe ,cabinet
+Rattle ,Rattles ,clatter ,Soother ,Soothers
+Doll ,Dolls ,dummy ,toy
+Romper
+vest ,Vests ,waistcoat
+Brief ,Briefs ,underwear ,underclothes
+Cot Bed ,cradle
+Moses Basket ,Moses Baskets
+Sheet ,Sheets  ,Bedding
+Bib ,Bibs
+Sandal ,Sandals
+Teether ,Teethers
+Legging ,Leggings
+Shirt ,Shirts
+Bodysuit ,Bodysuits
+Band ,Bands ,Headband
+Brush ,Brushs
+glove ,Gloves ,Mitts
+Cardigan ,jacket ,sweater ,overcoat
+Highchair ,Highchair ,Babychair
+Tights
+Sleeping Bag ,Sleeping Bags
+Pillow ,Pillows ,cushion ,Cushions
+Car Seat ,Car Seats ,Baby seat
+Sunglasses
+lamp ,bulb
+Thermometer ,Thermometers
+sleep support pillow ,multi purpose pillow
+Duvet ,Duvets
+Breast pump ,Breast pumps
