@@ -433,9 +433,9 @@ header,
   border: 1px solid $white;
 
   @include breakpoint($only-mobile) {
-    z-index: 99999;
+    z-index: 9999;
     position: fixed !important;
-    top: 130px !important;
+    top: 8.125rem !important;
   }
 
   li.ui-menu-item {
