@@ -79,3 +79,10 @@ function alshaya_search_modules_installed($modules) {
   $search_view->set('display.default.display_options.header.result.content', '@total القطع');
   $search_view->save();
 }
+
+/**
+ * Install search_api_solr_multilingual module.
+ */
+function alshaya_search_update_8001() {
+  \Drupal::service('module_installer')->install(['search_api_solr_multilingual']);
+}
