@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "099e4f51d75d5153306807b01338e2bf",
+    "content-hash": "412111a34597f5332ffb933771fe77e5",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2135,7 +2135,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/better_exposed_filters",
-                "reference": "d2de2d079c059017483410da84ca7c802177d7b3"
+                "reference": "56a347f9bc9c758fa7afd1fb3bfe1d133a42ae96"
             },
             "require": {
                 "drupal/core": "*"
@@ -2146,8 +2146,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha2+20-dev",
-                    "datestamp": "1495477983"
+                    "version": "8.x-3.0-alpha2+25-dev",
+                    "datestamp": "1496693042"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2165,7 +2165,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-06-01 19:19:16"
+            "time": "2017-06-05 20:35:07"
         },
         {
             "name": "drupal/block_field",
@@ -5474,6 +5474,9 @@
                 "drupal": {
                     "version": "8.x-1.x-dev",
                     "datestamp": "1486245484"
+                },
+                "patches_applied": {
+                    "Alter/Override options parameter": "https://www.drupal.org/files/issues/2883264-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5522,7 +5525,8 @@
             "homepage": "https://www.drupal.org/project/r4032login",
             "support": {
                 "source": "http://cgit.drupalcode.org/r4032login"
-            }
+            },
+            "time": "2017-02-08 04:20:19"
         },
         {
             "name": "drupal/recaptcha",
@@ -5883,22 +5887,26 @@
         },
         {
             "name": "drupal/search_api_solr",
-            "version": "1.0.0-beta2",
+            "version": "1.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api_solr",
-                "reference": "8.x-1.0-beta2"
+                "reference": "8.x-1.0-rc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_solr-8.x-1.0-beta2.zip",
-                "reference": "8.x-1.0-beta2",
-                "shasum": "4b35ffc5f26a07795170092965a1c11c3b181215"
+                "url": "https://ftp.drupal.org/files/projects/search_api_solr-8.x-1.0-rc3.zip",
+                "reference": "8.x-1.0-rc3",
+                "shasum": "0b4f7cbe4e5f43cea6399a180e7366b109f68e6b"
             },
             "require": {
                 "drupal/core": "~8.0",
-                "drupal/search_api": "*",
+                "drupal/search_api": "~1.0",
                 "solarium/solarium": "3.8.*"
+            },
+            "suggest": {
+                "drupal/facets": "Provides facetted search.",
+                "drupal/search_api_solr_multilingual": "Highly recommended if installation is multilingual or uses a language different than English."
             },
             "type": "drupal-module",
             "extra": {
@@ -5906,11 +5914,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta2",
-                    "datestamp": "1492189143"
+                    "version": "8.x-1.0-rc3",
+                    "datestamp": "1495024986"
                 },
                 "patches_applied": {
-                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
+                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--13.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5919,12 +5927,12 @@
             ],
             "authors": [
                 {
-                    "name": "Berdir",
-                    "homepage": "https://www.drupal.org/user/214652"
+                    "name": "Markus Kalkbrenner",
+                    "homepage": "https://www.drupal.org/u/mkalkbrenner"
                 },
                 {
-                    "name": "Nick_vh",
-                    "homepage": "https://www.drupal.org/user/122682"
+                    "name": "Other contributors",
+                    "homepage": "https://www.drupal.org/node/982682/committers"
                 },
                 {
                     "name": "amateescu",
@@ -5946,9 +5954,58 @@
             "description": "Offers an implementation of the Search API that uses an Apache Solr server for indexing content.",
             "homepage": "https://www.drupal.org/project/search_api_solr",
             "support": {
-                "source": "http://cgit.drupalcode.org/search_api_solr",
+                "source": "http://git.drupal.org/project/search_api_solr.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_solr",
                 "irc": "irc://irc.freenode.org/drupal-search-api"
+            }
+        },
+        {
+            "name": "drupal/search_api_solr_multilingual",
+            "version": "1.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/search_api_solr_multilingual",
+                "reference": "8.x-1.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_solr_multilingual-8.x-1.0-beta3.zip",
+                "reference": null,
+                "shasum": "ee105412f8c40311bc197ea08e4504c15bdc2816"
+            },
+            "require": {
+                "drupal/core": "*",
+                "drupal/search_api_solr": "*",
+                "maennchen/zipstream-php": "0.4.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta3",
+                    "datestamp": "1495025284"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "cspitzlay",
+                    "homepage": "https://www.drupal.org/user/419305"
+                },
+                {
+                    "name": "mkalkbrenner",
+                    "homepage": "https://www.drupal.org/user/124705"
+                }
+            ],
+            "description": "Offers an implementation of the Search API that uses an Apache Solr server for indexing content.",
+            "homepage": "https://www.drupal.org/project/search_api_solr_multilingual",
+            "support": {
+                "source": "http://cgit.drupalcode.org/search_api_solr_multilingual"
             }
         },
         {
@@ -6337,7 +6394,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486729083"
+                    "datestamp": "1486726083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6351,10 +6408,6 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
-                },
-                {
-                    "name": "miteshmap",
-                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -7781,6 +7834,58 @@
                 "service"
             ],
             "time": "2017-05-10T09:20:27+00:00"
+        },
+        {
+            "name": "maennchen/zipstream-php",
+            "version": "v0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maennchen/ZipStream-PHP.git",
+                "reference": "89e0cdb3c9ecabef4da988852003781a7802afb7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/89e0cdb3c9ecabef4da988852003781a7802afb7",
+                "reference": "89e0cdb3c9ecabef4da988852003781a7802afb7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">= 5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZipStream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Duncan",
+                    "email": "pabs@pablotron.org"
+                },
+                {
+                    "name": "Jesse Donat",
+                    "email": "donatj@gmail.com"
+                },
+                {
+                    "name": "Jonatan Männchen",
+                    "email": "jonatan@maennchen.ch"
+                }
+            ],
+            "description": "ZipStream is a library for dynamically streaming dynamic zip files from PHP without writing to the disk at all on the server.",
+            "keywords": [
+                "stream",
+                "zip"
+            ],
+            "time": "2016-09-13T10:29:17+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -9780,7 +9885,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.20",
+            "version": "v2.8.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -13100,6 +13205,7 @@
         "drupal/search_api_spellcheck": 20,
         "drupal/better_exposed_filters": 20,
         "drupal/r4032login": 20,
+        "drupal/search_api_solr_multilingual": 10,
         "drupal/memcache": 20
     },
     "prefer-stable": true,
