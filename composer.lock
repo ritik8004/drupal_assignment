@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "412111a34597f5332ffb933771fe77e5",
+    "content-hash": "89635419ca3db1631351a9570bba0961",
     "packages": [
         {
             "name": "acquia/blt",
@@ -5986,6 +5986,9 @@
                 "drupal": {
                     "version": "8.x-1.0-beta3",
                     "datestamp": "1495025284"
+                },
+                "patches_applied": {
+                    "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
