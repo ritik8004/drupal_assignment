@@ -474,6 +474,7 @@ header,
   }
 }
 
-ul.item-list__checkbox {
+ul.item-list__checkbox,
+.block-facets > ul {
   display: none;
 }

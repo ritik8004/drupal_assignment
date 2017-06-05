@@ -90,12 +90,9 @@
             <div class="c-facet__blocks__wrapper">
               <h3 class="c-facet__label">{{ "Filter" | t }}</h3>
               <div class="c-facet__blocks">
-                {{ page.sidebar_first.skusskureferencecolor }}
-                {{ page.sidebar_first.skusskureferencedisplayprice }}
-                {{ page.sidebar_first.skusskureferencesize }}
+                {{ page.sidebar_first }}
               </div>
             </div>
-            {{ page.sidebar_first | without('skusskureferencecolor', 'skusskureferencedisplayprice', 'skusskureferencesize') }}
           </div>
         </aside>
       {% endif %}
