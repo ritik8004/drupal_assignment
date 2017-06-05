@@ -666,7 +666,7 @@ function alshaya_master_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
-  $site_logo = 'themes/custom/alshaya_white_label/mothercare-logo';
+  $site_logo = 'themes/custom/alshaya_white_label/mothercare-logo-sm';
 
   // Get config factory object.
   $config_factory = \Drupal::configFactory();
