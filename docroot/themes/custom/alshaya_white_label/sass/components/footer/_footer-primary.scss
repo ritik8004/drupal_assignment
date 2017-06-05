@@ -24,7 +24,7 @@
   .primary--footer--right {
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 1rem;
+      margin-#{$right}: 0.8rem;
     }
 
     @include breakpoint($desktop) {
@@ -361,7 +361,7 @@
     }
 
     @include breakpoint($desktop) {
-      #{$right}: 0;
+      #{$right}: 0.8rem;
     }
 
     &:focus {
@@ -539,7 +539,8 @@
 
     @include breakpoint($desktop) {
       margin-top: 2.6rem;
-      padding-#{$left}: 0.1rem;
+      padding-#{$left}: 0;
+      margin-#{$left}: -0.1rem;
     }
   }
 }
