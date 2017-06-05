@@ -817,4 +817,10 @@ function alshaya_master_install() {
   \Drupal::configFactory()->getEditable('system.site')
     ->set('page.403', '/user')
     ->save();
+
+  // Set the access-denied page to '/user'.
+  \Drupal::configFactory()->getEditable('r4032login.settings')
+    ->set('display_denied_message', FALSE)
+    ->set('redirect_authenticated_users_to', '/user')
+    ->save();
 }
