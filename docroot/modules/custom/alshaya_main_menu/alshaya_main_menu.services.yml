@@ -4,3 +4,6 @@ services:
         arguments: ['@renderer']
         tags:
           - { name: twig.extension }
+    alshaya_main_menu.product_category_tree:
+        class: Drupal\alshaya_main_menu\ProductCategoryTree
+        arguments: ['@entity_type.manager', '@entity.repository', '@language_manager']
