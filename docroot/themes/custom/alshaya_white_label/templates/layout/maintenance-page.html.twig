@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a single Drupal page while offline.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_maintenance_page()
+ *
+ * @ingroup themeable
+ */
+#}
+<div>
+    {% if maintenance_text is not empty %}
+        {{ maintenance_text|raw }}
+    {% endif %}
+    {% if maintenance_image is not empty %}
+        {{ maintenance_image }}
+    {% endif %}
+</div>

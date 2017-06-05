@@ -2,21 +2,63 @@
 .nodetype--store {
   .view-header {
     font-size: 14px;
-    font-weight: bold;
     color: $black;
     margin-bottom: 1.563rem;
 
     @include breakpoint($only-mobile) {
-      margin-bottom: 0;
-      border-bottom: 1px solid $white;
+      margin-top: 1.1rem;
+      margin-bottom: 1.4rem;
     }
+
+    strong span {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+
+      @include breakpoint($desktop) {
+        font-family: $alshaya-bold;
+        color: $marine-blue;
+      }
+    }
+  }
+
+  .c-side-1 {
+    @include breakpoint($only-mobile) {
+      border-top: 1px solid $white;
+    }
+  }
+
+  .geolocation-common-map-container,
+  .geolocation-google-map {
+    height: 39rem !important;
+
+    @include breakpoint($desktop) {
+      height: 51rem !important;
+    }
+  }
+
+  .pager__item {
+    list-style: none;
+  }
+
+  .ui-autocomplete {
+    font-size: 0.75rem;
   }
 
   main {
     margin-bottom: 3.2rem;
+    overflow: hidden;
 
     @include breakpoint($desktop) {
       margin-bottom: 8rem;
+    }
+  }
+
+  .current-view {
+    @include breakpoint($only-mobile) {
+      #views-exposed-form-stores-finder-page-1 {
+        display: none;
+      }
     }
   }
 
@@ -51,21 +93,26 @@
 
     #edit-actions {
       position: absolute;
-      #{$right}: 2%;
-      top: 1.6rem;
+      #{$right}: 0;
+      top: 0;
+      height: 2.1875rem;
+      padding-#{$right}: 1rem;
+      padding-top: 0.3rem;
+      border: 1px solid $greyish;
+      border-#{$left}: 0;
+      z-index: 1;
 
       @include breakpoint($tablet) {
-        #{$right}: 5%;
-        top: 0.8rem;
+        border: 1px solid $white;
+        border-#{$left}: 0;
+        padding: 0.375rem;
+        #{$right}: 1.7%;
+        top: 0.3rem;
       }
 
       @include breakpoint($desktop) {
-        #{$right}: 3%;
-        top: 1.6rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        top: 0.6rem;
+        #{$right}: 1.5%;
+        top: 1.1rem;
       }
     }
   }
@@ -141,6 +188,9 @@
       background-repeat: no-repeat;
       text-indent: -9999px;
       width: 20px;
+      height: 25px;
+      padding: 0;
+      background-size: contain;
     }
   }
 
@@ -166,20 +216,58 @@
     background: url('../imgs/icons/ic-search-store.svg') no-repeat;
     width: 25px;
     height: 25px;
+    margin-#{$right}: 0.4rem;
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 0.3875rem;
+    }
   }
 
-  .map-view-link::before {
-    background: url('../imgs/icons/map.svg') no-repeat;
-    width: 1.625rem;
-    height: 1.4375rem;
-    margin-#{$right}: 0.6875rem;
+  .map-view-link {
+    @include icon(map, before) {
+      color: $cerulean-two;
+      margin-#{$right}: 0.4rem;
+      margin-#{$left}: 0.3125rem;
+      vertical-align: middle;
+      font-size: 1.8rem;
+      line-height: 1;
+
+      @include breakpoint($desktop) {
+        line-height: 0.6;
+        margin-#{$left}: 0.1875rem;
+      }
+    }
+
+    &:hover::before,
+    &.active::before {
+      color: $marine-blue;
+    }
   }
 
-  .list-view-link::before {
-    background: url('../imgs/icons/list.svg') no-repeat;
-    width: 1.625rem;
-    height: 1.125rem;
-    vertical-align: top;
+  .list-view-link {
+    @include icon(list, before) {
+      color: $cerulean-two;
+      width: 1.625rem;
+      height: 0.8rem;
+      vertical-align: top;
+      font-size: 2rem;
+      line-height: 0.6;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 1.1rem;
+        margin-#{$left}: -0.45rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0.5rem;
+        margin-#{$right}: 0.8rem;
+      }
+    }
+
+    &:hover::before,
+    &.active::before {
+      color: $marine-blue;
+    }
   }
 
   .label--location {
@@ -187,6 +275,7 @@
     padding-#{$right}: 1rem;
 
     @include breakpoint($desktop) {
+      padding-#{$left}: 1.4rem;
       padding-#{$right}: 0;
     }
   }
@@ -198,8 +287,8 @@
 
     &:hover,
     &.active {
-      border: 1px solid $marine-blue-two;
-      color: $marine-blue-two;
+      border: 1px solid $marine-blue;
+      color: $marine-blue;
       font-family: $alshaya-bold;
     }
   }
@@ -208,7 +297,7 @@
     padding: 0.85rem 0;
 
     @include breakpoint($desktop) {
-      padding: 1.625rem 0;
+      padding: 1.595rem 0;
     }
   }
 
@@ -216,12 +305,11 @@
     padding: 0.675rem 0;
 
     @include breakpoint($desktop) {
-      padding: 1.469rem 0;
+      padding: 1.47rem 0;
     }
   }
 
   .active {
-    font-weight: bold;
     color: $marine-blue-two;
   }
 
@@ -233,17 +321,26 @@
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
     background: none;
-    border: 1px solid $white;
+    border: 1px solid $greyish;
+    border-#{$right}: 2.3125rem solid $white-five;
     padding: 0.6rem;
     padding-#{$right}: 2.125rem;
     font-size: 0.75rem;
     color: $grey-ash;
-    max-width: 23.125rem;
-  }
 
-  .view-display-id-page_3 {
-    .view-content {
-      margin-bottom: 8.625rem;
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.25rem;
+    }
+
+    &.ui-autocomplete-loading {
+      background-size: 30px;
+    }
+
+    @include breakpoint($tablet) {
+      max-width: 23.125rem;
+      border: 1px solid $white;
+      border-#{$right}: 2.3125rem solid $white-five;
+      height: 2.1875rem;
     }
   }
 
@@ -259,11 +356,11 @@
     position: relative;
 
     @include breakpoint($tablet) {
-      padding-bottom: 3rem;
+      padding-bottom: 2rem;
     }
 
-    @include breakpoint($desktop) {
-      padding-bottom: 6rem;
+    @include breakpoint($tablet) {
+      padding-bottom: 3rem;
     }
 
     h3,
@@ -273,7 +370,8 @@
     }
 
     h3 {
-      font-size: 26px;
+      font-size: 1.625rem;
+      font-family: $alshaya-bold;
       font-weight: normal;
       color: $marine-blue;
       line-height: 1.6;
@@ -304,16 +402,14 @@
           line-height: 1;
           position: relative;
 
-          &::after {
+          @include icon(chevron#{$right}, after) {
             position: absolute;
-            content: '';
-            background: url('../imgs/icons/ic-chevron-70.svg');
-            background-repeat: no-repeat;
             display: inline-block;
-            width: 7px;
-            height: 16px;
-            top: 0.9rem;
-            #{$right}: 1rem;
+            color: $black;
+            font-size: 1.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            #{$right}: 0.4rem;
           }
         }
       }
@@ -341,7 +437,12 @@
       font-weight: bold;
       display: block;
       color: $marine-blue;
-      padding: 0 3.25rem;
+      padding: 0 3.5rem;
+
+      @include breakpoint($tablet) {
+        padding: 0 3.25rem;
+        color: $black;
+      }
     }
 
     .views-field-field-store-address {
@@ -349,12 +450,25 @@
       padding-bottom: 1.5rem;
 
       .field-content {
-        padding: 0 3.25rem;
+        padding: 0 3.5rem;
+
+        @include breakpoint($tablet) {
+          padding: 0 3.25rem;
+          padding-#{$right}: 2.5rem;
+        }
       }
     }
 
     .open--hours {
-      margin-top: 0.9rem;
+      margin-top: 1rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 0.9rem;
+      }
+
+      div {
+        margin-bottom: 0.0625rem;
+      }
     }
 
     .views-field-field-store-open-hours {
@@ -362,69 +476,16 @@
       .view-on--map,
       .get--directions {
         border-bottom: 1px solid $white;
-        padding: 1rem 1rem 1rem 3.25rem;
+        padding: 1rem;
+        padding-#{$left}: 3.5rem;
+
+        @include breakpoint($tablet) {
+          padding-#{$left}: 3.25rem;
+        }
       }
 
       a {
         display: block;
-      }
-    }
-
-    .views-field-field-store-open-hours {
-      .hours--label,
-      .get--directions,
-      .view-on--map {
-        position: relative;
-        color: $cerulean-two;
-        cursor: pointer;
-
-        a {
-          color: $cerulean-two;
-        }
-
-        &::after {
-          position: absolute;
-          background-repeat: no-repeat;
-          content: '';
-          display: inline-block;
-          top: 0;
-          #{$right}: 0;
-        }
-
-        &.open {
-          border-bottom: 0;
-
-          &::after {
-            transform: rotate(90deg);
-          }
-        }
-      }
-
-      .hours--label::after {
-        background: url('../imgs/icons/ic-chevron-70.svg');
-        width: 7px;
-        height: 16px;
-      }
-
-      .view-on--map::after {
-        background: url('../imgs/icons/map.png');
-        width: 18px;
-        height: 17px;
-        top: 1rem;
-        #{$right}: 0.8rem;
-      }
-
-      .get--directions::after {
-        background: url('../imgs/icons/ic-directions.svg');
-        top: 1rem;
-        #{$right}: 1rem;
-        width: 18px;
-        height: 18px;
-      }
-
-      .open--hours {
-        display: none;
-        line-height: 1.57;
       }
     }
 
@@ -433,8 +494,11 @@
     }
   }
 
-  .view-display-id-page_1 {
-    margin-top: 1.5rem;
+  .view-display-id-page_1,
+  .view-display-id-page_2 {
+    @include breakpoint($tablet) {
+      margin-top: 1.5rem;
+    }
   }
 
   @include breakpoint($only-mobile) {
@@ -462,10 +526,6 @@
     #edit-map-view {
       display: none;
     }
-
-    input.form-autocomplete {
-      border: 1px solid $greyish !important;
-    }
   }
 
   @include breakpoint($only-tablet) {
@@ -476,7 +536,8 @@
     }
 
     .store-finder--wrapper {
-      width: 47.5%;
+      width: 47%;
+      margin-#{$right}: 0.5%;
 
       .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
         width: 48% !important;
@@ -522,7 +583,7 @@
       height: 1.25rem;
       vertical-align: middle;
       text-align: center;
-      color: $white-two;
+      color: $white-five;
       border-radius: 50%;
       padding-top: 2px;
     }
@@ -532,17 +593,23 @@
       margin-bottom: 0.79rem;
     }
 
-    .by--alphabet {
+    .c-side {
       width: 50%;
       float: $left;
+    }
 
-      &:first-child {
-        border-#{$right}: 1px solid $white;
-      }
+    .c-side:nth-child(odd) {
+      border-#{$right}: 1px solid $white;
+      clear: both;
+    }
 
-      &:last-child {
-        padding-#{$left}: 1.5625rem;
-      }
+    .view-content .c-side.c-side-3,
+    .c-side:nth-child(even) {
+      padding-#{$left}: 1.5625rem;
+      border-#{$left}: 1px solid $white;
+      border-#{$right}: 0;
+      margin-#{$left}: -1px;
+      clear: none;
     }
 
     .attachment-after {
@@ -591,27 +658,32 @@
     }
 
     .attachment-after {
-      width: 71%;
+      width: 72.5%;
       vertical-align: top;
 
       @include breakpoint($only-tablet) {
-        max-width: 66%;
+        width: 61.5%;
       }
     }
 
     .view-display-id-page_1 > .view-content {
-      max-width: 27%;
       display: inline-block;
-      max-height: 51rem;
+      max-height: 39rem;
       overflow-y: scroll;
-      border-#{$right}: 1px solid $white;
       vertical-align: top;
-      margin-#{$right}: 0.6875rem;
-      padding-#{$right}: 0.6875rem;
+      max-width: 26.5%;
+      margin-#{$right}: 1%;
       float: $left;
 
+      @include breakpoint($desktop) {
+        max-height: 51rem;
+        border-#{$right}: 1px solid $white;
+        padding-#{$right}: 1%;
+      }
+
       @include breakpoint($only-tablet) {
-        max-width: 32%;
+        max-width: 35.8%;
+        margin-#{$right}: 2.7%;
       }
     }
   }
@@ -654,6 +726,17 @@
     }
   }
 
+  .list-view-link,
+  .map-view-link {
+    @include breakpoint($tablet) {
+      height: 2.9375rem;
+    }
+
+    @include breakpoint($desktop) {
+      height: 4.5rem;
+    }
+  }
+
   @include breakpoint($desktop) {
     .store-finder--wrapper {
       width: 49.7%;
@@ -661,12 +744,13 @@
       max-width: 38.4375;
     }
 
-    .by--alphabet {
+    .c-side {
       width: 49%;
+    }
 
-      &:last-child {
-        padding-#{$left}: 4.5625rem;
-      }
+    .view-content .c-side.c-side-3,
+    .c-side:nth-child(even) {
+      padding-#{$left}: 4.5625rem;
     }
 
     .view-header {
@@ -786,15 +870,21 @@
 //Individual store theming
 .individual--store {
   .view-content {
-    max-width: 27%;
     display: inline-block;
-    max-height: 51rem;
     overflow-y: scroll;
-    border-#{$right}: 1px solid $white;
     vertical-align: top;
-    margin-#{$right}: 0.6875rem;
-    padding-#{$right}: 0.6875rem;
+    width: 26.5%;
+    margin-#{$right}: 1%;
     float: $left;
+
+    @include breakpoint($desktop) {
+      padding-right: 1%;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 35.8%;
+      margin-#{$right}: 2.7%;
+    }
 
     @include breakpoint($only-mobile) {
       border-#{$right}: 0;
@@ -808,31 +898,125 @@
   }
 
   .hours--wrapper {
-    .hours--label::after {
-      transform: rotate(90deg);
-    }
-
-    .hours--label.open::after {
-      transform: rotate(0deg) !important;
-    }
-
     .open--hours {
-      display: block !important;
+      display: block;
+    }
 
-      &.selector--hours {
-        display: none !important;
+    .hours--label {
+      @include icon(chevronup, after) {
+        color: $marine-blue-two;
       }
     }
   }
 
   .map--store {
     float: $left;
-    width: 71%;
+    width: 61.5%;
     vertical-align: top;
+
+    @include breakpoint($desktop) {
+      width: 72.5%;
+    }
 
     @include breakpoint($only-mobile) {
       display: none;
     }
+  }
+}
+
+.path--store-finder,
+.nodetype--store {
+  .hours--wrapper {
+    .hours--label.open {
+      @include icon(chevrondown, after) {
+        color: $marine-blue-two;
+      }
+
+      &::after {
+        transform: none;
+      }
+    }
+
+    .open--hours {
+      @include breakpoint($only-mobile) {
+        margin-top: 0.9rem;
+      }
+    }
+  }
+
+  .hours--label.open {
+    + .open--hours {
+      display: block;
+    }
+  }
+
+  .hours--label,
+  .get--directions div,
+  .view-on--map {
+    position: relative;
+    color: $cerulean-two;
+    cursor: pointer;
+
+    a {
+      color: $cerulean-two;
+    }
+
+    &::after {
+      position: absolute;
+      background-repeat: no-repeat;
+      content: '';
+      display: inline-block;
+      top: 0;
+      #{$right}: 0;
+    }
+
+    &.open {
+      border-bottom: 0;
+
+      &::after {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  .hours--label {
+    @include icon(chevron#{$right}, after) {
+      position: absolute;
+      display: inline-block;
+      color: $cerulean-two;
+      font-size: 1.875rem;
+      top: -0.5rem;
+      #{$right}: -0.7rem;
+
+      @include breakpoint($tablet) {
+        #{$right}: -0.4375rem;
+      }
+    }
+  }
+
+  .view-on--map {
+    @include icon(map, after) {
+      color: $cerulean-two;
+      vertical-align: middle;
+      font-size: 1.8rem;
+      line-height: 1;
+      top: 0.8rem;
+      #{$right}: 0.8rem;
+    }
+  }
+
+  .get--directions div::after {
+    background: url('../imgs/icons/ic-directions.svg');
+    top: 50%;
+    transform: translateY(-50%);
+    #{$right}: 0;
+    width: 18px;
+    height: 18px;
+  }
+
+  .open--hours {
+    display: none;
+    line-height: 1.57;
   }
 }
 
@@ -846,10 +1030,18 @@
   .get--directions {
     color: $cerulean-two;
     cursor: pointer;
-    margin-top: 0.5625rem;
+  }
+
+  .hours--wrapper,
+  .view-on--map,
+  .get--directions {
+    padding: 1rem;
+    padding-#{$left}: 0;
+    padding-top: 0;
   }
 
   .open--hours {
     line-height: 1.57;
+    margin-top: 0.9rem;
   }
 }

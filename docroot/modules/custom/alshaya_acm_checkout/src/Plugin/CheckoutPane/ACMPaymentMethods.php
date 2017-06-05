@@ -103,10 +103,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $plugin_id = $cart->getPaymentMethod(FALSE);
 
-    if (empty($plugin_id)) {
-      $plugin_id = array_keys($payment_options)[0];
-    }
-
     $pane_form['payment_options'] = [
       '#type' => 'radios',
       '#title' => $this->t('Payment Options'),
@@ -139,7 +135,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public static function rebuildPaymentDetails(array $pane_form, FormStateInterface $form_state) {
-    return $pane_form['payment_methods']['payment_details'];
+    return $pane_form['acm_payment_methods']['payment_details'];
   }
 
   /**
@@ -155,9 +151,13 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       // the form rebuilds it shows the correct payment plugin form.
       $cart = $this->getCart();
       $cart->setPaymentMethod($payment_method);
+
+      $plugin = $this->getSelectedPlugin();
+      $plugin->validatePaymentForm($pane_form, $form_state, $complete_form);
     }
-    $plugin = $this->getSelectedPlugin();
-    $plugin->validatePaymentForm($pane_form, $form_state, $complete_form);
+    else {
+      $form_state->setErrorByName('acm_payment_methods][payment_options', $this->t('Please select a payment option to continue.'));
+    }
   }
 
   /**
@@ -166,6 +166,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $plugin = $this->getSelectedPlugin();
     $plugin->submitPaymentForm($pane_form, $form_state, $complete_form);
+    \Drupal::service('acq_cart.cart_storage')->updateCart();
   }
 
 }

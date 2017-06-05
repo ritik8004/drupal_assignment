@@ -12,4 +12,12 @@ alshaya_acm_product.product_settings_form:
     _form: '\Drupal\alshaya_acm_product\Form\ProductSettingsForm'
     _title: 'Product Settings'
   requirements:
-    _permission: 'access commerce administration pages'
+    _permission: 'access administration pages'
+
+alshaya_acm_product.size_guide_modal:
+  path: '/size-guide-view'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::sizeGuideModal'
+    _title: 'Size guide'
+  requirements:
+    _permission: 'access content'

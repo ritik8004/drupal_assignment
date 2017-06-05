@@ -16,3 +16,40 @@ function acq_commerce_page_attachments(array &$attachments) {
     $attachments['#attached']['library'][] = 'acq_commerce/drupal.acq_commerce.toolbar';
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function acq_commerce_theme($existing, $type, $theme, $path) {
+  return [
+    'acq_commerce_price' => [
+      'variables' => [
+        'price' => '',
+        'currency_format' => '',
+        'currency_code_position' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Format price value with currency.
+ *
+ * Default template: acq-commerce-price.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - price: a price value.
+ */
+function template_preprocess_acq_commerce_price(array &$variables) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+
+  // Fetch the currency format from the config factor.
+  $variables['currency_format'] = $config->get('currency_code');
+
+  // Fetch the currency code position.
+  $variables['currency_code_position'] = $config->get('currency_code_position');
+
+  $variables['price'] = number_format($variables['price'], $config->get('decimal_points'));
+}

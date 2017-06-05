@@ -162,7 +162,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
             // Theme the order total grands with currency.
             $order['totals']['grand'] = [
-              '#theme' => 'alshaya_acm_price',
+              '#theme' => 'acq_commerce_price',
               '#price' => isset($order['totals']) ? $order['totals']['grand'] : 0,
             ];
 
@@ -173,13 +173,13 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
               // Total price.
               $order['items'][$key]['total_price'] = [
-                '#theme' => 'alshaya_acm_price',
+                '#theme' => 'acq_commerce_price',
                 '#price' => ($order['items'][$key]['price'] * $order['items'][$key]['ordered']),
               ];
 
               // Unit price.
               $order['items'][$key]['price'] = [
-                '#theme' => 'alshaya_acm_price',
+                '#theme' => 'acq_commerce_price',
                 '#price' => $order['items'][$key]['price'],
               ];
 
@@ -216,6 +216,15 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    // Get uid of current user.
+    $uid = $this->currentUser->id();
+    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $uid . ':orders']);
   }
 
 }

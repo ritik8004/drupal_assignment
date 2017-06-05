@@ -20,6 +20,7 @@ content:
       link: ''
     third_party_settings: {  }
     type: entity_reference_revisions_entity_view
+    region: content
   field_1_row_2_col_2:
     weight: 0
     label: hidden
@@ -28,4 +29,5 @@ content:
       link: ''
     third_party_settings: {  }
     type: entity_reference_revisions_entity_view
+    region: content
 hidden: {  }

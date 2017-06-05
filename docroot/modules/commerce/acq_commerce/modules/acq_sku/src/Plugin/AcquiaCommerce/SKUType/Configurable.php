@@ -382,32 +382,6 @@ class Configurable extends SKUPluginBase {
   }
 
   /**
-   * Get parent of current product.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Current product.
-   *
-   * @return \Drupal\acq_sku\Entity\SKU|null
-   *   Parent product or null if not found.
-   */
-  public function getParentSku(SKU $sku) {
-    $query = \Drupal::database()->select('acq_sku', 'acq_sku');
-    $query->addField('acq_sku', 'sku');
-    $query->join(
-      'acq_sku__field_configured_skus',
-      'child_sku', 'acq_sku.id = child_sku.entity_id'
-    );
-    $query->condition("child_sku.field_configured_skus_value", $sku->getSku());
-    $parent_sku = $query->execute()->fetchField();
-
-    if (empty($parent_sku)) {
-      return NULL;
-    }
-
-    return SKU::loadFromSku($parent_sku);
-  }
-
-  /**
    * Get attribute value from key-value field.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku

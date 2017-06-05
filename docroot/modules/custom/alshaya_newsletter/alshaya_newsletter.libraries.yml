@@ -1,0 +1,11 @@
+newsletter_js:
+  version: 1.x
+  css:
+    theme:
+      css/alshaya_newsletter.css: {}
+  js:
+    js/alshaya_newsletter.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - alshaya_master/ladda

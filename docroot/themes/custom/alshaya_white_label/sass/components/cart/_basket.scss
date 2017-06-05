@@ -5,6 +5,11 @@
     }
 
     table tr {
+      &.sku-out-stock {
+        opacity: 0.7;
+        background-color: $white-four;
+      }
+
       td {
         @include breakpoint($upto-tablet) {
           display: block;
@@ -73,6 +78,7 @@
 
     .price-currency.prefix {
       padding-right: 0.5rem;
+      float: $left;
 
       @include breakpoint($tablet) {
         padding-right: 0;
@@ -151,15 +157,17 @@
       font-size: 0.625rem;
       position: absolute;
       z-index: 1;
-      padding: 5px 11px;
-      top: 1.25rem;
-      #{$right}: 5rem;
+      padding: 10px 11px;
+      top: 1rem;
+      #{$left}: -4.5rem;
+      color: $windows-blue;
       background-color: $alice-blue;
       border: 1px solid $cerulean-two;
+      border-radius: 2px;
       width: 10.81rem;
 
-      @include breakpoint($upto-desktop) {
-        #{$right}: 0;
+      @include breakpoint($desktop) {
+        #{$left}: 1.1rem;
       }
     }
 
@@ -204,21 +212,28 @@
     @extend %tooltip-before-after;
 
     @include breakpoint($desktop) {
-      #{$right}: 36px;
+      #{$right}: 5rem;
     }
   }
 
   .tooltip::after {
     @extend %tooltip-after;
+
+    border-bottom-width: 7px;
+
+    @include breakpoint($desktop) {
+      #{$right}: 5.05rem;
+    }
   }
 
   .tooltip::before {
     #{$right}: 3px;
+    border-bottom-width: 8px;
 
     @extend %tooltip-before;
 
     @include breakpoint($desktop) {
-      #{$right}: 35px;
+      #{$right}: 5rem;
     }
   }
 
@@ -460,9 +475,75 @@
   p {
     margin: 0;
     font-size: 0.75rem;
+    font-family: $arial;
 
     @include breakpoint($desktop) {
       font-size: 0.9375rem;
     }
+  }
+}
+
+#out-of-stock-message {
+  font-family: $arial;
+  font-size: 0.75rem;
+  color: $white-four;
+  font-weight: bold;
+  background-color: $cherry;
+  padding: 1.38rem 3rem;
+  margin-bottom: 0.875rem;
+  position: relative;
+
+  @include breakpoint($only-tablet) {
+    padding: 0.594rem 4rem;
+  }
+
+  @include breakpoint($desktop) {
+    font-size: 0.9375rem;
+    padding: 1rem 4rem;
+  }
+
+  @include icon(warning, after) {
+    background-size: 12px;
+    font-size: 28px;
+    position: absolute;
+    left: 11px;
+    top: 24px;
+
+    @include breakpoint($tablet) {
+      left: 23px;
+      top: 10px;
+    }
+  }
+}
+
+.inline-stock-error {
+  font-family: $arial;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: $cherry;
+  margin-top: 1.375rem;
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0.6875rem;
+  }
+}
+
+.stock-quantity-error {
+  .form-type-select {
+    border: 1px solid $cherry !important;
+    padding: 2px;
+    width: 4.75rem !important;
+
+    &::after {
+      #{$right}: 3px !important;
+      top: 2px !important;
+    }
+  }
+}
+
+#table-cart-totals,
+#table-cart-items {
+  .price-wrapper .price-amount {
+    float: $left;
   }
 }

@@ -39,14 +39,12 @@
   </div>
 
   <div class="print--barcode">
-    {{ barcode }}
+    {{ barcode|raw }}
   </div>
 </div>
 
 <div class="delivery-details">
-  {% trans %}
-    <span class="icon-ic_infomation"></span> Your order number is: <strong>{{ order.orderId }}</strong>
-  {% endtrans %}
+  <span class="icon-ic_infomation"></span> {% trans %}Your order number is <strong>{{ order.orderId }}</strong>{% endtrans %}
 </div>
 
 <h2 class="subtitle">{{ "order details"|t }}</h2>
@@ -59,7 +57,7 @@
         <div class="dark">{{ account.first_name }} {{ account.last_name }}</div>
 
         <div class="contact">
-          <div class="label">{{ "Contact no."|t }}</div>
+          <div class="label">{{ "Contact number"|t }}</div>
           <div class="dark">{{ order_details.contact_no }}</div>
         </div>
       </td>
@@ -68,7 +66,7 @@
         <div class="dark">{{ order_details.delivery_address }}</div>
       </td>
       <td>
-        <div class="label">{{ "Billing address method"|t }}</div>
+        <div class="label">{{ "Billing address"|t }}</div>
         <div class="dark">{{ order_details.billing_address }}</div>
       </td>
       <td class="blend">
@@ -157,7 +155,7 @@
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>
-        <div class="dark">{{ "ORDER TOTAL"|t }}</div>
+        <div class="dark upcase">{{ "Order Total"|t }}</div>
       </td>
       <td class="warm--white">
         <div class="dark">

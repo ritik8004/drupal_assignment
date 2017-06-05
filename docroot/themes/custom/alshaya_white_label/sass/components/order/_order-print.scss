@@ -73,7 +73,7 @@ body {
   margin-top: 1.9rem;
 
   .icon-ic_infomation {
-    font-size: 1.5rem;
+    font-size: 1.9rem;
     font-weight: 700;
     margin-right: 1.06rem;
     vertical-align: middle;
@@ -110,9 +110,11 @@ body {
 
     .value {
       color: $grey-ash;
-      padding-#{$right}: 0.9rem;
-      top: -4px;
+      top: -0.4375rem;
       position: relative;
+      font-size: 12px;
+      letter-spacing: 0.1875rem;
+      right: 0.9em;
     }
   }
 }

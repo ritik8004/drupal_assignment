@@ -34,10 +34,18 @@ function acq_cart_theme($existing, $type, $theme, $path) {
       'variables' => [
         'quantity' => 0,
         'total' => NULL,
-        'currency_format' => $currency_format,
-        'currency_code_position' => $currency_code_position,
       ],
       'template' => 'block--acqminicart',
     ],
   ];
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function acq_cart_user_logout($account) {
+  $cookies = \Drupal::request()->cookies->all();
+  if (isset($cookies['Drupal_visitor_acq_cart_id'])) {
+    user_cookie_delete('acq_cart_id');
+  }
 }

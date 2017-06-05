@@ -142,7 +142,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  * @param mixed $sku
  *   SKU text or full entity object.
  *
- * @return object
+ * @return \Drupal\acq_sku\Entity\SKU
  *   Loaded SKU entity.
  */
 function alshaya_acm_product_get_parent_sku_by_sku($sku) {
@@ -294,6 +294,10 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 function alshaya_acm_product_get_display_node($sku) {
   $sku = is_object($sku) ? $sku->getSKU() : $sku;
 
+  if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
+    $sku = $parent_sku->getSku();
+  }
+
   $query = \Drupal::entityQuery('node')
     ->condition('type', 'acq_product')
     ->condition('field_skus', $sku)
@@ -332,6 +336,30 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   }
 
   return [];
+}
+
+/**
+ * Get the url of the image of SKU.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU entity object.
+ *
+ * @return string
+ *   Url of the image.
+ */
+function _alshaya_acm_get_product_display_image_url(SKU $sku) {
+  // Load the first image.
+  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+
+  // If we have image for the product.
+  if (!empty($media_image)) {
+    if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
+      $uri = $media_image['file']->getFileUri();
+      return file_create_url($uri);
+    }
+  }
+
+  return '';
 }
 
 /**

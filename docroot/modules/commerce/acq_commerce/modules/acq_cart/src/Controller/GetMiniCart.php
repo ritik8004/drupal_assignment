@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\acq_cart\CartStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class GetMiniCart.
@@ -53,29 +54,23 @@ class GetMiniCart extends ControllerBase {
 
     $totals = $cart->totals();
 
-    // Fetch the config.
-    $config = \Drupal::configFactory()
-      ->get('acq_commerce.currency');
-
-    // Fetch the currency format from the config factor.
-    $currency_format = $config->get('currency_code');
-
-    // Fetch the currency code position.
-    $currency_code_position = $config->get('currency_code_position');
-
     // The grand total including discounts and taxes.
     $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
+    $total = [
+      '#theme' => 'acq_commerce_price',
+      '#price' => $grand_total,
+    ];
 
     // Use the template to render the HTML.
     $output = [
       '#theme' => 'acq_cart_mini_cart',
       '#quantity' => $cart->getCartItemsCount(),
-      '#total' => $grand_total,
-      '#currency_format' => $currency_format,
-      '#currency_code_position' => $currency_code_position,
+      '#total' => render($total),
     ];
 
-    return new JsonResponse(drupal_render($output)->jsonSerialize());
+    $response = new Response();
+    $response->setContent(render($output));
+    return $response;
   }
 
 }

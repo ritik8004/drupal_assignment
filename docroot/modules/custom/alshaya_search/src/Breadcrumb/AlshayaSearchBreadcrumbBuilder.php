@@ -42,7 +42,13 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     foreach ($queryString as $string) {
       $query = explode('=', $string);
       if ($query[0] == 'keywords') {
-        $breadcrumb->addLink(Link::createFromRoute(t('Search results for "@keyword"', ['@keyword' => urldecode($query[1])]), '<none>'));
+        if (empty($query[1])) {
+          $linkText = t('Search results');
+        }
+        else {
+          $linkText = t('Search results for "@keyword"', ['@keyword' => urldecode($query[1])]);
+        }
+        $breadcrumb->addLink(Link::createFromRoute($linkText, '<none>'));
         return $breadcrumb;
       }
     }

@@ -87,6 +87,16 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function customerEmail() {
+    if (isset($this->cart, $this->cart->customer_email)) {
+      return $this->cart->customer_email;
+    }
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function totals() {
     if (isset($this->cart, $this->cart->totals)) {
       return $this->cart->totals;
@@ -459,6 +469,7 @@ class Cart implements CartInterface {
   public function convertToCustomerCart(array $cart) {
     $this->cart->cart_id = $cart['cart_id'];
     $this->cart->customer_id = $cart['customer_id'];
+    $this->cart->customer_email = $cart['customer_email'];
   }
 
   /**

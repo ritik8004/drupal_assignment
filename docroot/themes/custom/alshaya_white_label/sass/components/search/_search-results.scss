@@ -168,10 +168,6 @@
         }
       }
 
-      .form-item-keywords {
-        display: none;
-      }
-
       .filter--mobile {
         @include breakpoint($tablet) {
           top: 0.25rem;
@@ -468,4 +464,16 @@ header,
 
 .form-autocomplete.ui-autocomplete-loading {
   background-size: 2rem;
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page {
+    .form-item-keywords {
+      float: $left;
+    }
+  }
+}
+
+ul.item-list__checkbox {
+  display: none;
 }

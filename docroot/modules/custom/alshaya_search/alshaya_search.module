@@ -17,7 +17,7 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
       $view->setTitle(t('Search results for "@keyword"', ['@keyword' => $view->getExposedInput()['keywords']]));
     }
     else {
-      $view->setTitle(t('Search results.'));
+      $view->setTitle(t('Search results'));
     }
 
     // Add search library to search page.
@@ -30,6 +30,7 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
  */
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-search-page') {
+    $form['#attached']['library'][] = 'alshaya_search/alshaya_search';
     $form['keywords']['#attributes'] = ['data-bef-auto-submit-exclude' => ''];
   }
 }
@@ -53,7 +54,7 @@ function alshaya_search_theme($existing, $type, $theme, $path) {
  * Implements hook_facets_search_api_query_type_mapping_alter().
  */
 function alshaya_search_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types) {
-  if ($backend_plugin_id == 'search_api_solr') {
+  if (in_array($backend_plugin_id, ['search_api_solr', 'search_api_db'])) {
     $query_types['range'] = 'alshaya_search_range';
   }
 }

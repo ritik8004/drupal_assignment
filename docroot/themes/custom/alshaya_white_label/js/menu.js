@@ -94,14 +94,15 @@
         $('.remove--toggle').removeClass('remove--toggle');
       });
 
-      $('.menu--one__list-item.has-child').hover(
-        function () {
+      var header_timer;
+      $('.main--menu').hover(function () {
+        header_timer = setTimeout(function () {
           $('body').addClass('overlay');
-        },
-        function () {
-          $('body').removeClass('overlay');
-        }
-      );
+        }, 700);
+      }, function () {
+        clearTimeout(header_timer);
+        $('body').removeClass('overlay');
+      });
 
       $('.logged-out .account').click(function () {
         $('.account').addClass('active');
@@ -143,11 +144,8 @@
       });
 
       // Toggle Function for Store Locator.
-      var $storeHours = $('.hours--label');
-      $storeHours.on('click', function () {
-        $(this).next().toggle();
-        $(this, $storeHours).toggleClass('open');
-        $(this).next().toggleClass('selector--hours');
+      $(document).on('click', '.hours--label', function () {
+        $(this).toggleClass('open');
       });
 
       /**
@@ -172,19 +170,24 @@
       * Make Header sticky on scroll.
       */
 
-      if ($('.block-alshaya-main-menu').length) {
-        var position = $('.block-alshaya-main-menu').offset().top;
-        var nav = $('.block-alshaya-main-menu');
+      if ($('.branding__menu').length) {
+        var position = $('.branding__menu').offset().top;
+        var nav = $('.branding__menu');
 
         $(window).scroll(function () {
           if ($(this).scrollTop() > position) {
+            $('body').addClass('header--fixed');
             nav.addClass('navbar-fixed-top');
           }
           else {
             nav.removeClass('navbar-fixed-top');
+            $('body').removeClass('header--fixed');
           }
         });
       }
+
+      // Add class for three level navigation.
+      $('.menu--one__list-item:not(:has(.menu--four__list-item))').addClass('has--three-levels');
     }
   };
 

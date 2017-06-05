@@ -24,6 +24,7 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
   field_1_row_2_col_2:
     type: entity_reference_paragraphs
     weight: 7
@@ -35,8 +36,10 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
   translation:
     weight: 10
+    region: content
 hidden:
   created: true
   status: true

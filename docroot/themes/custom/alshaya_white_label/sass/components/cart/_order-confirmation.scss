@@ -39,6 +39,25 @@
         padding: 0.625rem;
       }
     }
+
+    td {
+      .price-wrapper .price-currency {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .continue--shopping--mobile {
+    background-color: $white-five;
+
+    td {
+      padding: 0;
+      padding-top: 1rem;
+    }
+
+    @include breakpoint($tablet) {
+      display: none !important;
+    }
   }
 
   .order__unit--price {
@@ -96,6 +115,7 @@
       width: 50%;
       word-spacing: 0.125rem;
       padding-#{$left}: 0;
+      padding-top: 0.3125rem;
     }
 
     strong {
@@ -121,7 +141,7 @@
       padding: 1.125rem;
       padding-#{$left}: 0.8rem;
       padding-#{$right}: 1.5rem;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       color: $cerulean-two;
     }
   }
@@ -268,9 +288,22 @@
     }
   }
 
+  .right--align {
+    text-align: $right;
+  }
+
   .product--count {
-    border-bottom: 1px solid $white-five;
-    border-top: 1px solid $white-five;
+    border-top: 0.625rem solid $white-five;
+    font-size: 0.875rem;
+
+    @include breakpoint($tablet) {
+      border-bottom: 1px solid $white-five;
+      border-top: 1px solid $white-five;
+    }
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.75rem;
+    }
 
     td {
       position: relative;
@@ -310,6 +343,8 @@
   .subtitle {
     border-bottom: 1px solid $white;
     margin-bottom: 0.75rem;
+    color: $marine-blue-two;
+    font-size: 1rem;
   }
 
   &.user-page.checkout-login .multistep-checkout {
@@ -357,7 +392,7 @@
     }
 
     svg {
-      width: 6rem;
+      width: 7rem;
       max-height: 4.375rem;
     }
   }
@@ -367,6 +402,13 @@
 
     svg {
       max-height: 4.875rem;
+    }
+
+    .value {
+      letter-spacing: 0.1875rem;
+      right: 0;
+      top: -0.4375rem;
+      position: relative;
     }
 
     @include breakpoint($tablet) {
@@ -405,9 +447,11 @@
   }
 }
 
+.order-confirmation .continue--shopping--mobile a,
 #edit-confirmation-continue-shopping {
   font-size: 0.75rem;
   font-family: $alshaya-bold;
+  font-weight: normal;
   border: 1px solid $marine-blue;
   float: $right;
   padding: 0.5rem 1em;
@@ -434,6 +478,7 @@
 .confirmation__signup--title {
   color: $marine-blue-two;
   font-family: $alshaya-bold;
+  font-weight: normal;
   border-bottom: 1px solid $white;
   padding-bottom: 0.5rem;
   margin-bottom: 2.3125rem;

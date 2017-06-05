@@ -296,7 +296,7 @@
     }
 
     @include breakpoint($tablet) {
-      padding: 22px 24px;
+      padding: 1.375rem 1.5rem 3.438rem;
     }
   }
 
@@ -344,5 +344,19 @@
     @include breakpoint($tablet) {
       display: none;
     }
+  }
+}
+
+#block-userrecentorders {
+  h2.subtitle {
+    margin-top: 2.5rem;
+  }
+
+  .order-summary-row td:first-child .light {
+    font-size: 0.75rem;
+  }
+
+  td.desktop-only {
+    padding-left: 0;
   }
 }

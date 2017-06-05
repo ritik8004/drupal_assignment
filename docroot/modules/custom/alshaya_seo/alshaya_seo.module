@@ -7,6 +7,7 @@
 
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Url;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -59,6 +60,9 @@ function alshaya_seo_page_attachments(array &$attachments) {
     // As required, we want it to be array of objects.
     $gkg_data['contactPoint'][] = $contact;
   }
+
+  // Add/Edit rich snippet for the PDP page.
+  $gkg_data = _alshaya_seo_pdp_rich_snippet($gkg_data);
 
   $attachments['#attached']['html_head']['alshaya_seo'] = [
     [
@@ -134,4 +138,90 @@ function alshaya_seo_preprocess_node(&$variables) {
       $variables['gtm_attributes']['#markup'] = alshaya_seo_gtm_prepare_product_attributes_prepare_string(alshaya_seo_gtm_prepare_product_attributes($entity));
     }
   }
+}
+
+/**
+ * Adding google rich snippet to product.
+ *
+ * @param array $snippet
+ *   Rich snippet array.
+ *
+ * @return array
+ *   Rich snippet array.
+ */
+function _alshaya_seo_pdp_rich_snippet(array $snippet = []) {
+  $route_match = \Drupal::routeMatch();
+  if ($route_match->getRouteName() == 'entity.node.canonical') {
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $route_match->getParameter('node');
+    // If 'product' node.
+    if ($node && $node->getType() == 'acq_product') {
+      if ($sku_field = $node->get('field_skus')) {
+        $sku_id = $sku_field->first()->getString();
+        $sku_entity = SKU::loadFromSku($sku_id);
+        $product_title = "";
+
+        // Including the utility file.
+        \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+        $product_image = _alshaya_acm_get_product_display_image_url($sku_entity);
+
+        $product_description = _alshaya_seo_get_node_meta_description();
+        $final_price = "";
+        $currency = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
+
+        // If sku name is available.
+        if ($sku_entity->get('name')) {
+          $product_title = $sku_entity->get('name')->getString();
+        }
+
+        // If final price is available.
+        if ($sku_entity->get('final_price')) {
+          $final_price = (float) $sku_entity->get('final_price')->getString();
+        }
+
+        // Prepare rich snippet.
+        $snippet['@type'] = 'Product';
+        $snippet['name'] = $product_title;
+        $snippet['description'] = $product_description;
+        $snippet['image'] = $product_image;
+        // @Todo: Change this once brand field is available.
+        $snippet['brand'] = [
+          '@type' => 'Thing',
+          'name' => \Drupal::config('system.site')->get('name'),
+        ];
+        $snippet['offers'] = [
+          '@type' => "Offer",
+          'priceCurrency' => $currency,
+          'price' => $final_price,
+        ];
+      }
+    }
+  }
+
+  return $snippet;
+}
+
+/**
+ * Get the meta tag description.
+ *
+ * @return string
+ *   Meta tag description.
+ */
+function _alshaya_seo_get_node_meta_description() {
+  $meta_description = '';
+  // Get meta tag for the route.
+  $meta_tags = metatag_get_tags_from_route();
+  if (!empty($meta_tags)) {
+    $tags = $meta_tags['#attached']['html_head'];
+    if (!empty($tags)) {
+      foreach ($tags as $tag) {
+        // If meta description tag.
+        if ($tag[1] == 'description') {
+          $meta_description = $tag[0]['#attributes']['content'];
+        }
+      }
+    }
+  }
+
+  return $meta_description;
 }

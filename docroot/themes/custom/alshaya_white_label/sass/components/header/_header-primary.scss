@@ -50,6 +50,7 @@
 
 header {
   position: relative;
+  z-index: 4;
 
   .c-header__region {
     margin: 1.3625rem auto;
@@ -59,8 +60,10 @@ header {
     padding-right: 1.5rem;
 
     @include breakpoint($desktop) {
-      margin-top: 2.125rem;
       padding-bottom: 2rem;
+      padding-top: 2.125rem;
+      background: $white-five;
+      margin-top: 0;
     }
 
     @include breakpoint($only-tablet) {
@@ -121,7 +124,7 @@ header {
       .block-views-exposed-filter-blocksearch-page {
         input[type="text"] {
           width: 10.38rem;
-          padding-top: 4px;
+          padding-top: 0.625rem;
           font-size: 0.625rem;
 
           &::placeholder {
@@ -197,6 +200,10 @@ header {
       margin-#{$left}: 0;
       vertical-align: bottom;
       display: inline-block;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: -5px;
+      }
     }
 
     label {
@@ -318,11 +325,7 @@ header {
     }
 
     @include breakpoint($only-tablet) {
-      margin-bottom: 1.188rem;
-    }
-
-    @include breakpoint($tablet) {
-      margin-bottom: 0.9375rem;
+      margin-bottom: 0;
     }
   }
 
@@ -334,6 +337,7 @@ header {
     li {
       position: relative;
       list-style: none;
+      z-index: 4;
     }
   }
 
@@ -409,7 +413,8 @@ header {
 
     .mobile--menu {
       float: $left;
-      margin-#{$left}: 1.5625rem;
+      padding: 1rem 1.5625rem;
+      margin-top: -1rem;
     }
   }
 
@@ -453,7 +458,7 @@ header {
     display: block;
 
     a {
-      padding-#{$left}: 0.625rem;
+      padding: 0.875rem 0.875rem 0.5rem 0.625rem;
     }
 
     .store {
@@ -470,14 +475,6 @@ header {
       }
     }
 
-    .mobile--menu {
-      &:hover {
-        &::before {
-          background: url('../imgs/icons/mobile-menu--hover.svg');
-        }
-      }
-    }
-
     ul.menu {
       display: table;
       width: 100%;
@@ -487,11 +484,12 @@ header {
     li {
       display: table-cell;
       text-align: center;
-      padding: 0.875rem 0;
-      padding-bottom: 0.5rem;
-      padding-#{$right}: 0.875rem;
+      padding: 0;
 
-      &:hover,
+      &:hover {
+        background: none;
+      }
+
       &.search-active {
         background: $marine-blue;
 
@@ -513,12 +511,6 @@ header {
           background: url('../imgs/icons/ic-search.svg');
           width: 22px;
           height: 22px;
-        }
-
-        &:hover {
-          &::before {
-            background: url('../imgs/icons/ic-search--hover.svg');
-          }
         }
       }
     }
@@ -577,10 +569,11 @@ header {
       vertical-align: top;
       list-style: none;
       text-align: center;
-      border-bottom: 1px solid $white-five;
-      padding: 0.55rem 0.625rem;
+      border-bottom: 1px solid transparent;
+      padding: 0.8rem 0.625rem;
+      padding-bottom: 0.6rem;
       text-transform: lowercase;
-      height: 2.5625rem;
+      height: 2.5rem;
 
       &.active {
         background: $white-five !important;
@@ -592,19 +585,12 @@ header {
       }
 
       &:hover {
-        border-top: 2px solid $marine-blue;
-
         ul.menu--two__list {
           visibility: visible;
           opacity: 1;
           z-index: 1;
           transform: translateY(0%);
-          transition-delay: 0s, 0s, 0.3s;
-        }
-
-        a.menu--one__link {
-          font-family: $alshaya-bold;
-          color: $marine-blue;
+          transition-delay: 0.7s;
         }
       }
 
@@ -622,25 +608,34 @@ header {
         visibility: hidden;
         opacity: 0;
         position: absolute;
-        top: 100%;
+        top: 2.5625rem;
         #{$left}: 0;
         width: 100%;
         transform: translateY(-2.5rem);
         z-index: -1;
-        transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.1s;
+        transition: all 0.4s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.1s;
       }
     }
 
-    ul.menu--one__list {
+    .active--menu--links {
+      li.menu--one__list-item {
+        &:hover {
+          border-top: 2px solid $marine-blue;
+
+          a.menu--one__link {
+            font-family: $alshaya-bold;
+            font-weight: normal;
+            color: $marine-blue;
+          }
+        }
+      }
+
       &:hover {
         li.menu--one__list-item {
+          border-bottom: 1px solid $white;
+
           &:hover {
             border-bottom: 1px solid $white-five;
-          }
-
-          &:not(:hover) {
-            border-top: 2px solid $white-five;
-            border-bottom: 1px solid $white;
           }
         }
       }
@@ -651,7 +646,7 @@ header {
     position: absolute;
     width: 100%;
     text-align: $left;
-    top: 41px;
+    top: 2.5625rem;
     #{$left}: 0;
     #{$left}: 0;
     background: $white-five;
@@ -659,7 +654,7 @@ header {
     padding-top: 1.5625rem !important;
     padding-left: calc((100% - 1284px) / 2);
     padding-right: calc((100% - 1284px) / 2);
-    min-height: 350px;
+    min-height: 22.125rem;
 
     a {
       color: $peacock-blue;
@@ -675,6 +670,7 @@ header {
 
       > .menu-two__link-wrapper {
         font-family: $alshaya-bold;
+        font-weight: normal;
         display: inline-block;
         padding: 1.5rem 1.563rem;
         width: 210px;
@@ -684,6 +680,7 @@ header {
 
         a {
           font-family: $alshaya-bold;
+          font-weight: normal;
           color: $marine-blue;
 
           &:hover {
@@ -786,6 +783,7 @@ header {
   .menu--four__list {
     display: block !important;
     padding-#{$left}: 0;
+    font-family: $arial;
   }
 
   .level--three {
@@ -833,6 +831,7 @@ header {
 
     .title {
       font-family: $alshaya-bold;
+      font-weight: normal;
       display: block;
       font-size: 14px;
       color: $marine-blue;
@@ -896,6 +895,7 @@ header {
     margin-#{$left}: 0.625rem;
     margin-#{$right}: 0.625rem;
     font-family: $alshaya-bold;
+    font-weight: normal;
     color: $marine-blue;
     display: block;
     font-size: 12px;
@@ -949,12 +949,13 @@ header {
   .menu__in {
     background: url('../imgs/icons/ic-chevronright-copy-9.svg') no-repeat;
     float: $right;
-    margin-top: -14px;
+    margin-top: -0.75rem;
   }
 
   .menu__back {
     background: url('../imgs/icons/ic-chevronleft.svg') no-repeat;
     margin-#{$right}: 0.625rem;
+    vertical-align: middle;
   }
 
   .menu__in,
@@ -991,6 +992,8 @@ header {
     z-index: 1000;
     height: auto !important;
     background: $white-five;
+    padding-bottom: 4em !important;
+    overflow-y: scroll;
   }
 
   .menu-two__link-wrapper.contains-sublink .menu--three__link {
@@ -1069,6 +1072,7 @@ header {
   .one {
     @include breakpoint($only-tablet) {
       font-family: $alshaya-bold;
+      font-weight: normal;
     }
 
     font-family: $alshaya-thin;
@@ -1080,6 +1084,7 @@ header {
 
   .active {
     font-family: $alshaya-bold;
+    font-weight: normal;
     color: $marine-blue;
     background: $white-five;
     text-align: center;
@@ -1120,21 +1125,59 @@ header {
   }
 
   .c-menu-primary {
-    a {
-      padding-left: 0;
+    @include breakpoint($only-mobile) {
+      .my-account-nav a {
+        padding: 0;
+      }
+
+      a {
+        padding-left: 0;
+      }
+    }
+  }
+
+  &.toolbar-horizontal {
+    .toggle--sign {
+      top: 79px;
+    }
+
+    ul.menu--one__list {
+      top: 129px;
+    }
+
+    .mobile--close {
+      top: 89px;
+    }
+  }
+
+  &.toolbar-vertical {
+    .toggle--sign {
+      top: 40px;
+    }
+
+    ul.menu--one__list {
+      top: 90px;
+    }
+
+    .mobile--close {
+      top: 50px;
+    }
+
+    .c-my-account-nav {
+      top: 5.6875rem;
     }
   }
 
   .toggle--sign {
-    top: 40px;
+    top: 0;
   }
 
   ul.menu--one__list {
-    top: 90px;
+    top: 50px;
   }
 
   .mobile--close {
-    top: 50px;
+    top: 10px;
   }
 
   @include breakpoint($desktop) {

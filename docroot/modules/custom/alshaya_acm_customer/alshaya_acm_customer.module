@@ -10,8 +10,9 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\user\UserInterface;
+use Drupal\acq_cart\CartInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_module_implements_alter().
@@ -120,10 +121,14 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
 
     if (!empty($user)) {
       $user_data = \Drupal::service('user.data');
-      if ($preference = $user_data->get('user', $user->id(), 'communication_preference')) {
-        \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-        $request_options['form_params']['customer[extension][communication_preference]'] = alshaya_acm_customer_get_communication_preference_api_value($preference);
+      $preference = $user_data->get('user', $user->id(), 'communication_preference');
+
+      if (empty($preference)) {
+        $preference = [];
       }
+
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+      $request_options['form_params']['customer[extension][communication_preference]'] = alshaya_acm_customer_get_communication_preference_api_value($preference);
     }
   }
 }
@@ -148,6 +153,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
     }
 
     array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
+    $form['#validate'][] = 'alshaya_acm_customer_login_post_validate';
   }
 
   if ($form_id == 'user_register_form') {
@@ -221,7 +227,30 @@ function alshaya_acm_customer_user_email_validate($form, FormStateInterface $for
       $form_state->setValue('name', $user->getAccountName());
     }
     elseif (!$config->get('login_with_username')) {
-      $form_state->setErrorByName('name', t('Unrecognized username or password. <a href=":password">Forgot your password?</a>', [':password' => Url::fromRoute('user.pass')->toString()]));
+      $form_state->setErrorByName('name', t('Unrecognized email address or password.'));
+    }
+  }
+}
+
+/**
+ * Post validate callback to set proper messages.
+ */
+function alshaya_acm_customer_login_post_validate(array &$form, FormStateInterface &$form_state) {
+  // Do something here only if we have errors.
+  if ($all_errors = $form_state->getErrors()) {
+    // Clear all errors before setting them as expected.
+    $form_state->clearErrors();
+
+    // Set error without name ref for name error.
+    if (isset($all_errors['name'])) {
+      drupal_set_message($all_errors['name'], 'error');
+      $form_state->setErrorByName('custom', $all_errors['name']);
+      unset($all_errors['name']);
+    }
+
+    // Set all other errors.
+    foreach ($all_errors as $field_name => $error) {
+      $form_state->setErrorByName($field_name, $error);
     }
   }
 }
@@ -262,6 +291,10 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
           $cart = new Cart($cart);
 
           \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+        }
+        // Otherwise, associate the current cart with the authenticated user.
+        else {
+          \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id']);
         }
 
         // Check if user exists in Drupal. We have already loaded this above.
@@ -473,4 +506,17 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
   catch (\Exception $e) {
     // Do nothing, let default validation function handle the error messages.
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_checkout_pre_place_order().
+ *
+ * @see UserRecentOrders::build()
+ * @see MultistepCheckout::submitForm()
+ */
+function alshaya_acm_customer_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
+  $current_user_id = \Drupal::currentUser()->id();
+  // Invalidate the cache tag when order is placed to reflect on the user's
+  // recent orders.
+  Cache::invalidateTags(['user:' . $current_user_id . ':orders']);
 }

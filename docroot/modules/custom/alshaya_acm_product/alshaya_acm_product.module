@@ -134,7 +134,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     elseif ($view_mode == 'modal') {
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
-      $build['image_url'] = NULL;
+      // $build['image_url'] = NULL.
+      alshaya_acm_product_get_gallery($build, $sku_entity);
+      _alshaya_acm_product_build_price($build, $sku_entity);
+      $build['item_code']['#markup'] = $sku;
+
       $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
 
       if ($sku_media) {
@@ -173,6 +177,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       ];
 
       _alshaya_acm_product_build_price($build, $sku_entity);
+
+      if (!alshaya_acm_is_product_in_stock($sku_entity)) {
+        $build['out_of_stock'] = [
+          '#markup' => t('out of stock'),
+        ];
+      }
     }
   }
 }
@@ -228,6 +238,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               if (!alshaya_acm_is_product_in_stock($sku)) {
                 $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
               }
+            }
+            // For some reason we don't have proper data for the option.
+            else {
+              $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
             }
           }
         }
@@ -324,7 +338,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
 
   if ($price = (float) $sku_entity->get('price')->getString()) {
     $build['price'] = [
-      '#theme' => 'alshaya_acm_price',
+      '#theme' => 'acq_commerce_price',
       '#price' => $price,
     ];
 
@@ -336,7 +350,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
       }
 
       $build['final_price'] = [
-        '#theme' => 'alshaya_acm_price',
+        '#theme' => 'acq_commerce_price',
         '#price' => $final_price,
       ];
 
@@ -349,7 +363,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
   }
   elseif ($final_price = (float) $sku_entity->get('final_price')->getString()) {
     $build['price'] = [
-      '#theme' => 'alshaya_acm_price',
+      '#theme' => 'acq_commerce_price',
       '#price' => $final_price,
     ];
   }
@@ -364,36 +378,14 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
 function _alshaya_acm_product_get_size_guide_link() {
   // Check if we have the configuration set.
   if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
-    try {
-      $options = [
-        'attributes' => [
-          'class' => ['size-guide-link'],
-          'target' => '_blank',
-        ],
-      ];
-
-      // Try as external url.
-      $url = Url::fromUri($size_guide_link, $options);
-    }
-    catch (Exception $e) {
-      try {
-        $options = [
-          'attributes' => [
-            'class' => ['use-ajax', 'size-guide-link'],
-            'data-dialog-type' => 'modal',
-            'data-dialog-options' => Json::encode(['width' => 'auto']),
-          ],
-        ];
-
-        // Try as internal url.
-        $url = Url::fromUserInput($size_guide_link, $options);
-      }
-      catch (Exception $e) {
-        \Drupal::logger('alshaya_acm_product')->error('Invalid size guide link: @link', ['@link' => $size_guide_link]);
-        return '';
-      }
-    }
-
+    $options = [
+      'attributes' => [
+        'class' => ['size-guide-link', 'use-ajax'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
+      ],
+    ];
+    $url = Url::fromRoute('alshaya_acm_product.size_guide_modal', [], $options);
     $link = Link::fromTextAndUrl(t('Size Guide'), $url);
     return $link->toString();
   }

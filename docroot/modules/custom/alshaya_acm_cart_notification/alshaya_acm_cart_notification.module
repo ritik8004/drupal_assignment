@@ -37,7 +37,7 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
   // Attach the js file with the add to cart form.
   $form['#attached']['library'][] = 'core/drupal.ajax';
   $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-  $form['#attached']['library'][] = 'alshaya_acm_cart_notification/ladda';
+  $form['#attached']['library'][] = 'alshaya_master/ladda';
   $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
 }
 
@@ -113,7 +113,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#image' => $image,
       '#product_name' => $product_name,
       '#link' => $url,
-      '#link_text' => t('View Cart.'),
+      '#link_text' => t('view cart'),
     ];
   }
 
@@ -124,7 +124,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   $html = drupal_render($output);
 
   // Get the interval we want to show the message for on our ladda button.
-  $interval = \Drupal::config('alshaya_acm_cart_notification.settings')->get('ajax_spinner_message_interval');
+  $interval = \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
   $data['interval'] = $interval;
 
   // Prepare the ajax Response.

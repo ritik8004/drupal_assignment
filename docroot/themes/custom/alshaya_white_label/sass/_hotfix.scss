@@ -23,12 +23,28 @@ body.ie {
 body.ucbrowser {
   .owl-prev,
   .owl-next {
-    @include breakpoint($tablet) {
-      top: 47%;
+    @include breakpoint($mobile) {
+      top: 45% !important;
     }
 
-    @include breakpoint($only-mobile) {
-      top: 45%;
+    @include breakpoint($tablet) {
+      top: 47% !important;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    #block-mobilenavigation {
+      ul.menu {
+        li:first-child {
+          float: $left;
+          height: 20px;
+        }
+
+        li:last-child {
+          float: $right;
+          height: 20px;
+        }
+      }
     }
   }
 }

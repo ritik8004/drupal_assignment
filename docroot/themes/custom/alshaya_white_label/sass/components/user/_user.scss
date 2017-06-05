@@ -35,6 +35,10 @@
   font-size: 12px;
   color: $greyish;
   margin-top: 1.5rem;
+
+  + .captcha-inline-error {
+    display: none;
+  }
 }
 
 .messages--error {
@@ -214,7 +218,7 @@
 
       img {
         @include breakpoint($desktop) {
-          margin-#{$left}: 0.8rem;
+          margin-#{$left}: 0.7rem;
           margin-top: 0.3rem;
         }
       }
@@ -416,6 +420,7 @@
 
   &.c-change-password,
   &.c-user-edit {
+    padding-top: 0;
     padding-left: 0.5em;
     padding-right: 0.5em;
 
@@ -782,6 +787,7 @@
 .alias--user-register-complete {
   .c-page-title {
     font-family: $alshaya-bold;
+    font-weight: normal;
 
     @include breakpoint($only-tablet) {
       padding: 0 1rem;
@@ -860,6 +866,7 @@
   border: 0;
 
   .c-page-title {
+    padding-top: 0.2rem;
     border-bottom: 1px solid $white-three;
     position: static;
     padding-bottom: 10px;
@@ -1055,6 +1062,32 @@
       left: 90%;
       font-size: 22px;
       color: $black;
+    }
+  }
+}
+
+.alias--user-register {
+  @include breakpoint($only-tablet) {
+    .l-column--two-1050 {
+      margin-right: 1.5rem;
+      margin-left: 1.5rem;
+    }
+
+    .user-register-form,
+    h1.c-page-title {
+      margin-#{$left}: 0;
+    }
+  }
+}
+
+.alias--user-login,
+.alias--user-register {
+  @include breakpoint($only-mobile) {
+    .user-page {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 }

@@ -43,6 +43,8 @@ $config['google_tag.settings']['container_id'] = 'GTM-NPNW788';
 
 switch ($env) {
   case 'local':
+    global $_alshaya_acm_disable_stock_check;
+    $_alshaya_acm_disable_stock_check = TRUE;
   case 'dev':
   case 'test':
     $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.acm.acquia.io/';

@@ -153,6 +153,9 @@ function alshaya_master_install() {
     'Unit Price' => [
       'ar' => 'سعر القطعة',
     ],
+    'Unit price' => [
+      'ar' => 'سعر القطعة',
+    ],
     'Item code' => [
       'ar' => 'رمز القطعة',
     ],
@@ -165,11 +168,11 @@ function alshaya_master_install() {
     'Enter card details' => [
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
-    'I would like to receive exclusive deals from Mothercare. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.' => [
-      'ar' => '<a href="/terms">الشروط والأحكام</a> أرغب في استلام عروض حصرية من مذركير&nbsp;تسجيل بياناتك يعني موافقتك على الشروط والأحكام',
+    '<p>I would like to receive exclusive deals from Mothercare.</p><p>By registering I agree to your <a href="/terms">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>أرغب في استلام عروض حصرية من مذركير</p><p>تسجيل بياناتك يعني موافقتك على الشروط والأحكام&nbsp;<a href="/terms">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
-      'ar' => '@title يرجى إدخال',
+      'ar' => 'يرجى إدخال @title',
     ],
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
@@ -214,6 +217,9 @@ function alshaya_master_install() {
       'ar' => 'أضف عنواناً',
     ],
     'Delivery address' => [
+      'ar' => 'عنوان التوصيل',
+    ],
+    'Delivery Address' => [
       'ar' => 'عنوان التوصيل',
     ],
     'Primary address' => [
@@ -381,19 +387,302 @@ function alshaya_master_install() {
     'shop by' => [
       'ar' => 'التسوق حسب القسم',
     ],
+    'Basket (@count)' => [
+      'ar' => 'حقيبة التسوق (@count)',
+    ],
+    'Basket' => [
+      'ar' => 'حقيبة التسوق',
+    ],
+    'has been added to your cart.' => [
+      'ar' => 'تم إضافة القطعة/القطع إلى حقيبتك',
+    ],
+    'view cart' => [
+      'ar' => 'عرض العربة',
+    ],
+    'Some items in your basket are out of stock. Please remove them to proceed.' => [
+      'ar' => 'بعض القطع في حقيبة تسوقك نفذت من المخزون و تم إزالتها من حقيبة تسوقك',
+    ],
+    'Sub total' => [
+      'ar' => 'المبلغ',
+    ],
+    'Quantity' => [
+      'ar' => 'الكمية',
+    ],
+    'Product' => [
+      'ar' => 'المنتج',
+    ],
+    'Available delivery options' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Home delivery in @days days on orders over @amount' => [
+      'ar' => 'خدمة التوصيل للمنازل خلال @days أيام للطلبيات التي تزيد عن @amount د.ك.',
+    ],
+    'Collect the order in store from @days days' => [
+      'ar' => 'استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى @days أيام',
+    ],
+    'Home Delivery' => [
+      'ar' => 'خدمة التوصيل للمنزل',
+    ],
+    'Click and Collect' => [
+      'ar' => 'اختر واستلم',
+    ],
+    'Click & Collect' => [
+      'ar' => 'اختر واستلم',
+    ],
+    'checkout securely' => [
+      'ar' => 'إتمام عملية الشراء بأمان',
+    ],
+    'continue shopping' => [
+      'ar' => 'تابع التسوق',
+    ],
+    'Continue shopping' => [
+      'ar' => 'تابع التسوق',
+    ],
+    'Add a promo code' => [
+      'ar' => 'هل لديك رمز عرض ؟',
+    ],
+    'Enter a privilege card number' => [
+      'ar' => 'أدخل رقم بطاقة نادي الامتيازات',
+    ],
+    'Promotion code' => [
+      'ar' => 'رمز العرض',
+    ],
+    'apply' => [
+      'ar' => 'تطبيق',
+    ],
+    'Re-enter Privilege Card Number' => [
+      'ar' => 'يرجى إدخال رقم بطاقة نادي الامتيازات ثانيةً',
+    ],
+    'Your cart has been updated.' => [
+      'ar' => 'قطعة/قطع أضيفت إلى سلة تسوقك',
+    ],
+    'Horizontal Recommendations' => [
+      'ar' => 'ما ننصح به',
+    ],
+    'Loading ...' => [
+      'ar' => 'تحميل...',
+    ],
+    'Item %sku has been removed from cart.' => [
+      'ar' => 'تمت إزالة العنصر %sku من السلة.',
+    ],
+    'Your shopping basket is empty' => [
+      'ar' => 'حقيبة التسوق الخاصة بك فارغة',
+    ],
+    'Sorry, we now only have @quantity of these available and we have updated your basket.' => [
+      'ar' => 'عفواً، لم يتبق سوى quantity@ قطع من هذا المنتج و لقد قمنا بتحديث حقيبة تسوقك',
+    ],
+    'add to cart' => [
+      'ar' => 'أضف إلى السلة',
+    ],
+    '@name field is required.' => [
+      'ar' => 'يرجى إدخال @name',
+    ],
+    'Order Total <span>(Before Delivery)</span>' => [
+      'ar' => 'المبلغ الإجمالي للطلبية <span>(قبل التوصيل)</span>',
+    ],
+    'Basket (%count)' => [
+      'ar' => 'حقيبة التسوق (%count)',
+    ],
+    'print' => [
+      'ar' => 'طباعة',
+    ],
+    'Payment method' => [
+      'ar' => 'طريقة الدفع',
+    ],
+    'Delivery method' => [
+      'ar' => 'طريقة التوصيل',
+    ],
+    'Shipping & Billing Address' => [
+      'ar' => 'عنوان اتوصيل و عنوان تحرير الفاتورة',
+    ],
+    'Delivery charge' => [
+      'ar' => 'رسوم التوصيل',
+    ],
+    'Quantity: @product.ordered' => [
+      'ar' => 'الكمية: @product.ordered',
+    ],
+    'Item code: @product.sku' => [
+      'ar' => 'رمز القطعة: @product.sku',
+    ],
+    'Item Code' => [
+      'ar' => 'رمز القطعة',
+    ],
+    'Product Description' => [
+      'ar' => 'وصف المنتج',
+    ],
+    'Read more' => [
+      'ar' => 'اقرأ المزيد',
+    ],
+    'Delivery Options' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Standard delivery' => [
+      'ar' => 'التوصيل العادي',
+    ],
+    'FREE' => [
+      'ar' => 'مجاناً',
+    ],
+    'Next day delivery' => [
+      'ar' => 'التوصيل في اليوم التالي',
+    ],
+    'All orders' => [
+      'ar' => 'كل الطلبيات',
+    ],
+    'Enter your area' => [
+      'ar' => 'أدخل المنطقة',
+    ],
+    'Search Stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Hover over image to zoom' => [
+      'ar' => 'حرك مؤشر الماوس فوق الصورة للتكبير',
+    ],
+    'Customers also bought' => [
+      'ar' => 'الزبائن اشتروا أيضاً',
+    ],
+    'You may also like' => [
+      'ar' => 'قد يعجبك أيضاً',
+    ],
+    'Related' => [
+      'ar' => 'ذات صلة',
+    ],
+    'secure checkout' => [
+      'ar' => 'إتمام عملية الشراء بأمان',
+    ],
+    'Secure Checkout' => [
+      'ar' => 'إتمام عملية الشراء بأمان',
+    ],
+    'Order Summary' => [
+      'ar' => 'ملخص الطلبية',
+    ],
+    'Items in your basket' => [
+      'ar' => 'القطع في حقيبة تسوقك',
+    ],
+    'Before Delivery' => [
+      'ar' => 'قبل التوصيل',
+    ],
+    'Make payment' => [
+      'ar' => 'الدفع',
+    ],
+    'Order confirmation' => [
+      'ar' => 'تأكيد الطلبية',
+    ],
+    'Home delivery' => [
+      'ar' => 'خدمة التوصيل للمنزل',
+    ],
+    'deliver to this address' => [
+      'ar' => 'توصيل إلى هذا العنوان',
+    ],
+    'proceed to payment' => [
+      'ar' => 'تابع للدفع',
+    ],
+    'Back to basket' => [
+      'ar' => 'العودة إلى حقيبة التسوق',
+    ],
+    'Choose delivery' => [
+      'ar' => 'التأكيد',
+    ],
+    'delivery information' => [
+      'ar' => 'معلومات التوصيل',
+    ],
+    'Email Address' => [
+      'ar' => 'عنوان البريد الإلكتروني',
+    ],
+    'Address Line 1' => [
+      'ar' => 'العنوان الأول',
+    ],
+    'Change' => [
+      'ar' => 'تغيير',
+    ],
+    'Payment Options' => [
+      'ar' => 'خيارات الدفع',
+    ],
+    'Is the delivery address the same as your billing address?' => [
+      'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
+    ],
+    '<p>I confirm that I have read and accept the <a href="#">Privacy Policy</a> and <a href="#">Terms &amp; Conditions</a> of purchase. Read our <a href="#">Return Policy</a></p>' => [
+      'ar' => 'أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا',
+    ],
+    'Billing address' => [
+      'ar' => 'عنوان تحرير الفاتورة',
+    ],
+    'place order' => [
+      'ar' => 'سجل الطلبية',
+    ],
+    'Return to delivery options' => [
+      'ar' => 'العودة إلى خيارات التوصيل',
+    ],
+    '<p>Thank you for shopping online with us, <strong class="dark--text">@account.first_name @account.last_name</strong></p>' => [
+      'ar' => '<p>شكراً لتسوقكم معنا عبز الموقع، <strong class="dark--text">@account.first_name @account.last_name</strong></p>',
+    ],
+    '<p>You’ll receive an email addressed to <strong class="dark--text">@account.mail</strong> conﬁrming your order</p>' => [
+      'ar' => '<p>ستصلك رسالة تأكيد لطلبيتك بعد قليل على <strong class="dark--text">@account.mail</strong>.</p>',
+    ],
+    'print confirmation' => [
+      'ar' => 'اطبع التأكيد',
+    ],
+    'Your order number is <strong>@order.orderId</strong>' => [
+      'ar' => 'رقم طلبيتك هو: <strong>@order.orderId</strong>',
+    ],
+    'order details' => [
+      'ar' => 'تفاصيل الطلبية',
+    ],
+    'Product details (@products_count)' => [
+      'ar' => 'تفاصيل المنتج (@products_count)',
+    ],
+    'Your account' => [
+      'ar' => 'حسابك',
+    ],
+    'Save your details to make shopping easier next time' => [
+      'ar' => 'احفظ التفاصيل الخاصة بك لتسهيل تسوقك المرة القادمة',
+    ],
+    'save' => [
+      'ar' => 'وفر',
+    ],
+    'Back to top' => [
+      'ar' => 'الرجوع إلى أعلى',
+    ],
+    'The password does not satisfy the password policies.' => [
+      'ar' => 'كلمة السر غير مطابقة لسياسات كلمة السر',
+    ],
+    '%name is not recognized as a username or an email address.' => [
+      'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
+    ],
+    'Find stores near' => [
+      'ar' => 'ابحث عن المحلات القريبة',
+    ],
+    'Near me' => [
+      'ar' => 'القريبة إليك',
+    ],
+    'Get directions' => [
+      'ar' => 'احصل على الاتجاهات',
+    ],
+    'View on map' => [
+      'ar' => 'عرض على الخريطة',
+    ],
+    'Sorry, there are no stores or locations available to display.' => [
+      'ar' => 'عفواً، لا توجد محلات أو مواقع لعرضها',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
+  $site_logo = 'themes/custom/alshaya_white_label/mothercare-logo-sm';
+
   // Get config factory object.
   $config_factory = \Drupal::configFactory();
-
+  // Save default site logo.
   $config_factory
     ->getEditable('alshaya_white_label.settings')
     ->setData([
       'logo' => [
-        'path' => 'themes/custom/alshaya_white_label/mothercare-logo.svg',
+        'path' => $site_logo . '.svg',
       ],
     ])
+    ->save();
+
+  // Save default logo for email.
+  $config_factory->getEditable('alshaya_master.theme.alshaya_white_label')
+    ->set('email_logo_path', $site_logo . '.png')
     ->save();
 
   // Set /home page as site front page.
@@ -515,12 +804,17 @@ function alshaya_master_install() {
     ->set('visibility', [
       'request_path' => [
         'id' => 'request_path',
-        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*",
+        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*\r\n/contact",
         'negate' => FALSE,
         'context_mapping' => [],
       ],
     ])
     ->set('region', 'breadcrumb')
     ->set('weight', '-26')
+    ->save();
+
+  // Set the access-denied page to '/user'.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('page.403', '/user')
     ->save();
 }

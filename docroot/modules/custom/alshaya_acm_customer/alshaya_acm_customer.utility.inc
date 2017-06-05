@@ -103,30 +103,28 @@ function alshaya_acm_customer_update_user_data(User $user, array $customer) {
  * @param bool $default
  *   Whether function should return the default value.
  *
- * @return string
+ * @return array
  *   Drupal value.
  */
 function alshaya_acm_customer_get_communication_preference_drupal_value($value, $default = FALSE) {
-  $preferences = \Drupal::config('alshaya_acm_customer.api_mappings')->get('communication_preferences');
+  $values = [];
 
-  // Flip the array to return reverse data.
-  $preferences = array_flip($preferences);
-
-  if (isset($preferences[$value])) {
-    return $preferences[$value];
+  // We get the values separated by comma from API.
+  if (!empty($value)) {
+    $values = explode(',', $value);
+  }
+  // If no value available and default is required.
+  elseif ($default) {
+    $values[] = 'email';
   }
 
-  if ($default) {
-    return reset($preferences);
-  }
-
-  return '';
+  return $values;
 }
 
 /**
  * Function to get value of communication_preference as per keys used in API.
  *
- * @param string $value
+ * @param array $value
  *   Drupal Value.
  * @param bool $default
  *   Whether function should return the default value.
@@ -134,16 +132,17 @@ function alshaya_acm_customer_get_communication_preference_drupal_value($value, 
  * @return string
  *   API value.
  */
-function alshaya_acm_customer_get_communication_preference_api_value($value, $default = TRUE) {
-  $preferences = \Drupal::config('alshaya_acm_customer.api_mappings')->get('communication_preferences');
+function alshaya_acm_customer_get_communication_preference_api_value(array $value, $default = TRUE) {
+  $values = [];
 
-  if (isset($preferences[$value])) {
-    return $preferences[$value];
+  // We send array of values to API.
+  if ($value) {
+    $values = $value;
+  }
+  // If value is empty and default is required.
+  elseif ($default) {
+    $values = ['email'];
   }
 
-  if ($default) {
-    return reset($preferences);
-  }
-
-  return '';
+  return $values;
 }
