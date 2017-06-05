@@ -192,6 +192,8 @@ function _alshaya_seo_get_node_meta_description() {
       }
     }
   }
+
+  return $meta_description;
 }
 
 /**
