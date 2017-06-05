@@ -511,6 +511,32 @@ class APIWrapper {
   }
 
   /**
+   * Fetches product attribute options.
+   *
+   * @return array
+   *   Array of product attribute options.
+   */
+  public function getProductOptions() {
+    // @TODO: Need to remove v1/agent when we move to new agent url format.
+    $endpoint = 'v1/agent/product/options';
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $options = [];
+
+    try {
+      $options = $this->tryAgentRequest($doReq, 'getAttributeOptions', 'options');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $options;
+  }
+  
+  /**
    * Fetches all promotions.
    *
    * @return array

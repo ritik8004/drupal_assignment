@@ -589,6 +589,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $weight = $defaultWeightIncrement + count($fields);
 
         switch ($field_info['type']) {
+          case 'attribute':
           case 'string':
             $field = BaseFieldDefinition::create('string');
 
