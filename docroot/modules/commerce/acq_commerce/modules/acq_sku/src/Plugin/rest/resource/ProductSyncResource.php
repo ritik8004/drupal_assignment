@@ -529,6 +529,7 @@ class ProductSyncResource extends ResourceBase {
 
         switch ($field['type']) {
           case 'attribute':
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
             foreach ($value as $val) {
               if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
                 $sku->{$field_key}->setValue($term->getName());
