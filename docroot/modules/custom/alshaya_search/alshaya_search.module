@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -30,6 +31,18 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
  */
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-search-page') {
+    /** @var \Drupal\views\Entity\View $view */
+    $view = $form_state->getStorage()->view;
+
+    $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
+    foreach ($parameters['f'] as $key => $value) {
+      // Add hidden form field for facet parameter.
+      $form['f[' . $key . ']'] = [
+        '#type' => 'hidden',
+        '#value' => $value,
+        '#weight' => -1,
+      ];
+    }
     $form['#attached']['library'][] = 'alshaya_search/alshaya_search';
     $form['keywords']['#attributes'] = ['data-bef-auto-submit-exclude' => ''];
   }

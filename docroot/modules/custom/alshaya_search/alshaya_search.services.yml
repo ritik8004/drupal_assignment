@@ -1,9 +1,13 @@
 services:
- alshaya_search.breadcrumb:
-   class: Drupal\alshaya_search\Breadcrumb\AlshayaSearchBreadcrumbBuilder
-   tags:
-    - { name: breadcrumb_builder, priority: 100 }
- alshaya_plp.breadcrumb:
-   class: Drupal\alshaya_search\Breadcrumb\AlshayaPLPBreadcrumbBuilder
-   tags:
-    - { name: breadcrumb_builder, priority: 10001 }
+  alshaya_search.breadcrumb:
+    class: Drupal\alshaya_search\Breadcrumb\AlshayaSearchBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }
+  alshaya_plp.breadcrumb:
+    class: Drupal\alshaya_search\Breadcrumb\AlshayaPLPBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 10001 }
+  alshaya_search.route_subscriber:
+    class: Drupal\alshaya_search\Routing\FacetAjaxRouteSubscriber
+    tags:
+      - { name: event_subscriber }
