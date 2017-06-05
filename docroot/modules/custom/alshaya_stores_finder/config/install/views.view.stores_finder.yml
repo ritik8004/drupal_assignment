@@ -818,7 +818,7 @@ display:
           group_type: group
           admin_label: ''
           empty: false
-          content: '@total closest stores'
+          content: '@total closest stores to'
           plugin_id: result
       exposed_form:
         type: basic
@@ -1645,7 +1645,7 @@ display:
           group_type: group
           admin_label: ''
           empty: false
-          content: '@total closest stores'
+          content: '@total closest stores to'
           plugin_id: result
       exposed_form:
         type: basic
