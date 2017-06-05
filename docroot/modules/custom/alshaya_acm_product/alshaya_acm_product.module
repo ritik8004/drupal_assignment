@@ -177,6 +177,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       ];
 
       _alshaya_acm_product_build_price($build, $sku_entity);
+
+      if (!alshaya_acm_is_product_in_stock($sku_entity)) {
+        $build['out_of_stock'] = [
+          '#markup' => t('out of stock'),
+        ];
+      }
     }
   }
 }
@@ -332,7 +338,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
 
   if ($price = (float) $sku_entity->get('price')->getString()) {
     $build['price'] = [
-      '#theme' => 'alshaya_acm_price',
+      '#theme' => 'acq_commerce_price',
       '#price' => $price,
     ];
 
@@ -344,7 +350,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
       }
 
       $build['final_price'] = [
-        '#theme' => 'alshaya_acm_price',
+        '#theme' => 'acq_commerce_price',
         '#price' => $final_price,
       ];
 
@@ -357,7 +363,7 @@ function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
   }
   elseif ($final_price = (float) $sku_entity->get('final_price')->getString()) {
     $build['price'] = [
-      '#theme' => 'alshaya_acm_price',
+      '#theme' => 'acq_commerce_price',
       '#price' => $final_price,
     ];
   }

@@ -96,7 +96,8 @@
       #{$right}: 0;
       top: 0;
       height: 2.1875rem;
-      padding: 0.375rem;
+      padding-#{$right}: 1rem;
+      padding-top: 0.3rem;
       border: 1px solid $greyish;
       border-#{$left}: 0;
       z-index: 1;
@@ -104,6 +105,7 @@
       @include breakpoint($tablet) {
         border: 1px solid $white;
         border-#{$left}: 0;
+        padding: 0.375rem;
         #{$right}: 1.7%;
         top: 0.3rem;
       }
@@ -186,6 +188,9 @@
       background-repeat: no-repeat;
       text-indent: -9999px;
       width: 20px;
+      height: 25px;
+      padding: 0;
+      background-size: contain;
     }
   }
 
@@ -214,30 +219,54 @@
     margin-#{$right}: 0.4rem;
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 0.1875rem;
+      margin-#{$right}: 0.3875rem;
     }
   }
 
-  .map-view-link::before {
-    background: url('../imgs/icons/map.svg') no-repeat;
-    width: 1.625rem;
-    height: 1.4375rem;
-    margin-#{$right}: 0.6rem;
-    margin-#{$left}: 0.3125rem;
+  .map-view-link {
+    @include icon(map, before) {
+      color: $cerulean-two;
+      margin-#{$right}: 0.4rem;
+      margin-#{$left}: 0.3125rem;
+      vertical-align: middle;
+      font-size: 1.8rem;
+      line-height: 1;
 
-    @include breakpoint($desktop) {
-      margin-#{$left}: 0.1875rem;
+      @include breakpoint($desktop) {
+        line-height: 0.6;
+        margin-#{$left}: 0.1875rem;
+      }
+    }
+
+    &:hover::before,
+    &.active::before {
+      color: $marine-blue;
     }
   }
 
-  .list-view-link::before {
-    background: url('../imgs/icons/list.svg') no-repeat;
-    width: 1.625rem;
-    height: 1.125rem;
-    vertical-align: top;
+  .list-view-link {
+    @include icon(list, before) {
+      color: $cerulean-two;
+      width: 1.625rem;
+      height: 0.8rem;
+      vertical-align: top;
+      font-size: 2rem;
+      line-height: 0.6;
 
-    @include breakpoint($desktop) {
-      margin-#{$left}: 0.625rem;
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 1.1rem;
+        margin-#{$left}: -0.45rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0.5rem;
+        margin-#{$right}: 0.8rem;
+      }
+    }
+
+    &:hover::before,
+    &.active::before {
+      color: $marine-blue;
     }
   }
 
@@ -246,6 +275,7 @@
     padding-#{$right}: 1rem;
 
     @include breakpoint($desktop) {
+      padding-#{$left}: 1.4rem;
       padding-#{$right}: 0;
     }
   }
@@ -280,7 +310,6 @@
   }
 
   .active {
-    font-weight: bold;
     color: $marine-blue-two;
   }
 
@@ -298,6 +327,10 @@
     padding-#{$right}: 2.125rem;
     font-size: 0.75rem;
     color: $grey-ash;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.25rem;
+    }
 
     &.ui-autocomplete-loading {
       background-size: 30px;
@@ -645,7 +678,7 @@
       @include breakpoint($desktop) {
         max-height: 51rem;
         border-#{$right}: 1px solid $white;
-        padding-right: 1%;
+        padding-#{$right}: 1%;
       }
 
       @include breakpoint($only-tablet) {
@@ -690,6 +723,17 @@
 
     @include breakpoint($desktop) {
       font-size: 0.875rem;
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    @include breakpoint($tablet) {
+      height: 2.9375rem;
+    }
+
+    @include breakpoint($desktop) {
+      height: 4.5rem;
     }
   }
 
@@ -853,6 +897,18 @@
     }
   }
 
+  .hours--wrapper {
+    .open--hours {
+      display: block;
+    }
+
+    .hours--label {
+      @include icon(chevronup, after) {
+        color: $marine-blue-two;
+      }
+    }
+  }
+
   .map--store {
     float: $left;
     width: 61.5%;
@@ -871,18 +927,26 @@
 .path--store-finder,
 .nodetype--store {
   .hours--wrapper {
-    .hours--label::after {
-      transform: rotate(90deg);
-    }
+    .hours--label.open {
+      @include icon(chevrondown, after) {
+        color: $marine-blue-two;
+      }
 
-    .hours--label.open::after {
-      transform: rotate(0deg) !important;
+      &::after {
+        transform: none;
+      }
     }
 
     .open--hours {
       @include breakpoint($only-mobile) {
         margin-top: 0.9rem;
       }
+    }
+  }
+
+  .hours--label.open {
+    + .open--hours {
+      display: block;
     }
   }
 
@@ -915,18 +979,30 @@
     }
   }
 
-  .hours--label::after {
-    background: url('../imgs/icons/ic-chevron-70.svg');
-    width: 7px;
-    height: 16px;
+  .hours--label {
+    @include icon(chevron#{$right}, after) {
+      position: absolute;
+      display: inline-block;
+      color: $cerulean-two;
+      font-size: 1.875rem;
+      top: -0.5rem;
+      #{$right}: -0.7rem;
+
+      @include breakpoint($tablet) {
+        #{$right}: -0.4375rem;
+      }
+    }
   }
 
-  .view-on--map::after {
-    background: url('../imgs/icons/map.png');
-    width: 18px;
-    height: 17px;
-    top: 1rem;
-    #{$right}: 0.8rem;
+  .view-on--map {
+    @include icon(map, after) {
+      color: $cerulean-two;
+      vertical-align: middle;
+      font-size: 1.8rem;
+      line-height: 1;
+      top: 0.8rem;
+      #{$right}: 0.8rem;
+    }
   }
 
   .get--directions div::after {
@@ -954,14 +1030,18 @@
   .get--directions {
     color: $cerulean-two;
     cursor: pointer;
-    margin-top: 0.5625rem;
   }
 
-  .hours--label::after {
-    #{$right}: 7px;
+  .hours--wrapper,
+  .view-on--map,
+  .get--directions {
+    padding: 1rem;
+    padding-#{$left}: 0;
+    padding-top: 0;
   }
 
   .open--hours {
     line-height: 1.57;
+    margin-top: 0.9rem;
   }
 }

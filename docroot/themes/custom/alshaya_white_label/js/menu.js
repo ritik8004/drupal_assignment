@@ -95,13 +95,11 @@
       });
 
       var header_timer;
-      $('.main--menu').on('mouseover', function () {
+      $('.main--menu').hover(function () {
         header_timer = setTimeout(function () {
           $('body').addClass('overlay');
-        }, 600);
-      });
-
-      $('.main--menu').on('mouseout', function () {
+        }, 700);
+      }, function () {
         clearTimeout(header_timer);
         $('body').removeClass('overlay');
       });
@@ -147,9 +145,7 @@
 
       // Toggle Function for Store Locator.
       $(document).on('click', '.hours--label', function () {
-        $(this).next().slideToggle();
         $(this).toggleClass('open');
-        $(this).next().toggleClass('selector--hours');
       });
 
       /**

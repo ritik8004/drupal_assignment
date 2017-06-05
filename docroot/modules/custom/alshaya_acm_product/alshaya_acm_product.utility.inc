@@ -339,6 +339,30 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
 }
 
 /**
+ * Get the url of the image of SKU.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU entity object.
+ *
+ * @return string
+ *   Url of the image.
+ */
+function _alshaya_acm_get_product_display_image_url(SKU $sku) {
+  // Load the first image.
+  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+
+  // If we have image for the product.
+  if (!empty($media_image)) {
+    if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
+      $uri = $media_image['file']->getFileUri();
+      return file_create_url($uri);
+    }
+  }
+
+  return '';
+}
+
+/**
  * Helper function to get child skus for a configurable sku from tree.
  *
  * @param array $tree

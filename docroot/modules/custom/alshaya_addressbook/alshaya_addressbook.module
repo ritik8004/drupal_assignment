@@ -145,27 +145,31 @@ function alshaya_addressbook_entity_type_alter(array &$entity_types) {
 function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
   $strings = [
     'First name' => [
-      'ar' => 'First name ar',
+      'ar' => 'الاسم الأول',
       'context' => 'Address label',
     ],
     'Last name' => [
-      'ar' => 'Last name ar',
+      'ar' => 'اسم العائلة',
       'context' => 'Address label',
     ],
     'Company' => [
-      'ar' => 'Company ar',
+      'ar' => 'الشركة',
       'context' => 'Address label',
     ],
     'Street address' => [
-      'ar' => 'Street address ar',
+      'en' => 'Street',
+      'context' => 'Address label',
+    ],
+    'Street address' => [
+      'ar' => 'الشارع',
       'context' => 'Address label',
     ],
     'City' => [
-      'ar' => 'City ar',
+      'ar' => 'المدينة',
       'context' => 'Address label',
     ],
     'Postal code' => [
-      'ar' => 'Postal code ar',
+      'ar' => 'الرمز البريدي',
       'context' => 'Address label',
     ],
   ];

@@ -51,6 +51,10 @@
 }
 
 .path--cart {
+  @include breakpoint($only-mobile) {
+    margin-top: 0;
+  }
+
   .site-brand-home {
     a {
       width: 50.5%;
@@ -126,6 +130,8 @@
 .alias--cart-checkout-login,
 .alias--cart-checkout-payment,
 .alias--cart-checkout-confirmation {
+  margin-top: 0;
+
   .site-brand-home {
     @extend .l-one--w;
 

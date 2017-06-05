@@ -292,9 +292,9 @@ function alshaya_user_acq_commerce_update_customer_api_request_alter(array &$req
     $user = user_load_by_mail($request_options['form_params']['customer[email]']);
 
     if (!empty($user)) {
-      if ($phone_number = $user->get('field_mobile_number')->getValue()) {
-        $request_options['form_params']['customer[extension][phone_number]'] = $phone_number[0]['value'];
-      }
+      $phone_number = $user->get('field_mobile_number')->getValue();
+      $contact_number = !empty($phone_number) ? $phone_number[0]['value'] : '';
+      $request_options['form_params']['customer[extension][phone_number]'] = $contact_number;
     }
   }
 }

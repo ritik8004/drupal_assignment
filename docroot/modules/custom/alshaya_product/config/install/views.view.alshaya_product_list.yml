@@ -512,7 +512,7 @@ display:
           plugin_id: search_api
       display_extenders: {  }
       css_class: c-products-list
-      use_ajax: false
+      use_ajax: true
     cache_metadata:
       max-age: -1
       contexts:

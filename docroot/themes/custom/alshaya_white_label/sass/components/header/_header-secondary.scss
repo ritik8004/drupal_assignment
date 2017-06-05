@@ -199,7 +199,7 @@
 
   position: fixed;
   width: 80%;
-  top: 5.6875rem;
+  top: 3.125rem;
   background: $white-five;
   height: 100%;
   z-index: 1000;
@@ -276,7 +276,7 @@
   }
 }
 
-.navbar-fixed-top {
+.branding__menu.navbar-fixed-top {
   position: fixed;
   top: 0;
   width: 100%;
@@ -285,11 +285,14 @@
 }
 
 .branding__menu {
+  position: relative;
+  z-index: 4;
+  background-color: $white-five;
+
   @include breakpoint($upto-desktop) {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: $white-five;
   }
 }
 
@@ -299,10 +302,6 @@
 
   &.navbar-fixed-top {
     position: fixed;
-
-    &::before {
-      background: rgba(0, 0, 0, 0.48);
-    }
   }
 
   &::before {

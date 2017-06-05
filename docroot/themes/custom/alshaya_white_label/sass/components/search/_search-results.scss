@@ -168,10 +168,6 @@
         }
       }
 
-      .form-item-keywords {
-        display: none;
-      }
-
       .filter--mobile {
         @include breakpoint($tablet) {
           top: 0.25rem;
@@ -481,4 +477,8 @@ header,
       float: $left;
     }
   }
+}
+
+ul.item-list__checkbox {
+  display: none;
 }
