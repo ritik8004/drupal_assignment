@@ -224,52 +224,58 @@
   }
 
   .map-view-link {
-    &::before {
-      background: url('../imgs/icons/map.svg') no-repeat;
-      width: 1.625rem;
-      height: 1.4375rem;
-      margin-#{$right}: 0.6rem;
+    @include icon(map, before) {
+      color: $cerulean-two;
+      margin-#{$right}: 0.4rem;
       margin-#{$left}: 0.3125rem;
+      vertical-align: middle;
+      font-size: 1.8rem;
+      line-height: 1;
 
       @include breakpoint($desktop) {
+        line-height: 0.6;
         margin-#{$left}: 0.1875rem;
       }
     }
 
     &:hover::before,
     &.active::before {
-      background: url('../imgs/icons/map-active.svg') no-repeat;
+      color: $marine-blue;
     }
   }
 
   .list-view-link {
-    &::before {
-      background: url('../imgs/icons/list.svg') no-repeat;
+    @include icon(list, before) {
+      color: $cerulean-two;
       width: 1.625rem;
       height: 0.8rem;
-      vertical-align: middle;
+      vertical-align: top;
+      font-size: 2rem;
+      line-height: 0.6;
 
       @include breakpoint($only-tablet) {
-        margin-#{$right}: 0.7rem;
-        margin-#{$left}: -0.25rem;
+        margin-#{$right}: 1.1rem;
+        margin-#{$left}: -0.45rem;
       }
 
       @include breakpoint($desktop) {
-        margin-#{$left}: 0.625rem;
+        margin-#{$left}: 0.5rem;
+        margin-#{$right}: 0.8rem;
       }
     }
 
     &:hover::before,
     &.active::before {
-      background: url('../imgs/icons/list-active.svg') no-repeat;
+      color: $marine-blue;
     }
   }
 
   .label--location {
-    padding-#{$left}: 1.3rem;
+    padding-#{$left}: 1.5rem;
     padding-#{$right}: 1rem;
 
     @include breakpoint($desktop) {
+      padding-#{$left}: 1.4rem;
       padding-#{$right}: 0;
     }
   }
@@ -720,6 +726,17 @@
     }
   }
 
+  .list-view-link,
+  .map-view-link {
+    @include breakpoint($tablet) {
+      height: 2.9375rem;
+    }
+
+    @include breakpoint($desktop) {
+      height: 4.5rem;
+    }
+  }
+
   @include breakpoint($desktop) {
     .store-finder--wrapper {
       width: 49.7%;
@@ -977,13 +994,15 @@
     }
   }
 
-  .view-on--map::after {
-    background: url('../imgs/icons/map.png') no-repeat;
-    width: 21px;
-    height: 17px;
-    top: 1rem;
-    #{$right}: 0.8rem;
-    background-size: cover;
+  .view-on--map {
+    @include icon(map, after) {
+      color: $cerulean-two;
+      vertical-align: middle;
+      font-size: 1.8rem;
+      line-height: 1;
+      top: 0.8rem;
+      #{$right}: 0.8rem;
+    }
   }
 
   .get--directions div::after {
