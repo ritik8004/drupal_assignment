@@ -1,5 +1,4 @@
 <?php
-
 namespace Drupal\alshaya_search\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
@@ -11,7 +10,6 @@ use Symfony\Component\Routing\RouteCollection;
  * @package Drupal\alshaya_search\Routing
  */
 class FacetAjaxRouteSubscriber extends RouteSubscriberBase {
-
   /**
    * Alters existing routes for a specific collection.
    *

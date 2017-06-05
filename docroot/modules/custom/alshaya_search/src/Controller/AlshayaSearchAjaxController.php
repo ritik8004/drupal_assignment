@@ -21,7 +21,6 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
 
   /**
    * The Block Manager service.
-   *
    * @var \Drupal\Core\Block\BlockManager
    */
   protected $blockManager;
@@ -30,19 +29,12 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Entity\EntityManager $entityManager
-   *   The Entity Manager service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The Renderer service.
    * @param \Drupal\Core\Path\CurrentPathStack $currentPath
-   *   The current path service.
    * @param \Symfony\Component\Routing\RouterInterface $router
-   *   The router service.
    * @param \Drupal\Core\PathProcessor\PathProcessorManager $pathProcessor
-   *   The path processor service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   The logger service.
    * @param \Drupal\Core\Block\BlockManager $blockManager
-   *   The Block manager service.
    */
   public function __construct(EntityManager $entityManager,
                               RendererInterface $renderer,
@@ -74,18 +66,17 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    * Override the default controller function.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The request object.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
-   *   Ajax response to re-render the exposed form.
    */
   public function ajaxFacetBlockView(Request $request) {
     $response = parent::ajaxFacetBlockView($request);
 
     $block_id = 'views_exposed_filter_block:search-page';
     $block = $this->blockManager->createInstance($block_id);
+
     $block_view = $block->build();
-    $response->addCommand(new ReplaceCommand('.views-exposed-form-search-page', $block_view));
+    $response->addCommand(new ReplaceCommand('#views-exposed-form-search-page', $block_view));
 
     return $response;
   }
