@@ -201,22 +201,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
 
         $home_delivery_options = [];
-        $home_delivery_config_options = $home_delivery_config->get('options');
-
-        foreach ($home_delivery_config_options as $home_delivery_config_option) {
-          $home_delivery_option['icon_class'] = $home_delivery_config_option['icon_class'];
-          $home_delivery_option['title'] = $home_delivery_config_option['title'];
-          $home_delivery_option['subtitle'] = '(' . $home_delivery_config_option['subtitle'] . ')';
-
-          foreach ($home_delivery_config_option['price_options'] as $price_option) {
-            $home_delivery_option['price_options'][] = [
-              'title' => $price_option['title'],
-              'price' => alshaya_acm_price_get_formatted_price($price_option['price']),
-            ];
-          }
-
-          $home_delivery_options[] = $home_delivery_option;
-        }
+        $home_delivery_options['standard_icon_class'] = $home_delivery_config->get('options_standard_icon_class');
+        $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
+        $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
+        $home_delivery_options['standard_price_options_one_title'] = $home_delivery_config->get('options_standard_price_options_one_title');
+        $home_delivery_options['standard_price_options_one_price'] = $home_delivery_config->get('options_standard_price_options_one_price') ? alshaya_acm_price_format($home_delivery_config->get('options_standard_price_options_one_price')) : t('Free');
+        $home_delivery_options['standard_price_options_two_title'] = $home_delivery_config->get('options_standard_price_options_two_title');
+        $home_delivery_options['standard_price_options_two_price'] = $home_delivery_config->get('options_standard_price_options_two_price') ? alshaya_acm_price_format($home_delivery_config->get('options_standard_price_options_two_price')) : t('Free');
 
         // @TODO: Next day delivery not done for now.
         $build['home_delivery'] = [
