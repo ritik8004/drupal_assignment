@@ -12,14 +12,12 @@
       var $listItems = $('.menu__list-item');
       $listItems.each(function () {
         var linkWrapper = $(this).find('> .menu__link-wrapper');
-        var link = linkWrapper.find('.menu__link');
         var submenu = $(this).find('> .menu__list');
 
         if (submenu.length > 0) {
           $(this).addClass('has-child');
           linkWrapper.addClass('contains-sublink');
           linkWrapper.after('<span class="menu__in"></span>');
-          submenu.prepend('<span class="menu__list-item back--link"><span class="menu__back"></span> <span>' + link.text() + ' </span> </span> ');
         }
       });
 
@@ -30,7 +28,7 @@
 
       var $menuBack = $('.back--link');
       $menuBack.click(function () {
-        $(this).parent().toggleClass('menu__list--active');
+        $(this).parents('.menu__list').first().toggleClass('menu__list--active');
       });
 
       $('.mobile--menu, .mobile--search').click(function (e) {

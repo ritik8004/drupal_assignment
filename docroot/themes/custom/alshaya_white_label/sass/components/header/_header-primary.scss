@@ -905,6 +905,10 @@ header {
     text-transform: lowercase;
   }
 
+  .back--link {
+    @extend .menu__list-item;
+  }
+
   .menu--one__list-item {
     p {
       display: none;
