@@ -193,8 +193,10 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     $administrative_area = $values[0]['administrative_area'];
     if (!empty($administrative_area)) {
       $term = Term::load($administrative_area);
-      $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-      $administrative_area = $term->getName();
+      if ($term) {
+        $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+        $administrative_area = $term->getName();
+      }
     }
 
     // Address info.

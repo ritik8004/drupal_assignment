@@ -82,7 +82,9 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   // Validation for first and last name.
   $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
+  $element['given_name']['#maxlength'] = 255;
   $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
+  $element['family_name']['#maxlength'] = 255;
   return $element;
 }
 
