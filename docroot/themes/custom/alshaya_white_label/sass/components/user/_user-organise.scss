@@ -13,6 +13,10 @@
         padding-top: 10px;
         border-top: 1px solid $white;
         text-transform: lowercase;
+
+        &:hover {
+          cursor: default;
+        }
       }
 
       #edit-privilege-card-wrapper {
@@ -51,6 +55,10 @@
               color: $white;
             }
           }
+        }
+
+        &:hover {
+          cursor: default;
         }
       }
     }
