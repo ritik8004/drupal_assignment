@@ -1,7 +1,13 @@
 // Size Guide Link theme
 .size-guide-link {
-  float: right;
-  padding-top: 10px;
+  float: $right;
+  padding-top: 0.625rem;
+  font-size: 0.6875rem;
+  color: $cerulean;
+
+  + .ajax-progress-throbber {
+    @include u-visibility(none);
+  }
 }
 
 // Size Guide modal popup theming
