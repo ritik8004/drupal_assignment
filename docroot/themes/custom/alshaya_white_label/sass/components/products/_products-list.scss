@@ -33,7 +33,8 @@
     }
   }
 
-  .c-page-title__description {
+  .c-page-title__description,
+  .field--name-field-acq-promotion-description {
     @include breakpoint($only-mobile) {
       display: none;
     }
