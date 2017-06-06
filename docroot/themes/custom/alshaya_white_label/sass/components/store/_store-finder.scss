@@ -336,6 +336,10 @@
 
     @include breakpoint($only-mobile) {
       padding-#{$left}: 1.25rem;
+      padding-top: 0;
+      padding-bottom: 0;
+      line-height: 2.1875rem;
+      height: 2.1875rem;
     }
 
     &.ui-autocomplete-loading {
