@@ -543,7 +543,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-
     $fields['media'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Media'))
       ->setDescription(t('Store all the media files info.'))
@@ -589,6 +588,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $weight = $defaultWeightIncrement + count($fields);
 
         switch ($field_info['type']) {
+          case 'attribute':
           case 'string':
             $field = BaseFieldDefinition::create('string');
 
