@@ -58,3 +58,18 @@ function alshaya_search_facets_search_api_query_type_mapping_alter($backend_plug
     $query_types['range'] = 'alshaya_search_range';
   }
 }
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_search_page_attachments_alter(array &$attachments) {
+  $current_path = \Drupal::service('path.current')->getPath();
+  // Remove canonical link for search page.
+  if ($current_path == '/search') {
+    foreach ($attachments['#attached']['html_head'] as $key => $value) {
+      if ($value[1] == 'canonical_url') {
+        unset($attachments['#attached']['html_head'][$key]);
+      }
+    }
+  }
+}
