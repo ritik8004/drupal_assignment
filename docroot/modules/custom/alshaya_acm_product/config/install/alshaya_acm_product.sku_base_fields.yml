@@ -44,7 +44,7 @@ fields:
      label: 'Style'
      description: 'Part of description.'
      cardinality: 1
-     type: 'string'
+     type: 'attribute'
      configurable: 0
      visible_view: 0
      visible_form: 1
@@ -54,17 +54,7 @@ fields:
     label: 'Season'
     description: 'Part of description.'
     cardinality: 1
-    type: 'string'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  brand_sku:
-    parent: 'attributes'
-    label: 'At a glance'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'string'
+    type: 'attribute'
     configurable: 0
     visible_view: 0
     visible_form: 1
@@ -74,7 +64,7 @@ fields:
     label: 'Brand'
     description: 'Part of description.'
     cardinality: 1
-    type: 'string'
+    type: 'attribute'
     configurable: 0
     visible_view: 0
     visible_form: 1
@@ -84,7 +74,7 @@ fields:
     label: 'Collection'
     description: 'Part of description.'
     cardinality: 1
-    type: 'string'
+    type: 'attribute'
     configurable: 0
     visible_view: 0
     visible_form: 1
