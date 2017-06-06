@@ -84,7 +84,7 @@ class GuestDeliveryHome extends AddressFormBase {
     }
 
     $pane_form['address']['email'] = [
-      '#type' => 'textfield',
+      '#type' => 'email',
       '#title' => $this->t('Email Address'),
       '#required' => TRUE,
       '#attributes' => ['placeholder' => [$this->t('Email Address')]],
@@ -213,15 +213,12 @@ class GuestDeliveryHome extends AddressFormBase {
     $user = user_load_by_mail($values['address']['email']);
 
     if ($user !== FALSE) {
-      $form_state->setErrorByName('email', $this->t('You already have an account, please login.'));
+      $form_state->setErrorByName('guest_delivery_home][email', $this->t('You already have an account, please login.'));
     }
-  }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $values = $form_state->getValue($pane_form['#parents']);
+    if ($form_state->getErrors()) {
+      return;
+    }
 
     $shipping_method = NULL;
 
@@ -258,23 +255,49 @@ class GuestDeliveryHome extends AddressFormBase {
     $cart->setShippingMethod($carrier, $method);
 
     // We are only looking to convert guest carts.
-    if ($cart->customerId() != 0) {
+    if (!($cart->customerId())) {
+      // Get the customer id of Magento from this email.
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+
+      try {
+        $customer = $api_wrapper->createCustomer($address['first_name'], $address['last_name'], $email);
+      }
+      catch (\Exception $e) {
+        // @TODO: Handle create customer errors here.
+        // Probably just the email error.
+        \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
+        $form_state->setErrorByName('custom', '');
+        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        return;
+      }
+
+      $customer_cart = $api_wrapper->createCart($customer['customer_id']);
+
+      if (empty($customer_cart['customer_email'])) {
+        $customer_cart['customer_email'] = $email;
+      }
+
+      $cart->convertToCustomerCart($customer_cart);
+      \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+    }
+
+    try {
+      \Drupal::service('acq_cart.cart_storage')->updateCart();
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_acm_checkout')->error('Error while updating cart in guest delivery home: @message', ['@message' => $e->getMessage()]);
+      $form_state->setErrorByName('custom', '');
+      drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
       return;
     }
+  }
 
-    // Get the customer id of Magento from this email.
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
-    $customer = $api_wrapper->createCustomer($address['first_name'], $address['last_name'], $email);
-    $customer_cart = $api_wrapper->createCart($customer['customer_id']);
-
-    if (empty($customer_cart['customer_email'])) {
-      $customer_cart['customer_email'] = $email;
-    }
-
-    $cart->convertToCustomerCart($customer_cart);
-    \Drupal::service('acq_cart.cart_storage')->addCart($cart);
-    \Drupal::service('acq_cart.cart_storage')->updateCart();
+  /**
+   * {@inheritdoc}
+   */
+  public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    // We have done everything in validatePaneForm().
   }
 
   /**
