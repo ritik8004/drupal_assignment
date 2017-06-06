@@ -156,7 +156,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $build['image_url'] = [];
       $sku_media = alshaya_acm_product_get_sku_media($sku_entity);
 
-      $search_main_image = [];
+      $search_main_image = $thumbnails = [];
 
       // Loop through all media items and prepare thumbnails array.
       foreach ($sku_media as $delta => $media_item) {
