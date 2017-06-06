@@ -244,6 +244,7 @@ function _alshaya_address_book_after_build($element, FormStateInterface $form_st
   $element['administrative_area']['#title'] = t('Area');
   $element['administrative_area']['#theme'] = 'select';
   $element['administrative_area']['#type'] = 'select';
+  $element['administrative_area']['#multiple'] = FALSE;
   $element['administrative_area']['#options'] = ['' => t('Select Area')] + _alshaya_addressbook_area_list();
   $element['address_line1']['#title'] = t('Street name/number');
   $element['dependent_locality']['#title'] = t('Building name/number');
