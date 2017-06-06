@@ -1,0 +1,674 @@
+diff --git a/modules/acq_sku/acq_sku.drush.inc b/modules/acq_sku/acq_sku.drush.inc
+index 6e9c73d..c6f1dde 100644
+--- a/modules/acq_sku/acq_sku.drush.inc
++++ b/modules/acq_sku/acq_sku.drush.inc
+@@ -13,6 +13,14 @@
+ function acq_sku_drush_command() {
+   $commands = [];
+ 
++  $commands['sync-commerce-product-options'] = [
++    'description' => 'Run a full synchronization of all commerce product options.',
++    'aliases'     => ['acspo'],
++    'examples'    => [
++      'drush acsp' => 'Run a full product synchronization of all available product options.',
++    ],
++  ];
++  
+   $commands['sync-commerce-products'] = [
+     'description' => 'Run a full synchronization of all commerce product records.',
+     'aliases'     => ['acsp'],
+@@ -59,6 +67,17 @@ function drush_acq_sku_sync_commerce_cats() {
+   drush_print(dt('Done.'));
+ }
+ 
++
++/**
++ * Implements drush category sync command.
++ */
++function drush_acq_sku_sync_commerce_product_options() {
++  drush_print(dt('Synchronizing all commerce product options, please wait...'));
++  $container = \Drupal::getContainer();
++  $container->get('acq_sku.product_options_manager')->synchronizeProductOptions();
++  drush_print(dt('Done.'));
++}
++
+ /**
+  * Implements drush clean synced data command.
+  */
+diff --git a/modules/acq_sku/acq_sku.services.yml b/modules/acq_sku/acq_sku.services.yml
+index f65d2e3..f7dc993 100644
+--- a/modules/acq_sku/acq_sku.services.yml
++++ b/modules/acq_sku/acq_sku.services.yml
+@@ -11,6 +11,13 @@ services:
+       - '@entity.query'
+       - '@logger.factory'
+ 
++  acq_sku.product_options_manager:
++    class: Drupal\acq_sku\ProductOptionsManager
++    arguments:
++      - '@entity_type.manager'
++      - '@acq_commerce.api'
++      - '@logger.factory'
++
+   acq_sku.category_repo:
+     class: Drupal\acq_sku\ConductorCategoryRepository
+     arguments:
+diff --git a/modules/acq_sku/config/install/core.entity_form_display.taxonomy_term.sku_product_option.default.yml b/modules/acq_sku/config/install/core.entity_form_display.taxonomy_term.sku_product_option.default.yml
+new file mode 100644
+index 0000000..b5ee4dc
+--- /dev/null
++++ b/modules/acq_sku/config/install/core.entity_form_display.taxonomy_term.sku_product_option.default.yml
+@@ -0,0 +1,72 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.field.taxonomy_term.sku_product_option.field_sku_attribute_code
++    - field.field.taxonomy_term.sku_product_option.field_sku_attribute_id
++    - field.field.taxonomy_term.sku_product_option.field_sku_option_id
++    - taxonomy.vocabulary.sku_product_option
++  module:
++    - path
++    - text
++id: taxonomy_term.sku_product_option.default
++targetEntityType: taxonomy_term
++bundle: sku_product_option
++mode: default
++content:
++  description:
++    type: text_textfield
++    weight: 0
++    region: content
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++  field_sku_attribute_code:
++    weight: 32
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++    type: string_textfield
++    region: content
++  field_sku_attribute_id:
++    weight: 31
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++    type: string_textfield
++    region: content
++  field_sku_option_id:
++    weight: 33
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++    type: string_textfield
++    region: content
++  langcode:
++    type: language_select
++    weight: 2
++    region: content
++    settings: {  }
++    third_party_settings: {  }
++  name:
++    type: string_textfield
++    weight: -5
++    region: content
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++  path:
++    type: path
++    weight: 30
++    region: content
++    settings: {  }
++    third_party_settings: {  }
++  translation:
++    weight: 10
++    region: content
++hidden: {  }
+diff --git a/modules/acq_sku/config/install/core.entity_view_display.taxonomy_term.sku_product_option.default.yml b/modules/acq_sku/config/install/core.entity_view_display.taxonomy_term.sku_product_option.default.yml
+new file mode 100644
+index 0000000..404d611
+--- /dev/null
++++ b/modules/acq_sku/config/install/core.entity_view_display.taxonomy_term.sku_product_option.default.yml
+@@ -0,0 +1,48 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.field.taxonomy_term.sku_product_option.field_sku_attribute_code
++    - field.field.taxonomy_term.sku_product_option.field_sku_attribute_id
++    - field.field.taxonomy_term.sku_product_option.field_sku_option_id
++    - taxonomy.vocabulary.sku_product_option
++  module:
++    - text
++id: taxonomy_term.sku_product_option.default
++targetEntityType: taxonomy_term
++bundle: sku_product_option
++mode: default
++content:
++  description:
++    label: hidden
++    type: text_default
++    weight: 0
++    region: content
++    settings: {  }
++    third_party_settings: {  }
++  field_sku_attribute_code:
++    weight: 2
++    label: above
++    settings:
++      link_to_entity: false
++    third_party_settings: {  }
++    type: string
++    region: content
++  field_sku_attribute_id:
++    weight: 1
++    label: above
++    settings:
++      link_to_entity: false
++    third_party_settings: {  }
++    type: string
++    region: content
++  field_sku_option_id:
++    weight: 3
++    label: above
++    settings:
++      link_to_entity: false
++    third_party_settings: {  }
++    type: string
++    region: content
++hidden:
++  langcode: true
+diff --git a/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_attribute_code.yml b/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_attribute_code.yml
+new file mode 100644
+index 0000000..910bf6d
+--- /dev/null
++++ b/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_attribute_code.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.taxonomy_term.field_sku_attribute_code
++    - taxonomy.vocabulary.sku_product_option
++id: taxonomy_term.sku_product_option.field_sku_attribute_code
++field_name: field_sku_attribute_code
++entity_type: taxonomy_term
++bundle: sku_product_option
++label: 'Attribute Code'
++description: ''
++required: true
++translatable: false
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: string
+diff --git a/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_attribute_id.yml b/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_attribute_id.yml
+new file mode 100644
+index 0000000..826fbd2
+--- /dev/null
++++ b/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_attribute_id.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.taxonomy_term.field_sku_attribute_id
++    - taxonomy.vocabulary.sku_product_option
++id: taxonomy_term.sku_product_option.field_sku_attribute_id
++field_name: field_sku_attribute_id
++entity_type: taxonomy_term
++bundle: sku_product_option
++label: 'Attribute ID'
++description: ''
++required: true
++translatable: false
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: string
+diff --git a/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_option_id.yml b/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_option_id.yml
+new file mode 100644
+index 0000000..399cfc7
+--- /dev/null
++++ b/modules/acq_sku/config/install/field.field.taxonomy_term.sku_product_option.field_sku_option_id.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.taxonomy_term.field_sku_option_id
++    - taxonomy.vocabulary.sku_product_option
++id: taxonomy_term.sku_product_option.field_sku_option_id
++field_name: field_sku_option_id
++entity_type: taxonomy_term
++bundle: sku_product_option
++label: 'Attribute Option ID'
++description: ''
++required: true
++translatable: false
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: string
+diff --git a/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_attribute_code.yml b/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_attribute_code.yml
+new file mode 100644
+index 0000000..80b4486
+--- /dev/null
++++ b/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_attribute_code.yml
+@@ -0,0 +1,20 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - taxonomy
++id: taxonomy_term.field_sku_attribute_code
++field_name: field_sku_attribute_code
++entity_type: taxonomy_term
++type: string
++settings:
++  max_length: 255
++  is_ascii: false
++  case_sensitive: false
++module: core
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_attribute_id.yml b/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_attribute_id.yml
+new file mode 100644
+index 0000000..534d54f
+--- /dev/null
++++ b/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_attribute_id.yml
+@@ -0,0 +1,20 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - taxonomy
++id: taxonomy_term.field_sku_attribute_id
++field_name: field_sku_attribute_id
++entity_type: taxonomy_term
++type: string
++settings:
++  max_length: 255
++  is_ascii: false
++  case_sensitive: false
++module: core
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_option_id.yml b/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_option_id.yml
+new file mode 100644
+index 0000000..9111039
+--- /dev/null
++++ b/modules/acq_sku/config/install/field.storage.taxonomy_term.field_sku_option_id.yml
+@@ -0,0 +1,20 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - taxonomy
++id: taxonomy_term.field_sku_option_id
++field_name: field_sku_option_id
++entity_type: taxonomy_term
++type: string
++settings:
++  max_length: 255
++  is_ascii: false
++  case_sensitive: false
++module: core
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/modules/acq_sku/config/install/language.content_settings.taxonomy_term.sku_product_option.yml b/modules/acq_sku/config/install/language.content_settings.taxonomy_term.sku_product_option.yml
+new file mode 100644
+index 0000000..8d72099
+--- /dev/null
++++ b/modules/acq_sku/config/install/language.content_settings.taxonomy_term.sku_product_option.yml
+@@ -0,0 +1,15 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - taxonomy.vocabulary.sku_product_option
++  module:
++    - content_translation
++third_party_settings:
++  content_translation:
++    enabled: true
++id: taxonomy_term.sku_product_option
++target_entity_type_id: taxonomy_term
++target_bundle: sku_product_option
++default_langcode: site_default
++language_alterable: false
+diff --git a/modules/acq_sku/config/install/taxonomy.vocabulary.sku_product_option.yml b/modules/acq_sku/config/install/taxonomy.vocabulary.sku_product_option.yml
+new file mode 100644
+index 0000000..1d32921
+--- /dev/null
++++ b/modules/acq_sku/config/install/taxonomy.vocabulary.sku_product_option.yml
+@@ -0,0 +1,8 @@
++langcode: en
++status: true
++dependencies: {  }
++name: SKU Product Option
++vid: sku_product_option
++description: ''
++hierarchy: 0
++weight: 0
+diff --git a/modules/acq_sku/src/Entity/SKU.php b/modules/acq_sku/src/Entity/SKU.php
+index 9d010ba..4e302b0 100644
+--- a/modules/acq_sku/src/Entity/SKU.php
++++ b/modules/acq_sku/src/Entity/SKU.php
+@@ -543,7 +543,6 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+       ->setDisplayConfigurable('form', TRUE)
+       ->setDisplayConfigurable('view', TRUE);
+ 
+-
+     $fields['media'] = BaseFieldDefinition::create('text_long')
+       ->setLabel(t('Media'))
+       ->setDescription(t('Store all the media files info.'))
+@@ -589,6 +588,7 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+         $weight = $defaultWeightIncrement + count($fields);
+ 
+         switch ($field_info['type']) {
++          case 'attribute':
+           case 'string':
+             $field = BaseFieldDefinition::create('string');
+ 
+diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+index 2e9c438..45e5462 100644
+--- a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
++++ b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+@@ -4,6 +4,7 @@
+ 
+ use Drupal\acq_sku\CategoryRepositoryInterface;
+ use Drupal\acq_sku\Entity\SKU;
++use Drupal\acq_sku\ProductOptionsManager;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Entity\Query\QueryFactory;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+@@ -38,6 +39,13 @@ class ProductSyncResource extends ResourceBase {
+   private $categoryRepo;
+ 
+   /**
++   * Product Options Manager service instance.
++   *
++   * @var \Drupal\acq_sku\ProductOptionsManager
++   */
++  private $productOptionsManager;
++
++  /**
+    * Drupal Config Factory Instance.
+    *
+    * @var \Drupal\Core\Config\ConfigFactoryInterface
+@@ -79,13 +87,16 @@ class ProductSyncResource extends ResourceBase {
+    *   The query factory.
+    * @param \Drupal\acq_sku\CategoryRepositoryInterface $cat_repo
+    *   Category Repository instance.
++   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
++   *   Product Options Manager service instance.
+    */
+-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo) {
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo, ProductOptionsManager $product_options_manager) {
+     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
+     $this->entityManager = $entity_type_manager;
+     $this->configFactory = $config_factory;
+     $this->queryFactory = $query_factory;
+     $this->categoryRepo = $cat_repo;
++    $this->productOptionsManager = $product_options_manager;
+   }
+ 
+   /**
+@@ -101,7 +112,8 @@ public static function create(ContainerInterface $container, array $configuratio
+       $container->get('logger.factory')->get('acq_commerce'),
+       $container->get('config.factory'),
+       $container->get('entity.query'),
+-      $container->get('acq_sku.category_repo')
++      $container->get('acq_sku.category_repo'),
++      $container->get('acq_sku.product_options_manager')
+     );
+   }
+ 
+@@ -466,6 +478,17 @@ private function updateAttributeFields(SKU $sku, array $attributes) {
+         $field_key = 'attr_' . $key;
+ 
+         switch ($field['type']) {
++          case 'attribute':
++            foreach ($value as $val) {
++              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
++                $sku->{$field_key}->setValue($term->getName());
++              }
++              else {
++                $sku->{$field_key}->setValue($value);
++              }
++            }
++            break;
++
+           case 'string':
+             $sku->{$field_key}->setValue($value);
+             break;
+@@ -505,6 +528,18 @@ private function updateExtensionFields(SKU $sku, array $attributes) {
+         $field_key = 'attr_' . $key;
+ 
+         switch ($field['type']) {
++          case 'attribute':
++            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
++            foreach ($value as $val) {
++              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
++                $sku->{$field_key}->setValue($term->getName());
++              }
++              else {
++                $sku->{$field_key}->setValue($value);
++              }
++            }
++            break;
++
+           case 'string':
+             $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+             $sku->{$field_key}->setValue($value);
+diff --git a/modules/acq_sku/src/ProductOptionsManager.php b/modules/acq_sku/src/ProductOptionsManager.php
+new file mode 100644
+index 0000000..0aec035
+--- /dev/null
++++ b/modules/acq_sku/src/ProductOptionsManager.php
+@@ -0,0 +1,148 @@
++<?php
++
++namespace Drupal\acq_sku;
++
++use Drupal\acq_commerce\Conductor\APIWrapper;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Logger\LoggerChannelFactoryInterface;
++
++/**
++ * Provides a service for product options data to taxonomy synchronization.
++ *
++ * @ingroup acq_sku
++ */
++class ProductOptionsManager {
++
++  /**
++   * Conductor Agent Category Data API Endpoint.
++   *
++   * @const CONDUCTOR_API_CATEGORY
++   */
++  const PRODUCT_OPTIONS_VOCABULARY = 'sku_product_option';
++
++  /**
++   * Taxonomy Term Entity Storage.
++   *
++   * @var \Drupal\taxonomy\TermStorageInterface
++   */
++  private $termStorage;
++
++  /**
++   * API Wrapper object.
++   *
++   * @var \Drupal\acq_commerce\Conductor\APIWrapper
++   */
++  private $apiWrapper;
++
++  /**
++   * Result (create / update / failed) counts.
++   *
++   * @var array
++   */
++  private $results;
++
++  /**
++   * Constructor.
++   *
++   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
++   *   EntityTypeManager object.
++   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
++   *   ApiWrapper object.
++   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
++   *   LoggerFactory object.
++   */
++  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
++    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
++    $this->apiWrapper = $api_wrapper;
++    $this->logger = $logger_factory->get('acq_sku');
++  }
++
++  /**
++   * Load existing term (if available).
++   *
++   * @param string $attribute_code
++   *   Attribute code - Magento value.
++   * @param int $option_id
++   *   Option id - Magento value.
++   * @param bool $log_error
++   *   Flag to stop logging term not found errors during sync.
++   *
++   * @return \Drupal\taxonomy\Entity\Term|null
++   *   Loaded taxonomy term object if found.
++   */
++  public function loadProductOptionByOptionId($attribute_code, $option_id, $log_error = TRUE) {
++    $query = $this->termStorage->getQuery();
++    $query->condition('field_sku_option_id', $option_id);
++    $query->condition('field_sku_attribute_code', $attribute_code);
++    $query->condition('vid', self::PRODUCT_OPTIONS_VOCABULARY);
++    $tids = $query->execute();
++
++    // We won't log no term found error during sync.
++    if (count($tids) === 0) {
++      if ($log_error) {
++        $this->logger->error('No term found for option_id: @option_id having attribute_code @attribute_code.', [
++          '@option_id' => $option_id,
++          '@attribute_code' => $attribute_code,
++        ]);
++      }
++      return NULL;
++    }
++    elseif (count($tids) > 1) {
++      $this->logger->critical('Multiple terms found for option_id: @option_id having attribute_code @attribute_code.', [
++        '@option_id' => $option_id,
++        '@attribute_code' => $attribute_code,
++      ]);
++    }
++
++    // We use the first term and continue even if we have multiple terms.
++    $tid = array_shift($tids);
++    return $this->termStorage->load($tid);
++  }
++
++  /**
++   * Create product option if not available or update the name.
++   *
++   * @param int $option_id
++   *   Option id.
++   * @param string $option_value
++   *   Value (term name).
++   * @param int $attribute_id
++   *   Attribute id.
++   * @param string $attribute_code
++   *   Attribute code.
++   */
++  protected function createProductOption($option_id, $option_value, $attribute_id, $attribute_code) {
++    // Update the term if already available.
++    if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, FALSE)) {
++      if ($term->getName() != $option_value) {
++        $term->setName($option_value);
++        $term->save();
++      }
++    }
++    else {
++      $term = $this->termStorage->create([
++        'vid' => self::PRODUCT_OPTIONS_VOCABULARY,
++        'name' => $option_value,
++        'field_sku_option_id' => $option_id,
++        'field_sku_attribute_id' => $attribute_id,
++        'field_sku_attribute_code' => $attribute_code,
++      ]);
++
++      $term->save();
++    }
++  }
++
++  /**
++   * Synchronize all product options.
++   */
++  public function synchronizeProductOptions() {
++    $option_sets = $this->apiWrapper->getProductOptions();
++
++    foreach ($option_sets as $options) {
++      foreach ($options['options'] as $key => $value) {
++        $this->createProductOption($key, $value, $options['attribute_id'], $options['attribute_code']);
++      }
++    }
++  }
++
++}
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
+index dd2fa11..e544b3f 100644
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
+@@ -511,6 +511,32 @@ public function getCategories() {
+   }
+ 
+   /**
++   * Fetches product attribute options.
++   *
++   * @return array
++   *   Array of product attribute options.
++   */
++  public function getProductOptions() {
++    // @TODO: Need to remove v1/agent when we move to new agent url format.
++    $endpoint = 'v1/agent/product/options';
++
++    $doReq = function ($client, $opt) use ($endpoint) {
++      return ($client->get($endpoint, $opt));
++    };
++
++    $options = [];
++
++    try {
++      $options = $this->tryAgentRequest($doReq, 'getAttributeOptions', 'options');
++    }
++    catch (ConductorException $e) {
++      throw new \Exception($e->getMessage(), $e->getCode());
++    }
++
++    return $options;
++  }
++
++  /**
+    * Fetches all promotions.
+    *
+    * @return array

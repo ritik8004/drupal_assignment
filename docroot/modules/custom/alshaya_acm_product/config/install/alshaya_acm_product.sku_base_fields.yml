@@ -5,7 +5,7 @@ fields:
     label: 'Color'
     description: 'Color attribute for the product.'
     cardinality: -1
-    type: 'string'
+    type: 'attribute'
     configurable: 0
     visible_view: 0
     visible_form: 1
@@ -16,7 +16,7 @@ fields:
     label: 'Size'
     description: 'Size attribute for the product.'
     cardinality: -1
-    type: 'string'
+    type: 'attribute'
     configurable: 1
     visible_view: 0
     visible_form: 1
@@ -39,6 +39,17 @@ fields:
     description: 'Store the bullet points here.'
     cardinality: 1
     type: 'text_long'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  # Field for brand attribute.
+  brand:
+    parent: 'attributes'
+    label: 'Brand'
+    description: 'Brand attribute for the product.'
+    cardinality: 1
+    type: 'string'
     configurable: 0
     visible_view: 0
     visible_form: 1

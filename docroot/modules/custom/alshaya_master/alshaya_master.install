@@ -719,6 +719,7 @@ function alshaya_master_install() {
         'context_mapping' => [],
       ],
     ])
+    ->set('weight', '-28')
     ->save();
 
   // Settings override of 'back_to_top'.

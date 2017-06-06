@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "89635419ca3db1631351a9570bba0961",
+    "content-hash": "61adb8fe062e8622e2fe38d6d3d7e831",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2135,7 +2135,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/better_exposed_filters",
-                "reference": "56a347f9bc9c758fa7afd1fb3bfe1d133a42ae96"
+                "reference": "d2de2d079c059017483410da84ca7c802177d7b3"
             },
             "require": {
                 "drupal/core": "*"
@@ -2146,8 +2146,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha2+25-dev",
-                    "datestamp": "1496693042"
+                    "version": "8.x-3.0-alpha2+20-dev",
+                    "datestamp": "1495477983"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2165,7 +2165,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-06-05 20:35:07"
+            "time": "2017-06-01 19:19:16"
         },
         {
             "name": "drupal/block_field",
@@ -2875,6 +2875,7 @@
                     "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
                     "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-1.patch",
                     "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
+                    "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/no_reliable_method-2752961-29.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-303.patch"

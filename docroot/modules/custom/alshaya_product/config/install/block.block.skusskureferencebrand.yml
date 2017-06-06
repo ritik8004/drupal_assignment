@@ -2,21 +2,21 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.skus_sku_reference_color
+    - facets.facet.skus_sku_reference_brand
   module:
     - facets
     - system
   theme:
     - alshaya_white_label
-id: skusskureferencecolor
+id: skusskureferencebrand
 theme: alshaya_white_label
 region: sidebar_first
-weight: -27
+weight: -24
 provider: null
-plugin: 'facet_block:skus_sku_reference_color'
+plugin: 'facet_block:skus_sku_reference_brand'
 settings:
-  id: 'facet_block:skus_sku_reference_color'
-  label: Colour
+  id: 'facet_block:skus_sku_reference_brand'
+  label: Brand
   provider: facets
   label_display: visible
 visibility:

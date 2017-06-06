@@ -11,7 +11,7 @@ dependencies:
 id: skusskureferencedisplayprice
 theme: alshaya_white_label
 region: sidebar_first
-weight: -16
+weight: -26
 provider: null
 plugin: 'facet_block:skus_sku_reference_display_price'
 settings:
