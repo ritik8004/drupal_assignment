@@ -1,14 +1,14 @@
 diff --git a/modules/acq_cart/src/Cart.php b/modules/acq_cart/src/Cart.php
-index 1f2e3d9d..431bd3f7 100644
+index 39e812f8..e9739875 100644
 --- a/modules/acq_cart/src/Cart.php
 +++ b/modules/acq_cart/src/Cart.php
-@@ -435,6 +435,24 @@ public function setCoupon($coupon) {
+@@ -445,6 +445,24 @@ public function setCoupon($coupon) {
    /**
     * {@inheritdoc}
     */
-+  public function getLoyalty() {
-+    if (isset($this->cart, $this->cart->extension, $this->cart->extension->loyalty)) {
-+      return $this->cart->extension->loyalty;
++  public function getExtension($key) {
++    if (isset($this->cart, $this->cart->extension, $this->cart->extension[$key])) {
++      return $this->cart->extension[$key];
 +    }
 +
 +    return '';
@@ -17,8 +17,8 @@ index 1f2e3d9d..431bd3f7 100644
 +  /**
 +   * {@inheritdoc}
 +   */
-+  public function setLoyalty($loyalty_number) {
-+    $this->cart->extension['loyalty'] = $loyalty_number;
++  public function setExtension($key, $value) {
++    $this->cart->extension[$key] = $value;
 +  }
 +
 +  /**
@@ -28,29 +28,48 @@ index 1f2e3d9d..431bd3f7 100644
      if (isset($this->cart)) {
        $cart = $this->cart;
 diff --git a/modules/acq_cart/src/CartInterface.php b/modules/acq_cart/src/CartInterface.php
-index fe0b257a..2558bab2 100644
+index d77fb94f..efe1472f 100644
 --- a/modules/acq_cart/src/CartInterface.php
 +++ b/modules/acq_cart/src/CartInterface.php
-@@ -245,6 +245,22 @@ public function getCoupon();
+@@ -253,6 +253,27 @@ public function getCoupon();
    public function setCoupon($coupon);
  
    /**
-+   * Gets the loyalty number.
++   * Gets an extension by its key.
++   *
++   * @param string $key
++   *   The extension key.
 +   *
 +   * @return string
-+   *   The loyalty number.
++   *   The value.
 +   */
-+  public function getLoyalty();
++  public function getExtension($key);
 +
 +  /**
-+   * Set the loyalty number.
++   * Set an extension.
 +   *
-+   * @param string $loyalty_number
-+   *   The loyalty number.
++   * @param string $key
++   *   The extension key.
++   * @param string $value
++   *   The extension value.
 +   */
-+  public function setLoyalty($loyalty_number);
++  public function setExtension($key, $value);
 +
 +  /**
     * Converts this cart to the customer cart provided.
     *
     * @param array $cart
+diff --git a/docroot/modules/custom/alshaya_loyalty/alshaya_loyalty.module b/docroot/modules/custom/alshaya_loyalty/alshaya_loyalty.module
+index 2598a692..469257b7 100644
+--- a/docroot/modules/custom/alshaya_loyalty/alshaya_loyalty.module
++++ b/docroot/modules/custom/alshaya_loyalty/alshaya_loyalty.module
+@@ -230,6 +230,9 @@ function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInter
+       elseif (Drupal::currentUser()->isAnonymous()) {
+         $temp_store->set('card_number', $apc_number);
+       }
++
++      $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
++      $cart->setExtension('loyalty', $apc_number);
+     }
+     elseif ($temp_store->get('card_number')) {
+       $temp_store->delete('card_number');
