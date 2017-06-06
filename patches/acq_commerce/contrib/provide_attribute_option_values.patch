@@ -371,10 +371,18 @@ index 0000000..1d32921
 +hierarchy: 0
 +weight: 0
 diff --git a/modules/acq_sku/src/Entity/SKU.php b/modules/acq_sku/src/Entity/SKU.php
-index 9d010ba..1f3fec5 100644
+index 9d010ba..4e302b0 100644
 --- a/modules/acq_sku/src/Entity/SKU.php
 +++ b/modules/acq_sku/src/Entity/SKU.php
-@@ -589,6 +589,7 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+@@ -543,7 +543,6 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+       ->setDisplayConfigurable('form', TRUE)
+       ->setDisplayConfigurable('view', TRUE);
+ 
+-
+     $fields['media'] = BaseFieldDefinition::create('text_long')
+       ->setLabel(t('Media'))
+       ->setDescription(t('Store all the media files info.'))
+@@ -589,6 +588,7 @@ public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
          $weight = $defaultWeightIncrement + count($fields);
  
          switch ($field_info['type']) {
@@ -475,10 +483,10 @@ index 2e9c438..45e5462 100644
              $sku->{$field_key}->setValue($value);
 diff --git a/modules/acq_sku/src/ProductOptionsManager.php b/modules/acq_sku/src/ProductOptionsManager.php
 new file mode 100644
-index 0000000..c897607
+index 0000000..0aec035
 --- /dev/null
 +++ b/modules/acq_sku/src/ProductOptionsManager.php
-@@ -0,0 +1,138 @@
+@@ -0,0 +1,148 @@
 +<?php
 +
 +namespace Drupal\acq_sku;
@@ -486,7 +494,6 @@ index 0000000..c897607
 +use Drupal\acq_commerce\Conductor\APIWrapper;
 +use Drupal\Core\Entity\EntityTypeManagerInterface;
 +use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-+use Drupal\acq_commerce\Conductor\ClientFactory;
 +
 +/**
 + * Provides a service for product options data to taxonomy synchronization.
@@ -534,7 +541,6 @@ index 0000000..c897607
 +   *   LoggerFactory object.
 +   */
 +  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
-+
 +    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
 +    $this->apiWrapper = $api_wrapper;
 +    $this->logger = $logger_factory->get('acq_sku');
@@ -565,7 +571,7 @@ index 0000000..c897607
 +      if ($log_error) {
 +        $this->logger->error('No term found for option_id: @option_id having attribute_code @attribute_code.', [
 +          '@option_id' => $option_id,
-+          '@attribute_code' => $attribute_code
++          '@attribute_code' => $attribute_code,
 +        ]);
 +      }
 +      return NULL;
@@ -573,7 +579,7 @@ index 0000000..c897607
 +    elseif (count($tids) > 1) {
 +      $this->logger->critical('Multiple terms found for option_id: @option_id having attribute_code @attribute_code.', [
 +        '@option_id' => $option_id,
-+        '@attribute_code' => $attribute_code
++        '@attribute_code' => $attribute_code,
 +      ]);
 +    }
 +
@@ -582,6 +588,18 @@ index 0000000..c897607
 +    return $this->termStorage->load($tid);
 +  }
 +
++  /**
++   * Create product option if not available or update the name.
++   *
++   * @param int $option_id
++   *   Option id.
++   * @param string $option_value
++   *   Value (term name).
++   * @param int $attribute_id
++   *   Attribute id.
++   * @param string $attribute_code
++   *   Attribute code.
++   */
 +  protected function createProductOption($option_id, $option_value, $attribute_id, $attribute_code) {
 +    // Update the term if already available.
 +    if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, FALSE)) {
@@ -618,7 +636,7 @@ index 0000000..c897607
 +
 +}
 diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
-index dd2fa11..355c6de 100644
+index dd2fa11..e544b3f 100644
 --- a/src/Conductor/APIWrapper.php
 +++ b/src/Conductor/APIWrapper.php
 @@ -511,6 +511,32 @@ public function getCategories() {
@@ -649,7 +667,7 @@ index dd2fa11..355c6de 100644
 +
 +    return $options;
 +  }
-+  
++
 +  /**
     * Fetches all promotions.
     *
