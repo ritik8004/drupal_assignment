@@ -703,3 +703,12 @@ function alshaya_white_label_preprocess_facets_summary_item_list(&$variables) {
     $variables['items'][] = $clear_all_item;
   }
 }
+
+/**
+ * Implements template_preprocess_form().
+ */
+function alshaya_white_label_preprocess_form(&$variables) {
+  if ($variables['element']['#id'] === 'views-exposed-form-search-page') {
+    $variables['attributes']['class'][] = 'views-exposed-form-search-page';
+  }
+}

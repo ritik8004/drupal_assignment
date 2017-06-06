@@ -40,8 +40,6 @@ function alshaya_search_views_pre_build(ViewExecutable $view) {
  */
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-search-page') {
-    /** @var \Drupal\views\Entity\View $view */
-
     $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
     foreach ($parameters['f'] as $key => $value) {
       // Add hidden form field for facet parameter.
