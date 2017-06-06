@@ -4,7 +4,11 @@ This mainly adds support for Arabic text. Many of these files have been generate
 
 The stopwords have been split into English and Arabic. The Arabic stopwords have been combined with those provided by Solr.
 
-The synonyms have been split into English and Arabic synonym files.
+The synonyms have been split into English and Arabic synonym files. Spaces around commas have been removed and English text has been converted into lower case. 
+
+There are phrases in the synonym file that will be ignored since they have spaces. Solr first breaks the search term into individual words on white space, so it never sees these phrases. These were not removed in case they are needed for reference.
+
+Example: `car seat,car seats,baby seat`
 
 Arabic protected words (`protwords`) have not been added at this time.
 
