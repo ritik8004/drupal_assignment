@@ -45,6 +45,9 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
       return (bool) $field['configurable'];
     });
 
+    /** @var \Drupal\acq_sku\ProductOptionsManager $product_options_manager */
+    $product_options_manager = \Drupal::service('acq_sku.product_options_manager');
+
     // Loop through the configurable fields.
     foreach ($configurableFields as $key => $field) {
       $field_key = 'attr_' . $key;
@@ -54,6 +57,9 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
         if ($attribute_data['code'] == $key) {
           foreach ($attribute_data['values'] as $index => $value) {
             $sku->get($field_key)->set($index, $value['value_id']);
+            if ($term = $product_options_manager->loadProductOptionByOptionId($key, $value['value_id'])) {
+              $sku->get($field_key)->set($index, $term->getName());
+            }
           }
         }
       }
