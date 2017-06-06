@@ -535,7 +535,7 @@ class APIWrapper {
 
     return $options;
   }
-  
+
   /**
    * Fetches all promotions.
    *

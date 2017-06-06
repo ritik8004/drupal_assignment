@@ -5,7 +5,6 @@ namespace Drupal\acq_sku;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\acq_commerce\Conductor\ClientFactory;
 
 /**
  * Provides a service for product options data to taxonomy synchronization.
@@ -53,7 +52,6 @@ class ProductOptionsManager {
    *   LoggerFactory object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
-
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_sku');
@@ -84,7 +82,7 @@ class ProductOptionsManager {
       if ($log_error) {
         $this->logger->error('No term found for option_id: @option_id having attribute_code @attribute_code.', [
           '@option_id' => $option_id,
-          '@attribute_code' => $attribute_code
+          '@attribute_code' => $attribute_code,
         ]);
       }
       return NULL;
@@ -92,7 +90,7 @@ class ProductOptionsManager {
     elseif (count($tids) > 1) {
       $this->logger->critical('Multiple terms found for option_id: @option_id having attribute_code @attribute_code.', [
         '@option_id' => $option_id,
-        '@attribute_code' => $attribute_code
+        '@attribute_code' => $attribute_code,
       ]);
     }
 
@@ -101,6 +99,18 @@ class ProductOptionsManager {
     return $this->termStorage->load($tid);
   }
 
+  /**
+   * Create product option if not available or update the name.
+   *
+   * @param int $option_id
+   *   Option id.
+   * @param string $option_value
+   *   Value (term name).
+   * @param int $attribute_id
+   *   Attribute id.
+   * @param string $attribute_code
+   *   Attribute code.
+   */
   protected function createProductOption($option_id, $option_value, $attribute_id, $attribute_code) {
     // Update the term if already available.
     if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, FALSE)) {
