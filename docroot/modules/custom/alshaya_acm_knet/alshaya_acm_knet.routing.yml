@@ -6,8 +6,16 @@ alshaya_acm_knet.response:
   requirements:
     _permission: 'access content'
 
+alshaya_acm_knet.success:
+  path: '/knet/success/{order_id}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_knet\Controller\KnetController::success'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
 alshaya_acm_knet.error:
-  path: '/knet/error/{cart_id}'
+  path: '/knet/error/{order_id}'
   defaults:
     _controller: '\Drupal\alshaya_acm_knet\Controller\KnetController::error'
     _title: 'Error'

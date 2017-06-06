@@ -42,7 +42,12 @@ switch ($env) {
     $_alshaya_acm_disable_stock_check = TRUE;
 
     // Set the knet resource path which should be outside GIT root.
-    $config['alshaya_acm_knet.settings']['resource_path'] = '/home/vagrant/knet-resource';
+    $config['alshaya_acm_knet.settings']['resource_path'] = '/home/vagrant/knet-resource/dev/';
+
+    $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.acm.acquia.io/';
+    $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.acm.acquia.io/';
+    break;
+
   case 'dev':
   case 'test':
     $config['acq_commerce.conductor']['url'] = 'https://agent.dev.acm.acquia.io/';
