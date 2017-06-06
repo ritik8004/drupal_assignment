@@ -1,6 +1,5 @@
 /* Display image bellow Drupal overlay.*/
 .cloudzoom #wrap {
-  z-index: 0 !important;
   position: relative;
 }
 

@@ -187,22 +187,31 @@
     @include u-visibility(none);
   }
 
+  .form-item.form-type-select.form-item-quantity {
+    padding: 0;
+  }
+
   .form-item-quantity {
+    @include select-wrapper(4.375rem);
+
+    margin-bottom: 1.5rem;
+    margin-top: 2.1875rem;
     float: $left;
-    width: 9.375rem;
 
     label {
-      float: $left;
-      padding: 0.3125rem 1.25rem 0.3125rem 0;
+      display: block;
+      position: absolute;
+      top: -1.5625rem;
+      font-size: 0.6875rem;
+      padding: 0.3125rem 0;
+      padding-#{$right}: 1.25rem;
+      #{$left}: 0;
     }
 
-    .edit-quantity {
-      border: none;
-      border-radius: 0;
-      padding: 0.3125rem 0.625rem;
-      appearance: none;
-      margin: 0 0.3125rem;
-      float: $left;
+    select {
+      @include select-style(4.375rem);
+
+      background-color: $whisper-dark;
     }
   }
 }
@@ -270,16 +279,16 @@
     color: $black;
   }
 
-  h3 {
+  .desc-label {
     font-family: $alshaya-bold;
     font-weight: normal;
     color: $marine-blue;
     font-size: 0.75rem;
-    float: $left;
     margin-top: 0;
     margin-bottom: 0;
   }
 
+  .desc-wrapper,
   .description-section,
   .address {
     border-top: 1px solid $white;
@@ -297,6 +306,7 @@
     float: $right;
   }
 
+  .desc-value,
   .text {
     clear: both;
     padding-top: 0.9375rem;
@@ -350,6 +360,8 @@
       line-height: 2;
       text-transform: capitalize;
       cursor: pointer;
+      position: relative;
+      z-index: -99;
 
       &.ui-state-active {
         border-bottom: none;
@@ -363,35 +375,19 @@
         color: $greyish;
         line-height: 1;
       }
+
+      .title-price {
+        position: absolute;
+        top: 0.625rem;
+        #{$right}: 2.5rem;
+        font-family: $arial;
+        font-size: 0.6875rem;
+        font-weight: bold;
+        color: $black;
+      }
     }
 
     &_content {
-      .standard {
-        .delivery-option-title {
-          @include icon(delivery, before);
-
-          &::before {
-            color: $black;
-            font-size: 1.375rem;
-            line-height: 1;
-            vertical-align: bottom;
-          }
-        }
-      }
-
-      .next-day {
-        .delivery-option-title {
-          @include icon(nextdaydelivery, before);
-
-          &::before {
-            color: $black;
-            font-size: 1.375rem;
-            line-height: 1;
-            vertical-align: bottom;
-          }
-        }
-      }
-
       .delivery-option {
         &-content {
           font-family: $arial;
@@ -406,6 +402,7 @@
               span {
                 float: $right;
                 font-weight: bold;
+                text-transform: uppercase;
               }
             }
           }
@@ -414,6 +411,15 @@
         &-title {
           font-family: $arial;
           line-height: 1.5;
+
+          @include icon(delivery, before);
+
+          &::before {
+            color: $black;
+            font-size: 1.375rem;
+            line-height: 1;
+            vertical-align: bottom;
+          }
 
           strong {
             font-size: 0.75rem;
@@ -440,12 +446,65 @@
     font-size: 0.75rem;
     line-height: 2;
     color: $brownish-grey;
-    padding-bottom: 1.25rem;
+    padding-bottom: 1rem;
+
+    .text p {
+      font-family: $arial;
+      font-size: 0.75rem;
+      line-height: 2;
+      color: $brownish-grey;
+      margin: 0;
+    }
 
     @include clearfix;
 
     strong {
       font-weight: bold;
+    }
+  }
+
+  &-form,
+  &-empty-selection {
+    padding-bottom: 1.25rem;
+
+    @include clearfix;
+
+    label {
+      @include clearfix;
+    }
+
+    label,
+    .text p {
+      font-family: $arial;
+      font-size: 0.75rem;
+      line-height: 2;
+      color: $brownish-grey;
+      margin: 0;
+    }
+
+    #cc-store-name {
+      float: $left;
+      width: 162px;
+      height: 2.188rem;
+      padding: 0.3125rem;
+      border: solid 1px $white;
+    }
+
+    input[type="button"] {
+      float: $right;
+      width: 6.563rem;
+      height: 2.188rem;
+      background-color: $cerulean-two;
+      font-family: $alshaya-thin;
+      appearance: none;
+      font-size: 0.75rem;
+      color: $white-two;
+      text-transform: lowercase;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: none;
     }
   }
 
@@ -462,7 +521,7 @@
       border: solid 1px $white;
     }
 
-    input[type="submit"] {
+    input[type="button"] {
       float: $right;
       width: 6.563rem;
       height: 2.188rem;
@@ -477,6 +536,196 @@
       text-align: center;
       padding: 0.5rem 0;
       border: none;
+    }
+  }
+}
+
+.click-collect-top-stores {
+  ul {
+    padding-#{$left}: 0;
+    margin: 0;
+
+    li {
+      font-family: $arial;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      color: $grey-ash;
+      list-style: none;
+      padding: 1.125rem 0;
+      border-top: 1px solid $white;
+
+      @include clearfix;
+
+      .store {
+        &-sequence {
+          border: 1px solid $black;
+          height: 1.063rem;
+          width: 1.063rem;
+          border-radius: 1.063rem;
+          text-align: center;
+          float: $left;
+          margin-top: 2px;
+        }
+
+        &-info-wrap {
+          float: $right;
+          width: 90%;
+        }
+
+        &-name {
+          font-weight: bold;
+          color: $black;
+        }
+
+        &-delivery-time {
+          padding-top: 12px;
+
+          em {
+            font-weight: bold;
+            font-style: normal;
+          }
+        }
+      }
+    }
+  }
+}
+
+.other-stores-link {
+  font-family: $arial;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: $marine-blue;
+  padding: 1.063rem 0;
+  border-top: 1px solid $white;
+}
+
+.click-collect-all-stores {
+  &.inline-modal-wrapper {
+    position: absolute;
+    top: 0;
+    #{$right}: 0;
+    height: 31.5rem;
+    border: 1px solid $marine-blue;
+    padding: 1.25rem;
+    background: $white-five;
+    overflow: hidden;
+    width: 100%;
+
+    @include breakpoint($tablet) {
+      width: 38%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 29%;
+    }
+
+    .close-inline-modal {
+      @include icon(close);
+
+      position: absolute;
+      top: 0;
+      #{$right}: 0;
+      height: 2.188rem;
+      width: 2.188rem;
+      font-size: 30px;
+      text-align: center;
+      color: $white-two;
+      background-color: $marine-blue;
+    }
+
+    .all-stores-info {
+      padding-bottom: 1em;
+
+      a {
+        font-family: $arial;
+        font-size: 0.75rem;
+        font-weight: bold;
+        line-height: 1.83;
+        color: $windows-blue;
+      }
+
+      .text {
+        font-family: $arial;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        color: $brownish-grey;
+      }
+
+      strong {
+        font-weight: bold;
+        color: $black;
+      }
+
+      h3 {
+        font-family: $alshaya-bold;
+        font-weight: bold;
+        color: $marine-blue;
+        margin-top: 0;
+      }
+    }
+
+    ul {
+      padding-#{$left}: 0;
+      margin: 0;
+      height: 380px;
+      overflow: scroll;
+
+      li {
+        font-family: $arial;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        color: $grey-ash;
+        list-style: none;
+        padding: 1.125rem 0;
+        border-top: 1px solid $white;
+
+        strong,
+        em {
+          font-weight: bold;
+          font-style: normal;
+        }
+
+        @include clearfix;
+
+        .store {
+          &-sequence {
+            border: 1px solid $black;
+            height: 1.063rem;
+            width: 1.063rem;
+            border-radius: 1.063rem;
+            text-align: center;
+            float: $left;
+            margin-top: 2px;
+          }
+
+          &-info-wrap {
+            float: $right;
+            width: 90%;
+          }
+
+          &-name {
+            font-weight: bold;
+            color: $black;
+          }
+
+          &-delivery-time {
+            padding-top: 12px;
+
+            em {
+              font-weight: bold;
+              font-style: normal;
+            }
+          }
+
+          &-low-stock {
+            font-family: $arial;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: $pumpkin-orange;
+            float: $right;
+          }
+        }
+      }
     }
   }
 }
@@ -525,10 +774,13 @@
         border-radius: 0;
         color: $white-five;
         border: 0;
-        float: $left;
         text-transform: lowercase;
         padding: 0.66rem 1.3701rem;
         position: static;
+        margin-bottom: 1.5rem;
+        margin-top: 2.1875rem;
+        display: inline-block;
+        float: $right;
       }
     }
   }
