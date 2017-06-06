@@ -34,7 +34,7 @@
           }
           // Toggle the filter menu when click on the label.
           $('.filter-menu-label .label').on('click', function () {
-            $('.page-wrapper, .header--wrapper, .c-pre-content').toggleClass('show-overlay');
+            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu').toggleClass('show-overlay');
             $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
             $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
           });
@@ -55,6 +55,17 @@
           var contextualLink = $(this).find(body).next();
           $(this).append(contextualLink);
         });
+      }
+
+      /**
+       * Custom accordion for facet blocks so that multiple panes can be opened.
+       *
+       * @param {Object} element
+       * The header, which will be clicked.
+       */
+      function alshayaAccordion(element) {
+        $(element).siblings().slideToggle('slow');
+        $(element).toggleClass('ui-state-active');
       }
 
       /**
@@ -126,19 +137,17 @@
           facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile').addClass('is-filter');
           if ($('body').hasClass('path--search')) {
             mainBlock.before(facetBlockWrapper);
-            var searchFilter = $('.c-search #views-exposed-form-search-page');
-            searchFilter.wrapAll('<div class="view-filters is-filter">');
-            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
-            $('.block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper').insertBefore('.view-filters.is-filter');
           }
           else {
             mainBlock.after(facetBlockWrapper);
-            var viewFilter = $('.c-products-list .view-filters');
-            viewFilter.addClass('is-filter');
-            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
           }
+          var searchFilter = $('.c-plp #views-exposed-form-search-page');
+          searchFilter.wrapAll('<div class="view-filters is-filter">');
+          $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
+          $('.block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper').insertBefore('.view-filters.is-filter');
+
           facetLabel.click(function () {
-            $('.page-wrapper, .header--wrapper, .c-pre-content').toggleClass('show-overlay');
+            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu').toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
             facetBlock.toggle();
           });
@@ -153,10 +162,6 @@
           $('.c-search .region__content .block-facets-summary-blockfilter-bar').css('border-bottom-width', '0');
         }
 
-        // Add class to clear all link and move it to the last.
-        $('#block-filterbar ul li:first-child').addClass('clear-all');
-        $('#block-filterbar ul li.clear-all').insertAfter('#block-filterbar ul li:last-child');
-
         // Clone the filter bar and add it to the filter menu on mobile.
         // Show mobile slider only on mobile resolution.
         mobileFilterMenu();
@@ -166,9 +171,8 @@
           placeSearchCount();
         });
 
-        $('.c-facet__blocks').accordion({
-          header: '.c-accordion__title',
-          heightStyle: 'content'
+        $('.c-facet__blocks .c-accordion__title').off().on('click', function (e) {
+          alshayaAccordion(this);
         });
 
         // Accordion for delivery option section on PDP.
@@ -218,8 +222,8 @@
       */
 
       if ($('.checkout .multistep-checkout').length) {
-        $('.tab-home-delivery').addClass('active--tab--head');
-        $('#edit-guest-delivery-home, #edit-member-delivery-home').addClass('active--tab--content');
+        $('.tab-home-delivery, .tab-new-customer').addClass('active--tab--head');
+        $('#edit-guest-delivery-home, #edit-member-delivery-home, #edit-checkout-guest').addClass('active--tab--content');
 
         $('.tab').click(function () {
           $('.multistep-checkout .tab').removeClass('active--tab--head');
@@ -232,6 +236,14 @@
           else if ($(this).hasClass('tab-click-collect')) {
             $('.tab-click-collect').addClass('active--tab--head');
             $('#edit-guest-delivery-collect, #edit-member-delivery-collect').addClass('active--tab--content');
+          }
+          else if ($(this).hasClass('tab-new-customer')) {
+            $('.tab-new-customer').addClass('active--tab--head');
+            $('#edit-checkout-guest').addClass('active--tab--content');
+          }
+          else if ($(this).hasClass('tab-returning-customer')) {
+            $('.tab-returning-customer').addClass('active--tab--head');
+            $('#edit-checkout-login').addClass('active--tab--content');
           }
         });
 

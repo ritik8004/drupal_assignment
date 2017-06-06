@@ -1,6 +1,5 @@
 .view-product-slider {
   text-align: center;
-  max-width: 19rem;
   margin: auto;
   margin-bottom: 2.4rem;
 
@@ -10,20 +9,16 @@
     margin-bottom: 1.5rem;
   }
 
-  @include breakpoint($desktop) {
-    max-width: 44.5rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    max-width: 26rem;
-  }
-
   .c-products__item__label {
     font-size: 0.8125rem;
     font-family: $alshaya-thin;
     color: $grey-ash;
     font-weight: normal;
     margin: 0.625rem 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
 
     @include breakpoint($desktop) {
       padding-#{$left}: 1.5rem;
@@ -86,10 +81,6 @@
   }
 
   .views-row {
-    @include breakpoint($tablet) {
-      height: 18.1rem;
-    }
-
     .use-ajax {
       outline: transparent;
     }
@@ -173,7 +164,6 @@
     font-size: 1.125rem;
     margin-#{$left}: 2.7rem;
     margin-bottom: 0.6rem;
-    letter-spacing: 1px;
   }
 
   @include breakpoint($desktop) {
@@ -296,6 +286,13 @@
   text-decoration: line-through;
 }
 
+.node--view-mode-search-result {
+  .has--special--price,
+  .special--price {
+    display: inline;
+  }
+}
+
 .price--discount span,
 .special--price .price-wrapper {
   color: $scarlet;
@@ -304,6 +301,7 @@
 .price--discount {
   margin-top: 9px;
   font-size: 10px;
+  color: $scarlet;
 
   @include breakpoint($tablet) {
     margin-top: 12px;

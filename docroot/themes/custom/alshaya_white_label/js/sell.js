@@ -22,7 +22,7 @@
             items: 4,
             nav: true
           },
-          1024: {
+          1025: {
             items: 5,
             nav: true
           }
@@ -42,7 +42,7 @@
             items: 2,
             nav: true
           },
-          1024: {
+          1025: {
             items: 3,
             nav: true
           }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7500b11664d5c7b1a8716a5ad4f92d31",
+    "content-hash": "93e58430eff36125d57ea9addf749c95",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2097,7 +2097,8 @@
                     "datestamp": "1471598939"
                 },
                 "patches_applied": {
-                    "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch"
+                    "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
+                    "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2186,7 +2187,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/better_exposed_filters",
-                "reference": "05c5d454ae9667ceb5fb62dca7c077dbca87ea61"
+                "reference": "d2de2d079c059017483410da84ca7c802177d7b3"
             },
             "require": {
                 "drupal/core": "*"
@@ -2197,11 +2198,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha2+15-dev",
-                    "datestamp": "1492103042"
-                },
-                "patches_applied": {
-                    "Autosubmit ignores display-level Use AJAX setting": "https://www.drupal.org/files/issues/remove-pre-execute-method-2877139-3.patch"
+                    "version": "8.x-3.0-alpha2+20-dev",
+                    "datestamp": "1495477983"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2219,7 +2217,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-04-14 01:04:17"
+            "time": "2017-06-01 19:19:16"
         },
         {
             "name": "drupal/block_field",
@@ -2927,6 +2925,8 @@
                 "patches_applied": {
                     "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                     "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
+                    "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-1.patch",
+                    "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/no_reliable_method-2752961-29.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-303.patch"
@@ -3810,7 +3810,9 @@
                 },
                 "patches_applied": {
                     "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
-                    "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch"
+                    "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
+                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-23.patch",
+                    "Fix undefined index:active in facets_system_breadcrumb_alter()": "https://www.drupal.org/files/issues/undefIndexActive_2869850.2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6429,6 +6431,9 @@
                 "drupal": {
                     "version": "8.x-1.0-alpha1",
                     "datestamp": "1472948339"
+                },
+                "patches_applied": {
+                    "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-13.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13220,12 +13225,12 @@
         "drupal/sharethis": 10,
         "drupal/mimemail": 20,
         "drupal/search_api_autocomplete": 20,
-        "drupal/better_exposed_filters": 20,
         "drupal/block_field": 15,
         "drupal/google_tag": 20,
         "drupal/simple_sitemap": 20,
         "drupal/redirect": 15,
         "drupal/search_api_spellcheck": 20,
+        "drupal/better_exposed_filters": 20,
         "drupal/memcache": 20
     },
     "prefer-stable": true,

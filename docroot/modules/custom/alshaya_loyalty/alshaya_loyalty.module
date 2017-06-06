@@ -473,9 +473,8 @@ function alshaya_loyalty_acq_commerce_update_customer_api_request_alter(array &$
     $user = user_load_by_mail($request_options['form_params']['customer[email]']);
 
     if (!empty($user)) {
-      if ($privilege_card_number = $user->get('field_privilege_card_number')->getString()) {
-        $request_options['form_params']['customer[extension][loyalty_card_number]'] = $privilege_card_number;
-      }
+      $privilege_card_number = $user->get('field_privilege_card_number')->getString();
+      $request_options['form_params']['customer[extension][loyalty_card_number]'] = $privilege_card_number;
     }
   }
 }

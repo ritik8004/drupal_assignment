@@ -531,7 +531,7 @@ function alshaya_white_label_preprocess_user(&$variables) {
   if ($user) {
     $mobile_util = \Drupal::getContainer()->get('mobile_number.util');
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
-    $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user);
+    $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user, 3);
     $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
     $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
 
@@ -633,6 +633,9 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
     if ($element['#attributes']['data-twig-suggestion'] == 'addtocart') {
       $suggestions[] = 'input__add_to_cart';
     }
+    if ($element['#attributes']['data-twig-suggestion'] == 'newsletter') {
+      $suggestions[] = 'input__newsletter_submit';
+    }
   }
 }
 
@@ -685,5 +688,18 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
         '#uri' => $file->getFileUri(),
       ];
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_facets_summary_item_list().
+ */
+function alshaya_white_label_preprocess_facets_summary_item_list(&$variables) {
+  // Move clear-all link item to the end of the array & attach clear-all class.
+  if (count($variables['items']) > 0) {
+    $variables['items'][0]['attributes']->addClass('clear-all');
+    $clear_all_item = $variables['items'][0];
+    array_splice($variables['items'], 0, 1);
+    $variables['items'][] = $clear_all_item;
   }
 }

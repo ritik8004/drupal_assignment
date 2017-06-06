@@ -267,7 +267,7 @@ class GuestDeliveryHome extends AddressFormBase {
     $customer = \Drupal::service('acq_commerce.api')->createCustomer($address['first_name'], $address['last_name'], $address['email']);
     $customer_cart = \Drupal::service('acq_commerce.api')->createCart($customer['customer_id']);
     $cart->convertToCustomerCart($customer_cart);
-    \Drupal::service('acq_cart.cart_storage')->pushCart();
+    \Drupal::service('acq_cart.cart_storage')->updateCart();
   }
 
   /**

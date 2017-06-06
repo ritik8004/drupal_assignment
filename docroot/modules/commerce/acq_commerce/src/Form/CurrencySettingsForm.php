@@ -31,10 +31,10 @@ class CurrencySettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
     $this->config('acq_commerce.currency')
       ->set('currency_code', $form_state->getValue('currency_code'))
       ->set('currency_code_position', $form_state->getValue('currency_code_position'))
+      ->set('decimal_points', $form_state->getValue('decimal_points'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -63,6 +63,14 @@ class CurrencySettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('currency_code_position'),
       '#options' => $options,
       '#description' => $this->t('The position for the currency code.'),
+      '#required' => TRUE,
+    ];
+
+    $form['decimal_points'] = [
+      '#type' => 'select',
+      '#title' => t('Decimal points'),
+      '#default_value' => $config->get('decimal_points'),
+      '#options' => [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5],
       '#required' => TRUE,
     ];
 

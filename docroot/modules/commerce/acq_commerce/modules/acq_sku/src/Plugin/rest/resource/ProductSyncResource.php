@@ -155,9 +155,9 @@ class ProductSyncResource extends ResourceBase {
 
       $query = $this->queryFactory->get('acq_sku')
         ->condition('sku', $product['sku']);
-      $nids = $query->execute();
+      $sku_ids = $query->execute();
 
-      if (count($nids) > 1) {
+      if (count($sku_ids) > 1) {
         $this->logger->error(
           'Duplicate product SKU @sku found.',
           ['@sku' => $product['sku']]
@@ -166,9 +166,9 @@ class ProductSyncResource extends ResourceBase {
         continue;
       }
 
-      if (count($nids) > 0) {
-        $nid = array_shift($nids);
-        $sku = $em->load($nid);
+      if (count($sku_ids) > 0) {
+        $sku_id = array_shift($sku_ids);
+        $sku = $em->load($sku_id);
 
         if (!$sku->id()) {
           $this->logger->error(
@@ -186,12 +186,14 @@ class ProductSyncResource extends ResourceBase {
         $nids = $query->execute();
 
         if (!count($nids)) {
-          $this->logger->info(
-            'Existing product SKU @sku has no display node, creating.',
-            ['@sku' => $product['sku']]
-          );
+          if ($product['visibility'] == 1) {
+            $this->logger->info(
+              'Existing product SKU @sku has no display node, creating.',
+              ['@sku' => $product['sku']]
+            );
 
-          $display = $this->createDisplayNode($product);
+            $display = $this->createDisplayNode($product);
+          }
         }
         else {
           $this->updateNodeCategories($nids, $product);
@@ -225,7 +227,9 @@ class ProductSyncResource extends ResourceBase {
           'media' => serialize($product['extension']['media']),
         ]);
 
-        $display = $this->createDisplayNode($product);
+        if ($product['visibility'] == 1) {
+          $display = $this->createDisplayNode($product);
+        }
 
         $this->logger->info(
           'Creating product SKU @sku.',
