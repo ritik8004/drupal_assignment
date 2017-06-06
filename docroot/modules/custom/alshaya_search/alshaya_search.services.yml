@@ -11,3 +11,8 @@ services:
     class: Drupal\alshaya_search\Routing\FacetAjaxRouteSubscriber
     tags:
       - { name: event_subscriber }
+  cache_context.facets:
+    class: Drupal\alshaya_search\CacheContext\FacetsCacheContext
+    arguments: ['@request_stack']
+    tags:
+      - { name: cache.context }

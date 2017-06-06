@@ -84,7 +84,6 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
 
     $block_id = 'views_exposed_filter_block:search-page';
     $block = $this->blockManager->createInstance($block_id);
-
     $block_view = $block->build();
     $response->addCommand(new ReplaceCommand('#views-exposed-form-search-page', $block_view));
 

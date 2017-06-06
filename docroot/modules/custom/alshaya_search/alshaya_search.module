@@ -27,12 +27,20 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
 }
 
 /**
+ * Implements hook_views_pre_build().
+ */
+function alshaya_search_views_pre_build(ViewExecutable $view) {
+  if ($view->id() == 'search') {
+    $view->display_handler->display['cache_metadata']['contexts'][] = 'facets';
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-search-page') {
     /** @var \Drupal\views\Entity\View $view */
-    $view = $form_state->getStorage()->view;
 
     $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
     foreach ($parameters['f'] as $key => $value) {
