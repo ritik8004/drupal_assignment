@@ -122,6 +122,11 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
     if (!empty($user)) {
       $user_data = \Drupal::service('user.data');
       $preference = $user_data->get('user', $user->id(), 'communication_preference');
+
+      if (empty($preference)) {
+        $preference = [];
+      }
+
       \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
       $request_options['form_params']['customer[extension][communication_preference]'] = alshaya_acm_customer_get_communication_preference_api_value($preference);
     }
@@ -222,6 +227,7 @@ function alshaya_acm_customer_user_email_validate($form, FormStateInterface $for
       $form_state->setValue('name', $user->getAccountName());
     }
     elseif (!$config->get('login_with_username')) {
+      // We will set this again in alshaya_acm_customer_login_post_validate().
       $form_state->setErrorByName('name', t('Unrecognized email address or password.'));
     }
   }
@@ -238,6 +244,7 @@ function alshaya_acm_customer_login_post_validate(array &$form, FormStateInterfa
 
     // Set error without name ref for name error.
     if (isset($all_errors['name'])) {
+
       drupal_set_message($all_errors['name'], 'error');
       $form_state->setErrorByName('custom', $all_errors['name']);
       unset($all_errors['name']);
@@ -286,6 +293,10 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
           $cart = new Cart($cart);
 
           \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+        }
+        // Otherwise, associate the current cart with the authenticated user.
+        else {
+          \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id']);
         }
 
         // Check if user exists in Drupal. We have already loaded this above.
@@ -510,4 +521,19 @@ function alshaya_acm_customer_alshaya_acm_checkout_pre_place_order(CartInterface
   // Invalidate the cache tag when order is placed to reflect on the user's
   // recent orders.
   Cache::invalidateTags(['user:' . $current_user_id . ':orders']);
+}
+
+/**
+ * Implements hook_alshaya_profile_installed().
+ */
+function alshaya_acm_customer_alshaya_profile_installed() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_i18n')) {
+    // Save some translations.
+    $strings = [];
+    $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
+      'en' => 'Unrecognized email address or password.',
+    ];
+
+    alshaya_i18n_save_translations($strings);
+  }
 }

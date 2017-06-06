@@ -1,0 +1,33 @@
+<div>
+    {% if term_tree is not empty %}
+        {#Level 1 term#}
+        {% for level1 in term_tree %}
+            <div class="outer-wrapper">
+                <div class="inner-wrapper">
+                    <a href="{{ level1.path }}">{{ level1.label }}</a>
+                    {% if level1.description is not empty %}
+                        <div>{{ level1.description }}</div>
+                    {% endif %}
+                </div>
+                {% if level1.child is not empty %}
+                    <div>
+                        {#Level 2 term#}
+                        {% for level2 in level1.child %}
+                            <div>
+                                <a href="{{ level2.path }}">{{ level2.label }}</a>
+                            </div>
+                            {% if level2.child is not empty %}
+                                <div>
+                                    {#Level 3 term#}
+                                    {% for level3 in level2.child %}
+                                        <a href="{{ level3.path }}">{{ level3.label }}</a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

@@ -1,0 +1,1 @@
+curl -X GET --header "Accept: application/json" --header "Authorization: Beare8d1" "http://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud/rest/V1/click-and-collect/stores/product/M-D2937%20%20%20%20%20777777/lat/29/lon/48"

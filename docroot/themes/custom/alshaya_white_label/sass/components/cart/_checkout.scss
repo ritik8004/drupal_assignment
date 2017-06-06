@@ -502,6 +502,7 @@ body.alias--cart {
       background: $white-three;
 
       th {
+        font-family: $arial;
         font-weight: normal;
       }
     }
@@ -567,6 +568,12 @@ body.alias--cart {
 
         &.delivery-option {
           padding-top: 0;
+        }
+
+        &.quantity {
+          a {
+            font-family: $arial;
+          }
         }
       }
 
@@ -783,6 +790,7 @@ body.alias--cart {
 
         &:first-child {
           padding-#{$right}: 0.75rem;
+          font-family: $arial;
         }
       }
 
@@ -858,7 +866,7 @@ body.alias--cart {
     display: none;
     font-size: 14px;
     position: absolute;
-    top: 0;
+    top: -0.625rem;
     #{$right}: 0;
 
     @include breakpoint($tablet) {
@@ -874,8 +882,13 @@ body.alias--cart {
       cursor: pointer;
       background: #ff6d22;
       color: #fff;
-      padding: 0.625rem 2.2rem;
       font-size: 0.813rem;
+      font-family: $arial;
+      width: 10.81rem;
+      height: 2.188rem;
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
     }
   }
 }

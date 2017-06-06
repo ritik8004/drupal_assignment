@@ -4,6 +4,7 @@ namespace Drupal\acq_sku\Plugin\rest\resource;
 
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -36,6 +37,13 @@ class ProductSyncResource extends ResourceBase {
    * @var \Drupal\acq_sku\CategoryRepositoryInterface
    */
   private $categoryRepo;
+
+  /**
+   * Product Options Manager service instance.
+   *
+   * @var \Drupal\acq_sku\ProductOptionsManager
+   */
+  private $productOptionsManager;
 
   /**
    * Drupal Config Factory Instance.
@@ -79,13 +87,16 @@ class ProductSyncResource extends ResourceBase {
    *   The query factory.
    * @param \Drupal\acq_sku\CategoryRepositoryInterface $cat_repo
    *   Category Repository instance.
+   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
+   *   Product Options Manager service instance.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo, ProductOptionsManager $product_options_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->queryFactory = $query_factory;
     $this->categoryRepo = $cat_repo;
+    $this->productOptionsManager = $product_options_manager;
   }
 
   /**
@@ -101,7 +112,8 @@ class ProductSyncResource extends ResourceBase {
       $container->get('logger.factory')->get('acq_commerce'),
       $container->get('config.factory'),
       $container->get('entity.query'),
-      $container->get('acq_sku.category_repo')
+      $container->get('acq_sku.category_repo'),
+      $container->get('acq_sku.product_options_manager')
     );
   }
 
@@ -466,6 +478,17 @@ class ProductSyncResource extends ResourceBase {
         $field_key = 'attr_' . $key;
 
         switch ($field['type']) {
+          case 'attribute':
+            foreach ($value as $val) {
+              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
+                $sku->{$field_key}->setValue($term->getName());
+              }
+              else {
+                $sku->{$field_key}->setValue($value);
+              }
+            }
+            break;
+
           case 'string':
             $sku->{$field_key}->setValue($value);
             break;
@@ -505,6 +528,18 @@ class ProductSyncResource extends ResourceBase {
         $field_key = 'attr_' . $key;
 
         switch ($field['type']) {
+          case 'attribute':
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+            foreach ($value as $val) {
+              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
+                $sku->{$field_key}->setValue($term->getName());
+              }
+              else {
+                $sku->{$field_key}->setValue($value);
+              }
+            }
+            break;
+
           case 'string':
             $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
             $sku->{$field_key}->setValue($value);

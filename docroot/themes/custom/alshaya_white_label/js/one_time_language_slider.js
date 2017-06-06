@@ -16,6 +16,11 @@
         // Show the slider.
         $('.only-first-time').show();
       }
+      // Close the block when clicked on close button.
+      $('.language-switcher-close').on('click', function () {
+        // Hide the slider.
+        $('.only-first-time').hide();
+      });
     }
   };
 

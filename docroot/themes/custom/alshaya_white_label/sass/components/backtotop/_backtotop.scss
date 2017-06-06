@@ -1,6 +1,6 @@
 #backtotop {
   @include breakpoint($only-mobile) {
-    @include u-visibility(none, true);
+    #{$right}: -0.1875rem;
   }
 
   @include icon(arrowup, after) {
@@ -25,6 +25,7 @@
   cursor: pointer;
   position: fixed;
   font-size: 0.5rem;
+  font-family: $arial;
   z-index: 3;
   display: block;
   background: none;
