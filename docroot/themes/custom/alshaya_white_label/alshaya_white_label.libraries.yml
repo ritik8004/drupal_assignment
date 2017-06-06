@@ -13,6 +13,7 @@ global_styles:
     js/one_time_language_slider.js: {}
   dependencies:
     - core/jquery
+    - core/jquery.once
     - core/jquery.ui.accordion
     - core/jquery.ui.tabs
     - core/jquery.cookie
