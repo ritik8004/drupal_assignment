@@ -1,4 +1,4 @@
-name: 'Alshaya ACM K-Net'
+name: 'Alshaya API'
 type: module
 description: 'Contains wrappers to APIs exposed by Magento (bypass Conductor).'
 package: 'Alshaya'
