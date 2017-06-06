@@ -1,6 +1,6 @@
 #backtotop {
   @include breakpoint($only-mobile) {
-    @include u-visibility(none, true);
+    #{$right}: -0.1875rem;
   }
 
   @include icon(arrowup, after) {
