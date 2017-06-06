@@ -45,6 +45,7 @@ hidden:
   attr_size: true
   attributes: true
   crosssell: true
+  brand: true
   field_configurable_attributes: true
   field_configured_skus: true
   final_price: true

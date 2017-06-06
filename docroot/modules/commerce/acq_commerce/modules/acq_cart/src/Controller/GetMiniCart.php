@@ -56,6 +56,12 @@ class GetMiniCart extends ControllerBase {
 
     // The grand total including discounts and taxes.
     $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
+
+    // Deduct shipping.
+    if (isset($totals['shipping']) && $grand_total) {
+      $grand_total -= $totals['shipping'];
+    }
+
     $total = [
       '#theme' => 'acq_commerce_price',
       '#price' => $grand_total,
