@@ -663,10 +663,13 @@ function alshaya_master_install() {
     'Sorry, there are no stores or locations available to display.' => [
       'ar' => 'عفواً، لا توجد محلات أو مواقع لعرضها',
     ],
+    '@total closest stores to' => [
+      'ar' => 'أقرب @total محلات إلى',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
-  $site_logo = 'themes/custom/alshaya_white_label/mothercare-logo';
+  $site_logo = 'themes/custom/alshaya_white_label/mothercare-logo-sm';
 
   // Get config factory object.
   $config_factory = \Drupal::configFactory();
@@ -804,7 +807,7 @@ function alshaya_master_install() {
     ->set('visibility', [
       'request_path' => [
         'id' => 'request_path',
-        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*\r\n/contact",
+        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*\r\n/contact\r\n/sitemap",
         'negate' => FALSE,
         'context_mapping' => [],
       ],
@@ -816,5 +819,11 @@ function alshaya_master_install() {
   // Set the access-denied page to '/user'.
   \Drupal::configFactory()->getEditable('system.site')
     ->set('page.403', '/user')
+    ->save();
+
+  // Set the access-denied page to '/user'.
+  \Drupal::configFactory()->getEditable('r4032login.settings')
+    ->set('display_denied_message', FALSE)
+    ->set('redirect_authenticated_users_to', '/user')
     ->save();
 }

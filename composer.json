@@ -46,7 +46,8 @@
         "drupal/redirect": "^1.0@alpha",
         "drupal/form_options_attributes": "^1.0",
         "drupal/search_api_spellcheck": "dev-8.x-1.x",
-        "drupal/better_exposed_filters": "3.x-dev"
+        "drupal/better_exposed_filters": "3.x-dev",
+        "drupal/r4032login": "1.x-dev"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -128,6 +129,9 @@
             },
             "drupal/user_registrationpassword": {
                 "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-13.patch"
+            },
+            "drupal/r4032login": {
+                "Alter/Override options parameter": "https://www.drupal.org/files/issues/2883264-4.patch"
             }
         },
         "installer-paths": {
