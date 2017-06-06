@@ -59,17 +59,3 @@ index d77fb94f..efe1472f 100644
     * Converts this cart to the customer cart provided.
     *
     * @param array $cart
-diff --git a/docroot/modules/custom/alshaya_loyalty/alshaya_loyalty.module b/docroot/modules/custom/alshaya_loyalty/alshaya_loyalty.module
-index 2598a692..469257b7 100644
---- a/docroot/modules/custom/alshaya_loyalty/alshaya_loyalty.module
-+++ b/docroot/modules/custom/alshaya_loyalty/alshaya_loyalty.module
-@@ -230,6 +230,9 @@ function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInter
-       elseif (Drupal::currentUser()->isAnonymous()) {
-         $temp_store->set('card_number', $apc_number);
-       }
-+
-+      $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
-+      $cart->setExtension('loyalty', $apc_number);
-     }
-     elseif ($temp_store->get('card_number')) {
-       $temp_store->delete('card_number');
