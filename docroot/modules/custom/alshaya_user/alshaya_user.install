@@ -121,7 +121,7 @@ If you have any questions, check our <a href="[site:url]">FAQs page</a> here or 
 Best Wishes,
 The [site:name] Team
 Tel: 182-12-12
-<a href="www.mothercare.com.kw">www.mothercare.com.kw</a>');
+<a href="[site:url]">[site:url-brief]</a>');
   $config->save();
 
   // Set default body for password reset email.

@@ -323,7 +323,7 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
 مع أطيب التحيات،
 فريق عمل [site:name]
 هاتف:12-12-182
-<a href="www.mothercare.com.kw">www.mothercare.com.kw</a>');
+<a href="[site:url]">[site:url-brief]</a>');
   $signup_mail->save();
 
   // Disable account activation mail.

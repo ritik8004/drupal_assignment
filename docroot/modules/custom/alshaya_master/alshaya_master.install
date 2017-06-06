@@ -663,6 +663,9 @@ function alshaya_master_install() {
     'Sorry, there are no stores or locations available to display.' => [
       'ar' => 'عفواً، لا توجد محلات أو مواقع لعرضها',
     ],
+    '@total closest stores to' => [
+      'ar' => 'أقرب @total محلات إلى',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
@@ -716,6 +719,7 @@ function alshaya_master_install() {
         'context_mapping' => [],
       ],
     ])
+    ->set('weight', '-28')
     ->save();
 
   // Settings override of 'back_to_top'.
