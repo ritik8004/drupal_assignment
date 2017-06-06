@@ -435,9 +435,9 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function getLoyalty() {
-    if (isset($this->cart, $this->cart->extension, $this->cart->extension->loyalty)) {
-      return $this->cart->extension->loyalty;
+  public function getExtension($key) {
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension[$key])) {
+      return $this->cart->extension[$key];
     }
 
     return '';
@@ -446,8 +446,8 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function setLoyalty($loyalty_number) {
-    $this->cart->extension['loyalty'] = $loyalty_number;
+  public function setExtension($key, $value) {
+    $this->cart->extension[$key] = $value;
   }
 
   /**

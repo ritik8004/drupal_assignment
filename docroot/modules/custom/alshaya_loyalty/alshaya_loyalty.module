@@ -232,7 +232,7 @@ function alshaya_loyalty_save_privilege_card_number(array &$form, FormStateInter
       }
 
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
-      $cart->setLoyalty($apc_number);
+      $cart->setExtension('loyalty', $apc_number);
     }
     elseif ($temp_store->get('card_number')) {
       $temp_store->delete('card_number');

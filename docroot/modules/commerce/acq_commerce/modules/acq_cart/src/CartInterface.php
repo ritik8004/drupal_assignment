@@ -245,20 +245,25 @@ interface CartInterface {
   public function setCoupon($coupon);
 
   /**
-   * Gets the loyalty number.
+   * Gets an extension by its key.
+   *
+   * @param string $key
+   *   The extension key.
    *
    * @return string
-   *   The loyalty number.
+   *   The value.
    */
-  public function getLoyalty();
+  public function getExtension($key);
 
   /**
-   * Set the loyalty number.
+   * Set an extension.
    *
-   * @param string $loyalty_number
-   *   The loyalty number.
+   * @param string $key
+   *   The extension key.
+   * @param string $value
+   *   The extension value.
    */
-  public function setLoyalty($loyalty_number);
+  public function setExtension($key, $value);
 
   /**
    * Converts this cart to the customer cart provided.
