@@ -86,36 +86,40 @@ class AlshayaBulkUploadRedirect extends FormBase {
         if ($handle = fopen($csv_uri, 'r')) {
           // Read csv file handler.
           $i = 0;
-          while ($row = fgetcsv($handle)) {
-            $i++;
-            // Process only for exact two columns count.
-            if (count($row) == 2) {
-              // Both column have data.
-              if (!empty($row[0]) && !empty($row[1])) {
-                // If url contains no space in between.
-                if (strpos($row[1], ' ') === FALSE) {
-                  // If duplicate sku in csv.
-                  if (!in_array($row[0], $this->skus)) {
-                    $this->skus[] = $row[0];
-                    $this->redirects[] = [$row[0], $row[1]];
+          while ($data = fgetcsv($handle, NULL, "\r")) {
+            foreach ($data as $d) {
+              $i++;
+              $row = explode(';', $d);
+              // Process only for exact two columns count.
+              if (count($row) == 2) {
+                // Both column have data.
+                if (!empty($row[0]) && !empty($row[1])) {
+                  // If url contains no space in between.
+                  if (strpos($row[1], ' ') === FALSE) {
+                    // If duplicate sku in csv.
+                    if (!in_array($row[0], $this->skus)) {
+                      $this->skus[] = $row[0];
+                      $this->redirects[] = [$row[0], $row[1]];
+                    }
+                    else {
+                      $form_state->setErrorByName('file', $this->t('Duplicate sku id at row @row. Please check.', ['@row' => $i]));
+                    }
                   }
                   else {
-                    $form_state->setErrorByName('file', $this->t('Duplicate sku id at row @row. Please check.', ['@row' => $i]));
+                    $form_state->setErrorByName('file', $this->t('Url is containing space at row @row. Please check.', ['@row' => $i]));
                   }
                 }
                 else {
-                  $form_state->setErrorByName('file', $this->t('Url is containing space at row @row. Please check.', ['@row' => $i]));
+                  $form_state->setErrorByName('file', $this->t('Data is not available at row @row. Please check.', ['@row' => $i]));
                 }
               }
               else {
-                $form_state->setErrorByName('file', $this->t('Data is not available at row @row. Please check.', ['@row' => $i]));
+                // If there is some discrepancy in column count.
+                $form_state->setErrorByName('file', $this->t('There is some discrepancy in column at row @row. Please check.', ['@row' => $i]));
               }
             }
-            else {
-              // If there is some discrepancy in column count.
-              $form_state->setErrorByName('file', $this->t('There is some discrepancy in column at row @row. Please check.', ['@row' => $i]));
-            }
           }
+
           // Close file handler.
           fclose($handle);
 
