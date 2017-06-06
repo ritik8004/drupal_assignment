@@ -9,6 +9,9 @@
   // Coordinates of the user's location.
   var asf_coords = null;
 
+  // Last checked SKU (or variant SKU).
+  var last_sku = null;
+
   Drupal.behaviors.store_finder_pdp = {
     attach: function (context, settings) {
       var pdpStoresErrorCallback = function (error) {
@@ -44,12 +47,16 @@
           $(this).parents('.inline-modal-wrapper:first').slideToggle();
         });
       });
+
+      // Call here once to ensure we do it after changes in attribute selection.
+      Drupal.pdp_stores_display();
     }
   };
 
   Drupal.pdp_stores_display = function () {
     // Get the SKU.
     var sku = $('#pdp-stores-container').attr('sku');
+    var sku_clean = $('#pdp-stores-container').attr('sku-clean');
 
     // Get the type.
     var type = $('#pdp-stores-container').attr('type');
@@ -57,36 +64,39 @@
     if (asf_coords !== null) {
 
       if (type === 'configurable') {
-        // Check if we have options selected.
-        return;
+        if ($('.selected-variant-sku-' + sku_clean).length) {
+          $('.click-collect-empty-selection').hide();
+          sku = $('.selected-variant-sku-' + sku_clean).val();
+        }
+        else {
+          $('.click-collect-empty-selection').show();
+          $('.click-collect-form').hide();
+          return;
+        }
       }
 
-      $.ajax({
-        url: Drupal.url('stores/product/' + sku + '/' + asf_coords.latitude + '/' + asf_coords.longitude),
-        success: function(response) {
-          // Create a Drupal.Ajax object without associating an element, a
-          // progress indicator or a URL.
-          var ajax_object = Drupal.ajax({
-            url: '',
-            base: false,
-            element: $('#pdp-stores-container'),
-            progress: false
-          });
+      if (last_sku === null || last_sku != sku) {
+        last_sku = sku;
 
-          // WE simulate an AJAX response having arrived, and let the Ajax
-          // system handle it.
-          ajax_object.success(response, 'success');
-        }
-      });
+        $.ajax({
+          url: Drupal.url('stores/product/' + sku + '/' + asf_coords.latitude + '/' + asf_coords.longitude),
+          success: function (response) {
+            // Create a Drupal.Ajax object without associating an element, a
+            // progress indicator or a URL.
+            var ajax_object = Drupal.ajax({
+              url: '',
+              base: false,
+              element: false,
+              progress: false
+            });
+
+            // WE simulate an AJAX response having arrived, and let the Ajax
+            // system handle it.
+            ajax_object.success(response, 'success');
+          }
+        });
+      }
     }
-  }
-
-  /**
-   * Add new command for updating stores for product after attribute is selected.
-   */
-  Drupal.AjaxCommands.prototype.pdpUpdateStores = function (ajax, response, status) {
-    $('#pdp-stores-container').attr('sku', response.sku);
-    Drupal.pdp_stores_display();
   }
 
 })(jQuery, Drupal);

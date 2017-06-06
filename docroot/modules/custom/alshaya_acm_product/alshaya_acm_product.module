@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -427,6 +428,19 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $build = [];
     alshaya_acm_product_get_gallery($build, $tree_pointer);
     $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
+
+    $sku = SKU::load($form['sku_id']['#value']);
+
+    $dynamic_parts['selected_variant_sku'] = [
+      '#type' => 'hidden',
+      '#attributes' => [
+        'class' => [
+          'selected-variant-sku',
+          'selected-variant-sku-' . strtolower(Html::cleanCssIdentifier($sku->getSku())),
+        ],
+      ],
+      '#value' => $tree_pointer->getSku(),
+    ];
   }
 
   return $dynamic_parts;
