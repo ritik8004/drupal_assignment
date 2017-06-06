@@ -672,3 +672,53 @@ index dd2fa11..e544b3f 100644
     * Fetches all promotions.
     *
     * @return array
+diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+index 45e5462..31f3696 100644
+--- a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
++++ b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+@@ -474,22 +474,23 @@ private function updateAttributeFields(SKU $sku, array $attributes) {
+           continue;
+         }
+ 
+-        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+         $field_key = 'attr_' . $key;
+ 
+         switch ($field['type']) {
+           case 'attribute':
+-            foreach ($value as $val) {
++            $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
++            foreach ($value as $index => $val) {
+               if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
+-                $sku->{$field_key}->setValue($term->getName());
++                $sku->{$field_key}->set($index, $term->getName());
+               }
+               else {
+-                $sku->{$field_key}->setValue($value);
++                $sku->{$field_key}->set($index, $val);
+               }
+             }
+             break;
+ 
+           case 'string':
++            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+             $sku->{$field_key}->setValue($value);
+             break;
+ 
+@@ -529,13 +530,13 @@ private function updateExtensionFields(SKU $sku, array $attributes) {
+ 
+         switch ($field['type']) {
+           case 'attribute':
+-            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+-            foreach ($value as $val) {
++            $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
++            foreach ($value as $index => $val) {
+               if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
+-                $sku->{$field_key}->setValue($term->getName());
++                $sku->{$field_key}->set($index, $term->getName());
+               }
+               else {
+-                $sku->{$field_key}->setValue($value);
++                $sku->{$field_key}->set($index, $val);
+               }
+             }
+             break;
