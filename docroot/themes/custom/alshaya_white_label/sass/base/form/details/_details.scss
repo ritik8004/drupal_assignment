@@ -14,3 +14,7 @@ details div {
   animation-name: fadeInDown;
   animation-duration: 1s;
 }
+
+html.no-details details > summary::before {
+  content: none;
+}
