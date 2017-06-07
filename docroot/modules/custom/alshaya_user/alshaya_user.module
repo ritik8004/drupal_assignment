@@ -46,21 +46,18 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   if (\Drupal::currentUser()->isAuthenticated()) {
     // Get if user only authenticated or not.
     $only_authenticated = alshaya_user_only_authenticated();
-    $form['field_terms_and_condition']['#access'] = FALSE;
     // Disabled true, if only authenticated.
     $form['account']['mail']['#disabled'] = $only_authenticated;
     // Access false, if only authenticated.
     $form['account']['current_pass']['#access'] = !$only_authenticated;
   }
   else {
-    // Update title from description for terms and conditions field.
-    $form['field_terms_and_condition']['widget']['#title'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
-    $form['field_terms_and_condition']['widget']['value']['#title'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
-
-    // Set description to NULL for terms and conditions field.
-    $form['field_terms_and_condition']['widget']['#description'] = NULL;
-    $form['field_terms_and_condition']['widget']['value']['#description'] = NULL;
-
+    // Add markup for terms and conditions.
+    $form['field_terms_and_condition_markup'] = [
+      '#type' => 'item',
+      '#markup' => \Drupal::config('alshaya_user.settings')->get('terms_conditions.value'),
+      '#weight' => $form['field_subscribe_newsletter']['#weight'] + 1,
+    ];
     // Change submit button text.
     $form['actions']['submit']['#value'] = t('Create');
   }
@@ -75,25 +72,19 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     // Hide mobile number field from registration page.
     $form['field_mobile_number']['#access'] = FALSE;
 
-    $form['#validate'][] = 'alshaya_user_form_user_register_form_validate';
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+
+    // Add markup for terms and conditions.
+    $form['field_terms_and_condition_markup'] = [
+      '#type' => 'item',
+      '#markup' => \Drupal::config('alshaya_user.settings')->get('terms_conditions.value'),
+      '#weight' => $form['field_subscribe_newsletter']['#weight'] + 1,
+    ];
 
     // Change password_confirm field to normal password field.
     $form['account']['pass']['#title'] = t('Password');
     $form['account']['pass']['#type'] = 'password';
     $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
-  }
-}
-
-/**
- * Form validate callback for user registration form.
- *
- * Validate the terms and conditions field.
- */
-function alshaya_user_form_user_register_form_validate($form, FormStateInterface $form_state) {
-  $terms = $form_state->getValue('field_terms_and_condition');
-  if (is_array($terms) && empty($terms['value'])) {
-    $form_state->setErrorByName('field_terms_and_condition', t('Please agree to the Terms and Conditions.'));
   }
 }
 
