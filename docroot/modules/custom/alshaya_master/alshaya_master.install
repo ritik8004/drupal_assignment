@@ -666,6 +666,12 @@ function alshaya_master_install() {
     '@total closest stores to' => [
       'ar' => 'أقرب @total محلات إلى',
     ],
+    'clear all' => [
+      'ar' => 'امسح الكل',
+    ],
+    'under @granularity' => [
+      'ar' => '@granlarity تحت',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
