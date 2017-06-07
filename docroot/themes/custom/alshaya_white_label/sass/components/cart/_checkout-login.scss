@@ -3,11 +3,11 @@
   margin: 0 auto 1em;
 
   @include breakpoint($tablet) {
-    margin: 1.2rem auto 1em;
+    margin: 1rem auto 9.2rem;
   }
 
   @include breakpoint($desktop) {
-    margin: 0.38em auto 1em;
+    margin: 0.38em auto 4.8em;
   }
 
   h1 {
@@ -96,6 +96,11 @@
       float: $left;
       margin-left: 0;
       margin-right: 0;
+      margin-top: 2.05rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.2rem;
     }
 
     @include breakpoint($only-mobile) {
@@ -114,6 +119,13 @@
         display: none;
       }
     }
+
+    .form-item {
+      .error {
+        position: relative;
+        top: 0.5rem;
+      }
+    }
   }
 
   #edit-checkout-guest {
@@ -121,7 +133,7 @@
       padding: 0;
     }
 
-    @include breakpoint($tablet) {
+    @include breakpoint($desktop) {
       border-#{$right}: 1px solid $white;
     }
   }
@@ -147,12 +159,14 @@
 
   #edit-checkout-login {
     @include breakpoint($tablet) {
+      border-#{$left}: 1px solid $white;
       padding-#{$left}: 2.2rem;
       position: relative;
     }
 
     @include breakpoint($desktop) {
-      padding-#{$left}: 6.75em;
+      padding-#{$left}: 6.6em;
+      border-#{$left}: 0;
     }
 
     .request-password-link {
@@ -179,7 +193,7 @@
       margin-top: 1.4rem;
 
       @include breakpoint($tablet) {
-        margin-top: 2rem;
+        margin-top: 2.2rem;
       }
     }
 
@@ -230,23 +244,35 @@
 
     .tabs--content {
       @include breakpoint($tablet) {
-        margin-top: -0.3rem;
+        margin-top: 0.35rem;
       }
 
       @include breakpoint($desktop) {
         margin-#{$left}: 0;
-        margin-top: 1.25rem;
+        margin-top: 1.1rem;
         width: 94%;
       }
     }
 
     .form-type-password {
       margin-top: 2.8rem;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 2.9rem;
+      }
+
+      #unmask_password {
+        top: 0.5rem;
+
+        @include breakpoint($tablet) {
+          text-transform: uppercase;
+        }
+      }
     }
 
     .checkout-guest-email-usage {
       color: $light-ash;
-      margin-bottom: 2rem;
+      margin-bottom: 1.85rem;
 
       @include breakpoint($tablet) {
         color: $grey-ash;
@@ -268,6 +294,7 @@
     @include breakpoint($tablet) {
       font-size: 0.8125rem;
       width: 92%;
+      line-height: 1.5;
     }
 
     @include breakpoint($desktop) {

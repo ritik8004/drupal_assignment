@@ -1207,6 +1207,10 @@ header {
 
   a {
     display: block;
+
+    @include breakpoint($upto-desktop) {
+      height: 2.875rem;
+    }
   }
 }
 
