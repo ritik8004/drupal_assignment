@@ -51,10 +51,6 @@
 }
 
 .path--cart {
-  @include breakpoint($only-mobile) {
-    margin-top: 0;
-  }
-
   .site-brand-home {
     a {
       width: 50.5%;
