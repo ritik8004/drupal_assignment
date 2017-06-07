@@ -339,6 +339,12 @@
 }
 
 .delivery-options-wrapper {
+  .ui-accordion-header-active {
+    .title-price {
+      display: none;
+    }
+  }
+
   .field {
     &__label {
       font-size: 0.875rem;
