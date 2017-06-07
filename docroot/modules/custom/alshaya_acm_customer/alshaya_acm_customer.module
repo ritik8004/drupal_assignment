@@ -288,17 +288,23 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       if (!empty($customer) && !empty($customer['customer_id'])) {
         \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
-        // If we get a cart_id in the customer response, load it and store it
-        // in the session.
-        if (isset($customer['extension']['cart_id'])) {
-          $cart = (object) \Drupal::service('acq_commerce.api')->getCart($customer['extension']['cart_id']);
-          $cart = new Cart($cart);
+        try {
+          // If we get a cart_id in the customer response, load it and store it
+          // in the session.
+          if (isset($customer['extension']['cart_id'])) {
+            $cart = (object) \Drupal::service('acq_commerce.api')->getCart($customer['extension']['cart_id']);
+            $cart = new Cart($cart);
 
-          \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+            \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+          }
+          // Otherwise, associate the current cart with the authenticated user.
+          else {
+            \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id']);
+          }
         }
-        // Otherwise, associate the current cart with the authenticated user.
-        else {
-          \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id']);
+        catch (\Exception $e) {
+          // Some error occurred while associating cart, not doing anything
+          // here to allow normal login to work.
         }
 
         // Check if user exists in Drupal. We have already loaded this above.
