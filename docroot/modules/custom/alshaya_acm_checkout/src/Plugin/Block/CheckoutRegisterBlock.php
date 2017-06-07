@@ -109,6 +109,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $build = [];
 
     $account = $this->entityTypeManager->getStorage('user')->create([]);
+    $account->get('acq_customer_id')->setValue($order['customer_id']);
     $account->get('field_first_name')->setValue($order['firstname']);
     $account->get('field_last_name')->setValue($order['lastname']);
 
