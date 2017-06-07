@@ -11,15 +11,36 @@
       if ($('#block-alshaya-white-label-content div').hasClass('joinclub')) {
         $('#block-alshaya-white-label-content article').addClass('joinclubblock');
       }
+
+      var mobileStickyHeaderHeight = 100;
+      var normalStickyHeaderHeight = 160;
       $('.read-more-description-link').on('click', function () {
-        $('html,body').animate({
-          scrollTop: $('.content__title_wrapper').offset().top - 160
-        }, 'slow');
+        if ($(window).width() < 768) {
+          $('html,body').animate({
+            scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
+          }, 'slow');
+        }
+        else {
+          if ($('body').hasClass('header--fixed')) {
+            $('html,body').animate({
+              scrollTop: $('.content__title_wrapper').offset().top - normalStickyHeaderHeight
+            }, 'slow');
+          }
+        }
       });
       $('.other-stores-link').on('click', function () {
-        $('html,body').animate({
-          scrollTop: $('.content__title_wrapper').offset().top - 160
-        }, 'slow');
+        if ($(window).width() < 768) {
+          $('html,body').animate({
+            scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
+          }, 'slow');
+        }
+        else {
+          if ($('body').hasClass('header--fixed')) {
+            $('html,body').animate({
+              scrollTop: $('.content__title_wrapper').offset().top - normalStickyHeaderHeight
+            }, 'slow');
+          }
+        }
       });
     }
   };
