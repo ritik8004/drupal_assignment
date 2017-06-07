@@ -280,6 +280,9 @@
 
     @include breakpoint($tablet) {
       font-size: 0.875rem;
+    }
+
+    @include breakpoint($desktop) {
       margin-bottom: 1rem;
     }
   }
