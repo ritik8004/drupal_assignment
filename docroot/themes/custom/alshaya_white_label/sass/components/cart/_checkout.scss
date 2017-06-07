@@ -695,12 +695,25 @@ body.alias--cart {
 
       select {
         @include select-style(4.375rem);
-
-        text-indent: 0.4rem;
       }
 
       .form-type-select {
         @include select-wrapper(4.375rem);
+
+        .ajax-progress-throbber {
+          .message {
+            display: none;
+          }
+
+          .throbber {
+            background-image: url(../imgs/icons/MC-loader.svg) !important;
+            background-position: $right center !important;
+            background-repeat: no-repeat !important;
+            background-size: 1.5rem;
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+          }
+        }
       }
     }
   }
@@ -814,6 +827,7 @@ body.alias--cart {
     min-width: 10.8125rem;
     text-transform: lowercase;
     font-family: $arial;
+    font-size: 0.75rem;
 
     @include breakpoint($upto-tablet) {
       display: block;
@@ -882,7 +896,7 @@ body.alias--cart {
       cursor: pointer;
       background: #ff6d22;
       color: #fff;
-      font-size: 0.813rem;
+      font-size: 0.75rem;
       font-family: $arial;
       width: 10.81rem;
       height: 2.188rem;

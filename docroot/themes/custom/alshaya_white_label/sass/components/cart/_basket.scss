@@ -76,9 +76,11 @@
       font-size: 0.875rem;
     }
 
-    .price-currency.prefix {
-      padding-right: 0.5rem;
+    .price-currency.prefix,
+    .price-currency.suffix {
+      padding-#{$right}: 0.5rem;
       float: $left;
+      font-family: $arial;
 
       @include breakpoint($tablet) {
         padding-right: 0;
@@ -120,6 +122,7 @@
 
       @include breakpoint($desktop) {
         width: 58%;
+        padding-top: 0.125rem;
       }
 
       div {

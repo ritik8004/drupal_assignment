@@ -15,6 +15,11 @@ body.ie {
       }
     }
   }
+
+  // IE 10, 11, not taking line-height from select-wrapper mixin in rems.
+  &.alias--cart #table-cart-items .form-type-select::after {
+    line-height: 34px;
+  }
 }
 
 /**
@@ -50,5 +55,16 @@ body.ucbrowser {
 }
 
 /**
-  * Opera - Specific issues and hacks for them.
+ * Opera - Specific issues and hacks for them.
  */
+
+/**
+ * Chrome - Specific issues and hacks.
+ */
+
+// In Chrome, padding is not applied correctly on select, adding text-indent to roughly center the number.
+body.chrome {
+  &.alias--cart #table-cart-items td select {
+    text-indent: 0.4rem;
+  }
+}
