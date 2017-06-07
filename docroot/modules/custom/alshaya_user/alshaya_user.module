@@ -5,13 +5,14 @@
  * Module file for alshaya_user.
  */
 
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\block\Entity\Block;
-use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\user\Entity\User;
 
 /**
@@ -109,14 +110,14 @@ function alshaya_user_form_user_register_form_submit($form, FormStateInterface $
   // Get the new user account object from storage.
   $account = $storage['user'];
 
-  // Prepare user data array.
-  $user_data = ['id' => $account->id()];
-
-  // Get the string to pass into GET.
-  $user_data_string = base64_encode(json_encode($user_data));
-
+  // Redirect the user with email in GET to registration complete screen.
   if (\Drupal::currentUser()->isAnonymous()) {
-    // Redirect the user with email in GET.
+    // Prepare user data array.
+    $user_data = ['id' => $account->id()];
+
+    // Get the string to pass into GET.
+    $user_data_string = base64_encode(json_encode($user_data));
+
     $form_state->setRedirect('alshaya_user.user_register_complete', ['user' => $user_data_string]);
   }
 }
@@ -206,8 +207,8 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   $form['account']['roles']['#default_value'] = [];
 
   // Password policy custom validation.
-  $form['#validate'][] = 'alshaya_user_change_password_validate';
   $form['#validate'][] = '_password_policy_user_profile_form_validate';
+  $form['#validate'][] = 'alshaya_user_change_password_validate';
   $form['#submit'][] = '_password_policy_user_profile_form_submit';
 }
 
@@ -215,17 +216,13 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
  * Custom validate function for change password form.
  */
 function alshaya_user_change_password_validate(&$form, FormStateInterface &$form_state) {
-  // Set password value in $_POST for password_policy_history module.
-  $current_route = \Drupal::routeMatch();
-  if ($current_route->getRouteName() == 'change_pwd_page.change_password_form') {
-    /* @var \Drupal\user\Entity\User $password_user */
-    $uid = $current_route->getRawParameter('user');
-    if ($uid) {
-      $new_pass = $_POST['pass'];
-      $_POST['pass'] = [];
-      $_POST['pass']['pass1'] = $new_pass;
-      $_POST['pass']['pass2'] = $new_pass;
-    }
+  if (!$form_state->getErrors()) {
+    $account = \Drupal::routeMatch()->getParameter('user');
+
+    // Add entry into hash table after all validations have passed, this is not
+    // done by module for us because it checks for confirm_password field and
+    // we need a single password field.
+    _alshaya_user_password_policy_history_insert_password_hash($account, $form_state->getValue('pass'));
   }
 }
 
@@ -365,4 +362,38 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
 
 [site:name] فريق عمل --');
   $reset_password_mail->save();
+}
+
+/**
+ * Helper function to get hashed password and insert it into the history table.
+ *
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   User account object.
+ * @param string $password
+ *   A plain-text password.
+ *
+ * @see _password_policy_history_insert_password_hash()
+ */
+function _alshaya_user_password_policy_history_insert_password_hash(AccountInterface $account, $password) {
+  if (!\Drupal::moduleHandler()->moduleExists('password_policy_history')) {
+    return;
+  }
+
+  if ($account) {
+    // See _password_policy_history_insert_password_hash() for code below.
+    // @TODO: We should refactor the module and remove this code.
+    $connection = Database::getConnection();
+
+    $hashed_pass = \Drupal::service('password')->hash($password);
+    $values = [
+      $account->id(),
+      $hashed_pass,
+      time(),
+    ];
+
+    $connection->insert('password_policy_history')
+      ->fields(['uid', 'pass_hash', 'timestamp'], $values)
+      ->execute();
+
+  }
 }
