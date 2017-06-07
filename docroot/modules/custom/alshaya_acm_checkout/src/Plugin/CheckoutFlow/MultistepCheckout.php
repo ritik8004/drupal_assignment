@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Provides the default multistep checkout flow.
@@ -101,6 +102,13 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       if (!empty($requested_step_id)) {
         $this->redirectToStep($step_id);
       }
+    }
+
+    // Redirect user to basket page if there are no items in cart and user is
+    // trying to checkout.
+    if ($step_id != 'confirmation' && !$cart->items()) {
+      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+      $response->send();
     }
 
     $config = $this->getConfiguration();
