@@ -145,7 +145,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku_entity->getSku()));
 
   if ($output['#theme'] == 'add_to_cart_error') {
-    $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, $html));
+    $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id . ':visible', $html));
   }
   else {
     $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
