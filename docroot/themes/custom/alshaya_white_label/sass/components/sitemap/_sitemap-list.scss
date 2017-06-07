@@ -24,10 +24,13 @@
 
   .level--1 {
     margin-bottom: 1.25rem;
-    border-bottom: 1px solid $white;
 
     &:last-child {
       border-bottom: none;
+    }
+
+    @include breakpoint($only-mobile) {
+      border-bottom: 1px solid $white;
     }
 
     @include breakpoint($tablet) {
