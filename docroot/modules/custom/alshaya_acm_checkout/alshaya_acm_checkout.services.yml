@@ -1,0 +1,5 @@
+services:
+  alshaya_acm_checkout.route_subscriber:
+    class: Drupal\alshaya_acm_checkout\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
