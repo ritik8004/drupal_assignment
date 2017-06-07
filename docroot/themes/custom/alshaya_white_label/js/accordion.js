@@ -186,16 +186,17 @@
         var descwrapper = $('.c-pdp .description-wrapper');
         descwrapper.hide();
         $('.c-pdp .short-description-wrapper .read-more-description-link').on('click', function () {
-          descwrapper.slideToggle();
+          descwrapper.toggle('slow');
         });
 
         $('.c-pdp .description-wrapper .close').on('click', function () {
-          descwrapper.slideToggle();
+          descwrapper.toggle('slow');
         });
 
         // Add class to promotional banner view block if it is not empty.
         if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
           $('.block-views-blockplp-promotional-banner-block-1').addClass('promo-banner');
+          $('.block-views-blockplp-promotional-banner-block-1').siblings('.block-views-exposed-filter-blocksearch-page').addClass('promo-banner');
         }
       }
 

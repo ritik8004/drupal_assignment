@@ -311,7 +311,7 @@ function alshaya_acm_customer_get_barcode($order) {
 
   if (isset($order['extension'], $order['extension']['barcode'])) {
     $dom = new DOMDocument();
-    $dom->loadHtml($order['extension']['barcode']);
+    @$dom->loadHtml($order['extension']['barcode']);
     $svgs = $dom->getElementsByTagName('svg');
 
     // We do foreach only to avoid empty value notices, we will have only one.

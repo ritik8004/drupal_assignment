@@ -253,10 +253,10 @@ header {
 
     .cart-link-total {
       color: $black;
-      display: inline-block;
       float: $left;
       margin-top: 6px;
       margin-right: 2px;
+      padding-#{$right}: 1rem;
     }
 
     @include breakpoint($desktop) {
@@ -903,6 +903,10 @@ header {
     padding-bottom: 0.9375rem;
     padding-#{$right}: 0.625rem;
     text-transform: lowercase;
+  }
+
+  .back--link {
+    @extend .menu__list-item;
   }
 
   .menu--one__list-item {

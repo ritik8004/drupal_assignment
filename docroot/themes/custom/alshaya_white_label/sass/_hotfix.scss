@@ -15,6 +15,11 @@ body.ie {
       }
     }
   }
+
+  // IE 10, 11, not taking line-height from select-wrapper mixin in rems.
+  &.alias--cart #table-cart-items .form-type-select::after {
+    line-height: 34px;
+  }
 }
 
 /**

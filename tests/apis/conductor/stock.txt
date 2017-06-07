@@ -1,0 +1,1 @@
+curl -X GET "https://agent.dev.acm.acquia.io/stock/JC335"

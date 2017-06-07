@@ -229,8 +229,15 @@ function _alshaya_seo_get_node_meta_description() {
 }
 
 /**
- * Implements hook_datalayer_alter().
+ * Implements hook_theme().
  */
-function alshaya_seo_datalayer_alter(&$data_layer) {
-  kint($data_layer);
+function alshaya_seo_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_sitemap' => [
+      'template' => 'alshaya-sitemap',
+      'variables' => [
+        'term_tree' => NULL,
+      ],
+    ],
+  ];
 }

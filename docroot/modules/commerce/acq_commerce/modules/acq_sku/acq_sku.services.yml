@@ -11,6 +11,13 @@ services:
       - '@entity.query'
       - '@logger.factory'
 
+  acq_sku.product_options_manager:
+    class: Drupal\acq_sku\ProductOptionsManager
+    arguments:
+      - '@entity_type.manager'
+      - '@acq_commerce.api'
+      - '@logger.factory'
+
   acq_sku.category_repo:
     class: Drupal\acq_sku\ConductorCategoryRepository
     arguments:

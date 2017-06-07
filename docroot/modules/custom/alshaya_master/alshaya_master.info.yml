@@ -22,6 +22,7 @@ dependencies:
   - mailsystem
   - mimemail
   - redirect
+  - r4032login
   - sharethis
   - system
   - views

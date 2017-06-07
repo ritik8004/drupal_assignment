@@ -2,3 +2,7 @@ services:
   alshaya_seo.gtm_manager:
     class: Drupal\alshaya_seo\AlshayaGtmManager
     arguments: [ '@current_route_match' ]
+  alshaya_seo.sitemap_breadcrumb:
+    class: Drupal\alshaya_seo\Breadcrumb\AlshayaSiteMapBreadcrumb
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }
