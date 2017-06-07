@@ -453,7 +453,7 @@ body.alias--cart {
       }
 
       @include breakpoint($tablet) {
-        margin-#{$right}: -2.8rem;
+        margin-#{$right}: -3.8rem;
       }
 
       @include breakpoint($desktop) {
@@ -634,6 +634,11 @@ body.alias--cart {
           background: $white-smoke-light;
         }
 
+        @include breakpoint($only-tablet) {
+          width: 7.4rem;
+          padding: 1rem 0.7rem;
+        }
+
         @include breakpoint($desktop) {
           width: 10.8rem;
           min-width: 10.8rem;
@@ -757,6 +762,11 @@ body.alias--cart {
       margin-#{$left}: 1rem;
       padding: 1rem;
       text-align: $left;
+
+      @include breakpoint($only-tablet) {
+        width: 7rem;
+        padding: 1rem 0.7rem;
+      }
 
       @include breakpoint($desktop) {
         padding: 1.5rem;
