@@ -11,7 +11,7 @@ global_styles:
     js/form.js: {}
     js/address_book.js: {}
     js/one_time_language_slider.js: {}
-    js/details-polyfill.js: {}
+    vendor/js/details-polyfill.js: {}
   dependencies:
     - core/jquery
     - core/jquery.ui.accordion
