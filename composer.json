@@ -105,7 +105,7 @@
             "drupal/facets": {
                 "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
                 "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-23.patch",
+                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-24.patch",
                 "Fix undefined index:active in facets_system_breadcrumb_alter()": "https://www.drupal.org/files/issues/undefIndexActive_2869850.2.patch"
             },
             "drupal/simple_sitemap": {
