@@ -476,22 +476,23 @@ class ProductSyncResource extends ResourceBase {
           continue;
         }
 
-        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
         $field_key = 'attr_' . $key;
 
         switch ($field['type']) {
           case 'attribute':
-            foreach ($value as $val) {
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
+            foreach ($value as $index => $val) {
               if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
-                $sku->{$field_key}->setValue($term->getName());
+                $sku->{$field_key}->set($index, $term->getName());
               }
               else {
-                $sku->{$field_key}->setValue($value);
+                $sku->{$field_key}->set($index, $val);
               }
             }
             break;
 
           case 'string':
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
             $sku->{$field_key}->setValue($value);
             break;
 
@@ -531,13 +532,13 @@ class ProductSyncResource extends ResourceBase {
 
         switch ($field['type']) {
           case 'attribute':
-            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
-            foreach ($value as $val) {
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
+            foreach ($value as $index => $val) {
               if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
-                $sku->{$field_key}->setValue($term->getName());
+                $sku->{$field_key}->set($index, $term->getName());
               }
               else {
-                $sku->{$field_key}->setValue($value);
+                $sku->{$field_key}->set($index, $val);
               }
             }
             break;

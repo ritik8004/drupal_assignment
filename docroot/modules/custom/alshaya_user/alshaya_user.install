@@ -87,13 +87,11 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
-  unset($content['acq_customer_id']);
   unset($content['contact']);
   unset($content['langcode']);
   unset($content['language']);
   $userConfig->set('content', $content)->save();
   $hidden = $userConfig->get('hidden');
-  $hidden['acq_customer_id'] = TRUE;
   $hidden['contact'] = TRUE;
   $hidden['langcode'] = TRUE;
   $hidden['language'] = TRUE;
