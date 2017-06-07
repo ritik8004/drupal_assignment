@@ -1,0 +1,3 @@
+services:
+  alshaya_seo.gtm_manager:
+    class: Drupal\alshaya_seo\AlshayaGtmManager

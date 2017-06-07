@@ -129,13 +129,14 @@ function alshaya_seo_simple_sitemap_links_alter(&$links) {
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_seo_preprocess_node(&$variables) {
-  if ($variables['view_mode'] == 'teaser' || $variables['view_mode'] == 'search_result') {
+  if ($variables['view_mode'] === 'teaser' || $variables['view_mode'] === 'search_result') {
     /** @var \Drupal\node\Entity\Node $entity */
     $entity = $variables['node'];
 
-    if ($entity->bundle() == 'acq_product') {
-      \Drupal::moduleHandler()->loadInclude('alshaya_seo', 'inc', 'alshaya_seo.gtm');
-      $variables['gtm_attributes']['#markup'] = alshaya_seo_gtm_prepare_product_attributes_prepare_string(alshaya_seo_gtm_prepare_product_attributes($entity));
+    if ($entity->bundle() === 'acq_product') {
+      $alshayaGtmManager = \Drupal::service('alshaya_seo.gtm_manager');
+      $productNode = $alshayaGtmManager->fetchProductGtmAttributes($entity);
+      $variables['gtm_attributes']['#markup'] = $alshayaGtmManager->convertAttrsToString($productNode);
     }
   }
 }
