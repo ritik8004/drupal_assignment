@@ -381,6 +381,7 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
 function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterface &$form_state) {
   $pass = $form_state->getValue('pass');
   $form_state->setValue('pass', user_password(25));
+  $subscribe = $form_state->getValue('field_subscribe_newsletter');
 
   // Call the ::save method of Drupal first to get account created in Drupal.
   call_user_func_array($form_state->prepareCallback('::save'), [&$form, &$form_state]);
@@ -400,15 +401,18 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
   $user->save();
 
   // Subscribe user to newsletter.
-  /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
-  $apiWrapper = \Drupal::service('acq_commerce.api');
+  if (!empty($subscribe['value'])) {
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
+    $apiWrapper = \Drupal::service('acq_commerce.api');
 
-  try {
-    $apiWrapper->subscribeNewsletter($user->getEmail());
+    try {
+      $apiWrapper->subscribeNewsletter($user->getEmail());
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_acm_customer')->error('Error occurred while subscribing @email during registration. Error message: @error', ['@email' => $user->getEmail(), '@error' => $e->getMessage()]);
+    }
   }
-  catch (\Exception $e) {
-    \Drupal::logger('alshaya_acm_customer')->error('Error occurred while subscribing @email during registration. Error message: @error', ['@email' => $user->getEmail(), '@error' => $e->getMessage()]);
-  }
+
 }
 
 /**

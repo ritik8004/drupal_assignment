@@ -79,7 +79,7 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
-  $content['field_terms_and_condition'] = [
+  $content['field_subscribe_newsletter'] = [
     'weight' => 100,
     'type' => 'boolean_checkbox',
     'settings' => [
