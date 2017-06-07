@@ -1,24 +1,15 @@
-/**
- * @file
- */
-
-void(function (root, factory) {
+void (function (root, factory) {
   if (typeof define === 'function' && define.amd) define(factory)
-  else if (typeof exports === 'object') {
-module.exports = factory()
-  else {
-factory()
-}
-  }
-  }(this, function () {
+  else if (typeof exports === 'object') module.exports = factory()
+  else factory()
+}(this, function () {
   var DETAILS = 'details'
   var SUMMARY = 'summary'
 
   var supported = checkSupport()
-  if (supported) {
-return
+  if (supported) return
 
-  // Add a classname.
+  // Add a classname
   document.documentElement.className += ' no-details'
 
   window.addEventListener('click', clickHandler)
@@ -32,33 +23,28 @@ return
    * Click handler for `<summary>` tags
    */
 
-  function clickHandler(e) {
+  function clickHandler (e) {
     if (e.target.nodeName.toLowerCase() === 'summary') {
       var details = e.target.parentNode
-      if (!details) {
-return
+      if (!details) return
 
       if (details.getAttribute('open')) {
         details.open = false
         details.removeAttribute('open')
-      }
-else {
+      } else {
         details.open = true
         details.setAttribute('open', 'open')
       }
-      }
     }
-  }
   }
 
   /*
    * Checks for support for `<details>`
    */
 
-  function checkSupport() {
+  function checkSupport () {
     var el = document.createElement(DETAILS)
-    if (!('open' in el)) {
-return false
+    if (!('open' in el)) return false
 
     el.innerHTML = '<' + SUMMARY + '>a</' + SUMMARY + '>b'
     document.body.appendChild(el)
@@ -70,15 +56,13 @@ return false
     document.body.removeChild(el)
     return result
   }
-    }
 
   /*
    * Injects styles (idempotent)
    */
 
-  function injectStyle(id, style) {
-    if (document.getElementById(id)) {
-return
+  function injectStyle (id, style) {
+    if (document.getElementById(id)) return
 
     var el = document.createElement('style')
     el.id = id
@@ -86,5 +70,4 @@ return
 
     document.getElementsByTagName('head')[0].appendChild(el)
   }
-    }
-})); // eslint-disable-line semi.
+})); // eslint-disable-line semi
