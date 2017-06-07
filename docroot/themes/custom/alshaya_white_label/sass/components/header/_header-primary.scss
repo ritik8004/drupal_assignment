@@ -985,12 +985,12 @@ header {
   .menu--three__list,
   .menu--four__list {
     will-change: transform;
-    transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
+    // transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
+    #{$left}: 100%;
     transition: transform 0.5s ease-in-out;
     position: absolute;
     top: 0;
     display: block !important;
-    left: 0;
     right: 0;
     bottom: 0;
     z-index: 1000;
@@ -1228,14 +1228,13 @@ header {
     #{$left}: -100%;
     // transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
     will-change: transform;
-    z-index: -9;
+    z-index: 9;
   }
 
   .menu--active,
   .menu__list--active {
     // transform: translate(0, 0) !important;
     left: 0;
-    z-index: 9;
   }
 }
 
