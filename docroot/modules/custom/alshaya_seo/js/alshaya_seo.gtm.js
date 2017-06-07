@@ -18,12 +18,12 @@
               'ecommerce': {
                 'currencyCode': $('body').attr('gtm-currency'),
                 'click': {
-                  'actionField': {'list': that.parents('.gtm-container:first').attr('gtm-container-id')},
+                  'actionField': {'list': that.attr('gtm-container')},
                   'products': [Drupal.alshaya_seo_gtm_get_product_values(that)]
                 }
               },
               'eventCallback': function () {
-                document.location = that.attr('href');
+                document.location = that.attr('about');
               }
             };
 

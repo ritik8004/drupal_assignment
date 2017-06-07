@@ -134,6 +134,7 @@ function alshaya_seo_preprocess_node(&$variables) {
     $entity = $variables['node'];
 
     if ($entity->bundle() === 'acq_product') {
+      /** @var \Drupal\alshaya_seo\AlshayaGtmManager $alshayaGtmManager */
       $alshayaGtmManager = \Drupal::service('alshaya_seo.gtm_manager');
       $productNode = $alshayaGtmManager->fetchProductGtmAttributes($entity);
       $variables['gtm_attributes']['#markup'] = $alshayaGtmManager->convertAttrsToString($productNode);
@@ -225,4 +226,11 @@ function _alshaya_seo_get_node_meta_description() {
   }
 
   return $meta_description;
+}
+
+/**
+ * Implements hook_datalayer_alter().
+ */
+function alshaya_seo_datalayer_alter(&$data_layer) {
+  kint($data_layer);
 }
