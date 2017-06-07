@@ -11,13 +11,15 @@
       if ($('#block-alshaya-white-label-content div').hasClass('joinclub')) {
         $('#block-alshaya-white-label-content article').addClass('joinclubblock');
       }
-
       $('.read-more-description-link').on('click', function () {
-        $(window).scrollTop(0);
+        $('html,body').animate({
+          scrollTop: $('.content__title_wrapper').offset().top - 160
+        }, 'slow');
       });
-
       $('.other-stores-link').on('click', function () {
-        $(window).scrollTop(0);
+        $('html,body').animate({
+          scrollTop: $('.content__title_wrapper').offset().top - 160
+        }, 'slow');
       });
     }
   };
