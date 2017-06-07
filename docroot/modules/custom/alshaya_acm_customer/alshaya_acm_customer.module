@@ -157,6 +157,8 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id == 'user_register_form') {
+    // We allow Drupal admins to create only admin users and customers can be
+    // created in Magento directly.
     if (\Drupal::currentUser()->isAnonymous()) {
       // Disable default validateForm here, we will call later if required.
       $key = array_search('::validateForm', $form['#validate']);
