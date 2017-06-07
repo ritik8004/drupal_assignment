@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: taxonomy_term__acq_product_category
+label: 'Taxonomy term: Product Category'
+tags:
+  description: '[term:description]'
+  title: '[term:name] | [site:name]'
+  og_description: '[term:description]'
+  og_site_name: '[site:name]'
+  og_title: '[term:name] | [site:name]'

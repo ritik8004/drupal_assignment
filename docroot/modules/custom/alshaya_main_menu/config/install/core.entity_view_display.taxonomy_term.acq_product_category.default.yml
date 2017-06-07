@@ -5,9 +5,11 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_category_include_menu
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
+    - field.field.taxonomy_term.acq_product_category.field_meta_tags
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - taxonomy.vocabulary.acq_product_category
   module:
+    - metatag
     - text
 id: taxonomy_term.acq_product_category.default
 targetEntityType: taxonomy_term
@@ -20,6 +22,14 @@ content:
     weight: 0
     settings: {  }
     third_party_settings: {  }
+    region: content
+  field_meta_tags:
+    weight: 1
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
+    region: content
 hidden:
   field_category_include_menu: true
   field_commerce_id: true
