@@ -77,7 +77,7 @@
     }
 
     .price-currency.prefix {
-      padding-right: 0.5rem;
+      padding-#{$right}: 0.5rem;
       float: $left;
 
       @include breakpoint($tablet) {
