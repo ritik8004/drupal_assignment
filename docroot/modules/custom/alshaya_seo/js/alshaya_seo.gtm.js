@@ -8,10 +8,9 @@
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
+
       $('[gtm-type="gtm-product-link"]').once('gtm-jsevent').each(function () {
         $(this).bind('click', function (e) {
-          e.preventDefault();
-
           var that = $(this);
           try {
             var data = {

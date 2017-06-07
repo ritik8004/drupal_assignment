@@ -4,10 +4,10 @@
 view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 ] %}
 
-<article {{ attributes.addClass(classes) }}>
+<article {{ attributes.addClass(classes) }} {{ gtm_attributes }}>
 
   <div class="content">
-    <a href="{{ url }}" {{ gtm_attributes }}>{{ content.image }}</a>
+    <a href="{{ url }}">{{ content.image }}</a>
 
     <h2{{ title_attributes }} class="field--name-name">
       <a href="{{ url }}">{{ label }}</a>
