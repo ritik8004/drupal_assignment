@@ -12,8 +12,8 @@
         $('#block-alshaya-white-label-content article').addClass('joinclubblock');
       }
 
-      var mobileStickyHeaderHeight = 100;
-      var normalStickyHeaderHeight = 160;
+      var mobileStickyHeaderHeight = $('.branding__menu').height();
+      var normalStickyHeaderHeight = $('.branding__menu').height() + $('.header--wrapper').height();
       $('.read-more-description-link').on('click', function () {
         if ($(window).width() < 768) {
           $('html,body').animate({
