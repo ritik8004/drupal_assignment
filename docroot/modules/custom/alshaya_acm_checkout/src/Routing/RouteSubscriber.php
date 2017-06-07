@@ -9,7 +9,7 @@ use Symfony\Component\Routing\RouteCollection;
  * Listens to the dynamic route events.
  */
 class RouteSubscriber extends RouteSubscriberBase {
-  
+
   /**
    * {@inheritdoc}
    */
