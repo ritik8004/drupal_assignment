@@ -16,5 +16,5 @@ details div {
 }
 
 html.no-details details > summary::before {
-  content: none;
+  content: none !important;
 }
