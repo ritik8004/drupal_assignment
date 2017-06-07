@@ -26,7 +26,24 @@ class AlshayaGtmManager {
    * @var array
    */
   public static $routeGTMMapping = [
-    'view.search.page' => 'Search Results Page',
+    'view.search.page' => 'search result page',
+    'view.frontpage' => 'home page',
+    'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
+    'entity.node.canonical:acq_product' => 'product detail page',
+    'entity.node.canonical:department_page' => 'department page',
+    '' => 'page not found',
+    '' => 'contact us page',
+    '' => 'about us page',
+    '' => 'store finder',
+    '' => 'click and collect page',
+    '' => 'static page',
+    '' => 'confirmation page',
+    '' => 'payment page',
+    '' => 'summary page',
+    '' => 'delivery page',
+    '' => 'about you page',
+    'user.login' => 'login page',
+    '' => 'cart page',
   ];
 
   /**
@@ -65,7 +82,7 @@ class AlshayaGtmManager {
     $attributes['gtm-price'] = number_format($price, 3);
 
     // @TODO: Is this site name?
-    $attributes['gtm-brand'] = $sku->get('attributes')->getString();
+    $attributes['gtm-brand'] = $sku->get('attr_brand')->getString();
 
     $attributes['gtm-category'] = $product->get('field_category')->getString();
 
@@ -116,7 +133,9 @@ class AlshayaGtmManager {
     $currentRoute = &drupal_static(__FUNCTION__);
 
     if (!isset($currentRoute)) {
-      $currentRoute = $this->currentRouteMatch->getRouteName();
+      $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
+      $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
+      $currentRoute['pathinfo'] = $this->currentRouteMatch->getRouteObject();
     }
 
     return $currentRoute;
@@ -125,14 +144,35 @@ class AlshayaGtmManager {
   /**
    * Helper function to convert route name into actual GTM page name.
    *
-   * @param string $currentRouteName
-   *   Route name for the current page.
+   * @param array $currentRoute
+   *   Current route details.
    *
    * @return string
    *   GTM page name of the current route.
    */
-  public function convertCurrentRouteToGtmPageName($currentRouteName) {
-    return self::$routeGTMMapping[$currentRouteName];
+  public function convertCurrentRouteToGtmPageName(array $currentRoute) {
+
+    $routeIdentifier = $currentRoute['route_name'];
+    // Return GTM page-type based on our current route.
+    switch ($currentRoute['route_name']) {
+      case 'entity.node.canonical':
+        if (isset($currentRoute['route_params']['node'])) {
+          /** @var \Drupal\node\Entity\Node $node */
+          $node = $currentRoute['route_params']['node'];
+          $routeIdentifier .= ':' . $node->bundle();
+        }
+        break;
+
+      case 'entity.taxonomy_term.canonical':
+        if (isset($currentRoute['route_params']['taxonomy_term'])) {
+          /** @var \Drupal\taxonomy\Entity\Term $term */
+          $term = $currentRoute['route_params']['taxonomy_term'];
+          $routeIdentifier .= ':' . $currentRoute['route_name'] . ':' . $term->getVocabularyId();
+        }
+        break;
+    }
+
+    return self::$routeGTMMapping[$routeIdentifier];
   }
 
 }
