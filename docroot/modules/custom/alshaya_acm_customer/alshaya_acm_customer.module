@@ -160,6 +160,9 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
     // We allow Drupal admins to create only admin users and customers can be
     // created in Magento directly.
     if (\Drupal::currentUser()->isAnonymous()) {
+      // Always hide customer_id field for anonymous users.
+      $form['acq_customer_id']['#access'] = FALSE;
+
       // Disable default validateForm here, we will call later if required.
       $key = array_search('::validateForm', $form['#validate']);
       if ($key !== FALSE) {
@@ -180,6 +183,9 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id == 'user_form' && \Drupal::currentUser()->isAuthenticated()) {
+    // Always hide customer_id field for none-admin users.
+    $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
+
     $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
   }
 
@@ -342,6 +348,7 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
  */
 function alshaya_acm_customer_register_validate(array &$form, FormStateInterface &$form_state) {
   $mail = $form_state->getValue('mail');
+  $customer_id = $form_state->getValue('acq_customer_id') ? $form_state->getValue('acq_customer_id')[0]['value'] : NULL;
 
   try {
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
@@ -349,7 +356,9 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
 
     $customer = $api_wrapper->getCustomer($mail);
 
-    if (!empty($customer) && !empty($customer['customer_id'])) {
+    // Allow if returned customer array is empty or customer id is the same as
+    // what is available in the form.
+    if (!empty($customer) && !empty($customer['customer_id']) && $customer['customer_id'] != $customer_id) {
       $form_state->setErrorByName('mail', t('The email address @email is already taken.', ['@email' => $mail]));
     }
   }
