@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.body
     - field.storage.node.field_skus
     - search_api.server.acquia_search_server
   module:
@@ -14,19 +13,6 @@ name: 'Acquia Search Solr Index'
 description: ''
 read_only: false
 field_settings:
-  body:
-    label: Body
-    datasource_id: 'entity:node'
-    property_path: body
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.body
-  title:
-    label: Title
-    datasource_id: 'entity:node'
-    property_path: title
-    type: text
   color:
     label: Color
     datasource_id: 'entity:node'
@@ -37,6 +23,11 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
   price:
     label: Price
     datasource_id: 'entity:node'
@@ -67,21 +58,13 @@ datasource_settings:
       default: true
       selected: {  }
 processor_settings:
-  add_url:
-    plugin_id: add_url
-    settings: {  }
+  add_url: {  }
   aggregated_field: {  }
-  rendered_item: {  }
   entity_status: {  }
+  rendered_item: {  }
 tracker_settings:
   default: {  }
 options:
-  index_directly: false
+  index_directly: true
   cron_limit: 50
-  processors:
-    language:
-      status: '1'
-      weight: -50
-      settings: {  }
-      processorPluginId: language
 server: acquia_search_server
