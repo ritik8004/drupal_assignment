@@ -1054,10 +1054,6 @@ header {
   will-change: $left;
   transition: #{$left 0.5s ease-in-out};
 
-  .main--menu.menu--active & {
-    #{$left}: 17.3125rem;
-  }
-
   span {
     background: url('../imgs/icons/ic-close.svg') center center no-repeat;
     width: 25px;
@@ -1074,10 +1070,12 @@ header {
 
   position: fixed;
   top: 0;
-  width: 16.8125rem;
   background: $white;
   z-index: 10;
   display: table;
+  transition: #{$left 0.5s ease-in-out};
+  #{$left}: -100%;
+  width: 270px;
 
   .one {
     @include breakpoint($only-tablet) {
@@ -1106,9 +1104,13 @@ header {
 }
 
 // Tablet Specific menu width
-@include breakpoint($only-tablet) {
-  .toggle--sign {
-    width: 16.8125rem;
+@include breakpoint($upto-desktop) {
+  .menu--active .toggle--sign {
+    #{$left}: 0;
+  }
+
+  .menu--active .mobile--close {
+    #{$left}: 280px;
   }
 
   .main--menu ul.menu--one__list {
