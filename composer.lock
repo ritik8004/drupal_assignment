@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "468edd894c62bf0cb77b0b0fc907e069",
+    "content-hash": "0b19e2b36dc5cbf0c6a9d6699890c14b",
     "packages": [
         {
             "name": "acquia/blt",
@@ -5989,7 +5989,8 @@
                     "datestamp": "1495025284"
                 },
                 "patches_applied": {
-                    "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch"
+                    "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
+                    "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
