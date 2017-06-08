@@ -257,6 +257,10 @@ header {
       margin-top: 6px;
       margin-right: 2px;
       padding-#{$right}: 1rem;
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -458,7 +462,7 @@ header {
     display: block;
 
     a {
-      padding: 0.29rem 0.875rem 0.5rem 0.625rem;
+      padding: 0.87rem 0.875rem 0.5rem 0.625rem;
     }
 
     .store {
@@ -1215,6 +1219,7 @@ header {
 
   a {
     display: block;
+    font-size: 2rem;
 
     @include breakpoint($desktop) {
       height: 2.875rem;
