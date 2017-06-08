@@ -3,11 +3,7 @@
  * JS code to integrate with GTM.
  */
 
-<<<<<<< HEAD
-(function ($) {
-=======
 (function ($, Drupal, dataLayer) {
->>>>>>> 109c4890... MMCPA-1189: Adding support for GTM to cross-sell & up-sell sections.
   'use strict';
 
   Drupal.behaviors.seoGoogleTagManager = {
@@ -17,13 +13,9 @@
       var body = $('body');
       var currencyCode = body.attr('gtm-currency');
       var gtmPageType = body.attr('gtm-container');
-<<<<<<< HEAD
-      var productLinkSelector = $('[gtm-type="gtm-product-link"]');
-=======
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"]');
       var cartLinkSelector = $('article [gtm-type="add-cart-link"]');
       var listName = body.attr('gtm-list-name');
->>>>>>> 109c4890... MMCPA-1189: Adding support for GTM to cross-sell & up-sell sections.
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -31,14 +23,6 @@
         'search result page',
         'product listing page',
         'product detail page',
-<<<<<<< HEAD
-        'department page',
-      ];
-
-      if ($.inArray(gtmPageType, impressionPages)) {
-        var count = 1;
-        productLinkSelector.once('gtm-js-event').each(function() {
-=======
         'department page'
       ];
 
@@ -62,7 +46,6 @@
       else if ($.inArray(gtmPageType, impressionPages)) {
         var count = 1;
         productLinkSelector.each(function() {
->>>>>>> 109c4890... MMCPA-1189: Adding support for GTM to cross-sell & up-sell sections.
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = gtmPageType;
           impression.position = count;
@@ -81,11 +64,6 @@
         dataLayer.push(data);
       }
 
-<<<<<<< HEAD
-      productLinkSelector.once('gtm-jsevent').each(function () {
-        $(this).bind('click', function (e) {
-          var that = $(this);
-=======
       productLinkSelector.each(function () {
         $(this).bind('click', function (e) {
           console.log($(this));
@@ -97,25 +75,15 @@
             console.log(that.closest('.views-element-container'));
           }
 
->>>>>>> 109c4890... MMCPA-1189: Adding support for GTM to cross-sell & up-sell sections.
           try {
             var data = {
               'event': 'productClick',
               'ecommerce': {
                 'currencyCode': currencyCode,
                 'click': {
-<<<<<<< HEAD
-                  'actionField': {'list': that.attr('gtm-container')},
-                  'products': [Drupal.alshaya_seo_gtm_get_product_values(that)]
-                }
-              },
-              'eventCallback': function () {
-                document.location = that.attr('about');
-=======
                   'actionField': {'list': listName},
                   'products': [Drupal.alshaya_seo_gtm_get_product_values(that)]
                 }
->>>>>>> 109c4890... MMCPA-1189: Adding support for GTM to cross-sell & up-sell sections.
               }
             };
 
@@ -154,10 +122,6 @@
     };
 
     return productData;
-<<<<<<< HEAD
-  }
-})(jQuery);
-=======
   };
 })(jQuery, Drupal, dataLayer);
->>>>>>> 109c4890... MMCPA-1189: Adding support for GTM to cross-sell & up-sell sections.
+
