@@ -134,17 +134,30 @@ class AlshayaApiWrapper {
       return $this->token;
     }
 
-    $endpoint = 'integration/admin/token';
+    $cid = 'alshaya_api_token';
 
-    $data = [];
-    $data['username'] = $this->config->get('username');
-    $data['password'] = $this->config->get('password');
+    if ($cache = \Drupal::cache('data')->get($cid)) {
+      $this->token = $cache->data;
+    }
+    else {
+      $endpoint = 'integration/admin/token';
 
-    $token = $this->invokeApi($endpoint, $data, 'POST', FALSE);
+      $data = [];
+      $data['username'] = $this->config->get('username');
+      $data['password'] = $this->config->get('password');
 
-    $token = str_replace('"', '', $token);
+      $token = $this->invokeApi($endpoint, $data, 'POST', FALSE);
 
-    return $token;
+      $this->token = str_replace('"', '', $token);
+
+      // Calculate the timestamp when we want the cache to expire.
+      $expire = \Drupal::time()->getRequestTime() + $this->config->get('token_cache_time');
+
+      // Set the stock in cache.
+      \Drupal::cache('data')->set($cid, $this->token, $expire);
+    }
+
+    return $this->token;
   }
 
 }
