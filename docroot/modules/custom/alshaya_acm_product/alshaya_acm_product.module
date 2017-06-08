@@ -165,7 +165,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         '#items' => [],
       ];
 
-      // @TODO: Get values for all instead of ids.
       if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
         $specifications['value']['#items'][] = t('Style Code: @value', [
           '@value' => $attr_style_code,
