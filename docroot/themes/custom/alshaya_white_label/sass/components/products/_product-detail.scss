@@ -584,3 +584,21 @@
     }
   }
 }
+
+.errors-container .error {
+  background: $cherry;
+  padding: 0.625rem;
+  color: $white-four;
+  position: relative;
+
+  @include icon(warning, before) {
+    font-size: 1.4rem;
+    position: absolute;
+    top: 0.3125rem;
+  }
+
+  ul {
+    margin: 0;
+    list-style: none;
+  }
+}
