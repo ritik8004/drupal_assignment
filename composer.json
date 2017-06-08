@@ -96,7 +96,7 @@
             },
             "drupal/search_api_solr_multilingual": {
                 "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
-                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--2.patch"
+                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
             },
             "drupal/search_api_autocomplete": {
                 "Failed site install due to missing search_api_autocomplete config dependency": "https://www.drupal.org/files/issues/2824390-15.patch"
