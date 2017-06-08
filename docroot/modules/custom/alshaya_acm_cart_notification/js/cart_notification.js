@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, Drupal, document) {
   "use strict";
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
@@ -43,6 +43,17 @@
         }
       });
 
+      $('[data-drupal-selector="edit-configurables-size"]', context).on('change', function() {
+        // Start loading.
+        l.ladda( 'start' );
+      });
+
+      $(document).ajaxComplete(function(event, xhr, settings) {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_name === "configurables[size]")) {
+          $(this).stopSpinner(['success']);
+        }
+      });
+
       $.fn.stopSpinner = function(data) {
         l.ladda('stop');
         if (data.message === 'success') {
@@ -56,6 +67,8 @@
             $('.ladda-label').html(Drupal.t('add to cart'));
           }, data.interval);
       };
+
     }
   };
-})(jQuery);
+
+})(jQuery, Drupal, document);
