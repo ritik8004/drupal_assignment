@@ -9,8 +9,8 @@
         font-family: $alshaya-bold;
         font-size: 14px;
         color: $dark-sand;
-        padding-left: 5px;
-        padding-top: 10px;
+        padding-#{$left}: 0.5625rem;
+        padding-top: 0.375rem;
         border-top: 1px solid $white;
         text-transform: lowercase;
 
@@ -19,13 +19,14 @@
         }
       }
 
-      #edit-privilege-card-wrapper {
+      .privilege-card-wrapper .form-wrapper {
         margin-top: 0;
+        padding-#{$left}: 0.3125rem;
 
         summary {
-          padding-left: 5px;
-          padding-bottom: 10px;
-          font-size: 12px;
+          padding-#{$left}: 0.25rem;
+          padding-bottom: 0.3rem;
+          font-size: 0.75rem;
           color: $white;
           text-transform: lowercase;
           border-bottom: 1px solid $white;
@@ -38,28 +39,44 @@
           color: $grey-shade;
           font-size: 12px;
 
+          .form-item--error-message {
+            padding-top: 0.4rem;
+          }
+
           input {
-            &::-webkit-input-placeholder {
-              color: $white;
+            padding-bottom: 0.2rem;
+            margin-top: 0.2rem;
+
+            &::placeholder {
+              color: $grey-shade;
             }
 
-            &::-moz-placeholder {
-              color: $white;
+            &.error {
+              border-bottom: 2px solid $scarlet-two;
             }
+          }
+        }
 
-            &:-ms-input-placeholder {
-              color: $white;
-            }
+        .form-item-privilege-card-number {
+          margin-top: 2.25rem;
+        }
 
-            &:-moz-placeholder {
-              color: $white;
-            }
+        .form-item-privilege-card-number2 {
+          margin-top: 2.475rem;
+
+          label:not(.error) {
+            top: -1rem;
           }
         }
 
         &:hover {
           cursor: default;
         }
+      }
+
+      .privilege-card-wrapper .form-wrapper[open] {
+        padding-bottom: 1.3125rem;
+        border-bottom: 1px solid $white;
       }
     }
   }
@@ -95,10 +112,6 @@
     h3 {
       margin-bottom: 0.7rem;
       margin-top: -0.1875rem;
-
-      @include breakpoint($upto-tablet) {
-        color: $marine-blue-two;
-      }
 
       @include breakpoint($tablet) {
         margin-top: 0;

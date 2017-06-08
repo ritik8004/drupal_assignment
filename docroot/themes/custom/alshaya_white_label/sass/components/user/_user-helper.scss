@@ -269,12 +269,6 @@
   }
 
   .c-sidebar-second {
-    #block-jointheclub {
-      @include breakpoint($tablet) {
-        display: none;
-      }
-    }
-
     #block-youllbeableto {
       margin-bottom: 1.5rem;
 
@@ -309,6 +303,9 @@
 
 .c-user-register {
   &.user-page {
+    margin: 4.7em auto 1em;
+    padding: 1em 0.5rem;
+
     @include breakpoint($upto-tablet) {
       padding-top: 1.8rem;
     }
@@ -363,6 +360,17 @@
     .form-item {
       @include breakpoint($desktop) {
         margin-top: 2.63em;
+
+        &.form-type-email {
+          margin-top: 2.8rem;
+          position: relative;
+
+          label.error {
+            position: absolute;
+            #{$left}: 0;
+            top: 1.875rem;
+          }
+        }
       }
 
       @include breakpoint($only-tablet) {
