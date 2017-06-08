@@ -110,18 +110,13 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     if ($parent_sku = $this->getParentSku($sku)) {
       $plugin_manager = \Drupal::service('plugin.manager.sku');
       $plugin = $plugin_manager->pluginInstanceFromType($parent_sku->bundle());
-
-      $label = $plugin->cartName($sku, $cart);
-    }
-    else {
-      $label = $sku->label();
+      return $plugin->cartName($sku, $cart);
     }
 
+    $label = $sku->label();
     $display_node = $this->getDisplayNode($sku);
     $url = $display_node->toUrl();
-    $link = Link::fromTextAndUrl($label, $url);
-    $renderArray = $link->toRenderable();
-    return render($renderArray);
+    return Link::fromTextAndUrl($label, $url)->toRenderable();
   }
 
   /**
