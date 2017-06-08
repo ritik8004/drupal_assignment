@@ -44,7 +44,7 @@
       });
 
       $('[data-drupal-selector="edit-configurables-size"]', context).on('change', function() {
-        // Start loading
+        // Start loading.
         l.ladda( 'start' );
       });
 
