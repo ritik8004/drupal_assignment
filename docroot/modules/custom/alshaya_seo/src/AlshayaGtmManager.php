@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_seo;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\node\Entity\Node;
 
@@ -25,7 +26,7 @@ class AlshayaGtmManager {
    *
    * @var array
    */
-  public static $routeGTMMapping = [
+  const ROUTE_GTM_MAPPING = [
     'view.search.page' => 'search result page',
     'view.frontpage' => 'home page',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
@@ -46,14 +47,47 @@ class AlshayaGtmManager {
     '' => 'cart page',
   ];
 
+  const GTM_GLOBALS = [
+    'language',
+    'pageType',
+    'country',
+    'currency',
+  ];
+
+  const PDP_GTM_KEYS = [
+    'name' => 'gtm-name',
+    'id' => 'gtm-main-sku',
+    'price' => 'gtm-price',
+    'brand' => 'gtm-brand',
+    'category' => 'gtm-category',
+    'variant' => '',
+    'dimension1' => 'gtm-dimension1',
+    'dimension2' => 'gtm-dimension2',
+    'dimension3' => 'gtm-dimension3',
+    'dimension4' => 'gtm-stock',
+    'dimension5' => 'gtm-product-type',
+    'metric1' => '',
+  ];
+
+  /**
+   * The Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
   /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   Current route matcher service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config Factory service.
    */
-  public function __construct(CurrentRouteMatch $currentRouteMatch) {
+  public function __construct(CurrentRouteMatch $currentRouteMatch,
+                              ConfigFactoryInterface $configFactory) {
     $this->currentRouteMatch = $currentRouteMatch;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -129,7 +163,7 @@ class AlshayaGtmManager {
   /**
    * Helper function to fetch the current url & return corresponding page-type.
    */
-  protected function getGtmContainer() {
+  public function getGtmContainer() {
     $currentRoute = &drupal_static(__FUNCTION__);
 
     if (!isset($currentRoute)) {
@@ -151,28 +185,63 @@ class AlshayaGtmManager {
    *   GTM page name of the current route.
    */
   public function convertCurrentRouteToGtmPageName(array $currentRoute) {
+    $gtmPageType = &drupal_static(__FUNCTION__);
 
-    $routeIdentifier = $currentRoute['route_name'];
-    // Return GTM page-type based on our current route.
-    switch ($currentRoute['route_name']) {
-      case 'entity.node.canonical':
-        if (isset($currentRoute['route_params']['node'])) {
-          /** @var \Drupal\node\Entity\Node $node */
-          $node = $currentRoute['route_params']['node'];
-          $routeIdentifier .= ':' . $node->bundle();
-        }
-        break;
+    if (!isset($gtmPageType)) {
+      $routeIdentifier = $currentRoute['route_name'];
+      // Return GTM page-type based on our current route.
+      switch ($currentRoute['route_name']) {
+        case 'entity.node.canonical':
+          if (isset($currentRoute['route_params']['node'])) {
+            /** @var \Drupal\node\Entity\Node $node */
+            $node = $currentRoute['route_params']['node'];
+            $routeIdentifier .= ':' . $node->bundle();
+          }
+          break;
 
-      case 'entity.taxonomy_term.canonical':
-        if (isset($currentRoute['route_params']['taxonomy_term'])) {
-          /** @var \Drupal\taxonomy\Entity\Term $term */
-          $term = $currentRoute['route_params']['taxonomy_term'];
-          $routeIdentifier .= ':' . $currentRoute['route_name'] . ':' . $term->getVocabularyId();
-        }
-        break;
+        case 'entity.taxonomy_term.canonical':
+          if (isset($currentRoute['route_params']['taxonomy_term'])) {
+            /** @var \Drupal\taxonomy\Entity\Term $term */
+            $term = $currentRoute['route_params']['taxonomy_term'];
+            $routeIdentifier .= ':' . $term->getVocabularyId();
+          }
+          break;
+      }
+
+      $gtmPageType = self::ROUTE_GTM_MAPPING[$routeIdentifier];
     }
 
-    return self::$routeGTMMapping[$routeIdentifier];
+    return $gtmPageType;
+  }
+
+  /**
+   * Helper function to process Product attributes for PDP page.
+   *
+   * @param array $attributes
+   *   Product Attributes.
+   *
+   * @return array
+   *   Array of processed attributes.
+   */
+  public function processAttributesForPdp(array $attributes) {
+    $processed_attributes['ecommerce'] = [];
+    $processed_attributes['ecommerce']['currencyCode'] = $this->configFactory->get('acq_commerce.currency')->get('currency_code');
+    $processed_attributes['ecommerce']['detail']['actionField'] = [
+      'list' => $this->convertCurrentRouteToGtmPageName($this->getGtmContainer()),
+    ];
+    $product_details = [];
+    foreach (self::PDP_GTM_KEYS as $pdp_key => $attribute_key) {
+      // Keep attribute values as empty till we have info about them.
+      if ($attribute_key === '') {
+        $product_details[$pdp_key] = '';
+        continue;
+      }
+
+      $product_details[$pdp_key] = $attributes[$attribute_key];
+    }
+
+    $processed_attributes['ecommerce']['detail']['products'][] = $product_details;
+    return $processed_attributes;
   }
 
 }

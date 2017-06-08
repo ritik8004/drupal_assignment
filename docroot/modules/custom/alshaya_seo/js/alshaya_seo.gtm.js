@@ -9,14 +9,50 @@
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
 
-      $('[gtm-type="gtm-product-link"]').once('gtm-jsevent').each(function () {
+      var impressions = [];
+      var body = $('body');
+      var currencyCode = body.attr('gtm-currency');
+      var gtmPageType = body.attr('gtm-container');
+      var productLinkSelector = $('[gtm-type="gtm-product-link"]');
+
+      // List of Pages where we need to push out list of product being rendered to GTM.
+      var impressionPages = [
+        'home page',
+        'search result page',
+        'product listing page',
+        'product detail page',
+        'department page',
+      ];
+
+      if ($.inArray(gtmPageType, impressionPages)) {
+        var count = 1;
+        productLinkSelector.once('gtm-js-event').each(function() {
+          var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
+          impression.list = gtmPageType;
+          impression.position = count;
+          impressions.push(impression);
+          count++;
+        });
+
+        var data = {
+          'event': 'productImpression',
+          'ecommerce': {
+            'currencyCode': currencyCode,
+            'impressions': impressions
+          }
+        };
+
+        dataLayer.push(data);
+      }
+
+      productLinkSelector.once('gtm-jsevent').each(function () {
         $(this).bind('click', function (e) {
           var that = $(this);
           try {
             var data = {
               'event': 'productClick',
               'ecommerce': {
-                'currencyCode': $('body').attr('gtm-currency'),
+                'currencyCode': currencyCode,
                 'click': {
                   'actionField': {'list': that.attr('gtm-container')},
                   'products': [Drupal.alshaya_seo_gtm_get_product_values(that)]
