@@ -77,7 +77,7 @@
 
     .price-currency.prefix,
     .price-currency.suffix {
-      padding-#{$right}: 0.5rem;
+      padding-right: 0.5rem;
       float: $left;
       font-family: $arial;
 
@@ -88,6 +88,10 @@
       @include breakpoint($desktop) {
         padding-right: 1.56rem;
       }
+    }
+
+    .price-currency.suffix {
+      line-height: 1;
     }
 
     .image {
@@ -126,6 +130,10 @@
 
       div {
         margin-bottom: 0.187rem;
+      }
+
+      .dark + div {
+        font-family: $arial;
       }
     }
 
@@ -251,7 +259,7 @@
   .tooltip::after {
     @extend %tooltip-after;
 
-    border-bottom-width: 8px;
+    border-bottom-width: 6px;
 
     @include breakpoint($desktop) {
       #{$right}: 5.05rem;
