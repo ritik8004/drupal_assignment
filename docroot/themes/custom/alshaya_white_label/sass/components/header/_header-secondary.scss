@@ -7,10 +7,10 @@
     background: $white-five;
     display: none;
     position: fixed;
-    width: 80%;
+    width: 16.8125rem;
     height: 100%;
     z-index: 4;
-    top: 3.1875rem;
+    top: 2.9375rem;
   }
 
   @include breakpoint($desktop) {
@@ -198,8 +198,8 @@
   }
 
   position: fixed;
-  width: 80%;
-  top: 3.125rem;
+  width: 16.8125rem;
+  top: 2.9375rem;
   background: $white-five;
   height: 100%;
   z-index: 1000;
