@@ -296,6 +296,14 @@
   }
 }
 
+.alias--cart {
+  &.path--cart .site-brand-home a {
+    width: auto;
+    display: block;
+    margin-#{$left}: auto;
+  }
+}
+
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
     border-top: 1px solid $white;
