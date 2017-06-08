@@ -6,6 +6,8 @@
  */
 
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
+use Drupal\alshaya_seo\AlshayaGtmManager;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\acq_sku\Entity\SKU;
 
@@ -17,6 +19,7 @@ function alshaya_seo_preprocess_html(&$variables) {
   $gtmManager = \Drupal::service('alshaya_seo.gtm_manager');
   $variables['attributes']['gtm-currency'] = \Drupal::config('acq_commerce.currency')->get('currency_code');
   $variables['attributes']['gtm-container'] = $gtmManager->convertCurrentRouteToGtmPageName($gtmManager->getGtmContainer());
+  $variables['attributes']['gtm-list-name'] = $gtmManager->convertCurrentRouteToGtmListName($gtmManager->getGtmContainer());
 }
 
 /**
@@ -129,19 +132,18 @@ function alshaya_seo_simple_sitemap_links_alter(&$links) {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
+ * Implements template_preprocess_node().
  */
 function alshaya_seo_preprocess_node(&$variables) {
-  if ($variables['view_mode'] === 'teaser' || $variables['view_mode'] === 'search_result') {
-    /** @var \Drupal\node\Entity\Node $entity */
-    $entity = $variables['node'];
+  $view_mode = $variables['view_mode'];
+  /** @var \Drupal\node\Entity\Node $entity */
+  $entity = $variables['node'];
 
-    if ($entity->bundle() === 'acq_product') {
-      /** @var \Drupal\alshaya_seo\AlshayaGtmManager $alshayaGtmManager */
-      $alshayaGtmManager = \Drupal::service('alshaya_seo.gtm_manager');
-      $productNode = $alshayaGtmManager->fetchProductGtmAttributes($entity);
-      $variables['gtm_attributes']['#markup'] = $alshayaGtmManager->convertAttrsToString($productNode);
-    }
+  if ($entity->bundle() === 'acq_product') {
+    /** @var \Drupal\alshaya_seo\AlshayaGtmManager $alshayaGtmManager */
+    $alshayaGtmManager = \Drupal::service('alshaya_seo.gtm_manager');
+    $productNode = $alshayaGtmManager->fetchProductGtmAttributes($entity, $view_mode);
+    $variables['gtm_attributes']['#markup'] = $alshayaGtmManager->convertAttrsToString($productNode);
   }
 }
 
@@ -259,11 +261,29 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         /** @var \Drupal\node\Entity\Node $node */
         $node = $currentRoute['route_params']['node'];
         if ($node->bundle() === 'acq_product') {
-          $attributes = $gtmManager->fetchProductGtmAttributes($node);
+          $attributes = $gtmManager->fetchProductGtmAttributes($node, 'full');
           $processedAttributes = $gtmManager->processAttributesForPdp($attributes);
+          foreach ($data_layer as $key => $value) {
+            if (!in_array($key, AlshayaGtmManager::GTM_GLOBALS, TRUE)) {
+              unset($data_layer[$key]);
+            }
+          }
           $data_layer = array_merge($data_layer, $processedAttributes);
+          $data_layer['pageType'] = $gtmManager->convertCurrentRouteToGtmPageName($gtmManager->getGtmContainer());
         }
       }
       break;
+  }
+}
+
+/**
+ * Implements template preprocess_input().
+ */
+function alshaya_seo_preprocess_input(&$variables) {
+  if ($variables['element']['#type'] === 'submit') {
+    $value = $variables['element']['#value'];
+    if (($value instanceof TranslatableMarkup) && ($value->getUntranslatedString() === 'Add to cart')) {
+      $variables['attributes']['gtm-type'] = 'add-cart-link';
+    }
   }
 }

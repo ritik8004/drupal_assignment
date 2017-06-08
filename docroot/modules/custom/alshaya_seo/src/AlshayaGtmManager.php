@@ -44,9 +44,22 @@ class AlshayaGtmManager {
     '' => 'delivery page',
     '' => 'about you page',
     'user.login' => 'login page',
-    '' => 'cart page',
+    'acq_cart.cart' => 'cart page',
   ];
 
+  /**
+   * Mapping between Drupal routes & GTM list types.
+   */
+  const LIST_GTM_MAPPING = [
+    'view.search.page' => 'Search Results Page',
+    'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
+    'entity.node.canonical:acq_product' => 'PDP',
+    'acq_cart.cart' => 'CartPage',
+  ];
+
+  /**
+   * GTM gobal variables that need to be available on all pages.
+   */
   const GTM_GLOBALS = [
     'language',
     'pageType',
@@ -54,6 +67,9 @@ class AlshayaGtmManager {
     'currency',
   ];
 
+  /**
+   * Html attributes mapped with GTM tags.
+   */
   const PDP_GTM_KEYS = [
     'name' => 'gtm-name',
     'id' => 'gtm-main-sku',
@@ -95,15 +111,13 @@ class AlshayaGtmManager {
    *
    * @param \Drupal\node\Entity\Node $product
    *   Node object for which we want to get the attributes prepared.
+   * @param string $view_mode
+   *   View mode in which we trying to render the product.
    *
    * @return array
    *   Array of attributes to be exposed to GTM.
-   *
-   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
-   * @throws \InvalidArgumentException
-   *   Attributes array.
    */
-  public function fetchProductGtmAttributes(Node $product) {
+  public function fetchProductGtmAttributes(Node $product, $view_mode) {
     $sku = SKU::loadFromSku($product->get('field_skus')->first()->getString());
 
     $attributes = [];
@@ -131,6 +145,7 @@ class AlshayaGtmManager {
     $attributes['gtm-sku-type'] = $sku->bundle();
     $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
     $attributes['gtm-product-type'] = 'simple/configurable';
+    $attributes['gtm-view-mode'] = $view_mode;
 
     // @TODO: We should find a way to get this function work for other places.
     $attributes['gtm-cart-value'] = '';
@@ -212,6 +227,45 @@ class AlshayaGtmManager {
     }
 
     return $gtmPageType;
+  }
+
+  /**
+   * Helper function to convert route name into actual GTM list name.
+   *
+   * @param array $currentRoute
+   *   Current route details.
+   *
+   * @return string
+   *   GTM page name of the current route.
+   */
+  public function convertCurrentRouteToGtmListName(array $currentRoute) {
+    $gtmPageType = &drupal_static(__FUNCTION__);
+
+    if (!isset($gtmPageType)) {
+      $routeIdentifier = $currentRoute['route_name'];
+      // Return GTM page-type based on our current route.
+      switch ($currentRoute['route_name']) {
+        case 'entity.node.canonical':
+          if (isset($currentRoute['route_params']['node'])) {
+            /** @var \Drupal\node\Entity\Node $node */
+            $node = $currentRoute['route_params']['node'];
+            $routeIdentifier .= ':' . $node->bundle();
+          }
+          break;
+
+        case 'entity.taxonomy_term.canonical':
+          if (isset($currentRoute['route_params']['taxonomy_term'])) {
+            /** @var \Drupal\taxonomy\Entity\Term $term */
+            $term = $currentRoute['route_params']['taxonomy_term'];
+            $routeIdentifier .= ':' . $term->getVocabularyId();
+          }
+          break;
+      }
+
+      $gtmListName = self::LIST_GTM_MAPPING[$routeIdentifier];
+    }
+
+    return $gtmListName;
   }
 
   /**
