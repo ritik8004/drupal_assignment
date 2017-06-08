@@ -261,7 +261,7 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         if ($node->bundle() === 'acq_product') {
           $attributes = $gtmManager->fetchProductGtmAttributes($node);
           $processedAttributes = $gtmManager->processAttributesForPdp($attributes);
-          $data_layer += $processedAttributes;
+          $data_layer = array_merge($data_layer, $processedAttributes);
         }
       }
       break;
