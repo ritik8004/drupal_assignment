@@ -50,6 +50,7 @@ function alshaya_install() {
     'alshaya_admin',
     'alshaya_arabic',
     'alshaya_captcha',
+    'alshaya_config',
     'alshaya_contact',
     'alshaya_default_content',
     'alshaya_department_page',
