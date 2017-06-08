@@ -90,6 +90,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Flag for whether show the secure checkout button or not.
   $secure_checkout_access = TRUE;
+  // If there is at least one item out of scope, show the error.
+  $out_of_stock_message = '';
 
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
@@ -169,9 +171,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       ];
       $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price dark']];
 
-      // If there is at least one item out of scope, show the error.
-      $out_of_stock_message = '';
-
       // If item is not available in stock.
       if (!alshaya_acm_is_product_in_stock($id)) {
         // Basket out of stock error.
@@ -182,22 +181,26 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     }
   }
 
+  // Add checkout button on top.
+  $form['actions_top'] = [
+    '#type' => 'container',
+    '#weight' => -100,
+  ];
+
   if ($secure_checkout_access) {
     // Change checkout button text to 'Checkout Securely'.
     $form['actions']['checkout']['#value'] = t('checkout securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
 
-    // Add checkout button on top.
-    $form['actions_top'] = [
-      '#type' => 'container',
-      '#weight' => -100,
+    // Added link markup.
+    $form['actions_top']['checkout_top'] = [
+      '#markup' => '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
     ];
-
-    $form['actions_top']['checkout_top']['#markup'] = '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>';
   }
   else {
     $form['actions']['checkout']['#access'] = FALSE;
+    $form['actions_top']['checkout_top']['#access'] = FALSE;
   }
 
   // Out of stock error message.
@@ -340,6 +343,8 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     // Ajax response to update page section.
     $response->addCommand(new InvokeCommand(NULL, 'updateOutOfStockDom', [$out_of_stock_message]));
     $response->addCommand(new ReplaceCommand('#secure-checkout-button', $form['actions']));
+    // Removing the top 'checkout securely' button.
+    $response->addCommand(new RemoveCommand('#checkout-top'));
     $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
     return $response;
   }
@@ -381,6 +386,8 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
   $response->addCommand(new InvokeCommand('.select-quantity-' . str_replace(' ', '-', $sku), $select_quantity_class_method, ['stock-quantity-error']));
   $response->addCommand(new HtmlCommand('#stock-error-' . str_replace(' ', '-', $sku), $error_message));
+  // Update the top 'checkout securely' wrapper.
+  $response->addCommand(new HtmlCommand('#edit-actions-top', $form['actions_top']));
 
   // Again check all item in basket if they are out of stock or not. If no item
   // out of stock, then remove the out of stock error message div.
