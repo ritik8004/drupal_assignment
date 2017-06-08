@@ -412,9 +412,9 @@
 
   .form-type-checkbox .option {
     &::before {
-      margin-#{$right}: 0.5em;
+      margin-#{$right}: 0.95rem;
       position: relative;
-      top: 0.125rem;
+      top: 0.18rem;
     }
   }
 

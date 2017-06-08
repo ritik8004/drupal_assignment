@@ -324,7 +324,7 @@
 
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 5.3125rem;
+    margin-top: 5.5625rem;
   }
 
   @include breakpoint($only-tablet) {
