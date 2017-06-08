@@ -1,7 +1,6 @@
 magento_host: ''
 magento_api_base: ''
-consumer_key: ''
-consumer_secret: ''
-access_token: ''
-access_token_secret: ''
 verify_ssl: ''
+token_cache_time: 86400
+username: ''
+password: ''

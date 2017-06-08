@@ -18,6 +18,13 @@ class AlshayaApiWrapper {
   protected $config;
 
   /**
+   * Token to access APIs.
+   *
+   * @var string
+   */
+  protected $token;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -37,7 +44,7 @@ class AlshayaApiWrapper {
    *   Stores array.
    */
   public function getStores() {
-    $endpoint = 'storeLocator/search';
+    $endpoint = 'storeLocator/search?searchCriteria=';
 
     $response = $this->invokeApi($endpoint, [], 'GET');
     $stores = json_decode($response, TRUE);
@@ -80,31 +87,28 @@ class AlshayaApiWrapper {
    *   Post data to send to API.
    * @param string $method
    *   GET or POST.
+   * @param bool $requires_token
+   *   Flag to specify if this API requires token or not.
    *
    * @return mixed
    *   Response from the API.
    */
-  public function invokeApi($endpoint, array $data = [], $method = 'POST') {
+  public function invokeApi($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
     $url = $this->config->get('magento_host') . '/' . $this->config->get('magento_api_base') . '/' . $endpoint;
-
-    $oauth_data = [
-      'oauth_consumer_key' => $this->config->get('consumer_key'),
-      'oauth_nonce' => md5(uniqid(rand(), TRUE)),
-      'oauth_signature_method' => 'HMAC-SHA1',
-      'oauth_timestamp' => time(),
-      'oauth_token' => $this->config->get('access_token'),
-      'oauth_version' => '1.0',
-    ];
-
-    $signature = self::sign($method, $url, $oauth_data, $this->config->get('consumer_secret'), $this->config->get('access_token_secret'));
 
     $curl = curl_init();
 
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, [
-      'Authorization: Bearer ' . $signature,
-    ]);
+
+    if ($requires_token) {
+      $token = $this->getToken();
+
+      curl_setopt($curl, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+      ]);
+    }
+
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->config->get('verify_ssl'));
 
@@ -120,43 +124,40 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Helper function to get oauth signature for data.
-   *
-   * @param string $method
-   *   Method - GET or POST.
-   * @param string $url
-   *   URL of the API.
-   * @param array $data
-   *   Oauth data.
-   * @param string $consumerSecret
-   *   Consumer secret.
-   * @param string $tokenSecret
-   *   Token secret.
+   * Function to get token to access Magento APIs.
    *
    * @return string
-   *   Signed value.
+   *   Token as string.
    */
-  protected static function sign($method, $url, array $data, $consumerSecret, $tokenSecret) {
-    $url = self::urlEncodeAsZend($url);
-    $data = self::urlEncodeAsZend(http_build_query($data, '', '&'));
-    $data = implode('&', [$method, $url, $data]);
-    $secret = implode('&', [$consumerSecret, $tokenSecret]);
-    return base64_encode(hash_hmac('sha1', $data, $secret, TRUE));
-  }
+  private function getToken() {
+    if ($this->token) {
+      return $this->token;
+    }
 
-  /**
-   * Helper function to encode URL as Zend.
-   *
-   * @param string $value
-   *   Value to encode.
-   *
-   * @return mixed|string
-   *   Encoded value.
-   */
-  protected static function urlEncodeAsZend($value) {
-    $encoded = rawurlencode($value);
-    $encoded = str_replace('%7E', '~', $encoded);
-    return $encoded;
+    $cid = 'alshaya_api_token';
+
+    if ($cache = \Drupal::cache('data')->get($cid)) {
+      $this->token = $cache->data;
+    }
+    else {
+      $endpoint = 'integration/admin/token';
+
+      $data = [];
+      $data['username'] = $this->config->get('username');
+      $data['password'] = $this->config->get('password');
+
+      $token = $this->invokeApi($endpoint, $data, 'POST', FALSE);
+
+      $this->token = str_replace('"', '', $token);
+
+      // Calculate the timestamp when we want the cache to expire.
+      $expire = \Drupal::time()->getRequestTime() + $this->config->get('token_cache_time');
+
+      // Set the stock in cache.
+      \Drupal::cache('data')->set($cid, $this->token, $expire);
+    }
+
+    return $this->token;
   }
 
 }
