@@ -54,11 +54,7 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   }
   else {
     // Add markup for terms and conditions.
-    $form['field_terms_and_condition_markup'] = [
-      '#type' => 'item',
-      '#markup' => \Drupal::config('alshaya_user.settings')->get('terms_conditions.value'),
-      '#weight' => $form['field_subscribe_newsletter']['#weight'] + 1,
-    ];
+    $form['field_subscribe_newsletter']['widget']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
     // Change submit button text.
     $form['actions']['submit']['#value'] = t('Create');
   }
@@ -76,11 +72,7 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
 
     // Add markup for terms and conditions.
-    $form['field_terms_and_condition_markup'] = [
-      '#type' => 'item',
-      '#markup' => \Drupal::config('alshaya_user.settings')->get('terms_conditions.value'),
-      '#weight' => $form['field_subscribe_newsletter']['#weight'] + 1,
-    ];
+    $form['field_subscribe_newsletter']['widget']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
 
     // Change password_confirm field to normal password field.
     $form['account']['pass']['#title'] = t('Password');
