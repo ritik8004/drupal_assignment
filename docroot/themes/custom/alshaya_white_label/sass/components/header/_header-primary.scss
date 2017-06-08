@@ -984,14 +984,13 @@ header {
   .menu--two__list,
   .menu--three__list,
   .menu--four__list {
-    will-change: transform;
+    will-change: $left;
     // transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
     #{$left}: 100%;
-    transition: transform 0.5s ease-in-out;
+    transition: $left 0.5s ease-in-out;
     position: absolute;
     top: 0;
     display: block !important;
-    right: 0;
     bottom: 0;
     z-index: 1000;
     height: auto !important;
@@ -1043,7 +1042,7 @@ header {
 
 .mobile--close {
   background: $white-five;
-  position: fixed;
+  position: relative;
   top: 9px;
   #{$left}: 81.5%;
   width: 35px;
@@ -1051,6 +1050,7 @@ header {
   z-index: 12;
   text-align: center;
   padding-top: 4px;
+  will-change: $left;
 
   span {
     background: url('../imgs/icons/ic-close.svg') center center no-repeat;
@@ -1231,14 +1231,14 @@ header {
     transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     #{$left}: -100%;
     // transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
-    will-change: transform;
+    will-change: $left;
     z-index: 9;
   }
 
   .menu--active,
   .menu__list--active {
     // transform: translate(0, 0) !important;
-    left: 0;
+    #{$left}: 0;
   }
 }
 
