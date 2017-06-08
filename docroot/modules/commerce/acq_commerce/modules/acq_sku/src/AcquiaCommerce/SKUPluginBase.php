@@ -116,7 +116,8 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $label = $sku->label();
     $display_node = $this->getDisplayNode($sku);
     $url = $display_node->toUrl();
-    return Link::fromTextAndUrl($label, $url)->toRenderable();
+    $renderArray = Link::fromTextAndUrl($label, $url)->toRenderable();
+    return render($renderArray);
   }
 
   /**
