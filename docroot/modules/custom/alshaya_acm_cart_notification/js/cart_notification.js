@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, Drupal, document) {
   "use strict";
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
@@ -49,7 +49,7 @@
       });
 
       $(document).ajaxComplete(function(event, xhr, settings) {
-        if (settings.extraData._triggering_element_name === "configurables[size]") {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_name === "configurables[size]")) {
           $(this).stopSpinner(['success']);
         }
       });
@@ -71,4 +71,4 @@
     }
   };
 
-})(jQuery);
+})(jQuery, Drupal, document);
