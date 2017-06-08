@@ -1042,7 +1042,7 @@ header {
 
 .mobile--close {
   background: $white-five;
-  position: relative;
+  position: fixed;
   top: 9px;
   #{$left}: 81.5%;
   width: 35px;
