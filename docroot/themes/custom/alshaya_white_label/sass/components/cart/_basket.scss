@@ -54,8 +54,7 @@
     }
 
     .delivery-options-mobile,
-    .quantity .form-type-select,
-    .tooltip--wrap {
+    .quantity .form-type-select {
       @include breakpoint($upto-tablet) {
         display: inline-block;
         vertical-align: top;
@@ -143,12 +142,30 @@
     }
   }
 
+  .delivery-options-mobile {
+    @include breakpoint($only-mobile) {
+      float: $left;
+    }
+  }
+
   .tooltip--wrap {
     padding-#{$left}: 2.2rem;
+
+    @include breakpoint($only-mobile) {
+      float: $right;
+      margin-bottom: 1.6875rem;
+      margin-#{$right}: 1.7rem;
+      padding-#{$left}: 1rem;
+
+      &:last-child {
+        clear: both;
+      }
+    }
 
     @include breakpoint($tablet) {
       padding-#{$left}: 0;
       margin-top: 0.625rem;
+      margin-bottom: 2.125rem;
     }
   }
 
@@ -175,10 +192,6 @@
       }
     }
 
-    &:hover .tooltip {
-      display: block;
-    }
-
     &:nth-child(2) {
       margin-top: 1.68rem;
 
@@ -200,12 +213,26 @@
 
     @include icon(infomation, after) {
       margin-#{$left}: 0.3rem;
+      display: inline-block;
       vertical-align: middle;
       font-weight: bold;
       font-size: 1rem;
 
       @include breakpoint($desktop) {
         margin-#{$left}: 1rem;
+      }
+    }
+
+    &:hover + .tooltip {
+      display: block;
+    }
+
+    &.not-available {
+      color: $white;
+      text-decoration: line-through;
+
+      &:hover + .tooltip {
+        display: none;
       }
     }
   }

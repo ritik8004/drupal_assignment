@@ -1,27 +1,29 @@
 <div class="individual--store">
-    <div class="view-content">
-        <div class="list-view-locator">
-            <div class="back-link">
-                <a class="use-ajax" href="{{ url('alshaya_stores_finder.view_toggle', {'view_type': 'list_view'}) }}">{{ 'Back' | t }}</a>
+  <div class="view-content">
+    <div class="list-view-locator">
+      <div class="back-link">
+        <a class="use-ajax"
+           href="{{ url('alshaya_stores_finder.view_toggle', {'view_type': 'list_view'}) }}">{{ 'Back' | t }}</a>
+      </div>
+      <div>
+        <a class="row-title">{{ label }}</a>
+        <div class="views-row">
+          <div class="views-field-field-store-address">
+            <div class="field-content">
+              {{ content.field_store_address }}
+              {{ content.field_store_phone }}
             </div>
-            <div>
-            <a class="row-title">{{ label }}</a>
-                <div class="views-row">
-                    <div class="views-field-field-store-address">
-                        <div class="field-content">
-                            {{ content.field_store_address }}
-                        </div>
-                    </div>
-                    <div class="views-field-field-store-open-hours">
-                        <div class="field-content">
-                            {{ content.field_store_open_hours }}
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="views-field-field-store-open-hours">
+            <div class="field-content">
+              {{ content.field_store_open_hours }}
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="map--store">
-        {{ content.field_latitude_longitude }}
-    </div>
+  </div>
+  <div class="map--store">
+    {{ content.field_latitude_longitude }}
+  </div>
 </div>

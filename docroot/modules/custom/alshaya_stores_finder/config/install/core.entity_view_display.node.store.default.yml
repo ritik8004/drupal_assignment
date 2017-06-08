@@ -2,15 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.store.body
     - field.field.node.store.field_latitude_longitude
     - field.field.node.store.field_meta_tags
     - field.field.node.store.field_store_address
     - field.field.node.store.field_store_locator_id
-    - field.field.node.store.field_store_number
     - field.field.node.store.field_store_open_hours
+    - field.field.node.store.field_store_phone
     - node.type.store
   module:
+    - alshaya_stores_finder
     - geolocation
     - metatag
     - user
@@ -21,7 +21,7 @@ mode: default
 content:
   field_latitude_longitude:
     type: geolocation_map
-    weight: 3
+    weight: 2
     region: content
     label: hidden
     settings:
@@ -44,7 +44,6 @@ content:
         scrollwheel: 1
         disableDoubleClickZoom: 0
         draggable: 1
-        height: 400px
         width: 100%
         info_auto_display: 1
         marker_icon_path: /themes/custom/alshaya_white_label/imgs/icons/google-map-marker.svg
@@ -53,7 +52,6 @@ content:
         preferScrollingToZooming: 0
         gestureHandling: auto
     third_party_settings: {  }
-
   field_meta_tags:
     weight: 0
     label: above
@@ -69,18 +67,30 @@ content:
     type: basic_string
     region: content
   field_store_open_hours:
-    weight: 2
+    weight: 5
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: alshaya_stores_key_value
+    region: content
+  field_store_phone:
+    type: string
+    weight: 6
+    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
   links:
-    weight: 100
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   sharethis:
-    weight: 10
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
-  body: true
   field_store_locator_id: true
-  field_store_number: true
   langcode: true

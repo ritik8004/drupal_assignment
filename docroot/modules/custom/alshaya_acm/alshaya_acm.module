@@ -148,19 +148,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ];
       }
 
-      // TODO: Get delivery options from conductor.
-      $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
-      $product_delivery_options .= '<div class="tooltip--wrap">';
-      $product_delivery_options .= '<div class="contains--tooltip">';
-      $product_delivery_options .= '<p class="home-delivery tooltip--head">' . t('Home Delivery') . '</p>';
-      $product_delivery_options .= '<p class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<p>';
-      $product_delivery_options .= '</div>';
-      $product_delivery_options .= '<div class="contains--tooltip">';
-      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click & Collect') . '</p>';
-      $product_delivery_options .= '<p class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</p>';
-      $product_delivery_options .= '</div>';
-      $product_delivery_options .= '</div>';
-
       $form['cart'][$id]['name'] = [
         '#theme' => 'alshaya_cart_product_name',
         '#sku_attributes' => $sku_attributes,
@@ -168,13 +155,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         '#image' => $sku_image,
         '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
         '#item_code' => $id,
-        '#available_delivery_methods' => [
-          '#markup' => $product_delivery_options,
-        ],
-      ];
-
-      $form['cart'][$id]['delivery_options'] = [
-        '#markup' => $product_delivery_options,
       ];
 
       // Adding class attribute to columns for mobile view.
@@ -188,7 +168,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ],
       ];
       $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price dark']];
-      $form['cart'][$id]['delivery_options']['#wrapper_attributes'] = ['class' => ['delivery-option']];
 
       // If there is at least one item out of scope, show the error.
       $out_of_stock_message = '';
@@ -547,6 +526,26 @@ function alshaya_acm_price_format($price) {
   ];
 
   return render($output);
+}
+
+/**
+ * Wrapper function to format price value with currency.
+ *
+ * It also does an additional check for free and returns FREE as text if price
+ * is 0.
+ *
+ * @param mixed $price
+ *   Price value.
+ *
+ * @return mixed|null
+ *   Return rendered theme with html for price.
+ */
+function alshaya_acm_price_get_formatted_price($price) {
+  if (empty($price)) {
+    return t('FREE');
+  }
+
+  return alshaya_acm_price_format($price);
 }
 
 /**

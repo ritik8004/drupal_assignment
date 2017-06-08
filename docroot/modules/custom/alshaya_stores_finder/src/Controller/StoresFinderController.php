@@ -2,19 +2,65 @@
 
 namespace Drupal\alshaya_stores_finder\Controller;
 
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\CssCommand;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class StoresFinderController.
  */
 class StoresFinderController extends ControllerBase {
+
+  /**
+   * Stores Finder Utility service object.
+   *
+   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
+   */
+  protected $storesFinderUtility;
+
+  /**
+   * Entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
+   * StoresFinderController constructor.
+   *
+   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $stores_finder_utility
+   *   Stores Finder Utility service object.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity repository.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   */
+  public function __construct(StoresFinderUtility $stores_finder_utility, EntityRepositoryInterface $entity_repository, ConfigFactoryInterface $config_factory) {
+    $this->storesFinderUtility = $stores_finder_utility;
+    $this->entityRepository = $entity_repository;
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('alshaya_stores_finder.utility'),
+      $container->get('entity.repository'),
+      $container->get('config.factory')
+    );
+  }
 
   /**
    * Ajax request on store finder map view.
@@ -108,7 +154,7 @@ class StoresFinderController extends ControllerBase {
    */
   public function storeDetail(EntityInterface $node) {
     // Get the correct translated version of node.
-    $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
+    $node = $this->entityRepository->getTranslationFromContext($node);
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node);
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('.view-stores-finder:first', $build));
@@ -118,6 +164,58 @@ class StoresFinderController extends ControllerBase {
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString();
     $store_finder_node_li = '<li><a href="' . $url . '">' . $node->getTitle() . '</a></li>';
     $response->addCommand(new AppendCommand('.block-system-breadcrumb-block ol', $store_finder_node_li));
+
+    return $response;
+  }
+
+  /**
+   * Get stores for a product near user's location.
+   *
+   * @param string $sku
+   *   SKU to check for stores.
+   * @param float $lat
+   *   User's latitude.
+   * @param float $lon
+   *   User's longitude.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response.
+   */
+  public function getProductStores($sku, $lat, $lon) {
+    $response = new AjaxResponse();
+
+    if ($sku_entity = SKU::loadFromSku($sku)) {
+      if ($stores = $this->storesFinderUtility->getSkuStores($sku, $lat, $lon)) {
+        $top_three = [];
+        $top_three['#theme'] = 'pdp_click_collect_top_stores';
+        $top_three['#stores'] = array_slice($stores, 0, 3);
+        $top_three['#has_more'] = count($stores) > 3 ? t('Other stores nearby') : '';
+
+        $response->addCommand(new HtmlCommand('.click-collect-top-stores', render($top_three)));
+        $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'hide'));
+
+        if ($top_three['#has_more']) {
+          $config = $this->configFactory->get('alshaya_stores_finder.settings');
+          $all_stores = [];
+          $all_stores['#theme'] = 'pdp_click_collect_all_stores';
+          $all_stores['#stores'] = $stores;
+          $all_stores['#title'] = $config->get('pdp_click_collect_title');
+          $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
+          $response->addCommand(new HtmlCommand('.click-collect-all-stores', render($all_stores)));
+        }
+        else {
+          $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
+          $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
+        }
+      }
+      else {
+        $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
+        $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'show'));
+
+        $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
+        $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
+      }
+    }
 
     return $response;
   }
