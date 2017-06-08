@@ -258,7 +258,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['promotion_code_wrapper']['coupon'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
-    '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
+    '#prefix' => '<div class="coupon-code-wrapper">',
+    '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span></div>',
     '#default_value' => !empty($form_state->getValue('coupon')) ? $form_state->getValue('coupon') : '',
   ];
 
