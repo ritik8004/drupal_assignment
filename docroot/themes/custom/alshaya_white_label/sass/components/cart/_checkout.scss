@@ -851,6 +851,8 @@ body.alias--cart {
     @include breakpoint($desktop) {
       margin-top: 1em;
       width: 10.8rem;
+      height: 2.188rem;
+      line-height: 1;
     }
   }
 
