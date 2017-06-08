@@ -986,7 +986,7 @@ header {
   .menu--four__list {
     will-change: $left;
     // transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
-    #{$left}: 100%;
+    #{$left}: -100%;
     transition: $left 0.5s ease-in-out;
     position: absolute;
     top: 0;
@@ -1044,13 +1044,18 @@ header {
   background: $white-five;
   position: fixed;
   top: 9px;
-  #{$left}: 81.5%;
+  #{$left}: -100%;
   width: 35px;
   height: 32px;
   z-index: 12;
   text-align: center;
   padding-top: 4px;
   will-change: $left;
+  transition: #{$left 0.5s ease-in-out};
+
+  .main--menu.menu--active & {
+    #{$left}: 81.5%;
+  }
 
   span {
     background: url('../imgs/icons/ic-close.svg') center center no-repeat;
