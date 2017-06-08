@@ -9,7 +9,7 @@ id: user.user.field_subscribe_newsletter
 field_name: field_subscribe_newsletter
 entity_type: user
 bundle: user
-label: 'I would like to receive exclusive deals from BRAND'
+label: 'I would like to receive exclusive deals from Mothercare'
 description: ''
 required: false
 translatable: false
