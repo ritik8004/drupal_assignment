@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, Drupal, document) {
   "use strict";
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
@@ -58,4 +58,4 @@
       };
     }
   };
-})(jQuery);
+})(jQuery, Drupal, document);
