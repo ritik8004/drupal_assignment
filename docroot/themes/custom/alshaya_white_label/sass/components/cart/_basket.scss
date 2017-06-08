@@ -589,3 +589,12 @@
     float: $left;
   }
 }
+
+html[lang=ar] {
+  .customer-cart-form .tooltip--wrap {
+    @include breakpoint($tablet) {
+      margin-top: 0.3125rem;
+      margin-bottom: 1.625rem;
+    }
+  }
+}

@@ -723,6 +723,11 @@ body.alias--cart {
             padding-left: 0.625rem;
             padding-right: 0.625rem;
           }
+
+          @include breakpoint($only-mobile) {
+            top: 2.4375rem;
+            #{$right}: 1rem;
+          }
         }
       }
     }
