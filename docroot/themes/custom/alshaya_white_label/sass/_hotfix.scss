@@ -60,6 +60,10 @@ body.ucbrowser {
   }
 }
 
+#text-resize-control {
+  display: none !important;
+}
+
 /**
  * Opera - Specific issues and hacks for them.
  */
