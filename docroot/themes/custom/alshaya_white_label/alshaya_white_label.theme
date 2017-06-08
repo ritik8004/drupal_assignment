@@ -648,6 +648,12 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
     $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
   }
   $variables['email_logo'] = $email_logo['logo_url'];
+
+  // Add website footer block information with UUID as this is the unique id
+  // with different env.
+  $block = \Drupal::service('plugin.manager.block')->createInstance('block_content:340b823b-e16c-457a-bc03-4a096f8ae171');
+  $block_view = $block->build();
+  $variables['email_footer'] = $block_view;
 }
 
 /**

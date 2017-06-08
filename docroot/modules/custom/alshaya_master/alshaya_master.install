@@ -672,6 +672,12 @@ function alshaya_master_install() {
     'under @granularity' => [
       'ar' => '@granlarity تحت',
     ],
+    'Please fill the captcha.' => [
+      'ar' => 'يرجى إدخال الرمز الظاهر في الصورة',
+    ],
+    'You have just used your one-time login link. Your account is now active and you are authenticated.' => [
+      'ar' => 'لقد قمت للتو باستخدام رابط تسجيل الدخول المخصص لمرة واحدة. حسابك أصبح مفعلاً وموثوق.',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
