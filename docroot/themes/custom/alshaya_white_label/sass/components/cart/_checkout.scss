@@ -632,6 +632,7 @@ body.alias--cart {
 
         @include breakpoint($tablet) {
           background: $white-smoke-light;
+          min-width: 7.688rem;
         }
 
         @include breakpoint($only-tablet) {
@@ -728,7 +729,7 @@ body.alias--cart {
 
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 16.3%;
+      margin-#{$right}: 16.2%;
     }
 
     @include breakpoint($only-tablet) {
@@ -745,7 +746,7 @@ body.alias--cart {
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 21.6%;
+      margin-#{$right}: 21.7%;
     }
 
     .edit-continue-shopping-mobile,

@@ -251,7 +251,7 @@
   .tooltip::after {
     @extend %tooltip-after;
 
-    border-bottom-width: 7px;
+    border-bottom-width: 8px;
 
     @include breakpoint($desktop) {
       #{$right}: 5.05rem;
