@@ -28,11 +28,11 @@ class AlshayaGtmManager {
    */
   const ROUTE_GTM_MAPPING = [
     'view.search.page' => 'search result page',
-    'view.frontpage' => 'home page',
+    'alshaya_master.home' => 'home page',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:department_page' => 'department page',
-    '' => 'page not found',
+    'system.404' => 'page not found',
     '' => 'contact us page',
     '' => 'about us page',
     '' => 'store finder',

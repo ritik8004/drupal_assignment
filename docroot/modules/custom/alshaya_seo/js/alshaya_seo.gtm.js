@@ -37,11 +37,7 @@
       }
 
       if (gtmPageType === 'product detail page') {
-        cartLinkSelector.each(function() {
-          $(this).bind('click', function(e) {
-            dataLayer.push({'hello':'world'});
-          });
-        });
+        // @TODO: Calculate impressions separately for PDP since they reside under US & CS regions.
       }
       else if ($.inArray(gtmPageType, impressionPages)) {
         var count = 1;
@@ -64,15 +60,58 @@
         dataLayer.push(data);
       }
 
+      /** Add to cart GTM **/
+      // Trigger GTM push event on AJAX completion of add to cart button.
+      $(document).ajaxComplete(function(event, xhr, settings) {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_value === "Add to cart")) {
+          var responseJSON = xhr.responseJSON;
+          var responseMessage = '';
+          $.each(responseJSON, function(key, obj) {
+            if (obj.method === 'stopSpinner') {
+              responseMessage = obj.args[0].message;
+            }
+          });
+
+          // Only trigger gtm push event for cart if product added to cart successfully.
+          if (responseMessage === 'success') {
+            var targetEl = event.target.activeElement;
+            var addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
+            if (addedProductSelector) {
+              var product = Drupal.alshaya_seo_gtm_get_product_values(addedProductSelector);
+              // Remove product position: Not needed while adding to cart.
+              delete product.position;
+
+              // Set product quantity to 1 since we are adding item to cart here.
+              product.quantity = 1;
+
+              // Calculate metric 1 value.
+              product.metric1 = product.price * product.quantity;
+
+              var data = {
+                'event': 'addToCart',
+                'ecommerce': {
+                  'currencyCode': currencyCode,
+                  'add': {
+                    'products': [
+                      product
+                    ]
+                  }
+                }
+              };
+
+              dataLayer.push(data);
+            }
+          }
+        }
+      });
+
       productLinkSelector.each(function () {
         $(this).bind('click', function (e) {
-          console.log($(this));
-          alert('hello');
           var that = $(this);
           // Check the link triggering click & append sub-section to the listName if current page is
           // eligible for a sub-section in the list name.
           if ($.inArray(listName, pageSubListNames)) {
-            console.log(that.closest('.views-element-container'));
+
           }
 
           try {
