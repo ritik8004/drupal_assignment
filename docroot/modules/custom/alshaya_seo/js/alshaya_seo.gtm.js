@@ -13,9 +13,9 @@
       var body = $('body');
       var currencyCode = body.attr('gtm-currency');
       var gtmPageType = body.attr('gtm-container');
-      var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"]');
-      var cartLinkSelector = $('article [gtm-type="add-cart-link"]');
+      var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]');
       var listName = body.attr('gtm-list-name');
+      var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]');
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -36,6 +36,7 @@
         gtmPageType = 'not defined';
       }
 
+      /** Impressions tracking on listing pages with Products. **/
       if (gtmPageType === 'product detail page') {
         // @TODO: Calculate impressions separately for PDP since they reside under US & CS regions.
       }
@@ -75,7 +76,16 @@
           // Only trigger gtm push event for cart if product added to cart successfully.
           if (responseMessage === 'success') {
             var targetEl = event.target.activeElement;
-            var addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
+            var addedProductSelector = '';
+
+            // If the add-to-cart button was triggered from modal, the target element will be modal.
+            if ($(targetEl).hasClass('ui-dialog')) {
+              addedProductSelector = $(targetEl).find('article[gtm-type="gtm-product-link"]');
+            }
+            else {
+              addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
+            }
+
             if (addedProductSelector) {
               var product = Drupal.alshaya_seo_gtm_get_product_values(addedProductSelector);
               // Remove product position: Not needed while adding to cart.
@@ -105,13 +115,47 @@
         }
       });
 
+      /** Remove Product from cart **/
+      // Add click handler to fire 'removeFromCart' event to GTM.
+      removeCartSelector.each(function() {
+        $(this).bind('click', function (e) {
+          // Get selector holding details around the product.
+          var removeItem = $(this).closest('td.quantity').siblings('td.name').find('[gtm-type="gtm-remove-cart-wrapper"]');
+          var product = Drupal.alshaya_seo_gtm_get_product_values(removeItem);
+
+          // Set product quantity to the number of items selected for quantity.
+          product.quantity = $(this).closest('td.quantity').find('select').val();
+
+          // Remove product position: Not needed while removing item from cart.
+          delete product.position;
+
+          product.metric1 = -1 * product.quantity * product.price;
+
+          var data = {
+            'event': 'removeFromCart',
+            'ecommerce': {
+              'currencyCode': currencyCode,
+              'add': {
+                'products': [
+                  product
+                ]
+              }
+            }
+          };
+
+          dataLayer.push(data);
+        });
+      });
+
+      /** Product Click Handler **/
+      // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {
         $(this).bind('click', function (e) {
           var that = $(this);
           // Check the link triggering click & append sub-section to the listName if current page is
           // eligible for a sub-section in the list name.
           if ($.inArray(listName, pageSubListNames)) {
-
+            // @TODO: Append sub-tag e.g., US & CS to the list name.
           }
 
           try {

@@ -115,6 +115,13 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
       // Add remove link as suffix of quantity.
       $remove_url = Url::fromUserInput('/cart/remove/' . $id);
+      $remove_url_options = [
+        'attributes' => [
+          'gtm-type' => 'gtm-remove-cart',
+        ],
+      ];
+      $remove_url->setOptions($remove_url_options);
+
       $form['cart'][$id]['quantity']['#prefix'] = '<div class="select-quantity-' . str_replace(' ', '-', $id) . '">';
       $form['cart'][$id]['quantity']['#suffix'] = '</div>' . Link::fromTextAndUrl(t('Remove'), $remove_url)->toString() . '<div class="inline-stock-error" id="stock-error-' . str_replace(' ', '-', $id) . '"></div>';
 

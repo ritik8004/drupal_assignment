@@ -287,3 +287,19 @@ function alshaya_seo_preprocess_input(&$variables) {
     }
   }
 }
+
+/**
+ * Implements template_preprocess_alshaya_cart_product_name().
+ */
+function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
+  /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtmManager */
+  $gtmManager = \Drupal::service('alshaya_seo.gtm_manager');
+  $skuAtributes = $gtmManager->fetchSkuAtttributes($variables['item_code']);
+
+  // Fetch product for this sku to get the category.
+  $productNode = alshaya_acm_product_get_display_node($variables['item_code']);
+  $skuAtributes['gtm-category'] = $productNode->get('field_category')->getString();
+  $skuAtributes['gtm-type'] = 'gtm-remove-cart-wrapper';
+
+  $variables['gtm_attributes']['#markup'] = $gtmManager->convertAttrsToString($skuAtributes);
+}

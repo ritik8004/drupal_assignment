@@ -116,13 +116,41 @@ class AlshayaGtmManager {
    *
    * @return array
    *   Array of attributes to be exposed to GTM.
+   *
+   * @throws \InvalidArgumentException
    */
   public function fetchProductGtmAttributes(Node $product, $view_mode) {
-    $sku = SKU::loadFromSku($product->get('field_skus')->first()->getString());
+    $skuId = $product->get('field_skus')->first()->getString();
+
+    $skuAttributes = $this->fetchSkuAtttributes($skuId);
+
+    $attributes['gtm-type'] = 'gtm-product-link';
+    $attributes['gtm-category'] = $product->get('field_category')->getString();
+    $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
+    $attributes['gtm-view-mode'] = $view_mode;
+    $attributes['gtm-cart-value'] = '';
+
+    $attributes = array_merge($attributes, $skuAttributes);
+
+    return $attributes;
+  }
+
+  /**
+   * Helper function to fetch attributes on SKU.
+   *
+   * @param string $skuId
+   *   Identifier of the product variant on SKU entity.
+   *
+   * @return array
+   *   Attributes on sku to be exposed to GTM.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function fetchSkuAtttributes($skuId) {
+    $sku = SKU::loadFromSku($skuId);
 
     $attributes = [];
 
-    $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-name'] = $sku->label();
     $attributes['gtm-main-sku'] = $sku->getSku();
 
@@ -131,8 +159,6 @@ class AlshayaGtmManager {
 
     // @TODO: Is this site name?
     $attributes['gtm-brand'] = $sku->get('attr_brand')->getString();
-
-    $attributes['gtm-category'] = $product->get('field_category')->getString();
 
     // @TODO: We should find a way to get this function work for other places.
     $attributes['gtm-product-sku'] = '';
@@ -143,12 +169,7 @@ class AlshayaGtmManager {
     $attributes['gtm-dimension3'] = 'Baby Clothing';
     $attributes['gtm-stock'] = alshaya_acm_is_product_in_stock($sku->getSku()) ? 'in stock' : 'out of stock';
     $attributes['gtm-sku-type'] = $sku->bundle();
-    $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
     $attributes['gtm-product-type'] = 'simple/configurable';
-    $attributes['gtm-view-mode'] = $view_mode;
-
-    // @TODO: We should find a way to get this function work for other places.
-    $attributes['gtm-cart-value'] = '';
 
     return $attributes;
   }
@@ -239,9 +260,9 @@ class AlshayaGtmManager {
    *   GTM page name of the current route.
    */
   public function convertCurrentRouteToGtmListName(array $currentRoute) {
-    $gtmPageType = &drupal_static(__FUNCTION__);
+    $gtmListName = &drupal_static(__FUNCTION__);
 
-    if (!isset($gtmPageType)) {
+    if (!isset($gtmListName)) {
       $routeIdentifier = $currentRoute['route_name'];
       // Return GTM page-type based on our current route.
       switch ($currentRoute['route_name']) {
