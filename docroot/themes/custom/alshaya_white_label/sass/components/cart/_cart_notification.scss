@@ -11,7 +11,7 @@
 
   @include breakpoint($only-mobile) {
     top: 2.813rem;
-    #{$right}: calc((100% - 350px) / 2);
+    #{$right}: calc((100% - 337px) / 2);
   }
 
   .notification,
