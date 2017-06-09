@@ -147,7 +147,7 @@
 
       select.form-select {
         background-color: $whisper-dark;
-        height: 2.188rem;
+        height: 2.1875rem;
         font-family: $arial;
         font-size: 0.75rem;
         color: $black;
@@ -155,44 +155,16 @@
         float: $left;
       }
 
-      @include icon(chevrondown, after);
-
-      &::after {
+      @include icon(chevrondown, after) {
         background-color: $whisper-dark;
-        height: 2.188rem;
-        font-family: $arial;
-        color: $black;
-        display: inline;
-        font-size: 2.188rem;
-        margin-#{$left}: 1px;
-      }
-
-      @include if-ltr {
-        @include icon(chevrondown, after);
-
-        &::after {
-          background-color: $whisper-dark;
-          height: 2.188rem;
-          font-family: $arial;
-          color: $black;
-          display: inline;
-          font-size: 2.188rem;
-          margin-#{$left}: 0.0625rem;
-        }
-      }
-
-      @include if-rtl {
-        @include icon(chevrondown, before);
-
-        &::before {
-          background-color: $whisper-dark;
-          height: 2.188rem;
-          font-family: $arial;
-          color: $black;
-          display: inline;
-          font-size: 2.188rem;
-          margin-#{$left}: 0.0625rem;
-        }
+        color: $grey-ash;
+        display: inline-block;
+        font-size: 1.75rem;
+        width: 2.1875rem;
+        line-height: 35px;
+        text-align: center;
+        height: 2.1875rem;
+        margin-#{$left}: 0.0625rem;
       }
     }
 
@@ -213,7 +185,7 @@
 
       select.form-select {
         background-color: $whisper-dark;
-        height: 2.188rem;
+        height: 2.1875rem;
         font-family: $arial;
         font-size: 0.75rem;
         color: $black;
@@ -221,44 +193,16 @@
         float: $left;
       }
 
-      @include icon(chevrondown, after);
-
-      &::after {
+      @include icon(chevrondown, after) {
         background-color: $whisper-dark;
-        height: 2.188rem;
-        font-family: $arial;
-        color: $black;
-        display: inline;
-        font-size: 2.188rem;
+        color: $grey-ash;
+        display: inline-block;
+        font-size: 1.75rem;
+        width: 2.1875rem;
+        line-height: 35px;
+        text-align: center;
+        height: 2.1875rem;
         margin-#{$left}: 1px;
-      }
-
-      @include if-ltr {
-        @include icon(chevrondown, after);
-
-        &::after {
-          background-color: $whisper-dark;
-          height: 2.188rem;
-          font-family: $arial;
-          color: $black;
-          display: inline;
-          font-size: 2.188rem;
-          margin-#{$left}: 0.0625rem;
-        }
-      }
-
-      @include if-rtl {
-        @include icon(chevrondown, before);
-
-        &::before {
-          background-color: $whisper-dark;
-          height: 2.188rem;
-          font-family: $arial;
-          color: $black;
-          display: inline;
-          font-size: 2.188rem;
-          margin-#{$left}: 0.0625rem;
-        }
       }
     }
   }
