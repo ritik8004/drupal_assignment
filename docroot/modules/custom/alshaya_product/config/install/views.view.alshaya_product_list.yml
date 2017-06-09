@@ -296,10 +296,10 @@ display:
             link_to_item: false
             multi_separator: ', '
           plugin_id: search_api_field
-        price:
-          id: price
+        final_price:
+          id: final_price
           table: search_api_index_product
-          field: price
+          field: final_price
           relationship: none
           group_type: group
           admin_label: ''
@@ -452,10 +452,10 @@ display:
           expose:
             label: Name
           plugin_id: search_api
-        price:
-          id: price
+        final_price:
+          id: final_price
           table: search_api_index_product
-          field: price
+          field: final_price
           relationship: none
           group_type: group
           admin_label: ''

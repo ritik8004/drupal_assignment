@@ -15,7 +15,7 @@ facets:
     separator: ', '
     show_count: true
     weight: 0
-  price:
+  final_price:
     checked: true
     label: Price
     separator: ', '
