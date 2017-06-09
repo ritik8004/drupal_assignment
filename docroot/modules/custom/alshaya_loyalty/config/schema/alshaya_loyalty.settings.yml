@@ -8,7 +8,7 @@ alshaya_loyalty.settings:
       type: integer
       label: 'Max. Length'
     apcn_value_starts_with:
-      type: string
+      type: text
       label: 'Value starts with'
     enable_disable_loyalty:
       type: integer
