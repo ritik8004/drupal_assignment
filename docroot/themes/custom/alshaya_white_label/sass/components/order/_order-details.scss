@@ -4,11 +4,11 @@
   }
 
   .c-page-title {
-    padding-bottom: 8px;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid #ddd;
 
     @include breakpoint($tablet) {
-      margin-bottom: 36px;
+      margin-bottom: 2.25rem;
     }
 
     @include breakpoint($desktop) {
@@ -43,11 +43,13 @@
 }
 
 .user__order--detail {
+  font-family: $arial;
+  line-height: 1;
   background: $white-four;
   border-top: 1px solid #ddd;
   width: 100%;
-  font-size: 12px;
-  margin-bottom: 88px;
+  font-size: 0.75rem;
+  margin-bottom: 5.5rem;
 
   @include breakpoint($desktop) {
     font-size: 0.875rem;
@@ -73,7 +75,7 @@
   }
 
   .empty--cell {
-    width: 45px;
+    width: 2.1825rem;
 
     @include breakpoint($desktop) {
       width: 133px;
@@ -86,7 +88,7 @@
     background: $white-five;
 
     td {
-      padding: 10px 22px 9px;
+      padding: 0.625rem 1.375rem 0.5625rem;
     }
   }
 
@@ -102,7 +104,7 @@
 
     td {
       background: $solitude;
-      padding: 20px 16px;
+      padding: 1.25rem 1rem;
       padding-#{$left}: 56px;
       text-indent: -2.5rem;
       vertical-align: middle;
@@ -206,14 +208,18 @@
   .order-summary-row {
     td {
       background: $white-smoke;
-      padding: 22px 16px;
+      padding: 1.313rem 1rem;
 
       @include breakpoint($tablet) {
-        padding: 22px 24px;
+        padding: 1.375rem 1.5rem;
       }
 
       @include breakpoint($desktop) {
         vertical-align: middle;
+      }
+
+      &.above-mobile {
+        width: 260px;
       }
     }
 
@@ -350,6 +356,7 @@
 #block-userrecentorders {
   h2.subtitle {
     margin-top: 2.5rem;
+    border-bottom: none;
   }
 
   .order-summary-row td:first-child .light {
