@@ -423,6 +423,9 @@ function alshaya_master_install() {
     'Home Delivery' => [
       'ar' => 'خدمة التوصيل للمنزل',
     ],
+    'For orders over KWD99' => [
+      'ar' => 'على الطلبات التي تزيد على "99" د.ك.',
+    ],
     'Click and Collect' => [
       'ar' => 'اختر واستلم',
     ],
@@ -518,6 +521,12 @@ function alshaya_master_install() {
     ],
     'Standard delivery' => [
       'ar' => 'التوصيل العادي',
+    ],
+    'Standard Delivery' => [
+      'ar' => 'التوصيل العادي',
+    ],
+    'within 4 working days' => [
+      'ar' => 'من يوم إلى 4 أيام',
     ],
     'FREE' => [
       'ar' => 'مجاناً',
