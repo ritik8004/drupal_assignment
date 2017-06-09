@@ -3,8 +3,8 @@ alshaya_master.theme.*:
   label: 'Alshaya email logo settings'
   mapping:
     email_logo_path:
-      type: string
+      type: text
       label: 'Email logo path'
     email_logo_url:
-      type: string
+      type: text
       label: 'Email logo url'

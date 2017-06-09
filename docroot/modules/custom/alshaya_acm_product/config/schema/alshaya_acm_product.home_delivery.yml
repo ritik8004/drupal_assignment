@@ -1,31 +1,31 @@
-alshaya_acm_product.home_delivery.yml:
+alshaya_acm_product.home_delivery:
   type: config_object
   label: 'Alshaya ACM Product Home Delivery settings'
   mapping:
     title:
-      type: string
+      type: text
       label: 'Title'
     subtitle:
-      type: string
+      type: text
       label: 'Subtitle'
     title_price:
-      type: string
+      type: text
       label: 'Price displayed in title'
     options_standard_title:
-      type: string
+      type: text
       label: 'Standard option title'
     options_standard_subtitle:
-      type: string
+      type: text
       label: 'Standard option subtitle'
     options_standard_price_options_one_title:
-      type: string
+      type: text
       label: 'Standard option first line title'
     options_standard_price_options_one_price:
-      type: string
+      type: text
       label: 'Standard option first line price'
     options_standard_price_options_two_title:
-      type: string
+      type: text
       label: 'Standard option second line title'
     options_standard_price_options_two_price:
-      type: string
+      type: text
       label: 'Standard option second line price'
