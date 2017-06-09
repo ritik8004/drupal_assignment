@@ -73,7 +73,7 @@ function alshaya_search_modules_installed($modules) {
   $search_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');
   $search_view->set('display.default.display_options.exposed_form.options.sort_desc_label', 'تنازلي');
   $search_view->set('display.default.display_options.sorts.search_api_relevance.expose.label', 'التطابق');
-  $search_view->set('display.default.display_options.sorts.final_price.expose.label', 'السعر');
+  $search_view->set('display.default.display_options.sorts.price.expose.label', 'السعر');
   $search_view->set('display.default.display_options.sorts.title.expose.label', 'الاسم');
   $search_view->set('display.default.display_options.empty.area.content.value', "<p>لا يوجد نتائج لبحثك</p>\r\n");
   $search_view->set('display.default.display_options.header.result.content', '@total القطع');
