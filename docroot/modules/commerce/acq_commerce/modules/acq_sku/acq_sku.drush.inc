@@ -13,6 +13,14 @@ const DELETE_BATCH_COUNT = 200;
 function acq_sku_drush_command() {
   $commands = [];
 
+  $commands['sync-commerce-product-options'] = [
+    'description' => 'Run a full synchronization of all commerce product options.',
+    'aliases'     => ['acspo'],
+    'examples'    => [
+      'drush acsp' => 'Run a full product synchronization of all available product options.',
+    ],
+  ];
+  
   $commands['sync-commerce-products'] = [
     'description' => 'Run a full synchronization of all commerce product records.',
     'aliases'     => ['acsp'],
@@ -56,6 +64,17 @@ function drush_acq_sku_sync_commerce_cats() {
   drush_print(dt('Synchronizing all commerce categories, please wait...'));
   $container = \Drupal::getContainer();
   $container->get('acq_sku.category_manager')->synchronizeTree('acq_product_category');
+  drush_print(dt('Done.'));
+}
+
+
+/**
+ * Implements drush category sync command.
+ */
+function drush_acq_sku_sync_commerce_product_options() {
+  drush_print(dt('Synchronizing all commerce product options, please wait...'));
+  $container = \Drupal::getContainer();
+  $container->get('acq_sku.product_options_manager')->synchronizeProductOptions();
   drush_print(dt('Done.'));
 }
 

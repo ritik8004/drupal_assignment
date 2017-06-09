@@ -11,7 +11,7 @@ dependencies:
 id: skusskureferencecolor
 theme: alshaya_white_label
 region: sidebar_first
-weight: -17
+weight: -27
 provider: null
 plugin: 'facet_block:skus_sku_reference_color'
 settings:

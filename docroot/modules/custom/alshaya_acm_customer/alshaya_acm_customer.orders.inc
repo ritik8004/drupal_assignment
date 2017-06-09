@@ -5,7 +5,6 @@
  * Contains utility functions to process orders and provide related data.
  */
 
-use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
 use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
@@ -301,74 +300,27 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
 /**
  * Function to get barcode.
  *
- * @param string $order_number
- *   Order number for which barcode needed.
+ * @param string $order
+ *   Order for which barcode needed.
  *
  * @return array
  *   Build array.
  */
-function alshaya_acm_customer_get_barcode($order_number) {
-  $build = [];
-  $settings = [
-    'type' => 'C128',
-    'value' => $order_number,
-    'color' => '#000000',
-    'height' => 90,
-    'width' => 110,
-    'padding_top' => 0,
-    'padding_right' => 0,
-    'padding_bottom' => 0,
-    'padding_left' => 0,
-    'show_value' => TRUE,
-  ];
-  $generator = new BarcodeGenerator();
-  $suffix = str_replace(
-    '+', 'plus', strtolower($settings['type'])
-  );
-  $build['barcode'] = [
-    '#theme' => 'barcode__' . $suffix,
-    '#attached' => [
-      'library' => [
-        'barcodes/' . $suffix,
-      ],
-    ],
-    '#type' => $settings['type'],
-    '#value' => $settings['value'],
-    '#width' => $settings['width'],
-    '#height' => $settings['height'],
-    '#color' => $settings['color'],
-    '#padding_top' => $settings['padding_top'],
-    '#padding_right' => $settings['padding_right'],
-    '#padding_bottom' => $settings['padding_bottom'],
-    '#padding_left' => $settings['padding_left'],
-    '#show_value' => $settings['show_value'],
-  ];
+function alshaya_acm_customer_get_barcode($order) {
+  $build = '';
 
-  try {
-    $barcode = $generator->getBarcodeObj(
-      $settings['type'],
-      $settings['value'],
-      $settings['width'],
-      $settings['height'],
-      $settings['color'],
-      [
-        $settings['padding_top'],
-        $settings['padding_right'],
-        $settings['padding_bottom'],
-        $settings['padding_left'],
-      ]
-    );
-    $build['barcode']['#svg'] = $barcode->getSvgCode();
+  if (isset($order['extension'], $order['extension']['barcode'])) {
+    $dom = new DOMDocument();
+    @$dom->loadHtml($order['extension']['barcode']);
+    $svgs = $dom->getElementsByTagName('svg');
+
+    // We do foreach only to avoid empty value notices, we will have only one.
+    foreach ($svgs as $svg) {
+      $build = $svg->C14N();
+      break;
+    }
   }
-  catch (\Exception $e) {
-    $this->logger->error(
-      'Error: @error, given: @value',
-      [
-        '@error' => $e->getMessage(),
-        '@value' => $settings['value'],
-      ]
-    );
-  }
+
   return $build;
 }
 

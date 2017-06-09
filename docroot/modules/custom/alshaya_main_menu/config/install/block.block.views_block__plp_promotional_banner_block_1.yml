@@ -11,7 +11,7 @@ dependencies:
 id: views_block__plp_promotional_banner_block_1
 theme: alshaya_white_label
 region: content
-weight: -26
+weight: -29
 provider: null
 plugin: 'views_block:plp_promotional_banner-block_1'
 settings:

@@ -531,7 +531,7 @@ function alshaya_white_label_preprocess_user(&$variables) {
   if ($user) {
     $mobile_util = \Drupal::getContainer()->get('mobile_number.util');
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
-    $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user, 3);
+    $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user, 1, TRUE);
     $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
     $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
 
@@ -648,6 +648,12 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
     $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
   }
   $variables['email_logo'] = $email_logo['logo_url'];
+
+  // Add website footer block information with UUID as this is the unique id
+  // with different env.
+  $block = \Drupal::service('plugin.manager.block')->createInstance('block_content:340b823b-e16c-457a-bc03-4a096f8ae171');
+  $block_view = $block->build();
+  $variables['email_footer'] = $block_view;
 }
 
 /**
@@ -701,5 +707,14 @@ function alshaya_white_label_preprocess_facets_summary_item_list(&$variables) {
     $clear_all_item = $variables['items'][0];
     array_splice($variables['items'], 0, 1);
     $variables['items'][] = $clear_all_item;
+  }
+}
+
+/**
+ * Implements template_preprocess_form().
+ */
+function alshaya_white_label_preprocess_form(&$variables) {
+  if ($variables['element']['#id'] === 'views-exposed-form-search-page') {
+    $variables['attributes']['class'][] = 'views-exposed-form-search-page';
   }
 }

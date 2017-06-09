@@ -3,7 +3,7 @@ select::-ms-expand {
 }
 
 @mixin select-style($select-width) {
-  -webkit-appearance: none;
+  appearance: none;
   border: 1px solid $white-two;
   border-radius: 0;
   background-color: $white-five;
@@ -14,6 +14,12 @@ select::-ms-expand {
   height: 2.1875rem;
   font-size: 0.75rem;
   outline: none;
+
+  @include breakpoint($tablet) {
+    background-color: transparent;
+    position: relative;
+    z-index: 3;
+  }
 }
 
 @mixin select-wrapper($wrapper-width) {
@@ -32,5 +38,11 @@ select::-ms-expand {
     text-align: center;
     background-color: $white-two;
     width: 2.1875rem;
+    height: 35px;
+    height: 2.1875rem;
+
+    @include breakpoint($tablet) {
+      z-index: 1;
+    }
   }
 }

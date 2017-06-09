@@ -1,0 +1,22 @@
+<span class="close-inline-modal"></span>
+
+{% if title %}
+  <div class="all-stores-info">
+    <h3>{{ title }}</h3>
+    <div class="text">{{ subtitle }}</div>
+  </div>
+{% endif %}
+
+{% if stores %}
+  <ul>
+    {% for store in stores %}
+      <li>
+        <div class="store-low-stock">{{ store.low_stock_text }}</div>
+        <div class="store-name">{{ store.name }}</div>
+        <div class="store-address">{{ store.address }}</div>
+        <div class="store-delivery-time">{{ store.delivery_time  }}</div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+

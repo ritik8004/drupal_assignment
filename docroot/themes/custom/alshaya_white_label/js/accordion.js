@@ -176,26 +176,29 @@
         });
 
         // Accordion for delivery option section on PDP.
-        $('.c-accordion-delivery-options').accordion({
-          heightStyle: 'content',
-          collapsible: true,
-          active: false
+        $('.delivery-options-wrapper').once('bind-event').each(function () {
+          $('.c-accordion-delivery-options', $(this)).accordion({
+            heightStyle: 'content',
+            collapsible: true,
+            active: false
+          });
         });
 
         // Toggle for Product description.
-        var descwrapper = $('.c-pdp .description-wrapper');
-        descwrapper.hide();
-        $('.c-pdp .short-description-wrapper .read-more-description-link').on('click', function () {
-          descwrapper.slideToggle();
-        });
+        $('.c-pdp .short-description-wrapper').once('bind-event').each(function () {
+          $('.read-more-description-link', $(this)).on('click', function () {
+            $('.c-pdp .description-wrapper').toggle('slow');
+          });
 
-        $('.c-pdp .description-wrapper .close').on('click', function () {
-          descwrapper.slideToggle();
+          $('.close', $(this)).on('click', function () {
+            $('.c-pdp .description-wrapper').toggle('slow');
+          });
         });
 
         // Add class to promotional banner view block if it is not empty.
         if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
           $('.block-views-blockplp-promotional-banner-block-1').addClass('promo-banner');
+          $('.block-views-blockplp-promotional-banner-block-1').siblings('.block-views-exposed-filter-blocksearch-page').addClass('promo-banner');
         }
       }
 

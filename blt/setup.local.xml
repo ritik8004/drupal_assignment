@@ -12,6 +12,9 @@
     <echo>Sync the categories.</echo>
     <drush command="alshaya-acm-offline-categories-sync" assume="yes" alias="${drush.alias}" passthru="false" />
 
+    <echo>Sync the product options.</echo>
+    <drush command="sync-commerce-product-options" assume="yes" alias="${drush.alias}" passthru="false" />
+
     <echo>Sync the products.</echo>
     <drush command="alshaya-acm-offline-products-sync" assume="yes" alias="${drush.alias}" passthru="false">
       <option name="limit">200</option>

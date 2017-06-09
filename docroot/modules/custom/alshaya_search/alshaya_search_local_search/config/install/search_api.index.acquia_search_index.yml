@@ -38,6 +38,16 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  brand:
+    label: 'Brand'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_brand'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
 datasource_settings:
   'entity:node':
     bundles:
@@ -50,8 +60,8 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
-  rendered_item: {  }
   entity_status: {  }
+  rendered_item: {  }
 tracker_settings:
   default: {  }
 options:

@@ -412,9 +412,9 @@
 
   .form-type-checkbox .option {
     &::before {
-      margin-#{$right}: 0.5em;
+      margin-#{$right}: 0.95rem;
       position: relative;
-      top: 0.125rem;
+      top: 0.18rem;
     }
   }
 
@@ -1035,7 +1035,7 @@
       font-size: 1.563em;
       top: 0.25em;
       position: relative;
-      left: 0.25em;
+      #{$left}: 0.25em;
     }
 
     &::-webkit-details-marker {
@@ -1044,9 +1044,10 @@
 
     &::after {
       position: absolute;
-      top: -15px;
-      left: 90%;
-      font-size: 22px;
+      top: -1.125rem;
+      #{$right}: 0.3125rem;
+      #{$left}: auto;
+      font-size: 1.875rem;
       color: $black;
     }
   }
@@ -1055,13 +1056,31 @@
     position: relative;
 
     @include icon(chevronup, after);
+  }
+}
 
-    &::after {
-      position: absolute;
-      top: -15px;
-      left: 90%;
-      font-size: 22px;
-      color: $black;
+.alias--user-register {
+  @include breakpoint($only-tablet) {
+    .l-column--two-1050 {
+      margin-right: 1.5rem;
+      margin-left: 1.5rem;
+    }
+
+    .user-register-form,
+    h1.c-page-title {
+      margin-#{$left}: 0;
+    }
+  }
+}
+
+.alias--user-login,
+.alias--user-register {
+  @include breakpoint($only-mobile) {
+    .user-page {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 }

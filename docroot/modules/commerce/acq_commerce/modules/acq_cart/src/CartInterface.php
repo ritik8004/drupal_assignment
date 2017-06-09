@@ -34,6 +34,14 @@ interface CartInterface {
   public function customerId();
 
   /**
+   * Gets the customer email.
+   *
+   * @return string|null
+   *   The customer email of the cart, or NULL if the cart does not have one.
+   */
+  public function customerEmail();
+
+  /**
    * Gets the cart totals.
    *
    * @return mixed

@@ -57,7 +57,6 @@ function _alshaya_acm_checkout_clean_address($address) {
     'first_name',
     'lastname',
     'last_name',
-    'email',
     'phone',
     'street',
     'street2',
@@ -71,6 +70,12 @@ function _alshaya_acm_checkout_clean_address($address) {
     if (!in_array($key, $allowed_fields)) {
       unset($address[$key]);
     }
+  }
+
+  if (!empty($address['region'])) {
+    // TODO: We may just require region and not region_id, need to verify later.
+    $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country']);
+    $address['region'] = $address['region_id'];
   }
 
   if (!empty($address['phone'])) {
@@ -122,4 +127,40 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
 
     alshaya_i18n_save_translations($strings);
   }
+}
+
+/**
+ * Helper function to get region code.
+ *
+ * @param string $region
+ *   Region to get region code for. It could be region code itself.
+ * @param string $country_code
+ *   Country code.
+ *
+ * @return mixed|string
+ *   Region code.
+ */
+function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = 'US') {
+  $subdivision_repo = \Drupal::service('address.subdivision_repository');
+  $regions = $subdivision_repo->getList([$country_code]);
+
+  // Country has no regions.
+  if (empty($regions)) {
+    return '';
+  }
+
+  // Region is already the code.
+  if (isset($regions[$region])) {
+    return $region;
+  }
+
+  // Region is name and we have the code.
+  if ($region_key = array_search($region, $regions)) {
+    return $region_key;
+  }
+
+  // Invalid value for region, we log warning and return empty string.
+  \Drupal::logger('alshaya_acm_checkout')->warning('Invalid region @region passed for country code @country_code', ['@region' => $region, '@country_code' => $country_code]);
+
+  return '';
 }

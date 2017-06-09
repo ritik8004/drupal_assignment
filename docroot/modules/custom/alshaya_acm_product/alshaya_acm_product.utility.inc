@@ -339,6 +339,30 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
 }
 
 /**
+ * Get the url of the image of SKU.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU entity object.
+ *
+ * @return string
+ *   Url of the image.
+ */
+function _alshaya_acm_get_product_display_image_url(SKU $sku) {
+  // Load the first image.
+  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+
+  // If we have image for the product.
+  if (!empty($media_image)) {
+    if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
+      $uri = $media_image['file']->getFileUri();
+      return file_create_url($uri);
+    }
+  }
+
+  return '';
+}
+
+/**
  * Helper function to get child skus for a configurable sku from tree.
  *
  * @param array $tree
@@ -364,4 +388,39 @@ function alshaya_acm_product_get_selected_option_sku(array $tree, array $configu
   }
 
   return NULL;
+}
+
+/**
+ * Utility function to check if product is available for home delivery.
+ *
+ * @param mixed $sku
+ *   SKU string or full object.
+ *
+ * @return bool
+ *   Flag if the product is available for click and collect or not.
+ */
+function alshaya_acm_product_available_home_delivery($sku) {
+  // Check MMCSP-903 comments for more details.
+  return TRUE;
+}
+
+/**
+ * Utility function to check if product is available for click and collect.
+ *
+ * @param mixed $sku
+ *   SKU string or full object.
+ *
+ * @return bool
+ *   Flag if the product is available for click and collect or not.
+ */
+function alshaya_acm_product_available_click_collect($sku) {
+  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+
+  $sts = (int) $sku_entity->get('attr_ship_to_store')->getString();
+  $rnc = (int) $sku_entity->get('attr_reserve_and_collect')->getString();
+
+  // Product could be either available for ship to store or for reserve and
+  // collect. In both cases click and collect option will be considered as
+  // available.
+  return ($sts || $rnc);
 }

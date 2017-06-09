@@ -1,0 +1,48 @@
+<!-- Spell Check
+
+    The spell check component can return a list of alternative spelling
+    suggestions.
+
+    http://wiki.apache.org/solr/SpellCheckComponent
+ -->
+<searchComponent name="spellcheck" class="solr.SpellCheckComponent">
+
+  <str name="queryAnalyzerFieldType">textSpell</str>
+
+  <!-- Multiple "Spell Checkers" can be declared and used by this
+       component
+    -->
+
+  <!-- a spellchecker built from a field of the main index, and
+       written to disk
+    -->
+  <lst name="spellchecker">
+    <str name="name">default</str>
+    <str name="field">spell</str>
+    <str name="spellcheckIndexDir">spellchecker</str>
+    <str name="buildOnOptimize">true</str>
+    <str name="buildOnCommit">true</str>
+    <!-- uncomment this to require terms to occur in 1% of the documents in order to be included in the dictionary
+      <float name="thresholdTokenFrequency">.01</float>
+    -->
+  </lst>
+
+  <!-- Arabic -->
+  <lst name="spellchecker">
+    <str name="name">spellchecker_ar</str>
+    <str name="field">spell_ar</str>
+    <str name="spellcheckIndexDir">./spellchecker_ar</str>
+    <str name="buildOnOptimize">true</str>
+    <str name="buildOnCommit">true</str>
+  </lst>
+
+  <!-- English -->
+  <lst name="spellchecker">
+    <str name="name">spellchecker_en</str>
+    <str name="field">spell_en</str>
+    <str name="spellcheckIndexDir">./spellchecker_en</str>
+    <str name="buildOnOptimize">true</str>
+    <str name="buildOnCommit">true</str>
+  </lst>
+
+</searchComponent>

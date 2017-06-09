@@ -43,4 +43,9 @@ interface CartStorageInterface {
    */
   public function createCart();
 
+  /**
+   * Associate the current cart in storage with a given customer.
+   */
+  public function associateCart($customer_id);
+
 }

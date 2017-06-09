@@ -5,13 +5,14 @@
  * Module file for alshaya_user.
  */
 
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\block\Entity\Block;
-use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\user\Entity\User;
 
 /**
@@ -46,21 +47,14 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   if (\Drupal::currentUser()->isAuthenticated()) {
     // Get if user only authenticated or not.
     $only_authenticated = alshaya_user_only_authenticated();
-    $form['field_terms_and_condition']['#access'] = FALSE;
     // Disabled true, if only authenticated.
     $form['account']['mail']['#disabled'] = $only_authenticated;
     // Access false, if only authenticated.
     $form['account']['current_pass']['#access'] = !$only_authenticated;
   }
   else {
-    // Update title from description for terms and conditions field.
-    $form['field_terms_and_condition']['widget']['#title'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
-    $form['field_terms_and_condition']['widget']['value']['#title'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
-
-    // Set description to NULL for terms and conditions field.
-    $form['field_terms_and_condition']['widget']['#description'] = NULL;
-    $form['field_terms_and_condition']['widget']['value']['#description'] = NULL;
-
+    // Add markup for terms and conditions.
+    $form['field_subscribe_newsletter']['widget']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
     // Change submit button text.
     $form['actions']['submit']['#value'] = t('Create');
   }
@@ -75,25 +69,15 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     // Hide mobile number field from registration page.
     $form['field_mobile_number']['#access'] = FALSE;
 
-    $form['#validate'][] = 'alshaya_user_form_user_register_form_validate';
     $form['actions']['submit']['#submit'][] = 'alshaya_user_form_user_register_form_submit';
+
+    // Add markup for terms and conditions.
+    $form['field_subscribe_newsletter']['widget']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
 
     // Change password_confirm field to normal password field.
     $form['account']['pass']['#title'] = t('Password');
     $form['account']['pass']['#type'] = 'password';
     $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
-  }
-}
-
-/**
- * Form validate callback for user registration form.
- *
- * Validate the terms and conditions field.
- */
-function alshaya_user_form_user_register_form_validate($form, FormStateInterface $form_state) {
-  $terms = $form_state->getValue('field_terms_and_condition');
-  if (is_array($terms) && empty($terms['value'])) {
-    $form_state->setErrorByName('field_terms_and_condition', t('Please agree to the Terms and Conditions.'));
   }
 }
 
@@ -109,14 +93,14 @@ function alshaya_user_form_user_register_form_submit($form, FormStateInterface $
   // Get the new user account object from storage.
   $account = $storage['user'];
 
-  // Prepare user data array.
-  $user_data = ['id' => $account->id()];
-
-  // Get the string to pass into GET.
-  $user_data_string = base64_encode(json_encode($user_data));
-
+  // Redirect the user with email in GET to registration complete screen.
   if (\Drupal::currentUser()->isAnonymous()) {
-    // Redirect the user with email in GET.
+    // Prepare user data array.
+    $user_data = ['id' => $account->id()];
+
+    // Get the string to pass into GET.
+    $user_data_string = base64_encode(json_encode($user_data));
+
     $form_state->setRedirect('alshaya_user.user_register_complete', ['user' => $user_data_string]);
   }
 }
@@ -205,8 +189,24 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   // Set this as password policy module checks for the role element.
   $form['account']['roles']['#default_value'] = [];
 
-  // Password policy validation.
+  // Password policy custom validation.
   $form['#validate'][] = '_password_policy_user_profile_form_validate';
+  $form['#validate'][] = 'alshaya_user_change_password_validate';
+  $form['#submit'][] = '_password_policy_user_profile_form_submit';
+}
+
+/**
+ * Custom validate function for change password form.
+ */
+function alshaya_user_change_password_validate(&$form, FormStateInterface &$form_state) {
+  if (!$form_state->getErrors()) {
+    $account = \Drupal::routeMatch()->getParameter('user');
+
+    // Add entry into hash table after all validations have passed, this is not
+    // done by module for us because it checks for confirm_password field and
+    // we need a single password field.
+    _alshaya_user_password_policy_history_insert_password_hash($account, $form_state->getValue('pass'));
+  }
 }
 
 /**
@@ -296,5 +296,86 @@ function alshaya_user_acq_commerce_update_customer_api_request_alter(array &$req
       $contact_number = !empty($phone_number) ? $phone_number[0]['value'] : '';
       $request_options['form_params']['customer[extension][phone_number]'] = $contact_number;
     }
+  }
+}
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_user_alshaya_i18n_onetime_translation_add() {
+  // Set signup mail translation.
+  $signup_mail = \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'user_registrationpassword.mail');
+  $signup_mail->set('register_withpassword.subject', 'على موقع [site:name] [user:field_first_name:value] تفاصيل حساب');
+  $signup_mail->set('register_withpassword.body', '<h1>،[user:field_first_name:value] مرحباً</h1>
+
+أهلاً بك في موقع [site:name] و شكراً على الانضمام. إلينا
+
+[user:mail] :لقد قمت بالتسجيل عن طريق عنوان البريد الإلكتروني
+
+.وتقوم بتعديل وتحديث بياناتك الشخصية في أي وقت <a href="[user:registrationpassword-url]">My Account</a> الآن يمكنك الدخول إلى صفحة
+
+نتمنى لك تجربة تسوق ممتعة مع موقع [site:name]
+
+.هنا أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن <a href="[site:url]">FAQs page</a> إذا كان لديك أي سؤال، يرجى الاطلاع على صفحة
+
+مع أطيب التحيات،
+فريق عمل [site:name]
+هاتف:12-12-182
+<a href="[site:url]">[site:url-brief]</a>');
+  $signup_mail->save();
+
+  // Disable account activation mail.
+  \Drupal::configFactory()->getEditable('user.settings')->set('notify.status_activated', FALSE)->save();
+
+  // Set reset password mail translation.
+  $reset_password_mail = \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'user.mail');
+  $reset_password_mail->set('password_reset.subject', 'على موقع [site:name] [user:field_first_name:value] معلومات تسجيل الدخول البديلة للمستخدم');
+  $reset_password_mail->set('password_reset.body', '<h1>،[user:field_first_name:value] أهلاً بك </h1>
+
+تم إجراء طلب لإعادة تعيين كلمة المرور لحسابك على موقع [site:name]
+
+:يمكنك الآن تسجيل الدخول بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
+
+<a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
+
+لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها.
+
+فريق عمل [site:name]');
+  $reset_password_mail->save();
+}
+
+/**
+ * Helper function to get hashed password and insert it into the history table.
+ *
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   User account object.
+ * @param string $password
+ *   A plain-text password.
+ *
+ * @see _password_policy_history_insert_password_hash()
+ */
+function _alshaya_user_password_policy_history_insert_password_hash(AccountInterface $account, $password) {
+  if (!\Drupal::moduleHandler()->moduleExists('password_policy_history')) {
+    return;
+  }
+
+  if ($account) {
+    // See _password_policy_history_insert_password_hash() for code below.
+    // @TODO: We should refactor the module and remove this code.
+    $connection = Database::getConnection();
+
+    $hashed_pass = \Drupal::service('password')->hash($password);
+    $values = [
+      $account->id(),
+      $hashed_pass,
+      time(),
+    ];
+
+    $connection->insert('password_policy_history')
+      ->fields(['uid', 'pass_hash', 'timestamp'], $values)
+      ->execute();
+
   }
 }

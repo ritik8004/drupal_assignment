@@ -1,0 +1,6 @@
+magento_host: ''
+magento_api_base: ''
+verify_ssl: ''
+token_cache_time: 86400
+username: ''
+password: ''

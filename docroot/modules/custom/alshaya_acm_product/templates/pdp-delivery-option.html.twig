@@ -1,0 +1,36 @@
+<div class="{{ title|clean_class }} c-accordion-delivery-options">
+  <h3 class="c-accordion__title">
+    {% if title %}
+      {{ title }}
+      <span class="title-price">{{ title_price }}</span>
+      <span class="subtitle">{{ subtitle }}</span>
+    {% endif %}
+  </h3>
+  <div class="c-accordion_content">
+    <div class="delivery-option-content">
+      <div class="delivery-option-title {{ options.standard_icon_class }}">
+        {% if options.standard_title or options.standard_subtitle %}
+          <strong>{{ options.standard_title }} </strong>
+          <span>{{ options.standard_subtitle }}</span>
+        {% endif %}
+      </div>
+
+      {% if options.standard_price_options_one_title or options.standard_price_options_two_title %}
+        <ul>
+          {% if options.standard_price_options_one_title %}
+            <li>
+              {{ options.standard_price_options_one_title }}
+              <span>{{ options.standard_price_options_one_price }}</span>
+            </li>
+          {% endif %}
+          {% if options.standard_price_options_two_title %}
+            <li>
+              {{ options.standard_price_options_two_title }}
+              <span>{{ options.standard_price_options_two_price }}</span>
+            </li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</div>

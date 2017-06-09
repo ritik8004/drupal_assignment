@@ -5,11 +5,13 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_category_include_menu
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
+    - field.field.taxonomy_term.acq_product_category.field_meta_tags
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - image.style.thumbnail
     - taxonomy.vocabulary.acq_product_category
   module:
     - image
+    - metatag
     - paragraphs
     - path
     - text
@@ -25,12 +27,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+    region: content
   field_category_include_menu:
     weight: 6
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
+    region: content
   field_main_menu_highlight:
     type: entity_reference_paragraphs
     weight: 5
@@ -42,6 +46,13 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
+    region: content
+  field_meta_tags:
+    weight: 11
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_firehose
+    region: content
   field_promotion_banner:
     type: image_image
     weight: 7
@@ -55,6 +66,7 @@ content:
     weight: 2
     settings: {  }
     third_party_settings: {  }
+    region: content
   name:
     type: string_textfield
     weight: 0
@@ -62,12 +74,15 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+    region: content
   path:
     type: path
     weight: 4
     settings: {  }
     third_party_settings: {  }
+    region: content
   translation:
     weight: 10
+    region: content
 hidden:
   field_commerce_id: true

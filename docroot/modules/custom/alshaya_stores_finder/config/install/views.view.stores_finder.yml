@@ -9,6 +9,7 @@ dependencies:
   module:
     - better_exposed_filters
     - geolocation
+    - key_value_field
     - node
     - user
     - views_infinite_scroll
@@ -818,7 +819,7 @@ display:
           group_type: group
           admin_label: ''
           empty: false
-          content: '@total closest stores'
+          content: '@total closest stores to'
           plugin_id: result
       exposed_form:
         type: basic
@@ -1524,7 +1525,7 @@ display:
           empty: false
           tokenize: false
           content:
-            value: '<strong><span>select a store to see details</span></strong>'
+            value: 'select a store to see details'
             format: rich_text
           plugin_id: text
       sorts:
@@ -1645,7 +1646,7 @@ display:
           group_type: group
           admin_label: ''
           empty: false
-          content: '@total closest stores'
+          content: '@total closest stores to'
           plugin_id: result
       exposed_form:
         type: basic

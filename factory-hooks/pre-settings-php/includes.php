@@ -42,10 +42,23 @@ switch ($env) {
   case 'dev':
   case 'test':
     $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
+    $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
+    $config['alshaya_api.settings']['verify_ssl'] = 0;
+
+    $config['alshaya_api.settings']['username'] = 'acquiaapi';
+    $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
     break;
 
   default:
     $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
+
+    $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
+    $config['alshaya_api.settings']['verify_ssl'] = FALSE;
+
+    $config['alshaya_api.settings']['username'] = 'acquiaapi';
+    $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
     break;
 }
 

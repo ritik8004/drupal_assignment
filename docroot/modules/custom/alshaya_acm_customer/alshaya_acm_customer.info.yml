@@ -7,4 +7,3 @@ dependencies:
   - acq_customer
   - alshaya_acm_checkout
   - alshaya_acm_product
-  - barcodes

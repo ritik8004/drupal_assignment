@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "93e58430eff36125d57ea9addf749c95",
+    "content-hash": "c05ce791b167397ee221be97ec684307",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2130,58 +2130,6 @@
             }
         },
         {
-            "name": "drupal/barcodes",
-            "version": "1.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupal.org/project/barcodes",
-                "reference": "8.x-1.6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/barcodes-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "f89f7e24992feae9702c78bf4f9ea6e0b32d9e2d"
-            },
-            "require": {
-                "drupal/core": "~8.0",
-                "tecnickcom/tc-lib-barcode": "^1.9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1477500839"
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "julien",
-                    "homepage": "https://www.drupal.org/user/177445"
-                },
-                {
-                    "name": "sanduhrs",
-                    "homepage": "https://www.drupal.org/user/28074"
-                }
-            ],
-            "description": "Generate Barcodes of differebt types.",
-            "homepage": "https://www.drupal.org/project/barcodes",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/barcodes",
-                "issues": "https://www.drupal.org/project/issues/barcodes"
-            }
-        },
-        {
             "name": "drupal/better_exposed_filters",
             "version": "dev-3.x",
             "source": {
@@ -2927,6 +2875,7 @@
                     "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
                     "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-1.patch",
                     "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
+                    "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/no_reliable_method-2752961-29.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-303.patch"
@@ -3811,7 +3760,7 @@
                 "patches_applied": {
                     "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
                     "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
-                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-23.patch",
+                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-24.patch",
                     "Fix undefined index:active in facets_system_breadcrumb_alter()": "https://www.drupal.org/files/issues/undefIndexActive_2869850.2.patch"
                 }
             },
@@ -5508,6 +5457,79 @@
             }
         },
         {
+            "name": "drupal/r4032login",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/r4032login",
+                "reference": "391f10d69b9b8c466a2fddac2a6b99f1289e7781"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.x-dev",
+                    "datestamp": "1486245484"
+                },
+                "patches_applied": {
+                    "Alter/Override options parameter": "https://www.drupal.org/files/issues/2883264-4.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Bevan",
+                    "homepage": "https://www.drupal.org/user/49989"
+                },
+                {
+                    "name": "RobLoach",
+                    "homepage": "https://www.drupal.org/user/61114"
+                },
+                {
+                    "name": "Sk8erPeter",
+                    "homepage": "https://www.drupal.org/user/1441344"
+                },
+                {
+                    "name": "bdone",
+                    "homepage": "https://www.drupal.org/user/687670"
+                },
+                {
+                    "name": "deekayen",
+                    "homepage": "https://www.drupal.org/user/972"
+                },
+                {
+                    "name": "lotyrin",
+                    "homepage": "https://www.drupal.org/user/216580"
+                },
+                {
+                    "name": "mikesmullin",
+                    "homepage": "https://www.drupal.org/user/108440"
+                },
+                {
+                    "name": "pwolanin",
+                    "homepage": "https://www.drupal.org/user/49851"
+                },
+                {
+                    "name": "shrop",
+                    "homepage": "https://www.drupal.org/user/14767"
+                }
+            ],
+            "description": "Redirect anonymous users from 403 Access Denied pages to the /user/login page.",
+            "homepage": "https://www.drupal.org/project/r4032login",
+            "support": {
+                "source": "http://cgit.drupalcode.org/r4032login"
+            },
+            "time": "2017-02-08 04:20:19"
+        },
+        {
             "name": "drupal/recaptcha",
             "version": "2.2.0",
             "source": {
@@ -5866,22 +5888,26 @@
         },
         {
             "name": "drupal/search_api_solr",
-            "version": "1.0.0-beta2",
+            "version": "1.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api_solr",
-                "reference": "8.x-1.0-beta2"
+                "reference": "8.x-1.0-rc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_solr-8.x-1.0-beta2.zip",
-                "reference": "8.x-1.0-beta2",
-                "shasum": "4b35ffc5f26a07795170092965a1c11c3b181215"
+                "url": "https://ftp.drupal.org/files/projects/search_api_solr-8.x-1.0-rc3.zip",
+                "reference": "8.x-1.0-rc3",
+                "shasum": "0b4f7cbe4e5f43cea6399a180e7366b109f68e6b"
             },
             "require": {
                 "drupal/core": "~8.0",
-                "drupal/search_api": "*",
+                "drupal/search_api": "~1.0",
                 "solarium/solarium": "3.8.*"
+            },
+            "suggest": {
+                "drupal/facets": "Provides facetted search.",
+                "drupal/search_api_solr_multilingual": "Highly recommended if installation is multilingual or uses a language different than English."
             },
             "type": "drupal-module",
             "extra": {
@@ -5889,11 +5915,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta2",
-                    "datestamp": "1492189143"
+                    "version": "8.x-1.0-rc3",
+                    "datestamp": "1495024986"
                 },
                 "patches_applied": {
-                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/2812861-11-solr-crash.patch"
+                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--13.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5902,12 +5928,12 @@
             ],
             "authors": [
                 {
-                    "name": "Berdir",
-                    "homepage": "https://www.drupal.org/user/214652"
+                    "name": "Markus Kalkbrenner",
+                    "homepage": "https://www.drupal.org/u/mkalkbrenner"
                 },
                 {
-                    "name": "Nick_vh",
-                    "homepage": "https://www.drupal.org/user/122682"
+                    "name": "Other contributors",
+                    "homepage": "https://www.drupal.org/node/982682/committers"
                 },
                 {
                     "name": "amateescu",
@@ -5929,9 +5955,62 @@
             "description": "Offers an implementation of the Search API that uses an Apache Solr server for indexing content.",
             "homepage": "https://www.drupal.org/project/search_api_solr",
             "support": {
-                "source": "http://cgit.drupalcode.org/search_api_solr",
+                "source": "http://git.drupal.org/project/search_api_solr.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_solr",
                 "irc": "irc://irc.freenode.org/drupal-search-api"
+            }
+        },
+        {
+            "name": "drupal/search_api_solr_multilingual",
+            "version": "1.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/search_api_solr_multilingual",
+                "reference": "8.x-1.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_solr_multilingual-8.x-1.0-beta3.zip",
+                "reference": null,
+                "shasum": "ee105412f8c40311bc197ea08e4504c15bdc2816"
+            },
+            "require": {
+                "drupal/core": "*",
+                "drupal/search_api_solr": "*",
+                "maennchen/zipstream-php": "0.4.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta3",
+                    "datestamp": "1495025284"
+                },
+                "patches_applied": {
+                    "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
+                    "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "cspitzlay",
+                    "homepage": "https://www.drupal.org/user/419305"
+                },
+                {
+                    "name": "mkalkbrenner",
+                    "homepage": "https://www.drupal.org/user/124705"
+                }
+            ],
+            "description": "Offers an implementation of the Search API that uses an Apache Solr server for indexing content.",
+            "homepage": "https://www.drupal.org/project/search_api_solr_multilingual",
+            "support": {
+                "source": "http://cgit.drupalcode.org/search_api_solr_multilingual"
             }
         },
         {
@@ -7760,6 +7839,58 @@
                 "service"
             ],
             "time": "2017-05-10T09:20:27+00:00"
+        },
+        {
+            "name": "maennchen/zipstream-php",
+            "version": "v0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maennchen/ZipStream-PHP.git",
+                "reference": "89e0cdb3c9ecabef4da988852003781a7802afb7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/89e0cdb3c9ecabef4da988852003781a7802afb7",
+                "reference": "89e0cdb3c9ecabef4da988852003781a7802afb7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">= 5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZipStream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Duncan",
+                    "email": "pabs@pablotron.org"
+                },
+                {
+                    "name": "Jesse Donat",
+                    "email": "donatj@gmail.com"
+                },
+                {
+                    "name": "Jonatan Männchen",
+                    "email": "jonatan@maennchen.ch"
+                }
+            ],
+            "description": "ZipStream is a library for dynamically streaming dynamic zip files from PHP without writing to the disk at all on the server.",
+            "keywords": [
+                "stream",
+                "zip"
+            ],
+            "time": "2016-09-13T10:29:17+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -9759,7 +9890,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.20",
+            "version": "v2.8.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -10838,159 +10969,6 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2017-05-01T14:31:55+00:00"
-        },
-        {
-            "name": "tecnickcom/tc-lib-barcode",
-            "version": "1.15.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tecnickcom/tc-lib-barcode.git",
-                "reference": "18b8b9224c995cd9d7518e8551be833cbc31b323"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-barcode/zipball/18b8b9224c995cd9d7518e8551be833cbc31b323",
-                "reference": "18b8b9224c995cd9d7518e8551be833cbc31b323",
-                "shasum": ""
-            },
-            "require": {
-                "ext-bcmath": "*",
-                "ext-date": "*",
-                "ext-gd": "*",
-                "ext-pcre": "*",
-                "php": ">=5.4",
-                "tecnickcom/tc-lib-color": "^1.12.6"
-            },
-            "require-dev": {
-                "apigen/apigen": "^4.1.2",
-                "bartlett/php-compatinfo": "^5.0.4",
-                "pdepend/pdepend": "^2.5.0",
-                "phploc/phploc": "^2.1.5 || ^3.0.1",
-                "phpmd/phpmd": "^2.6.0",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0",
-                "sebastian/phpcpd": "^2.0.4 || 3.0.0",
-                "squizlabs/php_codesniffer": "^2.8.0 || ^3.0.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Com\\Tecnick\\Barcode\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Nicola Asuni",
-                    "email": "info@tecnick.com",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP library to generate linear and bidimensional barcodes",
-            "homepage": "http://www.tecnick.com",
-            "keywords": [
-                "3 of 9",
-                "ANSI MH10.8M-1983",
-                "CBC",
-                "CODABAR",
-                "CODE 11",
-                "CODE 128 A B C",
-                "CODE 39",
-                "CODE 93",
-                "EAN 13",
-                "EAN 8",
-                "ECC200",
-                "Intelligent Mail Barcode",
-                "Interleaved 2 of 5",
-                "KIX",
-                "Klant",
-                "MSI",
-                "Onecode",
-                "PHARMACODE",
-                "PHARMACODE TWO-TRACKS",
-                "POSTNET",
-                "RMS4CC",
-                "Standard 2 of 5",
-                "UPC-A",
-                "UPC-E",
-                "USD-3",
-                "USPS-B-3200",
-                "USS-93",
-                "barcode",
-                "datamatrix",
-                "pdf417",
-                "planet",
-                "qr-code",
-                "royal mail",
-                "tc-lib-barcode",
-                "upc"
-            ],
-            "time": "2017-02-12T13:51:39+00:00"
-        },
-        {
-            "name": "tecnickcom/tc-lib-color",
-            "version": "1.12.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tecnickcom/tc-lib-color.git",
-                "reference": "8921acc8e9c26bdc32c9b08989d42e428af6c660"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-color/zipball/8921acc8e9c26bdc32c9b08989d42e428af6c660",
-                "reference": "8921acc8e9c26bdc32c9b08989d42e428af6c660",
-                "shasum": ""
-            },
-            "require": {
-                "ext-pcre": "*",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "apigen/apigen": "^4.1.2",
-                "bartlett/php-compatinfo": "^5.0.4",
-                "pdepend/pdepend": "^2.5.0",
-                "phploc/phploc": "^2.1.5 || ^3.0.1",
-                "phpmd/phpmd": "^2.6.0",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0",
-                "sebastian/phpcpd": "^2.0.4 || 3.0.0",
-                "squizlabs/php_codesniffer": "^2.8.0 || ^3.0.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Com\\Tecnick\\Color\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Nicola Asuni",
-                    "email": "info@tecnick.com",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP library to manipulate various color representations",
-            "homepage": "http://www.tecnick.com",
-            "keywords": [
-                "cmyk",
-                "color",
-                "colors",
-                "colour",
-                "colours",
-                "hsl",
-                "hsla",
-                "javascript",
-                "rgb",
-                "rgba",
-                "tc-lib-color",
-                "web"
-            ],
-            "time": "2017-02-12T12:07:38+00:00"
         },
         {
             "name": "twig/twig",
@@ -13231,6 +13209,8 @@
         "drupal/redirect": 15,
         "drupal/search_api_spellcheck": 20,
         "drupal/better_exposed_filters": 20,
+        "drupal/r4032login": 20,
+        "drupal/search_api_solr_multilingual": 10,
         "drupal/memcache": 20
     },
     "prefer-stable": true,

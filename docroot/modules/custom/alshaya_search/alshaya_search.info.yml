@@ -16,10 +16,12 @@ dependencies:
   - node
   - search_api
   - search_api_autocomplete
+  - search_api_solr_multilingual
   - search_api_spellcheck
   - system
   - taxonomy
   - user
   - views
+  - views_infinite_scroll
 version: 8.x-1.0
 package: Alshaya

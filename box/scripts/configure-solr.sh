@@ -10,7 +10,8 @@
 SOLR_SETUP_COMPLETE_FILE=/etc/drupal_vm_solr_config_complete
 
 # Search API Solr module.
-SOLR_MODULE_DIR=/var/www/alshaya/docroot/modules/contrib
+PROJECT_DIR=/var/www/alshaya
+SOLR_MODULE_DIR=$PROJECT_DIR/docroot/modules/contrib
 SOLR_MODULE_NAME=search_api_solr
 
 # Check to see if we've already performed this setup.
@@ -18,6 +19,9 @@ if [ ! -e "$SOLR_SETUP_COMPLETE_FILE" ]; then
 
   # Copy the Solr configuration into place over the default `collection1` core.
   sudo cp -a $SOLR_MODULE_DIR/$SOLR_MODULE_NAME/solr-conf/4.x/. /var/solr/collection1/conf/
+
+  # Copy this projects overrides into the `collection1` core.
+  sudo cp -a $PROJECT_DIR/solrconf/. /var/solr/collection1/conf/
 
   # Adjust the autoCommit time so index changes are committed in 1s.
   #sudo sed -i 's/\(<maxTime>\)\([^<]*\)\(<[^>]*\)/\11000\3/g' /var/solr/collection1/conf/solrconfig.xml

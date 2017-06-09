@@ -179,6 +179,41 @@ class APIWrapper {
   }
 
   /**
+   * Associate a cart with a customer.
+   *
+   * @param int $cart_id
+   *   ID of cart to associate.
+   * @param $customer_id
+   *   ID of customer to associate with.
+   *
+   * @return bool
+   *   A status of coupon being applied.
+   * @throws \Exception
+   */
+  public function associateCart($cart_id, $customer_id) {
+    $endpoint = "cart/$cart_id/associate";
+
+    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $cart_id) {
+      $opt['json'] = [
+        'customer_id' => $customer_id,
+        'cart_id' => $cart_id
+      ];
+      return ($client->post($endpoint, $opt));
+    };
+
+    $status = FALSE;
+
+    try {
+      $status = (bool) $this->tryAgentRequest($doReq, 'associateCart');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $status;
+  }
+
+  /**
    * Finalizes a cart's order.
    *
    * @param int $cart_id
@@ -510,6 +545,32 @@ class APIWrapper {
     }
 
     return $categories;
+  }
+
+  /**
+   * Fetches product attribute options.
+   *
+   * @return array
+   *   Array of product attribute options.
+   */
+  public function getProductOptions() {
+    // @TODO: Need to remove v1/agent when we move to new agent url format.
+    $endpoint = 'v1/agent/product/options';
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $options = [];
+
+    try {
+      $options = $this->tryAgentRequest($doReq, 'getAttributeOptions', 'options');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $options;
   }
 
   /**
