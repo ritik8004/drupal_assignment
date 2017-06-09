@@ -2,14 +2,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.user.field_terms_and_condition
-  module:
-    - user
-id: user.user.field_terms_and_condition
-field_name: field_terms_and_condition
-entity_type: user
-bundle: user
-label: 'Terms and condition'
+    - node.type.store
+id: node.store.promote
+field_name: promote
+entity_type: node
+bundle: store
+label: 'Promoted to front page'
 description: ''
 required: false
 translatable: true

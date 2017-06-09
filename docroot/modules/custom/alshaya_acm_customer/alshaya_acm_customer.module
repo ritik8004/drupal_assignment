@@ -381,6 +381,7 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
 function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterface &$form_state) {
   $pass = $form_state->getValue('pass');
   $form_state->setValue('pass', user_password(25));
+  $subscribe = $form_state->getValue('field_subscribe_newsletter');
 
   // Call the ::save method of Drupal first to get account created in Drupal.
   call_user_func_array($form_state->prepareCallback('::save'), [&$form, &$form_state]);
@@ -399,16 +400,26 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
   $user->get('acq_customer_id')->setValue($customer['customer_id']);
   $user->save();
 
-  // Subscribe user to newsletter.
-  /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
-  $apiWrapper = \Drupal::service('acq_commerce.api');
+  // Add entry into hash table during registration, this is not done by module
+  // for us because it checks for confirm_password field and we need a single
+  // password field.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_user')) {
+    _alshaya_user_password_policy_history_insert_password_hash($user, $pass);
+  }
 
-  try {
-    $apiWrapper->subscribeNewsletter($user->getEmail());
+  // Subscribe user to newsletter.
+  if (!empty($subscribe['value'])) {
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
+    $apiWrapper = \Drupal::service('acq_commerce.api');
+
+    try {
+      $apiWrapper->subscribeNewsletter($user->getEmail());
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_acm_customer')->error('Error occurred while subscribing @email during registration. Error message: @error', ['@email' => $user->getEmail(), '@error' => $e->getMessage()]);
+    }
   }
-  catch (\Exception $e) {
-    \Drupal::logger('alshaya_acm_customer')->error('Error occurred while subscribing @email during registration. Error message: @error', ['@email' => $user->getEmail(), '@error' => $e->getMessage()]);
-  }
+
 }
 
 /**
@@ -431,10 +442,8 @@ function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, Fo
     $user = $build_info['args'][0];
   }
 
-  $roles = $user->getRoles();
-
-  // For all users except just authenticated, we store password only in Drupal.
-  if (count($roles) > 1) {
+  // For all users who don't have customer_id, we store password only in Drupal.
+  if (empty($user->get('acq_customer_id')->getValue())) {
     call_user_func_array($form_state->prepareCallback('::validateForm'), [&$form, &$form_state]);
     return;
   }

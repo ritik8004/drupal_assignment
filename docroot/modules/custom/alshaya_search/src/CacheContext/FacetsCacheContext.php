@@ -36,11 +36,17 @@ class FacetsCacheContext implements CacheContextInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @throws \InvalidArgumentException
    */
   public function getContext() {
     $request = $this->requestStack->getCurrentRequest();
     $facets = $request->request->get('f');
-    return implode('|', $facets);
+    $facetContextValue = '';
+    if (count($facets)) {
+      $facetContextValue = implode('|', $facets);
+    }
+    return $facetContextValue;
   }
 
   /**

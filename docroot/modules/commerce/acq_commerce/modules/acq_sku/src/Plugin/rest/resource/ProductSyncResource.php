@@ -215,7 +215,6 @@ class ProductSyncResource extends ResourceBase {
         $sku->price->value = $product['price'];
         $sku->special_price->value = $product['special_price'];
         $sku->final_price->value = $product['final_price'];
-        $sku->brand->value = $product['attributes']['brand'];
 
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
@@ -236,7 +235,6 @@ class ProductSyncResource extends ResourceBase {
           'price' => $product['price'],
           'special_price' => $product['special_price'],
           'final_price' => $product['final_price'],
-          'brand' => $product['attributes']['brand'],
           'attributes' => $this->formatProductAttributes($product['attributes']),
           'media' => serialize($product['extension']['media']),
         ]);

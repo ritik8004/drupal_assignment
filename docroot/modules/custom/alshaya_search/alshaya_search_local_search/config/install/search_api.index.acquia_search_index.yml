@@ -60,8 +60,8 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
-  rendered_item: {  }
   entity_status: {  }
+  rendered_item: {  }
 tracker_settings:
   default: {  }
 options:

@@ -7,3 +7,18 @@ alshaya_stores_finder.settings:
     enable_disable_store_finder_search:
       type: integer
       label: 'Enable or disable store finder search on site'
+    pdp_click_collect_title:
+      type: string
+      label: 'PDP: Click and Collect title'
+    pdp_click_collect_subtitle:
+      type: string
+      label: 'PDP: Click and Collect sub-title'
+    pdp_click_collect_price:
+      type: string
+      label: 'PDP: Click and Collect price'
+    pdp_click_collect_help_text:
+      type: text_format
+      label: 'PDP: Click and Collect help text'
+    pdp_click_collect_select_option_text:
+      type: text_format
+      label: 'PDP: Click and Collect select option text'
