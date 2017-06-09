@@ -861,7 +861,6 @@
         border: 0;
         text-transform: lowercase;
         padding: 0.66rem 1.3701rem;
-        position: static;
         margin-bottom: 1.5rem;
         margin-top: 2.1875rem;
         display: inline-block;
@@ -869,10 +868,6 @@
       }
     }
   }
-}
-
-.ladda-button[data-style=zoom-in] .ladda-label {
-  position: static;
 }
 
 .select2Option {
