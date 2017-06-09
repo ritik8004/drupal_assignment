@@ -1,9 +1,9 @@
 /**
-  * This file contains css browser specific hot-fix
+ * This file contains css browser specific hot-fix
  */
 
 /**
-  * IE - Specific issues and hacks for them.
+ * IE - Specific issues and hacks for them.
  */
 
 body.ie {
@@ -21,6 +21,18 @@ body.ie {
     line-height: 34px;
   }
 
+  // We have added a IE polyfill to make details element work, it converts the summary into <a> tag, so
+  // adding color for it.
+  summary a.details-title {
+    color: $grey-ash;
+  }
+}
+
+/**
+ * Edge Browser - Specific issues and hacks for them.
+ */
+
+body.edge {
   // We have added a IE polyfill to make details element work, it converts the summary into <a> tag, so
   // adding color for it.
   summary a.details-title {

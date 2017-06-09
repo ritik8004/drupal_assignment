@@ -409,7 +409,7 @@
     background: $pumpkin-orange;
     color: $white-five;
     cursor: pointer;
-    margin-#{$left}: 1rem;
+    margin-#{$left}: 1.5rem;
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: 1.5rem;
