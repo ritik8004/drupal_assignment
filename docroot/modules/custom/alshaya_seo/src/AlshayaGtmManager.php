@@ -55,6 +55,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
     'acq_cart.cart' => 'CartPage',
+    'alshaya_master.home' => 'home page',
   ];
 
   /**
@@ -243,8 +244,11 @@ class AlshayaGtmManager {
           }
           break;
       }
+      $gtmRoutes = self::ROUTE_GTM_MAPPING;
 
-      $gtmPageType = self::ROUTE_GTM_MAPPING[$routeIdentifier];
+      if (array_key_exists($routeIdentifier, $gtmRoutes)) {
+        $gtmPageType = self::ROUTE_GTM_MAPPING[$routeIdentifier];
+      }
     }
 
     return $gtmPageType;
@@ -283,7 +287,11 @@ class AlshayaGtmManager {
           break;
       }
 
-      $gtmListName = self::LIST_GTM_MAPPING[$routeIdentifier];
+      $gtmRoutes = self::LIST_GTM_MAPPING;
+
+      if (array_key_exists($routeIdentifier, $gtmRoutes)) {
+        $gtmListName = self::LIST_GTM_MAPPING[$routeIdentifier];
+      }
     }
 
     return $gtmListName;

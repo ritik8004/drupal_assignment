@@ -37,14 +37,43 @@
       }
 
       /** Impressions tracking on listing pages with Products. **/
-      if (gtmPageType === 'product detail page') {
-        // @TODO: Calculate impressions separately for PDP since they reside under US & CS regions.
+      if ((gtmPageType === 'product detail page') || (gtmPageType === 'cart page')) {
+        var count_pdp_items = 1;
+        productLinkSelector.each(function() {
+          // Fetch attributes for this product.
+          var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
+          var pdpListName = '';
+          var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
+
+          // Check whether the product is in US or CS region & update list accordingly.
+          if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
+            pdpListName = listName + '-CS';
+          }
+          else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
+            pdpListName = listName + '-US';
+          }
+
+          impression.list = pdpListName;
+          impression.position = count_pdp_items;
+          impressions.push(impression);
+          count_pdp_items++;
+        });
+
+        var data_pdp = {
+          'event': 'productImpression',
+          'ecommerce': {
+            'currencyCode': currencyCode,
+            'impressions': impressions
+          }
+        };
+
+        dataLayer.push(data_pdp);
       }
       else if ($.inArray(gtmPageType, impressionPages)) {
         var count = 1;
         productLinkSelector.each(function() {
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-          impression.list = gtmPageType;
+          impression.list = listName;
           impression.position = count;
           impressions.push(impression);
           count++;
