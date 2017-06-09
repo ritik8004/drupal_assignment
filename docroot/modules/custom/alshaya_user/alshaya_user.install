@@ -26,6 +26,9 @@ function alshaya_user_install() {
     'Communication preferences' => [
       'ar' => 'تفضيلات التواصل',
     ],
+    'I would like to receive exclusive deals from Mothercare' => [
+      'ar' => 'أرغب في استلام عروض حصرية من مذركير',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
