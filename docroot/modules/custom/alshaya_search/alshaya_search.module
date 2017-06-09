@@ -84,7 +84,11 @@ function alshaya_search_theme($existing, $type, $theme, $path) {
  */
 function alshaya_search_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types) {
   if (in_array($backend_plugin_id, ['search_api_solr', 'search_api_db'])) {
-    $query_types['range'] = 'alshaya_search_range';
+    // For some reason the SKU Final Price shows as a string, so we need to
+    // manually add numeric as an option.
+    // If we want special handling, we should update this to use
+    // alshaya_search_range.
+    $query_types['numeric'] = 'search_api_granular';
   }
 }
 
