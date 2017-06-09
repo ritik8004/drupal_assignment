@@ -9,7 +9,7 @@ alshaya_acm_product.home_delivery:
       type: text
       label: 'Subtitle'
     title_price:
-      type: text
+      type: float
       label: 'Price displayed in title'
     options_standard_title:
       type: text
@@ -21,11 +21,11 @@ alshaya_acm_product.home_delivery:
       type: text
       label: 'Standard option first line title'
     options_standard_price_options_one_price:
-      type: text
+      type: float
       label: 'Standard option first line price'
     options_standard_price_options_two_title:
       type: text
       label: 'Standard option second line title'
     options_standard_price_options_two_price:
-      type: text
+      type: float
       label: 'Standard option second line price'
