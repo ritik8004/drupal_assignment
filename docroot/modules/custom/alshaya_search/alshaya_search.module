@@ -102,3 +102,31 @@ function alshaya_search_page_attachments_alter(array &$attachments) {
     }
   }
 }
+
+/**
+ * Implements hook_ajax_render_alter().
+ */
+function alshaya_search_ajax_render_alter(array &$data) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $valid_routes = [
+    'views.ajax',
+  ];
+
+  // Only for ajax route.
+  if (in_array($route_name, $valid_routes)) {
+    foreach ($data as &$command) {
+      if ($command['command'] == 'settings' && isset($command['settings']['views']['ajaxViews'])) {
+        $dom_id = key($command['settings']['views']['ajaxViews']);
+        $view_name = $command['settings']['views']['ajaxViews'][$dom_id]['view_name'];
+        // If 'search' view.
+        if ($view_name == 'search') {
+          // Adding a command.
+          $data[] = [
+            'command' => 'invoke',
+            'method' => 'alshayaSearchHeaderUpdate',
+          ];
+        }
+      }
+    }
+  }
+}
