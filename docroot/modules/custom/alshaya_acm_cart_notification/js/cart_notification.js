@@ -59,7 +59,7 @@
         if (data.message === 'success') {
           $('.ladda-label').html(Drupal.t('added'));
         }
-        else {
+        else if (data.message === 'failure') {
           $('.ladda-label').html(Drupal.t('error'));
         }
         setTimeout(
