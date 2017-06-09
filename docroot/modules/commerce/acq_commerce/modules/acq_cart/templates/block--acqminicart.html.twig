@@ -1,10 +1,4 @@
 <div class="acq-mini-cart">
-  {% if quantity > 0 and total %}
-    {{ total }}
-  {% endif %}
-  <a class="cart-link" href="{{ url('acq_cart.cart') }}">
-    {% if quantity > 0 %}
-      <span class="quantity">{{ quantity }}</span>
-    {% endif %}
-  </a>
+  {{ total }}
+  <a class="cart-link" href="{{ url('acq_cart.cart') }}"><span class="quantity">{{ quantity }}</span></a>
 </div>

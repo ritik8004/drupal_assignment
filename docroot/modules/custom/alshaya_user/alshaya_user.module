@@ -306,19 +306,18 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
   // Set signup mail translation.
   $signup_mail = \Drupal::languageManager()
     ->getLanguageConfigOverride('ar', 'user_registrationpassword.mail');
-  $signup_mail->set('register_withpassword.subject', '[site:name] على موقع [user:field_first_name:value] تفاصيل حساب');
-  $signup_mail->set('register_withpassword.body', '<h1>مرحباً [user:field_first_name:value],</h1>
+  $signup_mail->set('register_withpassword.subject', 'على موقع [site:name] [user:field_first_name:value] تفاصيل حساب');
+  $signup_mail->set('register_withpassword.body', '<h1>،[user:field_first_name:value] مرحباً</h1>
 
-أهلاً بك في موقع [site:name] و شكراً على الانضمام إلينا.
+أهلاً بك في موقع [site:name] و شكراً على الانضمام. إلينا
 
-لقد قمت بالتسجيل عن طريق عنوان البريد الإلكتروني: [user:mail]
+[user:mail] :لقد قمت بالتسجيل عن طريق عنوان البريد الإلكتروني
 
-:يمكنك الآن تسجيل الدخول والتحقق من حسابك بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
-<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
+.وتقوم بتعديل وتحديث بياناتك الشخصية في أي وقت <a href="[user:registrationpassword-url]">My Account</a> الآن يمكنك الدخول إلى صفحة
 
-نتمنى لك تجربة تسوق ممتعة مع موقع [site:name].
+نتمنى لك تجربة تسوق ممتعة مع موقع [site:name]
 
-إذا كان لديك أي سؤال، يرجى الاطلاع على صفحة <a href="[site:url]">FAQs page</a> هنا أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن.
+.هنا أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن <a href="[site:url]">FAQs page</a> إذا كان لديك أي سؤال، يرجى الاطلاع على صفحة
 
 مع أطيب التحيات،
 فريق عمل [site:name]
@@ -332,10 +331,10 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
   // Set reset password mail translation.
   $reset_password_mail = \Drupal::languageManager()
     ->getLanguageConfigOverride('ar', 'user.mail');
-  $reset_password_mail->set('password_reset.subject', '[site:name] على موقع [user:field_first_name:value] معلومات تسجيل الدخول البديلة للمستخدم');
-  $reset_password_mail->set('password_reset.body', '<h1>,[user:field_first_name:value] أهلاً بك </h1>
+  $reset_password_mail->set('password_reset.subject', 'على موقع [site:name] [user:field_first_name:value] معلومات تسجيل الدخول البديلة للمستخدم');
+  $reset_password_mail->set('password_reset.body', '<h1>،[user:field_first_name:value] أهلاً بك </h1>
 
-.[site:name] تم إجراء طلب لإعادة تعيين كلمة المرور لحسابك على موقع
+تم إجراء طلب لإعادة تعيين كلمة المرور لحسابك على موقع [site:name]
 
 :يمكنك الآن تسجيل الدخول بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
 
@@ -343,7 +342,7 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
 
 لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها.
 
-[site:name] فريق عمل --');
+فريق عمل [site:name]');
   $reset_password_mail->save();
 }
 

@@ -54,7 +54,8 @@
         $('body').addClass('mobile--overlay');
       });
 
-      $('.c-menu-primary .mobile--search').click(function () {
+      $('.c-menu-primary .mobile--search').off().on('click', function (e) {
+        e.preventDefault();
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
         $(this).parent().toggleClass('search-active');
       });

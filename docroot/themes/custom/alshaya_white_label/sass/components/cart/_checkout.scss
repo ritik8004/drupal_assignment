@@ -908,7 +908,7 @@ body.alias--cart {
 
     @include breakpoint($tablet) {
       display: block;
-      margin-#{$right}: 11%;
+      margin-#{$right}: 7.5%;
     }
 
     @include breakpoint($desktop) {

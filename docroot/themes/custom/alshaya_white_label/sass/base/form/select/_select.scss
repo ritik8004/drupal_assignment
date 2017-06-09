@@ -3,7 +3,7 @@ select::-ms-expand {
 }
 
 @mixin select-style($select-width) {
-  -webkit-appearance: none;
+  appearance: none;
   border: 1px solid $white-two;
   border-radius: 0;
   background-color: $white-five;
@@ -18,7 +18,7 @@ select::-ms-expand {
   @include breakpoint($tablet) {
     background-color: transparent;
     position: relative;
-    z-index: 5;
+    z-index: 3;
   }
 }
 
@@ -38,6 +38,8 @@ select::-ms-expand {
     text-align: center;
     background-color: $white-two;
     width: 2.1875rem;
+    height: 35px;
+    height: 2.1875rem;
 
     @include breakpoint($tablet) {
       z-index: 1;

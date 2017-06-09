@@ -8,6 +8,7 @@
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 
 /**
  * Implements hook_views_pre_render().
@@ -23,6 +24,13 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
 
     // Add search library to search page.
     $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
+  }
+
+  // Override the 'result summary' header for PLP and Search.
+  if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
+    // Override the 'result summary' header.
+    $format_plural = new PluralTranslatableMarkup($view->total_rows, '1 item', '@count items');
+    $view->header['result']->options['content'] = $format_plural;
   }
 }
 

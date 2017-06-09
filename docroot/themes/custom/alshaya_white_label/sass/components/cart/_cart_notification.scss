@@ -5,13 +5,13 @@
   #{$right}: calc((100% - 1214px) / 2);
 
   @include breakpoint($only-tablet) {
-    top: 4.625rem;
-    #{$right}: calc((100% - 704px) / 2);
+    top: 4.063rem;
+    #{$right}: calc((100% - 691px) / 2);
   }
 
   @include breakpoint($only-mobile) {
-    top: 3.063rem;
-    #{$right}: calc((100% - 300px) / 2);
+    top: 2.813rem;
+    #{$right}: calc((100% - 337px) / 2);
   }
 
   .notification,
@@ -82,6 +82,15 @@
         color: $white-five;
         font-family: $alshaya-thin;
       }
+    }
+  }
+}
+
+.firefox #cart_notification {
+  .notification {
+    &::before {
+      top: 0.875rem;
+      #{$right}: 0.5rem;
     }
   }
 }

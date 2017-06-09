@@ -5,7 +5,7 @@
                 <div class="level--1__meta">
                     <a href="{{ level1.path }}" class="level--1__label">{{ level1.label }}</a>
                     {% if level1.description is not empty %}
-                        <div class="level--1__description">{{ level1.description }}</div>
+                        <div class="level--1__description">{{ level1.description|raw }}</div>
                     {% endif %}
                 </div>
                 {% if level1.child is not empty %}
