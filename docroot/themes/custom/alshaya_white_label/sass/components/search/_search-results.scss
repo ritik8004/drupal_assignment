@@ -428,12 +428,6 @@ header,
   background: $white-five;
   border: 1px solid $white;
 
-  @include breakpoint($only-mobile) {
-    z-index: 9999;
-    position: fixed !important;
-    top: 8.125rem !important;
-  }
-
   li.ui-menu-item {
     display: inherit;
     padding: 10px 1rem 10px 7.5px;
@@ -450,6 +444,16 @@ header,
     a {
       font-family: $alshaya-thin;
       color: $brownish-grey;
+    }
+  }
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page .ui-autocomplete {
+    @include breakpoint($only-mobile) {
+      z-index: 9999;
+      position: fixed !important;
+      top: 8.125rem !important;
     }
   }
 }

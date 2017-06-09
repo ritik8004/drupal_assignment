@@ -10,9 +10,9 @@
         });
       });
 
-      $('[data-drupal-selector="customer-cart-form"]').once('bind-events').each(function () {
+      $('[data-drupal-selector="customer-cart-form"]', context).once('bind-events').each(function () {
         $('#apply_coupon', $(this)).on('click', function () {
-          $('[data-drupal-selector="edit-update"]', $(this)).trigger('click');
+          $('[data-drupal-selector="edit-update"]').trigger('click');
         });
 
         $('#checkout-top', $(this)).on('click', function (event) {

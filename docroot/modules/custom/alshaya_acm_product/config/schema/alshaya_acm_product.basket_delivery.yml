@@ -3,14 +3,14 @@ alshaya_acm_product.basket_delivery:
   label: 'Alshaya ACM Basket Delivery settings'
   mapping:
     home_delivery_title:
-      type: string
+      type: text
       label: 'Home Delivery title'
     home_delivery_tooltip:
-      type: string
+      type: text
       label: 'Home Delivery tooltip'
     click_collect_title:
-      type: string
+      type: text
       label: 'Click and Collect title'
     click_collect_tooltip:
-      type: string
+      type: text
       label: 'Click and Collect tooltip'

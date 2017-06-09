@@ -3,7 +3,7 @@ block.settings.alshaya_shop_by_block:
   label: 'Branding block'
   mapping:
     vocabulary:
-      type: string
+      type: text
       label: 'Vocabulary'
     level:
       type: integer
