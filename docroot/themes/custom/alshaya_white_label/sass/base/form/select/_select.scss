@@ -38,6 +38,8 @@ select::-ms-expand {
     text-align: center;
     background-color: $white-two;
     width: 2.1875rem;
+    height: 35px;
+    height: 2.1875rem;
 
     @include breakpoint($tablet) {
       z-index: 1;
