@@ -1,0 +1,25 @@
+alshaya_api.settings:
+  type: config_object
+  label: 'Alshaya API settings'
+  mapping:
+    store_id:
+      type: integer
+      label: 'Store id'
+    magento_host:
+      type: string
+      label: 'Host'
+    magento_api_base:
+      type: string
+      label: 'API Base'
+    verify_ssl:
+      type: integer
+      label: 'Verify SSL'
+    token_cache_time:
+      type: string
+      label: 'Token cache time'
+    username:
+      type: string
+      label: 'Username'
+    password:
+      type: string
+      label: 'Password'

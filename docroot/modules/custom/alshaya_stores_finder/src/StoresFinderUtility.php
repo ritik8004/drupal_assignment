@@ -86,6 +86,8 @@ class StoresFinderUtility {
    *   Stores array.
    */
   public function getSkuStores($sku, $lat, $lon) {
+    $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+
     $stores = [];
 
     $stores_data = $this->apiWrapper->getProductStores($sku, $lat, $lon);
@@ -101,6 +103,12 @@ class StoresFinderUtility {
       $store['low_stock'] = $store_data['low_stock'];
 
       if ($store_node = $this->getStoreFromCode($store_data['code'])) {
+        if ($store_node->hasTranslation($langcode)) {
+          $store_node = $store_node->getTranslation($langcode);
+        }
+        else {
+          continue;
+        }
 
         $store['name'] = $store_node->label();
         $store['code'] = $store_node->get('field_store_locator_id')->getString();
@@ -113,13 +121,6 @@ class StoresFinderUtility {
         }
 
         $stores[$store_node->id()] = $store;
-      }
-      // @TODO: Remove this once stores API is done.
-      else {
-        $store['name'] = $store['code'];
-        $store['address'] = $store['code'];
-        $store['opening_hours'] = $store['code'];
-        $stores[$store['code']] = $store;
       }
     }
 
@@ -137,6 +138,80 @@ class StoresFinderUtility {
     }
 
     return $stores;
+  }
+
+  /**
+   * Function to sync all stores.
+   */
+  public function syncStores() {
+    $languages = \Drupal::languageManager()->getLanguages();
+
+    // Prepare the alternate locale data.
+    foreach ($languages as $lang => $language) {
+      $config = \Drupal::languageManager()->getLanguageConfigOverride($lang, 'alshaya_api.settings');
+      $store_id = $config->get('store_id');
+
+      $stores = $this->apiWrapper->getStores($store_id);
+
+      foreach ($stores['items'] as $store) {
+        $this->updateStore($store, $lang);
+      }
+    }
+  }
+
+  /**
+   * Function to create/update single store.
+   *
+   * @param array $store
+   *   Store array.
+   * @param string $langcode
+   *   Language code.
+   */
+  protected function updateStore(array $store, $langcode) {
+    if ($node = $this->getStoreFromCode($store['store_code'])) {
+      if ($node->hasTranslation($langcode)) {
+        $node = $node->getTranslation($langcode);
+        $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], 'langcode' => $store['langcode']]);
+      }
+      else {
+        $node = $node->addTranslation($langcode);
+        $this->logger->info('Adding @langcode translation for store @store_code', ['@store_code' => $store['store_code'], 'langcode' => $store['langcode']]);
+      }
+    }
+    else {
+      $node = $this->nodeStorage->create([
+        'type' => 'store',
+      ]);
+
+      $node->get('langcode')->setValue($langcode);
+
+      $node->get('field_store_locator_id')->setValue($store['store_code']);
+
+      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], 'langcode' => $store['langcode']]);
+    }
+
+    if (!empty($store['store_name'])) {
+      $node->get('title')->setValue($store['store_name']);
+    }
+    else {
+      $node->get('title')->setValue($store['store_code']);
+    }
+
+    $node->get('field_latitude_longitude')->setValue(['lat' => $store['latitude'], 'lng' => $store['longitude']]);
+
+    $node->get('field_store_phone')->setValue($store['store_phone']);
+
+    if (isset($store['address'])) {
+      $node->get('field_store_address')->setValue($store['address']);
+    }
+    else {
+      $node->get('field_store_address')->setValue('');
+    }
+
+    // Set the status.
+    $node->setPublished((bool) $store['status']);
+
+    $node->save();
   }
 
 }
