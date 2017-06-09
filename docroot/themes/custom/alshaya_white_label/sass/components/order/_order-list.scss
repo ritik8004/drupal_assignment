@@ -218,7 +218,11 @@
 
 .recent__orders--list {
   margin-bottom: 0;
-  border-bottom: 1px solid $white;
+  border-top: none;
+
+  @include breakpoint($desktop) {
+    table-layout: fixed;
+  }
 
   &:first-child {
     border-top-width: 1px;
@@ -226,13 +230,31 @@
 
   &:last-child {
     border-width: 2px;
+    border-bottom: 1px solid $white;
   }
 
   td {
     border-top: 1px solid $white;
+    padding: 1.313rem 1.5rem !important;
 
     @include breakpoint($tablet) {
-      width: 200px;
+      width: 12.5rem;
+    }
+
+    &.order-transaction {
+      width: 13.75rem;
+    }
+
+    &.above-mobile {
+      width: 14.38rem !important;
+    }
+
+    &.destop-only {
+      width: 6.875rem !important;
+    }
+
+    &.toggle--icon {
+      width: 14.38rem !important;
     }
   }
 
@@ -316,6 +338,8 @@
 }
 
 .block-alshaya-acm-customer > a {
+  font-family: $arial;
+  font-size: 1;
   font-size: 14px;
   color: $windows-blue;
   position: absolute;
@@ -358,9 +382,11 @@
 }
 
 .block-alshaya-acm-customer > .edit-account {
+  font-family: $arial;
+  line-height: 1;
   color: $white-five;
   min-width: 11.625rem;
-  top: -5.5rem;
+  top: -5.25rem;
   font-size: 0.75rem;
   text-transform: lowercase;
   font-weight: bold;
