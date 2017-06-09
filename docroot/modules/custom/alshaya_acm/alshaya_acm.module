@@ -90,6 +90,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Flag for whether show the secure checkout button or not.
   $secure_checkout_access = TRUE;
+  // If there is at least one item out of scope, show the error.
+  $out_of_stock_message = '';
 
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
@@ -148,19 +150,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ];
       }
 
-      // TODO: Get delivery options from conductor.
-      $product_delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
-      $product_delivery_options .= '<div class="tooltip--wrap">';
-      $product_delivery_options .= '<div class="contains--tooltip">';
-      $product_delivery_options .= '<p class="home-delivery tooltip--head">' . t('Home Delivery') . '</p>';
-      $product_delivery_options .= '<p class="tooltip">' . t('Home delivery in @days days on orders over @amount', ['@days' => 2, '@amount' => 'KWD 35']) . '<p>';
-      $product_delivery_options .= '</div>';
-      $product_delivery_options .= '<div class="contains--tooltip">';
-      $product_delivery_options .= '<p class="click-collect tooltip--head">' . t('Click & Collect') . '</p>';
-      $product_delivery_options .= '<p class="tooltip">' . t('Collect the order in store from @days days', ['@days' => '2-3']) . '</p>';
-      $product_delivery_options .= '</div>';
-      $product_delivery_options .= '</div>';
-
       $form['cart'][$id]['name'] = [
         '#theme' => 'alshaya_cart_product_name',
         '#sku_attributes' => $sku_attributes,
@@ -168,13 +157,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         '#image' => $sku_image,
         '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
         '#item_code' => $id,
-        '#available_delivery_methods' => [
-          '#markup' => $product_delivery_options,
-        ],
-      ];
-
-      $form['cart'][$id]['delivery_options'] = [
-        '#markup' => $product_delivery_options,
       ];
 
       // Adding class attribute to columns for mobile view.
@@ -188,10 +170,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ],
       ];
       $form['cart'][$id]['price']['#wrapper_attributes'] = ['class' => ['price dark']];
-      $form['cart'][$id]['delivery_options']['#wrapper_attributes'] = ['class' => ['delivery-option']];
-
-      // If there is at least one item out of scope, show the error.
-      $out_of_stock_message = '';
 
       // If item is not available in stock.
       if (!alshaya_acm_is_product_in_stock($id)) {
@@ -203,22 +181,26 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     }
   }
 
+  // Add checkout button on top.
+  $form['actions_top'] = [
+    '#type' => 'container',
+    '#weight' => -100,
+  ];
+
   if ($secure_checkout_access) {
     // Change checkout button text to 'Checkout Securely'.
     $form['actions']['checkout']['#value'] = t('checkout securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
 
-    // Add checkout button on top.
-    $form['actions_top'] = [
-      '#type' => 'container',
-      '#weight' => -100,
+    // Added link markup.
+    $form['actions_top']['checkout_top'] = [
+      '#markup' => '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
     ];
-
-    $form['actions_top']['checkout_top']['#markup'] = '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>';
   }
   else {
     $form['actions']['checkout']['#access'] = FALSE;
+    $form['actions_top']['checkout_top']['#access'] = FALSE;
   }
 
   // Out of stock error message.
@@ -258,7 +240,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['promotion_code_wrapper']['coupon'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
-    '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span>',
+    '#prefix' => '<div class="coupon-code-wrapper">',
+    '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span></div>',
     '#default_value' => !empty($form_state->getValue('coupon')) ? $form_state->getValue('coupon') : '',
   ];
 
@@ -360,6 +343,8 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     // Ajax response to update page section.
     $response->addCommand(new InvokeCommand(NULL, 'updateOutOfStockDom', [$out_of_stock_message]));
     $response->addCommand(new ReplaceCommand('#secure-checkout-button', $form['actions']));
+    // Removing the top 'checkout securely' button.
+    $response->addCommand(new RemoveCommand('#checkout-top'));
     $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
     return $response;
   }
@@ -401,6 +386,8 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $newcart->getCartItemsCount()])));
   $response->addCommand(new InvokeCommand('.select-quantity-' . str_replace(' ', '-', $sku), $select_quantity_class_method, ['stock-quantity-error']));
   $response->addCommand(new HtmlCommand('#stock-error-' . str_replace(' ', '-', $sku), $error_message));
+  // Update the top 'checkout securely' wrapper.
+  $response->addCommand(new HtmlCommand('#edit-actions-top', $form['actions_top']));
 
   // Again check all item in basket if they are out of stock or not. If no item
   // out of stock, then remove the out of stock error message div.
@@ -547,6 +534,26 @@ function alshaya_acm_price_format($price) {
   ];
 
   return render($output);
+}
+
+/**
+ * Wrapper function to format price value with currency.
+ *
+ * It also does an additional check for free and returns FREE as text if price
+ * is 0.
+ *
+ * @param mixed $price
+ *   Price value.
+ *
+ * @return mixed|null
+ *   Return rendered theme with html for price.
+ */
+function alshaya_acm_price_get_formatted_price($price) {
+  if (empty($price)) {
+    return t('FREE');
+  }
+
+  return alshaya_acm_price_format($price);
 }
 
 /**

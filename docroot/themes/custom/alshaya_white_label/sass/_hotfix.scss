@@ -20,6 +20,12 @@ body.ie {
   &.alias--cart #table-cart-items .form-type-select::after {
     line-height: 34px;
   }
+
+  // We have added a IE polyfill to make details element work, it converts the summary into <a> tag, so
+  // adding color for it.
+  summary a.details-title {
+    color: $grey-ash;
+  }
 }
 
 /**
@@ -52,6 +58,10 @@ body.ucbrowser {
       }
     }
   }
+}
+
+#text-resize-control {
+  display: none !important;
 }
 
 /**

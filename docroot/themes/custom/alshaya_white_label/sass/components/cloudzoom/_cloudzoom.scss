@@ -243,6 +243,7 @@
 
 #cloud-zoom-big {
   top: 13.13rem !important;
+  z-index: 99;
 
   @include if-rtl {
     right: 103% !important;

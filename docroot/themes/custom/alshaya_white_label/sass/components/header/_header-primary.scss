@@ -257,6 +257,10 @@ header {
       margin-top: 6px;
       margin-right: 2px;
       padding-#{$right}: 1rem;
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -458,7 +462,7 @@ header {
     display: block;
 
     a {
-      padding: 0.875rem 0.875rem 0.5rem 0.625rem;
+      padding: 0.87rem 0.875rem 0.5rem 0.625rem;
     }
 
     .store {
@@ -872,10 +876,10 @@ header {
 
     ul.menu--one__list {
       background: $white-five;
-      width: 79.9%;
+      width: 16.8125rem;
       height: 100%;
       position: fixed;
-      top: 50px;
+      top: 2.9375rem;
       z-index: 20;
       overflow-y: scroll;
       margin-top: 0;
@@ -884,7 +888,7 @@ header {
 
   .main--menu a {
     font-family: $alshaya-thin;
-    font-size: 12px;
+    font-size: 0.75rem;
     text-decoration: none;
     color: $brownish-grey;
     display: block;
@@ -899,9 +903,9 @@ header {
     color: $marine-blue;
     display: block;
     font-size: 12px;
-    padding: 0.9375rem 0;
+    padding: 1rem 0;
     padding-bottom: 0.9375rem;
-    padding-#{$right}: 0.625rem;
+    padding-#{$right}: 0.25rem;
     text-transform: lowercase;
   }
 
@@ -958,7 +962,8 @@ header {
 
   .menu__back {
     background: url('../imgs/icons/ic-chevronleft.svg') no-repeat;
-    margin-#{$right}: 0.625rem;
+    margin-#{$right}: 0.4rem;
+    margin-#{$left}: 0.375rem;
     vertical-align: middle;
   }
 
@@ -986,7 +991,7 @@ header {
   .menu--four__list {
     will-change: $left;
     // transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
-    #{$left}: 100%;
+    #{$left}: -100%;
     transition: $left 0.5s ease-in-out;
     position: absolute;
     top: 0;
@@ -1042,15 +1047,16 @@ header {
 
 .mobile--close {
   background: $white-five;
-  position: relative;
-  top: 9px;
-  #{$left}: 81.5%;
+  position: fixed;
+  top: 0.5rem;
+  #{$left}: -100%;
   width: 35px;
-  height: 32px;
+  height: 1.9375rem;
   z-index: 12;
   text-align: center;
-  padding-top: 4px;
+  padding-top: 0.25rem;
   will-change: $left;
+  transition: #{$left 0.5s ease-in-out};
 
   span {
     background: url('../imgs/icons/ic-close.svg') center center no-repeat;
@@ -1068,10 +1074,12 @@ header {
 
   position: fixed;
   top: 0;
-  width: 80%;
   background: $white;
   z-index: 10;
   display: table;
+  transition: #{$left 0.5s ease-in-out};
+  #{$left}: -100%;
+  width: 270px;
 
   .one {
     @include breakpoint($only-tablet) {
@@ -1081,9 +1089,13 @@ header {
 
     font-family: $alshaya-thin;
     font-size: 14px;
-    padding: 1rem 1.5rem;
+    padding: 0.9rem 1.5rem;
     display: table-cell;
     text-align: center;
+
+    &.shop {
+      padding: 0.9rem 2.05rem;
+    }
   }
 
   .active {
@@ -1096,17 +1108,17 @@ header {
 }
 
 // Tablet Specific menu width
-@include breakpoint($only-tablet) {
-  .toggle--sign {
-    width: 270px;
+@include breakpoint($upto-desktop) {
+  .menu--active .toggle--sign {
+    #{$left}: 0;
   }
 
-  .mobile--close {
+  .menu--active .mobile--close {
     #{$left}: 280px;
   }
 
   .main--menu ul.menu--one__list {
-    width: 270px;
+    width: 16.8125rem;
   }
 }
 
@@ -1160,7 +1172,7 @@ header {
     }
 
     ul.menu--one__list {
-      top: 90px;
+      top: 87px;
     }
 
     .mobile--close {
@@ -1168,7 +1180,7 @@ header {
     }
 
     .c-my-account-nav {
-      top: 5.6875rem;
+      top: 5.4375rem;
     }
   }
 
@@ -1177,7 +1189,7 @@ header {
   }
 
   ul.menu--one__list {
-    top: 50px;
+    top: 2.9375rem;
   }
 
   .mobile--close {
@@ -1207,8 +1219,9 @@ header {
 
   a {
     display: block;
+    font-size: 2rem;
 
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($desktop) {
       height: 2.875rem;
     }
   }

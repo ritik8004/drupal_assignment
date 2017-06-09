@@ -1,0 +1,60 @@
+﻿boys,boy
+girls,girl
+diaper,nappy
+dress,dresses
+matress,matresses
+towel,towels,bathtowel
+cot,crib,bed
+chair,seat,stool
+hats,hat,beanie,cap
+pushchair,pram,stroller
+accessory,accessories
+pyjama,pyjamas
+t-shirt,t-shirts
+slipper,slippers
+sleepsuit,sleepsuits
+maternity,motherhood
+bottle,bottles
+bouncer,bouncers
+jogger,joggers
+short,shorts
+blanket,blankets
+top,tops
+nursing top,nursing tops
+trousers,pants
+skirt,skirts
+baby monitor,baby monitors
+sock,socks
+cup holder,cups holder
+shoe,shoes
+boots,canvas shoes
+backpack,changing bag
+teat,teats,nipple
+baby bath,baby baths
+wardrobe,cabinet
+rattle,rattles,clatter,soother,soothers
+doll,dolls,dummy,toy
+vest,vests,waistcoat
+brief,briefs,underwear,underclothes
+cot bed,cradle
+moses basket,moses baskets
+sheet,sheets,bedding
+bib,bibs
+sandal,sandals
+teether,teethers
+legging,leggings
+shirt,shirts
+bodysuit,bodysuits
+band,bands,headband
+brush,brushs
+glove,gloves,mitts
+cardigan,jacket,sweater,overcoat
+highchair,highchair,babychair
+sleeping bag,sleeping bags
+pillow,pillows,cushion,cushions
+car seat,car seats,baby seat
+lamp,bulb
+thermometer,thermometers
+sleep support pillow,multi purpose pillow
+duvet,duvets
+breast pump,breast pumps

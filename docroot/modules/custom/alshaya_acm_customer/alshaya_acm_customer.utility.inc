@@ -24,7 +24,7 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
   $user = user_load_by_mail($mail);
 
   // We don't update Magento for admin created users.
-  if (empty($user->get('acq_customer_id')->getString())) {
+  if (empty($password) && empty($user->get('acq_customer_id')->getString())) {
     return NULL;
   }
 

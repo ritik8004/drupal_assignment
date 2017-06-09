@@ -2,7 +2,7 @@
   z-index: 999;
   position: absolute;
   top: 7.1rem;
-  #{$right}: calc((100% - 1218px) / 2);
+  #{$right}: calc((100% - 1214px) / 2);
 
   @include breakpoint($only-tablet) {
     top: 4.625rem;
@@ -38,7 +38,7 @@
 
     .col-1 {
       float: $left;
-      width: 4rem;
+      width: 4.313rem;
       font-family: $arial;
       font-size: 0.625rem;
       text-align: center;
@@ -49,7 +49,7 @@
       }
 
       img {
-        margin-bottom: 0.7rem;
+        margin-bottom: 0.4375rem;
       }
     }
 
@@ -60,7 +60,7 @@
       font-size: 0.688rem;
       float: $left;
       width: 9.5rem;
-      margin-#{left}: 1rem;
+      margin-#{left}: 0.6875rem;
 
       .name {
         font-family: $alshaya-thin;
@@ -72,7 +72,7 @@
       }
 
       a {
-        width: 100px;
+        width: 6.563rem;
         height: 35px;
         margin-top: 13px;
         display: block;

@@ -103,6 +103,7 @@
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
         $('.remove--toggle').removeClass('remove--toggle');
+        $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
       });
 
       var header_timer;

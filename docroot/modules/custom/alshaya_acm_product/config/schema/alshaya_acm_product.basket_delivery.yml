@@ -1,0 +1,16 @@
+alshaya_acm_product.basket_delivery:
+  type: config_object
+  label: 'Alshaya ACM Basket Delivery settings'
+  mapping:
+    home_delivery_title:
+      type: string
+      label: 'Home Delivery title'
+    home_delivery_tooltip:
+      type: string
+      label: 'Home Delivery tooltip'
+    click_collect_title:
+      type: string
+      label: 'Click and Collect title'
+    click_collect_tooltip:
+      type: string
+      label: 'Click and Collect tooltip'
