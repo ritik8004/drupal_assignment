@@ -56,7 +56,6 @@
 
       $.fn.stopSpinner = function(data) {
         l.ladda('stop');
-        debugger;
         if (data.message === 'success') {
           $('.ladda-label').html(Drupal.t('added'));
         }
