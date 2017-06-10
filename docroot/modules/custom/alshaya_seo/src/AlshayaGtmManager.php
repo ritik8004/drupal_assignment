@@ -170,7 +170,6 @@ class AlshayaGtmManager {
     $attributes['gtm-dimension3'] = 'Baby Clothing';
     $attributes['gtm-stock'] = alshaya_acm_is_product_in_stock($sku->getSku()) ? 'in stock' : 'out of stock';
     $attributes['gtm-sku-type'] = $sku->bundle();
-    $attributes['gtm-product-type'] = 'simple/configurable';
 
     return $attributes;
   }

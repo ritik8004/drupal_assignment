@@ -9,6 +9,7 @@
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
 
+      // Global variables & selectors.
       var impressions = [];
       var body = $('body');
       var currencyCode = body.attr('gtm-currency');
@@ -106,13 +107,15 @@
           if (responseMessage === 'success') {
             var targetEl = event.target.activeElement;
             var addedProductSelector = '';
-
+            var quantity = 1;
             // If the add-to-cart button was triggered from modal, the target element will be modal.
             if ($(targetEl).hasClass('ui-dialog')) {
               addedProductSelector = $(targetEl).find('article[gtm-type="gtm-product-link"]');
+              quantity = $(targetEl).find('form-item-quantity select').val();
             }
             else {
               addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
+              quantity = $(targetEl).closest('.sku-base-form').find('.form-item-quantity select').val();
             }
 
             if (addedProductSelector) {
@@ -121,7 +124,7 @@
               delete product.position;
 
               // Set product quantity to 1 since we are adding item to cart here.
-              product.quantity = 1;
+              product.quantity = quantity;
 
               // Calculate metric 1 value.
               product.metric1 = product.price * product.quantity;
@@ -176,6 +179,8 @@
         });
       });
 
+      /** Reduce item count in cart **/
+
       /** Product Click Handler **/
       // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {
@@ -225,8 +230,8 @@
       'category': product.attr('gtm-category'),
       'variant': product.attr('gtm-product-sku'),
       'position': 1,
-      'dimension1': product.attr('gtm-dimension1'),
-      'dimension2': product.attr('gtm-dimension2'),
+      'dimension1': '',
+      'dimension2': '',
       'dimension3': product.attr('gtm-dimension3'),
       'dimension4': product.attr('gtm-stock'),
       'dimension5': product.attr('gtm-sku-type'),
