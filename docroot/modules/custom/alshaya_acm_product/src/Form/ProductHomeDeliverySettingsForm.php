@@ -70,9 +70,9 @@ class ProductHomeDeliverySettingsForm extends ConfigFormBase {
 
     $form['title_price'] = [
       '#type' => 'textfield',
-      '#required' => TRUE,
+      '#required' => FALSE,
       '#title' => $this->t('Price displayed in title'),
-      '#description' => $this->t('Enter 0 for free'),
+      '#description' => $this->t('Leave blank for free'),
       '#default_value' => $config->get('title_price'),
     ];
 
@@ -107,9 +107,9 @@ class ProductHomeDeliverySettingsForm extends ConfigFormBase {
 
     $form['options_standard_price_options_one_price'] = [
       '#type' => 'textfield',
-      '#required' => TRUE,
+      '#required' => FALSE,
       '#title' => $this->t('Standard option first line price'),
-      '#description' => $this->t('Enter 0 for free'),
+      '#description' => $this->t('Leave blank for free'),
       '#default_value' => $config->get('options_standard_price_options_one_price'),
     ];
 
@@ -122,9 +122,9 @@ class ProductHomeDeliverySettingsForm extends ConfigFormBase {
 
     $form['options_standard_price_options_two_price'] = [
       '#type' => 'textfield',
-      '#required' => TRUE,
+      '#required' => FALSE,
       '#title' => $this->t('Standard option second line price'),
-      '#description' => $this->t('Enter 0 for free'),
+      '#description' => $this->t('Leave blank for free'),
       '#default_value' => $config->get('options_standard_price_options_two_price'),
     ];
 

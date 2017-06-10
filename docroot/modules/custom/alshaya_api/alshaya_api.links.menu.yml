@@ -1,6 +1,0 @@
-alshaya_api.api_settings_form:
-  title: 'Magento API settings'
-  parent: acq_commerce.configuration
-  description: 'Configure Magento API settings.'
-  weight: 1
-  route_name: alshaya_api.api_settings_form

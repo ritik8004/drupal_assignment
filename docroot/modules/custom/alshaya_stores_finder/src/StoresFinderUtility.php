@@ -46,11 +46,13 @@ class StoresFinderUtility {
    *
    * @param string $store_code
    *   Store code.
+   * @param bool $log_not_found
+   *   Log errors when store not found. Can be false during sync.
    *
    * @return \Drupal\node\Entity\Node
    *   Store node.
    */
-  public function getStoreFromCode($store_code) {
+  public function getStoreFromCode($store_code, $log_not_found = TRUE) {
 
     $query = $this->nodeStorage->getQuery();
     $query->condition('field_store_locator_id', $store_code);
@@ -58,7 +60,9 @@ class StoresFinderUtility {
 
     // No stores found.
     if (count($ids) === 0) {
-      $this->logger->error('No store node found for store code: @store_code.', ['@store_code' => $store_code]);
+      if ($log_not_found) {
+        $this->logger->error('No store node found for store code: @store_code.', ['@store_code' => $store_code]);
+      }
       return NULL;
     }
     // Some issue in DATA.
@@ -148,11 +152,22 @@ class StoresFinderUtility {
 
     // Prepare the alternate locale data.
     foreach ($languages as $lang => $language) {
-      $config = \Drupal::languageManager()->getLanguageConfigOverride($lang, 'alshaya_api.settings');
+      // For default language, we access the config directly.
+      if ($lang == \Drupal::languageManager()->getDefaultLanguage()->getId()) {
+        $config = \Drupal::config('acq_commerce.store');
+      }
+      // We get store id from translated config for other languages.
+      else {
+        $config = \Drupal::languageManager()->getLanguageConfigOverride($lang, 'acq_commerce.store');
+      }
+
+      // Get the store id.
       $store_id = $config->get('store_id');
 
+      // Get all stores for particular store id.
       $stores = $this->apiWrapper->getStores($store_id);
 
+      // Loop through all the stores and add/edit/translate the store node.
       foreach ($stores['items'] as $store) {
         $this->updateStore($store, $lang);
       }
@@ -168,7 +183,7 @@ class StoresFinderUtility {
    *   Language code.
    */
   protected function updateStore(array $store, $langcode) {
-    if ($node = $this->getStoreFromCode($store['store_code'])) {
+    if ($node = $this->getStoreFromCode($store['store_code'], FALSE)) {
       if ($node->hasTranslation($langcode)) {
         $node = $node->getTranslation($langcode);
         $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], 'langcode' => $store['langcode']]);

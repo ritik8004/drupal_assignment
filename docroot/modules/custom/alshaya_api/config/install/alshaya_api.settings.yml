@@ -1,8 +1,6 @@
 magento_host: ''
 magento_api_base: ''
-store_id: 1
 verify_ssl: 1
 token_cache_time: 86400
 username: ''
 password: ''
-langcode: en

@@ -1,4 +1,0 @@
-alshaya_api.api_settings_form:
-  route_name: alshaya_api.api_settings_form
-  title: 'Magento API settings'
-  base_route: alshaya_api.api_settings_form

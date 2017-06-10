@@ -1,0 +1,4 @@
+alshaya_stores_finder.configuration:
+  route_name: alshaya_stores_finder.configuration
+  title: 'Store finder configuration'
+  base_route: alshaya_stores_finder.configuration

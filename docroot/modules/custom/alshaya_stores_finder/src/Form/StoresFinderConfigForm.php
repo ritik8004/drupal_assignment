@@ -58,8 +58,8 @@ class StoresFinderConfigForm extends ConfigFormBase {
     $form['pdp_click_collect_price'] = [
       '#type' => 'textfield',
       '#title' => $this->t('PDP: Click and Collect price'),
-      '#description' => $this->t('Please enter 0 for free.'),
-      '#required' => TRUE,
+      '#description' => $this->t('Leave blank for free'),
+      '#required' => FALSE,
       '#default_value' => $config->get('pdp_click_collect_price'),
     ];
 

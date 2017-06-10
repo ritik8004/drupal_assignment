@@ -1,5 +1,0 @@
-alshaya_api.settings:
-  title: 'Alshaya API settings'
-  base_route_name: alshaya_api.api_settings_form
-  names:
-    - alshaya_api.settings

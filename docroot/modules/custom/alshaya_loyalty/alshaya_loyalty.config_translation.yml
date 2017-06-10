@@ -1,4 +1,4 @@
-alshaya_loyalty.loyalty_settings_form:
+alshaya_loyalty.loyalty_settings:
   title: 'Loyalty settings'
   base_route_name: alshaya_loyalty.loyalty_settings_form
   names:

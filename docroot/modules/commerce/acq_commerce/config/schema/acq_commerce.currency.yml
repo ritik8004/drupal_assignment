@@ -1,5 +1,3 @@
-# Schema for the configuration files of the Acquia Commerce module.
-
 acq_commerce.currency:
   type: config_object
   label: 'Currency Settings'
@@ -10,3 +8,9 @@ acq_commerce.currency:
     currency_code_position:
       type: label
       label: 'Currency Code Position'
+    decimal_points:
+      type: label
+      label: 'Decimal Points'
+    langcode:
+      type: string
+      label: 'Language code'

@@ -4,13 +4,3 @@
  * @file
  * Contains general hooks and alters.
  */
-
-/**
- * Implements hook_alshaya_i18n_onetime_translation_add().
- */
-function alshaya_api_alshaya_i18n_onetime_translation_add() {
-  // Set contact form translation.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings');
-  $config->set('store_id', 3);
-  $config->save();
-}
