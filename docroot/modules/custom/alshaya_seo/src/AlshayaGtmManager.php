@@ -136,7 +136,7 @@ class AlshayaGtmManager {
       }
     }
 
-    $attributes['gtm-category'] = implode(', ', $terms);
+    $attributes['gtm-category'] = implode('/', $terms);
     $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
