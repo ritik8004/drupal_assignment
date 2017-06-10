@@ -17,6 +17,8 @@
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]');
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]');
+      var originalCartQty = 0;
+      var updatedCartQty = 0;
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -108,6 +110,8 @@
             var targetEl = event.target.activeElement;
             var addedProductSelector = '';
             var quantity = 1;
+            var size = '';
+
             // If the add-to-cart button was triggered from modal, the target element will be modal.
             if ($(targetEl).hasClass('ui-dialog')) {
               addedProductSelector = $(targetEl).find('article[gtm-type="gtm-product-link"]');
@@ -116,6 +120,7 @@
             else {
               addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
               quantity = $(targetEl).closest('.sku-base-form').find('.form-item-quantity select').val();
+              size = $(targetEl).closest('.sku-base-form').find('.form-item-configurables-size select').val();
             }
 
             if (addedProductSelector) {
@@ -123,8 +128,11 @@
               // Remove product position: Not needed while adding to cart.
               delete product.position;
 
-              // Set product quantity to 1 since we are adding item to cart here.
+              // Set product quantity to selected quatity.
               product.quantity = quantity;
+
+              // Set product size to selected size.
+              product.dimension1 = size;
 
               // Calculate metric 1 value.
               product.metric1 = product.price * product.quantity;
@@ -147,6 +155,53 @@
         }
       });
 
+      /** Quantity update in cart. **/
+      // Trigger removeFromCart & addToCart events based on the quantity update on cart page.
+      $('select[gtm-type="gtm-quantity"]').focus(function() {
+        originalCartQty = $(this).val();
+      }).once('js-event').bind('change', function() {
+        if (originalCartQty !== 0) {
+          updatedCartQty = $(this).val();
+          var diffQty = updatedCartQty - originalCartQty;
+          var cartItem = $(this).closest('td.quantity').siblings('td.name').find('[gtm-type="gtm-remove-cart-wrapper"]');
+          var product = Drupal.alshaya_seo_gtm_get_product_values(cartItem);
+          var event = '';
+
+          // Set updated product quantity.
+          product.quantity = Math.abs(diffQty);
+
+          //Set item's size as dimension1.
+          product.dimension1 = cartItem.attr('gtm-size');
+
+          // Remove product position: Not needed while updating item in cart.
+          delete product.position;
+
+          product.metric1 = product.quantity * product.price;
+
+          if (diffQty < 0) {
+            event = 'removeFromCart';
+            product.metric1 = -1 * product.metric1;
+          }
+          else {
+            event = 'addToCart';
+          }
+
+          var data = {
+            'event': event,
+            'ecommerce': {
+              'currencyCode': currencyCode,
+              'add': {
+                'products': [
+                  product
+                ]
+              }
+            }
+          };
+
+          dataLayer.push(data);
+        }
+      });
+
       /** Remove Product from cart **/
       // Add click handler to fire 'removeFromCart' event to GTM.
       removeCartSelector.each(function() {
@@ -157,6 +212,9 @@
 
           // Set product quantity to the number of items selected for quantity.
           product.quantity = $(this).closest('td.quantity').find('select').val();
+
+          // Set selected size as dimension1.
+          product.dimension1 = removeItem.attr('gtm-size');
 
           // Remove product position: Not needed while removing item from cart.
           delete product.position;

@@ -121,7 +121,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Load the first image.
       $sku_image = alshaya_acm_get_product_display_image($id, '137x144');
       $item['quantity']['#type'] = 'select';
-
+      $item['quantity']['#attributes']['gtm-type'] = 'gtm-quantity';
       // Add ajax callback to update cart's total on quantity change.
       $item['quantity']['#ajax'] = [
         'callback' => 'alshaya_acm_cart_ajax_quantity_callback',
@@ -129,6 +129,13 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       ];
 
       $remove_url = Url::fromUserInput('/cart/remove/' . $id);
+      $remove_url_options = [
+        'attributes' => [
+          'gtm-type' => 'gtm-remove-cart',
+        ],
+      ];
+      $remove_url->setOptions($remove_url_options);
+
       $item['quantity']['#prefix'] = '<div class="select-quantity-' . str_replace(' ', '-', $id) . '">';
       $item['quantity']['#suffix'] = '</div>';
       $item['quantity']['#suffix'] .= Link::fromTextAndUrl(t('Remove'), $remove_url)

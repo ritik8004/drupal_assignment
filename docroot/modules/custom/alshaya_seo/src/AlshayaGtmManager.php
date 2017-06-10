@@ -6,6 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\node\Entity\Node;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Class AlshayaGtmManager.
@@ -82,7 +83,7 @@ class AlshayaGtmManager {
     'dimension2' => 'gtm-dimension2',
     'dimension3' => 'gtm-dimension3',
     'dimension4' => 'gtm-stock',
-    'dimension5' => 'gtm-product-type',
+    'dimension5' => 'gtm-sku-type',
     'metric1' => '',
   ];
 
@@ -122,11 +123,20 @@ class AlshayaGtmManager {
    */
   public function fetchProductGtmAttributes(Node $product, $view_mode) {
     $skuId = $product->get('field_skus')->first()->getString();
-
+    $terms = [];
     $skuAttributes = $this->fetchSkuAtttributes($skuId);
 
     $attributes['gtm-type'] = 'gtm-product-link';
-    $attributes['gtm-category'] = $product->get('field_category')->getString();
+    $categories = $product->get('field_category')->getValue();
+
+    if (count($categories)) {
+      foreach ($categories as $category) {
+        $term = Term::load($category['target_id']);
+        $terms[] = $term->getName();
+      }
+    }
+
+    $attributes['gtm-category'] = implode(', ', $terms);
     $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
@@ -165,8 +175,11 @@ class AlshayaGtmManager {
     $attributes['gtm-product-sku'] = '';
 
     // @TODO: This is getting static, need to find a way or discuss.
-    $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
-    $attributes['gtm-dimension2'] = $sku->get('attr_color')->getString();
+    // Dimension1 & 2 corrrespond to size & color.
+    // Should stay blank unless added to cart.
+    $attributes['gtm-dimension1'] = '';
+    $attributes['gtm-dimension2'] = '';
+
     $attributes['gtm-dimension3'] = 'Baby Clothing';
     $attributes['gtm-stock'] = alshaya_acm_is_product_in_stock($sku->getSku()) ? 'in stock' : 'out of stock';
     $attributes['gtm-sku-type'] = $sku->bundle();
