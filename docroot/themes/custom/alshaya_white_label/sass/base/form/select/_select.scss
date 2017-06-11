@@ -46,3 +46,16 @@ select::-ms-expand {
     }
   }
 }
+
+@mixin select-bg($select-width) {
+  &::before {
+    width: $select-width;
+    content: "";
+    background: $whisper-dark;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 2.1875rem;
+    z-index: 1;
+  }
+}
