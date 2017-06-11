@@ -238,7 +238,15 @@
         });
       });
 
-      /** Tracking New/Returning customers **/
+      /** Tracking New customers **/
+      cartCheckoutLoginSelector.find('[a[gtm-type="checkout-as-guest"]').once('js-event').bind('click', function() {
+        Drupal.alshaya_seo_gtm_push_customer_type('New Customer');
+      });
+
+      /** Tracking Returning customers **/
+      cartCheckoutLoginSelector.find('[a[gtm-type="checkout-signin"]').once('js-event').bind('click', function() {
+        Drupal.alshaya_seo_gtm_push_customer_type('New Customer');
+      });
       
       /** Product Click Handler **/
       // Add click link handler to fire 'productClick' event to GTM.
@@ -299,5 +307,22 @@
 
     return productData;
   };
+  
+  Drupal.alshaya_seo_gtm_push_customer_type = function (customerType) {
+    var data = {
+      'event': 'checkoutOption',
+      'ecommerce': {
+        'checkout_option': {
+          'actionField': {
+            'step': 1,
+            'option': customerType
+          }
+        }
+      }
+    };
+    
+    dataLayer.push(data);
+  };
+
 })(jQuery, Drupal, dataLayer);
 
