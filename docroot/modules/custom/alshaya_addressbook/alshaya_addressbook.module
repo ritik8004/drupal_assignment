@@ -124,6 +124,9 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   // Adding mobile number field to appropriate position.
   $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'family_name');
 
+  $element['#prefix'] = '<div class="address-book-address">';
+  $element['#suffix'] = '</div>';
+
   return $element;
 }
 
