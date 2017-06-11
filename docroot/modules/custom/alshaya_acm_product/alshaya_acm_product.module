@@ -14,7 +14,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\node\NodeInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
@@ -45,16 +44,6 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
   ];
 
   return $items;
-}
-
-/**
- * Implements hook_acq_sku_product_node_alter().
- */
-function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, array $product) {
-  $visible = $product['visibility'] == 1;
-  $description = (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '';
-  $node->get('body')->setValue($description);
-  $node->setPublished($visible);
 }
 
 /**

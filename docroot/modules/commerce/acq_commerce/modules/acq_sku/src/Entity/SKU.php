@@ -236,93 +236,49 @@ class SKU extends ContentEntityBase implements SKUInterface {
   }
 
   /**
-   * Query to get ids of given skus.
-   *
-   * @param array $sku
-   *   an Array of sku.
-   *
-   * @return array|int
-   *   The SKU ids.
-   */
-  public static function getSkuIds(array $sku) {
-    $query = \Drupal::entityQuery('acq_sku')->condition('sku', $sku, 'IN');
-    $ids = $query->execute();
-
-    return $ids;
-  }
-
-  /**
    * Loads a SKU Entity from SKU.
    *
    * @param string $sku
    *   SKU to load.
+   * @param string $langcode
+   *   Language code.
+   * @param bool $log_not_found
+   *   Log errors when store not found. Can be false during sync.
    *
    * @return \Drupal\acq_sku\Entity\SKU|null
    *   Found SKU
    */
-  public static function loadFromSku($sku) {
-    $ids = SKU::getSkuIds([$sku]);
+  public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE) {
+    $query = \Drupal::entityQuery('acq_sku');
+    $query->condition('sku', $sku, 'IN');
 
-    if (count($ids) != 1) {
-      \Drupal::logger('acq_sku')->error(
-        'Duplicate product or non-existent SKU @sku found while loading.',
-        ['@sku' => $sku]
-      );
+    if (\Drupal::languageManager()->isMultilingual()) {
+      if (empty($langcode)) {
+        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      }
+
+      $query->condition('langcode', $langcode);
+    }
+
+    $ids = $query->execute();
+
+    if (count($ids) == 0) {
+      // We don't log the error while doing sync.
+      if ($log_not_found) {
+        \Drupal::logger('acq_sku')->error('No SKU found for @sku.', ['@sku' => $sku]);
+      }
+
       return NULL;
+    }
+    // For multiple entries, we just log the error and continue with first one.
+    elseif (count($ids) > 1) {
+      \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
     $id = array_shift($ids);
     $sku = SKU::load($id);
 
     return $sku;
-  }
-
-  /**
-   * Get all the cross sell sku of given skus.
-   *
-   * @param array $sku
-   *   An array of sku.
-   *
-   * @return array
-   *   Return array of cross sell skus.
-   */
-  public static function getCrossSellSkus(array $sku) {
-    $ids = SKU::getSkuIds($sku);
-    $skus = SKU::loadMultiple($ids);
-
-    $crossskus = [];
-    foreach ($skus as $sku) {
-      $crosssell = $sku->getCrossSell();
-      foreach ($crosssell as $item) {
-        $crossskus[] = $item['value'];
-      }
-    }
-
-    return $crossskus;
-  }
-
-  /**
-   * Get all the up sell sku of given skus.
-   *
-   * @param array $sku
-   *   An array of sku.
-   *
-   * @return array
-   *   Return array of up sell skus.
-   */
-  public static function getUpSellSkus(array $sku) {
-    $ids = SKU::getSkuIds($sku);
-    $skus = SKU::loadMultiple($ids);
-
-    $upsellskus = [];
-    foreach ($skus as $sku) {
-      $upSell = $sku->getUpSell();
-      foreach ($upSell as $item) {
-        $upsellskus[] = $item['value'];
-      }
-    }
-
-    return $upsellskus;
   }
 
   /**

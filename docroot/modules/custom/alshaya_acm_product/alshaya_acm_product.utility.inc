@@ -141,38 +141,25 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  *
  * @param mixed $sku
  *   SKU text or full entity object.
+ * @param string $langcode
+ *   Language code.
  *
  * @return \Drupal\acq_sku\Entity\SKU
  *   Loaded SKU entity.
  */
-function alshaya_acm_product_get_parent_sku_by_sku($sku) {
-  $sku = is_object($sku) ? $sku->getSKU() : $sku;
-
-  // Execute the query and get all SKU which have current SKU in
-  // field_configured_skus.
-  $query = \Drupal::entityQuery('acq_sku');
-  $query->condition('field_configured_skus', $sku);
-  $ids = $query->execute();
-
-  // Not a configurable product.
-  if (count($ids) === 0) {
-    return NULL;
-  }
-  // Some issue in DATA.
-  elseif (count($ids) > 1) {
-    \Drupal::logger('alshaya_acm_product')->error(
-      'SKU @sku has no or multiple parent SKUs.',
-      ['@sku' => $sku]
-    );
-
-    throw new RuntimeException('Multiple parent SKUs found');
+function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
+  if (\Drupal::languageManager()->isMultilingual()) {
+    if (empty($langcode)) {
+      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
   }
 
-  // Get the first id.
-  $parentSkuId = array_shift($ids);
+  $sku = is_object($sku) ? $sku : SKU::loadFromSku($sku, $langcode);
 
-  // Return fully load SKU.
-  return SKU::load($parentSkuId);
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+  $plugin = $sku->getPluginInstance();
+
+  return $plugin->getParentSku($sku);
 }
 
 /**
@@ -287,26 +274,25 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
  *
  * @param mixed $sku
  *   SKU name or full sku object.
+ * @param string $langcode
+ *   Language code.
  *
  * @return object
  *   Loaded node object.
  */
-function alshaya_acm_product_get_display_node($sku) {
-  $sku = is_object($sku) ? $sku->getSKU() : $sku;
-
-  if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
-    $sku = $parent_sku->getSku();
+function alshaya_acm_product_get_display_node($sku, $langcode = '') {
+  if (\Drupal::languageManager()->isMultilingual()) {
+    if (empty($langcode)) {
+      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
   }
 
-  $query = \Drupal::entityQuery('node')
-    ->condition('type', 'acq_product')
-    ->condition('field_skus', $sku)
-    ->range(0, 1);
+  $sku = is_object($sku) ? $sku : SKU::loadFromSku($sku, $langcode);
 
-  $result = $query->execute();
-  $nid = reset($result);
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+  $plugin = $sku->getPluginInstance();
 
-  return Node::load($nid);
+  return $plugin->getDisplayNode($sku);
 }
 
 /**

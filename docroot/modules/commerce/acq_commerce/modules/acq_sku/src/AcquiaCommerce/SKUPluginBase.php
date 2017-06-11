@@ -5,6 +5,7 @@ namespace Drupal\acq_sku\AcquiaCommerce;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Link;
 
@@ -132,11 +133,14 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   public function getParentSku(SKU $sku) {
     $query = \Drupal::database()->select('acq_sku', 'acq_sku');
     $query->addField('acq_sku', 'sku');
-    $query->join(
-      'acq_sku__field_configured_skus',
-      'child_sku', 'acq_sku.id = child_sku.entity_id'
-    );
+    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
     $query->condition("child_sku.field_configured_skus_value", $sku->getSku());
+
+    if (\Drupal::languageManager()->isMultilingual()) {
+      $query->condition('acq_sku.langcode', $sku->get('langcode')->getString());
+      $query->condition('child_sku.langcode', $sku->get('langcode')->getString());
+    }
+
     $parent_sku = $query->execute()->fetchField();
 
     if (empty($parent_sku)) {
@@ -149,20 +153,49 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function getDisplayNode(SKU $sku) {
-    if ($parent_sku = $this->getParentSku($sku)) {
-      $sku = $parent_sku;
+  public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE) {
+    if ($check_parent) {
+      if ($parent_sku = $this->getParentSku($sku)) {
+        $sku = $parent_sku;
+      }
     }
 
-    $query = \Drupal::entityQuery('node')
-      ->condition('type', 'acq_product')
-      ->condition('field_skus', $sku->getSku())
-      ->range(0, 1);
+    $query = \Drupal::entityQuery('node');
+    $query->condition('type', 'acq_product');
+    $query->condition('field_skus', $sku->getSku());
+
+    $query->range(0, 1);
 
     $result = $query->execute();
-    $nid = reset($result);
 
-    return Node::load($nid);
+    if (empty($result)) {
+      return NULL;
+    }
+
+    $nid = reset($result);
+    $node = Node::load($nid);
+
+    // Check language checks if site is in multilingual mode.
+    if (\Drupal::languageManager()->isMultilingual()) {
+      // If language of SKU and node are the same, we return the node.
+      if ($node->language()->getId() == $sku->get('langcode')->getString()) {
+        return $node;
+      }
+
+      // If node has translation, we return the translation.
+      if ($node->hasTranslation($sku->get('langcode')->getString())) {
+        return $node->getTranslation($sku->get('langcode')->getString());
+      }
+
+      // If translation not available and create_translation flag is true.
+      if ($create_translation && $sku->get('langcode')->getString() != LanguageInterface::LANGCODE_NOT_SPECIFIED) {
+        return $node->addTranslation($sku->get('langcode')->getString());
+      }
+
+      return NULL;
+    }
+
+    return $node;
   }
 
 }
