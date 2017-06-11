@@ -10,7 +10,6 @@ use Drupal\alshaya_seo\AlshayaGtmManager;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -269,10 +268,38 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
               unset($data_layer[$key]);
             }
           }
+
+          // Should not be set until product added to the cart.
+          $processedAttributes['dimension1'] = '';
+          $processedAttributes['dimension2'] = '';
+
           $data_layer = array_merge($data_layer, $processedAttributes);
           $data_layer['pageType'] = $gtmManager->convertCurrentRouteToGtmPageName($gtmManager->getGtmContainer());
         }
       }
+      break;
+
+    case 'acq_checkout.form':
+      if ($currentRoute['route_params']['step'] === 'login') {
+        $cartItemAttributes = $gtmManager->fetchCartItemAttributes();
+        foreach ($cartItemAttributes as $key => $cartItem) {
+          $products[] = $gtmManager->convertHtmlAttributesToDatalayer($cartItem);
+        }
+      }
+      $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
+
+      $data_layer = [
+        'event' => 'checkout',
+        'ecommerce' => [
+          'currencyCode' => $currencyCode,
+          'checkout' => [
+            'actionField' => [
+              'step' => 1,
+            ],
+            'products' => $products,
+          ],
+        ],
+      ];
       break;
   }
 }
@@ -296,20 +323,11 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
   /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtmManager */
   $gtmManager = \Drupal::service('alshaya_seo.gtm_manager');
   $skuAtributes = $gtmManager->fetchSkuAtttributes($variables['item_code']);
-  $terms = [];
 
   // Fetch product for this sku to get the category.
   $productNode = alshaya_acm_product_get_display_node($variables['item_code']);
-  $categories = $productNode->get('field_category')->getValue();
 
-  if (count($categories)) {
-    foreach ($categories as $category) {
-      $term = Term::load($category['target_id']);
-      $terms[] = $term->getName();
-    }
-  }
-
-  $attributes['gtm-category'] = implode(', ', $terms);
+  $attributes['gtm-category'] = $gtmManager->fetchProductCategories($productNode);;
 
   $skuAtributes['gtm-type'] = 'gtm-remove-cart-wrapper';
   $skuAtributes['gtm-size'] = $variables['sku_attributes']['attr_size']['value'];

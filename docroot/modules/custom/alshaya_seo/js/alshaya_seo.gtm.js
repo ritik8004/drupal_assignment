@@ -17,6 +17,7 @@
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]');
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]');
+      var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]')
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -72,7 +73,7 @@
 
         dataLayer.push(data_pdp);
       }
-      else if ($.inArray(gtmPageType, impressionPages)) {
+      else if ($.inArray(gtmPageType, impressionPages) !== -1) {
         var count = 1;
         productLinkSelector.each(function() {
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
@@ -237,8 +238,8 @@
         });
       });
 
-      /** Reduce item count in cart **/
-
+      /** Tracking New/Returning customers **/
+      
       /** Product Click Handler **/
       // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {

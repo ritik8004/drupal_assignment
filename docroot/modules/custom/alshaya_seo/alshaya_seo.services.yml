@@ -1,7 +1,7 @@
 services:
   alshaya_seo.gtm_manager:
     class: Drupal\alshaya_seo\AlshayaGtmManager
-    arguments: [ '@current_route_match', '@config.factory' ]
+    arguments: [ '@current_route_match', '@config.factory', '@acq_cart.cart_storage' ]
   alshaya_seo.sitemap_breadcrumb:
     class: Drupal\alshaya_seo\Breadcrumb\AlshayaSiteMapBreadcrumb
     tags:

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo;
 
+use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
@@ -72,7 +73,7 @@ class AlshayaGtmManager {
   /**
    * Html attributes mapped with GTM tags.
    */
-  const PDP_GTM_KEYS = [
+  const GTM_KEYS = [
     'name' => 'gtm-name',
     'id' => 'gtm-main-sku',
     'price' => 'gtm-price',
@@ -95,17 +96,28 @@ class AlshayaGtmManager {
   protected $configFactory;
 
   /**
+   * The cart storage service.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartStorage;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   Current route matcher service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config Factory service.
+   * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
+   *   Cart Storage service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
-                              ConfigFactoryInterface $configFactory) {
+                              ConfigFactoryInterface $configFactory,
+                              CartStorageInterface $cartStorage) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
+    $this->cartStorage = $cartStorage;
   }
 
   /**
@@ -119,24 +131,15 @@ class AlshayaGtmManager {
    * @return array
    *   Array of attributes to be exposed to GTM.
    *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    * @throws \InvalidArgumentException
    */
   public function fetchProductGtmAttributes(Node $product, $view_mode) {
     $skuId = $product->get('field_skus')->first()->getString();
-    $terms = [];
     $skuAttributes = $this->fetchSkuAtttributes($skuId);
 
     $attributes['gtm-type'] = 'gtm-product-link';
-    $categories = $product->get('field_category')->getValue();
-
-    if (count($categories)) {
-      foreach ($categories as $category) {
-        $term = Term::load($category['target_id']);
-        $terms[] = $term->getName();
-      }
-    }
-
-    $attributes['gtm-category'] = implode('/', $terms);
+    $attributes['gtm-category'] = $this->fetchProductCategories($product);
     $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
@@ -177,7 +180,7 @@ class AlshayaGtmManager {
     // @TODO: This is getting static, need to find a way or discuss.
     // Dimension1 & 2 corrrespond to size & color.
     // Should stay blank unless added to cart.
-    $attributes['gtm-dimension1'] = '';
+    $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
     $attributes['gtm-dimension2'] = '';
 
     $attributes['gtm-dimension3'] = 'Baby Clothing';
@@ -261,6 +264,11 @@ class AlshayaGtmManager {
       if (array_key_exists($routeIdentifier, $gtmRoutes)) {
         $gtmPageType = self::ROUTE_GTM_MAPPING[$routeIdentifier];
       }
+
+      if (($currentRoute['route_name'] === 'acq_checkout.form') &&
+        ($currentRoute['route_params']['step'] === 'login')) {
+        $gtmPageType = 'cart-checkout-login';
+      }
     }
 
     return $gtmPageType;
@@ -324,19 +332,77 @@ class AlshayaGtmManager {
     $processed_attributes['ecommerce']['detail']['actionField'] = [
       'list' => $this->convertCurrentRouteToGtmPageName($this->getGtmContainer()),
     ];
+
+    $processed_attributes['ecommerce']['detail']['products'][] = $this->convertHtmlAttributesToDatalayer($attributes);
+    return $processed_attributes;
+  }
+
+  /**
+   * Converts attributes calculated for HTML to Datalayer attributes.
+   */
+  public function convertHtmlAttributesToDatalayer($attributes) {
     $product_details = [];
-    foreach (self::PDP_GTM_KEYS as $pdp_key => $attribute_key) {
+
+    foreach (self::GTM_KEYS as $datalayer_key => $attribute_key) {
       // Keep attribute values as empty till we have info about them.
       if ($attribute_key === '') {
-        $product_details[$pdp_key] = '';
+        $product_details[$datalayer_key] = '';
         continue;
       }
 
-      $product_details[$pdp_key] = $attributes[$attribute_key];
+      $product_details[$datalayer_key] = $attributes[$attribute_key];
     }
 
-    $processed_attributes['ecommerce']['detail']['products'][] = $product_details;
-    return $processed_attributes;
+    return $product_details;
+  }
+
+  /**
+   * Helper function to fetch current cart & its items.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function fetchCartItemAttributes() {
+    // Include product utility file to use helper functions.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $cart = $this->cartStorage->getCart();
+    $cartItems = $cart->get('items');
+    $skuIds = array_keys($cartItems);
+    $attributes = [];
+
+    foreach ($cartItems as $cartItem) {
+      $skuId = $cartItem['sku'];
+      $attributes[$skuId] = $this->fetchSkuAtttributes($skuId);
+      // Fetch product for this sku to get the category.
+      $productNode = alshaya_acm_product_get_display_node($skuId);
+      $attributes[$skuId]['gtm-category'] = $this->fetchProductCategories($productNode);
+    }
+
+    return $attributes;
+  }
+
+  /**
+   * Helper function to fetch & concatenate product categories.
+   *
+   * @param \Drupal\node\Entity\Node $productNode
+   *   Product node.
+   *
+   * @return string
+   *   Concatenated product categories.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function fetchProductCategories(Node $productNode) {
+    $categories = $productNode->get('field_category')->getValue();
+    $terms = [];
+
+    if (count($categories)) {
+      foreach ($categories as $category) {
+        $term = Term::load($category['target_id']);
+        $terms[] = $term->getName();
+      }
+    }
+
+    return implode('/', $terms);
   }
 
 }
