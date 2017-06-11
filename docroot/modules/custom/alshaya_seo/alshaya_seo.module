@@ -47,7 +47,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
 
     // Add all site languages as available language.
     foreach (\Drupal::languageManager()->getLanguages() as $language) {
-      $contact['availableLanguage'][] = $language->getName();
+      $contact['availableLanguage'][] = utf8_encode($language->getName());
     }
 
     // As required, we want it to be array of objects.

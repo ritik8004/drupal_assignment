@@ -5,16 +5,17 @@ alshaya_stores_finder.settings:
   label: 'Store finder configuration'
   mapping:
     enable_disable_store_finder_search:
+      # Keeping this to integer as we don't want to enable/disable only for one language.
       type: integer
       label: 'Enable or disable store finder search on site'
     pdp_click_collect_title:
-      type: text
+      type: label
       label: 'PDP: Click and Collect title'
     pdp_click_collect_subtitle:
-      type: text
+      type: label
       label: 'PDP: Click and Collect sub-title'
     pdp_click_collect_price:
-      type: text
+      type: label
       label: 'PDP: Click and Collect price'
     pdp_click_collect_help_text:
       type: text_format

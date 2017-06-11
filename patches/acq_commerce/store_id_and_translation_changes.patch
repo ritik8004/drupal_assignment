@@ -1,0 +1,215 @@
+diff --git a/acq_commerce.config_translation.yml b/acq_commerce.config_translation.yml
+index 6c5392f..862b412 100644
+--- a/acq_commerce.config_translation.yml
++++ b/acq_commerce.config_translation.yml
+@@ -3,3 +3,9 @@ acq_commerce.currency:
+   base_route_name: acq_commerce.configuration.currency
+   names:
+     - acq_commerce.currency
++
++acq_commerce.store:
++  title: 'Store Settings'
++  base_route_name: acq_commerce.configuration.store
++  names:
++    - acq_commerce.store
+diff --git a/acq_commerce.links.menu.yml b/acq_commerce.links.menu.yml
+index df5546d..386f36b 100644
+--- a/acq_commerce.links.menu.yml
++++ b/acq_commerce.links.menu.yml
+@@ -25,3 +25,10 @@ acq_commerce.configuration.currency:
+   parent: 'acq_commerce.configuration'
+   description: 'Configure your Acquia Commerce Currency settings.'
+   weight: 21
++
++acq_commerce.configuration.store:
++  title: 'Store Settings'
++  route_name: 'acq_commerce.configuration.store'
++  parent: 'acq_commerce.configuration'
++  description: 'Configure Store mapping.'
++  weight: 22
+diff --git a/acq_commerce.links.task.yml b/acq_commerce.links.task.yml
+new file mode 100644
+index 0000000..b8e9494
+--- /dev/null
++++ b/acq_commerce.links.task.yml
+@@ -0,0 +1,14 @@
++acq_commerce.configuration.conductor:
++  title: 'Conductor Settings'
++  route_name: 'acq_commerce.configuration.conductor'
++  base_route: 'acq_commerce.configuration.conductor'
++
++acq_commerce.configuration.currency:
++  title: 'Currency Settings'
++  route_name: 'acq_commerce.configuration.currency'
++  base_route: 'acq_commerce.configuration.currency'
++
++acq_commerce.configuration.store:
++  title: 'Store Settings'
++  route_name: 'acq_commerce.configuration.store'
++  base_route: 'acq_commerce.configuration.store'
+diff --git a/acq_commerce.routing.yml b/acq_commerce.routing.yml
+index 3d4af8f..8c2bdeb 100644
+--- a/acq_commerce.routing.yml
++++ b/acq_commerce.routing.yml
+@@ -29,3 +29,11 @@ acq_commerce.configuration.currency:
+     _title: 'Currency Settings'
+   requirements:
+     _permission: 'access commerce administration pages'
++
++acq_commerce.configuration.store:
++  path: '/admin/commerce/config/store-settings'
++  defaults:
++    _form: '\Drupal\acq_commerce\Form\StoreSettingsForm'
++    _title: 'Store Settings'
++  requirements:
++    _permission: 'access commerce administration pages'
+diff --git a/config/install/acq_commerce.currency.yml b/config/install/acq_commerce.currency.yml
+index a603eb2..f7709b4 100644
+--- a/config/install/acq_commerce.currency.yml
++++ b/config/install/acq_commerce.currency.yml
+@@ -1,4 +1,4 @@
+ currency_code: '$'
+ currency_code_position: 'before'
+-decimal_points: 2
++decimal_points: '2'
+ langcode: en
+diff --git a/config/install/acq_commerce.store.yml b/config/install/acq_commerce.store.yml
+new file mode 100644
+index 0000000..be2a19c
+--- /dev/null
++++ b/config/install/acq_commerce.store.yml
+@@ -0,0 +1,2 @@
++store_id: '1'
++langcode: en
+diff --git a/config/schema/acq_commerce.currency.yml b/config/schema/acq_commerce.currency.yml
+new file mode 100644
+index 0000000..8f61163
+--- /dev/null
++++ b/config/schema/acq_commerce.currency.yml
+@@ -0,0 +1,16 @@
++acq_commerce.currency:
++  type: config_object
++  label: 'Currency Settings'
++  mapping:
++    currency_code:
++      type: label
++      label: 'Currency Code'
++    currency_code_position:
++      type: label
++      label: 'Currency Code Position'
++    decimal_points:
++      type: label
++      label: 'Decimal Points'
++    langcode:
++      type: string
++      label: 'Language code'
+diff --git a/config/schema/acq_commerce.schema.yml b/config/schema/acq_commerce.schema.yml
+deleted file mode 100644
+index 7d7408a..0000000
+--- a/config/schema/acq_commerce.schema.yml
++++ /dev/null
+@@ -1,12 +0,0 @@
+-# Schema for the configuration files of the Acquia Commerce module.
+-
+-acq_commerce.currency:
+-  type: config_object
+-  label: 'Currency Settings'
+-  mapping:
+-    currency_code:
+-      type: label
+-      label: 'Currency Code'
+-    currency_code_position:
+-      type: label
+-      label: 'Currency Code Position'
+diff --git a/config/schema/acq_commerce.store.yml b/config/schema/acq_commerce.store.yml
+new file mode 100644
+index 0000000..7a65b0d
+--- /dev/null
++++ b/config/schema/acq_commerce.store.yml
+@@ -0,0 +1,10 @@
++acq_commerce.store:
++  type: config_object
++  label: 'Store Settings'
++  mapping:
++    store_id:
++      type: label
++      label: 'Store id'
++    langcode:
++      type: string
++      label: 'Language code'
+diff --git a/src/Form/ConductorSettingsForm.php b/src/Form/ConductorSettingsForm.php
+index 240e70a..150d1d5 100644
+--- a/src/Form/ConductorSettingsForm.php
++++ b/src/Form/ConductorSettingsForm.php
+@@ -6,7 +6,7 @@
+ use Drupal\Core\Form\FormStateInterface;
+ 
+ /**
+- * Class OrderSettingsForm.
++ * Class ConductorSettingsForm.
+  *
+  * @package Drupal\acq_commerce\Form
+  *
+diff --git a/src/Form/StoreSettingsForm.php b/src/Form/StoreSettingsForm.php
+new file mode 100644
+index 0000000..a2b816f
+--- /dev/null
++++ b/src/Form/StoreSettingsForm.php
+@@ -0,0 +1,57 @@
++<?php
++
++namespace Drupal\acq_commerce\Form;
++
++use Drupal\Core\Form\ConfigFormBase;
++use Drupal\Core\Form\FormStateInterface;
++
++/**
++ * Class StoreSettingsForm.
++ *
++ * @package Drupal\acq_commerce\Form
++ *
++ * @ingroup acq_commerce
++ */
++class StoreSettingsForm extends ConfigFormBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getFormId() {
++    return 'acq_commerce_store_settings';
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getEditableConfigNames() {
++    return ['acq_commerce.store'];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function submitForm(array &$form, FormStateInterface $form_state) {
++    $this->config('acq_commerce.store')
++      ->set('store_id', $form_state->getValue('store_id'))
++      ->save();
++
++    return parent::submitForm($form, $form_state);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildForm(array $form, FormStateInterface $form_state) {
++    $config = $this->config('acq_commerce.store');
++
++    $form['store_id'] = [
++      '#type' => 'textfield',
++      '#title' => $this->t('Store id'),
++      '#default_value' => $config->get('store_id'),
++    ];
++
++    return parent::buildForm($form, $form_state);
++  }
++
++}

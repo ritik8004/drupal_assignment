@@ -622,6 +622,11 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   $config->set('currency_code', 'د٠ك٠');
   $config->set('currency_code_position', 'after');
   $config->save();
+
+  // Translate store id in config.
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store');
+  $config->set('store_id', '3');
+  $config->save();
 }
 
 /**

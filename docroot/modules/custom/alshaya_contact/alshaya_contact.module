@@ -19,7 +19,7 @@ function alshaya_contact_webform_submission_presave(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_alshaya_onetime_translation_add().
+ * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_contact_alshaya_i18n_onetime_translation_add() {
   // Set contact form translation.
