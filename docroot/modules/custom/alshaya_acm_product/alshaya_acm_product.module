@@ -213,9 +213,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
         $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
         $home_delivery_options['standard_price_options_one_title'] = $home_delivery_config->get('options_standard_price_options_one_title');
-        $home_delivery_options['standard_price_options_one_price'] = $home_delivery_config->get('options_standard_price_options_one_price') ? (float) alshaya_acm_price_format($home_delivery_config->get('options_standard_price_options_one_price')) : t('Free');
+        $home_delivery_options['standard_price_options_one_price'] = $home_delivery_config->get('options_standard_price_options_one_price') ? alshaya_acm_price_format((float) $home_delivery_config->get('options_standard_price_options_one_price')) : t('Free');
         $home_delivery_options['standard_price_options_two_title'] = $home_delivery_config->get('options_standard_price_options_two_title');
-        $home_delivery_options['standard_price_options_two_price'] = $home_delivery_config->get('options_standard_price_options_two_price') ? (float) alshaya_acm_price_format($home_delivery_config->get('options_standard_price_options_two_price')) : t('Free');
+        $home_delivery_options['standard_price_options_two_price'] = $home_delivery_config->get('options_standard_price_options_two_price') ? alshaya_acm_price_format((float) $home_delivery_config->get('options_standard_price_options_two_price')) : t('Free');
 
         // @TODO: Next day delivery not done for now.
         $build['home_delivery'] = [
