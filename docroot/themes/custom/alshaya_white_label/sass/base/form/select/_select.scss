@@ -19,6 +19,7 @@ select:focus::-ms-value {
   height: 2.1875rem;
   font-size: 0.75rem;
   outline: none;
+  direction: $dir;
 
   @include breakpoint($tablet) {
     background-color: transparent;

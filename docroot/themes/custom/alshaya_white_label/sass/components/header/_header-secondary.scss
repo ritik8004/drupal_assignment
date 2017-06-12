@@ -50,7 +50,7 @@
 
   li {
     @include breakpoint($upto-desktop) {
-      @include icon(chevronright, after) {
+      @include icon(chevron#{$right}, after) {
         #{$right}: 4px;
         color: $marine-blue-two;
         position: absolute;
