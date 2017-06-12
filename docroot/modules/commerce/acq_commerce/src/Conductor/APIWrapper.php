@@ -280,7 +280,7 @@ class APIWrapper {
    *
    * @param int $cart_id
    *   Cart ID to estimate for.
-   * @param array $address
+   * @param array|object $address
    *   Array with the target address.
    *
    * @return array
@@ -289,7 +289,7 @@ class APIWrapper {
    * @throws \Exception
    *   Failed request exception.
    */
-  public function getShippingEstimates($cart_id, array $address) {
+  public function getShippingEstimates($cart_id, $address) {
     $endpoint = $this->apiVersion . "/agent/cart/$cart_id/estimate";
 
     $doReq = function ($client, $opt) use ($endpoint, $address) {
@@ -538,7 +538,7 @@ class APIWrapper {
     $categories = [];
 
     try {
-      $categories = $this->tryAgentRequest($doReq, 'getCategories', 'products');
+      $categories = $this->tryAgentRequest($doReq, 'getCategories', 'categories');
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());

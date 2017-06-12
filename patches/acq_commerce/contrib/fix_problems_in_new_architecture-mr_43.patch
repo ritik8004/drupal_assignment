@@ -1,0 +1,158 @@
+diff --git a/acq_commerce.services.yml b/acq_commerce.services.yml
+index fb7aeff..bfd9eb0 100644
+--- a/acq_commerce.services.yml
++++ b/acq_commerce.services.yml
+@@ -5,8 +5,8 @@ services:
+ 
+   acq_commerce.api:
+     class: Drupal\acq_commerce\Conductor\APIWrapper
+-    arguments: ['@acq_commerce.client_factory', '@logger.factory']
++    arguments: ['@acq_commerce.client_factory', '@config.factory', '@logger.factory']
+ 
+   acq_commerce.ingest_api:
+     class: Drupal\acq_commerce\Conductor\IngestAPIWrapper
+-    arguments: ['@acq_commerce.client_factory', '@logger.factory']
++    arguments: ['@acq_commerce.client_factory', '@config.factory', '@logger.factory']
+diff --git a/modules/acq_checkout/src/Plugin/CheckoutPane/ShippingInformation.php b/modules/acq_checkout/src/Plugin/CheckoutPane/ShippingInformation.php
+index 141fa4d..8e6cd97 100644
+--- a/modules/acq_checkout/src/Plugin/CheckoutPane/ShippingInformation.php
++++ b/modules/acq_checkout/src/Plugin/CheckoutPane/ShippingInformation.php
+@@ -170,10 +170,10 @@ public static function updateAddressAjaxCallback($form, FormStateInterface $form
+   /**
+    * Generates shipping estimate based on address and chosen shipping method.
+    *
+-   * @param object $address
++   * @param array|object $address
+    *   The object of address.
+    * @param array $select
+-   *   Array with selected whipping method.
++   *   Array with selected shipping method.
+    */
+   public static function generateShippingEstimates($address, array &$select) {
+     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+@@ -224,7 +224,7 @@ public function validatePaneForm(array &$pane_form, FormStateInterface $form_sta
+   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+     $values = $form_state->getValue($pane_form['#parents']);
+ 
+-    $shipping_method == NULL;
++    $shipping_method = NULL;
+ 
+     if (isset($values['address']['shipping_methods'])) {
+       $shipping_method = $values['address']['shipping_methods'];
+diff --git a/modules/acq_sku/acq_sku.services.yml b/modules/acq_sku/acq_sku.services.yml
+index c3f56a0..f65d2e3 100644
+--- a/modules/acq_sku/acq_sku.services.yml
++++ b/modules/acq_sku/acq_sku.services.yml
+@@ -30,3 +30,5 @@ services:
+       - '@request_stack'
+       - '@class_resolver'
+       - '@element_info'
++      - '@theme.manager'
++      - '@csrf_token'
+diff --git a/modules/acq_sku/src/ConductorCategoryManager.php b/modules/acq_sku/src/ConductorCategoryManager.php
+index 00b3d80..01f4895 100644
+--- a/modules/acq_sku/src/ConductorCategoryManager.php
++++ b/modules/acq_sku/src/ConductorCategoryManager.php
+@@ -160,23 +160,7 @@ public function synchronizeCategory($vocabulary, array $categories) {
+    *   Array of categories.
+    */
+   private function loadCategoryData($remoteRoot) {
+-
+-    $endpoint = self::CONDUCTOR_API_CATEGORY;
+-
+-    $doReq = function ($client, $opt) use ($endpoint) {
+-      return ($client->get($endpoint, $opt));
+-    };
+-
+-    $categories = [];
+-
+-    try {
+-      $categories = $this->tryAgentRequest($doReq, 'loadCategoryData', 'categories');
+-    }
+-    catch (ConductorException $e) {
+-      $this->logger->error('Unable to load conductor category data.');
+-    }
+-
+-    return ($categories);
++    return \Drupal::service('acq_commerce.api')->getCategories();
+   }
+ 
+   /**
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
+index e61ed93..71ef837 100644
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
+@@ -74,7 +74,7 @@ public function createCart($customer_id = NULL) {
+    * @throws \Exception
+    */
+   public function skuStockCheck($sku) {
+-    $endpoint = "stock/$sku";
++    $endpoint = $this->apiVersion . "/agent/stock/$sku";
+ 
+     $doReq = function ($client, $opt) use ($endpoint) {
+       return ($client->get($endpoint, $opt));
+@@ -281,7 +281,7 @@ public function getShippingMethods($cart_id) {
+    *
+    * @param int $cart_id
+    *   Cart ID to estimate for.
+-   * @param array $address
++   * @param array|object $address
+    *   Array with the target address.
+    *
+    * @return array
+@@ -290,7 +290,7 @@ public function getShippingMethods($cart_id) {
+    * @throws \Exception
+    *   Failed request exception.
+    */
+-  public function getShippingEstimates($cart_id, array $address) {
++  public function getShippingEstimates($cart_id, $address) {
+     $endpoint = $this->apiVersion . "/agent/cart/$cart_id/estimate";
+ 
+     $doReq = function ($client, $opt) use ($endpoint, $address) {
+@@ -539,7 +539,7 @@ public function getCategories() {
+     $categories = [];
+ 
+     try {
+-      $categories = $this->tryAgentRequest($doReq, 'getCategories', 'products');
++      $categories = $this->tryAgentRequest($doReq, 'getCategories', 'categories');
+     }
+     catch (ConductorException $e) {
+       throw new \Exception($e->getMessage(), $e->getCode());
+diff --git a/src/Conductor/IngestAPIWrapper.php b/src/Conductor/IngestAPIWrapper.php
+index 1b67387..7310132 100644
+--- a/src/Conductor/IngestAPIWrapper.php
++++ b/src/Conductor/IngestAPIWrapper.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\acq_commerce\Conductor;
+ 
+ use Drupal\Core\Logger\LoggerChannelFactory;
++use Drupal\Core\Config\ConfigFactoryInterface;
+ 
+ /**
+  * IngestAPIWrapper class.
+@@ -16,20 +17,23 @@ class IngestAPIWrapper {
+    *
+    * @param ClientFactory $client_factory
+    *   Object of ClientFactory.
++   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
++   *   Object of ConfigFactoryInterface.
+    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+    *   Object of LoggerFactory.
+    */
+-  public function __construct(ClientFactory $client_factory, LoggerChannelFactory $logger_factory) {
++  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LoggerChannelFactory $logger_factory) {
+ 
+     $this->clientFactory = $client_factory;
+     $this->logger = $logger_factory->get('acq_sku');
++    $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
+   }
+ 
+   /**
+    * Performs full conductor sync.
+    */
+   public function productFullSync() {
+-    $endpoint = "product/sync";
++    $endpoint = $this->apiVersion . "/ingest/product/sync";
+ 
+     $doReq = function ($client, $opt) use ($endpoint) {
+       return $client->post($endpoint, $opt);
