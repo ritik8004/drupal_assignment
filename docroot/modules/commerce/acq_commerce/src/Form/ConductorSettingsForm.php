@@ -36,8 +36,7 @@ class ConductorSettingsForm extends ConfigFormBase {
 
     // TODO Validate Conductor URL endpoints with watchdog request.
     $this->config('acq_commerce.conductor')
-      ->set('url_agent', $form_state->getValue('url_agent'))
-      ->set('url_ingest', $form_state->getValue('url_ingest'))
+      ->set('url', $form_state->getValue('url'))
       ->set('timeout', (int) $form_state->getValue('timeout'))
       ->set('verify_ssl', (bool) $form_state->getValue('verify_ssl'))
       ->set('product_page_size', (int) $form_state->getValue('page_size'))
@@ -52,18 +51,18 @@ class ConductorSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('acq_commerce.conductor');
-    $form['url_agent'] = [
+    $form['url'] = [
       '#type' => 'url',
-      '#title' => $this->t('Conductor Agent (Synchronous) URL'),
+      '#title' => $this->t('Conductor URL'),
       '#required' => TRUE,
-      '#default_value' => $config->get('url_agent'),
+      '#default_value' => $config->get('url'),
     ];
-
-    $form['url_ingest'] = [
-      '#type' => 'url',
-      '#title' => $this->t('Conductor Ingest (Asynchronous) URL'),
+    $form['api_version'] = [
+      '#type' => 'select',
+      '#title' => $this->t('API version'),
       '#required' => TRUE,
-      '#default_value' => $config->get('url_ingest'),
+      '#default_value' => $config->get('api_version'),
+      '#options' => ['v1' => 'V1'],
     ];
 
     $form['timeout'] = [

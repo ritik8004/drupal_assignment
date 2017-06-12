@@ -15,6 +15,13 @@ use GuzzleHttp\Exception\RequestException;
 trait AgentRequestTrait {
 
   /**
+   * Version of API.
+   *
+   * @var string
+   */
+  private $apiVersion;
+
+  /**
    * HTTP (Guzzle) Conductor Client Factory.
    *
    * @var ClientFactory
@@ -56,7 +63,7 @@ trait AgentRequestTrait {
    */
   protected function tryAgentRequest(callable $doReq, $action, $reskey = NULL) {
 
-    $client = $this->clientFactory->createAgentClient();
+    $client = $this->clientFactory->createClient();
     $reqOpts = [];
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');
 
