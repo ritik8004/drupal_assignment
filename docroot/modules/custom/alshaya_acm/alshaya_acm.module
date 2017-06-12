@@ -82,6 +82,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     return;
   }
 
+  $form['#error_no_message'] = TRUE;
+
   // Add sub total price of product.
   $form['cart']['#header'][] = t('Sub total');
   $form['cart']['#header'][2] = t('Unit Price');
@@ -226,6 +228,26 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['#attached']['library'][] = 'alshaya_acm/alshaya.acm.js';
 
   _alshaya_acm_format_cart_total($form, $cart);
+
+  array_unshift($form['#validate'], 'alshaya_acm_customer_cart_validate');
+}
+
+/**
+ * Validate the customer cart.
+ */
+function alshaya_acm_customer_cart_validate(array &$form, FormStateInterface $form_state) {
+  // Get the current cart.
+  $cart_storage = \Drupal::service('acq_cart.cart_storage');
+  $cart = $cart_storage->getCart();
+  // Get the new totals of cart.
+  $totals = $cart->totals();
+
+  $coupon = $form_state->getValue('coupon');
+
+  if ((float) $totals['discount'] != 0 && empty($coupon)) {
+    $cart->setCoupon('');
+    $cart_storage->updateCart();
+  }
 }
 
 /**
