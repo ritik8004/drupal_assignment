@@ -6,8 +6,10 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\user\PrivateTempStoreFactory;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -37,16 +39,6 @@ class AlshayaGtmManager {
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:department_page' => 'department page',
     'system.404' => 'page not found',
-    '' => 'contact us page',
-    '' => 'about us page',
-    '' => 'store finder',
-    '' => 'click and collect page',
-    '' => 'static page',
-    '' => 'confirmation page',
-    '' => 'payment page',
-    '' => 'summary page',
-    '' => 'delivery page',
-    '' => 'about you page',
     'user.login' => 'login page',
     'acq_cart.cart' => 'cart page',
   ];
@@ -81,7 +73,7 @@ class AlshayaGtmManager {
     'price' => 'gtm-price',
     'brand' => 'gtm-brand',
     'category' => 'gtm-category',
-    'variant' => '',
+    'variant' => 'gtm-product-sku',
     'dimension1' => 'gtm-dimension1',
     'dimension2' => 'gtm-dimension2',
     'dimension3' => 'gtm-dimension3',
@@ -105,6 +97,20 @@ class AlshayaGtmManager {
   protected $cartStorage;
 
   /**
+   * The private temp store service.
+   *
+   * @var \Drupal\user\PrivateTempStoreFactory
+   */
+  protected $privateTempStore;
+
+  /**
+   * The current user service.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -113,13 +119,21 @@ class AlshayaGtmManager {
    *   Config Factory service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
    *   Cart Storage service.
+   * @param \Drupal\user\PrivateTempStoreFactory $privateTempStore
+   *   Private temp store service.
+   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
+   *   Current User service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
-                              CartStorageInterface $cartStorage) {
+                              CartStorageInterface $cartStorage,
+                              PrivateTempStoreFactory $privateTempStore,
+                              AccountProxyInterface $currentUser) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
+    $this->privateTempStore = $privateTempStore;
+    $this->currentUser = $currentUser;
   }
 
   /**
@@ -171,21 +185,16 @@ class AlshayaGtmManager {
     $attributes['gtm-name'] = $sku->label();
     $price = $sku->get('price')->getString() ?: $sku->get('final_price')->getString();
     $attributes['gtm-price'] = number_format($price, 3);
-
-    // @TODO: Is this site name?
     $attributes['gtm-brand'] = $sku->get('attr_brand')->getString();
-
-    // @TODO: We should find a way to get this function work for other places.
     $attributes['gtm-product-sku'] = $sku->getSku();
 
-    // @TODO: This is getting static, need to find a way or discuss.
     // Dimension1 & 2 corrrespond to size & color.
     // Should stay blank unless added to cart.
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
     $attributes['gtm-dimension2'] = '';
 
-    $attributes['gtm-dimension3'] = 'Baby Clothing';
-    $attributes['gtm-stock'] = alshaya_acm_is_product_in_stock($sku->getSku()) ? 'in stock' : 'out of stock';
+    $attributes['gtm-dimension3'] = '';
+    $attributes['gtm-stock'] = '';
     $attributes['gtm-sku-type'] = $sku->bundle();
 
     return $attributes;
@@ -345,7 +354,7 @@ class AlshayaGtmManager {
     // Set dimension1 & 2 to empty until product added to cart.
     $attributes['gtm-dimension1'] = '';
     $attributes['gtm-dimension2'] = '';
-
+    $attributes['gtm-product-sku'] = '';
     $processed_attributes['ecommerce']['detail']['products'][] = $this->convertHtmlAttributesToDatalayer($attributes);
     return $processed_attributes;
   }
@@ -387,8 +396,9 @@ class AlshayaGtmManager {
       // Fetch product for this sku to get the category.
       $productNode = alshaya_acm_product_get_display_node($skuId);
       $attributes[$skuId]['gtm-category'] = $this->fetchProductCategories($productNode);
-      $attributes[$skuId]['gtm-main-sku'] = $productNode->id();
+      $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $attributes[$skuId]['quantity'] = $cartItem['qty'];
+      $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
     }
 
     return $attributes;
@@ -424,10 +434,11 @@ class AlshayaGtmManager {
    *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+   * @throws \InvalidArgumentException
    */
   public function fetchCompletedOrderAttributes() {
 
-    $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+    $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
     $order_data = $temp_store->get('order');
 
     // Throw access denied if nothing in session.
@@ -437,11 +448,11 @@ class AlshayaGtmManager {
 
     $order_id = (int) str_replace('"', '', $order_data['id']);
 
-    if (\Drupal::currentUser()->isAnonymous()) {
+    if ($this->currentUser->isAnonymous()) {
       $email = $temp_store->get('email');
     }
     else {
-      $email = \Drupal::currentUser()->getEmail();
+      $email = $this->currentUser->getEmail();
     }
 
     $orders = alshaya_acm_customer_get_user_orders($email);
@@ -458,9 +469,9 @@ class AlshayaGtmManager {
       $product = $this->fetchSkuAtttributes($item['sku']);
       $productNode = alshaya_acm_product_get_display_node($item['sku']);
       $product['gtm-category'] = $this->fetchProductCategories($productNode);
-
+      $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $productExtras = [
-        'quantity' => $item['quantity'],
+        'quantity' => $item['ordered'],
         'dimension6' => '',
         'dimension7' => '',
       ];
@@ -472,8 +483,8 @@ class AlshayaGtmManager {
       'id' => $order_id,
       'affiliation' => 'Online Store',
       'revenue' => (float) $order['totals']['grand'],
-      'tax' => (float) $orders['totals']['tax'] ?: 0.00,
-      'shippping' => (float) $orders['shipping']['method']['amount'] ?: 0.00,
+      'tax' => (float) $order['totals']['tax'] ?: 0.00,
+      'shippping' => (float) $order['shipping']['method']['amount'] ?: 0.00,
       'coupon' => '',
     ];
 

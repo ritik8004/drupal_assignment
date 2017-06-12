@@ -107,12 +107,13 @@
             // If the add-to-cart button was triggered from modal, the target element will be modal.
             if ($(targetEl).hasClass('ui-dialog')) {
               addedProductSelector = $(targetEl).find('article[gtm-type="gtm-product-link"]');
-              quantity = $(targetEl).find('.form-item-quantity select').val();
+              quantity = parseInt($(targetEl).find('.form-item-quantity select').val());
+              size = $(targetEl).find('.form-item-configurables-size select option:selected').text();
             }
             else {
               addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
-              quantity = $(targetEl).closest('.sku-base-form').find('.form-item-quantity select').val();
-              size = $(targetEl).closest('.sku-base-form').find('.form-item-configurables-size select').val();
+              quantity = parseInt($(targetEl).closest('.sku-base-form').find('.form-item-quantity select').val());
+              size = $(targetEl).closest('.sku-base-form').find('.form-item-configurables-size select option:selected').text();
             }
 
             if (addedProductSelector) {
@@ -129,7 +130,12 @@
               }
 
               // Set product variant to the selected variant.
-              product.variant = $('selected-variant-sku-' + product.id.toLowerCase(), context).val();
+              if (product.dimension5 !== 'simple') {
+                product.variant = $('.selected-variant-sku-' + product.id.toLowerCase()).val();
+              }
+              else {
+                product.variant = product.id;
+              }
 
               // Calculate metric 1 value.
               product.metric1 = product.price * product.quantity;
@@ -235,35 +241,36 @@
       });
 
       /** Tracking New customers **/
-      cartCheckoutLoginSelector.find('[a[gtm-type="checkout-as-guest"]').once('js-event').bind('click', function() {
+      cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').bind('click', function() {
         Drupal.alshaya_seo_gtm_push_customer_type('New Customer');
       });
 
       /** Tracking Returning customers **/
-      cartCheckoutLoginSelector.find('a[gtm-type="checkout-signin"]').once('js-event').bind('click', function() {
+      cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').bind('click', function() {
         Drupal.alshaya_seo_gtm_push_customer_type('Returning Customers');
       });
 
       /** Tracking Home Delivery **/
       if (cartCheckoutDeliverySelector.length !== 0) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
-        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').hasClass('active--tab--head')) {
+        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
           Drupal.alshaya_seo_gtm_push_delivery_type('Home Delivery');
         }
         // Fire checkout option event when user switches delivery option.
-        cartCheckoutDeliverySelector.find('[data-drupal-selector="edit-delivery-tabs"]').once('js-event').each(function() {
+        cartCheckoutDeliverySelector.find('[data-drupal-selector="edit-delivery-tabs"] .tab').once('js-event').each(function() {
           $(this).bind('click', function() {
             var gtmType = $(this).attr('gtm-type');
             var deliveryType = '';
-            if (gtmType === 'checkout-home-delivery') {
-              deliveryType = 'Home Delivery';
-            }
-            else if (gtmType === 'checkout-click-collect') {
-              deliveryType = 'Click & Collect';
-            }
+            if (gtmType !== undefined) {
+              if (gtmType === 'checkout-home-delivery') {
+                deliveryType = 'Home Delivery';
+              }
+              else if (gtmType === 'checkout-click-collect') {
+                deliveryType = 'Click & Collect';
+              }
 
-            Drupal.alshaya_seo_gtm_push_delivery_type(deliveryType);
-
+              Drupal.alshaya_seo_gtm_push_delivery_type(deliveryType);
+            }
           });
         });
       }
@@ -271,14 +278,14 @@
       /** Tracking selected payment option **/
       if (cartCheckoutPaymentSelector.length !== 0) {
         var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
-        if (preselectedMethod !== undefined) {
+        if (preselectedMethod.length === 1) {
           var preselectedMethodLabel = preselectedMethod.siblings('label').text();
           Drupal.alshaya_seo_gtm_push_selected_payment(preselectedMethodLabel);
         }
 
-        $('[gtm-type="cart-checkout-payment"] input').once('js-event').change(function() {
+        $('[gtm-type="cart-checkout-payment"] input', context).once('js-event').change(function() {
           var selectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
-          if (selectedMethod !== undefined) {
+          if (selectedMethod === 1) {
             var selectedMethodLabel = selectedMethod.siblings('label').text();
             Drupal.alshaya_seo_gtm_push_selected_payment(selectedMethodLabel);
           }
@@ -297,13 +304,15 @@
           }
 
           try {
+            var product = Drupal.alshaya_seo_gtm_get_product_values(that);
+            product.variant = '';
             var data = {
               'event': 'productClick',
               'ecommerce': {
                 'currencyCode': currencyCode,
                 'click': {
                   'actionField': {'list': listName},
-                  'products': [Drupal.alshaya_seo_gtm_get_product_values(that)]
+                  'products': [product]
                 }
               }
             };
