@@ -304,6 +304,10 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
+  if (empty($form['cart'])) {
+    return;
+  }
+
   // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 

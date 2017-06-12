@@ -148,13 +148,13 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  *   Loaded SKU entity.
  */
 function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
-  if (\Drupal::languageManager()->isMultilingual()) {
-    if (empty($langcode)) {
+  if (!is_object($sku)) {
+    if (empty($langcode) && \Drupal::languageManager()->isMultilingual()) {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
-  }
 
-  $sku = is_object($sku) ? $sku : SKU::loadFromSku($sku, $langcode);
+    $sku = SKU::loadFromSku($sku, $langcode);
+  }
 
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
   $plugin = $sku->getPluginInstance();
@@ -281,13 +281,13 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
  *   Loaded node object.
  */
 function alshaya_acm_product_get_display_node($sku, $langcode = '') {
-  if (\Drupal::languageManager()->isMultilingual()) {
-    if (empty($langcode)) {
+  if (!is_object($sku)) {
+    if (empty($langcode) && \Drupal::languageManager()->isMultilingual()) {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
-  }
 
-  $sku = is_object($sku) ? $sku : SKU::loadFromSku($sku, $langcode);
+    $sku = SKU::loadFromSku($sku, $langcode);
+  }
 
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
   $plugin = $sku->getPluginInstance();

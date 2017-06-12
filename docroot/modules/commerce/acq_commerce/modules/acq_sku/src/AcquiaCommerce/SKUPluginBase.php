@@ -134,11 +134,10 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $query = \Drupal::database()->select('acq_sku', 'acq_sku');
     $query->addField('acq_sku', 'sku');
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
-    $query->condition("child_sku.field_configured_skus_value", $sku->getSku());
+    $query->condition('child_sku.field_configured_skus_value', $sku->getSku());
 
     if (\Drupal::languageManager()->isMultilingual()) {
       $query->condition('acq_sku.langcode', $sku->get('langcode')->getString());
-      $query->condition('child_sku.langcode', $sku->get('langcode')->getString());
     }
 
     $parent_sku = $query->execute()->fetchField();
