@@ -295,6 +295,11 @@
           clearInterval(i);
           $('aside .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
+            var blockPlugin = $(this).attr('data-block-plugin-id');
+            var facet_id = blockPlugin.replace('facet_block:', '');
+            var softLimitSettings = settings.facets.softLimit;
+            var softItemsLimit = softLimitSettings[facet_id] - 1;
+            $(this).find('ul li:gt(' + softItemsLimit + ')').hide();
             softLink.insertAfter($(this).find('ul li:last-child'));
           });
         }
