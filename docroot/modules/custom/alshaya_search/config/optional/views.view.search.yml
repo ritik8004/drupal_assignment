@@ -270,10 +270,10 @@ display:
           expose:
             label: Relevance
           plugin_id: search_api
-        price:
-          id: price
+        final_price:
+          id: final_price
           table: search_api_index_acquia_search_index
-          field: price
+          field: final_price
           relationship: none
           group_type: group
           admin_label: ''

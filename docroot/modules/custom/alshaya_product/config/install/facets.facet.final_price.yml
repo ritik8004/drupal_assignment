@@ -6,13 +6,13 @@ dependencies:
     - views.view.search
   module:
     - search_api
-id: price
-name: Price
-url_alias: price
+id: final_price
+name: 'Final Price'
+url_alias: final_price
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: price
+field_identifier: final_price
 facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: range_checkbox

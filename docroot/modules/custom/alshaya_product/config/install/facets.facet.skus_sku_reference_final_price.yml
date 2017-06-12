@@ -6,13 +6,13 @@ dependencies:
     - views.view.alshaya_product_list
   module:
     - search_api
-id: skus_sku_reference_display_price
-name: 'SKUs » SKU Reference » Display Price'
-url_alias: skus_sku_reference_display_price
+id: skus_sku_reference_final_price
+name: 'SKUs » SKU Reference » Final Price'
+url_alias: skus_sku_reference_final_price
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: price
+field_identifier: final_price
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 widget:
   type: range_checkbox

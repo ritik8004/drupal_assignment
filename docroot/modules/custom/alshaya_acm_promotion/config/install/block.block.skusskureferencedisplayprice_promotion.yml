@@ -2,19 +2,19 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.skus_sku_reference_display_price
+    - facets.facet.skus_sku_reference_final_price
   module:
     - facets
   theme:
     - alshaya_white_label
-id: skusskureferencedisplayprice_promotion
+id: skusskureferencefinalprice_promotion
 theme: alshaya_white_label
 region: sidebar_first
 weight: -22
 provider: null
-plugin: 'facet_block:skus_sku_reference_display_price'
+plugin: 'facet_block:skus_sku_reference_final_price'
 settings:
-  id: 'facet_block:skus_sku_reference_display_price'
+  id: 'facet_block:skus_sku_reference_final_price'
   label: Price
   provider: facets
   label_display: visible
