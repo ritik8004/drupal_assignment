@@ -500,6 +500,8 @@
 
       a {
         display: block;
+        z-index: 1;
+        position: relative;
       }
     }
 
