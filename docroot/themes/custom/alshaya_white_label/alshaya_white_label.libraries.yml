@@ -18,6 +18,7 @@ global_styles:
     - core/jquery.ui.accordion
     - core/jquery.ui.tabs
     - core/jquery.cookie
+    - mobile_number/element
 
 ltr_styles:
   css:

@@ -4,9 +4,13 @@ core: 8.x
 dependencies:
   - address
   - block
+  - content_translation
   - field
+  - language
+  - mobile_number
   - profile
   - system
+  - taxonomy
   - telephone
   - views
   - workbench_moderation

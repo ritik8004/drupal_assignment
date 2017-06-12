@@ -48,6 +48,10 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
 
   // Set the default country.
   $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = $default_site_country;
+
+  // For profile add.
+  _alshaya_addressbook_form_alter($form, $form_state);
+
 }
 
 /**
@@ -76,6 +80,80 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     '#type' => 'hidden',
     '#value' => $default_country_code,
   ];
+
+  // Validation for first and last name.
+  $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
+  $element['given_name']['#maxlength'] = 255;
+  $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
+  $element['family_name']['#maxlength'] = 255;
+
+  // Only for 'Kuwait'.
+  if ($default_country_code == 'KW') {
+    $element['locality']['#title'] = t('Emirate/city');
+    $administrative_area_default_value = $element['administrative_area']['#default_value'];
+    $element['administrative_area'] = [
+      '#type' => 'select',
+      '#title' => t('Area'),
+      '#required' => TRUE,
+      '#multiple' => FALSE,
+      '#default_value' => $administrative_area_default_value,
+      '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list(),
+    ];
+    $element['address_line1']['#title'] = t('Street name/number');
+    $element['dependent_locality']['#title'] = t('Building name/number');
+    $element['organization']['#title'] = t('Block');
+    $element['address_line2']['#title'] = t('Floor (optional)');
+    $element['address_line2']['#title_display'] = 'before';
+  }
+
+  // Adding mobile number.
+  $mobile_number = [
+    'mobile_number' => [
+      '#type' => 'mobile_number',
+      '#title' => t('Mobile number'),
+      '#verify' => 0,
+      '#tfa' => 0,
+      '#required' => TRUE,
+    ],
+  ];
+
+  if (!empty($form_state->getTemporaryValue('default_value_mobile'))) {
+    $mobile_number['mobile_number']['#default_value'] = $form_state->getTemporaryValue('default_value_mobile');
+  }
+
+  // Adding mobile number field to appropriate position.
+  $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'family_name');
+
+  $element['#prefix'] = '<div class="address-book-address">';
+  $element['#suffix'] = '</div>';
+
+  return $element;
+}
+
+/**
+ * Validation for first name.
+ */
+function _alshaya_addressbook_firstname_validate($element, FormStateInterface $form_state) {
+  return _alshaya_addressbook_name_validation($element, $form_state, 'given_name');
+}
+
+/**
+ * Validation for the last name.
+ */
+function _alshaya_addressbook_lastname_validate($element, FormStateInterface $form_state) {
+  return _alshaya_addressbook_name_validation($element, $form_state, 'family_name');
+}
+
+/**
+ * Adding validation for the name.
+ */
+function _alshaya_addressbook_name_validation($element, FormStateInterface $form_state, $field_name) {
+  $string = $form_state->getValue('field_address')[0]['address'][$field_name];
+  if (preg_match('/[#$\_\!@%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $string)) {
+    $field_name = $field_name == 'given_name' ? 'first name' : 'last name';
+    $form_state->setError($element, t('Invalid @name', ['@name' => $field_name]));
+  }
+
   return $element;
 }
 
@@ -122,11 +200,59 @@ function alshaya_addressbook_form_profile_address_book_edit_form_alter(array &$f
     'callback' => 'alshaya_addressbook_save_ajax_callback',
     'wrapper' => 'address-book-form-open',
   ];
+
+  $form['actions']['set_default']['#access'] = FALSE;
   // Set default profile profile form.
   $form['actions']['set_default']['#ajax'] = [
     'callback' => 'alshaya_addressbook_save_ajax_callback',
     'wrapper' => 'address-book-form-open',
   ];
+
+  // For profile edit.
+  _alshaya_addressbook_form_alter($form, $form_state);
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_addressbook_form_profile_address_book_form_alter(array &$form, FormStateInterface $form_state) {
+  // For profile form.
+  _alshaya_addressbook_form_alter($form, $form_state);
+}
+
+/**
+ * Alter the address book form.
+ */
+function _alshaya_addressbook_form_alter(array &$form, FormStateInterface $form_state) {
+  $form['#validate'][] = '_alshaya_addressbook_mobile_process_validate';
+
+  // Get default value.
+  $default_value_mobile = $form['field_mobile_number']['widget'][0]['#default_value'];
+  if (!empty($default_value_mobile) && is_array($default_value_mobile)) {
+    $form_state->setTemporaryValue('default_value_mobile', $default_value_mobile);
+  }
+  $form['field_mobile_number']['#access'] = FALSE;
+}
+
+/**
+ * Process the mobile number during validation check.
+ */
+function _alshaya_addressbook_mobile_process_validate($form, FormStateInterface $form_state) {
+  // If no error.
+  if (!$form_state->getErrors()) {
+    $mobile = $form_state->getValue('field_address')[0]['address']['mobile_number'];
+    $util = \Drupal::service('mobile_number.util');
+    $mobile_country_code = $util->getCountryCode($mobile['country-code']);
+    $value[] = [
+      'country' => $mobile['country-code'],
+      'local_number' => $mobile['mobile'],
+      'value' => '+' . $mobile_country_code . $mobile['mobile'],
+      'country-code' => $mobile['country-code'],
+      'mobile' => $mobile['mobile'],
+    ];
+    $form_state->setValue('field_mobile_number', $value);
+  }
 }
 
 /**
@@ -176,4 +302,58 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
 
   // Save the translation.
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Returns list of areas for a given country.
+ *
+ * @param string $country_code
+ *   The country code.
+ *
+ * @return array
+ *   List or areas.
+ */
+function _alshaya_addressbook_area_list($country_code = 'KW') {
+  $term_tree = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree('area_list', 0, NULL, TRUE);
+  $area_list = [];
+  if (!empty($term_tree)) {
+    /* \Drupal\taxonomy\Entity\Term $term */
+    foreach ($term_tree as $term) {
+      $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+      $area_list[$term->id()] = $term->getName();
+    }
+  }
+
+  return $area_list;
+}
+
+/**
+ * Insert an array into another array before/after a certain key.
+ *
+ * @param array $array
+ *   Initial array.
+ * @param array $pairs
+ *   Added array.
+ * @param mixed $key
+ *   Position key.
+ * @param string $position
+ *   Position.
+ *
+ * @return array
+ *   Updated array.
+ */
+function _alshaya_addressbook_array_insert(array $array, array $pairs, $key, $position = 'after') {
+  $key_pos = array_search($key, array_keys($array));
+  if ('after' == $position) {
+    $key_pos++;
+  }
+  if (FALSE !== $key_pos) {
+    $result = array_slice($array, 0, $key_pos);
+    $result = array_merge($result, $pairs);
+    $result = array_merge($result, array_slice($array, $key_pos));
+  }
+  else {
+    $result = array_merge($array, $pairs);
+  }
+  return $result;
 }
