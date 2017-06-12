@@ -96,4 +96,31 @@ final class ClientFactory {
     return $this->clientFactory->fromOptions($clientConfig);
   }
 
+  /**
+   * CreateClient.
+   *
+   * Create a Guzzle http client configured to connect to the
+   * Conductor instance from the site configuration.
+   *
+   * @return \GuzzleHttp\Client
+   *   Object of initialized client.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function createClient() {
+
+    $config = $this->configFactory->get('acq_commerce.conductor');
+    if (!strlen($config->get('url'))) {
+      throw new \InvalidArgumentException('No Conductor Ingest URL specified.');
+    }
+
+    $clientConfig = [
+      'base_uri' => $config->get('url'),
+      'timeout'  => (int) $config->get('timeout'),
+      'verify'   => (bool) $config->get('verify_ssl'),
+    ];
+
+    return $this->clientFactory->fromOptions($clientConfig);
+  }
+
 }

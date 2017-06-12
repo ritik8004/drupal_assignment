@@ -117,7 +117,7 @@
         var accordionBody = $(accordionHead).nextAll();
 
         $(accordionBody).addClass('accordion--body');
-        $(accordionHead).click(function () {
+        $(accordionHead).once().click(function () {
           var $ub = $(this).nextAll().stop(true, true).slideToggle();
           accordionBody.not($ub).slideUp();
           $ub.parent().toggleClass('open--accordion');
@@ -176,21 +176,23 @@
         });
 
         // Accordion for delivery option section on PDP.
-        $('.c-accordion-delivery-options').accordion({
-          heightStyle: 'content',
-          collapsible: true,
-          active: false
+        $('.delivery-options-wrapper').once('bind-event').each(function () {
+          $('.c-accordion-delivery-options', $(this)).accordion({
+            heightStyle: 'content',
+            collapsible: true,
+            active: false
+          });
         });
 
         // Toggle for Product description.
-        var descwrapper = $('.c-pdp .description-wrapper');
-        descwrapper.hide();
-        $('.c-pdp .short-description-wrapper .read-more-description-link').on('click', function () {
-          descwrapper.toggle('slow');
-        });
+        $('.c-pdp .short-description-wrapper').once('bind-event').each(function () {
+          $('.read-more-description-link', $(this)).on('click', function () {
+            $('.c-pdp .description-wrapper').toggle('slow');
+          });
 
-        $('.c-pdp .description-wrapper .close').on('click', function () {
-          descwrapper.toggle('slow');
+          $('.close').on('click', function () {
+            $('.c-pdp .description-wrapper').toggle('slow');
+          });
         });
 
         // Add class to promotional banner view block if it is not empty.

@@ -16,6 +16,10 @@
     }
   }
 
+  @include breakpoint($only-tablet) {
+    margin-top: 2.0625rem;
+  }
+
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
     margin-top: 2rem;
@@ -358,6 +362,7 @@
     @include breakpoint($tablet) {
       #{$right}: 2.55rem;
       font-size: 0.8125rem;
+      border-top: -1px;
     }
 
     @include breakpoint($desktop) {
@@ -491,17 +496,35 @@
         text-decoration: underline;
 
         @include breakpoint($upto-desktop) {
-          font-family: $arial;
+          font-family: $alshaya-bold;
         }
 
         @include breakpoint($tablet) {
           margin: 0 0.6875rem;
         }
+
+        &.is-active {
+          color: $grey-ash;
+          font-weight: normal;
+          text-decoration: none;
+        }
+      }
+
+      &.ar a {
+        font-family: $alshaya-arabic-thin;
       }
 
       &.en a {
-        color: $brownish-grey;
-        text-decoration: none;
+        font-family: $alshaya-bold-nodir;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0.2rem;
+          margin-#{$right}: 0.7rem;
+        }
+      }
+
+      &.en.is-active a {
+        font-family: $alshaya-thin-nodir;
       }
     }
   }
@@ -533,8 +556,8 @@
 
   .c-social-links {
     @include breakpoint($tablet) {
-      margin-top: 2.75rem;
-      padding-left: 0.312rem;
+      margin-top: 1.75rem;
+      padding-left: 0.12rem;
     }
 
     @include breakpoint($desktop) {
@@ -547,7 +570,7 @@
 
 .language--switcher {
   @include breakpoint($tablet) {
-    margin-top: 1.75rem;
+    margin-top: 0.75rem;
   }
 
   @include breakpoint($desktop) {

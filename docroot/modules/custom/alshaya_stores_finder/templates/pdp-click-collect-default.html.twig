@@ -1,0 +1,37 @@
+<div id="pdp-stores-container" class="click-collect c-accordion-delivery-options" sku="{{ sku }}" sku-clean="{{ sku|clean_class }}" type="{{ type }}">
+  <h3 class="c-accordion__title">
+    {% if title %}
+      {{ title }}
+      <span class="title-price">{{ title_price }}</span>
+      <span class="subtitle">{{ subtitle }}</span>
+    {% endif %}
+  </h3>
+  <div class="c-accordion_content">
+    {% if type == 'configurable' %}
+      <div class="click-collect-empty-selection">
+        <div class="text">
+          {{ help_text|raw }}
+          {{ select_option_text|raw }}
+        </div>
+      </div>
+      <div class="click-collect-form" style="display: none;">
+    {% else %}
+      <div class="click-collect-form">
+    {% endif %}
+      <div class="text">
+        {{ help_text|raw }}
+        <p>{{ subtitle }}</p>
+      </div>
+
+      <form class="search-store">
+        <label>{{ 'Check in-store availability'|t }}</label>
+        <input type="text" id="cc-store-name" placeholder="{{ 'Enter your area'|t }}">
+        <input type="button" name="cc-search-store" value="{{ 'Search Stores'|t }}">
+      </form>
+    </div>
+
+    <div class="click-collect-top-stores"></div>
+  </div>
+</div>
+
+<div class="click-collect-all-stores inline-modal-wrapper" style="display: none;"></div>

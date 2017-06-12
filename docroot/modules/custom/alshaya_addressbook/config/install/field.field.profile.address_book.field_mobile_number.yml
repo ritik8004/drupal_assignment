@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_mobile_number
+    - profile.type.address_book
+  module:
+    - mobile_number
+id: profile.address_book.field_mobile_number
+field_name: field_mobile_number
+entity_type: profile
+bundle: address_book
+label: 'Mobile number'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  countries: {  }
+  verify: none
+  message: "Your verification code from !site_name:\n!code"
+field_type: mobile_number

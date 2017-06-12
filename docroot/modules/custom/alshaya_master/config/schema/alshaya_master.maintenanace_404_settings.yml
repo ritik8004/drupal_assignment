@@ -5,3 +5,6 @@ alshaya_master.maintenanace_404_settings:
     404_message:
       type: text_format
       label: '404 Text'
+    langcode:
+      type: string
+      label: 'Language code'

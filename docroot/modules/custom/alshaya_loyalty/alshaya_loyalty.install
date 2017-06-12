@@ -46,7 +46,7 @@ function alshaya_loyalty_modules_installed(array $modules) {
 
   // Save default settings by default.
   $config = \Drupal::configFactory()->getEditable('alshaya_loyalty.settings');
-  $config->set('apcn_max_length', 16);
-  $config->set('apcn_value_starts_with', 6362544);
+  $config->set('apcn_max_length', '16');
+  $config->set('apcn_value_starts_with', '6362544');
   $config->save();
 }

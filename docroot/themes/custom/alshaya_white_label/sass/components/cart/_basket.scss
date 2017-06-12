@@ -54,8 +54,7 @@
     }
 
     .delivery-options-mobile,
-    .quantity .form-type-select,
-    .tooltip--wrap {
+    .quantity .form-type-select {
       @include breakpoint($upto-tablet) {
         display: inline-block;
         vertical-align: top;
@@ -76,9 +75,11 @@
       font-size: 0.875rem;
     }
 
-    .price-currency.prefix {
+    .price-currency.prefix,
+    .price-currency.suffix {
       padding-right: 0.5rem;
       float: $left;
+      font-family: $arial;
 
       @include breakpoint($tablet) {
         padding-right: 0;
@@ -87,6 +88,10 @@
       @include breakpoint($desktop) {
         padding-right: 1.56rem;
       }
+    }
+
+    .price-currency.suffix {
+      line-height: 1;
     }
 
     .image {
@@ -120,10 +125,15 @@
 
       @include breakpoint($desktop) {
         width: 58%;
+        padding-top: 0.125rem;
       }
 
       div {
         margin-bottom: 0.187rem;
+      }
+
+      .dark + div {
+        font-family: $arial;
       }
     }
 
@@ -140,12 +150,30 @@
     }
   }
 
+  .delivery-options-mobile {
+    @include breakpoint($only-mobile) {
+      float: $left;
+    }
+  }
+
   .tooltip--wrap {
     padding-#{$left}: 2.2rem;
+
+    @include breakpoint($only-mobile) {
+      float: $right;
+      margin-bottom: 1.6875rem;
+      margin-#{$right}: 1.7rem;
+      padding-#{$left}: 1rem;
+
+      &:last-child {
+        clear: both;
+      }
+    }
 
     @include breakpoint($tablet) {
       padding-#{$left}: 0;
       margin-top: 0.625rem;
+      margin-bottom: 2.125rem;
     }
   }
 
@@ -170,10 +198,10 @@
       @include breakpoint($desktop) {
         #{$left}: 1.1rem;
       }
-    }
 
-    &:hover .tooltip {
-      display: block;
+      @include breakpoint($only-mobile) {
+        #{$left}: -3.5rem;
+      }
     }
 
     &:nth-child(2) {
@@ -197,12 +225,26 @@
 
     @include icon(infomation, after) {
       margin-#{$left}: 0.3rem;
+      display: inline-block;
       vertical-align: middle;
       font-weight: bold;
       font-size: 1rem;
 
       @include breakpoint($desktop) {
-        margin-#{$left}: 1rem;
+        margin-#{$left}: 0.75rem;
+      }
+    }
+
+    &:hover + .tooltip {
+      display: block;
+    }
+
+    &.not-available {
+      color: $white;
+      text-decoration: line-through;
+
+      &:hover + .tooltip {
+        display: none;
       }
     }
   }
@@ -216,12 +258,16 @@
     @include breakpoint($desktop) {
       #{$right}: 5rem;
     }
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 1rem;
+    }
   }
 
   .tooltip::after {
     @extend %tooltip-after;
 
-    border-bottom-width: 7px;
+    border-bottom-width: 6px;
 
     @include breakpoint($desktop) {
       #{$right}: 5.05rem;
@@ -231,6 +277,10 @@
   .tooltip::before {
     #{$right}: 3px;
     border-bottom-width: 8px;
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 0.9375rem;
+    }
 
     @extend %tooltip-before;
 
@@ -255,6 +305,14 @@
     @include breakpoint($only-tablet) {
       margin-bottom: 1.75rem;
     }
+  }
+}
+
+.alias--cart {
+  &.path--cart .site-brand-home a {
+    width: auto;
+    display: block;
+    margin-#{$left}: auto;
   }
 }
 
@@ -363,7 +421,7 @@
     background: $pumpkin-orange;
     color: $white-five;
     cursor: pointer;
-    margin-#{$left}: 1rem;
+    margin-#{$left}: 1.5rem;
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: 1.5rem;
@@ -549,5 +607,18 @@
 #table-cart-items {
   .price-wrapper .price-amount {
     float: $left;
+  }
+}
+
+html[lang=ar] {
+  .customer-cart-form .tooltip--wrap {
+    @include breakpoint($tablet) {
+      margin-top: 0.3125rem;
+      margin-bottom: 1.625rem;
+    }
+  }
+
+  tr[data-drupal-selector=edit-totals-grand] td:first-child {
+    line-height: 1.5;
   }
 }

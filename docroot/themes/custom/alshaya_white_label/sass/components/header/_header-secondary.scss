@@ -7,10 +7,10 @@
     background: $white-five;
     display: none;
     position: fixed;
-    width: 80%;
+    width: 270px;
     height: 100%;
     z-index: 4;
-    top: 3.1875rem;
+    top: 2.9375rem;
   }
 
   @include breakpoint($desktop) {
@@ -50,7 +50,7 @@
 
   li {
     @include breakpoint($upto-desktop) {
-      @include icon(chevronright, after) {
+      @include icon(chevron#{$right}, after) {
         #{$right}: 4px;
         color: $marine-blue-two;
         position: absolute;
@@ -198,8 +198,8 @@
   }
 
   position: fixed;
-  width: 80%;
-  top: 3.125rem;
+  width: 16.8125rem;
+  top: 2.9375rem;
   background: $white-five;
   height: 100%;
   z-index: 1000;
@@ -324,7 +324,7 @@
 
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 5.3125rem;
+    margin-top: 5.5625rem;
   }
 
   @include breakpoint($only-tablet) {

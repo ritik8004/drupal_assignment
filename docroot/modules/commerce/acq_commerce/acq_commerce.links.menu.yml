@@ -25,3 +25,10 @@ acq_commerce.configuration.currency:
   parent: 'acq_commerce.configuration'
   description: 'Configure your Acquia Commerce Currency settings.'
   weight: 21
+
+acq_commerce.configuration.store:
+  title: 'Store Settings'
+  route_name: 'acq_commerce.configuration.store'
+  parent: 'acq_commerce.configuration'
+  description: 'Configure Store mapping.'
+  weight: 22

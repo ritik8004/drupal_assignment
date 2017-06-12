@@ -3,11 +3,11 @@ status: true
 dependencies:
   config:
     - field.field.profile.address_book.field_address
-    - field.field.profile.address_book.field_telephone
+    - field.field.profile.address_book.field_mobile_number
     - profile.type.address_book
   module:
     - address
-    - telephone
+    - mobile_number
     - workbench_moderation
 id: profile.address_book.default
 targetEntityType: profile
@@ -20,12 +20,14 @@ content:
       default_country: null
     third_party_settings: {  }
     type: address_default
-  field_telephone:
+  field_mobile_number:
     weight: 7
     settings:
-      placeholder: ''
+      default_country: US
+      countries: {  }
+      placeholder: null
     third_party_settings: {  }
-    type: telephone_default
+    type: mobile_number_default
   langcode:
     type: language_select
     weight: 2

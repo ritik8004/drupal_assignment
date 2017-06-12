@@ -168,8 +168,8 @@ function alshaya_master_install() {
     'Enter card details' => [
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
-    '<p>I would like to receive exclusive deals from Mothercare.</p><p>By registering I agree to your <a href="/terms">Terms and Conditions</a>.</p>' => [
-      'ar' => '<p>أرغب في استلام عروض حصرية من مذركير</p><p>تسجيل بياناتك يعني موافقتك على الشروط والأحكام&nbsp;<a href="/terms">الشروط والأحكام</a></p>',
+    '<p>By registering I agree to your <a href="/terms">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>تسجيل بياناتك يعني موافقتك على الشروط والأحكام&nbsp;<a href="/terms">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
@@ -306,7 +306,7 @@ function alshaya_master_install() {
     ],
     'The phone number %value provided for %field is not a valid mobile number for country %country.' => [
       'en' => 'The Mobile number %value provided for %field is not a valid mobile number.',
-      'ar' => 'رقم الجوال field% المدخل في value% غير صحيح',
+      'ar' => 'رقم الجوال %field المدخل في %value غير صحيح',
     ],
     'Delivery to' => [
       'ar' => 'توصيل إلى',
@@ -666,6 +666,18 @@ function alshaya_master_install() {
     '@total closest stores to' => [
       'ar' => 'أقرب @total محلات إلى',
     ],
+    'clear all' => [
+      'ar' => 'امسح الكل',
+    ],
+    'under @granularity' => [
+      'ar' => '@granlarity تحت',
+    ],
+    'Please fill the captcha.' => [
+      'ar' => 'يرجى إدخال الرمز الظاهر في الصورة',
+    ],
+    'You have just used your one-time login link. Your account is now active and you are authenticated.' => [
+      'ar' => 'لقد قمت للتو باستخدام رابط تسجيل الدخول المخصص لمرة واحدة. حسابك أصبح مفعلاً وموثوق.',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
@@ -719,6 +731,7 @@ function alshaya_master_install() {
         'context_mapping' => [],
       ],
     ])
+    ->set('weight', '-28')
     ->save();
 
   // Settings override of 'back_to_top'.

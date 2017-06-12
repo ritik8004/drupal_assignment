@@ -11,11 +11,14 @@ global_styles:
     js/form.js: {}
     js/address_book.js: {}
     js/one_time_language_slider.js: {}
+    vendor/js/details-polyfill.js: {}
   dependencies:
     - core/jquery
+    - core/jquery.once
     - core/jquery.ui.accordion
     - core/jquery.ui.tabs
     - core/jquery.cookie
+    - mobile_number/element
 
 ltr_styles:
   css:
@@ -38,7 +41,7 @@ slider_banner:
     js/slider.js: {}
   dependencies:
     - core/jquery
-    - alshaya_white_label/owlcarousel
+    - alshaya_white_label/slick
 
 sell:
   js:
@@ -52,6 +55,13 @@ autosize_textarea:
     js/autosize_textarea.js: {}
   dependencies:
     - alshaya_white_label/autosize
+
+slick:
+  css:
+    theme:
+      vendor/css/slick.css: {}
+  js:
+    vendor/js/slick.min.js: {}
 
 owlcarousel:
   css:

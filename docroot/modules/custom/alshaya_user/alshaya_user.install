@@ -26,6 +26,9 @@ function alshaya_user_install() {
     'Communication preferences' => [
       'ar' => 'تفضيلات التواصل',
     ],
+    'I would like to receive exclusive deals from Mothercare' => [
+      'ar' => 'أرغب في استلام عروض حصرية من مذركير',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
@@ -79,7 +82,7 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
-  $content['field_terms_and_condition'] = [
+  $content['field_subscribe_newsletter'] = [
     'weight' => 100,
     'type' => 'boolean_checkbox',
     'settings' => [
@@ -87,13 +90,11 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
-  unset($content['acq_customer_id']);
   unset($content['contact']);
   unset($content['langcode']);
   unset($content['language']);
   $userConfig->set('content', $content)->save();
   $hidden = $userConfig->get('hidden');
-  $hidden['acq_customer_id'] = TRUE;
   $hidden['contact'] = TRUE;
   $hidden['langcode'] = TRUE;
   $hidden['language'] = TRUE;

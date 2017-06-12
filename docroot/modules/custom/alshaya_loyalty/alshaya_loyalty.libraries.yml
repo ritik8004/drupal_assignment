@@ -1,5 +1,6 @@
 format_input:
   js:
+    js/cleave.min.js: {}
     js/format-input.js: {}
   dependencies:
     - core/drupal

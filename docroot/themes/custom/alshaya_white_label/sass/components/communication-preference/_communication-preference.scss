@@ -39,7 +39,8 @@ form.user-communication-preference {
     }
 
     @include breakpoint($desktop) {
-      margin-bottom: 1.7rem;
+      margin-bottom: 0;
+      padding-bottom: 1.375rem;
     }
   }
 
@@ -54,12 +55,19 @@ form.user-communication-preference {
   }
 
   input[type=checkbox] {
-    ~ label[for=edit-communication-preference-email] {
+    ~ label[for=edit-communication-preference-email],
+    ~ label[for=edit-communication-preference-mobile] {
       font-size: 0.875rem;
 
       &::before {
-        padding-right: 1.188rem;
+        padding-#{$right}: 1.188rem;
       }
+    }
+  }
+
+  input[checked=checked] {
+    ~ label {
+      font-weight: bold;
     }
   }
 }

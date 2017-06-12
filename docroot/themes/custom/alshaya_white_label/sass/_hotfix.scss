@@ -1,9 +1,9 @@
 /**
-  * This file contains css browser specific hot-fix
+ * This file contains css browser specific hot-fix
  */
 
 /**
-  * IE - Specific issues and hacks for them.
+ * IE - Specific issues and hacks for them.
  */
 
 body.ie {
@@ -14,6 +14,29 @@ body.ie {
         display: inline;
       }
     }
+  }
+
+  // IE 10, 11, not taking line-height from select-wrapper mixin in rems.
+  &.alias--cart #table-cart-items .form-type-select::after {
+    line-height: 34px;
+  }
+
+  // We have added a IE polyfill to make details element work, it converts the summary into <a> tag, so
+  // adding color for it.
+  summary a.details-title {
+    color: $grey-ash;
+  }
+}
+
+/**
+ * Edge Browser - Specific issues and hacks for them.
+ */
+
+body.edge {
+  // We have added a IE polyfill to make details element work, it converts the summary into <a> tag, so
+  // adding color for it.
+  summary a.details-title {
+    color: $grey-ash;
   }
 }
 
@@ -49,6 +72,21 @@ body.ucbrowser {
   }
 }
 
+#text-resize-control {
+  display: none !important;
+}
+
 /**
-  * Opera - Specific issues and hacks for them.
+ * Opera - Specific issues and hacks for them.
  */
+
+/**
+ * Chrome - Specific issues and hacks.
+ */
+
+// In Chrome, padding is not applied correctly on select, adding text-indent to roughly center the number.
+body.chrome {
+  &.alias--cart #table-cart-items td select {
+    text-indent: 0.4rem;
+  }
+}

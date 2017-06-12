@@ -34,4 +34,12 @@
   color: $grey-ash;
   height: 4.375rem;
   width: 4.375rem;
+
+  @include breakpoint($only-tablet) {
+    padding-top: 3.625rem;
+
+    &::after {
+      top: 1rem;
+    }
+  }
 }

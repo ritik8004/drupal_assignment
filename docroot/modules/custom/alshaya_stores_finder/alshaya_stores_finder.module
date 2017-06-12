@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\views\ViewExecutable;
@@ -13,9 +14,48 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_stores_finder_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['pdp_click_collect_default'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'sku' => NULL,
+      'type' => NULL,
+      'title' => NULL,
+      'subtitle' => NULL,
+      'title_price' => NULL,
+      'help_text' => NULL,
+    ],
+  ];
+
+  $items['pdp_click_collect_all_stores'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'title' => NULL,
+      'subtitle' => NULL,
+      'stores' => NULL,
+    ],
+  ];
+
+  $items['pdp_click_collect_top_stores'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'stores' => NULL,
+      'has_more' => NULL,
+    ],
+  ];
+
+  return $items;
+}
+
+/**
  * Implements hook_page_attachments().
  */
 function alshaya_stores_finder_page_attachments(array &$attachments) {
+  // @TODO: Check if this is really required on all pages.
   $attachments['#attached']['library'][] = 'alshaya_stores_finder/store_finder';
   $site_country = _alshaya_custom_get_site_level_country_code();
   $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googleGeocodingAPI']['components'] = ['country' => $site_country];
@@ -133,23 +173,37 @@ function alshaya_stores_finder_block_build_alter(array &$build, BlockPluginInter
 }
 
 /**
- * Implements hook_preprocess_node().
- */
-function alshaya_stores_finder_preprocess_node(&$variables) {
-  // If product node.
-  if ($variables['node']->bundle() == 'acq_product') {
-    $variables['store_finder_enable_search'] = '';
-    // Config of store finder search enable/disable.
-    $store_finder_search_config = \Drupal::config('alshaya_stores_finder.settings')->get(('enable_disable_store_finder_search'));
-    $variables['store_finder_enable_search'] = $store_finder_search_config ?: '';
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_view_alter().
  */
 function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
   if ($entity->bundle() == 'acq_product' && $build['#view_mode'] == 'full') {
+    // Adding cache tags for the on-off feature.
     $build['#cache']['tags'][] = 'store-finder-cache-tag';
+
+    // Adding shipping options.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    $sku = $entity->get('field_skus')->first()->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    $config = \Drupal::config('alshaya_stores_finder.settings');
+
+    // Check if click and collect is available for this product.
+    // @TODO: ELSE: Do we need to show that click and collect is not available?
+    if ($config->get('enable_disable_store_finder_search') && alshaya_acm_product_available_click_collect($sku)) {
+      // Here we just show static text, we will get stores info using ajax.
+      // We need lat/lon info of user to get stores.
+      $build['click_and_collect'] = [
+        '#theme' => 'pdp_click_collect_default',
+        '#sku' => $sku,
+        '#type' => $sku_entity->bundle(),
+        '#title' => $config->get('pdp_click_collect_title'),
+        '#title_price' => alshaya_acm_price_get_formatted_price((float) $config->get('pdp_click_collect_price')),
+        '#subtitle' => $config->get('pdp_click_collect_subtitle'),
+        '#help_text' => $config->get('pdp_click_collect_help_text.value'),
+        '#attached' => ['library' => ['alshaya_stores_finder/pdp']],
+      ];
+    }
+
   }
 }

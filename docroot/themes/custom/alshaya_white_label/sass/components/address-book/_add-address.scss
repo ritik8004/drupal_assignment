@@ -143,3 +143,27 @@
     }
   }
 }
+
+#block-alshaya-white-label-content {
+  .ajax-progress-throbber {
+    margin-bottom: 0.625rem;
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-position: $right center !important;
+      background-repeat: no-repeat !important;
+      background-size: 1.5rem;
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 1rem;
+      margin-bottom: 0.625rem;
+    }
+  }
+}

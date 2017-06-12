@@ -9,6 +9,19 @@
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
 
+      var css = document.createElement('style');
+      css.type = 'text/css';
+      document.head.appendChild(css);
+      function setMenuWidth() {
+        var menuWidth = $('.menu--one__list').width();
+        css.innerHTML = '.menu--two__list, .menu--three__list, .menu--four__list { width: ' + menuWidth + 'px}';
+      }
+
+      setMenuWidth();
+      $(window).resize(function () {
+        setMenuWidth();
+      });
+
       var $listItems = $('.menu__list-item');
       $listItems.each(function () {
         var linkWrapper = $(this).find('> .menu__link-wrapper');
@@ -41,7 +54,8 @@
         $('body').addClass('mobile--overlay');
       });
 
-      $('.c-menu-primary .mobile--search').click(function () {
+      $('.c-menu-primary .mobile--search').off().on('click', function (e) {
+        e.preventDefault();
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
         $(this).parent().toggleClass('search-active');
       });
@@ -90,6 +104,7 @@
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
         $('.remove--toggle').removeClass('remove--toggle');
+        $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
       });
 
       var header_timer;

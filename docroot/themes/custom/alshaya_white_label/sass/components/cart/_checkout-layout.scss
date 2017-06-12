@@ -51,10 +51,6 @@
 }
 
 .path--cart {
-  @include breakpoint($only-mobile) {
-    margin-top: 0;
-  }
-
   .site-brand-home {
     a {
       width: 50.5%;
@@ -140,8 +136,7 @@
     margin: 0 auto;
 
     @include breakpoint($tablet) {
-      padding: 1.5rem;
-      padding-bottom: 1.2rem;
+      padding: 1rem 1.5rem;
     }
 
     @include breakpoint($desktop) {
@@ -284,6 +279,9 @@
 
     @include breakpoint($tablet) {
       font-size: 0.875rem;
+    }
+
+    @include breakpoint($desktop) {
       margin-bottom: 1rem;
     }
   }

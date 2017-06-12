@@ -26,6 +26,8 @@
       </div>
       <div class="light order-quantity">
         {% trans %}
+          Total: {{ count }} item
+        {% plural count %}
           Total: {{ count }} items
         {% endtrans %}
       </div>
@@ -40,6 +42,8 @@
       </div>
       <div class="light order-quantity">
         {% trans %}
+          Total: {{ count }} item
+        {% plural count %}
           Total: {{ count }} items
         {% endtrans %}
       </div>

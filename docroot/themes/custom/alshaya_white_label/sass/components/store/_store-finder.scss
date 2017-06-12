@@ -49,6 +49,10 @@
 
   .ui-autocomplete {
     font-size: 0.75rem;
+
+    @include breakpoint($only-mobile) {
+      width: calc(100% - 1rem) !important;
+    }
   }
 
   main {
@@ -428,7 +432,7 @@
         color: $grey-ash;
 
         &:hover {
-          color: $marine-blue;
+          color: $cerulean-two;
           text-decoration: underline;
         }
       }
@@ -496,6 +500,8 @@
 
       a {
         display: block;
+        z-index: 1;
+        position: relative;
       }
     }
 
@@ -1037,6 +1043,10 @@
     .key-value-value {
       text-align: $right;
     }
+  }
+
+  .ajax-progress-fullscreen {
+    background-image: url("../imgs/icons/MC-loader.svg");
   }
 }
 

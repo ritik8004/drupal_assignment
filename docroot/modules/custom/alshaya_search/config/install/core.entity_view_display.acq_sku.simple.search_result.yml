@@ -42,6 +42,7 @@ hidden:
   attr_short_description: true
   attr_size: true
   attributes: true
+  brand: true
   crosssell: true
   final_price: true
   media: true
