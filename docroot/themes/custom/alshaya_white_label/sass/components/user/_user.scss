@@ -534,11 +534,11 @@
       @include breakpoint($tablet) {
         margin-bottom: 7.5em;
       }
-    }
-  }
 
-  p {
-    display: none;
+      p {
+        display: none;
+      }
+    }
   }
 }
 
