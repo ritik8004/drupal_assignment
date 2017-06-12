@@ -1084,3 +1084,16 @@
     }
   }
 }
+
+html[lang="ar"] {
+  #block-jointheclub span.icon {
+    &-wish,
+    &-store,
+    &-offer,
+    &-win,
+    &-reward,
+    &-heart {
+      transform: scale(-1, 1);
+    }
+  }
+}
