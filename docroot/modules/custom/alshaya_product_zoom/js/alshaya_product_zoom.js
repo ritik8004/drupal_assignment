@@ -49,7 +49,7 @@
       }
 
       // Slider - 3 For Mobile - Image Gallery.
-      $('#product-image-gallery-mobile').lightSlider({
+      $('#product-image-gallery-mobile', context).lightSlider({
         item: 1,
         onAfterSlide: function (el) {
           el.children('iframe').remove();
