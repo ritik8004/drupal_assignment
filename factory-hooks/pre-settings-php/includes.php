@@ -35,9 +35,6 @@ elseif (strpos($env, 'test') !== FALSE) {
   $env = 'test';
 }
 
-// Test.
-$config['google_tag.settings']['container_id'] = 'GTM-NPNW788';
-
 // Test Alshaya.
 // $config['google_tag.settings']['container_id'] = 'GTM-PP5PK4C';
 
