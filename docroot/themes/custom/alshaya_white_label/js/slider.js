@@ -20,22 +20,20 @@
   Drupal.behaviors.sliderBanner = {
     attach: function (context, settings) {
       var options = {
-        items: 1,
-        dots: true,
-        nav: true,
+        arrows: true,
         autoplay: true,
-        loop: true,
-        autoplayTimeout: 15000,
-        autoplayHoverPause: true
+        autoplaySpeed: 500,
+        dots: true
       };
 
       if (isRTL()) {
-        $('.owl-carousel').owlCarousel(
-          $.extend({}, options, {rtl: true})
+        $('.c-slider-promo__items').attr('dir', 'rtl');
+        $('.c-slider-promo__items').slick(
+           $.extend({}, options, {rtl: true})
         );
       }
       else {
-        $('.owl-carousel').owlCarousel(options);
+        $('.c-slider-promo__items').slick(options);
       }
     }
   };

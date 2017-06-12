@@ -40,7 +40,7 @@ slider_banner:
     js/slider.js: {}
   dependencies:
     - core/jquery
-    - alshaya_white_label/owlcarousel
+    - alshaya_white_label/slick
 
 sell:
   js:
@@ -54,6 +54,13 @@ autosize_textarea:
     js/autosize_textarea.js: {}
   dependencies:
     - alshaya_white_label/autosize
+
+slick:
+  css:
+    theme:
+      vendor/css/slick.css: {}
+  js:
+    vendor/js/slick.min.js: {}
 
 owlcarousel:
   css:
