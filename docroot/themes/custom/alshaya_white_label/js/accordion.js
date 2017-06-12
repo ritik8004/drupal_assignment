@@ -68,6 +68,10 @@
         $(element).toggleClass('ui-state-active');
       }
 
+      $('.c-facet__blocks').find('.c-accordion__title').off().on('click', function (e) {
+        alshayaAccordion(this);
+      });
+
       /**
        * Place the search count from view header in different locations based on resolution.
        */
@@ -191,10 +195,6 @@
         $(window).on('resize', function (e) {
           mobileFilterMenu();
           placeSearchCount();
-        });
-
-        $('.c-facet__blocks .c-accordion__title').off().on('click', function (e) {
-          alshayaAccordion(this);
         });
 
         // Accordion for delivery option section on PDP.
