@@ -165,7 +165,7 @@ class ProductSyncResource extends ResourceBase {
         continue;
       }
 
-      if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE)) {
+      if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
         $this->logger->info('Updating product SKU @sku.', ['@sku' => $product['sku']]);
         $updated++;
       }
@@ -174,11 +174,8 @@ class ProductSyncResource extends ResourceBase {
         $sku = $em->create([
           'type' => $product['type'],
           'sku' => $product['sku'],
+          'langcode' => $langcode,
         ]);
-
-        if ($langcode) {
-          $sku->langcode = $langcode;
-        }
 
         $this->logger->info('Creating product SKU @sku.', ['@sku' => $product['sku']]);
 

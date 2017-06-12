@@ -9,7 +9,7 @@ label: 'Manage SKUs'
 module: views
 description: ''
 tag: ''
-base_table: acq_sku
+base_table: acq_sku_field_data
 base_field: id
 core: 8.x
 display:
@@ -77,20 +77,13 @@ display:
           summary: ''
           description: ''
           columns:
-            sku: sku
             name: name
+            sku: sku
             type: type
             langcode: langcode
             changed: changed
-            edit_acq_sku: edit_acq_sku
+            operations: operations
           info:
-            sku:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
             name:
               sortable: false
               default_sort_order: asc
@@ -98,6 +91,13 @@ display:
               separator: ''
               empty_column: false
               responsive: priority-medium
+            sku:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             type:
               sortable: false
               default_sort_order: asc
@@ -111,94 +111,27 @@ display:
               align: ''
               separator: ''
               empty_column: false
-              responsive: priority-low
+              responsive: ''
             changed:
               sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
-              responsive: priority-medium
-            edit_acq_sku:
-              sortable: false
-              default_sort_order: asc
+              responsive: priority-low
+            operations:
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-          default: changed
+          default: '-1'
           empty_table: false
       row:
         type: fields
       fields:
-        sku:
-          id: sku
-          table: acq_sku
-          field: sku
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: SKU
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: acq_sku
-          entity_field: sku
-          plugin_id: field
         name:
           id: name
-          table: acq_sku
+          table: acq_sku_field_data
           field: name
           relationship: none
           group_type: group
@@ -261,14 +194,79 @@ display:
           entity_type: null
           entity_field: name
           plugin_id: field
+        sku:
+          id: sku
+          table: acq_sku_field_data
+          field: sku
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: SKU
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          entity_type: acq_sku
+          entity_field: sku
+          plugin_id: field
         type:
           id: type
-          table: acq_sku
+          table: acq_sku_field_data
           field: type
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'SKU Type'
+          label: 'SKU type'
           exclude: false
           alter:
             alter_text: false
@@ -328,12 +326,12 @@ display:
           plugin_id: field
         langcode:
           id: langcode
-          table: acq_sku
+          table: acq_sku_field_data
           field: langcode
           relationship: none
           group_type: group
           admin_label: ''
-          label: Language
+          label: 'Translation language'
           exclude: false
           alter:
             alter_text: false
@@ -378,7 +376,7 @@ display:
           type: language
           settings:
             link_to_entity: false
-            native_language: false
+            native_language: true
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -394,7 +392,7 @@ display:
           plugin_id: field
         changed:
           id: changed
-          table: acq_sku
+          table: acq_sku_field_data
           field: changed
           relationship: none
           group_type: group
@@ -443,7 +441,7 @@ display:
           click_sort_column: value
           type: timestamp
           settings:
-            date_format: short
+            date_format: medium
             custom_date_format: ''
             timezone: ''
           group_column: value
@@ -459,14 +457,14 @@ display:
           entity_type: acq_sku
           entity_field: changed
           plugin_id: field
-        edit_acq_sku:
-          id: edit_acq_sku
+        operations:
+          id: operations
           table: acq_sku
-          field: edit_acq_sku
+          field: operations
           relationship: none
           group_type: group
           admin_label: ''
-          label: Action
+          label: Operations
           exclude: false
           alter:
             alter_text: false
@@ -507,67 +505,13 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          text: edit
+          destination: true
           entity_type: acq_sku
-          plugin_id: entity_link_edit
+          plugin_id: entity_operations
       filters:
-        sku:
-          id: sku
-          table: acq_sku
-          field: sku
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: contains
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: sku_op
-            label: SKU
-            description: ''
-            use_operator: false
-            operator: sku_op
-            identifier: sku
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              advanced_page_creator: '0'
-              advanced_page_reviewer: '0'
-              media_creator: '0'
-              acq_product_creator: '0'
-              media_manager: '0'
-              acq_product_reviewer: '0'
-              acq_promotion_creator: '0'
-              acq_promotion_reviewer: '0'
-              department_page_creator: '0'
-              department_page_reviewer: '0'
-              webmaster: '0'
-              reviewer: '0'
-              store_creator: '0'
-              store_reviewer: '0'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: acq_sku
-          entity_field: sku
-          plugin_id: string
         name:
           id: name
-          table: acq_sku
+          table: acq_sku_field_data
           field: name
           relationship: none
           group_type: group
@@ -619,9 +563,63 @@ display:
           entity_type: acq_sku
           entity_field: name
           plugin_id: string
+        sku:
+          id: sku
+          table: acq_sku_field_data
+          field: sku
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: sku_op
+            label: SKU
+            description: ''
+            use_operator: false
+            operator: sku_op
+            identifier: sku
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              advanced_page_creator: '0'
+              advanced_page_reviewer: '0'
+              media_creator: '0'
+              acq_product_creator: '0'
+              media_manager: '0'
+              acq_product_reviewer: '0'
+              acq_promotion_creator: '0'
+              acq_promotion_reviewer: '0'
+              department_page_creator: '0'
+              department_page_reviewer: '0'
+              webmaster: '0'
+              reviewer: '0'
+              store_creator: '0'
+              store_reviewer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: acq_sku
+          entity_field: sku
+          plugin_id: string
         type:
           id: type
-          table: acq_sku
+          table: acq_sku_field_data
           field: type
           relationship: none
           group_type: group
@@ -632,7 +630,7 @@ display:
           exposed: true
           expose:
             operator_id: type_op
-            label: 'SKU Type'
+            label: 'SKU type'
             description: ''
             use_operator: false
             operator: type_op
@@ -677,7 +675,7 @@ display:
           plugin_id: bundle
         langcode:
           id: langcode
-          table: acq_sku
+          table: acq_sku_field_data
           field: langcode
           relationship: none
           group_type: group
@@ -688,7 +686,7 @@ display:
           exposed: true
           expose:
             operator_id: langcode_op
-            label: 'Language code'
+            label: 'Translation language'
             description: ''
             use_operator: false
             operator: langcode_op
@@ -730,7 +728,22 @@ display:
           entity_type: acq_sku
           entity_field: langcode
           plugin_id: language
-      sorts: {  }
+      sorts:
+        changed:
+          id: changed
+          table: acq_sku_field_data
+          field: changed
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          granularity: second
+          entity_type: acq_sku
+          entity_field: changed
+          plugin_id: date
       title: 'Manage SKUs'
       header: {  }
       footer: {  }
@@ -738,10 +751,6 @@ display:
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
     cache_metadata:
       max-age: 0
       contexts:

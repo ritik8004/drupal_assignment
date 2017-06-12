@@ -30,13 +30,17 @@ use Drupal\user\UserInterface;
  *     "access" = "Drupal\acq_sku\SKUAccessControlHandler",
  *   },
  *   base_table = "acq_sku",
+ *   data_table = "acq_sku_field_data",
+ *   translatable = TRUE,
+ *   common_reference_target = TRUE,
  *   admin_permission = "administer commerce sku entity",
  *   fieldable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "name",
- *     "uuid" = "uuid",
- *     "bundle" = "type"
+ *     "bundle" = "type",
+ *     "langcode" = "langcode",
+ *     "uuid" = "uuid"
  *   },
  *   bundle_entity_type = "acq_sku_type",
  *   bundle_label = @Translation("SKU type"),
@@ -244,25 +248,21 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Language code.
    * @param bool $log_not_found
    *   Log errors when store not found. Can be false during sync.
+   * @param bool $create_translation
+   *   Create translation and return if entity available but translation is not.
    *
    * @return \Drupal\acq_sku\Entity\SKU|null
    *   Found SKU
    */
-  public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE) {
-    $query = \Drupal::entityQuery('acq_sku');
-    $query->condition('sku', $sku, 'IN');
-
-    if (\Drupal::languageManager()->isMultilingual()) {
-      if (empty($langcode)) {
-        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      }
-
-      $query->condition('langcode', $langcode);
+  public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE, $create_translation = FALSE) {
+    if (empty($langcode)) {
+      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
-    $ids = $query->execute();
+    $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
+    $skus = $storage->loadByProperties(['sku' => $sku]);
 
-    if (count($ids) == 0) {
+    if (count($skus) == 0) {
       // We don't log the error while doing sync.
       if ($log_not_found) {
         \Drupal::logger('acq_sku')->error('No SKU found for @sku.', ['@sku' => $sku]);
@@ -271,14 +271,25 @@ class SKU extends ContentEntityBase implements SKUInterface {
       return NULL;
     }
     // For multiple entries, we just log the error and continue with first one.
-    elseif (count($ids) > 1) {
+    elseif (count($skus) > 1) {
       \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
-    $id = array_shift($ids);
-    $sku = SKU::load($id);
+    $sku_entity = array_shift($skus);
 
-    return $sku;
+    if (\Drupal::languageManager()->isMultilingual()) {
+      if ($sku_entity->hasTranslation($langcode)) {
+        $sku_entity = $sku_entity->getTranslation($langcode);
+      }
+      elseif ($create_translation) {
+        $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
+      }
+      else {
+        throw new \Exception(new FormattableMarkup('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]), 404);
+      }
+    }
+
+    return $sku_entity;
   }
 
   /**
@@ -370,25 +381,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * in the GUI. The behaviour of the widgets used can be determined here.
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
-    $fields['type'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('SKU Type'))
-      ->setDescription(t('The SKU type.'))
-      ->setSetting('target_type', 'acq_sku_type')
-      ->setReadOnly(TRUE);
-
-    $fields['id'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('ID'))
-      ->setDescription(t('The ID of the SKU entity.'))
-      ->setReadOnly(TRUE);
-
-    $fields['uuid'] = BaseFieldDefinition::create('uuid')
-      ->setLabel(t('UUID'))
-      ->setDescription(t('The UUID of the SKU entity.'))
-      ->setReadOnly(TRUE);
+    $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Name'))
       ->setDescription(t("The SKU's human-friendly name."))
+      ->setTranslatable(TRUE)
       ->setSettings([
         'default_value' => '',
         'max_length' => 255,
@@ -409,6 +407,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['sku'] = BaseFieldDefinition::create('string')
       ->setLabel(t('SKU'))
       ->setDescription(t('The SKU.'))
+      ->setTranslatable(TRUE)
       ->setRequired(TRUE)
       ->setSettings([
         'default_value' => '',
@@ -430,6 +429,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['price'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Display Price'))
       ->setDescription(t('Display Price of this SKU.'))
+      ->setTranslatable(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'string',
@@ -445,18 +445,21 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['special_price'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Special Price'))
       ->setDescription(t('Special Price of this SKU.'))
+      ->setTranslatable(TRUE)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['final_price'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Final Price'))
       ->setDescription(t('Final Price of this SKU.'))
+      ->setTranslatable(TRUE)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['crosssell'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Cross sell SKU'))
       ->setDescription(t('Reference to all Cross sell SKUs.'))
+      ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => 5,
@@ -467,6 +470,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['upsell'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Up sell SKU'))
       ->setDescription(t('Reference to all up sell SKUs.'))
+      ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => 6,
@@ -477,6 +481,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['related'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Related SKU'))
       ->setDescription(t('Reference to all related SKUs.'))
+      ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => 7,
@@ -487,6 +492,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['image'] = BaseFieldDefinition::create('image')
       ->setLabel(t('Image'))
       ->setDescription(t('Product image'))
+      ->setTranslatable(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'hidden',
         'type' => 'image',
@@ -502,27 +508,27 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['media'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Media'))
       ->setDescription(t('Store all the media files info.'))
+      ->setTranslatable(TRUE)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['attributes'] = BaseFieldDefinition::create('key_value')
       ->setLabel(t('Attributes'))
       ->setDescription(t('Non-Drupal native product data.'))
+      ->setTranslatable(TRUE)
       ->setCardinality(-1)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['langcode'] = BaseFieldDefinition::create('language')
-      ->setLabel(t('Language code'))
-      ->setDescription(t('The language code of Product entity.'));
-
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
+      ->setDescription(t('The time that the entity was created.'))
+      ->setTranslatable(TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the entity was last edited.'));
+      ->setDescription(t('The time that the entity was last edited.'))
+      ->setTranslatable(TRUE);
 
     // Get all the fields added by other modules and add them as base fields.
     $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
@@ -590,6 +596,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
         // Update cardinality with default value if empty.
         $field_info['description'] = empty($field_info['description']) ? 1 : $field_info['description'];
         $field->setDescription($field_info['description']);
+
+        $field->setTranslatable(TRUE);
 
         // Update cardinality with default value if empty.
         $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];

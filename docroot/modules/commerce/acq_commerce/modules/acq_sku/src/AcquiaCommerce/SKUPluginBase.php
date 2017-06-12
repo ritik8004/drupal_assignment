@@ -136,17 +136,13 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
     $query->condition('child_sku.field_configured_skus_value', $sku->getSku());
 
-    if (\Drupal::languageManager()->isMultilingual()) {
-      $query->condition('acq_sku.langcode', $sku->get('langcode')->getString());
-    }
-
     $parent_sku = $query->execute()->fetchField();
 
     if (empty($parent_sku)) {
       return NULL;
     }
 
-    return SKU::loadFromSku($parent_sku);
+    return SKU::loadFromSku($parent_sku, $sku->language()->getId());
   }
 
   /**
@@ -177,21 +173,21 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     // Check language checks if site is in multilingual mode.
     if (\Drupal::languageManager()->isMultilingual()) {
       // If language of SKU and node are the same, we return the node.
-      if ($node->language()->getId() == $sku->get('langcode')->getString()) {
+      if ($node->language()->getId() == $sku->language()->getId()) {
         return $node;
       }
 
       // If node has translation, we return the translation.
-      if ($node->hasTranslation($sku->get('langcode')->getString())) {
-        return $node->getTranslation($sku->get('langcode')->getString());
+      if ($node->hasTranslation($sku->language()->getId())) {
+        return $node->getTranslation($sku->language()->getId());
       }
 
       // If translation not available and create_translation flag is true.
-      if ($create_translation && $sku->get('langcode')->getString() != LanguageInterface::LANGCODE_NOT_SPECIFIED) {
-        return $node->addTranslation($sku->get('langcode')->getString());
+      if ($create_translation) {
+        return $node->addTranslation($sku->language()->getId());
       }
 
-      return NULL;
+      throw new \Exception(new FormattableMarkup('Node translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $sku->language()->getId()]), 404);
     }
 
     return $node;

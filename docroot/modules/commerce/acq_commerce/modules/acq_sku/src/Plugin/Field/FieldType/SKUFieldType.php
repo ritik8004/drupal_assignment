@@ -148,7 +148,7 @@ class SKUFieldType extends FieldItemBase {
   public function get($property_name) {
     // Since we are doing reference in custom way, we load the value here.
     if ($property_name === 'entity' && !isset($this->values[$property_name])) {
-      $value = $this->values[$property_name] = SKU::loadFromSku($this->values['value']);
+      $value = $this->values[$property_name] = SKU::loadFromSku($this->values['value'], $this->getLangcode());
       $this->properties[$property_name] = $this->getTypedDataManager()->getPropertyInstance($this, $property_name, $value);
     }
 
