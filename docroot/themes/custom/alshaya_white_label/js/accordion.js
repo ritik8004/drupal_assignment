@@ -117,7 +117,7 @@
         var accordionBody = $(accordionHead).nextAll();
 
         $(accordionBody).addClass('accordion--body');
-        $(accordionHead).click(function () {
+        $(accordionHead).once().click(function () {
           var $ub = $(this).nextAll().stop(true, true).slideToggle();
           accordionBody.not($ub).slideUp();
           $ub.parent().toggleClass('open--accordion');
