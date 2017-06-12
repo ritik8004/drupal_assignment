@@ -148,22 +148,8 @@ class StoresFinderUtility {
    * Function to sync all stores.
    */
   public function syncStores() {
-    $languages = \Drupal::languageManager()->getLanguages();
-
     // Prepare the alternate locale data.
-    foreach ($languages as $lang => $language) {
-      // For default language, we access the config directly.
-      if ($lang == \Drupal::languageManager()->getDefaultLanguage()->getId()) {
-        $config = \Drupal::config('acq_commerce.store');
-      }
-      // We get store id from translated config for other languages.
-      else {
-        $config = \Drupal::languageManager()->getLanguageConfigOverride($lang, 'acq_commerce.store');
-      }
-
-      // Get the store id.
-      $store_id = $config->get('store_id');
-
+    foreach (acq_commerce_get_store_language_mapping() as $lang => $store_id) {
       // Get all stores for particular store id.
       $stores = $this->apiWrapper->getStores($store_id);
 
