@@ -1,7 +1,7 @@
 acq-cart-custom-js:
   version: 1.x
   js:
-    js/acq_cart_custom.js: {}
+    js/acq_cart_custom.js: { attributes: { defer: true, async: true} }
   dependencies:
     - core/jquery
     - core/drupal

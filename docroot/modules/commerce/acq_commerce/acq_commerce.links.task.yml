@@ -1,0 +1,14 @@
+acq_commerce.configuration.conductor:
+  title: 'Conductor Settings'
+  route_name: 'acq_commerce.configuration.conductor'
+  base_route: 'acq_commerce.configuration.conductor'
+
+acq_commerce.configuration.currency:
+  title: 'Currency Settings'
+  route_name: 'acq_commerce.configuration.currency'
+  base_route: 'acq_commerce.configuration.currency'
+
+acq_commerce.configuration.store:
+  title: 'Store Settings'
+  route_name: 'acq_commerce.configuration.store'
+  base_route: 'acq_commerce.configuration.store'

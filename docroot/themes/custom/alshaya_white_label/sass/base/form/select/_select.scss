@@ -2,6 +2,11 @@ select::-ms-expand {
   display: none;
 }
 
+select:focus::-ms-value {
+  background: transparent;
+  color: $black;
+}
+
 @mixin select-style($select-width) {
   appearance: none;
   border: 1px solid $white-two;
@@ -30,7 +35,7 @@ select::-ms-expand {
   @include icon(chevrondown, after) {
     border-#{$left}: 1px solid $white-five;
     font-size: 1.75rem;
-    line-height: 2.1875rem;
+    line-height: 35px;
     pointer-events: none;
     position: absolute;
     #{$right}: 0;
@@ -44,5 +49,18 @@ select::-ms-expand {
     @include breakpoint($tablet) {
       z-index: 1;
     }
+  }
+}
+
+@mixin select-bg($select-width) {
+  &::before {
+    width: $select-width;
+    content: "";
+    background: $whisper-dark;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 2.1875rem;
+    z-index: 1;
   }
 }

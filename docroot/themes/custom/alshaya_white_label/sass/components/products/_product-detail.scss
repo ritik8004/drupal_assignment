@@ -100,7 +100,7 @@
 
 // SideBar content theming
 
-.field--name-field-skus {
+.basic-details-wrapper .field--name-field-skus {
   .field--name-sku {
     @include u-visibility(none);
   }
@@ -133,6 +133,15 @@
     @include breakpoint($only-mobile) {
       padding: 0;
       margin-top: 1.5em;
+      position: relative;
+      z-index: 3;
+
+      @include select-wrapper(12.3125rem);
+
+      &::after {
+        top: 0.5rem;
+        z-index: 1;
+      }
 
       label {
         @include u-visibility(block);
@@ -146,25 +155,9 @@
       }
 
       select.form-select {
-        background-color: $whisper-dark;
-        height: 2.1875rem;
-        font-family: $arial;
-        font-size: 0.75rem;
-        color: $black;
-        display: inline-block;
-        float: $left;
-      }
+        @include select-style(12.3125rem);
 
-      @include icon(chevrondown, after) {
         background-color: $whisper-dark;
-        color: $grey-ash;
-        display: inline-block;
-        font-size: 1.75rem;
-        width: 2.1875rem;
-        line-height: 35px;
-        text-align: center;
-        height: 2.1875rem;
-        margin-#{$left}: 0.0625rem;
       }
     }
 
@@ -172,6 +165,14 @@
       padding: 0;
       margin-top: 1.5em;
 
+      @include select-wrapper(8.75rem);
+      @include select-bg(6.5625rem);
+
+      &::after,
+      &::before {
+        top: 0.5rem;
+      }
+
       label {
         @include u-visibility(block);
 
@@ -184,25 +185,7 @@
       }
 
       select.form-select {
-        background-color: $whisper-dark;
-        height: 2.1875rem;
-        font-family: $arial;
-        font-size: 0.75rem;
-        color: $black;
-        display: inline-block;
-        float: $left;
-      }
-
-      @include icon(chevrondown, after) {
-        background-color: $whisper-dark;
-        color: $grey-ash;
-        display: inline-block;
-        font-size: 1.75rem;
-        width: 2.1875rem;
-        line-height: 35px;
-        text-align: center;
-        height: 2.1875rem;
-        margin-#{$left}: 1px;
+        @include select-style(8.75rem);
       }
     }
   }
@@ -842,6 +825,7 @@
         text-align: center;
         padding: 0.75rem;
         font-size: 0.625rem;
+        color: $black;
 
         &.picked {
           color: $white;

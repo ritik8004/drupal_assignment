@@ -65,7 +65,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
         'type' => 'application/ld+json',
       ],
       // Adding PHP_EOL on both sides to make it look exactly same as expected.
-      '#value' => PHP_EOL . json_encode($gkg_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL,
+      '#value' => PHP_EOL . json_encode($gkg_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
       '#weight' => 100,
     ],
     'gpg',

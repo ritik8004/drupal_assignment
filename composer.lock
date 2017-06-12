@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c05ce791b167397ee221be97ec684307",
+    "content-hash": "a8f27171b2ed57a12fa329bcae380ec6",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1652,7 +1652,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.10",
-                    "datestamp": "1493037542"
+                    "datestamp": "1495479183"
                 },
                 "patches_applied": {
                     "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
@@ -2043,7 +2043,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486736883"
+                    "datestamp": "1495109886"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4493,7 +4493,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.3",
-                    "datestamp": "1494333185"
+                    "datestamp": "1495556283"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5379,6 +5379,9 @@
                 "drupal": {
                     "version": "8.x-1.0-alpha7",
                     "datestamp": "1493902084"
+                },
+                "patches_applied": {
+                    "Update access check for set-default profile": "https://www.drupal.org/files/issues/2885005-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5971,7 +5974,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/search_api_solr_multilingual-8.x-1.0-beta3.zip",
-                "reference": null,
+                "reference": "8.x-1.0-beta3",
                 "shasum": "ee105412f8c40311bc197ea08e4504c15bdc2816"
             },
             "require": {
@@ -6399,7 +6402,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486726083"
+                    "datestamp": "1486729083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6722,7 +6725,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.0-beta12",
-                    "datestamp": "1492798443"
+                    "datestamp": "1496265842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

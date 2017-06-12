@@ -3,29 +3,32 @@ alshaya_acm_product.home_delivery:
   label: 'Alshaya ACM Product Home Delivery settings'
   mapping:
     title:
-      type: text
+      type: label
       label: 'Title'
     subtitle:
-      type: text
+      type: label
       label: 'Subtitle'
     title_price:
       type: float
       label: 'Price displayed in title'
     options_standard_title:
-      type: text
+      type: label
       label: 'Standard option title'
     options_standard_subtitle:
-      type: text
+      type: label
       label: 'Standard option subtitle'
     options_standard_price_options_one_title:
-      type: text
+      type: label
       label: 'Standard option first line title'
     options_standard_price_options_one_price:
       type: float
       label: 'Standard option first line price'
     options_standard_price_options_two_title:
-      type: text
+      type: label
       label: 'Standard option second line title'
     options_standard_price_options_two_price:
       type: float
       label: 'Standard option second line price'
+    langcode:
+      type: string
+      label: 'Language code'

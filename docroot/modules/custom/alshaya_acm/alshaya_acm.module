@@ -526,10 +526,20 @@ function alshaya_acm_price_get_formatted_price($price) {
  *
  * @param int|null $max
  *   Maximum possible quantity.
+ * @param int|null $selected
+ *   Current selection.
+ *
+ * @return array
+ *   Options array.
  */
-function _alshaya_acm_get_cart_quantity_options($max = NULL) {
+function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
   // Get max possible from config.
   $max_config = \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty');
+
+  // We display options till current selection if available.
+  if ($selected > $max_config) {
+    $max_config = $selected;
+  }
 
   // We take lower value for quantity options as per config or provided value.
   $max = $max && $max_config > $max ? $max : $max_config;
@@ -622,6 +632,11 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   $config->set('currency_code', 'د٠ك٠');
   $config->set('currency_code_position', 'after');
   $config->save();
+
+  // Translate store id in config.
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store');
+  $config->set('store_id', '3');
+  $config->save();
 }
 
 /**
@@ -705,7 +720,7 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
       $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
     }
     else {
-      $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+      $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity, $selected_quantity);
     }
   }
   else {

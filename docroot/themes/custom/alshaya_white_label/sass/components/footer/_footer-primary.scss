@@ -16,6 +16,10 @@
     }
   }
 
+  @include breakpoint($only-tablet) {
+    margin-top: 2.0625rem;
+  }
+
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
     margin-top: 2rem;
@@ -358,6 +362,7 @@
     @include breakpoint($tablet) {
       #{$right}: 2.55rem;
       font-size: 0.8125rem;
+      border-top: -1px;
     }
 
     @include breakpoint($desktop) {

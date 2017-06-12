@@ -1,4 +1,4 @@
-alshaya_seo.settings:
+alshaya_seo.google_knowledge_graph:
   type: config_object
   label: 'Google Knowledge Graph'
   mapping:
@@ -6,14 +6,17 @@ alshaya_seo.settings:
       type: text
       label: 'Same As'
     contact_telephone:
-      type: text
+      type: label
       label: 'Contact Telephone'
     contact_type:
-      type: text
+      type: label
       label: 'Contact Type'
     contact_areaserved:
-      type: text
+      type: label
       label: 'Contact Area Served'
     contact_option:
-      type: text
+      type: label
       label: 'Contact Option'
+    langcode:
+      type: string
+      label: 'Language code'
