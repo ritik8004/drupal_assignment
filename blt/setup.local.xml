@@ -28,7 +28,7 @@
 
   <target name="refresh:local"
           description="Setup local dev environment."
-          depends="local:setup, local:reset-settings-file, sync:products">
+          depends="local:setup, local:reset-settings-file, sync:translations, sync:products">
   </target>
 
   <target name="refresh:local:drupal"
