@@ -693,6 +693,18 @@ function alshaya_master_install() {
     'Orders under KWD 1234' => [
       'ar' => 'الطلبيات الأقل من 1234 د.ك.',
     ],
+    'Standard delivery for purchases over KD 250' => [
+      'ar' => 'خدمة التوصيل العادي للطلبيات التي تزيد على 250 د.ك',
+    ],
+    'Collect your order in-store' => [
+      'ar' => 'استلم طلبيتك من المحل',
+    ],
+    'Please select a payment option to continue.' => [
+      'ar' => 'يرجى اختيار طريقة الدفع للمتابعة',
+    ],
+    'highlights' => [
+      'ar' => 'أهم العروض',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
