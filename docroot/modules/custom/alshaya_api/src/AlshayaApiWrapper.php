@@ -40,11 +40,14 @@ class AlshayaApiWrapper {
   /**
    * Function to get all the stores from the API.
    *
+   * @param int $store_id
+   *   Store id.
+   *
    * @return mixed
    *   Stores array.
    */
-  public function getStores() {
-    $endpoint = 'storeLocator/search?searchCriteria=';
+  public function getStores($store_id) {
+    $endpoint = 'storeLocator/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=' . $store_id;
 
     $response = $this->invokeApi($endpoint, [], 'GET');
     $stores = json_decode($response, TRUE);

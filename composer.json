@@ -139,6 +139,9 @@
             },
             "drupal/r4032login": {
                 "Alter/Override options parameter": "https://www.drupal.org/files/issues/2883264-4.patch"
+            },
+            "drupal/profile" : {
+                "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
             }
         },
         "installer-paths": {

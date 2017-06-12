@@ -52,7 +52,7 @@ trait IngestRequestTrait {
    */
   protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL) {
 
-    $client = $this->clientFactory->createIngestClient();
+    $client = $this->clientFactory->createClient();
     $reqOpts = [];
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');
 

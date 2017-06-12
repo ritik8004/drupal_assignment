@@ -306,7 +306,7 @@ function alshaya_master_install() {
     ],
     'The phone number %value provided for %field is not a valid mobile number for country %country.' => [
       'en' => 'The Mobile number %value provided for %field is not a valid mobile number.',
-      'ar' => 'رقم الجوال field% المدخل في value% غير صحيح',
+      'ar' => 'رقم الجوال %field المدخل في %value غير صحيح',
     ],
     'Delivery to' => [
       'ar' => 'توصيل إلى',

@@ -29,3 +29,11 @@ acq_commerce.configuration.currency:
     _title: 'Currency Settings'
   requirements:
     _permission: 'access commerce administration pages'
+
+acq_commerce.configuration.store:
+  path: '/admin/commerce/config/store-settings'
+  defaults:
+    _form: '\Drupal\acq_commerce\Form\StoreSettingsForm'
+    _title: 'Store Settings'
+  requirements:
+    _permission: 'access commerce administration pages'

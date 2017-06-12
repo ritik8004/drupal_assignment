@@ -198,7 +198,7 @@ function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $e
         '#sku' => $sku,
         '#type' => $sku_entity->bundle(),
         '#title' => $config->get('pdp_click_collect_title'),
-        '#title_price' => alshaya_acm_price_get_formatted_price($config->get('pdp_click_collect_price')),
+        '#title_price' => alshaya_acm_price_get_formatted_price((float) $config->get('pdp_click_collect_price')),
         '#subtitle' => $config->get('pdp_click_collect_subtitle'),
         '#help_text' => $config->get('pdp_click_collect_help_text.value'),
         '#attached' => ['library' => ['alshaya_stores_finder/pdp']],

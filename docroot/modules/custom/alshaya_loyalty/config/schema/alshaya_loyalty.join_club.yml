@@ -6,5 +6,5 @@ alshaya_loyalty.join_club:
       type: text_format
       label: 'Join the club description'
     langcode:
-     type: text
-     label: 'Language code'
+      type: string
+      label: 'Language code'
