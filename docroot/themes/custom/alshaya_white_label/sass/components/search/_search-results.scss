@@ -399,6 +399,12 @@ header,
 }
 
 .alias--search {
+  @include breakpoint($only-mobile) {
+    .branding__menu.show-overlay {
+      z-index: 2;
+    }
+  }
+
   header {
     @include breakpoint($only-tablet) {
       .bef-exposed-form {
@@ -486,4 +492,13 @@ header,
 ul.item-list__checkbox,
 .block-facets > ul {
   display: none;
+}
+
+.ajax-progress.ajax-progress-fullscreen {
+  background-image: url(../imgs/icons/MC-loader.svg) !important;
+  background-repeat: no-repeat !important;
+  background-color: transparent !important;
+  background-size: 4.5rem;
+  width: 4rem !important;
+  height: 4rem !important;
 }
