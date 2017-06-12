@@ -124,7 +124,7 @@
     .ajax-progress-throbber {
       position: absolute;
       top: 0.625rem;
-      left: 4.375rem;
+      #{$left}: 4.375rem;
 
       .message {
         display: none;
@@ -141,8 +141,7 @@
 
       @include breakpoint($only-mobile) {
         top: 0.625rem;
-        left: 4.375rem;
-        #{$right}: 1rem;
+        #{$left}: 4.375rem;
       }
     }
   }
