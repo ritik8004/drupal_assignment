@@ -191,7 +191,7 @@ class APIWrapper {
    * @throws \Exception
    */
   public function associateCart($cart_id, $customer_id) {
-    $endpoint = "cart/$cart_id/associate";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/associate";
 
     $doReq = function ($client, $opt) use ($endpoint, $customer_id, $cart_id) {
       $opt['json'] = [
