@@ -24,17 +24,21 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
  */
 function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Attach GTM attributes to identify buttons.
-  $checkout_guest_options = [
-    'attributes' => [
-      'gtm-type' => 'checkout-as-guest',
-    ],
-  ];
-  /** @var \Drupal\Core\Url $checkout_guest_url */
-  $checkout_guest_url = $form['checkout_guest']['checkout_guest']['checkout_as_guest']['#url'];
-  $checkout_guest_url->setOptions($checkout_guest_options);
-  $form['checkout_guest']['checkout_guest']['checkout_as_guest']['#url']->setOptions($checkout_guest_options);
+  if (!empty($form['checkout_guest'])) {
+    $checkout_guest_options = [
+      'attributes' => [
+        'gtm-type' => 'checkout-as-guest',
+      ],
+    ];
+    $form['checkout_guest']['checkout_guest']['checkout_as_guest']['#url']->setOptions($checkout_guest_options);
+  }
+  if (!empty($form['checkout_login'])) {
+    $form['checkout_login']['checkout_login']['form']['actions']['submit']['#attributes']['gtm-type'] = 'checkout-signin';
+  }
+  if (!empty($form['acm_payment_methods'])) {
+    $form['acm_payment_methods']['payment_options']['#attributes']['gtm-type'] = 'cart-checkout-payment';
+  }
 
-  $form['checkout_login']['checkout_login']['form']['actions']['submit']['#attributes']['gtm-type'] = 'checkout-signin';
   // Add markup to show selected card type.
   if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details'], $form['acm_payment_methods']['payment_details']['cc_number'])) {
     $form['acm_payment_methods']['payment_details']['cc_number']['#weight'] = 0;

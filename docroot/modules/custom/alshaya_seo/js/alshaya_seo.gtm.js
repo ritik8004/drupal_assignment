@@ -14,10 +14,12 @@
       var body = $('body');
       var currencyCode = body.attr('gtm-currency');
       var gtmPageType = body.attr('gtm-container');
-      var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]');
+      var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
       var listName = body.attr('gtm-list-name');
-      var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]');
-      var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]')
+      var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]', context);
+      var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]');
+      var cartCheckoutDeliverySelector = $('body[gtm-container="cart-checkout-delivery"]');
+      var cartCheckoutPaymentSelector = $('body[gtm-container="cart-checkout-payment"]');
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -46,6 +48,9 @@
         productLinkSelector.each(function() {
           // Fetch attributes for this product.
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
+          // Keep variant empty for impression pages. Populated only post add to cart action.
+          impression.variant = '';
+
           var pdpListName = '';
           var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
 
@@ -63,15 +68,7 @@
           count_pdp_items++;
         });
 
-        var data_pdp = {
-          'event': 'productImpression',
-          'ecommerce': {
-            'currencyCode': currencyCode,
-            'impressions': impressions
-          }
-        };
-
-        dataLayer.push(data_pdp);
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
       }
       else if ($.inArray(gtmPageType, impressionPages) !== -1) {
         var count = 1;
@@ -79,19 +76,13 @@
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
           impression.position = count;
+          // Keep variant empty for impression pages. Populated only post add to cart action.
+          impression.variant = '';
           impressions.push(impression);
           count++;
         });
 
-        var data = {
-          'event': 'productImpression',
-          'ecommerce': {
-            'currencyCode': currencyCode,
-            'impressions': impressions
-          }
-        };
-
-        dataLayer.push(data);
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
       }
 
       /** Add to cart GTM **/
@@ -116,7 +107,7 @@
             // If the add-to-cart button was triggered from modal, the target element will be modal.
             if ($(targetEl).hasClass('ui-dialog')) {
               addedProductSelector = $(targetEl).find('article[gtm-type="gtm-product-link"]');
-              quantity = $(targetEl).find('form-item-quantity select').val();
+              quantity = $(targetEl).find('.form-item-quantity select').val();
             }
             else {
               addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
@@ -133,7 +124,12 @@
               product.quantity = quantity;
 
               // Set product size to selected size.
-              product.dimension1 = size;
+              if (product.dimension5 !== 'simple') {
+                product.dimension1 = size;
+              }
+
+              // Set product variant to the selected variant.
+              product.variant = $('selected-variant-sku-' + product.id.toLowerCase(), context).val();
 
               // Calculate metric 1 value.
               product.metric1 = product.price * product.quantity;
@@ -205,7 +201,7 @@
 
       /** Remove Product from cart **/
       // Add click handler to fire 'removeFromCart' event to GTM.
-      removeCartSelector.each(function() {
+      removeCartSelector.once('js-event').each(function() {
         $(this).bind('click', function (e) {
           // Get selector holding details around the product.
           var removeItem = $(this).closest('td.quantity').siblings('td.name').find('[gtm-type="gtm-remove-cart-wrapper"]');
@@ -244,10 +240,51 @@
       });
 
       /** Tracking Returning customers **/
-      cartCheckoutLoginSelector.find('[a[gtm-type="checkout-signin"]').once('js-event').bind('click', function() {
-        Drupal.alshaya_seo_gtm_push_customer_type('New Customer');
+      cartCheckoutLoginSelector.find('a[gtm-type="checkout-signin"]').once('js-event').bind('click', function() {
+        Drupal.alshaya_seo_gtm_push_customer_type('Returning Customers');
       });
-      
+
+      /** Tracking Home Delivery **/
+      if (cartCheckoutDeliverySelector.length !== 0) {
+        // Fire checkout option event if home delivery option is selected by default on delivery page.
+        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').hasClass('active--tab--head')) {
+          Drupal.alshaya_seo_gtm_push_delivery_type('Home Delivery');
+        }
+        // Fire checkout option event when user switches delivery option.
+        cartCheckoutDeliverySelector.find('[data-drupal-selector="edit-delivery-tabs"]').once('js-event').each(function() {
+          $(this).bind('click', function() {
+            var gtmType = $(this).attr('gtm-type');
+            var deliveryType = '';
+            if (gtmType === 'checkout-home-delivery') {
+              deliveryType = 'Home Delivery';
+            }
+            else if (gtmType === 'checkout-click-collect') {
+              deliveryType = 'Click & Collect';
+            }
+
+            Drupal.alshaya_seo_gtm_push_delivery_type(deliveryType);
+
+          });
+        });
+      }
+
+      /** Tracking selected payment option **/
+      if (cartCheckoutPaymentSelector.length !== 0) {
+        var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
+        if (preselectedMethod !== undefined) {
+          var preselectedMethodLabel = preselectedMethod.siblings('label').text();
+          Drupal.alshaya_seo_gtm_push_selected_payment(preselectedMethodLabel);
+        }
+
+        $('[gtm-type="cart-checkout-payment"] input').once('js-event').change(function() {
+          var selectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
+          if (selectedMethod !== undefined) {
+            var selectedMethodLabel = selectedMethod.siblings('label').text();
+            Drupal.alshaya_seo_gtm_push_selected_payment(selectedMethodLabel);
+          }
+        });
+      }
+
       /** Product Click Handler **/
       // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {
@@ -318,11 +355,65 @@
             'option': customerType
           }
         }
+      },
+      'eventCallback': function() {
+        document.location = 'cart/checkout/delivery';
       }
     };
     
     dataLayer.push(data);
   };
 
-})(jQuery, Drupal, dataLayer);
+  Drupal.alshaya_seo_gtm_push_selected_payment = function(paymentMethod) {
+    var data = {
+      'event': 'checkoutOption',
+      'ecommerce': {
+        'checkout_option': {
+          'actionField': {
+            'step': 4,
+            'option': paymentMethod
+          }
+        }
+      },
+      'eventCallback': function () {
+        document.location = 'cart/checkout/confirmation';
+      }
+    };
+    
+    dataLayer.push(data);
+  };
 
+  Drupal.alshaya_seo_gtm_push_delivery_type = function(deliveryType) {
+    var data = {
+      'event': 'checkoutOption',
+      'ecommerce': {
+        'checkout_option': {
+          'actionField': {
+            'step': 2,
+            'option': deliveryType
+          }
+        }
+      },
+      'eventCallback': function() {
+        document.localtion = 'cart/checkout/payment';
+      }
+    };
+
+    dataLayer.push(data);
+  };
+
+  Drupal.alshaya_seo_gtm_push_impressions = function(currencyCode, impressions) {
+    if (impressions.length > 0) {
+      var data = {
+        'event': 'productImpression',
+        'ecommerce': {
+          'currencyCode': currencyCode,
+          'impressions': impressions
+        }
+      };
+
+      dataLayer.push(data);
+    }
+  };
+
+})(jQuery, Drupal, dataLayer);

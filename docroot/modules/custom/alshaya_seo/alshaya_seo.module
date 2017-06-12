@@ -253,6 +253,10 @@ function alshaya_seo_theme($existing, $type, $theme, $path) {
 function alshaya_seo_datalayer_alter(&$data_layer) {
   /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtmManager */
   $gtmManager = \Drupal::service('alshaya_seo.gtm_manager');
+  $currencyCode = \Drupal::config('acq_commerce.currency')
+    ->get('currency_code');
+  $data_layer = [];
+  $confirmationPage = FALSE;
 
   $currentRoute = $gtmManager->getGtmContainer();
   switch ($currentRoute['route_name']) {
@@ -269,10 +273,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
             }
           }
 
-          // Should not be set until product added to the cart.
-          $processedAttributes['dimension1'] = '';
-          $processedAttributes['dimension2'] = '';
-
           $data_layer = array_merge($data_layer, $processedAttributes);
           $data_layer['pageType'] = $gtmManager->convertCurrentRouteToGtmPageName($gtmManager->getGtmContainer());
         }
@@ -280,26 +280,59 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
       break;
 
     case 'acq_checkout.form':
-      if ($currentRoute['route_params']['step'] === 'login') {
+      if (in_array($currentRoute['route_params']['step'],
+        ['login', 'delivery', 'payment', 'confirmation'], TRUE)) {
         $cartItemAttributes = $gtmManager->fetchCartItemAttributes();
-        foreach ($cartItemAttributes as $key => $cartItem) {
-          $products[] = $gtmManager->convertHtmlAttributesToDatalayer($cartItem);
-        }
-      }
-      $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
+        $products = [];
 
-      $data_layer = [
-        'event' => 'checkout',
-        'ecommerce' => [
-          'currencyCode' => $currencyCode,
-          'checkout' => [
-            'actionField' => [
-              'step' => 1,
+        foreach ($cartItemAttributes as $key => $cartItem) {
+          $product = $gtmManager->convertHtmlAttributesToDatalayer($cartItem);
+          $product['quantity'] = $cartItem['quantity'];
+          // @Todo: Update these dimensions with the actual values.
+          $product['dimension6'] = '';
+          $product['dimension7'] = '';
+          $products[] = $product;
+        }
+
+        // Set the correct step id.
+        if ($currentRoute['route_params']['step'] === 'login') {
+          $step = 1;
+        }
+        elseif ($currentRoute['route_params']['step'] === 'delivery') {
+          $step = 2;
+        }
+        elseif ($currentRoute['route_params']['step'] === 'payment') {
+          $step = 4;
+        }
+        elseif ($currentRoute['route_params']['step'] === 'confirmation') {
+          $attributes = $gtmManager->fetchCompletedOrderAttributes();
+          $data_layer = $attributes['general'];
+          $data_layer['ecommerce'] = [
+            'currencyCode' => $currencyCode,
+            'purchase' => [
+              'actionField' => $attributes['actionField'],
+              'products' => $attributes['products'],
             ],
-            'products' => $products,
-          ],
-        ],
-      ];
+          ];
+          $confirmationPage = TRUE;
+        }
+
+        if (!$confirmationPage) {
+          $data_layer = [
+            'event' => 'checkout',
+            'ecommerce' => [
+              'currencyCode' => $currencyCode,
+              'checkout' => [
+                'actionField' => [
+                  'step' => $step,
+                ],
+                'products' => $products,
+              ],
+            ],
+          ];
+        }
+
+      }
       break;
   }
 }
@@ -327,8 +360,8 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
   // Fetch product for this sku to get the category.
   $productNode = alshaya_acm_product_get_display_node($variables['item_code']);
 
-  $attributes['gtm-category'] = $gtmManager->fetchProductCategories($productNode);;
-
+  $skuAtributes['gtm-category'] = $gtmManager->fetchProductCategories($productNode);
+  $skuAtributes['gtm-main-sku'] = $productNode->id();
   $skuAtributes['gtm-type'] = 'gtm-remove-cart-wrapper';
   $skuAtributes['gtm-size'] = $variables['sku_attributes']['attr_size']['value'];
 

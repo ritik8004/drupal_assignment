@@ -8,6 +8,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class AlshayaGtmManager.
@@ -143,6 +145,7 @@ class AlshayaGtmManager {
     $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
+    $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
 
     $attributes = array_merge($attributes, $skuAttributes);
 
@@ -166,8 +169,6 @@ class AlshayaGtmManager {
     $attributes = [];
 
     $attributes['gtm-name'] = $sku->label();
-    $attributes['gtm-main-sku'] = $sku->getSku();
-
     $price = $sku->get('price')->getString() ?: $sku->get('final_price')->getString();
     $attributes['gtm-price'] = number_format($price, 3);
 
@@ -175,7 +176,7 @@ class AlshayaGtmManager {
     $attributes['gtm-brand'] = $sku->get('attr_brand')->getString();
 
     // @TODO: We should find a way to get this function work for other places.
-    $attributes['gtm-product-sku'] = '';
+    $attributes['gtm-product-sku'] = $sku->getSku();
 
     // @TODO: This is getting static, need to find a way or discuss.
     // Dimension1 & 2 corrrespond to size & color.
@@ -265,9 +266,18 @@ class AlshayaGtmManager {
         $gtmPageType = self::ROUTE_GTM_MAPPING[$routeIdentifier];
       }
 
-      if (($currentRoute['route_name'] === 'acq_checkout.form') &&
-        ($currentRoute['route_params']['step'] === 'login')) {
-        $gtmPageType = 'cart-checkout-login';
+      if ($currentRoute['route_name'] === 'acq_checkout.form') {
+        if ($currentRoute['route_params']['step'] === 'login') {
+          $gtmPageType = 'cart-checkout-login';
+        }
+
+        if ($currentRoute['route_params']['step'] === 'delivery') {
+          $gtmPageType = 'cart-checkout-delivery';
+        }
+
+        if ($currentRoute['route_params']['step'] === 'payment') {
+          $gtmPageType = 'cart-checkout-payment';
+        }
       }
     }
 
@@ -332,6 +342,9 @@ class AlshayaGtmManager {
     $processed_attributes['ecommerce']['detail']['actionField'] = [
       'list' => $this->convertCurrentRouteToGtmPageName($this->getGtmContainer()),
     ];
+    // Set dimension1 & 2 to empty until product added to cart.
+    $attributes['gtm-dimension1'] = '';
+    $attributes['gtm-dimension2'] = '';
 
     $processed_attributes['ecommerce']['detail']['products'][] = $this->convertHtmlAttributesToDatalayer($attributes);
     return $processed_attributes;
@@ -366,7 +379,6 @@ class AlshayaGtmManager {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $cart = $this->cartStorage->getCart();
     $cartItems = $cart->get('items');
-    $skuIds = array_keys($cartItems);
     $attributes = [];
 
     foreach ($cartItems as $cartItem) {
@@ -375,6 +387,8 @@ class AlshayaGtmManager {
       // Fetch product for this sku to get the category.
       $productNode = alshaya_acm_product_get_display_node($skuId);
       $attributes[$skuId]['gtm-category'] = $this->fetchProductCategories($productNode);
+      $attributes[$skuId]['gtm-main-sku'] = $productNode->id();
+      $attributes[$skuId]['quantity'] = $cartItem['qty'];
     }
 
     return $attributes;
@@ -403,6 +417,80 @@ class AlshayaGtmManager {
     }
 
     return implode('/', $terms);
+  }
+
+  /**
+   * Helper function to fetch order attributes.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+   */
+  public function fetchCompletedOrderAttributes() {
+
+    $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+    $order_data = $temp_store->get('order');
+
+    // Throw access denied if nothing in session.
+    if (empty($order_data) || empty($order_data['id'])) {
+      throw new AccessDeniedHttpException();
+    }
+
+    $order_id = (int) str_replace('"', '', $order_data['id']);
+
+    if (\Drupal::currentUser()->isAnonymous()) {
+      $email = $temp_store->get('email');
+    }
+    else {
+      $email = \Drupal::currentUser()->getEmail();
+    }
+
+    $orders = alshaya_acm_customer_get_user_orders($email);
+
+    $order_index = array_search($order_id, array_column($orders, 'order_id'), TRUE);
+
+    if ($order_index === FALSE) {
+      throw new NotFoundHttpException();
+    }
+    $order = $orders[$order_index];
+    $orderItems = $order['items'];
+
+    foreach ($orderItems as $key => $item) {
+      $product = $this->fetchSkuAtttributes($item['sku']);
+      $productNode = alshaya_acm_product_get_display_node($item['sku']);
+      $product['gtm-category'] = $this->fetchProductCategories($productNode);
+
+      $productExtras = [
+        'quantity' => $item['quantity'],
+        'dimension6' => '',
+        'dimension7' => '',
+      ];
+
+      $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
+    }
+
+    $actionData = [
+      'id' => $order_id,
+      'affiliation' => 'Online Store',
+      'revenue' => (float) $order['totals']['grand'],
+      'tax' => (float) $orders['totals']['tax'] ?: 0.00,
+      'shippping' => (float) $orders['shipping']['method']['amount'] ?: 0.00,
+      'coupon' => '',
+    ];
+
+    // @Todo: Update deliveryOption once click & collect/delivery option step is built.
+    $generalInfo = [
+      'deliveryOption' => 'Home Delivery',
+      'paymentOption' => $order['payment']['method_title'],
+      'discountAmount' => $order['totals']['discount'],
+      'transactionID' => $order_id,
+      'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
+    ];
+
+    return [
+      'general' => $generalInfo,
+      'products' => $products,
+      'actionField' => $actionData,
+    ];
   }
 
 }
