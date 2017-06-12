@@ -3,7 +3,7 @@
   margin: 0 auto 1em;
 
   @include breakpoint($tablet) {
-    margin: 1rem auto 9.2rem;
+    margin: 1.2rem auto 9.2rem;
   }
 
   @include breakpoint($desktop) {
@@ -45,11 +45,6 @@
     max-width: 65.3125rem;
     margin: 0 auto;
     overflow: hidden;
-
-    input {
-      padding-bottom: 0.5rem;
-      margin-top: 0.5rem;
-    }
   }
 
   #edit-login-tabs {
@@ -124,6 +119,7 @@
       .error {
         position: relative;
         top: 0.5rem;
+        margin-bottom: 0.5rem;
       }
     }
   }
@@ -258,7 +254,7 @@
       margin-top: 2.8rem;
 
       @include breakpoint($only-tablet) {
-        margin-top: 2.9rem;
+        margin-top: 3.4rem;
       }
 
       #unmask_password {
