@@ -17,3 +17,5 @@ The `schema_extra_types.xml` defines a text field type for English and Arabic.
 The `schema_extra_fields.xml` defines an extra dynamic field for English and Arabic text.
 
 Note: The `search_api_solr_multilingual` module defined an undefined text field type (`text_und`) which was duplicated by the default field type. That has been manually removed.
+
+Elevated search is also added with `elevate.xml`. This allows the platform to raise specific results for specific terms. This will apply across all sites on ACSF.
