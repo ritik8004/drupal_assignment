@@ -190,7 +190,7 @@
             $('.c-pdp .description-wrapper').toggle('slow');
           });
 
-          $('.close', $(this)).on('click', function () {
+          $('.close').on('click', function () {
             $('.c-pdp .description-wrapper').toggle('slow');
           });
         });
