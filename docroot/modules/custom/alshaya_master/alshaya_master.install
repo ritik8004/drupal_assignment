@@ -414,11 +414,11 @@ function alshaya_master_install() {
     'Available delivery options' => [
       'ar' => 'خيارات التوصيل',
     ],
-    'Home delivery in @days days on orders over @amount' => [
-      'ar' => 'خدمة التوصيل للمنازل خلال @days أيام للطلبيات التي تزيد عن @amount د.ك.',
+    'Home delivery in 2 days on orders over KWD 35' => [
+      'ar' => 'خدمة التوصيل للمنازل خلال 2 أيام للطلبيات التي تزيد عن 35 د.ك.',
     ],
-    'Collect the order in store from @days days' => [
-      'ar' => 'استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى @days أيام',
+    'Collect the order in store from 2-3 days' => [
+      'ar' => 'استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى 2-3 أيام',
     ],
     'Home Delivery' => [
       'ar' => 'خدمة التوصيل للمنزل',
@@ -686,6 +686,12 @@ function alshaya_master_install() {
     ],
     'You have just used your one-time login link. Your account is now active and you are authenticated.' => [
       'ar' => 'لقد قمت للتو باستخدام رابط تسجيل الدخول المخصص لمرة واحدة. حسابك أصبح مفعلاً وموثوق.',
+    ],
+    'Orders over KWD 1234' => [
+      'ar' => 'للطلبيات التي تزيد على 1234 د.ك',
+    ],
+    'Orders under KWD 1234' => [
+      'ar' => 'الطلبيات الأقل من 1234 د.ك.',
     ],
   ];
   alshaya_i18n_save_translations($strings);
