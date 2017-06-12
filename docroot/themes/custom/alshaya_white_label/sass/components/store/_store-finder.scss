@@ -1044,6 +1044,10 @@
       text-align: $right;
     }
   }
+
+  .ajax-progress-fullscreen {
+    background-image: url("../imgs/icons/MC-loader.svg");
+  }
 }
 
 .geolocation-common-map-container {
