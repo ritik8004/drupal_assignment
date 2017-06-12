@@ -5,7 +5,7 @@ services:
 
   acq_commerce.api:
     class: Drupal\acq_commerce\Conductor\APIWrapper
-    arguments: ['@acq_commerce.client_factory', '@config.factory', '@logger.factory']
+    arguments: ['@acq_commerce.client_factory', '@config.factory', '@language_manager', '@logger.factory']
 
   acq_commerce.ingest_api:
     class: Drupal\acq_commerce\Conductor\IngestAPIWrapper

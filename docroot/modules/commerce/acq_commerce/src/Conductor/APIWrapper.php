@@ -3,6 +3,7 @@
 namespace Drupal\acq_commerce\Conductor;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 
 /**
@@ -11,6 +12,13 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 class APIWrapper {
 
   use \Drupal\acq_commerce\Conductor\AgentRequestTrait;
+
+  /**
+   * Store ID.
+   *
+   * @var mixed
+   */
+  protected $storeId;
 
   /**
    * Constructor.
@@ -22,10 +30,26 @@ class APIWrapper {
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
-  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LoggerChannelFactory $logger_factory) {
+  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactory $logger_factory) {
     $this->clientFactory = $client_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_sku');
+
+    // We always use the current language id to get store id. If required
+    // function calling the api wrapper will pass different store id to
+    // override this one.
+    $this->storeId = acq_commerce_get_store_id_from_langcode($language_manager->getCurrentLanguage()->getId());
+  }
+
+  /**
+   * Function to override context store id for API calls.
+   *
+   * @param mixed $store_id
+   *   Store ID to use for API calls.
+   */
+  public function updateStoreContext($store_id) {
+    // Calling code will be responsible for doing all checks on the value.
+    $this->storeId = $store_id;
   }
 
   /**

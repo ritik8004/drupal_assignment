@@ -88,6 +88,9 @@ trait AgentRequestTrait {
         };
     }
 
+    // This can be overridden in doReq function or using updateStoreContext.
+    $reqOpts['query']['store_id'] = $this->storeId;
+
     // Make Request.
     try {
       $result = $doReq($client, $reqOpts);
