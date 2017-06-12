@@ -2408,3 +2408,29 @@ index fc54f5b..9a95af3 100644
          $this->logger->info('Creating product SKU @sku.', ['@sku' => $product['sku']]);
  
          $created++;
+diff --git a/modules/acq_sku/src/AcquiaCommerce/SKUPluginBase.php b/modules/acq_sku/src/AcquiaCommerce/SKUPluginBase.php
+index a513e6c..701dc37 100644
+--- a/modules/acq_sku/src/AcquiaCommerce/SKUPluginBase.php
++++ b/modules/acq_sku/src/AcquiaCommerce/SKUPluginBase.php
+@@ -131,7 +131,7 @@ public function cartName($sku, array $cart) {
+    *   Parent product or null if not found.
+    */
+   public function getParentSku(SKU $sku) {
+-    $query = \Drupal::database()->select('acq_sku', 'acq_sku');
++    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+     $query->addField('acq_sku', 'sku');
+     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
+     $query->condition('child_sku.field_configured_skus_value', $sku->getSku());
+diff --git a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
+index d9ae049..5919d88 100644
+--- a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
++++ b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
+@@ -366,7 +366,7 @@ public static function recursiveConfigurableTree(array &$tree, array $available_
+    */
+   public static function &findProductInTreeWithConfig(array &$tree, array $config) {
+     $sku = $tree['parent']->getSKU();
+-    $query = \Drupal::database()->select('acq_sku', 'acq_sku');
++    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+ 
+     $query->addField('acq_sku', 'sku');
+     $query->condition('sku', "%$sku%", 'LIKE');
