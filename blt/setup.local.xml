@@ -8,6 +8,11 @@
     <exec dir="${repo.root}" command="git checkout docroot/sites/${multisite.name}/settings.php" logoutput="true" checkreturn="true" level="${blt.exec_level}" passthru="true" />
   </target>
 
+  <target name="sync:translations">
+    <echo>Add translations from code post drush si.</echo>
+    <drush command="aiota" assume="yes" alias="${drush.alias}" passthru="false" />
+  </target>
+
   <target name="sync:products">
     <echo>Sync the categories.</echo>
     <drush command="alshaya-acm-offline-categories-sync" assume="yes" alias="${drush.alias}" passthru="false" />
@@ -28,8 +33,6 @@
 
   <target name="refresh:local:drupal"
           description="Reinstall local dev environment."
-          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:products">
-    <echo>Add translations from code post drush si.</echo>
-    <drush command="aiota" assume="yes" alias="${drush.alias}" passthru="false" />
+          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:translations, sync:products">
   </target>
 </project>
