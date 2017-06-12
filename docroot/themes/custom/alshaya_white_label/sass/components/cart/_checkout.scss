@@ -497,6 +497,7 @@ body.alias--cart {
   #table-cart-items {
     table {
       width: 100%;
+      font-family: $arial-nodir;
     }
 
     thead {
@@ -604,7 +605,7 @@ body.alias--cart {
         div.items {
           @include breakpoint($only-mobile) {
             width: 48%;
-            padding-left: 0;
+            padding-#{$left}: 0;
             margin-bottom: 2.8rem;
 
             a {
@@ -650,6 +651,7 @@ body.alias--cart {
 
       td.delivery-option {
         clear: both;
+        font-family: $arial;
 
         @include breakpoint($upto-tablet) {
           font-size: 10px;
