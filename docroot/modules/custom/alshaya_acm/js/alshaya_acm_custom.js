@@ -11,16 +11,16 @@
       });
 
       // Hide apply coupon button on page load.
-      $('#apply_coupon').prop('style', 'display:none;');
+      $('#apply_coupon').hide();
 
       $('[data-drupal-selector="customer-cart-form"]', context).once('bind-events').each(function () {
         // Display apply coupon button if there's a value, else hide it.
         $('input[name="coupon"]').on('input', function (e) {
           if ($(this).val() != '') {
-            $('#apply_coupon').removeAttr( 'style' );
+            $('#apply_coupon').show();
           }
           else {
-            $('#apply_coupon').prop('style', 'display:none;' );
+            $('#apply_coupon').hide();
           }
         });
 
