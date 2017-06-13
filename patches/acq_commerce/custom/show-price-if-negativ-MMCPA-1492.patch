@@ -1,0 +1,28 @@
+diff --git a/docroot/modules/commerce/acq_commerce/templates/acq-commerce-price.html.twig b/docroot/modules/commerce/acq_commerce/templates/acq-commerce-price.html.twig
+index 00b9e52..d842130 100644
+--- a/docroot/modules/commerce/acq_commerce/templates/acq-commerce-price.html.twig
++++ b/docroot/modules/commerce/acq_commerce/templates/acq-commerce-price.html.twig
+@@ -1,13 +1,11 @@
+-{% if price > 0 %}
+-  {% if currency_code_position == 'before' %}
+-    <span class="price-wrapper">
+-      <span class="price-currency prefix">{{ currency_format }}</span>
+-      <span class="price-amount">{{ price }}</span>
+-    </span>
+-  {% else %}
+-    <span class="price-wrapper">
+-      <span class="price-amount">{{ price }}</span>
+-      <span class="price-currency suffix">{{ currency_format }}</span>
+-    </span>
+-  {% endif %}
++{% if currency_code_position == 'before' %}
++  <span class="price-wrapper">
++    <span class="price-currency prefix">{{ currency_format }}</span>
++    <span class="price-amount">{{ price }}</span>
++  </span>
++{% else %}
++  <span class="price-wrapper">
++    <span class="price-amount">{{ price }}</span>
++    <span class="price-currency suffix">{{ currency_format }}</span>
++  </span>
+ {% endif %}
