@@ -70,6 +70,12 @@
         $('.privilege-card-wrapper summary').click();
         return false;
       });
+
+      if ($('.password-tooltip').length > 0) {
+        $('#edit-pass').focus(function () {
+          $(this).addClass('is-active');
+        });
+      }
     }
   };
 

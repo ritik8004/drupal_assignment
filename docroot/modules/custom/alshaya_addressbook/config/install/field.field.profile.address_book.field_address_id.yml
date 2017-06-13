@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_address_id
+    - profile.type.address_book
+  module:
+    - profile
+third_party_settings:
+  profile:
+    profile_private: true
+id: profile.address_book.field_address_id
+field_name: field_address_id
+entity_type: profile
+bundle: address_book
+label: 'Address ID'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

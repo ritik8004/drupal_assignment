@@ -58,7 +58,9 @@ form.user-communication-preference {
       font-size: 0.875rem;
 
       &::before {
-        padding-#{$right}: 1.188rem;
+        padding-#{$right}: 1.0625rem;
+        position: relative;
+        top: 2px;
       }
     }
   }
