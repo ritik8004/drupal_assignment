@@ -29,7 +29,7 @@
         <str name="field">spell</str>
         <str name="spellcheckIndexDir">spellchecker</str>
         <str name="buildOnOptimize">true</str>
-        <str name="buildOnCommit">true</str>
+        <!--<str name="buildOnCommit">true</str>-->
         <!-- uncomment this to require terms to occur in 1% of the documents in order to be included in the dictionary
           <float name="thresholdTokenFrequency">.01</float>
         -->
@@ -41,7 +41,7 @@
         <str name="field">spell_ar</str>
         <str name="spellcheckIndexDir">./spellchecker_ar</str>
         <str name="buildOnOptimize">true</str>
-        <str name="buildOnCommit">true</str>
+        <!--<str name="buildOnCommit">true</str>-->
       </lst>
 
       <!-- English -->
@@ -50,7 +50,7 @@
         <str name="field">spell_en</str>
         <str name="spellcheckIndexDir">./spellchecker_en</str>
         <str name="buildOnOptimize">true</str>
-        <str name="buildOnCommit">true</str>
+        <!--<str name="buildOnCommit">true</str>-->
       </lst>
 
     </searchComponent>
