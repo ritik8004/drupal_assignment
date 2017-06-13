@@ -3,6 +3,8 @@
  * Sliders.
  */
 
+/* global debounce */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -22,7 +24,7 @@
       var options = {
         arrows: true,
         autoplay: true,
-        autoplaySpeed: 500,
+        autoplaySpeed: 15000,
         dots: true
       };
 
@@ -34,8 +36,15 @@
         var parentHeight = parent.height();
         var dotsHeight = dots.height() + (16 * 2);
         var buttonHeight = button.height() / 2;
+        var windowWidth = $(window).width();
 
-        var center = (parentHeight - (dotsHeight + buttonHeight)) / 2;
+        var center;
+        if (windowWidth > 768) {
+          center = (parentHeight - buttonHeight) / 2;
+        }
+        else {
+          center = (parentHeight - (dotsHeight + buttonHeight)) / 2;
+        }
         button.css({top: center});
       }
 
@@ -49,6 +58,10 @@
         $('.c-slider-promo__items').slick(options);
       }
       centerDots();
+      // eslint-disable-next-line.
+      $(window).resize(debounce(function () {
+        centerDots();
+      }, 250));
     }
   };
 
