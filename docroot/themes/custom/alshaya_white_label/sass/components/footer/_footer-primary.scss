@@ -511,7 +511,7 @@
       }
 
       &.ar a {
-        font-family: $alshaya-arabic-thin;
+        font-family: $alshaya-arabic-bold;
       }
 
       &.en a {
@@ -525,6 +525,10 @@
 
       &.en.is-active a {
         font-family: $alshaya-thin-nodir;
+      }
+
+      &.ar.is-active a {
+        font-family: $alshaya-arabic-thin;
       }
     }
   }
