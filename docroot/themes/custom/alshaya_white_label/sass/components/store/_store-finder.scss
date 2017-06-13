@@ -1045,8 +1045,9 @@
     }
   }
 
-  .ajax-progress-fullscreen {
+  + .ajax-progress-fullscreen {
     background-image: url("../imgs/icons/MC-loader.svg");
+    background-size: 2rem;
   }
 }
 
