@@ -24,6 +24,8 @@
   }
 }
 
+.owl-prev,
+.owl-next,
 .slick-prev,
 .slick-next {
   @include breakpoint($tablet) {
@@ -54,6 +56,7 @@
   }
 }
 
+.owl-prev,
 .slick-prev {
   @include breakpoint($tablet) {
     left: 1.65rem;
@@ -64,6 +67,7 @@
   left: 0.5rem;
 }
 
+.owl-next,
 .slick-next {
   @include breakpoint($tablet) {
     right: 1.65rem;
@@ -74,6 +78,7 @@
   right: 0.5rem;
 }
 
+.owl-dots,
 .slick-dots {
   @include breakpoint($tablet) {
     @include u-center--horizontally;
@@ -88,6 +93,7 @@
   padding-#{$left}: 0;
 }
 
+.owl-dot,
 .slick-dots li {
   @include breakpoint($tablet) {
     color: $white-five;
@@ -102,6 +108,7 @@
   margin: 1em 0.75em;
   padding-#{$left}: 0;
 
+  &.active,
   &.slick-active {
     background: currentColor;
   }
