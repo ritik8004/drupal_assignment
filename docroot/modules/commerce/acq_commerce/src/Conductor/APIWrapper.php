@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -27,6 +28,8 @@ class APIWrapper {
    *   ClientFactory object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   ConfigFactoryInterface object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   LanguageManagerInterface object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
@@ -108,7 +111,7 @@ class APIWrapper {
 
     try {
       // Cache id.
-      $cid = 'stock:' . $sku;
+      $cid = 'stock:' . strtolower(Html::cleanCssIdentifier($sku));
 
       // If information is cached.
       if ($cache = \Drupal::cache('data')->get($cid)) {
@@ -186,6 +189,8 @@ class APIWrapper {
 
     $doReq = function ($client, $opt) use ($endpoint, $cart) {
       $opt['json'] = $cart;
+
+      $this->logger->notice(json_encode($cart));
 
       return ($client->post($endpoint, $opt));
     };

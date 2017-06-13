@@ -3,6 +3,7 @@
 namespace Drupal\acq_cart\Form;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_commerce\UpdateCartErrorEvent;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -202,7 +203,12 @@ class CustomerCartForm extends FormBase {
       $this->cartStorage->updateCart();
     }
     catch (\Exception $e) {
-      if ($e->getMessage() == $this->t('Coupon code is not valid')) {
+      // Dispatch event so action can be taken.
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $event = new UpdateCartErrorEvent($e);
+      $dispatcher->dispatch(UpdateCartErrorEvent::SUBMIT, $event);
+
+      if ($e->getMessage() == $this->t('Coupon code is not valid')->render()) {
         // Set the error and require rebuild.
         $form_state->setErrorByName('coupon', $this->t('This coupon code seems invalid or expired, please try new one.'));
         $form_state->setRebuild(TRUE);
@@ -212,7 +218,7 @@ class CustomerCartForm extends FormBase {
         $this->updateCart($form_state);
       }
       else {
-        // @TODO: handle more exceptions.
+        // We will handle all other cases using event dispatcher.
       }
     }
   }
