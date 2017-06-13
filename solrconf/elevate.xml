@@ -1,0 +1,18 @@
+<elevate>
+    <!--
+        The following example shows how to add elevated search pages.
+
+        The text is the search term wrapped in quotes `&quot;`.
+
+        The Drupal implementation will add parameters q (query text) and qf (query field)
+        Ex: `q=example&qf=ts_X3b_en_title`.
+
+        The document list includes the core hash as well as the node id.
+    -->
+    <!--
+    <query text="&quot;black&quot;">
+        <doc id="1u5v57-acquia_search_index-entity:node/7:en" />
+        <doc id="1u5v57-acquia_search_index-entity:node/5:en" />
+    </query>
+    -->
+</elevate>
