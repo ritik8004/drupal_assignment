@@ -41,6 +41,7 @@ slider_banner:
     js/slider.js: {}
   dependencies:
     - core/jquery
+    - alshaya_white_label/utils
     - alshaya_white_label/slick
 
 sell:
@@ -89,3 +90,7 @@ sizeguide:
 ucfix:
   js:
     js/ucfix.js: {}
+
+utils:
+  js:
+    js/utils.js: {}
