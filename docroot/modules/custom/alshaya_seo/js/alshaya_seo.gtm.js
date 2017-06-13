@@ -20,6 +20,7 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="cart-checkout-delivery"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="cart-checkout-payment"]');
+      var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -325,6 +326,27 @@
           }
         });
       });
+
+      /** Tracking internal promotion impressions. **/
+      topNavLevelOneSelector.once('js-event').bind('mouseenter', function() {
+        if ($(this).hasClass('has-child')) {
+          var topNavLevelTwo = $(this).children('ul.menu--two__list');
+          var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
+          var highlights = [];
+
+          if ((topNavLevelThree.length > 0) && (topNavLevelThree.children('.highlights'))) {
+            highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
+          }
+          if (highlights.length > 0) {
+            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, gtmPageType);
+          }
+        }
+
+      });
+
+      $('[gtm-type="gtm-highlights"]').once('js-event').bind('click', function() {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+      });
     }
   };
 
@@ -423,6 +445,54 @@
 
       dataLayer.push(data);
     }
+  };
+
+  Drupal.alshaya_seo_gtm_push_promotion_impressions = function(highlights, gtmPageType, event) {
+    var promotions = [];
+
+    highlights.each(function(key, highlight) {
+      var promotion = {
+        'id': '',
+        'name': gtmPageType,
+        'creative': '',
+        'position': 'slot' + key+1
+      };
+      promotions.push(promotion);
+    });
+
+    var data = {
+      'ecommerce': {
+        'promoView': {
+          'promotions': promotions
+        }
+      }
+    };
+
+    if (event === 'promotionClick') {
+      var location = '';
+
+      if (highlights.find('a').length !== 0) {
+        location = highlights.find('a').attr('href');
+      }
+      else {
+        location = window.location.pathname;
+      }
+
+      data = {
+        'event': event,
+        'ecommerce': {
+          'promoClick': {
+            'promotions': promotions
+          }
+        },
+        'eventCallback': function() {
+          document.location = location;
+        }
+      };
+
+    }
+
+    dataLayer.push(data);
   };
 
 })(jQuery, Drupal, dataLayer);

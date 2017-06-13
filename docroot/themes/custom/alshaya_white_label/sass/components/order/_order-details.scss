@@ -357,6 +357,11 @@
   h2.subtitle {
     margin-top: 2.5rem;
     border-bottom: none;
+
+    .path--user & {
+      padding-bottom: 0.5625rem;
+      border-bottom: 1px solid $white;
+    }
   }
 
   .order-summary-row td:first-child .light {

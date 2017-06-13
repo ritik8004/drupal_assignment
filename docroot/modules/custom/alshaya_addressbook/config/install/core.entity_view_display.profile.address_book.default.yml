@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.profile.address_book.field_address
+    - field.field.profile.address_book.field_address_id
     - field.field.profile.address_book.field_mobile_number
     - profile.type.address_book
   module:
@@ -19,6 +20,7 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: address_default
+    region: content
   field_mobile_number:
     weight: 1
     label: above
@@ -26,5 +28,7 @@ content:
       as_link: false
     third_party_settings: {  }
     type: mobile_number_international
+    region: content
 hidden:
+  field_address_id: true
   langcode: true

@@ -3,6 +3,8 @@
  * Main Menu.
  */
 
+/* global debounce */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -201,6 +203,30 @@
 
       // Add class for three level navigation.
       $('.menu--one__list-item:not(:has(.menu--four__list-item))').addClass('has--three-levels');
+
+      // Set menu level2 height on desktop and tablet.
+      var windowWidth = $(window).width();
+      var menuLevel2 = $('.menu--two__list');
+
+      function setMenuHeight() {
+        if (windowWidth > 767) {
+          var maxHeight = menuLevel2.map(function () {
+            return $(this).height();
+          })
+          .toArray()
+          .reduce(function (first, second) {
+            return Math.max(first, second);
+          });
+
+          menuLevel2.each(function () {
+            $(this).height(maxHeight);
+          });
+        }
+      }
+      setMenuHeight();
+      $(window).resize(debounce(function () {
+        setMenuHeight();
+      }, 250));
     }
   };
 
