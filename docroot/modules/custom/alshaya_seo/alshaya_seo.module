@@ -275,7 +275,7 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
             }
           }
 
-          $data_layer = array_merge($data_layer, $processed_attributes;
+          $data_layer = array_merge($data_layer, $processed_attributes);
           $data_layer['pageType'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
         }
       }
