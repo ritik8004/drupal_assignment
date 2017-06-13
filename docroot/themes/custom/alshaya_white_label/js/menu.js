@@ -9,17 +9,28 @@
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
 
+      var css = document.createElement('style');
+      css.type = 'text/css';
+      document.head.appendChild(css);
+      function setMenuWidth() {
+        var menuWidth = $('.menu--one__list').width();
+        css.innerHTML = '.menu--two__list, .menu--three__list, .menu--four__list { width: ' + menuWidth + 'px}';
+      }
+
+      setMenuWidth();
+      $(window).resize(function () {
+        setMenuWidth();
+      });
+
       var $listItems = $('.menu__list-item');
       $listItems.each(function () {
         var linkWrapper = $(this).find('> .menu__link-wrapper');
-        var link = linkWrapper.find('.menu__link');
         var submenu = $(this).find('> .menu__list');
 
         if (submenu.length > 0) {
           $(this).addClass('has-child');
           linkWrapper.addClass('contains-sublink');
           linkWrapper.after('<span class="menu__in"></span>');
-          submenu.prepend('<span class="menu__list-item back--link"><span class="menu__back"></span> <span>' + link.text() + ' </span> </span> ');
         }
       });
 
@@ -30,7 +41,7 @@
 
       var $menuBack = $('.back--link');
       $menuBack.click(function () {
-        $(this).parent().toggleClass('menu__list--active');
+        $(this).parents('.menu__list').first().toggleClass('menu__list--active');
       });
 
       $('.mobile--menu, .mobile--search').click(function (e) {
@@ -43,7 +54,8 @@
         $('body').addClass('mobile--overlay');
       });
 
-      $('.c-menu-primary .mobile--search').click(function () {
+      $('.c-menu-primary .mobile--search').off().on('click', function (e) {
+        e.preventDefault();
         $('.c-menu-primary #block-exposedformsearchpage').toggle();
         $(this).parent().toggleClass('search-active');
       });
@@ -92,6 +104,7 @@
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
         $('.remove--toggle').removeClass('remove--toggle');
+        $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
       });
 
       var header_timer;
@@ -144,7 +157,7 @@
       });
 
       // Toggle Function for Store Locator.
-      $(document).on('click', '.hours--label', function () {
+      $(document).off().on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
 

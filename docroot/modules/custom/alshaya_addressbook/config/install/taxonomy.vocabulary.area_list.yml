@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Area List'
+vid: area_list
+description: ''
+hierarchy: 0
+weight: 0

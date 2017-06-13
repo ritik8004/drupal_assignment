@@ -24,20 +24,23 @@
   }
 }
 
-.owl-prev,
-.owl-next {
+.slick-prev,
+.slick-next {
   @include breakpoint($tablet) {
     top: calc(50% - 1.125rem); // 50% - (2.25rem / 2)
   }
 
   @include breakpoint($only-mobile) {
-    top: calc(50% - (4.375rem - 1.125rem)); // 50% - (4.375rem - (2.25rem / 2))
+    top: calc(50% - (4.75rem + 1.125rem)); // 50% - (4.375rem - (2.25rem / 2))
   }
 
   @include u-image-replacement;
 
   cursor: pointer;
   position: absolute;
+  background: none;
+  border: none;
+  z-index: 5;
 
   &::before {
     background-color: rgba(255, 255, 255, 0.25);
@@ -51,7 +54,7 @@
   }
 }
 
-.owl-prev {
+.slick-prev {
   @include breakpoint($tablet) {
     left: 1.65rem;
   }
@@ -61,7 +64,7 @@
   left: 0.5rem;
 }
 
-.owl-next {
+.slick-next {
   @include breakpoint($tablet) {
     right: 1.65rem;
   }
@@ -71,15 +74,21 @@
   right: 0.5rem;
 }
 
-.owl-dots {
+.slick-dots {
   @include breakpoint($tablet) {
     @include u-center--horizontally;
 
     bottom: 0;
   }
+
+  @include breakpoint($only-mobile) {
+    margin: 0;
+  }
+
+  padding-#{$left}: 0;
 }
 
-.owl-dot {
+.slick-dots li {
   @include breakpoint($tablet) {
     color: $white-five;
   }
@@ -91,8 +100,13 @@
   border: 1px solid currentColor;
   display: inline-block;
   margin: 1em 0.75em;
+  padding-#{$left}: 0;
 
-  &.active {
+  &.slick-active {
     background: currentColor;
+  }
+
+  button {
+    display: none;
   }
 }

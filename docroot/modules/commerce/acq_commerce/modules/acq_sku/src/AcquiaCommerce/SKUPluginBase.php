@@ -5,6 +5,7 @@ namespace Drupal\acq_sku\AcquiaCommerce;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Link;
 
@@ -110,17 +111,13 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     if ($parent_sku = $this->getParentSku($sku)) {
       $plugin_manager = \Drupal::service('plugin.manager.sku');
       $plugin = $plugin_manager->pluginInstanceFromType($parent_sku->bundle());
-
-      $label = $plugin->cartName($sku, $cart);
-    }
-    else {
-      $label = $sku->label();
+      return $plugin->cartName($sku, $cart);
     }
 
+    $label = $sku->label();
     $display_node = $this->getDisplayNode($sku);
     $url = $display_node->toUrl();
-    $link = Link::fromTextAndUrl($label, $url);
-    $renderArray = $link->toRenderable();
+    $renderArray = Link::fromTextAndUrl($label, $url)->toRenderable();
     return render($renderArray);
   }
 
@@ -134,39 +131,66 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    *   Parent product or null if not found.
    */
   public function getParentSku(SKU $sku) {
-    $query = \Drupal::database()->select('acq_sku', 'acq_sku');
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
     $query->addField('acq_sku', 'sku');
-    $query->join(
-      'acq_sku__field_configured_skus',
-      'child_sku', 'acq_sku.id = child_sku.entity_id'
-    );
-    $query->condition("child_sku.field_configured_skus_value", $sku->getSku());
+    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
+    $query->condition('child_sku.field_configured_skus_value', $sku->getSku());
+
     $parent_sku = $query->execute()->fetchField();
 
     if (empty($parent_sku)) {
       return NULL;
     }
 
-    return SKU::loadFromSku($parent_sku);
+    return SKU::loadFromSku($parent_sku, $sku->language()->getId());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDisplayNode(SKU $sku) {
-    if ($parent_sku = $this->getParentSku($sku)) {
-      $sku = $parent_sku;
+  public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE) {
+    if ($check_parent) {
+      if ($parent_sku = $this->getParentSku($sku)) {
+        $sku = $parent_sku;
+      }
     }
 
-    $query = \Drupal::entityQuery('node')
-      ->condition('type', 'acq_product')
-      ->condition('field_skus', $sku->getSku())
-      ->range(0, 1);
+    $query = \Drupal::entityQuery('node');
+    $query->condition('type', 'acq_product');
+    $query->condition('field_skus', $sku->getSku());
+
+    $query->range(0, 1);
 
     $result = $query->execute();
-    $nid = reset($result);
 
-    return Node::load($nid);
+    if (empty($result)) {
+      return NULL;
+    }
+
+    $nid = reset($result);
+    $node = Node::load($nid);
+
+    // Check language checks if site is in multilingual mode.
+    if (\Drupal::languageManager()->isMultilingual()) {
+      // If language of SKU and node are the same, we return the node.
+      if ($node->language()->getId() == $sku->language()->getId()) {
+        return $node;
+      }
+
+      // If node has translation, we return the translation.
+      if ($node->hasTranslation($sku->language()->getId())) {
+        return $node->getTranslation($sku->language()->getId());
+      }
+
+      // If translation not available and create_translation flag is true.
+      if ($create_translation) {
+        return $node->addTranslation($sku->language()->getId());
+      }
+
+      throw new \Exception(new FormattableMarkup('Node translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $sku->language()->getId()]), 404);
+    }
+
+    return $node;
   }
 
 }

@@ -26,6 +26,9 @@ function alshaya_user_install() {
     'Communication preferences' => [
       'ar' => 'تفضيلات التواصل',
     ],
+    'I would like to receive exclusive deals from Mothercare' => [
+      'ar' => 'أرغب في استلام عروض حصرية من مذركير',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
@@ -79,7 +82,7 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
-  $content['field_terms_and_condition'] = [
+  $content['field_subscribe_newsletter'] = [
     'weight' => 100,
     'type' => 'boolean_checkbox',
     'settings' => [
@@ -87,13 +90,11 @@ function alshaya_user_modules_installed($modules) {
     ],
     'third_party_settings' => [],
   ];
-  unset($content['acq_customer_id']);
   unset($content['contact']);
   unset($content['langcode']);
   unset($content['language']);
   $userConfig->set('content', $content)->save();
   $hidden = $userConfig->get('hidden');
-  $hidden['acq_customer_id'] = TRUE;
   $hidden['contact'] = TRUE;
   $hidden['langcode'] = TRUE;
   $hidden['language'] = TRUE;
@@ -102,22 +103,31 @@ function alshaya_user_modules_installed($modules) {
   // Set default configuration for user mails from registration password module.
   $config = \Drupal::configFactory()->getEditable('user_registrationpassword.settings');
   $config->set('registration', USER_REGISTRATIONPASSWORD_VERIFICATION_PASS);
-  $config->set('register_subject', 'Welcome to [site:name]');
-  $config->set('register_body', '<h1>Hi [user:field_first_name:value]!</h1>
+  $config->save();
+  $config = \Drupal::configFactory()->getEditable('user_registrationpassword.mail');
+  $config->set('register_withpassword.subject', 'Account details for [user:name] at [site:name]');
+  $config->set('register_withpassword.body', '<h1>Hello [user:field_first_name:value],</h1>
 
-You recently signed up for [site:name] Account.
+Thank you for registering with [site:name] and welcome.
 
-<b>Please verify your email address and activate your account by clicking the below link</b>
+You have registered with the following e-mail address: [user:mail]
 
-<a class="button" href="[user:registrationpassword-url]">verify your email</a>
+You may now log in and verify your account by clicking this link or copying and pasting it to your browser:
+<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
 
-Or verify using this link: <a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
+We hope you enjoy shopping at [site:name].
 
-If you did not request this verification, please ignore this email. If you feel something is wrong, please contact our support team at <a href="mailto:[site:mail]">[site:mail]</a>.');
+If you have any questions, check our <a href="[site:url]">FAQs page</a> here or contact our Customer Service team.
+
+Best Wishes,
+The [site:name] Team
+Tel: 182-12-12
+<a href="[site:url]">[site:url-brief]</a>');
   $config->save();
 
   // Set default body for password reset email.
   $config = \Drupal::configFactory()->getEditable('user.mail');
+  $config->set('password_reset.subject', 'Replacement login information for [user:field_first_name:value] at [site:name]');
   $config->set('password_reset.body', '<h1>Hi [user:field_first_name:value]!</h1>
 
 A request to reset the password for your account has been made at [site:name].
@@ -130,24 +140,4 @@ This link can only be used once to log in and will lead you to a page where you 
 
 --  [site:name] team');
   $config->save();
-
-  // Disable account activation mail.
-  \Drupal::configFactory()->getEditable('user.settings')->set('notify.status_activated', FALSE)->save();
-
-  // Set reset password mail translation.
-  $reset_password_mail = \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'user.mail');
-  $reset_password_mail->set('password_reset.subject', 'معلومات تسجيل الدخول البديلة ل [user:display-name] في [site:name]');
-  $reset_password_mail->set('password_reset.body', '<h1>![user:field_first_name:value] مرحبا</h1>
-
-[site:name] تم طلب إعادة تعيين كلمة المرور لحسابك في
-
-يمكنك الآن تسجيل الدخول بالنقر على هذا الرابط أو نسخه ولصقه في المتصفح:
-
-<a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
-
-لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها.
-
- [site:name] فريق دعم زبائن موقع');
-  $reset_password_mail->save();
 }

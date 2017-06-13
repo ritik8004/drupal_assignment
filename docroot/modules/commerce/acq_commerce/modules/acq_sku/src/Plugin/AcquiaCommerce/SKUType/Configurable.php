@@ -366,7 +366,7 @@ class Configurable extends SKUPluginBase {
    */
   public static function &findProductInTreeWithConfig(array &$tree, array $config) {
     $sku = $tree['parent']->getSKU();
-    $query = \Drupal::database()->select('acq_sku', 'acq_sku');
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
 
     $query->addField('acq_sku', 'sku');
     $query->condition('sku', "%$sku%", 'LIKE');

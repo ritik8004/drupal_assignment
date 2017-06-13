@@ -25,7 +25,7 @@ function alshaya_loyalty_get_validation_settings() {
     // Get alshaya loyalty settings.
     $config = \Drupal::config('alshaya_loyalty.settings');
     $loyalty = [
-      'length' => $config->get('apcn_max_length'),
+      'length' => (int) $config->get('apcn_max_length'),
       'value_start_with' => $config->get('apcn_value_starts_with'),
       'enable_disable_loyalty' => $config->get('enable_disable_loyalty'),
     ];
@@ -301,6 +301,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     ],
     '#default_value' => !empty($default_value) ? $default_value : $validation['value_start_with'],
     '#disabled' => !empty($default_value) && \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE,
+    '#prefix' => '<div class="details-privilege-card-wrapper-inside">',
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
@@ -325,6 +326,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#limit_validation_errors' => [['privilege_card_number'], ['privilege_card_number2']],
     '#default_value' => !empty($default_value) ? $default_value : $validation['value_start_with'],
     '#disabled' => !empty($default_value) && \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE,
+    '#suffix' => '</div>',
   ];
 
   _alshaya_loyalty_form_attachements($form, $form_state, $validation);

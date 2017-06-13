@@ -4,6 +4,7 @@
   padding-bottom: 2.25rem;
   position: relative;
   background: $white-five;
+  margin-top: 3.75rem;
   z-index: 2;
 
   @include breakpoint($tablet) {
@@ -16,6 +17,10 @@
     }
   }
 
+  @include breakpoint($only-tablet) {
+    margin-top: 2.0625rem;
+  }
+
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
     margin-top: 2rem;
@@ -24,7 +29,7 @@
   .primary--footer--right {
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 1rem;
+      margin-#{$right}: 0.8rem;
     }
 
     @include breakpoint($desktop) {
@@ -34,7 +39,43 @@
     }
 
     .language--switcher.only-first-time {
-      display: none !important;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: $marine-blue-two;
+
+      ul {
+        height: 2.188rem;
+
+        li {
+          padding: 0.375rem;
+
+          a {
+            color: $white-two;
+          }
+
+          &:first-child {
+            &::after {
+              color: $white-two;
+            }
+          }
+        }
+      }
+
+      .language-switcher-close {
+        width: 1.063rem;
+        height: 1.063rem;
+        display: block;
+        position: absolute;
+        #{$right}: 1.375rem;
+        top: -0.3125rem;
+
+        @include icon(close, after) {
+          position: absolute;
+          color: $white-two;
+          font-size: 2.688rem;
+        }
+      }
     }
   }
 
@@ -322,10 +363,11 @@
     @include breakpoint($tablet) {
       #{$right}: 2.55rem;
       font-size: 0.8125rem;
+      border-top: -1px;
     }
 
     @include breakpoint($desktop) {
-      #{$right}: 0;
+      #{$right}: 0.8rem;
     }
 
     &:focus {
@@ -455,17 +497,39 @@
         text-decoration: underline;
 
         @include breakpoint($upto-desktop) {
-          font-family: $arial;
+          font-family: $alshaya-bold;
         }
 
         @include breakpoint($tablet) {
           margin: 0 0.6875rem;
         }
+
+        &.is-active {
+          color: $grey-ash;
+          font-weight: normal;
+          text-decoration: none;
+        }
+      }
+
+      &.ar a {
+        font-family: $alshaya-arabic-bold;
       }
 
       &.en a {
-        color: $brownish-grey;
-        text-decoration: none;
+        font-family: $alshaya-bold-nodir;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0.2rem;
+          margin-#{$right}: 0.7rem;
+        }
+      }
+
+      &.en.is-active a {
+        font-family: $alshaya-thin-nodir;
+      }
+
+      &.ar.is-active a {
+        font-family: $alshaya-arabic-thin;
       }
     }
   }
@@ -497,20 +561,21 @@
 
   .c-social-links {
     @include breakpoint($tablet) {
-      margin-top: 2.75rem;
-      padding-left: 0.312rem;
+      margin-top: 1.75rem;
+      padding-left: 0.12rem;
     }
 
     @include breakpoint($desktop) {
       margin-top: 2.6rem;
-      padding-#{$left}: 0.1rem;
+      padding-#{$left}: 0;
+      margin-#{$left}: -0.1rem;
     }
   }
 }
 
 .language--switcher {
   @include breakpoint($tablet) {
-    margin-top: 1.75rem;
+    margin-top: 0.75rem;
   }
 
   @include breakpoint($desktop) {

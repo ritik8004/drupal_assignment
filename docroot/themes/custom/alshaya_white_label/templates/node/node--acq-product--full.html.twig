@@ -7,7 +7,7 @@ set classes = [
 ]
 %}
 
-<article{{ attributes }}>
+<article{{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
     <div class="content__title_wrapper">
       <h1>{{ label }}</h1>
@@ -66,12 +66,26 @@ set classes = [
         {{ content.field_skus }}
       </div>
 
-      <div class="description-wrapper">
+      <div class="description-wrapper" style="display: none;">
         <div class="content--description">
           <span class="close"></span>
           <h2 class="field__label">{{ 'Product Description'|t }}</h2>
           <div class="field__content">
-            {{ content.description }}
+            {% for desc in content.description  %}
+              {% if desc.value %}
+                <div class="desc-wrapper">
+                  {% if desc.label %}
+                    <div class="desc-label">
+                      {{ desc.label|raw }}
+                    </div>
+                  {% endif %}
+
+                  <div class="desc-value">
+                    {{ desc.value|raw }}
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -95,42 +109,11 @@ set classes = [
       <div class="delivery-options-wrapper">
         <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
         <div class="field__content">
-          <div class="home-delivery c-accordion-delivery-options">
-            <h3 class="c-accordion__title">{{ 'Home Delivery'|t }}<span class="subtitle">{{ 'For orders over KWD99'|t }}</span></h3>
-            <div class="c-accordion_content">
-              <div class="delivery-option-content standard">
-                <div class="delivery-option-title"><strong>{{ 'Standard delivery'|t }} </strong><span>{{ '(within 4 working days)'|t }}</span></div>
-                <ul>
-                  <li>{{ 'Orders over KWD 1234'|t }} <span>{{ 'FREE'|t }}</span></li>
-                  <li>{{ 'Orders under KWD 1234'|t }} <span>{{ 'KWD 123.1234'|t }}</span></li>
-                </ul>
-              </div>
-              <div class="delivery-option-content next-day">
-                <div class="delivery-option-title"><strong>{{ 'Next day delivery'|t }} </strong><span>{{ '(ordered before 9pm)'|t }}</span></div>
-                <ul>
-                  <li>{{ 'All orders'|t }} <span>{{ 'FREE'|t }}</span></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          {{ content.home_delivery }}
 
-          {#{% if store_finder_enable_search is not empty %}#}
-            <div class="click-collect c-accordion-delivery-options">
-              <h2 class="c-accordion__title">{{ 'Click and Collect'|t }}<span class="subtitle">{{ 'Collect the order from store in 99 days'|t }}</span></h2>
-              <div class="c-accordion_content">
-                <div class="click-collect-content standard">
-                  <div class="text line-1"><span>{{ 'This service is '|t }}</span><strong>{{ 'FREE'|t }}</strong><span>{{ ' of charge.'|t }}</span></div>
-                  <div class="text line-2"><span>{{ 'Collect the order from store in '|t }}</span><strong>{{ '99 hours'|t }}</strong></div>
-                  <form class="search-store">
-                    <label>{{ 'Check in-store availability'|t }}</label>
-                    <input type="text" name="store-name" placeholder="{{ 'Enter your area'|t }}">
-                    <input type="submit" name="search-store" value="{{ 'Search Stores'|t }}">
-                  </form>
-                </div>
-              </div>
-            </div>
-          {#{% endif %}#}
-
+          {% if content.click_and_collect %}
+            {{ content.click_and_collect }}
+          {% endif %}
         </div>
       </div>
 

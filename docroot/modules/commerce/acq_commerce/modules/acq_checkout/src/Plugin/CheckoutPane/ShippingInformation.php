@@ -170,10 +170,10 @@ class ShippingInformation extends AddressFormBase {
   /**
    * Generates shipping estimate based on address and chosen shipping method.
    *
-   * @param object $address
+   * @param array|object $address
    *   The object of address.
    * @param array $select
-   *   Array with selected whipping method.
+   *   Array with selected shipping method.
    */
   public static function generateShippingEstimates($address, array &$select) {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();

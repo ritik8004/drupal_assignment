@@ -5,8 +5,10 @@
  * Module file.
  */
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 
 /**
  * Implements hook_views_pre_render().
@@ -23,13 +25,40 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     // Add search library to search page.
     $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
   }
+
+  // Override the 'result summary' header for PLP and Search.
+  if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
+    // Override the 'result summary' header.
+    $format_plural = new PluralTranslatableMarkup($view->total_rows, '1 item', '@count items');
+    $view->header['result']->options['content'] = $format_plural;
+  }
+}
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function alshaya_search_views_pre_build(ViewExecutable $view) {
+  if ($view->id() == 'search') {
+    $view->display_handler->display['cache_metadata']['contexts'][] = 'facets';
+  }
 }
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form['#id'] == 'views-exposed-form-search-page') {
+  if ($form['#id'] === 'views-exposed-form-search-page') {
+    $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
+    if (!empty($parameters) && isset($parameters['f'])) {
+      foreach ($parameters['f'] as $key => $value) {
+        // Add hidden form field for facet parameter.
+        $form['f[' . $key . ']'] = [
+          '#type' => 'hidden',
+          '#value' => $value,
+          '#weight' => -1,
+        ];
+      }
+    }
     $form['#attached']['library'][] = 'alshaya_search/alshaya_search';
     $form['keywords']['#attributes'] = ['data-bef-auto-submit-exclude' => ''];
   }
@@ -54,7 +83,60 @@ function alshaya_search_theme($existing, $type, $theme, $path) {
  * Implements hook_facets_search_api_query_type_mapping_alter().
  */
 function alshaya_search_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types) {
-  if (in_array($backend_plugin_id, ['search_api_solr', 'search_api_db'])) {
-    $query_types['range'] = 'alshaya_search_range';
+  if (in_array($backend_plugin_id,
+    [
+      'search_api_solr',
+      'search_api_db',
+      'search_api_solr_multilingual',
+    ]
+  )) {
+    // For some reason the SKU Final Price shows as a string, so we need to
+    // manually add numeric as an option.
+    // We want these all to use alshaya_search_granular which is a customization
+    // of search_api_granular.
+    $query_types['numeric'] = 'alshaya_search_granular';
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_search_page_attachments_alter(array &$attachments) {
+  $current_path = \Drupal::service('path.current')->getPath();
+  // Remove canonical link for search page.
+  if ($current_path == '/search') {
+    foreach ($attachments['#attached']['html_head'] as $key => $value) {
+      if ($value[1] == 'canonical_url') {
+        unset($attachments['#attached']['html_head'][$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ajax_render_alter().
+ */
+function alshaya_search_ajax_render_alter(array &$data) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $valid_routes = [
+    'views.ajax',
+  ];
+
+  // Only for ajax route.
+  if (in_array($route_name, $valid_routes)) {
+    foreach ($data as &$command) {
+      if ($command['command'] == 'settings' && isset($command['settings']['views']['ajaxViews'])) {
+        $dom_id = key($command['settings']['views']['ajaxViews']);
+        $view_name = $command['settings']['views']['ajaxViews'][$dom_id]['view_name'];
+        // If 'search' view.
+        if ($view_name == 'search') {
+          // Adding a command.
+          $data[] = [
+            'command' => 'invoke',
+            'method' => 'alshayaSearchHeaderUpdate',
+          ];
+        }
+      }
+    }
   }
 }

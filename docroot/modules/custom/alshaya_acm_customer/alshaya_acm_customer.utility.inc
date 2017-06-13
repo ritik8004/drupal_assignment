@@ -23,6 +23,11 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
   /** @var \Drupal\user\Entity\User $user */
   $user = user_load_by_mail($mail);
 
+  // We don't update Magento for admin created users.
+  if (empty($password) && empty($user->get('acq_customer_id')->getString())) {
+    return NULL;
+  }
+
   /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
   $api_wrapper = \Drupal::service('acq_commerce.api');
   $customer = $api_wrapper->updateCustomer(

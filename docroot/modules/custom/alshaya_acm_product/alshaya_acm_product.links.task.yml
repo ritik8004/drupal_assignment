@@ -1,4 +1,12 @@
 alshaya_acm_product.product_settings_form:
   route_name: alshaya_acm_product.product_settings_form
-  title: 'Custom Product settings'
+  title: 'ACM Product settings'
   base_route: alshaya_acm_product.product_settings_form
+alshaya_acm_product.basket_delivery_settings_form:
+  route_name: alshaya_acm_product.basket_delivery_settings_form
+  title: 'ACM Basket Delivery settings'
+  base_route: alshaya_acm_product.basket_delivery_settings_form
+alshaya_acm_product.product_home_delivery_settings_form:
+  route_name: alshaya_acm_product.product_home_delivery_settings_form
+  title: 'ACM Product Home Delivery settings'
+  base_route: alshaya_acm_product.product_home_delivery_settings_form

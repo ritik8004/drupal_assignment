@@ -192,6 +192,7 @@
   clear: both;
 
   .field--name-name,
+  .field--name-sku,
   .field--name-attr-special-price {
     display: none;
   }
@@ -230,6 +231,7 @@
       .form-type-select {
         @include select-wrapper(12.375rem);
 
+        direction: $dir;
         padding: 0;
         position: relative;
         padding-bottom: 3rem;
@@ -250,6 +252,7 @@
     .form-item-configurables-size {
       select {
         display: block !important;
+        direction: $dir;
       }
 
       .select2Option {
@@ -269,6 +272,7 @@
         @include select-style(4.375rem);
 
         background-color: $whisper-dark;
+        direction: $dir;
       }
     }
   }

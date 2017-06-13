@@ -26,6 +26,7 @@
 
     #wrap {
       width: 100%;
+      z-index: 2 !important;
     }
 
     img {
@@ -243,6 +244,7 @@
 
 #cloud-zoom-big {
   top: 13.13rem !important;
+  z-index: 99;
 
   @include if-rtl {
     right: 103% !important;
@@ -294,6 +296,7 @@
     & > a {
       height: 2.188rem;
       width: 2.188rem;
+      z-index: 2;
     }
 
     .lSPrev {

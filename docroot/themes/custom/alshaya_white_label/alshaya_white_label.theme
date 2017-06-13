@@ -11,6 +11,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_preprocess_html().
@@ -86,6 +87,11 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['data-bundle-class'] = $bundle_class;
     }
   }
+
+  if ($variables['plugin_id'] === 'basket_horizontal_recommendation') {
+    $variables['attributes']['class'][] = 'horizontal-crossell';
+  }
+
 }
 
 /**
@@ -169,7 +175,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
 
   if ($profile) {
     $values = $profile->get('field_address')->getValue();
-    $telephone = $profile->get('field_telephone')->getValue();
+    $telephone = $profile->get('field_mobile_number')->getValue();
     $variables['delivery_to'] = '';
     $variables['delivery_address'] = '';
     $variables['contact_no'] = '';
@@ -189,6 +195,15 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
     // Get country list.
     $country_list = \Drupal::service('address.country_repository')->getList();
 
+    $administrative_area = $values[0]['administrative_area'];
+    if (!empty($administrative_area)) {
+      $term = Term::load($administrative_area);
+      if ($term) {
+        $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+        $administrative_area = $term->getName();
+      }
+    }
+
     // Address info.
     $variables['delivery_address'] = [
       'organization' => $values[0]['organization'],
@@ -198,7 +213,7 @@ function alshaya_white_label_preprocess_profile__address_book(&$variables) {
       'sorting_code' => $values[0]['sorting_code'],
       'dependent_locality' => $values[0]['dependent_locality'],
       'locality' => $values[0]['locality'],
-      'administrative_area' => $values[0]['administrative_area'],
+      'administrative_area' => $administrative_area,
       'country' => $country_list[$values[0]['country_code']],
     ];
 
@@ -531,7 +546,7 @@ function alshaya_white_label_preprocess_user(&$variables) {
   if ($user) {
     $mobile_util = \Drupal::getContainer()->get('mobile_number.util');
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
-    $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user, 3);
+    $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user, 1, TRUE);
     $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
     $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
 
@@ -648,6 +663,12 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
     $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
   }
   $variables['email_logo'] = $email_logo['logo_url'];
+
+  // Add website footer block information with UUID as this is the unique id
+  // with different env.
+  $block = \Drupal::service('plugin.manager.block')->createInstance('block_content:340b823b-e16c-457a-bc03-4a096f8ae171');
+  $block_view = $block->build();
+  $variables['email_footer'] = $block_view;
 }
 
 /**
@@ -701,5 +722,14 @@ function alshaya_white_label_preprocess_facets_summary_item_list(&$variables) {
     $clear_all_item = $variables['items'][0];
     array_splice($variables['items'], 0, 1);
     $variables['items'][] = $clear_all_item;
+  }
+}
+
+/**
+ * Implements template_preprocess_form().
+ */
+function alshaya_white_label_preprocess_form(&$variables) {
+  if ($variables['element']['#id'] === 'views-exposed-form-search-page') {
+    $variables['attributes']['class'][] = 'views-exposed-form-search-page';
   }
 }

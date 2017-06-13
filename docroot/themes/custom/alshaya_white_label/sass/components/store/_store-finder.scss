@@ -9,13 +9,18 @@
       margin-top: 1.1rem;
       margin-bottom: 1.4rem;
     }
+  }
 
-    strong span {
+  .view-display-id-page_2 {
+    .view-header {
+      font-weight: bold;
+
       @include breakpoint($only-mobile) {
         display: none;
       }
 
       @include breakpoint($desktop) {
+        font-weight: normal;
         font-family: $alshaya-bold;
         color: $marine-blue;
       }
@@ -25,6 +30,7 @@
   .c-side-1 {
     @include breakpoint($only-mobile) {
       border-top: 1px solid $white;
+      margin-top: 1.1rem;
     }
   }
 
@@ -43,6 +49,10 @@
 
   .ui-autocomplete {
     font-size: 0.75rem;
+
+    @include breakpoint($only-mobile) {
+      width: calc(100% - 1rem) !important;
+    }
   }
 
   main {
@@ -330,6 +340,10 @@
 
     @include breakpoint($only-mobile) {
       padding-#{$left}: 1.25rem;
+      padding-top: 0;
+      padding-bottom: 0;
+      line-height: 2.1875rem;
+      height: 2.1875rem;
     }
 
     &.ui-autocomplete-loading {
@@ -418,7 +432,7 @@
         color: $grey-ash;
 
         &:hover {
-          color: $marine-blue;
+          color: $cerulean-two;
           text-decoration: underline;
         }
       }
@@ -486,6 +500,8 @@
 
       a {
         display: block;
+        z-index: 1;
+        position: relative;
       }
     }
 
@@ -898,11 +914,7 @@
   }
 
   .hours--wrapper {
-    .open--hours {
-      display: block;
-    }
-
-    .hours--label {
+    .hours--label.open {
       @include icon(chevronup, after) {
         color: $marine-blue-two;
       }
@@ -989,7 +1001,7 @@
       #{$right}: -0.7rem;
 
       @include breakpoint($tablet) {
-        #{$right}: -0.4375rem;
+        #{$right}: -0.6rem;
       }
     }
   }
@@ -1017,6 +1029,25 @@
   .open--hours {
     display: none;
     line-height: 1.57;
+
+    div {
+      display: table;
+      width: 100%;
+    }
+
+    .key-value-key,
+    .key-value-value {
+      display: table-cell;
+    }
+
+    .key-value-value {
+      text-align: $right;
+    }
+  }
+
+  + .ajax-progress-fullscreen {
+    background-image: url("../imgs/icons/MC-loader.svg");
+    background-size: 2rem;
   }
 }
 
@@ -1026,10 +1057,19 @@
   }
 
   .hours--label,
+  .hours--label::after {
+    color: $black;
+  }
+
+  .hours--label.open {
+    font-weight: bold;
+  }
+
   .view-on--map,
   .get--directions {
     color: $cerulean-two;
     cursor: pointer;
+    font-weight: 700;
   }
 
   .hours--wrapper,

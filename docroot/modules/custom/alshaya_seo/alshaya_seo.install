@@ -14,6 +14,7 @@ function alshaya_seo_install() {
   $tags = $config_factory->get('tags');
   $tags['title'] = '[current-page:title] | [site:name]';
   $tags['og_locale'] = '[site:locale]';
+  $tags['og_locale_alternative'] = '[site:locale:alternate]';
   $tags['og_site_name'] = '[site:name]';
   $tags['canonical_url'] = '[current-page:url:absolute]';
   $config_factory->set('tags', $tags);
@@ -24,7 +25,7 @@ function alshaya_seo_install() {
   $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node');
   $tags = $config_factory->get('tags');
   $tags['title'] = '[node:title] | [site:name]';
-  $tags['og_description'] = '';
+  $tags['og_description'] = '[node:summary_custom:155]';
   $tags['og_locale_alternative'] = '[node:locale:alternate]';
   $config_factory->set('tags', $tags);
   $config_factory->save();
