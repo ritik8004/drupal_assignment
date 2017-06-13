@@ -264,10 +264,11 @@
 
     @include breakpoint($tablet) {
       margin-bottom: 2.25rem;
+      margin-top: 0.75rem;
     }
 
     @include breakpoint($desktop) {
-      padding-bottom: 1rem;
+      padding-bottom: 0.75rem;
       margin-bottom: 3rem;
     }
   }
@@ -316,5 +317,50 @@
         float: right;
       }
     }
+  }
+}
+
+.country-code-prefix {
+  margin-top: 0.55em;
+  color: #adadad;
+  border-bottom: 1px solid #666;
+  padding-bottom: 0.2em;
+}
+
+.address-book-address {
+  .mobile-number-field {
+    margin-top: -3.3em;
+
+    label {
+      top: -1.25em;
+      bottom: 0;
+      left: 0;
+      opacity: 1;
+      font-size: 0.75rem;
+      color: #adadad;
+    }
+  }
+
+  .local-number::-webkit-input-placeholder {
+    color: transparent;
+  }
+
+  #edit-field-address-0-address-administrative-area {
+    width: 100%;
+  }
+}
+
+.c-address-book .profile-form {
+  .address-book-address {
+    .form-item-field-address-0-address-mobile-number-mobile {
+      position: absolute;
+      top: 3em;
+      left: 3em;
+    }
+  }
+
+  input {
+    margin-top: 0.35rem;
+    padding-bottom: 0.25rem;
   }
 }
