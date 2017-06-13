@@ -51,7 +51,14 @@ function alshaya_acm_checkout_load_shipping_method($code, $name = '') {
     }
 
     $tid = array_shift($result);
+
+    /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = $taxonomy_term_storage->load($tid);
+
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if ($term->hasTranslation($langcode)) {
+      $term = $term->getTranslation($langcode);
+    }
   }
 
   if (!empty($name) && $name != $term->getName()) {
