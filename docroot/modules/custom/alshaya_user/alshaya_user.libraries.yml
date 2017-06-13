@@ -4,3 +4,11 @@ user_login:
     js/alshaya_user.js: {}
   dependencies:
     - core/jquery
+
+mobile_number:
+  version: 1.x
+  js:
+    js/mobile_number.js: {}
+  dependencies:
+    - core/jquery
+    - mobile_number/element

@@ -18,7 +18,6 @@ global_styles:
     - core/jquery.ui.accordion
     - core/jquery.ui.tabs
     - core/jquery.cookie
-    - mobile_number/element
     - alshaya_white_label/utils
 
 ltr_styles:
