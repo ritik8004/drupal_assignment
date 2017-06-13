@@ -36,8 +36,14 @@ function alshaya_master_install() {
     'sign in' => [
       'ar' => 'تسجيل الدخول',
     ],
-    'Forgot password' => [
-      'ar' => 'هل نسيت كلمة المرور',
+    'Forgot password?' => [
+      'ar' => 'هل نسيت كلمة السر؟',
+    ],
+    'Password' => [
+      'ar' => 'كلمة السر',
+    ],
+    'Password strength' => [
+      'ar' => 'درحة تعقيد كلمة السر:',
     ],
     'First Name' => [
       'ar' => 'الاسم الأول',
@@ -168,8 +174,8 @@ function alshaya_master_install() {
     'Enter card details' => [
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
-    '<p>By registering I agree to your <a href="/terms">Terms and Conditions</a>.</p>' => [
-      'ar' => '<p>تسجيل بياناتك يعني موافقتك على الشروط والأحكام&nbsp;<a href="/terms">الشروط والأحكام</a></p>',
+    '<p>By registering you agreed to our <a href="/terms">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
@@ -327,7 +333,7 @@ function alshaya_master_install() {
       'ar' => 'ابحث عن المحلات القريبة إليك',
     ],
     'select a store to see details' => [
-      'ar' => 'اختر محل لمعرفة التفاصيل',
+      'ar' => 'اختر محل للإطلاع على التفاصيل',
     ],
     'Store address' => [
       'ar' => 'عنوان المحل',
@@ -342,7 +348,7 @@ function alshaya_master_install() {
       'ar' => 'يرجى الموافقة على الشروط والأحكام',
     ],
     '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four passwords were not allowed.</li></ul>' => [
-      'ar' => '<ul><li>كلمة السر الخاصة بك يجب أن تتكون من 7 عناصر أو أكثر</li><li>كلمة السر الخاصة بك يجب أن تحتوي على عنصر خاص واحد أو أكثر</li><li>كلمة السر الخاصة بك يجب أن يجب أن تحتوي على عنصر رقمي واحد أو أكثر</li><li>كلمة السر الخاصة بك يجب أن تكون دون مسافات</li><li>لم يتم السماح بالمحاولات الأربعة السابقة</li></ul>',
+      'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li><li>لم يتم قبول المحاولات الأربعة السابقة</li></ul>',
     ],
     '<p>You\'re almost done.</p><p>We\'ve sent a verification email to <a href="mailto:[email]">[email]</a>.</p><p>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</p><p>It is also your final step in the sign up process.</p>' => [
       'ar' => '<p>أنت على وشك آلإنتهاء!</p><p>لقد تم إرسال رسالة تحقق إلكترونية إلى&nbsp;<a href="mailto:[email]">[email]</a></p><p>عند ضغطك على رابط عنوان البريد الإلكتروني، يتيح لنا معرفة أن البريد الإلكتروني صالح الفعالية و لك</p><p>كما أن هذه تعتبر آخر خطوة في عملية التسجيل</p>',
@@ -376,7 +382,7 @@ function alshaya_master_install() {
       'ar' => 'سجل الآن',
     ],
     'help' => [
-      'ar' => 'هل تحتاج إلى مساعدة؟',
+      'ar' => 'هل تحتاج مساعدة؟',
     ],
     'about brand' => [
       'ar' => 'حول مذركير',
@@ -397,7 +403,7 @@ function alshaya_master_install() {
       'ar' => 'تم إضافة القطعة/القطع إلى حقيبتك',
     ],
     'view cart' => [
-      'ar' => 'عرض العربة',
+      'ar' => 'عرض سلة التسوق',
     ],
     'Some items in your basket are out of stock. Please remove them to proceed.' => [
       'ar' => 'بعض القطع في حقيبة تسوقك نفذت من المخزون و تم إزالتها من حقيبة تسوقك',
@@ -420,11 +426,14 @@ function alshaya_master_install() {
     'Collect the order in store from 2-3 days' => [
       'ar' => 'استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى 2-3 أيام',
     ],
+    'Collect the order from store in 99 days' => [
+      'ar' => 'استلم طلبيتك من المحل خلال 99 أيام',
+    ],
     'Home Delivery' => [
       'ar' => 'خدمة التوصيل للمنزل',
     ],
     'For orders over KWD99' => [
-      'ar' => 'على الطلبات التي تزيد على "99" د.ك.',
+      'ar' => 'على الطلبيات التي تزيد على "99" د.ك.',
     ],
     'Click and Collect' => [
       'ar' => 'اختر واستلم',
@@ -475,7 +484,7 @@ function alshaya_master_install() {
       'ar' => 'عفواً، لم يتبق سوى quantity@ قطع من هذا المنتج و لقد قمنا بتحديث حقيبة تسوقك',
     ],
     'add to cart' => [
-      'ar' => 'أضف إلى السلة',
+      'ar' => 'أضف إلى سلة التسوق',
     ],
     '@name field is required.' => [
       'ar' => 'يرجى إدخال @name',
@@ -526,7 +535,7 @@ function alshaya_master_install() {
       'ar' => 'التوصيل العادي',
     ],
     'within 4 working days' => [
-      'ar' => 'من يوم إلى 4 أيام',
+      'ar' => 'خلال 4 أيام عمل',
     ],
     'FREE' => [
       'ar' => 'مجاناً',
@@ -661,10 +670,10 @@ function alshaya_master_install() {
       'ar' => 'ابحث عن المحلات القريبة',
     ],
     'Near me' => [
-      'ar' => 'القريبة إليك',
+      'ar' => 'الأقرب إلي',
     ],
     'Get directions' => [
-      'ar' => 'احصل على الاتجاهات',
+      'ar' => 'احصل على الإتجاهات',
     ],
     'View on map' => [
       'ar' => 'عرض على الخريطة',
@@ -688,13 +697,13 @@ function alshaya_master_install() {
       'ar' => 'لقد قمت للتو باستخدام رابط تسجيل الدخول المخصص لمرة واحدة. حسابك أصبح مفعلاً وموثوق.',
     ],
     'Orders over KWD 1234' => [
-      'ar' => 'للطلبيات التي تزيد على 1234 د.ك',
+      'ar' => 'على الطلبيات التي تزيد على 1234 د.ك.',
     ],
     'Orders under KWD 1234' => [
-      'ar' => 'الطلبيات الأقل من 1234 د.ك.',
+      'ar' => 'على الطلبيات الأقل من 1234 د.ك.',
     ],
     'Standard delivery for purchases over KD 250' => [
-      'ar' => 'خدمة التوصيل العادي للطلبيات التي تزيد على 250 د.ك',
+      'ar' => ' التوصيل العادي للطلبيات التي تزيد على 250 د.ك',
     ],
     'Collect your order in-store' => [
       'ar' => 'استلم طلبيتك من المحل',

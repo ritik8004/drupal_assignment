@@ -18,7 +18,7 @@ function alshaya_user_install() {
       'ar' => '(@mobile) متحرك',
     ],
     'Select your preferred communication channel' => [
-      'ar' => 'حدد قناة الاتصال المفضلة لديك',
+      'ar' => 'يرجى اختيار وسيلة التواصل المناسبة ',
     ],
     'Your communication preference saved successfully.' => [
       'ar' => 'تم حفظ تفضيلات الاتصال بنجاح.',
