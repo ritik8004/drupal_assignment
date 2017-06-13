@@ -8,6 +8,7 @@
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -206,4 +207,34 @@ function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $e
     }
 
   }
+}
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_stores_finder_alshaya_i18n_onetime_translation_add() {
+  // Including the area list file.
+  \Drupal::moduleHandler()->loadInclude('alshaya_stores_finder', 'inc', 'alshaya_stores_finder.area_list');
+
+  // If area available.
+  $area_list = _alshaya_stores_finder_get_area_list();
+  if ($area_list) {
+    // Vocabulary id.
+    $vid = 'area_list';
+    foreach ($area_list as $area) {
+      try {
+        // Create term for each area.
+        $term = Term::create([
+          'name' => $area,
+          'vid' => $vid,
+        ]);
+        $term->save();
+      }
+      catch (\Exception $e) {
+        // Log error if any.
+        \Drupal::logger('alshaya_stores_finder')->error($e->getMessage());
+      }
+    }
+  }
+
 }
