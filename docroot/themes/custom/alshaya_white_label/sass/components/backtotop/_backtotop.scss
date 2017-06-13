@@ -42,4 +42,12 @@
       top: 1rem;
     }
   }
+
+  @include breakpoint($only-mobile) {
+    padding-top: 3.2rem;
+
+    &::after {
+      top: 0.5rem;
+    }
+  }
 }
