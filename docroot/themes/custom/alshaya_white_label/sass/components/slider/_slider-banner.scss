@@ -31,7 +31,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    top: calc(50% - (4.375rem - 1.125rem)); // 50% - (4.375rem - (2.25rem / 2))
+    top: calc(50% - (4.75rem + 1.125rem)); // 50% - (4.375rem - (2.25rem / 2))
   }
 
   @include u-image-replacement;
@@ -40,7 +40,7 @@
   position: absolute;
   background: none;
   border: none;
-  z-index: 9;
+  z-index: 5;
 
   &::before {
     background-color: rgba(255, 255, 255, 0.25);
@@ -80,6 +80,8 @@
 
     bottom: 0;
   }
+
+  padding-#{$left}: 0;
 }
 
 .slick-dots li {
