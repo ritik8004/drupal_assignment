@@ -392,3 +392,50 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
 
   $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($sku_attributes);
 }
+
+/**
+ * Implements template_preprocess_menu().
+ */
+function alshaya_seo_preprocess_menu(&$variables) {
+  if ($variables['menu_name'] === 'account') {
+    foreach ($variables['items'] as $key => $item) {
+      if (Unicode::strcasecmp($item['title'], 'Sign in') !== 0) {
+        continue;
+      }
+
+      $signin_url_options = [
+        'attributes' => [
+          'class' => 'gtm-sign-in',
+        ],
+      ];
+
+      $variables['items'][$key]['url']->setOptions($signin_url_options);
+    }
+  }
+  elseif ($variables['menu_name'] === 'footer') {
+    foreach ($variables['items'] as $key => $item) {
+      $footer_url_options = [
+        'attributes' => [
+          'class' => 'c-footer-menu__link',
+        ],
+      ];
+
+      $variables['items'][$key]['url']->setOptions($footer_url_options);
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_alshaya_main_menu_level2().
+ */
+function alshaya_seo_preprocess_alshaya_main_menu_level2(&$variables) {
+  $sub_nav_label = str_replace(' ', '-', strtolower($variables['data']['label']));
+  $sub_nav_class = 'sub-nav-' . $sub_nav_label;
+  $variables['data']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label;
+  foreach ($variables['data']['child'] as $key1 => $value) {
+    $variables['data']['child'][$key1]['sub_nav_class'] = $sub_nav_class;
+    foreach ($value['child'] as $key2 => $value2) {
+      $variables['data']['child'][$key1]['child'][$key2]['sub_nav_class'] = $sub_nav_class;
+    }
+  }
+}
