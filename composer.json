@@ -102,6 +102,9 @@
             "drupal/search_api_autocomplete": {
                 "Failed site install due to missing search_api_autocomplete config dependency": "https://www.drupal.org/files/issues/2824390-15.patch"
             },
+            "drupal/search_api_spellcheck": {
+                "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
+            },
             "drupal/metatag": {
                 "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-14.patch"
             },
