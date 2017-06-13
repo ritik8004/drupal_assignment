@@ -69,7 +69,15 @@
     margin-bottom: 4rem;
 
     .form-item-mobile-number-mobile {
+      @include breakpoint($only-mobile) {
+        position: static;
+      }
+
       .form-item--error-message {
+        @include breakpoint($only-mobile) {
+          #{$left}: 0;
+        }
+
         position: absolute;
         #{$left}: -5rem;
         width: 21rem;
