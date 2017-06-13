@@ -2,9 +2,15 @@ alshaya_acm_product.settings:
   type: config_object
   label: 'Alshaya ACM Product settings'
   mapping:
+    brand_logo_base_path:
+      type: string
+      label: 'Base path on server for Brand Logo'
     size_guide_link:
       type: integer
       label: 'Enable Size Guide link'
     size_guide_modal_content:
       type: text_format
       label: 'Size guide content'
+    langcode:
+      type: string
+      label: 'Language code'

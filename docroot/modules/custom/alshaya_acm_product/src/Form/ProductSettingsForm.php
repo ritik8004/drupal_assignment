@@ -29,6 +29,7 @@ class ProductSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product.settings');
+    $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('size_guide_link', $form_state->getValue('size_guide_link'));
     $config->set('size_guide_modal_content', $form_state->getValue('size_guide_modal_content'));
     $config->save();
@@ -43,6 +44,14 @@ class ProductSettingsForm extends ConfigFormBase {
     $form = parent::buildForm($form, $form_state);
 
     $config = $this->config('alshaya_acm_product.settings');
+
+    $form['brand_logo_base_path'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Base path on server for Brand Logo'),
+      '#description' => $this->t('Do not include trailing or leading slashes.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('brand_logo_base_path'),
+    ];
 
     $form['size_guide_link'] = [
       '#type' => 'radios',
