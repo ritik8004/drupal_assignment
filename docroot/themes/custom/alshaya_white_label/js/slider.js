@@ -39,7 +39,7 @@
         var windowWidth = $(window).width();
 
         var center;
-        if (windowWidth > 768) {
+        if (windowWidth > 767) {
           center = (parentHeight - buttonHeight) / 2;
         }
         else {
