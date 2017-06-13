@@ -213,11 +213,8 @@ function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $e
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_stores_finder_alshaya_i18n_onetime_translation_add() {
-  // Including the area list file.
-  \Drupal::moduleHandler()->loadInclude('alshaya_stores_finder', 'inc', 'alshaya_stores_finder.area_list');
-
+  $area_list = \Drupal::config('area_list.kw')->get('areas');
   // If area available.
-  $area_list = _alshaya_stores_finder_get_area_list();
   if ($area_list) {
     // Vocabulary id.
     $vid = 'area_list';
