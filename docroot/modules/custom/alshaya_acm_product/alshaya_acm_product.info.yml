@@ -5,6 +5,7 @@ package: 'Alshaya'
 core: 8.x
 dependencies:
   - alshaya_acm
+  - alshaya_api
   - alshaya_product_zoom
   - form_options_attributes
   - metatag

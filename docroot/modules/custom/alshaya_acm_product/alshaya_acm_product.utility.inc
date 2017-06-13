@@ -7,6 +7,8 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\FileInterface;
@@ -409,4 +411,93 @@ function alshaya_acm_product_available_click_collect($sku) {
   // collect. In both cases click and collect option will be considered as
   // available.
   return ($sts || $rnc);
+}
+
+/**
+ * Utility function to get brand logo image.
+ *
+ * @param mixed $sku
+ *   SKU string or full object.
+ *
+ * @return array
+ *   Image build array.
+ */
+function alshaya_acm_product_get_brand_logo($sku) {
+  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+
+  $title = $sku_entity->get('attr_brand_logo')->getString();
+
+  $cid = 'brand_logo:' . Html::cleanCssIdentifier($title);
+
+  if ($cache = \Drupal::cache('data')->get($cid)) {
+    $image = $cache->data;
+  }
+  else {
+    // Preparing args for all info/error messages.
+    $args = ['@title' => $title, '@sku_id' => $sku_entity->id()];
+
+    $host = \Drupal::config('alshaya_api.settings')->get('magento_host');
+    $media_path = \Drupal::config('alshaya_acm_product.settings')->get('brand_logo_base_path');
+
+    $directory = $media_path;
+
+    for ($i = 0; $i < 2 && $i <= strlen($title); $i++) {
+      $directory .= '/' . substr(strtolower($title), $i, 1);
+    }
+
+    $directory_uri = 'public://brand-logo/' . $directory;
+    $image_uri = $directory_uri . '/' . strtolower($title) . '.jpeg';
+    $image_url = $host . '/' . $directory . '/' . strtolower($title) . '.jpeg';
+
+    $file_storage = \Drupal::entityTypeManager()->getStorage('file');
+
+    if ($files = $file_storage->loadByProperties(['uri' => $image_uri])) {
+      $file = reset($files);
+    }
+    else {
+      // Download the file contents.
+      $file_data = file_get_contents($image_url);
+
+      // Check to ensure errors like 404, 403, etc. are catched and empty file
+      // not saved in SKU.
+      if (empty($file_data)) {
+        \Drupal::logger('alshaya_acm_product')->error('Failed to download brand logo of title "@title" for SKU id @sku_id.', $args);
+      }
+
+      // Get the file name.
+      $file_name = basename($image_url);
+
+      // Prepare the directory.
+      file_prepare_directory($directory_uri, FILE_CREATE_DIRECTORY);
+
+      // Save the file as file entity.
+      /** @var \Drupal\file\Entity\File $file */
+      $file = file_save_data($file_data, $image_uri, FILE_EXISTS_REPLACE);
+
+      if (empty($file)) {
+        \Drupal::logger('alshaya_acm_product')->error('Failed to save brand logo of title "@title" for SKU id @sku_id.', $args);
+      }
+    }
+
+    if ($file) {
+      $image = [
+        '#theme' => 'image',
+        '#uri' => $file->getFileUri(),
+        '#title' => $title,
+        '#alt' => $title,
+      ];
+
+      $expire = CacheBackendInterface::CACHE_PERMANENT;
+    }
+    else {
+      $image = [];
+
+      // We cache this for 30 minutes to allow admins to correct the situation.
+      $expire = \Drupal::time()->getRequestTime() + (60 * 30);
+    }
+
+    \Drupal::cache('data')->set($cid, $image, $expire);
+  }
+
+  return $image;
 }
