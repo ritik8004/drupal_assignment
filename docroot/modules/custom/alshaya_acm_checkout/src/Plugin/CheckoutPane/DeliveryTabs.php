@@ -33,7 +33,7 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     // @TODO: We can think of making this dynamic if time permits.
     $pane_form['home_deliery'] = [
-      '#markup' => '<div class="tab tab-home-delivery"><h2>' . $this->t('Home delivery') . '</h2><p>' . $this->t('Standard delivery for purchases over KD 250') . '</p></div>',
+      '#markup' => '<div class="tab tab-home-delivery" gtm-type="checkout-home-delivery"><h2>' . $this->t('Home delivery') . '</h2><p>' . $this->t('Standard delivery for purchases over KD 250') . '</p></div>',
     ];
 
     $pane_form['separator'] = [
@@ -41,7 +41,7 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
     ];
 
     $pane_form['click_collect'] = [
-      '#markup' => '<div class="tab tab-click-collect"><h2>' . $this->t('Click & Collect') . '</h2><p>' . $this->t('Collect your order in-store') . '</p></div>',
+      '#markup' => '<div class="tab tab-click-collect" gtm-type="checkout-click-collect"><h2>' . $this->t('Click & Collect') . '</h2><p>' . $this->t('Collect your order in-store') . '</p></div>',
     ];
 
     $pane_form['line_seperator'] = [

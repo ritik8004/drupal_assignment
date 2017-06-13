@@ -1,0 +1,8 @@
+gtm:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once

@@ -11,4 +11,5 @@ dependencies:
   - robotstxt
   - simple_sitemap
   - token
+  - datalayer
 version: 8.x-1.0

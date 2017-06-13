@@ -87,6 +87,11 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['data-bundle-class'] = $bundle_class;
     }
   }
+
+  if ($variables['plugin_id'] === 'basket_horizontal_recommendation') {
+    $variables['attributes']['class'][] = 'horizontal-crossell';
+  }
+
 }
 
 /**
