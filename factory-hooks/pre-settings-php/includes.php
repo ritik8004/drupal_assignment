@@ -35,9 +35,6 @@ elseif (strpos($env, 'test') !== FALSE) {
   $env = 'test';
 }
 
-// Test Alshaya.
-// $config['google_tag.settings']['container_id'] = 'GTM-PP5PK4C';
-
 switch ($env) {
   case 'local':
     global $_alshaya_acm_disable_stock_check;
