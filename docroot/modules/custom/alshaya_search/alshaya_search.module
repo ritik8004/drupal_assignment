@@ -41,6 +41,14 @@ function alshaya_search_views_pre_build(ViewExecutable $view) {
   if ($view->id() == 'search') {
     $view->display_handler->display['cache_metadata']['contexts'][] = 'facets';
   }
+
+  if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
+    // If AND operator setting is enabled, change operator to AND.
+    if (\Drupal::config('alshaya_config.settings')->get('alshaya_search_and_operator')) {
+      $view->filter['search_api_fulltext']->operator = 'and';
+    }
+  }
+
 }
 
 /**

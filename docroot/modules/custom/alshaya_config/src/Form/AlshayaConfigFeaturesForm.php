@@ -4,11 +4,39 @@ namespace Drupal\alshaya_config\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Implements a form to collect security check configuration.
  */
 class AlshayaConfigFeaturesForm extends ConfigFormBase {
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Constructs a \Drupal\alshaya_config\FeaturesForm object.
+   *
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   */
+  public function __construct(ModuleHandlerInterface $module_handler) {
+    $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -32,12 +60,10 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
 
     $config = [];
 
-    $moduleHandler = \Drupal::service('module_handler');
-
     $config['alshaya_arabic'] = [
       'type' => 'module',
       'description' => t('Enable Arabic language for this site'),
-      'default_value' => $moduleHandler->moduleExists('alshaya_arabic'),
+      'default_value' => $this->moduleHandler->moduleExists('alshaya_arabic'),
     ];
 
     // @TODO: This is just an example for now and could be removed going
@@ -46,7 +72,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
     $config['alshaya_i18n'] = [
       'type' => 'module',
       'description' => t('Enable or disable the language switcher on the site'),
-      'default_value' => $moduleHandler->moduleExists('alshaya_i18n'),
+      'default_value' => $this->moduleHandler->moduleExists('alshaya_i18n'),
     ];
 
     // @TODO: Below is just an example of type variable. It is not fully
@@ -58,6 +84,15 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
     //   'default_value' => empty($storedConfig->get('home_banner')) ? 0 : 1,
     // ];
     // @codingStandardsIgnoreEnd
+
+    // Config to enable AND operator on Search and PLP pages.
+    if ($this->moduleHandler->moduleExists('alshaya_search')) {
+      $config['alshaya_search_and_operator'] = [
+        'type' => 'variable',
+        'description' => t('Use AND operator for Search. Defaults to OR.'),
+        'default_value' => $storedConfig->get('alshaya_search_and_operator'),
+      ];
+    }
 
     return $config;
   }
