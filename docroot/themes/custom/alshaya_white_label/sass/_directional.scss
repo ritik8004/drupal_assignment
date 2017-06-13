@@ -98,3 +98,5 @@ $alshaya-bold: if-ltr($alshaya-bold, $alshaya-arabic-bold);
 $alshaya-arabic-bold: if-ltr($alshaya-arabic-bold, $alshaya-bold);
 $alshaya-thin: if-ltr($alshaya-thin, $alshaya-arabic-thin);
 $alshaya-arabic-thin: if-ltr($alshaya-arabic-thin, $alshaya-thin);
+$after: if-ltr("after", "before");
+$before: if-ltr("before", "after");

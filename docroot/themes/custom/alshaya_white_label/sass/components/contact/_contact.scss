@@ -173,6 +173,7 @@
   .form-submit {
     @include breakpoint($only-mobile) {
       width: 100%;
+      margin-bottom: 0;
     }
 
     width: 5.6875rem;
