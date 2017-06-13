@@ -1,0 +1,61 @@
+diff --git a/modules/acq_cart/src/Cart.php b/modules/acq_cart/src/Cart.php
+index 39e812f8..e9739875 100644
+--- a/modules/acq_cart/src/Cart.php
++++ b/modules/acq_cart/src/Cart.php
+@@ -445,6 +445,24 @@ public function setCoupon($coupon) {
+   /**
+    * {@inheritdoc}
+    */
++  public function getExtension($key) {
++    if (isset($this->cart, $this->cart->extension, $this->cart->extension[$key])) {
++      return $this->cart->extension[$key];
++    }
++
++    return '';
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setExtension($key, $value) {
++    $this->cart->extension[$key] = $value;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
+   public function getCart() {
+     if (isset($this->cart)) {
+       $cart = $this->cart;
+diff --git a/modules/acq_cart/src/CartInterface.php b/modules/acq_cart/src/CartInterface.php
+index d77fb94f..efe1472f 100644
+--- a/modules/acq_cart/src/CartInterface.php
++++ b/modules/acq_cart/src/CartInterface.php
+@@ -253,6 +253,27 @@ public function getCoupon();
+   public function setCoupon($coupon);
+ 
+   /**
++   * Gets an extension by its key.
++   *
++   * @param string $key
++   *   The extension key.
++   *
++   * @return string
++   *   The value.
++   */
++  public function getExtension($key);
++
++  /**
++   * Set an extension.
++   *
++   * @param string $key
++   *   The extension key.
++   * @param string $value
++   *   The extension value.
++   */
++  public function setExtension($key, $value);
++
++  /**
+    * Converts this cart to the customer cart provided.
+    *
+    * @param array $cart

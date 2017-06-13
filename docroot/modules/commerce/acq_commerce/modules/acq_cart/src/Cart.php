@@ -445,6 +445,24 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function getExtension($key) {
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension[$key])) {
+      return $this->cart->extension[$key];
+    }
+
+    return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setExtension($key, $value) {
+    $this->cart->extension[$key] = $value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCart() {
     if (isset($this->cart)) {
       $cart = $this->cart;

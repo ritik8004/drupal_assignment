@@ -253,6 +253,27 @@ interface CartInterface {
   public function setCoupon($coupon);
 
   /**
+   * Gets an extension by its key.
+   *
+   * @param string $key
+   *   The extension key.
+   *
+   * @return string
+   *   The value.
+   */
+  public function getExtension($key);
+
+  /**
+   * Set an extension.
+   *
+   * @param string $key
+   *   The extension key.
+   * @param string $value
+   *   The extension value.
+   */
+  public function setExtension($key, $value);
+
+  /**
    * Converts this cart to the customer cart provided.
    *
    * @param array $cart
