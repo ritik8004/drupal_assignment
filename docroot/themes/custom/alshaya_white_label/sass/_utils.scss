@@ -51,6 +51,18 @@
   bottom: 0;
   right: 0;
   left: 0;
+
+  .ie & {
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+
+    /* IE 5-7 */
+    filter: alpha(opacity=0);
+
+    /* IE 10 */
+    opacity: 0;
+    background: white;
+  }
 }
 
 // @TODO: Replace the classes below with mixins.
