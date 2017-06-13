@@ -5,10 +5,12 @@ dependencies:
     - alshaya_search
   theme:
     - alshaya_white_label
+_core:
+  default_config_hash: L5qu7eLCKcDRjvDiKHtC8w7gknJMrmJtBuB0lA_f5BM
 id: keywordsearchblock
 theme: alshaya_white_label
 region: header
-weight: -29
+weight: -30
 provider: null
 plugin: keyword_search_block
 settings:
