@@ -4,6 +4,7 @@ dependencies:
   config:
     - views.view.search
   module:
+    - ctools
     - system
     - views
   theme:
@@ -26,3 +27,10 @@ visibility:
     pages: "/search\r\n/taxonomy/term/*"
     negate: false
     context_mapping: {  }
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      acq_product_category: acq_product_category
+    negate: true
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'
