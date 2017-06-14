@@ -55,7 +55,7 @@ class CartController extends ControllerBase {
       // Update cart, after the item has been removed.
       $this->cartStorage->updateCart();
 
-      drupal_set_message($this->t('Item %sku has been removed from cart.', ['%sku' => $sku]), 'status');
+      drupal_set_message($this->t('The product has been removed from your cart.'), 'status');
     }
     else {
       drupal_set_message($this->t('Oops, something went wrong.'), 'error');
