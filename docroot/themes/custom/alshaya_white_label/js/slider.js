@@ -57,11 +57,15 @@
       else {
         $('.c-slider-promo__items').slick(options);
       }
-      centerDots();
       // eslint-disable-next-line.
       $(window).resize(debounce(function () {
         centerDots();
       }, 250));
+
+      var windowWidth = $(window).width();
+      setTimeout(function () {
+        $(window).width(windowWidth);
+      }, 500);
     }
   };
 
