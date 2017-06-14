@@ -82,17 +82,19 @@
     }
 
     .form-actions {
-      margin-bottom: 90px;
-      font-size: 12px;
+      margin-bottom: 5.625rem;
+      font-size: 0.75rem;
       font-weight: 700;
 
       .form-submit {
         margin-top: 0;
-        margin-bottom: 23px;
-        min-width: 91px;
-        margin-#{$right}: 20px;
-        padding: 2px 16px 3px;
+        margin-bottom: 1.4375rem;
+        min-width: 5.6875rem;
+        margin-#{$right}: 1.25rem;
+        padding: 0.125rem 1rem 0.1875rem;
         width: auto;
+        font-weight: normal;
+        font-size: 0.75rem;
 
         @include breakpoint($only-mobile) {
           display: block;
@@ -104,7 +106,8 @@
       .cancel-button {
         display: block;
         text-align: center;
-        padding: 11px;
+        padding: 0.6875rem;
+        color: $windows-blue;
 
         @include breakpoint($tablet) {
           display: inline-block;
@@ -121,14 +124,14 @@
     }
 
     .js-form-type-select label {
-      color: #adadad;
-      font-size: 12px;
+      color: $greyish;
+      font-size: 0.75rem;
       #{$left}: 0;
       position: absolute;
-      top: -22px;
+      top: -1.1375rem;
 
       &.error {
-        top: 28px;
+        top: 1.75rem;
       }
     }
   }

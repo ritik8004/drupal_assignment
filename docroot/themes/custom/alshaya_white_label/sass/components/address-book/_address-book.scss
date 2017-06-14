@@ -322,12 +322,18 @@
 
 .country-code-prefix {
   margin-top: 0.55em;
-  color: #adadad;
-  border-bottom: 1px solid #666;
-  padding-bottom: 0.2em;
+  color: $greyish;
+  border-bottom: 1px solid $brownish-grey;
+  padding-bottom: 0.18em;
+  width: 3rem;
+
+  @include breakpoint($only-mobile) {
+    margin-top: 0.6em;
+  }
 }
 
-.address-book-address {
+.address-book-address,
+.webform-submission-alshaya-contact-form {
   .mobile-number-field {
     margin-top: -3.3em;
 
@@ -337,7 +343,7 @@
       left: 0;
       opacity: 1;
       font-size: 0.75rem;
-      color: #adadad;
+      color: $greyish;
     }
   }
 
@@ -350,17 +356,57 @@
   }
 }
 
-.c-address-book .profile-form {
-  .address-book-address {
-    .form-item-field-address-0-address-mobile-number-mobile {
-      position: absolute;
-      top: 3em;
-      left: 3em;
+.mobile-number-field {
+  .form-type-textfield {
+    position: absolute !important;
+    top: 3em;
+    left: 3em;
+
+    input {
+      width: 8.75rem !important;
     }
   }
+}
 
+.c-address-book .profile-form {
   input {
     margin-top: 0.35rem;
     padding-bottom: 0.25rem;
+  }
+}
+
+#edit-field-address-0-address-mobile-number-mobile-error {
+  left: -4em;
+  position: relative;
+  top: -0.1em;
+}
+
+.form-item-field-address-0-address-administrative-area {
+  padding-bottom: 1.5em !important;
+
+  .select2-selection {
+    border: 1px solid $brownish-grey;
+    font-family: "alshaya-thin";
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    margin: 0.45rem 0 1rem;
+  }
+
+  .select2-selection__rendered {
+    line-height: 19px !important;
+    padding-left: 0 !important;
+  }
+
+  .select2-selection__arrow {
+    top: 0.625rem !important;
+
+    @include icon(chevrondown, after) {
+      font-size: 1.25rem;
+    }
+
+    b {
+      display: none;
+    }
   }
 }
