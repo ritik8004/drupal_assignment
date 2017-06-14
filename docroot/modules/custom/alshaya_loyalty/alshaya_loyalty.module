@@ -386,7 +386,7 @@ function _alshaya_loyalty_form_attachements(&$form, FormStateInterface $form_sta
   if (empty($validation)) {
     $validation = alshaya_loyalty_get_validation_settings();
   }
-
+  $form['#attached']['library'][] = 'alshaya_master/ladda';
   $form['#attached']['drupalSettings']['alshaya_loyalty'] = [
     'card_validate' => [
       'init_value' => $validation['value_start_with'],

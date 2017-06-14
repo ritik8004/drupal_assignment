@@ -171,6 +171,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     $form['actions']['checkout']['#value'] = t('checkout securely');
     $form['actions']['checkout']['#suffix'] = '</div>';
     $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
+    // We need to change the markup for submit button.
+    // @see alshaya_white_label_theme_suggestions_input_alter().
+    $form['actions']['checkout']['#attributes']['data-twig-suggestion'] = 'secure-checkout';
 
     // Added link markup.
     $form['actions_top']['checkout_top'] = [
