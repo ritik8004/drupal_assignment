@@ -107,10 +107,6 @@
             font-size: 0.875rem;
           }
         }
-
-        .lSPager {
-          display: none;
-        }
       }
 
       .view-content,
@@ -556,5 +552,9 @@ ul.item-list__checkbox,
         }
       }
     }
+  }
+
+  .lSPager {
+    display: none;
   }
 }
