@@ -50,7 +50,7 @@ class KnetPaymentRedirect extends CheckoutPaneBase implements CheckoutPaneInterf
 
     // We want to redirect to K-Net only if payment method is K-Net and payment
     // status is pending_payment.
-    if ($order['payment']['method_code'] != 'knet' && $order['status'] != 'pending_payment') {
+    if ($order['payment']['method_code'] != 'knet' || $order['status'] != 'pending_payment') {
       return $pane_form;
     }
 
@@ -61,7 +61,7 @@ class KnetPaymentRedirect extends CheckoutPaneBase implements CheckoutPaneInterf
     $pipe->setCurrency(KNET_CURRENCY_KWD);
     $pipe->setLanguage(KNET_LANGUAGE_EN);
 
-    $pipe->setResponseUrl(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE])->toString());
+    $pipe->setResponseUrl(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE, 'https' => FALSE])->toString());
     $pipe->setErrorUrl(Url::fromRoute('alshaya_acm_knet.error', ['order_id' => $order['increment_id']], ['absolute' => TRUE])->toString());
 
     // @TODO: Make this dynamic.
@@ -72,8 +72,7 @@ class KnetPaymentRedirect extends CheckoutPaneBase implements CheckoutPaneInterf
     }
 
     // Set your alias name here.
-    // @TODO: Make this configurable.
-    $pipe->setAlias('alshaya');
+    $pipe->setAlias($knet_settings->get('alias'));
 
     $pipe->setTrackId($order['increment_id']);
 
@@ -91,9 +90,7 @@ class KnetPaymentRedirect extends CheckoutPaneBase implements CheckoutPaneInterf
       exit;
     }
     else {
-      // @TODO: Log this.
-      echo '<br>' . $pipe->getErrorMsg();
-      echo '<br>' . $pipe->getDebugMsg();
+      \Drupal::logger('alshaya_acm_knet')->critical($pipe->getErrorMsg());
       die();
     }
 

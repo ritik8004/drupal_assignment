@@ -2,14 +2,48 @@
 
 namespace Drupal\alshaya_acm_knet\Controller;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Class CheckoutSettingsForm.
  */
 class KnetController extends ControllerBase {
+
+  /**
+   * APIWrapper object.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  protected $apiWrapper;
+
+  /**
+   * Constructor.
+   *
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   APIWrapper object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Factory object.
+   */
+  public function __construct(APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
+    $this->apiWrapper = $api_wrapper;
+    $this->logger = $logger_factory->get('alshaya_acm_knet');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('acq_commerce.api'),
+      $container->get('logger.factory')
+    );
+  }
 
   /**
    * Page callback to process the payment and return redirect URL.
@@ -27,13 +61,16 @@ class KnetController extends ControllerBase {
     $response['order_id'] = $_POST['udf3'];
     $response['internal_order_id'] = $_POST['udf4'];
 
-    $result_params = '?response=' . base64_encode(serialize($response));
+    // @TODO: Should we think about encrypting this message?
+    $result_params = '?response=' . base64_encode(json_encode($response));
 
     if ($response['result'] == 'CAPTURED') {
       $result_url = Url::fromRoute('alshaya_acm_knet.success', ['order_id' => $response['order_id']], ['absolute' => TRUE])->toString();
+      $this->logger->info('KNET update for @order_id: @message', ['@order_id' => $response['order_id'], '@message' => json_encode($response)]);
     }
     else {
       $result_url = Url::fromRoute('alshaya_acm_knet.error', ['order_id' => $response['order_id']], ['absolute' => TRUE])->toString();
+      $this->logger->error('KNET update for @order_id: @message', ['@order_id' => $response['order_id'], '@message' => json_encode($response)]);
     }
 
     print 'REDIRECT=' . $result_url . $result_params;
@@ -44,34 +81,45 @@ class KnetController extends ControllerBase {
    * Page callback for success state.
    */
   public function success($order_id) {
-    $data = unserialize(base64_decode(\Drupal::request()->get('response')));
+    $data = json_decode(base64_decode(\Drupal::request()->get('response')), TRUE);
 
     if (empty($data) || $data['order_id'] != $order_id) {
       return new AccessDeniedHttpException();
     }
 
-    // @TODO: Update the order payment method and redirect user to payment page.
-    // @TODO: We need to redirect to confirmation page after processing.
+    $message = '';
+
+    foreach ($data as $key => $value) {
+      $message .= $key . ': ' . $value . PHP_EOL;
+    }
+
+    $this->apiWrapper->updateOrderStatus($data['internal_order_id'], 'pending', $message);
+
+    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation']));
+    $response->send();
   }
 
   /**
    * Page callback for error state.
-   *
-   * @return array
-   *   Build array.
    */
   public function error($order_id) {
-    $data = unserialize(base64_decode(\Drupal::request()->get('response')));
+    $data = json_decode(base64_decode(\Drupal::request()->get('response')), TRUE);
 
+    $message = $this->t('Something went wrong, we dont have proper error message.');
+
+    // Error from our side, K-Net error won't have this params.
     if (empty($data) || $data['order_id'] != $order_id) {
-      // Error from our side, K-Net error won't have this params.
+      $message = '';
+
+      foreach ($data as $key => $value) {
+        $message .= $key . ': ' . $value . PHP_EOL;
+      }
     }
 
-    $build = [
-      '#markup' => $this->t('Some error occurred.'),
-    ];
+    $this->apiWrapper->updateOrderStatus($data['internal_order_id'], 'payment_failed', $message);
 
-    return $build;
+    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation']));
+    $response->send();
   }
 
 }

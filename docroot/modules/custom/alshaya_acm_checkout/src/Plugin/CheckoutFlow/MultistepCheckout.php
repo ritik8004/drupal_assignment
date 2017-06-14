@@ -234,6 +234,13 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
         \Drupal::cache()->delete('orders_list_' . $email);
 
+        // @TODO: Remove this code once Magento has placed the observer.
+        $order = _alshaya_acm_checkout_get_last_order_from_session();
+
+        if ($order['payment']['method_code'] == 'knet') {
+          $this->apiWrapper->updateOrderStatus($order['order_id'], 'pending_payment', 'Remove code in Drupal to update status to pending_payment once Magento observer is in place');
+        }
+
         // Create a new cart now.
         $this->cartStorage->createCart();
       }
