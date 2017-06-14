@@ -19,6 +19,20 @@
         margin-top: 0;
       }
     }
+
+    .field--name-field-subscribe-newsletter {
+      margin-top: 2.2rem;
+
+      .js-form-type-checkbox {
+        margin-top: 1rem;
+      }
+
+      p {
+        font-size: 0.75rem;
+        margin-top: 0;
+        margin-bottom: 1.2rem;
+      }
+    }
   }
 
   .user__order--detail {
@@ -271,6 +285,10 @@
 
   .blend .delivery--method {
     padding-top: 1rem;
+
+    @include breakpoint($desktop) {
+      padding-top: 1.6rem;
+    }
   }
 
   .label.font-small {
