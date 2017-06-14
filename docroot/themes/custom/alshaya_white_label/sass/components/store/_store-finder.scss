@@ -578,15 +578,7 @@
 
   .store-row--counter {
     @include breakpoint($only-mobile) {
-      font-size: 0;
-      position: absolute;
-      #{$left}: 0.8125rem;
-      top: 0.5rem;
-
-      @include icon(chevron#{$left}, before) {
-        font-size: 2rem;
-        color: $cerulean-two;
-      }
+      display: none;
     }
   }
 
@@ -1048,6 +1040,44 @@
   + .ajax-progress-fullscreen {
     background-image: url("../imgs/icons/MC-loader.svg");
     background-size: 2rem;
+  }
+
+  #views-exposed-form-stores-finder-page-1 {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .view-display-id-page_1 {
+    .list-view-locator {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+
+    .store-mobile {
+      &:first-child {
+        border-top: 1px solid $white;
+      }
+
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+
+    .individual--store .list-view-locator {
+      display: block;
+    }
+  }
+
+  .view-display-id-page_2 .view-display-id-page_1 {
+    .store-mobile {
+      display: none;
+    }
+
+    .list-view-locator {
+      display: block;
+    }
   }
 }
 
