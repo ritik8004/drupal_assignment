@@ -1,4 +1,4 @@
-name: alshaya_addressbook
+name: 'Alshaya Addressbook'
 type: module
 core: 8.x
 dependencies:

@@ -225,6 +225,9 @@ function alshaya_addressbook_form_profile_address_book_form_alter(array &$form, 
  * Alter the address book form.
  */
 function _alshaya_addressbook_form_alter(array &$form, FormStateInterface $form_state) {
+  // This is internal field to be used only for synchronisation with Magento.
+  $form['field_address_id']['#access'] = FALSE;
+
   $form['#validate'][] = '_alshaya_addressbook_mobile_process_validate';
 
   // Get default value.
