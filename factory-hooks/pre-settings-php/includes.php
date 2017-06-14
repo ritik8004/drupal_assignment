@@ -41,16 +41,8 @@ switch ($env) {
     global $_alshaya_acm_disable_stock_check;
     $_alshaya_acm_disable_stock_check = TRUE;
 
-    // Set the knet resource path which should be outside GIT root.
-    $config['alshaya_acm_knet.settings']['resource_path'] = '/home/vagrant/knet-resource/dev/';
-
-    $config['acq_commerce.conductor']['url_agent'] = 'https://agent.dev.acm.acquia.io/';
-    $config['acq_commerce.conductor']['url_ingest'] = 'https://ingest.dev.acm.acquia.io/';
-    break;
-
-  case 'dev':
-  case 'test':
     $config['acq_commerce.conductor']['url'] = 'https://agent.dev.acm.acquia.io/';
+
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;
@@ -59,7 +51,22 @@ switch ($env) {
     $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
 
     // Set the knet resource path which should be outside GIT root.
-    $config['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource';
+    $config['alshaya_acm_knet.settings']['resource_path'] = '/home/vagrant/knet-resource/';
+    break;
+
+  case 'dev':
+  case 'test':
+    $config['acq_commerce.conductor']['url'] = 'https://agent.dev.acm.acquia.io/';
+
+    $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
+    $config['alshaya_api.settings']['verify_ssl'] = 0;
+
+    $config['alshaya_api.settings']['username'] = 'acquiaapi';
+    $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
+
+    // Set the knet resource path which should be outside GIT root.
+    $config['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource/';
     break;
 
   default:
@@ -67,14 +74,15 @@ switch ($env) {
 
     $config['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
-    $config['alshaya_api.settings']['verify_ssl'] = FALSE;
+    $config['alshaya_api.settings']['verify_ssl'] = 0;
 
     $config['alshaya_api.settings']['username'] = 'acquiaapi';
     $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
+
+    // Set the knet resource path which should be outside GIT root.
+    $config['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource/';
     break;
 }
-
-$config['acq_commerce.conductor']['verify_ssl'] = FALSE;
 
 // Recaptcha settings.
 $config['recaptcha.settings']['site_key'] = '6Le93BsUAAAAAMOiJ5wrk4ICF0N-dLs6iM_eR4di';
