@@ -138,11 +138,12 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       $form['geolocation_geocoder_google_geocoding_api']['#weight'] = 4;
 
       // Adding placeholder to the input field.
-      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
-      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#access'] = (bool) $store_finder_search_config;
+      $form['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
+      $form['geolocation_geocoder_google_geocoding_api']['#access'] = (bool) $store_finder_search_config;
       $form['actions']['#access'] = (bool) $store_finder_search_config;
       $form['actions']['#weight'] = 5;
       unset($form['geolocation_geocoder_google_geocoding_api']['#description']);
+      $form['field_latitude_longitude_proximity']['#attributes']['class'][] = 'hidden';
     }
   }
 }
