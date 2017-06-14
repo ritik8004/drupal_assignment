@@ -141,7 +141,7 @@ class UserCommunicationPreference extends FormBase {
     $mobile_number = $mobileUtil->libUtil()->format($mobile_value, $format);
 
     if ($replace_space) {
-      $mobile_number = str_replace(' ', '-', $mobile_number);
+      $mobile_number = str_replace(' ', ' - ', $mobile_number);
     }
     return $mobile_number;
   }
