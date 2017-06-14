@@ -1,0 +1,348 @@
+diff --git a/modules/acq_cart/acq_cart.services.yml b/modules/acq_cart/acq_cart.services.yml
+index 20661d8..085d671 100644
+--- a/modules/acq_cart/acq_cart.services.yml
++++ b/modules/acq_cart/acq_cart.services.yml
+@@ -1,4 +1,4 @@
+ services:
+   acq_cart.cart_storage:
+     class: Drupal\acq_cart\CartSessionStorage
+-    arguments: ['@session']
++    arguments: ['@session', '@acq_commerce.api', '@logger.factory']
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index 2a5cd87..b913310 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -2,6 +2,11 @@
+ 
+ namespace Drupal\acq_cart;
+ 
++use Drupal\acq_commerce\Conductor\APIWrapper;
++use Drupal\acq_sku\Entity\SKU;
++use Drupal\Component\Utility\Html;
++use Drupal\Core\Cache\Cache;
++use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+ use Symfony\Component\HttpFoundation\Session\SessionInterface;
+ 
+ /**
+@@ -19,13 +24,26 @@ class CartSessionStorage implements CartStorageInterface {
+   protected $session;
+ 
+   /**
++   * API Wrapper object.
++   *
++   * @var \Drupal\acq_commerce\Conductor\APIWrapper
++   */
++  private $apiWrapper;
++
++  /**
+    * Constructor.
+    *
+    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+    *   The session.
++   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
++   *   ApiWrapper object.
++   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
++   *   LoggerFactory object.
+    */
+-  public function __construct(SessionInterface $session) {
++  public function __construct(SessionInterface $session, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
+     $this->session = $session;
++    $this->apiWrapper = $api_wrapper;
++    $this->logger = $logger_factory->get('acq_cart');
+   }
+ 
+   /**
+@@ -64,6 +82,19 @@ public function addCart(CartInterface $cart) {
+   /**
+    * {@inheritdoc}
+    */
++  public function restoreCart($cart_id) {
++    $cart = (object) $this->apiWrapper->getCart($cart_id);
++
++    if ($cart) {
++      $cart->cart_id = $cart_id;
++      $cart = new Cart($cart);
++      $this->addCart($cart);
++    }
++  }
++
++  /**
++   * {@inheritdoc}
++   */
+   public function getCart() {
+     $cart = $this->session->get(self::STORAGE_KEY);
+ 
+@@ -123,7 +154,13 @@ public function updateCart() {
+       unset($cart->totals);
+     }
+ 
+-    $cart = (object) \Drupal::service('acq_commerce.api')->updateCart($cart_id, $update);
++    try {
++      $cart = (object) $this->apiWrapper->updateCart($cart_id, $update);
++    }
++    catch (\Exception $e) {
++      $this->restoreCart($cart_id);
++      throw $e;
++    }
+ 
+     if (empty($cart)) {
+       return;
+@@ -132,6 +169,7 @@ public function updateCart() {
+     $cart->cart_id = $cart_id;
+     $cart = new Cart($cart);
+     $this->addCart($cart);
++
+     return $cart;
+   }
+ 
+@@ -149,7 +187,7 @@ public function pushCart() {
+       $update = $cart->getCart();
+     }
+ 
+-    $cart_response = (object) \Drupal::service('acq_commerce.api')->updateCart($cart->id(), $update);
++    $cart_response = (object) $this->apiWrapper->updateCart($cart->id(), $update);
+ 
+     if (empty($cart_response)) {
+       return;
+@@ -171,7 +209,7 @@ public function createCart() {
+       $customer_id = \Drupal::currentUser()->getAccount()->acq_customer_id;
+     }
+ 
+-    $cart = (object) \Drupal::service('acq_commerce.api')->createCart($customer_id);
++    $cart = (object) $this->apiWrapper->createCart($customer_id);
+ 
+     $cart = new Cart($cart);
+     $this->addCart($cart);
+@@ -196,7 +234,28 @@ public function associateCart($customer_id) {
+     $this->session->set(self::STORAGE_KEY, $cart);
+ 
+     // Then we notify the commerce backend about the association.
+-    \Drupal::service('acq_commerce.api')->associateCart($cart->id(), $cart->customerId());
++    $this->apiWrapper->associateCart($cart->id(), $cart->customerId());
++  }
++
++  /**
++   * Helper function to clear stock cache of all items in cart.
++   */
++  public function clearCartItemsStockCache() {
++    $items = $this->getCart()->items();
++
++    if (empty($items)) {
++      return;
++    }
++
++    foreach ($items as $item) {
++      // Clear stock cache.
++      $stock_cid = 'stock:' . strtolower(Html::cleanCssIdentifier($item['sku']));
++      \Drupal::cache('data')->delete($stock_cid);
++
++      // Clear product and forms related to sku.
++      $sku_entity = SKU::loadFromSku($item['sku']);
++      Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
++    }
+   }
+ 
+ }
+diff --git a/modules/acq_cart/src/Form/CustomerCartForm.php b/modules/acq_cart/src/Form/CustomerCartForm.php
+index 7e9e00a..5a913d4 100644
+--- a/modules/acq_cart/src/Form/CustomerCartForm.php
++++ b/modules/acq_cart/src/Form/CustomerCartForm.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\acq_cart\Form;
+ 
+ use Drupal\acq_cart\CartStorageInterface;
++use Drupal\acq_commerce\UpdateCartErrorEvent;
+ use Drupal\Core\Form\FormBase;
+ use Drupal\Core\Form\FormStateInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+@@ -202,7 +203,12 @@ private function updateCart(FormStateInterface $form_state) {
+       $this->cartStorage->updateCart();
+     }
+     catch (\Exception $e) {
+-      if ($e->getMessage() == $this->t('Coupon code is not valid')) {
++      // Dispatch event so action can be taken.
++      $dispatcher = \Drupal::service('event_dispatcher');
++      $event = new UpdateCartErrorEvent($e);
++      $dispatcher->dispatch(UpdateCartErrorEvent::SUBMIT, $event);
++
++      if ($e->getMessage() == $this->t('Coupon code is not valid')->render()) {
+         // Set the error and require rebuild.
+         $form_state->setErrorByName('coupon', $this->t('This coupon code seems invalid or expired, please try new one.'));
+         $form_state->setRebuild(TRUE);
+@@ -212,7 +218,7 @@ private function updateCart(FormStateInterface $form_state) {
+         $this->updateCart($form_state);
+       }
+       else {
+-        // @TODO: handle more exceptions.
++        // We will handle all other cases using event dispatcher.
+       }
+     }
+   }
+diff --git a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
+index 5919d88..1dc831a 100644
+--- a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
++++ b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
+@@ -214,9 +214,6 @@ public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
+         \Drupal::service('acq_cart.cart_storage')->updateCart();
+       }
+       catch (\Exception $e) {
+-        // Remove item from cart.
+-        $cart->addItemToCart($tree_pointer->getSku(), -$quantity);
+-
+         // Dispatch event so action can be taken.
+         $dispatcher = \Drupal::service('event_dispatcher');
+         $event = new AddToCartErrorEvent($e);
+diff --git a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Grouped.php b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Grouped.php
+index 921a757..9ab8552 100644
+--- a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Grouped.php
++++ b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Grouped.php
+@@ -96,11 +96,6 @@ public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
+       \Drupal::service('acq_cart.cart_storage')->updateCart();
+     }
+     catch (\Exception $e) {
+-      // Remove item from cart.
+-      foreach ($skus as $sku => $quantity) {
+-        $cart->addItemToCart($sku, -$quantity);
+-      }
+-
+       // Dispatch event so action can be taken.
+       $dispatcher = \Drupal::service('event_dispatcher');
+       $event = new AddToCartErrorEvent($e);
+diff --git a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Simple.php b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Simple.php
+index c3fc07a..9d8e6c2 100644
+--- a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Simple.php
++++ b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Simple.php
+@@ -69,9 +69,6 @@ public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
+       \Drupal::service('acq_cart.cart_storage')->updateCart();
+     }
+     catch (\Exception $e) {
+-      // Remove item from cart.
+-      $cart->addItemToCart($sku, -$quantity);
+-
+       // Dispatch event so action can be taken.
+       $dispatcher = \Drupal::service('event_dispatcher');
+       $event = new AddToCartErrorEvent($e);
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
+index f19e519..8b20ed6 100644
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\acq_commerce\Conductor;
+ 
++use Drupal\Component\Utility\Html;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+ use Drupal\Core\Language\LanguageManagerInterface;
+ use Drupal\Core\Logger\LoggerChannelFactory;
+@@ -27,6 +28,8 @@ class APIWrapper {
+    *   ClientFactory object.
+    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+    *   ConfigFactoryInterface object.
++   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
++   *   LanguageManagerInterface object.
+    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+    *   LoggerChannelFactory object.
+    */
+@@ -108,7 +111,7 @@ public function skuStockCheck($sku) {
+ 
+     try {
+       // Cache id.
+-      $cid = 'stock:' . $sku;
++      $cid = 'stock:' . strtolower(Html::cleanCssIdentifier($sku));
+ 
+       // If information is cached.
+       if ($cache = \Drupal::cache('data')->get($cid)) {
+@@ -187,6 +190,8 @@ public function updateCart($cart_id, $cart) {
+     $doReq = function ($client, $opt) use ($endpoint, $cart) {
+       $opt['json'] = $cart;
+ 
++      $this->logger->notice(json_encode($cart));
++
+       return ($client->post($endpoint, $opt));
+     };
+ 
+diff --git a/src/UpdateCartErrorEvent.php b/src/UpdateCartErrorEvent.php
+new file mode 100644
+index 0000000..941a474
+--- /dev/null
++++ b/src/UpdateCartErrorEvent.php
+@@ -0,0 +1,47 @@
++<?php
++
++namespace Drupal\acq_commerce;
++
++use Symfony\Component\EventDispatcher\Event;
++
++/**
++ * Class UpdateCartErrorEvent.
++ *
++ * @package Drupal\acq_commerce
++ */
++class UpdateCartErrorEvent extends Event {
++
++  const SUBMIT = 'updateCart.submit.error';
++
++  /**
++   * The PHP exception we throw from SKU add to cart forms.
++   *
++   * @var \Exception
++   */
++  protected $exception;
++
++  /**
++   * {@inheritdoc}
++   */
++  public function __construct(\Exception $exception) {
++    $this->exception = $exception;
++  }
++
++  /**
++   * Get The exception.
++   *
++   * @return \Exception
++   *   Exception object which contains code and message.
++   */
++  public function getEventException() {
++    return $this->exception;
++  }
++
++  /**
++   * A Event description method for info.
++   */
++  public function myEventDescription() {
++    return "This event occurs when there is a exception while updating cart.";
++  }
++
++}
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index b913310..10174e0 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -83,6 +83,7 @@ public function addCart(CartInterface $cart) {
+    * {@inheritdoc}
+    */
+   public function restoreCart($cart_id) {
++    // @TODO: Need to rethink about this and get it done in single API call.
+     $cart = (object) $this->apiWrapper->getCart($cart_id);
+ 
+     if ($cart) {
+diff --git a/modules/acq_cart/src/CartStorageInterface.php b/modules/acq_cart/src/CartStorageInterface.php
+index b1c9e30..45ff946 100644
+--- a/modules/acq_cart/src/CartStorageInterface.php
++++ b/modules/acq_cart/src/CartStorageInterface.php
+@@ -13,6 +13,15 @@
+   const STORAGE_KEY = 'acq_cart';
+ 
+   /**
++   * Restores the cart to what is available in Magento.
++   *
++   * @param int $cart_id
++   *   Cart Id to restore. We don't rely on other functions as cart is already
++   *   corrupt when we call this function.
++   */
++  public function restoreCart($cart_id);
++
++  /**
+    * Gets the current card ID.
+    */
+   public function getCartId();

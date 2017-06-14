@@ -85,10 +85,12 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   }
   // Check if we have an error in Subscriber.
   elseif (AddToCartErrorEventSubscriber::getErrorStatus()) {
+    $errors = AddToCartErrorEventSubscriber::getErrors();
+
     // Use the template to render the error.
     $output = [
       '#theme' => 'add_to_cart_error',
-      '#message' => t('Oops! Something went wrong.'),
+      '#message' => reset($errors),
     ];
   }
   // Show success notification of the product.

@@ -2,15 +2,15 @@
 
 namespace Drupal\alshaya_acm\EventSubscriber;
 
-use Drupal\acq_sku\AddToCartErrorEvent;
+use Drupal\acq_commerce\UpdateCartErrorEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AddToCartErrorEventSubscriber.
+ * Class UpdateCartErrorEventSubscriber.
  *
- * @package Drupal\alshaya_acm\EventSubscriber
+ * @package Drupal\alshaya_acm
  */
-class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
+class UpdateCartErrorEventSubscriber implements EventSubscriberInterface {
 
   /**
    * Array to store all error messages.
@@ -23,7 +23,7 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[AddToCartErrorEvent::SUBMIT][] = ['onAddToCartError', 800];
+    $events[UpdateCartErrorEvent::SUBMIT][] = ['onUpdateCartError', 800];
     return $events;
   }
 
@@ -60,10 +60,10 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
   /**
    * Subscriber Callback for the event.
    *
-   * @param \Drupal\acq_sku\AddToCartErrorEvent $event
+   * @param \Drupal\acq_commerce\UpdateCartErrorEvent $event
    *   Exception raised.
    */
-  public function onAddToCartError(AddToCartErrorEvent $event) {
+  public function onUpdateCartError(UpdateCartErrorEvent $event) {
     // Logs a notice.
     $exception = $event->getEventException();
     \Drupal::logger('alshaya_acm')->notice($exception->getMessage());
