@@ -86,6 +86,11 @@
 
 .owl-dots,
 .slick-dots {
+  .ie & {
+    /* IE 10 */
+    background: url('../imgs/assets/FFFFFF.png') repeat;
+  }
+
   @include breakpoint($tablet) {
     @include u-center--horizontally;
 
