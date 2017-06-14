@@ -1,3 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+ This file allows you to boost certain search items to the top of search
+ results. You can find out an item's ID by searching directly on the Solr
+ server.
+
+ See http://wiki.apache.org/solr/QueryElevationComponent for more information.
+-->
+
 <elevate>
     <!--
         The following example shows how to add elevated search pages.
@@ -15,4 +25,7 @@
         <doc id="1u5v57-acquia_search_index-entity:node/5:en" />
     </query>
     -->
+
+    <!-- Multiple <query> elements can be specified, contained in one <elevate>. -->
+    <!-- <query text="...">...</query> -->
 </elevate>
