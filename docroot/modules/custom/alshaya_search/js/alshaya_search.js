@@ -6,12 +6,12 @@
       // Do not allow search form submit on empty search text.
       var selectors = 'form[data-bef-auto-submit-full-form], [data-bef-auto-submit-full-form] form, [data-bef-auto-submit]';
 
-      $(selectors, context).find('[data-bef-auto-submit-click]').click(function () {
-        var $keyword = $(selectors, context).find('input[name="keywords"]');
-        if (typeof $keyword.val() == 'undefined' || $.trim($keyword.val()) === '') {
-          return false;
-        }
-      });
+      // $(selectors, context).find('[data-bef-auto-submit-click]').click(function () {
+      //   var $keyword = $(selectors, context).find('input[name="keywords"]');
+      //   if (typeof $keyword.val() == 'undefined' || $.trim($keyword.val()) === '') {
+      //     return false;
+      //   }
+      // });
 
       // Ajax command to update search result header count.
       $.fn.alshayaSearchHeaderUpdate = function (data) {
