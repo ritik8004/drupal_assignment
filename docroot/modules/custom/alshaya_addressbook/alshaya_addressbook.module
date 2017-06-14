@@ -89,7 +89,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   // Only for 'Kuwait'.
   if ($default_country_code == 'KW') {
-    $element['locality']['#title'] = t('Emirate/city');
+    $element['locality']['#title'] = t('Emirate/city', [], ['context' => 'Address label']);
     $administrative_area_default_value = $element['administrative_area']['#default_value'];
     $element['administrative_area'] = [
       '#type' => 'select',
@@ -99,10 +99,10 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       '#default_value' => $administrative_area_default_value,
       '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list(),
     ];
-    $element['address_line1']['#title'] = t('Street name/number');
-    $element['dependent_locality']['#title'] = t('Building name/number');
-    $element['organization']['#title'] = t('Block');
-    $element['address_line2']['#title'] = t('Floor (optional)');
+    $element['address_line1']['#title'] = t('Street name/number', [], ['context' => 'Address label']);
+    $element['dependent_locality']['#title'] = t('Building name/number', [], ['context' => 'Address label']);
+    $element['organization']['#title'] = t('Block', [], ['context' => 'Address label']);
+    $element['address_line2']['#title'] = t('Floor (optional)', [], ['context' => 'Address label']);
     $element['address_line2']['#title_display'] = 'before';
   }
 
@@ -290,10 +290,18 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
       'context' => 'Address label',
     ],
     'Street address' => [
-      'ar' => 'الشارع',
+      'ar' => 'اسم الشارع',
+      'context' => 'Address label',
+    ],
+    'Street name/number' => [
+      'ar' => 'اسم الشارع',
       'context' => 'Address label',
     ],
     'City' => [
+      'ar' => 'المدينة',
+      'context' => 'Address label',
+    ],
+    'Emirate/city' => [
       'ar' => 'المدينة',
       'context' => 'Address label',
     ],

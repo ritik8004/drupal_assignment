@@ -136,8 +136,8 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
       'CUSTOMER SERVICE' => [
         'ar' => 'خدمة العملاء',
       ],
-      '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from 9:30am to 8:30pm Monday to Sunday</span></p>' => [
-        'ar' => '<p>الكويت <span class="light">+965 XXX XX XX</span></p><p>المناطق الأخرى <span class="light">8 (800) XXX XX X</span></p><p><span class="light">نحن منفتحون من 9:30 صباحا إلى 8:30 مساء من الاثنين إلى الأحد</span></p>',
+      '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from Sunday – Saturday from 9:30 am – 8:30 midnight (Kuwait Local Time, GMT +3)</span></p>' => [
+        'ar' => '<p>الكويت <span class="light">+965 XXX XX XX</span></p><p>المناطق الأخرى <span class="light">8 (800) XXX XX X</span></p><p><span class="light">مواعيد العمل: الأحد إلى السبت من الساعة 9:30 صباحًا حتى الساعة 8:30 منتصف الليل (حسب التوقيت المحلي للكويت، و3+ بتوقيت غرينتش)</span></p>',
       ],
     ];
 
