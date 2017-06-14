@@ -441,13 +441,16 @@ function alshaya_acm_product_get_brand_logo($sku) {
 
     $directory = $media_path;
 
+    // Prepare file name by replacing spaces with underscores and lower case.
+    $file_name = strtolower(str_replace(' ', '_', $title));
+
     for ($i = 0; $i < 2 && $i <= strlen($title); $i++) {
-      $directory .= '/' . substr(strtolower($title), $i, 1);
+      $directory .= '/' . substr($file_name, $i, 1);
     }
 
     $directory_uri = 'public://brand-logo/' . $directory;
-    $image_uri = $directory_uri . '/' . strtolower($title) . '.jpeg';
-    $image_url = $host . '/' . $directory . '/' . strtolower($title) . '.jpeg';
+    $image_uri = $directory_uri . '/' . $file_name . '.jpeg';
+    $image_url = $host . '/' . $directory . '/' . $file_name . '.jpeg';
 
     $file_storage = \Drupal::entityTypeManager()->getStorage('file');
 
