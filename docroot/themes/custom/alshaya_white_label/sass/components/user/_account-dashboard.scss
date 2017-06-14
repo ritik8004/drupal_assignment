@@ -93,10 +93,6 @@
         margin-top: 0;
       }
 
-      @include breakpoint($only-tablet) {
-        margin-top: -0.75em;
-      }
-
       p {
         font-family: $arial;
         font-size: 0.75rem;
