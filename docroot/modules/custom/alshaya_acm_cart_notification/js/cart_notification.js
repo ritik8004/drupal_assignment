@@ -23,29 +23,29 @@
       });
 
       // Create a new instance of ladda for the specified button
-      $('.edit-add-to-cart').attr( 'data-style', 'zoom-in');
+      $('.edit-add-to-cart', context).attr( 'data-style', 'zoom-in');
       var l = $('.edit-add-to-cart').ladda();
 
-      $('.edit-add-to-cart').on('click', function() {
+      $('.edit-add-to-cart', context).on('click', function() {
         // Start loading
-        l.ladda( 'start' );
+        $(this).ladda( 'start' );
       });
 
-      $('.edit-add-to-cart').on('mousedown', function() {
+      $('.edit-add-to-cart', context).on('mousedown', function() {
         // Start loading
-        l.ladda( 'start' );
+        $(this).ladda( 'start' );
       });
 
-      $('.edit-add-to-cart').on('keydown', function(event) {
+      $('.edit-add-to-cart', context).on('keydown', function(event) {
         if (event.keyCode == 13 || event.keyCode == 32) {
           // Start loading
-          l.ladda('start');
+          $(this).ladda('start');
         }
       });
 
       $('[data-drupal-selector="edit-configurables-size"]', context).on('change', function() {
         // Start loading.
-        l.ladda( 'start' );
+        $(this).closest('#configurable_ajax').siblings('.ladda-button').ladda( 'start' );
       });
 
       $(document).ajaxComplete(function(event, xhr, settings) {
@@ -58,6 +58,9 @@
         l.ladda('stop');
         if (data.message === 'success') {
           $('.ladda-label').html(Drupal.t('added'));
+          if ($('.ui-dailog')) {
+            $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
+          }
         }
         else if (data.message === 'failure') {
           $('.ladda-label').html(Drupal.t('error'));
