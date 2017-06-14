@@ -439,11 +439,19 @@
       #{$left}: 10em;
       bottom: 0.75em;
       width: auto;
+
+      .ar & {
+        #{$left}: 12em;
+      }
     }
 
     @include breakpoint($desktop) {
       #{$left}: 9em;
       bottom: 0.7em;
+
+      .ar & {
+        #{$left}: 12em;
+      }
     }
 
     position: absolute;

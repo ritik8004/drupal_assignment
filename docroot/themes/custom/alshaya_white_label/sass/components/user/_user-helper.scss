@@ -262,7 +262,7 @@
         font-size: 0.75rem;
 
         @include breakpoint($desktop) {
-          width: 91px;
+          min-width: 91px;
         }
       }
     }
