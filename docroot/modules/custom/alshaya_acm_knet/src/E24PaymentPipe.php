@@ -570,7 +570,7 @@ class E24PaymentPipe {
 
     $i = 0;
 
-    $zip = new ZipArchive();
+    $zip = new \ZipArchive();
     if ($zip->open($filenameInput) === TRUE) {
       $zip->extractTo($this->resourcePath);
       $zip->close();

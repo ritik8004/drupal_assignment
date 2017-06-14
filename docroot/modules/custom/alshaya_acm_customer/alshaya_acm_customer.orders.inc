@@ -117,6 +117,14 @@ function alshaya_acm_customer_clean_sku($sku) {
  *   Status of order, ensure string can be used directly as class too.
  */
 function alshaya_acm_customer_get_order_status(array $order) {
+  if ($order['status'] == 'payment_failed') {
+    return [
+      'text' => (new TranslatableMarkup('payment failed'))->render(),
+      'class' => 'status-returned status-failed',
+      'key' => 'failed',
+    ];
+  }
+
   // We support only three status as of now.
   $status = ['pending' => 0, 'delivered' => 0, 'returned' => 0];
 
@@ -361,6 +369,10 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   }
 
   $build = [];
+
+  if ($order['status'] == 'payment_failed') {
+    $build['#order_error'] = t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.');
+  }
 
   $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
   $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);

@@ -198,7 +198,8 @@
         "post-drupal-scaffold-cmd": [
             "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-knet-ssl-exception.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",
