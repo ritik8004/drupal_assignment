@@ -19,6 +19,7 @@ global_styles:
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element
+    - alshaya_white_label/utils
 
 ltr_styles:
   css:
@@ -41,7 +42,6 @@ slider_banner:
     js/slider.js: {}
   dependencies:
     - core/jquery
-    - alshaya_white_label/utils
     - alshaya_white_label/slick
 
 sell:

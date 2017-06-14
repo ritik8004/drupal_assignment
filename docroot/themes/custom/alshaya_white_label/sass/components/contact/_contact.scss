@@ -15,7 +15,7 @@
   .form-type-textarea {
     textarea {
       resize: none;
-      padding-#{$right}: 1.25rem;
+      padding-#{$right}: 1.25rem !important;
     }
 
     .field-suffix {
