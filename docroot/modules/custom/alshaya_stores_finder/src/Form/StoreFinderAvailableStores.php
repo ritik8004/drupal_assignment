@@ -1,18 +1,14 @@
 <?php
-
 namespace Drupal\alshaya_stores_finder\Form;
-
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\geolocation\GoogleMapsDisplayTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 /**
  * Provides a configuration form for configurable actions.
  */
 class StoreFinderAvailableStores extends FormBase {
-
   use GoogleMapsDisplayTrait;
   /**
    * The action plugin manager.
@@ -20,7 +16,6 @@ class StoreFinderAvailableStores extends FormBase {
    * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
    */
   protected $storeFinder;
-
   /**
    * Constructs a new ActionAdminManageForm.
    *
@@ -30,7 +25,6 @@ class StoreFinderAvailableStores extends FormBase {
   public function __construct(StoresFinderUtility $storeFinder) {
     $this->storeFinder = $storeFinder;
   }
-
   /**
    * {@inheritdoc}
    */
@@ -39,14 +33,12 @@ class StoreFinderAvailableStores extends FormBase {
       $container->get('alshaya_stores_finder.utility')
     );
   }
-
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
     return 'alshaya_stores_available_stores';
   }
-
   /**
    * {@inheritdoc}
    */
@@ -55,12 +47,10 @@ class StoreFinderAvailableStores extends FormBase {
     $form['latitude'] = [
       '#type' => 'hidden',
     ];
-
     // Hidden longitude field.
     $form['longitude'] = [
       '#type' => 'hidden',
     ];
-
     // Location field to search store.
     $form['location'] = [
       '#type' => 'textfield',
@@ -69,7 +59,6 @@ class StoreFinderAvailableStores extends FormBase {
       '#placeholder' => $this->t('Enter your area'),
       '#prefix' => '<span class="label">' . $this->t('Check in-store availability') . '</span>',
     ];
-
     $form['Search'] = [
       '#type' => 'html_tag',
       '#tag' => 'button',
@@ -82,7 +71,6 @@ class StoreFinderAvailableStores extends FormBase {
       ],
       '#value' => $this->t('search stores'),
     ];
-
     $form['#attached'] = [
       'library' => ['alshaya_stores_finder/pdp'],
       'drupalSettings' => [
@@ -91,10 +79,8 @@ class StoreFinderAvailableStores extends FormBase {
         ],
       ],
     ];
-
     return $form;
   }
-
   /**
    * {@inheritdoc}
    */
@@ -103,5 +89,4 @@ class StoreFinderAvailableStores extends FormBase {
       $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all());
     }
   }
-
 }
