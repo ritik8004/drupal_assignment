@@ -97,32 +97,26 @@
         geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
             if ($('.current-view').length) {
-              $('.current-view .ui-autocomplete-input').val(results[1].formatted_address);
+              $('.current-view #edit-geolocation-geocoder-google-geocoding-api').val(results[1].formatted_address);
+              $('.current-view input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+              $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
             }
             else {
-              $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').val(results[1].formatted_address);
+              $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-geocoding-api').val(results[1].formatted_address);
+              $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+              $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
             }
           }
 
-          // Set proximity boundries.
-          // var south_west_lat = results[1].geometry.bounds.getSouthWest().lat();
-          // var south_west_lng = results[1].geometry.bounds.getSouthWest().lng();
-          // var north_east_lat = results[1].geometry.bounds.getNorthEast().lat();
-          // var north_east_lng = results[1].geometry.bounds.getNorthEast().lng();
-
           if ($('.current-view').length !== 0) {
-            // $('.current-view input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
-            // $('.current-view input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
-            // $('.current-view input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
-            // $('.current-view input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
-            $('.current-view form #edit-submit-stores-finder').trigger('click');
+            setTimeout(function() {
+              $('.current-view form #edit-submit-stores-finder').trigger('click');
+            }, 500);
           }
           else {
-            // $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
-            // $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
-            // $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
-            // $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
-            $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+            setTimeout(function() {
+              $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+            }, 500);
           }
         });
         $('.alias--store-finder').removeClass('modal-overlay--spinner');
@@ -141,12 +135,16 @@
 
       // Trigger click on autocomplete selection.
       $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
-          $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+          setTimeout(function() {
+            $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+          }, 500);
       });
 
       // Trigger click on autocomplete selection.
       $('.block-views-exposed-filter-blockstores-finder-page-3 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
-        $('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-submit-stores-finder').trigger('click');
+        setTimeout(function() {
+          $('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-submit-stores-finder').trigger('click');
+        }, 500);
       });
 
     }
