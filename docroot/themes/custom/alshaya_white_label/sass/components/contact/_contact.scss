@@ -65,6 +65,14 @@
     }
   }
 
+  .mobile-number-field {
+    @include breakpoint($only-mobile) {
+      float: none;
+      clear: both;
+      display: block !important;
+    }
+  }
+
   .mobile-number-field.form-item--error {
     margin-bottom: 4rem;
 
