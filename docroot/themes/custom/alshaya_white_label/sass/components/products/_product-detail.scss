@@ -1,6 +1,11 @@
 /*
  * Theming of product detail page.
  */
+.c-pdp.l-one--w {
+  @include breakpoint($desktop) {
+    max-width: 66.35rem;
+  }
+}
 
 // Layout of the detail page
 .nodetype--acq_product {
@@ -87,13 +92,25 @@
 
     .price {
       font-size: 0.9375rem;
-      color: $scarlet;
+      color: $black;
+      margin-bottom: 1rem;
     }
 
     .content--item-code {
       font-size: 0.6875rem;
       color: $brownish-grey;
       padding-bottom: 1rem;
+    }
+
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .price--discount {
+      font-size: 0.9375rem;
     }
   }
 }
@@ -196,6 +213,11 @@
 
   .form-item.form-type-select.form-item-quantity {
     padding: 0;
+
+    @include breakpoint($only-mobile) {
+      float: $right;
+      top: -5.5rem;
+    }
   }
 
   .form-item-quantity {
@@ -233,6 +255,7 @@
   background: $white-five;
   overflow: hidden;
   width: 100%;
+  z-index: 4;
 
   @include breakpoint($tablet) {
     width: 38%;
@@ -496,10 +519,17 @@
 
     #cc-store-name {
       float: $left;
-      width: 162px;
       height: 2.188rem;
       padding: 0.3125rem;
       border: solid 1px $white;
+
+      @include breakpoint($mobile) {
+        width: 11.56rem;
+      }
+
+      @include breakpoint($tablet) {
+        width: 8.56rem;
+      }
     }
 
     input[type="button"] {
@@ -792,8 +822,25 @@
         margin-top: 2.1875rem;
         display: inline-block;
         float: $right;
+
+        @include breakpoint($only-mobile) {
+          float: none;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+          z-index: 99;
+          margin: 0;
+          #{$left}: 0;
+        }
       }
     }
+  }
+}
+
+.acq-sku-configurable-64__sku-base-form.sku-base-form {
+  @include breakpoint($only-mobile) {
+    height: 5rem;
+    overflow: hidden;
   }
 }
 
@@ -830,7 +877,7 @@
         &.picked {
           color: $white;
           font-weight: bold;
-          background: $marine-blue;
+          background: $black;
         }
       }
 
