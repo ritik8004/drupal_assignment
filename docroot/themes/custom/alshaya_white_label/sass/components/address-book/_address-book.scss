@@ -410,3 +410,31 @@
     }
   }
 }
+
+.form-item-field-address-0-address-mobile-number-mobile {
+  .form-item--error-message {
+    position: relative;
+    left: -4em;
+  }
+}
+
+.profile-address-book-edit-form,
+#address-book-form-open {
+  .form-actions {
+    position: relative;
+
+    input[disabled] {
+      color: transparent !important;
+    }
+
+    .ajax-progress {
+      position: absolute;
+      top: 0.7em;
+      left: 8%;
+
+      @include breakpoint($only-mobile) {
+        left: 46%;
+      }
+    }
+  }
+}

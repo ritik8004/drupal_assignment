@@ -398,6 +398,8 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       break;
 
     case "profile_address_book_add_form":
+    case "profile_address_book_edit_form":
+    case "profile_address_book_form":
       $form['#attached']['library'][] = 'alshaya_white_label/select2';
       break;
 
