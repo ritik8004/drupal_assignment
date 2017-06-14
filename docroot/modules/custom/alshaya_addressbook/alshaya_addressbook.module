@@ -226,7 +226,7 @@ function alshaya_addressbook_form_profile_address_book_form_alter(array &$form, 
  */
 function _alshaya_addressbook_form_alter(array &$form, FormStateInterface $form_state) {
   // This is internal field to be used only for synchronisation with Magento.
-  $form['field_address_id']['#access'] = FALSE;
+  $form['field_address_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
 
   $form['#validate'][] = '_alshaya_addressbook_mobile_process_validate';
 
@@ -383,4 +383,19 @@ function _alshaya_addressbook_array_insert(array $array, array $pairs, $key, $po
     $result = array_merge($array, $pairs);
   }
   return $result;
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_account_alter().
+ */
+function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountInterface $user, array $customer) {
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+  // Update privilege card number if available in customer data.
+  if (isset($customer['addresses'])) {
+    foreach ($customer['addresses'] as $address) {
+      $address_book_manager->saveUserAddressFromApi($user, $address);
+    }
+  }
 }

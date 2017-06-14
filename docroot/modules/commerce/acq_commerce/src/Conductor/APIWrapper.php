@@ -430,6 +430,37 @@ class APIWrapper {
   }
 
   /**
+   * Updates a customer.
+   *
+   * @param array $customer
+   *   Customer array to update (fully prepared array).
+   *
+   * @return array
+   *   New customer array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
+   */
+  public function updateCustomerJson(array $customer) {
+    // Calling function will be responsible to pass a clean customer array here.
+    $endpoint = $this->apiVersion . '/agent/customer';
+
+    $doReq = function ($client, $opt) use ($endpoint, $customer) {
+      $opt['json']['customer'] = $customer;
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      $customer = $this->tryAgentRequest($doReq, 'updateCustomer', 'customer');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $customer;
+  }
+
+  /**
    * Authenticate customer.
    *
    * @param string $email
