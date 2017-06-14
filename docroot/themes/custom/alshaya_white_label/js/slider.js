@@ -65,6 +65,7 @@
       var windowWidth = $(window).width();
       setTimeout(function () {
         $(window).width(windowWidth);
+        centerDots();
       }, 500);
     }
   };
