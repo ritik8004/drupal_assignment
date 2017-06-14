@@ -4,14 +4,13 @@ dependencies:
   config:
     - views.view.search
   module:
-    - system
     - views
   theme:
     - alshaya_white_label
-id: exposedformsearchpage_3
+id: exposedformsearchpage
 theme: alshaya_white_label
-region: content
-weight: -23
+region: menu_primary
+weight: -11
 provider: null
 plugin: 'views_exposed_filter_block:search-page'
 settings:
@@ -20,9 +19,4 @@ settings:
   provider: views
   label_display: '0'
   views_label: ''
-visibility:
-  request_path:
-    id: request_path
-    pages: "/search\r\n/taxonomy/term/*"
-    negate: false
-    context_mapping: {  }
+visibility: {  }
