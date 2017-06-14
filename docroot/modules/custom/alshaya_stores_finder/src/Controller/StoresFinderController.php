@@ -1,7 +1,5 @@
 <?php
-
 namespace Drupal\alshaya_stores_finder\Controller;
-
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_stores_finder\Form\StoreFinderAvailableStores;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
@@ -17,26 +15,22 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
 /**
  * Class StoresFinderController.
  */
 class StoresFinderController extends ControllerBase {
-
   /**
    * Stores Finder Utility service object.
    *
    * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
    */
   protected $storesFinderUtility;
-
   /**
    * Entity repository.
    *
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
    */
   protected $entityRepository;
-
   /**
    * StoresFinderController constructor.
    *
@@ -52,7 +46,6 @@ class StoresFinderController extends ControllerBase {
     $this->entityRepository = $entity_repository;
     $this->configFactory = $config_factory;
   }
-
   /**
    * {@inheritdoc}
    */
@@ -63,7 +56,6 @@ class StoresFinderController extends ControllerBase {
       $container->get('config.factory')
     );
   }
-
   /**
    * Ajax request on store finder map view.
    *
@@ -89,17 +81,12 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['list-view-exposed']));
     // Add class.
     $response->addCommand(new InvokeCommand('.list-view-link', 'addClass', ['active']));
-
     // Add class.
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['current-view']));
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['current-view']));
-
     $response->addCommand(new InvokeCommand('body', 'removeClass', ['store-finder-view']));
-
     return $response;
-
   }
-
   /**
    * Toggle the view type based on the display.
    *
@@ -122,7 +109,6 @@ class StoresFinderController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'addClass', ['current-view']));
       // Remove store title from breadcrumb.
       $response->addCommand(new InvokeCommand(NULL, 'updateStoreFinderBreadcrumb'));
-
       // Clear value from search field.
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api', 'val', ['']));
     }
@@ -141,12 +127,10 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new InvokeCommand('body', 'removeClass', ['store-finder-view']));
     // Removing class for mobile from store list.
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['mobile-store-detail']));
-
     // Clear value from search field.
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api', 'val', ['']));
     return $response;
   }
-
   /**
    * Get the store detail.
    *
@@ -165,15 +149,12 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new InvokeCommand('.body', 'removeClass', ['store-finder-view']));
     // Adding class for mobile for store detail.
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['mobile-store-detail']));
-
     // Add store finder title in breadcrumb.
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString();
     $store_finder_node_li = '<li><a href="' . $url . '">' . $node->getTitle() . '</a></li>';
     $response->addCommand(new AppendCommand('.block-system-breadcrumb-block ol', $store_finder_node_li));
-
     return $response;
   }
-
   /**
    * Get stores for a product near user's location.
    *
@@ -197,7 +178,6 @@ class StoresFinderController extends ControllerBase {
         $top_three['#theme'] = 'pdp_click_collect_top_stores';
         $top_three['#stores'] = array_slice($stores, 0, $limit);
         $top_three['#has_more'] = count($stores) > $limit ? t('Other stores nearby') : '';
-
         if ($top_three['#has_more']) {
           $store_form = \Drupal::formBuilder()->getForm(StoreFinderAvailableStores::class);
           $config = $this->configFactory->get('alshaya_stores_finder.settings');
@@ -210,10 +190,8 @@ class StoresFinderController extends ControllerBase {
         }
       }
     }
-
     return ['top_three' => $top_three, 'all_stores' => $all_stores];
   }
-
   /**
    * Get Json output of stores for a product near user's location.
    *
@@ -231,5 +209,4 @@ class StoresFinderController extends ControllerBase {
     $data = $this->getProductStores($sku, $lat, $lon);
     return new JsonResponse(['top_three' => render($data['top_three']), 'all_stores' => render($data['all_stores'])]);
   }
-
 }
