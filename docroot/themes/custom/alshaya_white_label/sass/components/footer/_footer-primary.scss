@@ -4,7 +4,7 @@
   padding-bottom: 2.25rem;
   position: relative;
   background: $white-five;
-  margin-top: 3.75rem;
+  margin-top: 3.5rem;
   z-index: 2;
 
   @include breakpoint($tablet) {
@@ -18,12 +18,12 @@
   }
 
   @include breakpoint($only-tablet) {
-    margin-top: 2.0625rem;
+    margin-top: 2.75rem;
   }
 
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
-    margin-top: 2rem;
+    margin-top: 3.75rem;
   }
 
   .primary--footer--right {
