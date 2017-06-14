@@ -145,6 +145,7 @@
     $('input[name="longitude"]').val(place.geometry.location.lng());
 
     if (records) {
+
       var coords = {
         latitude: place.geometry.location.lat(),
         longitude: place.geometry.location.lng()
