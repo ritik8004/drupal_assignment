@@ -326,30 +326,32 @@ class Cart implements CartInterface {
    * {@inheritdoc}
    */
   public function getShippingMethod() {
-    $shipping = NULL;
-
+    // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
-      $shipping = $this->cart->carrier;
+      return $this->cart->carrier;
     }
 
-    return $shipping;
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
+      return explode('_', $this->cart->extension['shipping_method']);
+    }
+
+    return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getShippingMethodAsString() {
+    // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
       $method = $this->cart->carrier;
-
-      return implode(
-        ',',
-        [
-          $method['carrier_code'],
-          $method['method_code'],
-        ]
-      );
+      return implode(',', [$method['carrier_code'], $method['method_code']]);
     }
+
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
+      return $this->cart->extension['shipping_method'];
+    }
+
     return '';
   }
 

@@ -378,8 +378,13 @@ function alshaya_seo_preprocess_input(&$variables) {
  * Implements template_preprocess_alshaya_cart_product_name().
  */
 function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
+  if (empty($variables['item_code'])) {
+    return;
+  }
+
   /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtmManager */
   $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
+
   $sku_attributes = $gtm_manager->fetchSkuAtttributes($variables['item_code']);
 
   // Fetch product for this sku to get the category.
