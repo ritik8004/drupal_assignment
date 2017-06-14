@@ -6,7 +6,17 @@
     <div class="text">{{ subtitle }}</div>
   </div>
 {% endif %}
+<div class="available_store">
+  <div class="available-store-text">
+    {{ 'Available at three stores near'|t }} <div class="google-store-location"></div>
+  </div>
+  <div class="store-finder-form-wrapper">
+    <span class="change-store-link">{{ 'Change Location'|t }}</span>
+    <div id="all-stores-search-store" class="search-store" style="display: none;">{{ store_finder_form }}</div>
+  </div>
+</div>
 
+<div class="stores-list-all">
 {% if stores %}
   <ul>
     {% for store in stores %}
@@ -19,4 +29,5 @@
     {% endfor %}
   </ul>
 {% endif %}
+</div>
 

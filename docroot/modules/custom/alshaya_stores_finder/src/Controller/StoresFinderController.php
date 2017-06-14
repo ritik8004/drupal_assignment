@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_stores_finder\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_stores_finder\Form\StoreFinderAvailableStores;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\CssCommand;
@@ -15,6 +16,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class StoresFinderController.
@@ -182,12 +184,11 @@ class StoresFinderController extends ControllerBase {
    * @param float $lon
    *   User's longitude.
    *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   Ajax response.
+   * @return array
+   *   Return array of top tree and all stores.
    */
   public function getProductStores($sku, $lat, $lon) {
-    $response = new AjaxResponse();
-
+    $final_all_stores = $final_top_three = '';
     if ($sku_entity = SKU::loadFromSku($sku)) {
       if ($stores = $this->storesFinderUtility->getSkuStores($sku, $lat, $lon)) {
         $top_three = [];
@@ -195,30 +196,75 @@ class StoresFinderController extends ControllerBase {
         $top_three['#stores'] = array_slice($stores, 0, 3);
         $top_three['#has_more'] = count($stores) > 3 ? t('Other stores nearby') : '';
 
-        $response->addCommand(new HtmlCommand('.click-collect-top-stores', render($top_three)));
-        $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'hide'));
-
         if ($top_three['#has_more']) {
+          $store_form = \Drupal::formBuilder()->getForm(StoreFinderAvailableStores::class);
           $config = $this->configFactory->get('alshaya_stores_finder.settings');
           $all_stores = [];
           $all_stores['#theme'] = 'pdp_click_collect_all_stores';
           $all_stores['#stores'] = $stores;
           $all_stores['#title'] = $config->get('pdp_click_collect_title');
           $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
-          $response->addCommand(new HtmlCommand('.click-collect-all-stores', render($all_stores)));
-        }
-        else {
-          $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
-          $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
+          $all_stores['#store_finder_form'] = render($store_form);
         }
       }
-      else {
-        $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
-        $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'show'));
+    }
 
+    return ['top_three' => $top_three, 'all_stores' => $all_stores];
+  }
+
+  /**
+   * Get Json output of stores for a product near user's location.
+   *
+   * @param string $sku
+   *   SKU to check for stores.
+   * @param float $lat
+   *   User's latitude.
+   * @param float $lon
+   *   User's longitude.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return json response to use in jquery ajax.
+   */
+  public function getProductStoresJson($sku, $lat, $lon) {
+    $data = $this->getProductStores($sku, $lat, $lon);
+    return new JsonResponse(['top_three' => render($data['top_three']), 'all_stores' => render($data['all_stores'])]);
+  }
+
+  /**
+   * Get Ajax response of stores for a product near user's location.
+   *
+   * @param string $sku
+   *   SKU to check for stores.
+   * @param float $lat
+   *   User's latitude.
+   * @param float $lon
+   *   User's longitude.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response.
+   */
+  public function getProductStoresAjaxResponse($sku, $lat, $lon) {
+    $response = new AjaxResponse();
+
+    $data = $this->getProductStores($sku, $lat, $lon);
+    if (!empty($data['top_three'])) {
+      $response->addCommand(new HtmlCommand('.click-collect-top-stores', render($data['top_three'])));
+      $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'hide'));
+
+      if (!empty($data['all_stores'])) {
+        $response->addCommand(new HtmlCommand('.click-collect-all-stores', render($data['all_stores'])));
+      }
+      else {
         $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
         $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
       }
+    }
+    else {
+      $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
+      $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'show'));
+
+      $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
+      $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
     }
 
     return $response;

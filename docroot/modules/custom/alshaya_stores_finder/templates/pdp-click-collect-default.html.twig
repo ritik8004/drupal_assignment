@@ -11,23 +11,33 @@
       <div class="click-collect-empty-selection">
         <div class="text">
           {{ help_text|raw }}
-          {{ select_option_text|raw }}
+          <div class="select-size-text">{{ select_option_text|raw }}</div>
         </div>
       </div>
-      <div class="click-collect-form" style="display: none;">
+      <div class="click-collect-form">
     {% else %}
       <div class="click-collect-form">
     {% endif %}
       <div class="text">
         {{ help_text|raw }}
+        <div class="available_store">
+          <div class="available-store-text">
+            {{ 'Available at three stores near'|t }} <div class="google-store-location"></div>
+          </div>
+          <div class="store-finder-form-wrapper">
+            <div class="change-location-link">{{ 'Change Location'|t }}</div>
+            <div id="search-store" class="search-store" style="display: none;">{{ store_finder_form }}</div>
+          </div>
+        </div>
         <p>{{ subtitle }}</p>
       </div>
 
-      <form class="search-store">
+      <!--<form class="search-store">
         <label>{{ 'Check in-store availability'|t }}</label>
-        <input type="text" id="cc-store-name" placeholder="{{ 'Enter your area'|t }}">
+        <input id="autocomplete" onFocus="geolocate()" type="text" placeholder="{{ 'Enter your area'|t }}" />
+        <input type="text" id="cc-store-name" >
         <input type="button" name="cc-search-store" value="{{ 'Search Stores'|t }}">
-      </form>
+      </form> -->
     </div>
 
     <div class="click-collect-top-stores"></div>
@@ -35,3 +45,4 @@
 </div>
 
 <div class="click-collect-all-stores inline-modal-wrapper" style="display: none;"></div>
+
