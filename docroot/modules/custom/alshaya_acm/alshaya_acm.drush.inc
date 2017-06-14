@@ -35,10 +35,14 @@ function drush_alshaya_acm_offline_categories_sync() {
   drush_print(dt('Synchronizing all commerce categories, please wait...'));
   $container = \Drupal::getContainer();
 
-  module_load_include('data', 'alshaya_acm', 'includes/categories');
-  global $_alshaya_acm_categories;
+  $languages = \Drupal::languageManager()->getLanguages();
+  foreach ($languages as $langcode => $language) {
+    drush_print(dt('Dealing with @langcode ...', ['@langcode' => $langcode]));
+    module_load_include('data', 'alshaya_acm', 'includes/categories_' . $langcode);
+    global $_alshaya_acm_categories;
 
-  $container->get('acq_sku.category_manager')->synchronizeTreeOffline('acq_product_category', $_alshaya_acm_categories);
+    $container->get('acq_sku.category_manager')->synchronizeTreeOffline('acq_product_category', $_alshaya_acm_categories);
+  }
   drush_print(dt('Done.'));
 }
 
