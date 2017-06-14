@@ -714,6 +714,9 @@ function alshaya_master_install() {
     'highlights' => [
       'ar' => 'أهم العروض',
     ],
+    'The product has been removed from your cart.' => [
+      'ar' => 'تم إزالة المنتج من سلتك ',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
