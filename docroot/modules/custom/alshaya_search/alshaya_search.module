@@ -55,7 +55,7 @@ function alshaya_search_views_pre_build(ViewExecutable $view) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (in_array($form['#id'], ['views-exposed-form-search-page', 'views-exposed-form-alshaya-product-list-block-1'])) {
+  if ($form['#id'] === 'views-exposed-form-search-page') {
     $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
     if (!empty($parameters) && isset($parameters['f'])) {
       foreach ($parameters['f'] as $key => $value) {
