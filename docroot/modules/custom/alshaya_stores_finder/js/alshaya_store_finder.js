@@ -105,23 +105,23 @@
           }
 
           // Set proximity boundries.
-          var south_west_lat = results[1].geometry.bounds.getSouthWest().lat();
-          var south_west_lng = results[1].geometry.bounds.getSouthWest().lng();
-          var north_east_lat = results[1].geometry.bounds.getNorthEast().lat();
-          var north_east_lng = results[1].geometry.bounds.getNorthEast().lng();
+          // var south_west_lat = results[1].geometry.bounds.getSouthWest().lat();
+          // var south_west_lng = results[1].geometry.bounds.getSouthWest().lng();
+          // var north_east_lat = results[1].geometry.bounds.getNorthEast().lat();
+          // var north_east_lng = results[1].geometry.bounds.getNorthEast().lng();
 
           if ($('.current-view').length !== 0) {
-            $('.current-view input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
-            $('.current-view input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
-            $('.current-view input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
-            $('.current-view input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
+            // $('.current-view input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
+            // $('.current-view input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
+            // $('.current-view input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
+            // $('.current-view input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
             $('.current-view form #edit-submit-stores-finder').trigger('click');
           }
           else {
-            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
-            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
-            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
-            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
+            // $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
+            // $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
+            // $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
+            // $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
             $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
           }
         });

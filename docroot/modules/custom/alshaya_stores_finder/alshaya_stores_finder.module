@@ -135,14 +135,14 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#weight' => 6,
       ];
 
-      $form['field_latitude_longitude_boundary']['#weight'] = 4;
+      $form['geolocation_geocoder_google_geocoding_api']['#weight'] = 4;
 
       // Adding placeholder to the input field.
       $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
       $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#access'] = (bool) $store_finder_search_config;
       $form['actions']['#access'] = (bool) $store_finder_search_config;
       $form['actions']['#weight'] = 5;
-      unset($form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#description']);
+      unset($form['geolocation_geocoder_google_geocoding_api']['#description']);
     }
   }
 }
@@ -155,8 +155,8 @@ function alshaya_stores_finder_views_pre_view(ViewExecutable $view, $display_id,
     $header_text = '';
     $exposed_input = $view->getExposedInput();
     if (!empty($exposed_input)) {
-      if (!empty($exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'])) {
-        $header_text = t('@total closest stores to') . ' ' . '<strong>' . $exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'] . '</strong>';
+      if (!empty($exposed_input['geolocation_geocoder_google_geocoding_api'])) {
+        $header_text = t('@total closest stores to') . ' ' . '<strong>' . $exposed_input['geolocation_geocoder_google_geocoding_api'] . '</strong>';
       }
     }
 
