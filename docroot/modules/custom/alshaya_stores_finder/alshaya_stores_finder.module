@@ -13,6 +13,7 @@ use Drupal\views\ViewExecutable;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\alshaya_stores_finder\Form\StoreFinderAvailableStores;
 
 /**
  * Implements hook_theme().
@@ -29,6 +30,8 @@ function alshaya_stores_finder_theme($existing, $type, $theme, $path) {
       'subtitle' => NULL,
       'title_price' => NULL,
       'help_text' => NULL,
+      'store_finder_form' => NULL,
+      'select_option_text' => NULL,
     ],
   ];
 
@@ -38,6 +41,7 @@ function alshaya_stores_finder_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'subtitle' => NULL,
       'stores' => NULL,
+      'store_finder_form' => NULL,
     ],
   ];
 
@@ -189,11 +193,14 @@ function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $e
 
     $config = \Drupal::config('alshaya_stores_finder.settings');
 
+    $stores = \Drupal::service('alshaya_stores_finder.utility')->getSkuStores($sku, 29.3460399, 48.0088076);
+
     // Check if click and collect is available for this product.
     // @TODO: ELSE: Do we need to show that click and collect is not available?
     if ($config->get('enable_disable_store_finder_search') && alshaya_acm_product_available_click_collect($sku)) {
       // Here we just show static text, we will get stores info using ajax.
       // We need lat/lon info of user to get stores.
+      $store_form = \Drupal::formBuilder()->getForm(StoreFinderAvailableStores::class);
       $build['click_and_collect'] = [
         '#theme' => 'pdp_click_collect_default',
         '#sku' => $sku,
@@ -202,10 +209,15 @@ function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $e
         '#title_price' => alshaya_acm_price_get_formatted_price((float) $config->get('pdp_click_collect_price')),
         '#subtitle' => $config->get('pdp_click_collect_subtitle'),
         '#help_text' => $config->get('pdp_click_collect_help_text.value'),
-        '#attached' => ['library' => ['alshaya_stores_finder/pdp']],
+        '#select_option_text' => $config->get('pdp_click_collect_select_option_text.value'),
+        '#store_finder_form' => render($store_form),
+        '#attached' => [
+          'library' => [
+            'alshaya_stores_finder/pdp',
+          ],
+        ],
       ];
     }
-
   }
 }
 
@@ -233,7 +245,17 @@ function alshaya_stores_finder_alshaya_i18n_onetime_translation_add() {
       }
     }
   }
+}
 
+/**
+ * Implements hook_geolocation_google_maps_parameters().
+ */
+function alshaya_stores_finder_geolocation_google_maps_parameters() {
+  return [
+    'libraries' => [
+      'places',
+    ],
+  ];
 }
 
 /**
