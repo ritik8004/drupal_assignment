@@ -13,6 +13,15 @@ interface CartStorageInterface {
   const STORAGE_KEY = 'acq_cart';
 
   /**
+   * Restores the cart to what is available in Magento.
+   *
+   * @param int $cart_id
+   *   Cart Id to restore. We don't rely on other functions as cart is already
+   *   corrupt when we call this function.
+   */
+  public function restoreCart($cart_id);
+
+  /**
    * Gets the current card ID.
    */
   public function getCartId();

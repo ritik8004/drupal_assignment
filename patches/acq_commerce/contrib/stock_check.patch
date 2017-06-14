@@ -314,3 +314,35 @@ index 0000000..941a474
 +  }
 +
 +}
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index b913310..10174e0 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -83,6 +83,7 @@ public function addCart(CartInterface $cart) {
+    * {@inheritdoc}
+    */
+   public function restoreCart($cart_id) {
++    // @TODO: Need to rethink about this and get it done in single API call.
+     $cart = (object) $this->apiWrapper->getCart($cart_id);
+ 
+     if ($cart) {
+diff --git a/modules/acq_cart/src/CartStorageInterface.php b/modules/acq_cart/src/CartStorageInterface.php
+index b1c9e30..45ff946 100644
+--- a/modules/acq_cart/src/CartStorageInterface.php
++++ b/modules/acq_cart/src/CartStorageInterface.php
+@@ -13,6 +13,15 @@
+   const STORAGE_KEY = 'acq_cart';
+ 
+   /**
++   * Restores the cart to what is available in Magento.
++   *
++   * @param int $cart_id
++   *   Cart Id to restore. We don't rely on other functions as cart is already
++   *   corrupt when we call this function.
++   */
++  public function restoreCart($cart_id);
++
++  /**
+    * Gets the current card ID.
+    */
+   public function getCartId();

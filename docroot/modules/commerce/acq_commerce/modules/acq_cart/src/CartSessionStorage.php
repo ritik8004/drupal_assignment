@@ -83,6 +83,7 @@ class CartSessionStorage implements CartStorageInterface {
    * {@inheritdoc}
    */
   public function restoreCart($cart_id) {
+    // @TODO: Need to rethink about this and get it done in single API call.
     $cart = (object) $this->apiWrapper->getCart($cart_id);
 
     if ($cart) {
