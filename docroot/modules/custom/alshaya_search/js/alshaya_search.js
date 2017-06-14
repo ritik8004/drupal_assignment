@@ -92,7 +92,7 @@
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
       // Convert the list to slider.
-      $('.search-lightSlider').each(function () {
+      $('.search-lightSlider').once('alshayaSearchSlider').each(function () {
         var gallery = $(this);
         gallery.lightSlider({
           vertical: false,
