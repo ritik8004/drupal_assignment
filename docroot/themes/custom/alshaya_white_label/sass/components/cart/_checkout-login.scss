@@ -61,7 +61,7 @@
   }
 
   .tab {
-    padding: 0.5rem 2.8rem;
+    padding: 0.5rem 2rem;
     border: 1px solid $cerulean-two;
     display: inline-block;
     color: $cerulean-two;
@@ -75,6 +75,12 @@
       color: $marine-blue;
       font-weight: bold;
       border: 2px solid $marine-blue;
+    }
+
+    span {
+      max-width: 4.75rem;
+      display: block;
+      margin: auto;
     }
   }
 }

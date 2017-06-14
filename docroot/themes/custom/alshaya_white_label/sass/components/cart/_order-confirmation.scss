@@ -100,7 +100,7 @@
 
     @include breakpoint($desktop) {
       margin-top: 1.42rem;
-      margin-bottom: 3.4rem;
+      margin-bottom: 1.8rem;
     }
   }
 
@@ -162,12 +162,11 @@
 
   .order-print-button a {
     display: inline-block;
+    font-family: $alshaya-bold;
     background: $white-five;
-    padding: 0.4375rem 2.1rem;
-    font-weight: bold;
+    padding: 0.5rem 2.45rem;
     border: solid 1px $marine-blue;
-    font-size: 0.8125rem;
-    word-spacing: 0.125rem;
+    font-size: 0.75rem;
   }
 
   tr td {
@@ -276,7 +275,7 @@
 
   .label.font-small {
     font-size: 0.75rem;
-    margin-bottom: 0;
+    margin-bottom: 0.25rem;
     color: $cerulean-two;
   }
 
@@ -285,6 +284,10 @@
 
     @include breakpoint($tablet) {
       margin-top: 2rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.7rem;
     }
   }
 
