@@ -107,10 +107,6 @@
             font-size: 0.875rem;
           }
         }
-
-        .lSPager {
-          display: none;
-        }
       }
 
       .view-content,
@@ -501,4 +497,64 @@ ul.item-list__checkbox,
   background-size: 4.5rem;
   width: 4rem !important;
   height: 4rem !important;
+}
+
+.alshaya_search_slider {
+  width: 16.19rem;
+  margin: 0 auto;
+  position: relative;
+
+  .lSSlideWrapper {
+    position: static;
+
+    li {
+      margin-top: 0.1875rem;
+      height: 4.25rem;
+
+      &:hover {
+        margin-top: 0;
+        margin-right: 0.1875rem !important;
+        margin-left: -0.1875rem !important;
+        padding: 0.1875rem;
+        border: 1px solid $brownish-grey;
+      }
+
+      &:first-child {
+        &:hover {
+          margin-left: 0 !important;
+        }
+      }
+
+      &:last-child {
+        margin-right: 0 !important;
+      }
+    }
+
+    .lSAction > a {
+      background-image: none;
+      top: 2rem;
+
+      &.lSNext {
+        #{$right}: -1.5rem;
+
+        @include icon(chevron#{$right}, after) {
+          font-size: 2.125rem;
+          color: $black;
+        }
+      }
+
+      &.lSPrev {
+        #{$left}: -1.625rem;
+
+        @include icon(chevron#{$left}, after) {
+          font-size: 2.125rem;
+          color: $black;
+        }
+      }
+    }
+  }
+
+  .lSPager {
+    display: none;
+  }
 }

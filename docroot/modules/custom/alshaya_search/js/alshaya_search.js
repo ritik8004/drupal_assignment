@@ -94,11 +94,14 @@
       // Convert the list to slider.
       $('.search-lightSlider').once('alshayaSearchSlider').each(function () {
         var gallery = $(this);
-        gallery.lightSlider({
+        $(this, context).lightSlider({
           vertical: false,
-          onSliderLoad: function () {
+          item: 4,
+          slideMargin: 6,
+          autoWidth: true,
+          onSliderLoad: function() {
             gallery.closest('.alshaya_search_slider').hide();
-            gallery.css('height', '64px');
+            gallery.css('height', '73px');
           }
         });
       });
@@ -106,7 +109,9 @@
       // Show/Hide the slider on Mouse hover.
       $('.c-products__item').hover(
         function () {
-          $(this).find('.alshaya_search_slider').show();
+          if ($(window).width() > 1025) {
+            $(this).find('.alshaya_search_slider').show();
+          }
         },
         function () {
           $(this).find('.alshaya_search_slider').hide();
