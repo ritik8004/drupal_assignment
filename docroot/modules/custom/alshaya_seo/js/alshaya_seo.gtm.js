@@ -163,7 +163,7 @@
       // Trigger removeFromCart & addToCart events based on the quantity update on cart page.
       $('select[gtm-type="gtm-quantity"]').focus(function() {
         originalCartQty = $(this).val();
-      }).once('js-event').bind('change', function() {
+      }).once('js-event').on('change', function() {
         if (originalCartQty !== 0) {
           updatedCartQty = $(this).val();
           var diffQty = updatedCartQty - originalCartQty;
@@ -209,7 +209,7 @@
       /** Remove Product from cart **/
       // Add click handler to fire 'removeFromCart' event to GTM.
       removeCartSelector.once('js-event').each(function() {
-        $(this).bind('click', function (e) {
+        $(this).on('click', function (e) {
           // Get selector holding details around the product.
           var removeItem = $(this).closest('td.quantity').siblings('td.name').find('[gtm-type="gtm-remove-cart-wrapper"]');
           var product = Drupal.alshaya_seo_gtm_get_product_values(removeItem);
@@ -242,12 +242,12 @@
       });
 
       /** Tracking New customers **/
-      cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').bind('click', function() {
+      cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function() {
         Drupal.alshaya_seo_gtm_push_customer_type('New Customer');
       });
 
       /** Tracking Returning customers **/
-      cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').bind('click', function() {
+      cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function() {
         Drupal.alshaya_seo_gtm_push_customer_type('Returning Customers');
       });
 
@@ -259,7 +259,7 @@
         }
         // Fire checkout option event when user switches delivery option.
         cartCheckoutDeliverySelector.find('[data-drupal-selector="edit-delivery-tabs"] .tab').once('js-event').each(function() {
-          $(this).bind('click', function() {
+          $(this).on('click', function() {
             var gtmType = $(this).attr('gtm-type');
             var deliveryType = '';
             if (gtmType !== undefined) {
@@ -296,39 +296,27 @@
       /** Product Click Handler **/
       // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {
-        $(this).bind('click', function (e) {
+        $(this).on('click', function (e) {
           var that = $(this);
-          // Check the link triggering click & append sub-section to the listName if current page is
-          // eligible for a sub-section in the list name.
-          if ($.inArray(listName, pageSubListNames)) {
-            // @TODO: Append sub-tag e.g., US & CS to the list name.
-          }
-
-          try {
-            var product = Drupal.alshaya_seo_gtm_get_product_values(that);
-            product.variant = '';
-            var data = {
-              'event': 'productClick',
-              'ecommerce': {
-                'currencyCode': currencyCode,
-                'click': {
-                  'actionField': {'list': listName},
-                  'products': [product]
-                }
+          var product = Drupal.alshaya_seo_gtm_get_product_values(that);
+          product.variant = '';
+          var data = {
+            'event': 'productClick',
+            'ecommerce': {
+              'currencyCode': currencyCode,
+              'click': {
+                'actionField': {'list': listName},
+                'products': [product]
               }
-            };
+            }
+          };
 
-            dataLayer.push(data);
-          }
-          catch (e) {
-            // @TODO: Remove this once we finish the implementation.
-            console.log(e);
-          }
+          dataLayer.push(data);
         });
       });
 
       /** Tracking internal promotion impressions. **/
-      topNavLevelOneSelector.once('js-event').bind('mouseenter', function() {
+      topNavLevelOneSelector.once('js-event').on('mouseenter', function() {
         if ($(this).hasClass('has-child')) {
           var topNavLevelTwo = $(this).children('ul.menu--two__list');
           var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
@@ -344,9 +332,44 @@
 
       });
 
-      $('[gtm-type="gtm-highlights"]').once('js-event').bind('click', function() {
+      $('[gtm-type="gtm-highlights"]').once('js-event').on('click', function() {
         Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
       });
+
+      /** Tracking clicks on fitler & sort options. **/
+      if (listName === "PLP" || listName === "Search Results Page") {
+        var section = listName;
+        if (listName === 'PLP') {
+          section = $('h1.c-page-title').text().toLowerCase();
+        }
+
+        // Track facet filters.
+        $('li.facet-item', context).once('js-event').on('click', function() {
+          var selectedVal = $(this).find('label>span.facet-item__value').text();
+          var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
+          var filterValue = facetTitle + ':' + selectedVal;
+
+          var data = {
+            'event' : 'filter',
+            'section' : section,
+            'filterValue': filterValue
+          };
+
+          dataLayer.push(data);
+        });
+
+        // Track sorts.
+        $('select[name="sort_bef_combine"]').on('change', function() {
+          var sortValue = $(this).find('option:selected').text();
+          var data = {
+            'event' : 'sort',
+            'section' : section,
+            'sortValue': sortValue
+          };
+
+          dataLayer.push(data);
+        });
+      }
     }
   };
 
