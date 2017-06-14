@@ -252,15 +252,6 @@ index f19e519..8b20ed6 100644
  
        // If information is cached.
        if ($cache = \Drupal::cache('data')->get($cid)) {
-@@ -187,6 +190,8 @@ public function updateCart($cart_id, $cart) {
-     $doReq = function ($client, $opt) use ($endpoint, $cart) {
-       $opt['json'] = $cart;
- 
-+      $this->logger->notice(json_encode($cart));
-+
-       return ($client->post($endpoint, $opt));
-     };
- 
 diff --git a/src/UpdateCartErrorEvent.php b/src/UpdateCartErrorEvent.php
 new file mode 100644
 index 0000000..941a474

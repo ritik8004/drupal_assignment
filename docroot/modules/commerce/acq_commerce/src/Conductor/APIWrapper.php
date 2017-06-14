@@ -190,8 +190,6 @@ class APIWrapper {
     $doReq = function ($client, $opt) use ($endpoint, $cart) {
       $opt['json'] = $cart;
 
-      $this->logger->notice(json_encode($cart));
-
       return ($client->post($endpoint, $opt));
     };
 
