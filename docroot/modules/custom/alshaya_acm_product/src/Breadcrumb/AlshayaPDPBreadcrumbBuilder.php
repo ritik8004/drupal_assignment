@@ -31,9 +31,10 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
     if ($field_category = $node->get('field_category')) {
-      if ($field_category->first()) {
-        $category = $field_category->first()->getValue();
-        $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($category['target_id']);
+      $term_list = $field_category->getValue();
+      $inner_term = $this->termTreeGroup($term_list);
+      if ($inner_term) {
+        $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($inner_term);
         foreach (array_reverse($parents) as $term) {
           $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
           $breadcrumb->addCacheableDependency($term);
@@ -50,6 +51,83 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb->addLink(Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]));
 
     return $breadcrumb;
+  }
+
+  /**
+   * Get most inner term for the first group.
+   *
+   * @param array $terms
+   *   Terms array.
+   *
+   * @return int
+   *   Term id.
+   */
+  protected function termTreeGroup(array $terms = []) {
+    $root_group = $this->getRootGroup($terms[0]['target_id']);
+    $root_group_terms = [];
+    if (!empty($terms)) {
+      foreach ($terms as $term) {
+        $root = $this->getRootGroup($term['target_id']);
+        if ($root == $root_group) {
+          $root_group_terms[] = $term['target_id'];
+        }
+      }
+
+      return $this->getInnerDepthTerm($root_group_terms);
+    }
+
+    return NULL;
+
+  }
+
+  /**
+   * Get the root level parent tid of a given term.
+   *
+   * @param int $tid
+   *   Term id.
+   *
+   * @return int
+   *   Root parent term id.
+   */
+  protected function getRootGroup($tid) {
+    $db = \Drupal::database();
+    // Recursive call to get parent root parent tid.
+    while ($tid > 0) {
+      $query = $db->select('taxonomy_term_hierarchy', 'tth');
+      $query->fields('tth', ['parent']);
+      $query->condition('tth.tid', $tid);
+      $parent = $query->execute()->fetchField();
+      if ($parent == 0) {
+        return $tid;
+      }
+
+      $tid = $parent;
+    }
+  }
+
+  /**
+   * Get the most inner term term based on the depth.
+   *
+   * @param array $terms
+   *   Array of term ids.
+   *
+   * @return int
+   *   The term id.
+   */
+  protected function getInnerDepthTerm(array $terms = []) {
+    $db = \Drupal::database();
+    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $depths = $db->select('taxonomy_term_field_data', 'ttfd')
+      ->fields('ttfd', ['tid', 'depth_level'])
+      ->condition('ttfd.tid', $terms, 'IN')
+      ->condition('ttfd.langcode', $current_langcode)
+      ->execute()->fetchAllKeyed();
+
+    // Sort the array reverse.
+    arsort($depths);
+    $most_inner_tid = key($depths);
+
+    return $most_inner_tid;
   }
 
 }
