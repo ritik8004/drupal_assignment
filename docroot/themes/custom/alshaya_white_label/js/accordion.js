@@ -9,42 +9,71 @@
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
       function mobileFilterMenu() {
+        console.log('called3');
         if ($(window).width() < 768) {
+          // Facet Block selector.
           var facetBlocks = $('.c-facet__blocks__wrapper .c-facet__blocks');
-          // Find if the label already exists, if yes, skip this entire thing.
+
+          // Mobile filter block selector.
+          var mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar';
+
+          // Check if we have filter label.
           var filterLabel = facetBlocks.find('.filter-menu-label');
           if (filterLabel.length) {
             // Already exists, dont create again.
           }
           else {
-            // Create the filter label we need for mobile.
+            // If we dont have one, create it.
             $('<div class="filter-menu-label"><span class="label">filter</span></div>').insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
-            // Clone the filter block from region content.
-            var blockFilterBar = $('.block-facets-summary-blockfilter-bar').clone();
-            // Place the cloned bar before other facets in the region content's sidebar first.
-            $(blockFilterBar).insertBefore('.region__content .c-facet__blocks .region__sidebar-first div:first-child');
-            // Add a class so we can identify our mobile filter block version.
-            $('.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar').addClass('mobile-filter-bar c-accordion');
             // Place the clear all link at the top.
-            $('.mobile-filter-bar ul li.clear-all').insertAfter('.filter-menu-label .label');
-            // If there are filters applied, we need to show the count next to the label.
-            var countFilters = $('.mobile-filter-bar ul li').length;
-            if (countFilters === 0 && $.trim($('.mobile-filter-bar').html()).length === 0) {
-              $('.mobile-filter-bar').append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+            // $(mobileFilterBarSelector + ' ul li.clear-all').insertAfter('.filter-menu-label .label');
+          }
+
+          // Clone the filter bar from content if it doesnot exist.
+          if ($(mobileFilterBarSelector).length) {
+            // Filter bar already exists for mobile view.
+
+            var countFilters = $(mobileFilterBarSelector + ' ul li').length;
+            // If there are no filters, we show 0
+            console.log(countFilters);
+            if (countFilters === 0 && $.trim($(mobileFilterBarSelector).html()).length === 0) {
+              console.log('called34');
+              $(mobileFilterBarSelector + ' h3').append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
                 + ' (' + countFilters + ')</h3>');
-              $('.mobile-filter-bar').addClass('empty');
+              $(mobileFilterBarSelector).addClass('empty');
             }
             else {
+              console.log('called35');
+              // If there are filters applied, we need to show the count next to the label.
+              $(mobileFilterBarSelector + ' > h3').remove();
+              $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+                + '(' + countFilters + ')</h3>').insertBefore(mobileFilterBarSelector + ' ul');
+
+              // $('.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar h3').html(Drupal.t('applied filters') + '(' + countFilters + ')');
+            }
+          }
+          else {
+            console.log('called36');
+            // Clone the filter block from region content.
+            var blockFilterBar = $('.block-facets-summary-blockfilter-bar').clone();
+
+            // Place the cloned bar before other facets in the region content's sidebar first.
+            $(blockFilterBar).insertBefore('.region__content .c-facet__blocks .region__sidebar-first div:first-child');
+
+            var countFilters = $(mobileFilterBarSelector + ' ul li').length;
+            // If there are no filters, we show 0
+            if (countFilters === 0 && $.trim($(mobileFilterBarSelector).html()).length === 0) {
+              $(mobileFilterBarSelector).append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+                + ' (' + countFilters + ')</h3>');
+              $(mobileFilterBarSelector).addClass('empty');
+            }
+            else {
+              // If there are filters applied, we need to show the count next to the label.
               $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
                 + '(' + countFilters + ')</h3>').insertBefore('.mobile-filter-bar ul');
             }
           }
-          // Toggle the filter menu when click on the label.
-          $('.filter-menu-label .label').on('click', function () {
-            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu').toggleClass('show-overlay');
-            $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
-            $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
-          });
+
           // Hide the filter block in mobile.
           $('.region__content > .block-facets-summary-blockfilter-bar').hide();
         }
@@ -195,15 +224,6 @@
           $('.c-search .region__content .block-facets-summary-blockfilter-bar').css('border-bottom-width', '0');
         }
 
-        // Clone the filter bar and add it to the filter menu on mobile.
-        // Show mobile slider only on mobile resolution.
-        mobileFilterMenu();
-        placeSearchCount();
-        $(window).on('resize', function (e) {
-          mobileFilterMenu();
-          placeSearchCount();
-        });
-
         // Accordion for delivery option section on PDP.
         $('.delivery-options-wrapper').once('bind-event').each(function () {
           $('.c-accordion-delivery-options', $(this)).accordion({
@@ -219,6 +239,24 @@
           $('.block-views-blockplp-promotional-banner-block-1').siblings('.block-views-exposed-filter-blocksearch-page').addClass('promo-banner');
         }
       }
+
+      // Clone the filter bar and add it to the filter menu on mobile.
+      // Show mobile slider only on mobile resolution.
+      console.log('called2');
+      mobileFilterMenu();
+      placeSearchCount();
+      $(window).on('resize', function (e) {
+        mobileFilterMenu();
+        placeSearchCount();
+      });
+
+      // Toggle the filter menu when click on the label.
+      $('.filter-menu-label .label').on('click', function () {
+        console.log('here');
+        $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu').toggleClass('show-overlay');
+        $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
+        $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
+      });
 
       /**
       * Toggles the Expand Order Accordions.
