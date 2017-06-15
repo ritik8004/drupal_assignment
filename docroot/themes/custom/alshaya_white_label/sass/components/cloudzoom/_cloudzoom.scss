@@ -248,16 +248,16 @@
 }
 
 #cloud-zoom-big {
-  top: 15.4rem !important;
+  top: 13.8rem !important;
   z-index: 99;
 
   @include if-rtl {
-    right: 104% !important;
+    right: 103.2% !important;
     left: auto !important;
   }
 
   @include if-ltr {
-    left: 104% !important;
+    left: 103.2% !important;
     right: auto !important;
   }
 
