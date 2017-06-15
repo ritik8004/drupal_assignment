@@ -622,38 +622,35 @@ html[lang=ar] {
     line-height: 1.5;
   }
 
-  .c-page-title {
-    font-family: 'alshaya-arabic-thin';
-    font-size: 1.3rem;
-    margin-bottom: 0.75rem;
-    padding-bottom: 1.375rem;
-    margin-top: 2em;
-
-    .placeholder {
-      font-size: 1.5rem;
+  .alias--cart {
+    .tooltip--head {
+      color: $black;
+      font-size: 0.65rem;
     }
-  }
 
-  .alias--cart #table-cart-items tr th,
-  .ladda-label {
-    font-size: 0.6875rem;
-  }
+    #table-cart-totals td {
+      text-align: right;
+    }
 
-  .alias--cart #table-cart-items {
-    tr {
-      th {
-        padding: 1.06rem 2.5rem 0.88rem;
-      }
+    #table-cart-items {
+      tr {
+        td {
+          padding: 1.9rem 1.5rem;
 
-      td {
-        padding: 1.9rem 1.5rem;
+          &:first-child a {
+            line-height: 18px;
+          }
+        }
+
+        th {
+          padding: 1.06rem 2.5rem 0.88rem;
+
+          &:nth-child(4) {
+            text-align: center;
+          }
+        }
       }
     }
-  }
-
-  .path--cart .tooltip--head {
-    color: $black;
-    font-size: 0.65rem;
   }
 
   .edit-continue-shopping-mobile {
@@ -666,27 +663,29 @@ html[lang=ar] {
     color: $cobalt-blue !important;
   }
 
+  .c-page-title {
+    font-family: 'alshaya-arabic-thin';
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 1.375rem;
+    margin-top: 2em;
+
+    .placeholder {
+      font-size: 1.5rem;
+    }
+  }
+
   .promo-continue-shopping-wrapper summary,
   .path--cart .customer-cart-form .items .dark + div,
   .alias--cart #table-cart-totals td:first-child,
-  #block-basketpromotionmessage p {
+  #block-basketpromotionmessage p,
+  .alias--cart #table-cart-items tr th,
+  .ladda-label {
     font-size: 0.6875rem;
-  }
-
-  .alias--cart #table-cart-totals td {
-    text-align: right;
   }
 
   .path--cart .customer-cart-form .items {
     padding-right: 1.2rem;
-  }
-
-  .alias--cart #table-cart-items tr td:first-child a {
-    line-height: 18px;
-  }
-
-  .alias--cart #table-cart-items tr th:nth-child(4) {
-    text-align: center;
   }
 }
 
