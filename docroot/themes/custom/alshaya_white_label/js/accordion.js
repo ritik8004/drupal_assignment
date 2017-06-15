@@ -231,7 +231,7 @@
         $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
       });
 
-      $('.c-facet__blocks', context).find('.c-accordion__title').off().on('click', function (e) {
+      $('.c-facet__blocks').find('.c-accordion__title').off().on('click', function (e) {
         Drupal.alshayaAccordion(this);
       });
 
