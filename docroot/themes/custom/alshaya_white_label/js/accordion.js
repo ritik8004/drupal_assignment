@@ -84,17 +84,6 @@
       }
 
       /**
-       * Custom accordion for facet blocks so that multiple panes can be opened.
-       *
-       * @param {Object} element
-       * The header, which will be clicked.
-       */
-      function alshayaAccordion(element) {
-        $(element).siblings().slideToggle('slow');
-        $(element).toggleClass('ui-state-active');
-      }
-
-      /**
        * Place the search count from view header in different locations based on resolution.
        */
       function placeSearchCount() {
@@ -243,7 +232,7 @@
       });
 
       $('.c-facet__blocks', context).find('.c-accordion__title').off().on('click', function (e) {
-        alshayaAccordion(this);
+        Drupal.alshayaAccordion(this);
       });
 
       /**
@@ -349,6 +338,11 @@
         }
       }, 100);
     }
+  };
+
+  Drupal.alshayaAccordion = function(element) {
+    $(element).siblings().slideToggle('slow');
+    $(element).toggleClass('ui-state-active');
   };
 
 })(jQuery, Drupal);
