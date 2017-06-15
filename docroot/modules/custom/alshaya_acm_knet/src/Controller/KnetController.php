@@ -59,31 +59,43 @@ class KnetController extends ControllerBase {
     $response['user_id'] = $_POST['udf1'];
     $response['customer_id'] = $_POST['udf2'];
     $response['order_id'] = $_POST['udf3'];
-    $response['internal_order_id'] = $_POST['udf4'];
+    $response['email'] = $_POST['udf4'];
 
-    // @TODO: Should we think about encrypting this message?
-    $result_params = '?response=' . base64_encode(json_encode($response));
+    $state_key = md5($response['order_id']);
+    \Drupal::state()->set($state_key, $response);
+
+    $result_url = 'REDIRECT=';
 
     if ($response['result'] == 'CAPTURED') {
-      $result_url = Url::fromRoute('alshaya_acm_knet.success', ['order_id' => $response['order_id']], ['absolute' => TRUE])->toString();
-      $this->logger->info('KNET update for @order_id: @message', ['@order_id' => $response['order_id'], '@message' => json_encode($response)]);
+      $result_url .= Url::fromRoute('alshaya_acm_knet.success', ['state_key' => $state_key], ['absolute' => TRUE])->toString();
+
+      $this->logger->info('KNET update for @order_id: @result_url @message', [
+        '@order_id' => $response['order_id'],
+        '@result_url' => $result_url,
+        '@message' => json_encode($response),
+      ]);
     }
     else {
-      $result_url = Url::fromRoute('alshaya_acm_knet.error', ['order_id' => $response['order_id']], ['absolute' => TRUE])->toString();
-      $this->logger->error('KNET update for @order_id: @message', ['@order_id' => $response['order_id'], '@message' => json_encode($response)]);
+      $result_url .= Url::fromRoute('alshaya_acm_knet.error', ['state_key' => $state_key], ['absolute' => TRUE])->toString();
+
+      $this->logger->error('KNET update for @order_id: @result_url @message', [
+        '@order_id' => $response['order_id'],
+        '@result_url' => $result_url,
+        '@message' => json_encode($response),
+      ]);
     }
 
-    print 'REDIRECT=' . $result_url . $result_params;
+    print $result_url;
     exit;
   }
 
   /**
    * Page callback for success state.
    */
-  public function success($order_id) {
-    $data = json_decode(base64_decode(\Drupal::request()->get('response')), TRUE);
+  public function success($state_key) {
+    $data = \Drupal::state()->get($state_key);
 
-    if (empty($data) || $data['order_id'] != $order_id) {
+    if (empty($data)) {
       return new AccessDeniedHttpException();
     }
 
@@ -93,9 +105,16 @@ class KnetController extends ControllerBase {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 
-    $this->apiWrapper->updateOrderStatus($data['internal_order_id'], 'pending', $message);
+    $this->logger->info('KNET payment complete for @order_id: @message', [
+      '@order_id' => $data['order_id'],
+      '@message' => $message,
+    ]);
+    $this->apiWrapper->updateOrderStatus($data['tracking_id'], 'pending', $message);
 
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation']));
+    // Delete the data from DB.
+    \Drupal::state()->delete($state_key);
+
+    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
     $response->send();
   }
 
@@ -103,22 +122,48 @@ class KnetController extends ControllerBase {
    * Page callback for error state.
    */
   public function error($order_id) {
-    $data = json_decode(base64_decode(\Drupal::request()->get('response')), TRUE);
+    $order = _alshaya_acm_checkout_get_last_order_from_session();
+
+    if ($order['order_id'] != $order_id) {
+      return new AccessDeniedHttpException();
+    }
 
     $message = $this->t('Something went wrong, we dont have proper error message.');
 
-    // Error from our side, K-Net error won't have this params.
-    if (empty($data) || $data['order_id'] != $order_id) {
-      $message = '';
-
-      foreach ($data as $key => $value) {
-        $message .= $key . ': ' . $value . PHP_EOL;
-      }
+    $message .= PHP_EOL . $this->t('Debug info:') . PHP_EOL;
+    foreach ($_GET as $key => $value) {
+      $message .= $key . ': ' . $value . PHP_EOL;
     }
 
-    $this->apiWrapper->updateOrderStatus($data['internal_order_id'], 'payment_failed', $message);
+    $this->apiWrapper->updateOrderStatus($order_id, 'payment_failed', $message);
 
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation']));
+    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
+    $response->send();
+  }
+
+  /**
+   * Page callback for internal error state.
+   */
+  public function internalError($state_key) {
+    $data = \Drupal::state()->get($state_key);
+
+    if (empty($data)) {
+      return new AccessDeniedHttpException();
+    }
+
+    $message = '';
+
+    foreach ($data as $key => $value) {
+      $message .= $key . ': ' . $value . PHP_EOL;
+    }
+
+    $this->logger->error('KNET payment failed for @order_id: @message', ['@order_id' => $data['order_id'], '@message' => $message]);
+    $this->apiWrapper->updateOrderStatus($data['tracking_id'], 'payment_failed', $message);
+
+    // Delete the data from DB.
+    \Drupal::state()->delete($state_key);
+
+    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
     $response->send();
   }
 
