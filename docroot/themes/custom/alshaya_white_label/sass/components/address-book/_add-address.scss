@@ -90,7 +90,7 @@
         margin-top: 0;
         margin-bottom: 1.4375rem;
         min-width: 5.6875rem;
-        margin-#{$right}: 1.25rem;
+        margin-#{$right}: 1rem;
         padding: 0.125rem 1rem 0.1875rem;
         width: auto;
         font-weight: normal;
@@ -141,7 +141,7 @@
       margin-top: 1rem;
 
       @include breakpoint($tablet) {
-        margin-top: 1.9rem;
+        margin-top: 1.2rem;
       }
     }
   }
