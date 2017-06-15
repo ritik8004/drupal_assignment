@@ -564,3 +564,7 @@ ul.item-list__checkbox,
     display: none;
   }
 }
+
+.region__content .region__sidebar-first .c-accordion__title::after {
+  #{$right}: 0;
+}
