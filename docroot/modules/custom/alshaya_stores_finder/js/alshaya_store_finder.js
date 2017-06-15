@@ -6,8 +6,19 @@
 (function ($, Drupal) {
   'use strict';
 
+  Drupal.alshaya_stores_finder = Drupal.alshaya_stores_finder || {};
+
   Drupal.behaviors.storeFinder = {
     attach: function (context, settings) {
+
+      var storeFinderPageSelector = $('.view-id-stores_finder.view-display-id-page_1', context);
+      if (storeFinderPageSelector.length > 0) {
+        var loadmoreItemLimit = settings.stores_finder.load_more_item_limit;
+        var storeLocatorSelector = 'div.list-view-locator';
+        var loadMoreButtonSelector = '.load-more-button';
+
+        Drupal.alshaya_stores_finder.paginateStores(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit);
+      }
 
       $('.set-center-location').on('click', function () {
         // Id of the row.
@@ -138,6 +149,30 @@
         $('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-submit-stores-finder').trigger('click');
       });
 
+    }
+  };
+
+  /**
+   * Helper function to add client-side pagination.
+   */
+  Drupal.alshaya_stores_finder.paginateStores = function(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit) {
+    var viewLocatorCount = $(storeLocatorSelector).length;
+
+    if (viewLocatorCount > loadmoreItemLimit) {
+      $(storeLocatorSelector).slice(loadmoreItemLimit, viewLocatorCount).hide();
+
+      $(loadMoreButtonSelector).on('click', function (e) {
+        e.preventDefault();
+        var hiddenStoreSelector = $(storeLocatorSelector + ':hidden');
+        hiddenStoreSelector.slice(0, loadmoreItemLimit).slideDown('slow', function () {
+          if ($(storeLocatorSelector + ':hidden').length === 0) {
+            $(loadMoreButtonSelector).fadeOut('slow');
+          }
+        });
+      });
+    }
+    else {
+      $(loadMoreButtonSelector).hide();
     }
   };
 

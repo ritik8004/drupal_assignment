@@ -120,6 +120,11 @@ function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(arra
   if ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_1') {
     // If store finder list view.
     $suggestions[] = "views_view_unformatted__store_list";
+    $variables['load_more_button'] = [
+      '#title' => t('Load More'),
+      '#type' => 'link',
+      '#url' => Url::fromUserInput('#'),
+    ];
   }
   elseif ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_2') {
     // If store finder glossary view.
