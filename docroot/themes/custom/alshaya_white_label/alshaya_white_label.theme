@@ -735,7 +735,7 @@ function alshaya_white_label_preprocess_form(&$variables) {
   if ($variables['element']['#id'] === 'views-exposed-form-search-page') {
     $variables['attributes']['class'][] = 'views-exposed-form-search-page';
   }
-  else if (isset($variables['element']['field_address'])) {
+  elseif (isset($variables['element']['field_address'])) {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
 }
