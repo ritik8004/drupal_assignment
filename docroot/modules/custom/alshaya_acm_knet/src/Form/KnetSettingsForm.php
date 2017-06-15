@@ -28,7 +28,7 @@ class KnetSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('alshaya_acm.cart_config')
+    $this->config('alshaya_acm_knet.settings')
       ->set('resource_path', $form_state->getValue('resource_path'))
       ->set('alias', $form_state->getValue('alias'))
       ->set('payment_pending', $form_state->getValue('payment_pending'))
@@ -43,7 +43,7 @@ class KnetSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_acm.cart_config');
+    $config = $this->config('alshaya_acm_knet.settings');
 
     $form['resource_path'] = [
       '#type' => 'textfield',
