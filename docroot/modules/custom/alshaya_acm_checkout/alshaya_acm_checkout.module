@@ -210,6 +210,9 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
     $email = \Drupal::currentUser()->getEmail();
   }
 
+  // At this stage we always want to have fresh data.
+  \Drupal::cache()->invalidate('orders_list_' . $email);
+
   $orders = alshaya_acm_customer_get_user_orders($email);
 
   $order_index = array_search($order_id, array_column($orders, 'order_id'));

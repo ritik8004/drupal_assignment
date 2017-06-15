@@ -43,47 +43,53 @@ class KnetPaymentRedirect extends CheckoutPaneBase implements CheckoutPaneInterf
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $order = _alshaya_acm_checkout_get_last_order_from_session();
 
+    $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+    if (\Drupal::currentUser()->isAnonymous()) {
+      $email = $temp_store->get('email');
+    }
+    else {
+      $email = \Drupal::currentUser()->getEmail();
+    }
+
     // No order found, we will handle errors in confirmation plugin.
     if (empty($order)) {
       return $pane_form;
     }
 
+    $knet_settings = \Drupal::config('alshaya_acm_knet.settings');
+
     // We want to redirect to K-Net only if payment method is K-Net and payment
     // status is pending_payment.
-    if ($order['payment']['method_code'] != 'knet' || $order['status'] != 'pending_payment') {
+    if ($order['payment']['method_code'] != 'knet' || $order['status'] != $knet_settings->get('payment_pending')) {
       return $pane_form;
     }
-
-    $knet_settings = \Drupal::config('alshaya_acm_knet.settings');
 
     $pipe = new E24PaymentPipe();
 
     $pipe->setCurrency(KNET_CURRENCY_KWD);
     $pipe->setLanguage(KNET_LANGUAGE_EN);
 
+    \Drupal::logger('alshaya_acm_knet')->info(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE, 'https' => FALSE])->toString());
     $pipe->setResponseUrl(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE, 'https' => FALSE])->toString());
-    $pipe->setErrorUrl(Url::fromRoute('alshaya_acm_knet.error', ['order_id' => $order['increment_id']], ['absolute' => TRUE])->toString());
+    $pipe->setErrorUrl(Url::fromRoute('alshaya_acm_knet.error', ['order_id' => $order['order_id']], ['absolute' => TRUE])->toString());
 
-    // @TODO: Make this dynamic.
     $pipe->setAmt($order['totals']['grand']);
 
-    if ($knet_settings->get('resource_path')) {
-      $pipe->setResourcePath($knet_settings->get('resource_path'));
-    }
+    // Set resource path.
+    $pipe->setResourcePath($knet_settings->get('resource_path'));
 
     // Set your alias name here.
     $pipe->setAlias($knet_settings->get('alias'));
 
-    $pipe->setTrackId($order['increment_id']);
+    $pipe->setTrackId($order['order_id']);
 
     $pipe->setUdf1(\Drupal::currentUser()->id());
     $pipe->setUdf2($order['customer_id']);
     $pipe->setUdf3($order['increment_id']);
-    $pipe->setUdf4($order['order_id']);
+    $pipe->setUdf4($email);
 
     // Get results.
     if ($pipe->performPaymentInitialization()) {
-      // @TODO: Store the payment id somewhere for later use.
       \Drupal::logger('alshaya_acm_knet')->info('Payment id for order id @order_id is @payment_id', ['@order_id' => $order['increment_id'], '@payment_id' => $pipe->getPaymentId()]);
       $response = new RedirectResponse($pipe->getRedirectUrl());
       $response->send();
