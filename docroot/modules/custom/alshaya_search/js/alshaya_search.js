@@ -14,14 +14,14 @@
       // });
 
       // Ajax command to update search result header count.
-      // $.fn.alshayaSearchHeaderUpdate = function (data) {
-      //   // If search page.
-      //   if ($('.view-id-search').length !== 0) {
-      //     // Update the header result count.
-      //     var header_result = $('.view-id-search .view-header').html();
-      //     $('.search-count').html(header_result);
-      //   }
-      // };
+      $.fn.alshayaSearchHeaderUpdate = function (data) {
+        // If search page.
+        if ($('.view-id-search').length !== 0) {
+          // Update the header result count.
+          var header_result = $('.view-id-search .view-header').html();
+          $('.search-count').html(header_result);
+        }
+      };
 
     }
   };
