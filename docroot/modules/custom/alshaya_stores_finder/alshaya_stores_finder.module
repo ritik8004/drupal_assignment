@@ -258,3 +258,13 @@ function alshaya_stores_finder_preprocess_views_view(&$variables) {
     ];
   }
 }
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function alshaya_stores_finder_views_pre_build(ViewExecutable $view) {
+  if (($view->id() === 'stores_finder') &&
+    ($view->current_display === 'page_1')) {
+    $view->display_handler->display['cache_metadata']['tags'][] = 'config:alshaya_stores_finder.settings';
+  }
+}

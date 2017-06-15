@@ -24,5 +24,5 @@ alshaya_stores_finder.settings:
       type: text_format
       label: 'PDP: Click and Collect select option text'
     load_more_item_limit:
-      type: text
-      label: 'Number of stores after which load more button should be displayed'
+      type: integer
+      label: 'Load more item count'
