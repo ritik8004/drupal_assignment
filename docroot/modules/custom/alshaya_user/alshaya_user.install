@@ -11,11 +11,8 @@
 function alshaya_user_install() {
   // Save texts for communication preference page.
   $strings = [
-    'Email (@mail)' => [
-      'ar' => '(@mail) البريد الإلكتروني',
-    ],
-    'Mobile (@mobile)' => [
-      'ar' => '(@mobile) متحرك',
+    'Mobile' => [
+      'ar' => 'متحرك',
     ],
     'Select your preferred communication channel' => [
       'ar' => 'يرجى اختيار وسيلة التواصل المناسبة ',
