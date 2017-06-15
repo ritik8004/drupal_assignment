@@ -1,3 +1,11 @@
+alshaya_acm_knet.settings:
+  path: '/admin/commerce/config/knet-settings'
+  defaults:
+    _form: '\Drupal\alshaya_acm_knet\Form\KnetSettingsForm'
+    _title: 'K-Net settings'
+  requirements:
+    _permission: 'access commerce administration pages'
+
 alshaya_acm_knet.response:
   path: '/knet/response'
   defaults:

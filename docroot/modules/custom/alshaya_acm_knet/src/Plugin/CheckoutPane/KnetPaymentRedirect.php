@@ -56,13 +56,13 @@ class KnetPaymentRedirect extends CheckoutPaneBase implements CheckoutPaneInterf
       return $pane_form;
     }
 
+    $knet_settings = \Drupal::config('alshaya_acm_knet.settings');
+
     // We want to redirect to K-Net only if payment method is K-Net and payment
     // status is pending_payment.
-    if ($order['payment']['method_code'] != 'knet' || $order['status'] != 'pending_payment') {
+    if ($order['payment']['method_code'] != 'knet' || $order['status'] != $knet_settings->get('payment_pending')) {
       return $pane_form;
     }
-
-    $knet_settings = \Drupal::config('alshaya_acm_knet.settings');
 
     $pipe = new E24PaymentPipe();
 

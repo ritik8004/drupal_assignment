@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_knet\Controller;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Url;
@@ -23,15 +24,25 @@ class KnetController extends ControllerBase {
   protected $apiWrapper;
 
   /**
+   * Array containing knet settings from config.
+   *
+   * @var array
+   */
+  protected $knetSettings;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   APIWrapper object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory object.
    */
-  public function __construct(APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(APIWrapper $api_wrapper, ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
+    $this->knetSettings = $config_factory->get('alshaya_acm_knet.settings');
     $this->logger = $logger_factory->get('alshaya_acm_knet');
   }
 
@@ -41,6 +52,7 @@ class KnetController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_commerce.api'),
+      $container->get('config.factory'),
       $container->get('logger.factory')
     );
   }
@@ -109,7 +121,8 @@ class KnetController extends ControllerBase {
       '@order_id' => $data['order_id'],
       '@message' => $message,
     ]);
-    $this->apiWrapper->updateOrderStatus($data['tracking_id'], 'pending', $message);
+
+    $this->apiWrapper->updateOrderStatus($data['tracking_id'], $this->knetSettings->get('payment_processed'), $message);
 
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
@@ -135,7 +148,12 @@ class KnetController extends ControllerBase {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 
-    $this->apiWrapper->updateOrderStatus($order_id, 'payment_failed', $message);
+    $this->logger->error('KNET payment failed for @order_id: @message', [
+      '@order_id' => $order_id,
+      '@message' => $message,
+    ]);
+
+    $this->apiWrapper->updateOrderStatus($order_id, $this->knetSettings->get('payment_failed'), $message);
 
     $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
     $response->send();
@@ -157,8 +175,12 @@ class KnetController extends ControllerBase {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 
-    $this->logger->error('KNET payment failed for @order_id: @message', ['@order_id' => $data['order_id'], '@message' => $message]);
-    $this->apiWrapper->updateOrderStatus($data['tracking_id'], 'payment_failed', $message);
+    $this->logger->error('KNET payment failed for @order_id: @message', [
+      '@order_id' => $data['order_id'],
+      '@message' => $message,
+    ]);
+
+    $this->apiWrapper->updateOrderStatus($data['tracking_id'], $this->knetSettings->get('payment_failed'), $message);
 
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
