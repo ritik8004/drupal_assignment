@@ -446,3 +446,9 @@
     }
   }
 }
+
+// Hide country flag coming from mobile number module.
+.form-item-field-address-0-address-mobile-number-country-code,
+.country-select {
+  display: none !important;
+}
