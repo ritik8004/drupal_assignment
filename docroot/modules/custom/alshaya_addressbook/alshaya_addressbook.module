@@ -309,6 +309,22 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
       'ar' => 'الرمز البريدي',
       'context' => 'Address label',
     ],
+    'Building name/number' => [
+      'ar' => 'رقم المبنى / اسم المبنى',
+      'context' => 'Address label',
+    ],
+    'Block' => [
+      'ar' => 'رقم القطعة',
+      'context' => 'Address label',
+    ],
+    'Floor (optional)' => [
+      'ar' => 'رقم الدور(اختياري)',
+      'context' => 'Address label',
+    ],
+    'Select Area' => [
+      'ar' => 'يرجى اختيار المنطقة / القطعة',
+      'context' => 'Address label',
+    ],
   ];
 
   // Save the translation.
