@@ -8,7 +8,7 @@ dependencies:
 id: keywordsearchblock_2
 theme: alshaya_white_label
 region: menu_primary
-weight: -30
+weight: -31
 provider: null
 plugin: keyword_search_block
 settings:
