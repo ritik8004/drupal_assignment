@@ -49,6 +49,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $request = \Drupal::request();
     $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
     $breadcrumb->addLink(Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]));
+    // Cacheability data of the node.
+    $breadcrumb->addCacheTags(['node:' . $node->id()]);
 
     return $breadcrumb;
   }
@@ -123,9 +125,13 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       ->condition('ttfd.langcode', $current_langcode)
       ->execute()->fetchAllKeyed();
 
-    // Sort the array reverse.
-    arsort($depths);
-    $most_inner_tid = key($depths);
+    // Flip key/value.
+    $terms = array_flip($terms);
+    // Merge two array (overriding depth value).
+    $depths = array_replace($terms, $depths);
+    // Get all max values and get first one.
+    $max_depth = array_keys($depths, max($depths));
+    $most_inner_tid = $max_depth[0];
 
     return $most_inner_tid;
   }
