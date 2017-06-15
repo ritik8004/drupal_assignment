@@ -264,10 +264,11 @@
 
     @include breakpoint($tablet) {
       margin-bottom: 2.25rem;
+      margin-top: 0.75rem;
     }
 
     @include breakpoint($desktop) {
-      padding-bottom: 1rem;
+      padding-bottom: 0.75rem;
       margin-bottom: 3rem;
     }
   }
@@ -317,4 +318,137 @@
       }
     }
   }
+}
+
+.country-code-prefix {
+  margin-top: 0.55rem;
+  color: $greyish;
+  border-bottom: 1px solid $brownish-grey;
+  padding-bottom: 0.18rem;
+  width: 3rem;
+
+  @include breakpoint($only-mobile) {
+    margin-top: 0.6rem;
+  }
+}
+
+.address-book-address,
+.webform-submission-alshaya-contact-form {
+  .mobile-number-field {
+    margin-top: -3.3rem;
+
+    label {
+      top: -1.25em;
+      bottom: 0;
+      left: 0;
+      opacity: 1;
+      font-size: 0.75rem;
+      color: $greyish;
+    }
+  }
+
+  .local-number::-webkit-input-placeholder {
+    color: transparent;
+  }
+
+  #edit-field-address-0-address-administrative-area {
+    width: 100%;
+  }
+}
+
+.mobile-number-field {
+  .form-type-textfield {
+    position: absolute !important;
+    top: 3rem;
+    left: 3rem;
+
+    input {
+      width: 8.75rem !important;
+    }
+  }
+}
+
+.c-address-book .profile-form {
+  input {
+    margin-top: 0.35rem;
+    padding-bottom: 0.25rem;
+  }
+}
+
+#edit-field-address-0-address-mobile-number-mobile-error {
+  left: -3rem;
+  position: relative;
+  top: -0.1rem;
+}
+
+.form-item-field-address-0-address-administrative-area {
+  padding-bottom: 1.5em !important;
+
+  .select2-selection {
+    border: 1px solid $brownish-grey;
+    font-family: "alshaya-thin";
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    margin: 0.45rem 0 1rem;
+    border-radius: 0;
+    border-color: $grey-ash;
+  }
+
+  .select2-selection__rendered {
+    font-family: $arial;
+    line-height: 19px !important;
+    padding-left: 0 !important;
+    color: $greyish;
+  }
+
+  .select2-selection__arrow {
+    top: 0.625rem !important;
+
+    @include icon(chevrondown, after) {
+      font-size: 1.25rem;
+    }
+
+    b {
+      display: none;
+    }
+  }
+}
+
+.form-item-field-address-0-address-mobile-number-mobile {
+  .form-item--error-message {
+    position: relative;
+    left: -3rem;
+  }
+}
+
+.profile-address-book-edit-form,
+#address-book-form-open {
+  .country-code-prefix {
+    margin-top: 0.6rem;
+  }
+
+  .form-actions {
+    position: relative;
+
+    input[disabled] {
+      color: transparent !important;
+    }
+
+    .ajax-progress {
+      position: absolute;
+      top: 0.7rem;
+      left: 8%;
+
+      @include breakpoint($only-mobile) {
+        left: 46%;
+      }
+    }
+  }
+}
+
+// Hide country flag coming from mobile number module.
+.form-item-field-address-0-address-mobile-number-country-code,
+.country-select {
+  display: none !important;
 }

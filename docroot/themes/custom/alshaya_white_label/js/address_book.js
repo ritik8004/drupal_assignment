@@ -23,19 +23,6 @@
           toggleOverlay('.ui-dialog-buttonpane .dialog-cancel', 'modal-overlay');
         });
       });
-
-      // If address book form.
-      if ($('.address-book-address').length) {
-        addressBookRemoveBraces();
-      }
-
-      // Remove braces around from country code.
-      function addressBookRemoveBraces() {
-        var country_code_html = $('.address-book-address div.country-select div.prefix').html();
-        var country_code_string = country_code_html.replace('(', '').replace(')', '');
-        $('.address-book-address div.country-select div.prefix').html(country_code_string);
-      }
-
     }
   };
 

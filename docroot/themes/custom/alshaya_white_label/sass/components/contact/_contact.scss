@@ -47,15 +47,16 @@
 
   #edit-mobile-number {
     label {
-      top: -1.25em;
       bottom: 0;
       #{$left}: 0;
       opacity: 1;
       font-size: 0.75rem;
-      position: absolute;
+      position: relative;
+      top: 0;
 
       &.error {
-        top: 1.25rem;
+        top: -0.25rem;
+        left: -4em;
         width: 9rem;
       }
     }
@@ -224,5 +225,15 @@
 
   legend {
     color: $marine-blue-two;
+  }
+}
+
+.webform-submission-alshaya-contact-form {
+  .mobile-number-field {
+    width: 100%;
+
+    .form-type-textfield {
+      top: 1.5rem;
+    }
   }
 }

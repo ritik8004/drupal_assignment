@@ -57,6 +57,12 @@ autosize_textarea:
   dependencies:
     - alshaya_white_label/autosize
 
+convert_to_select2:
+  js:
+    js/convert_to_select2.js: {}
+  dependencies:
+    - alshaya_white_label/select2
+
 slick:
   css:
     theme:
