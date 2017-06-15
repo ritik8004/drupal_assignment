@@ -11,16 +11,23 @@
       function mobileFilterMenu() {
         if ($(window).width() < 768) {
           var facetBlocks = $('.c-facet__blocks__wrapper .c-facet__blocks');
+          // Find if the label already exists, if yes, skip this entire thing.
           var filterLabel = facetBlocks.find('.filter-menu-label');
           if (filterLabel.length) {
             // Already exists, dont create again.
           }
           else {
+            // Create the filter label we need for mobile.
             $('<div class="filter-menu-label"><span class="label">filter</span></div>').insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
-            var blockFilterBar = $('#block-filterbar').clone();
+            // Clone the filter block from region content.
+            var blockFilterBar = $('.block-facets-summary-blockfilter-bar').clone();
+            // Place the cloned bar before other facets in the region content's sidebar first.
             $(blockFilterBar).insertBefore('.region__content .c-facet__blocks .region__sidebar-first div:first-child');
-            $('.region__content .region__sidebar-first #block-filterbar').addClass('mobile-filter-bar c-accordion');
+            // Add a class so we can identify our mobile filter block version.
+            $('.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar').addClass('mobile-filter-bar c-accordion');
+            // Place the clear all link at the top.
             $('.mobile-filter-bar ul li.clear-all').insertAfter('.filter-menu-label .label');
+            // If there are filters applied, we need to show the count next to the label.
             var countFilters = $('.mobile-filter-bar ul li').length;
             if (countFilters === 0 && $.trim($('.mobile-filter-bar').html()).length === 0) {
               $('.mobile-filter-bar').append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
@@ -38,12 +45,12 @@
             $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
             $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
           });
-
-          $('.region__content > #block-filterbar').hide();
+          // Hide the filter block in mobile.
+          $('.region__content > .block-facets-summary-blockfilter-bar').hide();
         }
-
         else {
-          $('.region__content > #block-filterbar').show();
+          // Show the filter block in the content region for tablet and desktop.
+          $('.region__content > .block-facets-summary-blockfilter-bar').show();
         }
       }
 
