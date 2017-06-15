@@ -18,6 +18,7 @@ global_styles:
     - core/jquery.ui.accordion
     - core/jquery.ui.tabs
     - core/jquery.cookie
+    - mobile_number/element
     - alshaya_white_label/utils
 
 ltr_styles:
@@ -55,6 +56,12 @@ autosize_textarea:
     js/autosize_textarea.js: {}
   dependencies:
     - alshaya_white_label/autosize
+
+convert_to_select2:
+  js:
+    js/convert_to_select2.js: {}
+  dependencies:
+    - alshaya_white_label/select2
 
 slick:
   css:

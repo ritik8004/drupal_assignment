@@ -397,12 +397,6 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
-    case "profile_address_book_add_form":
-    case "profile_address_book_edit_form":
-    case "profile_address_book_form":
-      $form['#attached']['library'][] = 'alshaya_white_label/select2';
-      break;
-
     case "user_register_form":
       if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
         if (isset($form['privilege_card_wrapper'])) {
@@ -740,5 +734,8 @@ function alshaya_white_label_preprocess_facets_summary_item_list(&$variables) {
 function alshaya_white_label_preprocess_form(&$variables) {
   if ($variables['element']['#id'] === 'views-exposed-form-search-page') {
     $variables['attributes']['class'][] = 'views-exposed-form-search-page';
+  }
+  else if (isset($variables['element']['field_address'])) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
 }

@@ -321,21 +321,21 @@
 }
 
 .country-code-prefix {
-  margin-top: 0.55em;
+  margin-top: 0.55rem;
   color: $greyish;
   border-bottom: 1px solid $brownish-grey;
-  padding-bottom: 0.18em;
+  padding-bottom: 0.18rem;
   width: 3rem;
 
   @include breakpoint($only-mobile) {
-    margin-top: 0.6em;
+    margin-top: 0.6rem;
   }
 }
 
 .address-book-address,
 .webform-submission-alshaya-contact-form {
   .mobile-number-field {
-    margin-top: -3.3em;
+    margin-top: -3.3rem;
 
     label {
       top: -1.25em;
@@ -359,8 +359,8 @@
 .mobile-number-field {
   .form-type-textfield {
     position: absolute !important;
-    top: 3em;
-    left: 3em;
+    top: 3rem;
+    left: 3rem;
 
     input {
       width: 8.75rem !important;
@@ -376,9 +376,9 @@
 }
 
 #edit-field-address-0-address-mobile-number-mobile-error {
-  left: -4em;
+  left: -3rem;
   position: relative;
-  top: -0.1em;
+  top: -0.1rem;
 }
 
 .form-item-field-address-0-address-administrative-area {
@@ -391,11 +391,15 @@
     padding: 0.25rem 0.5rem;
     width: 100%;
     margin: 0.45rem 0 1rem;
+    border-radius: 0;
+    border-color: $grey-ash;
   }
 
   .select2-selection__rendered {
+    font-family: $arial;
     line-height: 19px !important;
     padding-left: 0 !important;
+    color: $greyish;
   }
 
   .select2-selection__arrow {
@@ -414,12 +418,16 @@
 .form-item-field-address-0-address-mobile-number-mobile {
   .form-item--error-message {
     position: relative;
-    left: -4em;
+    left: -3rem;
   }
 }
 
 .profile-address-book-edit-form,
 #address-book-form-open {
+  .country-code-prefix {
+    margin-top: 0.6rem;
+  }
+
   .form-actions {
     position: relative;
 
@@ -429,7 +437,7 @@
 
     .ajax-progress {
       position: absolute;
-      top: 0.7em;
+      top: 0.7rem;
       left: 8%;
 
       @include breakpoint($only-mobile) {

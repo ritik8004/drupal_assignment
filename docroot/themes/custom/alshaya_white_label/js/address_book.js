@@ -23,8 +23,6 @@
           toggleOverlay('.ui-dialog-buttonpane .dialog-cancel', 'modal-overlay');
         });
       });
-
-      $('#edit-field-address-0-address-administrative-area').select2();
     }
   };
 
