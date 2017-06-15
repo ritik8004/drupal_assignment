@@ -1,5 +1,5 @@
 terms_conditions:
-  value: '<p>By registering I agree to your <a href="/terms">Terms and Conditions</a>.</p>'
+  value: '<p>By registering you agree to our <a href="/terms">Terms and Conditions</a>.</p>'
   format: rich_text
 user_register_complete:
   value: '<p>You''re almost done.</p><p>We''ve sent a verification email to <a href="mailto:[email]">[email]</a>.</p><p>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</p><p>It is also your final step in the sign up process.</p>'
