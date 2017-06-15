@@ -556,8 +556,8 @@ function alshaya_acm_get_product_stock($sku, $reset = FALSE) {
 /**
  * Check if product is in stock for the given sku.
  *
- * @param string|object $sku
- *   The Sku string or Sku object.
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   The Sku entity object.
  * @param bool $recheck
  *   Flag to specify if we should recheck.
  * @param bool $reset
@@ -566,15 +566,35 @@ function alshaya_acm_get_product_stock($sku, $reset = FALSE) {
  * @return int|bool
  *   Return quantity if stock exists, else false.
  */
-function alshaya_acm_is_product_in_stock($sku, $recheck = FALSE, $reset = FALSE) {
-  if ($sku_stock = alshaya_acm_get_product_stock($sku, $reset)) {
-    if ($sku_stock['is_in_stock']) {
-      return $sku_stock['quantity'];
-    }
-    elseif (!$reset && $recheck) {
-      if ($sku_stock = alshaya_acm_get_product_stock($sku, TRUE)) {
+function alshaya_acm_is_product_in_stock(SKU $sku_entity, $recheck = FALSE, $reset = FALSE) {
+  // @TODO: Add condition and handle stock check for grouped.
+  if ($sku_entity->bundle() == 'simple') {
+    if ($sku_stock = alshaya_acm_get_product_stock($sku_entity, $reset)) {
+      if ($sku_stock['is_in_stock']) {
         return $sku_stock['quantity'];
       }
+      elseif (!$reset && $recheck) {
+        if ($sku_stock = alshaya_acm_get_product_stock($sku_entity, TRUE)) {
+          return $sku_stock['quantity'];
+        }
+      }
+    }
+  }
+  elseif ($sku_entity->bundle() == 'configurable') {
+    /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
+    $plugin = $sku_entity->getPluginInstance();
+    $tree = $plugin->deriveProductTree($sku_entity);
+
+    if (isset($tree['products'])) {
+      $quantities = [];
+
+      foreach ($tree['products'] as $child_sku => $child_sku_entity) {
+        if ($child_sku_entity instanceof SKU) {
+          $quantities[$child_sku] = (int) alshaya_acm_is_product_in_stock($child_sku_entity, $recheck, $reset);
+        }
+      }
+
+      return max($quantities);
     }
   }
 
