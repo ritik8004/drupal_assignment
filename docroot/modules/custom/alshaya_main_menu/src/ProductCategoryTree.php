@@ -153,12 +153,13 @@ class ProductCategoryTree {
         if ($paragraph && !empty($paragraph->get('field_highlight_image'))) {
           $image = $paragraph->get('field_highlight_image')->getValue();
           $image_link = $paragraph->get('field_highlight_link')->getValue();
+          $renderable_image = $paragraph->get('field_highlight_image')->view('default');
           if (!empty($image)) {
             $file = File::load($image[0]['target_id']);
             $url = Url::fromUri($image_link[0]['uri']);
             $highlight_images[] = [
               'image_link' => $url->toString(),
-              'img' => file_create_url($file->getFileUri()),
+              'img' => $renderable_image,
             ];
           }
         }

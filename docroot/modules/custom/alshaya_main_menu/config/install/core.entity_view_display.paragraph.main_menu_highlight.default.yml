@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.paragraph.main_menu_highlight.field_highlight_image
     - field.field.paragraph.main_menu_highlight.field_highlight_link
+    - image.style.186x184
     - paragraphs.paragraphs_type.main_menu_highlight
   module:
     - image
@@ -15,9 +16,9 @@ mode: default
 content:
   field_highlight_image:
     weight: 0
-    label: above
+    label: hidden
     settings:
-      image_style: ''
+      image_style: 186x184
       image_link: ''
     third_party_settings: {  }
     type: image
