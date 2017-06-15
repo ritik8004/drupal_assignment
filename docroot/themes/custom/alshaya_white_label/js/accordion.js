@@ -126,6 +126,28 @@
       }
 
       if (context === document) {
+        // Toggle for Product description.
+        $('.read-more-description-link').on('click', function () {
+          $('.c-pdp .description-wrapper').toggle('slow');
+          if ($(window).width() < 768) {
+            $('.c-pdp .short-description-wrapper').toggle('slow');
+            if ($('.c-pdp .description-wrapper .show-less-link').length < 1) {
+              $('.c-pdp .description-wrapper .field__content').append('<div class="show-less-link">' + Drupal.t('show less') + '</div>');
+            }
+          }
+        });
+
+        $('.close').on('click', function () {
+          $('.c-pdp .description-wrapper').toggle('slow');
+        });
+
+        $('.c-pdp .description-wrapper .field__content').on('click', '.show-less-link', function () {
+          if ($(window).width() < 768) {
+            $('.c-pdp .short-description-wrapper').toggle('slow');
+            $('.c-pdp .description-wrapper').toggle('slow');
+          }
+        });
+
         moveContextualLink('.c-accordion');
 
         if ($('.c-facet__blocks__wrapper').length) {
@@ -181,17 +203,6 @@
             heightStyle: 'content',
             collapsible: true,
             active: false
-          });
-        });
-
-        // Toggle for Product description.
-        $('.c-pdp .short-description-wrapper').once('bind-event').each(function () {
-          $('.read-more-description-link', $(this)).on('click', function () {
-            $('.c-pdp .description-wrapper').toggle('slow');
-          });
-
-          $('.close').on('click', function () {
-            $('.c-pdp .description-wrapper').toggle('slow');
           });
         });
 
