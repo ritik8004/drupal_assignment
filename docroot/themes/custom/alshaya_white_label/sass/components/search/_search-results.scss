@@ -264,6 +264,10 @@
       }
     }
 
+    .filter--mobile .block-facets-summary-blockfilter-bar ul {
+      display: none;
+    }
+
     .block-facets-summary-blockfilter-bar {
       overflow: hidden;
 
