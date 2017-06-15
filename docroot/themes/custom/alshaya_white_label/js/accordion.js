@@ -340,7 +340,7 @@
     }
   };
 
-  Drupal.alshayaAccordion = function(element) {
+  Drupal.alshayaAccordion = function (element) {
     $(element).siblings().slideToggle('slow');
     $(element).toggleClass('ui-state-active');
   };
