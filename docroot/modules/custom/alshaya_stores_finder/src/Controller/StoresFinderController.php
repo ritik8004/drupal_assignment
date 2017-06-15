@@ -74,7 +74,7 @@ class StoresFinderController extends ControllerBase {
   public function updateGlossaryView(EntityInterface $node) {
     $response = new AjaxResponse();
     $list_view = views_embed_view('stores_finder', 'page_1');
-    $response->addCommand(new HtmlCommand('.view-display-id-page_2', $list_view));
+    $response->addCommand(new ReplaceCommand('.view-display-id-page_2', $list_view));
     // Firing click event.
     $response->addCommand(new InvokeCommand('#row-' . $node->id(), 'trigger', ['click']));
     // Adding class for selection.
