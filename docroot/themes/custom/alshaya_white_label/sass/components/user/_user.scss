@@ -440,7 +440,7 @@
       bottom: 0.75em;
       width: auto;
 
-      .ar & {
+      html[lang='ar'] & {
         #{$left}: 12em;
       }
     }
@@ -449,7 +449,7 @@
       #{$left}: 9em;
       bottom: 0.7em;
 
-      .ar & {
+      html[lang='ar'] & {
         #{$left}: 12em;
       }
     }
