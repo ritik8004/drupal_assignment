@@ -530,8 +530,14 @@
   margin-bottom: 0.875rem;
   letter-spacing: 0.0125rem;
 
+  @include breakpoint($tablet) {
+    margin-top: -1em;
+  }
+
   @include breakpoint($desktop) {
     padding: 0.8125rem 1.5625rem;
+    margin-top: 0;
+    margin-bottom: 1.3rem;
   }
 
   p {
