@@ -9,12 +9,11 @@
   Drupal.behaviors.sizeguide = {
     attach: function (context, settings) {
       // JS for converting select list for size to unformatted list on PDP pages.
-      function select2OptionConvert () {
+      function select2OptionConvert() {
         if ($(window).width() > 1024) {
           if ($('.acq-content-product .form-item-configurables-size .select2Option').length === 0) {
             $('.acq-content-product .form-item-configurables-size select').select2Option();
           }
-          
           if ($('.acq-content-product-modal .form-item-configurables-size .select2Option').length === 0) {
             $('.acq-content-product-modal .form-item-configurables-size select').select2Option();
           }
