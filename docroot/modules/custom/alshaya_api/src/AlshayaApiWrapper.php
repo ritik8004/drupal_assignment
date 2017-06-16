@@ -139,7 +139,7 @@ class AlshayaApiWrapper {
 
     $cid = 'alshaya_api_token';
 
-    if ($cache = \Drupal::cache('token')->get($cid)) {
+    if ($cache = \Drupal::cache('data')->get($cid)) {
       $this->token = $cache->data;
     }
     else {
@@ -157,7 +157,7 @@ class AlshayaApiWrapper {
       $expire = \Drupal::time()->getRequestTime() + $this->config->get('token_cache_time');
 
       // Set the stock in cache.
-      \Drupal::cache('token')->set($cid, $this->token, $expire);
+      \Drupal::cache('data')->set($cid, $this->token, $expire);
     }
 
     return $this->token;
