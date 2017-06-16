@@ -23,25 +23,12 @@ function alshaya_menus_theme($existing, $type, $theme, $path) {
  * Implements template_preprocess_hook().
  */
 function template_preprocess_alshaya_shop_by(&$variables) {
-  $col = 0;
-  $row = 0;
-  $column = 6;
-  $items = [];
+  // Number of columns to show/divide.
+  $column_count = 2;
 
-  // Iterate over each rendered views result row.
-  foreach ($variables['term_tree'] as $item) {
-    $items[$row]['content'][$col]['content'] = $item;
-    if ($col == 0 && $col != ($column - 1)) {
-      $col++;
-    }
-    elseif ($col >= ($column - 1)) {
-      $col = 0;
-      $row++;
-    }
-    else {
-      $col++;
-    }
-  }
+  // Splite/Chunk the array.
+  $items = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / $column_count));
+
   // Add items to the variables array.
   $variables['items'] = $items;
 }
