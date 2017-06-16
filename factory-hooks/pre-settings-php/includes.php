@@ -28,6 +28,7 @@ $env = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_ENV['AH_SITE_ENVIRONMENT'] : 'loc
 
 // Set the knet resource path which should be outside GIT root.
 $config['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource/' . $env . '/mckw/';
+$config['alshaya_acm_knet.settings']['use_secure_response_url'] = 0;
 
 // 01 is prefixed most of the time so we don't get proper env here.
 // Clean the env, we do it only for dev and test.
