@@ -432,7 +432,7 @@ body.alias--cart {
     @include breakpoint($tablet) {
       @include container(100%);
 
-      margin-top: 2rem;
+      margin-top: 1.2rem;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
@@ -928,6 +928,7 @@ body.alias--cart {
       display: table-cell;
       text-align: center;
       vertical-align: middle;
+      padding: 0.6rem 1.125rem;
     }
   }
 }
