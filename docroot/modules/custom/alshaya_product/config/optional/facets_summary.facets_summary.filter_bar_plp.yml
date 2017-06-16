@@ -31,14 +31,14 @@ facets:
     checked: true
     label: 'SKUs » SKU Reference » Brand'
     separator: ', '
+    show_count: true
     weight: 0
-    show_count: false
   skus_sku_reference_final_price:
     checked: true
     label: 'SKUs » SKU Reference » Final Price'
     separator: ', '
+    show_count: true
     weight: 0
-    show_count: false
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 processor_configs:
   hide_when_not_rendered:
