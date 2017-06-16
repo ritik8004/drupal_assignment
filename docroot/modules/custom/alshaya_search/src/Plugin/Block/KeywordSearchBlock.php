@@ -74,7 +74,7 @@ class KeywordSearchBlock extends BlockBase implements ContainerFactoryPluginInte
     unset($form['sort_bef_combine'], $form['#submit'][0]);
 
     $build['keyword_search_block'] = $form;
-
+    $build['keyword_search_block']['#cache']['contexts'][] = 'url.query_args:keywords';
     return $build;
   }
 
