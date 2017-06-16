@@ -10,7 +10,10 @@
     attach: function (context, settings) {
 
       /**
-       * function to get correct filter bar selector.
+       * Get the correct selector for filter bar on PLP and search page.
+       *
+       * @return {*} mobileFilterBarSelector
+       *   Correct selector based on which page you are on.
        */
       function getFilterBarSelector() {
         var mobileFilterBarSelector = null;
