@@ -298,7 +298,7 @@
 
 .branding__menu {
   position: relative;
-  z-index: 4;
+  z-index: 6;
   background-color: $white-five;
 
   @include breakpoint($upto-desktop) {

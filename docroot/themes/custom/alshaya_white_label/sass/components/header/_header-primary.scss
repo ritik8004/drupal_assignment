@@ -9,12 +9,12 @@
   .header--wrapper {
     position: relative;
     background: $white-five;
-    z-index: 3;
+    z-index: 5;
   }
 
   .first--child_open {
     > .menu-two__link-wrapper {
-      background-color: $marine-blue;
+      background-color: $marine-blue-two;
 
       &::after {
         background: url('../imgs/icons/icon-chevron-next--hover.svg') no-repeat !important;
@@ -556,6 +556,8 @@ header {
   .block-alshaya-main-menu {
     position: relative;
     z-index: 4;
+    max-width: 80.25rem;
+    margin: 0 auto;
 
     @include breakpoint($upto-desktop) {
       .main--menu {
@@ -580,15 +582,25 @@ header {
       vertical-align: top;
       list-style: none;
       text-align: center;
-      border-bottom: 1px solid transparent;
-      padding: 0.625rem;
-      padding-bottom: 0.6rem;
       text-transform: lowercase;
       height: 2.625rem;
 
+      a.menu--one__link {
+        padding: 0.625rem;
+        padding-bottom: 0.6rem;
+        display: block;
+        height: 2.625rem;
+        border-bottom: 1px solid transparent;
+        border-top: 2px solid transparent;
+        position: relative;
+        top: -1px;
+      }
+
       &.active {
-        background: $white-five !important;
-        border-top: 2px solid $peacock-blue !important;
+        a.menu--one__link {
+          background: $white-five;
+          border-top: 2px solid $marine-blue-two;
+        }
       }
 
       a {
@@ -596,12 +608,11 @@ header {
       }
 
       &:hover {
-        ul.menu--two__list {
+        & > ul.menu--two__list {
           visibility: visible;
           opacity: 1;
           z-index: 1;
           transform: translateY(0%);
-          transition-delay: 0.7s;
         }
       }
 
@@ -623,34 +634,31 @@ header {
         visibility: hidden;
         opacity: 0;
         position: absolute;
-        top: 2.625rem;
+        top: 100%;
         #{$left}: 0;
         width: 100%;
-        transform: translateY(-2.5rem);
+        transform: translateY(-2.625rem);
         z-index: -1;
-        transition: all 0.4s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.1s;
+        transition: all 0.5s ease-in-out 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
+        transition-delay: 0.4s;
       }
     }
 
     .active--menu--links {
-      li.menu--one__list-item {
-        &:hover {
-          border-top: 2px solid $marine-blue;
-
+      &:hover {
+        li.menu--one__list-item {
           a.menu--one__link {
-            font-family: $alshaya-bold;
-            font-weight: normal;
-            color: $marine-blue;
+            border-bottom: 1px solid $white;
           }
         }
       }
 
-      &:hover {
-        li.menu--one__list-item {
-          border-bottom: 1px solid $white;
-
-          &:hover {
+      li.menu--one__list-item {
+        &:hover {
+          a.menu--one__link {
             border-bottom: 1px solid $white-five;
+            color: $marine-blue;
+            border-top: 2px solid $marine-blue;
           }
         }
       }
@@ -792,7 +800,7 @@ header {
     bottom: 0;
     #{$left}: 0;
     background-color: rgba(0, 0, 0, 0.48);
-    z-index: 3;
+    z-index: 5;
   }
 
   .menu--four__list {
@@ -875,7 +883,7 @@ header {
     &::before {
       content: '';
       position: fixed;
-      z-index: 4;
+      z-index: 5;
       width: 100%;
       height: 100;
       top: 0;
