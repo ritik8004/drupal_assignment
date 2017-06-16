@@ -51,10 +51,18 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
-  $current_route = \Drupal::routeMatch()->getRouteName();
+  $current_route = \Drupal::routeMatch();
   // If store finder glossary view.
-  if ($current_route == 'view.stores_finder.page_2') {
+  if ($current_route->getRouteName() == 'view.stores_finder.page_2') {
     $variables['attributes']['class'][] = 'store-finder-view';
+  }
+
+  // Add class for page PLP.
+  if ($current_route->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $current_route->getParameter('taxonomy_term');
+    if ($term->bundle() == 'acq_product_category') {
+      $variables['attributes']['class'][] = 'plp-page-only';
+    }
   }
 }
 
