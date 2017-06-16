@@ -278,6 +278,10 @@ function alshaya_stores_finder_preprocess_views_view(&$variables) {
       ],
     ];
   }
+
+  if ($view->id() === 'stores_finder') {
+    $variables['#attached']['library'][] = 'geolocation/geolocation.commonmap';
+  }
 }
 
 /**
