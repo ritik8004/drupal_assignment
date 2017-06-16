@@ -26,7 +26,11 @@
 
     #wrap {
       width: 100%;
-      z-index: 2 !important;
+      z-index: 4 !important;
+
+      @include breakpoint($only-tablet) {
+        z-index: 3 !important;
+      }
     }
 
     img {
@@ -204,8 +208,13 @@
     }
 
     @include breakpoint($desktop) {
-      height: 32.19rem;
+      height: 32.5rem;
       overflow: hidden;
+
+      img {
+        height: 100%;
+        width: auto;
+      }
     }
   }
 
@@ -243,16 +252,16 @@
 }
 
 #cloud-zoom-big {
-  top: 13.13rem !important;
+  top: 13.8rem !important;
   z-index: 99;
 
   @include if-rtl {
-    right: 103% !important;
+    right: 103.2% !important;
     left: auto !important;
   }
 
   @include if-ltr {
-    left: 103% !important;
+    left: 103.2% !important;
     right: auto !important;
   }
 
@@ -284,8 +293,10 @@
     color: $white-five;
     line-height: 1;
     background: $black-two;
-    margin-top: -0.3125rem;
+    margin-top: 0;
     opacity: 0.62;
+    position: absolute;
+    bottom: 3.125rem;
 
     p {
       margin: 3px;
@@ -325,6 +336,7 @@
       position: absolute;
       width: 100%;
       bottom: 1.25rem;
+      z-index: 0;
 
       &.lSpg > li {
         a {

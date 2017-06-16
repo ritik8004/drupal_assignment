@@ -147,7 +147,8 @@
   }
 }
 
-#block-alshaya-white-label-content {
+// Making it more specific to address page.
+.c-address-book #block-alshaya-white-label-content {
   .ajax-progress-throbber {
     margin-bottom: 0.625rem;
 

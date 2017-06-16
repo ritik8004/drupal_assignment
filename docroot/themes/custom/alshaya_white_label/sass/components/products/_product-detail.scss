@@ -2,8 +2,14 @@
  * Theming of product detail page.
  */
 .c-pdp.l-one--w {
+  @include breakpoint($only-mobile) {
+    padding: 0;
+  }
+
   @include breakpoint($desktop) {
     max-width: 66.35rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -44,38 +50,44 @@
   }
 
   &__sidebar {
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
+    }
+
     @include breakpoint($mobile) {
       position: relative;
     }
 
     @include breakpoint($tablet) {
       position: static;
-    }
-
-    @include breakpoint($tablet) {
-      width: 40%;
+      width: 35%;
       float: $right;
-      padding: 0 1rem;
+      margin: 0 1rem;
     }
 
     @include breakpoint($desktop) {
-      width: 30%;
+      width: 28%;
       float: $right;
-      padding: 0 1.5rem;
+      margin: 0;
     }
   }
 
   &__title_wrapper {
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
+    }
+
     @include breakpoint($tablet) {
-      width: 40%;
+      width: 35%;
       float: $right;
-      padding: 0 1rem;
+      margin: 0 1rem;
+      border-bottom: 1px solid $white;
     }
 
     @include breakpoint($desktop) {
-      width: 30%;
+      width: 28%;
       float: $right;
-      padding: 0 1.5rem;
+      margin: 0;
     }
   }
 }
@@ -99,7 +111,7 @@
     .content--item-code {
       font-size: 0.6875rem;
       color: $brownish-grey;
-      padding-bottom: 1rem;
+      padding-bottom: 0.75rem;
     }
 
     .has--special--price,
@@ -148,12 +160,13 @@
     }
 
     @include breakpoint($only-mobile) {
+      @include select-wrapper(12.3125rem);
+
       padding: 0;
       margin-top: 1.5em;
       position: relative;
       z-index: 3;
-
-      @include select-wrapper(12.3125rem);
+      width: 100%;
 
       &::after {
         top: 0.5rem;
@@ -175,19 +188,25 @@
         @include select-style(12.3125rem);
 
         background-color: $whisper-dark;
+        width: 100%;
       }
     }
 
     @include breakpoint($only-tablet) {
-      padding: 0;
-      margin-top: 1.5em;
-
       @include select-wrapper(8.75rem);
       @include select-bg(6.5625rem);
+
+      padding: 0;
+      margin-top: 1.5em;
+      width: 100%;
 
       &::after,
       &::before {
         top: 0.5rem;
+      }
+
+      &::before {
+        width: 100%;
       }
 
       label {
@@ -203,6 +222,8 @@
 
       select.form-select {
         @include select-style(8.75rem);
+
+        width: 100%;
       }
     }
   }
@@ -216,7 +237,14 @@
 
     @include breakpoint($only-mobile) {
       float: $right;
-      top: -5.5rem;
+      top: -3px;
+      background-color: $whisper-dark;
+    }
+
+    @include breakpoint($only-tablet) {
+      float: $right;
+      top: -3px;
+      background-color: $whisper-dark;
     }
   }
 
@@ -240,43 +268,14 @@
     select {
       @include select-style(4.375rem);
 
-      background-color: $whisper-dark;
+      background-color: transparent;
     }
   }
 }
 
 .description-wrapper {
-  position: absolute;
-  top: 0;
-  #{$right}: 0;
-  height: 31.5rem;
-  border: 1px solid $marine-blue;
-  padding: 1.25rem;
-  background: $white-five;
-  overflow: hidden;
-  width: 100%;
-  z-index: 4;
-
-  @include breakpoint($tablet) {
-    width: 38%;
-  }
-
-  @include breakpoint($desktop) {
-    width: 29%;
-  }
-
-  .close {
-    @include icon(close);
-
-    position: absolute;
-    top: 0;
-    #{$right}: 0;
-    height: 2.188rem;
-    width: 2.188rem;
-    font-size: 30px;
-    text-align: center;
-    color: $white-two;
-    background-color: $marine-blue;
+  @include breakpoint($only-mobile) {
+    padding: 1rem 0;
   }
 
   .field {
@@ -291,8 +290,6 @@
     &__content {
       font-size: 0.75rem;
       line-height: 1.5;
-      overflow: scroll;
-      height: 430px;
     }
   }
 
@@ -318,6 +315,15 @@
     margin-bottom: 0;
   }
 
+  .show-less-link {
+    font-family: $arial;
+    font-size: 0.75rem;
+    font-weight: bold;
+    line-height: 1.83;
+    color: $windows-blue;
+    cursor: pointer;
+  }
+
   .desc-wrapper,
   .description-section,
   .address {
@@ -340,6 +346,50 @@
   .text {
     clear: both;
     padding-top: 0.9375rem;
+  }
+}
+
+@include breakpoint($tablet) {
+  .description-wrapper {
+    position: absolute;
+    top: 0;
+    #{$right}: 0;
+    height: 32.5rem;
+    border: 1px solid $marine-blue;
+    padding: 1.25rem;
+    background: $white-five;
+    overflow: hidden;
+    width: 35%;
+    z-index: 4;
+    margin: 0 1rem;
+
+    .close {
+      @include icon(close);
+
+      position: absolute;
+      top: 0;
+      #{$right}: 0;
+      height: 2.188rem;
+      width: 2.188rem;
+      font-size: 30px;
+      text-align: center;
+      color: $white-two;
+      background-color: $marine-blue;
+    }
+
+    .field {
+      &__content {
+        overflow: scroll;
+        height: 430px;
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .description-wrapper {
+    width: 28%;
+    margin: 0;
   }
 }
 
@@ -774,6 +824,26 @@
 
 .field--name {
   &-field-skus {
+    border-bottom: 1px solid $whisper-dark;
+
+    @include breakpoint($only-mobile) {
+      height: 8rem;
+    }
+
+    .js-form-wrapper {
+      @include breakpoint($mobile) {
+        @include u-visibility(inline-block);
+
+        width: 65%;
+      }
+
+      @include breakpoint($desktop) {
+        @include u-visibility(block);
+
+        width: 100%;
+      }
+    }
+
     .field {
       @include clearfix;
 
@@ -819,9 +889,7 @@
         text-transform: lowercase;
         padding: 0.66rem 1.3701rem;
         margin-bottom: 1.5rem;
-        margin-top: 2.1875rem;
         display: inline-block;
-        float: $right;
 
         @include breakpoint($only-mobile) {
           float: none;
@@ -832,6 +900,25 @@
           margin: 0;
           #{$left}: 0;
         }
+
+        @include breakpoint($mobile) {
+          float: $left;
+        }
+
+        @include breakpoint($desktop) {
+          float: $right;
+          margin-top: 2.1875rem;
+        }
+      }
+    }
+  }
+}
+
+.basic-details-wrapper {
+  .field--name {
+    &-field-skus {
+      @include breakpoint($only-mobile) {
+        height: 6.5rem;
       }
     }
   }
@@ -839,7 +926,7 @@
 
 .acq-sku-configurable-64__sku-base-form.sku-base-form {
   @include breakpoint($only-mobile) {
-    height: 5rem;
+    height: 8rem;
     overflow: hidden;
   }
 }
@@ -851,6 +938,10 @@
     margin: 0;
     font-size: 0.6875rem;
     font-weight: 100;
+  }
+
+  .selected-text {
+    font-weight: bold;
   }
 
   .select-buttons {
