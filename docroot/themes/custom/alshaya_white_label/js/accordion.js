@@ -10,15 +10,29 @@
     attach: function (context, settings) {
 
       /**
+       * function to get correct filter bar selector.
+       */
+      function getFilterBarSelector() {
+        var mobileFilterBarSelector = null;
+        if ($('body').hasClass('path--search')) {
+          mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar';
+        }
+        else {
+          mobileFilterBarSelector = '.c-content__region .region__sidebar-first .block-facets-summary-blockfilter-bar-plp';
+        }
+        return mobileFilterBarSelector;
+      }
+
+      /**
        * Place the facet count, in the mobile filter view.
        */
       function placeFilterCount() {
         // Mobile filter block selector.
-        var mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar';
+        var mobileFilterBarSelector = getFilterBarSelector();
 
         var countFilters = $(mobileFilterBarSelector + ' ul li').length;
         if (countFilters === 0 && $.trim($(mobileFilterBarSelector).html()).length === 0) {
-          $(mobileFilterBarSelector).append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+          $(mobileFilterBarSelector).once().append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
             + ' (' + countFilters + ')</h3>');
           $(mobileFilterBarSelector).addClass('empty');
         }
@@ -36,12 +50,20 @@
       }
 
       function mobileFilterMenu() {
+        // Mobile filter block selector.
+        var mobileFilterBarSelector = getFilterBarSelector();
+        // The original filter block.
+        var filterBarSelector = null;
+        if ($('body').hasClass('path--search')) {
+          filterBarSelector = '.region__content > .block-facets-summary-blockfilter-bar';
+        }
+        else {
+          filterBarSelector = '.region__content > .block-facets-summary-blockfilter-bar-plp';
+        }
+
         if ($(window).width() < 768) {
           // Facet Block selector.
           var facetBlocks = $('.c-facet__blocks__wrapper .c-facet__blocks');
-
-          // Mobile filter block selector.
-          var mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar';
 
           // Check if we have filter label.
           var filterLabel = facetBlocks.find('.filter-menu-label');
@@ -58,7 +80,7 @@
           }
           else {
             // Clone the filter block from region content.
-            var blockFilterBar = $('.block-facets-summary-blockfilter-bar').clone();
+            var blockFilterBar = $(filterBarSelector).clone();
 
             // Place the cloned bar before other facets in the region content's sidebar first.
             $(blockFilterBar).insertBefore('.region__content .c-facet__blocks .region__sidebar-first div:first-child');
@@ -67,11 +89,11 @@
           }
 
           // Hide the filter block in mobile.
-          $('.region__content > .block-facets-summary-blockfilter-bar').hide();
+          $(filterBarSelector).hide();
         }
         else {
           // Show the filter block in the content region for tablet and desktop.
-          $('.region__content > .block-facets-summary-blockfilter-bar').show();
+          $(filterBarSelector).show();
         }
       }
 
@@ -89,23 +111,29 @@
        * Place the search count from view header in different locations based on resolution.
        */
       function placeSearchCount() {
-        var viewHeader = $('.c-search .view-search .view-header');
+        var viewHeader = null;
+        var searchCount = null;
+        var selector = null;
+        var filterSelector = null;
+        if ($('body').hasClass('path--search')) {
+          viewHeader = $('.c-search .view-search .view-header');
+          selector = '.c-content__region .block-views-exposed-filter-blocksearch-page';
+          filterSelector = '.c-content__region .region__content .block-facets-summary-blockfilter-bar';
+        }
+        else {
+          viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
+          selector = '.c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-1';
+          filterSelector = '.c-content__region .region__content .block-facets-summary-blockfilter-bar-plp';
+        }
         viewHeader.addClass('search-count');
-        var searchCount = $('.c-content__region .search-count');
+        searchCount = $('.c-content__region .search-count');
         // For mobile.
         if ($(window).width() < 768) {
           $('.block-page-title-block').addClass('mobile');
           searchCount.removeClass('tablet');
           if (viewHeader.length) {
-            if (!$('.c-content__region .search-count.only-mobile').length) {
-              viewHeader.insertBefore('.c-content__region .block-views-exposed-filter-blocksearch-page');
-
-            }
-          }
-          else {
-            if (!$('.c-content__region .search-count.only-mobile').length) {
-              searchCount.insertBefore('.c-content__region .block-views-exposed-filter-blocksearch-page');
-            }
+            searchCount.remove();
+            viewHeader.insertBefore(selector);
           }
           searchCount.addClass('only-mobile');
         }
@@ -114,12 +142,8 @@
           $('.block-page-title-block').removeClass('mobile');
           searchCount.removeClass('only-mobile');
           if (viewHeader.length) {
-            viewHeader.insertBefore('.c-content__region .region__content > #block-filterbar');
-          }
-          else {
-            if (!$('.c-content__region .search-count.tablet').length) {
-              searchCount.insertBefore('.c-content__region .region__content > #block-filterbar');
-            }
+            searchCount.remove();
+            viewHeader.insertBefore(filterSelector);
           }
           searchCount.addClass('tablet');
         }
@@ -176,14 +200,18 @@
           facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile').addClass('is-filter');
           if ($('body').hasClass('path--search')) {
             mainBlock.before(facetBlockWrapper);
+            var searchFilter = $('.c-plp #views-exposed-form-search-page');
+            searchFilter.wrapAll('<div class="view-filters is-filter">');
+            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
+            $('.region__content .block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper').insertBefore('.view-filters.is-filter');
           }
           else {
-            mainBlock.after(facetBlockWrapper);
+            mainBlock.before(facetBlockWrapper);
+            var plpFilter = $('.c-plp #views-exposed-form-alshaya-product-list-block-1');
+            plpFilter.wrapAll('<div class="view-filters is-filter">');
+            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
+            $('.region__content .c-facet__blocks__wrapper').insertBefore('.view-filters.is-filter');
           }
-          var searchFilter = $('.c-plp #views-exposed-form-search-page');
-          searchFilter.wrapAll('<div class="view-filters is-filter">');
-          $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
-          $('.block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper').insertBefore('.view-filters.is-filter');
 
           facetLabel.click(function () {
             $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu').toggleClass('show-overlay');
@@ -238,7 +266,7 @@
       });
 
       // Click event for fake clear all link on mobile filter.
-      var mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar';
+      var mobileFilterBarSelector = getFilterBarSelector();
       $('.clear-all-fake', context).stop().on('click', function () {
         $(mobileFilterBarSelector + ' .clear-all').trigger('click');
         return false;
