@@ -42,6 +42,9 @@
           }
         }
       });
+
+      // Mobile grey block hiding over the image after 3secs.
+      $('.mobilegallery .subtext').show().delay(3000).fadeOut();
     }
   };
 

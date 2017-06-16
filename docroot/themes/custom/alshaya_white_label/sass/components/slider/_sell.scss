@@ -236,6 +236,7 @@
         position: relative;
         padding-bottom: 3rem;
         margin-top: 2.1875rem;
+        width: 100%;
 
         .ajax-progress {
           display: none;
@@ -246,6 +247,7 @@
         @include select-style(12.375rem);
 
         background-color: $whisper-dark;
+        width: 100%;
       }
     }
 

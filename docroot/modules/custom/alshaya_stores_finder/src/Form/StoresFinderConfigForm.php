@@ -79,6 +79,13 @@ class StoresFinderConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('pdp_click_collect_select_option_text.value'),
     ];
 
+    $form['load_more_item_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Load more item count'),
+      '#description' => $this->t('Number of stores after which load more button should be displayed. Click on load more will pull down these number of stores.'),
+      '#default_value' => $config->get('load_more_item_limit'),
+    ];
+
     return $form;
   }
 
@@ -93,6 +100,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
     $config->set('pdp_click_collect_price', $form_state->getValue('pdp_click_collect_price'));
     $config->set('pdp_click_collect_help_text', $form_state->getValue('pdp_click_collect_help_text'));
     $config->set('pdp_click_collect_select_option_text', $form_state->getValue('pdp_click_collect_select_option_text'));
+    $config->set('load_more_item_limit', $form_state->getValue('load_more_item_limit'));
     $config->save();
 
     // Invalidate the cache tag.

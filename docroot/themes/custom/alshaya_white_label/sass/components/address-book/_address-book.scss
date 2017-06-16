@@ -268,7 +268,7 @@
     }
 
     @include breakpoint($desktop) {
-      padding-bottom: 0.75rem;
+      padding-bottom: 0.9rem;
       margin-bottom: 3rem;
     }
   }
@@ -335,7 +335,7 @@
 .address-book-address,
 .webform-submission-alshaya-contact-form {
   .mobile-number-field {
-    margin-top: -3.3rem;
+    margin-top: -1.7rem !important;
 
     label {
       top: -1.25em;
@@ -359,7 +359,7 @@
 .mobile-number-field {
   .form-type-textfield {
     position: absolute !important;
-    top: 3rem;
+    top: 1.1rem;
     left: 3rem;
 
     input {
@@ -425,7 +425,7 @@
 .profile-address-book-edit-form,
 #address-book-form-open {
   .country-code-prefix {
-    margin-top: 0.6rem;
+    margin-top: 0.55rem;
   }
 
   .form-actions {
@@ -451,4 +451,10 @@
 .form-item-field-address-0-address-mobile-number-country-code,
 .country-select {
   display: none !important;
+}
+
+.path--user {
+  .block-alshaya-my-account-links {
+    margin-top: 0.55rem;
+  }
 }

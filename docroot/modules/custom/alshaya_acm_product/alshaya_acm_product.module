@@ -358,7 +358,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['quantity']['#suffix'] = '</span>';
 
   if (isset($form['ajax']) && isset($form['ajax']['configurables'])) {
-
     // Attach size guide link to size attribute. This is statically attached to
     // size, we don't want it for any other attributes.
     if (isset($form['ajax']['configurables']['size'])) {
@@ -387,7 +386,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
             // This is very limited, it supports only 1 configurable attribute.
             if ($sku instanceof SKU) {
               $form['#cache']['tags'][] = 'acq_sku:' . $sku->id();
-              if (!alshaya_acm_is_product_in_stock($sku, TRUE)) {
+              if ($quantity = alshaya_acm_is_product_in_stock($sku, TRUE)) {
+                $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+              }
+              else {
                 $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
               }
             }

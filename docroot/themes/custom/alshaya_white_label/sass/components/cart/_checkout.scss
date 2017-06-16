@@ -432,7 +432,7 @@ body.alias--cart {
     @include breakpoint($tablet) {
       @include container(100%);
 
-      margin-top: 2rem;
+      margin-top: 1.2rem;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
@@ -478,11 +478,17 @@ body.alias--cart {
     font-weight: normal;
     color: $cobalt-blue;
     border-bottom: 1px solid $white;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.625rem;
 
     @include breakpoint($tablet) {
+      font-size: 1.375rem;
+      padding-bottom: 0.875rem;
+    }
+
+    @include breakpoint($desktop) {
       font-size: 1.5rem;
+      padding-bottom: 0.75rem;
     }
 
     em {
@@ -498,6 +504,7 @@ body.alias--cart {
     table {
       width: 100%;
       font-family: $arial-nodir;
+      margin-top: -0.5rem;
     }
 
     thead {
@@ -527,7 +534,7 @@ body.alias--cart {
       }
 
       th {
-        padding: 1rem;
+        padding: 1.1rem;
         padding-#{$right}: 0.5rem;
         text-align: $left;
 
@@ -661,6 +668,7 @@ body.alias--cart {
           width: 16.3%;
           padding-#{$left}: 0.63rem;
           padding-#{$right}: 0;
+          padding-top: 0.4rem;
         }
 
         @include breakpoint($desktop) {
@@ -738,6 +746,10 @@ body.alias--cart {
 
   #table-cart-totals {
     font-size: 14px;
+
+    #edit-totals tr:nth-child(2) td {
+      color: $scarlet;
+    }
 
     @include breakpoint($tablet) {
       float: $right;
@@ -911,10 +923,14 @@ body.alias--cart {
     @include breakpoint($tablet) {
       display: block;
       margin-#{$right}: 7.5%;
+      top: -0.3rem;
+      #{$right}: 0.3rem;
     }
 
     @include breakpoint($desktop) {
       margin-#{$right}: 21.5%;
+      top: -0.625rem;
+      #{$right}: 0;
     }
 
     .checkout-top-button {
@@ -928,6 +944,7 @@ body.alias--cart {
       display: table-cell;
       text-align: center;
       vertical-align: middle;
+      padding: 0.6rem 1.125rem;
     }
   }
 }
