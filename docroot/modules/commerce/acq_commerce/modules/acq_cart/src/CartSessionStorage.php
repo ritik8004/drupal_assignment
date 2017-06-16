@@ -4,7 +4,6 @@ namespace Drupal\acq_cart;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -249,12 +248,13 @@ class CartSessionStorage implements CartStorageInterface {
     }
 
     foreach ($items as $item) {
+      $sku_entity = SKU::loadFromSku($item['sku']);
+
       // Clear stock cache.
-      $stock_cid = 'stock:' . strtolower(Html::cleanCssIdentifier($item['sku']));
-      \Drupal::cache('data')->delete($stock_cid);
+      $stock_cid = acq_sku_get_stock_cache_id($sku_entity);
+      \Drupal::cache('data')->invalidate($stock_cid);
 
       // Clear product and forms related to sku.
-      $sku_entity = SKU::loadFromSku($item['sku']);
       Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
     }
   }

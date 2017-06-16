@@ -512,15 +512,15 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
 /**
  * Get the stock info of given sku.
  *
- * @param string|object $sku
- *   The Sku string or Sku object.
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU Entity object.
  * @param bool $reset
  *   Flag to reset cache and get fresh stock.
  *
  * @return bool|array
  *   Return the stock response or boolean value.
  */
-function alshaya_acm_get_product_stock($sku, $reset = FALSE) {
+function alshaya_acm_get_product_stock(SKU $sku_entity, $reset = FALSE) {
   $stock = &drupal_static(__FUNCTION__, []);
 
   // TODO: Remove this after go live probably.
@@ -533,24 +533,20 @@ function alshaya_acm_get_product_stock($sku, $reset = FALSE) {
     ];
   }
 
-  // Get the sku.
-  $sku = is_object($sku) ? $sku->getSku() : $sku;
-
-  if ($reset || !isset($stock[$sku])) {
-    $stock[$sku] = NULL;
+  if ($reset || !isset($stock[$sku_entity->getSku()])) {
+    $stock[$sku_entity->getSku()] = NULL;
 
     // Stock check.
-    $sku_stock = \Drupal::service('acq_commerce.api')
-      ->skuStockCheck($sku, $reset);
+    $sku_stock = acq_sku_get_sku_stock($sku_entity, $reset);
 
     if (empty($sku_stock) || (!empty($sku_stock) && !$sku_stock['is_in_stock'])) {
-      $stock[$sku] = NULL;
+      $stock[$sku_entity->getSku()] = NULL;
     }
     elseif (isset($sku_stock['is_in_stock'])) {
-      $stock[$sku] = $sku_stock;
+      $stock[$sku_entity->getSku()] = $sku_stock;
     }
   }
-  return $stock[$sku];
+  return $stock[$sku_entity->getSku()];
 }
 
 /**
