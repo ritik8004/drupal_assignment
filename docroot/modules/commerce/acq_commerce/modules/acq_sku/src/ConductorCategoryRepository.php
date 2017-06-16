@@ -42,29 +42,19 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
   private $vocabulary;
 
   /**
-   * Drupal Entity Query Factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  private $queryFactory;
-
-  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   EntityTypeManager object.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
-   *   QueryFactory object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
    * @param string $vocabulary
    *   Taxonomy Vocabulary for categories.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, $vocabulary = NULL) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactory $logger_factory, $vocabulary = NULL) {
 
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
-    $this->queryFactory = $query_factory;
     $this->logger = $logger_factory->get('acq_sku');
 
     if ($vocabulary) {
@@ -95,7 +85,7 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
       return ($this->terms[$commerce_id]);
     }
 
-    $query = $this->queryFactory->get('taxonomy_term');
+    $query = $this->termStorage->getQuery();
     $group = $query->andConditionGroup()
       ->condition('field_commerce_id', $commerce_id)
       ->condition('vid', $this->vocabulary->id());
@@ -105,10 +95,7 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
 
     if (count($tids) > 1) {
 
-      $this->logger->error(
-        'Multiple terms found for category id @cid',
-        ['@cid' => $category['category_id']]
-      );
+      $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $commerce_id]);
 
       return (NULL);
 

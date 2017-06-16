@@ -22,33 +22,70 @@
   [class^="c-social-links--"] {
     @include u-image-replacement;
 
+    display: block;
+
     &::before {
       font-size: 1.938rem;
       color: $marine-blue-two;
+    }
+
+    &:hover::before {
+      color: transparent;
+      height: 31px;
+      width: 31px;
     }
   }
 
   .c-social-links--facebook {
     @include icon(facebook);
+
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-facebookselect.png") no-repeat center;
+      background-size: 1.5rem;
+    }
   }
 
   .c-social-links--instagram {
     @include icon(instagram);
+
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-instagramselect.png") no-repeat center;
+      background-size: 1.5rem;
+    }
   }
 
   .c-social-links--youtube {
     @include icon(youtube);
+
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-youtubeselect.png") no-repeat center;
+      background-size: 1.5rem;
+    }
   }
 
   .c-social-links--google-plus {
     @include icon(googleplus);
+
+    &:hover::before {
+      color: $marine-blue;
+    }
   }
 
   .c-social-links--twitter {
     @include icon(twitter);
+
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-twitterselect.png") no-repeat center;
+      background-size: 1.5rem;
+    }
   }
 
   .c-social-links--pinterest {
     @include icon(pinterest);
+
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-pinterestselect.png") no-repeat center;
+      background-size: 1.5rem;
+    }
   }
 }

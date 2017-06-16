@@ -18,7 +18,7 @@ function alshaya_master_install() {
     ],
     'Log out' => [
       'en' => 'Sign out',
-      'ar' => 'خروج',
+      'ar' => 'تسجيل الخروج',
     ],
     'Create new account' => [
       'en' => 'Create an account',
@@ -311,8 +311,8 @@ function alshaya_master_install() {
       'ar' => 'الهاتف',
     ],
     'The phone number %value provided for %field is not a valid mobile number for country %country.' => [
-      'en' => 'The Mobile number %value provided for %field is not a valid mobile number.',
-      'ar' => 'رقم الجوال %field المدخل في %value غير صحيح',
+      'en' => 'The %value provided is not a valid mobile number.',
+      'ar' => 'غير صحيح %value رقم الجوال',
     ],
     'Delivery to' => [
       'ar' => 'توصيل إلى',
@@ -667,7 +667,7 @@ function alshaya_master_install() {
       'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
     ],
     'Find stores near' => [
-      'ar' => 'ابحث عن المحلات القريبة',
+      'ar' => 'البحث عن أقرب المحلات إليك',
     ],
     'Near me' => [
       'ar' => 'الأقرب إلي',
@@ -713,6 +713,12 @@ function alshaya_master_install() {
     ],
     'highlights' => [
       'ar' => 'أهم العروض',
+    ],
+    'The product has been removed from your cart.' => [
+      'ar' => 'تم إزالة المنتج من سلتك ',
+    ],
+    '<p>This service is <strong>FREE</strong> of charge.</p>' => [
+      'ar' => '<p>استلم من المحل مجاناً</p>',
     ],
   ];
   alshaya_i18n_save_translations($strings);

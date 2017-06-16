@@ -392,3 +392,78 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
 
   $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($sku_attributes);
 }
+
+/**
+ * Implements template_preprocess_menu().
+ */
+function alshaya_seo_preprocess_menu(&$variables) {
+  if ($variables['menu_name'] === 'account') {
+    foreach ($variables['items'] as $key => $item) {
+      if (Unicode::strcasecmp($item['title'], 'Sign in') !== 0) {
+        continue;
+      }
+
+      $signin_url_options = [
+        'attributes' => [
+          'class' => 'gtm-sign-in',
+        ],
+      ];
+
+      $variables['items'][$key]['url']->setOptions($signin_url_options);
+    }
+  }
+  elseif ($variables['menu_name'] === 'footer') {
+    foreach ($variables['items'] as $key => $item) {
+      $footer_url_options = [
+        'attributes' => [
+          'class' => 'c-footer-menu__link',
+        ],
+      ];
+
+      $variables['items'][$key]['url']->setOptions($footer_url_options);
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_alshaya_main_menu_level2().
+ */
+function alshaya_seo_preprocess_alshaya_main_menu_level2(&$variables) {
+  $sub_nav_label = str_replace(' ', '-', strtolower($variables['data']['label']));
+  $sub_nav_class = 'sub-nav-' . $sub_nav_label;
+  $variables['data']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label;
+  foreach ($variables['data']['child'] as $key1 => $value) {
+    $variables['data']['child'][$key1]['sub_nav_class'] = $sub_nav_class;
+    foreach ($value['child'] as $key2 => $value2) {
+      $variables['data']['child'][$key1]['child'][$key2]['sub_nav_class'] = $sub_nav_class;
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_views_view_field().
+ */
+function alshaya_seo_preprocess_views_view_field(&$variables) {
+  $field = $variables['field'];
+  $view = $variables['view'];
+
+  $is_product_level_3_view = (($view->id() === 'product_category_level_3')
+    && ($view->current_display === 'default'));
+  if (($is_product_level_3_view) &&
+    ($field->getPluginId() === 'term_name')) {
+    $args = $view->args;
+    $parents = \Drupal::entityManager()->getStorage('taxonomy_term')->loadParents($args[0]);
+    $parent_term = array_shift($parents);
+    $parent_term_name = $parent_term->getName();
+    $parent_term_class = 'vert-nav-' . str_replace(' ', '-', strtolower($parent_term_name));
+    $term = $variables['row']->_entity;
+
+    $options = [
+      'attributes' => [
+        'class' => $parent_term_class,
+      ],
+    ];
+
+    $variables['output'] = $term->toLink($term->getName(), '', $options)->toString();
+  }
+}

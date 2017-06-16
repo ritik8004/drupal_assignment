@@ -137,6 +137,8 @@ class StoresFinderController extends ControllerBase {
     $view = views_embed_view('stores_finder', $display);
     $response->addCommand(new HtmlCommand('.view-stores-finder:first', $view));
     $response->addCommand(new InvokeCommand('body', 'removeClass', ['store-finder-view']));
+    // Removing class for mobile from store list.
+    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['mobile-store-detail']));
 
     // Clear value from search field.
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api', 'val', ['']));
@@ -159,6 +161,8 @@ class StoresFinderController extends ControllerBase {
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('.view-stores-finder:first', $build));
     $response->addCommand(new InvokeCommand('.body', 'removeClass', ['store-finder-view']));
+    // Adding class for mobile for store detail.
+    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['mobile-store-detail']));
 
     // Add store finder title in breadcrumb.
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString();

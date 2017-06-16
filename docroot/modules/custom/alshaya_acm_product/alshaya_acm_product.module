@@ -7,16 +7,18 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\block\Entity\Block;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\Core\Url;
-use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_theme().
@@ -279,7 +281,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       if (!alshaya_acm_is_product_in_stock($sku_entity)) {
         $build['out_of_stock'] = [
-          '#markup' => t('out of stock'),
+          '#markup' => '<span>' . t('out of stock') . '</span>',
         ];
       }
     }
@@ -349,10 +351,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // Get SKU id.
   $sku_entity = SKU::load($form['sku_id']['#value']);
 
+  $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
   $form['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
 
-  if (isset($form['ajax']) && isset($form['ajax']['configurables'])) {
+  $form['quantity']['#prefix'] = '<span class="quantity-' . $sku_identifier . '">';
+  $form['quantity']['#suffix'] = '</span>';
 
+  if (isset($form['ajax']) && isset($form['ajax']['configurables'])) {
     // Attach size guide link to size attribute. This is statically attached to
     // size, we don't want it for any other attributes.
     if (isset($form['ajax']['configurables']['size'])) {
@@ -364,8 +369,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
       if (is_array($configurable)) {
+        $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
+
         // Add custom ajax callback for configurables to refresh the gallery.
         $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
+        unset($configurable['#ajax']['wrapper']);
 
         $configurable['#options_attributes'] = [];
 
@@ -378,7 +386,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
             // This is very limited, it supports only 1 configurable attribute.
             if ($sku instanceof SKU) {
               $form['#cache']['tags'][] = 'acq_sku:' . $sku->id();
-              if (!alshaya_acm_is_product_in_stock($sku, TRUE)) {
+              if ($quantity = alshaya_acm_is_product_in_stock($sku, TRUE)) {
+                $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+              }
+              else {
                 $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
               }
             }
@@ -434,22 +445,37 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   $tree_pointer = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), $form_state->getValue('configurables'));
 
   if ($tree_pointer instanceof SKU) {
+    if ($quantity = alshaya_acm_is_product_in_stock($tree_pointer)) {
+      $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+    }
+
     $build = [];
     alshaya_acm_product_get_gallery($build, $tree_pointer);
     $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
 
     $sku = SKU::load($form['sku_id']['#value']);
+    $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
 
     $dynamic_parts['selected_variant_sku'] = [
       '#type' => 'hidden',
       '#attributes' => [
         'class' => [
           'selected-variant-sku',
-          'selected-variant-sku-' . strtolower(Html::cleanCssIdentifier($sku->getSku())),
+          'selected-variant-sku-' . $sku_identifier,
         ],
       ],
       '#value' => $tree_pointer->getSku(),
     ];
+
+    $response = new AjaxResponse();
+
+    $selector = '.configurable-wrapper-' . $sku_identifier;
+    $response->addCommand(new HtmlCommand($selector, $dynamic_parts));
+
+    $selector = '.quantity-' . $sku_identifier;
+    $response->addCommand(new HtmlCommand($selector, $form['quantity']));
+
+    return $response;
   }
 
   return $dynamic_parts;

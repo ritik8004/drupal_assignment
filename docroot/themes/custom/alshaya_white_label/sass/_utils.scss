@@ -102,6 +102,31 @@
   }
 }
 
+%modal-overlay-spinner,
+.modal-overlay--spinner {
+  @extend %modal-overlay;
+
+  &::before {
+    position: fixed;
+    z-index: 1000;
+  }
+
+  &::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    right: 0;
+    left: 0;
+    transform: translateY(-50%);
+    background-image: url("../imgs/icons/MC-loader-white.svg");
+    background-size: cover;
+    margin: 0 auto;
+    width: 4rem;
+    height: 3rem;
+    z-index: 1001;
+  }
+}
+
 .mobile-only-block {
   @include breakpoint($tablet) {
     display: none;

@@ -232,7 +232,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           $email = \Drupal::currentUser()->getEmail();
         }
 
-        \Drupal::cache()->delete('orders_list_' . $email);
+        \Drupal::cache()->invalidate('orders_list_' . $email);
 
         // Create a new cart now.
         $this->cartStorage->createCart();

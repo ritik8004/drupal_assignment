@@ -5,8 +5,6 @@
  * Module file.
  */
 
-use Drupal\Core\Entity\EntityInterface;
-
 /**
  * Implements hook_theme().
  */
@@ -37,14 +35,4 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_main_menu_taxonomy_term_presave(EntityInterface $entity) {
-  // For categories, populate include in menu field with TRUE by default.
-  if ($entity->bundle() == 'acq_product_category' && $entity->isNew()) {
-    $entity->get('field_category_include_menu')->setValue(TRUE);
-  }
 }

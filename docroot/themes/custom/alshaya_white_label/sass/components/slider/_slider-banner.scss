@@ -64,7 +64,9 @@
     left: 1.65rem;
   }
 
-  @include icon(chevronleft);
+  @include icon(chevronleft) {
+    padding-#{$right}: 0.1875rem;
+  }
 
   left: 0.5rem;
 }
@@ -75,13 +77,20 @@
     right: 1.65rem;
   }
 
-  @include icon(chevronright);
+  @include icon(chevronright) {
+    padding-#{$left}: 0.1875rem;
+  }
 
   right: 0.5rem;
 }
 
 .owl-dots,
 .slick-dots {
+  .ie & {
+    /* IE 10 */
+    background: url('../imgs/assets/FFFFFF.png') repeat;
+  }
+
   @include breakpoint($tablet) {
     @include u-center--horizontally;
 

@@ -372,7 +372,8 @@
 
     .text-full,
     .form-email,
-    .form-text {
+    .form-text,
+    .form-tel {
       border: 1px solid $brownish-grey;
       border-width: 0 0 1px;
       width: 100%;
@@ -439,11 +440,19 @@
       #{$left}: 10em;
       bottom: 0.75em;
       width: auto;
+
+      html[lang='ar'] & {
+        #{$left}: 12em;
+      }
     }
 
     @include breakpoint($desktop) {
       #{$left}: 9em;
       bottom: 0.7em;
+
+      html[lang='ar'] & {
+        #{$left}: 12em;
+      }
     }
 
     position: absolute;

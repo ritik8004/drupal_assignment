@@ -60,7 +60,7 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
 function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
   $media = [];
 
-  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   if (!($sku_entity instanceof SKU)) {
     return [];
@@ -114,11 +114,10 @@ function alshaya_acm_product_get_sku_image(array $media, $image_style = '', $rel
 function alshaya_acm_product_get_sku_configurable_values($sku) {
   $configurableFieldValues = [];
 
-  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
-  if ($sku_entity instanceof SKU) {
-    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')
-      ->get('fields');
+  if ($sku_entity) {
+    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
     $configurableFields = array_filter($fields, function ($field) {
       return (bool) $field['configurable'];
     });
@@ -150,18 +149,17 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  *   Loaded SKU entity.
  */
 function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
-  if (!is_object($sku)) {
-    if (empty($langcode) && \Drupal::languageManager()->isMultilingual()) {
-      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    }
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
 
-    $sku = SKU::loadFromSku($sku, $langcode);
+  // Additional check, can be removed post go UAT.
+  if (empty($sku_entity)) {
+    return NULL;
   }
 
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-  $plugin = $sku->getPluginInstance();
+  $plugin = $sku_entity->getPluginInstance();
 
-  return $plugin->getParentSku($sku);
+  return $plugin->getParentSku($sku_entity);
 }
 
 /**
@@ -283,18 +281,12 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
  *   Loaded node object.
  */
 function alshaya_acm_product_get_display_node($sku, $langcode = '') {
-  if (!is_object($sku)) {
-    if (empty($langcode) && \Drupal::languageManager()->isMultilingual()) {
-      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    }
-
-    $sku = SKU::loadFromSku($sku, $langcode);
-  }
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
 
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-  $plugin = $sku->getPluginInstance();
+  $plugin = $sku_entity->getPluginInstance();
 
-  return $plugin->getDisplayNode($sku);
+  return $plugin->getDisplayNode($sku_entity);
 }
 
 /**
@@ -314,7 +306,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
 
   // If we have image for the product.
   if (!empty($media_image)) {
-    if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
+    if ($media_image['file'] instanceof FileInterface) {
       return alshaya_acm_product_get_sku_image($media_image, $image_style);
     }
   }
@@ -341,7 +333,7 @@ function _alshaya_acm_get_product_display_image_url(SKU $sku) {
 
   // If we have image for the product.
   if (!empty($media_image)) {
-    if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
+    if ($media_image['file'] instanceof FileInterface) {
       $uri = $media_image['file']->getFileUri();
       return file_create_url($uri);
     }
@@ -402,7 +394,7 @@ function alshaya_acm_product_available_home_delivery($sku) {
  *   Flag if the product is available for click and collect or not.
  */
 function alshaya_acm_product_available_click_collect($sku) {
-  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   $sts = (int) $sku_entity->get('attr_ship_to_store')->getString();
   $rnc = (int) $sku_entity->get('attr_reserve_and_collect')->getString();
@@ -423,7 +415,7 @@ function alshaya_acm_product_available_click_collect($sku) {
  *   Image build array.
  */
 function alshaya_acm_product_get_brand_logo($sku) {
-  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   $title = $sku_entity->get('attr_brand_logo')->getString();
 
@@ -441,13 +433,16 @@ function alshaya_acm_product_get_brand_logo($sku) {
 
     $directory = $media_path;
 
+    // Prepare file name by replacing spaces with underscores and lower case.
+    $file_name = strtolower(str_replace(' ', '_', $title));
+
     for ($i = 0; $i < 2 && $i <= strlen($title); $i++) {
-      $directory .= '/' . substr(strtolower($title), $i, 1);
+      $directory .= '/' . substr($file_name, $i, 1);
     }
 
     $directory_uri = 'public://brand-logo/' . $directory;
-    $image_uri = $directory_uri . '/' . strtolower($title) . '.jpeg';
-    $image_url = $host . '/' . $directory . '/' . strtolower($title) . '.jpeg';
+    $image_uri = $directory_uri . '/' . $file_name . '.jpeg';
+    $image_url = $host . '/' . $directory . '/' . $file_name . '.jpeg';
 
     $file_storage = \Drupal::entityTypeManager()->getStorage('file');
 

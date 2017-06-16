@@ -2,8 +2,8 @@
 
 namespace Drupal\acq_sku;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
 
@@ -13,13 +13,6 @@ use Drupal\acq_commerce\Conductor\ClientFactory;
  * @ingroup acq_sku
  */
 class ConductorCategoryManager implements CategoryManagerInterface {
-
-  /**
-   * Conductor Agent Category Data API Endpoint.
-   *
-   * @const CONDUCTOR_API_CATEGORY
-   */
-  const CONDUCTOR_API_CATEGORY = 'categories';
 
   /**
    * Taxonomy Term Entity Storage.
@@ -43,18 +36,18 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   private $vocabulary;
 
   /**
-   * Drupal Entity Query Factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  private $queryFactory;
-
-  /**
    * Result (create / update / failed) counts.
    *
    * @var array
    */
   private $results;
+
+  /**
+   * API Wrapper object.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  protected $apiWrapper;
 
   /**
    * Constructor.
@@ -63,17 +56,16 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   EntityTypeManager object.
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
    *   ClientFactory object.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
-   *   QueryFactory object.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   API Wrapper object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, QueryFactory $query_factory, LoggerChannelFactory $logger_factory) {
-
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, LoggerChannelFactory $logger_factory) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
-    $this->queryFactory = $query_factory;
     $this->clientFactory = $client_factory;
+    $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_sku');
   }
 
@@ -85,12 +77,15 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
-    // Load Conductor Category data.
-    $remoteRoot = ($remoteRoot !== NULL) ? (int) $remoteRoot : NULL;
-    $categories = [$this->loadCategoryData($remoteRoot)];
+    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+      if ($store_id) {
+        // Load Conductor Category data.
+        $categories = [$this->loadCategoryData($store_id)];
 
-    // Recurse the category tree and create / update nodes.
-    $this->syncCategory($categories, NULL);
+        // Recurse the category tree and create / update nodes.
+        $this->syncCategory($categories, NULL);
+      }
+    }
 
     return ($this->results);
   }
@@ -129,30 +124,15 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *
    * Load the commerce backend category data from Conductor.
    *
-   * @param int $remoteRoot
-   *   Remote Root ID (optional)
+   * @param int $store_id
+   *   Store id for which we should get categories.
    *
    * @return array
    *   Array of categories.
    */
-  private function loadCategoryData($remoteRoot) {
-
-    $endpoint = self::CONDUCTOR_API_CATEGORY;
-
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
-
-    $categories = [];
-
-    try {
-      $categories = $this->tryAgentRequest($doReq, 'loadCategoryData', 'categories');
-    }
-    catch (ConductorException $e) {
-      $this->logger->error('Unable to load conductor category data.');
-    }
-
-    return ($categories);
+  private function loadCategoryData($store_id) {
+    $this->apiWrapper->updateStoreContext($store_id);
+    return $this->apiWrapper->getCategories();
   }
 
   /**
@@ -221,11 +201,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         continue;
       }
 
+      $langcode = acq_commerce_get_langcode_from_store_id($category['store_id']);
+
       $parent_data = ($parent) ? [$parent->id()] : [0];
       $position = (isset($category['position'])) ? (int) $category['position'] : 1;
 
       // Load existing term (if found).
-      $query = $this->queryFactory->get('taxonomy_term');
+      $query = $this->termStorage->getQuery();
       $group = $query->andConditionGroup()
         ->condition('field_commerce_id', $category['category_id'])
         ->condition('vid', $this->vocabulary->id());
@@ -234,25 +216,29 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $tids = $query->execute();
 
       if (count($tids) > 1) {
-
-        $this->logger->error(
-          'Multiple terms found for category id @cid',
-          ['@cid' => $category['category_id']]
-        );
-
+        $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $category['category_id']]);
         $this->results['failed']++;
         continue;
-
       }
       elseif (count($tids) == 1) {
-
-        $this->logger->info('Updating category term @name [@id]',
-          ['@name' => $category['name'], '@id' => $category['category_id']]
-        );
+        $this->logger->info('Updating category term @name [@id]', [
+          '@name' => $category['name'],
+          '@id' => $category['category_id'],
+        ]);
 
         // Load and update the term entity.
+        /** @var \Drupal\taxonomy\Entity\Term $term */
         $term = $this->termStorage->load(array_shift($tids));
-        $term->name->value = $category['name'];
+
+        if (!$term->hasTranslation($langcode)) {
+          $term = $term->addTranslation($langcode);
+          $term->get('field_commerce_id')->setValue($category['category_id']);
+        }
+        else {
+          $term = $term->getTranslation($langcode);
+        }
+
+        $term->setName($category['name']);
         $term->parent = $parent_data;
         $term->weight->value = $position;
 
@@ -276,15 +262,19 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         );
 
         $term = $this->termStorage->create([
-          'vid'               => $this->vocabulary->id(),
-          'name'              => $category['name'],
+          'vid' => $this->vocabulary->id(),
+          'name' => $category['name'],
           'field_commerce_id' => $category['category_id'],
-          'parent'            => $parent_data,
-          'weight'            => $position,
+          'parent' => $parent_data,
+          'weight' => $position,
+          'langcode' => $langcode,
         ]);
 
         $this->results['created']++;
       }
+
+      $term->get('field_category_include_menu')->setValue($category['in_menu']);
+      $term->get('description')->setValue($category['description']);
 
       $term->save();
 

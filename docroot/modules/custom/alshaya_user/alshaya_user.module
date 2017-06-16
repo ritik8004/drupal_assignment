@@ -254,6 +254,13 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
     $element['mobile']['#required'] = TRUE;
   }
 
+  // Getting mobile country code for the current site country and use that for
+  // the prefix.
+  $country_mobile_code = \Drupal::service('mobile_number.util')->getCountryCode($default_site_country);
+  if ($country_mobile_code) {
+    $element['mobile']['#prefix'] = '<div class="country-code-prefix">' . '+' . $country_mobile_code . '</div>';
+  }
+
   return $element;
 }
 

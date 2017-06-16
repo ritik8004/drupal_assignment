@@ -8,7 +8,7 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@acq_commerce.client_factory'
-      - '@entity.query'
+      - '@acq_commerce.api'
       - '@logger.factory'
 
   acq_sku.product_options_manager:
@@ -22,7 +22,6 @@ services:
     class: Drupal\acq_sku\ConductorCategoryRepository
     arguments:
       - '@entity_type.manager'
-      - '@entity.query'
       - '@logger.factory'
       - 'acq_product_category'
 

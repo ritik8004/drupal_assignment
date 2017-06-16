@@ -296,7 +296,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number'] = [
-    '#type' => 'textfield',
+    '#type' => 'tel',
     '#title' => t('Privilege Card Number'),
     '#maxlength' => 19,
     '#element_validate' => [
@@ -308,7 +308,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
-    '#type' => 'textfield',
+    '#type' => 'tel',
     '#title' => t('Re-enter Privilege Card Number'),
     '#maxlength' => 19,
     '#states' => [
@@ -386,7 +386,7 @@ function _alshaya_loyalty_form_attachements(&$form, FormStateInterface $form_sta
   if (empty($validation)) {
     $validation = alshaya_loyalty_get_validation_settings();
   }
-
+  $form['#attached']['library'][] = 'alshaya_master/ladda';
   $form['#attached']['drupalSettings']['alshaya_loyalty'] = [
     'card_validate' => [
       'init_value' => $validation['value_start_with'],

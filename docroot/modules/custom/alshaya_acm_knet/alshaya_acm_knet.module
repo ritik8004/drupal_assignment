@@ -1,63 +1,6 @@
 <?php
-// @codingStandardsIgnoreFile
 
 /**
  * @file
  * Contains general hooks and alters.
  */
-
-use Drupal\acq_cart\CartInterface;
-use Drupal\alshaya_acm_knet\E24PaymentPipe;
-
-/**
- * Implements hook_alshaya_acm_checkout_pre_place_order().
- */
-function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
-  // @TODO: Redirect to K-Net if selected.
-  return;
-
-  $pipe = new E24PaymentPipe();
-
-  $pipe->setCurrency(KNET_CURRENCY_KWD);
-  $pipe->setLanguage(KNET_LANGUAGE_EN);
-
-  $pipe->setResponseUrl('https://local.mothercare.com.kw/knet/response.php');
-  $pipe->setErrorUrl('https://local.mothercare.com.kw/knet/error.php');
-
-  // @TODO: Make this dynamic.
-  $pipe->setAmt('20');
-
-  // @TODO: Make this configurable.
-  $pipe->setResourcePath('/var/www/alshaya/knet-resource/test/');
-
-  // Set your alias name here.
-  // @TODO: Make this configurable.
-  $pipe->setAlias('alshaya');
-
-  // @TODO: This can be the cart id.
-  $pipe->setTrackId(rand(1000, 9999));//generate the random number here
-
-  // @TODO: Make this proper.
-  $pipe->setUdf1($_GET['name']);
-  $pipe->setUdf2($_GET['address']);
-  $pipe->setUdf3($_GET['postal']);
-  $pipe->setUdf4('UDF 4');
-  $pipe->setUdf5('UDF 5');
-
-  // Get results.
-  if ($pipe->performPaymentInitialization()) {
-    // @TODO: Log this too, also store the payment id for later use.
-    $payID = $pipe->getPaymentId();
-    $payURL = $pipe->getRedirectUrl();
-    print $payURL . '?PaymentID=' . $payID;
-    exit;
-    echo $pipe->getDebugMsg();
-    header('location:' . $payURL);
-  }
-  else {
-    // @TODO: Log this.
-    echo '<br>' . $pipe->getErrorMsg();
-    echo '<br>' . $pipe->getDebugMsg();
-    // header('location: https://www.yourURL.com/error.php');
-  }
-}

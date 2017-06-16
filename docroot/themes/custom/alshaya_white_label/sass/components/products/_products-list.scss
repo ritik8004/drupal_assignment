@@ -80,6 +80,7 @@
     color: $black;
     height: 19.5rem;
     margin-bottom: 4px;
+    font-size: 0.9375rem;
 
     @include breakpoint($only-mobile) {
       &:nth-child(2n) {
@@ -107,8 +108,8 @@
     }
 
     .field--name-name {
-      margin-top: 9px;
-      margin-bottom: 9px;
+      margin-top: 0.3125rem;
+      margin-bottom: 0.5625rem;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
 
@@ -141,10 +142,34 @@
     }
 
     @include breakpoint($desktop) {
+      margin-bottom: 3rem;
+
       &:hover {
+        transform: scale(1.083);
         box-shadow: 4px 4px 0 0 $whisper-light;
         border: 1px solid $greyish;
+
+        .field--name-name {
+          a {
+            color: $cerulean-two;
+            text-decoration: underline;
+          }
+        }
+
+        article {
+          transform: scale(0.92336); // 1/1.083.
+        }
       }
+    }
+
+    .out-of-stock span {
+      background: $cherry;
+      color: $white-five;
+      font-family: $alshaya-thin;
+      font-size: 0.8125rem;
+      padding: 0.5625rem 1.688rem;
+      margin-top: 0.25rem;
+      display: inline-block;
     }
   }
 

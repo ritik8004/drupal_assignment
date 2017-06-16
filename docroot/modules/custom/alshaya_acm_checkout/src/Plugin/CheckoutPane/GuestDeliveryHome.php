@@ -185,6 +185,11 @@ class GuestDeliveryHome extends AddressFormBase {
 
         $term = alshaya_acm_checkout_load_shipping_method($code, $name);
 
+        // We don't display click and collect delivery method for home delivery.
+        if ($code == \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
+          continue;
+        }
+
         $method_name = '
           <div class="shipping-method-name">
             <div class="shipping-method-title">' . $term->getName() . '</div>

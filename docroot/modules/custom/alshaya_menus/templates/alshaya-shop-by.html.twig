@@ -31,7 +31,7 @@
     <div class="c-footer-menu">
       {% for column in row.content %}
         <div class="c-footer-menu__tab">
-          <a class="menu__link menu--one__link {{ column.content.active_class }}" href="{{ column.content.path }}">{{ column.content.label }}</a>
+          <a class="menu__link menu--one__link c-footer-menu__link {{ column.content.active_class }}" href="{{ column.content.path }}">{{ column.content.label }}</a>
         </div>
       {% endfor %}
     </div>

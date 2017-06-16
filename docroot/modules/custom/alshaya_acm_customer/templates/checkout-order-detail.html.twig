@@ -14,32 +14,40 @@
 <div{{ attributes }}>
 
   <div class="barcode--wrapper">
-    <div class="inner--wrap">
-      <div>
-        {% trans %}
-        <p>Thank you for shopping online with us, <strong class="dark--text">{{ account.first_name }} {{ account.last_name }}</strong></p>
-        {% endtrans %}
+    {% if order_error %}
+      <div class="inner--wrap">
+        <div class="messages error">
+          {{ order_error }}
+        </div>
       </div>
-
-      <div>
-        {% trans %}
-        <p>You’ll receive an email addressed to <strong class="dark--text">{{ account.mail }}</strong> conﬁrming your order</p>
-        {% endtrans %}
-      </div>
-
-      {% if account.privilege_card_number %}
+    {% else %}
+      <div class="inner--wrap">
         <div>
           {% trans %}
-          <p>Your Privileges Card Number is: <strong class="dark--text">{{ account.privilege_card_number }}</strong></p>
+          <p>Thank you for shopping online with us, <strong class="dark--text">{{ account.first_name }} {{ account.last_name }}</strong></p>
           {% endtrans %}
         </div>
-      {% endif %}
-    </div>
 
-    <div class="above-mobile print--barcode">
-      {{ barcode|raw }}
+        <div>
+          {% trans %}
+          <p>You’ll receive an email addressed to <strong class="dark--text">{{ account.mail }}</strong> conﬁrming your order</p>
+          {% endtrans %}
+        </div>
+
+        {% if account.privilege_card_number %}
+          <div>
+            {% trans %}
+            <p>Your Privileges Card Number is: <strong class="dark--text">{{ account.privilege_card_number }}</strong></p>
+            {% endtrans %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="above-mobile print--barcode">
+        {{ barcode|raw }}
+      </div>
     </div>
-  </div>
+  {% endif %}
 
   <div class="order-summary">
     <div class="order-id-details">
@@ -63,7 +71,7 @@
   <table class="user__order--detail">
     <tbody>
       <tr class="order-details-row">
-        <td>
+        <td class="order__user--info">
           <div class="label font-small">{{ "Delivery to"|t }}</div>
           <div class="dark">{{ order_details.delivery_to }}</div>
           <div class="contact">

@@ -19,6 +19,20 @@
         margin-top: 0;
       }
     }
+
+    .field--name-field-subscribe-newsletter {
+      margin-top: 2.2rem;
+
+      .js-form-type-checkbox {
+        margin-top: 1rem;
+      }
+
+      p {
+        font-size: 0.75rem;
+        margin-top: 0;
+        margin-bottom: 1.2rem;
+      }
+    }
   }
 
   .user__order--detail {
@@ -100,7 +114,7 @@
 
     @include breakpoint($desktop) {
       margin-top: 1.42rem;
-      margin-bottom: 3.4rem;
+      margin-bottom: 1.8rem;
     }
   }
 
@@ -162,12 +176,11 @@
 
   .order-print-button a {
     display: inline-block;
+    font-family: $alshaya-bold;
     background: $white-five;
-    padding: 0.4375rem 2.1rem;
-    font-weight: bold;
+    padding: 0.5rem 2.45rem;
     border: solid 1px $marine-blue;
-    font-size: 0.8125rem;
-    word-spacing: 0.125rem;
+    font-size: 0.75rem;
   }
 
   tr td {
@@ -272,11 +285,15 @@
 
   .blend .delivery--method {
     padding-top: 1rem;
+
+    @include breakpoint($desktop) {
+      padding-top: 1.6rem;
+    }
   }
 
   .label.font-small {
     font-size: 0.75rem;
-    margin-bottom: 0;
+    margin-bottom: 0.25rem;
     color: $cerulean-two;
   }
 
@@ -285,6 +302,10 @@
 
     @include breakpoint($tablet) {
       margin-top: 2rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.7rem;
     }
   }
 

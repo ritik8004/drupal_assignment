@@ -26,6 +26,10 @@ $settings['alshaya_custom_shield_default_pass'] = 'AS_S';
 // Conductor settings.
 $env = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_ENV['AH_SITE_ENVIRONMENT'] : 'local';
 
+// Set the knet resource path which should be outside GIT root.
+$config['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource/' . $env . '/mckw/';
+$config['alshaya_acm_knet.settings']['use_secure_response_url'] = 0;
+
 // 01 is prefixed most of the time so we don't get proper env here.
 // Clean the env, we do it only for dev and test.
 if (strpos($env, 'dev') !== FALSE) {
@@ -37,11 +41,17 @@ elseif (strpos($env, 'test') !== FALSE) {
 
 switch ($env) {
   case 'local':
+    // Disable stock check in local.
     global $_alshaya_acm_disable_stock_check;
     $_alshaya_acm_disable_stock_check = TRUE;
+
+    // Set the knet resource path which should be outside GIT root.
+    $config['alshaya_acm_knet.settings']['resource_path'] = '/home/vagrant/knet-resource/';
+
   case 'dev':
   case 'test':
     $config['acq_commerce.conductor']['url'] = 'https://agent.dev.acm.acquia.io/';
+
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;
@@ -55,14 +65,12 @@ switch ($env) {
 
     $config['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
-    $config['alshaya_api.settings']['verify_ssl'] = FALSE;
+    $config['alshaya_api.settings']['verify_ssl'] = 0;
 
     $config['alshaya_api.settings']['username'] = 'acquiaapi';
     $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
     break;
 }
-
-$config['acq_commerce.conductor']['verify_ssl'] = FALSE;
 
 // Recaptcha settings.
 $config['recaptcha.settings']['site_key'] = '6Le93BsUAAAAAMOiJ5wrk4ICF0N-dLs6iM_eR4di';

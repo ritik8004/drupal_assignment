@@ -2043,7 +2043,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486736883"
+                    "datestamp": "1486737287"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4410,6 +4410,10 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
+                    "name": "Dave Reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                },
+                {
                     "name": "Drupal Media Team",
                     "homepage": "https://www.drupal.org/user/3260690"
                 },
@@ -6382,8 +6386,16 @@
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
+                    "name": "badjava",
+                    "homepage": "https://www.drupal.org/user/83372"
+                },
+                {
                     "name": "chx",
                     "homepage": "https://www.drupal.org/user/9446"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "kalman.hosszu",
@@ -12802,7 +12814,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork Maintainer"
+                    "role": "Fork maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",

@@ -682,6 +682,7 @@
       max-width: 26.5%;
       margin-#{$right}: 1%;
       float: $left;
+      width: 100%;
 
       @include breakpoint($desktop) {
         max-height: 51rem;
@@ -738,6 +739,7 @@
   .map-view-link {
     @include breakpoint($tablet) {
       height: 2.9375rem;
+      border: 1px solid transparent;
     }
 
     @include breakpoint($desktop) {

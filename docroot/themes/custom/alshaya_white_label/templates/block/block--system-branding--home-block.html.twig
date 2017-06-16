@@ -17,21 +17,9 @@
 {% block content %}
     {% if site_logo %}
       <h1 class="site-brand-home">
-        <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
-            <img src="{{ site_logo }}" alt="{{ 'Home'|t }}"/>
+        <a href="{{ path('<front>') }}" title="{{ site_name }}" rel="home" class="logo">
+            <img src="{{ site_logo }}" alt="{{ site_name }}"/>
         </a>
       </h1>
-    {% endif %}
-    {% if site_name or site_slogan %}
-        <div class="site-branding-text">
-            {% if site_name %}
-                <div class="site-branding-name">
-                    <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>
-                </div>
-            {% endif %}
-            {% if site_slogan %}
-                <div class="site-branding-slogan">{{ site_slogan }}</div>
-            {% endif %}
-        </div>
     {% endif %}
 {% endblock %}

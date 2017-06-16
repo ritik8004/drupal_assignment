@@ -54,6 +54,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
   $items['user_order_detail'] = [
     'render element' => 'elements',
     'variables' => [
+      'order_error' => NULL,
       'order' => NULL,
       'barcode' => NULL,
       'order_details' => NULL,
@@ -67,6 +68,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
   $items['checkout_order_detail'] = [
     'render element' => 'elements',
     'variables' => [
+      'order_error' => NULL,
       'order' => NULL,
       'barcode' => NULL,
       'order_details' => NULL,

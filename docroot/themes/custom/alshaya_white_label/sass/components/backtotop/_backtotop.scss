@@ -9,7 +9,7 @@
     background: $whisper-light;
     font-size: 2.125rem;
     position: absolute;
-    top: -3rem;
+    top: 0.75rem;
     right: 0.875rem;
     border-radius: 100%;
     color: $black;
@@ -34,20 +34,5 @@
   color: $grey-ash;
   height: 4.375rem;
   width: 4.375rem;
-
-  @include breakpoint($only-tablet) {
-    padding-top: 3.625rem;
-
-    &::after {
-      top: 1rem;
-    }
-  }
-
-  @include breakpoint($only-mobile) {
-    padding-top: 3.2rem;
-
-    &::after {
-      top: 0.5rem;
-    }
-  }
+  line-height: 120px;
 }
