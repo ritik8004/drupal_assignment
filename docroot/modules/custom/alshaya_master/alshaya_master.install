@@ -720,6 +720,12 @@ function alshaya_master_install() {
     '<p>This service is <strong>FREE</strong> of charge.</p>' => [
       'ar' => '<p>استلم من المحل مجاناً</p>',
     ],
+    'Please enter an email address' => [
+      'ar' => 'يرجى إدخال عنوان بريدك الإلكتروني',
+    ],
+    'Select Area' => [
+      'ar' => 'يرجى اختيار المنطقة / القطعة',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
