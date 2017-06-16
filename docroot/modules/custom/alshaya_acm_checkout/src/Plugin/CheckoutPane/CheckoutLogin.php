@@ -60,7 +60,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
       ],
     ]);
 
-    $pane_form['checkout_login']['form']['request_password'] = Link::fromTextAndUrl($this->t('Forgot password'), $request_password_link)->toRenderable();
+    $pane_form['checkout_login']['form']['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
     $pane_form['checkout_login']['form']['request_password']['#weight'] = 101;
 
     // Remove all other links.
