@@ -23,13 +23,15 @@
           $(mobileFilterBarSelector).addClass('empty');
         }
         else {
-          // Removing the element before adding again.
-          $(mobileFilterBarSelector + ' > h3').remove();
-          // We need to minus one count as the facets also include clear all link.
-          countFilters = countFilters - 1;
-          // If there are filters applied, we need to show the count next to the label.
-          $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-            + '(' + countFilters + ')</h3>').insertBefore(mobileFilterBarSelector + ' ul');
+          if(countFilters > 0) {
+            // Removing the element before adding again.
+            $(mobileFilterBarSelector + ' > h3').remove();
+            // We need to minus one count as the facets also include clear all link.
+            countFilters = countFilters - 1;
+            // If there are filters applied, we need to show the count next to the label.
+            $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+              + '(' + countFilters + ')</h3>').insertBefore(mobileFilterBarSelector + ' ul');
+          }
         }
       }
 

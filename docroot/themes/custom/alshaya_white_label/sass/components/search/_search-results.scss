@@ -571,14 +571,6 @@ ul.item-list__checkbox,
     .c-accordion__title::after {
       #{$right}: 0;
     }
-
-    .filter--mobile .block-facets-summary-blockfilter-bar ul {
-      display: none;
-
-      li.clear-all {
-        display: none !important;
-      }
-    }
   }
 
   .filter-menu-label {
