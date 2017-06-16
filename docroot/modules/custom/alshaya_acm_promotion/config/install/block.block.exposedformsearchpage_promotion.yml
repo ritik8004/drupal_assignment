@@ -1,5 +1,5 @@
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - views.view.search
@@ -11,7 +11,7 @@ dependencies:
 id: exposedformsearchpage_promotion
 theme: alshaya_white_label
 region: content
-weight: -22
+weight: -12
 provider: null
 plugin: 'views_exposed_filter_block:search-page'
 settings:
