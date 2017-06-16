@@ -374,6 +374,9 @@
           url: map.settings.google_map_settings.marker_icon_path,
           labelOrigin: new google.maps.Point(15, 15)
         };
+        if (drupalSettings.path.currentLanguage === 'ar') {
+          markerSettings.icon.labelOrigin = new google.maps.Point(7, 15);
+        }
       }
     }
 
