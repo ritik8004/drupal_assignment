@@ -132,7 +132,7 @@
           if ($(window).width() < 768) {
             $('.c-pdp .short-description-wrapper').toggle('slow');
             if ($('.c-pdp .description-wrapper .show-less-link').length < 1) {
-              $('.c-pdp .description-wrapper .field__content').append('<div class="show-less-link">' + Drupal.t('show less') + '</div>');
+              $('.c-pdp .description-wrapper .field__content').append('<div class="show-less-link">' + Drupal.t('Show less') + '</div>');
             }
           }
         });
