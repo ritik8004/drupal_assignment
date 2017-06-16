@@ -112,6 +112,9 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         'wrapper' => 'payment_details',
         'callback' => [$this, 'rebuildPaymentDetails'],
       ],
+      '#attributes' => [
+        'gtm-type' => 'cart-checkout-payment',
+      ],
     ];
 
     if ($plugin_id) {

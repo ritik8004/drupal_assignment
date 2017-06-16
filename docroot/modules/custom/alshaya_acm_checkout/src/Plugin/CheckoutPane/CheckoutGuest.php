@@ -34,13 +34,19 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $config = \Drupal::config('alshaya_acm_checkout.settings');
 
-    $pane_form['checkout_guest']['checkout_as_guest'] = Link::createFromRoute($this->t('checkout as guest'), 'acq_checkout.form', ['step' => 'delivery'])->toRenderable();
+    $checkout_guest_options = [
+      'attributes' => [
+        'gtm-type' => 'checkout-as-guest',
+      ],
+    ];
 
-    $pane_form['checkout_guest']['email_usage'] = [
+    $pane_form['checkout_as_guest'] = Link::createFromRoute($this->t('checkout as guest'), 'acq_checkout.form', ['step' => 'delivery'], $checkout_guest_options)->toRenderable();
+
+    $pane_form['email_usage'] = [
       '#markup' => '<div class="checkout-guest-email-usage">' . $config->get('checkout_guest_email_usage.value') . '</div>',
     ];
 
-    $pane_form['checkout_guest']['summary'] = [
+    $pane_form['summary'] = [
       '#markup' => '<div class="checkout-guest-summary">' . $config->get('checkout_guest_summary.value') . '</div>',
     ];
 

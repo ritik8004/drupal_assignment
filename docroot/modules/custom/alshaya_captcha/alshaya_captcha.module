@@ -132,9 +132,10 @@ function _alshaya_captcha_form_validate(&$form, FormStateInterface $form_state) 
  */
 function _alshaya_captcha_form_submit(&$form, FormStateInterface $form_state) {
   // If successful, clear flood.
-  $flood = $form_state->get('flood');
-  $flood->clear('alshaya_captcha_' . $form['#id']);
-  $flood->clear('alshaya_captcha_' . $form['#id'] . '_captcha_fail_message');
+  if ($flood = $form_state->get('flood')) {
+    $flood->clear('alshaya_captcha_' . $form['#id']);
+    $flood->clear('alshaya_captcha_' . $form['#id'] . '_captcha_fail_message');
+  }
 }
 
 /**
