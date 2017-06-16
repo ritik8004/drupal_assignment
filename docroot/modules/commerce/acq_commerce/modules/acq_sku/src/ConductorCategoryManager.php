@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
@@ -12,13 +13,6 @@ use Drupal\acq_commerce\Conductor\ClientFactory;
  * @ingroup acq_sku
  */
 class ConductorCategoryManager implements CategoryManagerInterface {
-
-  /**
-   * Conductor Agent Category Data API Endpoint.
-   *
-   * @const CONDUCTOR_API_CATEGORY
-   */
-  const CONDUCTOR_API_CATEGORY = 'categories';
 
   /**
    * Taxonomy Term Entity Storage.
@@ -49,20 +43,29 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   private $results;
 
   /**
+   * API Wrapper object.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  protected $apiWrapper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   EntityTypeManager object.
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
    *   ClientFactory object.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   API Wrapper object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, LoggerChannelFactory $logger_factory) {
-
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, LoggerChannelFactory $logger_factory) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
+    $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_sku');
   }
 
@@ -74,12 +77,15 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
-    // Load Conductor Category data.
-    $remoteRoot = ($remoteRoot !== NULL) ? (int) $remoteRoot : NULL;
-    $categories = [$this->loadCategoryData($remoteRoot)];
+    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+      if ($store_id) {
+        // Load Conductor Category data.
+        $categories = [$this->loadCategoryData($store_id)];
 
-    // Recurse the category tree and create / update nodes.
-    $this->syncCategory($categories, NULL);
+        // Recurse the category tree and create / update nodes.
+        $this->syncCategory($categories, NULL);
+      }
+    }
 
     return ($this->results);
   }
@@ -118,30 +124,15 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *
    * Load the commerce backend category data from Conductor.
    *
-   * @param int $remoteRoot
-   *   Remote Root ID (optional)
+   * @param int $store_id
+   *   Store id for which we should get categories.
    *
    * @return array
    *   Array of categories.
    */
-  private function loadCategoryData($remoteRoot) {
-
-    $endpoint = self::CONDUCTOR_API_CATEGORY;
-
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
-
-    $categories = [];
-
-    try {
-      $categories = $this->tryAgentRequest($doReq, 'loadCategoryData', 'categories');
-    }
-    catch (ConductorException $e) {
-      $this->logger->error('Unable to load conductor category data.');
-    }
-
-    return ($categories);
+  private function loadCategoryData($store_id) {
+    $this->apiWrapper->updateStoreContext($store_id);
+    return $this->apiWrapper->getCategories();
   }
 
   /**

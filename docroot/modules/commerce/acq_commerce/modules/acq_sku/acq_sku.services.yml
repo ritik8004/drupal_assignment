@@ -8,6 +8,7 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@acq_commerce.client_factory'
+      - '@acq_commerce.api'
       - '@logger.factory'
 
   acq_sku.product_options_manager:
