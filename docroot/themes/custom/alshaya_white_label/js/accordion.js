@@ -25,6 +25,8 @@
         else {
           // Removing the element before adding again.
           $(mobileFilterBarSelector + ' > h3').remove();
+          // We need to minus one count as the facets also include clear all link.
+          countFilters = countFilters - 1;
           // If there are filters applied, we need to show the count next to the label.
           $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
             + '(' + countFilters + ')</h3>').insertBefore(mobileFilterBarSelector + ' ul');
@@ -42,13 +44,11 @@
           // Check if we have filter label.
           var filterLabel = facetBlocks.find('.filter-menu-label');
           if (filterLabel.length) {
-            // Place the clear all link at the top.
             // This is an ajax call.
-            $(mobileFilterBarSelector + ' ul li.clear-all').insertAfter('.filter-menu-label .label');
           }
           else {
             // If we dont have one, create it, this is first time load.
-            $('<div class="filter-menu-label"><span class="label">filter</span></div>').insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
+            $('<div class="filter-menu-label"><span class="label">filter</span><li class="clear-all-fake"><span>clear all</span></li></div>').insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
           }
 
           if ($(mobileFilterBarSelector).length) {
@@ -233,6 +233,13 @@
 
       $('.c-facet__blocks').find('.c-accordion__title').off().on('click', function (e) {
         Drupal.alshayaAccordion(this);
+      });
+
+      // Click event for fake clear all link on mobile filter.
+      var mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar';
+      $('.clear-all-fake', context).stop().on('click', function () {
+        $(mobileFilterBarSelector + ' .clear-all').trigger('click');
+        return false;
       });
 
       /**
