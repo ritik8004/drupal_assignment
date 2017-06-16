@@ -23,7 +23,7 @@
           $(mobileFilterBarSelector).addClass('empty');
         }
         else {
-          if(countFilters > 0) {
+          if (countFilters > 0) {
             // Removing the element before adding again.
             $(mobileFilterBarSelector + ' > h3').remove();
             // We need to minus one count as the facets also include clear all link.
