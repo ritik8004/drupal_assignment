@@ -36,7 +36,7 @@
         "drupal/mailsystem": "^4.1",
         "drupal/mimemail": "1.x-dev",
         "drupal/search_api_solr": "^1.0-rc3",
-        "drupal/search_api_autocomplete": "1.x-dev",
+        "drupal/search_api_autocomplete": "1.0-alpha2",
         "drupal/acquia_connector": "1.9.0",
         "drupal/geolocation": "^1.10",
         "drupal/block_field": "^1.0@alpha",
@@ -98,9 +98,6 @@
             "drupal/search_api_solr_multilingual": {
                 "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
                 "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
-            },
-            "drupal/search_api_autocomplete": {
-                "Failed site install due to missing search_api_autocomplete config dependency": "https://www.drupal.org/files/issues/2824390-15.patch"
             },
             "drupal/search_api_spellcheck": {
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"

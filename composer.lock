@@ -2043,7 +2043,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486737287"
+                    "datestamp": "1495109886"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3791,7 +3791,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/facets-8.x-1.0-alpha9.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha9",
                 "shasum": "b0b1e1cc57bc2586cf1afb67c3a8ed24771f4738"
             },
             "require": {
@@ -5960,11 +5960,17 @@
         },
         {
             "name": "drupal/search_api_autocomplete",
-            "version": "dev-1.x",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api_autocomplete",
-                "reference": "0d32cb7b5e8febf28c3ec45a8420a4d9275ab660"
+                "reference": "8.x-1.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.0-alpha2.zip",
+                "reference": null,
+                "shasum": "e1b444d6235aab1fa4fb7f6d16c3dae482b1c6b9"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -5976,11 +5982,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha1+11-dev",
-                    "datestamp": "1494495484"
-                },
-                "patches_applied": {
-                    "Failed site install due to missing search_api_autocomplete config dependency": "https://www.drupal.org/files/issues/2824390-15.patch"
+                    "version": "8.x-1.0-alpha2",
+                    "datestamp": "1495529883"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5997,8 +6000,7 @@
             "homepage": "https://www.drupal.org/project/search_api_autocomplete",
             "support": {
                 "source": "http://cgit.drupalcode.org/search_api_autocomplete"
-            },
-            "time": "2017-05-11 10:03:02"
+            }
         },
         {
             "name": "drupal/search_api_solr",
@@ -13333,7 +13335,6 @@
         "drupal/mobile_number": 15,
         "drupal/sharethis": 10,
         "drupal/mimemail": 20,
-        "drupal/search_api_autocomplete": 20,
         "drupal/block_field": 15,
         "drupal/google_tag": 20,
         "drupal/simple_sitemap": 20,
