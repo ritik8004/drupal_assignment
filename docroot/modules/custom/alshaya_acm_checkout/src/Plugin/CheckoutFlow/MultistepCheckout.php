@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
@@ -208,15 +209,17 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       if ($next_step_id == 'confirmation') {
         $cart = $this->cartStorage->getCart();
 
-        // Invoke hook to allow other modules to process before order is finally
-        // placed.
-        \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);
+        try {
+          $this->cartStorage->pushCart();
+          $cart_id = $this->cartStorage->getCartId();
 
-        $this->cartStorage->pushCart();
-        $cart_id = $this->cartStorage->getCartId();
-
-        // Place an order.
-        $response = $this->apiWrapper->placeOrder($cart_id);
+          // Place an order.
+          $response = $this->apiWrapper->placeOrder($cart_id);
+        }
+        catch (\Exception $e) {
+          drupal_set_message($e->getMessage(), 'error');
+          $this->redirectToStep('payment');
+        }
 
         // Store the order details from response in tempstore.
         $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
@@ -230,6 +233,11 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         }
         else {
           $email = \Drupal::currentUser()->getEmail();
+          $current_user_id = \Drupal::currentUser()->id();
+
+          // Invalidate the cache tag when order is placed to reflect on the
+          // user's recent orders.
+          Cache::invalidateTags(['user:' . $current_user_id . ':orders']);
         }
 
         \Drupal::cache()->invalidate('orders_list_' . $email);

@@ -11,8 +11,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\UserInterface;
-use Drupal\acq_cart\CartInterface;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_module_implements_alter().
@@ -278,10 +276,8 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
   /** @var \Drupal\user\Entity\User $user */
   if ($user = user_load_by_mail($mail)) {
-    $roles = $user->getRoles();
-
     // For all users except just authenticated, we can rely on Drupal auth.
-    if (count($roles) > 1) {
+    if (empty($user->get('acq_customer_id')->getValue())) {
       $do_api_check = FALSE;
     }
   }
@@ -536,19 +532,6 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
   catch (\Exception $e) {
     // Do nothing, let default validation function handle the error messages.
   }
-}
-
-/**
- * Implements hook_alshaya_acm_checkout_pre_place_order().
- *
- * @see UserRecentOrders::build()
- * @see MultistepCheckout::submitForm()
- */
-function alshaya_acm_customer_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
-  $current_user_id = \Drupal::currentUser()->id();
-  // Invalidate the cache tag when order is placed to reflect on the user's
-  // recent orders.
-  Cache::invalidateTags(['user:' . $current_user_id . ':orders']);
 }
 
 /**
