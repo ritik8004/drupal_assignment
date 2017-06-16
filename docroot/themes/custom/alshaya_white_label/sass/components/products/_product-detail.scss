@@ -160,12 +160,13 @@
     }
 
     @include breakpoint($only-mobile) {
+      @include select-wrapper(12.3125rem);
+
       padding: 0;
       margin-top: 1.5em;
       position: relative;
       z-index: 3;
-
-      @include select-wrapper(12.3125rem);
+      width: 100%;
 
       &::after {
         top: 0.5rem;
@@ -187,19 +188,25 @@
         @include select-style(12.3125rem);
 
         background-color: $whisper-dark;
+        width: 100%;
       }
     }
 
     @include breakpoint($only-tablet) {
-      padding: 0;
-      margin-top: 1.5em;
-
       @include select-wrapper(8.75rem);
       @include select-bg(6.5625rem);
+
+      padding: 0;
+      margin-top: 1.5em;
+      width: 100%;
 
       &::after,
       &::before {
         top: 0.5rem;
+      }
+
+      &::before {
+        width: 100%;
       }
 
       label {
@@ -215,6 +222,8 @@
 
       select.form-select {
         @include select-style(8.75rem);
+
+        width: 100%;
       }
     }
   }
@@ -258,11 +267,17 @@
 
     select {
       @include select-style(4.375rem);
+
+      background-color: transparent;
     }
   }
 }
 
 .description-wrapper {
+  @include breakpoint($only-mobile) {
+    padding: 1rem 0;
+  }
+
   .field {
     &__label {
       font-size: 0.875rem;
@@ -903,7 +918,7 @@
   .field--name {
     &-field-skus {
       @include breakpoint($only-mobile) {
-        height: 5rem;
+        height: 6.5rem;
       }
     }
   }

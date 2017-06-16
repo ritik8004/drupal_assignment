@@ -27,6 +27,10 @@
     #wrap {
       width: 100%;
       z-index: 4 !important;
+
+      @include breakpoint($only-tablet) {
+        z-index: 3 !important;
+      }
     }
 
     img {
