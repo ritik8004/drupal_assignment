@@ -736,6 +736,15 @@ function alshaya_master_install() {
       ],
     ])
     ->save();
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'alshaya_white_label.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
 
   // Save default logo for email.
   $config_factory->getEditable('alshaya_master.theme.alshaya_white_label')
