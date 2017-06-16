@@ -49,7 +49,8 @@
         "drupal/better_exposed_filters": "3.x-dev",
         "drupal/r4032login": "1.x-dev",
         "drupal/datalayer": "^1.0@beta",
-        "drupal/search_api_solr_multilingual": "^1.0@beta"
+        "drupal/search_api_solr_multilingual": "^1.0@beta",
+        "drupal/views_block_filter_block": "1.x-dev"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
