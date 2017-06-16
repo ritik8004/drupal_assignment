@@ -33,16 +33,22 @@ class IngestAPIWrapper {
    * Performs full conductor sync.
    */
   public function productFullSync() {
-    $endpoint = $this->apiVersion . "/ingest/product/sync";
+    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+      if (empty($store_id)) {
+        continue;
+      }
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return $client->post($endpoint, $opt);
-    };
+      $endpoint = $this->apiVersion . '/ingest/product/sync?store_id=' . $store_id;
 
-    try {
-      $this->tryIngestRequest($doReq, 'productFullSync', 'products');
-    }
-    catch (ConductorException $e) {
+      $doReq = function ($client, $opt) use ($endpoint) {
+        return $client->post($endpoint, $opt);
+      };
+
+      try {
+        $this->tryIngestRequest($doReq, 'productFullSync', 'products');
+      }
+      catch (ConductorException $e) {
+      }
     }
   }
 
