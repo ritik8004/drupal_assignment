@@ -2,7 +2,6 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;

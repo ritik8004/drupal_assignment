@@ -4,7 +4,6 @@ namespace Drupal\acq_cart;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

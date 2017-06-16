@@ -117,7 +117,7 @@ function acq_sku_get_stock_cache_id(SKU $sku_entity) {
 /**
  * Checks the stock for the given sku.
  *
- * @param \Drupal\acq_sku\Entity\SKU $sku
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
  *   SKU Entity object.
  *
  * @return array|mixed
