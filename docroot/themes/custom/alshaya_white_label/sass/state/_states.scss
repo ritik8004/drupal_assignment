@@ -22,6 +22,6 @@
   }
 
   @include breakpoint($tablet) {
-    @include u-visibility(hide, true);
+    @include u-visibility(none, true);
   }
 }
