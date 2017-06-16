@@ -113,7 +113,7 @@
       $('.main--menu').hover(function () {
         header_timer = setTimeout(function () {
           $('body').addClass('overlay');
-        }, 700);
+        }, 400);
       }, function () {
         clearTimeout(header_timer);
         $('body').removeClass('overlay');
@@ -173,7 +173,7 @@
         $('.block-alshaya-main-menu').mouseenter(function () {
           setTimeout(function () {
             $(parent).parent().addClass('active--menu--links');
-          }, 500);
+          }, 410);
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {
