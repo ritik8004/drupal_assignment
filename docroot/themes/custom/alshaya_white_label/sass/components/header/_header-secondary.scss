@@ -356,3 +356,13 @@ body {
 .logged-in .menu--account li:first-child {
   margin-#{$right}: -0.3125rem;
 }
+
+html[lang='ar'] {
+  .menu--account {
+    margin-#{$right}: -0.375rem;
+
+    a.register-link {
+      margin-#{$right}: -0.375rem;
+    }
+  }
+}
