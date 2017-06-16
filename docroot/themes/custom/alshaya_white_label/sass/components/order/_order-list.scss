@@ -233,6 +233,12 @@
     border-bottom: 1px solid $white;
   }
 
+  &:nth-of-type(1) {
+    td {
+      border-top: none;
+    }
+  }
+
   td {
     border-top: 1px solid $white;
     padding: 1.313rem 1.5rem !important;
