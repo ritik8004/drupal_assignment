@@ -107,36 +107,14 @@ class APIWrapper {
       return ($client->get($endpoint, $opt));
     };
 
-    $stock = [];
-
     try {
-      // Cache id.
-      $cid = 'stock:' . strtolower(Html::cleanCssIdentifier($sku));
-
-      // If information is cached.
-      if ($cache = \Drupal::cache('data')->get($cid)) {
-        $stock = $cache->data;
-      }
-      else {
-        $stock = $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
-        $stock_check_proportion = \Drupal::config('acq_commerce.conductor')->get('stock_check_cache_proportion');
-
-        // Calculate the time in seconds (config contains in minutes).
-        $time = $stock['quantity'] ? $stock['quantity'] * $stock_check_proportion * 60 : $stock_check_proportion * 60;
-
-        // Calculate the timestamp when we want the cache to expire.
-        $expire = \Drupal::time()->getRequestTime() + $time;
-
-        // Set the stock in cache.
-        \Drupal::cache('data')->set($cid, $stock, $expire);
-      }
+      return $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
     }
     catch (ConductorException $e) {
-      // Log the stock error, do not throw error if stock info is missing.
-      $this->logger->emergency('Unable to get the stock for @sku : @message', ['@sku' => $sku, '@message' => $e->getMessage()]);
+      throw $e;
     }
 
-    return $stock;
+    return NULL;
   }
 
   /**

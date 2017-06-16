@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
@@ -214,6 +215,13 @@ class Configurable extends SKUPluginBase {
         \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
       catch (\Exception $e) {
+        // Clear stock cache.
+        $stock_cid = acq_sku_get_stock_cache_id($tree_pointer);
+        \Drupal::cache('data')->invalidate($stock_cid);
+
+        // Clear product and forms related to sku.
+        Cache::invalidateTags(['acq_sku:' . $tree_pointer->id()]);
+
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
         $event = new AddToCartErrorEvent($e);

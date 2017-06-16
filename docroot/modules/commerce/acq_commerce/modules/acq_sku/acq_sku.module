@@ -8,6 +8,7 @@
  * connector.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Element;
 
 /**
@@ -98,4 +99,69 @@ function acq_sku_theme_suggestions_acq_sku(array $variables) {
   $suggestions[] = 'acq_sku__' . $sku->id();
   $suggestions[] = 'acq_sku__' . $sku->id() . '__' . $sanitized_view_mode;
   return $suggestions;
+}
+
+/**
+ * Helper function to get cache id for sku stock.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU Entity object.
+ *
+ * @return string
+ *   Cache id.
+ */
+function acq_sku_get_stock_cache_id(SKU $sku_entity) {
+  return 'stock:' . $sku_entity->language()->getId() . ':' . $sku_entity->id();
+}
+
+/**
+ * Checks the stock for the given sku.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU Entity object.
+ *
+ * @return array|mixed
+ *   Available stock detail.
+ *
+ * @throws \Exception
+ */
+function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
+  try {
+    // Cache id.
+    $cid = acq_sku_get_stock_cache_id($sku_entity);
+
+    $cache = \Drupal::cache('data')->get($cid);
+
+    // If information is cached.
+    if (!$reset && !empty($cache)) {
+      $stock = $cache->data;
+    }
+    else {
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+
+      // Update API context to match the store id with requested langcode.
+      $api_wrapper->updateStoreContext(acq_commerce_get_store_id_from_langcode($sku_entity->language()->getId()));
+
+      // Get the stock.
+      $stock = $api_wrapper->skuStockCheck($sku_entity->getSku());
+
+      // If cache multiplier is zero we don't cache the stock.
+      if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
+        $time = $stock['quantity'] ? $stock['quantity'] * $cache_multiplier : $cache_multiplier;
+
+        // Calculate the timestamp when we want the cache to expire.
+        $expire = \Drupal::time()->getRequestTime() + $time;
+
+        // Set the stock in cache.
+        \Drupal::cache('data')->set($cid, $stock, $expire);
+      }
+    }
+  }
+  catch (ConductorException $e) {
+    // Log the stock error, do not throw error if stock info is missing.
+    \Drupal::logger('acq_sku')->emergency('Unable to get the stock for @sku : @message', ['@sku' => $sku_entity->getSku(), '@message' => $e->getMessage()]);
+  }
+
+  return $stock;
 }
