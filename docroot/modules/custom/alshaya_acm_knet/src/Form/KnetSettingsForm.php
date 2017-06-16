@@ -30,6 +30,7 @@ class KnetSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_acm_knet.settings')
       ->set('resource_path', $form_state->getValue('resource_path'))
+      ->set('use_secure_response_url', $form_state->getValue('use_secure_response_url'))
       ->set('alias', $form_state->getValue('alias'))
       ->set('payment_pending', $form_state->getValue('payment_pending'))
       ->set('payment_processed', $form_state->getValue('payment_processed'))
@@ -51,6 +52,15 @@ class KnetSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Resource path'),
       '#required' => TRUE,
       '#default_value' => $config->get('resource_path'),
+    ];
+
+    $form['use_secure_response_url'] = [
+      '#type' => 'select',
+      '#options' => [0 => $this->t('No'), 1 => $this->t('Yes')],
+      '#description' => $this->t('Use secure (https) for response url. Should be enabled on production, requires valid SSL certificate.'),
+      '#title' => $this->t('Use secure response url'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('use_secure_response_url'),
     ];
 
     $form['alias'] = [

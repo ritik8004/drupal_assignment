@@ -69,8 +69,8 @@ class KnetPaymentRedirect extends CheckoutPaneBase implements CheckoutPaneInterf
     $pipe->setCurrency(KNET_CURRENCY_KWD);
     $pipe->setLanguage(KNET_LANGUAGE_EN);
 
-    \Drupal::logger('alshaya_acm_knet')->info(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE, 'https' => FALSE])->toString());
-    $pipe->setResponseUrl(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE, 'https' => FALSE])->toString());
+    $https = (bool) $knet_settings->get('use_secure_response_url');
+    $pipe->setResponseUrl(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE, 'https' => $https])->toString());
     $pipe->setErrorUrl(Url::fromRoute('alshaya_acm_knet.error', ['order_id' => $order['order_id']], ['absolute' => TRUE])->toString());
 
     $pipe->setAmt($order['totals']['grand']);
