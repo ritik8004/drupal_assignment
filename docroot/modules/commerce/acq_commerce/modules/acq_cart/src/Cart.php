@@ -487,7 +487,9 @@ class Cart implements CartInterface {
   public function convertToCustomerCart(array $cart) {
     $this->cart->cart_id = $cart['cart_id'];
     $this->cart->customer_id = $cart['customer_id'];
-    $this->cart->customer_email = $cart['customer_email'];
+    if (!empty($cart['customer_email'])) {
+      $this->cart->customer_email = $cart['customer_email'];
+    }
   }
 
   /**

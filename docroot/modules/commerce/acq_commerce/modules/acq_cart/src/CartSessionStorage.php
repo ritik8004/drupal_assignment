@@ -219,7 +219,7 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function associateCart($customer_id) {
+  public function associateCart($customer_id, $customer_email = '') {
     // We first update the session cart.
     $cart = $this->session->get(self::STORAGE_KEY);
     if (!$cart) {
@@ -229,6 +229,7 @@ class CartSessionStorage implements CartStorageInterface {
     $data = [
       'cart_id' => $cart->id(),
       'customer_id' => $customer_id,
+      'customer_email' => $customer_email
     ];
     $cart->convertToCustomerCart($data);
     $this->session->set(self::STORAGE_KEY, $cart);
