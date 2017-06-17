@@ -169,7 +169,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $plugin = $this->getSelectedPlugin();
     $plugin->submitPaymentForm($pane_form, $form_state, $complete_form);
-    \Drupal::service('acq_cart.cart_storage')->updateCart();
   }
 
 }

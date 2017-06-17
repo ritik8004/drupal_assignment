@@ -202,17 +202,55 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    parent::submitForm($form, $form_state);
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $panes = $this->getPanes($this->stepId);
+    foreach ($panes as $pane_id => $pane) {
+      $pane->validatePaneForm($form[$pane_id], $form_state, $form);
+    }
 
+    if ($form_state->getErrors() || $form_state->isRebuilding()) {
+      return;
+    }
+
+    // We submit panes in validate itself to allow setting form errors.
+    foreach ($panes as $pane_id => $pane) {
+      $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+    }
+
+    if ($form_state->getErrors() || $form_state->isRebuilding()) {
+      return;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($next_step_id = $this->getNextStepId()) {
+      try {
+        /** @var \Drupal\acq_cart\Cart $cart */
+        $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('alshaya_acm_checkout')->error('Error while updating cart in @step: @message', [
+          '@step' => $this->stepId,
+          '@message' => $e->getMessage(),
+        ]);
+
+        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        $this->redirectToStep($cart->getCheckoutStep());
+      }
+
+      $cart->setCheckoutStep($next_step_id);
+      $form_state->setRedirect('acq_checkout.form', [
+        'step' => $next_step_id,
+      ]);
+
       if ($next_step_id == 'confirmation') {
         $cart = $this->cartStorage->getCart();
+        $cart_id = $this->cartStorage->getCartId();
 
         try {
-          $this->cartStorage->pushCart();
-          $cart_id = $this->cartStorage->getCartId();
-
           // Place an order.
           $response = $this->apiWrapper->placeOrder($cart_id);
         }

@@ -286,16 +286,6 @@ class GuestDeliveryHome extends AddressFormBase {
       $cart->convertToCustomerCart($customer_cart);
       \Drupal::service('acq_cart.cart_storage')->addCart($cart);
     }
-
-    try {
-      \Drupal::service('acq_cart.cart_storage')->updateCart();
-    }
-    catch (\Exception $e) {
-      \Drupal::logger('alshaya_acm_checkout')->error('Error while updating cart in guest delivery home: @message', ['@message' => $e->getMessage()]);
-      $form_state->setErrorByName('custom', '');
-      drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
-      return;
-    }
   }
 
   /**

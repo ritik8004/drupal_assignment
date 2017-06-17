@@ -55,6 +55,17 @@ class Cart implements CartInterface {
   }
 
   /**
+   * Function to update cart object.
+   *
+   * @param object $cart
+   *   The cart.
+   */
+  public function updateCartObject($cart) {
+    $this->cart = $cart;
+    $this->updateCartItemsCount();
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function id() {
