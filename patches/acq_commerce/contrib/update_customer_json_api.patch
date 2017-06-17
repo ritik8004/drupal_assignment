@@ -1,0 +1,42 @@
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
+index 4452d86..41591b3 100644
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
+@@ -430,6 +430,37 @@ public function updateCustomer($customer_id, $first_name, $last_name, $email, $p
+   }
+ 
+   /**
++   * Updates a customer.
++   *
++   * @param array $customer
++   *   Customer array to update (fully prepared array).
++   *
++   * @return array
++   *   New customer array.
++   *
++   * @throws \Exception
++   *   Failed request exception.
++   */
++  public function updateCustomerJson(array $customer) {
++    // Calling function will be responsible to pass a clean customer array here.
++    $endpoint = $this->apiVersion . '/agent/customer';
++
++    $doReq = function ($client, $opt) use ($endpoint, $customer) {
++      $opt['json']['customer'] = $customer;
++      return ($client->post($endpoint, $opt));
++    };
++
++    try {
++      $customer = $this->tryAgentRequest($doReq, 'updateCustomer', 'customer');
++    }
++    catch (ConductorException $e) {
++      throw new \Exception($e->getMessage(), $e->getCode());
++    }
++
++    return $customer;
++  }
++
++  /**
+    * Authenticate customer.
+    *
+    * @param string $email
