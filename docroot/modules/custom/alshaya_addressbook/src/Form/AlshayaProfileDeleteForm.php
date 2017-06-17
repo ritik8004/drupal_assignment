@@ -89,6 +89,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
 
     $form['actions']['cancel']['#attributes']['class'][] = 'button';
     $form['actions']['cancel']['#attributes']['class'][] = 'dialog-cancel';
+    $form['actions']['cancel']['#attributes']['class'][] = 'address-book-dialog-cancel';
 
     return $form;
   }

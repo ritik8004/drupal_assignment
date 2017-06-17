@@ -23,6 +23,12 @@
           toggleOverlay('.ui-dialog-buttonpane .dialog-cancel', 'modal-overlay');
         });
       });
+
+      // Close overlay.
+      $('.address-book-dialog-cancel').on('click', function() {
+        $('body').removeClass('modal-overlay');
+      });
+
     }
   };
 
