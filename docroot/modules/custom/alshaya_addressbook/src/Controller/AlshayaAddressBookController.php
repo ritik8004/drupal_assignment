@@ -3,7 +3,8 @@
 namespace Drupal\alshaya_addressbook\Controller;
 
 use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\profile\Controller\ProfileController;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\profile\Entity\ProfileInterface;
@@ -142,7 +143,8 @@ class AlshayaAddressBookController extends ProfileController {
       return $form;
     }
     $response = new AjaxResponse();
-    $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form));
+    $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
+    $response->addCommand(new RemoveCommand('.messages__wrapper'));
     return $response;
   }
 
@@ -165,7 +167,8 @@ class AlshayaAddressBookController extends ProfileController {
       return $form;
     }
     $response = new AjaxResponse();
-    $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form));
+    $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
+    $response->addCommand(new RemoveCommand('.messages__wrapper'));
     return $response;
   }
 
