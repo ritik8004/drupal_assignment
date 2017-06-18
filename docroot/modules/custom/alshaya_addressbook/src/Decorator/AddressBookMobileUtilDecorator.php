@@ -55,7 +55,7 @@ class AddressBookMobileUtilDecorator extends MobileNumberUtil {
   ]) {
     // Remove leading zero due to which number is un-recognizable.
     $number = ltrim($number, 0);
-    return $this->mobileUtil->getMobileNumber($number, $country);
+    return $this->mobileUtil->getMobileNumber($number, $country, $types);
   }
 
 }
