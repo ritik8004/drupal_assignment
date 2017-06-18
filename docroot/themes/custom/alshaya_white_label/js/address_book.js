@@ -24,9 +24,12 @@
         });
       });
 
-      // Close overlay.
-      $('.address-book-dialog-cancel').on('click', function() {
-        $('body').removeClass('modal-overlay');
+      // On dialog close.
+      $(window).on('dialog:afterclose', function (e, dialog, $element) {
+        // If body has overlay class, remove it.
+        if ($('body').hasClass('modal-overlay')) {
+          $('body').removeClass('modal-overlay');
+        }
       });
 
     }
