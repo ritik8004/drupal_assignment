@@ -53,11 +53,6 @@
           }
         }
 
-        @include breakpoint($mobile) {
-          width: 50%;
-          max-width: 9rem;
-        }
-
         @include breakpoint($tablet) {
           height: 24rem;
         }
