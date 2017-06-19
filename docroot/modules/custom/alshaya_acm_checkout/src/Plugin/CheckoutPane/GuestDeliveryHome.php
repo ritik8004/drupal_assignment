@@ -175,12 +175,12 @@ class GuestDeliveryHome extends AddressFormBase {
     if (!empty($shipping_methods)) {
       foreach ($shipping_methods as $method) {
         // Key needs to hold both carrier and method.
-        $key = implode(',', [$method['carrier_code'], $method['method_code']]);
+        $key = implode('_', [$method['carrier_code'], $method['method_code']]);
 
         // @TODO: Currently what we get back in orders is first 32 characters
         // and concatenated by underscore.
-        $code = substr(implode('_', [$method['carrier_code'], $method['method_code']]), 0, 32);
-        $name = $method['method_title'];
+        $code = substr($key, 0, 32);
+        $name = t('@method_title by @carrier_title', ['@method_title' => $method['method_title'], '@carrier_title' => $method['carrier_title']]);
         $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
 
         $term = alshaya_acm_checkout_load_shipping_method($code, $name);
@@ -194,7 +194,7 @@ class GuestDeliveryHome extends AddressFormBase {
           <div class="shipping-method-name">
             <div class="shipping-method-title">' . $term->getName() . '</div>
             <div class="shipping-method-price">' . $price . '</div>
-            <div class="shipping-method-description">' . $term->get('description')->getString() . '</div>
+            <div class="shipping-method-description">' . $term->get('description')->getValue()[0]['value'] . '</div>
           </div>
         ';
 
@@ -255,7 +255,7 @@ class GuestDeliveryHome extends AddressFormBase {
       return;
     }
 
-    list($carrier, $method) = explode(',', $shipping_method);
+    list($carrier, $method) = explode('_', $shipping_method);
 
     $cart->setShippingMethod($carrier, $method);
 
