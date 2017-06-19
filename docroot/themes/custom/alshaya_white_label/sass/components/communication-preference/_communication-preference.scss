@@ -72,6 +72,13 @@ form.user-communication-preference {
   }
 
   html[lang=ar] & {
+    .form-item-communication-preference-email,
+    .form-item-communication-preference-mobile {
+      span {
+        font-family: $arial-nodir;
+      }
+    }
+
     .form-item-communication-preference-mobile {
       label {
         position: relative;
@@ -81,7 +88,7 @@ form.user-communication-preference {
         direction: ltr;
         float: left;
         position: absolute;
-        left: -6.75rem;
+        left: -7.5rem;
         top: 0.375rem;
       }
     }

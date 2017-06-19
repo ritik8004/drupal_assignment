@@ -87,7 +87,7 @@ class UserCommunicationPreference extends FormBase {
 
     // Display email as communication preference.
     $options = [
-      'email' => $this->t('Email') . ' (' . $account->getEmail() . ')',
+      'email' => $this->t('Email') . ' <span>(' . $account->getEmail() . ')</span>',
     ];
 
     // Display mobile as communication preference if not empty.
