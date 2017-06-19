@@ -27,8 +27,8 @@
         }
 
         @include breakpoint($only-mobile) {
-          top: 0.625rem;
-          #{$left}: 4.375rem;
+          bottom: -2rem;
+          #{$left}: 40%;
         }
       }
     }
