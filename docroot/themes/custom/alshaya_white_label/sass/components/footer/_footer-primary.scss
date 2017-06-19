@@ -29,7 +29,6 @@
   .primary--footer--right {
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 0.8rem;
     }
 
     @include breakpoint($desktop) {
@@ -93,7 +92,7 @@
 
   .footer--categories {
     @include breakpoint($only-tablet) {
-      margin-#{$right}: 3.25rem;
+      margin-#{$right}: 1.25rem;
     }
   }
 
@@ -156,6 +155,14 @@
     &:hover {
       color: $cerulean-two;
       text-decoration: underline;
+    }
+  }
+
+  .cols-6 & {
+    &:last-child {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 1rem;
+      }
     }
   }
 }
