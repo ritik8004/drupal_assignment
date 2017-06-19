@@ -829,6 +829,10 @@
   &-field-skus {
     border-bottom: 1px solid $whisper-dark;
 
+    .acq-content-product-modal & {
+      border-bottom: none;
+    }
+
     @include breakpoint($only-mobile) {
       height: 8rem;
     }
