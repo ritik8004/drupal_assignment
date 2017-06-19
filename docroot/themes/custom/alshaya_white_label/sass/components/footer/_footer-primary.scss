@@ -323,7 +323,9 @@
         right: 0;
         top: 100%;
         color: $red-error;
-        padding: 0.25em 0;
+        padding: 0.3125rem 0;
+        z-index: 9;
+        background: $white-five;
       }
     }
   }
