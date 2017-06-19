@@ -553,7 +553,7 @@ function alshaya_white_label_preprocess_user(&$variables) {
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
     $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user, 1, TRUE);
     $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
-    $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
+    $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card, TRUE) : '';
 
     $module_handler = \Drupal::moduleHandler();
     if ($module_handler->moduleExists('alshaya_loyalty')) {
