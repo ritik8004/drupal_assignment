@@ -2,10 +2,10 @@
 
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
-use Drupal\acq_checkout\Plugin\CheckoutPane\AddressFormBase;
+use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
+use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\mobile_number\MobileNumberUtilInterface;
 
 /**
  * Provides the delivery home pane for guests.
@@ -17,7 +17,7 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
  *   wrapperElement = "fieldset",
  * )
  */
-class GuestDeliveryHome extends AddressFormBase {
+class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterface {
 
   /**
    * {@inheritdoc}
@@ -57,39 +57,32 @@ class GuestDeliveryHome extends AddressFormBase {
 
     $form_state->setTemporaryValue('address', $address_object);
 
-    $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
+    $address_storage = \Drupal::entityTypeManager()->getStorage('profile');
+    $address_entity = $address_storage->create([
+      'type' => 'address_book',
+    ]);
 
-    // Do required changes in weight.
-    $pane_form['address']['first_name']['#weight'] = -10;
-    $pane_form['address']['last_name']['#weight'] = -9;
-    $pane_form['address']['phone']['#weight'] = 0;
+    /** @var \Drupal\Core\Entity\EntityFormBuilder $entity_form_builder */
+    $entity_form_builder = \Drupal::service('entity.form_builder');
 
-    // Update the phone number to mobile_number field instead of textfield.
-    $pane_form['address']['phone']['#type'] = 'mobile_number';
-    $pane_form['address']['phone']['#title_display'] = 'above';
-    $pane_form['address']['phone']['#verify'] = MobileNumberUtilInterface::MOBILE_NUMBER_VERIFY_NONE;
-    $pane_form['address']['phone']['#default_value'] = [
-      'value' => $pane_form['address']['phone']['#default_value'],
-    ];
+    $address_form = $entity_form_builder->getForm($address_entity, 'add');
 
-    // Fix default value for region.
-    if (isset($pane_form['address']['dynamic_parts']['region'])) {
-      $region_options = $pane_form['address']['dynamic_parts']['region']['#options'];
+    $pane_form['address']['field_address'] = $address_form['field_address'];
+    $pane_form['address']['field_address']['#weight'] = -5;
 
-      if ($region = $pane_form['address']['dynamic_parts']['region']['#default_value']) {
-        $pane_form['address']['dynamic_parts']['region']['#default_value'] = alshaya_acm_checkout_get_region_id_from_name($region, $pane_form['address']['dynamic_parts']['country']['#default_value']);
-      }
+    $pane_form['address']['field_mobile_number'] = $address_form['field_mobile_number'];
+    $pane_form['address']['field_address']['#weight'] = -4;
 
-      $pane_form['address']['dynamic_parts']['region']['#access'] = !empty($region_options);
-    }
+    $pane_form['address']['field_address_id'] = $address_form['field_address_id'];
+    $pane_form['address']['field_address']['#weight'] = -3;
 
-    $pane_form['address']['email'] = [
+    $pane_form['address']['field_address']['widget'][0]['address']['email'] = [
       '#type' => 'email',
       '#title' => $this->t('Email Address'),
       '#required' => TRUE,
       '#attributes' => ['placeholder' => [$this->t('Email Address')]],
-      '#weight' => -8,
       '#default_value' => $cart->customerEmail(),
+      '#weight' => -1,
     ];
 
     $shipping_methods = self::generateShippingEstimates($address);
