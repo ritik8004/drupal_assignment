@@ -3,10 +3,12 @@ status: true
 dependencies:
   config:
     - field.field.profile.address_book.field_address
-    - field.field.profile.address_book.field_telephone
+    - field.field.profile.address_book.field_address_id
+    - field.field.profile.address_book.field_mobile_number
     - profile.type.address_book
   module:
     - address
+    - mobile_number
 id: profile.address_book.default
 targetEntityType: profile
 bundle: address_book
@@ -18,11 +20,15 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: address_default
-  field_telephone:
+    region: content
+  field_mobile_number:
     weight: 1
     label: above
-    settings: {  }
+    settings:
+      as_link: false
     third_party_settings: {  }
-    type: basic_string
+    type: mobile_number_international
+    region: content
 hidden:
+  field_address_id: true
   langcode: true

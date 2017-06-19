@@ -16,3 +16,102 @@ function acq_commerce_page_attachments(array &$attachments) {
     $attachments['#attached']['library'][] = 'acq_commerce/drupal.acq_commerce.toolbar';
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function acq_commerce_theme($existing, $type, $theme, $path) {
+  return [
+    'acq_commerce_price' => [
+      'variables' => [
+        'price' => '',
+        'currency_format' => '',
+        'currency_code_position' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Format price value with currency.
+ *
+ * Default template: acq-commerce-price.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - price: a price value.
+ */
+function template_preprocess_acq_commerce_price(array &$variables) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+
+  // Fetch the currency format from the config factor.
+  $variables['currency_format'] = $config->get('currency_code');
+
+  // Fetch the currency code position.
+  $variables['currency_code_position'] = $config->get('currency_code_position');
+
+  $variables['price'] = number_format($variables['price'], $config->get('decimal_points'));
+}
+
+/**
+ * Helper function to get mapping between all store ids and language codes.
+ *
+ * @return array
+ *   Mapping array.
+ */
+function acq_commerce_get_store_language_mapping() {
+  $mapping = [];
+
+  $languages = \Drupal::languageManager()->getLanguages();
+
+  // Prepare the alternate locale data.
+  foreach ($languages as $lang => $language) {
+    // For default language, we access the config directly.
+    if ($lang == \Drupal::languageManager()->getDefaultLanguage()->getId()) {
+      $config = \Drupal::config('acq_commerce.store');
+    }
+    // We get store id from translated config for other languages.
+    else {
+      $config = \Drupal::languageManager()->getLanguageConfigOverride($lang, 'acq_commerce.store');
+    }
+
+    $mapping[$lang] = $config->get('store_id');
+  }
+
+  return $mapping;
+}
+
+/**
+ * Helper function to get store id from language code.
+ *
+ * @param string $langcode
+ *   Language code to convert to store id.
+ *
+ * @return string|null
+ *   Store id if available as string or null.
+ */
+function acq_commerce_get_store_id_from_langcode($langcode) {
+  $mapping = acq_commerce_get_store_language_mapping();
+  return !empty($mapping[$langcode]) ? $mapping[$langcode] : NULL;
+}
+
+/**
+ * Helper function to get language code from store id.
+ *
+ * @param $store_id
+ *   Store id to convert to language code.
+ *
+ * @return string|null
+ *   Language code if available or null.
+ */
+function acq_commerce_get_langcode_from_store_id($store_id) {
+  $mapping = acq_commerce_get_store_language_mapping();
+  $mapping = array_flip($mapping);
+
+  if (empty($store_id)) {
+    return array_shift($mapping);
+  }
+
+  return !empty($mapping[$store_id]) ? $mapping[$store_id] : NULL;
+}

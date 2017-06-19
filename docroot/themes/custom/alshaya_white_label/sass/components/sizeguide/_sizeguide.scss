@@ -1,18 +1,32 @@
 // Size Guide Link theme
 .size-guide-link {
-  float: right;
-  padding-top: 10px;
+  float: $right;
+  padding-top: 0.625rem;
+  font-size: 0.6875rem;
+  color: $cerulean;
+
+  + .ajax-progress-throbber {
+    @include u-visibility(none);
+  }
 }
 
 // Size Guide modal popup theming
+.path--cart .ui-dialog,
 .nodetype--acq_product .ui-dialog {
   height: 100% !important;
   width: 100% !important;
   top: 0 !important;
   left: 0 !important;
   background: rgba(0, 0, 0, 0.5);
-  padding: 100px calc((100% - 1080px) / 2);
   overflow: hidden;
+
+  @include breakpoint($tablet) {
+    padding: calc((100vh - 36rem) / 2) calc((100vw - 48rem) / 2);
+  }
+
+  @include breakpoint($desktop) {
+    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2);
+  }
 
   .ui-dialog-titlebar {
     padding: 0;
@@ -29,68 +43,15 @@
 
   #drupal-modal {
     background: $white-five;
-    padding: 2em;
+    padding: 1.5em;
+    overflow: hidden;
 
-    .sku-base-form {
-      padding: 20px 0;
-      border-bottom: 1px solid $white-two;
+    @include breakpoint($tablet) {
+      height: 36rem !important;
     }
 
-    .more-content {
-      border-bottom: 1px solid $white-two;
-      margin: 0;
-      padding: 16px 0;
-
-      .link {
-        font-size: 14px;
-        font-weight: bold;
-        color: $marine-blue;
-      }
-
-      .arrow {
-        @include icon(chevronright);
-
-        font-size: 20px;
-        font-weight: bold;
-        color: $marine-blue;
-        position: absolute;
-        right: 0;
-      }
-    }
-
-    #lightSlider {
-      margin-top: 50px;
-      padding-left: 0;
-
-      img {
-        width: 100%;
-        height: auto;
-      }
-
-      &.pager-no {
-        margin-top: 0;
-      }
-
-      li {
-        overflow: hidden;
-
-        @include breakpoint($tablet) {
-          height: 60px !important;
-        }
-
-        @include breakpoint($desktop) {
-          height: 85px !important;
-          float: none !important;
-        }
-
-        &.active {
-          border: 1px solid;
-        }
-
-        img {
-          width: 100%;
-        }
-      }
+    @include breakpoint($desktop) {
+      height: 34.75rem !important;
     }
   }
 }

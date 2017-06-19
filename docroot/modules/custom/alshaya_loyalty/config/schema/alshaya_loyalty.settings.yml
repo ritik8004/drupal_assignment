@@ -5,8 +5,15 @@ alshaya_loyalty.settings:
   label: 'Custom loyalty settings'
   mapping:
     apcn_max_length:
-      type: integer
+      type: label
       label: 'Max. Length'
     apcn_value_starts_with:
-      type: string
+      type: label
       label: 'Value starts with'
+    enable_disable_loyalty:
+      # Keeping this to integer as we don't want to enable/disable only for one language.
+      type: integer
+      label: 'Enable or disable loyalty on site'
+    langcode:
+      type: string
+      label: 'Language code'

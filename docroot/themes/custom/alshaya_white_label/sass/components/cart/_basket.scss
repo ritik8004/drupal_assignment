@@ -5,6 +5,11 @@
     }
 
     table tr {
+      &.sku-out-stock {
+        opacity: 0.7;
+        background-color: $white-four;
+      }
+
       td {
         @include breakpoint($upto-tablet) {
           display: block;
@@ -49,11 +54,16 @@
     }
 
     .delivery-options-mobile,
-    .quantity .form-type-select,
-    .tooltip--wrap {
+    .quantity .form-type-select {
       @include breakpoint($upto-tablet) {
         display: inline-block;
         vertical-align: top;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      .delivery-options-mobile {
+        @include u-visibility(none);
       }
     }
   }
@@ -65,8 +75,11 @@
       font-size: 0.875rem;
     }
 
-    .price-currency.prefix {
+    .price-currency.prefix,
+    .price-currency.suffix {
       padding-right: 0.5rem;
+      float: $left;
+      font-family: $arial;
 
       @include breakpoint($tablet) {
         padding-right: 0;
@@ -75,6 +88,10 @@
       @include breakpoint($desktop) {
         padding-right: 1.56rem;
       }
+    }
+
+    .price-currency.suffix {
+      line-height: 1;
     }
 
     .image {
@@ -108,10 +125,15 @@
 
       @include breakpoint($desktop) {
         width: 58%;
+        padding-top: 0.125rem;
       }
 
       div {
         margin-bottom: 0.187rem;
+      }
+
+      .dark + div {
+        font-family: $arial;
       }
     }
 
@@ -128,12 +150,30 @@
     }
   }
 
+  .delivery-options-mobile {
+    @include breakpoint($only-mobile) {
+      float: $left;
+    }
+  }
+
   .tooltip--wrap {
     padding-#{$left}: 2.2rem;
+
+    @include breakpoint($only-mobile) {
+      float: $right;
+      margin-bottom: 1.6875rem;
+      margin-#{$right}: 1.7rem;
+      padding-#{$left}: 1rem;
+
+      &:last-child {
+        clear: both;
+      }
+    }
 
     @include breakpoint($tablet) {
       padding-#{$left}: 0;
       margin-top: 0.625rem;
+      margin-bottom: 2.125rem;
     }
   }
 
@@ -143,22 +183,25 @@
     .tooltip {
       display: none;
       font-size: 0.625rem;
+      font-family: $arial;
       position: absolute;
       z-index: 1;
-      padding: 5px 11px;
-      top: 1.25rem;
-      #{$right}: 5rem;
+      padding: 10px 11px;
+      top: 1rem;
+      #{$left}: -4.5rem;
+      color: $windows-blue;
       background-color: $alice-blue;
       border: 1px solid $cerulean-two;
+      border-radius: 2px;
       width: 10.81rem;
 
-      @include breakpoint($upto-desktop) {
-        #{$right}: 0;
+      @include breakpoint($desktop) {
+        #{$left}: 1.1rem;
       }
-    }
 
-    &:hover .tooltip {
-      display: block;
+      @include breakpoint($only-mobile) {
+        #{$left}: -3.5rem;
+      }
     }
 
     &:nth-child(2) {
@@ -176,17 +219,32 @@
 
   .tooltip--head {
     font-size: 0.75rem;
+    font-family: $arial;
     color: $cerulean-two;
     margin: 0;
 
     @include icon(infomation, after) {
       margin-#{$left}: 0.3rem;
+      display: inline-block;
       vertical-align: middle;
       font-weight: bold;
       font-size: 1rem;
 
       @include breakpoint($desktop) {
-        margin-#{$left}: 1rem;
+        margin-#{$left}: 0.75rem;
+      }
+    }
+
+    &:hover + .tooltip {
+      display: block;
+    }
+
+    &.not-available {
+      color: $white;
+      text-decoration: line-through;
+
+      &:hover + .tooltip {
+        display: none;
       }
     }
   }
@@ -198,21 +256,36 @@
     @extend %tooltip-before-after;
 
     @include breakpoint($desktop) {
-      #{$right}: 36px;
+      #{$right}: 5rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 1rem;
     }
   }
 
   .tooltip::after {
     @extend %tooltip-after;
+
+    border-bottom-width: 6px;
+
+    @include breakpoint($desktop) {
+      #{$right}: 5.05rem;
+    }
   }
 
   .tooltip::before {
     #{$right}: 3px;
+    border-bottom-width: 8px;
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 0.9375rem;
+    }
 
     @extend %tooltip-before;
 
     @include breakpoint($desktop) {
-      #{$right}: 35px;
+      #{$right}: 5rem;
     }
   }
 
@@ -235,6 +308,14 @@
   }
 }
 
+.alias--cart {
+  &.path--cart .site-brand-home a {
+    width: auto;
+    display: block;
+    margin-#{$left}: auto;
+  }
+}
+
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
     border-top: 1px solid $white;
@@ -253,6 +334,7 @@
     padding: 1rem;
     position: relative;
     outline: none;
+    font-family: $arial;
 
     @include breakpoint($tablet) {
       padding: 1rem 1.5rem;
@@ -297,6 +379,7 @@
     top: -3.4rem;
     font-size: 0.75rem;
     color: $greyish;
+    font-family: $arial;
 
     &.error {
       bottom: 7px;
@@ -338,7 +421,7 @@
     background: $pumpkin-orange;
     color: $white-five;
     cursor: pointer;
-    margin-#{$left}: 1rem;
+    margin-#{$left}: 1.5rem;
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: 1.5rem;
@@ -364,7 +447,7 @@
     padding-top: 2.7rem;
   }
 
-  & > h2 {
+  & > h3 {
     color: $marine-blue;
     margin-bottom: 0.3rem;
     padding-bottom: 0.56rem;
@@ -410,6 +493,10 @@
     .owl-prev,
     .owl-next {
       @include breakpoint($tablet) {
+        top: 20.3%;
+      }
+
+      @include breakpoint($desktop) {
         top: 19.7%;
       }
     }
@@ -421,7 +508,7 @@
     }
 
     .owl-next {
-      @include breakpoint($desktop) {
+      @include breakpoint($tablet) {
         right: -2.7rem;
       }
     }
@@ -443,16 +530,168 @@
   margin-bottom: 0.875rem;
   letter-spacing: 0.0125rem;
 
+  @include breakpoint($tablet) {
+    margin-top: -1em;
+  }
+
   @include breakpoint($desktop) {
     padding: 0.8125rem 1.5625rem;
+    margin-top: 0;
+    margin-bottom: 1.3rem;
   }
 
   p {
     margin: 0;
     font-size: 0.75rem;
+    font-family: $arial;
 
     @include breakpoint($desktop) {
       font-size: 0.9375rem;
     }
   }
 }
+
+#out-of-stock-message {
+  font-family: $arial;
+  font-size: 0.75rem;
+  color: $white-four;
+  font-weight: bold;
+  background-color: $cherry;
+  padding: 1.38rem 3rem;
+  margin-bottom: 0.875rem;
+  position: relative;
+
+  @include breakpoint($only-tablet) {
+    padding: 0.594rem 4rem;
+  }
+
+  @include breakpoint($desktop) {
+    font-size: 0.9375rem;
+    padding: 1rem 4rem;
+  }
+
+  @include icon(warning, after) {
+    background-size: 12px;
+    font-size: 28px;
+    position: absolute;
+    left: 11px;
+    top: 24px;
+
+    @include breakpoint($tablet) {
+      left: 23px;
+      top: 10px;
+    }
+  }
+}
+
+.inline-stock-error {
+  font-family: $arial;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: $cherry;
+  margin-top: 1.375rem;
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0.6875rem;
+  }
+}
+
+.stock-quantity-error {
+  .form-type-select {
+    border: 1px solid $cherry !important;
+    padding: 2px;
+    width: 4.75rem !important;
+
+    &::after {
+      #{$right}: 3px !important;
+      top: 2px !important;
+    }
+  }
+}
+
+#table-cart-totals,
+#table-cart-items {
+  .price-wrapper .price-amount {
+    float: $left;
+  }
+}
+
+html[lang=ar] {
+  .customer-cart-form .tooltip--wrap {
+    @include breakpoint($tablet) {
+      margin-top: 0.3125rem;
+      margin-bottom: 1.625rem;
+    }
+  }
+
+  tr[data-drupal-selector=edit-totals-grand] td:first-child {
+    line-height: 1.5;
+  }
+
+  .alias--cart {
+    .tooltip--head {
+      color: $black;
+      font-size: 0.65rem;
+    }
+
+    #table-cart-totals td {
+      text-align: right;
+    }
+
+    #table-cart-items {
+      tr {
+        td {
+          padding: 1.9rem 1.5rem;
+
+          &:first-child a {
+            line-height: 18px;
+          }
+        }
+
+        th {
+          padding: 1.06rem 2.5rem 0.88rem;
+
+          &:nth-child(4) {
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+
+  .edit-continue-shopping-mobile {
+    border: 1px solid $cobalt-blue !important;
+    position: absolute;
+    right: 0;
+    bottom: 1rem;
+    width: 10.8125rem;
+    padding: 0.67rem !important;
+    color: $cobalt-blue !important;
+  }
+
+  .c-page-title {
+    font-family: 'alshaya-arabic-thin';
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 1.375rem;
+    margin-top: 2em;
+
+    .placeholder {
+      font-size: 1.5rem;
+    }
+  }
+
+  .promo-continue-shopping-wrapper summary,
+  .path--cart .customer-cart-form .items .dark + div,
+  .alias--cart #table-cart-totals td:first-child,
+  #block-basketpromotionmessage p,
+  .alias--cart #table-cart-items tr th,
+  .ladda-label {
+    font-size: 0.6875rem;
+  }
+
+  .path--cart .customer-cart-form .items {
+    padding-right: 1.2rem;
+  }
+}
+

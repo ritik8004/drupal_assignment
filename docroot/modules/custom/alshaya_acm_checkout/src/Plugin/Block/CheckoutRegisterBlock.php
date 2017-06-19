@@ -109,6 +109,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $build = [];
 
     $account = $this->entityTypeManager->getStorage('user')->create([]);
+    $account->get('acq_customer_id')->setValue($order['customer_id']);
     $account->get('field_first_name')->setValue($order['firstname']);
     $account->get('field_last_name')->setValue($order['lastname']);
 
@@ -163,6 +164,13 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     return AccessResult::allowedIf($account->isAnonymous() && (\Drupal::config('user.settings')->get('register') != USER_REGISTER_ADMINISTRATORS_ONLY))
       ->addCacheContexts(['user.roles'])
       ->addCacheTags(\Drupal::config('user.settings')->getCacheTags());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
   }
 
 }

@@ -20,6 +20,7 @@ content:
       view_mode: 291x256
       link: ''
     third_party_settings: {  }
+    region: content
   field_1_row_2_col_2:
     type: entity_reference_revisions_entity_view
     weight: 1
@@ -28,4 +29,5 @@ content:
       view_mode: 606x256
       link: ''
     third_party_settings: {  }
+    region: content
 hidden: {  }

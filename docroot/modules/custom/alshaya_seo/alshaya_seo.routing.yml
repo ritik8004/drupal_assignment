@@ -5,3 +5,10 @@ alshaya_seo.google_knowledge_graph_form:
     _title: 'Google Knowledge Graph'
   requirements:
     _permission: 'access administration pages'
+alshaya_seo.sitemap:
+  path: '/sitemap'
+  defaults:
+    _controller: '\Drupal\alshaya_seo\Controller\AlshayaSeoController::siteMap'
+    _title: 'site map'
+  requirements:
+    _access: 'TRUE'

@@ -8,18 +8,24 @@
 
   Drupal.behaviors.sizeguide = {
     attach: function (context, settings) {
-      // JS for converting select list for size to unformatted list on PDP pages.
-      if ($('.content__sidebar .form-item-configurables-size .select2Option').length === 0) {
-        $('.content__sidebar .form-item-configurables-size select').select2Option();
-      }
-    }
-  };
+      // Show mobile slider only on mobile resolution.
+      select2OptionConvert();
+      $(window).on('resize', function (e) {
+        select2OptionConvert();
+      });
 
-  Drupal.behaviors.sizeguideclick = {
-    attach: function (context, settings) {
-      var clickedOption = $('.content__sidebar .form-item-configurables-size .select2Option li a.picked');
-      $('.content__sidebar .form-item-configurables-size .select2Option').find('.list-title .selected-text').remove();
-      $('.content__sidebar .form-item-configurables-size .select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span');
+      // JS for converting select list for size to unformatted list on PDP pages.
+      function select2OptionConvert() {
+        if ($(window).width() > 1024) {
+          $('.acq-content-product .form-item-configurables-size, .acq-content-product-modal .form-item-configurables-size').once('bind-events').each(function () {
+            $('select', $(this)).select2Option();
+
+            var clickedOption = $('.select2Option li a.picked', $(this));
+            $('.select2Option', $(this)).find('.list-title .selected-text').remove();
+            $('.select2Option', $(this)).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+          });
+        }
+      }
     }
   };
 

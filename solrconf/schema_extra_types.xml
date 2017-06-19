@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<types>
+
+  <!--
+    Arabic Text Field
+    4.5.0
+  -->
+  <fieldType name="text_ar" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_ar.txt" enablePositionIncrements="1"/>
+      <filter class="solr.ArabicNormalizationFilterFactory"/>
+      <filter class="solr.SynonymFilterFactory" synonyms="synonyms_ar.txt" expand="1" ignoreCase="1"/>
+      <filter class="solr.ArabicStemFilterFactory"/>
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_ar.txt" enablePositionIncrements="1"/>
+      <filter class="solr.ArabicNormalizationFilterFactory"/>
+      <filter class="solr.SynonymFilterFactory" synonyms="synonyms_ar.txt" expand="1" ignoreCase="1"/>
+      <filter class="solr.ArabicStemFilterFactory"/>
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+    </analyzer>
+  </fieldType>
+
+  <!-- Field that is not stemmed for spelling. -->
+  <fieldType name="text_spell_ar" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_ar.txt" enablePositionIncrements="1"/>
+      <filter class="solr.ArabicNormalizationFilterFactory"/>
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_ar.txt" enablePositionIncrements="1"/>
+      <filter class="solr.ArabicNormalizationFilterFactory"/>
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+    </analyzer>
+  </fieldType>
+
+  <!--
+    English Text Field
+    4.5.0
+  -->
+  <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <charFilter class="solr.MappingCharFilterFactory" mapping="accents_en.txt"/>
+      <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.LengthFilterFactory" min="2" max="100"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_en.txt"/>
+      <filter class="solr.WordDelimiterFilterFactory" catenateNumbers="1" generateNumberParts="1" protected="protwords_en.txt" splitOnCaseChange="0" generateWordParts="1" preserveOriginal="1" catenateAll="0" catenateWords="1"/>
+      <filter class="solr.SynonymFilterFactory" synonyms="synonyms_en.txt" expand="1" ignoreCase="1"/>
+      <filter class="solr.SnowballPorterFilterFactory" language="English" protected="protwords_en.txt"/>
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+    </analyzer>
+    <analyzer type="query">
+      <charFilter class="solr.MappingCharFilterFactory" mapping="accents_en.txt"/>
+      <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.LengthFilterFactory" min="2" max="100"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_en.txt"/>
+      <filter class="solr.WordDelimiterFilterFactory" catenateNumbers="0" generateNumberParts="1" protected="protwords_en.txt" splitOnCaseChange="0" generateWordParts="1" preserveOriginal="1" catenateAll="0" catenateWords="0"/>
+      <filter class="solr.SynonymFilterFactory" synonyms="synonyms_en.txt" expand="1" ignoreCase="1"/>
+      <filter class="solr.SnowballPorterFilterFactory" language="English" protected="protwords_en.txt"/>
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+    </analyzer>
+  </fieldType>
+
+  <!-- Field that is not stemmed for spelling. -->
+  <fieldType name="text_spell_en" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <charFilter class="solr.MappingCharFilterFactory" mapping="accents_en.txt"/>
+      <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.LengthFilterFactory" min="2" max="100"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_en.txt"/>
+      <filter class="solr.WordDelimiterFilterFactory" catenateNumbers="1" generateNumberParts="1" protected="protwords_en.txt" splitOnCaseChange="0" generateWordParts="1" preserveOriginal="1" catenateAll="0" catenateWords="1"/>
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+    </analyzer>
+    <analyzer type="query">
+      <charFilter class="solr.MappingCharFilterFactory" mapping="accents_en.txt"/>
+      <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.LengthFilterFactory" min="2" max="100"/>
+      <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_en.txt"/>
+      <filter class="solr.WordDelimiterFilterFactory" catenateNumbers="0" generateNumberParts="1" protected="protwords_en.txt" splitOnCaseChange="0" generateWordParts="1" preserveOriginal="1" catenateAll="0" catenateWords="0"/>
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+    </analyzer>
+  </fieldType>
+
+</types>

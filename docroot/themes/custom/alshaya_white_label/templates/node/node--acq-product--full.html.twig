@@ -7,59 +7,139 @@ set classes = [
 ]
 %}
 
-<article{{ attributes }}>
+<article{{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
+    <div class="content__title_wrapper">
+      {% if content.brand_logo %}
+        <div class="brand-logo-wrapper">
+          {{ content.brand_logo }}
+        </div>
+      {% endif %}
+
+      <h1>{{ label }}</h1>
+
+      {% if content.final_price %}
+        <div class="has--special--price">
+      {% else %}
+        <div class="price">
+      {% endif %}
+        {{ content.price }}
+      </div>
+
+      {% if content.final_price %}
+        <div class="special--price">
+          {{ content.final_price }}
+        </div>
+
+        <div class="price--discount">
+          ({{ content.discount }})
+        </div>
+      {% endif %}
+
+      <div class="content--item-code">
+        <span class="field__label">{{ 'Item Code'|t }}:</span>
+        {{ content.item_code }}
+      </div>
+    </div>
+    
     <div class="content__main">
       {{ content.gallery }}
 
       {% if content.cross_sell %}
         <div class="horizontal-crossell above-mobile-block">
-          <h2 class="subtitle crossell-title">{{ "Horizontal Cross Sell"|t}}</h2>
+          <h3 class="subtitle crossell-title">{{ "Customers also bought"|t}}</h3>
           {{ content.cross_sell }}
         </div>
       {% endif %}
 
       {% if content.up_sell %}
         <div class="horizontal-upell above-mobile-block">
-          <h2 class="subtitle crossell-title">{{ "Horizontal up Sell"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "You may also like"|t }}</h3>
           {{ content.up_sell }}
         </div>
       {% endif %}
 
       {% if content.related %}
         <div class="horizontal-upell above-mobile-block">
-          <h2 class="subtitle crossell-title">{{ "Related"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "Related"|t }}</h3>
           {{ content.related }}
         </div>
       {% endif %}
 
     </div>
     <div class="content__sidebar">
-      {{ content.field_skus }}
-      {{ content.body }}
+      <div class="basic-details-wrapper">
+        {{ content.field_skus }}
+      </div>
+
+      <div class="short-description-wrapper">
+        <div class="content--short-description">
+          <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+          <div class="field__content-wrapper">
+            <span class="field__content">{{ content.short_description }}</span>
+            <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="description-wrapper" style="display: none;">
+        <div class="content--description">
+          <span class="close"></span>
+          <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+          <div class="field__content">
+            {% for desc in content.description  %}
+              {% if desc.value %}
+                <div class="desc-wrapper">
+                  {% if desc.label %}
+                    <div class="desc-label">
+                      {{ desc.label|raw }}
+                    </div>
+                  {% endif %}
+
+                  <div class="desc-value">
+                    {{ desc.value|raw }}
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
       {% if sku_out_of_stock %}
         <div class="out-of-stock {{ sku_out_of_stock }}">{{ content.sharethis }}</div>
       {% else %}
         {{ content.sharethis }}
       {% endif %}
 
+      <div class="delivery-options-wrapper">
+        <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+        <div class="field__content">
+          {{ content.home_delivery }}
+
+          {% if content.click_and_collect %}
+            {{ content.click_and_collect }}
+          {% endif %}
+        </div>
+      </div>
+
       {% if content.cross_sell %}
         <div class="horizontal-crossell mobile-only-block">
-          <h2 class="subtitle crossell-title">{{ "Horizontal Cross Sell"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
           {{ content.cross_sell }}
         </div>
       {% endif %}
 
       {% if content.up_sell %}
         <div class="horizontal-upell mobile-only-block">
-          <h2 class="subtitle crossell-title">{{ "Horizontal up Sell"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "You may also like"|t }}</h3>
           {{ content.up_sell }}
         </div>
       {% endif %}
 
       {% if content.related %}
         <div class="horizontal-upell mobile-only-block">
-          <h2 class="subtitle crossell-title">{{ "Related"|t }}</h2>
+          <h3 class="subtitle crossell-title">{{ "Related"|t }}</h3>
           {{ content.related }}
         </div>
       {% endif %}

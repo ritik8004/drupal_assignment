@@ -5,15 +5,61 @@
  * Module file.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\views\ViewExecutable;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_stores_finder_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['pdp_click_collect_default'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'sku' => NULL,
+      'type' => NULL,
+      'title' => NULL,
+      'subtitle' => NULL,
+      'title_price' => NULL,
+      'help_text' => NULL,
+    ],
+  ];
+
+  $items['pdp_click_collect_all_stores'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'title' => NULL,
+      'subtitle' => NULL,
+      'stores' => NULL,
+    ],
+  ];
+
+  $items['pdp_click_collect_top_stores'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'stores' => NULL,
+      'has_more' => NULL,
+    ],
+  ];
+
+  return $items;
+}
 
 /**
  * Implements hook_page_attachments().
  */
 function alshaya_stores_finder_page_attachments(array &$attachments) {
+  // @TODO: Check if this is really required on all pages.
   $attachments['#attached']['library'][] = 'alshaya_stores_finder/store_finder';
+  $site_country = _alshaya_custom_get_site_level_country_code();
+  $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googleGeocodingAPI']['components'] = ['country' => $site_country];
 }
 
 /**
@@ -21,11 +67,23 @@ function alshaya_stores_finder_page_attachments(array &$attachments) {
  */
 function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
+
+    $active_class = '';
+    $current_route_name = \Drupal::routeMatch()->getRouteName();
+    // If store-finder glossary or list view page.
+    if ($current_route_name == 'view.stores_finder.page_2' || $current_route_name == 'view.stores_finder.page_1') {
+      $active_class = 'active';
+    }
+
     $exposed_form_ids = [
       'views-exposed-form-stores-finder-page-1',
       'views-exposed-form-stores-finder-page-3',
     ];
     if (in_array($form['#id'], $exposed_form_ids)) {
+
+      // Config of store finder search enable/disable.
+      $store_finder_search_config = \Drupal::config('alshaya_stores_finder.settings')->get(('enable_disable_store_finder_search'));
+
       $form['list_view'] = [
         '#title' => t('List view'),
         '#type' => 'link',
@@ -34,9 +92,10 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'list-view-link',
+            $active_class,
           ],
         ],
-        '#weight' => 100,
+        '#weight' => 7,
       ];
       $form['map_view'] = [
         '#title' => t('Map view'),
@@ -48,16 +107,37 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
             'map-view-link',
           ],
         ],
-        '#weight' => 100,
+        '#weight' => 8,
       ];
       $form['current_location'] = [
         '#markup' => '<a href="javascript:;" class="current-location">' . t('Near me') . '</a>',
-        '#weight' => -1,
+        '#weight' => 1,
+        '#access' => (bool) $store_finder_search_config,
       ];
+
+      $form['prefix_wrapper'] = [
+        '#markup' => '<div class="store-finder--wrapper">',
+        '#weight' => 2,
+      ];
+
+      $form['store_near_me'] = [
+        '#markup' => '<div class="label--location">' . t('Find stores near') . '</div><div class="input--wrapper">',
+        '#weight' => 3,
+        '#access' => (bool) $store_finder_search_config,
+      ];
+
+      $form['suffix_wrapper'] = [
+        '#markup' => '</div></div>',
+        '#weight' => 6,
+      ];
+
+      $form['field_latitude_longitude_boundary']['#weight'] = 4;
 
       // Adding placeholder to the input field.
       $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
-      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#prefix'] = '<div class="label--location">' . t('Find stores near') . '</div>';
+      $form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#access'] = (bool) $store_finder_search_config;
+      $form['actions']['#access'] = (bool) $store_finder_search_config;
+      $form['actions']['#weight'] = 5;
       unset($form['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api']['#description']);
     }
   }
@@ -72,10 +152,119 @@ function alshaya_stores_finder_views_pre_view(ViewExecutable $view, $display_id,
     $exposed_input = $view->getExposedInput();
     if (!empty($exposed_input)) {
       if (!empty($exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'])) {
-        $header_text = t('@total closest stores to') . ' ' . $exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'];
+        $header_text = t('@total closest stores to') . ' ' . '<strong>' . $exposed_input['field_latitude_longitude_boundary']['geolocation_geocoder_google_geocoding_api'] . '</strong>';
       }
     }
 
     $view->setHandlerOption($display_id, 'header', 'result', 'content', $header_text);
+  }
+}
+
+/**
+ * Implements hook_block_build_alter().
+ */
+function alshaya_stores_finder_block_build_alter(array &$build, BlockPluginInterface $block) {
+  $store_finder_search_blocks = [
+    'views_exposed_filter_block:stores_finder-page_3',
+    'views_exposed_filter_block:stores_finder-page_1',
+  ];
+  if (in_array($block->getPluginId(), $store_finder_search_blocks)) {
+    $build['#cache']['tags'][] = 'store-finder-cache-tag';
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if ($entity->bundle() == 'acq_product' && $build['#view_mode'] == 'full') {
+    // Adding cache tags for the on-off feature.
+    $build['#cache']['tags'][] = 'store-finder-cache-tag';
+
+    // Adding shipping options.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    $sku = $entity->get('field_skus')->first()->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    $config = \Drupal::config('alshaya_stores_finder.settings');
+
+    // Check if click and collect is available for this product.
+    // @TODO: ELSE: Do we need to show that click and collect is not available?
+    if ($config->get('enable_disable_store_finder_search') && alshaya_acm_product_available_click_collect($sku)) {
+      // Here we just show static text, we will get stores info using ajax.
+      // We need lat/lon info of user to get stores.
+      $build['click_and_collect'] = [
+        '#theme' => 'pdp_click_collect_default',
+        '#sku' => $sku,
+        '#type' => $sku_entity->bundle(),
+        '#title' => $config->get('pdp_click_collect_title'),
+        '#title_price' => alshaya_acm_price_get_formatted_price((float) $config->get('pdp_click_collect_price')),
+        '#subtitle' => $config->get('pdp_click_collect_subtitle'),
+        '#help_text' => $config->get('pdp_click_collect_help_text.value'),
+        '#attached' => ['library' => ['alshaya_stores_finder/pdp']],
+      ];
+    }
+
+  }
+}
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_stores_finder_alshaya_i18n_onetime_translation_add() {
+  $area_list = \Drupal::config('area_list.kw')->get('areas');
+  // If area available.
+  if ($area_list) {
+    // Vocabulary id.
+    $vid = 'area_list';
+    foreach ($area_list as $area) {
+      try {
+        // Create term for each area.
+        $term = Term::create([
+          'name' => $area,
+          'vid' => $vid,
+        ]);
+        $term->save();
+      }
+      catch (\Exception $e) {
+        // Log error if any.
+        \Drupal::logger('alshaya_stores_finder')->error($e->getMessage());
+      }
+    }
+  }
+
+}
+
+/**
+ * Implements template_preprocess_views_view().
+ */
+function alshaya_stores_finder_preprocess_views_view(&$variables) {
+  $view = $variables['view'];
+  if (($view->id() === 'stores_finder') &&
+    ($view->current_display === 'page_1')) {
+    $load_more_item_limit = \Drupal::configFactory()
+      ->get('alshaya_stores_finder.settings')
+      ->get('load_more_item_limit');
+
+    $variables['attachment_after'][] = [
+      '#attached' => [
+        'drupalSettings' => [
+          'stores_finder' => [
+            'load_more_item_limit' => $load_more_item_limit,
+          ],
+        ],
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function alshaya_stores_finder_views_pre_build(ViewExecutable $view) {
+  if (($view->id() === 'stores_finder') &&
+    ($view->current_display === 'page_1')) {
+    $view->display_handler->display['cache_metadata']['tags'][] = 'config:alshaya_stores_finder.settings';
   }
 }

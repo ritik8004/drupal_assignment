@@ -51,6 +51,18 @@
   bottom: 0;
   right: 0;
   left: 0;
+
+  .ie & {
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+
+    /* IE 5-7 */
+    filter: alpha(opacity=0);
+
+    /* IE 10 */
+    opacity: 0;
+    background: white;
+  }
 }
 
 // @TODO: Replace the classes below with mixins.
@@ -87,6 +99,31 @@
     left: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 6;
+  }
+}
+
+%modal-overlay-spinner,
+.modal-overlay--spinner {
+  @extend %modal-overlay;
+
+  &::before {
+    position: fixed;
+    z-index: 1000;
+  }
+
+  &::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    right: 0;
+    left: 0;
+    transform: translateY(-50%);
+    background-image: url("../imgs/icons/MC-loader-white.svg");
+    background-size: cover;
+    margin: 0 auto;
+    width: 4rem;
+    height: 3rem;
+    z-index: 1001;
   }
 }
 
@@ -129,4 +166,14 @@
   to {
     opacity: 1;
   }
+}
+
+// Mixin for truncating lines in text and adding ellipsis to the end.
+@mixin truncateAfterLines($line-height: 1, $lines: 2, $font-size: 12px) {
+  display: block; /* Fallback for non-webkit */
+  font-size: $font-size;
+  line-height: $line-height;
+  height: $font-size*$lines*$line-height;  /* Fallback for non-webkit */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

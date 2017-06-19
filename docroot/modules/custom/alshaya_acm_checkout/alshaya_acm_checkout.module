@@ -6,6 +6,8 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Implements hook_acq_checkout_pane_pane_info_alter().
@@ -16,21 +18,43 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
   unset($definitions['shipping_information']);
   unset($definitions['review']);
   unset($definitions['completion_message']);
+  unset($definitions['payment_methods']);
 }
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Attach GTM attributes to identify buttons.
+  if (!empty($form['checkout_guest'])) {
+    $checkout_guest_options = [
+      'attributes' => [
+        'gtm-type' => 'checkout-as-guest',
+      ],
+    ];
+    $form['checkout_guest']['checkout_guest']['checkout_as_guest']['#url']->setOptions($checkout_guest_options);
+  }
+  if (!empty($form['checkout_login'])) {
+    $form['checkout_login']['checkout_login']['form']['actions']['submit']['#attributes']['gtm-type'] = 'checkout-signin';
+  }
+  if (!empty($form['acm_payment_methods'])) {
+    $form['acm_payment_methods']['payment_options']['#attributes']['gtm-type'] = 'cart-checkout-payment';
+  }
+
   // Add markup to show selected card type.
-  if (isset($form['payment_methods'], $form['payment_methods']['payment_details'], $form['payment_methods']['payment_details']['cc_number'])) {
-    $form['payment_methods']['payment_details']['cc_number']['#suffix'] = '
+  if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details'], $form['acm_payment_methods']['payment_details']['cc_number'])) {
+    $form['acm_payment_methods']['payment_details']['cc_number']['#weight'] = 0;
+    $form['acm_payment_methods']['payment_details']['cc_number']['#suffix'] = '
       <div class="card-types-wrapper">
         <span class="card-type card-type-visa"></span>
         <span class="card-type card-type-mastercard"></span>
         <span class="card-type card-type-diners-club"></span>
       </div>
     ';
+    $form['acm_payment_methods']['payment_details']['cc_cvv']['#weight'] = 1;
+    $form['acm_payment_methods']['payment_details']['cc_cvv']['#suffix'] = '<div class="cc_cvv_help_text">' . t('This code is a three or four digit number printed on the front or back of the credit card') . '</div>';
+    $form['acm_payment_methods']['payment_details']['cc_exp_month']['#weight'] = 2;
+    $form['acm_payment_methods']['payment_details']['cc_exp_year']['#weight'] = 2;
   }
 }
 
@@ -51,7 +75,6 @@ function _alshaya_acm_checkout_clean_address($address) {
     'first_name',
     'lastname',
     'last_name',
-    'email',
     'phone',
     'street',
     'street2',
@@ -65,6 +88,12 @@ function _alshaya_acm_checkout_clean_address($address) {
     if (!in_array($key, $allowed_fields)) {
       unset($address[$key]);
     }
+  }
+
+  if (!empty($address['region'])) {
+    // TODO: We may just require region and not region_id, need to verify later.
+    $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country']);
+    $address['region'] = $address['region_id'];
   }
 
   if (!empty($address['phone'])) {
@@ -97,4 +126,100 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
   }
 
   return $phone_string;
+}
+
+/**
+ * Implements hook_alshaya_profile_installed().
+ */
+function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
+  if (in_array('alshaya_i18n', $modules)) {
+    // Array of language translation strings.
+    $strings = [
+      'CUSTOMER SERVICE' => [
+        'ar' => 'خدمة العملاء',
+      ],
+      '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from Sunday – Saturday from 9:30 am – 8:30 midnight (Kuwait Local Time, GMT +3)</span></p>' => [
+        'ar' => '<p>الكويت <span class="light">+965 XXX XX XX</span></p><p>المناطق الأخرى <span class="light">8 (800) XXX XX X</span></p><p><span class="light">مواعيد العمل: الأحد إلى السبت من الساعة 9:30 صباحًا حتى الساعة 8:30 منتصف الليل (حسب التوقيت المحلي للكويت، و3+ بتوقيت غرينتش)</span></p>',
+      ],
+    ];
+
+    alshaya_i18n_save_translations($strings);
+  }
+}
+
+/**
+ * Helper function to get region code.
+ *
+ * @param string $region
+ *   Region to get region code for. It could be region code itself.
+ * @param string $country_code
+ *   Country code.
+ *
+ * @return mixed|string
+ *   Region code.
+ */
+function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = 'US') {
+  $subdivision_repo = \Drupal::service('address.subdivision_repository');
+  $regions = $subdivision_repo->getList([$country_code]);
+
+  // Country has no regions.
+  if (empty($regions)) {
+    return '';
+  }
+
+  // Region is already the code.
+  if (isset($regions[$region])) {
+    return $region;
+  }
+
+  // Region is name and we have the code.
+  if ($region_key = array_search($region, $regions)) {
+    return $region_key;
+  }
+
+  // Invalid value for region, we log warning and return empty string.
+  \Drupal::logger('alshaya_acm_checkout')->warning('Invalid region @region passed for country code @country_code', ['@region' => $region, '@country_code' => $country_code]);
+
+  return '';
+}
+
+/**
+ * Helper function to return order from session.
+ *
+ * @return array
+ *   Order array if found.
+ */
+function _alshaya_acm_checkout_get_last_order_from_session() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+
+  $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+  $order_data = $temp_store->get('order');
+
+  // Throw access denied if nothing in session.
+  if (empty($order_data) || empty($order_data['id'])) {
+    throw new AccessDeniedHttpException();
+  }
+
+  // @TODO: Remove the fix when we get the full order details.
+  $order_id = str_replace('"', '', $order_data['id']);
+
+  if (\Drupal::currentUser()->isAnonymous()) {
+    $email = $temp_store->get('email');
+  }
+  else {
+    $email = \Drupal::currentUser()->getEmail();
+  }
+
+  // At this stage we always want to have fresh data.
+  \Drupal::cache()->invalidate('orders_list_' . $email);
+
+  $orders = alshaya_acm_customer_get_user_orders($email);
+
+  $order_index = array_search($order_id, array_column($orders, 'order_id'));
+
+  if ($order_index === FALSE) {
+    throw new NotFoundHttpException();
+  }
+
+  return $orders[$order_index];
 }

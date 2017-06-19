@@ -1,0 +1,93 @@
+<!--
+  This wrapper lets us define multiple components.
+
+  See https://www.drupal.org/node/2145969#comment-10341941.
+  -->
+<xi:include href="ThisFileDoesNotExist-ItsJustAHack.txt" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:fallback>
+
+    <!-- Spell Check
+
+        The spell check component can return a list of alternative spelling
+        suggestions.
+
+        http://wiki.apache.org/solr/SpellCheckComponent
+     -->
+    <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
+
+      <str name="queryAnalyzerFieldType">textSpell</str>
+
+      <!-- Multiple "Spell Checkers" can be declared and used by this
+           component
+        -->
+
+      <!-- a spellchecker built from a field of the main index, and
+           written to disk
+        -->
+      <lst name="spellchecker">
+        <str name="name">default</str>
+        <str name="field">spell</str>
+        <str name="spellcheckIndexDir">spellchecker</str>
+        <str name="buildOnOptimize">true</str>
+        <!--<str name="buildOnCommit">true</str>-->
+        <!-- uncomment this to require terms to occur in 1% of the documents in order to be included in the dictionary
+          <float name="thresholdTokenFrequency">.01</float>
+        -->
+      </lst>
+
+      <!-- Arabic -->
+      <lst name="spellchecker">
+        <str name="name">spellchecker_ar</str>
+        <str name="field">spell_ar</str>
+        <str name="spellcheckIndexDir">./spellchecker_ar</str>
+        <str name="buildOnOptimize">true</str>
+        <!--<str name="buildOnCommit">true</str>-->
+      </lst>
+
+      <!-- English -->
+      <lst name="spellchecker">
+        <str name="name">spellchecker_en</str>
+        <str name="field">spell_en</str>
+        <str name="spellcheckIndexDir">./spellchecker_en</str>
+        <str name="buildOnOptimize">true</str>
+        <!--<str name="buildOnCommit">true</str>-->
+      </lst>
+
+    </searchComponent>
+
+    <!--
+      The default handler `pinkPony` from `solrconfig.xml` with name changed.
+
+      The elevator component has been added.
+      -->
+    <!-- Start of the chages. -->
+    <requestHandler name="alshayadefault" class="solr.SearchHandler" default="true">
+    <!-- End of the chages. -->
+      <lst name="defaults">
+        <str name="defType">edismax</str>
+        <str name="echoParams">explicit</str>
+        <bool name="omitHeader">true</bool>
+        <float name="tie">0.01</float>
+        <!-- Don't abort searches for the pinkPony request handler (set in solrcore.properties) -->
+        <int name="timeAllowed">${solr.pinkPony.timeAllowed:-1}</int>
+        <str name="q.alt">*:*</str>
+
+        <!-- By default, don't spell check -->
+        <str name="spellcheck">false</str>
+        <!-- Defaults for the spell checker when used -->
+        <str name="spellcheck.onlyMorePopular">true</str>
+        <str name="spellcheck.extendedResults">false</str>
+        <!--  The number of suggestions to return -->
+        <str name="spellcheck.count">1</str>
+      </lst>
+      <arr name="last-components">
+        <str>spellcheck</str>
+        <!-- Start of the additions. -->
+        <str>elevator</str>
+        <!-- End of the additions. -->
+      </arr>
+    </requestHandler>
+
+    <!-- Close out with the proper sections too -->
+  </xi:fallback>
+</xi:include>

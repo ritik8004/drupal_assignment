@@ -5,12 +5,10 @@
  * Contains utility functions to process orders and provide related data.
  */
 
-use Com\Tecnick\Barcode\Barcode as BarcodeGenerator;
 use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\user\UserInterface;
 
 /**
@@ -68,7 +66,7 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
           return TRUE;
         }
         // Search by SKU.
-        elseif (stripos($orderItem['sku'], $search) > -1) {
+        elseif (stripos(alshaya_acm_customer_clean_sku($orderItem['sku']), alshaya_acm_customer_clean_sku($search)) > -1) {
           return TRUE;
         }
       }
@@ -93,6 +91,23 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
 }
 
 /**
+ * Clean up sku values by removing spaces and dashes.
+ *
+ * @param string $sku
+ *   The sku string.
+ *
+ * @return string
+ *   Return cleaned string without spaces and dashes.
+ */
+function alshaya_acm_customer_clean_sku($sku) {
+  // Convert whitespaces and underscore to dash.
+  $string = preg_replace("/[\s_]/", "-", $sku);
+  // Clean up multiple dashes or whitespaces.
+  $string = preg_replace("/[\s-]+/", "", $string);
+  return $string;
+}
+
+/**
  * Apply conditions and get order status.
  *
  * @param array $order
@@ -102,6 +117,14 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
  *   Status of order, ensure string can be used directly as class too.
  */
 function alshaya_acm_customer_get_order_status(array $order) {
+  if ($order['status'] == 'payment_failed') {
+    return [
+      'text' => (new TranslatableMarkup('payment failed'))->render(),
+      'class' => 'status-returned status-failed',
+      'key' => 'failed',
+    ];
+  }
+
   // We support only three status as of now.
   $status = ['pending' => 0, 'delivered' => 0, 'returned' => 0];
 
@@ -211,7 +234,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $orderRow['quantity'] = alshaya_acm_customer_get_order_total_quantity($order);
 
   // Format total to have max 3 decimals as per mockup.
-  $orderRow['total'] = number_format($order['totals']['grand'], 3);
+  $orderRow['total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   // Calculate status of order based on status of items.
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
@@ -239,14 +262,15 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['delivery_address'] = $address_formatter->render((object) $order['shipping']['address']);
   $orderDetails['billing_address'] = $address_formatter->render((object) $order['billing']);
 
-  // @TODO: MMCPA-641.
-  $orderDetails['delivery_method'] = $order['shipping']['method']['carrier_code'];
-  $orderDetails['delivery_charge'] = $order['shipping']['method']['amount'];
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
+  $shippingTerm = alshaya_acm_checkout_load_shipping_method($order['shipping']['method']['carrier_code']);
+  $orderDetails['delivery_method'] = $shippingTerm->getName();
+  $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
 
   $orderDetails['payment_method'] = $order['payment']['method_title'];
 
-  $orderDetails['sub_total'] = $order['totals']['sub'];
-  $orderDetails['order_total'] = $order['totals']['grand'];
+  $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
+  $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   return $orderDetails;
 }
@@ -284,74 +308,27 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
 /**
  * Function to get barcode.
  *
- * @param string $order_number
- *   Order number for which barcode needed.
+ * @param string $order
+ *   Order for which barcode needed.
  *
  * @return array
  *   Build array.
  */
-function alshaya_acm_customer_get_barcode($order_number) {
-  $build = [];
-  $settings = [
-    'type' => 'C128',
-    'value' => $order_number,
-    'color' => '#000000',
-    'height' => 90,
-    'width' => 110,
-    'padding_top' => 0,
-    'padding_right' => 0,
-    'padding_bottom' => 0,
-    'padding_left' => 0,
-    'show_value' => TRUE,
-  ];
-  $generator = new BarcodeGenerator();
-  $suffix = str_replace(
-    '+', 'plus', strtolower($settings['type'])
-  );
-  $build['barcode'] = [
-    '#theme' => 'barcode__' . $suffix,
-    '#attached' => [
-      'library' => [
-        'barcodes/' . $suffix,
-      ],
-    ],
-    '#type' => $settings['type'],
-    '#value' => $settings['value'],
-    '#width' => $settings['width'],
-    '#height' => $settings['height'],
-    '#color' => $settings['color'],
-    '#padding_top' => $settings['padding_top'],
-    '#padding_right' => $settings['padding_right'],
-    '#padding_bottom' => $settings['padding_bottom'],
-    '#padding_left' => $settings['padding_left'],
-    '#show_value' => $settings['show_value'],
-  ];
+function alshaya_acm_customer_get_barcode($order) {
+  $build = '';
 
-  try {
-    $barcode = $generator->getBarcodeObj(
-      $settings['type'],
-      $settings['value'],
-      $settings['width'],
-      $settings['height'],
-      $settings['color'],
-      [
-        $settings['padding_top'],
-        $settings['padding_right'],
-        $settings['padding_bottom'],
-        $settings['padding_left'],
-      ]
-    );
-    $build['barcode']['#svg'] = $barcode->getSvgCode();
+  if (isset($order['extension'], $order['extension']['barcode'])) {
+    $dom = new DOMDocument();
+    @$dom->loadHtml($order['extension']['barcode']);
+    $svgs = $dom->getElementsByTagName('svg');
+
+    // We do foreach only to avoid empty value notices, we will have only one.
+    foreach ($svgs as $svg) {
+      $build = $svg->C14N();
+      break;
+    }
   }
-  catch (\Exception $e) {
-    $this->logger->error(
-      'Error: @error, given: @value',
-      [
-        '@error' => $e->getMessage(),
-        '@value' => $settings['value'],
-      ]
-    );
-  }
+
   return $build;
 }
 
@@ -370,7 +347,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $products = [];
   foreach ($order['items'] as $item) {
     $product = $item;
-    $product['total'] = number_format($item['ordered'] * $item['price'], 3);
+    $product['price'] = alshaya_acm_price_format($item['price']);
+    $product['total'] = alshaya_acm_price_format($item['ordered'] * $item['price']);
     $product['attributes'] = [];
 
     // Check if we can find a parent SKU for this to get proper name.
@@ -385,30 +363,25 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $product['image'] = '';
 
     // Load the first image.
-    $sku_media = alshaya_acm_get_product_display_image($item['sku']);
-    // If we have image for the product.
-    if (!empty($sku_media['uri'])) {
-      $product['image'] = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($sku_media['uri']);
-    }
+    $product['image'] = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
     $products[] = $product;
   }
 
-  // Get the currency code and position.
-  $currencyCode = \Drupal::config('acq_commerce.currency')->get('currency_code');
-  $currencyCodePosition = \Drupal::config('acq_commerce.currency')->get('currency_code_position');
-
   $build = [];
+
+  if ($order['status'] == 'payment_failed') {
+    $build['#order_error'] = t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.');
+  }
 
   $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
   $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
   $build['#products'] = $products;
   $build['#products_count'] = count($build['#products']);
-  // @TODO: MMCPA-641.
-  $build['#delivery_detail_notice'] = t('your order will be delivered between 1 and 3 days');
 
-  $build['#currency_code'] = $currencyCode;
-  $build['#currency_code_position'] = $currencyCodePosition;
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
+  $shippingTerm = alshaya_acm_checkout_load_shipping_method($order['shipping']['method']['carrier_code']);
+  $build['#delivery_detail_notice'] = $shippingTerm->get('field_shipping_method_desc')->getString();
 
   return $build;
 }

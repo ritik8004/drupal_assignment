@@ -1,0 +1,5 @@
+services:
+  alshaya_contact.breadcrumb:
+     class: Drupal\alshaya_contact\Breadcrumb\AlshayaContactBreadcrumbBuilder
+     tags:
+       - { name: breadcrumb_builder, priority: 100 }

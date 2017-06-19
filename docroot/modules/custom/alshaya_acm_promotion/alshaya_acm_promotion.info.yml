@@ -1,0 +1,9 @@
+name: 'Alshaya ACM Promotion'
+type: module
+description: 'All custom code around promotions.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - acq_promotion
+  - alshaya_acm
+  - alshaya_product

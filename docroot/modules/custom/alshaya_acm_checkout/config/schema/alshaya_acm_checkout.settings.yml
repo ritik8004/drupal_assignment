@@ -14,3 +14,9 @@ alshaya_acm_checkout.settings:
     checkout_terms_condition:
       type: text_format
       label: 'Checkout Terms and Conditions'
+    checkout_customer_service:
+      type: text_format
+      label: 'Checkout Customer Service'
+    click_collect_method:
+      type: string
+      label: 'Click and Collect delivery method code'

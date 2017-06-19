@@ -1,11 +1,39 @@
+/*
+ * Theming of product detail page.
+ */
+.c-pdp.l-one--w {
+  @include breakpoint($only-mobile) {
+    padding: 0;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 66.35rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// Layout of the detail page
 .nodetype--acq_product {
   .region__content {
-    margin: 20px 0;
+    margin: 1.25rem 0;
   }
 }
 
 .acq-content-product {
+  @include if-ltr {
+    direction: ltr;
+  }
+
+  @include if-rtl {
+    direction: rtl;
+  }
+
   @include clearfix;
+
+  @include breakpoint($tablet) {
+    position: relative;
+  }
 }
 
 .content {
@@ -22,21 +50,86 @@
   }
 
   &__sidebar {
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
+    }
+
+    @include breakpoint($mobile) {
+      position: relative;
+    }
+
     @include breakpoint($tablet) {
-      width: 40%;
+      position: static;
+      width: 35%;
       float: $right;
-      padding: 0 1rem;
+      margin: 0 1rem;
     }
 
     @include breakpoint($desktop) {
-      width: 30%;
+      width: 28%;
       float: $right;
-      padding: 0 1rem;
+      margin: 0;
+    }
+  }
+
+  &__title_wrapper {
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
+    }
+
+    @include breakpoint($tablet) {
+      width: 35%;
+      float: $right;
+      margin: 0 1rem;
+      border-bottom: 1px solid $white;
+    }
+
+    @include breakpoint($desktop) {
+      width: 28%;
+      float: $right;
+      margin: 0;
     }
   }
 }
 
-.field--name-field-skus {
+// Title wrapper
+.content {
+  &__title_wrapper {
+    h1,
+    h1 span {
+      font-family: $alshaya-thin;
+      font-size: 1.125rem;
+      font-weight: 100;
+    }
+
+    .price {
+      font-size: 0.9375rem;
+      color: $black;
+      margin-bottom: 1rem;
+    }
+
+    .content--item-code {
+      font-size: 0.6875rem;
+      color: $brownish-grey;
+      padding-bottom: 0.75rem;
+    }
+
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .price--discount {
+      font-size: 0.9375rem;
+    }
+  }
+}
+
+// SideBar content theming
+
+.basic-details-wrapper .field--name-field-skus {
   .field--name-sku {
     @include u-visibility(none);
   }
@@ -52,33 +145,708 @@
     select {
       border: none;
       border-radius: 0;
-      padding: 5px 10px;
+      padding: 0.3125rem 0.625rem;
       appearance: none;
-      width: 200px;
-      float: $right;
+    }
+  }
+
+  .form-item-configurables-size {
+    label {
+      @include u-visibility(none);
+    }
+
+    .ajax-progress-throbber {
+      @include u-visibility(none);
+    }
+
+    @include breakpoint($only-mobile) {
+      @include select-wrapper(12.3125rem);
+
+      padding: 0;
+      margin-top: 1.5em;
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      min-height: 2.188rem;
+
+      &::after {
+        top: 0.5rem;
+        z-index: 1;
+      }
+
+      label {
+        @include u-visibility(block);
+
+        position: absolute;
+        top: -1rem;
+        font-size: 0.6875rem;
+        padding: 0.3125rem 0;
+        padding-#{$right}: 1.25rem;
+        #{$left}: 0;
+      }
+
+      select.form-select {
+        @include select-style(12.3125rem);
+
+        background-color: $whisper-dark;
+        width: 100%;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      @include select-wrapper(8.75rem);
+      @include select-bg(6.5625rem);
+
+      padding: 0;
+      margin-top: 1.5em;
+      width: 100%;
+      min-height: 2.188rem;
+
+      &::after,
+      &::before {
+        top: 0.5rem;
+      }
+
+      &::before {
+        width: 100%;
+      }
+
+      label {
+        @include u-visibility(block);
+
+        position: absolute;
+        top: -1rem;
+        font-size: 0.6875rem;
+        padding: 0.3125rem 0;
+        padding-#{$right}: 1.25rem;
+        #{$left}: 0;
+      }
+
+      select.form-select {
+        @include select-style(8.75rem);
+
+        width: 100%;
+      }
     }
   }
 
   #configurable_ajax h2.field--name-name {
     @include u-visibility(none);
   }
-}
 
-.field--name-body {
-  h2.field__label {
-    font-size: 14px;
-    font-weight: bold;
-    color: $marine-blue;
+  .form-item.form-type-select.form-item-quantity {
+    padding: 0;
+
+    @include breakpoint($only-mobile) {
+      float: $right;
+      top: -3px;
+      background-color: $whisper-dark;
+    }
+
+    @include breakpoint($only-tablet) {
+      float: $right;
+      top: -3px;
+      background-color: $whisper-dark;
+    }
   }
 
-  p {
-    font-size: 12px;
+  .form-item-quantity {
+    @include select-wrapper(4.375rem);
+
+    margin-bottom: 1.5rem;
+    margin-top: 2.1875rem;
+    float: $left;
+
+    label {
+      display: block;
+      position: absolute;
+      top: -1.5625rem;
+      font-size: 0.6875rem;
+      padding: 0.3125rem 0;
+      padding-#{$right}: 1.25rem;
+      #{$left}: 0;
+    }
+
+    select {
+      @include select-style(4.375rem);
+
+      background-color: transparent;
+    }
+  }
+}
+
+.description-wrapper {
+  @include breakpoint($only-mobile) {
+    padding: 1rem 0;
+  }
+
+  .field {
+    &__label {
+      font-size: 0.875rem;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      color: $marine-blue;
+      margin-top: 0;
+    }
+
+    &__content {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+  }
+
+  a {
+    font-family: $arial;
+    font-size: 0.75rem;
+    font-weight: bold;
+    line-height: 1.83;
+    color: $windows-blue;
+  }
+
+  strong {
+    font-weight: bold;
+    color: $black;
+  }
+
+  .desc-label {
+    font-family: $alshaya-bold;
+    font-weight: normal;
+    color: $marine-blue;
+    font-size: 0.75rem;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .show-less-link {
+    font-family: $arial;
+    font-size: 0.75rem;
+    font-weight: bold;
+    line-height: 1.83;
+    color: $windows-blue;
+    text-transform: lowercase;
+    cursor: pointer;
+  }
+
+  .desc-wrapper,
+  .description-section,
+  .address {
+    border-top: 1px solid $white;
+    padding: 0.625rem 0;
     line-height: 1.5;
+
+    @include clearfix;
+  }
+
+  .low-stock-indicator {
+    font-family: $arial;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: $pumpkin-orange;
+    float: $right;
+  }
+
+  .desc-value,
+  .text {
+    clear: both;
+    padding-top: 0.9375rem;
+  }
+}
+
+@include breakpoint($tablet) {
+  .description-wrapper {
+    position: absolute;
+    top: 0;
+    #{$right}: 0;
+    height: 32.5rem;
+    border: 1px solid $marine-blue;
+    padding: 1.25rem;
+    background: $white-five;
+    overflow: hidden;
+    width: 35%;
+    z-index: 4;
+    margin: 0 1rem;
+
+    .close {
+      @include icon(close);
+
+      position: absolute;
+      top: 0;
+      #{$right}: 0;
+      height: 2.188rem;
+      width: 2.188rem;
+      font-size: 30px;
+      text-align: center;
+      color: $white-two;
+      background-color: $marine-blue;
+    }
+
+    .field {
+      &__content {
+        overflow: scroll;
+        height: 430px;
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .description-wrapper {
+    width: 28%;
+    margin: 0;
+  }
+}
+
+.short-description-wrapper {
+  .field {
+    &__label {
+      font-size: 0.875rem;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      color: $marine-blue;
+    }
+
+    &__content {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+  }
+
+  .read-more-description-link {
+    font-family: $arial;
+    font-size: 0.75rem;
+    font-weight: bold;
+    line-height: 1.83;
+    color: $windows-blue;
+    cursor: pointer;
+  }
+}
+
+.delivery-options-wrapper {
+  .ui-accordion-header-active {
+    .title-price {
+      display: none;
+    }
+  }
+
+  .field {
+    &__label {
+      font-size: 0.875rem;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      color: $marine-blue;
+    }
+  }
+
+  .c-accordion {
+    &-delivery-options {
+      border-bottom: 1px solid $white;
+    }
+
+    &__title {
+      font-family: $arial;
+      font-size: 0.875rem;
+      color: $black;
+      line-height: 2;
+      text-transform: capitalize;
+      cursor: pointer;
+      position: relative;
+
+      &.ui-state-active {
+        border-bottom: none;
+      }
+
+      .subtitle {
+        @include u-visibility(block);
+
+        font-family: $arial;
+        font-size: 0.6875rem;
+        color: $greyish;
+        line-height: 1;
+      }
+
+      .title-price {
+        position: absolute;
+        top: 0.625rem;
+        #{$right}: 2.5rem;
+        font-family: $arial;
+        font-size: 0.6875rem;
+        font-weight: bold;
+        color: $black;
+      }
+    }
+
+    &_content {
+      .delivery-option {
+        &-content {
+          font-family: $arial;
+          font-size: 0.6875rem;
+          line-height: 1.64;
+          color: $greyish;
+
+          ul {
+            li {
+              @include clearfix;
+
+              span {
+                float: $right;
+                font-weight: bold;
+                text-transform: uppercase;
+              }
+            }
+          }
+        }
+
+        &-title {
+          font-family: $arial;
+          line-height: 1.5;
+
+          @include icon(delivery, before);
+
+          &::before {
+            color: $black;
+            font-size: 1.375rem;
+            line-height: 1;
+            vertical-align: bottom;
+          }
+
+          strong {
+            font-size: 0.75rem;
+            color: $black;
+          }
+
+          span {
+            font-size: 0.6875rem;
+            color: $brownish-grey;
+          }
+        }
+      }
+    }
+  }
+}
+
+.click-collect {
+  .c-accordion__title {
+    border-top: none;
+  }
+
+  &-content {
+    font-family: $arial;
+    font-size: 0.75rem;
+    line-height: 2;
+    color: $brownish-grey;
+    padding-bottom: 1rem;
+
+    .text p {
+      font-family: $arial;
+      font-size: 0.75rem;
+      line-height: 2;
+      color: $brownish-grey;
+      margin: 0;
+    }
+
+    @include clearfix;
+
+    strong {
+      font-weight: bold;
+    }
+  }
+
+  &-form,
+  &-empty-selection {
+    padding-bottom: 1.25rem;
+
+    @include clearfix;
+
+    label {
+      @include clearfix;
+    }
+
+    label,
+    .text p {
+      font-family: $arial;
+      font-size: 0.75rem;
+      line-height: 2;
+      color: $brownish-grey;
+      margin: 0;
+    }
+
+    #cc-store-name {
+      float: $left;
+      height: 2.188rem;
+      padding: 0.3125rem;
+      border: solid 1px $white;
+
+      @include breakpoint($mobile) {
+        width: 11.56rem;
+      }
+
+      @include breakpoint($tablet) {
+        width: 8.56rem;
+      }
+    }
+
+    input[type="button"] {
+      float: $right;
+      width: 6.563rem;
+      height: 2.188rem;
+      background-color: $cerulean-two;
+      font-family: $alshaya-thin;
+      appearance: none;
+      font-size: 0.75rem;
+      color: $white-two;
+      text-transform: lowercase;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: none;
+    }
+  }
+
+  .click-collect-content .search-store {
+    label {
+      @include clearfix;
+    }
+
+    input[type="text"] {
+      float: $left;
+      width: 162px;
+      height: 2.188rem;
+      padding: 0.3125rem;
+      border: solid 1px $white;
+    }
+
+    input[type="button"] {
+      float: $right;
+      width: 6.563rem;
+      height: 2.188rem;
+      background-color: $cerulean-two;
+      font-family: $alshaya-thin;
+      appearance: none;
+      font-size: 0.75rem;
+      color: $white-two;
+      text-transform: lowercase;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: none;
+    }
+  }
+}
+
+.click-collect-top-stores {
+  ul {
+    padding-#{$left}: 0;
+    margin: 0;
+
+    li {
+      font-family: $arial;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      color: $grey-ash;
+      list-style: none;
+      padding: 1.125rem 0;
+      border-top: 1px solid $white;
+
+      @include clearfix;
+
+      .store {
+        &-sequence {
+          border: 1px solid $black;
+          height: 1.063rem;
+          width: 1.063rem;
+          border-radius: 1.063rem;
+          text-align: center;
+          float: $left;
+          margin-top: 2px;
+        }
+
+        &-info-wrap {
+          float: $right;
+          width: 90%;
+        }
+
+        &-name {
+          font-weight: bold;
+          color: $black;
+        }
+
+        &-delivery-time {
+          padding-top: 12px;
+
+          em {
+            font-weight: bold;
+            font-style: normal;
+          }
+        }
+      }
+    }
+  }
+}
+
+.other-stores-link {
+  font-family: $arial;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: $marine-blue;
+  padding: 1.063rem 0;
+  border-top: 1px solid $white;
+}
+
+.click-collect-all-stores {
+  &.inline-modal-wrapper {
+    position: absolute;
+    top: 0;
+    #{$right}: 0;
+    height: 31.5rem;
+    border: 1px solid $marine-blue;
+    padding: 1.25rem;
+    background: $white-five;
+    overflow: hidden;
+    width: 100%;
+
+    @include breakpoint($tablet) {
+      width: 38%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 29%;
+    }
+
+    .close-inline-modal {
+      @include icon(close);
+
+      position: absolute;
+      top: 0;
+      #{$right}: 0;
+      height: 2.188rem;
+      width: 2.188rem;
+      font-size: 30px;
+      text-align: center;
+      color: $white-two;
+      background-color: $marine-blue;
+    }
+
+    .all-stores-info {
+      padding-bottom: 1em;
+
+      a {
+        font-family: $arial;
+        font-size: 0.75rem;
+        font-weight: bold;
+        line-height: 1.83;
+        color: $windows-blue;
+      }
+
+      .text {
+        font-family: $arial;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        color: $brownish-grey;
+      }
+
+      strong {
+        font-weight: bold;
+        color: $black;
+      }
+
+      h3 {
+        font-family: $alshaya-bold;
+        font-weight: bold;
+        color: $marine-blue;
+        margin-top: 0;
+      }
+    }
+
+    ul {
+      padding-#{$left}: 0;
+      margin: 0;
+      height: 380px;
+      overflow: scroll;
+
+      li {
+        font-family: $arial;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        color: $grey-ash;
+        list-style: none;
+        padding: 1.125rem 0;
+        border-top: 1px solid $white;
+
+        strong,
+        em {
+          font-weight: bold;
+          font-style: normal;
+        }
+
+        @include clearfix;
+
+        .store {
+          &-sequence {
+            border: 1px solid $black;
+            height: 1.063rem;
+            width: 1.063rem;
+            border-radius: 1.063rem;
+            text-align: center;
+            float: $left;
+            margin-top: 2px;
+          }
+
+          &-info-wrap {
+            float: $right;
+            width: 90%;
+          }
+
+          &-name {
+            font-weight: bold;
+            color: $black;
+          }
+
+          &-delivery-time {
+            padding-top: 12px;
+
+            em {
+              font-weight: bold;
+              font-style: normal;
+            }
+          }
+
+          &-low-stock {
+            font-family: $arial;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: $pumpkin-orange;
+            float: $right;
+          }
+        }
+      }
+    }
   }
 }
 
 .field--name {
   &-field-skus {
+    border-bottom: 1px solid $whisper-dark;
+
+    @include breakpoint($only-mobile) {
+      height: 8rem;
+    }
+
+    .js-form-wrapper {
+      @include breakpoint($mobile) {
+        @include u-visibility(inline-block);
+
+        width: 65%;
+      }
+
+      @include breakpoint($desktop) {
+        @include u-visibility(block);
+
+        width: 100%;
+      }
+    }
+
     .field {
       @include clearfix;
 
@@ -87,8 +855,9 @@
       &__label {
         @include u-visibility(inline);
 
-        font-size: 14px;
+        font-size: 0.875rem;
         font-family: $alshaya-bold;
+        font-weight: normal;
         color: $peacock-blue;
         text-transform: lowercase;
       }
@@ -100,7 +869,7 @@
 
     h2 {
       font-family: $alshaya-thin;
-      font-size: 18px;
+      font-size: 1.125rem;
       font-weight: 100;
     }
 
@@ -113,46 +882,81 @@
       }
 
       button[type="submit"] {
-        font-family: $alshaya-bold;
+        font-family: $arial;
+        font-weight: bold;
+        font-size: 0.75rem;
         background: $pumpkin-orange;
         border-radius: 0;
-        color: $white-three;
-        padding: 0.625rem 1.6rem;
+        color: $white-five;
         border: 0;
-        font-size: 0.813rem;
-        float: left;
         text-transform: lowercase;
+        padding: 0.66rem 1.3701rem;
+        margin-bottom: 1.5rem;
+        display: inline-block;
+
+        @include breakpoint($only-mobile) {
+          float: none;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+          z-index: 4;
+          margin: 0;
+          #{$left}: 0;
+        }
+
+        @include breakpoint($mobile) {
+          float: $left;
+        }
+
+        @include breakpoint($desktop) {
+          float: $right;
+          margin-top: 2.1875rem;
+        }
       }
     }
   }
 }
 
-.form-item-quantity {
-  float: $left;
-  width: 150px;
-
-  label {
-    float: $left;
-    padding: 5px 20px 5px 0;
+.basic-details-wrapper {
+  .field--name {
+    &-field-skus {
+      @include breakpoint($only-mobile) {
+        height: 6.5rem;
+      }
+    }
   }
+}
 
-  #edit-quantity {
-    border: none;
-    border-radius: 0;
-    padding: 5px 10px;
-    appearance: none;
-    margin: 0 5px;
-    float: $left;
+.acq-sku-configurable-64__sku-base-form.sku-base-form {
+  @include breakpoint($only-mobile) {
+    height: 8rem;
+    overflow: hidden;
   }
 }
 
 .select2Option {
+  text-align: $left;
+
+  @include breakpoint($mobile) {
+    @include u-visibility(none);
+  }
+
+  @include breakpoint($desktop) {
+    @include u-visibility(block);
+  }
+
   h4 {
     margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 100;
+  }
+
+  .selected-text {
+    font-weight: bold;
   }
 
   .select-buttons {
-    padding-left: 0;
+    padding-#{$left}: 0;
     margin-bottom: 0;
     margin-top: 2px;
 
@@ -161,49 +965,49 @@
 
       @include u-visibility(inline-block);
 
-      a {
+      a,
+      span {
         @include u-visibility(block);
 
-        margin: 5px 5px 5px 0;
+        margin: 0.3125rem 8px 0.3125rem 0;
         border: 1px solid $black;
         text-align: center;
-        padding: 7px;
-        font-size: 10px;
+        padding: 0.75rem;
+        font-size: 0.625rem;
+        color: $black;
 
         &.picked {
           color: $white;
           font-weight: bold;
-          background: $marine-blue;
+          background: $black;
         }
       }
 
-      .unavailable {
-        position: relative;
-
-        &::before,
-        &::after {
-          content: "";
-          position: absolute;
-          z-index: -1;
-          background: $black;
-        }
-
-        &::before {
-          left: 50%;
-          width: 1px;
-          height: calc(100% * 1.414);
-          top: -21%;
-          transform: rotate(45deg);
-        }
-
-        &::after {
-          top: 50%;
-          left: -21%;
-          height: 1px;
-          width: calc(100% * 1.414);
-          transform: rotate(45deg);
+      &.disabled {
+        a,
+        span {
+          background: url("../imgs/icons/disabled.png") no-repeat;
+          background-size: 100% 100%;
         }
       }
     }
+  }
+}
+
+.errors-container .error {
+  background: $cherry;
+  padding: 0.625rem;
+  color: $white-four;
+  position: relative;
+
+  @include icon(warning, before) {
+    font-size: 1.4rem;
+    position: absolute;
+    top: 0.3125rem;
+  }
+
+  ul {
+    margin: 0;
+    list-style: none;
   }
 }

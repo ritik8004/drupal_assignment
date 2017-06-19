@@ -13,14 +13,6 @@ targetEntityType: acq_sku
 bundle: configurable
 mode: search_result
 content:
-  attr_special_price:
-    label: hidden
-    type: string
-    weight: 3
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    region: content
   image:
     type: image
     weight: 0
@@ -47,16 +39,17 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  attr_bullet_points: true
   attr_color: true
-  attr_image: true
-  attr_media: true
   attr_short_description: true
   attr_size: true
-  attr_small_image: true
-  attr_thumbnail: true
   attributes: true
   crosssell: true
+  brand: true
   field_configurable_attributes: true
   field_configured_skus: true
+  final_price: true
+  media: true
   sku: true
+  special_price: true
   upsell: true

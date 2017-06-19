@@ -1,4 +1,8 @@
 .c-search {
+  @include breakpoint($only-mobile) {
+    padding-top: 1.375rem;
+  }
+
   .region__content {
     position: relative;
 
@@ -111,9 +115,19 @@
       }
 
       nav.pager {
+        float: $left;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+
         .js-pager__items {
-          width: 32%;
           margin: 8rem auto 2.1rem;
+          clear: $left;
+          float: $left;
+          list-style: none;
+          position: relative;
+          #{$left}: 50%;
+          text-align: center;
 
           @include breakpoint($only-mobile) {
             width: 57%;
@@ -125,6 +139,9 @@
         .pager__item {
           float: $left;
           margin-#{$right}: 1.5rem;
+          display: block;
+          position: relative;
+          #{$right}: 50%;
 
           &.is-active {
             a {
@@ -145,10 +162,6 @@
         .form-item {
           float: none;
         }
-      }
-
-      .form-item-keywords {
-        display: none;
       }
 
       .filter--mobile {
@@ -236,6 +249,12 @@
               margin-left: 0;
               margin-right: 0;
 
+              @include breakpoint($only-tablet) {
+                ul {
+                  padding-top: 0;
+                }
+              }
+
               .c-accordion__title::after {
                 #{$right}: 0;
               }
@@ -320,6 +339,15 @@
       }
     }
 
+    .mobile-filter-bar,
+    .filter-menu-label {
+      display: none;
+
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
+
     .view-header.search-count {
       margin-top: 0.9rem;
       margin-bottom: 0.75rem;
@@ -328,6 +356,18 @@
       padding-bottom: 9px;
       border-bottom: 1px solid $white;
       font-family: $alshaya-thin;
+    }
+  }
+
+  .block-page-title-block.mobile {
+    + .view-header.search-count {
+      margin-top: 5px;
+    }
+
+    h1 {
+      border-bottom: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
   }
 
@@ -355,6 +395,12 @@ header,
 }
 
 .alias--search {
+  @include breakpoint($only-mobile) {
+    .branding__menu.show-overlay {
+      z-index: 2;
+    }
+  }
+
   header {
     @include breakpoint($only-tablet) {
       .bef-exposed-form {
@@ -383,7 +429,6 @@ header,
   z-index: 99;
   background: $white-five;
   border: 1px solid $white;
-  border-top-width: 0;
 
   li.ui-menu-item {
     display: inherit;
@@ -402,5 +447,114 @@ header,
       font-family: $alshaya-thin;
       color: $brownish-grey;
     }
+  }
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page .ui-autocomplete {
+    @include breakpoint($only-mobile) {
+      z-index: 9999;
+      position: fixed !important;
+      top: 8.125rem !important;
+    }
+  }
+}
+
+.search-api-autocomplete-suggestion {
+  font-size: 0.75rem;
+
+  @include breakpoint($only-tablet) {
+    font-size: 0.625rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 0.625rem;
+    font-weight: 700;
+  }
+}
+
+.form-autocomplete.ui-autocomplete-loading {
+  background-size: 2rem;
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page {
+    .form-item-keywords {
+      float: $left;
+    }
+  }
+}
+
+ul.item-list__checkbox,
+.block-facets > ul {
+  display: none;
+}
+
+.ajax-progress.ajax-progress-fullscreen {
+  background-image: url(../imgs/icons/MC-loader.svg) !important;
+  background-repeat: no-repeat !important;
+  background-color: transparent !important;
+  background-size: 4.5rem;
+  width: 4rem !important;
+  height: 4rem !important;
+}
+
+.alshaya_search_slider {
+  width: 16.19rem;
+  margin: 0 auto;
+  position: relative;
+
+  .lSSlideWrapper {
+    position: static;
+
+    li {
+      margin-top: 0.1875rem;
+      height: 4.25rem;
+
+      &:hover {
+        margin-top: 0;
+        margin-right: 0.1875rem !important;
+        margin-left: -0.1875rem !important;
+        padding: 0.1875rem;
+        border: 1px solid $brownish-grey;
+      }
+
+      &:first-child {
+        &:hover {
+          margin-left: 0 !important;
+        }
+      }
+
+      &:last-child {
+        margin-right: 0 !important;
+      }
+    }
+
+    .lSAction > a {
+      background-image: none;
+      top: 2rem;
+
+      &.lSNext {
+        #{$right}: -1.5rem;
+
+        @include icon(chevron#{$right}, after) {
+          font-size: 2.125rem;
+          color: $black;
+        }
+      }
+
+      &.lSPrev {
+        #{$left}: -1.625rem;
+
+        @include icon(chevron#{$left}, after) {
+          font-size: 2.125rem;
+          color: $black;
+        }
+      }
+    }
+  }
+
+  .lSPager {
+    display: none;
   }
 }

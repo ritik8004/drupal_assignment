@@ -34,6 +34,14 @@ interface CartInterface {
   public function customerId();
 
   /**
+   * Gets the customer email.
+   *
+   * @return string|null
+   *   The customer email of the cart, or NULL if the cart does not have one.
+   */
+  public function customerEmail();
+
+  /**
    * Gets the cart totals.
    *
    * @return mixed
@@ -243,6 +251,27 @@ interface CartInterface {
    *   The coupon code.
    */
   public function setCoupon($coupon);
+
+  /**
+   * Gets an extension by its key.
+   *
+   * @param string $key
+   *   The extension key.
+   *
+   * @return string
+   *   The value.
+   */
+  public function getExtension($key);
+
+  /**
+   * Set an extension.
+   *
+   * @param string $key
+   *   The extension key.
+   * @param string $value
+   *   The extension value.
+   */
+  public function setExtension($key, $value);
 
   /**
    * Converts this cart to the customer cart provided.

@@ -8,19 +8,22 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@acq_commerce.client_factory'
-      - '@entity.query'
+      - '@acq_commerce.api'
+      - '@logger.factory'
+
+  acq_sku.product_options_manager:
+    class: Drupal\acq_sku\ProductOptionsManager
+    arguments:
+      - '@entity_type.manager'
+      - '@acq_commerce.api'
       - '@logger.factory'
 
   acq_sku.category_repo:
     class: Drupal\acq_sku\ConductorCategoryRepository
     arguments:
       - '@entity_type.manager'
-      - '@entity.query'
       - '@logger.factory'
       - 'acq_product_category'
-
-  acq_sku.download_images_queue:
-    class: Drupal\acq_sku\DownloadImagesQueue
 
   acq_sku.form_builder:
     class: Drupal\acq_sku\Form\AcqSkuFormBuilder

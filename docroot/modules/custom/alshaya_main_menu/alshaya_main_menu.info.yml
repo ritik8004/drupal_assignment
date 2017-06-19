@@ -15,11 +15,13 @@ dependencies:
   - language
   - lightning_media_image
   - link
+  - metatag
   - paragraphs
   - path
   - system
   - taxonomy
   - text
+  - user
   - views
   - workbench_moderation
 version: 8.x-1.0

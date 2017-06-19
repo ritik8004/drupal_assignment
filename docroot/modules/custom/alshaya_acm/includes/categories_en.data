@@ -1,0 +1,4186 @@
+<?php
+global $_alshaya_acm_categories;
+ 
+$_alshaya_acm_categories = 
+array (
+  0 => 
+  array (
+    'category_id' => 2,
+    'parent_id' => 1,
+    'store_id' => 1,
+    'name' => 'Default Category',
+    'description' => '',
+    'position' => 1,
+    'level' => 1,
+    'in_menu' => true,
+    'product_ids' => 
+    array (
+    ),
+    'children' => 
+    array (
+      0 => 
+      array (
+        'category_id' => 5,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Baby Clothing',
+        'description' => '',
+        'position' => 1,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 6,
+            'parent_id' => 5,
+            'store_id' => 1,
+            'name' => 'Baby (Newborn - 18 months)',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 7,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'New in: Baby Clothing',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 8,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Baby Girls',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 9,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Baby Boys',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 10,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Baby Unisex',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 11,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Tops',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 12,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Dresses & Skirts',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 13,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Trousers & Leggings',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              7 => 
+              array (
+                'category_id' => 14,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Jeans',
+                'description' => '',
+                'position' => 8,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              8 => 
+              array (
+                'category_id' => 15,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Sleepsuits & Pyjamas',
+                'description' => '',
+                'position' => 9,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              9 => 
+              array (
+                'category_id' => 16,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Clothing Sets',
+                'description' => '',
+                'position' => 10,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              10 => 
+              array (
+                'category_id' => 17,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Bodysuits',
+                'description' => '',
+                'position' => 11,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              11 => 
+              array (
+                'category_id' => 18,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Outerwear',
+                'description' => '',
+                'position' => 12,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              12 => 
+              array (
+                'category_id' => 19,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Rompers & Coveralls',
+                'description' => '',
+                'position' => 13,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              13 => 
+              array (
+                'category_id' => 20,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Underwear',
+                'description' => '',
+                'position' => 14,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              14 => 
+              array (
+                'category_id' => 21,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Footwear',
+                'description' => '',
+                'position' => 15,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              15 => 
+              array (
+                'category_id' => 22,
+                'parent_id' => 6,
+                'store_id' => 1,
+                'name' => 'Accessories',
+                'description' => '',
+                'position' => 16,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      1 => 
+      array (
+        'category_id' => 23,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Girls Clothing',
+        'description' => '',
+        'position' => 2,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 24,
+            'parent_id' => 23,
+            'store_id' => 1,
+            'name' => 'Girls Fashion (1 - 10 years)',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 25,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'New in: Girls Fashion',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 26,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Tops',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 27,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Blouses & Shirts',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 28,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Dresses & Skirts',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 29,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Shorts',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 30,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Swimwear',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 31,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Trousers & Leggings',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              7 => 
+              array (
+                'category_id' => 32,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Jeans',
+                'description' => '',
+                'position' => 8,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              8 => 
+              array (
+                'category_id' => 33,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Sleepsuits & Pyjamas',
+                'description' => '',
+                'position' => 9,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              9 => 
+              array (
+                'category_id' => 34,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Clothing Sets',
+                'description' => '',
+                'position' => 10,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              10 => 
+              array (
+                'category_id' => 35,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Jumpers & Cardigans',
+                'description' => '',
+                'position' => 11,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              11 => 
+              array (
+                'category_id' => 36,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Jumpsuits & Coveralls',
+                'description' => '',
+                'position' => 12,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              12 => 
+              array (
+                'category_id' => 37,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Underwear',
+                'description' => '',
+                'position' => 13,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              13 => 
+              array (
+                'category_id' => 38,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Socks & Tights',
+                'description' => '',
+                'position' => 14,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              14 => 
+              array (
+                'category_id' => 39,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Footwear',
+                'description' => '',
+                'position' => 15,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              15 => 
+              array (
+                'category_id' => 40,
+                'parent_id' => 24,
+                'store_id' => 1,
+                'name' => 'Accessories',
+                'description' => '',
+                'position' => 16,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      2 => 
+      array (
+        'category_id' => 41,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Boys Clothing',
+        'description' => '',
+        'position' => 3,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 42,
+            'parent_id' => 41,
+            'store_id' => 1,
+            'name' => 'Boys Fashion (1-10 years)',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 43,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'New in: Boys Fashion',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 44,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Tops',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 45,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Shirts',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 46,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Shorts',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 47,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Swimwear',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 48,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Trousers',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 49,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Jeans',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              7 => 
+              array (
+                'category_id' => 50,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Sleepsuits & Pyjamas',
+                'description' => '',
+                'position' => 8,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              8 => 
+              array (
+                'category_id' => 51,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Clothing Sets',
+                'description' => '',
+                'position' => 9,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              9 => 
+              array (
+                'category_id' => 52,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Jumpers & Cardigans',
+                'description' => '',
+                'position' => 10,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              10 => 
+              array (
+                'category_id' => 53,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Underwear',
+                'description' => '',
+                'position' => 11,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              11 => 
+              array (
+                'category_id' => 54,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Outerwear',
+                'description' => '',
+                'position' => 12,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              12 => 
+              array (
+                'category_id' => 55,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Socks & Tights',
+                'description' => '',
+                'position' => 13,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              13 => 
+              array (
+                'category_id' => 56,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Footwear',
+                'description' => '',
+                'position' => 14,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              14 => 
+              array (
+                'category_id' => 57,
+                'parent_id' => 42,
+                'store_id' => 1,
+                'name' => 'Accessories',
+                'description' => '',
+                'position' => 15,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      3 => 
+      array (
+        'category_id' => 58,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Maternity',
+        'description' => '',
+        'position' => 4,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 59,
+            'parent_id' => 58,
+            'store_id' => 1,
+            'name' => 'Maternity Clothing',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 60,
+                'parent_id' => 59,
+                'store_id' => 1,
+                'name' => 'New in: Maternity Fashion',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 61,
+                'parent_id' => 59,
+                'store_id' => 1,
+                'name' => 'Dresses & Skirts',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 62,
+            'parent_id' => 58,
+            'store_id' => 1,
+            'name' => 'Lingerie & Nightwear',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 63,
+                'parent_id' => 62,
+                'store_id' => 1,
+                'name' => 'Bras',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 64,
+                'parent_id' => 62,
+                'store_id' => 1,
+                'name' => 'Briefs',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 65,
+                'parent_id' => 62,
+                'store_id' => 1,
+                'name' => 'Nightwear',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 66,
+            'parent_id' => 58,
+            'store_id' => 1,
+            'name' => 'Care & Hygiene',
+            'description' => '',
+            'position' => 3,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 67,
+                'parent_id' => 66,
+                'store_id' => 1,
+                'name' => 'Bra & Maternity Pads',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 68,
+                'parent_id' => 66,
+                'store_id' => 1,
+                'name' => 'Nursing Pillows',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      4 => 
+      array (
+        'category_id' => 69,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Bathing & Care',
+        'description' => '',
+        'position' => 5,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 70,
+            'parent_id' => 69,
+            'store_id' => 1,
+            'name' => 'Bathing',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 71,
+                'parent_id' => 70,
+                'store_id' => 1,
+                'name' => 'Baby Toiletries',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 72,
+                'parent_id' => 70,
+                'store_id' => 1,
+                'name' => 'Accessories',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 73,
+                'parent_id' => 70,
+                'store_id' => 1,
+                'name' => 'Bathtime Toys',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 74,
+                'parent_id' => 70,
+                'store_id' => 1,
+                'name' => 'Baths & Bath Support',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 75,
+                'parent_id' => 70,
+                'store_id' => 1,
+                'name' => 'Towels & Towelling Robes',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 76,
+                'parent_id' => 70,
+                'store_id' => 1,
+                'name' => 'Nappies',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 77,
+            'parent_id' => 69,
+            'store_id' => 1,
+            'name' => 'Nappies',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 78,
+                'parent_id' => 77,
+                'store_id' => 1,
+                'name' => 'Nappy Disposal Systems',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 79,
+                'parent_id' => 77,
+                'store_id' => 1,
+                'name' => 'Potty Training',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 80,
+                'parent_id' => 77,
+                'store_id' => 1,
+                'name' => 'Changing Mats',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 81,
+            'parent_id' => 69,
+            'store_id' => 1,
+            'name' => 'Health',
+            'description' => '',
+            'position' => 3,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 82,
+                'parent_id' => 81,
+                'store_id' => 1,
+                'name' => 'Thermometers',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 83,
+                'parent_id' => 81,
+                'store_id' => 1,
+                'name' => 'Dental Care',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 84,
+                'parent_id' => 81,
+                'store_id' => 1,
+                'name' => 'Maternity Care',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 85,
+                'parent_id' => 81,
+                'store_id' => 1,
+                'name' => 'Accessories',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 86,
+                'parent_id' => 81,
+                'store_id' => 1,
+                'name' => 'Wipes and Cotton Buds',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 87,
+                'parent_id' => 81,
+                'store_id' => 1,
+                'name' => 'Medicine',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          3 => 
+          array (
+            'category_id' => 88,
+            'parent_id' => 69,
+            'store_id' => 1,
+            'name' => 'Shop by Brand',
+            'description' => '',
+            'position' => 4,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 89,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Angel Care',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 90,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Baby Journey',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 91,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Bumbo',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 92,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Mothercare',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 93,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Munchkin',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 94,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Noodle & Boo',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 95,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Sassy',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              7 => 
+              array (
+                'category_id' => 96,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Skip Hop',
+                'description' => '',
+                'position' => 8,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              8 => 
+              array (
+                'category_id' => 97,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Sudocrem',
+                'description' => '',
+                'position' => 9,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              9 => 
+              array (
+                'category_id' => 98,
+                'parent_id' => 88,
+                'store_id' => 1,
+                'name' => 'Summer Infant',
+                'description' => '',
+                'position' => 10,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      5 => 
+      array (
+        'category_id' => 99,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Car Seats',
+        'description' => '',
+        'position' => 6,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 100,
+            'parent_id' => 99,
+            'store_id' => 1,
+            'name' => 'Shop by Department',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 101,
+                'parent_id' => 100,
+                'store_id' => 1,
+                'name' => 'Baby Carriers',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 102,
+                'parent_id' => 100,
+                'store_id' => 1,
+                'name' => 'Infant Car Seats (Group 0+)',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 103,
+                'parent_id' => 100,
+                'store_id' => 1,
+                'name' => 'Combination Car Seats (Group 0+ -1)',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 104,
+                'parent_id' => 100,
+                'store_id' => 1,
+                'name' => 'Forward Facing Car Seats (Group 1)',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 105,
+                'parent_id' => 100,
+                'store_id' => 1,
+                'name' => 'Highback Booster Seats With Harness (Group 1-2-3)',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 106,
+                'parent_id' => 100,
+                'store_id' => 1,
+                'name' => 'Highback Booster Seats Without Harness (Group 2-3)',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 107,
+                'parent_id' => 100,
+                'store_id' => 1,
+                'name' => 'Booster Seats (Group 3)',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 108,
+            'parent_id' => 99,
+            'store_id' => 1,
+            'name' => 'Accessories',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 109,
+                'parent_id' => 108,
+                'store_id' => 1,
+                'name' => 'Car Seat Accessories',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 110,
+                'parent_id' => 108,
+                'store_id' => 1,
+                'name' => 'Adapters',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 111,
+            'parent_id' => 99,
+            'store_id' => 1,
+            'name' => 'Shop by Brand',
+            'description' => '',
+            'position' => 3,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 112,
+                'parent_id' => 111,
+                'store_id' => 1,
+                'name' => 'Maxi-Cosi',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 113,
+                'parent_id' => 111,
+                'store_id' => 1,
+                'name' => 'Mothercare',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      6 => 
+      array (
+        'category_id' => 114,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Feeding',
+        'description' => '',
+        'position' => 7,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 115,
+            'parent_id' => 114,
+            'store_id' => 1,
+            'name' => 'Baby Feeding',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 116,
+                'parent_id' => 115,
+                'store_id' => 1,
+                'name' => 'Bibs',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 117,
+                'parent_id' => 115,
+                'store_id' => 1,
+                'name' => 'Bottle Feeding',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 118,
+                'parent_id' => 115,
+                'store_id' => 1,
+                'name' => 'Breast Feeding',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 119,
+                'parent_id' => 115,
+                'store_id' => 1,
+                'name' => 'Soothers & Teethers',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 120,
+                'parent_id' => 115,
+                'store_id' => 1,
+                'name' => 'Sterilizing',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 121,
+                'parent_id' => 115,
+                'store_id' => 1,
+                'name' => 'Thermobags',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 122,
+            'parent_id' => 114,
+            'store_id' => 1,
+            'name' => 'Weaning & Toddler Feeding',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 123,
+                'parent_id' => 122,
+                'store_id' => 1,
+                'name' => 'Floor Seats',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 124,
+                'parent_id' => 122,
+                'store_id' => 1,
+                'name' => 'Highchairs',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 125,
+                'parent_id' => 122,
+                'store_id' => 1,
+                'name' => 'Weaning',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 126,
+                'parent_id' => 122,
+                'store_id' => 1,
+                'name' => 'Cups & beakers',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 127,
+                'parent_id' => 122,
+                'store_id' => 1,
+                'name' => 'Toddler bibs',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 128,
+            'parent_id' => 114,
+            'store_id' => 1,
+            'name' => 'Shop by Brand',
+            'description' => '',
+            'position' => 3,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 129,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Avent',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 130,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Bumbo',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 131,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Dr. Brown',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 132,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Medela',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 133,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Mothercare',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 134,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Munchkin',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 135,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Oxo',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              7 => 
+              array (
+                'category_id' => 136,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Sassy',
+                'description' => '',
+                'position' => 8,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              8 => 
+              array (
+                'category_id' => 137,
+                'parent_id' => 128,
+                'store_id' => 1,
+                'name' => 'Skip Hop',
+                'description' => '',
+                'position' => 9,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      7 => 
+      array (
+        'category_id' => 138,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Nursery & Bedroom',
+        'description' => '',
+        'position' => 8,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 139,
+            'parent_id' => 138,
+            'store_id' => 1,
+            'name' => 'Nursery',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 140,
+                'parent_id' => 139,
+                'store_id' => 1,
+                'name' => 'Cribs & Moses Baskets',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 141,
+                'parent_id' => 139,
+                'store_id' => 1,
+                'name' => 'Travel Cots',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 142,
+                'parent_id' => 139,
+                'store_id' => 1,
+                'name' => 'Furniture',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 143,
+                'parent_id' => 139,
+                'store_id' => 1,
+                'name' => 'Highchairs',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 144,
+            'parent_id' => 138,
+            'store_id' => 1,
+            'name' => 'Nursery Playtime',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 145,
+                'parent_id' => 144,
+                'store_id' => 1,
+                'name' => 'Bouncing Cradles & Rockers',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 146,
+                'parent_id' => 144,
+                'store_id' => 1,
+                'name' => 'Playmats',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 147,
+                'parent_id' => 144,
+                'store_id' => 1,
+                'name' => 'Baby Walkers & Activity Stations',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 148,
+            'parent_id' => 138,
+            'store_id' => 1,
+            'name' => 'Bedroom',
+            'description' => '',
+            'position' => 3,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 149,
+                'parent_id' => 148,
+                'store_id' => 1,
+                'name' => 'Bales & Sets',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 150,
+                'parent_id' => 148,
+                'store_id' => 1,
+                'name' => 'Baby Sleeping Bags',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 151,
+                'parent_id' => 148,
+                'store_id' => 1,
+                'name' => 'Bedding Accessories',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 152,
+                'parent_id' => 148,
+                'store_id' => 1,
+                'name' => 'Blankets',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 153,
+                'parent_id' => 148,
+                'store_id' => 1,
+                'name' => 'Bumpers',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 154,
+                'parent_id' => 148,
+                'store_id' => 1,
+                'name' => 'Pillow Cases & Duvet Covers',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 155,
+                'parent_id' => 148,
+                'store_id' => 1,
+                'name' => 'Quilts & Duvets',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              7 => 
+              array (
+                'category_id' => 156,
+                'parent_id' => 148,
+                'store_id' => 1,
+                'name' => 'Sheets',
+                'description' => '',
+                'position' => 8,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          3 => 
+          array (
+            'category_id' => 157,
+            'parent_id' => 138,
+            'store_id' => 1,
+            'name' => 'Child Safety',
+            'description' => '',
+            'position' => 4,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 158,
+                'parent_id' => 157,
+                'store_id' => 1,
+                'name' => 'Baby Monitors',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 159,
+                'parent_id' => 157,
+                'store_id' => 1,
+                'name' => 'Child Safety Essentials',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 160,
+                'parent_id' => 157,
+                'store_id' => 1,
+                'name' => 'Stair Gates & Safety Gates',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          4 => 
+          array (
+            'category_id' => 161,
+            'parent_id' => 138,
+            'store_id' => 1,
+            'name' => 'Shop by Brand',
+            'description' => '',
+            'position' => 5,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 162,
+                'parent_id' => 161,
+                'store_id' => 1,
+                'name' => 'Delta',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 163,
+                'parent_id' => 161,
+                'store_id' => 1,
+                'name' => 'Evenflo',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 164,
+                'parent_id' => 161,
+                'store_id' => 1,
+                'name' => 'Mothercare',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 165,
+                'parent_id' => 161,
+                'store_id' => 1,
+                'name' => 'Munchkin',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      8 => 
+      array (
+        'category_id' => 166,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Pushchairs',
+        'description' => '',
+        'position' => 9,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 167,
+            'parent_id' => 166,
+            'store_id' => 1,
+            'name' => 'Pushchairs',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 168,
+                'parent_id' => 167,
+                'store_id' => 1,
+                'name' => 'Prams & Pushchairs',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 169,
+                'parent_id' => 167,
+                'store_id' => 1,
+                'name' => 'Strollers',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 170,
+                'parent_id' => 167,
+                'store_id' => 1,
+                'name' => 'Travel Systems',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 171,
+            'parent_id' => 166,
+            'store_id' => 1,
+            'name' => 'Accessories',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 172,
+                'parent_id' => 171,
+                'store_id' => 1,
+                'name' => 'Changing Bags',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 173,
+                'parent_id' => 171,
+                'store_id' => 1,
+                'name' => 'Stroller Accessories',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          2 => 
+          array (
+            'category_id' => 174,
+            'parent_id' => 166,
+            'store_id' => 1,
+            'name' => 'Shop by Brand',
+            'description' => '',
+            'position' => 3,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 175,
+                'parent_id' => 174,
+                'store_id' => 1,
+                'name' => 'Baby Jogger',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 176,
+                'parent_id' => 174,
+                'store_id' => 1,
+                'name' => 'Babymel',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 177,
+                'parent_id' => 174,
+                'store_id' => 1,
+                'name' => 'Babyzen',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 178,
+                'parent_id' => 174,
+                'store_id' => 1,
+                'name' => 'Maclaren',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 179,
+                'parent_id' => 174,
+                'store_id' => 1,
+                'name' => 'Mothercare',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 180,
+                'parent_id' => 174,
+                'store_id' => 1,
+                'name' => 'Silver Cross',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      9 => 
+      array (
+        'category_id' => 181,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Toys',
+        'description' => '',
+        'position' => 10,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 182,
+            'parent_id' => 181,
+            'store_id' => 1,
+            'name' => 'Shop by Department',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 183,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Rattles & Teethers',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 184,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Clip Toys & Mobiles',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 185,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Soft Toys & Dolls',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 186,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Books & Audio',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 187,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Blocks,  Shapes Sorters & Stacking Toys',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 189,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Outdoors & Active Toys',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 190,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Musical Toys',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              7 => 
+              array (
+                'category_id' => 191,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Bathtime Toys',
+                'description' => '',
+                'position' => 8,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              8 => 
+              array (
+                'category_id' => 192,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Board Games & Puzzles',
+                'description' => '',
+                'position' => 9,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              9 => 
+              array (
+                'category_id' => 193,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Arts & Crafts',
+                'description' => '',
+                'position' => 10,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              10 => 
+              array (
+                'category_id' => 194,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Cars & Vehicles',
+                'description' => '',
+                'position' => 11,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              11 => 
+              array (
+                'category_id' => 195,
+                'parent_id' => 182,
+                'store_id' => 1,
+                'name' => 'Educational & Development Toys',
+                'description' => '',
+                'position' => 12,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 196,
+            'parent_id' => 181,
+            'store_id' => 1,
+            'name' => 'Shop by Brand',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 197,
+                'parent_id' => 196,
+                'store_id' => 1,
+                'name' => 'Bumbo',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 198,
+                'parent_id' => 196,
+                'store_id' => 1,
+                'name' => 'Disney',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 199,
+                'parent_id' => 196,
+                'store_id' => 1,
+                'name' => 'Melissa & Doug',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 200,
+                'parent_id' => 196,
+                'store_id' => 1,
+                'name' => 'Sassy',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              4 => 
+              array (
+                'category_id' => 201,
+                'parent_id' => 196,
+                'store_id' => 1,
+                'name' => 'Skip Hop',
+                'description' => '',
+                'position' => 5,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              5 => 
+              array (
+                'category_id' => 202,
+                'parent_id' => 196,
+                'store_id' => 1,
+                'name' => 'Crayola',
+                'description' => '',
+                'position' => 6,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              6 => 
+              array (
+                'category_id' => 203,
+                'parent_id' => 196,
+                'store_id' => 1,
+                'name' => 'Beanie Boos',
+                'description' => '',
+                'position' => 7,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              7 => 
+              array (
+                'category_id' => 204,
+                'parent_id' => 196,
+                'store_id' => 1,
+                'name' => 'Zoggs',
+                'description' => '',
+                'position' => 8,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      10 => 
+      array (
+        'category_id' => 205,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Offers',
+        'description' => '',
+        'position' => 11,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 206,
+            'parent_id' => 205,
+            'store_id' => 1,
+            'name' => 'Shop by Department',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+              0 => 
+              array (
+                'category_id' => 207,
+                'parent_id' => 206,
+                'store_id' => 1,
+                'name' => 'Clothing up to 2 KWD',
+                'description' => '',
+                'position' => 1,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              1 => 
+              array (
+                'category_id' => 208,
+                'parent_id' => 206,
+                'store_id' => 1,
+                'name' => 'Clothing for 3 KWD',
+                'description' => '',
+                'position' => 2,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              2 => 
+              array (
+                'category_id' => 209,
+                'parent_id' => 206,
+                'store_id' => 1,
+                'name' => 'Clothing for 4 KWD',
+                'description' => '',
+                'position' => 3,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+              3 => 
+              array (
+                'category_id' => 210,
+                'parent_id' => 206,
+                'store_id' => 1,
+                'name' => 'Clothing from 5 to 7 KWD',
+                'description' => '',
+                'position' => 4,
+                'level' => 4,
+                'in_menu' => true,
+                'product_ids' => 
+                array (
+                ),
+                'children' => 
+                array (
+                ),
+                'extension' => 
+                array (
+                ),
+              ),
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      11 => 
+      array (
+        'category_id' => 211,
+        'parent_id' => 2,
+        'store_id' => 1,
+        'name' => 'Promotions',
+        'description' => '',
+        'position' => 12,
+        'level' => 2,
+        'in_menu' => false,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 212,
+            'parent_id' => 211,
+            'store_id' => 1,
+            'name' => '20% off',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => false,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 213,
+            'parent_id' => 211,
+            'store_id' => 1,
+            'name' => 'Buy one get one free',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => false,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+    ),
+    'extension' => 
+    array (
+    ),
+  ),
+);

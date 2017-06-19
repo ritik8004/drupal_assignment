@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_menus_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_shop_by' => [
+      'template' => 'alshaya-shop-by',
+      'variables' => [
+        'term_tree' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements template_preprocess_hook().
+ */
+function template_preprocess_alshaya_shop_by(&$variables) {
+  // Number of columns to show/divide.
+  $column_count = 2;
+
+  // Splite/Chunk the array.
+  $items = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / $column_count));
+
+  // Add items to the variables array.
+  $variables['items'] = $items;
+}

@@ -10,5 +10,5 @@
  */
 function alshaya_permissions_uninstall() {
   \Drupal::configFactory()->getEditable('user.role.webmaster')->delete();
-  \Drupal::configFactory()->getEditable('user.role.reviewe')->delete();
+  \Drupal::configFactory()->getEditable('user.role.reviewer')->delete();
 }

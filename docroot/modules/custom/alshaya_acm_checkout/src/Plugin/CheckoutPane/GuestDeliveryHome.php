@@ -30,9 +30,7 @@ class GuestDeliveryHome extends AddressFormBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [
-      'weight' => 1,
-    ] + parent::defaultConfiguration();
+    return ['weight' => 1] + parent::defaultConfiguration();
   }
 
   /**
@@ -79,52 +77,40 @@ class GuestDeliveryHome extends AddressFormBase {
       $region_options = $pane_form['address']['dynamic_parts']['region']['#options'];
 
       if ($region = $pane_form['address']['dynamic_parts']['region']['#default_value']) {
-
-        if (!isset($region_options[$region])) {
-          if ($region_key = array_search($region, $region_options)) {
-            $pane_form['address']['dynamic_parts']['region']['#default_value'] = $region_key;
-          }
-        }
+        $pane_form['address']['dynamic_parts']['region']['#default_value'] = alshaya_acm_checkout_get_region_id_from_name($region, $pane_form['address']['dynamic_parts']['country']['#default_value']);
       }
 
       $pane_form['address']['dynamic_parts']['region']['#access'] = !empty($region_options);
     }
 
-    // Block proceeding checkout until shipping method is chosen.
-    $complete_form['actions']['next']['#states'] = [
-      'invisible' => [
-        '#shipping_methods_wrapper' => ['value' => ''],
-      ],
-    ];
-
     $pane_form['address']['email'] = [
-      '#type' => 'textfield',
+      '#type' => 'email',
       '#title' => $this->t('Email Address'),
       '#required' => TRUE,
       '#attributes' => ['placeholder' => [$this->t('Email Address')]],
       '#weight' => -8,
-      '#default_value' => !empty($address->email) ? $address->email : '',
+      '#default_value' => $cart->customerEmail(),
     ];
+
+    $shipping_methods = self::generateShippingEstimates($address);
+    $default_shipping = $cart->getShippingMethodAsString();
+    if (!empty($shipping_methods) && empty($default_shipping)) {
+      $default_shipping = array_keys($shipping_methods)[0];
+    }
 
     $pane_form['address']['shipping_methods'] = [
-      '#type' => 'select',
+      '#type' => 'radios',
       '#title' => t('Shipping Methods'),
-      '#empty_option' => t('Available Shipping Methods'),
-      '#default_value' => $cart->getShippingMethodAsString(),
+      '#default_value' => $default_shipping,
       '#validated' => TRUE,
-      '#attributes' => [
-        'id' => ['shipping_methods_wrapper'],
-      ],
+      '#options' => $shipping_methods,
+      '#prefix' => '<div id="shipping_methods_wrapper">',
+      '#suffix' => '</div>',
     ];
-
-    GuestDeliveryHome::generateShippingEstimates(
-      $address,
-      $pane_form['address']['shipping_methods']
-    );
 
     $complete_form['actions']['get_shipping_methods'] = [
       '#type' => 'button',
-      '#value' => $this->t('Estimate Shipping'),
+      '#value' => $this->t('deliver to this address'),
       '#ajax' => [
         'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
@@ -156,10 +142,8 @@ class GuestDeliveryHome extends AddressFormBase {
     unset($address_values['email']);
     $address = self::getAddressFromValues($address_values);
 
-    self::generateShippingEstimates(
-      $address,
-      $address_fields['shipping_methods']
-    );
+    $address_fields['shipping_methods']['#options'] = self::generateShippingEstimates($address);
+    $address_fields['shipping_methods']['#default_value'] = array_keys($address_fields['shipping_methods']['#options'])[0];
 
     return $address_fields;
   }
@@ -169,10 +153,12 @@ class GuestDeliveryHome extends AddressFormBase {
    *
    * @param array|object $address
    *   Array of object of address.
-   * @param array $select
-   *   Selected method.
+   *
+   * @return array
+   *   Available shipping methods.
    */
-  public static function generateShippingEstimates($address, array &$select) {
+  public static function generateShippingEstimates($address) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
     $address = (array) $address;
 
     $address = _alshaya_acm_checkout_clean_address($address);
@@ -180,34 +166,43 @@ class GuestDeliveryHome extends AddressFormBase {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
 
     $shipping_methods = [];
+    $shipping_method_options = [];
 
     if (!empty($address) && !empty($address['country'])) {
       $shipping_methods = \Drupal::service('acq_commerce.api')->getShippingEstimates($cart->id(), $address);
     }
 
-    if (empty($shipping_methods)) {
-      $select['#suffix'] = t('No shipping methods found, please check your address and try again.');
-      return;
-    }
-    else {
-      unset($select['#suffix']);
+    if (!empty($shipping_methods)) {
+      foreach ($shipping_methods as $method) {
+        // Key needs to hold both carrier and method.
+        $key = implode(',', [$method['carrier_code'], $method['method_code']]);
+
+        // @TODO: Currently what we get back in orders is first 32 characters
+        // and concatenated by underscore.
+        $code = substr(implode('_', [$method['carrier_code'], $method['method_code']]), 0, 32);
+        $name = $method['method_title'];
+        $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
+
+        $term = alshaya_acm_checkout_load_shipping_method($code, $name);
+
+        // We don't display click and collect delivery method for home delivery.
+        if ($code == \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
+          continue;
+        }
+
+        $method_name = '
+          <div class="shipping-method-name">
+            <div class="shipping-method-title">' . $term->getName() . '</div>
+            <div class="shipping-method-price">' . $price . '</div>
+            <div class="shipping-method-description">' . $term->get('description')->getString() . '</div>
+          </div>
+        ';
+
+        $shipping_method_options[$key] = $method_name;
+      }
     }
 
-    foreach ($shipping_methods as $method) {
-      // Key needs to hold both carrier and method.
-      $key = implode(',', [$method['carrier_code'], $method['method_code']]);
-
-      $name = t(
-        '@carrier — @method (@price)',
-        [
-          '@carrier' => $method['carrier_title'],
-          '@method' => $method['method_title'],
-          '@price' => $method['amount'] ? $method['amount'] : t('Free'),
-        ]
-      );
-
-      $select['#options'][$key] = $name;
-    }
+    return $shipping_method_options;
   }
 
   /**
@@ -223,15 +218,12 @@ class GuestDeliveryHome extends AddressFormBase {
     $user = user_load_by_mail($values['address']['email']);
 
     if ($user !== FALSE) {
-      $form_state->setErrorByName('email', $this->t('You already have an account, please login.'));
+      $form_state->setErrorByName('guest_delivery_home][email', $this->t('You already have an account, please login.'));
     }
-  }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $values = $form_state->getValue($pane_form['#parents']);
+    if ($form_state->getErrors()) {
+      return;
+    }
 
     $shipping_method = NULL;
 
@@ -253,6 +245,10 @@ class GuestDeliveryHome extends AddressFormBase {
     });
 
     $cart = $this->getCart();
+
+    // Store in separate variable to use later, will be removed while cleaning.
+    $email = $address['email'];
+
     $cart->setShipping(_alshaya_acm_checkout_clean_address($address));
 
     if (empty($shipping_method)) {
@@ -264,15 +260,49 @@ class GuestDeliveryHome extends AddressFormBase {
     $cart->setShippingMethod($carrier, $method);
 
     // We are only looking to convert guest carts.
-    if ($cart->customerId() != 0) {
-      return;
+    if (!($cart->customerId())) {
+      // Get the customer id of Magento from this email.
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+
+      try {
+        $customer = $api_wrapper->createCustomer($address['first_name'], $address['last_name'], $email);
+      }
+      catch (\Exception $e) {
+        // @TODO: Handle create customer errors here.
+        // Probably just the email error.
+        \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
+        $form_state->setErrorByName('custom', '');
+        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        return;
+      }
+
+      $customer_cart = $api_wrapper->createCart($customer['customer_id']);
+
+      if (empty($customer_cart['customer_email'])) {
+        $customer_cart['customer_email'] = $email;
+      }
+
+      $cart->convertToCustomerCart($customer_cart);
+      \Drupal::service('acq_cart.cart_storage')->addCart($cart);
     }
 
-    // Get the customer id of Magento from this email.
-    $customer = \Drupal::service('acq_commerce.api')->createCustomer($address['first_name'], $address['last_name'], $address['email']);
-    $customer_cart = \Drupal::service('acq_commerce.api')->createCart($customer['customer_id']);
-    $cart->convertToCustomerCart($customer_cart);
-    \Drupal::service('acq_cart.cart_storage')->pushCart();
+    try {
+      \Drupal::service('acq_cart.cart_storage')->updateCart();
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_acm_checkout')->error('Error while updating cart in guest delivery home: @message', ['@message' => $e->getMessage()]);
+      $form_state->setErrorByName('custom', '');
+      drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+      return;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    // We have done everything in validatePaneForm().
   }
 
   /**

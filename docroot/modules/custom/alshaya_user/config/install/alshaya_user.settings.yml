@@ -1,10 +1,10 @@
 terms_conditions:
-  value: 'I would like to receive exclusive deals from Pottery Barn. By registering I agree to your <a href="/terms" target="_blank">Terms and Conditions</a>.'
-  format: 'rich_text'
+  value: '<p>By registering you agreed to our <a href="/terms">Terms and Conditions</a>.</p>'
+  format: rich_text
 user_register_complete:
-  value: "<span>You're almost done.</span><span>We've sent a verification email to <a href='mailto:[email]'>[email]</a>.</span><div>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</div><span>It is also your final step in the sign up process.</span>"
-  format: 'rich_text'
+  value: '<p>You''re almost done.</p><p>We''ve sent a verification email to <a href="mailto:[email]">[email]</a>.</p><p>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</p><p>It is also your final step in the sign up process.</p>'
+  format: rich_text
 password_tooltip:
-  value: '<ul><li>Password must have at-least 7 characters</li><li>Password must contain at-least 1 special character</li><li>Password must contain at-least 1 numeric character</li><li>Spaces are not allowed in password.</li><li>Previous four passwords not allowed.</li></ul>'
-  format: 'rich_text'
+  value: '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four passwords were not allowed.</li></ul>'
+  format: rich_text
 langcode: en

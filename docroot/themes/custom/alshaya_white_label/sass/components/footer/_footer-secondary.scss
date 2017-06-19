@@ -2,7 +2,7 @@
   background: $white-four;
   font-size: 0.6875rem;
   position: relative;
-  z-index: 2;
+  z-index: 1;
 
   @include breakpoint($tablet) {
     height: 4.375rem;
@@ -26,11 +26,11 @@
 }
 
 .c-footer__logos {
-  padding-#{$right}: 1.5rem;
   line-height: 4.375rem;
 
   @include breakpoint($tablet) {
     float: $left;
+    padding-#{$right}: 1.5rem;
     margin-#{$right}: 1.5rem;
   }
 
@@ -40,7 +40,7 @@
 
   @include breakpoint($desktop) {
     float: $left;
-    margin-right: 0;
+    margin-#{$right}: 0;
   }
 
   @include breakpoint($only-tablet) {
@@ -57,7 +57,15 @@
   }
 
   li:not(:last-child) {
-    margin-#{$right}: 1.875rem;
+    margin-#{$right}: 1.5rem;
+
+    @include breakpoint($tablet) {
+      margin-#{$right}: 1.8rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 1.6rem;
+    }
   }
 }
 
@@ -114,10 +122,20 @@
     line-height: 1.5;
   }
 
-  p {
+  .field--name-body p {
     margin-top: 0;
-    color: $black;
+    color: $grey-ash;
+    font-size: 0.75rem;
     margin-bottom: 0;
+
+    @include breakpoint($only-mobile) {
+      line-height: 19px;
+    }
+
+    @include breakpoint($tablet) {
+      color: $black;
+      font-size: 0.6875rem;
+    }
   }
 
   .field--name-body {
@@ -129,6 +147,6 @@
 
   @include breakpoint($desktop) {
     width: 56%;
-    margin-right: 9.5rem;
+    margin-right: 9.7rem;
   }
 }

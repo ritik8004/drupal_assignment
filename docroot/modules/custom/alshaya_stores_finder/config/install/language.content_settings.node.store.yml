@@ -3,6 +3,11 @@ status: true
 dependencies:
   config:
     - node.type.store
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
 id: node.store
 target_entity_type_id: node
 target_bundle: store

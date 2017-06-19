@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.acq_promotion
+id: node.acq_promotion
+target_entity_type_id: node
+target_bundle: acq_promotion
+default_langcode: site_default
+language_alterable: false

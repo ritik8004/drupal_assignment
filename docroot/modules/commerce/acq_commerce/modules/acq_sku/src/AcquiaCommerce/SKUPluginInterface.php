@@ -90,10 +90,15 @@ interface SKUPluginInterface {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   The object of product.
+   * @param bool $check_parent
+   *   Flag to check for parent sku or not (for configurable products).
+   * @param bool $create_translation
+   *   Flag to create translation if node available and translation not
+   *   available. Used during sync.
    *
    * @return \Drupal\node\Entity\Node|null
    *   Return object of Node or null if not found.
    */
-  public function getDisplayNode(SKU $sku);
+  public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE);
 
 }

@@ -1,2 +1,6 @@
-size_guide_link: ''
+brand_logo_base_path: 'media/attribute/swatch'
+size_guide_link: 0
+size_guide_modal_content:
+  format: rich_text
+  value: '<div>Size guide content is here.</div>'
 langcode: en

@@ -4,6 +4,7 @@ namespace Drupal\acq_sku\Plugin\rest\resource;
 
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -38,6 +39,13 @@ class ProductSyncResource extends ResourceBase {
   private $categoryRepo;
 
   /**
+   * Product Options Manager service instance.
+   *
+   * @var \Drupal\acq_sku\ProductOptionsManager
+   */
+  private $productOptionsManager;
+
+  /**
    * Drupal Config Factory Instance.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -57,13 +65,6 @@ class ProductSyncResource extends ResourceBase {
    * @var \Drupal\Core\Entity\Query\QueryFactory
    */
   private $queryFactory;
-
-  /**
-   * Queue of images to download.
-   *
-   * @var DownloadImagesQueue
-   */
-  private $downloadImagesQueueManager = NULL;
 
   /**
    * Construct.
@@ -86,13 +87,16 @@ class ProductSyncResource extends ResourceBase {
    *   The query factory.
    * @param \Drupal\acq_sku\CategoryRepositoryInterface $cat_repo
    *   Category Repository instance.
+   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
+   *   Product Options Manager service instance.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo, ProductOptionsManager $product_options_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->queryFactory = $query_factory;
     $this->categoryRepo = $cat_repo;
+    $this->productOptionsManager = $product_options_manager;
   }
 
   /**
@@ -108,7 +112,8 @@ class ProductSyncResource extends ResourceBase {
       $container->get('logger.factory')->get('acq_commerce'),
       $container->get('config.factory'),
       $container->get('entity.query'),
-      $container->get('acq_sku.category_repo')
+      $container->get('acq_sku.category_repo'),
+      $container->get('acq_sku.product_options_manager')
     );
   }
 
@@ -131,15 +136,15 @@ class ProductSyncResource extends ResourceBase {
     $failed = 0;
 
     foreach ($products as $product) {
-      $display = NULL;
+      $langcode = acq_commerce_get_langcode_from_store_id($product['store_id']);
 
       if (!isset($product['type'])) {
         continue;
       }
 
-      $query = $this->queryFactory->get('acq_sku_type')
-        ->condition('id', $product['type'])
-        ->count();
+      $query = $this->queryFactory->get('acq_sku_type');
+      $query->condition('id', $product['type']);
+      $query->count();
 
       $has_bundle = $query->execute();
 
@@ -160,85 +165,35 @@ class ProductSyncResource extends ResourceBase {
         continue;
       }
 
-      $query = $this->queryFactory->get('acq_sku')
-        ->condition('sku', $product['sku']);
-      $nids = $query->execute();
-
-      if (count($nids) > 1) {
-        $this->logger->error(
-          'Duplicate product SKU @sku found.',
-          ['@sku' => $product['sku']]
-        );
-        $failed++;
-        continue;
-      }
-
-      if (count($nids) > 0) {
-        $nid = array_shift($nids);
-        $sku = $em->load($nid);
-
-        if (!$sku->id()) {
-          $this->logger->error(
-            'Loading product SKU @sku failed.',
-            ['@sku' => $product['sku']]
-          );
-          $failed++;
-          continue;
-        }
-
-        // Load associated product display node.
-        $query = $this->queryFactory->get('node')
-          ->condition('type', 'acq_product')
-          ->condition('field_skus', $product['sku']);
-        $nids = $query->execute();
-
-        if (!count($nids)) {
-          $this->logger->info(
-            'Existing product SKU @sku has no display node, creating.',
-            ['@sku' => $product['sku']]
-          );
-
-          $display = $this->createDisplayNode($product);
-        }
-        else {
-          $this->updateNodeCategories($nids, $product);
-        }
-
-        $sku->name->value = $product['name'];
-        $sku->price->value = $product['price'];
-        $sku->attributes = $this->formatProductAttributes($product['attributes']);
-
-        $this->logger->info(
-          'Updating product SKU @sku.',
-          ['@sku' => $product['sku']]
-        );
-
+      if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
+        $this->logger->info('Updating product SKU @sku.', ['@sku' => $product['sku']]);
         $updated++;
       }
       else {
+        /** @var \Drupal\acq_sku\Entity\SKU $sku */
         $sku = $em->create([
           'type' => $product['type'],
           'sku' => $product['sku'],
-          'name' => html_entity_decode($product['name']),
-          'price' => $product['price'],
-          'attributes' => $this->formatProductAttributes($product['attributes']),
+          'langcode' => $langcode,
         ]);
 
-        $display = $this->createDisplayNode($product);
-
-        $this->logger->info(
-          'Creating product SKU @sku.',
-          ['@sku' => $product['sku']]
-        );
+        $this->logger->info('Creating product SKU @sku.', ['@sku' => $product['sku']]);
 
         $created++;
       }
 
+      $sku->name->value = html_entity_decode($product['name']);
+      $sku->price->value = $product['price'];
+      $sku->special_price->value = $product['special_price'];
+      $sku->final_price->value = $product['final_price'];
+      $sku->attributes = $this->formatProductAttributes($product['attributes']);
+      $sku->media = serialize($product['extension']['media']);
+
       // Update the fields based on the values from attributes.
-      $this->updateAttributeFields($sku, $product['attributes']);
+      $this->updateFields('attributes', $sku, $product['attributes']);
 
       // Update the fields based on the values from extension.
-      $this->updateExtensionFields($sku, $product['extension']);
+      $this->updateFields('extension', $sku, $product['extension']);
 
       // Update upsell linked SKUs.
       $this->updateLinkedSkus('upsell', $sku, $product['linked']);
@@ -249,22 +204,44 @@ class ProductSyncResource extends ResourceBase {
       // Update related linked SKUs.
       $this->updateLinkedSkus('related', $sku, $product['linked']);
 
-      $plugin_manager = \Drupal::service('plugin.manager.sku');
-      $plugin_definition = $plugin_manager->pluginFromSKU($sku);
-
-      if (!empty($plugin_definition)) {
-        $class = $plugin_definition['class'];
-        $plugin = new $class();
-        $plugin->processImport($sku, $product);
-      }
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $plugin->processImport($sku, $product);
 
       $sku->save();
 
-      // Update fields based on the values from attributes that require SKU id.
-      $this->updateAttributeFieldsPostSave($sku, $product['attributes']);
+      if ($product['visibility'] == 1) {
+        $node = $plugin->getDisplayNode($sku, FALSE, TRUE);
 
-      if ($display) {
-        $display->save();
+        if (empty($node)) {
+          $node = $this->createDisplayNode($product, $langcode);
+        }
+
+        $node->get('title')->setValue(html_entity_decode($product['name']));
+
+        $description = (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '';
+        $node->get('body')->setValue([
+          'value' => $description,
+          'format' => 'rich_text',
+        ]);
+
+        $categories = (isset($product['categories'])) ? $product['categories'] : [];
+        $categories = $this->formatCategories($categories);
+        $node->field_category = $categories;
+
+        $node->setPublished(TRUE);
+
+        // Invoke the alter hook to allow all modules to update the node.
+        \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
+
+        $node->save();
+      }
+      else {
+        if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
+          $node->setPublished(FALSE);
+          $node->save;
+        }
+
       }
     }
 
@@ -285,32 +262,23 @@ class ProductSyncResource extends ResourceBase {
    *
    * @param array $product
    *   Product data.
+   * @param string $langcode
+   *   Language code.
    *
    * @return \Drupal\Core\Entity\EntityInterface
    *   Node object.
    */
-  private function createDisplayNode(array $product) {
-
-    $description = (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '';
-
-    $categories = (isset($product['categories'])) ? $product['categories'] : [];
-    $categories = $this->formatCategories($categories);
-
-    $node = $this->entityManager->getStorage('node')->create([
+  private function createDisplayNode(array $product, $langcode = '') {
+    $data = [
       'type' => 'acq_product',
-      'title' => html_entity_decode($product['name']),
-      'body' => [
-        'value' => $description,
-        'format' => 'rich_text',
-      ],
       'field_skus' => [$product['sku']],
-      'field_category' => $categories,
-    ]);
+    ];
 
-    $node->setPublished(FALSE);
+    if ($langcode) {
+      $data['langcode'] = $langcode;
+    }
 
-    // Invoke the alter hook to allow all modules to update the node.
-    \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
+    $node = $this->entityManager->getStorage('node')->create($data);
 
     return $node;
   }
@@ -359,39 +327,11 @@ class ProductSyncResource extends ResourceBase {
 
       $formatted[] = [
         'key' => $name,
-        'value' => substr((string) $value, 0, 100),
+        'value' => utf8_encode(substr((string) $value, 0, 100)),
       ];
     }
 
     return ($formatted);
-  }
-
-  /**
-   * UpdateNodeCategories.
-   *
-   * Update the assigned categories for display nodes (by ID).
-   *
-   * @param int[] $nids
-   *   Node IDs.
-   * @param array $product
-   *   Product Data.
-   */
-  private function updateNodeCategories(array $nids, array $product) {
-
-    $categories = (isset($product['categories'])) ? $product['categories'] : [];
-    $categories = $this->formatCategories($categories);
-
-    foreach ($nids as $nid) {
-      $node = $this->entityManager->getStorage('node')->load($nid);
-      if ($node && $node->id()) {
-        $node->field_category = $categories;
-
-        // Invoke the alter hook to allow all modules to update the node.
-        \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
-
-        $node->save();
-      }
-    }
   }
 
   /**
@@ -442,71 +382,41 @@ class ProductSyncResource extends ResourceBase {
    *
    * Update the fields based on the values from attributes.
    *
+   * @param string $parent
+   *   Fields to get from this parent will be processed.
    * @param Drupal\acq_sku\Entity\SKU $sku
    *   The root SKU.
-   * @param array $attributes
-   *   The attributes to set.
+   * @param array $values
+   *   The product attributes/extensions to get value from.
    */
-  private function updateAttributeFields(SKU $sku, array $attributes) {
+  private function updateFields($parent, SKU $sku, array $values) {
     $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
 
     // Loop through all the attributes available for this particular SKU.
-    foreach ($attributes as $key => $value) {
+    foreach ($values as $key => $value) {
       // Check if attribute is required by us.
       if (isset($additionalFields[$key])) {
         $field = $additionalFields[$key];
 
-        if ($field['parent'] != 'attributes') {
-          continue;
-        }
-
-        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
-        $field_key = 'attr_' . $key;
-
-        switch ($field['type']) {
-          case 'string':
-            $sku->{$field_key}->setValue($value);
-            break;
-
-          case 'text_long':
-            $value = isset($field['serialize']) ? serialize($value) : $value;
-            $sku->{$field_key}->setValue($value);
-            break;
-
-          case 'image':
-            // We will manage this post save.
-            break;
-        }
-      }
-    }
-  }
-
-  /**
-   * Update extension fields.
-   *
-   * Update the fields based on the values from extension.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   The root SKU.
-   * @param array $attributes
-   *   The attributes to set.
-   */
-  private function updateExtensionFields(SKU $sku, array $attributes) {
-    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
-
-    // Loop through all the attributes available for this particular SKU.
-    foreach ($attributes as $key => $value) {
-      // Check if attribute is required by us.
-      if (isset($additionalFields[$key])) {
-        $field = $additionalFields[$key];
-
-        if ($field['parent'] != 'extension') {
+        if ($field['parent'] != $parent) {
           continue;
         }
 
         $field_key = 'attr_' . $key;
 
         switch ($field['type']) {
+          case 'attribute':
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
+            foreach ($value as $index => $val) {
+              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
+                $sku->{$field_key}->set($index, $term->getName());
+              }
+              else {
+                $sku->{$field_key}->set($index, $val);
+              }
+            }
+            break;
+
           case 'string':
             $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
             $sku->{$field_key}->setValue($value);
@@ -515,52 +425,6 @@ class ProductSyncResource extends ResourceBase {
           case 'text_long':
             $value = isset($field['serialize']) ? serialize($value) : $value;
             $sku->{$field_key}->setValue($value);
-            break;
-
-          case 'image':
-            // We will manage this post save.
-            break;
-        }
-      }
-    }
-  }
-
-  /**
-   * Update attribute fields post save.
-   *
-   * Update the fields based on the values from attributes.
-   * We need the SKU id for some cases which will be handled in this.
-   *
-   * @param Drupal\acq_sku\Entity\SKU $sku
-   *   The root SKU.
-   * @param array $attributes
-   *   The attributes to set.
-   */
-  private function updateAttributeFieldsPostSave(SKU $sku, array $attributes) {
-    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
-
-    // Loop through all the attributes available for this particular SKU.
-    foreach ($attributes as $key => $value) {
-      // Check if attribute is required by us.
-      if (isset($additionalFields[$key])) {
-        $field = $additionalFields[$key];
-
-        $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
-        $field_key = 'attr_' . $key;
-
-        switch ($field['type']) {
-          case 'image':
-            // Initialise queue manager if not already done.
-            if (empty($this->downloadImagesQueueManager)) {
-              $this->downloadImagesQueueManager = \Drupal::service('acq_sku.download_images_queue');
-            }
-
-            // @TODO: Enhance the process by checking if the same image is
-            // already there during update.
-            foreach ($value as $index => $val) {
-              $this->downloadImagesQueueManager->addItem($sku->id(), $field_key, $index, $val);
-            }
-
             break;
         }
       }

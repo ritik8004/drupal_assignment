@@ -3,6 +3,8 @@
     .item-list ul {
       @extend %list-clear;
 
+      font-family: $arial;
+      line-height: 1;
       font-size: 0.75rem;
     }
 
@@ -22,12 +24,20 @@
         font-size: 0.875rem;
       }
 
-      &.active,
-      &:hover {
+      &.active {
         color: $marine-blue;
         font-weight: bold;
       }
+
+      &:hover {
+        color: $cerulean-two;
+        text-decoration: underline;
+      }
     }
+  }
+
+  .block:first-child {
+    margin-top: 0.3rem;
   }
 }
 
@@ -36,12 +46,12 @@
     &.has-join-club {
       li {
         @include breakpoint($desktop) {
-          width: 100%;
+          width: 33%;
         }
       }
 
       @include breakpoint($desktop) {
-        width: 50%;
+        width: 100%;
         float: $left;
       }
     }
@@ -50,11 +60,20 @@
   .joinclub {
     @include breakpoint($desktop) {
       padding-#{$left}: 2.375rem;
+      margin-bottom: 1rem;
+    }
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: 1.375rem;
     }
   }
 
   #block-jointheclub {
-    h2 {
+    @include breakpoint($tablet) {
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
       color: $dark-sand;
       font-size: 14px;
       font-family: "alshaya-bold";
@@ -67,13 +86,18 @@
       max-width: 15.5rem;
 
       @include breakpoint($tablet) {
-        margin-#{$left}: -2.6875rem;
+        width: 85%;
       }
 
       @include breakpoint($desktop) {
         float: $right;
         width: 58%;
         margin-#{$left}: 0;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$left}: -2.6875rem;
+        width: 56%;
       }
     }
 
@@ -92,3 +116,27 @@
   }
 }
 
+.account--dashboard.joinclubblock {
+  .account-content-wrapper {
+    &.has-join-club {
+      li {
+        @include breakpoint($desktop) {
+          width: 100%;
+          margin-bottom: 2rem;
+          padding-left: 0;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        width: 50%;
+        float: $left;
+        margin-bottom: 1rem;
+      }
+
+      @include breakpoint($tablet) {
+        width: 45%;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

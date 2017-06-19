@@ -2,6 +2,10 @@
 
 namespace Drupal\acq_cart;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -19,13 +23,26 @@ class CartSessionStorage implements CartStorageInterface {
   protected $session;
 
   /**
+   * API Wrapper object.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  private $apiWrapper;
+
+  /**
    * Constructor.
    *
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
    *   The session.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   ApiWrapper object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   LoggerFactory object.
    */
-  public function __construct(SessionInterface $session) {
+  public function __construct(SessionInterface $session, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
     $this->session = $session;
+    $this->apiWrapper = $api_wrapper;
+    $this->logger = $logger_factory->get('acq_cart');
   }
 
   /**
@@ -54,9 +71,25 @@ class CartSessionStorage implements CartStorageInterface {
    */
   public function addCart(CartInterface $cart) {
     $this->session->set(self::STORAGE_KEY, $cart);
+    // Update cookies cache in Drupal to use new one.
+    \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', $cart->id());
     user_cookie_save([
       'acq_cart_id' => $cart->id(),
     ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function restoreCart($cart_id) {
+    // @TODO: Need to rethink about this and get it done in single API call.
+    $cart = (object) $this->apiWrapper->getCart($cart_id);
+
+    if ($cart) {
+      $cart->cart_id = $cart_id;
+      $cart = new Cart($cart);
+      $this->addCart($cart);
+    }
   }
 
   /**
@@ -80,16 +113,18 @@ class CartSessionStorage implements CartStorageInterface {
   }
 
   /**
-   * Get skus of current cart times.
+   * Get skus of current cart items.
    *
    * @return array
+   *   Items in the current cart.
    */
   public function getCartSkus() {
     $items = $this->getCart()->items();
-    if (empty($items))
-      return array();
+    if (empty($items)) {
+      return [];
+    }
 
-    $skus = array();
+    $skus = [];
     foreach ($items as $item) {
       $skus[] = $item['sku'];
     }
@@ -119,7 +154,13 @@ class CartSessionStorage implements CartStorageInterface {
       unset($cart->totals);
     }
 
-    $cart = (object) \Drupal::service('acq_commerce.api')->updateCart($cart_id, $update);
+    try {
+      $cart = (object) $this->apiWrapper->updateCart($cart_id, $update);
+    }
+    catch (\Exception $e) {
+      $this->restoreCart($cart_id);
+      throw $e;
+    }
 
     if (empty($cart)) {
       return;
@@ -128,6 +169,7 @@ class CartSessionStorage implements CartStorageInterface {
     $cart->cart_id = $cart_id;
     $cart = new Cart($cart);
     $this->addCart($cart);
+
     return $cart;
   }
 
@@ -145,7 +187,7 @@ class CartSessionStorage implements CartStorageInterface {
       $update = $cart->getCart();
     }
 
-    $cart_response = (object) \Drupal::service('acq_commerce.api')->updateCart($cart->id(), $update);
+    $cart_response = (object) $this->apiWrapper->updateCart($cart->id(), $update);
 
     if (empty($cart_response)) {
       return;
@@ -160,15 +202,61 @@ class CartSessionStorage implements CartStorageInterface {
   public function createCart() {
     $customer_id = NULL;
 
+    // @TODO: It seems this customer_id is never used by Magento.
+    // We may need to edit Magento code to associate the cart if customer_id is
+    // given or use the associate endpoint.
     if (!\Drupal::currentUser()->isAnonymous()) {
       $customer_id = \Drupal::currentUser()->getAccount()->acq_customer_id;
     }
 
-    $cart = (object) \Drupal::service('acq_commerce.api')->createCart($customer_id);
+    $cart = (object) $this->apiWrapper->createCart($customer_id);
 
     $cart = new Cart($cart);
     $this->addCart($cart);
     return $cart;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function associateCart($customer_id) {
+    // We first update the session cart.
+    $cart = $this->session->get(self::STORAGE_KEY);
+    if (!$cart) {
+      return;
+    }
+
+    $data = [
+      'cart_id' => $cart->id(),
+      'customer_id' => $customer_id,
+    ];
+    $cart->convertToCustomerCart($data);
+    $this->session->set(self::STORAGE_KEY, $cart);
+
+    // Then we notify the commerce backend about the association.
+    $this->apiWrapper->associateCart($cart->id(), $cart->customerId());
+  }
+
+  /**
+   * Helper function to clear stock cache of all items in cart.
+   */
+  public function clearCartItemsStockCache() {
+    $items = $this->getCart()->items();
+
+    if (empty($items)) {
+      return;
+    }
+
+    foreach ($items as $item) {
+      $sku_entity = SKU::loadFromSku($item['sku']);
+
+      // Clear stock cache.
+      $stock_cid = acq_sku_get_stock_cache_id($sku_entity);
+      \Drupal::cache('data')->invalidate($stock_cid);
+
+      // Clear product and forms related to sku.
+      Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
+    }
   }
 
 }

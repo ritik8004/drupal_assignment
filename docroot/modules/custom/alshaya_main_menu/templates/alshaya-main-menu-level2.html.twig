@@ -1,8 +1,9 @@
 <ul class="menu__list menu--two__list">
+  <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
   {% for key, level2 in data.child %}
     <li class="menu__list-item menu--two__list-item">
       <div class="menu__link-wrapper menu-two__link-wrapper">
-        <a  class="menu__link menu-two__link" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
+        <a  class="menu__link menu-two__link {{ data.sub_nav_class }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
         {% if level2.description is not empty %}
           <p>{{ level2.description | raw }}</p>
         {% endif %}
@@ -10,10 +11,11 @@
       {% if level2.child is not empty %}
         <ul class="menu__list menu--three__list">
         <div class="level-three__wrapper">
+        <span class="back--link"><span class="menu__back"></span> <span>{{ level2.label }}</span></span>
         {% for key3, level3 in level2.child %}
             <li class="menu__list-item menu--three__list-item">
               <div class="menu__link-wrapper menu-two__link-wrapper">
-                <a class="menu__link menu--three__link" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
+                <a class="menu__link menu--three__link {{ data.sub_nav_class }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
               </div>
               {% if level3.child is not empty %}
                 {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
@@ -24,17 +26,17 @@
           {#Highlight image start#}
           <div class="highlights">
             {% if level2.highlight_image is not empty %}
-              <div class="title">{{ 'Highlights' | t }}</div>
+              <div class="title">{{ 'highlights' | t }}</div>
               {% for highlight_image in level2.highlight_image %}
-                <div class="highlighted">
-                  <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
+                <div class="highlighted" gtm-type="gtm-highlights">
+                  <a href="{{ highlight_image.image_link }}">{{ highlight_image.img }}</a>
                 </div>
               {% endfor %}
             {% elseif data.highlight_image is not empty %}
-              <div class="title">{{ 'Highlights' | t }}</div>
+              <div class="title">{{ 'highlights' | t }}</div>
               {% for highlight_image in data.highlight_image %}
-                <div class="highlighted">
-                  <a href="{{ highlight_image.image_link }}"><img src="{{ highlight_image.img }}" /></a>
+                <div class="highlighted" gtm-type="gtm-highlights">
+                  <a href="{{ highlight_image.image_link }}">{{ highlight_image.img }}</a>
                 </div>
               {% endfor %}
             {% endif %}

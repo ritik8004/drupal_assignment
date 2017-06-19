@@ -1,0 +1,7 @@
+services:
+  acq_promotion.promotions_manager:
+    class: Drupal\acq_promotion\AcqPromotionsManager
+    arguments:
+      - '@entity_type.manager'
+      - '@acq_commerce.api'
+      - '@logger.factory'

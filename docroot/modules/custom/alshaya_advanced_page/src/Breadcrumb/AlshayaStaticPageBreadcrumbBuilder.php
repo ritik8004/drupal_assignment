@@ -27,10 +27,11 @@ class AlshayaStaticPageBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<none>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
     $request = \Drupal::request();
+    $node = $route_match->getParameter('node');
     $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
-    $breadcrumb->addLink(Link::createFromRoute($title, '<none>'));
+    $breadcrumb->addLink(Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]));
     $breadcrumb->addCacheableDependency(['url.path']);
 
     return $breadcrumb;

@@ -1,0 +1,6 @@
+services:
+  alshaya_api.api:
+    class: Drupal\alshaya_api\AlshayaApiWrapper
+    arguments:
+      - '@config.factory'
+      - '@logger.factory'

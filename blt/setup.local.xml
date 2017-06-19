@@ -8,9 +8,17 @@
     <exec dir="${repo.root}" command="git checkout docroot/sites/${multisite.name}/settings.php" logoutput="true" checkreturn="true" level="${blt.exec_level}" passthru="true" />
   </target>
 
+  <target name="sync:translations">
+    <echo>Add translations from code post drush si.</echo>
+    <drush command="aiota" assume="yes" alias="${drush.alias}" passthru="false" />
+  </target>
+
   <target name="sync:products">
     <echo>Sync the categories.</echo>
     <drush command="alshaya-acm-offline-categories-sync" assume="yes" alias="${drush.alias}" passthru="false" />
+
+    <echo>Sync the product options.</echo>
+    <drush command="sync-commerce-product-options" assume="yes" alias="${drush.alias}" passthru="false" />
 
     <echo>Sync the products.</echo>
     <drush command="alshaya-acm-offline-products-sync" assume="yes" alias="${drush.alias}" passthru="false">
@@ -18,21 +26,13 @@
     </drush>
   </target>
 
-  <target name="sync:product-images">
-    <echo>Download some product images by running the queue for ~60 seconds.</echo>
-    <drush command="queue-run" alias="${drush.alias}" passthru="false" verbose="${blt.verbose}">
-      <param>acq_sku_download_product_images</param>
-      <option name="time-limit">60</option>
-    </drush>
-  </target>
-
   <target name="refresh:local"
           description="Setup local dev environment."
-          depends="local:setup, local:reset-settings-file, sync:products, sync:product-images">
+          depends="local:setup, local:reset-settings-file, sync:translations, sync:products">
   </target>
 
   <target name="refresh:local:drupal"
           description="Reinstall local dev environment."
-          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:products, sync:product-images">
+          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:translations, sync:products">
   </target>
 </project>

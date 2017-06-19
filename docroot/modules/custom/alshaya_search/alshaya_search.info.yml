@@ -5,6 +5,7 @@ core: 8.x
 dependencies:
   - acq_sku
   - alshaya_image_styles
+  - alshaya_product_zoom
   - better_exposed_filters
   - block
   - facets
@@ -13,9 +14,10 @@ dependencies:
   - image
   - lightning_core
   - node
-  - panelizer
   - search_api
   - search_api_autocomplete
+  - search_api_solr_multilingual
+  - search_api_spellcheck
   - system
   - taxonomy
   - user

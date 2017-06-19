@@ -5,7 +5,7 @@ id: node__acq_product
 label: 'Content: Product'
 tags:
   description: '[node:summary_custom:155]'
-  title: '[node:title] | [site:name] [site:country]'
+  title: '[node:title] | [site:name]'
   og_description: '[node:summary_custom:155]'
   og_site_name: '[site:name]'
   og_title: '[node:title] | [site:name]'

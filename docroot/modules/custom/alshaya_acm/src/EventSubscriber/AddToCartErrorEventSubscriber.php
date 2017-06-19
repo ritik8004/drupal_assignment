@@ -13,11 +13,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * Flag to indicate whether we have an error.
+   * Array to store all error messages.
    *
-   * @var bool
+   * @var array
    */
-  public static $erroredOnAddToCart = FALSE;
+  public static $errors = [];
 
   /**
    * {@inheritdoc}
@@ -31,17 +31,30 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    * Check error status in EventSubscriber.
    *
    * @return bool
-   *   Returns the current value of $erroredOnAddToCart.
+   *   Returns TRUE if there is any value added in $errors array.
    */
   public static function getErrorStatus() {
-    return self::$erroredOnAddToCart;
+    return count(self::$errors) > 0;
   }
 
   /**
-   * Sets the static variable when there is an error.
+   * Get error messages in EventSubscriber.
+   *
+   * @return array
+   *   Returns the error messages available in EventSubscriber.
    */
-  public static function setErrorStatus() {
-    self::$erroredOnAddToCart = TRUE;
+  public static function getErrors() {
+    return self::$errors;
+  }
+
+  /**
+   * Adds error message to the static variable when there is an error.
+   *
+   * @param string $error
+   *   Error message to add to static array.
+   */
+  public static function setError($error) {
+    self::$errors[] = $error;
   }
 
   /**
@@ -51,12 +64,11 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    *   Exception raised.
    */
   public function onAddToCartError(AddToCartErrorEvent $event) {
-    // Set our static variable to TRUE.
-    self::setErrorStatus();
-
     // Logs a notice.
     $exception = $event->getEventException();
-    \Drupal::logger('acq_sku')->notice($exception->getMessage());
+    \Drupal::logger('alshaya_acm')->notice($exception->getMessage());
+
+    self::setError($exception->getMessage());
   }
 
 }

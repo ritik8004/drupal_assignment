@@ -1,0 +1,46 @@
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
+index 407b316..9e79e37 100644
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
+@@ -547,6 +547,41 @@ public function getCustomerOrders($email) {
+   }
+ 
+   /**
++   * Update order status and provide comment for update.
++   *
++   * @param int $order_id
++   *   Order id.
++   * @param string $status
++   *   Order status.
++   * @param string $comment
++   *   Optional comment.
++   *
++   * @return bool|mixed
++   *   Status of the update (TRUE/FALSE).
++   *
++   * @throws \Exception
++   */
++  public function updateOrderStatus($order_id, $status, $comment = '') {
++    $endpoint = $this->apiVersion . '/agent/order/' . $order_id;
++
++    $doReq = function ($client, $opt) use ($endpoint, $status, $comment) {
++      $opt['json']['status'] = $status;
++      $opt['json']['comment'] = $comment;
++
++      return ($client->post($endpoint, $opt));
++    };
++
++    try {
++      return $this->tryAgentRequest($doReq, 'updateOrderStatus', 'status');
++    }
++    catch (ConductorException $e) {
++      throw new \Exception($e->getMessage(), $e->getCode());
++    }
++
++    return FALSE;
++  }
++
++  /**
+    * Fetches product categories.
+    *
+    * @return array

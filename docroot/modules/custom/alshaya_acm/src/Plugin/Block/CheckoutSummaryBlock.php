@@ -8,7 +8,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Provides a 'CheckoutSummaryBlock' block.
@@ -137,29 +136,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $shipping_address_string = NULL;
     }
 
-    // Fetch the config.
-    $config = \Drupal::configFactory()
-      ->get('acq_commerce.currency');
-
-    // Fetch the currency format from the config factor.
-    $currency_format = $config->get('currency_code');
-
-    // Fetch the currency code position.
-    $currency_code_position = $config->get('currency_code_position');
-
     // Products and No.of items.
     $products = [];
     $cart_count = 0;
 
     foreach ($items as $item) {
-      $img = '';
-
       // Load the first image.
-      $sku_media = alshaya_acm_get_product_display_image($item['sku']);
-      // If we have image for the product.
-      if (!empty($sku_media['uri'])) {
-        $img = ImageStyle::load('checkout_summary_block_thumbnail')->buildUrl($sku_media['uri']);
-      }
+      $image = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
       // Check if we can find a parent SKU for this.
       $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
@@ -179,9 +162,10 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       // Create products array to be used in twig.
       $products[] = [
         'name' => $item['name'],
-        'imgurl' => $img,
+        'image' => $image,
         'qty' => $item['qty'],
-        'total' => $item['price'],
+        'raw_total' => $item['price'],
+        'total' => alshaya_acm_price_format($item['price']),
       ];
 
       // Total number of items in the cart.
@@ -193,20 +177,26 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $totals = $cart->totals();
 
     // Subtotal.
-    $subtotal = $totals['sub'];
+    $subtotal = alshaya_acm_price_format($totals['sub']);
 
     // Tax.
     if ((float) $totals['tax'] > 0) {
-      $tax = $totals['tax'];
+      $tax = alshaya_acm_price_format($totals['tax']);
     }
 
     // Discount.
+    $discount = NULL;
     if ((float) $totals['discount'] > 0) {
-      $discount = $totals['discount'];
+      $discount = alshaya_acm_price_format($totals['discount']);
+    }
+
+    $shipping = NULL;
+    if ((float) $totals['shipping'] != 0) {
+      $shipping = alshaya_acm_price_format($totals['shipping']);
     }
 
     // Grand Total or Order total.
-    $order_total = $totals['grand'];
+    $order_total = alshaya_acm_price_format($totals['grand']);
 
     // Generate the cart link.
     $url = Url::fromRoute('acq_cart.cart')->toString();
@@ -219,9 +209,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#subtotal' => $subtotal,
       '#tax' => $tax,
       '#discount' => $discount,
+      '#shipping' => $shipping,
       '#ordertotal' => $order_total,
-      '#currency_format' => $currency_format,
-      '#currency_code_position' => $currency_code_position,
       '#delivery_address' => $shipping_address_string,
       '#delivery_method' => $shipping_method_string,
       '#delivery_label' => $delivery_label,

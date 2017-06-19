@@ -1,22 +1,11 @@
-.edit-add-to-cart {
-  font-size: 0.75rem;
-  background: #ff6d22;
-  text-transform: lowercase;
-  font-family: arial, sans-serif;
-  border-radius: 0;
-  padding: 0.665rem 1.313rem;
-  position: relative;
-  font-weight:bold;
-  color: #fff;
-  max-height: 35px;
-}
-
 .edit-add-to-cart:focus {
  outline: 0;
 }
 
 .edit-add-to-cart[data-style=zoom-in][data-loading] {
  padding-right: 2.875rem;
+ max-width: 6.563rem;
+ max-height: 35px;
 }
 
 .edit-add-to-cart .ladda-spinner {
@@ -27,4 +16,3 @@
 .edit-add-to-cart ~ .ajax-progress-throbber {
   display: none;
 }
-

@@ -6,7 +6,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 ]
 %}
 
-<article{{ attributes }}>
+<article{{ attributes }} {{ gtm_attributes }}>
   <a class="use-ajax above-mobile-block" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'node': node.id}) }}">
     {% if content.image is not null %}
       {{ content.image }}
@@ -20,7 +20,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     {% endif %}
     {{ title_suffix }}
 
-    {% if content.special_price %}
+    {% if content.final_price %}
       <div class="has--special--price">
     {% else %}
       <div class="price">
@@ -28,18 +28,23 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
       {{ content.price }}
     </div>
 
-    {% if content.special_price %}
+    {% if content.final_price %}
       <div class="special--price">
-        {{ content.special_price }}
+        {{ content.final_price }}
+      </div>
+
+      <div class="price--discount">
+        {{ content.discount }}
       </div>
     {% endif %}
+
   </a>
 
   <table class="mobile--only--sell">
     <tr>
       <td class="sell--image">
-        {% if content.image_url is not null %}
-          <img src={{ content.image_url }} />
+        {% if content.image is not null %}
+          {{ content.image }}
         {% endif %}
       </td>
 
@@ -52,7 +57,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         {% endif %}
         {{ title_suffix }}
 
-        {% if content.special_price %}
+        {% if content.final_price %}
           <div class="has--special--price">
         {% else %}
           <div class="price">
@@ -60,9 +65,13 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
           {{ content.price }}
         </div>
 
-        {% if content.special_price %}
+        {% if content.final_price %}
           <div class="special--price">
-            {{ content.special_price }}
+            {{ content.final_price }}
+          </div>
+
+          <div class="price--discount">
+            {{ content.discount }}
           </div>
         {% endif %}
       </td>

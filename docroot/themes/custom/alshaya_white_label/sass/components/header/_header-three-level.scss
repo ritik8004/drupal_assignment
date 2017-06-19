@@ -1,0 +1,82 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .menu--two__list {
+      -webkit-column-count: 3;
+      -moz-column-count: 3;
+      column-count: 3;
+      max-height: 24rem;
+      padding-#{$right}: 52%;
+      padding-#{$left}: 1rem;
+      padding-bottom: 1.5rem;
+
+      .menu--two__list-item .menu--three__list {
+        padding-#{$left}: 0;
+        padding-top: 0;
+        position: static;
+      }
+    }
+
+    .level-three__wrapper {
+      width: 100%;
+      display: block;
+    }
+
+    .highlights {
+      position: absolute;
+      #{$left}: 49.145%;
+      top: 1.7rem;
+      margin-top: 0;
+      width: 50%;
+
+      .title {
+        margin-bottom: 0.9rem;
+      }
+    }
+
+    .menu--two__list .menu--two__list-item > .menu-two__link-wrapper {
+      background: transparent;
+      padding: 0;
+      margin-bottom: 2px;
+      max-width: 10rem;
+
+      &::after {
+        content: none;
+      }
+
+      a {
+        color: $marine-blue !important;
+      }
+    }
+
+    .menu--three__list-item > .menu-two__link-wrapper a {
+      font-size: 0.75rem !important;
+      color: $grey-ash !important;
+      font-family: $arial !important;
+
+      &:hover {
+        color: $cerulean-two !important;
+      }
+    }
+
+    .menu--two__list .menu--three__list-item {
+      display: block;
+      margin-bottom: 0;
+    }
+
+    .menu--two__list .menu--two__list-item {
+      max-width: none;
+      display: block;
+      vertical-align: top;
+      padding-#{$left}: 0.5rem;
+      break-inside: avoid;
+    }
+  }
+}
+
+.block-alshaya-main-menu .has--three-levels {
+  &.menu--one__list-item ul ul {
+    @include breakpoint($desktop) {
+      display: block;
+    }
+  }
+}

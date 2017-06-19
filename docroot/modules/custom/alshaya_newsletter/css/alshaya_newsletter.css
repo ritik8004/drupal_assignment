@@ -1,0 +1,12 @@
+.edit-newsletter:focus {
+  outline: 0;
+}
+
+.edit-newsletter .ladda-spinner {
+  transform: scale(0.85);
+  top: 17px;
+}
+
+.edit-newsletter ~ .ajax-progress-throbber {
+  display: none;
+}

@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
@@ -197,15 +198,6 @@ class Configurable extends SKUPluginBase {
         implode(', ', $label_parts)
       );
 
-      $cart->addRawItemToCart([
-        'name' => $label,
-        'sku' => $tree['parent']->getSKU(),
-        'qty' => $quantity,
-        'options' => [
-          'configurable_item_options' => $options,
-        ],
-      ]);
-
       drupal_set_message(
         t('Added @quantity of @name to the cart.',
           [
@@ -223,6 +215,13 @@ class Configurable extends SKUPluginBase {
         \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
       catch (\Exception $e) {
+        // Clear stock cache.
+        $stock_cid = acq_sku_get_stock_cache_id($tree_pointer);
+        \Drupal::cache('data')->invalidate($stock_cid);
+
+        // Clear product and forms related to sku.
+        Cache::invalidateTags(['acq_sku:' . $tree_pointer->id()]);
+
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
         $event = new AddToCartErrorEvent($e);
@@ -372,7 +371,7 @@ class Configurable extends SKUPluginBase {
    */
   public static function &findProductInTreeWithConfig(array &$tree, array $config) {
     $sku = $tree['parent']->getSKU();
-    $query = \Drupal::database()->select('acq_sku', 'acq_sku');
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
 
     $query->addField('acq_sku', 'sku');
     $query->condition('sku', "%$sku%", 'LIKE');
@@ -385,32 +384,6 @@ class Configurable extends SKUPluginBase {
 
     $sku = $query->execute()->fetchField();
     return $tree['products'][$sku];
-  }
-
-  /**
-   * Get parent of current product.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Current product.
-   *
-   * @return \Drupal\acq_sku\Entity\SKU|null
-   *   Parent product or null if not found.
-   */
-  public function getParentSku(SKU $sku) {
-    $query = \Drupal::database()->select('acq_sku', 'acq_sku');
-    $query->addField('acq_sku', 'sku');
-    $query->join(
-      'acq_sku__field_configured_skus',
-      'child_sku', 'acq_sku.id = child_sku.entity_id'
-    );
-    $query->condition("child_sku.field_configured_skus_value", $sku->getSku());
-    $parent_sku = $query->execute()->fetchField();
-
-    if (empty($parent_sku)) {
-      return NULL;
-    }
-
-    return SKU::loadFromSku($parent_sku);
   }
 
   /**

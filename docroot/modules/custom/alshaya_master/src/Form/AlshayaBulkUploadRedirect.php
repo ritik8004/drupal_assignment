@@ -14,6 +14,20 @@ use Drupal\redirect\Entity\Redirect;
 class AlshayaBulkUploadRedirect extends FormBase {
 
   /**
+   * Contains redirect data read from CSV.
+   *
+   * @var array
+   */
+  protected $redirects = [];
+
+  /**
+   * Contains list of skus read from csv.
+   *
+   * @var array
+   */
+  protected $skus = [];
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -58,62 +72,109 @@ class AlshayaBulkUploadRedirect extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    // Re-initialising variables as causing duplicate entries.
+    $this->redirects = [];
+    $this->skus = [];
+
     $fid = $form_state->getValue('file')[0];
-    $langcode = !empty($form_state->getValue('language')) ? $form_state->getValue('language') : 'en';
+    // Load file.
     if ($file = File::load($fid)) {
-      // Get file uri.
       $csv_uri = $file->getFileUri();
       if (!empty($csv_uri)) {
         // Open file handler.
-        $handle = fopen($csv_uri, 'r');
-        // Read csv file handler.
-        while ($row = fgetcsv($handle)) {
-          // Prepare redirect array data.
-          $redirects = [];
-          // Read the complete csv data string.
-          $data = str_getcsv($row[0], "\r");
-          // If get any data/row from csv file.
-          if (!empty($data)) {
-            // Unset header row as header not required.
-            unset($data[0]);
-            foreach ($data as $i => $csv_row) {
-              // Explode the row by ';'.
-              $exploded_row = explode(';', $csv_row);
-              $redirects[$i][] = trim($exploded_row[0], ' "');
-              $redirects[$i][] = trim($exploded_row[1], ' "');
+        if ($handle = fopen($csv_uri, 'r')) {
+          // Read csv file handler.
+          $i = 0;
+          while ($data = fgetcsv($handle, NULL, "\r")) {
+            foreach ($data as $d) {
+              $i++;
+              $row = explode(';', $d);
+              // Process only for exact two columns count.
+              if (count($row) == 2) {
+                // Both column have data.
+                if (!empty($row[0]) && !empty($row[1])) {
+                  // If url contains no space in between.
+                  if (strpos($row[1], ' ') === FALSE) {
+                    // If duplicate sku in csv.
+                    if (!in_array($row[0], $this->skus)) {
+                      $this->skus[] = $row[0];
+                      $this->redirects[] = [$row[0], $row[1]];
+                    }
+                    else {
+                      $form_state->setErrorByName('file', $this->t('Duplicate sku id at row @row. Please check.', ['@row' => $i]));
+                    }
+                  }
+                  else {
+                    $form_state->setErrorByName('file', $this->t('Url is containing space at row @row. Please check.', ['@row' => $i]));
+                  }
+                }
+                else {
+                  $form_state->setErrorByName('file', $this->t('Data is not available at row @row. Please check.', ['@row' => $i]));
+                }
+              }
+              else {
+                // If there is some discrepancy in column count.
+                $form_state->setErrorByName('file', $this->t('There is some discrepancy in column at row @row. Please check.', ['@row' => $i]));
+              }
             }
           }
+
+          // Close file handler.
+          fclose($handle);
+
+          // If no data after processing csv or just contains only header.
+          if (empty($this->redirects) || count($this->redirects) < 2) {
+            $form_state->setErrorByName('file', $this->t('CSV file has no data.'));
+          }
         }
-        // Close file handler.
-        fclose($handle);
-
-        // Prepare batch.
-        $batch = [
-          'operations' => [],
-          'finished' => [AlshayaBulkUploadRedirect::class, 'finishBatch'],
-          'title' => $this->t('Importing redirects'),
-          'init_message' => $this->t('Starting redirect import.'),
-          'progress_message' => $this->t('Completed @current step of @total.'),
-          'error_message' => $this->t('Redirect import has encountered an error.'),
-        ];
-
-        $redirect_chunks = array_chunk($redirects, 1);
-        foreach ($redirect_chunks as $redirect_chunk) {
-          $batch['operations'][] = [
-            [
-              AlshayaBulkUploadRedirect::class, 'processBatch',
-            ],
-            [
-              $redirect_chunk,
-              $langcode,
-            ],
-          ];
+        else {
+          $form_state->setErrorByName('file', $this->t('There was some error in opening the file. Please try again.'));
         }
-
-        batch_set($batch);
+      }
+      else {
+        // If unable to get file uri.
+        $form_state->setErrorByName('file', $this->t('There was some error in loading file. Please try again.'));
       }
     }
+    else {
+      // If unable to load file.
+      $form_state->setErrorByName('file', $this->t('There was some error in loading file. Please try again.'));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $langcode = !empty($form_state->getValue('language')) ? $form_state->getValue('language') : 'en';
+    // Prepare batch.
+    $batch = [
+      'operations' => [],
+      'finished' => [AlshayaBulkUploadRedirect::class, 'finishBatch'],
+      'title' => $this->t('Importing redirects'),
+      'init_message' => $this->t('Starting redirect import.'),
+      'progress_message' => $this->t('Completed @current step of @total.'),
+      'error_message' => $this->t('Redirect import has encountered an error.'),
+    ];
+
+    // Removing the header data.
+    unset($this->redirects[0]);
+
+    $redirect_chunks = array_chunk($this->redirects, 1);
+    foreach ($redirect_chunks as $redirect_chunk) {
+      $batch['operations'][] = [
+        [
+          AlshayaBulkUploadRedirect::class, 'processBatch',
+        ],
+        [
+          $redirect_chunk,
+          $langcode,
+        ],
+      ];
+    }
+
+    batch_set($batch);
   }
 
   /**
@@ -139,19 +200,26 @@ class AlshayaBulkUploadRedirect extends FormBase {
       // If node object.
       if ($node && $node instanceof NodeInterface) {
         // If redirect already exists for the given source, no need to process.
-        $redirect_exists = $redirect_repository->findBySourcePath($redirect[1]);
-        if ($redirect_exists && !empty($redirect_exists)) {
-          continue;
-        }
+        try {
+          $redirect_exists = $redirect_repository->findMatchingRedirect($redirect[1], [], $langcode);
+          // If redirect already exists.
+          if ($redirect_exists) {
+            continue;
+          }
 
-        $redirect_entity = [
-          'redirect_source' => $redirect[1],
-          'redirect_redirect' => 'entity:node/' . $node->id(),
-          'status_code' => '301',
-          'language' => $langcode,
-        ];
-        $new_redirect = Redirect::create($redirect_entity);
-        $new_redirect->save();
+          $redirect_entity = [
+            'redirect_source' => $redirect[1],
+            'redirect_redirect' => 'entity:node/' . $node->id(),
+            'status_code' => '301',
+            'language' => $langcode,
+          ];
+          $new_redirect = Redirect::create($redirect_entity);
+          $new_redirect->save();
+        }
+        catch (\Exception $e) {
+          // If any exception.
+          drupal_set_message(t('There was some problem in adding redirect for the url @url. Please check if redirect already exists or not.', ['@url' => $redirect[1]]));
+        }
       }
     }
   }

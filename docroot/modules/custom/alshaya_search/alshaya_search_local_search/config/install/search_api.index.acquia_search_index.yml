@@ -28,11 +28,21 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: title
     type: text
-  price:
-    label: Price
+  brand:
+    label: Brand
     datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:price'
-    type: integer
+    property_path: 'field_skus:entity:attr_brand'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  final_price:
+    label: 'Final Price'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:final_price'
+    type: decimal
     dependencies:
       config:
         - field.storage.node.field_skus
@@ -50,8 +60,8 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
-  rendered_item: {  }
   entity_status: {  }
+  rendered_item: {  }
 tracker_settings:
   default: {  }
 options:

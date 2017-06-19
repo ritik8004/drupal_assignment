@@ -1,0 +1,13 @@
+alshaya_master.theme.*:
+  type: config_object
+  label: 'Alshaya email logo settings'
+  mapping:
+    email_logo_path:
+      type: label
+      label: 'Email logo path'
+    email_logo_url:
+      type: label
+      label: 'Email logo url'
+    langcode:
+      type: string
+      label: 'Language code'

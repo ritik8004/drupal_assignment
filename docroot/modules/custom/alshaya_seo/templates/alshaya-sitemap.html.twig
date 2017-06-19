@@ -1,0 +1,32 @@
+<div class="sitemap">
+    {% if term_tree is not empty %}
+        {% for level1 in term_tree %}
+          <div class="level--1">
+                <div class="level--1__meta">
+                    <a href="{{ level1.path }}" class="level--1__label">{{ level1.label }}</a>
+                    {% if level1.description is not empty %}
+                        <div class="level--1__description">{{ level1.description|raw }}</div>
+                    {% endif %}
+                </div>
+                {% if level1.child is not empty %}
+                    <div class="level--1__children">
+                        {% for level2 in level1.child %}
+                            <div class="level--2">
+                              <div class="level--2__meta">
+                                  <a href="{{ level2.path }}" class="level--2__label">{{ level2.label }}</a>
+                              </div>
+                              {% if level2.child is not empty %}
+                                  <div class="level--2__children">
+                                      {% for level3 in level2.child %}
+                                          <a href="{{ level3.path }}" class="level--3__label">{{ level3.label }}</a>
+                                      {% endfor %}
+                                  </div>
+                              {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+          </div>
+        {% endfor %}
+    {% endif %}
+</div>

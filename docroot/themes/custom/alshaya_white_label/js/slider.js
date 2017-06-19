@@ -3,6 +3,8 @@
  * Sliders.
  */
 
+/* global debounce */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -20,23 +22,51 @@
   Drupal.behaviors.sliderBanner = {
     attach: function (context, settings) {
       var options = {
-        items: 1,
-        dots: true,
-        nav: true,
+        arrows: true,
         autoplay: true,
-        loop: true,
-        autoplayTimeout: 15000,
-        autoplayHoverPause: true
+        autoplaySpeed: 15000,
+        dots: true
       };
 
+      function centerDots() {
+        var parent = $('.c-slider-promo__items');
+        var dots = $('.slick-dots');
+        var button = $('.slick-next, .slick-prev');
+
+        var parentHeight = parent.height();
+        var dotsHeight = dots.height() + (16 * 2);
+        var buttonHeight = button.height() / 2;
+        var windowWidth = $(window).width();
+
+        var center;
+        if (windowWidth > 767) {
+          center = (parentHeight - buttonHeight) / 2;
+        }
+        else {
+          center = (parentHeight - (dotsHeight + buttonHeight)) / 2;
+        }
+        button.css({top: center});
+      }
+
       if (isRTL()) {
-        $('.owl-carousel').owlCarousel(
-          $.extend({}, options, {rtl: true})
+        $('.c-slider-promo__items').attr('dir', 'rtl');
+        $('.c-slider-promo__items').slick(
+           $.extend({}, options, {rtl: true})
         );
       }
       else {
-        $('.owl-carousel').owlCarousel(options);
+        $('.c-slider-promo__items').slick(options);
       }
+      // eslint-disable-next-line.
+      $(window).resize(debounce(function () {
+        centerDots();
+      }, 250));
+
+      var windowWidth = $(window).width();
+      setTimeout(function () {
+        $(window).width(windowWidth);
+        centerDots();
+      }, 500);
     }
   };
 

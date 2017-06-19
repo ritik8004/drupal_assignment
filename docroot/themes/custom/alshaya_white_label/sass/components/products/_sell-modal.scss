@@ -1,0 +1,133 @@
+// Theming modal window for the cross-sell and up sell
+#drupal-modal {
+  .contextual-region {
+    position: static;
+  }
+}
+
+.acq-content-product-modal {
+  .content {
+    &__main {
+      @include breakpoint($tablet) {
+        width: 60%;
+        float: $left;
+      }
+
+      @include breakpoint($desktop) {
+        width: 70%;
+        float: $left;
+      }
+    }
+
+    &__sidebar {
+      @include breakpoint($mobile) {
+        position: relative;
+      }
+
+      @include breakpoint($tablet) {
+        position: static;
+      }
+
+      @include breakpoint($tablet) {
+        width: 40%;
+        float: $right;
+        padding: 0 1rem;
+      }
+
+      @include breakpoint($desktop) {
+        width: 30%;
+        float: $right;
+        padding: 0 1.5rem;
+      }
+    }
+  }
+
+  .cloudzoom__image {
+    .img-wrap {
+      overflow: hidden;
+
+      @include breakpoint($tablet) {
+        height: 21.88rem;
+      }
+
+      @include breakpoint($desktop) {
+        height: 26.31rem;
+      }
+    }
+  }
+
+  .hover-text {
+    @include u-visibility(none);
+  }
+
+  .c-products__item__label {
+    font-family: $alshaya-thin;
+    font-size: 1.125rem;
+    font-weight: 100;
+    margin-top: 0;
+  }
+
+  .form-item-quantity {
+    float: $left;
+    z-index: 0;
+
+    label {
+      float: $left;
+      padding: 0.3125rem 1.25rem 0.3125rem 0;
+    }
+
+    .edit-quantity {
+      border: none;
+      border-radius: 0;
+      padding: 0.3125rem 0.625rem;
+      appearance: none;
+      float: $left;
+    }
+  }
+
+  .full-prod-link {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    padding: 1rem 0;
+    border-top: 1px solid $white;
+    border-bottom: 1px solid $white;
+    margin-bottom: 1.5rem;
+    font-family: $arial;
+    font-size: 0.875rem;
+    font-weight: bold;
+    color: $marine-blue;
+    line-height: 1.8rem;
+    text-align: $left;
+
+    @include breakpoint($tablet) {
+      width: 35%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 25%;
+    }
+
+    @include if-ltr {
+      @include icon(chevronright, after);
+
+      &::after {
+        float: $right;
+        font-size: 1.875rem;
+        line-height: 1;
+        vertical-align: top;
+      }
+    }
+
+    @include if-rtl {
+      @include icon(chevronright, before);
+
+      &::before {
+        float: $right;
+        font-size: 1.875rem;
+        line-height: 1;
+        vertical-align: top;
+      }
+    }
+  }
+}

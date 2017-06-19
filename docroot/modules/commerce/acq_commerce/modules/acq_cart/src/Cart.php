@@ -87,6 +87,16 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function customerEmail() {
+    if (isset($this->cart, $this->cart->customer_email)) {
+      return $this->cart->customer_email;
+    }
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function totals() {
     if (isset($this->cart, $this->cart->totals)) {
       return $this->cart->totals;
@@ -139,7 +149,12 @@ class Cart implements CartInterface {
 
       if ($item['sku'] == $sku) {
         $new_qty = (int) $item['qty'] + (int) $quantity;
-        $this->updateItemQuantity($sku, $new_qty);
+        if ($new_qty > 0) {
+          $this->updateItemQuantity($sku, $new_qty);
+        }
+        else {
+          $this->removeItemFromCart($sku);
+        }
         return;
       }
     }
@@ -430,6 +445,24 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function getExtension($key) {
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension[$key])) {
+      return $this->cart->extension[$key];
+    }
+
+    return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setExtension($key, $value) {
+    $this->cart->extension[$key] = $value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCart() {
     if (isset($this->cart)) {
       $cart = $this->cart;
@@ -454,6 +487,7 @@ class Cart implements CartInterface {
   public function convertToCustomerCart(array $cart) {
     $this->cart->cart_id = $cart['cart_id'];
     $this->cart->customer_id = $cart['customer_id'];
+    $this->cart->customer_email = $cart['customer_email'];
   }
 
   /**

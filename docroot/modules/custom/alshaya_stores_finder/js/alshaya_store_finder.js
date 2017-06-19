@@ -6,8 +6,19 @@
 (function ($, Drupal) {
   'use strict';
 
+  Drupal.alshaya_stores_finder = Drupal.alshaya_stores_finder || {};
+
   Drupal.behaviors.storeFinder = {
     attach: function (context, settings) {
+
+      var storeFinderPageSelector = $('.view-id-stores_finder.view-display-id-page_1', context);
+      if (storeFinderPageSelector.length > 0) {
+        var loadmoreItemLimit = settings.stores_finder.load_more_item_limit;
+        var storeLocatorSelector = 'div.list-view-locator';
+        var loadMoreButtonSelector = '.load-more-button';
+
+        Drupal.alshaya_stores_finder.paginateStores(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit);
+      }
 
       $('.set-center-location').on('click', function () {
         // Id of the row.
@@ -55,6 +66,8 @@
 
       $('.current-location').on('click', function () {
         // Start overlay here.
+        $('.alias--store-finder').addClass('modal-overlay--spinner');
+
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         }
@@ -64,7 +77,7 @@
 
       // Error callback.
       var errorCallback = function (error) {
-        // Close overlay here.
+        $('.alias--store-finder').removeClass('modal-overlay--spinner');
       };
 
       // Success callback.
@@ -75,7 +88,11 @@
       };
 
       function displayLocation(latitude, longitude) {
-        var geocoder = new google.maps.Geocoder();
+        //var geocoder = new google.maps.Geocoder();
+        if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
+          Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
+        }
+        var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
         var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
         geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
@@ -86,10 +103,76 @@
               $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').val(results[1].formatted_address);
             }
           }
+
+          // Set proximity boundries.
+          var south_west_lat = results[1].geometry.bounds.getSouthWest().lat();
+          var south_west_lng = results[1].geometry.bounds.getSouthWest().lng();
+          var north_east_lat = results[1].geometry.bounds.getNorthEast().lat();
+          var north_east_lng = results[1].geometry.bounds.getNorthEast().lng();
+
+          if ($('.current-view').length !== 0) {
+            $('.current-view input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
+            $('.current-view input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
+            $('.current-view input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
+            $('.current-view input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
+            $('.current-view form #edit-submit-stores-finder').trigger('click');
+          }
+          else {
+            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
+            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
+            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
+            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
+            $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+          }
         });
-        // Close overlay here.
+        $('.alias--store-finder').removeClass('modal-overlay--spinner');
       }
 
+      // Remove the store node title from breadcrumb.
+      $.fn.updateStoreFinderBreadcrumb = function(data) {
+        var breadcrumb = $('.block-system-breadcrumb-block').length;
+        if (breadcrumb > 0) {
+          var li_count = $('.block-system-breadcrumb-block ol li').length;
+          if (li_count > 2) {
+            $('.block-system-breadcrumb-block ol li:last').remove();
+          }
+        }
+      };
+
+      // Trigger click on autocomplete selection.
+      $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
+          $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+      });
+
+      // Trigger click on autocomplete selection.
+      $('.block-views-exposed-filter-blockstores-finder-page-3 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
+        $('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-submit-stores-finder').trigger('click');
+      });
+
+    }
+  };
+
+  /**
+   * Helper function to add client-side pagination.
+   */
+  Drupal.alshaya_stores_finder.paginateStores = function(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit) {
+    var viewLocatorCount = $(storeLocatorSelector).length;
+
+    if (viewLocatorCount > loadmoreItemLimit) {
+      $(storeLocatorSelector).slice(loadmoreItemLimit, viewLocatorCount).hide();
+
+      $(loadMoreButtonSelector).on('click', function (e) {
+        e.preventDefault();
+        var hiddenStoreSelector = $(storeLocatorSelector + ':hidden');
+        hiddenStoreSelector.slice(0, loadmoreItemLimit).slideDown('slow', function () {
+          if ($(storeLocatorSelector + ':hidden').length === 0) {
+            $(loadMoreButtonSelector).fadeOut('slow');
+          }
+        });
+      });
+    }
+    else {
+      $(loadMoreButtonSelector).hide();
     }
   };
 

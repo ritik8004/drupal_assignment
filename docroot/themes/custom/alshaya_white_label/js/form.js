@@ -8,7 +8,7 @@
 
   Drupal.behaviors.formsInput = {
     attach: function (context, settings) {
-      $('.profile-form input, .c-user-edit .user-form input, .order-confirmation .user-register-form input').each(function () {
+      $('.profile-form input, .c-user-edit .user-form input, .user-login-form input, .order-confirmation .user-register-form input').each(function () {
         if ($.trim($(this).val()).length !== 0) {
           $(this).parent().find('label').last().addClass('active-label');
         }
@@ -63,6 +63,18 @@
       // Handling error for mobile number fields.
       if ($('.mobile-number-field').find('.form-item-mobile-number-mobile').hasClass('form-item--error')) {
         $('.mobile-number-field').addClass('form-item--error');
+      }
+
+      // Click event trigger for privilege card field on register page.
+      $('.user-register-form .privilege-card-wrapper-title').bind('click touchstart', function () {
+        $('.privilege-card-wrapper summary').click();
+        return false;
+      });
+
+      if ($('.password-tooltip').length > 0) {
+        $('#edit-pass').focus(function () {
+          $(this).addClass('is-active');
+        });
       }
     }
   };

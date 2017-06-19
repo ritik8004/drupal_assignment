@@ -5,14 +5,14 @@
  * Contains form alter for sku base form.
  */
 
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\image\Entity\ImageStyle;
-use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 
 /**
  * Implements hook_page_bottom().
@@ -28,6 +28,19 @@ function alshaya_acm_cart_notification_page_bottom(array &$page_bottom) {
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $sku = SKU::load($form['sku_id']['#value']);
+
+  $form['errors-container'] = [
+    '#type' => 'container',
+    '#weight' => -50,
+    '#attributes' => [
+      'class' => [
+        'errors-container',
+        'error-container-' . strtolower(Html::cleanCssIdentifier($sku->getSku())),
+      ],
+    ],
+  ];
+
   // Altering Sku base form, which is the form implementation for Simple,
   // Grouped and Configurable products.
   $form['add_to_cart']['#ajax'] = [
@@ -38,7 +51,7 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
   // Attach the js file with the add to cart form.
   $form['#attached']['library'][] = 'core/drupal.ajax';
   $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-  $form['#attached']['library'][] = 'alshaya_acm_cart_notification/ladda';
+  $form['#attached']['library'][] = 'alshaya_master/ladda';
   $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
 }
 
@@ -46,6 +59,8 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
  * AJAX callback for the add to cart submit button.
  */
 function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
+  // SKU entity.
+  $sku_entity = SKU::load($form_state->getValue('sku_id'));
 
   // If there are validation failures on the form.
   if ($form_state->getErrors()) {
@@ -60,7 +75,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#wrapper_attributes' => ['class' => 'container'],
     ];
 
-    $error_html = drupal_render($error_list);
+    $error_html = render($error_list);
 
     // Use the template to render the error.
     $output = [
@@ -70,17 +85,16 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   }
   // Check if we have an error in Subscriber.
   elseif (AddToCartErrorEventSubscriber::getErrorStatus()) {
+    $errors = AddToCartErrorEventSubscriber::getErrors();
+
     // Use the template to render the error.
     $output = [
       '#theme' => 'add_to_cart_error',
-      '#message' => t('Oops! Something went wrong.'),
+      '#message' => reset($errors),
     ];
   }
   // Show success notification of the product.
   else {
-    // SKU entity.
-    $sku_entity = SKU::load($form_state->getValue('sku_id'));
-
     // Get product type.
     $type = $sku_entity->getType();
 
@@ -96,22 +110,14 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     // Include the utility file to get product image.
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
-    // Initialise the image variable to be used in output array.
-    $image = NULL;
-
     // Check for product type as they have different data structures.
     if ($type == 'configurable') {
       // If we have a child_sku available.
-      $child_sku = SKU::loadFromSku($form_state->getTemporaryValue('child_sku'));
-      $sku_media = alshaya_acm_get_product_display_image($child_sku);
+      $child_sku_entity = SKU::loadFromSku($form_state->getTemporaryValue('child_sku'));
+      $image = alshaya_acm_get_product_display_image($child_sku_entity, 'cart_notification_thumbnail');
     }
-    // Product Type - Simple.
     else {
-      $sku_media = alshaya_acm_get_product_display_image($sku_entity);
-    }
-    // In local or for some weired product we may not have an image.
-    if (!empty($sku_media['uri'])) {
-      $image = ImageStyle::load('cart_notification_thumbnail')->buildUrl($sku_media['uri']);
+      $image = alshaya_acm_get_product_display_image($sku_entity, 'cart_notification_thumbnail');
     }
 
     // Use the template to render the HTML.
@@ -121,7 +127,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       '#image' => $image,
       '#product_name' => $product_name,
       '#link' => $url,
-      '#link_text' => t('View Cart.'),
+      '#link_text' => t('view cart'),
     ];
   }
 
@@ -129,18 +135,27 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   unset($_SESSION['messages']['status']);
 
   // Get the rendered html to pass into HtmlCommand.
-  $html = drupal_render($output);
+  $html = render($output);
 
   // Get the interval we want to show the message for on our ladda button.
-  $interval = \Drupal::config('alshaya_acm_cart_notification.settings')->get('ajax_spinner_message_interval');
+  $interval = \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
   $data['interval'] = $interval;
 
   // Prepare the ajax Response.
   $response = new AjaxResponse();
   $data['message'] = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
-  $response->addCommand(new HtmlCommand('#cart_notification', $html));
   $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
-  $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
+
+  $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku_entity->getSku()));
+
+  if ($output['#theme'] == 'add_to_cart_error') {
+    $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id . ':visible', $html));
+  }
+  else {
+    $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
+    $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
+    $response->addCommand(new HtmlCommand('#cart_notification', $html));
+  }
   return $response;
 }
 

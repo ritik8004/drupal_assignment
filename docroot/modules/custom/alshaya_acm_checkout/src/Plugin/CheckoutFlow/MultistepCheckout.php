@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Provides the default multistep checkout flow.
@@ -41,7 +42,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     $steps['payment'] = [
       'label' => $this->t('secure checkout'),
       'title' => $this->t('Make payment'),
-      'next_label' => $this->t('Continue to payment'),
+      'next_label' => $this->t('proceed to payment'),
     ];
 
     $steps['confirmation'] = [
@@ -101,6 +102,13 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       if (!empty($requested_step_id)) {
         $this->redirectToStep($step_id);
       }
+    }
+
+    // Redirect user to basket page if there are no items in cart and user is
+    // trying to checkout.
+    if ($step_id != 'confirmation' && !$cart->items()) {
+      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+      $response->send();
     }
 
     $config = $this->getConfiguration();
@@ -217,16 +225,14 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         // Clear orders list cache if user is logged in.
         if (\Drupal::currentUser()->isAnonymous()) {
           // Store the email address of customer in tempstore.
-          $cart = $this->cartStorage->getCart();
-          $shipping = $cart->getShipping();
-          $email = $shipping->email;
-          $temp_store->set('email', $shipping->email);
+          $email = $cart->customerEmail();
+          $temp_store->set('email', $email);
         }
         else {
           $email = \Drupal::currentUser()->getEmail();
         }
 
-        \Drupal::cache()->delete('orders_list_' . $email);
+        \Drupal::cache()->invalidate('orders_list_' . $email);
 
         // Create a new cart now.
         $this->cartStorage->createCart();

@@ -1,0 +1,5 @@
+home_delivery_title: 'Home Delivery'
+home_delivery_tooltip: 'Home delivery in 2 days on orders over KWD 35'
+click_collect_title: 'Click & Collect'
+click_collect_tooltip: 'Collect the order in store from 2-3 days'
+langcode: en

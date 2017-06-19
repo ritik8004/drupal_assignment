@@ -7,11 +7,11 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
-use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
-use Drupal\Component\Render\FormattableMarkup;
 
 /**
  * Utility function to return media files for a product.
@@ -60,125 +60,46 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
 function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
   $media = [];
 
-  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   if (!($sku_entity instanceof SKU)) {
     return [];
   }
 
-  if (!empty($sku_entity->attr_media)) {
-    if ($media_data = $sku_entity->get('attr_media')->getString()) {
-      $update_sku = FALSE;
-
-      $media_data_full = unserialize($media_data);
-
-      if (empty($media_data_full)) {
-        return [];
-      }
-
-      // @TODO: Remove this hard coded fix after getting answer why we have empty
-      // second array index and why all media come in first array index.
-      $media_data = reset($media_data_full);
-
-      foreach ($media_data as &$data) {
-        if ($data['media_type'] == 'image') {
-          if (empty($data['fid'])) {
-            try {
-              // Prepare the File object when we access it the first time.
-              $data['fid'] = alshaya_acm_product_download_sku_media_image($data, $sku_entity);
-              $update_sku = TRUE;
-            }
-            catch (\Exception $e) {
-              \Drupal::logger('alshaya_acm_product')->error($e->getMessage());
-              continue;
-            }
-          }
-
-          $data['file'] = File::load($data['fid']);
-
-          if (empty($data['label'])) {
-            $data['label'] = $sku_entity->label();
-          }
-        }
-
-        $media[$data['position']] = $data;
-      }
-
-      if ($update_sku) {
-        // @TODO: Remove this hard coded fix after getting answer why we have
-        // empty second array index and why all media come in first array index.
-        $media_data_full[0] = $media_data;
-        $sku_entity->get('attr_media')->setValue(serialize($media_data_full));
-        $sku_entity->save();
-      }
-    }
-
-    // Sort them by position again to ensure it works everytime.
-    ksort($media);
-
-    if ($first_image_only) {
-      // We loop through all the media items and return the first image.
-      foreach ($media as $media_item) {
-        if ($media_item['media_type'] == 'image') {
-          return $media_item;
-        }
-      }
-
-      // We didn't find any image media so returning null.
-      return NULL;
-    }
+  if ($first_image_only) {
+    return $sku_entity->getThumbnail();
   }
 
-  return $media;
+  return $sku_entity->getMedia();
 }
 
 /**
- * Function to save image file into public dir.
+ * Get Image tag from media item array.
  *
- * @param array $data
- *   File data.
- * @param \Drupal\acq_sku\Entity\SKU $sku
- *   SKU entity.
+ * @param array $media
+ *   Media array containing image details.
+ * @param string $image_style
+ *   Image style to apply to the image.
+ * @param string $rel_image_style
+ *   For some sliders we may want full/big image url in rel.
  *
- * @return int
- *   File id.
+ * @return array
+ *   Image build array.
  */
-function alshaya_acm_product_download_sku_media_image(array $data, SKU $sku) {
-  // Preparing args for all info/error messages.
-  $args = ['@file' => $data['file'], '@sku_id' => $sku->id()];
+function alshaya_acm_product_get_sku_image(array $media, $image_style = '', $rel_image_style = '') {
+  $image = [
+    '#theme' => 'image_style',
+    '#style_name' => $image_style,
+    '#uri' => $media['file']->getFileUri(),
+    '#title' => $media['label'],
+    '#alt' => $media['label'],
+  ];
 
-  // Download the file contents.
-  $file_data = file_get_contents($data['file']);
-
-  // Check to ensure errors like 404, 403, etc. are catched and empty file
-  // not saved in SKU.
-  if (empty($file_data)) {
-    throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
+  if ($rel_image_style) {
+    $image['#attributes']['rel'] = ImageStyle::load($rel_image_style)->buildUrl($image['#uri']);
   }
 
-  // Get the path part in the url, remove hostname.
-  $path = parse_url($data['file'], PHP_URL_PATH);
-
-  // Remove slashes from start and end.
-  $path = trim($path, '/');
-
-  // Get the file name.
-  $file_name = basename($path);
-
-  // Prepare the directory path.
-  $directory = 'public://acm/' . str_replace('/' . $file_name, '', $path);
-
-  // Prepare the directory.
-  file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-
-  // Save the file as file entity.
-  /** @var \Drupal\file\Entity\File $file */
-  if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
-    return $file->id();
-  }
-  else {
-    throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
-  }
+  return $image;
 }
 
 /**
@@ -193,11 +114,10 @@ function alshaya_acm_product_download_sku_media_image(array $data, SKU $sku) {
 function alshaya_acm_product_get_sku_configurable_values($sku) {
   $configurableFieldValues = [];
 
-  $sku_entity = is_object($sku) ? $sku : SKU::loadFromSku($sku);
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
-  if ($sku_entity instanceof SKU) {
-    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')
-      ->get('fields');
+  if ($sku_entity) {
+    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
     $configurableFields = array_filter($fields, function ($field) {
       return (bool) $field['configurable'];
     });
@@ -222,38 +142,24 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  *
  * @param mixed $sku
  *   SKU text or full entity object.
+ * @param string $langcode
+ *   Language code.
  *
- * @return object
+ * @return \Drupal\acq_sku\Entity\SKU
  *   Loaded SKU entity.
  */
-function alshaya_acm_product_get_parent_sku_by_sku($sku) {
-  $sku = is_object($sku) ? $sku->getSKU() : $sku;
+function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
 
-  // Execute the query and get all SKU which have current SKU in
-  // field_configured_skus.
-  $query = \Drupal::entityQuery('acq_sku');
-  $query->condition('field_configured_skus', $sku);
-  $ids = $query->execute();
-
-  // Not a configurable product.
-  if (count($ids) === 0) {
+  // Additional check, can be removed post go UAT.
+  if (empty($sku_entity)) {
     return NULL;
   }
-  // Some issue in DATA.
-  elseif (count($ids) > 1) {
-    \Drupal::logger('alshaya_acm_product')->error(
-      'SKU @sku has no or multiple parent SKUs.',
-      ['@sku' => $sku]
-    );
 
-    throw new RuntimeException('Multiple parent SKUs found');
-  }
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+  $plugin = $sku_entity->getPluginInstance();
 
-  // Get the first id.
-  $parentSkuId = array_shift($ids);
-
-  // Return fully load SKU.
-  return SKU::load($parentSkuId);
+  return $plugin->getParentSku($sku_entity);
 }
 
 /**
@@ -292,18 +198,17 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       // Show original full image in the modal inside a draggable container.
       $original_image = $media_item['file']->url();
 
-      if (empty($main_image)) {
-        $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-        $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-        $main_image = [
-          'zoomurl' => $image_zoom,
-          'mediumurl' => $image_medium,
-        ];
-      }
-
       $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
       $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+      if (empty($main_image)) {
+        $main_image = [
+          'zoomurl' => $image_zoom,
+          'mediumurl' => $image_medium,
+          'label' => $media_item['label'],
+        ];
+      }
 
       $thumbnails[] = [
         'thumburl' => $image_small,
@@ -369,22 +274,19 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
  *
  * @param mixed $sku
  *   SKU name or full sku object.
+ * @param string $langcode
+ *   Language code.
  *
  * @return object
  *   Loaded node object.
  */
-function alshaya_acm_product_get_display_node($sku) {
-  $sku = is_object($sku) ? $sku->getSKU() : $sku;
+function alshaya_acm_product_get_display_node($sku, $langcode = '') {
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
 
-  $query = \Drupal::entityQuery('node')
-    ->condition('type', 'acq_product')
-    ->condition('field_skus', $sku)
-    ->range(0, 1);
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+  $plugin = $sku_entity->getPluginInstance();
 
-  $result = $query->execute();
-  $nid = reset($result);
-
-  return Node::load($nid);
+  return $plugin->getDisplayNode($sku_entity);
 }
 
 /**
@@ -392,29 +294,205 @@ function alshaya_acm_product_get_display_node($sku) {
  *
  * @param mixed $sku
  *   SKU text or full entity object.
+ * @param string $image_style
+ *   Image style to apply to the image.
  *
- * @return null|array
- *   Return array with file uri and label or Null if not found.
+ * @return array
+ *   Return string of uri or Null if not found.
  */
-function alshaya_acm_get_product_display_image($sku) {
+function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   // Load the first image.
   $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
 
   // If we have image for the product.
   if (!empty($media_image)) {
-    if (is_object($media_image['file']) && $media_image['file'] instanceof FileInterface) {
-      $file_uri = $media_image['file']->getFileUri();
-      return [
-        'uri' => $file_uri,
-        'label' => $media_image['label'],
-      ];
+    if ($media_image['file'] instanceof FileInterface) {
+      return alshaya_acm_product_get_sku_image($media_image, $image_style);
     }
   }
-  // Sometimes sku created for size only, such sku don't have any image. only
-  // parent sku has image. In such cases get the image of parent sku.
+  // If no image found, check once for parent product as well.
   elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
-    return alshaya_acm_get_product_display_image($parent_sku);
+    return alshaya_acm_get_product_display_image($parent_sku, $image_style);
+  }
+
+  return [];
+}
+
+/**
+ * Get the url of the image of SKU.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU entity object.
+ *
+ * @return string
+ *   Url of the image.
+ */
+function _alshaya_acm_get_product_display_image_url(SKU $sku) {
+  // Load the first image.
+  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+
+  // If we have image for the product.
+  if (!empty($media_image)) {
+    if ($media_image['file'] instanceof FileInterface) {
+      $uri = $media_image['file']->getFileUri();
+      return file_create_url($uri);
+    }
+  }
+
+  return '';
+}
+
+/**
+ * Helper function to get child skus for a configurable sku from tree.
+ *
+ * @param array $tree
+ *   Tree containing configurable options and SKU objects.
+ * @param array $configurables
+ *   Configurable values array.
+ *
+ * @return null|SKU
+ *   Null or SKU instance.
+ */
+function alshaya_acm_product_get_selected_option_sku(array $tree, array $configurables) {
+  $tree_pointer = &$tree['options'];
+
+  foreach ($configurables as $key => $value) {
+    if (empty($value)) {
+      continue;
+    }
+
+    // Move the tree pointer if the selection is valid.
+    if (isset($tree_pointer["$key:$value"])) {
+      return $tree_pointer["$key:$value"];
+    }
   }
 
   return NULL;
+}
+
+/**
+ * Utility function to check if product is available for home delivery.
+ *
+ * @param mixed $sku
+ *   SKU string or full object.
+ *
+ * @return bool
+ *   Flag if the product is available for click and collect or not.
+ */
+function alshaya_acm_product_available_home_delivery($sku) {
+  // Check MMCSP-903 comments for more details.
+  return TRUE;
+}
+
+/**
+ * Utility function to check if product is available for click and collect.
+ *
+ * @param mixed $sku
+ *   SKU string or full object.
+ *
+ * @return bool
+ *   Flag if the product is available for click and collect or not.
+ */
+function alshaya_acm_product_available_click_collect($sku) {
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+
+  $sts = (int) $sku_entity->get('attr_ship_to_store')->getString();
+  $rnc = (int) $sku_entity->get('attr_reserve_and_collect')->getString();
+
+  // Product could be either available for ship to store or for reserve and
+  // collect. In both cases click and collect option will be considered as
+  // available.
+  return ($sts || $rnc);
+}
+
+/**
+ * Utility function to get brand logo image.
+ *
+ * @param mixed $sku
+ *   SKU string or full object.
+ *
+ * @return array
+ *   Image build array.
+ */
+function alshaya_acm_product_get_brand_logo($sku) {
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+
+  $title = $sku_entity->get('attr_brand_logo')->getString();
+
+  $cid = 'brand_logo:' . Html::cleanCssIdentifier($title);
+
+  if ($cache = \Drupal::cache('data')->get($cid)) {
+    $image = $cache->data;
+  }
+  else {
+    // Preparing args for all info/error messages.
+    $args = ['@title' => $title, '@sku_id' => $sku_entity->id()];
+
+    $host = \Drupal::config('alshaya_api.settings')->get('magento_host');
+    $media_path = \Drupal::config('alshaya_acm_product.settings')->get('brand_logo_base_path');
+
+    $directory = $media_path;
+
+    // Prepare file name by replacing spaces with underscores and lower case.
+    $file_name = strtolower(str_replace(' ', '_', $title));
+
+    for ($i = 0; $i < 2 && $i <= strlen($title); $i++) {
+      $directory .= '/' . substr($file_name, $i, 1);
+    }
+
+    $directory_uri = 'public://brand-logo/' . $directory;
+    $image_uri = $directory_uri . '/' . $file_name . '.jpeg';
+    $image_url = $host . '/' . $directory . '/' . $file_name . '.jpeg';
+
+    $file_storage = \Drupal::entityTypeManager()->getStorage('file');
+
+    if ($files = $file_storage->loadByProperties(['uri' => $image_uri])) {
+      $file = reset($files);
+    }
+    else {
+      // Download the file contents.
+      $file_data = file_get_contents($image_url);
+
+      // Check to ensure errors like 404, 403, etc. are catched and empty file
+      // not saved in SKU.
+      if (empty($file_data)) {
+        \Drupal::logger('alshaya_acm_product')->error('Failed to download brand logo of title "@title" for SKU id @sku_id.', $args);
+      }
+
+      // Get the file name.
+      $file_name = basename($image_url);
+
+      // Prepare the directory.
+      file_prepare_directory($directory_uri, FILE_CREATE_DIRECTORY);
+
+      // Save the file as file entity.
+      /** @var \Drupal\file\Entity\File $file */
+      $file = file_save_data($file_data, $image_uri, FILE_EXISTS_REPLACE);
+
+      if (empty($file)) {
+        \Drupal::logger('alshaya_acm_product')->error('Failed to save brand logo of title "@title" for SKU id @sku_id.', $args);
+      }
+    }
+
+    if ($file) {
+      $image = [
+        '#theme' => 'image',
+        '#uri' => $file->getFileUri(),
+        '#title' => $title,
+        '#alt' => $title,
+      ];
+
+      $expire = CacheBackendInterface::CACHE_PERMANENT;
+    }
+    else {
+      $image = [];
+
+      // We cache this for 30 minutes to allow admins to correct the situation.
+      $expire = \Drupal::time()->getRequestTime() + (60 * 30);
+    }
+
+    \Drupal::cache('data')->set($cid, $image, $expire);
+  }
+
+  return $image;
 }

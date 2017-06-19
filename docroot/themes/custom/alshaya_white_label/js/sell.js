@@ -10,7 +10,7 @@
     attach: function (context, settings) {
 
       $('.block-basket-horizontal-recommendation .owl-carousel').owlCarousel({
-        loop: false,
+        loop: true,
         responsiveClass: true,
         dots: true,
         responsive: {
@@ -22,7 +22,7 @@
             items: 4,
             nav: true
           },
-          1024: {
+          1025: {
             items: 5,
             nav: true
           }
@@ -30,7 +30,7 @@
       });
 
       $('.owl-carousel').owlCarousel({
-        loop: false,
+        loop: true,
         responsiveClass: true,
         dots: true,
         responsive: {
@@ -42,7 +42,7 @@
             items: 2,
             nav: true
           },
-          1024: {
+          1025: {
             items: 3,
             nav: true
           }

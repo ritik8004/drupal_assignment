@@ -11,12 +11,12 @@ dependencies:
 id: color
 theme: alshaya_white_label
 region: sidebar_first
-weight: 0
+weight: -22
 provider: null
 plugin: 'facet_block:color'
 settings:
   id: 'facet_block:color'
-  label: Color
+  label: Colour
   provider: facets
   label_display: visible
 visibility:

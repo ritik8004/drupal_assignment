@@ -1,3 +1,4 @@
+uuid: 483ab9f1-4ffe-4c59-a364-82234ea4d572
 langcode: en
 status: true
 dependencies:
@@ -6,6 +7,8 @@ dependencies:
   module:
     - better_exposed_filters
     - search_api
+    - search_api_spellcheck
+    - views_infinite_scroll
 id: search
 label: Search
 module: views
@@ -72,17 +75,16 @@ display:
                   filter_rewrite_values: ''
           text_input_required_format: rich_text
       pager:
-        type: full
+        type: infinite_scroll
         options:
           items_per_page: 15
           offset: 0
           id: 0
           total_pages: null
+          query_type: GET
           tags:
             previous: ‹‹
             next: ››
-            first: '« First'
-            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -91,7 +93,9 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          quantity: 15
+          views_infinite_scroll:
+            button_text: 'Load More'
+            automatically_load_content: false
       style:
         type: default
         options:
@@ -266,10 +270,10 @@ display:
           expose:
             label: Relevance
           plugin_id: search_api
-        price:
-          id: price
+        final_price:
+          id: final_price
           table: search_api_index_acquia_search_index
-          field: price
+          field: final_price
           relationship: none
           group_type: group
           admin_label: ''
@@ -301,6 +305,17 @@ display:
           empty: false
           content: '@total items'
           plugin_id: result
+        search_api_spellcheck:
+          id: search_api_spellcheck
+          table: views
+          field: search_api_spellcheck
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          search_api_spellcheck_title: 'Did you mean:'
+          search_api_spellcheck_hide_on_result: 1
+          plugin_id: search_api_spellcheck
       footer: {  }
       empty:
         area:
@@ -321,7 +336,7 @@ display:
       display_extenders: {  }
       title: Search
       css_class: c-products-list
-      use_ajax: false
+      use_ajax: true
     cache_metadata:
       max-age: -1
       contexts:

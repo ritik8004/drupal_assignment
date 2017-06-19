@@ -22,7 +22,7 @@
   </head>
   <body id="mimemail-body" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
     <div id="header">
-      <img src="{{ site_base_path ~ directory }}/mothercare-logo.png" width="281px" alt="logo" title="logo"/>
+      <img src="{{ email_logo }}" width="281px" alt="logo" title="logo"/>
     </div>
     <div id="center">
       <div id="main">
@@ -32,34 +32,27 @@
     <div class="footer" style="border-top: 2px solid #003971; text-align: center;">
       <div style="padding-top: 30px; padding-bottom: 50px;">
         <a href="" target="_blank">
-            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/facebook.png" width="24.3px" alt="facebook" title="facebook"/>
+            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/facebook-icon.png" width="24.3px" alt="facebook" title="facebook"/>
         </a>
         <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/instagram.png" width="24.3px"  alt="instagram" title="instagram"/>
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/instagram-icon.png" width="24.3px"  alt="instagram" title="instagram"/>
         </a>
         <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/youtube.png" width="24.3px"  alt="youtube" title="youtube"/>
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/youtube-icon.png" width="24.3px"  alt="youtube" title="youtube"/>
         </a>
         <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/google.png" width="24.3px"  alt="google" title="google"/>
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/google-icon.png" width="24.3px"  alt="google" title="google"/>
         </a>
         <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/twitter.png" width="24.3px" alt="twitter" title="twitter"/>
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/twitter-icon.png" width="24.3px" alt="twitter" title="twitter"/>
         </a>
         <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/pinterest.png" width="24.3px" alt="pinterest" title="pinterest"/>
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/pinterest-icon.png" width="24.3px" alt="pinterest" title="pinterest"/>
         </a>
       </div>
       <div style="font-family: Arial, helvetica; font-size: 11px; color: #333; line-height: 1.55; background: #f7f7f7; padding: 16px; text-align: center;">
         <p style="margin:0; color: #333; font-size: 11px;">
-          {% trans %}
-            &copy; Copyright Mothercare UK Limited  2016 Registerd in England no. 533087, VAT Reg no 440 6445 66
-          {% endtrans %}
-        </p>
-        <p style="margin:0; color: #333; font-size: 11px;">
-          {% trans %}
-            Registered office: Cherry Tree Road, Watford, Herfordshire, WD24 6SH
-          {% endtrans %}
+          {{ email_footer }}
         </p>
       </div>
     </div>

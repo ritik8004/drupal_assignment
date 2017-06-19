@@ -6,8 +6,6 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Provides the final confirmation post payment.
@@ -41,36 +39,14 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $order = _alshaya_acm_checkout_get_last_order_from_session();
+
+    if (empty($order)) {
+      return $pane_form;
+    }
+
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-    $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
-    $order_data = $temp_store->get('order');
-
-    // Throw access denied if nothing in session.
-    if (empty($order_data) || empty($order_data['id'])) {
-      throw new AccessDeniedHttpException();
-    }
-
-    // @TODO: Remove the fix when we get the full order details.
-    $order_id = str_replace('"', '', $order_data['id']);
-
-    if (\Drupal::currentUser()->isAnonymous()) {
-      $email = $temp_store->get('email');
-    }
-    else {
-      $email = \Drupal::currentUser()->getEmail();
-    }
-
-    $orders = alshaya_acm_customer_get_user_orders($email);
-
-    $order_index = array_search($order_id, array_column($orders, 'order_id'));
-
-    if ($order_index === FALSE) {
-      throw new NotFoundHttpException();
-    }
-
-    $order = $orders[$order_index];
 
     // Build account details array.
     $account = [];
@@ -95,7 +71,7 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $build = alshaya_acm_customer_build_order_detail($order);
     $build['#account'] = $account;
-    $build['#barcode'] = alshaya_acm_customer_get_barcode($order['increment_id']);
+    $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#print_link'] = $print_link;
     $build['#theme'] = 'checkout_order_detail';
 

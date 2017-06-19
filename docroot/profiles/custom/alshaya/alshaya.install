@@ -32,6 +32,13 @@ function alshaya_install() {
   }
 
   $modules = [
+    // Some must required contrib modules.
+    'config_translation',
+    'content_translation',
+    'language',
+    'locale',
+
+    // Custom modules.
     'alshaya_custom',
     'alshaya_addressbook',
     'alshaya_advanced_page',
@@ -39,10 +46,11 @@ function alshaya_install() {
     'alshaya_acm_checkout',
     'alshaya_acm_customer',
     'alshaya_acm_product',
+    'alshaya_acm_promotion',
     'alshaya_admin',
     'alshaya_arabic',
     'alshaya_captcha',
-    'alshaya_acm_cart_notification',
+    'alshaya_config',
     'alshaya_contact',
     'alshaya_default_content',
     'alshaya_department_page',
@@ -51,16 +59,19 @@ function alshaya_install() {
     'alshaya_main_menu',
     'alshaya_master',
     'alshaya_menus',
+    'alshaya_acm_cart_notification',
     'alshaya_newsletter',
     'alshaya_permissions',
     'alshaya_product',
     'alshaya_seo',
     'alshaya_stores_finder',
     'alshaya_user',
-    'google_tag',
+    'alshaya_acm_knet',
   ];
 
   foreach ($modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
   }
+
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', [$modules]);
 }

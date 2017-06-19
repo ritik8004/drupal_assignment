@@ -4,11 +4,15 @@ core: 8.x
 package: Alshaya
 description: 'Alshaya stores CT and related settings.'
 dependencies:
+  - alshaya_acm_product
+  - alshaya_api
   - alshaya_stores_finder
   - better_exposed_filters
   - block
+  - content_translation
   - field
   - geolocation
+  - key_value_field
   - language
   - menu_ui
   - metatag

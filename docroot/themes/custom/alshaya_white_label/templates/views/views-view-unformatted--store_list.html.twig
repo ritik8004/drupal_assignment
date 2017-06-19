@@ -18,26 +18,43 @@
  */
 #}
 {% if title %}
-    <h3>{{ title }}</h3>
+  <h3>{{ title }}</h3>
 {% endif %}
+
 {% for row in rows %}
-    {%
+  {%
     set row_classes = [
-    default_row_class ? 'views-row',
+      default_row_class ? 'views-row',
     ]
-    %}
-    <div class="list-view-locator">
-        <a class="use-ajax row-title" href="/store-detail/{{ row.nid }}">{{ row.title }}</a>
-        <div class="set-center-location" id="row-{{ row.nid }}">
-            <div{{ row.attributes.addClass(row_classes) }}>
-                {{ row.content }}
-            </div>
-            {% if row.lat_long is not empty %}
-                <div class="lat-lng">
-                    <div class="lat">{{ row.lat_long.lat }}</div>
-                    <div class="lng">{{ row.lat_long.lng }}</div>
-                </div>
-            {% endif %}
-        </div>
+  %}
+
+  <div class="by--alphabet store-mobile">
+    <div class="rows">
+      <a class="use-ajax row-title" href="{{ url('alshaya_stores_finder.store_detail', {'node': row.nid}) }}">{{ row.title }}</a>
     </div>
+  </div>
+
+  <div class="list-view-locator row-{{ row.nid }}">
+    <div class="store-row--counter">{{ row.counter }}</div>
+
+    <a class="use-ajax row-title" href="{{ url('alshaya_stores_finder.store_detail', {'node': row.nid}) }}">{{ row.title }}</a>
+
+    <div class="set-center-location" id="row-{{ row.nid }}">
+      <div{{ row.attributes.addClass(row_classes) }}>
+        {{ row.content }}
+      </div>
+
+      {% if row.lat_long is not empty %}
+        <div class="lat-lng">
+          <div class="lat">{{ row.lat_long.lat }}</div>
+          <div class="lng">{{ row.lat_long.lng }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
 {% endfor %}
+{%  if load_more_button %}
+  <div class="load-more-button mobile-only-hide">
+    {{ load_more_button }}
+  </div>
+{% endif %}

@@ -1,0 +1,37 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.acq_promotion.field_acq_promotion_data
+    - field.field.node.acq_promotion.field_acq_promotion_description
+    - field.field.node.acq_promotion.field_acq_promotion_rule_id
+    - node.type.acq_promotion
+  module:
+    - text
+    - user
+id: node.acq_promotion.default
+targetEntityType: node
+bundle: acq_promotion
+mode: default
+content:
+  field_acq_promotion_description:
+    weight: 2
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  links:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  sharethis:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_acq_promotion_rule_id: true
+  field_acq_promotion_data: true
+  langcode: true

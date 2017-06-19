@@ -1,7 +1,6 @@
-url_agent: ''
-url_ingest: ''
+url: ''
 timeout: 30
 verify_ssl: true
 product_page_size: 50
-stock_check_cache_proportion: 10
+api_version: v1
 filter_root_category: false

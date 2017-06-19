@@ -5,6 +5,24 @@
     }
   }
 
+  .block-page-title-block {
+    position: relative;
+  }
+
+  h1.c-page-title {
+    @include breakpoint($only-mobile) {
+      padding-left: 1em;
+      font-size: 1.115rem;
+
+      @include icon(chevronleft, before) {
+        position: absolute;
+        left: -0.6875rem;
+        top: 0;
+        font-size: 1.563rem;
+      }
+    }
+  }
+
   .fieldsets-separator {
     font-size: 0.75rem;
     text-align: center;
@@ -348,6 +366,7 @@
           color: #003971;
           font-size: 16px;
           font-family: $alshaya-bold;
+          font-weight: normal;
           padding-bottom: 0.4375rem;
           border-bottom: 1px solid #ddd;
         }

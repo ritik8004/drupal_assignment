@@ -6,6 +6,22 @@
  */
 
 use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+
+/**
+ * Implements hook_editor_js_settings_alter().
+ */
+function alshaya_master_editor_js_settings_alter(array &$settings) {
+  if (isset($settings['editor']['formats']['rich_text'])) {
+    // Remove the editor's built in context menu.
+    // context menu is dependent on tableTools and tableResize plugins, so need
+    // to remove those too.
+    $settings['editor']['formats']['rich_text']['editorSettings']['removePlugins'] = 'contextmenu,tabletools,tableresize';
+  }
+}
 
 /**
  * Implements hook_block_build_alter().
@@ -13,5 +29,341 @@ use Drupal\Core\Block\BlockPluginInterface;
 function alshaya_master_block_build_alter(array &$build, BlockPluginInterface $block) {
   if ($block->getPluginId() == 'system_branding_block') {
     $build['#cache']['contexts'][] = 'url.path';
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_master_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (!in_array($form_id, ['customer_cart_form'])) {
+    $form['#error_no_message'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_master_form_system_site_maintenance_mode_alter(&$form, FormStateInterface $form_state) {
+  $form['maintenance_mode_message']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Logo settings, only available when file.module is enabled.
+  if (\Drupal::moduleHandler()->moduleExists('file')) {
+    $build_info = $form_state->getBuildInfo();
+    if (isset($build_info['args'][0]) && ($theme = $build_info['args'][0])) {
+      $form['email_logo'] = [
+        '#type' => 'details',
+        '#title' => t('E-mail logo image'),
+        '#open' => TRUE,
+      ];
+
+      $config = \Drupal::configFactory()->get('alshaya_master.theme.' . $theme);
+      $form['email_logo']['settings']['email_logo_path'] = [
+        '#type' => 'textfield',
+        '#title' => t('Path to custom logo'),
+        '#default_value' => $config->get('email_logo_path'),
+      ];
+      $form['email_logo']['settings']['email_logo_upload'] = [
+        '#type' => 'file',
+        '#title' => t('Upload logo image'),
+        '#maxlength' => 40,
+        '#description' => t("If you don't have direct file access to the server, use this field to upload your logo."),
+      ];
+
+      $key = array_search('::validateForm', $form['#validate']);
+      $form['#validate'][$key] = 'alshaya_master_override_default_validate_system_theme_settings_form';
+      array_unshift($form['#submit'], 'alshaya_master_save_system_theme_settings');
+    }
+  }
+}
+
+/**
+ * Override default theme settings for validation.
+ *
+ * Allow svg extension file to be uploaded as site logo image & validate email
+ * logo file upload.
+ *
+ * @see \Drupal\system\Form\ThemeSettingsForm::validateForm()
+ */
+function alshaya_master_override_default_validate_system_theme_settings_form(array &$form, FormStateInterface $form_state) {
+  if (\Drupal::moduleHandler()->moduleExists('file')) {
+    // Handle file uploads.
+    $validators = ['file_validate_extensions' => ['png gif jpg jpeg apng svg']];
+
+    // Check for a new uploaded logo.
+    $file = file_save_upload('logo_upload', $validators, FALSE, 0);
+    if (isset($file)) {
+      // File upload was attempted.
+      if ($file) {
+        // Put the temporary file in form_values so we can save it on submit.
+        $form_state->setValue('logo_upload', $file);
+      }
+      else {
+        // File upload failed.
+        $form_state->setErrorByName('logo_upload', t('The logo could not be uploaded.'));
+      }
+    }
+
+    $validators = ['file_validate_extensions' => ['ico png gif jpg jpeg apng svg']];
+
+    // Check for a new uploaded favicon.
+    $file = file_save_upload('favicon_upload', $validators, FALSE, 0);
+    if (isset($file)) {
+      // File upload was attempted.
+      if ($file) {
+        // Put the temporary file in form_values so we can save it on submit.
+        $form_state->setValue('favicon_upload', $file);
+      }
+      else {
+        // File upload failed.
+        $form_state->setErrorByName('favicon_upload', t('The favicon could not be uploaded.'));
+      }
+    }
+
+    // When intending to use the default logo, unset the logo_path.
+    if ($form_state->getValue('default_logo')) {
+      $form_state->unsetValue('logo_path');
+    }
+
+    // When intending to use the default favicon, unset the favicon_path.
+    if ($form_state->getValue('default_favicon')) {
+      $form_state->unsetValue('favicon_path');
+    }
+
+    // If the user provided a path for a logo or favicon file, make sure a file
+    // exists at that path.
+    if ($form_state->getValue('logo_path')) {
+      $path = alshaya_master_validate_path($form_state->getValue('logo_path'));
+      if (!$path) {
+        $form_state->setErrorByName('logo_path', t('The custom logo path is invalid.'));
+      }
+    }
+    if ($form_state->getValue('favicon_path')) {
+      $path = alshaya_master_validate_path($form_state->getValue('favicon_path'));
+      if (!$path) {
+        $form_state->setErrorByName('favicon_path', t('The custom favicon path is invalid.'));
+      }
+    }
+
+    // Handle email logo file upload and validation.
+    // Handle file uploads.
+    $validators = ['file_validate_extensions' => ['png gif jpg jpeg apng svg']];
+
+    // Check for a new uploaded logo.
+    $file = file_save_upload('email_logo_upload', $validators, FALSE, 0);
+    if (isset($file)) {
+      // File upload was attempted.
+      if ($file) {
+        // Put the temporary file in form_values so we can save it on submit.
+        $form_state->setValue('email_logo_upload', $file);
+      }
+      else {
+        // File upload failed.
+        $form_state->setErrorByName('email_logo_upload', t('The logo could not be uploaded.'));
+      }
+    }
+
+  }
+}
+
+/**
+ * Save email logo for selected theme.
+ */
+function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+
+  $build_info = $form_state->getBuildInfo();
+  if (isset($build_info['args'][0])) {
+    $theme = $build_info['args'][0];
+  }
+
+  if (!empty($values['logo_upload'])) {
+    $filename = file_unmanaged_copy($values['logo_upload']->getFileUri());
+    $values['default_logo'] = 0;
+    $values['logo_path'] = $filename;
+  }
+
+  // If the user entered a path relative to the system files directory for
+  // a logo or favicon, store a public:// URI so the theme system can handle it.
+  if (!empty($values['logo_path'])) {
+    $values['logo_path'] = alshaya_master_validate_path($values['logo_path']);
+  }
+
+  // Save different logo for language.
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $themeConfig = \Drupal::languageManager()->getLanguageConfigOverride($langcode, $theme . '.settings');
+  $themeConfig->set('logo.path', $values['logo_path'])->save();
+  $form_state->unsetValue('logo_path');
+  $form_state->unsetValue('logo_upload');
+
+  // Save email logo.
+  $settings = ['email_logo_upload', 'email_logo_path'];
+  foreach ($settings as $setting_name) {
+    ${$setting_name} = $form_state->getValue($setting_name);
+    $form_state->unsetValue($setting_name);
+  }
+
+  // If the user uploaded a new logo or favicon, save it to a permanent location
+  // and use it in place of the default theme-provided file.
+  if (!empty($email_logo_upload)) {
+    $filename = file_unmanaged_copy($email_logo_upload->getFileUri());
+    $logo_path = $filename;
+  }
+
+  if (!empty($email_logo_path) && empty($email_logo_upload)) {
+    $logo_path = alshaya_master_validate_path($email_logo_path);
+  }
+
+  if (isset($logo_path)) {
+    $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $theme);
+    $config->set('email_logo_path', $logo_path);
+    $config->set('email_logo_url', file_create_url($logo_path));
+    $config->save();
+  }
+}
+
+/**
+ * Helper function to Validate the file path.
+ *
+ * @param string $path
+ *   A path relative to the Drupal root or to the public files directory, or
+ *   a stream wrapper URI.
+ *
+ * @return bool|string
+ *   A valid path that can be displayed through the theme system, or FALSE if
+ *   the path could not be validated.
+ */
+function alshaya_master_validate_path($path) {
+  // Absolute local file paths are invalid.
+  if (drupal_realpath($path) == $path) {
+    return FALSE;
+  }
+  // A path relative to the Drupal root or a fully qualified URI is valid.
+  if (is_file($path)) {
+    return $path;
+  }
+  // Prepend 'public://' for relative file paths within public filesystem.
+  if (file_uri_scheme($path) === FALSE) {
+    $path = 'public://' . $path;
+  }
+  if (is_file($path)) {
+    return $path;
+  }
+  return FALSE;
+}
+
+/**
+ * Get email logo settings.
+ *
+ * @param null|string $theme
+ *   The theme name for which we have return the logo.
+ *
+ * @return array
+ *   Return array of logo path and url.
+ */
+function alshaya_master_get_email_logo($theme = NULL) {
+  $cache = &drupal_static(__FUNCTION__, []);
+  // If no key is given, use the current theme if we can determine it.
+  if (!isset($theme)) {
+    $theme = \Drupal::theme()->getActiveTheme()->getName();
+  }
+
+  if (empty($cache[$theme])) {
+    $config = \Drupal::configFactory()->get('alshaya_master.theme.' . $theme);
+    $cache[$theme]['logo_path'] = $config->get('email_logo_path');
+    if (!empty($cache[$theme]['logo_path'])) {
+      $cache[$theme]['logo_url'] = file_create_url($config->get('email_logo_path'));
+    }
+  }
+
+  return $cache[$theme];
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_master_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'breadcrumb' block on some pages.
+  if ($operation == 'view' && $block->getPluginId() == 'system_breadcrumb_block') {
+    $current_route = \Drupal::routeMatch()->getRouteName();
+    $forbidden_routes = [
+      'user.login',
+      'user.register',
+      'user.pass',
+      'user.cancel_confirm',
+      'user.reset.login',
+      'user.reset.form',
+      'user.reset',
+    ];
+    $front_page = \Drupal::service('path.matcher')->isFrontPage();
+    return AccessResult::forbiddenIf(in_array($current_route, $forbidden_routes) || $front_page);
+  }
+}
+
+/**
+ * Implements hook_r4032login_redirect_option_alter().
+ */
+function alshaya_master_r4032login_redirect_option_alter(array &$options) {
+  // Unset destination query parameter for both logged-in and anon user.
+  unset($options['query']);
+}
+
+/**
+ * Function to sort an array based on a specific key.
+ *
+ * @param array $array
+ *   Array to sort.
+ * @param string $key
+ *   Key of the array or object to sort with.
+ * @param string $order
+ *   Sorting order asc/desc.
+ * @param string $key2
+ *   Optional secondary key for sorting when first key has equal value.
+ */
+function alshaya_master_utility_usort(array &$array, $key, $order = 'desc', $key2 = NULL, $order2 = 'asc') {
+  usort($array, function ($item_1, $item_2) use ($key, $order, $key2) {
+    $val1 = is_array($item_1) ? $item_1[$key] : $item_1->$key;
+    $val2 = is_array($item_2) ? $item_2[$key] : $item_2->$key;
+
+    $order = _alshaya_master_utility_usort_check_order($val1, $val2, $order);
+
+    // Add check for secondary key.
+    if ($key2 && $order === 0) {
+      $val3 = is_array($item_1) ? $item_1[$key2] : $item_1->$key2;
+      $val4 = is_array($item_2) ? $item_2[$key2] : $item_2->$key2;
+      return _alshaya_master_utility_usort_check_order($val3, $val4, $order);
+    }
+
+    return $order;
+  });
+}
+
+/**
+ * Helper function to get order between two values.
+ *
+ * @param mixed $val1
+ *   First value.
+ * @param mixed $val2
+ *   Second value.
+ * @param string $order
+ *   Ascending or descending.
+ *
+ * @return int
+ *   Returns the order value - 0, 1 or -1.
+ */
+function _alshaya_master_utility_usort_check_order($val1, $val2, $order) {
+  if ($val1 == $val2) {
+    return 0;
+  }
+  if ($order == 'asc') {
+    return ($val1 < $val2) ? -1 : 1;
+  }
+  elseif ($order == 'desc') {
+    return ($val1 > $val2) ? -1 : 1;
   }
 }

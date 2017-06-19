@@ -70,14 +70,8 @@ AddEncoding gzip svgz
   RewriteEngine on
 
 
-  # Remove .html from url.
-  RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
-  RewriteRule ^ /%1 [NC,L,R]
-  RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^ %{REQUEST_URI}.html [NC,L]
-
-  # Rewrite rule for redirecting old urls.
-  RewriteRule ^kwt-([a-z]{2})/(.*)$ /$1/$2 [R=301,L]
+  # Rewrite rule to remove .html and remove kwt-* from url.
+  RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
 
   # Remove trailing slash from all URLs (except home, which is practically not possible).
   RewriteCond %{REQUEST_FILENAME} !-d
@@ -139,6 +133,11 @@ AddEncoding gzip svgz
   # Redirect HTTP to HTTPS for all requests
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  # Make sure we are not executing this rule after an internal redirection for
+  # index.php. Note that variable name is prefixed by Apache when recomputing
+  # redirect rules after an internal redirection.
+  RewriteCond %{ENV:REDIRECT_internal_redirect} !true
+  RewriteCond %{REQUEST_URI} !(knet) [NC]
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Redirect common PHP files to their new locations.
@@ -155,7 +154,7 @@ AddEncoding gzip svgz
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_URI} !=/favicon.ico
-  RewriteRule ^ index.php [L]
+  RewriteRule ^ index.php [L,E=internal_redirect:true]
 
   # For security reasons, deny access to other PHP files on public sites.
   # Note: The following URI conditions are not anchored at the start (^),

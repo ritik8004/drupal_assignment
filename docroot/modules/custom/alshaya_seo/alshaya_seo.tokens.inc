@@ -21,9 +21,9 @@ function alshaya_seo_token_info() {
     'description' => t('Locale (en_US) for the currently visited page.'),
   ];
 
-  $info['tokens']['site']['country'] = [
-    'name' => 'country',
-    'description' => t('Site Country.'),
+  $info['tokens']['site']['locale:alternate'] = [
+    'name' => 'locale:alternate',
+    'description' => t('Alternate locale available for the site.'),
   ];
 
   $info['tokens']['node']['locale:alternate'] = [
@@ -58,9 +58,21 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     if (isset($tokens['locale'])) {
       $replacements[$tokens['locale']] = AlshayaI18nLanguages::getLocale($langcode);
     }
-
-    if (isset($tokens['country'])) {
-      $replacements[$tokens['country']] = _alshaya_seo_get_site_country_name();
+    if (isset($tokens['locale:alternate'])) {
+      // Get all languages available for the site.
+      $languages = \Drupal::languageManager()->getLanguages();
+      // If there are languages available.
+      if (!empty($languages)) {
+        $alternates = [];
+        // If we still have some data in language array.
+        if (!empty($languages)) {
+          // Prepare the alternate locale data.
+          foreach ($languages as $lang => $language) {
+            $alternates[] = AlshayaI18nLanguages::getLocale($lang);
+          }
+        }
+        $replacements[$tokens['locale:alternate']] = implode(',', $alternates);
+      }
     }
   }
 
@@ -105,8 +117,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
         else {
           $output = $item->processed;
         }
-
-        $replacements[$original] = text_summary($output, $item->format, $size);
+        $replacements[$original] = text_summary($output, 'plain_text', $size);
       }
     }
   }

@@ -1,0 +1,10 @@
+block.settings.alshaya_shop_by_block:
+  type: block_settings
+  label: 'Branding block'
+  mapping:
+    vocabulary:
+      type: text
+      label: 'Vocabulary'
+    level:
+      type: integer
+      label: 'Starting level'

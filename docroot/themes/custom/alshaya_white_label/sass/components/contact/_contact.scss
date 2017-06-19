@@ -1,4 +1,10 @@
 .c-contact {
+  &.l-one--w {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 6.438rem;
+    }
+  }
+
   .c-page-title {
     border-bottom: 1px solid $white;
     margin-bottom: 0.75rem;
@@ -9,13 +15,13 @@
   .form-type-textarea {
     textarea {
       resize: none;
-      padding-#{$right}: 1.25rem;
+      padding-#{$right}: 1.25rem !important;
     }
 
     .field-suffix {
       position: absolute;
       top: 0.125rem;
-      right: 0;
+      #{$right}: 0;
       font-size: 0.8125rem;
       color: $greyish;
       font-weight: normal;
@@ -41,15 +47,16 @@
 
   #edit-mobile-number {
     label {
-      top: -1.25em;
       bottom: 0;
-      left: 0;
+      #{$left}: 0;
       opacity: 1;
       font-size: 0.75rem;
-      position: absolute;
+      position: relative;
+      top: 0;
 
       &.error {
-        top: 1.25rem;
+        top: -0.25rem;
+        left: -4em;
         width: 9rem;
       }
     }
@@ -59,11 +66,27 @@
     }
   }
 
+  .mobile-number-field {
+    @include breakpoint($only-mobile) {
+      float: none;
+      clear: both;
+      display: block !important;
+    }
+  }
+
   .mobile-number-field.form-item--error {
     margin-bottom: 4rem;
 
     .form-item-mobile-number-mobile {
+      @include breakpoint($only-mobile) {
+        position: static;
+      }
+
       .form-item--error-message {
+        @include breakpoint($only-mobile) {
+          #{$left}: 0;
+        }
+
         position: absolute;
         #{$left}: -5rem;
         width: 21rem;
@@ -80,7 +103,7 @@
   legend {
     font-weight: bold;
     font-size: 0.875rem;
-    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   input[type="text"],
@@ -167,9 +190,10 @@
   .form-submit {
     @include breakpoint($only-mobile) {
       width: 100%;
+      margin-bottom: 0;
     }
 
-    width: 5.6875rem;
+    width: 5.875rem;
     height: 2.1875rem;
     text-transform: lowercase;
     font-size: 0.875rem;
@@ -200,6 +224,16 @@
   }
 
   legend {
-    color: $black;
+    color: $marine-blue-two;
+  }
+}
+
+.webform-submission-alshaya-contact-form {
+  .mobile-number-field {
+    width: 100%;
+
+    .form-type-textfield {
+      top: 1.5rem;
+    }
   }
 }

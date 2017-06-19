@@ -2,7 +2,9 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
-use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactory;
 
 /**
  * APIWrapper class.
@@ -12,13 +14,44 @@ class APIWrapper {
   use \Drupal\acq_commerce\Conductor\AgentRequestTrait;
 
   /**
+   * Store ID.
+   *
+   * @var mixed
+   */
+  protected $storeId;
+
+  /**
    * Constructor.
    *
    * @param ClientFactory $client_factory
    *   ClientFactory object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   ConfigFactoryInterface object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   LanguageManagerInterface object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+   *   LoggerChannelFactory object.
    */
-  public function __construct(ClientFactory $client_factory) {
+  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactory $logger_factory) {
     $this->clientFactory = $client_factory;
+    $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
+    $this->logger = $logger_factory->get('acq_sku');
+
+    // We always use the current language id to get store id. If required
+    // function calling the api wrapper will pass different store id to
+    // override this one.
+    $this->storeId = acq_commerce_get_store_id_from_langcode($language_manager->getCurrentLanguage()->getId());
+  }
+
+  /**
+   * Function to override context store id for API calls.
+   *
+   * @param mixed $store_id
+   *   Store ID to use for API calls.
+   */
+  public function updateStoreContext($store_id) {
+    // Calling code will be responsible for doing all checks on the value.
+    $this->storeId = $store_id;
   }
 
   /**
@@ -29,9 +62,12 @@ class APIWrapper {
    *
    * @return object
    *   Contains the new cart object.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function createCart($customer_id = NULL) {
-    $endpoint = 'cart/create';
+    $endpoint = $this->apiVersion . '/agent/cart/create';
 
     $doReq = function ($client, $opt) use ($endpoint, $customer_id) {
       if (!empty($customer_id)) {
@@ -64,34 +100,20 @@ class APIWrapper {
    * @throws \Exception
    */
   public function skuStockCheck($sku) {
-    $endpoint = "stock/$sku";
+    $endpoint = $this->apiVersion . "/agent/stock/$sku";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
     };
 
-    $stock = [];
-
     try {
-      // Cache id.
-      $cid = 'stock:' . $sku;
-
-      // If information is cached.
-      if ($cache = \Drupal::cache('data')->get($cid)) {
-        $stock = $cache->data;
-      }
-      else {
-        $stock = $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
-        $stock_check_proportion = \Drupal::config('acq_commerce.conductor')->get('stock_check_cache_proportion');
-        \Drupal::cache('data')->set($cid, $stock, $stock['quantity'] * $stock_check_proportion);
-      }
+      return $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
     }
     catch (ConductorException $e) {
-      // Log the stock error, do not throw error if stock info is missing.
-      \Drupal::logger('acq_commerce')->log(RfcLogLevel::ERROR, 'Unable to get the stock for @sku : @message', ['@sku' => $sku, '@message' => $e->getMessage()]);
+      throw $e;
     }
 
-    return $stock;
+    return NULL;
   }
 
   /**
@@ -102,9 +124,12 @@ class APIWrapper {
    *
    * @return array
    *   Contains the retrieved cart array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getCart($cart_id) {
-    $endpoint = "cart/$cart_id";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -132,9 +157,12 @@ class APIWrapper {
    *
    * @return array
    *   Full updated cart after submission.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function updateCart($cart_id, $cart) {
-    $endpoint = "cart/$cart_id";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id";
 
     $doReq = function ($client, $opt) use ($endpoint, $cart) {
       $opt['json'] = $cart;
@@ -155,6 +183,41 @@ class APIWrapper {
   }
 
   /**
+   * Associate a cart with a customer.
+   *
+   * @param int $cart_id
+   *   ID of cart to associate.
+   * @param $customer_id
+   *   ID of customer to associate with.
+   *
+   * @return bool
+   *   A status of coupon being applied.
+   * @throws \Exception
+   */
+  public function associateCart($cart_id, $customer_id) {
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/associate";
+
+    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $cart_id) {
+      $opt['json'] = [
+        'customer_id' => $customer_id,
+        'cart_id' => $cart_id
+      ];
+      return ($client->post($endpoint, $opt));
+    };
+
+    $status = FALSE;
+
+    try {
+      $status = (bool) $this->tryAgentRequest($doReq, 'associateCart');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $status;
+  }
+
+  /**
    * Finalizes a cart's order.
    *
    * @param int $cart_id
@@ -162,9 +225,12 @@ class APIWrapper {
    *
    * @return array
    *   Result returned back from the conductor.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function placeOrder($cart_id) {
-    $endpoint = "cart/$cart_id/place";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/place";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->post($endpoint, $opt));
@@ -190,9 +256,12 @@ class APIWrapper {
    *
    * @return array
    *   If successful, returns a array of shipping methods.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getShippingMethods($cart_id) {
-    $endpoint = "cart/$cart_id/shipping";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/shipping";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -215,14 +284,17 @@ class APIWrapper {
    *
    * @param int $cart_id
    *   Cart ID to estimate for.
-   * @param array $address
+   * @param array|object $address
    *   Array with the target address.
    *
    * @return array
    *   Array of estimates and methods.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
-  public function getShippingEstimates($cart_id, array $address) {
-    $endpoint = "cart/$cart_id/estimate";
+  public function getShippingEstimates($cart_id, $address) {
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/estimate";
 
     $doReq = function ($client, $opt) use ($endpoint, $address) {
       $opt['json'] = $address;
@@ -250,9 +322,12 @@ class APIWrapper {
    *
    * @return array
    *   Array of methods.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getPaymentMethods($cart_id) {
-    $endpoint = "cart/$cart_id/payments";
+    $endpoint = $this->apiVersion . "/agent/cart/$cart_id/payments";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -279,15 +354,17 @@ class APIWrapper {
    *   Customer last name.
    * @param string $email
    *   Customer e-mail.
+   * @param string $password
+   *   Optional password.
    *
    * @return array
    *   New customer array.
    */
-  public function createCustomer($first_name, $last_name, $email) {
+  public function createCustomer($first_name, $last_name, $email, $password = NULL) {
     // First check if the user exists in Magento.
     try {
       if ($existingCustomer = $this->getCustomer($email)) {
-        return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email);
+        return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email, $password);
       }
     }
     catch (\Exception $e) {
@@ -295,7 +372,7 @@ class APIWrapper {
       // already in magento.
     }
 
-    return $this->updateCustomer(NULL, $first_name, $last_name, $email);
+    return $this->updateCustomer(NULL, $first_name, $last_name, $email, $password);
   }
 
   /**
@@ -309,14 +386,19 @@ class APIWrapper {
    *   Customer last name.
    * @param string $email
    *   Customer e-mail.
+   * @param string $password
+   *   Optional password.
    *
    * @return array
    *   New customer array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
-  public function updateCustomer($customer_id, $first_name, $last_name, $email) {
-    $endpoint = "customer";
+  public function updateCustomer($customer_id, $first_name, $last_name, $email, $password = NULL) {
+    $endpoint = $this->apiVersion . "/agent/customer";
 
-    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $first_name, $last_name, $email) {
+    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $first_name, $last_name, $email, $password) {
       if (!empty($customer_id)) {
         $opt['form_params']['customer[customer_id]'] = $customer_id;
       }
@@ -324,6 +406,13 @@ class APIWrapper {
       $opt['form_params']['customer[firstname]'] = $first_name;
       $opt['form_params']['customer[lastname]'] = $last_name;
       $opt['form_params']['customer[email]'] = $email;
+
+      if (!empty($password)) {
+        $opt['form_params']['password'] = $password;
+      }
+
+      // Invoke the alter hook to allow all modules to update the customer data.
+      \Drupal::moduleHandler()->alter('acq_commerce_update_customer_api_request', $opt);
 
       return ($client->post($endpoint, $opt));
     };
@@ -341,6 +430,38 @@ class APIWrapper {
   }
 
   /**
+   * Authenticate customer.
+   *
+   * @param string $email
+   *   Customer e-mail.
+   * @param string $password
+   *   Password.
+   *
+   * @return array
+   *   New customer array.
+   */
+  public function authenticateCustomer($email, $password) {
+    $endpoint = $this->apiVersion . "/agent/customer/" . $email;
+
+    $doReq = function ($client, $opt) use ($endpoint, $password) {
+      $opt['form_params']['password'] = $password;
+
+      return ($client->post($endpoint, $opt));
+    };
+
+    $customer = [];
+
+    try {
+      $customer = $this->tryAgentRequest($doReq, 'authenticateCustomer', 'customer');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $customer;
+  }
+
+  /**
    * Gets customer by email.
    *
    * @param string $email
@@ -348,9 +469,12 @@ class APIWrapper {
    *
    * @return array
    *   Customer array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getCustomer($email) {
-    $endpoint = "customer/$email";
+    $endpoint = $this->apiVersion . "/agent/customer/$email";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -376,9 +500,12 @@ class APIWrapper {
    *
    * @return array
    *   Orders array.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getCustomerOrders($email) {
-    $endpoint = "customer/orders/$email";
+    $endpoint = $this->apiVersion . "/agent/customer/orders/$email";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -397,13 +524,51 @@ class APIWrapper {
   }
 
   /**
+   * Update order status and provide comment for update.
+   *
+   * @param int $order_id
+   *   Order id.
+   * @param string $status
+   *   Order status.
+   * @param string $comment
+   *   Optional comment.
+   *
+   * @return bool|mixed
+   *   Status of the update (TRUE/FALSE).
+   *
+   * @throws \Exception
+   */
+  public function updateOrderStatus($order_id, $status, $comment = '') {
+    $endpoint = $this->apiVersion . '/agent/order/' . $order_id;
+
+    $doReq = function ($client, $opt) use ($endpoint, $status, $comment) {
+      $opt['json']['status'] = $status;
+      $opt['json']['comment'] = $comment;
+
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      return $this->tryAgentRequest($doReq, 'updateOrderStatus', 'status');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return FALSE;
+  }
+
+  /**
    * Fetches product categories.
    *
    * @return array
    *   Array of product categories.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getCategories() {
-    $endpoint = "categories";
+    $endpoint = $this->apiVersion . "/agent/categories";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -412,13 +577,63 @@ class APIWrapper {
     $categories = [];
 
     try {
-      $categories = $this->tryAgentRequest($doReq, 'getCategories', 'products');
+      $categories = $this->tryAgentRequest($doReq, 'getCategories', 'categories');
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());
     }
 
     return $categories;
+  }
+
+  /**
+   * Fetches product attribute options.
+   *
+   * @return array
+   *   Array of product attribute options.
+   */
+  public function getProductOptions() {
+    $endpoint = $this->apiVersion . "/agent/product/options";
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $options = [];
+
+    try {
+      $options = $this->tryAgentRequest($doReq, 'getAttributeOptions', 'options');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $options;
+  }
+
+  /**
+   * Fetches all promotions.
+   *
+   * @return array
+   *   Array of promotions.
+   */
+  public function getPromotions() {
+    $endpoint = $this->apiVersion . "/agent/promotions/category";
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $result = [];
+
+    try {
+      $result = $this->tryAgentRequest($doReq, 'getPromotions', 'promotions');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $result;
   }
 
   /**
@@ -429,9 +644,12 @@ class APIWrapper {
    *
    * @return array
    *   Array of products.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getProductsByUpdatedDate(\DateTime $date_time) {
-    $endpoint = "products";
+    $endpoint = $this->apiVersion . "/agent/products";
 
     $doReq = function ($client, $opt) use ($endpoint, $date_time) {
       $opt['query']['updated'] = $date_time->format('Y-m-d H:i:s');
@@ -468,9 +686,12 @@ class APIWrapper {
    *
    * @return string
    *   Payment token.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getPaymentToken($method) {
-    $endpoint = "cart/token/$method";
+    $endpoint = $this->apiVersion . "/agent/cart/token/$method";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -489,13 +710,39 @@ class APIWrapper {
   }
 
   /**
+   * Function to subscribe an email for newsletter.
+   *
+   * @param string $email
+   *   E-Mail to subscribe.
+   */
+  public function subscribeNewsletter($email) {
+    $endpoint = $this->apiVersion . "/agent/newsletter/subscribe";
+
+    $doReq = function ($client, $opt) use ($endpoint, $email) {
+      $opt['form_params']['email'] = $email;
+
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      return $this->tryAgentRequest($doReq, 'subscribeNewsletter');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
    * Preforms a test call to conductor.
    *
    * @return array
    *   Test request result.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function systemWatchdog() {
-    $endpoint = "system/wd";
+    $endpoint = $this->apiVersion . "/agent/system/wd";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));

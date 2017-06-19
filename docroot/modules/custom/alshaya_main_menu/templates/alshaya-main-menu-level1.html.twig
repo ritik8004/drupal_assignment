@@ -15,9 +15,8 @@
         <li class="menu__list-item menu--one__list-item">
       {% endif %}
           <div class="menu__link-wrapper menu-two__link-wrapper">
-            <a class="menu__link menu--one__link" href="{{ level1.path }}">{{ level1.label }}</a>
+            <a class="menu__link menu--one__link {{ level1.class }}" href="{{ level1.path }}">{{ level1.label }}</a>
           </div>
-
           {% if level1.child is not empty %}
             {{ alshaya_main_menu('alshaya_main_menu_level2', level1) }}
           {% endif %}

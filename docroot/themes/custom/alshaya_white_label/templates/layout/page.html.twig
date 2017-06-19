@@ -11,10 +11,11 @@
         </div>
       </div>
     {% endif %}
+  </div>
     <!-- /menu-secondary -->
 
     <!-- ______________________ HEADER _______________________ -->
-
+  <div class="branding__menu">
     {% if page.header %}
       <header class="c-header">
         <div class="l-container">
@@ -37,19 +38,19 @@
         </div>
       </div>
     {% endif %}
-  </div>
-  <!-- /menu-primary -->
+    <!-- /menu-primary -->
 
-  <!-- ______________________ Pre content _______________________ -->
-  {% if page.pre_content %}
-    <div class="c-pre-content">
-      <div class="l-container">
-        <div class="c-pre-content__region">
-          {{ page.pre_content }}
+    <!-- ______________________ Pre content _______________________ -->
+    {% if page.pre_content %}
+      <div class="c-pre-content">
+        <div class="l-container">
+          <div class="c-pre-content__region">
+            {{ page.pre_content }}
+          </div>
         </div>
       </div>
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
 
     <!-- ______________________ BREADCRUMB _______________________ -->
 

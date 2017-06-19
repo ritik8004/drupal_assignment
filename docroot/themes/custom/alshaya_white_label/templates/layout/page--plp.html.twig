@@ -12,10 +12,11 @@
         </div>
       </div>
     {% endif %}
+  </div>
     <!-- /menu-secondary -->
 
     <!-- ______________________ HEADER _______________________ -->
-
+  <div class="branding__menu">
     {% if page.header %}
       <header class="c-header">
         <div class="l-container">
@@ -38,19 +39,19 @@
         </div>
       </div>
     {% endif %}
-  </div>
-  <!-- /menu-primary -->
+    <!-- /menu-primary -->
 
-  <!-- ______________________ Pre content _______________________ -->
-  {% if page.pre_content %}
-    <div class="c-pre-content">
-      <div class="l-container">
-        <div class="c-pre-content__region">
-          {{ page.pre_content }}
+    <!-- ______________________ Pre content _______________________ -->
+    {% if page.pre_content %}
+      <div class="c-pre-content">
+        <div class="l-container">
+          <div class="c-pre-content__region">
+            {{ page.pre_content }}
+          </div>
         </div>
       </div>
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
 
   <!-- ______________________ BREADCRUMB _______________________ -->
 
@@ -89,12 +90,9 @@
             <div class="c-facet__blocks__wrapper">
               <h3 class="c-facet__label">{{ "Filter" | t }}</h3>
               <div class="c-facet__blocks">
-                {{ page.sidebar_first.skusskureferencecolor }}
-                {{ page.sidebar_first.skusskureferencedisplayprice }}
-                {{ page.sidebar_first.skusskureferencesize }}
+                {{ page.sidebar_first }}
               </div>
             </div>
-            {{ page.sidebar_first | without('skusskureferencecolor', 'skusskureferencedisplayprice', 'skusskureferencesize') }}
           </div>
         </aside>
       {% endif %}

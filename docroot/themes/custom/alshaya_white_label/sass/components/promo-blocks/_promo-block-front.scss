@@ -25,8 +25,9 @@
   }
 }
 
-.c-slider-promo__items {
-  img {
-    max-height: 476px;
+.c-slider-promo__item {
+  .field--name-field-banner {
+    max-height: 424px;
+    overflow: hidden;
   }
 }
