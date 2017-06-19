@@ -401,7 +401,7 @@ function alshaya_loyalty_preprocess_input(&$variables) {
   // Attach library for privilege card input field.
   if (isset($variables['element'], $variables['element']['#name']) && strpos($variables['element']['#name'], 'privilege_card_number') !== FALSE) {
     $variables['attributes']['class'][] = 'c-input__privilege-card ';
-    $variables['#attached']['library'][] = 'alshaya_loyalty/format_input';
+    $variables['#attached']['library'][] = 'alshaya_loyalty/privilege_card_number';
   }
 }
 

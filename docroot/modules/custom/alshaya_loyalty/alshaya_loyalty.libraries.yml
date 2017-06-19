@@ -1,7 +1,7 @@
-format_input:
+privilege_card_number:
   js:
     js/cleave.min.js: {}
-    js/format-input.js: {}
+    js/privilege_card_number.js: {}
   dependencies:
     - core/drupal
     - core/jquery
