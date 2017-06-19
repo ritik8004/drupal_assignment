@@ -353,9 +353,9 @@
 
       // Poll the DOM to check if the show more/less link is avaialble, before placing it inside the ul.
       var i = setInterval(function () {
-        if ($('.c-plp-only aside .block-facet--checkbox a.facets-soft-limit-link').length) {
+        if ($('.c-plp-only .block-facet--checkbox a.facets-soft-limit-link').length) {
           clearInterval(i);
-          $('aside .block-facet--checkbox').each(function () {
+          $('.block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
             var blockPlugin = $(this).attr('data-block-plugin-id');
             var facet_id = blockPlugin.replace('facet_block:', '');
