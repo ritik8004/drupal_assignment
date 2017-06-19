@@ -617,10 +617,38 @@
 }
 
 html[lang=ar] {
-  .customer-cart-form .tooltip--wrap {
-    @include breakpoint($tablet) {
-      margin-top: 0.3125rem;
-      margin-bottom: 1.625rem;
+  .tooltip--head::after {
+    @include breakpoint($desktop) {
+      position: absolute;
+      left: 6.7rem;
+      top: -0.25rem;
+    }
+  }
+
+  .customer-cart-form {
+    .mobile-only {
+      @include breakpoint($only-mobile) {
+        margin-top: 1.2rem;
+      }
+    }
+
+    .image {
+      @include breakpoint($only-mobile) {
+        border: 1px solid #ddd;
+        background: white;
+
+        img {
+          border: 0;
+          max-width: 100% !important;
+        }
+      }
+    }
+
+    .tooltip--wrap {
+      @include breakpoint($tablet) {
+        margin-top: 0.3125rem;
+        margin-bottom: 1.625rem;
+      }
     }
   }
 
@@ -643,8 +671,28 @@ html[lang=ar] {
         td {
           padding: 1.9rem 1.5rem;
 
+          @include breakpoint($upto-desktop) {
+            padding: 0;
+          }
+
           &:first-child a {
             line-height: 18px;
+          }
+
+          @include breakpoint($only-mobile) {
+            margin-top: -2.2rem;
+          }
+        }
+
+        td.delivery-option {
+          @include breakpoint($only-mobile) {
+            margin-top: 1rem;
+          }
+        }
+
+        td.name {
+          @include breakpoint($only-mobile) {
+            margin-top: 2rem;
           }
         }
 
@@ -661,9 +709,6 @@ html[lang=ar] {
 
   .edit-continue-shopping-mobile {
     border: 1px solid $cobalt-blue !important;
-    position: absolute;
-    right: 0;
-    bottom: 1rem;
     width: 10.8125rem;
     padding: 0.67rem !important;
     color: $cobalt-blue !important;
@@ -676,8 +721,17 @@ html[lang=ar] {
     padding-bottom: 1.375rem;
     margin-top: 2em;
 
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
     .placeholder {
       font-size: 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+      }
     }
   }
 
@@ -687,11 +741,20 @@ html[lang=ar] {
   #block-basketpromotionmessage p,
   .alias--cart #table-cart-items tr th,
   .ladda-label {
-    font-size: 0.6875rem;
+    font-size: 0.6rem;
   }
 
   .path--cart .customer-cart-form .items {
     padding-right: 1.2rem;
   }
-}
 
+  .field--name-field-skus .ladda-button[data-style=zoom-in] .ladda-spinner {
+    left: 43%;
+
+    @include breakpoint($upto-desktop) {
+      left: 27%;
+      position: relative;
+      top: -0.25rem;
+    }
+  }
+}

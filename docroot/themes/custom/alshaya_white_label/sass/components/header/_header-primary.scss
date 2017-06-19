@@ -261,6 +261,10 @@ header {
       @include breakpoint($only-mobile) {
         display: none;
       }
+
+      .price-currency.prefix {
+        padding-right: 0.45em;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -1283,5 +1287,11 @@ header {
   @include breakpoint($desktop) {
     border-top: 1px solid $white;
     border-bottom: 1px solid $white;
+  }
+}
+
+html[lang='ar'] {
+  .cart-link-total .price-currency.suffix {
+    padding-right: 0.5rem;
   }
 }
