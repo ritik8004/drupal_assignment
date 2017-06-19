@@ -373,6 +373,10 @@
             position: absolute;
             #{$left}: 0;
             top: 1.875rem;
+
+            ~ .form-item--error-message {
+              padding-top: 1.688rem;
+            }
           }
         }
       }
