@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.formatInput = {
+  Drupal.behaviors.privilege_card_number = {
     attach: function (context, settings) {
 
       var defaultValue = settings.alshaya_loyalty.card_validate.init_value;
@@ -42,17 +42,42 @@
       function validate_privilege_card() {
         if (priv_card.val().length == 19 && priv_card.val() == priv_card2.val() && priv_card.val().length == priv_card2.val().length) {
           priv_card2.blur();
-          l2.ladda('start');
-          l.ladda('start');
         }
       }
 
-      $(document).ajaxComplete(function(event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) && settings.extraData._triggering_element_name == 'privilege_card_number2') {
-          $.ladda('stopAll');
-        }
-      });
+      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.PrivilegeCardBeforeSend === 'undefined') {
+        Drupal.Ajax.prototype.PrivilegeCardBeforeSend = Drupal.Ajax.prototype.beforeSend;
+        Drupal.Ajax.prototype.PrivilegeCardsuccess = Drupal.Ajax.prototype.success;
+        Drupal.Ajax.prototype.PrivilegeCarderror = Drupal.Ajax.prototype.error;
 
+        // See docroot/core/misc/ajax.js > Drupal.Ajax.prototype.beforeSend()
+        Drupal.Ajax.prototype.beforeSend = function (xmlhttprequest, options) {
+          if (this.element.name == 'privilege_card_number2') {
+            l2.ladda('start');
+            l.ladda('start');
+          }
+          // Invoke the original function.
+          this.PrivilegeCardBeforeSend(xmlhttprequest, options);
+        };
+
+        Drupal.Ajax.prototype.error = function (xmlhttprequest, uri, customMessage) {
+          $(this).cartladdastop(this.element);
+          // Invoke the original function.
+          this.PrivilegeCarderror(xmlhttprequest, uri, customMessage);
+        };
+
+        Drupal.Ajax.prototype.success = function (response, status) {
+          $(this).cartladdastop(this.element);
+          // Invoke the original function.
+          this.PrivilegeCardsuccess(response, status);
+        };
+
+        $.fn.cartladdastop = function(element) {
+          if(element.name == 'privilege_card_number2') {
+            $.ladda('stopAll');
+          }
+        }
+      }
     }
   };
 })(jQuery, Drupal);
