@@ -88,3 +88,23 @@ index 46e9569..70dd8c7 100644
      $this->addCart($cart);
  
      return $cart;
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index 70dd8c7..ea5b8df 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -167,7 +167,14 @@ public function updateCart() {
+     }
+ 
+     $cartObject->cart_id = $cart_id;
+-    $cart->updateCartObject($cartObject);
++
++    if ($cart) {
++      $cart->updateCartObject($cartObject);
++    }
++    else {
++      $cart = new Cart($cartObject);
++    }
++
+     $this->addCart($cart);
+ 
+     return $cart;
