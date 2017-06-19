@@ -393,7 +393,7 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
   $sku_attributes['gtm-category'] = $gtm_manager->fetchProductCategories($product_node);
   $sku_attributes['gtm-main-sku'] = $product_node->get('field_skus')->first()->getString();
   $sku_attributes['gtm-type'] = 'gtm-remove-cart-wrapper';
-  $sku_attributes['gtm-size'] = $variables['sku_attributes']['attr_size']['value'];
+  $sku_attributes['gtm-size'] = isset($variables['sku_attributes'], $variables['sku_attributes']['attr_size']) ? $variables['sku_attributes']['attr_size']['value'] : '';
 
   $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($sku_attributes);
 }

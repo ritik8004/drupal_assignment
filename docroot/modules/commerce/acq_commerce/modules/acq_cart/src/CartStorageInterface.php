@@ -54,7 +54,12 @@ interface CartStorageInterface {
 
   /**
    * Associate the current cart in storage with a given customer.
+   *
+   * @param int $customer_id
+   *   Customer ID.
+   * @param string $customer_email
+   *   Customer E-Mail.
    */
-  public function associateCart($customer_id);
+  public function associateCart($customer_id, $customer_email);
 
 }

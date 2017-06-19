@@ -7,6 +7,8 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
 
 /**
  * Provides the login form pane.
@@ -35,22 +37,48 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $config = \Drupal::config('alshaya_acm_checkout.settings');
 
-    $pane_form['checkout_login']['summary'] = [
+    $pane_form['summary'] = [
       '#markup' => $config->get('checkout_guest_login.value'),
+      '#weight' => -50,
     ];
 
-    $pane_form['checkout_login']['form'] = \Drupal::formBuilder()->getForm('Drupal\user\Form\UserLoginForm');
+    $pane_form['messages'] = [
+      '#type' => 'status_messages',
+      '#weight' => -49,
+    ];
 
-    // When unsetting field descriptions, also unset aria-describedby attributes
-    // to avoid introducing an accessibility bug.
-    unset($pane_form['checkout_login']['form']['name']['#description']);
-    unset($pane_form['checkout_login']['form']['name']['#attributes']['aria-describedby']);
-    unset($pane_form['checkout_login']['form']['pass']['#description']);
-    unset($pane_form['checkout_login']['form']['pass']['#attributes']['aria-describedby']);
+    // Display login form:
+    $pane_form['name'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Username'),
+      '#size' => 15,
+      '#maxlength' => UserInterface::USERNAME_MAX_LENGTH,
+      '#required' => TRUE,
+      '#attributes' => [
+        'autocorrect' => 'none',
+        'autocapitalize' => 'none',
+        'spellcheck' => 'false',
+      ],
+    ];
 
-    // Use small size for input elements.
-    $pane_form['checkout_login']['form']['name']['#size'] = 15;
-    $pane_form['checkout_login']['form']['pass']['#size'] = 15;
+    $pane_form['pass'] = [
+      '#type' => 'password',
+      '#title' => $this->t('Password'),
+      '#size' => 15,
+      '#description' => $this->t('Enter the password that accompanies your username.'),
+      '#required' => TRUE,
+      '#attached' => [
+        'library' => ['alshaya_white_label/unmask_password'],
+      ],
+    ];
+
+    $pane_form['actions'] = ['#type' => 'actions'];
+    $pane_form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('sign in'),
+    ];
+
+    $pane_form['actions']['submit']['#attributes']['gtm-type'] = 'checkout-signin';
 
     // Get the forgot password link.
     $request_password_link = Url::fromRoute('user.pass', [], [
@@ -60,13 +88,41 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
       ],
     ]);
 
-    $pane_form['checkout_login']['form']['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
-    $pane_form['checkout_login']['form']['request_password']['#weight'] = 101;
-
-    // Remove all other links.
-    unset($pane_form['checkout_login']['form']['account']);
+    $pane_form['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
+    $pane_form['request_password']['#weight'] = 101;
 
     return $pane_form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getErrors()) {
+      return;
+    }
+
+    $values = $form_state->getValue($pane_form['#parents']);
+    $mail = $values['name'];
+    $pass = $values['pass'];
+
+    if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass, TRUE)) {
+      $form_state->setRedirect('acq_checkout.form', ['step' => 'delivery']);
+
+      $account = User::load($uid);
+
+      if ($account->isActive()) {
+        user_login_finalize($account);
+      }
+      else {
+        drupal_set_message($this->t('Your account has not been activated or is blocked.'), 'error');
+        $form_state->setErrorByName('custom', $this->t('Your account has not been activated or is blocked.'));
+      }
+    }
+    else {
+      drupal_set_message($this->t('Unrecognized email address or password.'), 'error');
+      $form_state->setErrorByName('custom', $this->t('Unrecognized email address or password.'));
+    }
   }
 
 }

@@ -11,8 +11,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\UserInterface;
-use Drupal\acq_cart\CartInterface;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_module_implements_alter().
@@ -278,63 +276,21 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
   /** @var \Drupal\user\Entity\User $user */
   if ($user = user_load_by_mail($mail)) {
-    $roles = $user->getRoles();
-
     // For all users except just authenticated, we can rely on Drupal auth.
-    if (count($roles) > 1) {
+    if (empty($user->get('acq_customer_id')->getValue())) {
+      $do_api_check = FALSE;
+    }
+    elseif (!$user->isActive()) {
+      $form_state->setErrorByName('name', $this->t('Your account has not been activated or is blocked.'));
       $do_api_check = FALSE;
     }
   }
 
   // Do check against Magento only if user is unknown or just authenticated.
   if ($do_api_check) {
-    try {
-      $api_wrapper = \Drupal::service('acq_commerce.api');
-
-      $customer = $api_wrapper->authenticateCustomer($mail, $pass);
-
-      if (!empty($customer) && !empty($customer['customer_id'])) {
-        \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-
-        try {
-          // If we get a cart_id in the customer response, load it and store it
-          // in the session.
-          if (isset($customer['extension']['cart_id'])) {
-            $cart = (object) \Drupal::service('acq_commerce.api')->getCart($customer['extension']['cart_id']);
-            $cart = new Cart($cart);
-
-            \Drupal::service('acq_cart.cart_storage')->addCart($cart);
-          }
-          // Otherwise, associate the current cart with the authenticated user.
-          else {
-            \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id']);
-          }
-        }
-        catch (\Exception $e) {
-          // Some error occurred while associating cart, not doing anything
-          // here to allow normal login to work.
-        }
-
-        // Check if user exists in Drupal. We have already loaded this above.
-        if (!empty($user)) {
-          // Update the data in Drupal to match the values in Magento.
-          alshaya_acm_customer_update_user_data($user, $customer);
-
-          $form_state->set('uid', $user->id());
-          return;
-        }
-        // Create user.
-        else {
-          /** @var \Drupal\user\Entity\User $user */
-          $user = alshaya_acm_customer_create_drupal_user($customer);
-        }
-
-        $form_state->set('uid', $user->id());
-        return;
-      }
-    }
-    catch (\Exception $e) {
-      // Do nothing, could be admin user.
+    if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass)) {
+      $form_state->set('uid', $uid);
+      return;
     }
   }
 
@@ -343,6 +299,67 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
   // We also process default authentication code.
   call_user_func_array($form_state->prepareCallback('::validateAuthentication'), [&$form, &$form_state]);
+}
+
+/**
+ * Helper function to authenticate user from Magento.
+ *
+ * @param string $mail
+ *   Mail.
+ * @param string $pass
+ *   Password.
+ *
+ * @return int|null
+ *   User id of user if successful or null.
+ */
+function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associate_cart = FALSE) {
+  try {
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('acq_commerce.api');
+
+    $customer = $api_wrapper->authenticateCustomer($mail, $pass);
+
+    if (!empty($customer) && !empty($customer['customer_id'])) {
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+
+      try {
+        // If we get a cart_id in the customer response, load it and store it
+        // in the session.
+        if (!$force_associate_cart && isset($customer['extension']['cart_id'])) {
+          $cart = (object) $api_wrapper->getCart($customer['extension']['cart_id']);
+          $cart = new Cart($cart);
+
+          \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+        }
+        // Otherwise, associate the current cart with the authenticated user.
+        else {
+          \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id'], $customer['customer_email']);
+        }
+      }
+      catch (\Exception $e) {
+        // Some error occurred while associating cart, not doing anything
+        // here to allow normal login to work.
+      }
+
+      // Check if user exists in Drupal.
+      if ($user = user_load_by_mail($mail)) {
+        // Update the data in Drupal to match the values in Magento.
+        alshaya_acm_customer_update_user_data($user, $customer);
+      }
+      // Create user.
+      else {
+        /** @var \Drupal\user\Entity\User $user */
+        $user = alshaya_acm_customer_create_drupal_user($customer);
+      }
+
+      return $user->id();
+    }
+  }
+  catch (\Exception $e) {
+    // Do nothing, could be admin user.
+  }
+
+  return NULL;
 }
 
 /**
@@ -536,19 +553,6 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
   catch (\Exception $e) {
     // Do nothing, let default validation function handle the error messages.
   }
-}
-
-/**
- * Implements hook_alshaya_acm_checkout_pre_place_order().
- *
- * @see UserRecentOrders::build()
- * @see MultistepCheckout::submitForm()
- */
-function alshaya_acm_customer_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
-  $current_user_id = \Drupal::currentUser()->id();
-  // Invalidate the cache tag when order is placed to reflect on the user's
-  // recent orders.
-  Cache::invalidateTags(['user:' . $current_user_id . ':orders']);
 }
 
 /**

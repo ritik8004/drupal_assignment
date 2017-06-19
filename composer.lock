@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "27b46021bb57237d7303593a59c4ff10",
+    "content-hash": "27cfcc6091612f2b719e2f6ae5f94fcc",
     "packages": [
         {
             "name": "acquia/blt",
@@ -4975,6 +4975,9 @@
                 "drupal": {
                     "version": "8.x-1.0-alpha5",
                     "datestamp": "1493925184"
+                },
+                "patches_applied": {
+                    "Fix notices": "https://www.drupal.org/files/issues/2886786.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6523,7 +6526,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486726083"
+                    "datestamp": "1486729083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6537,6 +6540,10 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
+                },
+                {
+                    "name": "miteshmap",
+                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",

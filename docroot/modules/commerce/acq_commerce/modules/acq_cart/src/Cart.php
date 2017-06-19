@@ -55,6 +55,17 @@ class Cart implements CartInterface {
   }
 
   /**
+   * Function to update cart object.
+   *
+   * @param object $cart
+   *   The cart.
+   */
+  public function updateCartObject($cart) {
+    $this->cart = $cart;
+    $this->updateCartItemsCount();
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function id() {
@@ -489,7 +500,9 @@ class Cart implements CartInterface {
   public function convertToCustomerCart(array $cart) {
     $this->cart->cart_id = $cart['cart_id'];
     $this->cart->customer_id = $cart['customer_id'];
-    $this->cart->customer_email = $cart['customer_email'];
+    if (!empty($cart['customer_email'])) {
+      $this->cart->customer_email = $cart['customer_email'];
+    }
   }
 
   /**
