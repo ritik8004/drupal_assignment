@@ -147,7 +147,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
         // All order link.
         $build['view_all_orders'] = [
           '#type' => 'link',
-          'class' => ['show-all'],
+          '#attributes' => ['class' => ['show-all']],
           '#title' => $this->t('View all orders'),
           '#url' => Url::fromRoute('acq_customer.orders', ['user' => $uid]),
         ];
