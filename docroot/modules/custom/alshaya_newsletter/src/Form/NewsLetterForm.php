@@ -109,7 +109,7 @@ class NewsLetterForm extends FormBase {
     }
     else {
       $data['message'] = 'failure';
-      $html = '';
+      $html = '<div class="subscription-status"><span class="message error">' . $this->t('Please enter an email address') . '</span></div>';
     }
 
     // Get the interval we want to show the message for on our ladda button.

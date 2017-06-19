@@ -325,7 +325,7 @@
         color: $red-error;
         padding: 0.3125rem 0;
         z-index: 9;
-        background: $white-five;
+        font-size: 0.75rem;
       }
     }
   }
@@ -386,6 +386,10 @@
       width: 18.19rem;
       max-width: 18.18rem;
     }
+  }
+
+  .inline-error ~ #footer-newsletter-form-wrapper {
+    top: 6.1rem;
   }
 
   .edit-newsletter[data-style=zoom-in][data-loading] {
