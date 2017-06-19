@@ -10,3 +10,7 @@ services:
   alshaya_addressbook.manager:
     class: Drupal\alshaya_addressbook\AlshayaAddressBookManager
     arguments: [ '@entity_type.manager', '@acq_commerce.api', '@logger.factory' ]
+  alshaya_addressbook.mobile_util:
+    class: Drupal\alshaya_addressbook\Decorator\AddressBookMobileUtilDecorator
+    decorates: mobile_number.util
+    arguments: ['@alshaya_addressbook.mobile_util.inner', '@config.factory', '@flood', '@entity_field.manager', '@module_handler', '@country_manager', '@token']

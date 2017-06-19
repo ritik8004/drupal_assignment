@@ -747,7 +747,7 @@ body.alias--cart {
   #table-cart-totals {
     font-size: 14px;
 
-    #edit-totals tr:nth-child(2) td {
+    #edit-totals tr[data-drupal-selector="edit-totals-discount"] td {
       color: $scarlet;
     }
 
