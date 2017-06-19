@@ -67,9 +67,10 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#size' => 15,
       '#description' => $this->t('Enter the password that accompanies your username.'),
       '#required' => TRUE,
+      '#attached' => [
+        'library' => ['alshaya_white_label/unmask_password'],
+      ],
     ];
-
-    $pane_form['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
 
     $pane_form['actions'] = ['#type' => 'actions'];
     $pane_form['actions']['submit'] = [
