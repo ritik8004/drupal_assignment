@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_search\Controller;
 
-use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Ajax\InsertCommand;
+use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\facets\Controller\FacetBlockAjaxController;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Block\BlockManager;
@@ -26,6 +28,13 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   protected $blockManager;
 
   /**
+   * The current route matcher service.
+   *
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  protected $currentRouteMatch;
+
+  /**
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Entity\EntityManager $entityManager
@@ -35,6 +44,9 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    * @param \Drupal\Core\PathProcessor\PathProcessorManager $pathProcessor
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    * @param \Drupal\Core\Block\BlockManager $blockManager
+   *   The Block manager service.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
+   *   The current route matcher service.
    */
   public function __construct(EntityManager $entityManager,
                               RendererInterface $renderer,
@@ -42,9 +54,11 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
                               RouterInterface $router,
                               PathProcessorManager $pathProcessor,
                               LoggerChannelFactoryInterface $logger,
-                              BlockManager $blockManager) {
+                              BlockManager $blockManager,
+                              CurrentRouteMatch $currentRouteMatch) {
     parent::__construct($entityManager, $renderer, $currentPath, $router, $pathProcessor, $logger);
     $this->blockManager = $blockManager;
+    $this->currentRouteMatch = $currentRouteMatch;
   }
 
   /**
@@ -58,7 +72,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $container->get('router'),
       $container->get('path_processor_manager'),
       $container->get('logger.factory'),
-      $container->get('plugin.manager.block')
+      $container->get('plugin.manager.block'),
+      $container->get('current_route_match')
     );
   }
 
@@ -71,14 +86,79 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    */
   public function ajaxFacetBlockView(Request $request) {
     $response = parent::ajaxFacetBlockView($request);
+    $isPlpPage = FALSE;
+    $isPromoPage = FALSE;
+    $isSearchPage = FALSE;
+    $facetFields['facets_container'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => 'facets-hidden-container',
+      ],
+    ];;
 
-    $block_id = 'views_exposed_filter_block:search-page';
-    $block = $this->blockManager->createInstance($block_id);
+    $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
+    if (!empty($parameters) && isset($parameters['f'])) {
+      foreach ($parameters['f'] as $key => $value) {
+        // Add hidden form field for facet parameter.
+        $facetFields['facets_container']['f[' . $key . ']'] = [
+          '#type' => 'hidden',
+          '#value' => $value,
+          '#weight' => -1,
+          '#attributes' => [
+            'name' => 'f[' . $key . ']',
+          ],
+        ];
+      }
+    }
 
-    $block_view = $block->build();
-    $response->addCommand(new ReplaceCommand('#views-exposed-form-search-page', $block_view));
+    $this->setPageType($isPlpPage, $isPromoPage, $isSearchPage);
+
+    // If page is PLP or Promo, inject hidden field into product_list exposed
+    // form.
+    if ($isSearchPage) {
+      $response->addCommand(new InsertCommand('.block-views-exposed-filter-blocksearch-page:not(.block-keyword-search-block) form .facets-hidden-container', $facetFields));
+    }
+
+    // If page is search, inject hidden field into search page exposed form.
+    if ($isPlpPage || $isPromoPage) {
+      $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container', $facetFields));
+    }
 
     return $response;
+  }
+
+  /**
+   * Helper function to set page type variables.
+   *
+   * @param bool $isPlpPage
+   *   TRUE if current page is PLP.
+   * @param bool $isPromoPage
+   *   TRUE if current page is promotion content-type.
+   * @param bool $isSearchPage
+   *   TRUE if current page is search page.
+   */
+  protected function setPageType(&$isPlpPage, &$isPromoPage, &$isSearchPage) {
+    $currentRouteName = $this->currentRouteMatch->getRouteName();
+    if ($currentRouteName === 'entity.taxonomy_term.canonical') {
+      $term = $this->currentRouteMatch->getParameter('taxonomy_term');
+      $vocabId = $term->getVocabularyId();
+      if ($vocabId === 'acq_product_category') {
+        $isPlpPage = TRUE;
+        return;
+      }
+    }
+    elseif ($currentRouteName === 'entity.node.canonical') {
+      $node = $this->currentRouteMatch->getParameter('node');
+      $bundle = $node->bundle();
+      if ($bundle === 'promotion') {
+        $isPromoPage = TRUE;
+        return;
+      }
+    }
+    elseif ($currentRouteName === 'view.search.page') {
+      $isSearchPage = TRUE;
+      return;
+    }
   }
 
 }
