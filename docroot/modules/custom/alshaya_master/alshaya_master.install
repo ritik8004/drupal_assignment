@@ -344,6 +344,9 @@ function alshaya_master_install() {
     'Further instructions have been sent to your email address.' => [
       'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
     ],
+    'Further instructions have been sent to your e-mail address.' => [
+      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
+    ],
     'Please agree to the Terms and Conditions.' => [
       'ar' => 'يرجى الموافقة على الشروط والأحكام',
     ],
