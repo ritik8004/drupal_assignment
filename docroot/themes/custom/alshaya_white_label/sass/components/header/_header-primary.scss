@@ -1208,7 +1208,7 @@ header {
     }
 
     .c-my-account-nav {
-      top: 5.4375rem;
+      top: 4.8rem;
     }
   }
 
@@ -1293,5 +1293,17 @@ header {
 html[lang='ar'] {
   .cart-link-total .price-currency.suffix {
     padding-right: 0.5rem;
+  }
+}
+
+.main--menu .not-active {
+  @include breakpoint($upto-desktop) {
+    display: none;
+  }
+}
+
+.main--menu .active-menu.not-active {
+  @include breakpoint($upto-desktop) {
+    display: block;
   }
 }
