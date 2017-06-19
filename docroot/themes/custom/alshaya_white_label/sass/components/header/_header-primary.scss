@@ -931,14 +931,22 @@ header {
     color: $marine-blue;
     display: block;
     font-size: 12px;
-    padding: 1rem 0;
-    padding-bottom: 0.9375rem;
-    padding-#{$right}: 0.25rem;
+    padding: 0;
     text-transform: lowercase;
+
+    a {
+      padding: 1rem 0;
+      padding-bottom: 0.9375rem;
+      padding-#{$right}: 0.25rem;
+    }
   }
 
   .back--link {
     @extend .menu__list-item;
+
+    padding: 1rem 0;
+    padding-bottom: 0.9375rem;
+    padding-#{$right}: 0.25rem;
   }
 
   .menu--one__list-item {
@@ -953,13 +961,16 @@ header {
 
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $white;
-      padding-top: 0.9375rem;
-      padding-bottom: 0.9375rem;
+
+      a {
+        padding-top: 0.9375rem;
+        padding-bottom: 0.9375rem;
+      }
     }
 
     .menu__in {
       margin-top: -34px;
-      margin-#{$right}: 0.2rem;
+      margin-#{$right}: 0;
     }
 
     .menu--three__list-item {
@@ -971,8 +982,11 @@ header {
   .menu--three__list-item {
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $white;
-      padding-top: 0.9375rem;
-      padding-bottom: 0.9375rem;
+
+      a {
+        padding-top: 0.9375rem;
+        padding-bottom: 0.9375rem;
+      }
     }
   }
 
@@ -984,11 +998,11 @@ header {
 
   .menu__in {
     float: $right;
-    margin-top: -1.125rem;
+    margin-top: -2.0625rem;
     width: 1.3125rem;
     height: 1.3125rem;
     position: relative;
-    #{$right}: -0.25rem;
+    #{$right}: 0;
     display: inline-block;
     pointer-events: none;
 
@@ -1058,7 +1072,7 @@ header {
       }
 
       .menu--three__list-item .menu__in {
-        margin-#{$right}: 0.875rem;
+        margin-#{$right}: 0.625rem;
       }
 
       .menu--four__list {
