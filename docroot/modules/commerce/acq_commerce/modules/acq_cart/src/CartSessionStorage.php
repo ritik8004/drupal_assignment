@@ -167,7 +167,14 @@ class CartSessionStorage implements CartStorageInterface {
     }
 
     $cartObject->cart_id = $cart_id;
-    $cart->updateCartObject($cartObject);
+
+    if ($cart) {
+      $cart->updateCartObject($cartObject);
+    }
+    else {
+      $cart = new Cart($cartObject);
+    }
+
     $this->addCart($cart);
 
     return $cart;
