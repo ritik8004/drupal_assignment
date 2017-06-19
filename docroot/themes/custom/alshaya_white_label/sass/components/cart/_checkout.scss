@@ -747,8 +747,14 @@ body.alias--cart {
   #table-cart-totals {
     font-size: 14px;
 
-    #edit-totals tr[data-drupal-selector="edit-totals-discount"] td {
-      color: $scarlet;
+    #edit-totals tr[data-drupal-selector="edit-totals-discount"] {
+      td {
+        color: $scarlet;
+      }
+
+      td:first-child {
+        font-size: 12px;
+      }
     }
 
     @include breakpoint($tablet) {
@@ -781,6 +787,10 @@ body.alias--cart {
         border: 0;
         padding: 0;
         color: $cerulean-two;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
       }
     }
 
@@ -846,7 +856,7 @@ body.alias--cart {
         width: 10.8rem;
 
         &:first-child {
-          padding-#{$right}: 2.9375rem;
+          padding-right: 2.9375rem;
         }
       }
     }

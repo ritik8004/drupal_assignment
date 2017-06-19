@@ -5,13 +5,13 @@
   #{$right}: calc((100% - 1214px) / 2);
 
   @include breakpoint($only-tablet) {
-    top: 4.063rem;
-    #{$right}: calc((100% - 691px) / 2);
+    top: 5.2rem;
+    left: 2em;
   }
 
   @include breakpoint($only-mobile) {
-    top: 2.813rem;
-    #{$right}: calc((100% - 337px) / 2);
+    top: 4rem;
+    left: 0.75em;
   }
 
   .notification,
