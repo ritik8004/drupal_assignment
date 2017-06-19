@@ -237,3 +237,22 @@
     }
   }
 }
+
+.c-user-edit .user-form {
+  .country-code-prefix {
+    margin-top: -1.2rem;
+  }
+
+  #edit-account {
+    margin-top: 2.813rem;
+  }
+}
+
+html[lang=ar] {
+  .c-user-edit .user-form {
+    .mobile-number-field .form-type-textfield {
+      width: 18.5rem;
+    }
+  }
+}
+

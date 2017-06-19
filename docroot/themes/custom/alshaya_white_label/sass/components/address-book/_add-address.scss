@@ -171,3 +171,15 @@
     }
   }
 }
+
+html[lang=ar] {
+  .profile-form {
+    .mobile-number-field .form-type-textfield {
+      width: 19.5rem;
+    }
+
+    input.local-number {
+      margin-top: 0.15rem;
+    }
+  }
+}
