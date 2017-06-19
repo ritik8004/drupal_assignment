@@ -1,3 +1,40 @@
+.horizontal-upell,
+.horizontal-crossell {
+  .view-product-slider {
+    text-align: center;
+    margin: auto;
+    margin-bottom: 2.4rem;
+
+    .views-row {
+      position: relative;
+
+      .ajax-progress-throbber {
+        position: absolute;
+        bottom: -2rem;
+        #{$left}: 40%;
+
+        .message {
+          display: none;
+        }
+
+        .throbber {
+          background-image: url(../imgs/icons/MC-loader.svg) !important;
+          background-position: $right center !important;
+          background-repeat: no-repeat !important;
+          background-size: 1.5rem;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          top: 0.625rem;
+          #{$left}: 4.375rem;
+        }
+      }
+    }
+  }
+}
+
 .view-product-slider {
   text-align: center;
   margin: auto;

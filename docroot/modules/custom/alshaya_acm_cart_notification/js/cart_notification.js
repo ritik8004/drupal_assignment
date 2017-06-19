@@ -57,17 +57,17 @@
       $.fn.stopSpinner = function(data) {
         l.ladda('stop');
         if (data.message === 'success') {
-          $('.ladda-label').html(Drupal.t('added'));
+          $(this).find('.ladda-label').html(Drupal.t('added'));
           if ($('.ui-dailog')) {
             $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
           }
         }
         else if (data.message === 'failure') {
-          $('.ladda-label').html(Drupal.t('error'));
+          $(this).find('.ladda-label').html(Drupal.t('error'));
         }
         setTimeout(
           function() {
-            $('.ladda-label').html(Drupal.t('add to cart'));
+            $(this).find('.ladda-label').html(Drupal.t('add to cart'));
           }, data.interval);
       };
 
