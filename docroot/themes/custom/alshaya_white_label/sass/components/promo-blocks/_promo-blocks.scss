@@ -43,7 +43,7 @@
   }
 
   @include breakpoint($tablet) {
-    width: 31%;
+    width: 31.77%;
     width: calc(33.33% - 1rem);
 
     &:nth-child(2) {
