@@ -107,14 +107,13 @@ class AlshayaAddressBookController extends ProfileController {
       // Render the active profiles.
       $build['active_profiles'] = [
         '#type' => 'view',
-        '#name' => 'profiles',
-        '#display_id' => 'profile_type_listing',
-        '#arguments' => [$user->id(), $profile_type->id(), 1],
+        '#name' => 'address_book',
+        '#display_id' => 'address_book',
+        '#arguments' => [$user->id()],
         '#embed' => TRUE,
         '#title' => $this->t('Active @type', ['@type' => $profile_type->label()]),
         '#pre_render' => [
           ['\Drupal\views\Element\View', 'preRenderViewElement'],
-          'profile_views_add_title_pre_render',
         ],
       ];
 

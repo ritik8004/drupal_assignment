@@ -56,12 +56,13 @@
         <div class="address--options">
           {% if set_default_operation is not empty %}
             <div class="address--primary address--controls">
-              {{ link(set_default_operation.title, set_default_operation.url ) }}
+              {{ set_default_operation }}
             </div>
+          {% endif %}
 
-          {% else %}
-            <div class="address--primary address--controls">
-              <span>{{ "Primary address"|t }}</span>
+          {% if deliver_to_this_address is not empty  %}
+            <div class="address--deliver-to-this-address address--controls">
+              {{ deliver_to_this_address }}
             </div>
           {% endif %}
 

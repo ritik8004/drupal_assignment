@@ -5,14 +5,16 @@
  * Module file.
  */
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -398,4 +400,166 @@ function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountIn
       $address_book_manager->saveUserAddressFromApi($user, $address);
     }
   }
+}
+
+/**
+ * Implements template_preprocess_profile().
+ */
+function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
+  /* @var \Drupal\profile\Entity\Profile $profile */
+  if (isset($variables['elements'], $variables['elements']['#profile'])) {
+    $profile = $variables['elements']['#profile'];
+  }
+  else {
+    return;
+  }
+
+  $values = $profile->get('field_address')->getValue();
+
+  $variables['delivery_to'] = '';
+  $variables['delivery_address'] = '';
+
+  // Contact info.
+  $telephone = $profile->get('field_mobile_number')->getValue();
+  $variables['contact_no'] = '';
+
+  if (isset($telephone[0]) && !empty($telephone[0]['value'])) {
+    $variables['contact_no'] = $telephone[0]['value'];
+  }
+
+  if (isset($values[0])) {
+    // If name is available.
+    if (isset($values[0]['given_name']) && !empty($values[0]['given_name'])) {
+      $variables['delivery_to'] = $values[0]['given_name'] . ' ' . $values[0]['family_name'];
+    }
+
+    // Address info.
+    // @TODO: We should change keys here to match the validations doc so for FE
+    // it becomes the final implementation and we then just need to change
+    // value assignment here.
+    $variables['delivery_address'] = [
+      'organization' => $values[0]['organization'],
+      'address_line1' => $values[0]['address_line1'],
+      'address_line2' => $values[0]['address_line2'],
+      'postal_code' => $values[0]['postal_code'],
+      'sorting_code' => $values[0]['sorting_code'],
+      'dependent_locality' => $values[0]['dependent_locality'],
+      'locality' => $values[0]['locality'],
+      'administrative_area' => '',
+    ];
+
+    $administrative_area = $values[0]['administrative_area'];
+    if (!empty($administrative_area)) {
+      $variables['administrative_area'] = $administrative_area;
+
+      $term = Term::load($administrative_area);
+      if ($term) {
+        $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+        $variables['administrative_area'] = $term->getName();
+      }
+    }
+
+    // Get country list.
+    $country_list = \Drupal::service('address.country_repository')->getList();
+    $variables['delivery_address']['country'] = $country_list[$values[0]['country_code']];
+
+    // If profile is default profile.
+    $variables['is_default_profile'] = $profile->isDefault() ?: '';
+
+    // Operation links.
+    $variables['edit_operation'] = '';
+    $variables['delete_operation'] = '';
+    $variables['set_default_operation'] = '';
+
+    $current_user = \Drupal::currentUser();
+
+    // Current language.
+    $current_language = \Drupal::languageManager()->getCurrentLanguage();
+
+    $route_match = \Drupal::routeMatch();
+    if ($route_match->getRouteName() == 'acq_checkout.form') {
+      $variables['deliver_to_this_address'] = [
+        '#type' => 'link',
+        '#title' => t('deliver to this address'),
+        '#url' => Url::fromRoute('alshaya_acm_checkout.use_delivery_address', [
+          'type' => 'address_book',
+          'id' => $profile->id(),
+        ]),
+      ];
+
+      // Edit operation.
+      if ($profile->access('update') && $profile->hasLinkTemplate('edit-form')) {
+        // Edit operation.
+        $variables['edit_operation'] = [
+          'title' => t('Edit'),
+          'url' => Url::fromRoute('alshaya_addressbook.edit_address_ajax',
+            ['profile' => $profile->id(), 'js' => 'nojs'],
+            [
+              'attributes' => [
+                'class' => ['use-ajax'],
+                'rel' => 'address-book-form-wrapper',
+              ],
+              'query' => [
+                'from' => 'checkout',
+              ],
+            ]
+          ),
+        ];
+      }
+    }
+    else {
+      // Edit operation.
+      if ($profile->access('update') && $profile->hasLinkTemplate('edit-form')) {
+        $variables['edit_operation'] = [
+          'title' => t('Edit'),
+          'url' => Url::fromRoute('alshaya_addressbook.edit_address_ajax',
+            ['profile' => $profile->id(), 'js' => 'nojs'],
+            [
+              'attributes' => [
+                'class' => ['use-ajax'],
+                'rel' => 'address-book-form-wrapper',
+              ],
+            ]),
+        ];
+      }
+
+      // Delete operation.
+      if ($profile->access('delete') && $profile->hasLinkTemplate('delete-form')) {
+        $variables['delete_operation'] = [
+          'title' => t('Delete'),
+          'url' => $profile->urlInfo('delete-form', [
+            'attributes' => [
+              'class' => ['use-ajax'],
+              'data-dialog-type' => 'modal',
+              'data-dialog-options' => Json::encode(['width' => '341']),
+            ],
+            'language' => $current_language,
+          ]),
+        ];
+      }
+
+      // Primary address operation.
+      if ($profile->isDefault()) {
+        $variables['set_default_operation'] = [
+          '#markup' => '<span>' . t('Primary address') . '</span>',
+        ];
+      }
+      else {
+        $set_default_url = $profile->toUrl('set-default', [
+          'query' => [
+            'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
+          ],
+        ]);
+
+        $variables['set_default_operation'] = [
+          '#type' => 'link',
+          '#title' => t('Primary address'),
+          '#url' => $set_default_url,
+        ];
+      }
+    }
+  }
+
+  $variables['#cache']['contexts'][] = 'route';
+  $variables['#attached']['library'][] = 'core/drupal.ajax';
 }
