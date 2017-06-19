@@ -41,9 +41,20 @@
         $(this).next('.menu__in').next().toggleClass('menu__list--active');
       });
 
+      var $menuInFirst = $('.has-child > .menu__link-wrapper');
+      $menuInFirst.on('click', function () {
+        $('.menu--one__list-item.has-child').addClass('not-active');
+        $(this).parent().removeClass('not-active').addClass('active-menu');
+      });
+
       var $menuBack = $('.back--link');
       $menuBack.click(function () {
         $(this).parents('.menu__list').first().toggleClass('menu__list--active');
+      });
+
+      var $menuBackFirst = $('.menu--two__list > .back--link');
+      $menuBackFirst.on('click', function () {
+        $('.menu--one__list-item.has-child').removeClass('not-active active-menu');
       });
 
       $('.mobile--menu, .mobile--search').click(function (e) {

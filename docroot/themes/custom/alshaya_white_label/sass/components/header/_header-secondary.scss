@@ -51,7 +51,7 @@
   li {
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
-        #{$right}: 4px;
+        #{$right}: 0;
         color: $marine-blue-two;
         position: absolute;
         top: 50%;
@@ -120,7 +120,6 @@
     }
   }
 
-  .menu--account,
   .block-alshaya-stores-finder {
     margin-#{$right}: -0.3125rem;
   }
@@ -210,7 +209,7 @@
   }
 
   position: fixed;
-  width: 16.8125rem;
+  width: 16.875rem;
   top: 2.9375rem;
   background: $white-five;
   height: 100%;
@@ -245,7 +244,7 @@
       content: '';
       background: url(../imgs/icons/ic-chevronright-copy-9.svg);
       position: absolute;
-      #{$right}: 0;
+      #{$right}: 0.3125rem;
       width: 6px;
       height: 10px;
       top: 20px;
