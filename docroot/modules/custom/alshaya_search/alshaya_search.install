@@ -69,7 +69,7 @@ function alshaya_search_modules_installed($modules) {
 الاسم تنازلي|الاسم من ي إلى أ
 الاسم تصاعدي|الاسم من أ إلى ي
 السعر تنازلي|السعر من أعلى إلى أدنى
-السعر تصاعدي|السعر من أدنى إلى أعلى"');
+السعر تصاعدي|السعر من أدنى إلى أعلى');
   $search_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');
   $search_view->set('display.default.display_options.exposed_form.options.sort_desc_label', 'تنازلي');
   $search_view->set('display.default.display_options.sorts.search_api_relevance.expose.label', 'التطابق');
