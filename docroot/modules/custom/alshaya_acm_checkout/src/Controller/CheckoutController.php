@@ -3,9 +3,12 @@
 namespace Drupal\alshaya_acm_checkout\Controller;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Url;
 use Drupal\profile\Entity\Profile;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -29,16 +32,26 @@ class CheckoutController implements ContainerInjectionInterface {
   protected $entityManager;
 
   /**
+   * Address Book Manager object.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  protected $addressBookManager;
+
+  /**
    * Constructs a new CheckoutController object.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart session.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   Entity type manager.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
+   *   Address Book Manager object.
    */
-  public function __construct(CartStorageInterface $cart_storage, EntityTypeManagerInterface $entity_manager) {
+  public function __construct(CartStorageInterface $cart_storage, EntityTypeManagerInterface $entity_manager, AlshayaAddressBookManager $address_book_manager) {
     $this->cartStorage = $cart_storage;
     $this->entityManager = $entity_manager;
+    $this->addressBookManager = $address_book_manager;
   }
 
   /**
@@ -47,7 +60,8 @@ class CheckoutController implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_cart.cart_storage'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_addressbook.manager')
     );
   }
 
@@ -61,15 +75,20 @@ class CheckoutController implements ContainerInjectionInterface {
    *   AjaxResponse object.
    */
   public function useAddress(Profile $profile) {
-    $response = new AjaxResponse();
+    $address = $this->addressBookManager->getAddressFromEntity($profile, FALSE);
+
+    $address['customer_address_id'] = $address['address_id'];
+    unset($address['address_id']);
 
     $cart = $this->cartStorage->getCart();
 
-    $address = [];
+    $address['customer_id'] = $cart->customerId();
 
-    // @TODO: Get address array from entity.
     $cart->setShipping($address);
+    $this->cartStorage->updateCart();
 
+    $response = new AjaxResponse();
+    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString()));
     return $response;
   }
 

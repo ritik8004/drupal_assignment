@@ -37,6 +37,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      return $pane_form;
+    }
+
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
     $pane_form['guest_delivery_home']['title'] = [
       '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
@@ -86,7 +90,12 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     ];
 
     $shipping_methods = self::generateShippingEstimates($address);
+
     $default_shipping = $cart->getShippingMethodAsString();
+
+    // Convert to code.
+    $default_shipping = str_replace(',', '_', substr($default_shipping, 0, 32));
+
     if (!empty($shipping_methods) && empty($default_shipping)) {
       $default_shipping = array_keys($shipping_methods)[0];
     }
@@ -176,7 +185,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         $name = t('@method_title by @carrier_title', ['@method_title' => $method['method_title'], '@carrier_title' => $method['carrier_title']]);
         $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
 
-        $term = alshaya_acm_checkout_load_shipping_method($code, $name);
+        $term = alshaya_acm_checkout_load_shipping_method($code, $name, $method['carrier_code'], $method['method_code']);
 
         // We don't display click and collect delivery method for home delivery.
         if ($code == \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
@@ -191,7 +200,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
           </div>
         ';
 
-        $shipping_method_options[$key] = $method_name;
+        $shipping_method_options[$code] = $method_name;
       }
     }
 
@@ -248,9 +257,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       return;
     }
 
-    list($carrier, $method) = explode('_', $shipping_method);
+    $term = alshaya_acm_checkout_load_shipping_method($shipping_method);
 
-    $cart->setShippingMethod($carrier, $method);
+    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
 
     // We are only looking to convert guest carts.
     if (!($cart->customerId())) {

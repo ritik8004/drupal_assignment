@@ -154,6 +154,10 @@ class CartSessionStorage implements CartStorageInterface {
       unset($update->totals);
     }
 
+    if (isset($update->extension)) {
+      unset($update->extension);
+    }
+
     try {
       $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
     }

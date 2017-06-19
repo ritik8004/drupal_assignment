@@ -39,7 +39,17 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $account = \Drupal::currentUser();
+    if (\Drupal::currentUser()->isAnonymous()) {
+      return $pane_form;
+    }
+
+    $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
+    $pane_form['guest_delivery_home']['title'] = [
+      '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
+    ];
+
+    $cart = $this->getCart();
+    $address = $cart->getShipping();
 
     // This class is required to make theme work properly.
     $pane_form['#attributes']['class'] = 'c-address-book';
@@ -94,7 +104,47 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       ],
     ];
 
+    $shipping_methods = GuestDeliveryHome::generateShippingEstimates($address);
+    $default_shipping = $cart->getShippingMethodAsString();
+
+    // Convert to code.
+    $default_shipping = str_replace(',', '_', substr($default_shipping, 0, 32));
+
+    if (!empty($shipping_methods) && empty($default_shipping)) {
+      $default_shipping = array_keys($shipping_methods)[0];
+    }
+
+    $pane_form['address']['shipping_methods'] = [
+      '#type' => 'radios',
+      '#title' => t('Shipping Methods'),
+      '#default_value' => $default_shipping,
+      '#validated' => TRUE,
+      '#options' => $shipping_methods,
+      '#prefix' => '<div id="shipping_methods_wrapper">',
+      '#suffix' => '</div>',
+    ];
+
+    unset($complete_form['actions']['get_shipping_methods']);
+
     return $pane_form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $values = $form_state->getValue($pane_form['#parents']);
+
+    $shipping_method = isset($values['address']['shipping_methods']) ? $values['address']['shipping_methods'] : NULL;
+
+    if (empty($shipping_method)) {
+      return;
+    }
+
+    $cart = $this->getCart();
+
+    $term = alshaya_acm_checkout_load_shipping_method($shipping_method);
+    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
   }
 
 }

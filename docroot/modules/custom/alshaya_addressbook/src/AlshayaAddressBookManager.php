@@ -168,7 +168,6 @@ class AlshayaAddressBookManager {
 
     $address['country_id'] = $address['country'];
     $address['telephone'] = $address['phone'];
-    $address['postcode'] = '30000';
 
     unset($address['street2']);
     unset($address['phone']);
@@ -186,18 +185,20 @@ class AlshayaAddressBookManager {
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   Address entity.
+   * @param bool $return_clean
+   *   Flag to specify if cleaned address is required in response or not.
    *
    * @return array
    *   Address array.
    */
-  protected function getAddressFromEntity(EntityInterface $entity) {
+  public function getAddressFromEntity(EntityInterface $entity, $return_clean = TRUE) {
     $address_id = $entity->get('field_address_id')->getString();
     $entity_address = $entity->get('field_address')->first()->getValue();
 
     $address = [];
 
     if ($address_id) {
-      $address['address_id'] = $address_id;
+      $address['address_id'] = (int) $address_id;
     }
 
     $address['firstname'] = $entity_address['given_name'];
@@ -212,7 +213,10 @@ class AlshayaAddressBookManager {
       $address['phone'] = $phone['value'];
     }
 
-    return $this->getCleanAddress($address);
+    // @TODO: Remove this after Magento gets the address form fields proper.
+    $address['postcode'] = '30000';
+
+    return $return_clean ? $this->getCleanAddress($address) : $address;
   }
 
 }

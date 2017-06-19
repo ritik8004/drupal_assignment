@@ -2,13 +2,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_shipping_method_code
+    - field.storage.taxonomy_term.field_shipping_carrier_code
     - taxonomy.vocabulary.shipping_method
-id: taxonomy_term.shipping_method.field_shipping_method_code
-field_name: field_shipping_method_code
+id: taxonomy_term.shipping_method.field_shipping_carrier_code
+field_name: field_shipping_carrier_code
 entity_type: taxonomy_term
 bundle: shipping_method
-label: 'Method Code'
+label: 'Carrier Code'
 description: ''
 required: true
 translatable: false

@@ -481,10 +481,14 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       $variables['deliver_to_this_address'] = [
         '#type' => 'link',
         '#title' => t('deliver to this address'),
-        '#url' => Url::fromRoute('alshaya_acm_checkout.use_delivery_address', [
-          'type' => 'address_book',
-          'id' => $profile->id(),
-        ]),
+        '#url' => Url::fromRoute('alshaya_acm_checkout.use_delivery_address',
+          ['profile' => $profile->id()],
+          [
+            'attributes' => [
+              'class' => ['use-ajax'],
+            ],
+          ]
+        ),
       ];
 
       // Edit operation.

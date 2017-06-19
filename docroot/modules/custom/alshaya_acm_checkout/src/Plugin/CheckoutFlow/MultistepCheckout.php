@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\Url;
+use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -212,7 +213,9 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $panes = $this->getPanes($this->stepId);
     foreach ($panes as $pane_id => $pane) {
-      $pane->validatePaneForm($form[$pane_id], $form_state, $form);
+      if ($pane->isVisible()) {
+        $pane->validatePaneForm($form[$pane_id], $form_state, $form);
+      }
     }
 
     if ($form_state->getErrors() || $form_state->isRebuilding()) {
@@ -221,7 +224,9 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
     // We submit panes in validate itself to allow setting form errors.
     foreach ($panes as $pane_id => $pane) {
-      $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+      if ($pane->isVisible()) {
+        $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+      }
     }
 
     if ($form_state->getErrors() || $form_state->isRebuilding()) {
@@ -234,6 +239,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($next_step_id = $this->getNextStepId()) {
+      $current_step_id = $this->getStepId();
       try {
         /** @var \Drupal\acq_cart\Cart $cart */
         $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
@@ -245,7 +251,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         ]);
 
         drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
-        $this->redirectToStep($cart->getCheckoutStep());
+        $this->redirectToStep($current_step_id);
       }
 
       $cart->setCheckoutStep($next_step_id);
@@ -275,6 +281,15 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           // Store the email address of customer in tempstore.
           $email = $cart->customerEmail();
           $temp_store->set('email', $email);
+
+          // Update user's mobile number if empty.
+          $account = User::load(\Drupal::currentUser()->id());
+
+          if (empty($account->get('field_mobile_number')->getString())) {
+            $billing = $cart->getBilling();
+            $account->get('field_mobile_number')->setValue($billing['phone']);
+            $account->save();
+          }
         }
         else {
           $email = \Drupal::currentUser()->getEmail();
