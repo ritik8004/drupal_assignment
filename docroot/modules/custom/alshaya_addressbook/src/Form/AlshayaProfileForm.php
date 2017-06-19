@@ -58,6 +58,11 @@ class AlshayaProfileForm extends ProfileForm {
 
     // If address book profile.
     if ($profile_type == 'address_book') {
+      // Update addressbook for user in Magento.
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+      $address_book_manager->pushUserAddressToApi($entity);
+
       switch ($this->entity->save()) {
         case SAVED_NEW:
           drupal_set_message($this->t('Address is added successfully.'));
