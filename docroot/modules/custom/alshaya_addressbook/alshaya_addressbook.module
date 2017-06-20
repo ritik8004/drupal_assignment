@@ -129,12 +129,25 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     ],
   ];
 
+  // Adding country.
+  $country_list = \Drupal::service('address.country_repository')->getList();
+  $country_name = [
+    'country_name' => [
+      '#type' => 'select',
+      '#title' => t('Country'),
+      '#default_value' => $default_country_code,
+      '#options' => [$default_country_code => $country_list[$default_country_code]],
+    ],
+  ];
+
   if (!empty($form_state->getTemporaryValue('default_value_mobile'))) {
     $mobile_number['mobile_number']['#default_value'] = $form_state->getTemporaryValue('default_value_mobile');
   }
 
   // Adding mobile number field to appropriate position.
   $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'locality');
+  // Adding country code field to appropriate position.
+  $element = _alshaya_addressbook_array_insert($element, $country_name, 'mobile_number');
 
   $element['#prefix'] = '<div class="address-book-address">';
   $element['#suffix'] = '</div>';
