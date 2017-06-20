@@ -108,14 +108,18 @@ class AlshayaAddressBookManager {
 
     foreach ($customer['addresses'] as $index => $address) {
       $customer['addresses'][$index] = $this->getCleanAddress($address);
+      $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
+      $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
       $current_ids[] = $address['address_id'];
     }
 
     $address_id = $entity->get('field_address_id')->getString();
     $new_address = $this->getAddressFromEntity($entity);
+    $new_address['customer_id'] = $customer['customer_id'];
 
     if ($address_id) {
-      if ($address_index = array_search($address_id, array_column($customer['addresses'], 'address_id'))) {
+      $address_index = array_search($address_id, array_column($customer['addresses'], 'address_id'));
+      if ($address_index !== FALSE) {
         $customer['addresses'][$address_index] = $new_address;
       }
       else {
@@ -200,10 +204,11 @@ class AlshayaAddressBookManager {
 
     if ($address_id) {
       $address['address_id'] = (int) $address_id;
+      $address['customer_address_id'] = $address['address_id'];
     }
 
     $address['firstname'] = $entity_address['given_name'];
-    $address['lastname'] = $entity_address['given_name'];
+    $address['lastname'] = $entity_address['family_name'];
     $address['street'] = $entity_address['address_line1'];
     $address['street2'] = $entity_address['address_line2'];
     $address['city'] = $entity_address['locality'];

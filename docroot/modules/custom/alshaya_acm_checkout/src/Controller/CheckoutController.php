@@ -80,7 +80,7 @@ class CheckoutController implements ContainerInjectionInterface {
     $address = $this->addressBookManager->getAddressFromEntity($profile, FALSE);
 
     $update = [];
-    $update['customer_address_id'] = $address['address_id'];
+    $update['customer_address_id'] = $address['customer_address_id'];
     $update['country'] = $address['country'];
     $update['customer_id'] = $cart->customerId();
 
