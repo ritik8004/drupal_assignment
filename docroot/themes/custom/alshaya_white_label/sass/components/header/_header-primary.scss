@@ -1323,11 +1323,18 @@ html[lang='ar'] {
   }
 
   .block-system-branding-block {
+    .site-brand-home {
+      @include breakpoint($only-tablet) {
+        width: 13rem;
+      }
+    }
+
     .site-brand-home img {
       width: 6.563rem;
 
       @include breakpoint($only-tablet) {
-        width: 13rem;
+        width: auto;
+        height: 60px;
       }
 
       @include breakpoint($desktop) {
