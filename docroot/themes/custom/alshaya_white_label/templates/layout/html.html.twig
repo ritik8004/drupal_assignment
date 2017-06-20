@@ -1,7 +1,5 @@
 <!-- CONDITIONAL CSS -->
 
-{% set dir = html_attributes["dir"] %}
-
 {% if html_attributes["dir"] == "ltr" %}
   {{ attach_library('alshaya_white_label/ltr_styles') }}
 {% elseif html_attributes["dir"] == "rtl" %}
@@ -9,7 +7,7 @@
 {% endif %}
 
 <!DOCTYPE html>
-<html{{ html_attributes.removeAttribute("dir") }}>
+<html{{ html_attributes }}>
 <head>
     <head-placeholder token="{{ placeholder_token|raw }}">
     <title>{{ head_title|safe_join(' | ') }}</title>
@@ -17,16 +15,14 @@
     <js-placeholder token="{{ placeholder_token|raw }}">
 </head>
 <body{{ attributes }}>
-  <div class="body-inner-wrapper" dir="{{ dir }}">
-  <div id="skip">
-      <a class="visually-hidden focusable skip-link" href="#main-menu">
-          {{ 'Skip to main navigation'|t }}
-      </a>
-  </div>
-  {{ page_top }}
-  {{ page }}
-  {{ page_bottom }}
-  <js-bottom-placeholder token="{{ placeholder_token|raw }}">
-  </div>
+<div id="skip">
+    <a class="visually-hidden focusable skip-link" href="#main-menu">
+        {{ 'Skip to main navigation'|t }}
+    </a>
+</div>
+{{ page_top }}
+{{ page }}
+{{ page_bottom }}
+<js-bottom-placeholder token="{{ placeholder_token|raw }}">
 </body>
 </html>
