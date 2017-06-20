@@ -3,10 +3,10 @@
 namespace Drupal\alshaya_addressbook;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\profile\Entity\Profile;
 use Drupal\user\Entity\User;
 
 /**
@@ -57,6 +57,18 @@ class AlshayaAddressBookManager {
   }
 
   /**
+   * Function to delete all addresses for a user.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   Account object.
+   */
+  public function deleteUserAddresses(AccountInterface $account) {
+    if ($addresses = $this->profileStorage->loadByProperties(['uid' => $account->id()])) {
+      $this->profileStorage->delete($addresses);
+    }
+  }
+
+  /**
    * Save address from Magento to Drupal.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
@@ -88,16 +100,18 @@ class AlshayaAddressBookManager {
       'country_code' => $address['country'],
     ]);
 
+    $address_entity->setDefault((int) $address['default_shipping']);
+
     $address_entity->save();
   }
 
   /**
    * Push address changes to Magento.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\profile\Entity\Profile $entity
    *   Address Entity.
    */
-  public function pushUserAddressToApi(EntityInterface $entity) {
+  public function pushUserAddressToApi(Profile $entity) {
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
     $account = User::load($entity->getOwnerId());
 
@@ -110,6 +124,11 @@ class AlshayaAddressBookManager {
       $customer['addresses'][$index] = $this->getCleanAddress($address);
       $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
       $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
+
+      if ($entity->isDefault()) {
+        $customer['addresses'][$index]['default_shipping'] = 0;
+      }
+
       $current_ids[] = $address['address_id'];
     }
 
@@ -134,26 +153,21 @@ class AlshayaAddressBookManager {
     }
 
     try {
-      $updated_customer = $this->apiWrapper->updateCustomerJson($customer);
+      $updated_customer = $this->apiWrapper->updateCustomer($customer);
+
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+
+      // Update the data in Drupal to match the values in Magento.
+      alshaya_acm_customer_update_user_data($account, $updated_customer);
+
+      return TRUE;
     }
     catch (\Exception $e) {
       $this->logger->warning('Error while saving address: @message', ['@message' => $e->getMessage()]);
-
       drupal_set_message($e->getMessage(), 'error');
     }
 
-    if (!$address_id) {
-      foreach ($current_ids as $current_id) {
-        if ($address_index = array_search($current_id, array_column($updated_customer['addresses'], 'address_id'))) {
-          unset($updated_customer['addresses'][$address_index]);
-        }
-      }
-
-      $saved_address = reset($updated_customer['addresses']);
-      $address_id = $saved_address['address_id'];
-    }
-
-    $entity->get('field_address_id')->setValue($address_id);
+    return FALSE;
   }
 
   /**
@@ -188,7 +202,7 @@ class AlshayaAddressBookManager {
   /**
    * Function to get address array to send to Magento from Entity.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\profile\Entity\Profile $entity
    *   Address entity.
    * @param bool $return_clean
    *   Flag to specify if cleaned address is required in response or not.
@@ -196,7 +210,7 @@ class AlshayaAddressBookManager {
    * @return array
    *   Address array.
    */
-  public function getAddressFromEntity(EntityInterface $entity, $return_clean = TRUE) {
+  public function getAddressFromEntity(Profile $entity, $return_clean = TRUE) {
     $address_id = $entity->get('field_address_id')->getString();
     $entity_address = $entity->get('field_address')->first()->getValue();
 
@@ -213,6 +227,8 @@ class AlshayaAddressBookManager {
     $address['street2'] = $entity_address['address_line2'];
     $address['city'] = $entity_address['locality'];
     $address['country'] = $entity_address['country_code'];
+
+    $address['default_shipping'] = (int) $entity->isDefault();
 
     $address['phone'] = '';
     if ($phone = $entity->get('field_mobile_number')->first()->getValue()) {

@@ -160,6 +160,13 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    *   Available shipping methods.
    */
   public static function generateShippingEstimates($address) {
+    // Below code is to ensure we call the API only once.
+    static $options;
+    $static_key = base64_encode(serialize($address));
+    if ($options[$static_key]) {
+      return $options[$static_key];
+    }
+
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
     $address = (array) $address;
 
@@ -203,6 +210,8 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         $shipping_method_options[$code] = $method_name;
       }
     }
+
+    $options[$static_key] = $shipping_method_options;
 
     return $shipping_method_options;
   }

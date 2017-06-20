@@ -85,7 +85,6 @@ class CheckoutController implements ContainerInjectionInterface {
     $update['customer_id'] = $cart->customerId();
 
     $cart->setShipping($update);
-    $this->cartStorage->updateCart();
 
     $response = new AjaxResponse();
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString()));

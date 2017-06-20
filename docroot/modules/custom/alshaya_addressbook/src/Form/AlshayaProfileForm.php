@@ -79,21 +79,18 @@ class AlshayaProfileForm extends ProfileForm {
       // Update addressbook for user in Magento.
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-      $address_book_manager->pushUserAddressToApi($entity);
 
-      switch ($this->entity->save()) {
-        case SAVED_NEW:
+      if ($address_book_manager->pushUserAddressToApi($entity)) {
+        if ($this->entity->isNew()) {
           drupal_set_message($this->t('Address is added successfully.'));
-          break;
-
-        case SAVED_UPDATED:
+        }
+        else {
           drupal_set_message($this->t('Address is updated successfully.'));
-          break;
+        }
       }
 
-      $user_id = $this->currentUser()->id();
       $form_state->setRedirect('entity.profile.type.address_book.user_profile_form', [
-        'user' => $user_id,
+        'user' => $this->entity->getOwnerId(),
         'profile_type' => 'address_book',
       ]);
     }

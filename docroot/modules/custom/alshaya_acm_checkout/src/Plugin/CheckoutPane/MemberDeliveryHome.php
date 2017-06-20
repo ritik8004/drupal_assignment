@@ -6,6 +6,7 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\profile\Entity\Profile;
 
 /**
  * Provides the delivery home pane for members.
@@ -49,7 +50,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     ];
 
     $cart = $this->getCart();
-    $address = $cart->getShipping();
+    $address = (array) $cart->getShipping();
 
     // This class is required to make theme work properly.
     $pane_form['#attributes']['class'] = 'c-address-book';
@@ -71,60 +72,72 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#markup' => '<h2>' . $this->t('choose delivery address') . '</h2>',
     ];
 
-    $add_profile_route_params = [
-      'user' => \Drupal::currentUser()->id(),
-      'profile_type' => 'address_book',
-      'js' => 'nojs',
-    ];
+    if ($address['customer_address_id']) {
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+      $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
 
-    $add_profile_route_options = [
-      'attributes' => [
-        'class' => ['use-ajax'],
-        'rel' => 'address-book-form-wrapper',
-      ],
-      'query' => [
-        'from' => 'checkout',
-      ],
-    ];
+      $view_builder = \Drupal::entityTypeManager()->getViewBuilder('profile');
+      $pane_form['address']['display'] = $view_builder->view($entity, 'teaser');
 
-    $pane_form['header']['add_profile'] = Link::createFromRoute(
-      $this->t('add new address'),
-      'alshaya_addressbook.add_address_ajax',
-      $add_profile_route_params,
-      $add_profile_route_options)->toRenderable();
+      $pane_form['address']['edit'] = [];
 
-    $pane_form['addresses'] = [
-      '#type' => 'view',
-      '#name' => 'address_book',
-      '#display_id' => 'address_book',
-      '#embed' => TRUE,
-      '#title' => '',
-      '#pre_render' => [
-        ['\Drupal\views\Element\View', 'preRenderViewElement'],
-      ],
-    ];
+      $shipping_methods = self::generateShippingEstimates($entity);
+      $default_shipping = $cart->getShippingMethodAsString();
 
-    $shipping_methods = GuestDeliveryHome::generateShippingEstimates($address);
-    $default_shipping = $cart->getShippingMethodAsString();
+      // Convert to code.
+      $default_shipping = str_replace(',', '_', substr($default_shipping, 0, 32));
 
-    // Convert to code.
-    $default_shipping = str_replace(',', '_', substr($default_shipping, 0, 32));
+      if (!empty($shipping_methods) && empty($default_shipping)) {
+        $default_shipping = array_keys($shipping_methods)[0];
+      }
 
-    if (!empty($shipping_methods) && empty($default_shipping)) {
-      $default_shipping = array_keys($shipping_methods)[0];
+      $pane_form['address']['shipping_methods'] = [
+        '#type' => 'radios',
+        '#title' => t('Shipping Methods'),
+        '#default_value' => $default_shipping,
+        '#validated' => TRUE,
+        '#options' => $shipping_methods,
+        '#prefix' => '<div id="shipping_methods_wrapper">',
+        '#suffix' => '</div>',
+      ];
+
     }
+    else {
 
-    $pane_form['address']['shipping_methods'] = [
-      '#type' => 'radios',
-      '#title' => t('Shipping Methods'),
-      '#default_value' => $default_shipping,
-      '#validated' => TRUE,
-      '#options' => $shipping_methods,
-      '#prefix' => '<div id="shipping_methods_wrapper">',
-      '#suffix' => '</div>',
-    ];
+      $add_profile_route_params = [
+        'user' => \Drupal::currentUser()->id(),
+        'profile_type' => 'address_book',
+        'js' => 'nojs',
+      ];
 
-    unset($complete_form['actions']['get_shipping_methods']);
+      $add_profile_route_options = [
+        'attributes' => [
+          'class' => ['use-ajax'],
+          'rel' => 'address-book-form-wrapper',
+        ],
+        'query' => [
+          'from' => 'checkout',
+        ],
+      ];
+
+      $pane_form['header']['add_profile'] = Link::createFromRoute(
+        $this->t('add new address'),
+        'alshaya_addressbook.add_address_ajax',
+        $add_profile_route_params,
+        $add_profile_route_options)->toRenderable();
+
+      $pane_form['addresses'] = [
+        '#type' => 'view',
+        '#name' => 'address_book',
+        '#display_id' => 'address_book',
+        '#embed' => TRUE,
+        '#title' => '',
+        '#pre_render' => [
+          ['\Drupal\views\Element\View', 'preRenderViewElement'],
+        ],
+      ];
+    }
 
     return $pane_form;
   }
@@ -143,8 +156,36 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $cart = $this->getCart();
 
+    $address = (array) $cart->getShipping();
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
+    $address = $address_book_manager->getAddressFromEntity($entity, FALSE);
+
+    $update = [];
+    $update['customer_address_id'] = $address['customer_address_id'];
+    $update['country'] = $address['country'];
+    $update['customer_id'] = $cart->customerId();
+
+    $cart->setShipping($update);
+
     $term = alshaya_acm_checkout_load_shipping_method($shipping_method);
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
+  }
+
+  /**
+   * Helper function to get shipping estimates.
+   *
+   * @param \Drupal\profile\Entity\Profile $entity
+   *   Address entity.
+   *
+   * @return array
+   *   Available shipping methods.
+   */
+  public static function generateShippingEstimates(Profile $entity) {
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    $full_address = $address_book_manager->getAddressFromEntity($entity, FALSE);
+    return GuestDeliveryHome::generateShippingEstimates($full_address);
   }
 
 }

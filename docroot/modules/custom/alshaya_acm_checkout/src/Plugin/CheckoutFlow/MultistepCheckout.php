@@ -281,19 +281,19 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           // Store the email address of customer in tempstore.
           $email = $cart->customerEmail();
           $temp_store->set('email', $email);
-
-          // Update user's mobile number if empty.
-          $account = User::load(\Drupal::currentUser()->id());
-
-          if (empty($account->get('field_mobile_number')->getString())) {
-            $billing = $cart->getBilling();
-            $account->get('field_mobile_number')->setValue($billing['phone']);
-            $account->save();
-          }
         }
         else {
           $email = \Drupal::currentUser()->getEmail();
           $current_user_id = \Drupal::currentUser()->id();
+
+          // Update user's mobile number if empty.
+          $account = User::load($current_user_id);
+
+          if (empty($account->get('field_mobile_number')->getString())) {
+            $billing = (array) $cart->getBilling();
+            $account->get('field_mobile_number')->setValue($billing['phone']);
+            $account->save();
+          }
 
           // Invalidate the cache tag when order is placed to reflect on the
           // user's recent orders.

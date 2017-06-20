@@ -30,15 +30,23 @@ class AlshayaAddressBookController extends ProfileController {
     /* @var \Drupal\profile\Entity\Profile $profile */
     $profile = $routeMatch->getParameter('profile');
 
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
     // If not address book, use default handling.
     if ($profile->bundle() != 'address_book') {
       return parent::setDefault($routeMatch);
     }
 
     $profile->setDefault(TRUE);
+
+    // We have to save here first to ensure other addresses that are default
+    // are demoted.
     $profile->save();
 
-    drupal_set_message($this->t('Primary address is updated successfully.'));
+    if ($address_book_manager->pushUserAddressToApi($profile)) {
+      drupal_set_message($this->t('Primary address is updated successfully.'));
+    }
 
     $url = $profile->urlInfo('collection');
     return $this->redirect($url->getRouteName(), $url->getRouteParameters(), $url->getOptions());
