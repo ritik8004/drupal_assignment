@@ -875,10 +875,14 @@
   border: 0;
 
   .c-page-title {
-    padding-top: 0.2rem;
     border-bottom: 1px solid $white-three;
     position: static;
-    padding-bottom: 10px;
+    padding-bottom: 1rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 0.437rem;
+      padding-bottom: 0.75rem;
+    }
   }
 
   .c-content .messages--error {

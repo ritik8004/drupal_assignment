@@ -264,12 +264,13 @@
 
     @include breakpoint($tablet) {
       margin-bottom: 2.25rem;
-      margin-top: 0.75rem;
+      margin-top: 0.437rem;
     }
 
     @include breakpoint($desktop) {
-      padding-bottom: 0.9rem;
+      padding-bottom: 1rem;
       margin-bottom: 3rem;
+      margin-top: 0;
     }
   }
 
@@ -307,6 +308,7 @@
         float: $left;
         max-width: 16.8125rem;
         width: 23%;
+        padding-top: 1em;
       }
     }
 
