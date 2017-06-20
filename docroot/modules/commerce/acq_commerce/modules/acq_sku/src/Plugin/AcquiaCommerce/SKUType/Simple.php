@@ -33,6 +33,7 @@ class Simple extends SKUPluginBase {
     ];
 
     $form['quantity'] = [
+      '#title' => t('Quantity'),
       '#type' => 'number',
       '#default_value' => 1,
       '#required' => TRUE,
