@@ -38,8 +38,54 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $pane_form['member_delivery_collect']['summary'] = [
-      '#markup' => 'Click and collect',
+    $cart = $this->getCart();
+
+    // Get the stores from Magento.
+    $api_wrapper = \Drupal::service('alshaya_api.api');
+    $stores = $api_wrapper->getCartStores($cart->id());
+
+    // Add missing information to store data.
+    array_walk($stores, function (&$store) {
+      $nodes = \Drupal::entityTypeManager()
+        ->getStorage('node')
+        ->loadByProperties(['type' => 'store', 'field_store_locator_id' => $store['code']]);
+
+      if ($node = reset($nodes)) {
+        $store['address'] = $node->get('field_store_address')->getString();
+        $store['open_hours'] = $node->get('field_store_open_hours')->getString();
+        $store['title'] = $node->get('title')->getString();
+      }
+    });
+
+    $pane_form['guest_delivery_collect']['text_filter'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Find your closest collection point'),
+    ];
+
+    $pane_form['guest_delivery_collect']['toggle_list_view'] = [
+      '#markup' => $this->t('List view'),
+    ];
+
+    $pane_form['guest_delivery_collect']['toggle_map_view'] = [
+      '#markup' => $this->t('Map view'),
+    ];
+
+    $pane_form['guest_delivery_collect']['list_view'] = [
+      '#type' => 'container',
+    ];
+
+    $pane_form['guest_delivery_collect']['list_view']['content'] = [
+      '#theme' => 'click_collect_stores_list',
+      '#title' => $this->t('Available at @count stores', ['@count' => count($stores)]),
+      '#stores' => $stores,
+    ];
+
+    $pane_form['guest_delivery_collect']['map_view'] = [
+      '#type' => 'container',
+    ];
+
+    $pane_form['guest_delivery_collect']['map_view']['content'] = [
+      '#markup' => $this->t('Map view'),
     ];
 
     return $pane_form;
