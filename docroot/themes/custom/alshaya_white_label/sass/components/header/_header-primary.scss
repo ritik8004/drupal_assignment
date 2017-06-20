@@ -1321,6 +1321,21 @@ html[lang='ar'] {
   .cart-link-total .price-currency.suffix {
     padding-right: 0.5rem;
   }
+
+  .block-system-branding-block {
+    .site-brand-home img {
+      width: 6.563rem;
+
+      @include breakpoint($only-tablet) {
+        width: 13rem;
+      }
+
+      @include breakpoint($desktop) {
+        width: 14.94rem;
+        margin-top: -1.063rem;
+      }
+    }
+  }
 }
 
 .main--menu .not-active {
