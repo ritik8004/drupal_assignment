@@ -8,20 +8,20 @@
 
 .mobile-only-hide {
   @include breakpoint($mobile) {
-    @include u-visibility(none, true);
+    @include u-visibility(none);
   }
 
   @include breakpoint($tablet) {
-    @include u-visibility(block, true);
+    @include u-visibility(block);
   }
 }
 
 .mobile-only-show {
   @include breakpoint($mobile) {
-    @include u-visibility(block, true);
+    @include u-visibility(block);
   }
 
   @include breakpoint($tablet) {
-    @include u-visibility(none, true);
+    @include u-visibility(none);
   }
 }
