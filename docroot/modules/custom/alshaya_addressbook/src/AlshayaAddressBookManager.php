@@ -65,15 +65,16 @@ class AlshayaAddressBookManager {
    *   Address array.
    */
   public function saveUserAddressFromApi(AccountInterface $account, array $address) {
+    /** @var \Drupal\profile\Entity\Profile $address_entity */
     $address_entity = $this->getUserAddressByCommerceId($address['address_id']);
 
     if (empty($address_entity)) {
       $address_entity = $this->profileStorage->create([
         'type' => 'address_book',
-        'uid' => $account->id(),
       ]);
     }
 
+    $address_entity->setOwnerId($account->id());
     $address_entity->get('field_address_id')->setValue($address['address_id']);
     $address_entity->get('field_mobile_number')->setValue($address['phone']);
 
