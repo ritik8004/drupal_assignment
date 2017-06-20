@@ -75,16 +75,16 @@ class CheckoutController implements ContainerInjectionInterface {
    *   AjaxResponse object.
    */
   public function useAddress(Profile $profile) {
-    $address = $this->addressBookManager->getAddressFromEntity($profile, FALSE);
-
-    $address['customer_address_id'] = $address['address_id'];
-    unset($address['address_id']);
-
     $cart = $this->cartStorage->getCart();
 
-    $address['customer_id'] = $cart->customerId();
+    $address = $this->addressBookManager->getAddressFromEntity($profile, FALSE);
 
-    $cart->setShipping($address);
+    $update = [];
+    $update['customer_address_id'] = $address['address_id'];
+    $update['country'] = $address['country'];
+    $update['customer_id'] = $cart->customerId();
+
+    $cart->setShipping($update);
     $this->cartStorage->updateCart();
 
     $response = new AjaxResponse();
