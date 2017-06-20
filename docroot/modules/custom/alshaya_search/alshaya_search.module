@@ -137,12 +137,14 @@ function alshaya_search_ajax_render_alter(array &$data) {
         if ($view_name == 'search') {
           // Adding a command.
           $data[] = [
+            'selector' => NULL,
             'command' => 'invoke',
             'method' => 'alshayaSearchHeaderUpdate',
           ];
           $data[] = [
+            'selector' => NULL,
             'command' => 'invoke',
-            'behaviour' => 'searchSlider',
+            'method' => 'alshayaAttachSearchSlider',
           ];
         }
       }
