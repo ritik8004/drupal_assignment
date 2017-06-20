@@ -302,14 +302,14 @@ function alshaya_user_alshaya_acm_customer_update_account_alter(User $user, arra
  * Implements hook_acq_commerce_update_customer_api_request_alter().
  */
 function alshaya_user_acq_commerce_update_customer_api_request_alter(array &$request_options) {
-  if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
+  if (isset($request_options['json'], $request_options['json']['customer']['email'])) {
     /** @var \Drupal\user\Entity\User $user */
-    $user = user_load_by_mail($request_options['form_params']['customer[email]']);
+    $user = user_load_by_mail($request_options['json']['customer']['email']);
 
     if (!empty($user)) {
       $phone_number = $user->get('field_mobile_number')->getValue();
       $contact_number = !empty($phone_number) ? $phone_number[0]['value'] : '';
-      $request_options['form_params']['customer[extension][phone_number]'] = $contact_number;
+      $request_options['json']['customer']['extension']['phone_number'] = $contact_number;
     }
   }
 }
