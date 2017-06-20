@@ -95,10 +95,10 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    */
   public function ajaxFacetBlockView(Request $request) {
     $response = parent::ajaxFacetBlockView($request);
-    $isPlpPage = FALSE;
-    $isPromoPage = FALSE;
-    $isSearchPage = FALSE;
-    $facetFields['facets_container'] = [
+    $is_plp_page = FALSE;
+    $is_promo_page = FALSE;
+    $is_search_page = FALSE;
+    $facet_fields['facets_container'] = [
       '#type' => 'container',
       '#attributes' => [
         'class' => 'facets-hidden-container',
@@ -109,7 +109,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     if (!empty($parameters) && isset($parameters['f'])) {
       foreach ($parameters['f'] as $key => $value) {
         // Add hidden form field for facet parameter.
-        $facetFields['facets_container']['f[' . $key . ']'] = [
+        $facet_fields['facets_container']['f[' . $key . ']'] = [
           '#type' => 'hidden',
           '#value' => $value,
           '#weight' => -1,
@@ -120,17 +120,17 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       }
     }
 
-    $this->setPageType($isPlpPage, $isPromoPage, $isSearchPage);
+    $this->setPageType($is_plp_page, $is_promo_page, $is_search_page);
 
     // If page is PLP or Promo, inject hidden field into product_list exposed
     // form.
-    if ($isSearchPage) {
-      $response->addCommand(new InsertCommand('.block-views-exposed-filter-blocksearch-page:not(.block-keyword-search-block) form .facets-hidden-container', $facetFields));
+    if ($is_search_page) {
+      $response->addCommand(new InsertCommand('.block-views-exposed-filter-blocksearch-page:not(.block-keyword-search-block) form .facets-hidden-container', $facet_fields));
     }
 
     // If page is search, inject hidden field into search page exposed form.
-    if ($isPlpPage || $isPromoPage) {
-      $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container', $facetFields));
+    if ($is_plp_page || $is_promo_page) {
+      $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container', $facet_fields));
     }
 
     return $response;
@@ -139,33 +139,33 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   /**
    * Helper function to set page type variables.
    *
-   * @param bool $isPlpPage
+   * @param bool $is_plp_page
    *   TRUE if current page is PLP.
-   * @param bool $isPromoPage
+   * @param bool $is_promo_page
    *   TRUE if current page is promotion content-type.
-   * @param bool $isSearchPage
+   * @param bool $is_search_page
    *   TRUE if current page is search page.
    */
-  protected function setPageType(&$isPlpPage, &$isPromoPage, &$isSearchPage) {
-    $currentRouteName = $this->currentRouteMatch->getRouteName();
-    if ($currentRouteName === 'entity.taxonomy_term.canonical') {
+  protected function setPageType(&$is_plp_page, &$is_promo_page, &$is_search_page) {
+    $current_route_name = $this->currentRouteMatch->getRouteName();
+    if ($current_route_name === 'entity.taxonomy_term.canonical') {
       $term = $this->currentRouteMatch->getParameter('taxonomy_term');
       $vocabId = $term->getVocabularyId();
       if ($vocabId === 'acq_product_category') {
-        $isPlpPage = TRUE;
+        $is_plp_page = TRUE;
         return;
       }
     }
-    elseif ($currentRouteName === 'entity.node.canonical') {
+    elseif ($current_route_name === 'entity.node.canonical') {
       $node = $this->currentRouteMatch->getParameter('node');
       $bundle = $node->bundle();
       if ($bundle === 'promotion') {
-        $isPromoPage = TRUE;
+        $is_promo_page = TRUE;
         return;
       }
     }
-    elseif ($currentRouteName === 'view.search.page') {
-      $isSearchPage = TRUE;
+    elseif ($current_route_name === 'view.search.page') {
+      $is_search_page = TRUE;
       return;
     }
   }
