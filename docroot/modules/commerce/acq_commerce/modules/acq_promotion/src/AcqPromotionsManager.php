@@ -42,14 +42,21 @@ class AcqPromotionsManager {
   }
 
   /**
-   * Sync promotions from API to Drupal.
+   * Synchronize promotions through the API.
+   *
+   * @param mixed $types
+   *   The type of promotion to synchronize.
    */
-  public function syncPromotions() {
-    $promotions = $this->apiWrapper->getPromotions();
+  public function syncPromotions($types = ['category', 'cart']) {
+    $types = is_array($types) ? $types : [$types];
 
-    foreach ($promotions as $promotion) {
-      // @TODO: Add basic validations to remove junk data here.
-      $this->syncPromotion($promotion);
+    foreach ($types as $type) {
+      $promotions = $this->apiWrapper->getPromotions($type);
+
+      foreach ($promotions as $promotion) {
+        // @TODO: Add basic validations to remove junk data here.
+        $this->syncPromotion($promotion);
+      }
     }
   }
 
