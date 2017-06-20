@@ -292,7 +292,7 @@
         });
 
       $('.c-facet').each(function () {
-        if($(this).hasClass('facet-active')) {
+        if ($(this).hasClass('facet-active')) {
           $(this).find('.c-accordion__title').addClass('ui-state-active');
         }
       });
@@ -356,6 +356,7 @@
                 if ($(this).hasClass('tab-returning-customer')) {
                   $('.tab-returning-customer').addClass('active--tab--head');
                   $('#edit-checkout-login').addClass('active--tab--content');
+
                 }
               }
             }
