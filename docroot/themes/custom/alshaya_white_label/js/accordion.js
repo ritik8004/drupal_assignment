@@ -291,6 +291,12 @@
           Drupal.alshayaAccordion(this);
         });
 
+      $('.c-facet').each(function () {
+        if($(this).hasClass('facet-active')) {
+          $(this).find('.c-accordion__title').addClass('ui-state-active');
+        }
+      });
+
       // Click event for fake clear all link on mobile filter.
       var mobileFilterBarSelector = getFilterBarSelector();
       $('.clear-all-fake', context).stop().on('click', function () {
