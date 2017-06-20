@@ -64,6 +64,9 @@ class AlshayaApiWrapper {
    *   Latitude of user.
    * @param float $lon
    *   Longitude of user.
+   *
+   * @return mixed
+   *   Response from the API.
    */
   public function getProductStores($sku, $lat, $lon) {
     if (\Drupal::state()->get('store_development_mode', 0)) {
@@ -74,6 +77,31 @@ class AlshayaApiWrapper {
     $sku = urlencode($sku);
 
     $endpoint = 'click-and-collect/stores/product/' . $sku . '/lat/' . $lat . '/lon/' . $lon;
+    $response = $this->invokeApi($endpoint, [], 'GET');
+    $stores = json_decode($response, TRUE);
+    return $stores;
+  }
+
+  /**
+   * Function to get click and collect stores available nearby for a cart.
+   *
+   * @param int $cart_id
+   *   The cart ID.
+   * @param float $lat
+   *   Latitude of user.
+   * @param float $lon
+   *   Longitude of user.
+   *
+   * @return mixed
+   *   Response from the API.
+   */
+  public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
+    if (\Drupal::state()->get('store_development_mode', 0) || empty($lat) || empty($long)) {
+      $lat = 29;
+      $lon = 48;
+    }
+
+    $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $response = $this->invokeApi($endpoint, [], 'GET');
     $stores = json_decode($response, TRUE);
     return $stores;
