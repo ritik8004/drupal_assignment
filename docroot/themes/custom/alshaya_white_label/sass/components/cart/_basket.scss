@@ -360,6 +360,34 @@
 
     .form-item-privilege-card-number2 {
       border-top: 0;
+
+      .ajax-progress-throbber {
+        position: absolute;
+        margin-#{$left}: 0.5rem;
+        top: 2rem;
+
+        .message {
+          display: none;
+        }
+
+        .throbber {
+          background-image: url(../imgs/icons/MC-loader.svg) !important;
+          background-position: $right center !important;
+          background-repeat: no-repeat !important;
+          background-size: 2.5rem;
+          padding: 1rem;
+
+          @include breakpoint($only-mobile) {
+            background-size: 1.5rem;
+            padding: 0.5rem;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          top: 2.4375rem;
+          margin-#{$left}: 0;
+        }
+      }
     }
   }
 
