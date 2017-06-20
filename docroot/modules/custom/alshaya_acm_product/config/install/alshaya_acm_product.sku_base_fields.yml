@@ -101,7 +101,7 @@ fields:
 
   reserve_and_collect:
     parent: 'attributes'
-    label: 'At a glance'
+    label: 'Reserve and Collect'
     description: 'Flag to check if product is available for reserve and collect.'
     cardinality: 1
     type: 'string'
@@ -111,7 +111,7 @@ fields:
 
   ship_to_store:
     parent: 'attributes'
-    label: 'At a glance'
+    label: 'Ship to Store'
     description: 'Flag to check if product is available for ship to store.'
     cardinality: 1
     type: 'string'
