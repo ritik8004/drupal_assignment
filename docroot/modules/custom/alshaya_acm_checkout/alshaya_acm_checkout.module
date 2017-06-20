@@ -10,6 +10,23 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['click_collect_stores_list'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'title' => NULL,
+      'stores' => NULL,
+    ],
+  ];
+
+  return $items;
+}
+
+/**
  * Implements hook_acq_checkout_pane_pane_info_alter().
  */
 function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definitions) {
