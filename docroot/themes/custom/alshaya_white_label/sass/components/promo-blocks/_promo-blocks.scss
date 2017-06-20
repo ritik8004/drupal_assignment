@@ -52,6 +52,10 @@
     }
   }
 
+  @include breakpoint(($tablet) (orientation portrait)) {
+    width: 31%;
+  }
+
   .field--name-field-link {
     color: $peacock-blue;
     font-size: 0.75rem;
