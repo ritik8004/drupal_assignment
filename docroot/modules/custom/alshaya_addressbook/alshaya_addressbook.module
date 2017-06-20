@@ -92,6 +92,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['locality'] = [
     '#type' => 'email',
     '#required' => TRUE,
+    '#default_value' => $element['locality']['#default_value'],
     '#title' => t('Email', [], ['context' => 'Address label']),
     '#description' => t("We'll send your order confirmation here."),
   ];
