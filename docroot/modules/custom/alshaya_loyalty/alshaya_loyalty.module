@@ -423,11 +423,13 @@ function alshaya_loyalty_preprocess_user(&$variables) {
  *
  * @param string $number
  *   The loyalty card number.
+ * @param bool $space
+ *   Add space around glue.
  *
  * @return string
  *   Return the formatted string.
  */
-function alshaya_loyalty_format_card_number($number) {
+function alshaya_loyalty_format_card_number($number, $space = FALSE) {
   $number = str_replace(['-', ' '], '', $number);
   $cc_length = strlen($number);
   $processed_number = substr($number, -4);
@@ -435,7 +437,8 @@ function alshaya_loyalty_format_card_number($number) {
   for ($i = $cc_length - 5; $i >= 0; $i--) {
     $calc = ((($i + 1) - $cc_length) % 4);
     if ($calc == 0) {
-      $processed_number = '-' . $processed_number;
+      $glue = $space ? ' - ' : '-';
+      $processed_number = $glue . $processed_number;
     }
     $processed_number = $number[$i] . $processed_number;
   }
