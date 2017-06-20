@@ -660,6 +660,10 @@ html[lang=ar] {
     .tooltip--head {
       color: $black;
       font-size: 0.65rem;
+
+      &.not-available {
+        color: $white;
+      }
     }
 
     #table-cart-totals td {
@@ -736,7 +740,6 @@ html[lang=ar] {
   }
 
   .promo-continue-shopping-wrapper summary,
-  .path--cart .customer-cart-form .items .dark + div,
   .alias--cart #table-cart-totals td:first-child,
   #block-basketpromotionmessage p,
   .alias--cart #table-cart-items tr th,
