@@ -363,8 +363,8 @@ class APIWrapper {
   public function createCustomer($first_name, $last_name, $email, $password = NULL) {
     $customer = [];
     $customer['firstname'] = $first_name;
-    $customer['lastname'] = $first_name;
-    $customer['email'] = $first_name;
+    $customer['lastname'] = $last_name;
+    $customer['email'] = $email;
 
     // First check if the user exists in Magento.
     try {
