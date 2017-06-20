@@ -1,13 +1,13 @@
 .c-menu-secondary {
   @include breakpoint($only-tablet) {
-    max-width: 16.875rem;
+    max-width: 84.375%;
   }
 
   @include breakpoint($upto-desktop) {
     background: $white-five;
     display: none;
     position: fixed;
-    width: 270px;
+    width: 84.375%;
     height: 100%;
     z-index: 4;
     top: 2.9375rem;
@@ -191,7 +191,7 @@
 
 .c-my-account-nav {
   @include breakpoint($only-tablet) {
-    width: 270px !important;
+    width: 84.375% !important;
   }
 
   display: none;
