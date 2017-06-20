@@ -127,7 +127,7 @@
             .label {
               font-family: $alshaya-bold;
               font-size: 0.817rem;
-              padding-left: 1.5rem;
+              padding-#{$left}: 1.5rem;
               color: $black;
               float: $left;
               margin-top: 7px;
