@@ -30,13 +30,15 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
 
   /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
   $api_wrapper = \Drupal::service('acq_commerce.api');
-  $customer = $api_wrapper->updateCustomer(
-    $user->get('acq_customer_id')->getString(),
-    $user->get('field_first_name')->getString(),
-    $user->get('field_last_name')->getString(),
-    $user->getEmail(),
-    $password
-  );
+
+  $customer_array = [
+    'customer_id' => $user->get('acq_customer_id')->getString(),
+    'firstname' => $user->get('field_first_name')->getString(),
+    'lastname' => $user->get('field_last_name')->getString(),
+    'email' => $user->getEmail(),
+  ];
+
+  $customer = $api_wrapper->updateCustomer($customer_array, $password);
 
   return $customer;
 }
