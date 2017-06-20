@@ -591,6 +591,9 @@ class APIWrapper {
    *
    * @return array
    *   Array of product attribute options.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getProductOptions() {
     $endpoint = $this->apiVersion . "/agent/product/options";
@@ -614,11 +617,23 @@ class APIWrapper {
   /**
    * Fetches all promotions.
    *
+   * @param string $type
+   *   The type of promotion to retrieve from the API.
+   *
    * @return array
    *   Array of promotions.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
-  public function getPromotions() {
-    $endpoint = $this->apiVersion . "/agent/promotions/category";
+  public function getPromotions($type = 'category') {
+    // As the parameter is used in endpoint path, we restrict it to avoid
+    // unexpected exception.
+    if (!in_array($type, ['category', 'cart'])) {
+      return [];
+    }
+
+    $endpoint = $this->apiVersion . "/agent/promotions/$type";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
