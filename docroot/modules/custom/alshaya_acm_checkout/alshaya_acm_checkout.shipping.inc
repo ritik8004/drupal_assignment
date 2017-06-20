@@ -16,14 +16,14 @@
  * @return \Drupal\Core\Entity\EntityInterface|null
  *   Loaded term object.
  */
-function alshaya_acm_checkout_load_shipping_method($code, $name = '') {
+function alshaya_acm_checkout_load_shipping_method($code, $name = '', $carrier_code = '', $method_code = '') {
   $save_term = FALSE;
   $logger = \Drupal::logger('alshaya_acm_checkout');
   $taxonomy_term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
   $query = \Drupal::entityQuery('taxonomy_term');
   $query->condition('vid', 'shipping_method');
-  $query->condition('field_shipping_method_code', $code);
+  $query->condition('field_shipping_code', $code);
 
   $result = $query->execute();
 
@@ -39,7 +39,9 @@ function alshaya_acm_checkout_load_shipping_method($code, $name = '') {
 
     $term->get('description')->setValue($name);
     $term->get('field_shipping_method_desc')->setValue($name);
-    $term->get('field_shipping_method_code')->setValue($code);
+    $term->get('field_shipping_code')->setValue($code);
+    $term->get('field_shipping_carrier_code')->setValue($carrier_code);
+    $term->get('field_shipping_method_code')->setValue($method_code);
 
     $save_term = TRUE;
 

@@ -6,6 +6,7 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\user\Entity\User;
 
 /**
  * Provides the final confirmation post payment.
@@ -51,19 +52,16 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
     // Build account details array.
     $account = [];
 
+    $account['first_name'] = $order['firstname'];
+    $account['last_name'] = $order['lastname'];
+    $account['mail'] = $order['email'];
+
     if (\Drupal::currentUser()->isAnonymous()) {
       // @TODO: Get privilege card number once integration done.
-      $account['first_name'] = $order['firstname'];
-      $account['last_name'] = $order['lastname'];
-      $account['mail'] = $order['email'];
-
       $print_link = Url::fromRoute('alshaya_acm_customer.print_last_order');
     }
     else {
-      $user = \Drupal::currentUser();
-      $account['first_name'] = $user->get('field_first_name')->getString();
-      $account['last_name'] = $user->get('field_last_name')->getString();
-      $account['mail'] = $user->getEmail();
+      $user = User::load(\Drupal::currentUser()->id());
       $account['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
 
       $print_link = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order['increment_id']]);

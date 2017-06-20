@@ -20,30 +20,48 @@ class AlshayaProfileForm extends ProfileForm {
 
     if ($this->entity->bundle() == 'address_book') {
       $user_id = $this->currentUser()->id();
-      $element['cancel_button'] = [
-        '#type' => 'link',
-        '#title' => t('Cancel'),
-        '#attributes' => [
-          'class' => ['cancel-button', 'button'],
-        ],
-        '#weight' => 20,
-        '#url' => Url::fromRoute('entity.profile.type.address_book.user_profile_form', [
-          'user' => $user_id,
-          'profile_type' => 'address_book',
-        ]),
-      ];
 
-      // Open delete form in modal on address edit screen.
-      $element['delete']['#attributes']['class'][] = 'use-ajax';
-      $element['delete']['#attributes']['data-dialog-type'] = 'modal';
-      $element['delete']['#attributes']['data-dialog-options'] = Json::encode(['width' => '341']);
-      // Get current language.
-      $current_language = \Drupal::languageManager()->getCurrentLanguage();
-      if (isset($element['delete']['#url'])) {
-        $element['delete']['#url']->setOption('language', $current_language);
+      if (\Drupal::request()->get('from') == 'checkout') {
+        $element['cancel_button'] = [
+          '#type' => 'link',
+          '#title' => t('Cancel'),
+          '#attributes' => [
+            'class' => ['cancel-button', 'button'],
+          ],
+          '#weight' => 20,
+          '#url' => Url::fromRoute('acq_checkout.form', [
+            'step' => 'delivery',
+          ]),
+        ];
+      }
+      else {
+        $element['cancel_button'] = [
+          '#type' => 'link',
+          '#title' => t('Cancel'),
+          '#attributes' => [
+            'class' => ['cancel-button', 'button'],
+          ],
+          '#weight' => 20,
+          '#url' => Url::fromRoute('entity.profile.type.address_book.user_profile_form', [
+            'user' => $user_id,
+            'profile_type' => 'address_book',
+          ]),
+        ];
+
+        // Open delete form in modal on address edit screen.
+        $element['delete']['#attributes']['class'][] = 'use-ajax';
+        $element['delete']['#attributes']['data-dialog-type'] = 'modal';
+        $element['delete']['#attributes']['data-dialog-options'] = Json::encode(['width' => '341']);
+
+        // Get current language.
+        $current_language = \Drupal::languageManager()->getCurrentLanguage();
+        if (isset($element['delete']['#url'])) {
+          $element['delete']['#url']->setOption('language', $current_language);
+        }
+
+        $element['delete']['#access'] = FALSE;
       }
 
-      $element['delete']['#access'] = FALSE;
     }
 
     return $element;
@@ -61,21 +79,18 @@ class AlshayaProfileForm extends ProfileForm {
       // Update addressbook for user in Magento.
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-      $address_book_manager->pushUserAddressToApi($entity);
 
-      switch ($this->entity->save()) {
-        case SAVED_NEW:
+      if ($address_book_manager->pushUserAddressToApi($entity)) {
+        if ($this->entity->isNew()) {
           drupal_set_message($this->t('Address is added successfully.'));
-          break;
-
-        case SAVED_UPDATED:
+        }
+        else {
           drupal_set_message($this->t('Address is updated successfully.'));
-          break;
+        }
       }
 
-      $user_id = $this->currentUser()->id();
       $form_state->setRedirect('entity.profile.type.address_book.user_profile_form', [
-        'user' => $user_id,
+        'user' => $this->entity->getOwnerId(),
         'profile_type' => 'address_book',
       ]);
     }
