@@ -93,8 +93,8 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['data-bundle-class'] = $bundle_class;
     }
   }
-  else if ($variables['elements']['#id'] === 'keywordsearchblock') {
-    $variables['attributes']['class'][] =  'block-views-exposed-filter-blocksearch-page';
+  elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
+    $variables['attributes']['class'][] = 'block-views-exposed-filter-blocksearch-page';
   }
 
   if ($variables['plugin_id'] === 'basket_horizontal_recommendation') {
