@@ -90,10 +90,11 @@
   }
 
   .c-page-title {
-    padding-bottom: 17px;
+    padding-bottom: 1rem;
 
     @include breakpoint($only-tablet) {
-      padding-bottom: 11px;
+      padding-bottom: 0.75rem;
+      margin-top: 0.437rem;
     }
   }
 

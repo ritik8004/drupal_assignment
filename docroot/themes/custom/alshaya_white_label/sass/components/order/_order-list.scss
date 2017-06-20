@@ -1,12 +1,16 @@
 .c-order-list {
   .c-page-title {
     border-bottom: 1px solid $white;
-    padding-top: 0.2rem;
     padding-bottom: 0.875rem;
     margin-bottom: 0.8rem;
 
     @include breakpoint($tablet) {
       margin-bottom: 1.9rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-bottom: 0.75rem;
+      margin-top: 0.437rem;
     }
 
     @include breakpoint($desktop) {
@@ -19,20 +23,6 @@
       margin-top: 1rem;
       padding-top: 0;
       padding-bottom: 0.7rem;
-    }
-  }
-
-  &.l-two--sf .c-sidebar-first {
-    .c-sidebar-first__region {
-      @include breakpoint($only-tablet) {
-        padding-top: 1.5rem;
-      }
-    }
-  }
-
-  main {
-    @include breakpoint($only-tablet) {
-      padding-top: 2.5rem;
     }
   }
 
