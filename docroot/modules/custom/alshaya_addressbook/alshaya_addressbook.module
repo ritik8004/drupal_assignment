@@ -159,7 +159,7 @@ function _alshaya_addressbook_lastname_validate($element, FormStateInterface $fo
  * Adding validation for the name.
  */
 function _alshaya_addressbook_name_validation($element, FormStateInterface $form_state, $field_name) {
-  $string = $form_state->getValue('field_address')[0]['address'][$field_name];
+  $string = $element['#default_value'];
   if (preg_match('/[#$\_\!@%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $string)) {
     $field_name = $field_name == 'given_name' ? 'first name' : 'last name';
     $form_state->setError($element, t('Invalid @name', ['@name' => $field_name]));
