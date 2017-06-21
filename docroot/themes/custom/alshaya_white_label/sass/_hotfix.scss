@@ -26,6 +26,11 @@ body.ie {
   summary a.details-title {
     color: $grey-ash;
   }
+
+  .webform-submission-alshaya-contact-form textarea {
+    // Removes the scrollbar which IE adds by default.
+    overflow: hidden !important;
+  }
 }
 
 /**
@@ -88,5 +93,16 @@ body.ucbrowser {
 body.chrome {
   &.alias--cart #table-cart-items td select {
     text-indent: 0.4rem;
+  }
+}
+
+/**
+ * Samsung - Specific issues and hacks.
+ */
+.samsung {
+  .form-type-textfield {
+    html[lang=ar] & {
+      top: 0.2rem !important;
+    }
   }
 }

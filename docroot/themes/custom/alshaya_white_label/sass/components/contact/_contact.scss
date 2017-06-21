@@ -245,11 +245,11 @@
       top: 0.35rem;
 
       html[lang=ar] & {
-        top: 0.218rem;
+        top: 0.23rem;
       }
 
       .firefox & {
-        top: 0.395rem;
+        top: 0.44rem;
       }
 
       .ie & {
@@ -264,11 +264,6 @@
         position: absolute !important;
       }
     }
-  }
-
-  textarea {
-    // Removes the scrollbar which IE adds by default.
-    overflow: auto;
   }
 }
 
