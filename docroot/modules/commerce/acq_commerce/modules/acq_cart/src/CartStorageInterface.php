@@ -23,8 +23,14 @@ interface CartStorageInterface {
 
   /**
    * Gets the current card ID.
+   *
+   * @param bool $create_new
+   *   Create new cart if no cart exists for the current session.
+   *
+   * @return int
+   *   Current Cart Id.
    */
-  public function getCartId();
+  public function getCartId($create_new);
 
   /**
    * Adds the given cart to storage.
@@ -37,15 +43,24 @@ interface CartStorageInterface {
   /**
    * Gets cart from storage.
    *
+   * @param bool $create_new
+   *   Create new cart if no cart exists for the current session.
+   *
    * @return \Drupal\acq_cart\CartInterface
    *   The current cart.
    */
-  public function getCart();
+  public function getCart($create_new);
 
   /**
    * Updates the current cart in storage.
+   *
+   * @param bool $create_new
+   *   Create new cart if no cart exists for the current session.
+   *
+   * @return \Drupal\acq_cart\Cart
+   *   Updated cart.
    */
-  public function updateCart();
+  public function updateCart($create_new);
 
   /**
    * Creates a cart for storage.
