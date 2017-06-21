@@ -482,7 +482,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       $term = Term::load($administrative_area);
       if ($term) {
         $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-        $variables['administrative_area'] = $term->getName();
+        $variables['delivery_address']['administrative_area'] = $term->getName();
       }
     }
 
