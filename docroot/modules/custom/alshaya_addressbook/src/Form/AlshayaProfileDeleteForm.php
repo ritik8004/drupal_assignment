@@ -108,4 +108,21 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    $entity = $this->getEntity();
+
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    if ($address_book_manager->deleteUserAddressFromApi($entity)) {
+      drupal_set_message($this->getDeletionMessage());
+      $this->logDeletionMessage();
+    }
+
+    $form_state->setRedirectUrl($this->getRedirectUrl());
+  }
+
 }
