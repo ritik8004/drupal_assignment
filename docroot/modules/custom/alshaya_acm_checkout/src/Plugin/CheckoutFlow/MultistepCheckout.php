@@ -268,7 +268,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           exit;
         }
 
-        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        drupal_set_message($e->getMessage(), 'error');
         $this->redirectToStep($current_step_id);
       }
 
