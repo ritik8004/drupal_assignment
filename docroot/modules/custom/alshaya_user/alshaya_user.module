@@ -260,6 +260,7 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
   // the prefix.
   $country_mobile_code = \Drupal::service('mobile_number.util')->getCountryCode($default_site_country);
   if ($country_mobile_code) {
+    $element['#attached']['library'][] = 'alshaya_user/alshaya_mobile_number';
     $element['mobile']['#prefix'] = '<div class="country-code-prefix">' . '+' . $country_mobile_code . '</div>';
   }
 
