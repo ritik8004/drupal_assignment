@@ -106,9 +106,15 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         $this->redirectToStep($step_id);
       }
 
+      // We don't want to allow access to /cart/checkout without step id.
+      // This is required for proper templates to get applied.
+      if (empty($requested_step_id)) {
+        $this->redirectToStep($step_id);
+      }
+
       // If the requested step is not valid we redirect them to proper URL.
       // This will mostly happen when user logs in.
-      if (!empty($requested_step_id)) {
+      if (!empty($requested_step_id) && $requested_step_id != $step_id) {
         $this->redirectToStep($step_id);
       }
     }
