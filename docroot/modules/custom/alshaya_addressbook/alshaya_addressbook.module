@@ -134,10 +134,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $country_list = \Drupal::service('address.country_repository')->getList();
   $country_name = [
     'country_name' => [
-      '#type' => 'select',
-      '#title' => t('Country'),
-      '#default_value' => $default_country_code,
-      '#options' => [$default_country_code => $country_list[$default_country_code]],
+      '#markup' => '<div class="country-label">' . t('Country') . '</div><div class="country-name">' . $country_list[$default_country_code] . '</div>',
     ],
   ];
 
