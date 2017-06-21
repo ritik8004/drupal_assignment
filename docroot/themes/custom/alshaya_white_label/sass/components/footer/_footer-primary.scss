@@ -333,6 +333,8 @@
         padding: 0.3125rem 0;
         z-index: 9;
         font-size: 0.75rem;
+        background: $white-five;
+        margin-top: 0.1875rem;
       }
     }
   }
@@ -403,14 +405,22 @@
     background: $marine-blue-two;
   }
 
-  .subscription-status .success {
-    background: $tealish;
-    color: $white-four;
-    font-size: 0.75rem;
-    padding: 0.3125rem 0.875rem;
-    margin-top: 0.1875rem;
-    font-weight: bold;
-    display: block;
+  .subscription-status {
+    .success {
+      background: $tealish;
+      color: $white-four;
+      font-size: 0.75rem;
+      padding: 0.3125rem 0.875rem;
+      margin-top: 0.1875rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .error {
+      margin-top: 0.1875rem;
+      padding: 0.3125rem 0;
+      display: block;
+    }
   }
 }
 
