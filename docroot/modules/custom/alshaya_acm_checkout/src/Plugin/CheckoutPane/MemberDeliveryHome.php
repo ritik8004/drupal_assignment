@@ -75,36 +75,36 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     if ($address['customer_address_id']) {
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-      $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
 
-      $view_builder = \Drupal::entityTypeManager()->getViewBuilder('profile');
-      $pane_form['address']['display'] = $view_builder->view($entity, 'teaser');
+      if ($entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id'])) {
+        $view_builder = \Drupal::entityTypeManager()->getViewBuilder('profile');
+        $pane_form['address']['display'] = $view_builder->view($entity, 'teaser');
 
-      $pane_form['address']['edit'] = [];
+        $pane_form['address']['edit'] = [];
 
-      $shipping_methods = self::generateShippingEstimates($entity);
-      $default_shipping = $cart->getShippingMethodAsString();
+        $shipping_methods = self::generateShippingEstimates($entity);
+        $default_shipping = $cart->getShippingMethodAsString();
 
-      // Convert to code.
-      $default_shipping = str_replace(',', '_', substr($default_shipping, 0, 32));
+        // Convert to code.
+        $default_shipping = str_replace(',', '_', substr($default_shipping, 0, 32));
 
-      if (!empty($shipping_methods) && empty($default_shipping)) {
-        $default_shipping = array_keys($shipping_methods)[0];
+        if (!empty($shipping_methods) && empty($default_shipping)) {
+          $default_shipping = array_keys($shipping_methods)[0];
+        }
+
+        $pane_form['address']['shipping_methods'] = [
+          '#type' => 'radios',
+          '#title' => t('Shipping Methods'),
+          '#default_value' => $default_shipping,
+          '#validated' => TRUE,
+          '#options' => $shipping_methods,
+          '#prefix' => '<div id="shipping_methods_wrapper">',
+          '#suffix' => '</div>',
+        ];
       }
-
-      $pane_form['address']['shipping_methods'] = [
-        '#type' => 'radios',
-        '#title' => t('Shipping Methods'),
-        '#default_value' => $default_shipping,
-        '#validated' => TRUE,
-        '#options' => $shipping_methods,
-        '#prefix' => '<div id="shipping_methods_wrapper">',
-        '#suffix' => '</div>',
-      ];
-
     }
-    else {
 
+    if (empty($address['customer_address_id']) || empty($pane_form['address']) || empty($pane_form['address']['display'])) {
       $add_profile_route_params = [
         'user' => \Drupal::currentUser()->id(),
         'profile_type' => 'address_book',
