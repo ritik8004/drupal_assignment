@@ -18,6 +18,23 @@
   .region__content {
     margin: 1.25rem 0;
   }
+
+  #backtotop {
+    @include breakpoint($only-mobile) {
+      z-index: 5;
+      line-height: 45px;
+
+      &::after {
+        margin-top: -2.4rem;
+      }
+    }
+  }
+
+  .c-footer-primary {
+    @include breakpoint($only-mobile) {
+      margin-top: 5.5rem;
+    }
+  }
 }
 
 .acq-content-product {
