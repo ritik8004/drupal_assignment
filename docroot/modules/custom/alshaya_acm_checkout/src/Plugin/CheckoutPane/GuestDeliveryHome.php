@@ -174,7 +174,6 @@ class GuestDeliveryHome extends AddressFormBase {
       return $options[$static_key];
     }
 
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
     $address = (array) $address;
 
     $address = _alshaya_acm_checkout_clean_address($address);
@@ -199,7 +198,9 @@ class GuestDeliveryHome extends AddressFormBase {
         $name = t('@method_title by @carrier_title', ['@method_title' => $method['method_title'], '@carrier_title' => $method['carrier_title']]);
         $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
 
-        $term = alshaya_acm_checkout_load_shipping_method($code, $name, $method['carrier_code'], $method['method_code']);
+        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+        $term = $checkout_options_manager->loadShippingMethod($code, $name, $method['carrier_code'], $method['method_code']);
 
         // We don't display click and collect delivery method for home delivery.
         if ($code == \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
@@ -273,8 +274,9 @@ class GuestDeliveryHome extends AddressFormBase {
       return;
     }
 
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
-    $term = alshaya_acm_checkout_load_shipping_method($shipping_method);
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+    $term = $checkout_options_manager->loadShippingMethod($shipping_method);
 
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
 

@@ -258,12 +258,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['contact_no'] = $order['shipping']['address']['phone'];
 
-  $address_formatter = new ACQAddressFormatter();
-  $orderDetails['delivery_address'] = $address_formatter->render((object) $order['shipping']['address']);
-  $orderDetails['billing_address'] = $address_formatter->render((object) $order['billing']);
+  $addressFormatter = new ACQAddressFormatter();
+  $orderDetails['delivery_address'] = $addressFormatter->render((object) $order['shipping']['address']);
+  $orderDetails['billing_address'] = $addressFormatter->render((object) $order['billing']);
 
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
-  $shippingTerm = alshaya_acm_checkout_load_shipping_method($order['shipping']['method']['carrier_code']);
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
+  $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $shippingTerm = $checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
   $orderDetails['delivery_method'] = $shippingTerm->getName();
   $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
 
@@ -379,8 +380,9 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $build['#products'] = $products;
   $build['#products_count'] = count($build['#products']);
 
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
-  $shippingTerm = alshaya_acm_checkout_load_shipping_method($order['shipping']['method']['carrier_code']);
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
+  $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $shippingTerm = $checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
   $build['#delivery_detail_notice'] = $shippingTerm->get('field_shipping_method_desc')->getString();
 
   return $build;

@@ -117,14 +117,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     // @TODO: Pending development for CnC.
     if ($method = $cart->getShippingMethodAsString()) {
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_checkout', 'inc', 'alshaya_acm_checkout.shipping');
-
       // URL to change delivery address or shipping method.
       $options = ['absolute' => TRUE];
       $delivery['url'] = Url::fromRoute('acq_checkout.form', ['step' => 'shipping'], $options)->toString();
 
-      /** @var \Drupal\taxonomy\Entity\Term $term */
-      $term = alshaya_acm_checkout_load_shipping_method($method);
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+      $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+      $term = $checkout_options_manager->loadShippingMethod($method);
       $delivery['label'] = $this->t("Home Delivery");
       $delivery['address_label'] = $this->t("Delivery Address");
 

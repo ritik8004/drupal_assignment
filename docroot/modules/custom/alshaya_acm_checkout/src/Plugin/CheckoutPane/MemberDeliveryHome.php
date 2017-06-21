@@ -168,7 +168,9 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $cart->setShipping($update);
 
-    $term = alshaya_acm_checkout_load_shipping_method($shipping_method);
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+    $term = $checkout_options_manager->loadShippingMethod($shipping_method);
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
   }
 
