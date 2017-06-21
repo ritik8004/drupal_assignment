@@ -67,6 +67,18 @@
         $(window).width(windowWidth);
         centerDots();
       }, 500);
+
+      // Open homepage slider link in new tab.
+      // This is used to fix behaviour of UC browser.
+      var sliderLinks = $('.c-slider-promo a');
+      sliderLinks.each(function () {
+        $(this).click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var link = $(this).attr('href');
+          window.open(link);
+        });
+      });
     }
   };
 
