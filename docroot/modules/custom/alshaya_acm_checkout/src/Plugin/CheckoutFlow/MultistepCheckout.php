@@ -250,6 +250,19 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           '@message' => $e->getMessage(),
         ]);
 
+        // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
+        if (strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
+          $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+          $response->send();
+          exit;
+        }
+        // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
+        elseif ($e->getMessage() == $this->t('This product is out of stock.')) {
+          $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+          $response->send();
+          exit;
+        }
+
         drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
         $this->redirectToStep($current_step_id);
       }
