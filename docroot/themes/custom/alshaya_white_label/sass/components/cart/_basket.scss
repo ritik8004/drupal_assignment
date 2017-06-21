@@ -788,3 +788,13 @@ html[lang=ar] {
     }
   }
 }
+
+html[lang=ar] {
+  #table-cart-totals,
+  #edit-actions-top {
+    .ladda-button[data-style=zoom-in][data-loading] .ladda-spinner {
+      margin-right: -0.375rem;
+      right: 50%;
+    }
+  }
+}
