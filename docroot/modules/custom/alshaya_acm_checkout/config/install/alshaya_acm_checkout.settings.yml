@@ -14,7 +14,4 @@ checkout_customer_service:
   value: '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from Sunday – Saturday from 9:30 am – 8:30 midnight (Kuwait Local Time, GMT +3)</span></p>'
   format: 'rich_text'
 click_collect_method: 'click_and_collect_click_and_coll'
-payments_default: 'knet'
-payments_home_delivery: 'knet,cybersource,cashondelivery'
-payments_click_collect: 'knet,cybersource'
 langcode: en

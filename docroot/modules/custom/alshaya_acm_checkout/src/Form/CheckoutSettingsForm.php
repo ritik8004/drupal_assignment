@@ -34,15 +34,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('checkout_guest_login', $form_state->getValue('checkout_guest_login'));
     $config->set('checkout_terms_condition', $form_state->getValue('checkout_terms_condition'));
     $config->set('checkout_customer_service', $form_state->getValue('checkout_customer_service'));
-    $config->set('payments_default', $form_state->getValue('payments_default'));
-
-    $payments_home_delivery = explode(',', $form_state->getValue('payments_home_delivery'));
-    $payments_home_delivery = array_map('trim', $payments_home_delivery);
-    $config->set('payments_home_delivery', implode(',', $payments_home_delivery));
-
-    $payments_click_collect = explode(',', $form_state->getValue('payments_click_collect'));
-    $payments_click_collect = array_map('trim', $payments_click_collect);
-    $config->set('payments_click_collect', implode(',', $payments_click_collect));
+    $config->set('click_collect_method', $form_state->getValue('click_collect_method'));
 
     $config->save();
 
@@ -103,30 +95,6 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Click and Collect delivery method code'),
       '#required' => TRUE,
       '#default_value' => $config->get('click_collect_method'),
-    ];
-
-    $form['payments_default'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default Payment method'),
-      '#description' => $this->t('Default selected payment method. Enter the payment method code from Magento here.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('payments_default'),
-    ];
-
-    $form['payments_home_delivery'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Payment methods - Home Delivery'),
-      '#description' => $this->t('Payment methods allowed for Home Delivery. Please enter comma separated list of payment method codes from Magento here.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('payments_home_delivery'),
-    ];
-
-    $form['payments_click_collect'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Payment methods - Click and Collect'),
-      '#description' => $this->t('Payment methods allowed for Click and Collect. Please enter comma separated list of payment method codes from Magento here.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('payments_click_collect'),
     ];
 
     return $form;
