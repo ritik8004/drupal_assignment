@@ -372,11 +372,9 @@
           label.error {
             position: absolute;
             #{$left}: 0;
-            top: 1.875rem;
-
-            ~ .form-item--error-message {
-              padding-top: 1.688rem;
-            }
+            top: 1.563rem;
+            background: $white-five;
+            width: 100%;
           }
         }
       }

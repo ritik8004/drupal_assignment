@@ -7,14 +7,16 @@
       var l = $('.edit-newsletter').ladda();
 
       $('.edit-newsletter').on('click', function() {
-        if($('#alshaya-newsletter-subscribe .form-type-email label.error').is(':visible') === true) {
-          $('#alshaya-newsletter-subscribe .form-type-email').addClass('inline-error');
-        }
-        else {
-          $('#alshaya-newsletter-subscribe .form-type-email').removeClass('inline-error');
-        }
         // Start loading
         l.ladda('start');
+      });
+
+      // Hide multiple inline error messages for email field.
+      $('#alshaya-newsletter-subscribe .form-type-email input').once().on('keyup', function() {
+        var ajaxWrapper = '#alshaya-newsletter-subscribe #footer-newsletter-form-wrapper';
+        if($('#alshaya-newsletter-subscribe .form-type-email label.error').is(':visible') === true) {
+          $(ajaxWrapper).empty();
+        }
       });
 
       $.fn.stopNewsletterSpinner = function(data) {

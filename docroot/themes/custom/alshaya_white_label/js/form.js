@@ -76,6 +76,14 @@
           $(this).addClass('is-active');
         });
       }
+
+      // On register page, hide multiple inline error messages for email field.
+      $('#user-register-form .form-type-email input').once().on('keyup', function () {
+        var serverErrorWrapper = '#user-register-form .form-type-email .form-item--error-message';
+        if ($('#user-register-form .form-type-email label.error').is(':visible') === true) {
+          $(serverErrorWrapper).empty();
+        }
+      });
     }
   };
 
