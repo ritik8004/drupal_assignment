@@ -89,6 +89,11 @@ function alshaya_acm_customer_update_user_data(User $user, array $customer) {
   $user->get('field_last_name')->setValue($customer['lastname']);
   $user->get('acq_customer_id')->setValue($customer['customer_id']);
 
+  // Save here to ensure we use it while creating addresses.
+  if ($user->isNew()) {
+    $user->save();
+  }
+
   // Invoke the alter hook to allow all modules to update the account.
   \Drupal::moduleHandler()->alter('alshaya_acm_customer_update_account', $user, $customer);
 
