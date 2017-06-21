@@ -38,8 +38,6 @@
   }
 
   .form-item-mobile-number-mobile input {
-    width: 107px !important;
-
     &::placeholder {
       visibility: hidden;
     }
@@ -91,6 +89,12 @@
         #{$left}: -5rem;
         width: 21rem;
       }
+    }
+  }
+
+  .country-code-prefix {
+    @include breakpoint($only-mobile) {
+      margin-top: 0.5rem;
     }
   }
 }
@@ -233,26 +237,25 @@
     width: 100%;
 
     .form-type-textfield {
-      top: 1.5rem;
+      top: 0.3rem;
+
+      html[lang=ar] & {
+        top: 0.2rem;
+      }
+    }
+
+    html[lang=ar] & {
+      margin-top: 0.5rem !important;
+
+      label {
+        position: absolute !important;
+      }
     }
   }
 }
 
 .c-user-edit .user-form {
-  .country-code-prefix {
-    margin-top: -1.2rem;
-  }
-
   #edit-account {
     margin-top: 2.813rem;
   }
 }
-
-html[lang=ar] {
-  .c-user-edit .user-form {
-    .mobile-number-field .form-type-textfield {
-      width: 18.5rem;
-    }
-  }
-}
-

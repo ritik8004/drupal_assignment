@@ -66,6 +66,10 @@
       padding-left: 3.8125rem;
       text-indent: -2.725rem;
       line-height: 1.5;
+
+      html[lang=ar] & {
+        text-indent: 0;
+      }
     }
 
     &::before {
