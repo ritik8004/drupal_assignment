@@ -268,6 +268,8 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           exit;
         }
 
+        // @TODO: We can revert this to generic message once all basic
+        // validations are in place.
         drupal_set_message($e->getMessage(), 'error');
         $this->redirectToStep($current_step_id);
       }
