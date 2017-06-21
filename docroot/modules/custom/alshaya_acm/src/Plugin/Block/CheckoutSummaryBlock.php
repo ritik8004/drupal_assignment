@@ -121,7 +121,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
       // URL to change delivery address or shipping method.
       $options = ['absolute' => TRUE];
-      $delivery['url'] = Url::fromRoute('acq_checkout.form', ['step' => 'shipping'], $options)->toString();
+      $delivery['url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
 
       /** @var \Drupal\taxonomy\Entity\Term $term */
       $term = alshaya_acm_checkout_load_shipping_method($method);
