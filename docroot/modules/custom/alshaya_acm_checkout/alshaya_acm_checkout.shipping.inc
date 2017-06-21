@@ -63,11 +63,6 @@ function alshaya_acm_checkout_load_shipping_method($code, $name = '', $carrier_c
     }
   }
 
-  if (!empty($name) && $name != $term->getName()) {
-    $term->setName($name);
-    $save_term = TRUE;
-  }
-
   // Save the term only if required.
   if ($save_term) {
     $term->save();
