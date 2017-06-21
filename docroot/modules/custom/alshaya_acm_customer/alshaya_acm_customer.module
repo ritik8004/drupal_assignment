@@ -115,9 +115,11 @@ function alshaya_acm_customer_block_access(Block $block, $operation, AccountInte
  * Implements hook_acq_commerce_update_customer_api_request_alter().
  */
 function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(array &$request_options) {
-  if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
+  if (isset($request_options['json'], $request_options['json']['customer']['email'])) {
+    $request_options['json']['customer']['extension']['communication_preference'] = [];
+
     /** @var \Drupal\user\Entity\User $user */
-    $user = user_load_by_mail($request_options['form_params']['customer[email]']);
+    $user = user_load_by_mail($request_options['json']['customer']['email']);
 
     if (!empty($user)) {
       $user_data = \Drupal::service('user.data');
@@ -128,7 +130,7 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
       }
 
       \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-      $request_options['form_params']['customer[extension][communication_preference]'] = alshaya_acm_customer_get_communication_preference_api_value($preference);
+      $request_options['json']['customer']['extension']['communication_preference'] = alshaya_acm_customer_get_communication_preference_api_value($preference);
     }
   }
 }
@@ -281,7 +283,7 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       $do_api_check = FALSE;
     }
     elseif (!$user->isActive()) {
-      $form_state->setErrorByName('name', $this->t('Your account has not been activated or is blocked.'));
+      $form_state->setErrorByName('name', t('Your account has not been activated or is blocked.'));
       $do_api_check = FALSE;
     }
   }

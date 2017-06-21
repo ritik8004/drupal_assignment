@@ -30,15 +30,23 @@ class AlshayaAddressBookController extends ProfileController {
     /* @var \Drupal\profile\Entity\Profile $profile */
     $profile = $routeMatch->getParameter('profile');
 
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
     // If not address book, use default handling.
     if ($profile->bundle() != 'address_book') {
       return parent::setDefault($routeMatch);
     }
 
     $profile->setDefault(TRUE);
+
+    // We have to save here first to ensure other addresses that are default
+    // are demoted.
     $profile->save();
 
-    drupal_set_message($this->t('Primary address is updated successfully.'));
+    if ($address_book_manager->pushUserAddressToApi($profile)) {
+      drupal_set_message($this->t('Primary address is updated successfully.'));
+    }
 
     $url = $profile->urlInfo('collection');
     return $this->redirect($url->getRouteName(), $url->getRouteParameters(), $url->getOptions());
@@ -107,14 +115,13 @@ class AlshayaAddressBookController extends ProfileController {
       // Render the active profiles.
       $build['active_profiles'] = [
         '#type' => 'view',
-        '#name' => 'profiles',
-        '#display_id' => 'profile_type_listing',
-        '#arguments' => [$user->id(), $profile_type->id(), 1],
+        '#name' => 'address_book',
+        '#display_id' => 'address_book',
+        '#arguments' => [$user->id()],
         '#embed' => TRUE,
         '#title' => $this->t('Active @type', ['@type' => $profile_type->label()]),
         '#pre_render' => [
           ['\Drupal\views\Element\View', 'preRenderViewElement'],
-          'profile_views_add_title_pre_render',
         ],
       ];
 

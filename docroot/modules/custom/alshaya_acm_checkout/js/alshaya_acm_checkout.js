@@ -59,7 +59,6 @@
         }
       }
 
-
       if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.beforeSendAcmCheckout === 'undefined') {
         Drupal.Ajax.prototype.beforeSendAcmCheckout = Drupal.Ajax.prototype.beforeSend;
         Drupal.Ajax.prototype.successAcmCheckout = Drupal.Ajax.prototype.success;

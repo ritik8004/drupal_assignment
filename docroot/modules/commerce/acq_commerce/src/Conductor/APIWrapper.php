@@ -361,31 +361,31 @@ class APIWrapper {
    *   New customer array.
    */
   public function createCustomer($first_name, $last_name, $email, $password = NULL) {
+    $customer = [];
+    $customer['firstname'] = $first_name;
+    $customer['lastname'] = $last_name;
+    $customer['email'] = $email;
+
     // First check if the user exists in Magento.
     try {
       if ($existingCustomer = $this->getCustomer($email)) {
-        return $this->updateCustomer($existingCustomer['customer_id'], $first_name, $last_name, $email, $password);
+        $customer['customer_id'] = $existingCustomer['customer_id'];
       }
     }
     catch (\Exception $e) {
       // We are expecting error here for all emails that are not registered
       // already in magento.
+      unset($customer['customer_id']);
     }
 
-    return $this->updateCustomer(NULL, $first_name, $last_name, $email, $password);
+    return $this->updateCustomer($customer, $password);
   }
 
   /**
-   * Updates a customer by customer ID.
+   * Updates a customer.
    *
-   * @param int $customer_id
-   *   Customer ID to update.
-   * @param string $first_name
-   *   Customer first name.
-   * @param string $last_name
-   *   Customer last name.
-   * @param string $email
-   *   Customer e-mail.
+   * @param array $customer
+   *   Customer array to update (fully prepared array).
    * @param string $password
    *   Optional password.
    *
@@ -395,20 +395,15 @@ class APIWrapper {
    * @throws \Exception
    *   Failed request exception.
    */
-  public function updateCustomer($customer_id, $first_name, $last_name, $email, $password = NULL) {
+  public function updateCustomer($customer, $password = NULL) {
     $endpoint = $this->apiVersion . "/agent/customer";
 
-    $doReq = function ($client, $opt) use ($endpoint, $customer_id, $first_name, $last_name, $email, $password) {
-      if (!empty($customer_id)) {
-        $opt['form_params']['customer[customer_id]'] = $customer_id;
-      }
+    $doReq = function ($client, $opt) use ($endpoint, $customer, $password) {
 
-      $opt['form_params']['customer[firstname]'] = $first_name;
-      $opt['form_params']['customer[lastname]'] = $last_name;
-      $opt['form_params']['customer[email]'] = $email;
+      $opt['json']['customer'] = $customer;
 
       if (!empty($password)) {
-        $opt['form_params']['password'] = $password;
+        $opt['json']['password'] = $password;
       }
 
       // Invoke the alter hook to allow all modules to update the customer data.
@@ -418,37 +413,6 @@ class APIWrapper {
     };
 
     $customer = [];
-
-    try {
-      $customer = $this->tryAgentRequest($doReq, 'updateCustomer', 'customer');
-    }
-    catch (ConductorException $e) {
-      throw new \Exception($e->getMessage(), $e->getCode());
-    }
-
-    return $customer;
-  }
-
-  /**
-   * Updates a customer.
-   *
-   * @param array $customer
-   *   Customer array to update (fully prepared array).
-   *
-   * @return array
-   *   New customer array.
-   *
-   * @throws \Exception
-   *   Failed request exception.
-   */
-  public function updateCustomerJson(array $customer) {
-    // Calling function will be responsible to pass a clean customer array here.
-    $endpoint = $this->apiVersion . '/agent/customer';
-
-    $doReq = function ($client, $opt) use ($endpoint, $customer) {
-      $opt['json']['customer'] = $customer;
-      return ($client->post($endpoint, $opt));
-    };
 
     try {
       $customer = $this->tryAgentRequest($doReq, 'updateCustomer', 'customer');
@@ -622,6 +586,9 @@ class APIWrapper {
    *
    * @return array
    *   Array of product attribute options.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
   public function getProductOptions() {
     $endpoint = $this->apiVersion . "/agent/product/options";
@@ -645,11 +612,23 @@ class APIWrapper {
   /**
    * Fetches all promotions.
    *
+   * @param string $type
+   *   The type of promotion to retrieve from the API.
+   *
    * @return array
    *   Array of promotions.
+   *
+   * @throws \Exception
+   *   Failed request exception.
    */
-  public function getPromotions() {
-    $endpoint = $this->apiVersion . "/agent/promotions/category";
+  public function getPromotions($type = 'category') {
+    // As the parameter is used in endpoint path, we restrict it to avoid
+    // unexpected exception.
+    if (!in_array($type, ['category', 'cart'])) {
+      return [];
+    }
+
+    $endpoint = $this->apiVersion . "/agent/promotions/$type";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
