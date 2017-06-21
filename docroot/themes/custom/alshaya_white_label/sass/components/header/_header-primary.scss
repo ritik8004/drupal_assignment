@@ -597,9 +597,12 @@ header {
         padding: 0.625rem;
         padding-bottom: 0.6rem;
         display: block;
-        height: 2.6875rem;
+        height: 2.75rem;
         border-bottom: 1px solid $white;
         border-top: 2px solid transparent;
+        position: relative;
+        z-index: 100;
+        margin-top: -1px;
       }
 
       &.active {
@@ -894,8 +897,9 @@ header {
       height: 100;
       top: 0;
       #{$left}: 0;
-      bottom: 0;
-      #{$left}: 0;
+      bottom: -6rem;
+      #{$right}: 0;
+      transform: translate3d(0, 0, 0);
       background-color: rgba(0, 0, 0, 0.48);
     }
   }
@@ -905,14 +909,16 @@ header {
 
     ul.menu--one__list {
       background: $white-five;
-      width: 16.875rem;
+      width: 84.375%;
       height: 100%;
       position: fixed;
       top: 2.9375rem;
+      bottom: 0;
       z-index: 20;
       overflow-y: scroll;
       margin-top: 0;
       padding-bottom: 3.125rem;
+      transform: translate3d(0, 0, 0);
     }
   }
 
@@ -1134,7 +1140,7 @@ header {
   display: table;
   transition: #{$left 0.5s ease-in-out};
   #{$left}: -100%;
-  width: 270px;
+  width: 84.375%;
 
   .one {
     @include breakpoint($only-tablet) {
@@ -1170,11 +1176,11 @@ header {
   }
 
   .menu--active .mobile--close {
-    #{$left}: 280px;
+    #{$left}: 87.375%;
   }
 
   .main--menu ul.menu--one__list {
-    width: 16.875rem;
+    width: 84.375%;
   }
 }
 
