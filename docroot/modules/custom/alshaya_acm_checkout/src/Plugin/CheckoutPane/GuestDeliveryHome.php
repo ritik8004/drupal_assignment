@@ -170,7 +170,7 @@ class GuestDeliveryHome extends AddressFormBase {
     // Below code is to ensure we call the API only once.
     static $options;
     $static_key = base64_encode(serialize($address));
-    if ($options[$static_key]) {
+    if (isset($options[$static_key]) && !empty($options[$static_key])) {
       return $options[$static_key];
     }
 
