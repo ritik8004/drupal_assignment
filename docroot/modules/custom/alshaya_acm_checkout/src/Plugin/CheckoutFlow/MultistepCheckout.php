@@ -250,6 +250,18 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           '@message' => $e->getMessage(),
         ]);
 
+        // @TODO: From Nikunj for Sylvain - how to handle translation here?
+        if (strpos($e->getMessage(), "We don't have as many") !== FALSE) {
+          $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+          $response->send();
+          exit;
+        }
+        elseif ($e->getMessage() == $this->t('This product is out of stock.')) {
+          $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+          $response->send();
+          exit;
+        }
+
         drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
         $this->redirectToStep($current_step_id);
       }
