@@ -1,22 +1,22 @@
 langcode: en
-status: false
+status: true
 dependencies:
   config:
-    - facets_summary.facets_summary.filter_bar
+    - facets_summary.facets_summary.filter_bar_plp
   module:
     - ctools
     - facets_summary
   theme:
     - alshaya_white_label
-id: filterbar_promotion
+id: filterbarplp_2
 theme: alshaya_white_label
 region: content
-weight: -11
+weight: -19
 provider: null
-plugin: 'facets_summary_block:filter_bar'
+plugin: 'facets_summary_block:filter_bar_plp'
 settings:
-  id: 'facets_summary_block:filter_bar'
-  label: 'Filter Bar'
+  id: 'facets_summary_block:filter_bar_plp'
+  label: 'Filter bar PLP'
   provider: facets_summary
   label_display: '0'
 visibility:

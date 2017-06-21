@@ -137,6 +137,11 @@
               .attr('rel'));
         }
       );
+
+      $.fn.alshayaAttachSearchSlider = function () {
+        Drupal.attachBehaviors(context);
+      };
+
     }
   };
 

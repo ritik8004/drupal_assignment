@@ -41,11 +41,6 @@ function alshaya_search_install() {
 
   ConfigHelper::forModule('alshaya_search')
     ->optional()
-    ->getEntity('block', 'exposedformsearchpage_2')
-    ->save();
-
-  ConfigHelper::forModule('alshaya_search')
-    ->optional()
     ->getEntity('block', 'exposedformsearchpage_3')
     ->save();
 
