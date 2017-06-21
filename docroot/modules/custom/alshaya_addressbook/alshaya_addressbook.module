@@ -462,7 +462,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     // it becomes the final implementation and we then just need to change
     // value assignment here.
     $variables['delivery_address'] = [
-      // 'organization' => $values[0]['organization'],.
+      'organization' => $values[0]['organization'],
       'address_line1' => $values[0]['address_line1'],
       'address_line2' => $values[0]['address_line2'],
       'postal_code' => $values[0]['postal_code'],
