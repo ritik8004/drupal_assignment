@@ -118,8 +118,6 @@ class AlshayaAddressBookManager {
     $customer = $this->apiWrapper->getCustomer($account->getEmail());
     unset($customer['extension']);
 
-    $current_ids = [];
-
     foreach ($customer['addresses'] as $index => $address) {
       $customer['addresses'][$index] = $this->getCleanAddress($address);
       $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
@@ -128,8 +126,6 @@ class AlshayaAddressBookManager {
       if ($entity->isDefault()) {
         $customer['addresses'][$index]['default_shipping'] = 0;
       }
-
-      $current_ids[] = $address['address_id'];
     }
 
     $address_id = $entity->get('field_address_id')->getString();
@@ -164,6 +160,54 @@ class AlshayaAddressBookManager {
     }
     catch (\Exception $e) {
       $this->logger->warning('Error while saving address: @message', ['@message' => $e->getMessage()]);
+      drupal_set_message($e->getMessage(), 'error');
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Push address changes to Magento.
+   *
+   * @param \Drupal\profile\Entity\Profile $entity
+   *   Address Entity.
+   */
+  public function deleteUserAddressFromApi(Profile $entity) {
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
+    $account = User::load($entity->getOwnerId());
+
+    $customer = $this->apiWrapper->getCustomer($account->getEmail());
+    unset($customer['extension']);
+
+    $address_id = $entity->get('field_address_id')->getString();
+
+    foreach ($customer['addresses'] as $index => $address) {
+      if ($address['address_id'] == $address_id) {
+        unset($customer['addresses'][$index]);
+        continue;
+      }
+
+      $customer['addresses'][$index] = $this->getCleanAddress($address);
+      $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
+      $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
+
+      if ($entity->isDefault()) {
+        $customer['addresses'][$index]['default_shipping'] = 0;
+      }
+    }
+
+    try {
+      $updated_customer = $this->apiWrapper->updateCustomer($customer);
+
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+
+      // Update the data in Drupal to match the values in Magento.
+      alshaya_acm_customer_update_user_data($account, $updated_customer);
+
+      return TRUE;
+    }
+    catch (\Exception $e) {
+      $this->logger->warning('Error while deleting address: @message', ['@message' => $e->getMessage()]);
       drupal_set_message($e->getMessage(), 'error');
     }
 
