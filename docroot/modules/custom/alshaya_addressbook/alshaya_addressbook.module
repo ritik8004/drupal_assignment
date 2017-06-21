@@ -89,9 +89,20 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
   $element['family_name']['#maxlength'] = 255;
 
+  // Use organization field as email.
+  $element['organization'] = [
+    '#type' => 'email',
+    '#required' => TRUE,
+    '#default_value' => $element['organization']['#default_value'],
+    '#title' => t('Email', [], ['context' => 'Address label']),
+    '#description' => t("We'll send your order confirmation here."),
+  ];
+
+  $element['given_name']['#title'] = t('First Name', [], ['context' => 'Address label']);
+  $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
+
   // Only for 'Kuwait'.
   if ($default_country_code == 'KW') {
-    $element['locality']['#title'] = t('Emirate/city', [], ['context' => 'Address label']);
     $administrative_area_default_value = $element['administrative_area']['#default_value'];
     $element['administrative_area'] = [
       '#type' => 'select',
@@ -101,10 +112,10 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       '#default_value' => $administrative_area_default_value,
       '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list(),
     ];
-    $element['address_line1']['#title'] = t('Street name/number', [], ['context' => 'Address label']);
-    $element['dependent_locality']['#title'] = t('Building name/number', [], ['context' => 'Address label']);
-    $element['organization']['#title'] = t('Block', [], ['context' => 'Address label']);
-    $element['address_line2']['#title'] = t('Floor (optional)', [], ['context' => 'Address label']);
+    $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
+    $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
+    $element['locality']['#title'] = t('Block', [], ['context' => 'Address label']);
+    $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
     $element['address_line2']['#title_display'] = 'before';
   }
 
@@ -112,10 +123,18 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $mobile_number = [
     'mobile_number' => [
       '#type' => 'mobile_number',
-      '#title' => t('Mobile number'),
+      '#title' => t('Mobile Number'),
       '#verify' => 0,
       '#tfa' => 0,
       '#required' => TRUE,
+    ],
+  ];
+
+  // Adding country.
+  $country_list = \Drupal::service('address.country_repository')->getList();
+  $country_name = [
+    'country_name' => [
+      '#markup' => '<div class="country-label">' . t('Country') . '</div><div class="country-name">' . $country_list[$default_country_code] . '</div>',
     ],
   ];
 
@@ -124,7 +143,9 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   }
 
   // Adding mobile number field to appropriate position.
-  $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'family_name');
+  $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'organization');
+  // Adding country code field to appropriate position.
+  $element = _alshaya_addressbook_array_insert($element, $country_name, 'mobile_number');
 
   $element['#prefix'] = '<div class="address-book-address">';
   $element['#suffix'] = '</div>';
@@ -150,7 +171,7 @@ function _alshaya_addressbook_lastname_validate($element, FormStateInterface $fo
  * Adding validation for the name.
  */
 function _alshaya_addressbook_name_validation($element, FormStateInterface $form_state, $field_name) {
-  $string = $form_state->getValue('field_address')[0]['address'][$field_name];
+  $string = $element['#default_value'];
   if (preg_match('/[#$\_\!@%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $string)) {
     $field_name = $field_name == 'given_name' ? 'first name' : 'last name';
     $form_state->setError($element, t('Invalid @name', ['@name' => $field_name]));
@@ -458,7 +479,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       $term = Term::load($administrative_area);
       if ($term) {
         $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-        $variables['administrative_area'] = $term->getName();
+        $variables['delivery_address']['administrative_area'] = $term->getName();
       }
     }
 
@@ -553,6 +574,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       }
       else {
         $set_default_url = $profile->toUrl('set-default', [
+          'language' => $current_language,
           'query' => [
             'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
           ],
