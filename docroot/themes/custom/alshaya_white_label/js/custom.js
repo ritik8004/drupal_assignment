@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  $(window).bind("pageshow", function(event) {
+  $(window).bind("pageshow", function (event) {
     if (event.originalEvent.persisted) {
       window.location.reload()
     }
