@@ -278,4 +278,3 @@ class CartSessionStorage implements CartStorageInterface {
   }
 
 }
-
