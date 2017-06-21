@@ -213,8 +213,6 @@ class CheckoutOptionsManager {
         'name' => $name,
       ]);
 
-      $term->get('description')->setValue($name);
-
       if (!$this->getDefaultPaymentCode()) {
         $term->get('field_payment_default')->setValue(1);
       }
