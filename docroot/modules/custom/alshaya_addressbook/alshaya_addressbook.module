@@ -89,10 +89,11 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
   $element['family_name']['#maxlength'] = 255;
 
-  $element['locality'] = [
+  // Use organization field as email.
+  $element['organization'] = [
     '#type' => 'email',
     '#required' => TRUE,
-    '#default_value' => $element['locality']['#default_value'],
+    '#default_value' => $element['organization']['#default_value'],
     '#title' => t('Email', [], ['context' => 'Address label']),
     '#description' => t("We'll send your order confirmation here."),
   ];
@@ -113,7 +114,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     ];
     $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
     $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
-    $element['organization']['#title'] = t('Block', [], ['context' => 'Address label']);
+    $element['locality']['#title'] = t('Block', [], ['context' => 'Address label']);
     $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
     $element['address_line2']['#title_display'] = 'before';
   }
@@ -145,7 +146,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   }
 
   // Adding mobile number field to appropriate position.
-  $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'locality');
+  $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'organization');
   // Adding country code field to appropriate position.
   $element = _alshaya_addressbook_array_insert($element, $country_name, 'mobile_number');
 
@@ -464,7 +465,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     // it becomes the final implementation and we then just need to change
     // value assignment here.
     $variables['delivery_address'] = [
-      'organization' => $values[0]['organization'],
+      // 'organization' => $values[0]['organization'],.
       'address_line1' => $values[0]['address_line1'],
       'address_line2' => $values[0]['address_line2'],
       'postal_code' => $values[0]['postal_code'],
