@@ -156,6 +156,8 @@ header {
       bottom: -3.8125rem;
       #{$left}: 0;
       #{$right}: 0;
+      background: white;
+      padding-bottom: 1rem;
 
       .form-item-keywords {
         float: none !important;
