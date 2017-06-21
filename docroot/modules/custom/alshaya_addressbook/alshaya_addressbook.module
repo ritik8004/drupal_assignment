@@ -577,6 +577,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       }
       else {
         $set_default_url = $profile->toUrl('set-default', [
+          'language' => $current_language,
           'query' => [
             'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
           ],
