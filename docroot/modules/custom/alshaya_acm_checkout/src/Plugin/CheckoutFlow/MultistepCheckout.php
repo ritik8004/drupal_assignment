@@ -250,12 +250,13 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           '@message' => $e->getMessage(),
         ]);
 
-        // @TODO: From Nikunj for Sylvain - how to handle translation here?
-        if (strpos($e->getMessage(), "We don't have as many") !== FALSE) {
+        // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
+        if (strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
           $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
           $response->send();
           exit;
         }
+        // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
         elseif ($e->getMessage() == $this->t('This product is out of stock.')) {
           $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
           $response->send();
