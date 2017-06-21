@@ -20,12 +20,3 @@ alshaya_acm_checkout.settings:
     click_collect_method:
       type: string
       label: 'Click and Collect delivery method code'
-    payments_default:
-      type: string
-      label: 'Default Payment method'
-    payments_home_delivery:
-      type: string
-      label: 'Payment methods - Home Delivery'
-    payments_click_collect:
-      type: string
-      label: 'Payment methods - Click and Collect'

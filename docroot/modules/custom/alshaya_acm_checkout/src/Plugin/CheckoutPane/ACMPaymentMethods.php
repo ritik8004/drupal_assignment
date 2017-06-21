@@ -68,13 +68,18 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $config = \Drupal::config('alshaya_acm_checkout.settings');
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
     // @TODO: After the payment details are entered, prevent this form from
     // showing again if a user navigates back to this step or present an option
     // for the user to cancel the last payment method and enter a new one.
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
+
+    foreach ($plugins as $plugin) {
+      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']);
+    }
 
     // Get available payment methods and compare to enabled payment method
     // plugins.
@@ -84,8 +89,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     // Get the methods allowed for selected delivery method.
     $shipping_method = $cart->getShippingMethodAsString();
-    $allowed_methods = $shipping_method == $config->get('click_collect_method') ? $config->get('payments_click_collect') : $config->get('payments_home_delivery');
-    $allowed_methods = explode(',', $allowed_methods);
+    $allowed_methods = $checkout_options_manager->getAllowedPaymentMethodCodes($shipping_method);
 
     // Update payment methods to show only those which are allowed for selected
     // delivery method.
@@ -113,7 +117,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       return $pane_form;
     }
     elseif (empty($selected_plugin_id)) {
-      $default_plugin_id = $config->get('payments_default');
+      $default_plugin_id = $checkout_options_manager->getDefaultPaymentCode();
 
       if (in_array($default_plugin_id, $payment_methods)) {
         $selected_plugin_id = $default_plugin_id;
@@ -129,7 +133,18 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       if (!isset($plugins[$plugin_id])) {
         continue;
       }
-      $payment_options[$plugin_id] = $plugins[$plugin_id]['label'];
+
+      $payment_term = $checkout_options_manager->loadPaymentMethod($plugin_id);
+
+      $method_name = '
+        <div class="payment-method-name">
+          <div class="method-title">' . $payment_term->getName() . '</div>
+          <div class="method-side-info method-' . $plugin_id . '"></div>
+          <div class="method-description">' . $payment_term->get('description')->getValue()[0]['value'] . '</div>
+        </div>
+      ';
+
+      $payment_options[$plugin_id] = $method_name;
     }
 
     $pane_form['payment_options'] = [

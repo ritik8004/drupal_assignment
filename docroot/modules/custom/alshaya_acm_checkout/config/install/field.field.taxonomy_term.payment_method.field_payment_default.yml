@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_payment_default
+    - taxonomy.vocabulary.payment_method
+  module:
+    - options
+id: taxonomy_term.payment_method.field_payment_default
+field_name: field_payment_default
+entity_type: taxonomy_term
+bundle: payment_method
+label: 'Default Payment'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 2
+default_value_callback: ''
+settings: {  }
+field_type: list_integer
