@@ -48,7 +48,7 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCartId() {
+  public function getCartId($create_new = TRUE) {
     $cookies = \Drupal::request()->cookies->all();
     $cart_id = NULL;
 
@@ -61,9 +61,14 @@ class CartSessionStorage implements CartStorageInterface {
     if ($cart) {
       return $cart->id();
     }
+    elseif ($create_new) {
+      $cart = $this->createCart();
+      return $cart->id();
+    }
+    else {
+      return NULL;
+    }
 
-    $cart = $this->createCart();
-    return $cart->id();
   }
 
   /**
@@ -95,13 +100,13 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCart() {
+  public function getCart($create_new = TRUE) {
     $cart = $this->session->get(self::STORAGE_KEY);
 
     // No cart in session, try to load an updated cart.
     if (!$cart) {
       try {
-        $cart = $this->updateCart();
+        $cart = $this->updateCart($create_new);
       }
       catch (\Exception $e) {
         // Intentionally suppressing the error here. This will happen when there
@@ -135,8 +140,8 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function updateCart() {
-    $cart_id = $this->getCartId();
+  public function updateCart($create_new = TRUE) {
+    $cart_id = $this->getCartId($create_new);
     $update = NULL;
 
     $cart = $this->session->get(self::STORAGE_KEY);
@@ -154,30 +159,35 @@ class CartSessionStorage implements CartStorageInterface {
       unset($update->totals);
     }
 
-    try {
-      $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
-    }
-    catch (\Exception $e) {
-      $this->restoreCart($cart_id);
-      throw $e;
-    }
+    if ($cart_id) {
+      try {
+        $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
+      }
+      catch (\Exception $e) {
+        $this->restoreCart($cart_id);
+        throw $e;
+      }
 
-    if (empty($cartObject)) {
-      return;
-    }
+      if (empty($cartObject)) {
+        return;
+      }
 
-    $cartObject->cart_id = $cart_id;
+      $cartObject->cart_id = $cart_id;
 
-    if ($cart) {
-      $cart->updateCartObject($cartObject);
+      if ($cart) {
+        $cart->updateCartObject($cartObject);
+      }
+      else {
+        $cart = new Cart($cartObject);
+      }
+
+      $this->addCart($cart);
+
+      return $cart;
     }
     else {
-      $cart = new Cart($cartObject);
+      return NULL;
     }
-
-    $this->addCart($cart);
-
-    return $cart;
   }
 
   /**
@@ -268,3 +278,4 @@ class CartSessionStorage implements CartStorageInterface {
   }
 
 }
+
