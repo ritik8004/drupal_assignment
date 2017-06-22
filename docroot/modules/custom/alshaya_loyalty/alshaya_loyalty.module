@@ -97,6 +97,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     case 'user_form':
       // Allow loyalty only if its enabled.
       if ($loyalty_settings['enable_disable_loyalty']) {
+        $form['field_privilege_card_number']['widget'][0]['value']['#type'] = 'tel';
         _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
       }
       else {
