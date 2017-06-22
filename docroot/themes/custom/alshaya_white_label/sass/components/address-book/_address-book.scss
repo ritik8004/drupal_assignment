@@ -1,4 +1,4 @@
-.c-address-book .user__address--column {
+.user__address--column {
   border: 1px solid $white;
   font-family: $arial;
   font-size: 12px;
@@ -23,7 +23,9 @@
       margin-#{$right}: 48px;
     }
   }
+}
 
+.address {
   .address--data {
     overflow: hidden;
     padding: 26px 28px 51px 16px;
@@ -234,7 +236,7 @@
     }
   }
 
-  .active {
+  &.active {
     .address--data {
       background: $white-four;
     }
