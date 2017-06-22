@@ -66,7 +66,7 @@
 
       $('.current-location').on('click', function () {
         // Start overlay here.
-        $('.alias--store-finder').addClass('modal-overlay--spinner');
+        $('body').addClass('modal-overlay--spinner');
 
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
@@ -77,7 +77,8 @@
 
       // Error callback.
       var errorCallback = function (error) {
-        $('.alias--store-finder').removeClass('modal-overlay--spinner');
+        // Close the overlay.
+        $('body').removeClass('modal-overlay--spinner');
       };
 
       // Success callback.
@@ -119,7 +120,9 @@
             }, 500);
           }
         });
-        $('.alias--store-finder').removeClass('modal-overlay--spinner');
+
+        // Close the overlay.
+        $('body').removeClass('modal-overlay--spinner');
       }
 
       // Remove the store node title from breadcrumb.
