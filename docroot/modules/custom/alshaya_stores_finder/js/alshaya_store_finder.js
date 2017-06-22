@@ -20,9 +20,9 @@
         Drupal.alshaya_stores_finder.paginateStores(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit);
       }
 
-      $('.set-center-location').on('click', function () {
+      $('.set-center-location .views-field-field-store-address').on('click', function () {
         // Id of the row.
-        var elementID = $(this).attr('id');
+        var elementID = $(this).parents('.set-center-location').attr('id');
         Drupal.geolocation.loadGoogle(function () {
           var geolocationMap = {};
 
