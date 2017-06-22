@@ -319,7 +319,8 @@
   z-index: 5;
   background: transparent;
 
-  &.navbar-fixed-top {
+  &.navbar-fixed-top,
+  .block-views-exposed-filter-blocksearch-page {
     background: transparent;
   }
 
