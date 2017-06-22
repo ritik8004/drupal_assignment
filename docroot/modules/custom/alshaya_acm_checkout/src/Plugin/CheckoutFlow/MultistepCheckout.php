@@ -94,7 +94,15 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   protected function processStepId($requested_step_id) {
-    $cart = $this->cartStorage->getCart();
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    // Redirect user to basket page if there are no items in cart and user is
+    // trying to checkout.
+    if ($requested_step_id != 'confirmation' && (empty($cart) || !$cart->items())) {
+      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+      $response->send();
+    }
+
     $cart_step_id = $cart->getCheckoutStep();
     $step_ids = array_keys($this->getVisibleSteps());
     $step_id = $requested_step_id;
@@ -117,13 +125,6 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       if (!empty($requested_step_id) && $requested_step_id != $step_id) {
         $this->redirectToStep($step_id);
       }
-    }
-
-    // Redirect user to basket page if there are no items in cart and user is
-    // trying to checkout.
-    if ($step_id != 'confirmation' && !$cart->items()) {
-      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
-      $response->send();
     }
 
     $config = $this->getConfiguration();

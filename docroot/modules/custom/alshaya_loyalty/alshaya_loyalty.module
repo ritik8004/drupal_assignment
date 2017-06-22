@@ -69,8 +69,10 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     case 'customer_cart_form':
       // Get the current cart.
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+
       // Get current cart items.
-      $cart_items = $cart->items();
+      $cart_items = $cart ? $cart->items() : NULL;
+
       // Add Privilege cart form elements only if there is something in cart.
       if (!empty($cart_items)) {
         $add_privilege_fields = TRUE;
