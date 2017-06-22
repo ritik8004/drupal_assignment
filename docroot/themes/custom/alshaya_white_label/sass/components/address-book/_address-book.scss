@@ -47,6 +47,10 @@
     color: $black-two;
     direction: ltr;
 
+    html[lang=ar] & {
+      text-align: right;
+    }
+
     @include breakpoint($desktop) {
       font-size: 14px;
       font-weight: 700;
@@ -441,7 +445,7 @@
 .profile-address-book-edit-form,
 #address-book-form-open {
   .country-code-prefix {
-    margin-top: 0.55rem;
+    margin-top: 0.5rem;
 
     @include breakpoint($only-mobile) {
       margin-top: 0.5rem;

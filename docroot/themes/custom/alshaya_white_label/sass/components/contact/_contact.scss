@@ -245,7 +245,11 @@
       top: 0.35rem;
 
       html[lang=ar] & {
-        top: 0.23rem;
+        top: 0.25rem;
+
+        @include breakpoint($only-mobile) {
+          top: 0.2rem;
+        }
       }
 
       .firefox & {
