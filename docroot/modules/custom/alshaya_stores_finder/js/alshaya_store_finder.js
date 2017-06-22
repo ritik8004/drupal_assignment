@@ -21,6 +21,14 @@
       }
 
       $('.set-center-location .views-field-field-store-address').on('click', function () {
+        // Get all elements having 'selected' class and then remove class.
+        var active_stores = $('.list-view-locator.selected');
+        if (active_stores.length > 0) {
+          active_stores.removeClass('selected');
+        }
+        // Add class to parent for making it active.
+        $(this).parents('.list-view-locator').addClass('selected');
+
         // Id of the row.
         var elementID = $(this).parents('.set-center-location').attr('id');
         Drupal.geolocation.loadGoogle(function () {
