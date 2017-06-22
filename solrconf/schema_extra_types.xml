@@ -11,6 +11,8 @@
       <tokenizer class="solr.WhitespaceTokenizerFactory"/>
       <filter class="solr.LowerCaseFilterFactory"/>
       <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_ar.txt" enablePositionIncrements="1"/>
+      <!-- We include the synonym filter twice since sometimes the synonyms are normalized and sometimes they are not. -->
+      <filter class="solr.SynonymFilterFactory" synonyms="synonyms_ar.txt" expand="1" ignoreCase="1"/>
       <filter class="solr.ArabicNormalizationFilterFactory"/>
       <filter class="solr.SynonymFilterFactory" synonyms="synonyms_ar.txt" expand="1" ignoreCase="1"/>
       <filter class="solr.ArabicStemFilterFactory"/>
@@ -20,6 +22,8 @@
       <tokenizer class="solr.WhitespaceTokenizerFactory"/>
       <filter class="solr.LowerCaseFilterFactory"/>
       <filter class="solr.StopFilterFactory" ignoreCase="1" words="stopwords_ar.txt" enablePositionIncrements="1"/>
+      <!-- We include the synonym filter twice since sometimes the synonyms are normalized and sometimes they are not. -->
+      <filter class="solr.SynonymFilterFactory" synonyms="synonyms_ar.txt" expand="1" ignoreCase="1"/>
       <filter class="solr.ArabicNormalizationFilterFactory"/>
       <filter class="solr.SynonymFilterFactory" synonyms="synonyms_ar.txt" expand="1" ignoreCase="1"/>
       <filter class="solr.ArabicStemFilterFactory"/>
