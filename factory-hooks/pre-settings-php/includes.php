@@ -50,7 +50,7 @@ switch ($env) {
 
   case 'dev':
   case 'test':
-    $config['acq_commerce.conductor']['url'] = 'https://agent.dev.acm.acquia.io/';
+    $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
 
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
