@@ -335,7 +335,12 @@
         font-size: 0.75rem;
         background: $white-five;
         margin-top: 0.1875rem;
+        text-align: $left;
       }
+    }
+
+    input[type=email]::placeholder {
+      color: $greyish;
     }
   }
 
