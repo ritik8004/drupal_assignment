@@ -624,7 +624,7 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          transform: translateY(0%);
+          transform: translateY(-2rem);
         }
       }
 
@@ -649,10 +649,11 @@ header {
         top: 100%;
         #{$left}: 0;
         width: 100%;
-        transform: translateY(-2.6875rem);
+        transform: translateY(-3.625rem);
         z-index: -1;
-        transition: all 0.5s ease-in-out 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
+        transition: all 0.6s ease-in-out 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
         transition-delay: 0.4s;
+        border-top: 3rem solid transparent;
       }
     }
 
@@ -686,7 +687,7 @@ header {
     #{$left}: 0;
     background: $white-five;
     z-index: 10;
-    padding-top: 1.5625rem !important;
+    padding-top: 0.5625rem;
     padding-#{$left}: 0;
     padding-#{$right}: calc((100% - 1284px) / 2);
     min-height: 22.125rem;
@@ -948,7 +949,7 @@ header {
     a {
       padding: 1rem 0;
       padding-bottom: 0.9375rem;
-      padding-#{$right}: 0.25rem;
+      padding-#{$right}: 1.25rem;
     }
   }
 
