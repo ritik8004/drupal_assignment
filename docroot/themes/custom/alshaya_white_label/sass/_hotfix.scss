@@ -100,9 +100,11 @@ body.chrome {
  * Samsung - Specific issues and hacks.
  */
 .samsung {
-  .form-type-textfield {
+  .webform-submission-alshaya-contact-form .form-item-mobile-number-mobile {
     html[lang=ar] & {
-      top: 0.2rem !important;
+      @include breakpoint($only-mobile) {
+        top: 0.2rem !important;
+      }
     }
   }
 }
