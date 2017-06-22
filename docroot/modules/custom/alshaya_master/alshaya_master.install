@@ -777,6 +777,9 @@ function alshaya_master_install() {
     'register' => [
       'ar' => 'سجل الآن',
     ],
+    'A @entity_type with @field_name @value already exists.' => [
+      'ar' => 'يوجد @entity_type لديه اسم المستخدم @field_name و رقم الجوال @value مسجل',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
