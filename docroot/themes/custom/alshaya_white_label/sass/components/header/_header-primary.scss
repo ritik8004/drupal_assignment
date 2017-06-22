@@ -156,7 +156,6 @@ header {
       bottom: -3.8125rem;
       #{$left}: 0;
       #{$right}: 0;
-      background: white;
 
       .form-item-keywords {
         float: none !important;
@@ -915,7 +914,7 @@ header {
       width: 84.375%;
       height: 100%;
       position: fixed;
-      top: 2.9375rem;
+      top: 2.9rem;
       bottom: 0;
       z-index: 20;
       overflow-y: scroll;
@@ -1156,7 +1155,7 @@ header {
     padding: 0.9rem 1.5rem;
     display: table-cell;
     text-align: center;
-    height: 2.9375rem;
+    height: 2.9rem;
 
     &.shop {
       padding: 0.9rem 2.05rem;
@@ -1245,7 +1244,7 @@ header {
     }
 
     .c-my-account-nav {
-      top: 4.8rem;
+      top: 86px;
     }
   }
 
@@ -1254,7 +1253,7 @@ header {
   }
 
   ul.menu--one__list {
-    top: 2.9375rem;
+    top: 2.9rem;
   }
 
   .mobile--close {
