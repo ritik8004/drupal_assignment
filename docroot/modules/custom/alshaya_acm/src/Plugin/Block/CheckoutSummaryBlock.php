@@ -158,8 +158,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         $delivery['address'] .= !empty($shipping_address['street2']) ? $shipping_address['street2'] . ', ' : '';
         $delivery['address'] .= !empty($shipping_address['city']) ? $shipping_address['city'] . ', ' : '';
         $delivery['address'] .= !empty($shipping_address['region']) ? $shipping_address['region'] . ', ' : '';
-        $delivery['address'] .= $shipping_address['country'] . ', ';
-        $delivery['address'] .= !empty($shipping_address['postcode']) ? $shipping_address['postcode'] : '';
+        $delivery['address'] .= $shipping_address->country;
+        $delivery['address'] .= !empty($shipping_address->postcode) ? ', ' . $shipping_address->postcode : '';
       }
     }
 

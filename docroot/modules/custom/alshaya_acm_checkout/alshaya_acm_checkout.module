@@ -96,6 +96,7 @@ function _alshaya_acm_checkout_clean_address($address) {
     'first_name',
     'lastname',
     'last_name',
+    'email',
     'phone',
     'street',
     'street2',
@@ -139,11 +140,17 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
   if (is_string($phone)) {
     $phone_string = $phone;
   }
-  elseif (is_object($phone)) {
-    $phone_string = \Drupal::service('mobile_number.util')->libUtil()->format($phone, 1);
-  }
-  elseif (is_array($phone)) {
-    $phone_string = $phone['value'];
+  elseif (is_array($phone) || is_object($phone)) {
+    $phone = (array) $phone;
+    if (isset($phone['country_code'])) {
+      $phone_string = \Drupal::service('mobile_number.util')->getPhoneNumberAsString($phone['mobile'], $phone['country_code']);
+    }
+    elseif (isset($phone['country-code'])) {
+      $phone_string = \Drupal::service('mobile_number.util')->getPhoneNumberAsString($phone['mobile'], $phone['country-code']);
+    }
+    elseif (isset($phone['value'])) {
+      $phone_string = $phone['value'];
+    }
   }
 
   return $phone_string;
