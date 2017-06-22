@@ -1,12 +1,9 @@
-uuid: 40d17069-ec54-403d-b6a0-2b56950d9461
 langcode: en
 status: true
 dependencies:
   module:
     - taxonomy
     - user
-_core:
-  default_config_hash: uSLDqZs0dkslDcPLwQwUHpC_8YJuHaEM7eKA6yoyRR0
 id: term_search
 label: 'Term Search'
 module: views
