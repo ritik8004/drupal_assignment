@@ -7,3 +7,8 @@ alshaya_master.404_maintenance_setting:
   route_name: alshaya_master.404_maintenance_setting
   title: '404 and Maintenance mode content'
   base_route: alshaya_master.404_maintenance_setting
+alshaya_master.product_category_search:
+  route_name: view.search_product_category.page_1
+  title: 'Product category search'
+  base_route: entity.taxonomy_vocabulary.overview_form
+  weight: 100
