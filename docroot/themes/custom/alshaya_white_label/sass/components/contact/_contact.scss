@@ -259,6 +259,11 @@
       .ie & {
         top: 0.4rem;
       }
+
+      input::placeholder {
+        color: $greyish;
+        opacity: 1;
+      }
     }
 
     html[lang=ar] & {
