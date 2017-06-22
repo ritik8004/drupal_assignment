@@ -358,8 +358,6 @@
     }
 
     @include breakpoint($desktop) {
-      margin-bottom: 3rem;
-
       &:hover {
         z-index: 1;
 
@@ -373,6 +371,7 @@
           z-index: -1;
           box-shadow: 4px 4px 0 0 $whisper-light;
           border: 1px solid $greyish;
+          background: $white-five;
         }
 
         .field--name-name {
@@ -625,6 +624,8 @@
     }
 
     .form-type-select {
+      @include select-wrapper(7.1875rem);
+
       @include icon(chevrondown, after) {
         #{$right}: -2.25rem;
         height: 2.1875rem;
@@ -640,19 +641,19 @@
     }
 
     select {
+      @include select-style(9.375rem);
+
+      @include breakpoint($tablet) {
+        background-color: $white-two;
+        z-index: 1;
+        padding: 0.625rem;
+        padding-left: 0.75rem;
+      }
+
       @include breakpoint($only-mobile) {
         max-width: 6.75rem;
         border-right: 1px solid #fff;
       }
-
-      border: none;
-      background: #e5e5e5;
-      padding: 0.625rem;
-      padding-left: 0.75rem;
-      height: 2.1875rem;
-      border-radius: 0;
-      -webkit-appearance: none;
-      font-size: 0.75rem;
     }
   }
 }
