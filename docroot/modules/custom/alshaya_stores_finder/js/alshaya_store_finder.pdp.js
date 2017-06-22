@@ -6,6 +6,8 @@
 (function ($, Drupal) {
   'use strict';
 
+  /* global google */
+
   // Coordinates of the user's location.
   var asf_coords = null;
 
@@ -32,12 +34,14 @@
     attach: function (context, settings) {
 
       $('#pdp-stores-container').once('initiate-stores').each(function () {
+        // Get the permission track the user location.
         try {
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(Drupal.geolocation.currentLocationSuccessCallback, Drupal.geolocation.currentLocationErrorCallback);
           }
         }
         catch (e) {
+          // Empty
         }
       });
 
@@ -46,10 +50,10 @@
       });
 
       $('.click-collect-all-stores').once('bind-events').on('click', '.close-inline-modal, .change-store-link, .search-stores-button', function (e) {
-        if (e.target.className == 'change-store-link') {
+        if (e.target.className === 'change-store-link') {
           $(this).siblings('.search-store').show();
         }
-        else if (e.target.className == 'search-stores-button' && !records) {
+        else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
 
           var asf_coords = {
@@ -68,10 +72,10 @@
       });
 
       $('.click-collect-form').once('bind-events').on('click', '.change-location-link, .search-stores-button', function (e) {
-        if (e.target.className == 'change-location-link') {
+        if (e.target.className === 'change-location-link') {
           $(this).siblings('.search-store').show();
         }
-        else if (e.target.className == 'search-stores-button' && !records) {
+        else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
           var asf_coords = {
             latitude: $('input[name="latitude"]').val(),
@@ -103,7 +107,7 @@
 
           // When the user selects an address from the dropdown, populate the address
           // fields in the form.
-          autocomplete.addListener('place_changed', function() {
+          autocomplete.addListener('place_changed', function () {
             // Get the place details from the autocomplete object.
             var place = autocomplete.getPlace();
             Drupal.geolocation.getStores(place);
@@ -130,7 +134,7 @@
   };
 
   // Initialize autocomplete for given field.
-  Drupal.geolocation.initAutocomplete = function(field) {
+  Drupal.geolocation.initAutocomplete = function (field) {
     // Create the autocomplete object, restricting the search to geographical
     // location types.
     return new google.maps.places.Autocomplete(
@@ -140,7 +144,7 @@
   };
 
   // Fill stores for the given place.
-  Drupal.geolocation.getStores = function(place) {
+  Drupal.geolocation.getStores = function (place) {
     $('input[name="latitude"]').val(place.geometry.location.lat());
     $('input[name="longitude"]').val(place.geometry.location.lng());
 
@@ -156,10 +160,10 @@
   };
 
   // Make autocomplete field in search form in the all stores.
-  Drupal.pdp.all_store_autocomplete = function() {
+  Drupal.pdp.all_store_autocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
     all_store_autocomplete = Drupal.geolocation.initAutocomplete(field);
-    all_store_autocomplete.addListener('place_changed', function() {
+    all_store_autocomplete.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
       var place = all_store_autocomplete.getPlace();
       Drupal.geolocation.getStores(place);
@@ -167,7 +171,7 @@
   };
 
   // Dispaly search store form.
-  Drupal.pdp.dispalySearchStoreForm = function() {
+  Drupal.pdp.dispalySearchStoreForm = function () {
     var sku_clean = $('#pdp-stores-container').attr('sku-clean');
     if ($('.selected-variant-sku-' + sku_clean).length) {
       $('.click-collect-empty-selection').hide();
@@ -179,7 +183,7 @@
   };
 
   // Get formatted address from geocode.
-  Drupal.pdp.getFormattedAddress = function(latitude, longitude, $target) {
+  Drupal.pdp.getFormattedAddress = function (latitude, longitude, $target) {
     if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
       Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
     }
@@ -217,26 +221,26 @@
       }
     }
 
-    /*if (last_coords === null) {
+    /* if (last_coords === null) {
       asf_coords.latitude = 29.3222135;
       asf_coords.longitude = 48.04741160000003;
-    }*/
+    } */
 
     if (asf_coords !== null) {
       Drupal.pdp.getFormattedAddress(asf_coords.latitude, asf_coords.longitude, $('.click-collect-form').find('.google-store-location'));
 
       var check_location = true;
       if (last_coords !== null) {
-        check_location = (last_coords.latitude != asf_coords.latitude || last_coords.longitude != asf_coords.longitude);
+        check_location = (last_coords.latitude !== asf_coords.latitude || last_coords.longitude !== asf_coords.longitude);
       }
 
-      if ((last_sku === null || last_sku != sku) || check_location) {
+      if ((last_sku === null || last_sku !== sku) || check_location) {
         last_sku = sku;
         last_coords = asf_coords;
 
         $.ajax({
           url: Drupal.url('stores/product/' + last_sku + '/' + asf_coords.latitude + '/' + asf_coords.longitude),
-          beforeSend: function(xmlhttprequest) {
+          beforeSend: function (xmlhttprequest) {
             var progressElement = '<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>';
             $('.click-collect-top-stores').html(progressElement);
             $('.click-collect-all-stores .stores-list-all').html(progressElement);
@@ -251,7 +255,7 @@
   };
 
   // Fill the stores with result.
-  Drupal.pdp.fill_stores = function(response, asf_coords) {
+  Drupal.pdp.fill_stores = function (response, asf_coords) {
     if (response.top_three) {
       records = true;
       $('.click-collect-top-stores').html(response.top_three);
