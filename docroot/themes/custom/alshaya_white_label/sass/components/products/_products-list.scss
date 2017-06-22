@@ -98,10 +98,6 @@
           @include breakpoint($desktop) {
             width: 9.4rem;
           }
-
-          @include breakpoint($only-tablet) {
-            width: 7.813rem;
-          }
         }
 
         label {
@@ -626,6 +622,10 @@
     .form-type-select {
       @include select-wrapper(7.1875rem);
 
+      @include breakpoint($only-mobile) {
+        @include select-wrapper(100%);
+      }
+
       @include icon(chevrondown, after) {
         #{$right}: -2.25rem;
         height: 2.1875rem;
@@ -651,8 +651,11 @@
       }
 
       @include breakpoint($only-mobile) {
-        max-width: 6.75rem;
-        border-right: 1px solid #fff;
+        width: 133%;
+        background-color: $white-two;
+        z-index: 1;
+        padding: 0.625rem;
+        padding-left: 0.75rem;
       }
     }
   }
