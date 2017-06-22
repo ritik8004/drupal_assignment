@@ -94,7 +94,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   protected function processStepId($requested_step_id) {
-    $cart = $this->cartStorage->getCart();
+    $cart = $this->cartStorage->getCart(FALSE);
 
     // Redirect user to basket page if there are no items in cart and user is
     // trying to checkout.
