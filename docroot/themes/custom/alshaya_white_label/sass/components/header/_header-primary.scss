@@ -157,7 +157,6 @@ header {
       #{$left}: 0;
       #{$right}: 0;
       background: white;
-      padding-bottom: 1rem;
 
       .form-item-keywords {
         float: none !important;
@@ -362,6 +361,10 @@ header {
 
 .c-menu-primary {
   display: none;
+
+  @include breakpoint($only-tablet) {
+    height: 60px;
+  }
 
   #block-exposedformsearchpage,
   .block-views-exposed-filter-blocksearch-page {
@@ -1362,5 +1365,18 @@ html[lang='ar'] {
 .main--menu .active-menu.not-active {
   @include breakpoint($upto-desktop) {
     display: block;
+  }
+}
+
+.c-header .block-views-exposed-filter-blocksearch-page {
+  @include breakpoint($desktop) {
+    position: relative;
+    left: 22px;
+    top: 2px;
+
+    html[lang=ar] & {
+      right: 10px;
+      top: -3px;
+    }
   }
 }
