@@ -40,6 +40,11 @@
   .form-item-mobile-number-mobile input {
     &::placeholder {
       visibility: hidden;
+
+      .ie & {
+        visibility: visible;
+        color: transparent;
+      }
     }
   }
 
@@ -86,7 +91,7 @@
         }
 
         position: absolute;
-        #{$left}: -5rem;
+        #{$left}: -3rem;
         width: 21rem;
       }
     }
@@ -237,10 +242,18 @@
     width: 100%;
 
     .form-type-textfield {
-      top: 0.3rem;
+      top: 0.35rem;
 
       html[lang=ar] & {
-        top: 0.2rem;
+        top: 0.23rem;
+      }
+
+      .firefox & {
+        top: 0.44rem;
+      }
+
+      .ie & {
+        top: 0.4rem;
       }
     }
 
@@ -257,5 +270,21 @@
 .c-user-edit .user-form {
   #edit-account {
     margin-top: 2.813rem;
+  }
+}
+
+html[lang=ar] {
+  .webform-submission-alshaya-contact-form {
+    .form-item-mobile-number-mobile {
+      label.error {
+        top: 1.125rem !important;
+        left: -0.4375rem !important;
+      }
+
+      .form-item--error-message {
+        right: 0 !important;
+        direction: rtl;
+      }
+    }
   }
 }
