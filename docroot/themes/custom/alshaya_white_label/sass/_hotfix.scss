@@ -108,7 +108,7 @@ body.chrome {
     }
   }
 
-  &.s-tab2 {
+  &.s-tab2:not(.chrome) {
     html[lang=ar] & {
       .webform-submission-alshaya-contact-form .form-item-mobile-number-mobile {
         top: 0.15rem !important;
