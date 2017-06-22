@@ -12,6 +12,12 @@
                 <div class="address--content">{{ delivery_to }}</div>
              </div>
          {% endif %}
+          {% if delivery_address.organization is not empty %}
+              <div class="address--contact">
+                  <div class="address--label">{{ 'Email' | t }}</div>
+                  <div class="address--content">{{ delivery_address.organization }}</div>
+              </div>
+          {% endif %}
         {% if contact_no is not empty %}
             <div class="address--contact">
                 <div class="address--label">{{ 'Contact number' | t }}</div>
@@ -27,9 +33,6 @@
                 {% endif %}
                 {% if delivery_address.dependent_locality is not empty %}
                     <div class="address--content">{{ delivery_address.dependent_locality }}</div>
-                {% endif %}
-                {% if delivery_address.organization is not empty %}
-                    <div class="address--content">{{ delivery_address.organization }}</div>
                 {% endif %}
                 {% if delivery_address.address_line1 is not empty %}
                     <div class="address--content">{{ delivery_address.address_line1 }}</div>
