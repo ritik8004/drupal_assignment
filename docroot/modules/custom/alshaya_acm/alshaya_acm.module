@@ -48,7 +48,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $cart = $cart_storage->getCart();
 
   // Get current cart items.
-  $cart_items = $cart->items();
+  $cart_items = $cart ? $cart->items() : NULL;
 
   if (empty($cart_items)) {
     // Add empty message wrapper container.
@@ -339,9 +339,10 @@ function alshaya_acm_preprocess_page_title(&$variables) {
   // Change cart page title with quantity count.
   if ($route_match->getRouteName() == 'acq_cart.cart') {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+    $count = $cart ? $cart->getCartItemsCount() : 0;
 
     $variables['title'] = [
-      '#markup' => t("Basket (%count)", ['%count' => $cart->getCartItemsCount()]),
+      '#markup' => t("Basket (%count)", ['%count' => $count]),
     ];
   }
 }
