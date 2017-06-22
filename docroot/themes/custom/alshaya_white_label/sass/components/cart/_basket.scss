@@ -798,4 +798,38 @@ html[lang=ar] {
       right: 50%;
     }
   }
+
+  .tooltip--wrap {
+    min-width: 15em;
+
+    @include breakpoint($tablet) {
+      min-width: 12em;
+    }
+  }
+
+  .path--cart .contains--tooltip {
+    @include breakpoint($only-mobile) {
+      .tooltip {
+        right: -2.5rem;
+      }
+
+      .tooltip--head::after {
+        position: absolute;
+        left: 0.9rem;
+        top: -0.25rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .tooltip--head::after {
+        position: absolute;
+        left: 1.9rem;
+        top: -0.25rem;
+      }
+
+      .tooltip {
+        right: -3.5rem;
+      }
+    }
+  }
 }
