@@ -85,7 +85,7 @@ class StoreFinderAvailableStores extends FormBase {
     ];
 
     $form['#attached'] = [
-      'library' => ['alshaya_stores_finder/store_finder_autocomplete'],
+      'library' => ['alshaya_stores_finder/pdp'],
       'drupalSettings' => [
         'geolocation' => [
           'google_map_url' => $this->getGoogleMapsApiUrl(),
