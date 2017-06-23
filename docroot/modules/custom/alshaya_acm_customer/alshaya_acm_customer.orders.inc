@@ -8,7 +8,6 @@
 use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\UserInterface;
 
 /**
@@ -27,7 +26,9 @@ use Drupal\user\UserInterface;
 function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_key = '') {
   $orders = [];
 
-  $cid = 'orders_list_' . $email;
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  $cid = 'orders_list_' . $langcode . '_' . $email;
 
   if ($cache = \Drupal::cache()->get($cid)) {
     $orders = $cache->data;
@@ -117,45 +118,10 @@ function alshaya_acm_customer_clean_sku($sku) {
  *   Status of order, ensure string can be used directly as class too.
  */
 function alshaya_acm_customer_get_order_status(array $order) {
-  if ($order['status'] == 'payment_failed') {
-    return [
-      'text' => (new TranslatableMarkup('payment failed'))->render(),
-      'class' => 'status-returned status-failed',
-      'key' => 'failed',
-    ];
-  }
-
-  // We support only three status as of now.
-  $status = ['pending' => 0, 'delivered' => 0, 'returned' => 0];
-
-  // Check for each item status.
-  foreach ($order['items'] as $item) {
-    $itemStatus = alshaya_acm_customer_get_order_item_status($item);
-    $status[$itemStatus]++;
-  }
-
-  // @TODO: Add conditions for partial delivery status - not in MVP1.
-  // Check MMCPA-145 comments for more details.
-  if ($status['returned'] !== 0) {
-    return [
-      'text' => (new TranslatableMarkup('returned'))->render(),
-      'class' => 'status-returned',
-      'key' => 'returned',
-    ];
-  }
-  elseif ($status['delivered'] !== 0) {
-    return [
-      'text' => (new TranslatableMarkup('delivered'))->render(),
-      'class' => 'status-delivered',
-      'key' => 'delivered',
-    ];
-  }
-
-  // Finally if it is neither delivered nor returned, it is pending.
   return [
-    'text' => (new TranslatableMarkup('pending'))->render(),
-    'class' => 'status-pending',
-    'key' => 'pending',
+    'text' => $order['state'],
+    'class' => 'status-' . $order['status'],
+    'key' => $order['status'],
   ];
 }
 
