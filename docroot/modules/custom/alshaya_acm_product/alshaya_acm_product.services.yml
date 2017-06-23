@@ -6,3 +6,5 @@ services:
   alshaya_acm_product.fields:
     class: Drupal\alshaya_acm_product\AlshayaGetProductFields
     arguments: [ '@entity_type.manager' ]
+  alshaya_acm_product.skumanager:
+    class: Drupal\alshaya_acm_product\SkuManager
