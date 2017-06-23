@@ -28,7 +28,9 @@
     acq_cart_mini_cart_xhr = $.ajax({
       url: Drupal.url('mini-cart'),
       success: function (result) {
-        $('#mini-cart-wrapper').html(result);
+        if ($('#cart_notification').length === 0) {
+          $('#mini-cart-wrapper').html(result);
+        }
       }
     });
   };
