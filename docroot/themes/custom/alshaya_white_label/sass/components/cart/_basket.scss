@@ -701,10 +701,14 @@ html[lang=ar] {
     #table-cart-items {
       tr {
         td {
-          padding: 1.9rem 1.5rem;
+          padding: 0 1.2rem;
 
-          @include breakpoint($upto-desktop) {
-            padding: 0;
+          @include breakpoint($tablet) {
+            padding: 1.9rem 1rem;
+          }
+
+          @include breakpoint($desktop) {
+            padding: 1.9rem 1.5rem;
           }
 
           &:first-child a {
@@ -776,6 +780,14 @@ html[lang=ar] {
 
   .path--cart .customer-cart-form .items {
     padding-right: 1.2rem;
+
+    @include breakpoint($only-tablet) {
+      padding-right: 2.5rem;
+
+      a {
+        width: 100%;
+      }
+    }
   }
 
   .field--name-field-skus .ladda-button[data-style=zoom-in] .ladda-spinner {
