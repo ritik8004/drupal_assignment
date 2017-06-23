@@ -53,18 +53,6 @@ class LoyaltyConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('apcn_value_starts_with') ? $config->get('apcn_value_starts_with') : '6362544',
     ];
 
-    $form['loyalty_configuration'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Configuration'),
-      '#open' => FALSE,
-    ];
-    $form['loyalty_configuration']['privilege_card_earn_text'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Privilege card earn text'),
-      '#description' => $this->t('Privilege card earn text'),
-      '#default_value' => $config->get('privilege_card_earn_text') ? $config->get('privilege_card_earn_text') : '',
-    ];
-
     // Loyalty on/off feature.
     $form['loyalty_on_off'] = [
       '#type' => 'details',
@@ -90,7 +78,6 @@ class LoyaltyConfigForm extends ConfigFormBase {
     $config->set('apcn_max_length', $form_state->getValue('max_length'));
     $config->set('apcn_value_starts_with', $form_state->getValue('value_starts_with'));
     $config->set('enable_disable_loyalty', $form_state->getValue('enable_disable_loyalty'));
-    $config->set('privilege_card_earn_text', $form_state->getValue('privilege_card_earn_text'));
     $config->save();
 
     // Invalidate the cache tag.
