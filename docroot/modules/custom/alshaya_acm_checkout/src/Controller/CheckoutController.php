@@ -13,6 +13,8 @@ use Drupal\Core\Url;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides additional urls for checkout pages.
@@ -113,7 +115,8 @@ class CheckoutController implements ContainerInjectionInterface {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   AjaxResponse object.
    */
-  public function editAddress(Profile $profile) {
+  public function editAddress(Profile $profile)
+  {
     $magento_address = $this->addressBookManager->getAddressFromEntity($profile, FALSE);
     $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($magento_address);
 
@@ -123,6 +126,96 @@ class CheckoutController implements ContainerInjectionInterface {
     $response = new AjaxResponse();
     $response->addCommand(new InvokeCommand(NULL, 'editDeliveryAddress', [$address]));
     return $response;
+  }
+
+  /** Function to get the cart stores.
+   *
+   * @param int $cart_id
+   *   The cart id.
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return array
+   *   Return the array of all available stores.
+   */
+  public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
+
+    // Get the stores from Magento.
+    $api_wrapper = \Drupal::service('alshaya_api.api');
+    $stores = $api_wrapper->getCartStores($cart_id, $lat, $lon);
+
+    // Add missing information to store data.
+    array_walk($stores, function (&$store) {
+      $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+      $extra_data = $store_utility->getStoreExtraData($store);
+      if (!empty($extra_data)) {
+        $store = array_merge($extra_data, $extra_data);
+      }
+      else {
+        $store['name'] = $store['code'];
+        $store['address'] = $store['code'];
+        $store['opening_hours'] = $store['code'];
+      }
+    });
+    return $stores;
+  }
+
+  /**
+   * Function to get the cart stores.
+   *
+   * @param int $cart_id
+   *   The cart id.
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return json response to use in jquery ajax.
+   */
+  public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
+    $stores = $this->getCartStores($cart_id, $lat, $lon);
+    $output = t('Sorry, No Store found for selected location.');
+    if (count($stores) > 0) {
+      $build = [
+        '#theme' => 'click_collect_stores_list',
+        '#title' => t('Available at @count stores', ['@count' => count($stores)]),
+        '#stores' => $stores,
+      ];
+      $output = render($build);
+    }
+
+    return new JsonResponse(['output' => $output, 'raw' => $stores]);
+  }
+
+  /**
+   * Render selected store html.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Output the rendered html with selected store information.
+   */
+  public function selectedStore() {
+    // Get all the post data, which contains store information passed in ajax.
+    $store = \Drupal::request()->request->all();
+    $output = t("There's no store selected.");
+    if (!empty($store)) {
+      $build = [
+        '#theme' => 'click_collect_selected_store',
+        '#store' => $store,
+      ];
+      $output = render($build);
+    }
+
+    return new JsonResponse(['output' => render($build), 'raw' => $store]);
+  }
+
+  /**
+   * Map view of the selected store.
+   */
+  public function storeMapView() {
+    return new JsonResponse(['output' => '']);
   }
 
 }

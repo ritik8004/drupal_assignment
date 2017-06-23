@@ -6,6 +6,7 @@ use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Url;
 
 /**
  * Class StoresFinderUtility.
@@ -101,7 +102,7 @@ class StoresFinderUtility {
    *   Stores array.
    */
   public function getSkuStores($sku, $lat, $lon) {
-    $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $stores = [];
 
@@ -124,19 +125,10 @@ class StoresFinderUtility {
         else {
           continue;
         }
-
-        $store['name'] = $store_node->label();
-        $store['code'] = $store_node->get('field_store_locator_id')->getString();
-        $store['address'] = $store_node->get('field_store_address')->getString();
-        $store['opening_hours'] = $store_node->get('field_store_open_hours')->getString();
-
-        if ($lat_lon = $store_node->get('field_latitude_longitude')->getValue()) {
-          $store['lat'] = $lat_lon[0]['lat'];
-          $store['lon'] = $lat_lon[0]['lon'];
-        }
-
-        $stores[$store_node->id()] = $store;
+        $extra_data = $this->getStoreExtraData($store_data, $store_node);
+        $stores[$store_node->id()] = array_merge($store, $extra_data);
       }
+
     }
 
     // Sort the stores first by distance and then by name.
@@ -153,6 +145,45 @@ class StoresFinderUtility {
     }
 
     return $stores;
+  }
+
+  /**
+   * Get extra data for the given store from node.
+   *
+   * @param array $store_data
+   *   The store data.
+   * @param object|null $store_node
+   *   The store node object if available.
+   *
+   * @return array
+   *   Return the store array with additional data from store node.
+   */
+  public function getStoreExtraData(array $store_data, $store_node = NULL) {
+    if (empty($store_node)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+      if ($store_node = $this->getStoreFromCode($store_data['code'])) {
+        if ($store_node->hasTranslation($langcode)) {
+          $store_node = $store_node->getTranslation($langcode);
+        }
+      }
+    }
+
+    $store = [];
+    if ($store_node) {
+      $store['name'] = $store_node->label();
+      $store['code'] = $store_node->get('field_store_locator_id')->getString();
+      $store['address'] = $store_node->get('field_store_address')->getString();
+      $store['open_hours'] = $store_node->get('field_store_open_hours')->getString();
+      $store['nid'] = $store_node->id();
+      $store['view_on_map_link'] = Url::fromRoute('alshaya_acm_checkout.cc_store_map_view', ['node' => $store_node->id()])->toString();
+
+      if ($lat_lon = $store_node->get('field_latitude_longitude')->getValue()) {
+        $store['lat'] = $lat_lon[0]['lat'];
+        $store['lon'] = $lat_lon[0]['lng'];
+      }
+    }
+    return $store;
   }
 
   /**

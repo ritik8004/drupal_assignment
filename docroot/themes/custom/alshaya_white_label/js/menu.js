@@ -228,14 +228,14 @@
       var menuLevel2 = $('.menu--two__list');
 
       function setMenuHeight() {
-        if (windowWidth > 767) {
+        if (menuLevel2.length > 0 && windowWidth > 767) {
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })
-          .toArray()
-          .reduce(function (first, second) {
-            return Math.max(first, second);
-          });
+            .toArray()
+            .reduce(function (first, second) {
+              return Math.max(first, second);
+            });
 
           menuLevel2.each(function () {
             $(this).height(maxHeight);
