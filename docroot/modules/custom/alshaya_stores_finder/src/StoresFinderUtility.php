@@ -4,6 +4,7 @@ namespace Drupal\alshaya_stores_finder;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
@@ -26,18 +27,28 @@ class StoresFinderUtility {
   protected $nodeStorage;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   AlshayaApiWrapper service object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(AlshayaApiWrapper $api_wrapper, EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(AlshayaApiWrapper $api_wrapper, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->languageManager = $language_manager;
     $this->logger = $logger_factory->get('alshaya_stores_finder');
   }
 
@@ -148,6 +159,8 @@ class StoresFinderUtility {
    * Function to sync all stores.
    */
   public function syncStores() {
+    $languages = $this->languageManager->getLanguages();
+
     // Prepare the alternate locale data.
     foreach (acq_commerce_get_store_language_mapping() as $lang => $store_id) {
       // Get all stores for particular store id.
@@ -155,7 +168,8 @@ class StoresFinderUtility {
 
       // Loop through all the stores and add/edit/translate the store node.
       foreach ($stores['items'] as $store) {
-        $this->updateStore($store, $lang);
+        $language = $languages[$lang];
+        $this->updateStore($store, $lang, $language->getDirection());
       }
     }
   }
@@ -167,8 +181,10 @@ class StoresFinderUtility {
    *   Store array.
    * @param string $langcode
    *   Language code.
+   * @param string $direction
+   *   Direction for the language.
    */
-  protected function updateStore(array $store, $langcode) {
+  protected function updateStore(array $store, $langcode, $direction) {
     if ($node = $this->getStoreFromCode($store['store_code'], FALSE)) {
       if ($node->hasTranslation($langcode)) {
         $node = $node->getTranslation($langcode);
@@ -208,6 +224,27 @@ class StoresFinderUtility {
     else {
       $node->get('field_store_address')->setValue('');
     }
+
+    $open_hours = [];
+
+    foreach (explode(',', $store['store_hours']) as $open_hour_row) {
+      $open_hour_data = explode(':', trim($open_hour_row));
+
+      if ($direction == 'rtl') {
+        $open_hours[] = [
+          'key' => $open_hour_data[1],
+          'value' => $open_hour_data[0],
+        ];
+      }
+      else {
+        $open_hours[] = [
+          'key' => $open_hour_data[0],
+          'value' => $open_hour_data[1],
+        ];
+      }
+    }
+
+    $node->get('field_store_open_hours')->setValue($open_hours);
 
     // Set the status.
     $node->setPublished((bool) $store['status']);
