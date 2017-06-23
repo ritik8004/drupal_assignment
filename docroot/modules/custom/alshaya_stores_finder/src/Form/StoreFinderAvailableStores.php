@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_stores_finder\Form;
 
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\geolocation\GoogleMapsDisplayTrait;
@@ -52,18 +51,17 @@ class StoreFinderAvailableStores extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $settings = $this->getGoogleMapsSettings([]);
-    $canvas_id = Html::getUniqueId('available_stores');
-
+    // Hidden latitude field.
     $form['latitude'] = [
       '#type' => 'hidden',
     ];
 
+    // Hidden longitude field.
     $form['longitude'] = [
       '#type' => 'hidden',
     ];
 
-    // Hidden lat,lng input fields.
+    // Location field to search store.
     $form['location'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Check in-store availability'),
@@ -101,10 +99,7 @@ class StoreFinderAvailableStores extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($form_state->getValue('action')) {
-      $form_state->setRedirect(
-        'action.admin_add',
-        ['action_id' => $form_state->getValue('action')]
-      );
+      $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all());
     }
   }
 

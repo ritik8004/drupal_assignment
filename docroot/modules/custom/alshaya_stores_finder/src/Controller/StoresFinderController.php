@@ -183,18 +183,20 @@ class StoresFinderController extends ControllerBase {
    *   User's latitude.
    * @param float $lon
    *   User's longitude.
+   * @param int $limit
+   *   Limit for top stores.
    *
    * @return array
    *   Return array of top tree and all stores.
    */
-  public function getProductStores($sku, $lat, $lon) {
+  public function getProductStores($sku, $lat, $lon, $limit = 3) {
     $final_all_stores = $final_top_three = '';
     if ($sku_entity = SKU::loadFromSku($sku)) {
       if ($stores = $this->storesFinderUtility->getSkuStores($sku, $lat, $lon)) {
         $top_three = [];
         $top_three['#theme'] = 'pdp_click_collect_top_stores';
-        $top_three['#stores'] = array_slice($stores, 0, 3);
-        $top_three['#has_more'] = count($stores) > 3 ? t('Other stores nearby') : '';
+        $top_three['#stores'] = array_slice($stores, 0, $limit);
+        $top_three['#has_more'] = count($stores) > $limit ? t('Other stores nearby') : '';
 
         if ($top_three['#has_more']) {
           $store_form = \Drupal::formBuilder()->getForm(StoreFinderAvailableStores::class);
