@@ -178,7 +178,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ]);
       }
 
-      if ($attr_brand = $sku_entity->get('attr_brand')->getString()) {
+      if ($attr_brand = $sku_entity->get('attr_product_brand')->getString()) {
         $specifications['value']['#items'][] = t('Product brand: @value', [
           '@value' => $attr_brand,
         ]);
