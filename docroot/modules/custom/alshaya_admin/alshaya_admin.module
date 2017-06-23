@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_admin_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Promotion options restricted for all users, except user id 1.
+  $user = \Drupal::currentUser();
+  if ($user->id() != 1) {
+    $form['options']['#access'] = FALSE;
+  }
+}
