@@ -230,44 +230,4 @@ class StoresFinderController extends ControllerBase {
     return new JsonResponse(['top_three' => render($data['top_three']), 'all_stores' => render($data['all_stores'])]);
   }
 
-  /**
-   * Get Ajax response of stores for a product near user's location.
-   *
-   * @param string $sku
-   *   SKU to check for stores.
-   * @param float $lat
-   *   User's latitude.
-   * @param float $lon
-   *   User's longitude.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   Ajax response.
-   */
-  public function getProductStoresAjaxResponse($sku, $lat, $lon) {
-    $response = new AjaxResponse();
-
-    $data = $this->getProductStores($sku, $lat, $lon);
-    if (!empty($data['top_three'])) {
-      $response->addCommand(new HtmlCommand('.click-collect-top-stores', render($data['top_three'])));
-      $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'hide'));
-
-      if (!empty($data['all_stores'])) {
-        $response->addCommand(new HtmlCommand('.click-collect-all-stores', render($data['all_stores'])));
-      }
-      else {
-        $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
-        $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
-      }
-    }
-    else {
-      $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
-      $response->addCommand(new InvokeCommand('.click-collect-form .search-store', 'show'));
-
-      $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
-      $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
-    }
-
-    return $response;
-  }
-
 }

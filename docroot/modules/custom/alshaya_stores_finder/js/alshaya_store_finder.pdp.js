@@ -9,28 +9,28 @@
   /* global google */
 
   // Coordinates of the user's location.
-  var asf_coords = null;
+  var asfCoords = null;
 
   // Last checked SKU (or variant SKU).
-  var last_sku = null;
+  var lastSku = null;
 
   // Last coords.
-  var last_coords = null;
+  var lastCoords = null;
 
   // Geolocation permission.
-  var geo_perm = false;
+  var geoPerm = false;
 
   // Check records already exists.
   var records = false;
 
   var autocomplete;
 
-  var all_store_autocomplete;
+  var allStoresAutocomplete;
 
   Drupal.pdp = Drupal.pdp || {};
   Drupal.geolocation = Drupal.geolocation || {};
 
-  Drupal.behaviors.store_finder_pdp = {
+  Drupal.behaviors.storeFinderPdp = {
     attach: function (context, settings) {
 
       $('#pdp-stores-container').once('initiate-stores').each(function () {
@@ -56,13 +56,13 @@
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
 
-          var asf_coords = {
+          var asfCoords = {
             latitude: $('input[name="latitude"]').val(),
             longitude: $('input[name="longitude"]').val()
           };
 
-          // Drupal.pdp.getFormattedAddress(asf_coords.latitude, asf_coords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
-          Drupal.pdp.stores_display(asf_coords);
+          // Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
+          Drupal.pdp.storesDisplay(asfCoords);
 
           return false;
         }
@@ -77,25 +77,25 @@
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
-          var asf_coords = {
+          var asfCoords = {
             latitude: $('input[name="latitude"]').val(),
             longitude: $('input[name="longitude"]').val()
           };
-          Drupal.pdp.stores_display(asf_coords);
+          Drupal.pdp.storesDisplay(asfCoords);
           return false;
         }
       });
 
-      if (!geo_perm) {
+      if (!geoPerm) {
         Drupal.pdp.dispalySearchStoreForm();
       }
 
       // Call here once to ensure we do it after changes in attribute selection.
-      Drupal.pdp.stores_display();
+      Drupal.pdp.storesDisplay();
     }
   };
 
-  Drupal.behaviors.alshaya_store_finder_autocomplete = {
+  Drupal.behaviors.alshayaStoreFinderAutocomplete = {
     attach: function (context, settings) {
 
       if (typeof Drupal.geolocation.loadGoogle === 'function') {
@@ -119,18 +119,18 @@
 
   // Error callback.
   Drupal.geolocation.currentLocationErrorCallback = function (error) {
-    geo_perm = false;
+    geoPerm = false;
     // Do nothing, we already have the search form displayed by default.
   };
 
   // Success callback.
   Drupal.geolocation.currentLocationSuccessCallback = function (position) {
-    asf_coords = {
+    asfCoords = {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude
     };
-    geo_perm = true;
-    Drupal.pdp.stores_display();
+    geoPerm = true;
+    Drupal.pdp.storesDisplay();
   };
 
   // Initialize autocomplete for given field.
@@ -149,31 +149,31 @@
     $('input[name="longitude"]').val(place.geometry.location.lng());
 
     if (records) {
-      var asf_coords = {
+      var asfCoords = {
         latitude: place.geometry.location.lat(),
         longitude: place.geometry.location.lng()
       };
 
-      // Drupal.pdp.getFormattedAddress(asf_coords.latitude, asf_coords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
-      Drupal.pdp.stores_display(asf_coords);
+      // Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
+      Drupal.pdp.storesDisplay(asfCoords);
     }
   };
 
   // Make autocomplete field in search form in the all stores.
-  Drupal.pdp.all_store_autocomplete = function () {
+  Drupal.pdp.allStoresAutocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    all_store_autocomplete = Drupal.geolocation.initAutocomplete(field);
-    all_store_autocomplete.addListener('place_changed', function () {
+    allStoresAutocomplete = Drupal.geolocation.initAutocomplete(field);
+    allStoresAutocomplete.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
-      var place = all_store_autocomplete.getPlace();
+      var place = allStoresAutocomplete.getPlace();
       Drupal.geolocation.getStores(place);
     });
   };
 
   // Dispaly search store form.
   Drupal.pdp.dispalySearchStoreForm = function () {
-    var sku_clean = $('#pdp-stores-container').attr('sku-clean');
-    if ($('.selected-variant-sku-' + sku_clean).length) {
+    var skuClean = $('#pdp-stores-container').attr('sku-clean');
+    if ($('.selected-variant-sku-' + skuClean).length) {
       $('.click-collect-empty-selection').hide();
       $('.click-collect-form').show();
       $('.click-collect-form').find('.available-store-text').hide();
@@ -197,22 +197,22 @@
   };
 
   // Make Ajax call to get stores and render html.
-  Drupal.pdp.stores_display = function (coords) {
+  Drupal.pdp.storesDisplay = function (coords) {
     if (coords) {
-      asf_coords = coords;
+      asfCoords = coords;
     }
 
     // Get the SKU.
     var sku = $('#pdp-stores-container').attr('sku');
-    var sku_clean = $('#pdp-stores-container').attr('sku-clean');
+    var skuClean = $('#pdp-stores-container').attr('sku-clean');
 
     // Get the type.
     var type = $('#pdp-stores-container').attr('type');
 
     if (type === 'configurable') {
-      if ($('.selected-variant-sku-' + sku_clean).length) {
+      if ($('.selected-variant-sku-' + skuClean).length) {
         $('.click-collect-empty-selection').hide();
-        sku = $('.selected-variant-sku-' + sku_clean).val();
+        sku = $('.selected-variant-sku-' + skuClean).val();
       }
       else {
         $('.click-collect-empty-selection').show();
@@ -221,33 +221,32 @@
       }
     }
 
-    /* if (last_coords === null) {
-      asf_coords.latitude = 29.3222135;
-      asf_coords.longitude = 48.04741160000003;
+    /* if (lastCoords === null) {
+      asfCoords.latitude = 29.3222135;
+      asfCoords.longitude = 48.04741160000003;
     } */
 
-    if (asf_coords !== null) {
-      Drupal.pdp.getFormattedAddress(asf_coords.latitude, asf_coords.longitude, $('.click-collect-form').find('.google-store-location'));
+    if (asfCoords !== null) {
+      Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-form').find('.google-store-location'));
 
-      var check_location = true;
-      if (last_coords !== null) {
-        check_location = (last_coords.latitude !== asf_coords.latitude || last_coords.longitude !== asf_coords.longitude);
+      var checkLocation = true;
+      if (lastCoords !== null) {
+        checkLocation = (lastCoords.latitude !== asfCoords.latitude || lastCoords.longitude !== asfCoords.longitude);
       }
 
-      if ((last_sku === null || last_sku !== sku) || check_location) {
-        last_sku = sku;
-        last_coords = asf_coords;
+      if ((lastSku === null || lastSku !== sku) || checkLocation) {
+        lastSku = sku;
+        lastCoords = asfCoords;
 
         $.ajax({
-          url: Drupal.url('stores/product/' + last_sku + '/' + asf_coords.latitude + '/' + asf_coords.longitude),
+          url: Drupal.url('stores/product/' + lastSku + '/' + asfCoords.latitude + '/' + asfCoords.longitude),
           beforeSend: function (xmlhttprequest) {
             var progressElement = '<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>';
             $('.click-collect-top-stores').html(progressElement);
             $('.click-collect-all-stores .stores-list-all').html(progressElement);
           },
-          // url: Drupal.url('stores/product/' + last_sku + '/29.3222135/48.04741160000003'),
           success: function (response) {
-            Drupal.pdp.fill_stores(response, asf_coords);
+            Drupal.pdp.fillStores(response, asfCoords);
           }
         });
       }
@@ -255,7 +254,7 @@
   };
 
   // Fill the stores with result.
-  Drupal.pdp.fill_stores = function (response, asf_coords) {
+  Drupal.pdp.fillStores = function (response, asfCoords) {
     if (response.top_three) {
       records = true;
       $('.click-collect-top-stores').html(response.top_three);
@@ -264,8 +263,8 @@
       if (response.all_stores) {
         $('.click-collect-all-stores').html(response.all_stores);
         $('.click-collect-all-stores').find('.store-finder-form-wrapper .search-store').find('.search-stores-button').hide();
-        Drupal.pdp.getFormattedAddress(asf_coords.latitude, asf_coords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
-        Drupal.pdp.all_store_autocomplete();
+        Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
+        Drupal.pdp.allStoresAutocomplete();
       }
       else {
         $('.click-collect-all-stores').html('');
