@@ -438,6 +438,8 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     return;
   }
 
+  $view_mode = isset($variables['elements']['#view_mode']) ? $variables['elements']['#view_mode'] : 'default';
+
   $values = $profile->get('field_address')->getValue();
 
   $variables['delivery_to'] = '';
@@ -501,7 +503,17 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     $current_language = \Drupal::languageManager()->getCurrentLanguage();
 
     $route_match = \Drupal::routeMatch();
-    if ($route_match->getRouteName() == 'acq_checkout.form') {
+    if ($view_mode == 'teaser') {
+      $variables['change_address'] = [
+        '#type' => 'button',
+        '#value' => t('Edit'),
+        '#attributes' => [
+          'id' => 'change-address',
+        ],
+        '#executes_submit_callback' => FALSE,
+      ];
+    }
+    elseif ($route_match->getRouteName() == 'acq_checkout.form') {
       $variables['deliver_to_this_address'] = [
         '#type' => 'link',
         '#title' => t('deliver to this address'),

@@ -60,6 +60,12 @@
             </div>
           {% endif %}
 
+          {% if change_address is not empty %}
+            <div class="address--change-address address--controls">
+              {{ change_address }}
+            </div>
+          {% endif %}
+
           {% if deliver_to_this_address is not empty  %}
             <div class="address--deliver-to-this-address address--controls">
               {{ deliver_to_this_address }}
