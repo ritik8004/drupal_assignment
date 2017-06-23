@@ -10,9 +10,6 @@ alshaya_loyalty.settings:
     apcn_value_starts_with:
       type: label
       label: 'Value starts with'
-    privilege_card_earn_text:
-      type: label
-      label: 'Privilege card earn text'
     enable_disable_loyalty:
       # Keeping this to integer as we don't want to enable/disable only for one language.
       type: integer
