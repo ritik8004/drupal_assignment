@@ -1372,7 +1372,7 @@ html[lang='ar'] {
 .c-header .block-views-exposed-filter-blocksearch-page {
   @include breakpoint($desktop) {
     position: relative;
-    left: 22px;
+    left: -24px;
     top: 2px;
 
     html[lang=ar] & {
