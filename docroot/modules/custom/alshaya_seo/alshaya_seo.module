@@ -412,7 +412,6 @@ function alshaya_seo_preprocess_menu(&$variables) {
         'attributes' => [
           'class' => 'gtm-sign-in',
         ],
-        'set_active_class' => 1,
       ];
 
       $variables['items'][$key]['url']->setOptions($signin_url_options);
