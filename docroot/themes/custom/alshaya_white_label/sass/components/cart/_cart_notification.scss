@@ -1,22 +1,11 @@
 #cart_notification {
   z-index: 999;
-  position: absolute;
-  top: 7.3rem;
-  #{$right}: calc((100% - 1214px) / 2);
-
-  @include breakpoint($only-tablet) {
-    top: 4.2rem;
-    #{$right}: 2.2em;
-  }
-
-  @include breakpoint($only-mobile) {
-    top: 3rem;
-    #{$right}: 0.75em;
-  }
+  position: relative;
+  top: 1.5rem;
 
   .notification,
   .error {
-    width: 16.37rem;
+    width: 17.37rem;
     background: #fff;
     border: 2px solid $pumpkin-orange;
     box-shadow: 4px 4px 0 0 $white-two;
@@ -25,15 +14,14 @@
 
     &::before {
       content: '';
-      position: absolute;
+      position: relative;
       width: 0;
       height: 0;
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;
       border-bottom: 11px solid $pumpkin-orange;
       clear: both;
-      margin-top: -1.5rem;
-      margin-#{$left}: 14rem;
+      top: -3em;
     }
 
     .col-1 {
