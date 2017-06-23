@@ -799,6 +799,12 @@ html[lang=ar] {
       top: -0.25rem;
     }
   }
+
+  #block-basketpromotionmessage {
+    @include breakpoint($only-tablet) {
+      margin-top: -0.4rem;
+    }
+  }
 }
 
 html[lang=ar] {
@@ -842,6 +848,38 @@ html[lang=ar] {
       .tooltip {
         right: -3.5rem;
       }
+    }
+  }
+
+  .alias--cart #table-cart-totals td:last-child {
+    position: relative;
+
+    @include breakpoint(($only-tablet) (orientation landscape)) {
+      left: 1.1rem;
+    }
+
+    @include breakpoint(($only-tablet) (orientation portrait)) {
+      left: 3.7rem;
+    }
+  }
+
+  .alias--cart #table-cart-totals tr > td {
+    &:first-child {
+      @include breakpoint(($only-tablet) (orientation portrait)) {
+        width: 11rem;
+      }
+    }
+
+    &:last-child {
+      @include breakpoint(($only-tablet) (orientation portrait)) {
+        width: 7rem;
+      }
+    }
+  }
+
+  body.alias--cart .page-standard.l-container .edit-actions {
+    @include breakpoint($only-tablet) {
+      margin-left: 0;
     }
   }
 }
