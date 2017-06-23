@@ -55,15 +55,12 @@
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
-
-          var asfCoords = {
+          var coords = {
             latitude: $('input[name="latitude"]').val(),
             longitude: $('input[name="longitude"]').val()
           };
 
-          // Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
-          Drupal.pdp.storesDisplay(asfCoords);
-
+          Drupal.pdp.storesDisplay(coords);
           return false;
         }
         else {
@@ -149,13 +146,12 @@
     $('input[name="longitude"]').val(place.geometry.location.lng());
 
     if (records) {
-      var asfCoords = {
+      var coords = {
         latitude: place.geometry.location.lat(),
         longitude: place.geometry.location.lng()
       };
 
-      // Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
-      Drupal.pdp.storesDisplay(asfCoords);
+      Drupal.pdp.storesDisplay(coords);
     }
   };
 
@@ -221,11 +217,6 @@
       }
     }
 
-    /* if (lastCoords === null) {
-      asfCoords.latitude = 29.3222135;
-      asfCoords.longitude = 48.04741160000003;
-    } */
-
     if (asfCoords !== null) {
       Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-form').find('.google-store-location'));
 
@@ -260,6 +251,8 @@
       $('.click-collect-top-stores').html(response.top_three);
       $('.click-collect-form').find('.search-store').hide();
       $('.click-collect-form').find('.available-store-text').show();
+      $('.click-collect-form').find('.store-finder-form-wrapper .search-store').find('.search-stores-button').hide();
+      $('.click-collect-form').find('.store-finder-form-wrapper .change-location-link').show();
       if (response.all_stores) {
         $('.click-collect-all-stores').html(response.all_stores);
         $('.click-collect-all-stores').find('.store-finder-form-wrapper .search-store').find('.search-stores-button').hide();
@@ -277,10 +270,7 @@
       $('.click-collect-form').find('.available-store-text').hide();
     }
     $('.click-collect-form').show();
-    $('.click-collect-form').find('.store-finder-form-wrapper .change-location-link').show();
     $('.click-collect-form').find('.store-finder-form-wrapper .search-store').hide();
-    $('.click-collect-form').find('.store-finder-form-wrapper .search-store').find('.search-stores-button').hide();
-
   };
 
 })(jQuery, Drupal);
