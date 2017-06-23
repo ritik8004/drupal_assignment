@@ -80,7 +80,7 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
   if ($filter_key && $filter = \Drupal::request()->query->get($filter_key)) {
     $orders = array_filter($orders, function ($order, $orderId) use ($filter) {
       $status = alshaya_acm_customer_get_order_status($order);
-      if ($status['key'] == $filter) {
+      if ($status['text'] == $filter) {
         return TRUE;
       }
 
@@ -118,9 +118,23 @@ function alshaya_acm_customer_clean_sku($sku) {
  *   Status of order, ensure string can be used directly as class too.
  */
 function alshaya_acm_customer_get_order_status(array $order) {
+  $config = \Drupal::config('alshaya_acm_customer.orders_config');
+  $black_orders = explode(',', $config->get('black_orders'));
+  $green_orders = explode(',', $config->get('black_orders'));
+
+  if (in_array($order['status'], $black_orders)) {
+    $class = 'status-returned';
+  }
+  elseif (in_array($order['status'], $green_orders)) {
+    $class = 'status-delivered';
+  }
+  else {
+    $class = 'status-pending';
+  }
+
   return [
     'text' => $order['state'],
-    'class' => 'status-' . $order['status'],
+    'class' => $class,
     'key' => $order['status'],
   ];
 }
@@ -263,7 +277,7 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
     $status = alshaya_acm_customer_get_order_status($order);
 
     // Add the status in array (overriding if already available).
-    $all_status[$status['key']] = $status['text'];
+    $all_status[$status['text']] = $status['text'];
   }
 
   // Sort them by ascending order of key to keep it consistent across languages.
