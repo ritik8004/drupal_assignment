@@ -6,6 +6,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\node\Entity\Node;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Class AcqPromotionsManager.
@@ -129,22 +130,13 @@ class AcqPromotionsManager {
     // Set the Promotion type.
     $node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
 
-    // Add product NID's to promotion.
+    // Add SKU ID's to promotion.
     if (!empty($promotion['products'])) {
-      // Fetch all products NID's related to SKU ID's.
-      $productNIDs = [];
-      foreach ($promotion['products'] as $product) {
-        $productQuery = $this->nodeStorage->getQuery();
-        $productQuery->condition('type', 'acq_product');
-        $productQuery->condition('field_skus', $product['product_id'], 'IN');
-        $productNIDs += $productQuery->execute();
-      }
-
       // Assign value to $node object.
-      $productNIDs = array_values($productNIDs);
-      if (!empty($productNIDs)) {
-        foreach ($productNIDs as $delta => $productNID) {
-          $node->get('field_acq_promotion_product')->set($delta, $productNID);
+      foreach ($promotion['products'] as $delta => $product) {
+        $sku = SKU::loadFromSku($product['product_sku']);
+        if ($sku instanceof SKU) {
+          $node->get('field_acq_promotion_sku')->set($delta, $sku->id());
         }
       }
     }

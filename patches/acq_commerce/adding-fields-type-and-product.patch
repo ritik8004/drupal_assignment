@@ -1,13 +1,12 @@
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml
-index ab1379fc..3f2b5d21 100644
+index ab1379fc..89452b82 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml
-@@ -4,7 +4,9 @@ dependencies:
-   config:
+@@ -5,6 +5,8 @@ dependencies:
      - field.field.node.acq_promotion.field_acq_promotion_data
      - field.field.node.acq_promotion.field_acq_promotion_description
-+    - field.field.node.acq_promotion.field_acq_promotion_product
      - field.field.node.acq_promotion.field_acq_promotion_rule_id
++    - field.field.node.acq_promotion.field_acq_promotion_sku
 +    - field.field.node.acq_promotion.field_acq_promotion_type
      - node.type.acq_promotion
    module:
@@ -27,7 +26,7 @@ index ab1379fc..3f2b5d21 100644
      settings:
        rows: 5
        placeholder: ''
-@@ -30,30 +32,45 @@ content:
+@@ -30,7 +32,7 @@ content:
      type: string_textarea
      region: content
    field_acq_promotion_description:
@@ -36,18 +35,9 @@ index ab1379fc..3f2b5d21 100644
      settings:
        rows: 5
        placeholder: ''
-     third_party_settings: {  }
+@@ -38,22 +40,37 @@ content:
      type: text_textarea
      region: content
-+  field_acq_promotion_product:
-+    type: entity_reference_autocomplete
-+    weight: 11
-+    region: content
-+    settings:
-+      match_operator: CONTAINS
-+      size: 60
-+      placeholder: ''
-+    third_party_settings: {  }
    field_acq_promotion_rule_id:
 -    weight: 33
 +    weight: 8
@@ -57,6 +47,15 @@ index ab1379fc..3f2b5d21 100644
      third_party_settings: {  }
      type: string_textfield
      region: content
++  field_acq_promotion_sku:
++    weight: 26
++    settings:
++      match_operator: CONTAINS
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++    type: entity_reference_autocomplete
++    region: content
 +  field_acq_promotion_type:
 +    type: options_select
 +    weight: 10
@@ -110,15 +109,14 @@ index ab1379fc..3f2b5d21 100644
        match_operator: CONTAINS
        size: 60
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
-index 000762f5..3399ef41 100644
+index 000762f5..6d142336 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
-@@ -4,11 +4,20 @@ dependencies:
-   config:
+@@ -5,10 +5,19 @@ dependencies:
      - field.field.node.acq_promotion.field_acq_promotion_data
      - field.field.node.acq_promotion.field_acq_promotion_description
-+    - field.field.node.acq_promotion.field_acq_promotion_product
      - field.field.node.acq_promotion.field_acq_promotion_rule_id
++    - field.field.node.acq_promotion.field_acq_promotion_sku
 +    - field.field.node.acq_promotion.field_acq_promotion_type
      - node.type.acq_promotion
    module:
@@ -138,14 +136,14 @@ index 000762f5..3399ef41 100644
      third_party_settings: {  }
      type: text_default
      region: content
-+  field_acq_promotion_product:
-+    type: entity_reference_label
-+    weight: 3
-+    region: content
-+    label: hidden
++  field_acq_promotion_sku:
++    weight: 4
++    label: above
 +    settings:
 +      link: true
 +    third_party_settings: {  }
++    type: entity_reference_label
++    region: content
    links:
      weight: 1
      region: content
@@ -158,38 +156,42 @@ index 000762f5..3399ef41 100644
 +  field_acq_promotion_rule_id: true
 +  field_acq_promotion_type: true
    langcode: true
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_product.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_product.yml
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_sku.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_sku.yml
 new file mode 100644
-index 00000000..84f973c0
+index 00000000..c0d1d65c
 --- /dev/null
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_product.yml
-@@ -0,0 +1,27 @@
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_sku.yml
+@@ -0,0 +1,31 @@
 +langcode: en
 +status: true
 +dependencies:
 +  config:
-+    - field.storage.node.field_acq_promotion_product
-+    - node.type.acq_product
++    - acq_sku.type.configurable
++    - acq_sku.type.grouped
++    - acq_sku.type.simple
++    - field.storage.node.field_acq_promotion_sku
 +    - node.type.acq_promotion
-+id: node.acq_promotion.field_acq_promotion_product
-+field_name: field_acq_promotion_product
++id: node.acq_promotion.field_acq_promotion_sku
++field_name: field_acq_promotion_sku
 +entity_type: node
 +bundle: acq_promotion
-+label: Product
++label: SKU
 +description: ''
 +required: false
 +translatable: false
 +default_value: {  }
 +default_value_callback: ''
 +settings:
-+  handler: 'default:node'
++  handler: 'default:acq_sku'
 +  handler_settings:
 +    target_bundles:
-+      acq_product: acq_product
++      configurable: configurable
++      grouped: grouped
++      simple: simple
 +    sort:
 +      field: _none
 +    auto_create: false
-+    auto_create_bundle: ''
++    auto_create_bundle: configurable
 +field_type: entity_reference
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_type.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_type.yml
 new file mode 100644
@@ -217,23 +219,24 @@ index 00000000..32e2e147
 +default_value_callback: ''
 +settings: {  }
 +field_type: list_string
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_product.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_product.yml
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_sku.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_sku.yml
 new file mode 100644
-index 00000000..1ec78f32
+index 00000000..2b20db85
 --- /dev/null
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_product.yml
-@@ -0,0 +1,18 @@
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_sku.yml
+@@ -0,0 +1,19 @@
 +langcode: en
 +status: true
 +dependencies:
 +  module:
++    - acq_sku
 +    - node
-+id: node.field_acq_promotion_product
-+field_name: field_acq_promotion_product
++id: node.field_acq_promotion_sku
++field_name: field_acq_promotion_sku
 +entity_type: node
 +type: entity_reference
 +settings:
-+  target_type: node
++  target_type: acq_sku
 +module: core
 +locked: false
 +cardinality: -1
@@ -274,18 +277,19 @@ index 00000000..303d79af
 +persist_with_no_fields: false
 +custom_storage: false
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
-index dba4e48d..66ef913e 100644
+index dba4e48d..2e2bf8eb 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
-@@ -5,6 +5,7 @@
+@@ -5,6 +5,8 @@
  use Drupal\acq_commerce\Conductor\APIWrapper;
  use Drupal\Core\Entity\EntityTypeManagerInterface;
  use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 +use Drupal\node\Entity\Node;
++use Drupal\acq_sku\Entity\SKU;
  
  /**
   * Class AcqPromotionsManager.
-@@ -49,15 +50,24 @@ public function __construct(EntityTypeManagerInterface $entity_type_manager, API
+@@ -49,15 +51,24 @@ public function __construct(EntityTypeManagerInterface $entity_type_manager, API
     */
    public function syncPromotions($types = ['category', 'cart']) {
      $types = is_array($types) ? $types : [$types];
@@ -310,7 +314,7 @@ index dba4e48d..66ef913e 100644
    }
  
    /**
-@@ -76,6 +86,7 @@ protected function syncPromotion(array $promotion) {
+@@ -76,6 +87,7 @@ protected function syncPromotion(array $promotion) {
  
      // Create promotion.
      if (empty($nids)) {
@@ -318,7 +322,7 @@ index dba4e48d..66ef913e 100644
        $node = $this->nodeStorage->create([
          'type' => 'acq_promotion',
        ]);
-@@ -92,6 +103,7 @@ protected function syncPromotion(array $promotion) {
+@@ -92,6 +104,7 @@ protected function syncPromotion(array $promotion) {
        }
  
        // We will use only the first matching node.
@@ -326,29 +330,20 @@ index dba4e48d..66ef913e 100644
        $node = $this->nodeStorage->load(reset($nids));
  
        if (serialize($promotion) == $node->get('field_acq_promotion_data')->getString()) {
-@@ -114,9 +126,52 @@ protected function syncPromotion(array $promotion) {
+@@ -114,9 +127,43 @@ protected function syncPromotion(array $promotion) {
      // Store everything as serialized string in DB.
      $node->get('field_acq_promotion_data')->setValue(serialize($promotion));
  
 +    // Set the Promotion type.
 +    $node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
 +
-+    // Add product NID's to promotion.
++    // Add SKU ID's to promotion.
 +    if (!empty($promotion['products'])) {
-+      // Fetch all products NID's related to SKU ID's.
-+      $productNIDs = [];
-+      foreach ($promotion['products'] as $product) {
-+        $productQuery = $this->nodeStorage->getQuery();
-+        $productQuery->condition('type', 'acq_product');
-+        $productQuery->condition('field_skus', $product['product_id'], 'IN');
-+        $productNIDs += $productQuery->execute();
-+      }
-+
 +      // Assign value to $node object.
-+      $productNIDs = array_values($productNIDs);
-+      if (!empty($productNIDs)) {
-+        foreach ($productNIDs as $delta => $productNID) {
-+          $node->get('field_acq_promotion_product')->set($delta, $productNID);
++      foreach ($promotion['products'] as $delta => $product) {
++        $sku = SKU::loadFromSku($product['product_sku']);
++        if ($sku instanceof SKU) {
++          $node->get('field_acq_promotion_sku')->set($delta, $sku->id());
 +        }
 +      }
 +    }

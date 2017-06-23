@@ -2,13 +2,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - acq_sku
     - node
-id: node.field_acq_promotion_product
-field_name: field_acq_promotion_product
+id: node.field_acq_promotion_sku
+field_name: field_acq_promotion_sku
 entity_type: node
 type: entity_reference
 settings:
-  target_type: node
+  target_type: acq_sku
 module: core
 locked: false
 cardinality: -1

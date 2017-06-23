@@ -4,8 +4,8 @@ dependencies:
   config:
     - field.field.node.acq_promotion.field_acq_promotion_data
     - field.field.node.acq_promotion.field_acq_promotion_description
-    - field.field.node.acq_promotion.field_acq_promotion_product
     - field.field.node.acq_promotion.field_acq_promotion_rule_id
+    - field.field.node.acq_promotion.field_acq_promotion_sku
     - field.field.node.acq_promotion.field_acq_promotion_type
     - node.type.acq_promotion
   module:
@@ -39,15 +39,6 @@ content:
     third_party_settings: {  }
     type: text_textarea
     region: content
-  field_acq_promotion_product:
-    type: entity_reference_autocomplete
-    weight: 11
-    region: content
-    settings:
-      match_operator: CONTAINS
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_acq_promotion_rule_id:
     weight: 8
     settings:
@@ -55,6 +46,15 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
+    region: content
+  field_acq_promotion_sku:
+    weight: 26
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   field_acq_promotion_type:
     type: options_select
