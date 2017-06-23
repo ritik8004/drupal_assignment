@@ -117,8 +117,10 @@ body.chrome {
   }
 }
 
-body.ucbrowser.alias--cart {
-  #table-cart-items td select {
-    padding-left: 50px;
+html[lang=ar] {
+  body.ucbrowser.alias--cart {
+    #table-cart-items td select {
+      padding-left: 50px;
+    }
   }
 }
