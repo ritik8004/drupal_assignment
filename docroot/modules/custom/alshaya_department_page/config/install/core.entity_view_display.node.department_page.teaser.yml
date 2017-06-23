@@ -3,26 +3,17 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.department_page.body
     - field.field.node.department_page.field_meta_tags
     - field.field.node.department_page.field_product_category
     - field.field.node.department_page.field_promo_blocks
     - node.type.department_page
   module:
-    - text
     - user
 id: node.department_page.teaser
 targetEntityType: node
 bundle: department_page
 mode: teaser
 content:
-  body:
-    label: hidden
-    type: text_summary_or_trimmed
-    weight: 1
-    settings:
-      trim_length: 600
-    third_party_settings: {  }
   links:
     weight: 0
     settings: {  }
