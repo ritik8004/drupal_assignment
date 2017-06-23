@@ -123,6 +123,7 @@
     }
   }
 
+  .menu--account,
   .block-alshaya-stores-finder {
     margin-#{$right}: -0.3125rem;
   }
@@ -363,4 +364,10 @@ body {
 
 .logged-in .menu--account li:first-child {
   margin-#{$right}: -0.3125rem;
+}
+
+html[lang=ar] {
+  .block-language-blocklanguage-interface {
+    margin-right: -0.0625rem;
+  }
 }
