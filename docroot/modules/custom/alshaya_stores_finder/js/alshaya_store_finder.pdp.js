@@ -99,7 +99,6 @@
         // First load the library from google.
         Drupal.geolocation.loadGoogle(function () {
           var field = $('.click-collect-form').find('input[name="location"]')[0];
-          // var field = $('#all-stores-search-store').find('input[name="location"]')[0];
           autocomplete = Drupal.geolocation.initAutocomplete(field);
 
           // When the user selects an address from the dropdown, populate the address
