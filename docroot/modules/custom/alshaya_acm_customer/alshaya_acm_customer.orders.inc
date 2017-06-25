@@ -120,7 +120,7 @@ function alshaya_acm_customer_clean_sku($sku) {
 function alshaya_acm_customer_get_order_status(array $order) {
   $config = \Drupal::config('alshaya_acm_customer.orders_config');
   $black_orders = explode(',', $config->get('black_orders'));
-  $green_orders = explode(',', $config->get('black_orders'));
+  $green_orders = explode(',', $config->get('green_orders'));
 
   if (in_array($order['status'], $black_orders)) {
     $class = 'status-returned';
