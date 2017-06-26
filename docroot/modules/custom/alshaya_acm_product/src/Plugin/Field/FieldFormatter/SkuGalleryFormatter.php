@@ -93,9 +93,9 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     $product_url = $product_label = '';
 
     // Fetch Product in which this sku is referenced.
-    $entityAdapter = $items->first()->getParent()->getParent();
-    if ($entityAdapter instanceof EntityAdapter) {
-      $node = $entityAdapter->getValue();
+    $entity_adapter = $items->first()->getParent()->getParent();
+    if ($entity_adapter instanceof EntityAdapter) {
+      $node = $entity_adapter->getValue();
       if ($node instanceof Node) {
         $product_url = $node->url();
         $product_label = $node->getTitle();
