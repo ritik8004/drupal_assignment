@@ -81,7 +81,7 @@
 
   <div class="address">
     {{ delivery.address_label }} <a href="{{ delivery.url }}">{% trans %}Edit{% endtrans %}</a>
-    <div class="delivery-address">{{ delivery.address }}</div>
+    <div class="delivery-address">{{ delivery.address|raw }}</div>
   </div>
   {% endif %}
 </div>

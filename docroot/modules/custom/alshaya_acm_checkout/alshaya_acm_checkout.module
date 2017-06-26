@@ -96,14 +96,14 @@ function _alshaya_acm_checkout_clean_address($address) {
     'first_name',
     'lastname',
     'last_name',
-    'email',
-    'phone',
+    'telephone',
     'street',
     'street2',
     'city',
     'region',
     'postcode',
-    'country',
+    'country_id',
+    'extension',
   ];
 
   foreach ($address as $key => $value) {

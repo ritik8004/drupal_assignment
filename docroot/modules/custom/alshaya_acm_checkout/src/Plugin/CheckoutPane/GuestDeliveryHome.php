@@ -52,17 +52,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
 
-    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
-      $address = $address_book_manager->getMagentoAddressFromAddressArray($form_values['address']['shipping']);
-    }
-
-    $pane_form['address'] = [
-      '#type' => 'container',
-      '#attributes' => [
-        'id' => ['address_wrapper'],
-      ],
-    ];
-
     if (empty($address['country'])) {
       $address_default_value = [
         'country_code' => _alshaya_custom_get_site_level_country_code(),
@@ -75,12 +64,30 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         $form_state->setTemporaryValue('default_value_mobile', $address_default_value['mobile_number']);
         unset($address_default_value['mobile_number']);
       }
+
+      $address_default_value['organization'] = $cart->customerEmail();
     }
+
+    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
+      $address = $address_book_manager->getMagentoAddressFromAddressArray($form_values['address']['shipping']);
+    }
+
+    if ($email = $cart->customerEmail()) {
+      $address_default_value['organization'] = $email;
+    }
+
+    $pane_form['address'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => ['address_wrapper'],
+      ],
+    ];
 
     $pane_form['address']['shipping'] = [
       '#type' => 'address',
       '#title' => '',
       '#default_value' => $address_default_value,
+      '#require_email' => TRUE,
     ];
 
     $shipping_methods = self::generateShippingEstimates($address);
@@ -173,7 +180,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $shipping_methods = [];
     $shipping_method_options = [];
 
-    if (!empty($address) && !empty($address['country'])) {
+    if (!empty($address) && !empty($address['country_id'])) {
       $shipping_methods = \Drupal::service('acq_commerce.api')->getShippingEstimates($cart->id(), $address);
     }
 
