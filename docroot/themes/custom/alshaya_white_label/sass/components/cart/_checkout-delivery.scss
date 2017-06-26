@@ -124,6 +124,7 @@
           background: white;
           margin-top: 1rem;
           padding: 0;
+          margin-bottom: 1rem;
         }
 
         .form-submit {
@@ -181,7 +182,21 @@
     position: relative;
 
     @include breakpoint($upto-tablet) {
-      display: none;
+      hr {
+        display: none;
+      }
+
+      .tab {
+        display: none;
+
+        &.active--tab--head {
+          display: block;
+          background-color: $white-two;
+          border-width: 2px;
+          border-color: $marine-blue-two;
+          padding: 5px;
+        }
+      }
     }
 
     @include breakpoint($only-tablet) {
@@ -189,6 +204,7 @@
     }
 
     hr {
+      display: block;
       width: calc(50% - 40px);
       margin: 0 10px;
       border: 1px solid $cerulean-two;
@@ -278,6 +294,24 @@
         width: 3.5rem;
       }
     }
+
+    @include breakpoint($upto-tablet) {
+      hr {
+        display: none;
+      }
+
+      .tab {
+        display: none;
+
+        &.active--tab--head {
+          display: block;
+          background-color: $white-five;
+          border-width: 2px;
+          border-color: $marine-blue-two;
+          padding: 5px;
+        }
+      }
+    }
   }
 }
 
@@ -320,6 +354,25 @@
         #edit-member-delivery-home-addresses,
         #selected-address-wrapper {
           margin: 0.75rem 1.375rem;
+        }
+
+        #addresses-header {
+          a {
+            display: block;
+            padding: 0.5rem 0;
+          }
+
+          @include breakpoint($tablet) {
+            position: relative;
+
+            a {
+              display: inline;
+              position: absolute;
+              top: 0;
+              right: 0;
+              color: $cerulean-two;
+            }
+          }
         }
 
         .form-wrapper,
@@ -368,16 +421,25 @@
           font-size: 16px;
           font-family: $alshaya-bold;
           font-weight: normal;
-          padding-bottom: 0.4375rem;
-          border-bottom: 1px solid #ddd;
+          padding-bottom: 1rem;
+
+          @include breakpoint($tablet) {
+            padding-bottom: 0.4375rem;
+            border-bottom: 1px solid #ddd;
+          }
         }
 
         .fieldset-wrapper {
           @include breakpoint($upto-tablet) {
-            display: none;
-            border: 1px solid $light-greyish;
-            padding: 1.375rem;
+            border: none;
+            padding: 0;
             border-top: 0;
+
+            #addresses-header,
+            #edit-member-delivery-home-addresses,
+            #selected-address-wrapper {
+              margin: 0;
+            }
           }
 
           @include breakpoint($tablet) {
@@ -399,15 +461,15 @@
   font-size: 0.75rem;
   margin-bottom: 1.5rem;
 
-  @include breakpoint($tablet) {
-    float: $left;
-    width: calc(50% - 0.75rem);
-    max-width: 15.94rem;
+  // @include breakpoint($tablet) {
+  //   float: $left;
+  //   width: calc(50% - 0.75rem);
+  //   max-width: 15.94rem;
 
-    &:nth-of-type(odd) {
-      margin-#{$right}: 1.5rem;
-    }
-  }
+  //   &:nth-of-type(odd) {
+  //     margin-#{$right}: 1.5rem;
+  //   }
+  // }
 
   @include breakpoint($desktop) {
     margin-bottom: 3rem;
@@ -469,7 +531,9 @@
 }
 
 #edit-member-delivery-home-address-book-wrapper {
-  margin-left: 1.5rem;
+  @include breakpoint($tablet) {
+    margin-left: 1.5rem;
+  }
 
   .country-code-prefix {
     margin-top: 1.65rem;
@@ -485,7 +549,20 @@
 
   .form-item-field-address-0-address-address-line2 {
     label {
-      font-size: 1rem;
+      font-size: 16px;
+      color: #adadad;
+      position: absolute;
+      left: 0;
+      top: -0.125rem;
+      transition: 0.2s ease all;
+    }
+
+    input[type="text"]:focus ~ label:last-of-type {
+      top: -1.25em;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 1;
+      font-size: 0.75rem;
     }
   }
 }

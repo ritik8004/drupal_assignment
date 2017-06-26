@@ -25,6 +25,28 @@
   }
 }
 
+#edit-member-delivery-home .user__address--column {
+  @include breakpoint($tablet) {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: auto;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    margin-bottom: 48px;
+    max-width: 420px;
+    width: calc(50% - 24px);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 48px;
+    }
+  }
+}
+
 .address {
   .address--data {
     overflow: hidden;
