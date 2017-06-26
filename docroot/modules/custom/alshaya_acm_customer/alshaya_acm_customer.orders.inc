@@ -119,13 +119,13 @@ function alshaya_acm_customer_clean_sku($sku) {
  */
 function alshaya_acm_customer_get_order_status(array $order) {
   $config = \Drupal::config('alshaya_acm_customer.orders_config');
-  $black_orders = explode(',', $config->get('black_orders'));
-  $green_orders = explode(',', $config->get('green_orders'));
+  $order_status_returned = explode(',', $config->get('order_status_returned'));
+  $order_status_delivered = explode(',', $config->get('order_status_delivered'));
 
-  if (in_array($order['status'], $black_orders)) {
+  if (in_array($order['status'], $order_status_returned)) {
     $class = 'status-returned';
   }
-  elseif (in_array($order['status'], $green_orders)) {
+  elseif (in_array($order['status'], $order_status_delivered)) {
     $class = 'status-delivered';
   }
   else {
