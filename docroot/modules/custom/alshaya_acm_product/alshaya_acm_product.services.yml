@@ -3,6 +3,8 @@ services:
     class: Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
     tags:
       - { name: breadcrumb_builder, priority: 100 }
-
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
+  alshaya_acm_product.fields:
+    class: Drupal\alshaya_acm_product\AlshayaGetProductFields
+    arguments: [ '@entity_type.manager' ]
