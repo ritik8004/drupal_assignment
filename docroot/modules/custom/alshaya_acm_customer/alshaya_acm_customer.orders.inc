@@ -122,14 +122,13 @@ function alshaya_acm_customer_get_order_status(array $order) {
   $order_status_returned = explode(',', $config->get('order_status_returned'));
   $order_status_delivered = explode(',', $config->get('order_status_delivered'));
 
+  $class = 'status-pending';
+
   if (in_array($order['status'], $order_status_returned)) {
     $class = 'status-returned';
   }
   elseif (in_array($order['status'], $order_status_delivered)) {
     $class = 'status-delivered';
-  }
-  else {
-    $class = 'status-pending';
   }
 
   return [
