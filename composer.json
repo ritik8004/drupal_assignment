@@ -146,6 +146,9 @@
             },
             "drupal/profile" : {
                 "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
+            },
+            "drupal/redirect" : {
+                "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
             }
         },
         "installer-paths": {
