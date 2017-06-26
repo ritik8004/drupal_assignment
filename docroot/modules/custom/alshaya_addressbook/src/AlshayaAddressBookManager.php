@@ -88,7 +88,7 @@ class AlshayaAddressBookManager {
 
     $address_entity->setOwnerId($account->id());
     $address_entity->get('field_address_id')->setValue($magento_address['address_id']);
-    $address_entity->get('field_mobile_number')->setValue($magento_address['phone']);
+    $address_entity->get('field_mobile_number')->setValue($magento_address['telephone']);
     $address_entity->setDefault((int) $magento_address['default_shipping']);
 
     $address = $this->getAddressArrayFromMagentoAddress($magento_address);
@@ -216,17 +216,6 @@ class AlshayaAddressBookManager {
    *   Cleaned/Hacked address array.
    */
   protected function getCleanAddress(array $address) {
-    $address['street'] = [
-      $address['street'],
-      $address['street2'],
-    ];
-
-    $address['country_id'] = $address['country'];
-    $address['telephone'] = $address['phone'];
-
-    unset($address['street2']);
-    unset($address['phone']);
-
     // This is very annoying, when we save in Magento it allows to save region
     // but when we pass from here it gives error because Kuwait doesn't have
     // region.
@@ -262,9 +251,6 @@ class AlshayaAddressBookManager {
       $address['customer_address_id'] = $address['address_id'];
     }
 
-    // @TODO: Check why this is different, it is phone in checkout.
-    $address['telephone'] = $address['phone'];
-
     $address['default_shipping'] = (int) $entity->isDefault();
 
     return $return_clean ? $this->getCleanAddress($address) : $address;
@@ -284,17 +270,20 @@ class AlshayaAddressBookManager {
 
     $address['given_name'] = $magento_address['firstname'];
     $address['family_name'] = $magento_address['lastname'];
-    $address['organization'] = $magento_address['email'];
     $address['mobile_number'] = [
-      'value' => $magento_address['phone'],
+      'value' => $magento_address['telephone'],
     ];
     $address['address_line1'] = $magento_address['street'];
-    $address['address_line2'] = $magento_address['street2'];
-    $address['administrative_area'] = '';
-    $address['locality'] = '';
-    $address['dependent_locality'] = $magento_address['region'];
-    $address['locality'] = $magento_address['city'];
-    $address['country_code'] = $magento_address['country'];
+    $address['address_line2'] = $magento_address['extension']['address_apartment_segment'];
+    $address['administrative_area'] = $magento_address['extension']['address_area_segment'];
+    $address['locality'] = $magento_address['extension']['address_block_segment'];
+    $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
+
+    $address['country_code'] = $magento_address['country_id'];
+
+    if ($magento_address['region']) {
+      $address['region'] = $magento_address['region'];
+    }
 
     return $address;
   }
@@ -313,16 +302,17 @@ class AlshayaAddressBookManager {
 
     $magento_address['firstname'] = $address['given_name'];
     $magento_address['lastname'] = $address['family_name'];
-    $magento_address['email'] = $address['organization'];
-    $magento_address['phone'] = _alshaya_acm_checkout_clean_address_phone($address['mobile_number']);
+    $magento_address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['mobile_number']);
     $magento_address['street'] = $address['address_line1'];
-    $magento_address['street2'] = $address['address_line2'];
-    $magento_address['region'] = $address['dependent_locality'];
-    $magento_address['city'] = $address['locality'];
-    $magento_address['country'] = $address['country_code'];
+    $magento_address['extension']['address_apartment_segment'] = $address['address_line2'];
+    $magento_address['extension']['address_area_segment'] = $address['administrative_area'];
+    $magento_address['extension']['address_building_segment'] = $address['dependent_locality'];
+    $magento_address['extension']['address_block_segment'] = $address['locality'];
+    $magento_address['country_id'] = $address['country_code'];
 
-    // @TODO: Remove this after Magento gets the address form fields proper.
-    $magento_address['postcode'] = '30000';
+    // @TODO: Remove this after Magento makes it optional.
+    $magento_address['city'] = 'NA';
+    $magento_address['postcode'] = '31000';
 
     return $magento_address;
   }

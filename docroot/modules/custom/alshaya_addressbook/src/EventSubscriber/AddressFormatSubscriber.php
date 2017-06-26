@@ -29,10 +29,9 @@ class AddressFormatSubscriber implements EventSubscriberInterface {
     $definition = $event->getDefinition();
     // Only for 'Kuwait'.
     if ($definition['country_code'] == 'KW') {
-      $definition['format'] = "%givenName %familyName\n%organization\n%administrativeArea\n%locality\n%addressLine1\n%dependentLocality\n%addressLine2";
+      $definition['format'] = "%givenName %familyName\n%administrativeArea\n%locality\n%addressLine1\n%dependentLocality\n%addressLine2";
       $definition['required_fields'][] = 'dependentLocality';
       $definition['required_fields'][] = 'administrativeArea';
-      $definition['required_fields'][] = 'organization';
       $definition['uppercase_fields'][] = 'addressLine2';
       $event->setDefinition($definition);
     }

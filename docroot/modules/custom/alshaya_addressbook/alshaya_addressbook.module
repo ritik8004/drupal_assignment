@@ -89,14 +89,20 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
   $element['family_name']['#maxlength'] = 255;
 
-  // Use organization field as email.
-  $element['organization'] = [
-    '#type' => 'email',
-    '#required' => TRUE,
-    '#default_value' => $element['organization']['#default_value'],
-    '#title' => t('Email', [], ['context' => 'Address label']),
-    '#description' => t("We'll send your order confirmation here."),
-  ];
+  if (isset($element['#require_email']) && $element['#require_email']) {
+    // Use organization field as email.
+    $element['organization'] = [
+      '#type' => 'email',
+      '#required' => TRUE,
+      '#default_value' => $element['organization']['#default_value'],
+      '#title' => t('Email', [], ['context' => 'Address label']),
+      '#description' => t("We'll send your order confirmation here."),
+    ];
+  }
+  else {
+    $element['organization']['#required'] = FALSE;
+    $element['organization']['#access'] = FALSE;
+  }
 
   $element['given_name']['#title'] = t('First Name', [], ['context' => 'Address label']);
   $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
