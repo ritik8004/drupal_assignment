@@ -423,6 +423,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
     'alshaya_cart_product_name' => [
       'variables' => [
         'sku_attributes' => '',
+        'promotions' => '',
         'item_code' => '',
         'total_price' => '',
         'name' => '',
@@ -650,6 +651,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
 
   // Get parent sku of the sku.
   $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
+  $promotions = \Drupal::service('alshaya_acm_product.fields')->getPromotionsFromSkuId($sku_entity);
 
   if ($parent_sku) {
     /* @var \Drupal\node\Entity\Node $parent_node */
@@ -679,6 +681,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     '#theme' => 'alshaya_cart_product_name',
     '#sku_attributes' => $sku_attributes,
     '#name' => $name,
+    '#promotions' => $promotions,
     '#image' => $sku_image,
     '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item['price']),
     '#item_code' => $sku_entity->getSku(),
