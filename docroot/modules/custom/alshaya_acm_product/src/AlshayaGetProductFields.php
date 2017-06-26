@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\Entity\Node;
 
@@ -11,6 +12,13 @@ use Drupal\node\Entity\Node;
  * @package Drupal\alshaya_acm_product
  */
 class AlshayaGetProductFields {
+
+  /**
+   * Sku entity storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $skuStorage;
 
   /**
    * Node Entity Storage.
@@ -27,35 +35,56 @@ class AlshayaGetProductFields {
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
   }
 
   /**
    * Get Promotion node object(s) related to provided SKU.
    *
-   * @param string $skuID
+   * @param mixed $sku
    *   The SKU ID, for which linked promotions need to be fetched.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
    */
-  public function getPromotionsFromSkuId($skuID) {
+  public function getPromotionsFromSkuId($sku) {
+    if ($sku instanceof SKU) {
+      $sku = $sku->id();
+    }
+
+    $promos = [];
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
-    $query->condition('field_acq_promotion_sku', $skuID);
+    $query->condition('field_acq_promotion_sku', $sku);
     $promotionIDs = $query->execute();
 
     if (!empty($promotionIDs)) {
       $promotions = Node::loadMultiple($promotionIDs);
 
-      $links = [];
       foreach ($promotions as $promotion) {
         /* @var \Drupal\node\Entity\Node $promotion */
-        $links[] = $promotion->toLink($promotion->getTitle())->toString()->getGeneratedLink();
+        $promos[$promotion->id()] = $promotion->getTitle();
       }
-      return $links;
     }
 
-    return [];
+    return $promos;
+  }
+
+  /**
+   * Helper function to fetch Entity id given SKU for a product.
+   *
+   * @param string $sku
+   *   Sku identifier of the product variant.
+   *
+   * @return int
+   *   Entity id of the Sku
+   */
+  public function getIdFromSku($sku) {
+    $query = $this->skuStorage->getQuery();
+    $query->condition('sku', $sku);
+    $sku_entity_ids = $query->execute();
+
+    return array_shift($sku_entity_ids);
   }
 
 }
