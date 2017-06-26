@@ -31,7 +31,7 @@ class PagerPostQueryContext implements CacheContextInterface {
    * {@inheritdoc}
    */
   public static function getLabel() {
-    drupal_set_message('Lable of cache context');
+    drupal_set_message('Label of cache context');
   }
 
   /**
