@@ -369,7 +369,7 @@
               display: inline;
               position: absolute;
               top: 0;
-              right: 0;
+              #{$right}: 0;
               color: $cerulean-two;
             }
           }
@@ -540,9 +540,9 @@
   .form-item-field-address-0-address-address-line2 {
     label {
       font-size: 16px;
-      color: #adadad;
+      color: $greyish;
       position: absolute;
-      left: 0;
+      #{$left}: 0;
       top: -0.125rem;
       transition: 0.2s ease all;
     }
