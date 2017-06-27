@@ -89,6 +89,9 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
       }
     }
 
+    // Filter out duplicate skus.
+    $skus = array_unique($skus);
+
     return implode('+', $skus);
   }
 
