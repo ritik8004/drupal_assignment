@@ -27,7 +27,7 @@
           padding-#{$left}: 0.25rem;
           padding-bottom: 0.3rem;
           font-size: 0.75rem;
-          color: $white;
+          color: $greyish;
           text-transform: lowercase;
           border-bottom: 1px solid $white;
         }
@@ -36,7 +36,7 @@
         .form-item-privilege-card-number2,
         .form-item-privilege-card-number {
           padding-left: 5px;
-          color: $grey-shade;
+          color: $greyish;
           font-size: 12px;
 
           .form-item--error-message {
