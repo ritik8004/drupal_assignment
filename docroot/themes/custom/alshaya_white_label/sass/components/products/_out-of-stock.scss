@@ -1,4 +1,20 @@
+.out-of-stock {
+  .sku-base-form & {
+    @include breakpoint($tablet) {
+      padding: 1rem 0;
+    }
+  }
+}
+
 .add-to-cart.out-of-stock {
+  @include breakpoint($only-mobile) {
+    position: fixed;
+    bottom: 0;
+    z-index: 10;
+    width: 100%;
+    left: 0;
+  }
+
   width: 6.563rem;
   height: 2.188rem;
   background-color: $cherry;

@@ -74,4 +74,11 @@
     b.className += ' ucbrowser';
   }
 
+  if (navigator.userAgent.match(/SAMSUNG|SGH-[I|N|T]|GT-[I|P|N]|SM-[N|P|T|Z|G]|SHV-E|SCH-[I|J|R|S]|SPH-L/i)) {
+    b.className += ' samsung';
+    if (navigator.userAgent.match(/SAMSUNG|GT-P[3100|3110|5113]/i)) {
+      b.className += ' s-tab2';
+    }
+  }
+
 })();

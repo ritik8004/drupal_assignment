@@ -701,10 +701,14 @@ html[lang=ar] {
     #table-cart-items {
       tr {
         td {
-          padding: 1.9rem 1.5rem;
+          padding: 0 1.2rem;
 
-          @include breakpoint($upto-desktop) {
-            padding: 0;
+          @include breakpoint($tablet) {
+            padding: 1.9rem 1rem;
+          }
+
+          @include breakpoint($desktop) {
+            padding: 1.9rem 1.5rem;
           }
 
           &:first-child a {
@@ -776,6 +780,14 @@ html[lang=ar] {
 
   .path--cart .customer-cart-form .items {
     padding-right: 1.2rem;
+
+    @include breakpoint($only-tablet) {
+      padding-right: 2.5rem;
+
+      a {
+        width: 100%;
+      }
+    }
   }
 
   .field--name-field-skus .ladda-button[data-style=zoom-in] .ladda-spinner {
@@ -787,14 +799,87 @@ html[lang=ar] {
       top: -0.25rem;
     }
   }
+
+  #block-basketpromotionmessage {
+    @include breakpoint($only-tablet) {
+      margin-top: -0.4rem;
+    }
+  }
 }
 
 html[lang=ar] {
   #table-cart-totals,
-  #edit-actions-top {
+  #edit-actions-top,
+  #alshaya-newsletter-subscribe {
     .ladda-button[data-style=zoom-in][data-loading] .ladda-spinner {
       margin-right: -0.375rem;
       right: 50%;
+    }
+  }
+
+  .tooltip--wrap {
+    min-width: 15em;
+
+    @include breakpoint($tablet) {
+      min-width: 12em;
+    }
+  }
+
+  .path--cart .contains--tooltip {
+    @include breakpoint($only-mobile) {
+      .tooltip {
+        right: -2.5rem;
+      }
+
+      .tooltip--head::after {
+        position: absolute;
+        left: 0.9rem;
+        top: -0.25rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .tooltip--head::after {
+        position: absolute;
+        left: 1.9rem;
+        top: -0.25rem;
+      }
+
+      .tooltip {
+        right: -3.5rem;
+      }
+    }
+  }
+
+  .alias--cart #table-cart-totals td:last-child {
+    position: relative;
+
+    @include breakpoint(($only-tablet) (orientation landscape)) {
+      left: 1.1rem;
+    }
+
+    @include breakpoint(($only-tablet) (orientation portrait)) {
+      left: 3.7rem;
+    }
+  }
+
+  .alias--cart #table-cart-totals tr > td {
+    &:first-child {
+      @include breakpoint(($only-tablet) (orientation portrait)) {
+        width: 11rem;
+      }
+    }
+
+    &:last-child {
+      @include breakpoint(($only-tablet) (orientation portrait)) {
+        width: 7rem;
+      }
+    }
+  }
+
+  body.alias--cart .page-standard.l-container .edit-actions {
+    @include breakpoint($only-tablet) {
+      margin-left: 0;
     }
   }
 }

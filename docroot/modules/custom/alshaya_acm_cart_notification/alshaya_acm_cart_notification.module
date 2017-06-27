@@ -15,16 +15,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Implements hook_page_bottom().
- */
-function alshaya_acm_cart_notification_page_bottom(array &$page_bottom) {
-  // Adding a form element a placeholder to populate as a cart notification.
-  $page_bottom['alshaya_acm_cart_notification'] = [
-    '#markup' => '<div id="cart_notification"></div>',
-  ];
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {

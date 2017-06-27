@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "27cfcc6091612f2b719e2f6ae5f94fcc",
+    "content-hash": "e7df93bf59d22f85cd27f75fe2344890",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1627,17 +1627,17 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "1.10.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/acquia_connector",
-                "reference": "8.x-1.10"
+                "reference": "8.x-1.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.10.zip",
-                "reference": "8.x-1.10",
-                "shasum": "aa56f04d572e7963e14abc9bcfb3d8cc9c00eb7d"
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.12.zip",
+                "reference": null,
+                "shasum": "ac8e7a955dd92dc8dc0d3476f2e3c2b0dcb3855a"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -1651,8 +1651,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.10",
-                    "datestamp": "1493037542"
+                    "version": "8.x-1.12",
+                    "datestamp": "1496931843"
                 },
                 "patches_applied": {
                     "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
@@ -2043,7 +2043,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486737287"
+                    "datestamp": "1486736883"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3812,7 +3812,7 @@
                 "patches_applied": {
                     "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
                     "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
-                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-24.patch",
+                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-42.patch",
                     "Fix undefined index:active in facets_system_breadcrumb_alter()": "https://www.drupal.org/files/issues/undefIndexActive_2869850.2.patch"
                 }
             },
@@ -4408,10 +4408,6 @@
                 {
                     "name": "Berdir",
                     "homepage": "https://www.drupal.org/user/214652"
-                },
-                {
-                    "name": "Dave Reid",
-                    "homepage": "https://www.drupal.org/user/53892"
                 },
                 {
                     "name": "Drupal Media Team",
@@ -5960,11 +5956,17 @@
         },
         {
             "name": "drupal/search_api_autocomplete",
-            "version": "dev-1.x",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api_autocomplete",
-                "reference": "0d32cb7b5e8febf28c3ec45a8420a4d9275ab660"
+                "reference": "8.x-1.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.0-alpha2.zip",
+                "reference": "8.x-1.0-alpha2",
+                "shasum": "e1b444d6235aab1fa4fb7f6d16c3dae482b1c6b9"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -5976,11 +5978,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha1+11-dev",
-                    "datestamp": "1494495484"
-                },
-                "patches_applied": {
-                    "Failed site install due to missing search_api_autocomplete config dependency": "https://www.drupal.org/files/issues/2824390-15.patch"
+                    "version": "8.x-1.0-alpha2",
+                    "datestamp": "1495529883"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5997,8 +5996,7 @@
             "homepage": "https://www.drupal.org/project/search_api_autocomplete",
             "support": {
                 "source": "http://cgit.drupalcode.org/search_api_autocomplete"
-            },
-            "time": "2017-05-11 10:03:02"
+            }
         },
         {
             "name": "drupal/search_api_solr",
@@ -6389,16 +6387,8 @@
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
-                    "name": "badjava",
-                    "homepage": "https://www.drupal.org/user/83372"
-                },
-                {
                     "name": "chx",
                     "homepage": "https://www.drupal.org/user/9446"
-                },
-                {
-                    "name": "japerry",
-                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "kalman.hosszu",
@@ -6526,7 +6516,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486729083"
+                    "datestamp": "1486726083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6540,10 +6530,6 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
-                },
-                {
-                    "name": "miteshmap",
-                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -6722,6 +6708,52 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/video_embed_field"
             }
+        },
+        {
+            "name": "drupal/views_block_filter_block",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/views_block_filter_block",
+                "reference": "ca039afb46ae9603e8c034a2ecd8c7e261af6c7f"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.x-dev",
+                    "datestamp": "1495707184"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Yogesh Pawar",
+                    "homepage": "https://www.drupal.org/user/2922907"
+                },
+                {
+                    "name": "iamEAP",
+                    "homepage": "https://www.drupal.org/user/1467594"
+                },
+                {
+                    "name": "sumitmadan",
+                    "homepage": "https://www.drupal.org/user/1538790"
+                }
+            ],
+            "description": "Provides blocks for Views exposed filters on View blocks.",
+            "homepage": "https://www.drupal.org/project/views_block_filter_block",
+            "support": {
+                "source": "http://cgit.drupalcode.org/views_block_filter_block"
+            },
+            "time": "2017-05-25 11:05:23"
         },
         {
             "name": "drupal/views_field_view",
@@ -12821,7 +12853,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork maintainer"
+                    "role": "Fork Maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
@@ -13333,7 +13365,6 @@
         "drupal/mobile_number": 15,
         "drupal/sharethis": 10,
         "drupal/mimemail": 20,
-        "drupal/search_api_autocomplete": 20,
         "drupal/block_field": 15,
         "drupal/google_tag": 20,
         "drupal/simple_sitemap": 20,
@@ -13343,6 +13374,7 @@
         "drupal/r4032login": 20,
         "drupal/datalayer": 10,
         "drupal/search_api_solr_multilingual": 10,
+        "drupal/views_block_filter_block": 20,
         "drupal/memcache": 20
     },
     "prefer-stable": true,

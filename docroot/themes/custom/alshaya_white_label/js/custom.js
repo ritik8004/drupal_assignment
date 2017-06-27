@@ -6,6 +6,12 @@
 (function ($, Drupal) {
   'use strict';
 
+  $(window).bind('pageshow', function (event) {
+    if (event.originalEvent.persisted) {
+      window.location.reload();
+    }
+  });
+
   Drupal.behaviors.joinusblock = {
     attach: function (context, settings) {
       if ($('#block-alshaya-white-label-content div').hasClass('joinclub')) {

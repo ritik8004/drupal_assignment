@@ -15,6 +15,7 @@ dependencies:
   - responsive_image
   - search_api
   - search_api_db
+  - views_block_filter_block
   - system
   - taxonomy
   - user

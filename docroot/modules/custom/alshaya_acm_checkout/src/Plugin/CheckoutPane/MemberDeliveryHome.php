@@ -6,6 +6,7 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\profile\Entity\Profile;
 
 /**
@@ -45,9 +46,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     }
 
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
-    $pane_form['guest_delivery_home']['title'] = [
-      '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
-    ];
 
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
@@ -63,24 +61,67 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     $pane_form['header'] = [
       '#type' => 'container',
       '#attributes' => [
-        'id' => ['addresses_header'],
+        'id' => ['addresses-header'],
       ],
     ];
 
     $pane_form['header']['title'] = [
-      '#type' => 'markup',
-      '#markup' => '<h2>' . $this->t('choose delivery address') . '</h2>',
+      '#markup' => '<div class="title delivery-address-title">' . $this->t('choose delivery address') . '</div>',
+    ];
+
+    $add_profile_route_params = [
+      'user' => \Drupal::currentUser()->id(),
+      'profile_type' => 'address_book',
+      'js' => 'nojs',
+    ];
+
+    $add_profile_route_options = [
+      'attributes' => [
+        'class' => ['use-ajax'],
+        'rel' => 'address-book-form-wrapper',
+      ],
+      'query' => [
+        'from' => 'checkout',
+      ],
+    ];
+
+    $pane_form['header']['add_profile'] = Link::createFromRoute(
+      $this->t('add new address'),
+      'alshaya_addressbook.add_address_ajax',
+      $add_profile_route_params,
+      $add_profile_route_options
+    )->toRenderable();
+
+    $pane_form['addresses'] = [
+      '#type' => 'view',
+      '#name' => 'address_book',
+      '#display_id' => 'address_book',
+      '#embed' => TRUE,
+      '#title' => '',
+      '#pre_render' => [
+        ['\Drupal\views\Element\View', 'preRenderViewElement'],
+      ],
+    ];
+
+    $shipping_methods = [];
+    $default_shipping = NULL;
+
+    $pane_form['address']['selected'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => ['selected-address-wrapper'],
+      ],
     ];
 
     if ($address['customer_address_id']) {
+      $pane_form['header']['title']['#markup'] = '<div class="title delivery-address-title">' . $this->t('delivery address') . '</div>';
+
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
       if ($entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id'])) {
         $view_builder = \Drupal::entityTypeManager()->getViewBuilder('profile');
-        $pane_form['address']['display'] = $view_builder->view($entity, 'teaser');
-
-        $pane_form['address']['edit'] = [];
+        $pane_form['address']['selected']['display'] = $view_builder->view($entity, 'teaser');
 
         $shipping_methods = self::generateShippingEstimates($entity);
         $default_shipping = $cart->getShippingMethodAsString();
@@ -91,53 +132,27 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
         if (!empty($shipping_methods) && empty($default_shipping)) {
           $default_shipping = array_keys($shipping_methods)[0];
         }
-
-        $pane_form['address']['shipping_methods'] = [
-          '#type' => 'radios',
-          '#title' => t('Shipping Methods'),
-          '#default_value' => $default_shipping,
-          '#validated' => TRUE,
-          '#options' => $shipping_methods,
-          '#prefix' => '<div id="shipping_methods_wrapper">',
-          '#suffix' => '</div>',
-        ];
       }
     }
 
-    if (empty($address['customer_address_id']) || empty($pane_form['address']) || empty($pane_form['address']['display'])) {
-      $add_profile_route_params = [
-        'user' => \Drupal::currentUser()->id(),
-        'profile_type' => 'address_book',
-        'js' => 'nojs',
-      ];
+    $pane_form['address']['shipping_methods'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('select delivery options'),
+      '#default_value' => $default_shipping,
+      '#validated' => TRUE,
+      '#options' => $shipping_methods,
+      '#prefix' => '<div id="shipping_methods_wrapper">',
+      '#suffix' => '</div>',
+    ];
 
-      $add_profile_route_options = [
-        'attributes' => [
-          'class' => ['use-ajax'],
-          'rel' => 'address-book-form-wrapper',
-        ],
-        'query' => [
-          'from' => 'checkout',
-        ],
-      ];
-
-      $pane_form['header']['add_profile'] = Link::createFromRoute(
-        $this->t('add new address'),
-        'alshaya_addressbook.add_address_ajax',
-        $add_profile_route_params,
-        $add_profile_route_options)->toRenderable();
-
-      $pane_form['addresses'] = [
-        '#type' => 'view',
-        '#name' => 'address_book',
-        '#display_id' => 'address_book',
-        '#embed' => TRUE,
-        '#title' => '',
-        '#pre_render' => [
-          ['\Drupal\views\Element\View', 'preRenderViewElement'],
-        ],
-      ];
-    }
+    $complete_form['actions']['back_to_basket'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Back to basket'),
+      '#url' => Url::fromRoute('acq_cart.cart'),
+      '#attributes' => [
+        'class' => ['back-to-basket'],
+      ],
+    ];
 
     return $pane_form;
   }

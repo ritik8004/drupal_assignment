@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets_summary.facets_summary.filter_bar_plp
+  module:
+    - ctools
+    - facets_summary
+  theme:
+    - alshaya_white_label
+id: filterbarplp
+theme: alshaya_white_label
+region: content
+weight: -15
+provider: null
+plugin: 'facets_summary_block:filter_bar_plp'
+settings:
+  id: 'facets_summary_block:filter_bar_plp'
+  label: 'Filter bar PLP'
+  provider: facets_summary
+  label_display: '0'
+visibility:
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      acq_product_category: acq_product_category
+    negate: false
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'

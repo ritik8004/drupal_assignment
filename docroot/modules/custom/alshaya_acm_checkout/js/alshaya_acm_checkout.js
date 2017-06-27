@@ -59,6 +59,22 @@
         }
       }
 
+      $('#change-address').once('bind-events').each(function () {
+        $('#edit-member-delivery-home-addresses').hide();
+        $('#edit-member-delivery-home-header-add-profile').hide();
+
+        $(this).on('click', function (e) {
+          e.preventDefault();
+
+          $('#selected-address-wrapper').slideUp();
+          $('[data-drupal-selector="edit-actions-next"]').hide();
+          $('#shipping_methods_wrapper').slideUp();
+          $('#edit-member-delivery-home-addresses').slideDown();
+          $('.delivery-address-title').html(Drupal.t('choose delivery address'));
+          $('#edit-member-delivery-home-header-add-profile').show();
+        });
+      });
+
       if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.beforeSendAcmCheckout === 'undefined') {
         Drupal.Ajax.prototype.beforeSendAcmCheckout = Drupal.Ajax.prototype.beforeSend;
         Drupal.Ajax.prototype.successAcmCheckout = Drupal.Ajax.prototype.success;
