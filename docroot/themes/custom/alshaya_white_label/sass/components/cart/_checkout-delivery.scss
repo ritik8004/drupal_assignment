@@ -461,16 +461,6 @@
   font-size: 0.75rem;
   margin-bottom: 1.5rem;
 
-  // @include breakpoint($tablet) {
-  //   float: $left;
-  //   width: calc(50% - 0.75rem);
-  //   max-width: 15.94rem;
-
-  //   &:nth-of-type(odd) {
-  //     margin-#{$right}: 1.5rem;
-  //   }
-  // }
-
   @include breakpoint($desktop) {
     margin-bottom: 3rem;
     max-width: 26.25rem;
@@ -629,5 +619,13 @@
         }
       }
     }
+  }
+}
+
+#edit-member-delivery-collect {
+  padding: 5px;
+
+  @include breakpoint($tablet) {
+    padding: 1.5rem
   }
 }
