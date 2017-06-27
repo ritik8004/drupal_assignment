@@ -2,24 +2,23 @@ langcode: en
 status: true
 dependencies:
   config:
-    - views.view.alshaya_product_list
+    - facets.facet.promotion_color_facet
   module:
     - ctools
-    - views
+    - facets
   theme:
     - alshaya_white_label
-id: exposedformalshaya_product_listblock_1_2
+id: promotioncolorfacet
 theme: alshaya_white_label
-region: content
-weight: -20
+region: sidebar_first
+weight: -24
 provider: null
-plugin: 'views_exposed_filter_block:alshaya_product_list-block_1'
+plugin: 'facet_block:promotion_color_facet'
 settings:
-  id: 'views_exposed_filter_block:alshaya_product_list-block_1'
-  label: ''
-  provider: views
+  id: 'facet_block:promotion_color_facet'
+  label: Color
+  provider: facets
   label_display: visible
-  views_label: ''
 visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'

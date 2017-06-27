@@ -6,20 +6,19 @@ dependencies:
     - views.view.alshaya_product_list
   module:
     - search_api
-id: skus_sku_reference_final_price_promotions
-name: 'SKUs » SKU Reference » Final Price'
-url_alias: skus_sku_reference_final_price_promotions
+id: promotion_color_facet
+name: 'Promotion color facet'
+url_alias: skus_sku_reference_color_promotions
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: final_price
+field_identifier: attr_color
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_2'
 widget:
-  type: range_checkbox
+  type: checkbox
   config:
     show_numbers: true
-    soft_limit: '5'
-    granularity: '20'
+    soft_limit: 5
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
