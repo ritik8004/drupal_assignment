@@ -2,21 +2,21 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.skus_sku_reference_size_promotions
+    - facets.facet.promotion_price_facet
   module:
     - ctools
     - facets
   theme:
     - alshaya_white_label
-id: skusskureferencesize_2
+id: promotionpricefacet
 theme: alshaya_white_label
 region: sidebar_first
-weight: -21
+weight: -23
 provider: null
-plugin: 'facet_block:skus_sku_reference_size_promotions'
+plugin: 'facet_block:promotion_price_facet'
 settings:
-  id: 'facet_block:skus_sku_reference_size_promotions'
-  label: Size
+  id: 'facet_block:promotion_price_facet'
+  label: Price
   provider: facets
   label_display: visible
 visibility:

@@ -9,25 +9,25 @@ dependencies:
 id: filter_bar_promotions
 name: 'Filter bar Promotions'
 facets:
-  skus_sku_reference_brand_promotions:
+  promotion_brand_facet:
     checked: true
     label: Brand
     separator: ', '
     show_count: true
     weight: 0
-  skus_sku_reference_color_promotions:
+  promotion_color_:
     checked: true
     label: Color
     separator: ', '
     show_count: true
     weight: 0
-  skus_sku_reference_final_price_promotions:
+  promotion_price_facet:
     checked: true
     label: Price
     separator: ', '
     show_count: true
     weight: 0
-  skus_sku_reference_size_promotions:
+  promotion_size_facet:
     checked: true
     label: Size
     separator: ', '

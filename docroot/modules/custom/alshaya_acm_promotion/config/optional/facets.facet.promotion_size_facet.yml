@@ -6,20 +6,20 @@ dependencies:
     - views.view.alshaya_product_list
   module:
     - search_api
-id: skus_sku_reference_brand_promotions
-name: 'SKUs » SKU Reference » Brand'
-url_alias: skus_sku_reference_brand_promotions
+id: promotion_size_facet
+name: 'Promotion size facet'
+url_alias: promotion_size_facet
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: brand
+field_identifier: attr_size
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_2'
 widget:
   type: checkbox
   config:
     show_numbers: true
     soft_limit: 5
-query_operator: and
+query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
 enable_parent_when_child_gets_disabled: true

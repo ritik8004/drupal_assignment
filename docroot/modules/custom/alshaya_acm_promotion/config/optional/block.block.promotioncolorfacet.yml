@@ -2,20 +2,20 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.skus_sku_reference_color_promotions
+    - facets.facet.promotion_color_facet
   module:
     - ctools
     - facets
   theme:
     - alshaya_white_label
-id: skusskureferencecolor_2
+id: promotioncolorfacet
 theme: alshaya_white_label
 region: sidebar_first
-weight: -23
+weight: -24
 provider: null
-plugin: 'facet_block:skus_sku_reference_color_promotions'
+plugin: 'facet_block:promotion_color_facet'
 settings:
-  id: 'facet_block:skus_sku_reference_color_promotions'
+  id: 'facet_block:promotion_color_facet'
   label: Color
   provider: facets
   label_display: visible
