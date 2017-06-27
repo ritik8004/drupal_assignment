@@ -154,7 +154,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
       if (!alshaya_acm_is_product_in_stock($sku)) {
         $elements[$delta]['#out_of_stock'] = [
-          '#markup' => '<span>' . t('out of stock') . '</span>',
+          '#markup' => '<span>' . $this->t('out of stock') . '</span>',
         ];
       }
     }
