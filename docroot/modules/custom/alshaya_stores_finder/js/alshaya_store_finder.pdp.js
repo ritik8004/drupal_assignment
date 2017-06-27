@@ -46,12 +46,12 @@
       });
 
       $('.click-collect-top-stores').once('bind-events').on('click', '.other-stores-link', function () {
-        $('.click-collect-all-stores').slideToggle();
+        $('.click-collect-all-stores').toggle('slow');
       });
 
       $('.click-collect-all-stores').once('bind-events').on('click', '.close-inline-modal, .change-store-link, .search-stores-button', function (e) {
         if (e.target.className === 'change-store-link') {
-          $(this).siblings('.search-store').show();
+          $(this).parent().siblings('.store-finder-form-wrapper').find('.search-store').show();
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
@@ -64,13 +64,13 @@
           return false;
         }
         else {
-          $('.click-collect-all-stores').slideToggle();
+          $('.click-collect-all-stores').toggle('slow');
         }
       });
 
       $('.click-collect-form').once('bind-events').on('click', '.change-location-link, .search-stores-button', function (e) {
         if (e.target.className === 'change-location-link') {
-          $(this).siblings('.search-store').show();
+          $(this).parent().siblings('.store-finder-form-wrapper').find('.search-store').show();
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
@@ -172,7 +172,7 @@
       $('.click-collect-empty-selection').hide();
       $('.click-collect-form').show();
       $('.click-collect-form').find('.available-store-text').hide();
-      $('.click-collect-form').find('.store-finder-form-wrapper .change-location-link').hide();
+      // $('.click-collect-form').find('.store-finder-form-wrapper .change-location-link').hide();
       $('.click-collect-form').find('.store-finder-form-wrapper .search-store').show();
     }
   };
@@ -251,7 +251,7 @@
       $('.click-collect-form').find('.search-store').hide();
       $('.click-collect-form').find('.available-store-text').show();
       $('.click-collect-form').find('.store-finder-form-wrapper .search-store').find('.search-stores-button').hide();
-      $('.click-collect-form').find('.store-finder-form-wrapper .change-location-link').show();
+      // $('.click-collect-form').find('.store-finder-form-wrapper .change-location-link').show();
       if (response.all_stores) {
         $('.click-collect-all-stores').html(response.all_stores);
         $('.click-collect-all-stores').find('.store-finder-form-wrapper .search-store').find('.search-stores-button').hide();
