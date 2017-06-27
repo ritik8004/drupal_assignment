@@ -482,7 +482,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
 
     $administrative_area = $values[0]['administrative_area'];
     if (!empty($administrative_area)) {
-      $variables['administrative_area'] = _alshaya_addressbook_get_area_from_id($variables['administrative_area']);
+      $variables['delivery_address']['administrative_area'] = _alshaya_addressbook_get_area_from_id($administrative_area);
     }
 
     // Get country list.

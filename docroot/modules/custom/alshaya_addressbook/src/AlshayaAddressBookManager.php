@@ -117,6 +117,7 @@ class AlshayaAddressBookManager {
 
       if ($entity->isDefault()) {
         $customer['addresses'][$index]['default_shipping'] = 0;
+        $customer['addresses'][$index]['default_billing'] = 0;
       }
     }
 
@@ -185,6 +186,7 @@ class AlshayaAddressBookManager {
 
       if ($entity->isDefault()) {
         $customer['addresses'][$index]['default_shipping'] = 0;
+        $customer['addresses'][$index]['default_billing'] = 0;
       }
     }
 
@@ -252,6 +254,7 @@ class AlshayaAddressBookManager {
     }
 
     $address['default_shipping'] = (int) $entity->isDefault();
+    $address['default_billing'] = (int) $entity->isDefault();
 
     return $return_clean ? $this->getCleanAddress($address) : $address;
   }
@@ -266,6 +269,16 @@ class AlshayaAddressBookManager {
    *   Drupal address.
    */
   public function getAddressArrayFromMagentoAddress(array $magento_address) {
+    // Fix for current invalid data.
+    if (empty($magento_address['extension'])) {
+      $magento_address['extension'] = [
+        'address_apartment_segment' => '',
+        'address_area_segment' => '',
+        'address_block_segment' => '',
+        'address_building_segment' => '',
+      ];
+    }
+
     $address = [];
 
     $address['given_name'] = $magento_address['firstname'];
