@@ -67,6 +67,7 @@ class StoreFinderAvailableStores extends FormBase {
       '#title' => $this->t('Check in-store availability'),
       '#title_display' => 'before',
       '#placeholder' => $this->t('Enter your area'),
+      '#prefix' => '<span class="label">' . $this->t('Check in-store availability') . '</span>',
     ];
 
     $form['Search'] = [
