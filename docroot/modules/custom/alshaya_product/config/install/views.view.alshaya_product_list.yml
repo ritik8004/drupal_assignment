@@ -4,7 +4,6 @@ dependencies:
   config:
     - search_api.index.product
   module:
-    - alshaya_acm_promotion
     - better_exposed_filters
     - search_api
     - views_infinite_scroll

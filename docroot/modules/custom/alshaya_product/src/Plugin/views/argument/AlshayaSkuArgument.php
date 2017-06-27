@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_promotion\Plugin\views\argument;
+namespace Drupal\alshaya_product\Plugin\views\argument;
 
 use Drupal\search_api\Plugin\views\argument\SearchApiStandard;
 
