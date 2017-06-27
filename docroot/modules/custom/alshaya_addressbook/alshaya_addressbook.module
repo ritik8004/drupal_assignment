@@ -84,22 +84,28 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   ];
 
   // Validation for first and last name.
+  $element['given_name']['#title'] = t('First Name', [], ['context' => 'Address label']);
   $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
   $element['given_name']['#maxlength'] = 255;
+
+  $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
   $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
   $element['family_name']['#maxlength'] = 255;
 
-  // Use organization field as email.
-  $element['organization'] = [
-    '#type' => 'email',
-    '#required' => TRUE,
-    '#default_value' => $element['organization']['#default_value'],
-    '#title' => t('Email', [], ['context' => 'Address label']),
-    '#description' => t("We'll send your order confirmation here."),
-  ];
-
-  $element['given_name']['#title'] = t('First Name', [], ['context' => 'Address label']);
-  $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
+  if (isset($element['#require_email']) && $element['#require_email']) {
+    // Use organization field as email.
+    $element['organization'] = [
+      '#type' => 'email',
+      '#required' => TRUE,
+      '#default_value' => isset($element['organization']) ? $element['organization']['#default_value'] : '',
+      '#title' => t('Email', [], ['context' => 'Address label']),
+      '#description' => t("We'll send your order confirmation here."),
+    ];
+  }
+  else {
+    $element['organization']['#required'] = FALSE;
+    $element['organization']['#access'] = FALSE;
+  }
 
   // Only for 'Kuwait'.
   if ($default_country_code == 'KW') {
@@ -476,13 +482,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
 
     $administrative_area = $values[0]['administrative_area'];
     if (!empty($administrative_area)) {
-      $variables['administrative_area'] = $administrative_area;
-
-      $term = Term::load($administrative_area);
-      if ($term) {
-        $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-        $variables['delivery_address']['administrative_area'] = $term->getName();
-      }
+      $variables['delivery_address']['administrative_area'] = _alshaya_addressbook_get_area_from_id($administrative_area);
     }
 
     // Get country list.
@@ -603,4 +603,24 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
 
   $variables['#cache']['contexts'][] = 'route';
   $variables['#attached']['library'][] = 'core/drupal.ajax';
+}
+
+/**
+ * Helper function to get translated term name from area term id.
+ *
+ * @param int $tid
+ *   Area term id.
+ *
+ * @return string
+ *   Term name.
+ */
+function _alshaya_addressbook_get_area_from_id($tid) {
+  $term = Term::load($tid);
+
+  if ($term) {
+    $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+    return $term->getName();
+  }
+
+  return '';
 }

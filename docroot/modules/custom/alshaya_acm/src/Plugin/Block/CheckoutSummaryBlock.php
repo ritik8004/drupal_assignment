@@ -150,16 +150,27 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $shipping_address = $this->addressBookManager->getAddressFromEntity($entity, FALSE);
         }
       }
+      else {
+        $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
+      }
 
-      if (isset($shipping_address['street'])) {
-        $delivery['address'] = $shipping_address['street'] . ', ';
+      if (isset($shipping_address['address_line1'])) {
+        $line1[] = $shipping_address['address_line2'];
+        $line1[] = $shipping_address['dependent_locality'];
 
-        // @TODO: Need to update this after address form/fields are changed.
-        $delivery['address'] .= !empty($shipping_address['street2']) ? $shipping_address['street2'] . ', ' : '';
-        $delivery['address'] .= !empty($shipping_address['city']) ? $shipping_address['city'] . ', ' : '';
-        $delivery['address'] .= !empty($shipping_address['region']) ? $shipping_address['region'] . ', ' : '';
-        $delivery['address'] .= $shipping_address['country'] . ', ';
-        $delivery['address'] .= !empty($shipping_address['postcode']) ? $shipping_address['postcode'] : '';
+        $line2[] = $shipping_address['locality'] . ',';
+
+        $line2[] = $shipping_address['address_line1'];
+        $line2[] = $this->t('@area Area', ['@area' => _alshaya_addressbook_get_area_from_id($shipping_address['administrative_area'])]);
+
+        $country_list = \Drupal::service('address.country_repository')->getList();
+        $line3[] = $country_list[$shipping_address['country_code']];
+
+        $delivery['address'] = implode(',<br>', [
+          implode(' ', $line1),
+          implode(' ', $line2),
+          implode(' ', $line3),
+        ]);
       }
     }
 

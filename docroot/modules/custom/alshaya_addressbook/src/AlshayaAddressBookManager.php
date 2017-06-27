@@ -73,12 +73,12 @@ class AlshayaAddressBookManager {
    *
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Account for which address is to be saved.
-   * @param array $address
+   * @param array $magento_address
    *   Address array.
    */
-  public function saveUserAddressFromApi(AccountInterface $account, array $address) {
+  public function saveUserAddressFromApi(AccountInterface $account, array $magento_address) {
     /** @var \Drupal\profile\Entity\Profile $address_entity */
-    $address_entity = $this->getUserAddressByCommerceId($address['address_id']);
+    $address_entity = $this->getUserAddressByCommerceId($magento_address['address_id']);
 
     if (empty($address_entity)) {
       $address_entity = $this->profileStorage->create([
@@ -87,20 +87,12 @@ class AlshayaAddressBookManager {
     }
 
     $address_entity->setOwnerId($account->id());
-    $address_entity->get('field_address_id')->setValue($address['address_id']);
-    $address_entity->get('field_mobile_number')->setValue($address['phone']);
+    $address_entity->get('field_address_id')->setValue($magento_address['address_id']);
+    $address_entity->get('field_mobile_number')->setValue($magento_address['telephone']);
+    $address_entity->setDefault((int) $magento_address['default_shipping']);
 
-    $address_entity->get('field_address')->setValue([
-      'given_name' => $address['firstname'],
-      'family_name' => $address['lastname'],
-      'address_line1' => $address['street'],
-      'address_line2' => $address['street2'],
-      'dependent_locality' => $address['region'],
-      'locality' => $address['city'],
-      'country_code' => $address['country'],
-    ]);
-
-    $address_entity->setDefault((int) $address['default_shipping']);
+    $address = $this->getAddressArrayFromMagentoAddress($magento_address);
+    $address_entity->get('field_address')->setValue($address);
 
     $address_entity->save();
   }
@@ -125,6 +117,7 @@ class AlshayaAddressBookManager {
 
       if ($entity->isDefault()) {
         $customer['addresses'][$index]['default_shipping'] = 0;
+        $customer['addresses'][$index]['default_billing'] = 0;
       }
     }
 
@@ -193,6 +186,7 @@ class AlshayaAddressBookManager {
 
       if ($entity->isDefault()) {
         $customer['addresses'][$index]['default_shipping'] = 0;
+        $customer['addresses'][$index]['default_billing'] = 0;
       }
     }
 
@@ -224,17 +218,6 @@ class AlshayaAddressBookManager {
    *   Cleaned/Hacked address array.
    */
   protected function getCleanAddress(array $address) {
-    $address['street'] = [
-      $address['street'],
-      $address['street2'],
-    ];
-
-    $address['country_id'] = $address['country'];
-    $address['telephone'] = $address['phone'];
-
-    unset($address['street2']);
-    unset($address['phone']);
-
     // This is very annoying, when we save in Magento it allows to save region
     // but when we pass from here it gives error because Kuwait doesn't have
     // region.
@@ -258,31 +241,93 @@ class AlshayaAddressBookManager {
     $address_id = $entity->get('field_address_id')->getString();
     $entity_address = $entity->get('field_address')->first()->getValue();
 
-    $address = [];
+    $entity_address['mobile_number'] = '';
+    if ($phone = $entity->get('field_mobile_number')->first()->getValue()) {
+      $entity_address['mobile_number'] = $phone['value'];
+    }
+
+    $address = $this->getMagentoAddressFromAddressArray($entity_address);
 
     if ($address_id) {
       $address['address_id'] = (int) $address_id;
       $address['customer_address_id'] = $address['address_id'];
     }
 
-    $address['firstname'] = $entity_address['given_name'];
-    $address['lastname'] = $entity_address['family_name'];
-    $address['street'] = $entity_address['address_line1'];
-    $address['street2'] = $entity_address['address_line2'];
-    $address['city'] = $entity_address['locality'];
-    $address['country'] = $entity_address['country_code'];
-
     $address['default_shipping'] = (int) $entity->isDefault();
-
-    $address['phone'] = '';
-    if ($phone = $entity->get('field_mobile_number')->first()->getValue()) {
-      $address['phone'] = $phone['value'];
-    }
-
-    // @TODO: Remove this after Magento gets the address form fields proper.
-    $address['postcode'] = '30000';
+    $address['default_billing'] = (int) $entity->isDefault();
 
     return $return_clean ? $this->getCleanAddress($address) : $address;
+  }
+
+  /**
+   * Convert drupal address into magento address.
+   *
+   * @param array $magento_address
+   *   Magento address.
+   *
+   * @return array
+   *   Drupal address.
+   */
+  public function getAddressArrayFromMagentoAddress(array $magento_address) {
+    // Fix for current invalid data.
+    if (empty($magento_address['extension'])) {
+      $magento_address['extension'] = [
+        'address_apartment_segment' => '',
+        'address_area_segment' => '',
+        'address_block_segment' => '',
+        'address_building_segment' => '',
+      ];
+    }
+
+    $address = [];
+
+    $address['given_name'] = $magento_address['firstname'];
+    $address['family_name'] = $magento_address['lastname'];
+    $address['mobile_number'] = [
+      'value' => $magento_address['telephone'],
+    ];
+    $address['address_line1'] = $magento_address['street'];
+    $address['address_line2'] = $magento_address['extension']['address_apartment_segment'];
+    $address['administrative_area'] = $magento_address['extension']['address_area_segment'];
+    $address['locality'] = $magento_address['extension']['address_block_segment'];
+    $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
+
+    $address['country_code'] = $magento_address['country_id'];
+
+    if ($magento_address['region']) {
+      $address['region'] = $magento_address['region'];
+    }
+
+    return $address;
+  }
+
+  /**
+   * Convert magento address into drupal address.
+   *
+   * @param array $address
+   *   Drupal address.
+   *
+   * @return array
+   *   Magento address.
+   */
+  public function getMagentoAddressFromAddressArray(array $address) {
+    $magento_address = [];
+
+    $magento_address['firstname'] = $address['given_name'];
+    $magento_address['lastname'] = $address['family_name'];
+    $magento_address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['mobile_number']);
+    $magento_address['street'] = $address['address_line1'];
+    $magento_address['extension']['address_apartment_segment'] = $address['address_line2'];
+    $magento_address['extension']['address_area_segment'] = $address['administrative_area'];
+    $magento_address['extension']['address_building_segment'] = $address['dependent_locality'];
+    $magento_address['extension']['address_block_segment'] = $address['locality'];
+    $magento_address['country_id'] = $address['country_code'];
+
+    // @TODO: Remove this after Magento makes it optional.
+    $magento_address['city'] = 'NA';
+    $magento_address['postcode'] = '31000';
+
+    return $magento_address;
   }
 
 }
