@@ -1032,3 +1032,21 @@
     list-style: none;
   }
 }
+
+// Rearranging quantity on PDP for simple products
+article[gtm-sku-type="simple"] {
+  .acq-content-product {
+    .sku-base-form {
+      .form-item-quantity {
+        float: left !important;
+      }
+
+      button[type="submit"] {
+        @include breakpoint($only-tablet) {
+          float: right;
+          margin-top: 1rem;
+        }
+      }
+    }
+  }
+}

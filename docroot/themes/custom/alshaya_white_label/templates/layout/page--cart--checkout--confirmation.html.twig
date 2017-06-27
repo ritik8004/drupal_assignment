@@ -14,29 +14,33 @@
   {% endif %}
     <!-- /breadcrumb -->
 
-    <!-- ______________________ HERO CONTENT _______________________ -->
-
-  {% if page.hero_content %}
-      <div class="c-hero-content">
-          <div class="l-container">
-              <div class="c-hero-content__region">
-                {{ page.hero_content }}
-              </div>
-          </div>
-      </div>
-  {% endif %}
-    <!-- /hero content -->
-
     <!-- ______________________ MAIN _______________________ -->
-     <div class="site-brand-home">
-      <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
-        <img src="/themes/custom/alshaya_white_label/mothercare-logo.svg" alt="{{ 'Home'|t }}"/>
-      </a>
+    <div class="site-brand-wrapper">
+      <div class="site-brand-home">
+        <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="logo">
+          <img src="/themes/custom/alshaya_white_label/mothercare-logo.svg" alt="{{ 'Home'|t }}"/>
+        </a>
 
-      <div class="secure__checkout--block">
-        <span class="secure__checkout--label">{{ "Secure Checkout"|t }}</span><span class="icon-ic_login"></span>
+        <div class="secure__checkout--block">
+          <span class="secure__checkout--label">{{ "Secure Checkout"|t }}</span><span class="icon-ic_login"></span>
+        </div>
       </div>
     </div>
+
+    <!-- ______________________ HERO CONTENT _______________________ -->
+
+    {% if page.hero_content %}
+      <div class="c-hero-content">
+        <div class="l-container">
+          <div class="c-hero-content__region">
+            {{ page.hero_content }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <!-- /hero content -->
+
+
     <div class="clearfix page-wrapper">
         <div{{ attributes.addClass('l-container') }}>
             <main>

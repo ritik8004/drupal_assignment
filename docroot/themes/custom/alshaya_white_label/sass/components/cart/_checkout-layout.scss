@@ -128,10 +128,17 @@
 .alias--cart-checkout-confirmation {
   margin-top: 0;
 
+  .c-post-content {
+    background-color: $white-four;
+  }
+
+  .site-brand-wrapper {
+    border-bottom: 1px solid $white-three;
+  }
+
   .site-brand-home {
     @extend .l-one--w;
 
-    border-bottom: 1px solid $white-three;
     padding: 1rem 0.5rem 0.2rem;
     margin: 0 auto;
 

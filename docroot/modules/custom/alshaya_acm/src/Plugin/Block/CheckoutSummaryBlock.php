@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,6 +27,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $cartStorage;
 
   /**
+   * Address book manager.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  protected $addressBookManager;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -36,10 +44,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The plugin implementation definition.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart session.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
+   *   Address book manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage, AlshayaAddressBookManager $address_book_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->cartStorage = $cart_storage;
+    $this->addressBookManager = $address_book_manager;
   }
 
   /**
@@ -50,7 +61,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('acq_cart.cart_storage')
+      $container->get('acq_cart.cart_storage'),
+      $container->get('alshaya_addressbook.manager')
     );
   }
 
@@ -131,16 +143,24 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
 
       // Delivery address.
-      $shipping_address = (object) $cart->getShipping();
+      $shipping_address = (array) $cart->getShipping();
 
-      $delivery['address'] = $shipping_address->street . ', ';
+      if (isset($shipping_address['customer_address_id']) && empty($shipping_address['street'])) {
+        if ($entity = $this->addressBookManager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
+          $shipping_address = $this->addressBookManager->getAddressFromEntity($entity, FALSE);
+        }
+      }
 
-      // @TODO: Need to update this after address form/fields are changed.
-      $delivery['address'] .= !empty($shipping_address->street2) ? $shipping_address->street2 . ', ' : '';
-      $delivery['address'] .= !empty($shipping_address->city) ? $shipping_address->city . ', ' : '';
-      $delivery['address'] .= !empty($shipping_address->region) ? $shipping_address->region . ', ' : '';
-      $delivery['address'] .= $shipping_address->country . ', ';
-      $delivery['address'] .= !empty($shipping_address->postcode) ? $shipping_address->postcode : '';
+      if (isset($shipping_address['street'])) {
+        $delivery['address'] = $shipping_address['street'] . ', ';
+
+        // @TODO: Need to update this after address form/fields are changed.
+        $delivery['address'] .= !empty($shipping_address['street2']) ? $shipping_address['street2'] . ', ' : '';
+        $delivery['address'] .= !empty($shipping_address['city']) ? $shipping_address['city'] . ', ' : '';
+        $delivery['address'] .= !empty($shipping_address['region']) ? $shipping_address['region'] . ', ' : '';
+        $delivery['address'] .= $shipping_address['country'] . ', ';
+        $delivery['address'] .= !empty($shipping_address['postcode']) ? $shipping_address['postcode'] : '';
+      }
     }
 
     // Totals.

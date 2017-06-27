@@ -1,4 +1,4 @@
-.c-address-book .user__address--column {
+.user__address--column {
   border: 1px solid $white;
   font-family: $arial;
   font-size: 12px;
@@ -23,7 +23,9 @@
       margin-#{$right}: 48px;
     }
   }
+}
 
+.address {
   .address--data {
     overflow: hidden;
     padding: 26px 28px 51px 16px;
@@ -35,7 +37,7 @@
 
     @include breakpoint($desktop) {
       padding: 26px 44px 53px 23px;
-      min-height: 13.5rem;
+      min-height: 12rem;
     }
   }
 
@@ -46,6 +48,10 @@
   .address--content {
     color: $black-two;
     direction: ltr;
+
+    html[lang=ar] & {
+      text-align: right;
+    }
 
     @include breakpoint($desktop) {
       font-size: 14px;
@@ -230,7 +236,7 @@
     }
   }
 
-  .active {
+  &.active {
     .address--data {
       background: $white-four;
     }
@@ -441,7 +447,7 @@
 .profile-address-book-edit-form,
 #address-book-form-open {
   .country-code-prefix {
-    margin-top: 0.55rem;
+    margin-top: 0.5rem;
 
     @include breakpoint($only-mobile) {
       margin-top: 0.5rem;

@@ -10,7 +10,7 @@
     width: 84.375%;
     height: 100%;
     z-index: 4;
-    top: 2.9375rem;
+    top: 2.9rem;
   }
 
   @include breakpoint($desktop) {
@@ -123,6 +123,7 @@
     }
   }
 
+  .menu--account,
   .block-alshaya-stores-finder {
     margin-#{$right}: -0.3125rem;
   }
@@ -212,12 +213,16 @@
   }
 
   position: fixed;
-  width: 16.875rem;
-  top: 2.9375rem;
+  width: 84.375%;
+  top: 2.9rem;
   background: $white-five;
   height: 100%;
   z-index: 1000;
   padding: 0;
+
+  &.block.block-alshaya-my-account-links {
+    margin-top: 0;
+  }
 
   a {
     &::before {
@@ -315,7 +320,8 @@
   z-index: 5;
   background: transparent;
 
-  &.navbar-fixed-top {
+  &.navbar-fixed-top,
+  .block-views-exposed-filter-blocksearch-page {
     background: transparent;
   }
 
@@ -358,4 +364,10 @@ body {
 
 .logged-in .menu--account li:first-child {
   margin-#{$right}: -0.3125rem;
+}
+
+html[lang=ar] {
+  .block-language-blocklanguage-interface {
+    margin-right: -0.0625rem;
+  }
 }

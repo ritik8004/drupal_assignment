@@ -40,6 +40,11 @@
   .form-item-mobile-number-mobile input {
     &::placeholder {
       visibility: hidden;
+
+      .ie & {
+        visibility: visible;
+        color: transparent;
+      }
     }
   }
 
@@ -86,7 +91,7 @@
         }
 
         position: absolute;
-        #{$left}: -5rem;
+        #{$left}: -3rem;
         width: 21rem;
       }
     }
@@ -157,6 +162,26 @@
       bottom: 0;
       #{$left}: 0;
       opacity: 1;
+      font-size: 0.75rem;
+    }
+  }
+
+  .country-field-wrapper {
+    @include clearfix;
+
+    position: relative;
+    height: 5rem;
+
+    .country-label {
+      font-size: 1rem;
+      color: $greyish;
+      transition: 0.2s ease all;
+    }
+  }
+
+  .form-type-email {
+    .description {
+      padding-top: 0.5rem;
       font-size: 0.75rem;
     }
   }
@@ -237,10 +262,26 @@
     width: 100%;
 
     .form-type-textfield {
-      top: 0.3rem;
+      top: 0.35rem;
 
       html[lang=ar] & {
-        top: 0.2rem;
+        top: 0.25rem;
+
+        @include breakpoint($only-mobile) {
+          top: 0.2rem;
+        }
+      }
+
+      .firefox & {
+        top: 0.44rem;
+      }
+
+      .ie & {
+        top: 0.4rem;
+      }
+
+      input::placeholder {
+        opacity: 0;
       }
     }
 
@@ -257,5 +298,21 @@
 .c-user-edit .user-form {
   #edit-account {
     margin-top: 2.813rem;
+  }
+}
+
+html[lang=ar] {
+  .webform-submission-alshaya-contact-form {
+    .form-item-mobile-number-mobile {
+      label.error {
+        top: 1.125rem !important;
+        left: -0.4375rem !important;
+      }
+
+      .form-item--error-message {
+        right: 0 !important;
+        direction: rtl;
+      }
+    }
   }
 }
