@@ -44,6 +44,7 @@
       .ie & {
         visibility: visible;
         color: transparent;
+        opacity: 1 !important;
       }
     }
   }
@@ -260,6 +261,8 @@
 .webform-submission-alshaya-contact-form {
   .mobile-number-field {
     width: 100%;
+    display: block;
+    clear: both;
 
     .form-type-textfield {
       top: 0.35rem;
