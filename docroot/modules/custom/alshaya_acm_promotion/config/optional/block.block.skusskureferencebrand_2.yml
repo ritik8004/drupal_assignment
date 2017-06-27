@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.skus_sku_reference_brand_promotions
+  module:
+    - ctools
+    - facets
+  theme:
+    - alshaya_white_label
+id: skusskureferencebrand_2
+theme: alshaya_white_label
+region: sidebar_first
+weight: -20
+provider: null
+plugin: 'facet_block:skus_sku_reference_brand_promotions'
+settings:
+  id: 'facet_block:skus_sku_reference_brand_promotions'
+  label: Brand
+  provider: facets
+  label_display: visible
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_promotion: acq_promotion
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
