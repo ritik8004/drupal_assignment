@@ -225,19 +225,17 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       }
     }
 
-    if ($form_state->getErrors() || $form_state->isRebuilding()) {
+    if ($form_state->getErrors()) {
       return;
     }
 
-    // We submit panes in validate itself to allow setting form errors.
-    foreach ($panes as $pane_id => $pane) {
-      if ($pane->isVisible()) {
-        $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+    if ($form_state->getTriggeringElement()['#parents'][0] == 'actions') {
+      // We submit panes in validate itself to allow setting form errors.
+      foreach ($panes as $pane_id => $pane) {
+        if ($pane->isVisible()) {
+          $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+        }
       }
-    }
-
-    if ($form_state->getErrors() || $form_state->isRebuilding()) {
-      return;
     }
   }
 

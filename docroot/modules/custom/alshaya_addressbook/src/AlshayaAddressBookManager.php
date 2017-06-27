@@ -102,6 +102,9 @@ class AlshayaAddressBookManager {
    *
    * @param \Drupal\profile\Entity\Profile $entity
    *   Address Entity.
+   *
+   * @return bool|string
+   *   Commerce Address ID or false.
    */
   public function pushUserAddressToApi(Profile $entity) {
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
@@ -125,6 +128,7 @@ class AlshayaAddressBookManager {
     $new_address = $this->getAddressFromEntity($entity);
     $new_address['customer_id'] = $customer['customer_id'];
 
+    $address_index = FALSE;
     if ($address_id) {
       $address_index = array_search($address_id, array_column($customer['addresses'], 'address_id'));
       if ($address_index !== FALSE) {
@@ -149,7 +153,16 @@ class AlshayaAddressBookManager {
       // Update the data in Drupal to match the values in Magento.
       alshaya_acm_customer_update_user_data($account, $updated_customer);
 
-      return TRUE;
+      // This is not reliable but only solution available.
+      // @TODO: Try and find a better solution for this.
+      if ($address_index !== FALSE) {
+        $updated_address = $updated_customer['addresses'][$address_index];
+      }
+      else {
+        $updated_address = array_pop($updated_customer['addresses']);
+      }
+
+      return $updated_address['address_id'];
     }
     catch (\Exception $e) {
       $this->logger->warning('Error while saving address: @message', ['@message' => $e->getMessage()]);
