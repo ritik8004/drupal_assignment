@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_promotion\Plugin\views\argument_default;
+namespace Drupal\alshaya_product\Plugin\views\argument_default;
 
 use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -88,6 +88,9 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
         }
       }
     }
+
+    // Filter out duplicate skus.
+    $skus = array_unique($skus);
 
     return implode('+', $skus);
   }

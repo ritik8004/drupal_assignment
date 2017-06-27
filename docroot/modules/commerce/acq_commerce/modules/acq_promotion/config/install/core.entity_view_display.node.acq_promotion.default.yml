@@ -24,32 +24,17 @@ bundle: acq_promotion
 mode: default
 content:
   field_acq_promotion_description:
-    weight: 2
+    weight: 0
     label: hidden
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
-  field_acq_promotion_sku:
-    weight: 4
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    type: entity_reference_label
-    region: content
-  links:
-    weight: 1
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  sharethis:
-    weight: 0
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   field_acq_promotion_data: true
   field_acq_promotion_rule_id: true
+  field_acq_promotion_sku: true
   field_acq_promotion_type: true
   langcode: true
+  links: true
+  sharethis: true
