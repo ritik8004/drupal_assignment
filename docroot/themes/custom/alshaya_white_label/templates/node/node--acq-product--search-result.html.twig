@@ -36,6 +36,12 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         {{ content.out_of_stock }}
       </div>
     {% endif %}
+
+    {% if content.promotions %}
+      <div class="promotions">
+        {{ content.promotions }}
+      </div>
+    {% endif %}
   </div>
   <!-- /content -->
 </article>

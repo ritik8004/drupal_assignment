@@ -219,6 +219,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           '#options' => $home_delivery_options,
         ];
       }
+
+      // Get promotions for the product.
+      $promotions = \Drupal::service('alshaya_acm_product.fields')->getPromotionsFromSkuId($sku_entity, TRUE);
+      if (!empty($promotions)) {
+        $build['promotions'] = [
+          '#markup' => implode(', ', $promotions),
+        ];
+      }
     }
     elseif ($view_mode == 'teaser') {
       // Get the image.
@@ -231,6 +239,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       _alshaya_acm_product_build_price($build, $sku_entity);
+
+      // Get promotions for the product.
+      $promotions = \Drupal::service('alshaya_acm_product.fields')->getPromotionsFromSkuId($sku_entity, TRUE);
+      if (!empty($promotions)) {
+        $build['promotions'] = [
+          '#markup' => implode(', ', $promotions),
+        ];
+      }
+
     }
     elseif ($view_mode == 'modal') {
       // Get the image.
@@ -286,6 +303,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           '#markup' => '<span>' . t('out of stock') . '</span>',
         ];
       }
+
+      // Get promotions for the product.
+      $promotions = \Drupal::service('alshaya_acm_product.fields')->getPromotionsFromSkuId($sku_entity, TRUE);
+      if (!empty($promotions)) {
+        $build['promotions'] = [
+          '#markup' => implode(', ', $promotions),
+        ];
+      }
+
     }
   }
 }
