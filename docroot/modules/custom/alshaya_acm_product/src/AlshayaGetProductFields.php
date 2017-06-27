@@ -69,9 +69,11 @@ class AlshayaGetProductFields {
           $promos[$promotion->id()] = $promotion->toLink($promotion->getTitle())->toString()->getGeneratedLink();
         }
         else {
-          $promos[$promotion->id()] = $promotion->getTitle();
+          $promos[$promotion->id()] = [
+            'text' => $promotion->getTitle(),
+            'description' => $promotion->get('field_acq_promotion_description')->first()->getValue(),
+          ];
         }
-
       }
     }
 
