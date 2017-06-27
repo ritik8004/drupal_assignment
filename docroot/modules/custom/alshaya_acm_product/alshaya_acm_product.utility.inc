@@ -496,3 +496,21 @@ function alshaya_acm_product_get_brand_logo($sku) {
 
   return $image;
 }
+
+/**
+ * Helper function to fetch sku from entity id rather than loading the SKU.
+ *
+ * @param int $sku_entity_id
+ *   Entity id of the Sku item.
+ *
+ * @return string
+ *   Sku Id of the item.
+ */
+function alshaya_acm_product_get_sku_by_entity_id($sku_entity_id) {
+  $query = \Drupal::database()->select('acq_sku_field_data', 'asfd')
+    ->fields('asfd', ['sku'])
+    ->condition('id', $sku_entity_id)
+    ->range(0, 1);
+
+  return $query->execute()->fetchField();
+}
