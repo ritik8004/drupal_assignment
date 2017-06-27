@@ -43,11 +43,13 @@ class AlshayaGetProductFields {
    *
    * @param mixed $sku
    *   The SKU ID, for which linked promotions need to be fetched.
+   * @param bool $getLinks
+   *   Boolen to identify if Links are required.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
    */
-  public function getPromotionsFromSkuId($sku) {
+  public function getPromotionsFromSkuId($sku, $getLinks = FALSE) {
     if ($sku instanceof SKU) {
       $sku = $sku->id();
     }
@@ -63,7 +65,13 @@ class AlshayaGetProductFields {
 
       foreach ($promotions as $promotion) {
         /* @var \Drupal\node\Entity\Node $promotion */
-        $promos[$promotion->id()] = $promotion->getTitle();
+        if ($getLinks) {
+          $promos[$promotion->id()] = $promotion->toLink($promotion->getTitle())->toString()->getGeneratedLink();
+        }
+        else {
+          $promos[$promotion->id()] = $promotion->getTitle();
+        }
+
       }
     }
 

@@ -39,6 +39,11 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     {% endif %}
 
   </a>
+  {% if content.promotions %}
+    <div class="promotions">
+      {{ content.promotions }}
+    </div>
+  {% endif %}
 
   <table class="mobile--only--sell">
     <tr>
@@ -82,5 +87,14 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         {{ content.field_skus }}
       </td>
     </tr>
+
+    {% if content.promotions %}
+      <tr>
+        <td colspan="2" class="sell-promotions">
+          {{ content.promotions }}
+        </td>
+      </tr>
+    {% endif %}
+
   </table>
 </article>
