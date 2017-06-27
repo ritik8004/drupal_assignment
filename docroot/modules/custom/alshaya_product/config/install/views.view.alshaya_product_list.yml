@@ -4,6 +4,7 @@ dependencies:
   config:
     - search_api.index.product
   module:
+    - alshaya_acm_promotion
     - better_exposed_filters
     - search_api
     - views_infinite_scroll
@@ -540,6 +541,57 @@ display:
       defaults:
         cache: false
       exposed_block: true
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
+      tags: {  }
+  block_2:
+    display_plugin: block
+    id: block_2
+    display_title: 'Promotional Products'
+    position: 2
+    display_options:
+      display_extenders: {  }
+      arguments:
+        field_skus:
+          id: field_skus
+          table: search_api_index_product
+          field: field_skus
+          relationship: none
+          group_type: group
+          admin_label: ''
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: promotion_sku_id
+          default_argument_options: {  }
+          default_argument_skip_url: false
+          summary_options: null
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: true
+          not: 0
+          plugin_id: search_api_index_product
+      defaults:
+        arguments: false
+      display_description: ''
     cache_metadata:
       max-age: -1
       contexts:
