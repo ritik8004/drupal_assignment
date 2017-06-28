@@ -126,13 +126,6 @@ class StoresFinderUtility {
 
         $stores[$store_node->id()] = $store;
       }
-      // @TODO: Remove this once stores API is done.
-      else {
-        $store['name'] = $store['code'];
-        $store['address'] = $store['code'];
-        $store['opening_hours'] = $store['code'];
-        $stores[$store['code']] = $store;
-      }
     }
 
     // Sort the stores first by distance and then by name.
