@@ -138,6 +138,12 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
       $promotions = $this->alshayaGetProductFields->getPromotionsFromSkuId($sku, TRUE);
 
+      if (!empty($promotions)) {
+        $promotions = [
+          '#markup' => implode(', ', $promotions),
+        ];
+      }
+
       $sku_gallery = [
         '#theme' => 'alshaya_search_gallery',
         '#mainImage' => $search_main_image,
