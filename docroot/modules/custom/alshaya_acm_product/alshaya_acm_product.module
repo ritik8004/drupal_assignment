@@ -53,6 +53,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'price' => NULL,
       'final_price' => NULL,
       'discount' => NULL,
+      'promotions' => NULL,
       'out_of_stock' => NULL,
     ],
   ];
