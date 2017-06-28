@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Implements hook_editor_js_settings_alter().
@@ -365,5 +366,16 @@ function _alshaya_master_utility_usort_check_order($val1, $val2, $order) {
   }
   elseif ($order == 'desc') {
     return ($val1 > $val2) ? -1 : 1;
+  }
+}
+
+/**
+ * Implements hook_alshaya_profile_installed().
+ */
+function alshaya_master_alshaya_profile_installed() {
+  // Delete basic page content type.
+  $node_type = NodeType::load('page');
+  if ($node_type) {
+    $node_type->delete();
   }
 }
