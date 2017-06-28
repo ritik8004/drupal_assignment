@@ -205,14 +205,22 @@ class SkuManager {
    * @throws \Drupal\Core\Entity\Exception\UndefinedLinkTemplateException
    */
   public function getPromotionsFromSkuId($sku, $getLinks = FALSE) {
-    if ($sku instanceof SKU) {
-      $sku = $sku->id();
-    }
+    $sku = $sku instanceof SKU ? $sku->id() : $sku;
     $promos = [];
+
+    // Fetch child skus, if its a parent sku.
+    $child_skus = $this->getChildSkus($sku);
+
+    // If not child skus, its a simple product.
+    if (empty($child_skus)) {
+      $child_skus[] = $sku->getSku();
+    }
+
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
-    $query->condition('field_acq_promotion_sku', $sku);
+    $query->condition('field_acq_promotion_sku', $child_skus, 'IN');
     $promotionIDs = $query->execute();
+
     if (!empty($promotionIDs)) {
       $promotions = Node::loadMultiple($promotionIDs);
       foreach ($promotions as $promotion) {
@@ -228,6 +236,7 @@ class SkuManager {
         }
       }
     }
+
     return $promos;
   }
 

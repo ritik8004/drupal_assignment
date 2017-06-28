@@ -5,4 +5,4 @@ services:
       - { name: breadcrumb_builder, priority: 100 }
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
-    arguments: [ '@entity_type.manager' ]
+    arguments: [ '@database', '@entity_type.manager' ]
