@@ -26,13 +26,18 @@
     </drush>
   </target>
 
+  <target name="sync:promotions">
+    <echo>Sync the promotions.</echo>
+    <drush command="sync-commerce-promotions" assume="yes" alias="${drush.alias}" passthru="false" />
+  </target>
+
   <target name="refresh:local"
           description="Setup local dev environment."
-          depends="local:setup, local:reset-settings-file, sync:translations, sync:products">
+          depends="local:setup, local:reset-settings-file, sync:translations, sync:products, sync:promotions">
   </target>
 
   <target name="refresh:local:drupal"
           description="Reinstall local dev environment."
-          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:translations, sync:products">
+          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:translations, sync:products, sync:promotions">
   </target>
 </project>
