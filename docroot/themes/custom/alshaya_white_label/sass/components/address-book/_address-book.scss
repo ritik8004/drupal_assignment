@@ -71,6 +71,7 @@
   .address--content {
     color: $black-two;
     direction: ltr;
+    font-weight: 700;
 
     html[lang=ar] & {
       text-align: right;
@@ -78,7 +79,6 @@
 
     @include breakpoint($desktop) {
       font-size: 14px;
-      font-weight: 700;
     }
   }
 
@@ -356,7 +356,6 @@
   margin-top: 0.55rem;
   color: $greyish;
   border-bottom: 1px solid $brownish-grey;
-  padding-bottom: 0.18rem;
   width: 3rem;
   float: left;
 
@@ -378,6 +377,18 @@
       font-size: 0.75rem;
       color: $greyish;
       position: absolute;
+    }
+
+    .form-type-textfield {
+      margin-top: -0.15rem !important;
+
+      @include breakpoint($tablet) {
+        margin-top: -0.3rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: -0.35rem !important;
+      }
     }
   }
 
@@ -440,6 +451,10 @@
     border-color: $grey-ash;
   }
 
+  .select2-container {
+    width: 100% !important;
+  }
+
   .select2-selection__rendered {
     font-family: $arial;
     line-height: 19px !important;
@@ -492,6 +507,20 @@
       @include breakpoint($only-mobile) {
         left: 46%;
       }
+    }
+  }
+}
+
+.profile-address-book-add-form,
+.profile-address-book-edit-form {
+  .mobile-number-field {
+    label.error {
+      left: -3rem;
+      top: 1.5rem;
+    }
+
+    .form-type-textfield {
+      margin-top: -0.2rem !important;
     }
   }
 }

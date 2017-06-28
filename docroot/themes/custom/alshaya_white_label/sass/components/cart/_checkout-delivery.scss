@@ -243,11 +243,31 @@
         width: calc(50% - 28px);
       }
 
-      &.active--tab--head {
-        position: relative;
-        z-index: 2;
-        border-width: 2px;
-        border-color: $greyish;
+      @include breakpoint($tablet) {
+        &.active--tab--head {
+          position: relative;
+          z-index: 2;
+          border-width: 2px;
+          border-color: $greyish;
+        }
+
+        &.tab-home-delivery {
+          margin-#{$left}: -3px;
+
+          &.active--tab--head {
+            margin-#{$left}: 0;
+            border-#{$left}: none;
+          }
+        }
+
+        &.tab-click-collect {
+          margin-#{$right}: -3px;
+
+          &.active--tab--head {
+            margin-#{$right}: 0;
+            border-#{$right}: none;
+          }
+        }
       }
     }
 
@@ -291,7 +311,8 @@
       }
 
       @include breakpoint($desktop) {
-        width: 3.5rem;
+        width: 3.4rem;
+        margin: 2px;
       }
     }
 
@@ -318,6 +339,13 @@
 .user-page.c-delivery-checkout {
   main {
     form {
+      #edit-guest-delivery-home {
+        .fieldset-wrapper {
+          margin: 0.75rem 1.375rem;
+        }
+      }
+
+      #edit-guest-delivery-home,
       fieldset {
         -webkit-animation: fadeEffect 2s;
         animation: fadeEffect 2s;
@@ -347,6 +375,8 @@
             position: relative;
             border-width: 2px;
             border-color: $greyish;
+            border: none;
+            border-top: 2px solid $greyish;
           }
         }
 
@@ -449,7 +479,11 @@
     }
 
     .tabs--content {
-      margin-top: 0.4375rem;
+      @include breakpoint($tablet) {
+        border: 2px solid $greyish;
+        border-top: none;
+        margin-top: 0.4375rem;
+      }
     }
   }
 }
@@ -489,6 +523,7 @@
   }
 }
 
+#address_wrapper,
 #selected-address-wrapper,
 #edit-member-delivery-home-addresses {
   .address--deliver-to-this-address {
@@ -519,21 +554,28 @@
   }
 }
 
+#address_wrapper,
 #edit-member-delivery-home-address-book-wrapper {
   @include breakpoint($tablet) {
     margin-left: 1.5rem;
   }
 
-  .country-code-prefix {
-    margin-top: 1.65rem;
-  }
+  .address-book-address {
+    .mobile-number-field {
+      padding-top: 3rem;
 
-  .form-item {
-    padding-bottom: 1.5rem;
-  }
+      label {
+        padding-top: 1.7rem;
+      }
 
-  .mobile-number-field label {
-    top: 1rem;
+      .form-type-textfield {
+        margin-top: -0.25rem !important;
+
+        @include breakpoint($desktop) {
+          margin-top: -0.3rem !important;
+        }
+      }
+    }
   }
 
   .form-item-field-address-0-address-address-line2 {
@@ -556,6 +598,7 @@
   }
 }
 
+#edit-acm-payment-methods-payment-options,
 #edit-member-delivery-home-address-shipping-methods--wrapper {
   border: none;
 
@@ -628,3 +671,120 @@
     padding: 1.5rem;
   }
 }
+
+// Adding throbber overlay for any ajax call on payment and checkout delivery page.
+.checkout-payment,
+.c-delivery-checkout {
+  .ajax-progress-throbber {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.7);
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      position: fixed;
+      right: 0;
+      top: 0;
+      z-index: 100;
+      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      background-size: 3.5rem;
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+#edit-acm-payment-methods-payment-options--wrapper {
+  legend {
+    display: none;
+  }
+}
+
+#edit-acm-payment-methods-payment-options {
+  padding-left: 0;
+
+  .form-type-radio {
+    width: 100%;
+    margin: 0;
+    padding: 1.5rem;
+    border-top: 1px solid $white;
+    border-bottom: 1px solid $white;
+
+    input[checked="checked"] {
+      & ~ label.option .method-knet {
+        background: $white url('../imgs/cards/knet-active.png') no-repeat;
+        background-size: 100%;
+      }
+    }
+
+    &:nth-child(odd) {
+      background-color: $white-four;
+    }
+
+    label {
+      &.option {
+        @include clearfix;
+
+        &::before {
+          display: block;
+          float: $left;
+          margin-#{$right}: 0.5rem;
+          top: 0;
+        }
+
+        .payment-method {
+          &-name {
+            float: $right;
+            width: 96.5%;
+            line-height: 1;
+          }
+        }
+
+        .method {
+          &-title {
+            font-size: 0.875rem;
+            font-weight: bold;
+            color: $brownish-grey;
+          }
+
+          &-side-info {
+            float: $right;
+            height: 2rem;
+            width: 3rem;
+            background: $white;
+            margin-top: -1.25rem;
+          }
+
+          &-knet {
+            background: $white url('../imgs/cards/knet-inactive.png') no-repeat;
+            background-size: 100%;
+          }
+
+          &-cashondelivery,
+          &-checkmo,
+          &-cybersource {
+            display: none;
+          }
+
+          &-description {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
