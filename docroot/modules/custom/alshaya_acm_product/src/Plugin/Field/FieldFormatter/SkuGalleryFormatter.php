@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
+use Drupal\alshaya_acm_product\AlshayaGetProductFields;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -33,6 +34,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $skuManager;
 
   /**
+   * The Alshaya product field service.
+   *
+   * @var \Drupal\alshaya_acm_product\AlshayaGetProductFields
+   */
+  protected $alshayaGetProductFields;
+
+  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -51,6 +59,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   Any third party settings.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku Manager service.
+   * @param \Drupal\alshaya_acm_product\AlshayaGetProductFields $alshayaGetProductFields
+   *   Alshaya product fields service.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -59,9 +69,11 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               $label,
                               $view_mode,
                               array $third_party_settings,
-                              SkuManager $skuManager) {
+                              SkuManager $skuManager,
+                              AlshayaGetProductFields $alshayaGetProductFields) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
+    $this->alshayaGetProductFields = $alshayaGetProductFields;
   }
 
   /**
@@ -109,7 +121,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       // Get the image.
       $build['image_url'] = [];
       $sku_media = $this->skuManager->getSkuMedia($sku);
-
       $search_main_image = $thumbnails = [];
 
       // Loop through all media items and prepare thumbnails array.
@@ -124,6 +135,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           $thumbnails[] = $this->skuManager->getSkuImage($media_item, '59x60', '291x288');
         }
       }
+
+      $promotions = $this->alshayaGetProductFields->getPromotionsFromSkuId($sku, TRUE);
 
       $sku_gallery = [
         '#theme' => 'alshaya_search_gallery',
@@ -141,6 +154,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         '#gallery' => $sku_gallery,
         '#product_url' => $product_url,
         '#product_label' => $product_label,
+        '#promotions' => $promotions,
         '#cache' => [
           'tags' => ['sku:' . $sku->id()],
         ],
@@ -186,7 +200,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('alshaya_acm_product.fields'),
     );
   }
 
