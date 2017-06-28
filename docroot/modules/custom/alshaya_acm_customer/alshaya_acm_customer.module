@@ -335,7 +335,7 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         }
         // Otherwise, associate the current cart with the authenticated user.
         else {
-          \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id'], $customer['customer_email']);
+          \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id'], $customer['email']);
         }
       }
       catch (\Exception $e) {

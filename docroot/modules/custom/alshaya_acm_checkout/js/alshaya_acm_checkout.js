@@ -60,18 +60,34 @@
       }
 
       $('#change-address').once('bind-events').each(function () {
+        $('#add-address-button').hide();
         $('#edit-member-delivery-home-addresses').hide();
         $('#edit-member-delivery-home-header-add-profile').hide();
 
         $(this).on('click', function (e) {
           e.preventDefault();
 
+          $('#add-address-button').show();
           $('#selected-address-wrapper').slideUp();
           $('[data-drupal-selector="edit-actions-next"]').hide();
           $('#shipping_methods_wrapper').slideUp();
           $('#edit-member-delivery-home-addresses').slideDown();
           $('.delivery-address-title').html(Drupal.t('choose delivery address'));
           $('#edit-member-delivery-home-header-add-profile').show();
+        });
+      });
+
+      $('#address-book-form-wrapper').once('bind-events').each(function () {
+        $(this).hide();
+
+        $('#add-address-button').on('click', function (event) {
+          event.preventDefault();
+          $('#address-book-form-wrapper').slideDown();
+        });
+
+        $('#cancel-address-add-edit').on('click', function (event) {
+          event.preventDefault();
+          $('#address-book-form-wrapper').slideUp();
         });
       });
 

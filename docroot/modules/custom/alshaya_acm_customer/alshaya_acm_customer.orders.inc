@@ -8,7 +8,6 @@
 use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\UserInterface;
 
 /**
@@ -27,7 +26,9 @@ use Drupal\user\UserInterface;
 function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_key = '') {
   $orders = [];
 
-  $cid = 'orders_list_' . $email;
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  $cid = 'orders_list_' . $langcode . '_' . $email;
 
   if ($cache = \Drupal::cache()->get($cid)) {
     $orders = $cache->data;
@@ -79,7 +80,7 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
   if ($filter_key && $filter = \Drupal::request()->query->get($filter_key)) {
     $orders = array_filter($orders, function ($order, $orderId) use ($filter) {
       $status = alshaya_acm_customer_get_order_status($order);
-      if ($status['key'] == $filter) {
+      if ($status['text'] == $filter) {
         return TRUE;
       }
 
@@ -117,45 +118,23 @@ function alshaya_acm_customer_clean_sku($sku) {
  *   Status of order, ensure string can be used directly as class too.
  */
 function alshaya_acm_customer_get_order_status(array $order) {
-  if ($order['status'] == 'payment_failed') {
-    return [
-      'text' => (new TranslatableMarkup('payment failed'))->render(),
-      'class' => 'status-returned status-failed',
-      'key' => 'failed',
-    ];
+  $config = \Drupal::config('alshaya_acm_customer.orders_config');
+  $order_status_returned = explode(',', $config->get('order_status_returned'));
+  $order_status_delivered = explode(',', $config->get('order_status_delivered'));
+
+  $class = 'status-pending';
+
+  if (in_array($order['status'], $order_status_returned)) {
+    $class = 'status-returned';
+  }
+  elseif (in_array($order['status'], $order_status_delivered)) {
+    $class = 'status-delivered';
   }
 
-  // We support only three status as of now.
-  $status = ['pending' => 0, 'delivered' => 0, 'returned' => 0];
-
-  // Check for each item status.
-  foreach ($order['items'] as $item) {
-    $itemStatus = alshaya_acm_customer_get_order_item_status($item);
-    $status[$itemStatus]++;
-  }
-
-  // @TODO: Add conditions for partial delivery status - not in MVP1.
-  // Check MMCPA-145 comments for more details.
-  if ($status['returned'] !== 0) {
-    return [
-      'text' => (new TranslatableMarkup('returned'))->render(),
-      'class' => 'status-returned',
-      'key' => 'returned',
-    ];
-  }
-  elseif ($status['delivered'] !== 0) {
-    return [
-      'text' => (new TranslatableMarkup('delivered'))->render(),
-      'class' => 'status-delivered',
-      'key' => 'delivered',
-    ];
-  }
-
-  // Finally if it is neither delivered nor returned, it is pending.
   return [
-    'text' => (new TranslatableMarkup('pending'))->render(),
-    'class' => 'status-pending',
-    'key' => 'pending',
+    'text' => $order['state'],
+    'class' => $class,
+    'key' => $order['status'],
   ];
 }
 
@@ -256,7 +235,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
 
-  $orderDetails['contact_no'] = $order['shipping']['address']['phone'];
+  $orderDetails['contact_no'] = $order['shipping']['address']['telephone'];
 
   $addressFormatter = new ACQAddressFormatter();
   $orderDetails['delivery_address'] = $addressFormatter->render((object) $order['shipping']['address']);
@@ -297,7 +276,7 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
     $status = alshaya_acm_customer_get_order_status($order);
 
     // Add the status in array (overriding if already available).
-    $all_status[$status['key']] = $status['text'];
+    $all_status[$status['text']] = $status['text'];
   }
 
   // Sort them by ascending order of key to keep it consistent across languages.

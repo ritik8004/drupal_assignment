@@ -5,3 +5,7 @@ alshaya_search:
     - core/jquery
     - core/drupalSettings
     - alshaya_product_zoom/lightslider
+
+disable_keyword_ajax:
+  js:
+    js/disable_keyword_ajax.js: {}

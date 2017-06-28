@@ -16,3 +16,9 @@ services:
     arguments: ['@request_stack']
     tags:
       - { name: cache.context }
+  cache_context.pager_post_query:
+    class: Drupal\alshaya_search\CacheContext\PagerPostQueryContext
+    arguments: ['@request_stack']
+    tags:
+      - { name: cache.context }
+

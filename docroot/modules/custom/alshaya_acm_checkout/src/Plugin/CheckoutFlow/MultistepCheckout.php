@@ -225,19 +225,17 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       }
     }
 
-    if ($form_state->getErrors() || $form_state->isRebuilding()) {
+    if ($form_state->getErrors()) {
       return;
     }
 
-    // We submit panes in validate itself to allow setting form errors.
-    foreach ($panes as $pane_id => $pane) {
-      if ($pane->isVisible()) {
-        $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+    if ($form_state->getTriggeringElement()['#parents'][0] == 'actions') {
+      // We submit panes in validate itself to allow setting form errors.
+      foreach ($panes as $pane_id => $pane) {
+        if ($pane->isVisible()) {
+          $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+        }
       }
-    }
-
-    if ($form_state->getErrors() || $form_state->isRebuilding()) {
-      return;
     }
   }
 
@@ -257,23 +255,12 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           '@message' => $e->getMessage(),
         ]);
 
-        $stock_error = FALSE;
-
         // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
-        if (strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
-          $stock_error = TRUE;
-        }
-        elseif ($e->getMessage() == $this->t('This product is out of stock.')->render()) {
-          $stock_error = TRUE;
-        }
-        elseif ($e->getMessage() == $this->t('Some of the products are out of stock.')->render()) {
-          $stock_error = TRUE;
-        }
-        elseif ($e->getMessage() == $this->t('Not all of your products are available in the requested quantity.')->render()) {
-          $stock_error = TRUE;
-        }
+        if ($e->getMessage() == $this->t('This product is out of stock.')->render()
+          || $e->getMessage() == $this->t('Some of the products are out of stock.')->render()
+          || $e->getMessage() == $this->t('Not all of your products are available in the requested quantity.')->render()
+          || strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
 
-        if ($stock_error === TRUE) {
           $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
           $response->send();
           exit;
