@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_product\Plugin\views\argument_default;
 
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Cache\Cache;
@@ -35,6 +36,13 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
   protected $routeMatch;
 
   /**
+   * The skuManager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * ProductCategoryTermId constructor.
    *
    * @param array $configuration
@@ -47,10 +55,13 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
    *   Entity type manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route match.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   The sku manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, RouteMatchInterface $route_match) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, RouteMatchInterface $route_match, SkuManager $skuManager) {
     $this->entityManager = $entity_manager;
     $this->routeMatch = $route_match;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -62,12 +73,16 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @throws \Drupal\Core\Database\InvalidQueryException
+   * @throws \InvalidArgumentException
    */
   public function getArgument() {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
@@ -77,7 +92,7 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
       if ($node->bundle() === 'acq_promotion') {
         $sku_ids = $node->get('field_acq_promotion_sku')->getValue();
         foreach ($sku_ids as $sku_entity_id) {
-          $sku_id = alshaya_acm_product_get_sku_by_entity_id($sku_entity_id['target_id']);
+          $sku_id = $this->skuManager->getSkuByEntityId($sku_entity_id['target_id']);
           $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_id);
           if ($parent_sku === NULL) {
             $skus[] = $sku_id;

@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
-use Drupal\alshaya_acm_product\AlshayaGetProductFields;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -34,13 +33,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $skuManager;
 
   /**
-   * The Alshaya product field service.
-   *
-   * @var \Drupal\alshaya_acm_product\AlshayaGetProductFields
-   */
-  protected $alshayaGetProductFields;
-
-  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -59,8 +51,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   Any third party settings.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku Manager service.
-   * @param \Drupal\alshaya_acm_product\AlshayaGetProductFields $alshayaGetProductFields
-   *   Alshaya product fields service.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -69,11 +59,9 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               $label,
                               $view_mode,
                               array $third_party_settings,
-                              SkuManager $skuManager,
-                              AlshayaGetProductFields $alshayaGetProductFields) {
+                              SkuManager $skuManager) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
-    $this->alshayaGetProductFields = $alshayaGetProductFields;
   }
 
   /**
@@ -136,7 +124,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         }
       }
 
-      $promotions = $this->alshayaGetProductFields->getPromotionsFromSkuId($sku, TRUE);
+      $promotions = $this->skuManager->getPromotionsFromSkuId($sku, TRUE);
 
       if (!empty($promotions)) {
         $promotions = [
@@ -206,8 +194,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('alshaya_acm_product.skumanager'),
-      $container->get('alshaya_acm_product.fields')
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 

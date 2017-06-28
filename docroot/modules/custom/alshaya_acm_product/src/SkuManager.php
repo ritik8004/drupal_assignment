@@ -3,7 +3,10 @@
 namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\node\Entity\Node;
 
 /**
  * Class SkuManager.
@@ -11,6 +14,30 @@ use Drupal\image\Entity\ImageStyle;
  * @package Drupal\alshaya_acm_product
  */
 class SkuManager {
+
+  /**
+   * The database service.
+   *
+   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   */
+  protected $connection;
+
+  /**
+   * SkuManager constructor.
+   *
+   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   *   Database service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager service.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   */
+  public function __construct(Connection $connection,
+                              EntityTypeManagerInterface $entity_type_manager) {
+    $this->connection = $connection;
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
+  }
 
   /**
    * Utility function to return media files for a SKU.
@@ -111,6 +138,97 @@ class SkuManager {
         '#price' => $final_price,
       ];
     }
+  }
+
+  /**
+   * Helper function to fetch sku from entity id rather than loading the SKU.
+   *
+   * @param int $sku_entity_id
+   *   Entity id of the Sku item.
+   *
+   * @return string
+   *   Sku Id of the item.
+   *
+   * @throws \Drupal\Core\Database\InvalidQueryException
+   */
+  public function getSkuByEntityId($sku_entity_id) {
+    $query = $this->connection->select('acq_sku_field_data', 'asfd')
+      ->fields('asfd', ['sku'])
+      ->condition('id', $sku_entity_id)
+      ->range(0, 1);
+
+    return $query->execute()->fetchField();
+  }
+
+  /**
+   * Helper function to fetch child skus of a configurable Sku.
+   *
+   * @param mixed $sku
+   *   sku text or Sku object.
+   *
+   * @return array
+   *   Array of child skus.
+   *
+   * @throws \Drupal\Core\Database\InvalidQueryException
+   */
+  public function getChildSkus($sku) {
+    $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+    $child_skus = [];
+
+    if ($sku_entity->getType() == 'configurable') {
+      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs')
+        ->fields('asfcs', ['field_configured_skus_value'])
+        ->condition('asfcs.entity_id', $sku_entity->id());
+
+      $result = $query->execute();
+
+      while ($row = $result->fetchAssoc()) {
+        $child_skus[] = $row['field_configured_skus_value'];
+      }
+    }
+
+    return $child_skus;
+  }
+
+  /**
+   * Get Promotion node object(s) related to provided SKU.
+   *
+   * @param mixed $sku
+   *   The SKU ID, for which linked promotions need to be fetched.
+   * @param bool $getLinks
+   *   Boolen to identify if Links are required.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface[]
+   *   blank array, if no promotions found, else Array of promotion entities.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   * @throws \Drupal\Core\Entity\Exception\UndefinedLinkTemplateException
+   */
+  public function getPromotionsFromSkuId($sku, $getLinks = FALSE) {
+    if ($sku instanceof SKU) {
+      $sku = $sku->id();
+    }
+    $promos = [];
+    $query = $this->nodeStorage->getQuery();
+    $query->condition('type', 'acq_promotion');
+    $query->condition('field_acq_promotion_sku', $sku);
+    $promotionIDs = $query->execute();
+    if (!empty($promotionIDs)) {
+      $promotions = Node::loadMultiple($promotionIDs);
+      foreach ($promotions as $promotion) {
+        /* @var \Drupal\node\Entity\Node $promotion */
+        if ($getLinks) {
+          $promos[$promotion->id()] = $promotion->toLink($promotion->getTitle())->toString()->getGeneratedLink();
+        }
+        else {
+          $promos[$promotion->id()] = [
+            'text' => $promotion->getTitle(),
+            'description' => $promotion->get('field_acq_promotion_description')->first()->getValue(),
+          ];
+        }
+      }
+    }
+    return $promos;
   }
 
 }
