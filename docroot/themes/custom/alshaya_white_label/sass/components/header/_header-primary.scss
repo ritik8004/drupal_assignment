@@ -1283,6 +1283,14 @@ header {
 .site-brand-home {
   margin: 0;
 
+  @include breakpoint($only-mobile) {
+    max-width: 10rem;
+
+    html[lang=ar] & {
+      max-width: 6.5625rem;
+    }
+  }
+
   a {
     display: block;
     font-size: 2rem;
@@ -1347,6 +1355,7 @@ html[lang='ar'] {
       @include breakpoint($only-tablet) {
         width: auto;
         height: 60px;
+        max-width: 11.9375rem;
       }
 
       @include breakpoint($desktop) {

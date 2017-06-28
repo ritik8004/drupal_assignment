@@ -1119,12 +1119,12 @@ article[gtm-sku-type="simple"] {
   .acq-content-product {
     .sku-base-form {
       .form-item-quantity {
-        float: left !important;
+        float: $left !important;
       }
 
       button[type="submit"] {
         @include breakpoint($only-tablet) {
-          float: right;
+          float: $right;
           margin-top: 1rem;
         }
       }

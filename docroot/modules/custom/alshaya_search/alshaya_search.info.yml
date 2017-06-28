@@ -22,6 +22,7 @@ dependencies:
   - taxonomy
   - user
   - views
+  - redirect_domain
   - views_infinite_scroll
 version: 8.x-1.0
 package: Alshaya
