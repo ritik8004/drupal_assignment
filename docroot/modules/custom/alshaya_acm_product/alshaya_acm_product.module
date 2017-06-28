@@ -479,6 +479,14 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $selector = '.quantity-' . $sku_identifier;
     $response->addCommand(new HtmlCommand($selector, $form['quantity']));
 
+    // Update the promotions for the product.
+    $promotion_links = '';
+    $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($tree_pointer, TRUE);
+    if (!empty($promotions)) {
+      $promotion_links = implode(', ', $promotions);
+    }
+    $response->addCommand(new HtmlCommand('.promotions', $promotion_links));
+
     return $response;
   }
 
