@@ -11,7 +11,7 @@ dependencies:
 id: filterbarpromotions
 theme: alshaya_white_label
 region: content
-weight: -2
+weight: 2
 provider: null
 plugin: 'facets_summary_block:filter_bar_promotions'
 settings:
