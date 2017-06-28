@@ -529,12 +529,11 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
         // Edit operation.
         $variables['edit_operation'] = [
           'title' => t('Edit'),
-          'url' => Url::fromRoute('alshaya_addressbook.edit_address_ajax',
+          'url' => Url::fromRoute('alshaya_acm_checkout.edit_delivery_address',
             ['profile' => $profile->id(), 'js' => 'nojs'],
             [
               'attributes' => [
                 'class' => ['use-ajax'],
-                'rel' => 'address-book-form-wrapper',
               ],
               'query' => [
                 'from' => 'checkout',

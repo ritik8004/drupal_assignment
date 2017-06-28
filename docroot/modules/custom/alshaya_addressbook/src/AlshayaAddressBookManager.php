@@ -307,7 +307,7 @@ class AlshayaAddressBookManager {
 
     $address['country_code'] = $magento_address['country_id'];
 
-    if ($magento_address['region']) {
+    if (isset($magento_address['region'])) {
       $address['region'] = $magento_address['region'];
     }
 

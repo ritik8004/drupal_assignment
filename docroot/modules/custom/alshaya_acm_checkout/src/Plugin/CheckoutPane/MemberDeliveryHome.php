@@ -253,16 +253,29 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       return $form;
     }
 
+    /** @var \Drupal\profile\ProfileStorage $profile_storage */
+    $profile_storage = \Drupal::entityTypeManager()->getStorage('profile');
+
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
     $values = $form_state->getValues();
     $address_values = $values['member_delivery_home']['address_form']['form'];
 
-    /** @var \Drupal\profile\Entity\Profile $profile */
-    $profile = \Drupal::entityTypeManager()->getStorage('profile')->create([
-      'type' => 'address_book',
-      'uid' => \Drupal::currentUser()->id(),
-      'field_address' => $address_values,
-      'field_mobile_number' => _alshaya_acm_checkout_clean_address_phone($address_values['mobile_number']),
-    ]);
+    if (!empty($address_values['address_id'])) {
+      /** @var \Drupal\profile\Entity\Profile $profile */
+      $profile = $address_book_manager->getUserAddressByCommerceId($address_values['address_id']);
+    }
+    else {
+      /** @var \Drupal\profile\Entity\Profile $profile */
+      $profile = \Drupal::entityTypeManager()->getStorage('profile')->create([
+        'type' => 'address_book',
+      ]);
+    }
+
+    $profile->setOwnerId(\Drupal::currentUser()->id());
+    $profile->get('field_address')->setValue($address_values);
+    $profile->get('field_mobile_number')->setValue(_alshaya_acm_checkout_clean_address_phone($address_values['mobile_number']));
 
     /* @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
     if ($violations = $profile->validate()) {
@@ -276,12 +289,8 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       return $form;
     }
 
-    $profile->save();
-
     $cart = $this->getCart();
 
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     if ($customer_address_id = $address_book_manager->pushUserAddressToApi($profile)) {
       $update = [];
       $update['customer_address_id'] = $customer_address_id;
@@ -293,7 +302,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     }
 
     $response = new AjaxResponse();
-    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])));
+    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString()));
     return $response;
   }
 

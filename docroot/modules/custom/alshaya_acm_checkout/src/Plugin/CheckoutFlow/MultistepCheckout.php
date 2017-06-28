@@ -243,6 +243,10 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($form_state->getTriggeringElement()['#parents'][0] != 'actions') {
+      return;
+    }
+
     if ($next_step_id = $this->getNextStepId()) {
       $current_step_id = $this->getStepId();
       try {
