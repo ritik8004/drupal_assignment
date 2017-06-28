@@ -29,8 +29,8 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_api.settings');
-    $config->set('store_id', $form_state->getValue('store_id'));
     $config->set('magento_host', $form_state->getValue('magento_host'));
+    $config->set('magento_lang_prefix', $form_state->getValue('magento_lang_prefix'));
     $config->set('magento_api_base', $form_state->getValue('magento_api_base'));
     $config->set('verify_ssl', $form_state->getValue('verify_ssl'));
     $config->set('token_cache_time', $form_state->getValue('token_cache_time'));
@@ -49,17 +49,17 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
 
     $config = $this->config('alshaya_acm_product.settings');
 
-    $form['store_id'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Store id'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('store_id'),
-    ];
-
     $form['magento_host'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Host'),
       '#default_value' => $config->get('magento_host'),
+    ];
+
+    $form['magento_lang_prefix'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Language prefix'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('magento_lang_prefix'),
     ];
 
     $form['magento_api_base'] = [
