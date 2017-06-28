@@ -201,7 +201,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $configuration['view_mode'],
       $configuration['third_party_settings'],
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('alshaya_acm_product.fields'),
+      $container->get('alshaya_acm_product.fields')
     );
   }
 
