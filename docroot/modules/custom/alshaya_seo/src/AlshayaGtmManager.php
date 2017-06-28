@@ -185,7 +185,7 @@ class AlshayaGtmManager {
     $attributes['gtm-name'] = $sku->label();
     $price = $sku->get('price')->getString() ?: $sku->get('final_price')->getString();
     $attributes['gtm-price'] = number_format($price, 3);
-    $attributes['gtm-brand'] = $sku->get('attr_brand')->getString();
+    $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString();
     $attributes['gtm-product-sku'] = $sku->getSku();
 
     // Dimension1 & 2 corrrespond to size & color.
