@@ -1,19 +1,21 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - search_api.index.acquia_search_index
 id: search_api_views_search
 label: search_api_views_search
 index_id: acquia_search_index
-suggester_id: server
+suggester: server
+suggester_settings:
+  fields:
+    title: '0'
 type: views
+type_settings:
+  display: default
 options:
-  suggester_configuration:
-    fields:
-      title: 0
-  min_length: '1'
-  results: 0
-  delay: ''
-  custom:
-    display: page
+  min_length: 1
+  show_count: false
+  delay: null
   submit_button_selector: ':submit'
-  autosubmit: 1
+  autosubmit: true

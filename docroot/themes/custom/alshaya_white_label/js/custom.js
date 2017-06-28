@@ -10,6 +10,11 @@
     if (event.originalEvent.persisted) {
       window.location.reload();
     }
+
+    if ($('html').attr('dir') === 'rtl') {
+      $('body').scrollTop(12);
+      $('body').scrollTop(0);
+    }
   });
 
   Drupal.behaviors.joinusblock = {

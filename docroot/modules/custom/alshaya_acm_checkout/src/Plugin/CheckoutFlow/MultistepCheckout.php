@@ -258,13 +258,11 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         ]);
 
         // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
-        if (strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
-          $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
-          $response->send();
-          exit;
-        }
-        // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
-        elseif ($e->getMessage() == $this->t('This product is out of stock.')) {
+        if ($e->getMessage() == $this->t('This product is out of stock.')->render()
+          || $e->getMessage() == $this->t('Some of the products are out of stock.')->render()
+          || $e->getMessage() == $this->t('Not all of your products are available in the requested quantity.')->render()
+          || strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
+
           $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
           $response->send();
           exit;

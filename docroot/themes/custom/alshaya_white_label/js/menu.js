@@ -69,7 +69,7 @@
 
       $('.c-menu-primary .mobile--search').off().on('click', function (e) {
         e.preventDefault();
-        $('.c-menu-primary #block-exposedformsearchpage').toggle();
+        $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
         $(this).parent().toggleClass('search-active');
       });
 
@@ -124,7 +124,7 @@
       $('.main--menu').hover(function () {
         header_timer = setTimeout(function () {
           $('body').addClass('overlay');
-        }, 400);
+        }, 300);
       }, function () {
         clearTimeout(header_timer);
         $('body').removeClass('overlay');
@@ -192,7 +192,7 @@
         $('.block-alshaya-main-menu').mouseenter(function () {
           setTimeout(function () {
             $(parent).parent().addClass('active--menu--links');
-          }, 410);
+          }, 310);
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {

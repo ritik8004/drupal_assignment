@@ -87,6 +87,10 @@ header {
     }
   }
 
+  .facets-hidden-container {
+    display: none;
+  }
+
   .region__header {
     display: table;
     width: 100%;
@@ -94,6 +98,16 @@ header {
     > div {
       display: table-cell;
       vertical-align: middle;
+    }
+
+    .block-views-exposed-filter-blocksearch-page {
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        top: 5.125rem;
+        display: none;
+        width: 100%;
+        left: 0;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -157,6 +171,7 @@ header {
       #{$left}: 0;
       #{$right}: 0;
       background: white;
+      display: table-cell !important;
 
       .form-item-keywords {
         float: none !important;
@@ -164,7 +179,7 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      display: none !important;
+      display: none;
     }
 
     @include breakpoint($upto-desktop) {
@@ -358,6 +373,37 @@ header {
 /*
 	SITE HEADER - MOBILE MENU
 */
+
+.block-views-exposed-filter-blocksearch-page {
+  form {
+    @include breakpoint($only-mobile) {
+      border: 0.5rem solid $marine-blue-two;
+
+      .form-item {
+        display: block;
+
+        input {
+          max-width: none;
+          width: 100%;
+        }
+      }
+
+      .form-actions {
+        display: none;
+      }
+    }
+  }
+
+  input {
+    color: $grey-ash;
+    font-family: $alshaya-thin;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.6875rem !important;
+      font-size: 0.625rem;
+    }
+  }
+}
 
 .c-menu-primary {
   display: none;
@@ -651,8 +697,8 @@ header {
         width: 100%;
         transform: translateY(-3.625rem);
         z-index: -1;
-        transition: all 0.6s ease-in-out 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
-        transition-delay: 0.4s;
+        transition: all 0.6s ease-in 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
+        transition-delay: 0.3s;
         border-top: 3rem solid transparent;
       }
     }
@@ -919,7 +965,7 @@ header {
       top: 2.9rem;
       bottom: 0;
       z-index: 20;
-      overflow-y: scroll;
+      overflow-y: auto;
       margin-top: 0;
       padding-bottom: 3.125rem;
       transform: translate3d(0, 0, 0);
@@ -949,7 +995,7 @@ header {
     a {
       padding: 1rem 0;
       padding-bottom: 0.9375rem;
-      padding-#{$right}: 1.25rem;
+      padding-#{$right}: 1.4rem;
     }
   }
 
@@ -957,7 +1003,6 @@ header {
     @extend .menu__list-item;
 
     padding: 1rem 0;
-    padding-bottom: 0.9375rem;
     padding-#{$right}: 0.25rem;
   }
 
@@ -1066,7 +1111,7 @@ header {
     height: auto !important;
     background: $white-five;
     padding-bottom: 4em !important;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   .menu-two__link-wrapper.contains-sublink .menu--three__link {
@@ -1141,10 +1186,10 @@ header {
   top: 0;
   background: $white;
   z-index: 10;
-  display: table;
   transition: #{$left 0.5s ease-in-out};
   #{$left}: -100%;
   width: 84.375%;
+  font-size: 0;
 
   .one {
     @include breakpoint($only-tablet) {
@@ -1154,13 +1199,16 @@ header {
 
     font-family: $alshaya-thin;
     font-size: 14px;
-    padding: 0.9rem 1.5rem;
-    display: table-cell;
+    padding: 0.9rem 1rem;
+    display: inline-block;
+    vertical-align: middle;
     text-align: center;
     height: 2.9rem;
+    width: 61%;
 
     &.shop {
       padding: 0.9rem 2.05rem;
+      width: 39%;
     }
   }
 
@@ -1283,9 +1331,22 @@ header {
 .site-brand-home {
   margin: 0;
 
+  @include breakpoint($only-mobile) {
+    max-width: 10rem;
+
+    html[lang=ar] & {
+      max-width: 6.5625rem;
+    }
+  }
+
   a {
     display: block;
     font-size: 2rem;
+    max-width: 10.0625rem;
+
+    @include breakpoint($tablet) {
+      max-width: none;
+    }
 
     @include breakpoint($desktop) {
       height: 2.875rem;
@@ -1347,6 +1408,7 @@ html[lang='ar'] {
       @include breakpoint($only-tablet) {
         width: auto;
         height: 60px;
+        max-width: 11.9375rem;
       }
 
       @include breakpoint($desktop) {
@@ -1380,4 +1442,9 @@ html[lang='ar'] {
       top: -3px;
     }
   }
+}
+
+// Remove tap background from ios mobile and tablet devices.
+html {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }

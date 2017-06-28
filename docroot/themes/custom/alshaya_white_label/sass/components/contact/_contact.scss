@@ -166,6 +166,26 @@
     }
   }
 
+  .country-field-wrapper {
+    @include clearfix;
+
+    position: relative;
+    height: 5rem;
+
+    .country-label {
+      font-size: 1rem;
+      color: $greyish;
+      transition: 0.2s ease all;
+    }
+  }
+
+  .form-type-email {
+    .description {
+      padding-top: 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+
   .form-item {
     position: relative;
   }
@@ -261,8 +281,7 @@
       }
 
       input::placeholder {
-        color: $greyish;
-        opacity: 1;
+        opacity: 0;
       }
     }
 

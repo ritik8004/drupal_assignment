@@ -59,19 +59,9 @@ fields:
     visible_view: 0
     visible_form: 1
 
-  brand:
+  product_brand:
     parent: 'attributes'
     label: 'Brand'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  brand_logo:
-    parent: 'attributes'
-    label: 'Brand Logo'
     description: 'Part of description.'
     cardinality: 1
     type: 'attribute'

@@ -5,7 +5,6 @@
  * Module file.
  */
 
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
@@ -38,8 +37,11 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
  * Implements hook_views_pre_build().
  */
 function alshaya_search_views_pre_build(ViewExecutable $view) {
-  if ($view->id() == 'search') {
+  if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
     $view->display_handler->display['cache_metadata']['contexts'][] = 'facets';
+    $view->display_handler->display['cache_metadata']['contexts'][] = 'pager_post_query';
+    $view->element['#cache']['contexts'][] = 'facets';
+    $view->element['#cache']['contexts'][] = 'pager_post_query';
   }
 
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
@@ -55,18 +57,15 @@ function alshaya_search_views_pre_build(ViewExecutable $view) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form['#id'] === 'views-exposed-form-search-page') {
-    $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
-    if (!empty($parameters) && isset($parameters['f'])) {
-      foreach ($parameters['f'] as $key => $value) {
-        // Add hidden form field for facet parameter.
-        $form['f[' . $key . ']'] = [
-          '#type' => 'hidden',
-          '#value' => $value,
-          '#weight' => -1,
-        ];
-      }
-    }
+  if (($form['#id'] === 'views-exposed-form-search-page') ||
+      ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-1')) {
+    $form['facets_container'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => 'facets-hidden-container',
+      ],
+    ];
+
     $form['#attached']['library'][] = 'alshaya_search/alshaya_search';
     $form['keywords']['#attributes'] = ['data-bef-auto-submit-exclude' => ''];
   }
@@ -140,12 +139,14 @@ function alshaya_search_ajax_render_alter(array &$data) {
         if ($view_name == 'search') {
           // Adding a command.
           $data[] = [
+            'selector' => NULL,
             'command' => 'invoke',
             'method' => 'alshayaSearchHeaderUpdate',
           ];
           $data[] = [
+            'selector' => NULL,
             'command' => 'invoke',
-            'behaviour' => 'searchSlider',
+            'method' => 'alshayaAttachSearchSlider',
           ];
         }
       }

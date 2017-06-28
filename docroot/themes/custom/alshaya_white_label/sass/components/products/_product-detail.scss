@@ -602,7 +602,7 @@
       }
     }
 
-    input[type="button"] {
+    button {
       float: $right;
       width: 6.563rem;
       height: 2.188rem;
@@ -610,38 +610,7 @@
       font-family: $alshaya-thin;
       appearance: none;
       font-size: 0.75rem;
-      color: $white-two;
-      text-transform: lowercase;
-      display: inline-block;
-      vertical-align: middle;
-      text-align: center;
-      padding: 0.5rem 0;
-      border: none;
-    }
-  }
-
-  .click-collect-content .search-store {
-    label {
-      @include clearfix;
-    }
-
-    input[type="text"] {
-      float: $left;
-      width: 162px;
-      height: 2.188rem;
-      padding: 0.3125rem;
-      border: solid 1px $white;
-    }
-
-    input[type="button"] {
-      float: $right;
-      width: 6.563rem;
-      height: 2.188rem;
-      background-color: $cerulean-two;
-      font-family: $alshaya-thin;
-      appearance: none;
-      font-size: 0.75rem;
-      color: $white-two;
+      color: $white-five;
       text-transform: lowercase;
       display: inline-block;
       vertical-align: middle;
@@ -652,7 +621,88 @@
   }
 }
 
+.available_store {
+  span.label {
+    font-family: $arial;
+    font-size: 0.75rem;
+    line-height: 2;
+    color: $brownish-grey;
+    margin: 0;
+  }
+
+  .change-location-link,
+  .change-store-link {
+    color: $cerulean-two;
+    font-size: 0.75rem;
+    font-family: $arial;
+    font-weight: bold;
+
+    @include u-visibility(inline);
+  }
+
+  .available-store-text {
+    font-family: $arial;
+    font-size: 0.75rem;
+    line-height: 2;
+    color: $brownish-grey;
+    margin: 0;
+
+    .google-store-location {
+      font-weight: bold;
+
+      @include u-visibility(inline);
+    }
+  }
+
+  .search-store {
+    label {
+      @include clearfix;
+    }
+
+    input[type="text"] {
+      float: $left;
+      width: 162px;
+      height: 2.188rem;
+      padding: 0.3125rem;
+      border: solid 1px $white;
+      font-size: 0.75rem;
+      color: $greyish;
+
+      @include breakpoint($desktop) {
+        width: 185px;
+      }
+
+      &::placeholder {
+        color: $greyish;
+      }
+    }
+
+    button {
+      float: $right;
+      width: 6.563rem;
+      height: 2.188rem;
+      background-color: $cerulean-two;
+      font-family: $alshaya-thin;
+      appearance: none;
+      font-size: 0.75rem;
+      color: $white-five;
+      text-transform: lowercase;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: none;
+    }
+
+    .form-item-location label {
+      @include u-visibility(none);
+    }
+  }
+}
+
 .click-collect-top-stores {
+  position: relative;
+
   ul {
     padding-#{$left}: 0;
     margin: 0;
@@ -677,6 +727,7 @@
           text-align: center;
           float: $left;
           margin-top: 2px;
+          line-height: 1.4;
         }
 
         &-info-wrap {
@@ -698,6 +749,30 @@
           }
         }
       }
+    }
+  }
+
+  .ajax-progress-throbber {
+    position: absolute;
+    top: -3rem;
+    #{$left}: 102%;
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-position: $right center !important;
+      background-repeat: no-repeat !important;
+      background-size: 1.5rem;
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: -2rem;
+      #{$left}: 70%;
     }
   }
 }
@@ -781,6 +856,7 @@
       margin: 0;
       height: 380px;
       overflow: scroll;
+      clear: both;
 
       li {
         font-family: $arial;
@@ -838,6 +914,11 @@
           }
         }
       }
+    }
+
+    .form-item-location {
+      margin-bottom: 0.5rem;
+      float: $left;
     }
   }
 }
@@ -1038,12 +1119,12 @@ article[gtm-sku-type="simple"] {
   .acq-content-product {
     .sku-base-form {
       .form-item-quantity {
-        float: left !important;
+        float: $left !important;
       }
 
       button[type="submit"] {
         @include breakpoint($only-tablet) {
-          float: right;
+          float: $right;
           margin-top: 1rem;
         }
       }

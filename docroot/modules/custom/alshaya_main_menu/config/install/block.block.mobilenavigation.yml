@@ -10,7 +10,7 @@ dependencies:
 id: mobilenavigation
 theme: alshaya_white_label
 region: menu_primary
-weight: -15
+weight: -32
 provider: null
 plugin: 'system_menu_block:mobile-navigation'
 settings:

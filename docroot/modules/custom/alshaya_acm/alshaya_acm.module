@@ -604,6 +604,29 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store');
   $config->set('store_id', '3');
   $config->save();
+
+  // Add translation for the error messages we check in API response.
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'This product is out of stock.' => [
+      'ar' => 'هذا المنتج غير متوفر في المخزن.',
+    ],
+    "We don't have as many" => [
+      'ar' => 'ليس لدينا العديد من',
+    ],
+    'Some of the products are out of stock.' => [
+      'ar' => 'بعض المنتجات غير متوفرة بالمخزن.',
+    ],
+    'Not all of your products are available in the requested quantity.' => [
+      'ar' => 'بعض المنتجات غير متوفرة بالمخزن.',
+    ],
+    'Coupon code is not valid' => [
+      'ar' => 'رمز قسيمة الخصم غير صالحة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
