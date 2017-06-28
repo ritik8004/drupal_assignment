@@ -104,6 +104,7 @@
   }
 }
 
+.address-book-address,
 .contact-form,
 .user-communication-preference {
   max-width: 24.75rem;
@@ -162,6 +163,38 @@
       bottom: 0;
       #{$left}: 0;
       opacity: 1;
+      font-size: 0.75rem;
+    }
+
+    input:focus ~ label:not(.error),
+    input:not(:focus):valid ~ label:not(.error),
+    input:active ~ label:not(.error),
+    input:not(:active):valid ~ label:not(.error),
+    input.error ~ label:not(.error) {
+      top: -1.25em;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 1;
+      font-size: 12px;
+    }
+  }
+
+  .country-field-wrapper {
+    @include clearfix;
+
+    position: relative;
+    height: 5rem;
+
+    .country-label {
+      font-size: 1rem;
+      color: $greyish;
+      transition: 0.2s ease all;
+    }
+  }
+
+  .form-type-email {
+    .description {
+      padding-top: 0.5rem;
       font-size: 0.75rem;
     }
   }
