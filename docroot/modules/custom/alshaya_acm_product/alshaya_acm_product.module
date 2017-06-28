@@ -237,7 +237,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       // Get promotions for the product.
-      $promotions = \Drupal::service('alshaya_acm_product.fields')->getPromotionsFromSkuId($sku_entity, TRUE);
+      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE);
       if (!empty($promotions)) {
         $build['promotions'] = [
           '#markup' => implode(', ', $promotions),
@@ -255,7 +255,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       // Get promotions for the product.
-      $promotions = \Drupal::service('alshaya_acm_product.fields')->getPromotionsFromSkuId($sku_entity, TRUE);
+      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE);
       if (!empty($promotions)) {
         $build['promotions'] = [
           '#markup' => implode(', ', $promotions),
@@ -281,7 +281,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       // Get promotions for the product.
-      $promotions = \Drupal::service('alshaya_acm_product.fields')->getPromotionsFromSkuId($sku_entity, TRUE);
+      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE);
       if (!empty($promotions)) {
         $build['promotions'] = [
           '#markup' => implode(', ', $promotions),
