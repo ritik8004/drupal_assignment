@@ -159,17 +159,14 @@ class StoresFinderUtility {
    * Function to sync all stores.
    */
   public function syncStores() {
-    $languages = $this->languageManager->getLanguages();
-
-    // Prepare the alternate locale data.
-    foreach (acq_commerce_get_store_language_mapping() as $lang => $store_id) {
-      // Get all stores for particular store id.
-      $stores = $this->apiWrapper->getStores($store_id);
+    // Do API call to get stores for each language.
+    foreach ($this->languageManager->getLanguages() as $langcode => $language) {
+      // Get all stores for particular language.
+      $stores = $this->apiWrapper->getStores($langcode);
 
       // Loop through all the stores and add/edit/translate the store node.
       foreach ($stores['items'] as $store) {
-        $language = $languages[$lang];
-        $this->updateStore($store, $lang, $language->getDirection());
+        $this->updateStore($store, $langcode);
       }
     }
   }
@@ -181,10 +178,8 @@ class StoresFinderUtility {
    *   Store array.
    * @param string $langcode
    *   Language code.
-   * @param string $direction
-   *   Direction for the language.
    */
-  protected function updateStore(array $store, $langcode, $direction) {
+  protected function updateStore(array $store, $langcode) {
     if ($node = $this->getStoreFromCode($store['store_code'], FALSE)) {
       if ($node->hasTranslation($langcode)) {
         $node = $node->getTranslation($langcode);
@@ -227,21 +222,11 @@ class StoresFinderUtility {
 
     $open_hours = [];
 
-    foreach (explode(',', $store['store_hours']) as $open_hour_row) {
-      $open_hour_data = explode(':', trim($open_hour_row));
-
-      if ($direction == 'rtl') {
-        $open_hours[] = [
-          'key' => $open_hour_data[1],
-          'value' => $open_hour_data[0],
-        ];
-      }
-      else {
-        $open_hours[] = [
-          'key' => $open_hour_data[0],
-          'value' => $open_hour_data[1],
-        ];
-      }
+    foreach ($store['store_hours'] as $store_hour) {
+      $open_hours[] = [
+        'key' => $store_hour['day'],
+        'value' => $store_hour['hours'],
+      ];
     }
 
     $node->get('field_store_open_hours')->setValue($open_hours);

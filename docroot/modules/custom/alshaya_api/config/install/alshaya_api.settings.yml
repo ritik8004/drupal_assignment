@@ -1,4 +1,5 @@
 magento_host: ''
+magento_lang_prefix: ''
 magento_api_base: ''
 verify_ssl: 1
 token_cache_time: 86400
