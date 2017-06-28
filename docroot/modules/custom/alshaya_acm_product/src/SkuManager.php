@@ -161,6 +161,26 @@ class SkuManager {
   }
 
   /**
+   * Helper function to fetch entity id from sku rather than loading the SKU.
+   *
+   * @param string $sku_text
+   *   Sku text of the Sku item.
+   *
+   * @return int
+   *   Entity Id of sku item.
+   *
+   * @throws \Drupal\Core\Database\InvalidQueryException
+   */
+  public function getEntityIdBySku($sku_text) {
+    $query = $this->connection->select('acq_sku_field_data', 'asfd')
+      ->fields('asfd', ['id'])
+      ->condition('sku', $sku_text)
+      ->range(0, 1);
+
+    return $query->execute()->fetchField();
+  }
+
+  /**
    * Helper function to fetch child skus of a configurable Sku.
    *
    * @param mixed $sku
@@ -201,6 +221,7 @@ class SkuManager {
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
    *
+   * @throws \Drupal\Core\Database\InvalidQueryException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    * @throws \Drupal\Core\Entity\Exception\UndefinedLinkTemplateException
    */
@@ -215,9 +236,16 @@ class SkuManager {
       $child_skus[] = $sku->getSku();
     }
 
+    // Convert array of sku text into sku enity Ids.
+    // @TODO: Remove this & refactor this function if we store sku ids in Products.
+
+    foreach ($child_skus as $key => $child_sku) {
+      $child_sku_ids[$key] = $this->getEntityIdBySku($child_sku);
+    }
+
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
-    $query->condition('field_acq_promotion_sku', $child_skus, 'IN');
+    $query->condition('field_acq_promotion_sku', $child_sku_ids, 'IN');
     $promotionIDs = $query->execute();
 
     if (!empty($promotionIDs)) {
