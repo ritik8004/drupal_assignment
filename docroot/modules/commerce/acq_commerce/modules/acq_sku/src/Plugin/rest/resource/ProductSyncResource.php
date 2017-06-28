@@ -408,7 +408,7 @@ class ProductSyncResource extends ResourceBase {
           case 'attribute':
             $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
             foreach ($value as $index => $val) {
-              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val)) {
+              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val, $sku->language()->getId())) {
                 $sku->{$field_key}->set($index, $term->getName());
               }
               else {
