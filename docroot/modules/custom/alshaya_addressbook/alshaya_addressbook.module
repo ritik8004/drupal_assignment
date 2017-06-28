@@ -423,9 +423,6 @@ function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountIn
 
   // Update privilege card number if available in customer data.
   if (isset($customer['addresses'])) {
-    // Delete all existing addresses.
-    $address_book_manager->deleteUserAddresses($user);
-
     foreach ($customer['addresses'] as $address) {
       $address_book_manager->saveUserAddressFromApi($user, $address);
     }
