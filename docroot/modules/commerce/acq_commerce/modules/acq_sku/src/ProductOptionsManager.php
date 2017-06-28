@@ -35,13 +35,6 @@ class ProductOptionsManager {
   private $apiWrapper;
 
   /**
-   * Result (create / update / failed) counts.
-   *
-   * @var array
-   */
-  private $results;
-
-  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -70,7 +63,7 @@ class ProductOptionsManager {
    * @return \Drupal\taxonomy\Entity\Term|null
    *   Loaded taxonomy term object if found.
    */
-  public function loadProductOptionByOptionId($attribute_code, $option_id, $log_error = TRUE) {
+  public function loadProductOptionByOptionId($attribute_code, $option_id, $langcode, $log_error = TRUE) {
     $query = $this->termStorage->getQuery();
     $query->condition('field_sku_option_id', $option_id);
     $query->condition('field_sku_attribute_code', $attribute_code);
@@ -96,7 +89,15 @@ class ProductOptionsManager {
 
     // We use the first term and continue even if we have multiple terms.
     $tid = array_shift($tids);
-    return $this->termStorage->load($tid);
+
+    /** @var \Drupal\taxonomy\Entity\Term $term */
+    $term = $this->termStorage->load($tid);
+
+    if ($langcode && $term->hasTranslation($langcode)) {
+      $term = $term->getTranslation($langcode);
+    }
+
+    return $term;
   }
 
   /**
@@ -115,20 +116,21 @@ class ProductOptionsManager {
    */
   protected function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code) {
     // Update the term if already available.
-    if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, FALSE)) {
+    if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, NULL, FALSE)) {
       $save_term = FALSE;
 
       if ($term->hasTranslation($langcode)) {
         $term = $term->getTranslation($langcode);
+
+        // We won't allow editing name here, if required it must be done from
+        // Magento.
+        if ($term->getName() != $option_value) {
+          $term->setName($option_value);
+          $save_term = TRUE;
+        }
       }
       else {
-        $term->addTranslation($langcode, []);
-        $save_term = TRUE;
-      }
-
-      // We won't allow editing name here, if required it must be done from
-      // Magento.
-      if ($term->getName() != $option_value) {
+        $term = $term->addTranslation($langcode, []);
         $term->setName($option_value);
         $save_term = TRUE;
       }
@@ -155,13 +157,13 @@ class ProductOptionsManager {
    * Synchronize all product options.
    */
   public function synchronizeProductOptions() {
-    foreach (acq_commerce_get_store_language_mapping() as $langcocde => $store_id) {
+    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
       $this->apiWrapper->updateStoreContext($store_id);
       $option_sets = $this->apiWrapper->getProductOptions();
 
       foreach ($option_sets as $options) {
         foreach ($options['options'] as $key => $value) {
-          $this->createProductOption('ar', $key, $value, $options['attribute_id'], $options['attribute_code']);
+          $this->createProductOption($langcode, $key, $value, $options['attribute_id'], $options['attribute_code']);
         }
       }
     }
