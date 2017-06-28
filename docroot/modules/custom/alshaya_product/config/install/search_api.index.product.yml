@@ -113,7 +113,7 @@ field_settings:
   brand:
     label: 'SKUs » SKU Reference » Brand'
     datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_brand'
+    property_path: 'field_skus:entity:attr_product_brand'
     type: string
     dependencies:
       config:

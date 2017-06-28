@@ -417,7 +417,7 @@ function alshaya_acm_product_available_click_collect($sku) {
 function alshaya_acm_product_get_brand_logo($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
-  $title = $sku_entity->get('attr_brand_logo')->getString();
+  $title = $sku_entity->get('attr_product_brand')->getString();
 
   $cid = 'brand_logo:' . Html::cleanCssIdentifier($title);
 
