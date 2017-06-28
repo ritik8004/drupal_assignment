@@ -12,4 +12,9 @@ pdp:
     - core/jquery.once
     - core/drupal
     - core/drupal.ajax
+
+store_finder_autocomplete:
+  js:
+    js/alshaya_store_finder.autocomplete.js: {}
+  dependencies:
     - geolocation/geolocation.geocoder.googlegeocodingapi
