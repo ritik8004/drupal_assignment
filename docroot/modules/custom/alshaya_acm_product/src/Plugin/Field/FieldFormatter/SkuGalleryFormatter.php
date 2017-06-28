@@ -117,7 +117,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     foreach ($items as $delta => $item) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
       $sku = $this->viewValue($item);
-
+      $promotion_cache_tags = [];
       // Get the image.
       $build['image_url'] = [];
       $sku_media = $this->skuManager->getSkuMedia($sku);
@@ -139,18 +139,17 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $promotions = $this->skuManager->getPromotionsFromSkuId($sku);
       $current_route_name = $this->currentRouteMatch->getRouteName();
       $current_node = $this->currentRouteMatch->getParameter('node');
-      // Check if current page is promotion page,
-      // render current promotion as text.
-      if (($current_route_name === 'entity.node.canonical') &&
-      ($current_node->bundle() === 'acq_promotion')) {
-        foreach ($promotions as $key => $promotion) {
-          if ((int) $current_node->id() === $key) {
-            $promotions[$key]['render_link'] = FALSE;
-          }
-          else {
-            $promotions[$key]['render_link'] = TRUE;
-          }
+
+      foreach ($promotions as $key => $promotion) {
+        $promotions[$key]['render_link'] = TRUE;
+        // Check if current page is promotion page,
+        // render current promotion as text.
+        if (($current_route_name === 'entity.node.canonical') &&
+          ($current_node->bundle() === 'acq_promotion') &&
+          ((int) $current_node->id() === $key)) {
+          $promotions[$key]['render_link'] = FALSE;
         }
+        $promotion_cache_tags[] = 'node:' . $key;
       }
 
       $sku_gallery = [
@@ -171,7 +170,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         '#product_label' => $product_label,
         '#promotions' => $promotions,
         '#cache' => [
-          'tags' => ['sku:' . $sku->id()],
+          'tags' => array_merge($promotion_cache_tags, ['sku:' . $sku->id()]),
           'contexts' => ['url'],
         ],
       ];
