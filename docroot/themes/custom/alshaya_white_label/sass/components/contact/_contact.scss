@@ -302,8 +302,32 @@ form.user-form {
     html[lang=ar] & {
       margin-top: 0.5rem !important;
 
-      label {
+      label.form-required {
         position: absolute !important;
+      }
+    }
+  }
+}
+
+form.user-form {
+  .mobile-number-field {
+    .form-item--error-message {
+      position: absolute;
+      top: 3rem;
+      width: 19rem;
+    }
+
+    .c-input__bar {
+      top: 3px !important;
+
+      html[lang=ar] & {
+        top: 4px !important;
+      }
+    }
+
+    html[lang=ar] & {
+      .form-type-textfield {
+        top: 0.4rem !important;
       }
     }
   }
