@@ -45,12 +45,11 @@
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
-        $('.click-collect-all-stores').toggle('slow', function(){
-          console.log($(".click-collect-all-stores").offset().top - 200);
+        $('.click-collect-all-stores').toggle('slow', function () {
           // Scroll
           $('html,body').animate({
-              scrollTop: $(".click-collect-all-stores").offset().top},
-            'slow');
+            scrollTop: $('.click-collect-all-stores').offset().top
+          }, 'slow');
         });
 
       });
@@ -84,7 +83,6 @@
 
       $('.click-collect-form', context).once('bind-events').on('click', '.change-location-link, .search-stores-button, .cancel-change-location', function (e) {
         if (e.target.className === 'change-location-link') {
-          //var html = $(this).parent().siblings('.store-finder-form-wrapper').html();
           $(this).siblings('.change-location').show();
           $(this).hide();
         }

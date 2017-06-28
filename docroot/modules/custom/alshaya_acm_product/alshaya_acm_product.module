@@ -481,7 +481,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // @todo: Refactor this with hook or add dependency for alshaya_store_finder.
     $config = \Drupal::config('alshaya_stores_finder.settings');
-    if (alshaya_acm_product_available_click_collect($tree_pointer->getSku())) {
+    if (!alshaya_acm_product_available_click_collect($tree_pointer->getSku())) {
       $response->addCommand(new HtmlCommand('#pdp-stores-container.click-collect > h3 > .subtitle', $config->get('pdp_click_collect_unavailable')));
       $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'removeClass', ['ui-state-active ui-accordion-header-active']));
       $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > .c-accordion_content', 'hide'));
