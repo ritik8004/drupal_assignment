@@ -206,6 +206,7 @@ function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $e
         '#title' => $config->get('pdp_click_collect_title'),
         '#title_price' => alshaya_acm_price_get_formatted_price((float) $config->get('pdp_click_collect_price')),
         '#subtitle' => $config->get('pdp_click_collect_subtitle'),
+        '#unavailable' => $config->get('pdp_click_collect_unavailable'),
         '#help_text' => $config->get('pdp_click_collect_help_text.value'),
         '#select_option_text' => $config->get('pdp_click_collect_select_option_text.value'),
         '#store_finder_form' => render($store_form),

@@ -24,6 +24,10 @@
         <div class="available_store">
           <div class="available-store-text">
             {{ 'Available at three stores near'|t }} <div class="google-store-location"></div>
+            <div class="change-location" style="display: none;">
+              <input type="textfield" name="store-location" class="change-store-location"/>
+              <button type="button" name="cancel-change-location" id="cancel-change-location" class="cancel-change-location">X</button>
+            </div>
             <div class="change-location-link">{{ 'change'|t }}</div>
           </div>
           <div class="store-finder-form-wrapper">
@@ -37,5 +41,5 @@
   </div>
 </div>
 
-<div class="click-collect-all-stores inline-modal-wrapper" style="display: none;"></div>
+<div class="click-collect-all-stores inline-modal-wrapper" id="click-collect-all-stores" style="display: none;"></div>
 

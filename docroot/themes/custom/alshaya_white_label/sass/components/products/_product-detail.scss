@@ -546,6 +546,10 @@
     border-top: none;
   }
 
+  .ui-state-disabled::after {
+    display: none;
+  }
+
   &-content {
     font-family: $arial;
     font-size: 0.75rem;
@@ -636,6 +640,7 @@
     font-size: 0.75rem;
     font-family: $arial;
     font-weight: bold;
+    cursor: pointer;
 
     @include u-visibility(inline);
   }
@@ -784,6 +789,7 @@
   color: $marine-blue;
   padding: 1.063rem 0;
   border-top: 1px solid $white;
+  cursor: pointer;
 }
 
 .click-collect-all-stores {
@@ -797,6 +803,7 @@
     background: $white-five;
     overflow: hidden;
     width: 100%;
+    z-index: 99;
 
     @include breakpoint($tablet) {
       width: 38%;
@@ -818,6 +825,7 @@
       text-align: center;
       color: $white-two;
       background-color: $marine-blue;
+      cursor: pointer;
     }
 
     .all-stores-info {

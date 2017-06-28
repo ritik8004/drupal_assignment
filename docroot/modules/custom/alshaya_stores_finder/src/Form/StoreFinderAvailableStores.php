@@ -89,6 +89,9 @@ class StoreFinderAvailableStores extends FormBase {
         'geolocation' => [
           'google_map_url' => $this->getGoogleMapsApiUrl(),
         ],
+        'alshaya_acm' => [
+          'storeFinder' => TRUE,
+        ],
       ],
     ];
 

@@ -1,13 +1,14 @@
 (function ($, Drupal, document) {
   "use strict";
+
+  // Add to cart button.
+  var atc_button;
+
+  // Add to cart button.
+  var ladda_button;
+
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-
-      $.fn.cartNotificationScroll = function() {
-        $('html,body').animate({
-          scrollTop: $('.header--wrapper').offset().top
-        }, 'slow');
-      };
 
       $(window).on('click', function() {
         // check if element is Visible
@@ -17,8 +18,9 @@
           $('#cart_notification').empty();
         }
       });
+
       // Stop event from inside container to propogate out.
-      $('#cart_notification').on('click', function(event){
+      $('#cart_notification').once('bind-events').on('click', function(event){
         event.stopPropagation();
       });
 
@@ -28,31 +30,41 @@
 
       $('.edit-add-to-cart', context).on('click', function() {
         // Start loading
-        $(this).ladda( 'start' );
+        l.ladda( 'start' );
       });
 
       $('.edit-add-to-cart', context).on('mousedown', function() {
         // Start loading
-        $(this).ladda( 'start' );
+        l.ladda( 'start' );
       });
 
       $('.edit-add-to-cart', context).on('keydown', function(event) {
         if (event.keyCode == 13 || event.keyCode == 32) {
           // Start loading
-          $(this).ladda('start');
+          l.ladda('start');
         }
       });
 
-      $('[data-drupal-selector="edit-configurables-size"]', context).on('change', function() {
+      $('[data-drupal-selector="edit-configurables-size"]', context).once('bind-events').on('change', function() {
         // Start loading.
-        $(this).closest('#configurable_ajax').siblings('.ladda-button').ladda( 'start' );
+        // $(this).closest('#configurable_ajax').siblings('.ladda-button').ladda( 'start' );
+        $(this).parents('form').find('.ladda-button').ladda('start')
       });
 
       $(document).ajaxComplete(function(event, xhr, settings) {
         if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_name === "configurables[size]")) {
           $(this).stopSpinner(['success']);
         }
+        else {
+          $.ladda('stopAll');
+        }
       });
+
+      $.fn.cartNotificationScroll = function() {
+        $('html,body').animate({
+          scrollTop: $('.header--wrapper').offset().top
+        }, 'slow');
+      };
 
       $.fn.stopSpinner = function(data) {
         l.ladda('stop');
@@ -70,6 +82,7 @@
             $(this).find('.ladda-label').html(Drupal.t('add to cart'));
           }, data.interval);
       };
+
 
     }
   };
