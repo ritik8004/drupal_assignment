@@ -193,8 +193,8 @@ class SkuManager {
   /**
    * Get Promotion node object(s) related to provided SKU.
    *
-   * @param mixed $sku
-   *   The SKU ID, for which linked promotions need to be fetched.
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   The SKU Entity, for which linked promotions need to be fetched.
    * @param bool $getLinks
    *   Boolen to identify if Links are required.
    *
@@ -204,8 +204,7 @@ class SkuManager {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    * @throws \Drupal\Core\Entity\Exception\UndefinedLinkTemplateException
    */
-  public function getPromotionsFromSkuId($sku, $getLinks = FALSE) {
-    $sku = $sku instanceof SKU ? $sku->id() : $sku;
+  public function getPromotionsFromSkuId(SKU $sku, $getLinks = FALSE) {
     $promos = [];
 
     // Fetch child skus, if its a parent sku.
