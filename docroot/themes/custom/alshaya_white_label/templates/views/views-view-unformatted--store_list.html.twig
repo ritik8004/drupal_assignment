@@ -36,6 +36,9 @@
 
   <div class="list-view-locator row-{{ row.nid }}">
     <div class="store-row--counter">{{ row.counter }}</div>
+    <div class="mobile-only-back-to-glossary">
+      <a href="{{ url('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
+    </div>
 
     <a class="use-ajax row-title" href="{{ url('alshaya_stores_finder.store_detail', {'node': row.nid}) }}">{{ row.title }}</a>
 
@@ -53,8 +56,3 @@
     </div>
   </div>
 {% endfor %}
-{%  if load_more_button %}
-  <div class="load-more-button mobile-only-hide">
-    {{ load_more_button }}
-  </div>
-{% endif %}

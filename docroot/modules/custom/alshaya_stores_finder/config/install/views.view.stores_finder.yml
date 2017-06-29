@@ -937,6 +937,7 @@ display:
         fields: false
         pager: false
         empty: false
+        footer: false
       header:
         result:
           id: result
@@ -1370,6 +1371,18 @@ display:
             value: 'Sorry, there are no stores or locations available to display.'
             format: mail_text
           plugin_id: text
+      footer:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          tokenize: false
+          content: "<div class=\"load-more-button mobile-only-hide\">\n    <a href=\"\">Load More</a>\n  </div>"
+          plugin_id: text_custom
     cache_metadata:
       max-age: -1
       contexts:
