@@ -270,7 +270,14 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           exit;
         }
 
-        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        // Show message from Magento to user if allowed in config.
+        if (\Drupal::config('alshaya_acm_checkout.settings')->get('checkout_display_magento_error')) {
+          drupal_set_message($e->getMessage(), 'error');
+        }
+        else {
+          drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        }
+
         $this->redirectToStep($current_step_id);
       }
 
