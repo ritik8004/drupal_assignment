@@ -2,13 +2,16 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.acq_promotion.field_acq_promotion_banner
     - field.field.node.acq_promotion.field_acq_promotion_data
     - field.field.node.acq_promotion.field_acq_promotion_description
     - field.field.node.acq_promotion.field_acq_promotion_rule_id
     - field.field.node.acq_promotion.field_acq_promotion_sku
     - field.field.node.acq_promotion.field_acq_promotion_type
+    - image.style.thumbnail
     - node.type.acq_promotion
   module:
+    - image
     - path
     - text
     - workbench_moderation
@@ -23,8 +26,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_acq_promotion_banner:
+    type: image_image
+    weight: 8
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    third_party_settings: {  }
+    region: content
   field_acq_promotion_data:
-    weight: 9
+    weight: 10
     settings:
       rows: 5
       placeholder: ''
@@ -40,7 +51,7 @@ content:
     type: text_textarea
     region: content
   field_acq_promotion_rule_id:
-    weight: 8
+    weight: 9
     settings:
       size: 60
       placeholder: ''
@@ -48,7 +59,7 @@ content:
     type: string_textfield
     region: content
   field_acq_promotion_sku:
-    weight: 26
+    weight: 12
     settings:
       match_operator: CONTAINS
       size: 60
@@ -58,7 +69,7 @@ content:
     region: content
   field_acq_promotion_type:
     type: options_select
-    weight: 10
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
