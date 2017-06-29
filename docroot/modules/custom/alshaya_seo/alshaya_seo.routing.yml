@@ -4,7 +4,7 @@ alshaya_seo.google_knowledge_graph_form:
     _form: '\Drupal\alshaya_seo\Form\GoogleKnowledgeGraphConfigForm'
     _title: 'Google Knowledge Graph'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'access google knowledge graph'
 alshaya_seo.sitemap:
   path: '/sitemap'
   defaults:
@@ -12,3 +12,10 @@ alshaya_seo.sitemap:
     _title: 'site map'
   requirements:
     _access: 'TRUE'
+alshaya_seo.settings:
+  path: '/admin/seo-settings'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'SEO Settings'
+  requirements:
+    _role: 'seo_admin'
