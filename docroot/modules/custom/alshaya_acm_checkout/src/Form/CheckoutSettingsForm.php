@@ -35,6 +35,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('checkout_terms_condition', $form_state->getValue('checkout_terms_condition'));
     $config->set('checkout_customer_service', $form_state->getValue('checkout_customer_service'));
     $config->set('click_collect_method', $form_state->getValue('click_collect_method'));
+    $config->set('checkout_display_magento_error', $form_state->getValue('checkout_display_magento_error'));
 
     $config->save();
 
@@ -95,6 +96,17 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Click and Collect delivery method code'),
       '#required' => TRUE,
       '#default_value' => $config->get('click_collect_method'),
+    ];
+
+    $form['checkout_display_magento_error'] = [
+      '#type' => 'select',
+      '#options' => [
+        0 => $this->t('No - Generic message'),
+        1 => $this->t('Yes'),
+      ],
+      '#title' => $this->t('Display error message from magento'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('checkout_display_magento_error'),
     ];
 
     return $form;

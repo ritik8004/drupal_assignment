@@ -20,3 +20,6 @@ alshaya_acm_checkout.settings:
     click_collect_method:
       type: string
       label: 'Click and Collect delivery method code'
+    checkout_display_magento_error:
+      type: integer
+      label: 'Display error message from magento'

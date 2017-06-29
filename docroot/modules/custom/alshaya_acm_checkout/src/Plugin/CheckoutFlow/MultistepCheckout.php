@@ -268,9 +268,14 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           exit;
         }
 
-        // @TODO: We can revert this to generic message once all basic
-        // validations are in place.
-        drupal_set_message($e->getMessage(), 'error');
+        // Show message from Magento to user if allowed in config.
+        if (\Drupal::config('alshaya_acm_checkout.settings')->get('checkout_display_magento_error')) {
+          drupal_set_message($e->getMessage(), 'error');
+        }
+        else {
+          drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        }
+
         $this->redirectToStep($current_step_id);
       }
 
