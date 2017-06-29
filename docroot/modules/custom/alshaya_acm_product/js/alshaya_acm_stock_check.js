@@ -9,7 +9,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Js for stock check on PLP & search pages.
    */
-  Drupal.behaviors.alshaya_acm_product_stock_check = {
+  Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
       $('.views-element-container').find('.c-products__item article').once('js-event').each(function(){
         var productQuickeditLink = $(this).attr('data-quickedit-entity-id');
