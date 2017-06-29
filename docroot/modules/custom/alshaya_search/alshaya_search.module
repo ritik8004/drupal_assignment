@@ -39,9 +39,7 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
 function alshaya_search_views_pre_build(ViewExecutable $view) {
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
     $view->display_handler->display['cache_metadata']['contexts'][] = 'facets';
-    $view->display_handler->display['cache_metadata']['contexts'][] = 'pager_post_query';
     $view->element['#cache']['contexts'][] = 'facets';
-    $view->element['#cache']['contexts'][] = 'pager_post_query';
   }
 
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
