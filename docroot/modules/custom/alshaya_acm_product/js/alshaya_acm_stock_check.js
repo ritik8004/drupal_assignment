@@ -9,17 +9,17 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Js for stock check on PLP & search pages.
    */
-  Drupal.behaviors.alshaya_acm_product_stock_check = {
+  Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
       $('.views-element-container').find('.c-products__item article').once('js-event').each(function(){
-        var product_quickedit_link = $(this).attr('data-quickedit-entity-id');
-        var product_id = product_quickedit_link.replace('node/', '');
-        var product_stock = $(this).find('.out-of-stock');
+        var productQuickeditLink = $(this).attr('data-quickedit-entity-id');
+        var productId = productQuickeditLink.replace('node/', '');
+        var productStock = $(this).find('.out-of-stock');
 
         $.ajax({
-          url: Drupal.url('stock-check-ajax/' + product_id),
+          url: Drupal.url('stock-check-ajax/' + productId),
           success: function (result) {
-            product_stock.html(result);
+            productStock.html(result);
           }
         });
       });
