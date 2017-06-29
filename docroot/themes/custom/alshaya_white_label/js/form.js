@@ -61,7 +61,8 @@
       });
 
       // Handling error for mobile number fields.
-      if ($('.mobile-number-field').find('.form-item-mobile-number-mobile').hasClass('form-item--error')) {
+      if ($('.mobile-number-field').find('.form-item-mobile-number-mobile').hasClass('form-item--error') ||
+        $('.mobile-number-field').find('.form-item-field-mobile-number-0-mobile').hasClass('form-item--error')) {
         $('.mobile-number-field').addClass('form-item--error');
       }
 

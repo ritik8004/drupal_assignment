@@ -332,17 +332,19 @@ form.user-form {
 
 form.user-form {
   .mobile-number-field {
+    padding-bottom: 2px;
+
     .form-item--error-message {
       position: absolute;
-      top: 3rem;
+      top: 4rem;
       width: 19rem;
     }
 
     .c-input__bar {
-      top: 3px !important;
+      top: 0.125rem !important;
 
       html[lang=ar] & {
-        top: 4px !important;
+        top: 0.1875rem !important;
       }
     }
 
@@ -350,6 +352,10 @@ form.user-form {
       .form-type-textfield {
         top: 0.4rem !important;
       }
+    }
+
+    &.form-item--error {
+      margin-bottom: 4.5rem;
     }
   }
 }
