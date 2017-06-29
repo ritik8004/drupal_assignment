@@ -1,24 +1,24 @@
 .user__address--column {
-  border: 1px solid $white;
+  border:0.0625rem solid $white;
   font-family: $arial;
-  font-size: 12px;
-  margin-bottom: 24px;
+  font-size: 0.75rem;
+  margin-bottom: 1.5rem;
 
   @include breakpoint($tablet) {
     float: $left;
     width: calc(50% - 0.75rem);
 
     &:nth-of-type(odd) {
-      margin-#{$right}: 24px;
+      margin-#{$right}: 1.5rem;
     }
   }
 
   @include breakpoint($desktop) {
-    margin-bottom: 48px;
-    width: calc(50% - 24px);
+    margin-bottom: 3rem;
+    width: calc(50% - 1.5rem);
 
     &:nth-of-type(odd) {
-      margin-#{$right}: 48px;
+      margin-#{$right}: 3rem;
     }
   }
 }
@@ -36,12 +36,11 @@
 
   @include breakpoint($desktop) {
     float: $left;
-    margin-bottom: 48px;
-    max-width: 420px;
-    width: calc(50% - 24px);
+    margin-bottom: 3rem;
+    width: calc(50% - 1.5rem);
 
     &:nth-of-type(odd) {
-      margin-#{$right}: 48px;
+      margin-#{$right}: 3rem;
     }
   }
 }
@@ -63,7 +62,7 @@
   }
 
   .address--contact {
-    margin-top: 22px;
+    margin-top: 1.375rem;
   }
 
   .address--content {
@@ -76,12 +75,12 @@
     }
 
     @include breakpoint($desktop) {
-      font-size: 14px;
+      font-size: 0.875rem;
     }
   }
 
   .address--label {
-    margin-bottom: 3px;
+    margin-bottom: 0.1875rem;
   }
 
   .address--userinfo {
@@ -114,13 +113,13 @@
   }
 
   .address--options {
-    border-top: 1px solid $white;
+    border-top:0.0625rem solid $white;
     clear: both;
     display: table;
     width: 100%;
 
     @include breakpoint($desktop) {
-      padding: 19px 24px;
+      padding: 1.188rem 1.5rem;
     }
 
     a {
@@ -129,7 +128,7 @@
   }
 
   .address--controls {
-    border-#{$right}: 1px solid $white;
+    border-#{$right}:0.0625rem solid $white;
     display: table-cell;
     min-height: 3.0625rem;
     padding: 0.9375rem;
@@ -138,7 +137,7 @@
 
     @include breakpoint($tablet) {
       padding: 1.375rem 0.875rem;
-      min-height: 73px;
+      min-height: 4.563rem;
       text-align: center;
     }
 
@@ -175,14 +174,14 @@
   }
 
   .address--primary {
-    width: 151px;
+    width: 9.438rem;
     position: relative;
     padding-#{$right}: 0.5625rem;
     padding-#{$left}: 2.5rem;
     text-align: left;
 
     @include breakpoint($tablet) {
-      width: 106px;
+      width: 6.625rem;
       padding-#{$left}: 2.4rem;
     }
 
@@ -202,7 +201,7 @@
       height: 0.875rem;
       border-radius: 100%;
       margin-#{$right}: 0.75rem;
-      border: 1px solid;
+      border:0.0625rem solid;
       position: absolute;
       #{$left}: 1rem;
       top: 50%;
@@ -231,7 +230,7 @@
       }
 
       @include breakpoint($desktop) {
-        border: 1px solid $black-two;
+        border:0.0625rem solid $black-two;
         display: inline-block;
         font-weight: 700;
         padding: 0.625rem 1.5rem;
@@ -353,11 +352,11 @@
 .address-book-address,
 .webform-submission-alshaya-contact-form {
   .mobile-number-field {
-    border-bottom: 1px solid $brownish-grey;
+    border-bottom:0.0625rem solid $brownish-grey;
     padding-bottom: 0 !important;
     margin-bottom: 3rem;
-    width: 186px;
-    height: 45px;
+    width: 11.63rem;
+    height: 2.813rem;
 
     label {
       top: 0;
@@ -376,7 +375,7 @@
     .form-item-field-address-0-address-mobile-number-mobile {
       position: static !important;
       float: $right;
-      width: 138px;
+      width: 8.625rem;
       padding-bottom: 0 !important;
 
       label.error {
@@ -390,11 +389,7 @@
         &.local-number {
           border-bottom: none;
 
-          &::placeholder,
-          &::-webkit-input-placeholder,
-          &::-moz-placeholder,
-          &::-ms-input-placeholder,
-          &:-moz-placeholder {
+          &::placeholder {
             color: transparent !important;
             font-size: 0 !important;
             text-indent: -999rem !important;
@@ -405,13 +400,13 @@
       .c-input__bar {
         &::before,
         &::after {
-          top: 1px;
+          top:0.0625rem;
         }
       }
 
       .form-item--error-message {
         position: absolute;
-        left: 0;
+        #{$left}: 0;
       }
     }
   }
@@ -452,7 +447,7 @@
     border-radius: 0;
     border-color: $grey-ash;
     background: $white;
-    height: 35px;
+    height: 2.188rem;
   }
 
   .select2-container {
@@ -461,16 +456,16 @@
 
   .select2-selection__rendered {
     font-family: $arial;
-    line-height: 19px !important;
+    line-height: 1.188rem !important;
     color: $greyish;
     padding: 0.25rem !important;
   }
 
   .select2-selection__arrow {
     top: 0.5rem !important;
-    height: 35px !important;
-    width: 35px !important;
-    border-left: 1px solid $white-five;
+    height: 2.188rem !important;
+    width: 2.188rem !important;
+    border-left:0.0625rem solid $white-five;
 
     @include icon(chevrondown, after) {
       font-size: 1.5rem;
