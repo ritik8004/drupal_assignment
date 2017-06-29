@@ -22,8 +22,19 @@
   </div>
 {% endif %}
 
-{% if out_of_stock %}
-  <div class="out-of-stock">
-    {{ out_of_stock }}
+<div class="out-of-stock">Checking stock...</div>
+
+{% if promotions %}
+  <div class="promotions">
+    {% for id, promotion in promotions %}
+      {% if (promotion.render_link) %}
+        <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+          {{ promotion.text }}
+        </a>
+      {% else %}
+        {{ promotion.text }}
+      {% endif %}
+    {% endfor %}
+>>>>>>> Stashed changes
   </div>
 {% endif %}
