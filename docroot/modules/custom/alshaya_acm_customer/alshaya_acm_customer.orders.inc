@@ -235,7 +235,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
 
-  $orderDetails['contact_no'] = $order['shipping']['address']['phone'];
+  $orderDetails['contact_no'] = $order['shipping']['address']['telephone'];
 
   $addressFormatter = new ACQAddressFormatter();
   $orderDetails['delivery_address'] = $addressFormatter->render((object) $order['shipping']['address']);
