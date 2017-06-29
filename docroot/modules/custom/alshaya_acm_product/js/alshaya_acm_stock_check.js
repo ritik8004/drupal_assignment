@@ -7,7 +7,7 @@
    * @type {Drupal~behavior}
    *
    * @prop {Drupal~behaviorAttach} attach
-   *   All custom js for product page.
+   *   Js for stock check on PLP & search pages.
    */
   Drupal.behaviors.alshaya_acm_product_stock_check = {
     attach: function (context, settings) {
