@@ -75,7 +75,7 @@ class BillingInformation extends AddressFormBase {
     $field_names = [
       'first_name',
       'last_name',
-      'phone',
+      'telephone',
       'street',
       'street2',
     ];
@@ -84,7 +84,7 @@ class BillingInformation extends AddressFormBase {
       'city',
       'region',
       'postcode',
-      'country',
+      'country_id',
     ];
 
     foreach ($field_names as $field_name) {
