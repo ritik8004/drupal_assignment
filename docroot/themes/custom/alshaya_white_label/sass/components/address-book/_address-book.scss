@@ -465,7 +465,7 @@
     top: 0.5rem !important;
     height: 2.188rem !important;
     width: 2.188rem !important;
-    border-left: 0.0625rem solid $white-five;
+    border-#{$left}: 0.0625rem solid $white-five;
 
     @include icon(chevrondown, after) {
       font-size: 1.5rem;
