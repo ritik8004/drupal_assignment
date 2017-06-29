@@ -479,7 +479,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $selector = '.quantity-' . $sku_identifier;
     $response->addCommand(new HtmlCommand($selector, $form['quantity']));
 
-    // @todo: Refactor this with hook or add dependency for alshaya_store_finder.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
       $config = \Drupal::config('alshaya_stores_finder.settings');
       if (!alshaya_acm_product_available_click_collect($tree_pointer->getSku())) {
