@@ -925,7 +925,9 @@
 
 .field--name {
   &-field-skus {
-    border-bottom: 1px solid $whisper-dark;
+    .c-pdp & {
+      border-bottom: 1px solid $whisper-dark;
+    }
 
     .acq-content-product-modal & {
       border-bottom: none;
