@@ -78,11 +78,17 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     }
     else {
       $billing_address = (array) $cart->getBilling();
-
-      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-      $address_default_value = $address_book_manager->getAddressArrayFromMagentoAddress($billing_address);
-      $form_state->setTemporaryValue('default_value_mobile', $address_default_value['mobile_number']);
+      if (!empty($billing_address['country_id'])) {
+        /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+        $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+        $address_default_value = $address_book_manager->getAddressArrayFromMagentoAddress($billing_address);
+        $form_state->setTemporaryValue('default_value_mobile', $address_default_value['mobile_number']);
+      }
+      else {
+        $address_default_value = [
+          'country_code' => _alshaya_custom_get_site_level_country_code(),
+        ];
+      }
 
       $pane_form['address']['billing'] = [
         '#type' => 'address',
