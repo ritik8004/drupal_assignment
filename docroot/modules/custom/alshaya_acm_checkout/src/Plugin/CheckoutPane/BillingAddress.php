@@ -119,10 +119,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $values = $form_state->getValue($pane_form['#parents']);
 
-    if ($values['same_as_shipping'] == 1) {
-      // No checks required here.
-    }
-    else {
+    if ($values['same_as_shipping'] != 1) {
       $address_values = $values['address']['billing'];
 
       /** @var \Drupal\profile\Entity\Profile $profile */
