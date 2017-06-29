@@ -46,7 +46,7 @@ class ACQAddressFormatter {
    *   A renderable array.
    */
   protected function viewElement($address, $langcode) {
-    $country_code = $address->country;
+    $country_code = $address->country_id;
     $country_repository = \Drupal::service('address.country_repository');
     $countries = $country_repository->getList();
     $address_format_repository = \Drupal::service('address.address_format_repository');
@@ -124,7 +124,7 @@ class ACQAddressFormatter {
         // This level is empty, so there can be no sublevels.
         break;
       }
-      $parents[] = $index ? $original_values[$subdivision_fields[$index - 1]] : $address->country;
+      $parents[] = $index ? $original_values[$subdivision_fields[$index - 1]] : $address->country_id;
       $subdivision_repository = \Drupal::service('address.subdivision_repository');
       $subdivision = $subdivision_repository->get($values[$field], $parents);
       if (!$subdivision) {
