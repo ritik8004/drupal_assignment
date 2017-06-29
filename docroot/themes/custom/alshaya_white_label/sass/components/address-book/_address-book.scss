@@ -484,3 +484,18 @@
     margin-top: 0.55rem;
   }
 }
+
+#address-book-form-open .address-book-address {
+  .country-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.9375em;
+  }
+
+  .select2-container {
+    max-width: 100%;
+  }
+
+  .mobile-number-field {
+    padding-bottom: 2rem;
+  }
+}
