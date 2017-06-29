@@ -165,18 +165,6 @@
       opacity: 1;
       font-size: 0.75rem;
     }
-
-    input:focus ~ label:not(.error),
-    input:not(:focus):valid ~ label:not(.error),
-    input:active ~ label:not(.error),
-    input:not(:active):valid ~ label:not(.error),
-    input.error ~ label:not(.error) {
-      top: -1.25em;
-      bottom: 0;
-      #{$left}: 0;
-      opacity: 1;
-      font-size: 12px;
-    }
   }
 
   .country-field-wrapper {

@@ -54,13 +54,13 @@
     padding: 26px 28px 51px 16px;
 
     @include breakpoint($tablet) {
-      min-height: 13rem;
+      min-height: 15rem;
       padding: 26px 14px 37px 16px;
     }
 
     @include breakpoint($desktop) {
       padding: 26px 44px 53px 23px;
-      min-height: 12rem;
+      min-height: 14rem;
     }
   }
 
