@@ -37,3 +37,10 @@ alshaya_acm_product.size_guide_modal:
     _title: 'Size guide'
   requirements:
     _permission: 'access content'
+alshaya_acm_produt.stock_check_ajax:
+  path: '/stock-check-ajax/{node}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::checkStock'
+    _title: 'Cart'
+  requirements:
+    _permission: 'access content'
