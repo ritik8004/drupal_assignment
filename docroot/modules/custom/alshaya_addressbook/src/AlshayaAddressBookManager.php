@@ -338,7 +338,6 @@ class AlshayaAddressBookManager {
 
     // @TODO: Remove this after Magento makes it optional.
     $magento_address['city'] = 'NA';
-    $magento_address['postcode'] = '31000';
 
     return $magento_address;
   }
