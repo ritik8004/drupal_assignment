@@ -56,7 +56,6 @@
 
       $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-store-link, .search-stores-button, .cancel-change-location', function (e) {
         if (e.target.className === 'change-store-link') {
-          // $(this).parent().siblings('.store-finder-form-wrapper').find('.search-store').show();
           $(this).siblings('.change-location').show();
           $(this).hide();
         }
@@ -103,7 +102,7 @@
         }
       });
 
-      // Call here once to ensure we do it after changes in attribute selection.
+      // Call storesDisplay to render stores, if click and collect available for selected sku.
       if (settings.alshaya_acm.storeFinder === true) {
         Drupal.pdp.storesDisplay();
       }

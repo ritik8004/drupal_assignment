@@ -40,8 +40,6 @@
 
       $('[data-drupal-selector="edit-configurables-size"]', context).once('bind-events').on('change', function () {
         // Start loading.
-        // $(this).closest('#configurable_ajax').siblings('.ladda-button').ladda( 'start' );
-        // $(this).parents('form').find('.ladda-button').ladda('start')
         l.ladda('start');
       });
 
