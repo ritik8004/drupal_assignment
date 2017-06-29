@@ -93,6 +93,15 @@ class StoresFinderConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('load_more_item_limit'),
     ];
 
+    $form['search_proximity_radius'] = [
+      '#type' => 'number',
+      '#min' => 1,
+      '#step' => 1,
+      '#title' => $this->t('Store finder proximity radius'),
+      '#description' => $this->t('Proximity radius for store search. This will be in KM.'),
+      '#default_value' => $config->get('search_proximity_radius'),
+    ];
+
     return $form;
   }
 
@@ -109,6 +118,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
     $config->set('pdp_click_collect_help_text', $form_state->getValue('pdp_click_collect_help_text'));
     $config->set('pdp_click_collect_select_option_text', $form_state->getValue('pdp_click_collect_select_option_text'));
     $config->set('load_more_item_limit', $form_state->getValue('load_more_item_limit'));
+    $config->set('search_proximity_radius', $form_state->getValue('search_proximity_radius'));
     $config->save();
 
     // Invalidate the cache tag.

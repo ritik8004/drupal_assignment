@@ -86,7 +86,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
     if (in_array($form['#id'], $exposed_form_ids)) {
 
       // Config of store finder search enable/disable.
-      $store_finder_search_config = \Drupal::config('alshaya_stores_finder.settings')->get(('enable_disable_store_finder_search'));
+      $store_finder_config = \Drupal::config('alshaya_stores_finder.settings');
+      $store_finder_search_config = $store_finder_config->get('enable_disable_store_finder_search');
 
       $form['list_view'] = [
         '#title' => t('List view'),
@@ -144,6 +145,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       $form['actions']['#weight'] = 5;
       unset($form['geolocation_geocoder_google_geocoding_api']['#description']);
       $form['field_latitude_longitude_proximity']['#attributes']['class'][] = 'hidden';
+      $form['field_latitude_longitude_proximity']['#default_value'] = $store_finder_config->get('search_proximity_radius');
+      $form['field_latitude_longitude_proximity']['#value'] = $store_finder_config->get('search_proximity_radius');
     }
   }
 }
