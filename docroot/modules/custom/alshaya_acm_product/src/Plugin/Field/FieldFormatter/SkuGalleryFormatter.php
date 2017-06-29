@@ -157,6 +157,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           '#markup' => '<span>' . $this->t('out of stock') . '</span>',
         ];
       }
+
+      $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
     }
 
     return $elements;

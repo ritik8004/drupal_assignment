@@ -6,3 +6,9 @@ product_view:
     - core/jquery
     - core/jquery.once
     - core/drupal
+stock_check:
+  version: 1.x
+  js:
+    js/alshaya_acm_stock_check.js: {}
+  dependencies:
+    - core/jquery
