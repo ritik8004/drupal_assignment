@@ -336,6 +336,7 @@
   padding-bottom: 0.18rem;
   width: 3rem;
   float: left;
+  font-size: 1rem;
 
   @include breakpoint($only-mobile) {
     margin-top: 0.75rem;

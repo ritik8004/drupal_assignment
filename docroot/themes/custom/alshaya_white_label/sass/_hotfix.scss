@@ -100,18 +100,22 @@ body.chrome {
  * Samsung - Specific issues and hacks.
  */
 .samsung {
-  .webform-submission-alshaya-contact-form .form-item-mobile-number-mobile {
-    html[lang=ar] & {
-      @include breakpoint($only-mobile) {
-        top: 0.2rem !important;
+  &.s-tab2:not(.chrome) {
+    html[lang=en] & {
+      .webform-submission-alshaya-contact-form,
+      form.user-form {
+        .form-item-mobile-number-mobile {
+          top: 0.3rem !important;
+        }
       }
     }
-  }
 
-  &.s-tab2:not(.chrome) {
     html[lang=ar] & {
-      .webform-submission-alshaya-contact-form .form-item-mobile-number-mobile {
-        top: 0.15rem !important;
+      .webform-submission-alshaya-contact-form,
+      form.user-form {
+        .form-item-mobile-number-mobile {
+          top: 0.1rem !important;
+        }
       }
     }
   }

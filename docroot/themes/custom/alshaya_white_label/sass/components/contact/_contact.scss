@@ -44,6 +44,7 @@
       .ie & {
         visibility: visible;
         color: transparent;
+        opacity: 1 !important;
       }
     }
   }
@@ -58,7 +59,6 @@
       top: 0;
 
       &.error {
-        top: -0.25rem;
         left: -4em;
         width: 9rem;
       }
@@ -257,39 +257,77 @@
   }
 }
 
-.webform-submission-alshaya-contact-form {
+.webform-submission-alshaya-contact-form,
+form.user-form {
   .mobile-number-field {
     width: 100%;
+    display: block;
+    clear: both;
+    border-bottom: 1px solid $grey-ash;
+    padding-bottom: 1px;
+
+    .country-code-prefix {
+      border-bottom: none;
+    }
 
     .form-type-textfield {
-      top: 0.35rem;
+      top: 0.4rem;
 
       html[lang=ar] & {
-        top: 0.25rem;
+        top: 0.2rem;
+      }
 
-        @include breakpoint($only-mobile) {
-          top: 0.2rem;
+      label.error {
+        position: absolute !important;
+        top: 1.2rem !important;
+      }
+
+      .c-input__bar {
+        top: 1px;
+
+        html[lang=ar] & {
+          top: 2px;
         }
       }
 
-      .firefox & {
-        top: 0.44rem;
-      }
+      input {
+        border-bottom: none !important;
 
-      .ie & {
-        top: 0.4rem;
-      }
-
-      input::placeholder {
-        opacity: 0;
+        &::placeholder {
+          opacity: 0;
+        }
       }
     }
 
     html[lang=ar] & {
       margin-top: 0.5rem !important;
 
-      label {
+      label.form-required {
         position: absolute !important;
+      }
+    }
+  }
+}
+
+form.user-form {
+  .mobile-number-field {
+    .form-item--error-message {
+      position: absolute;
+      top: 3rem;
+      width: 19rem;
+    }
+
+    .c-input__bar {
+      top: 3px !important;
+
+      html[lang=ar] & {
+        top: 4px !important;
+      }
+    }
+
+    html[lang=ar] & {
+      .form-type-textfield {
+        top: 0.4rem !important;
       }
     }
   }
