@@ -7,7 +7,6 @@
   @include breakpoint($tablet) {
     float: $left;
     width: calc(50% - 0.75rem);
-    max-width: 255px;
 
     &:nth-of-type(odd) {
       margin-#{$right}: 24px;
@@ -16,7 +15,6 @@
 
   @include breakpoint($desktop) {
     margin-bottom: 48px;
-    max-width: 420px;
     width: calc(50% - 24px);
 
     &:nth-of-type(odd) {
@@ -51,16 +49,16 @@
 .address {
   .address--data {
     overflow: hidden;
-    padding: 26px 28px 51px 16px;
+    padding: 1rem;
 
     @include breakpoint($tablet) {
-      min-height: 15rem;
-      padding: 26px 14px 37px 16px;
+      min-height: 12rem;
+      padding: 1rem;
     }
 
     @include breakpoint($desktop) {
-      padding: 26px 44px 53px 23px;
-      min-height: 14rem;
+      padding: 1.5rem;
+      min-height: 12rem;
     }
   }
 
@@ -88,7 +86,7 @@
 
   .address--userinfo {
     float: left;
-    padding-right: 26px;
+    padding-right: 1rem;
     vertical-align: top;
     width: 55%;
 
@@ -97,7 +95,7 @@
     }
 
     @include breakpoint($desktop) {
-      padding-right: 108px;
+      padding-right: 1.5rem;
       width: 59%;
     }
   }
@@ -161,7 +159,7 @@
       }
 
       .throbber {
-        background-image: url(../imgs/icons/MC-loader.svg) !important;
+        background-image: url(../imgs/assets/loading.gif) !important;
         background-position: $right center !important;
         background-repeat: no-repeat !important;
         background-size: 1.5rem;
@@ -352,23 +350,14 @@
   }
 }
 
-.country-code-prefix {
-  margin-top: 0.55rem;
-  color: $greyish;
-  border-bottom: 1px solid $brownish-grey;
-  width: 3rem;
-  float: left;
-  font-size: 1rem;
-
-  @include breakpoint($only-mobile) {
-    margin-top: 0.75rem;
-  }
-}
-
 .address-book-address,
 .webform-submission-alshaya-contact-form {
   .mobile-number-field {
-    margin-top: -1.7rem !important;
+    border-bottom: 1px solid $brownish-grey;
+    padding-bottom: 0 !important;
+    margin-bottom: 3rem;
+    width: 186px;
+    height: 45px;
 
     label {
       top: 0;
@@ -380,48 +369,66 @@
       position: absolute;
     }
 
-    .form-type-textfield {
-      margin-top: -0.15rem !important;
+    .form-item {
+      padding-bottom: 0 !important;
+    }
 
-      @include breakpoint($tablet) {
-        margin-top: -0.3rem !important;
+    .form-item-field-address-0-address-mobile-number-mobile {
+      position: static !important;
+      float: $right;
+      width: 138px;
+      padding-bottom: 0 !important;
+
+      label.error {
+        display: none !important;
       }
 
-      @include breakpoint($desktop) {
-        margin-top: -0.35rem !important;
+      input {
+        border-bottom: none !important;
+        margin-top: 1.188rem;
+
+        &.local-number {
+          border-bottom: none;
+
+          &::placeholder,
+          &::-webkit-input-placeholder,
+          &::-moz-placeholder,
+          &::-ms-input-placeholder,
+          &:-moz-placeholder {
+            color: transparent !important;
+            font-size: 0 !important;
+            text-indent: -999rem !important;
+          }
+        }
+      }
+
+      .c-input__bar {
+        &::before,
+        &::after {
+          top: 1px;
+        }
+      }
+
+      .form-item--error-message {
+        position: absolute;
+        left: 0;
       }
     }
   }
 
-  .local-number::-webkit-input-placeholder {
-    color: transparent;
+  .country-code-prefix {
+    margin-top: 1.5rem;
+    color: $greyish;
+    width: 3rem;
+    float: $left;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0.75rem;
+    }
   }
 
   #edit-field-address-0-address-administrative-area {
     width: 100%;
-  }
-}
-
-.mobile-number-field {
-  @include clearfix;
-
-  max-width: 186px;
-  padding-top: 1rem;
-
-  html[lang=ar] & {
-    direction: ltr;
-
-    label {
-      text-align: right;
-    }
-  }
-
-  .form-item {
-    padding-bottom: 0 !important;
-    width: 138px;
-    float: left;
-    position: relative;
-    top: -1px;
   }
 }
 
@@ -432,24 +439,20 @@
   }
 }
 
-#edit-field-address-0-address-mobile-number-mobile-error {
-  left: -3rem;
-  position: relative;
-  top: -0.1rem;
-}
-
 .form-item-field-address-0-address-administrative-area {
   padding-bottom: 1.5em !important;
 
   .select2-selection {
-    border: 1px solid $brownish-grey;
+    border: none;
     font-family: "alshaya-thin";
-    font-size: 0.75rem;
+    font-size: 1rem;
     padding: 0.25rem 0.5rem;
     width: 100%;
     margin: 0.45rem 0 1rem;
     border-radius: 0;
     border-color: $grey-ash;
+    background: $white;
+    height: 35px;
   }
 
   .select2-container {
@@ -459,15 +462,21 @@
   .select2-selection__rendered {
     font-family: $arial;
     line-height: 19px !important;
-    padding-left: 0 !important;
     color: $greyish;
+    padding: 0.25rem !important;
   }
 
   .select2-selection__arrow {
-    top: 0.625rem !important;
+    top: 0.5rem !important;
+    height: 35px !important;
+    width: 35px !important;
+    border-left: 1px solid $white-five;
 
     @include icon(chevrondown, after) {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
+      position: absolute;
+      top: 15%;
+      left: 20%;
     }
 
     b {
@@ -476,23 +485,8 @@
   }
 }
 
-.form-item-field-address-0-address-mobile-number-mobile {
-  .form-item--error-message {
-    position: relative;
-    left: -3rem;
-  }
-}
-
 .profile-address-book-edit-form,
 #address-book-form-open {
-  .country-code-prefix {
-    margin-top: 0.5rem;
-
-    @include breakpoint($only-mobile) {
-      margin-top: 0.5rem;
-    }
-  }
-
   .form-actions {
     position: relative;
 
@@ -512,29 +506,17 @@
   }
 }
 
-.profile-address-book-add-form,
-.profile-address-book-edit-form {
-  .mobile-number-field {
-    label.error {
-      left: -3rem;
-      top: 1.5rem;
+// Replacing the throbber for delete address form on addressbook
+.profile-address-book-delete-form {
+  .ajax-progress-throbber {
+    .throbber {
+      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-position: $right center !important;
+      background-repeat: no-repeat !important;
+      background-size: 1.5rem;
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
     }
-
-    .form-type-textfield {
-      margin-top: -0.2rem !important;
-    }
-  }
-}
-
-// Hide country flag coming from mobile number module.
-.form-item-field-address-0-address-mobile-number-country-code,
-.country-select {
-  display: none !important;
-}
-
-.path--user {
-  .block-alshaya-my-account-links {
-    margin-top: 0.55rem;
   }
 }
 
