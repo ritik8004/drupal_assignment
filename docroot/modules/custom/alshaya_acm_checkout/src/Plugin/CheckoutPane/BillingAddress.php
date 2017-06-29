@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
-use Drupal\acq_checkout\Plugin\CheckoutPane\AddressFormBase;
+use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
+use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\mobile_number\MobileNumberUtilInterface;
 
 /**
  * Provides the billing address form.
@@ -16,7 +18,7 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
  *   wrapperElement = "fieldset",
  * )
  */
-class BillingAddress extends AddressFormBase {
+class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
 
   /**
    * {@inheritdoc}
@@ -40,9 +42,6 @@ class BillingAddress extends AddressFormBase {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $cart = $this->getCart();
 
-    $form_state->setTemporaryValue('address', $cart->getBilling());
-    $form_state->setTemporaryValue('shipping_address', $cart->getShipping());
-
     $pane_form['summary'] = [
       '#markup' => $this->t('Is the delivery address the same as your billing address?'),
     ];
@@ -56,7 +55,6 @@ class BillingAddress extends AddressFormBase {
       '#attributes' => ['class' => ['same-as-shipping']],
       '#ajax' => [
         'callback' => [$this, 'updateAddressAjaxCallback'],
-        'wrapper' => 'address_wrapper',
       ],
       '#default_value' => 1,
     ];
@@ -70,30 +68,26 @@ class BillingAddress extends AddressFormBase {
     }
 
     if ($same_as_shipping === 1) {
-      $form_state->setTemporaryValue('address', $cart->getShipping());
-
       // Add empty wrapper to use when we click on No.
       $pane_form['address'] = [
         '#type' => 'container',
         '#attributes' => [
-          'id' => ['address_wrapper'],
+          'class' => ['address_wrapper'],
         ],
       ];
     }
     else {
-      $pane_form += parent::buildPaneForm($pane_form, $form_state, $complete_form);
+      $billing_address = (array) $cart->getBilling();
 
-      // Do required changes in weight.
-      $pane_form['address']['first_name']['#weight'] = -10;
-      $pane_form['address']['last_name']['#weight'] = -9;
-      $pane_form['address']['phone']['#weight'] = 0;
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+      $address_default_value = $address_book_manager->getAddressArrayFromMagentoAddress($billing_address);
+      $form_state->setTemporaryValue('default_value_mobile', $address_default_value['mobile_number']);
 
-      // Update the phone number to mobile_number field instead of textfield.
-      $pane_form['address']['phone']['#type'] = 'mobile_number';
-      $pane_form['address']['phone']['#title_display'] = 'above';
-      $pane_form['address']['phone']['#verify'] = MobileNumberUtilInterface::MOBILE_NUMBER_VERIFY_NONE;
-      $pane_form['address']['phone']['#default_value'] = [
-        'value' => $pane_form['address']['phone']['#default_value'],
+      $pane_form['address']['billing'] = [
+        '#type' => 'address',
+        '#title' => '',
+        '#default_value' => $address_default_value,
       ];
     }
 
@@ -104,69 +98,63 @@ class BillingAddress extends AddressFormBase {
    * Ajax handler for reusing address.
    */
   public static function updateAddressAjaxCallback($form, FormStateInterface $form_state) {
-    $values = $form_state->getValue($form['#parents']);
-    $values = $values['billing_address'];
+    $response = new AjaxResponse();
+    $response->addCommand(new HtmlCommand('.address_wrapper', $form['billing_address']['address']));
+    return $response;
+  }
 
-    $same_as_shipping = $values['same_as_shipping'];
-    $address = $form_state->getTemporaryValue('address');
-    $address_fields =& $form['billing_address']['address'];
-
-    if ($same_as_shipping == 1) {
-      $address = $form_state->getTemporaryValue('shipping_address');
+  /**
+   * {@inheritdoc}
+   */
+  public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getErrors()) {
+      return;
     }
 
-    $field_names = [
-      'first_name' => 'firstname',
-      'last_name' => 'lastname',
-      'phone' => 'phone',
-      'street' => 'street',
-      'street2' => 'street2',
-    ];
+    $values = $form_state->getValue($pane_form['#parents']);
 
-    $dynamic_field_names = [
-      'city',
-      'region',
-      'postcode',
-      'country',
-    ];
-
-    foreach ($field_names as $field_key => $field_name) {
-      $address_fields[$field_key]['#value'] = isset($address->{$field_name}) ? $address->{$field_name} : '';
+    if ($values['same_as_shipping'] == 1) {
+      // No checks required here.
     }
+    else {
+      $address_values = $values['address']['billing'];
 
-    foreach ($dynamic_field_names as $field_name) {
-      $address_fields['dynamic_parts'][$field_name]['#value'] = isset($address->{$field_name}) ? $address->{$field_name} : '';
+      /** @var \Drupal\profile\Entity\Profile $profile */
+      $profile = \Drupal::entityTypeManager()->getStorage('profile')->create([
+        'type' => 'address_book',
+        'uid' => 0,
+        'field_address' => $address_values,
+      ]);
+
+      /* @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
+      if ($violations = $profile->validate()) {
+        foreach ($violations->getByFields(['field_address']) as $violation) {
+          $error_field = explode('.', $violation->getPropertyPath());
+          $form_state->setErrorByName('billing_address][address][shipping][' . $error_field[2], $violation->getMessage());
+        }
+      }
     }
-
-    return $address_fields;
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $values = $form_state->getValue($pane_form['#parents']);
     $cart = $this->getCart();
 
-    $values = $form_state->getValue($pane_form['#parents']);
-
-    $address = [];
-
     if ($values['same_as_shipping'] == 1) {
-      $address = $cart->getShipping();
+      $cart->setBilling($cart->getShipping());
     }
     else {
-      $address_values = $values['address'];
+      $address_values = $values['address']['billing'];
 
-      if (!empty($address_values['phone'])) {
-        $address_values['phone'] = _alshaya_acm_checkout_clean_address_phone($address_values['phone']);
-      }
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+      $address = $address_book_manager->getMagentoAddressFromAddressArray($address_values);
 
-      array_walk_recursive($address_values, function ($value, $key) use (&$address) {
-        $address[$key] = $value;
-      });
+      $cart->setBilling(_alshaya_acm_checkout_clean_address($address));
     }
-
-    $cart->setBilling(_alshaya_acm_checkout_clean_address($address));
   }
 
 }

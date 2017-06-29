@@ -12,7 +12,7 @@
   Drupal.behaviors.ZZAlshayaAcmCheckout = {
     attach: function (context, settings) {
       // Bind this only once after every ajax call.
-      $('[data-drupal-selector="edit-payment-methods-payment-details-cc-number"]').once('validate-cc').each(function () {
+      $('[data-drupal-selector="edit-acm-payment-methods-payment-details-cc-number"]').once('validate-cc').each(function () {
         $(this).validateCreditCard(function (result) {
           // Reset error and card type active class.
           $(this).parent().removeClass('cc-error');
