@@ -1,5 +1,5 @@
 .user__address--column {
-  border:0.0625rem solid $white;
+  border: 0.0625rem solid $white;
   font-family: $arial;
   font-size: 0.75rem;
   margin-bottom: 1.5rem;
@@ -113,7 +113,7 @@
   }
 
   .address--options {
-    border-top:0.0625rem solid $white;
+    border-top: 0.0625rem solid $white;
     clear: both;
     display: table;
     width: 100%;
@@ -128,7 +128,7 @@
   }
 
   .address--controls {
-    border-#{$right}:0.0625rem solid $white;
+    border-#{$right}: 0.0625rem solid $white;
     display: table-cell;
     min-height: 3.0625rem;
     padding: 0.9375rem;
@@ -201,7 +201,7 @@
       height: 0.875rem;
       border-radius: 100%;
       margin-#{$right}: 0.75rem;
-      border:0.0625rem solid;
+      border: 0.0625rem solid;
       position: absolute;
       #{$left}: 1rem;
       top: 50%;
@@ -230,7 +230,7 @@
       }
 
       @include breakpoint($desktop) {
-        border:0.0625rem solid $black-two;
+        border: 0.0625rem solid $black-two;
         display: inline-block;
         font-weight: 700;
         padding: 0.625rem 1.5rem;
@@ -352,7 +352,7 @@
 .address-book-address,
 .webform-submission-alshaya-contact-form {
   .mobile-number-field {
-    border-bottom:0.0625rem solid $brownish-grey;
+    border-bottom: 0.0625rem solid $brownish-grey;
     padding-bottom: 0 !important;
     margin-bottom: 3rem;
     width: 11.63rem;
@@ -400,7 +400,7 @@
       .c-input__bar {
         &::before,
         &::after {
-          top:0.0625rem;
+          top: 0.0625rem;
         }
       }
 
@@ -465,7 +465,7 @@
     top: 0.5rem !important;
     height: 2.188rem !important;
     width: 2.188rem !important;
-    border-left:0.0625rem solid $white-five;
+    border-left: 0.0625rem solid $white-five;
 
     @include icon(chevrondown, after) {
       font-size: 1.5rem;
