@@ -14,6 +14,9 @@ alshaya_stores_finder.settings:
     pdp_click_collect_subtitle:
       type: label
       label: 'PDP: Click and Collect sub-title'
+    pdp_click_collect_unavailable:
+      type: label
+      label: 'PDP: Click and Collect Unavailable'
     pdp_click_collect_price:
       type: float
       label: 'PDP: Click and Collect price'
