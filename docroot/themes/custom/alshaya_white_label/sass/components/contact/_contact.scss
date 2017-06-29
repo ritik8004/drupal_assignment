@@ -332,6 +332,8 @@ form.user-form {
 
 form.user-form {
   .mobile-number-field {
+    padding-bottom: 2px;
+
     .form-item--error-message {
       position: absolute;
       top: 3rem;
@@ -339,10 +341,10 @@ form.user-form {
     }
 
     .c-input__bar {
-      top: 3px !important;
+      top: 2px !important;
 
       html[lang=ar] & {
-        top: 4px !important;
+        top: 3px !important;
       }
     }
 
