@@ -173,6 +173,14 @@
       margin-bottom: 0.625rem;
     }
   }
+
+  .form-actions {
+    .ajax-progress-throbber {
+      .throbber {
+        background-image: url(../imgs/icons/MC-loader-white.svg) !important;
+      }
+    }
+  }
 }
 
 html[lang=ar] {
