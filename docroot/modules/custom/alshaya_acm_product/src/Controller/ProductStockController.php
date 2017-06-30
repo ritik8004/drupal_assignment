@@ -31,10 +31,10 @@ class ProductStockController extends ControllerBase {
     $sku = $node->get('field_skus')->first()->getString();
     $sku_entity = SKU::loadFromSku($sku);
     if (alshaya_acm_is_product_in_stock($sku_entity)) {
-      $build['#markup'] = '<span>' . $this->t('out of stock') . '</span>';
+      $build['#markup'] = '';
     }
     else {
-      $build['#markup'] = '';
+      $build['#markup'] = '<span>' . $this->t('out of stock') . '</span>';
     }
 
     $response = new Response();
