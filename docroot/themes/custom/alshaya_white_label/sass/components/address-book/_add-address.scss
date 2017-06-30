@@ -173,6 +173,14 @@
       margin-bottom: 0.625rem;
     }
   }
+
+  .form-actions {
+    .ajax-progress-throbber {
+      .throbber {
+        background-image: url(../imgs/icons/MC-loader-white.svg) !important;
+      }
+    }
+  }
 }
 
 html[lang=ar] {
@@ -182,7 +190,7 @@ html[lang=ar] {
     }
 
     input.local-number {
-      margin-top: 0.15rem;
+      margin-top: 1.188rem;
     }
   }
 }
