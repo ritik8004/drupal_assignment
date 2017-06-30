@@ -115,8 +115,7 @@ class CheckoutController implements ContainerInjectionInterface {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   AjaxResponse object.
    */
-  public function editAddress(Profile $profile)
-  {
+  public function editAddress(Profile $profile) {
     $magento_address = $this->addressBookManager->getAddressFromEntity($profile, FALSE);
     $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($magento_address);
 
@@ -128,7 +127,8 @@ class CheckoutController implements ContainerInjectionInterface {
     return $response;
   }
 
-  /** Function to get the cart stores.
+  /**
+   * Function to get the cart stores.
    *
    * @param int $cart_id
    *   The cart id.
