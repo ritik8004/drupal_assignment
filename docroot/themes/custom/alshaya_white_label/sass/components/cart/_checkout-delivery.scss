@@ -416,8 +416,8 @@
 }
 
 // Adding throbber overlay for any ajax call on payment and checkout delivery page.
-.checkout-payment,
-.c-delivery-checkout {
+.page-standard.user-page.checkout-payment,
+.page-standard.user-page.c-delivery-checkout {
   .ajax-progress-throbber {
     position: fixed !important;
     width: 100% !important;
@@ -438,9 +438,7 @@
       right: 0;
       top: 0;
       z-index: 100;
-      background-image: url(../imgs/icons/MC-loader.svg) !important;
-      background-position: center !important;
-      background-repeat: no-repeat !important;
+      background: url(../imgs/icons/MC-loader.svg) center no-repeat !important;
       background-size: 3.5rem;
       padding-left: 0.625rem;
       padding-right: 0.625rem;
@@ -778,6 +776,15 @@
       #{$left}: 0;
       top: -0.125rem;
       transition: 0.2s ease all;
+    }
+
+    input:not(:focus):valid ~ label:not(.error),
+    input:focus ~ label:not(.error) {
+      top: -1.25em;
+      bottom: 0;
+      left: 0;
+      opacity: 1;
+      font-size: 12px;
     }
 
     input[type="text"]:focus ~ label:last-of-type {
