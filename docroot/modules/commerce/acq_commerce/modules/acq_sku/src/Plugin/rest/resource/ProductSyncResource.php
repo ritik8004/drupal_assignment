@@ -129,14 +129,26 @@ class ProductSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $products = []) {
-
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
     $updated = 0;
     $failed = 0;
 
+    $config = $this->config('acq_commerce.conductor');
+    $debug = $config->get('debug');
+    $debug_dir = $config->get('debug_dir');
+
     foreach ($products as $product) {
       $langcode = acq_commerce_get_langcode_from_store_id($product['store_id']);
+
+      if ($debug && !empty($debug_dir)) {
+        // Export product data into file.
+        if (!isset($fps) || !isset($fps[$langcode])) {
+          $filename = $debug_dir . '/products_.' . $langcode . '.data';
+          $fps[$langcode] = fopen($filename, 'a');
+        }
+        fwrite($fps[$langcode], var_export($categories, 1));
+      }
 
       if (!isset($product['type'])) {
         continue;
@@ -242,6 +254,12 @@ class ProductSyncResource extends ResourceBase {
           $node->save;
         }
 
+      }
+    }
+
+    if (isset($fps)) {
+      foreach ($fps as $fp) {
+        fclose($fp);
       }
     }
 
