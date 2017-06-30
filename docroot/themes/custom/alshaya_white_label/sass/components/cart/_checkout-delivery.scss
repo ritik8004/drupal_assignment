@@ -648,7 +648,7 @@
 
         .title {
           color: #003971;
-          font-size: 16px;
+          font-size: 1rem;
           font-family: $alshaya-bold;
           font-weight: normal;
           padding-bottom: 1rem;
@@ -784,7 +784,7 @@
       bottom: 0;
       left: 0;
       opacity: 1;
-      font-size: 12px;
+      font-size: 0.75rem;
     }
 
     input[type="text"]:focus ~ label:last-of-type {
