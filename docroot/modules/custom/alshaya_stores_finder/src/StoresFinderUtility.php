@@ -130,7 +130,7 @@ class StoresFinderUtility {
         $store['address'] = $store_node->get('field_store_address')->getString();
         $store['opening_hours'] = $store_node->get('field_store_open_hours')->getString();
 
-        if ($lat_lon = $store->get('field_latitude_longitude')->getValue()) {
+        if ($lat_lon = $store_node->get('field_latitude_longitude')->getValue()) {
           $store['lat'] = $lat_lon[0]['lat'];
           $store['lon'] = $lat_lon[0]['lon'];
         }
