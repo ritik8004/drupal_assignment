@@ -16,12 +16,13 @@
   }
 
   &:hover {
-    opacity: 0.75;
+    opacity: 0.75 !important;
   }
 
   #{$right}: 20px;
   text-indent: 0;
   bottom: 1px;
+  opacity: 1 !important;
   cursor: pointer;
   position: fixed;
   font-size: 0.5rem;
