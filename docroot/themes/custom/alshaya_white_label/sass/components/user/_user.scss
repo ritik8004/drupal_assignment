@@ -551,6 +551,16 @@
       p {
         display: none;
       }
+
+      input[type=submit] {
+        @include breakpoint($tablet) {
+          width: 5.688rem;
+        }
+      }
+
+      input[type=email] {
+        color: $grey-ash;
+      }
     }
   }
 }
