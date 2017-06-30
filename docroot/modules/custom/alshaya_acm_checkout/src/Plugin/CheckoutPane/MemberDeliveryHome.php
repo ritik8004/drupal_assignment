@@ -67,7 +67,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $pane_form['address_form']['address_id'] = [
       '#type' => 'hidden',
-      '#value' => '',
+      '#default_value' => '',
       '#attributes' => [
         'id' => 'address-form-address-id',
       ],
@@ -261,6 +261,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $values = $form_state->getValues();
     $address_values = $values['member_delivery_home']['address_form']['form'];
+    $address_values['address_id'] = $values['member_delivery_home']['address_form']['address_id'];
 
     if (!empty($address_values['address_id'])) {
       /** @var \Drupal\profile\Entity\Profile $profile */
