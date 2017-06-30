@@ -457,6 +457,22 @@
   .c-accordion {
     &-delivery-options {
       border-bottom: 1px solid $white;
+
+      &.click-collect {
+        h3 {
+          &.ui-state-disabled {
+            color: $white;
+
+            span {
+              color: $white;
+
+              &.title-price {
+                @include u-visibility(none);
+              }
+            }
+          }
+        }
+      }
     }
 
     &__title {
