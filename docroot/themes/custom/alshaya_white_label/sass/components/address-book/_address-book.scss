@@ -162,8 +162,8 @@
         background-position: $right center !important;
         background-repeat: no-repeat !important;
         background-size: 1.5rem;
-        padding-left: 0.625rem;
-        padding-right: 0.625rem;
+        padding-#{$left}: 0.625rem;
+        padding-#{$right}: 0.625rem;
       }
 
       @include breakpoint($only-mobile) {
@@ -355,6 +355,7 @@
     border-bottom: 0.0625rem solid $brownish-grey;
     padding-bottom: 0 !important;
     margin-bottom: 3rem;
+    margin-top: 0;
     width: 11.63rem;
     height: 2.813rem;
 
@@ -363,15 +364,22 @@
       bottom: 0;
       #{$left}: 0;
       opacity: 1;
-      font-size: 0.75rem;
+      font-size: 0.75rem !important;
       color: $greyish;
       position: absolute;
     }
 
     .form-item {
+      margin-top: 0 !important;
       padding-bottom: 0 !important;
     }
 
+    .form-type-select {
+      display: none !important;
+    }
+
+    .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
+    .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
     .form-item-field-address-0-address-mobile-number-mobile {
       position: static !important;
       float: $right;
@@ -416,10 +424,6 @@
     color: $greyish;
     width: 3rem;
     float: $left;
-
-    @include breakpoint($only-mobile) {
-      margin-top: 0.75rem;
-    }
   }
 
   #edit-field-address-0-address-administrative-area {
@@ -434,16 +438,36 @@
   }
 }
 
-.form-item-field-address-0-address-administrative-area {
-  padding-bottom: 1.5em !important;
+.form-item-guest-delivery-home-address-shipping-administrative-area,
+.form-item-member-delivery-home-address-form-form-administrative-area {
+  &::after {
+    top: 0 !important;
+    height: 2.188rem;
+    width: 2.188rem;
+    background: $white !important;
+    border-#{$left}: 1px solid $white-five;
+  }
 
+  #edit-guest-delivery-home-address-shipping-administrative-area,
+  #edit-member-delivery-home-address-form-form-administrative-area {
+    border: none;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    border-radius: 0;
+    border-color: $grey-ash;
+    background: $white;
+    height: 2.188rem;
+  }
+}
+
+.form-item-field-address-0-address-administrative-area {
   .select2-selection {
     border: none;
     font-family: "alshaya-thin";
     font-size: 1rem;
     padding: 0.25rem 0.5rem;
     width: 100%;
-    margin: 0.45rem 0 1rem;
     border-radius: 0;
     border-color: $grey-ash;
     background: $white;
@@ -462,7 +486,6 @@
   }
 
   .select2-selection__arrow {
-    top: 0.5rem !important;
     height: 2.188rem !important;
     width: 2.188rem !important;
     border-#{$left}: 0.0625rem solid $white-five;
