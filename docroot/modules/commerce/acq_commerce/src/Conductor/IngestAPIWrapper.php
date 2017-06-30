@@ -33,9 +33,20 @@ class IngestAPIWrapper {
    * Performs full conductor sync.
    */
   public function productFullSync() {
+    $config = $this->config('acq_commerce.conductor');
+    $debug = $config->get('debug');
+    $debug_dir = $config->get('debug_dir');
+
     foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
       if (empty($store_id)) {
         continue;
+      }
+
+      if ($debug && !empty($debug_dir)) {
+        // Export product data into file.
+        $filename = $debug_dir . '/products_.' . $langcode . '.data';
+        $fp = fopen($filename, 'w');
+        fclose($fp);
       }
 
       $endpoint = $this->apiVersion . '/ingest/product/sync?store_id=' . $store_id;
