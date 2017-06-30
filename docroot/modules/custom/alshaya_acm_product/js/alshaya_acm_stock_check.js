@@ -12,8 +12,7 @@
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
       $('.views-element-container').find('.c-products__item article').once('js-event').each(function(){
-        var productQuickeditLink = $(this).attr('data-quickedit-entity-id');
-        var productId = productQuickeditLink.replace('node/', '');
+        var productId = $(this).attr('data-nid');
         var productStock = $(this).find('.out-of-stock');
 
         $.ajax({
