@@ -76,7 +76,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
-    $config = $this->config('acq_commerce.conductor');
+    $config = \Drupal::config('acq_commerce.conductor');
     $debug = $config->get('debug');
     $debug_dir = $config->get('debug_dir');
 
@@ -87,7 +87,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
         if ($debug && !empty($debug_dir)) {
           // Export category data into file.
-          $filename = $debug_dir . '/categories_.' . $langcode . '.data';
+          $filename = $debug_dir . '/categories_' . $langcode . '.data';
           $fp = fopen($filename, 'w');
           fwrite($fp, var_export($categories, 1));
           fclose($fp);

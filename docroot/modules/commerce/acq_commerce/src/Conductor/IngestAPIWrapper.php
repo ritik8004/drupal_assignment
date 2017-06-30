@@ -27,24 +27,22 @@ class IngestAPIWrapper {
     $this->clientFactory = $client_factory;
     $this->logger = $logger_factory->get('acq_sku');
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
+    $this->debug = $config_factory->get('acq_commerce.conductor')->get('debug');
+    $this->debugDir = $config_factory->get('acq_commerce.conductor')->get('debug_dir');
   }
 
   /**
    * Performs full conductor sync.
    */
   public function productFullSync() {
-    $config = $this->config('acq_commerce.conductor');
-    $debug = $config->get('debug');
-    $debug_dir = $config->get('debug_dir');
-
     foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
       if (empty($store_id)) {
         continue;
       }
 
-      if ($debug && !empty($debug_dir)) {
+      if ($this->debug && !empty($this->debugDir)) {
         // Export product data into file.
-        $filename = $debug_dir . '/products_.' . $langcode . '.data';
+        $filename = $this->debugDir . '/products_' . $langcode . '.data';
         $fp = fopen($filename, 'w');
         fclose($fp);
       }

@@ -134,7 +134,7 @@ class ProductSyncResource extends ResourceBase {
     $updated = 0;
     $failed = 0;
 
-    $config = $this->config('acq_commerce.conductor');
+    $config = $this->configFactory->get('acq_commerce.conductor');
     $debug = $config->get('debug');
     $debug_dir = $config->get('debug_dir');
 
@@ -144,10 +144,11 @@ class ProductSyncResource extends ResourceBase {
       if ($debug && !empty($debug_dir)) {
         // Export product data into file.
         if (!isset($fps) || !isset($fps[$langcode])) {
-          $filename = $debug_dir . '/products_.' . $langcode . '.data';
+          $filename = $debug_dir . '/products_' . $langcode . '.data';
           $fps[$langcode] = fopen($filename, 'a');
         }
-        fwrite($fps[$langcode], var_export($categories, 1));
+        fwrite($fps[$langcode], var_export($product, 1));
+        fwrite($fps[$langcode], '\n');
       }
 
       if (!isset($product['type'])) {
