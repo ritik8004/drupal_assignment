@@ -20,6 +20,32 @@ function alshaya_search_acquia_search_install() {
     ->setData($search_api_index)
     ->save();
 
+  // Modify the search server configuration.
+  // These are all of the differences that get set when you use the
+  // search_api_solr_multiligual backend.
+  \Drupal::configFactory()
+    ->getEditable('search_api.server.acquia_search_server')
+    ->merge([
+      'dependencies' => [
+        'module' => [
+          'acquia_search',
+          'search_api_solr',
+          'search_api_solr_multilingual',
+        ],
+      ],
+      'backend' => 'search_api_solr_multilingual',
+      'backend_config' => [
+        'retrieve_data' => FALSE,
+        'highlight_data' => FALSE,
+        'sasm_limit_search_page_to_content_language' => TRUE,
+        'sasm_language_unspecific_fallback_on_schema_issues' => TRUE,
+        'sasm_domain' => 'generic',
+        'autocorrect_spell' => TRUE,
+        'autocorrect_suggest_words' => TRUE,
+      ],
+    ])
+    ->save();
+
   // Disable Acquia Search View.
   $acquia_search_view = \Drupal::configFactory()->getEditable('views.view.acquia_search')->getRawData();
 
