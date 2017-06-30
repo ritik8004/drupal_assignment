@@ -162,8 +162,8 @@
         background-position: $right center !important;
         background-repeat: no-repeat !important;
         background-size: 1.5rem;
-        padding-left: 0.625rem;
-        padding-right: 0.625rem;
+        padding-#{$left}: 0.625rem;
+        padding-#{$right}: 0.625rem;
       }
 
       @include breakpoint($only-mobile) {
@@ -445,7 +445,7 @@
     height: 35px;
     width: 35px;
     background: $white !important;
-    border-left: 1px solid $white-five;
+    border-#{$left}: 1px solid $white-five;
   }
 
   #edit-guest-delivery-home-address-shipping-administrative-area,
