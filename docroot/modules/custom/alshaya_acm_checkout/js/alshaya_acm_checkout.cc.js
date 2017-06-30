@@ -137,21 +137,4 @@
     }
   };
 
-  Drupal.theme.selectedCheckoutStore = function (settings) {
-    var html = '';
-    html += '<div id="selected-store-info" data-store-code="' + settings.code + '" data-store-node="' + settings.nid + '">';
-    html += '  <div class="store-name-and-address">';
-    html += '    <span class="store-name">' + settings.name + '</span>';
-    html += '    <span class="store-address">' + settings.address + '</span>';
-    html += '  </div>';
-    html += '  <div class="store-open-hours">' + settings.open_hours + '</div>';
-    html += '  <div class="store-delivery-time">' + settings.delivery_time + '</div>';
-    html += '  <div class="store-actions">';
-    html += '    <a class="change-store" data-store-code="' + settings.code + '" data-node="' + settings.nid + '">' + Drupal.t('change store') + '</a>';
-    html += '    <a href="' + settings.view_on_map_link + '">' + Drupal.t('View on map') + '</a>';
-    html += '  </div>';
-    html += '</div>';
-    return html;
-  };
-
 })(jQuery, Drupal);
