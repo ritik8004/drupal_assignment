@@ -7,7 +7,7 @@ set classes = [
 ]
 %}
 
-<article{{ attributes }} {{ gtm_attributes }}>
+  <article{{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
     <div class="content__title_wrapper">
       {% if content.brand_logo %}
@@ -106,11 +106,7 @@ set classes = [
         </div>
       </div>
 
-      {% if sku_out_of_stock %}
-        <div class="out-of-stock {{ sku_out_of_stock }}">{{ content.sharethis }}</div>
-      {% else %}
-        {{ content.sharethis }}
-      {% endif %}
+      {{ content.sharethis }}
 
       <div class="delivery-options-wrapper">
         <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>

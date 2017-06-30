@@ -2,7 +2,6 @@
   "use strict";
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-
       $.fn.cartNotificationScroll = function() {
         $('html,body').animate({
           scrollTop: $('.header--wrapper').offset().top

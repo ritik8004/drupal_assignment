@@ -204,6 +204,10 @@ function alshaya_white_label_preprocess_node(&$variables) {
     // Hide the node title on product list/search page.
     $variables['label'] = NULL;
   }
+  elseif ($variables['node']->bundle() === 'acq_product') {
+    $variables['attributes']['data-nid'] = $variables['node']->id();
+    $variables['attributes']['data-vmode'] = $variables['view_mode'];
+  }
 }
 
 /**
@@ -628,4 +632,8 @@ function alshaya_white_label_preprocess_form(&$variables) {
   elseif (isset($variables['element']['field_address'])) {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
+}
+
+function alshaya_white_label_preprocess_acq_sku(&$variables) {
+  $variables['attributes']['data-skuid'] = $variables['sku_entity']->id();
 }
