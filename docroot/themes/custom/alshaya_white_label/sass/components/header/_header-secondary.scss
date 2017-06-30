@@ -54,8 +54,7 @@
         #{$right}: 0;
         color: $marine-blue-two;
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        margin-top: -2.0625rem;
         font-size: 1.313rem;
         cursor: pointer;
         pointer-events: none;
@@ -245,8 +244,7 @@
       cursor: pointer;
       pointer-events: none;
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+      margin-top: -1.1625rem;
       #{$right}: 0;
     }
 
@@ -342,7 +340,7 @@ body {
       margin-top: 5.9375rem;
     }
 
-    &.logged-in {
+    &.logged-in.toolbar-vertical {
       margin-top: 9.125rem;
       padding-top: 0 !important;
 
@@ -351,7 +349,7 @@ body {
       }
     }
 
-    &.logged-in .branding__menu {
+    &.logged-in.toolbar-vertical .branding__menu {
       top: 39px;
     }
   }
@@ -363,7 +361,7 @@ body {
       margin-top: 10.25rem;
     }
 
-    &.logged-in {
+    &.logged-in.toolbar-vertical {
       margin-top: 11rem;
       padding-top: 0 !important;
 
@@ -372,7 +370,7 @@ body {
       }
     }
 
-    &.logged-in .branding__menu {
+    &.logged-in.toolbar-vertical .branding__menu {
       top: 39px;
     }
   }
