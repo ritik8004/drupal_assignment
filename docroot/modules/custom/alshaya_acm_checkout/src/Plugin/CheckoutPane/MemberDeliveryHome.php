@@ -253,9 +253,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       return $form;
     }
 
-    /** @var \Drupal\profile\ProfileStorage $profile_storage */
-    $profile_storage = \Drupal::entityTypeManager()->getStorage('profile');
-
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
