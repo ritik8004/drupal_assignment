@@ -14,7 +14,6 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides additional urls for checkout pages.
