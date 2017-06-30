@@ -127,6 +127,13 @@ class KnetController extends ControllerBase {
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
 
+    // Invalidate the cache tag when order is placed to reflect on the
+    // user's recent orders.
+    Cache::invalidateTags(['user:' . $data['user_id'] . ':orders']);
+
+    // Clear user's order cache.
+    \Drupal::cache()->invalidate('orders_list_' . $data['email']);
+
     $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
     $response->send();
   }
@@ -154,6 +161,13 @@ class KnetController extends ControllerBase {
     ]);
 
     $this->apiWrapper->updateOrderStatus($order_id, $this->knetSettings->get('payment_failed'), $message);
+
+    // Invalidate the cache tag when order is placed to reflect on the
+    // user's recent orders.
+    Cache::invalidateTags(['user:' . \Drupal::currentUser()->id() . ':orders']);
+
+    // Clear user's order cache.
+    \Drupal::cache()->invalidate('orders_list_' . \Drupal::currentUser()->getEmail());
 
     $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
     $response->send();
