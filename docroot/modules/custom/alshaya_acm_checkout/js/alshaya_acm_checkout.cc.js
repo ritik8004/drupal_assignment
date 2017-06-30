@@ -51,7 +51,7 @@
             }
           }
           catch (e) {
-            // console.log(navigator.geolocation);
+
           }
         }
       });
@@ -84,7 +84,7 @@
       data: selectedStoreObj,
       dataType: 'json',
       beforeSend: function (xmlhttprequest) {
-        // selectedButton.ladda('start');
+        // Add ladda button / throbber for the select store link.
       },
       success: function (response) {
         $('#selected-store-wrapper').html(response.output).show();
