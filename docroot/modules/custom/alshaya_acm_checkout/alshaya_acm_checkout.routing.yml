@@ -21,3 +21,24 @@ alshaya_acm_checkout.edit_delivery_address:
     _title: ''
   requirements:
     _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'
+
+alshaya_acm_checkout.click_and_collect:
+  path: '/click-and-collect/stores/cart/{cart_id}/{lat}/{lon}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_checkout\Controller\CheckoutController::getCartStoresJson'
+  requirements:
+    _permission: 'access content'
+
+alshaya_acm_checkout.cc_store_map_view:
+  path: '/click-and-collect/store-map-view/{node}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_checkout\Controller\CheckoutController::storeMapView'
+  requirements:
+    _permission: 'access content'
+
+alshaya_acm_checkout.cc_selected_store:
+  path: '/click-and-collect/selected-store'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_checkout\Controller\CheckoutController::selectedStore'
+  requirements:
+    _permission: 'access content'
