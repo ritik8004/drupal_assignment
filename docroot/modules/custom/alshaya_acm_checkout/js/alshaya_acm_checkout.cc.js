@@ -34,7 +34,7 @@
               latitude: place.geometry.location.lat(),
               longitude: place.geometry.location.lng()
             };
-            Drupal.clickAndCollect.storesDisplay(coords);
+            Drupal.clickAndCollect.storesList(coords);
           });
         });
       }
@@ -51,8 +51,24 @@
             }
           }
           catch (e) {
-
+            // console.log(navigator.geolocation);
           }
+        }
+      });
+
+      // Select this store click
+      $('#edit-guest-delivery-collect', context).once('bind-events').on('click', 'a.stores-list-view, a.stores-map-view', function (e) {
+        if (e.target.className === 'stores-list-view') {
+          e.preventDefault();
+          $('#click-and-collect-list-view').show();
+          $('#click-and-collect-map-view').hide();
+          return false;
+        }
+        else if (e.target.className === 'stores-map-view') {
+          e.preventDefault();
+          $('#click-and-collect-list-view').hide();
+          $('#click-and-collect-map-view').show();
+          return false;
         }
       });
 
@@ -67,56 +83,46 @@
       $('#selected-store-wrapper', context).once('bind-events').on('click', 'a.change-store', function (e) {
         if (e.target.className === 'change-store') {
           $('#selected-store-wrapper').hide();
-          $('#click-and-collect-list-view').show();
+          $('#store-finder-wrapper').show();
         }
       });
 
       if (geoPerm) {
-        Drupal.clickAndCollect.storesDisplay(coords);
+        Drupal.clickAndCollect.storesList(coords);
       }
     }
   };
 
-  Drupal.clickAndCollect.selectedStoreEvents = function (selectedButton, selectedStoreObj) {
-    $.ajax({
-      url: Drupal.url('click-and-collect/selected-store'),
-      type: 'post',
-      data: selectedStoreObj,
-      dataType: 'json',
-      beforeSend: function (xmlhttprequest) {
-        // Add ladda button / throbber for the select store link.
-      },
-      success: function (response) {
-        $('#selected-store-wrapper').html(response.output).show();
-        $('#click-and-collect-list-view').hide();
-      }
-    });
-  };
-
   // Error callback.
   Drupal.clickAndCollect.locationError = function (error) {
+    // Do nothing, we already have the search form displayed by default.
     geoPerm = false;
     $('#click-and-collect-list-view').html('');
-    // Do nothing, we already have the search form displayed by default.
   };
 
   // Success callback.
   Drupal.clickAndCollect.locationSuccess = function (position) {
-    coords = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    };
+    /*coords = {
+     latitude: position.coords.latitude,
+     longitude: position.coords.longitude
+     };*/
     geoPerm = true;
-    Drupal.clickAndCollect.storesDisplay(coords);
+
+    coords = {
+      latitude: 29.3204817,
+      longitude: 48.04878039999994
+    };
+    Drupal.clickAndCollect.storesList(coords);
   };
 
-  // Make Ajax call to get stores and render html.
-  Drupal.clickAndCollect.storesDisplay = function (coords) {
+  // Make Ajax call to get stores list and render html.
+  Drupal.clickAndCollect.storesList = function (coords) {
     if (coords !== null) {
+
       var cartId = drupalSettings.alshaya_acm_checkout.cart_id;
       var checkLocation = true;
 
-      if (lastCoords !== null) {
+      if (typeof lastCoords !== 'undefined' && lastCoords !== null) {
         checkLocation = (lastCoords.latitude !== coords.latitude || lastCoords.longitude !== coords.longitude);
       }
 
@@ -129,12 +135,44 @@
             $('#click-and-collect-list-view').html(progressElement);
           },
           success: function (response) {
-            $('#click-and-collect-list-view').html(response.output);
             storeList = response.raw;
+            $('#click-and-collect-list-view').html(response.output);
+            Drupal.clickAndCollect.storeMapView(storeList);
           }
         });
       }
     }
+  };
+
+  // Render html for Selected store.
+  Drupal.clickAndCollect.selectedStoreEvents = function (selectedButton, selectedStoreObj) {
+    $.ajax({
+      url: Drupal.url('click-and-collect/selected-store'),
+      type: 'post',
+      data: selectedStoreObj,
+      dataType: 'json',
+      beforeSend: function (xmlhttprequest) {
+        // selectedButton.ladda('start');
+      },
+      success: function (response) {
+        $('#selected-store-wrapper > #selected-store-content').html(response.output);
+        $('#selected-store-wrapper').show();
+        $('#store-finder-wrapper').hide();
+      }
+    });
+  };
+
+  // Display map view.
+  Drupal.clickAndCollect.storeMapView = function (storeList) {
+    var geolocationMap = {};
+    var mapWrapper = $('#click-and-collect-map-view');
+    geolocationMap.settings = {};
+    geolocationMap.settings.google_map_settings = drupalSettings.geolocation.google_map_settings;
+    geolocationMap.container = mapWrapper.children('.geolocation-common-map-container');
+    geolocationMap.container.show();
+    geolocationMap.lat = coords.latitude;
+    geolocationMap.lng = coords.longitude;
+    Drupal.geolocation.addMap(geolocationMap);
   };
 
 })(jQuery, Drupal);
