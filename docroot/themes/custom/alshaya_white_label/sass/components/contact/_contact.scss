@@ -358,6 +358,12 @@ form.user-form {
       margin-bottom: 4.5rem;
     }
   }
+
+  .form-actions {
+    @include breakpoint($desktop) {
+      margin-top: 1.5rem;
+    }
+  }
 }
 
 .c-user-edit .user-form {
@@ -377,6 +383,14 @@ html[lang=ar] {
       .form-item--error-message {
         right: 0 !important;
         direction: rtl;
+      }
+    }
+  }
+
+  form.user-form {
+    .form-type-email {
+      input[type=email] {
+        margin-top: 0.3125rem;
       }
     }
   }
