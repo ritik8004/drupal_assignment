@@ -40,6 +40,11 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $complete_form['messages'] = [
+      '#type' => 'status_messages',
+      '#weight' => -49,
+    ];
+
     $cart = $this->getCart();
 
     $pane_form['summary'] = [
@@ -147,7 +152,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     $cart = $this->getCart();
 
     if ($values['same_as_shipping'] == 1) {
-      $cart->setBilling($cart->getShipping());
+      $cart->setBilling(_alshaya_acm_checkout_clean_address($cart->getShipping()));
     }
     else {
       $address_values = $values['address']['billing'];
