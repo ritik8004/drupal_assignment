@@ -178,9 +178,9 @@ class StoresFinderUtility {
       $store['nid'] = $store_node->id();
       $store['view_on_map_link'] = Url::fromRoute('alshaya_acm_checkout.cc_store_map_view', ['node' => $store_node->id()])->toString();
 
-      if ($lat_lon = $store_node->get('field_latitude_longitude')->getValue()) {
-        $store['lat'] = $lat_lon[0]['lat'];
-        $store['lon'] = $lat_lon[0]['lng'];
+      if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
+        $store['lat'] = $lat_lng[0]['lat'];
+        $store['lng'] = $lat_lng[0]['lng'];
       }
     }
     return $store;
