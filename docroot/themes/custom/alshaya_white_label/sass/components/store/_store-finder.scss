@@ -25,6 +25,13 @@
         color: $marine-blue;
       }
     }
+
+    .view-display-id-page_1 .view-header {
+      color: $black;
+      display: block;
+      font-family: $arial;
+      font-weight: normal;
+    }
   }
 
   .c-side-1 {
@@ -72,7 +79,8 @@
     }
   }
 
-  .back-link {
+  .back-link,
+  .mobile-only-back-to-glossary {
     a {
       display: block;
       width: inherit;
@@ -93,6 +101,7 @@
   }
 
   @include breakpoint($tablet) {
+    .mobile-only-back-to-glossary,
     .view-on--map {
       display: none;
     }
@@ -340,7 +349,7 @@
     border: 1px solid $greyish;
     border-#{$right}: 2.3125rem solid $white-five;
     padding: 0.6rem;
-    padding-#{$right}: 2.125rem;
+    padding-#{$right}: 1rem;
     font-size: 0.75rem;
     color: $grey-ash;
 
@@ -1064,12 +1073,6 @@
   }
 
   .view-display-id-page_1 {
-    .list-view-locator {
-      @include breakpoint($only-mobile) {
-        display: none;
-      }
-    }
-
     .store-mobile {
       &:first-child {
         border-top: 1px solid $white;
