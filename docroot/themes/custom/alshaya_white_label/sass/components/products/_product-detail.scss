@@ -457,6 +457,22 @@
   .c-accordion {
     &-delivery-options {
       border-bottom: 1px solid $white;
+
+      &.click-collect {
+        h3 {
+          &.ui-state-disabled {
+            color: $white;
+
+            span {
+              color: $white;
+
+              &.title-price {
+                @include u-visibility(none);
+              }
+            }
+          }
+        }
+      }
     }
 
     &__title {
@@ -703,6 +719,55 @@
       @include u-visibility(none);
     }
   }
+
+  .change-location {
+    display: inline-block;
+
+    .change-store-location {
+      width: 4.438rem;
+      height: 1.125rem;
+      font-size: 0.5625rem;
+      border: 1px solid $white-two;
+      margin-#{$left}: -2px;
+    }
+
+    .cancel-change-location {
+      width: 1.125rem;
+      height: 1.125rem;
+      background: $white-two;
+      float: none;
+      position: relative;
+      border: none;
+      color: $white-two;
+      vertical-align: middle;
+
+      @include icon(close, after) {
+        position: absolute;
+        font-size: 1.188rem;
+        top: -1px;
+        #{$left}: -1px;
+        color: $black;
+      }
+    }
+  }
+}
+
+// Google Places Autocomplete results.
+.pac-container {
+  border: 1px solid $white-two;
+  box-shadow: none;
+  width: 11.44rem !important;
+
+  .pac-icon {
+    @include u-visibility(none);
+  }
+
+  .pac-item,
+  .pac-matched,
+  .pac-item-query {
+    font-size: 0.5625rem !important;
+    color: $cerulean-two !important;
+  }
 }
 
 .click-collect-top-stores {
@@ -718,7 +783,7 @@
       line-height: 1.5;
       color: $grey-ash;
       list-style: none;
-      padding: 1.125rem 0;
+      padding: 0.6875rem 0;
       border-top: 1px solid $white;
 
       @include clearfix;
@@ -872,7 +937,7 @@
         line-height: 1.5;
         color: $grey-ash;
         list-style: none;
-        padding: 1.125rem 0;
+        padding: 0.6875rem 0;
         border-top: 1px solid $white;
 
         strong,
@@ -901,7 +966,7 @@
 
           &-name {
             font-weight: bold;
-            color: $black;
+            color: $blue-three;
           }
 
           &-delivery-time {
@@ -927,6 +992,10 @@
     .form-item-location {
       margin-bottom: 0.5rem;
       float: $left;
+    }
+
+    .stores-list-all {
+      margin-top: 0.5rem;
     }
   }
 }

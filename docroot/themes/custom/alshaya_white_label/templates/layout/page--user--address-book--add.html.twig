@@ -165,24 +165,25 @@
   {% endif %}
 
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
+  <footer class="c-footer">
+    {% if page.footer_primary %}
+        {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
+      <!-- /footer-primary -->
+    {% endif %}
 
-  {% if page.footer_primary %}
-      {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
-    <!-- /footer-primary -->
-  {% endif %}
+    <!-- ______________________ FOOTER SECONDARY _______________________ -->
 
-  <!-- ______________________ FOOTER SECONDARY _______________________ -->
-
-  {% if page.footer_secondary %}
-    <div class="c-footer-secondary">
-      <div class="l-container">
-        <div class="c-footer-secondary__region">
-          {{ page.footer_secondary }}
+    {% if page.footer_secondary %}
+      <div class="c-footer-secondary">
+        <div class="l-container">
+          <div class="c-footer-secondary__region">
+            {{ page.footer_secondary }}
+          </div>
         </div>
       </div>
-    </div>
-    <!-- /footer-secondary -->
-  {% endif %}
+      <!-- /footer-secondary -->
+    {% endif %}
+  </footer>
 
 
 </div>

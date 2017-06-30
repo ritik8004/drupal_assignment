@@ -48,6 +48,9 @@ class CheckoutOptionsManager {
    *   Term object.
    */
   public function loadShippingMethod($code, $name = '', $carrier_code = '', $method_code = '') {
+    // Clean the code every-time.
+    $code = substr(str_replace(',', '_', $code), 0, 32);
+
     $query = $this->termStorage->getQuery();
     $query->condition('vid', 'shipping_method');
     $query->condition('field_shipping_code', $code);

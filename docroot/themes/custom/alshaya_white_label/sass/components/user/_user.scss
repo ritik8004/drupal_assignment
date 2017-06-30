@@ -882,6 +882,10 @@
   input {
     height: 100% !important;
     line-height: 1;
+
+    html[lang=ar] & {
+      font-family: $arial-nodir;
+    }
   }
 }
 
