@@ -662,6 +662,10 @@
         .second-third {
           height: 96px;
 
+          @include breakpoint($only-tablet) {
+            width: 13.5rem;
+          }
+
           @include breakpoint($only-mobile) {
             width: 100%;
             vertical-align: top;
@@ -753,8 +757,8 @@
           font-size: 12px;
           margin-bottom: 5px;
 
-          @include breakpoint($only-mobile) {
-            font-size: 10px;
+          @include breakpoint($upto-desktop) {
+            font-size: 0.625rem;
           }
         }
 
@@ -766,8 +770,8 @@
           font-weight: bold;
           letter-spacing: 0.5px;
 
-          @include breakpoint($only-mobile) {
-            font-size: 12px;
+          @include breakpoint($upto-desktop) {
+            font-size: 0.75rem;
           }
         }
 
@@ -871,6 +875,13 @@
     @include breakpoint($desktop) {
       margin-top: 0;
     }
+  }
+}
+
+.c-change-password {
+  input {
+    height: 100% !important;
+    line-height: 1;
   }
 }
 

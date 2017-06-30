@@ -366,6 +366,10 @@
 
   .order-summary-row td:first-child .light {
     font-size: 0.75rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.625rem;
+    }
   }
 
   td.desktop-only {

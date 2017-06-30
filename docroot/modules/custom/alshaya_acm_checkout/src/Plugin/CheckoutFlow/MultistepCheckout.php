@@ -318,7 +318,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
           if (empty($account->get('field_mobile_number')->getString())) {
             $billing = (array) $cart->getBilling();
-            $account->get('field_mobile_number')->setValue($billing['phone']);
+            $account->get('field_mobile_number')->setValue($billing['telephone']);
             $account->save();
           }
 
