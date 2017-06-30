@@ -24,7 +24,28 @@ function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['alshaya_address'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'address' => [],
+    ],
+  ];
+
   return $items;
+}
+
+/**
+ * Format price value with currency.
+ *
+ * Default template: acq-commerce-price.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - price: a price value.
+ */
+function template_preprocess_alshaya_address(array &$variables) {
+  $country_list = \Drupal::service('address.country_repository')->getList();
+  $variables['address']['country'] = $country_list[$variables['address']['country_code']];
 }
 
 /**
@@ -118,8 +139,8 @@ function _alshaya_acm_checkout_clean_address($address) {
     $address['region'] = $address['region_id'];
   }
 
-  if (!empty($address['phone'])) {
-    $address['phone'] = _alshaya_acm_checkout_clean_address_phone($address['phone']);
+  if (!empty($address['telephone'])) {
+    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['telephone']);
   }
 
   return $address;

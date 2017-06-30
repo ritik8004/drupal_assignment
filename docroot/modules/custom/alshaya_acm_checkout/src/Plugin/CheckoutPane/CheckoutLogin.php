@@ -107,6 +107,10 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
     $pass = $values['pass'];
 
     if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass, TRUE)) {
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $cart_storage->getCart()->setCheckoutStep('delivery');
+
       $form_state->setRedirect('acq_checkout.form', ['step' => 'delivery']);
 
       $account = User::load($uid);
