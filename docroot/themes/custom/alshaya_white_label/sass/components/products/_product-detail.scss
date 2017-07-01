@@ -1105,9 +1105,19 @@
           z-index: 4;
           margin: 0;
           #{$left}: 0;
+          height: 2.188rem;
+
+          .ladda-label {
+            html[lang="ar"] & {
+              margin-top: 0;
+              position: absolute;
+              top: 1rem;
+              left: 33%;
+            }
+          }
         }
 
-        @include breakpoint($mobile) {
+        @include breakpoint($tablet) {
           float: $left;
         }
 
@@ -1227,8 +1237,21 @@ article[gtm-sku-type="simple"] {
         @include breakpoint($only-tablet) {
           float: $right;
           margin-top: 1rem;
+          height: 2.188rem;
+          text-align: center;
         }
       }
+    }
+  }
+}
+
+// Add to cart block breaking in arabic due to ladda button - fixing it through this hack.
+@include breakpoint($upto-desktop) {
+  html[lang="ar"] {
+    .c-pdp .content__sidebar .ladda-spinner {
+      left: 43% !important;
+      position: absolute !important;
+      top: 1rem !important;
     }
   }
 }
