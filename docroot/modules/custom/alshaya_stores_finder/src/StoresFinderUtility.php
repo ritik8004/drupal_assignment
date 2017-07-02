@@ -4,6 +4,7 @@ namespace Drupal\alshaya_stores_finder;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
@@ -26,18 +27,28 @@ class StoresFinderUtility {
   protected $nodeStorage;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   AlshayaApiWrapper service object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(AlshayaApiWrapper $api_wrapper, EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(AlshayaApiWrapper $api_wrapper, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->languageManager = $language_manager;
     $this->logger = $logger_factory->get('alshaya_stores_finder');
   }
 
@@ -126,13 +137,6 @@ class StoresFinderUtility {
 
         $stores[$store_node->id()] = $store;
       }
-      // @TODO: Remove this once stores API is done.
-      else {
-        $store['name'] = $store['code'];
-        $store['address'] = $store['code'];
-        $store['opening_hours'] = $store['code'];
-        $stores[$store['code']] = $store;
-      }
     }
 
     // Sort the stores first by distance and then by name.
@@ -155,14 +159,14 @@ class StoresFinderUtility {
    * Function to sync all stores.
    */
   public function syncStores() {
-    // Prepare the alternate locale data.
-    foreach (acq_commerce_get_store_language_mapping() as $lang => $store_id) {
-      // Get all stores for particular store id.
-      $stores = $this->apiWrapper->getStores($store_id);
+    // Do API call to get stores for each language.
+    foreach ($this->languageManager->getLanguages() as $langcode => $language) {
+      // Get all stores for particular language.
+      $stores = $this->apiWrapper->getStores($langcode);
 
       // Loop through all the stores and add/edit/translate the store node.
       foreach ($stores['items'] as $store) {
-        $this->updateStore($store, $lang);
+        $this->updateStore($store, $langcode);
       }
     }
   }
@@ -215,6 +219,17 @@ class StoresFinderUtility {
     else {
       $node->get('field_store_address')->setValue('');
     }
+
+    $open_hours = [];
+
+    foreach ($store['store_hours'] as $store_hour) {
+      $open_hours[] = [
+        'key' => $store_hour['day'],
+        'value' => $store_hour['hours'],
+      ];
+    }
+
+    $node->get('field_store_open_hours')->setValue($open_hours);
 
     // Set the status.
     $node->setPublished((bool) $store['status']);

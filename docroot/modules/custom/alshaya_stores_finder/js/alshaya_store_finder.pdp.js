@@ -25,15 +25,14 @@
 
   var autocomplete;
 
-  var allStoresAutocomplete;
-
   Drupal.pdp = Drupal.pdp || {};
+  Drupal.pdp.allStores = Drupal.pdp.allStores || {};
   Drupal.geolocation = Drupal.geolocation || {};
 
   Drupal.behaviors.storeFinderPdp = {
     attach: function (context, settings) {
 
-      $('#pdp-stores-container').once('initiate-stores').each(function () {
+      $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Get the permission track the user location.
         try {
           if (navigator.geolocation) {
@@ -45,13 +44,26 @@
         }
       });
 
-      $('.click-collect-top-stores').once('bind-events').on('click', '.other-stores-link', function () {
-        $('.click-collect-all-stores').toggle('slow');
+      $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
+        $('.click-collect-all-stores').toggle('slow', function () {
+          // Scroll
+          $('html,body').animate({
+            scrollTop: $('.click-collect-all-stores').offset().top
+          }, 'slow');
+        });
+
       });
 
-      $('.click-collect-all-stores').once('bind-events').on('click', '.close-inline-modal, .change-store-link, .search-stores-button', function (e) {
+      $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-store-link, .search-stores-button, .cancel-change-location', function (e) {
         if (e.target.className === 'change-store-link') {
-          $(this).parent().siblings('.store-finder-form-wrapper').find('.search-store').show();
+          $(this).siblings('.change-location').show();
+          $(this).hide();
+        }
+        else if (e.target.className === 'cancel-change-location') {
+          e.preventDefault();
+          $(this).parent().hide();
+          $('.click-collect-all-stores').find('.available-store-text .change-location-link').show();
+          return false;
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
@@ -68,9 +80,16 @@
         }
       });
 
-      $('.click-collect-form').once('bind-events').on('click', '.change-location-link, .search-stores-button', function (e) {
+      $('.click-collect-form', context).once('bind-events').on('click', '.change-location-link, .search-stores-button, .cancel-change-location', function (e) {
         if (e.target.className === 'change-location-link') {
-          $(this).parent().siblings('.store-finder-form-wrapper').find('.search-store').show();
+          $(this).siblings('.change-location').show();
+          $(this).hide();
+        }
+        else if (e.target.className === 'cancel-change-location') {
+          e.preventDefault();
+          $(this).parent().hide();
+          $('.click-collect-form').find('.available-store-text .change-location-link').show();
+          return false;
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
@@ -83,12 +102,16 @@
         }
       });
 
+      // Call storesDisplay to render stores, if click and collect available for selected sku.
+      if (settings.alshaya_acm.storeFinder === true) {
+        Drupal.pdp.storesDisplay();
+      }
+
+      // If geolocation permission is denied then display the search form.
       if (!geoPerm) {
         Drupal.pdp.dispalySearchStoreForm();
       }
 
-      // Call here once to ensure we do it after changes in attribute selection.
-      Drupal.pdp.storesDisplay();
     }
   };
 
@@ -145,7 +168,6 @@
     $('input[name="longitude"]').val(place.geometry.location.lng());
 
     if (records) {
-
       var coords = {
         latitude: place.geometry.location.lat(),
         longitude: place.geometry.location.lng()
@@ -155,10 +177,9 @@
     }
   };
 
-  // Make autocomplete field in search form in the all stores.
-  Drupal.pdp.allStoresAutocomplete = function () {
-    var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    allStoresAutocomplete = Drupal.geolocation.initAutocomplete(field);
+  Drupal.pdp.changeLocationAutocomplete = function () {
+    var field = $('.click-collect-form').find('input[name="store-location"]')[0];
+    var allStoresAutocomplete = Drupal.geolocation.initAutocomplete(field);
     allStoresAutocomplete.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
       var place = allStoresAutocomplete.getPlace();
@@ -173,7 +194,6 @@
       $('.click-collect-empty-selection').hide();
       $('.click-collect-form').show();
       $('.click-collect-form').find('.available-store-text').hide();
-      // $('.click-collect-form').find('.store-finder-form-wrapper .change-location-link').hide();
       $('.click-collect-form').find('.store-finder-form-wrapper .search-store').show();
     }
   };
@@ -249,15 +269,16 @@
     if (response.top_three) {
       records = true;
       $('.click-collect-top-stores').html(response.top_three);
-      $('.click-collect-form').find('.search-store').hide();
+      $('.click-collect-form').find('.store-finder-form-wrapper .search-store').hide();
+      $('.click-collect-form').find('.change-location').hide();
       $('.click-collect-form').find('.available-store-text').show();
-      $('.click-collect-form').find('.store-finder-form-wrapper .search-store').find('.search-stores-button').hide();
-      // $('.click-collect-form').find('.store-finder-form-wrapper .change-location-link').show();
+      $('.click-collect-form').find('.available-store-text .change-location-link').show();
+      Drupal.pdp.changeLocationAutocomplete();
       if (response.all_stores) {
         $('.click-collect-all-stores').html(response.all_stores);
-        $('.click-collect-all-stores').find('.store-finder-form-wrapper .search-store').find('.search-stores-button').hide();
         Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-all-stores').find('.google-store-location'));
-        Drupal.pdp.allStoresAutocomplete();
+        Drupal.pdp.allStores.Autocomplete();
+        Drupal.pdp.allStores.changeLocationAutocomplete();
       }
       else {
         $('.click-collect-all-stores').html('');
@@ -268,9 +289,31 @@
       $('.click-collect-top-stores').html('');
       $('.click-collect-all-stores').html('');
       $('.click-collect-form').find('.available-store-text').hide();
+      $('.click-collect-form').find('.store-finder-form-wrapper .search-store').show();
     }
     $('.click-collect-form').show();
-    $('.click-collect-form').find('.store-finder-form-wrapper .search-store').hide();
   };
+
+  // Make autocomplete field in search form in the all stores.
+  Drupal.pdp.allStores.Autocomplete = function () {
+    var field = $('#all-stores-search-store').find('input[name="location"]')[0];
+    var allStoresAutocomplete = Drupal.geolocation.initAutocomplete(field);
+    allStoresAutocomplete.addListener('place_changed', function () {
+      // Get the place details from the autocomplete object.
+      var place = allStoresAutocomplete.getPlace();
+      Drupal.geolocation.getStores(place);
+    });
+  };
+
+  Drupal.pdp.allStores.changeLocationAutocomplete = function () {
+    var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
+    var allStoresAutocomplete = Drupal.geolocation.initAutocomplete(field);
+    allStoresAutocomplete.addListener('place_changed', function () {
+      // Get the place details from the autocomplete object.
+      var place = allStoresAutocomplete.getPlace();
+      Drupal.geolocation.getStores(place);
+    });
+  };
+
 
 })(jQuery, Drupal);

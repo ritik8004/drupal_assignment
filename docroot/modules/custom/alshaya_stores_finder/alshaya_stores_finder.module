@@ -193,8 +193,6 @@ function alshaya_stores_finder_node_view_alter(array &$build, EntityInterface $e
 
     $config = \Drupal::config('alshaya_stores_finder.settings');
 
-    $stores = \Drupal::service('alshaya_stores_finder.utility')->getSkuStores($sku, 29.3460399, 48.0088076);
-
     // Check if click and collect is available for this product.
     // @TODO: ELSE: Do we need to show that click and collect is not available?
     if ($config->get('enable_disable_store_finder_search') && alshaya_acm_product_available_click_collect($sku)) {

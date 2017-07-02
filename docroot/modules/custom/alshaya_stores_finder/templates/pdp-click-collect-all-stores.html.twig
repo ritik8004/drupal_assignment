@@ -8,7 +8,12 @@
 {% endif %}
 <div class="available_store">
   <div class="available-store-text">
-    {{ 'Available at three stores near'|t }} <div class="google-store-location"></div>
+    {{ 'Available at three stores near'|t }}
+    <div class="google-store-location"></div>
+    <div class="change-location" style="display: none;">
+      <input type="textfield" name="store-location" class="change-store-location"/>
+      <button type="button" name="cancel-change-location" id="cancel-change-location" class="cancel-change-location">X</button>
+    </div>
     <div class="change-store-link">{{ 'change'|t }}</div>
   </div>
   <div class="store-finder-form-wrapper">
@@ -30,3 +35,4 @@
   </ul>
 {% endif %}
 </div>
+

@@ -1,6 +1,7 @@
 enable_disable_store_finder_search: 1
 pdp_click_collect_title: 'Click and Collect'
 pdp_click_collect_subtitle: 'Collect the order from store in 99 days'
+pdp_click_collect_unavailable: 'Sorry Collect your order in-store is unavailable'
 pdp_click_collect_price: ''
 pdp_click_collect_help_text:
   value: '<p>This service is <strong>FREE</strong> of charge.</p>'
