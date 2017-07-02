@@ -11,7 +11,7 @@ label: 'SEO admin'
 weight: 17
 is_admin: null
 permissions:
-  - 'access administration pages'
+  - 'access google knowledge graph'
   - 'access content overview'
   - 'access toolbar'
   - 'administer robots.txt'
@@ -23,8 +23,4 @@ permissions:
   - 'edit any page content'
   - 'edit any store content'
   - 'edit terms in acq_product_category'
-  - 'edit terms in area_list'
-  - 'edit terms in payment_method'
-  - 'edit terms in shipping_method'
-  - 'edit terms in sku_product_option'
   - 'view the administration theme'

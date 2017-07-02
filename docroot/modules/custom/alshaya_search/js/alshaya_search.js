@@ -34,7 +34,7 @@
           $(this).find('ul').prepend('<input type="text" placeholder="'
             + Drupal.t('Enter your filter name')
             + '" class="facets-search-input">').on('keyup', function () {
-              var facetFilterKeyword = $(this).find('.facets-search-input').val();
+              var facetFilterKeyword = $(this).find('.facets-search-input').val().toLowerCase();
               if (facetFilterKeyword) {
               // Hide show more if above keyword has some data.
                 if (settings.facets.softLimit !== undefined) {
@@ -43,7 +43,7 @@
                 $(this).find('li').each(function () {
                 // Hide all facet links.
                   $(this).hide();
-                  if ($(this).find('.facet-item__value').html().search(facetFilterKeyword) >= 0) {
+                  if ($(this).find('.facet-item__value').html().toLowerCase().search(facetFilterKeyword) >= 0) {
                     $(this).show();
                   }
                 });

@@ -25,19 +25,42 @@
   }
 }
 
+#edit-member-delivery-home .user__address--column {
+  @include breakpoint($tablet) {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: auto;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    float: $left;
+    margin-bottom: 48px;
+    max-width: 420px;
+    width: calc(50% - 24px);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 48px;
+    }
+  }
+}
+
 .address {
   .address--data {
     overflow: hidden;
     padding: 26px 28px 51px 16px;
 
     @include breakpoint($tablet) {
-      min-height: 13rem;
+      min-height: 15rem;
       padding: 26px 14px 37px 16px;
     }
 
     @include breakpoint($desktop) {
       padding: 26px 44px 53px 23px;
-      min-height: 12rem;
+      min-height: 14rem;
     }
   }
 
@@ -48,6 +71,7 @@
   .address--content {
     color: $black-two;
     direction: ltr;
+    font-weight: 700;
 
     html[lang=ar] & {
       text-align: right;
@@ -55,7 +79,6 @@
 
     @include breakpoint($desktop) {
       font-size: 14px;
-      font-weight: 700;
     }
   }
 
@@ -333,9 +356,9 @@
   margin-top: 0.55rem;
   color: $greyish;
   border-bottom: 1px solid $brownish-grey;
-  padding-bottom: 0.18rem;
   width: 3rem;
   float: left;
+  font-size: 1rem;
 
   @include breakpoint($only-mobile) {
     margin-top: 0.75rem;
@@ -355,6 +378,18 @@
       font-size: 0.75rem;
       color: $greyish;
       position: absolute;
+    }
+
+    .form-type-textfield {
+      margin-top: -0.15rem !important;
+
+      @include breakpoint($tablet) {
+        margin-top: -0.3rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: -0.35rem !important;
+      }
     }
   }
 
@@ -417,6 +452,10 @@
     border-color: $grey-ash;
   }
 
+  .select2-container {
+    width: 100% !important;
+  }
+
   .select2-selection__rendered {
     font-family: $arial;
     line-height: 19px !important;
@@ -473,6 +512,20 @@
   }
 }
 
+.profile-address-book-add-form,
+.profile-address-book-edit-form {
+  .mobile-number-field {
+    label.error {
+      left: -3rem;
+      top: 1.5rem;
+    }
+
+    .form-type-textfield {
+      margin-top: -0.2rem !important;
+    }
+  }
+}
+
 // Hide country flag coming from mobile number module.
 .form-item-field-address-0-address-mobile-number-country-code,
 .country-select {
@@ -482,5 +535,20 @@
 .path--user {
   .block-alshaya-my-account-links {
     margin-top: 0.55rem;
+  }
+}
+
+#address-book-form-open .address-book-address {
+  .country-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.9375em;
+  }
+
+  .select2-container {
+    max-width: 100%;
+  }
+
+  .mobile-number-field {
+    padding-bottom: 2rem;
   }
 }

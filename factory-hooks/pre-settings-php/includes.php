@@ -30,6 +30,9 @@ $env = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_ENV['AH_SITE_ENVIRONMENT'] : 'loc
 $config['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource/' . $env . '/mckw/';
 $config['alshaya_acm_knet.settings']['use_secure_response_url'] = 0;
 
+// Set the debug dir of conductor.
+$config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
+
 // 01 is prefixed most of the time so we don't get proper env here.
 // Clean the env, we do it only for dev and test.
 if (strpos($env, 'dev') !== FALSE) {
@@ -51,8 +54,10 @@ switch ($env) {
   case 'dev':
   case 'test':
     $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
+    $config['acq_commerce.conductor']['debug'] = TRUE;
 
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;
 
@@ -62,8 +67,10 @@ switch ($env) {
 
   default:
     $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
+    $config['acq_commerce.conductor']['debug'] = TRUE;
 
-    $config['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
+    $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;
 

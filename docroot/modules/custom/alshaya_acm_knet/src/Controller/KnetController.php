@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_knet\Controller;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -31,18 +32,28 @@ class KnetController extends ControllerBase {
   protected $knetSettings;
 
   /**
+   * Orders Manager object.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   APIWrapper object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory object.
    */
-  public function __construct(APIWrapper $api_wrapper, ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(APIWrapper $api_wrapper, ConfigFactoryInterface $config_factory, OrdersManager $orders_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->knetSettings = $config_factory->get('alshaya_acm_knet.settings');
+    $this->ordersManager = $orders_manager;
     $this->logger = $logger_factory->get('alshaya_acm_knet');
   }
 
@@ -53,6 +64,7 @@ class KnetController extends ControllerBase {
     return new static(
       $container->get('acq_commerce.api'),
       $container->get('config.factory'),
+      $container->get('alshaya_acm_customer.orders_manager'),
       $container->get('logger.factory')
     );
   }
@@ -127,6 +139,8 @@ class KnetController extends ControllerBase {
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
 
+    $this->ordersManager->clearOrderCache($data['email'], $data['user_id']);
+
     $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
     $response->send();
   }
@@ -154,6 +168,8 @@ class KnetController extends ControllerBase {
     ]);
 
     $this->apiWrapper->updateOrderStatus($order_id, $this->knetSettings->get('payment_failed'), $message);
+
+    $this->ordersManager->clearOrderCache(\Drupal::currentUser()->getEmail(), \Drupal::currentUser()->id());
 
     $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
     $response->send();

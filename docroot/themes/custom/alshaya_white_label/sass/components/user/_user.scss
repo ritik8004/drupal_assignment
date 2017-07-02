@@ -551,6 +551,16 @@
       p {
         display: none;
       }
+
+      input[type=submit] {
+        @include breakpoint($tablet) {
+          width: 5.688rem;
+        }
+      }
+
+      input[type=email] {
+        color: $grey-ash;
+      }
     }
   }
 }
@@ -662,6 +672,10 @@
         .second-third {
           height: 96px;
 
+          @include breakpoint($only-tablet) {
+            width: 13.5rem;
+          }
+
           @include breakpoint($only-mobile) {
             width: 100%;
             vertical-align: top;
@@ -753,8 +767,8 @@
           font-size: 12px;
           margin-bottom: 5px;
 
-          @include breakpoint($only-mobile) {
-            font-size: 10px;
+          @include breakpoint($upto-desktop) {
+            font-size: 0.625rem;
           }
         }
 
@@ -766,8 +780,8 @@
           font-weight: bold;
           letter-spacing: 0.5px;
 
-          @include breakpoint($only-mobile) {
-            font-size: 12px;
+          @include breakpoint($upto-desktop) {
+            font-size: 0.75rem;
           }
         }
 
@@ -870,6 +884,17 @@
 
     @include breakpoint($desktop) {
       margin-top: 0;
+    }
+  }
+}
+
+.c-change-password {
+  input {
+    height: 100% !important;
+    line-height: 1;
+
+    html[lang=ar] & {
+      font-family: $arial-nodir;
     }
   }
 }

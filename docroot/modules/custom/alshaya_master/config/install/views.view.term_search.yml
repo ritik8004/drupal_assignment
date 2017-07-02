@@ -343,15 +343,16 @@ display:
           entity_type: taxonomy_term
           entity_field: name
           plugin_id: string
-        default_langcode:
-          id: default_langcode
+        langcode:
+          id: langcode
           table: taxonomy_term_field_data
-          field: default_langcode
+          field: langcode
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
-          value: '1'
+          operator: in
+          value:
+            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
           group: 1
           exposed: false
           expose:
@@ -366,6 +367,7 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -379,22 +381,22 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           entity_type: taxonomy_term
-          entity_field: default_langcode
-          plugin_id: boolean
+          entity_field: langcode
+          plugin_id: language
       sorts:
-        weight:
-          id: weight
+        name:
+          id: name
           table: taxonomy_term_field_data
-          field: weight
+          field: name
           relationship: none
           group_type: group
           admin_label: ''
-          order: DESC
+          order: ASC
           exposed: false
           expose:
             label: ''
           entity_type: taxonomy_term
-          entity_field: weight
+          entity_field: name
           plugin_id: standard
       title: 'Term Search'
       header: {  }
@@ -479,10 +481,10 @@ display:
         weight: -10
         context: '0'
         menu_name: admin
+      rendering_language: '***LANGUAGE_language_interface***'
     cache_metadata:
       max-age: 0
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args

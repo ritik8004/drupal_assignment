@@ -4,6 +4,8 @@
   }
 }
 
+#edit-billing-address,
+.checkout-login,
 .c-add-address,
 .c-address-book {
   .c-page-title {
@@ -33,6 +35,7 @@
     display: none;
   }
 
+  #address_wrapper,
   .profile-form {
     @extend .contact-form;
 

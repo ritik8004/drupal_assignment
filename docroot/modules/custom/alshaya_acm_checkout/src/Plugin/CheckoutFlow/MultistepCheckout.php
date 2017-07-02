@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
@@ -225,19 +224,17 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       }
     }
 
-    if ($form_state->getErrors() || $form_state->isRebuilding()) {
+    if ($form_state->getErrors()) {
       return;
     }
 
-    // We submit panes in validate itself to allow setting form errors.
-    foreach ($panes as $pane_id => $pane) {
-      if ($pane->isVisible()) {
-        $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+    if ($form_state->getTriggeringElement()['#parents'][0] == 'actions') {
+      // We submit panes in validate itself to allow setting form errors.
+      foreach ($panes as $pane_id => $pane) {
+        if ($pane->isVisible()) {
+          $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+        }
       }
-    }
-
-    if ($form_state->getErrors() || $form_state->isRebuilding()) {
-      return;
     }
   }
 
@@ -245,6 +242,10 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($form_state->getTriggeringElement()['#parents'][0] != 'actions') {
+      return;
+    }
+
     if ($next_step_id = $this->getNextStepId()) {
       $current_step_id = $this->getStepId();
       try {
@@ -268,7 +269,14 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           exit;
         }
 
-        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        // Show message from Magento to user if allowed in config.
+        if (\Drupal::config('alshaya_acm_checkout.settings')->get('checkout_display_magento_error')) {
+          drupal_set_message($e->getMessage(), 'error');
+        }
+        else {
+          drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        }
+
         $this->redirectToStep($current_step_id);
       }
 
@@ -294,6 +302,8 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
         $temp_store->set('order', $response['order']);
 
+        $current_user_id = 0;
+
         // Clear orders list cache if user is logged in.
         if (\Drupal::currentUser()->isAnonymous()) {
           // Store the email address of customer in tempstore.
@@ -309,16 +319,14 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
           if (empty($account->get('field_mobile_number')->getString())) {
             $billing = (array) $cart->getBilling();
-            $account->get('field_mobile_number')->setValue($billing['phone']);
+            $account->get('field_mobile_number')->setValue($billing['telephone']);
             $account->save();
           }
-
-          // Invalidate the cache tag when order is placed to reflect on the
-          // user's recent orders.
-          Cache::invalidateTags(['user:' . $current_user_id . ':orders']);
         }
 
-        \Drupal::cache()->invalidate('orders_list_' . $email);
+        /** @var \Drupal\alshaya_acm_customer\OrdersManager $orders_manager */
+        $orders_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+        $orders_manager->clearOrderCache($email, $current_user_id);
 
         // Create a new cart now.
         $this->cartStorage->createCart();

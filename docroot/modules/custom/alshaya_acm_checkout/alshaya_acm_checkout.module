@@ -24,7 +24,28 @@ function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['alshaya_address'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'address' => [],
+    ],
+  ];
+
   return $items;
+}
+
+/**
+ * Format price value with currency.
+ *
+ * Default template: acq-commerce-price.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - price: a price value.
+ */
+function template_preprocess_alshaya_address(array &$variables) {
+  $country_list = \Drupal::service('address.country_repository')->getList();
+  $variables['address']['country'] = $country_list[$variables['address']['country_code']];
 }
 
 /**
@@ -96,13 +117,14 @@ function _alshaya_acm_checkout_clean_address($address) {
     'first_name',
     'lastname',
     'last_name',
-    'phone',
+    'telephone',
     'street',
     'street2',
     'city',
     'region',
     'postcode',
-    'country',
+    'country_id',
+    'extension',
   ];
 
   foreach ($address as $key => $value) {
@@ -117,8 +139,8 @@ function _alshaya_acm_checkout_clean_address($address) {
     $address['region'] = $address['region_id'];
   }
 
-  if (!empty($address['phone'])) {
-    $address['phone'] = _alshaya_acm_checkout_clean_address_phone($address['phone']);
+  if (!empty($address['telephone'])) {
+    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['telephone']);
   }
 
   return $address;
@@ -139,11 +161,17 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
   if (is_string($phone)) {
     $phone_string = $phone;
   }
-  elseif (is_object($phone)) {
-    $phone_string = \Drupal::service('mobile_number.util')->libUtil()->format($phone, 1);
-  }
-  elseif (is_array($phone)) {
-    $phone_string = $phone['value'];
+  elseif (is_array($phone) || is_object($phone)) {
+    $phone = (array) $phone;
+    if (isset($phone['country_code'])) {
+      $phone_string = \Drupal::service('mobile_number.util')->getPhoneNumberAsString($phone['mobile'], $phone['country_code']);
+    }
+    elseif (isset($phone['country-code'])) {
+      $phone_string = \Drupal::service('mobile_number.util')->getPhoneNumberAsString($phone['mobile'], $phone['country-code']);
+    }
+    elseif (isset($phone['value'])) {
+      $phone_string = $phone['value'];
+    }
   }
 
   return $phone_string;

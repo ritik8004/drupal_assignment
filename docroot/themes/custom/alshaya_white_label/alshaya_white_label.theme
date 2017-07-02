@@ -204,6 +204,10 @@ function alshaya_white_label_preprocess_node(&$variables) {
     // Hide the node title on product list/search page.
     $variables['label'] = NULL;
   }
+  elseif ($variables['node']->bundle() === 'acq_product') {
+    $variables['attributes']['data-nid'] = $variables['node']->id();
+  }
+
 }
 
 /**

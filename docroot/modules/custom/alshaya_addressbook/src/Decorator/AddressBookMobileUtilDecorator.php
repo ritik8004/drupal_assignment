@@ -49,13 +49,46 @@ class AddressBookMobileUtilDecorator extends MobileNumberUtil {
   /**
    * {@inheritdoc}
    */
-  public function getMobileNumber($number, $country = NULL, $types = [
-    1 => 1,
-    2 => 2,
-  ]) {
+  public function getMobileNumber($number, $country = NULL, $types = [1 => 1, 2 => 2]) {
     // Remove leading zero due to which number is un-recognizable.
     $number = ltrim($number, 0);
     return $this->mobileUtil->getMobileNumber($number, $country, $types);
+  }
+
+  /**
+   * Get phone number as string.
+   *
+   * @param string $number
+   *   Number.
+   * @param null|string $country
+   *   Country.
+   * @param array $types
+   *   Types to check.
+   *
+   * @return string
+   *   Full phone number.
+   */
+  public function getPhoneNumberAsString($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
+    $phone = $this->getMobileNumber($number, $country, $types);
+    return $this->libUtil()->format($phone, 1);
+  }
+
+  /**
+   * Get only mobile number as string.
+   *
+   * @param string $number
+   *   Number.
+   * @param null|string $country
+   *   Country.
+   * @param array $types
+   *   Types to check.
+   *
+   * @return string
+   *   Mobile number.
+   */
+  public function getMobileNumberAsString($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
+    $phone = $this->getMobileNumber($number, $country, $types);
+    return $phone->getNationalNumber();
   }
 
 }

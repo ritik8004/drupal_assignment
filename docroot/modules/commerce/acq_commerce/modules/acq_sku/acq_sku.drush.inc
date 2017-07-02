@@ -82,7 +82,7 @@ function drush_acq_sku_sync_commerce_product_options() {
  * Implements drush clean synced data command.
  */
 function drush_acq_sku_clean_synced_data() {
-  if (!drush_confirm(dt("Are you sure you want to clean commerce data (Products, SKUs and Product Categories)?"))) {
+  if (!drush_confirm(dt("Are you sure you want to clean commerce data (Products, SKUs, Product Categories and Product Options)?"))) {
     return drush_user_abort();
   }
   drush_print(dt('Cleaning synced commerce data (Products, SKUs and Product Categories), please wait...'));
@@ -139,6 +139,14 @@ function _acq_sku_clean_process(&$context) {
     $cat_entities = $query->execute();
     foreach ($cat_entities as $cat_entity) {
       $context['sandbox']['results'][] = [$cat_entity, 'taxonomy_term'];
+    }
+
+    // Get all sku_product_option entities.
+    $query = \Drupal::entityQuery('taxonomy_term');
+    $query->condition('vid', 'sku_product_option');
+    $sku_product_option_entities = $query->execute();
+    foreach ($sku_product_option_entities as $sku_product_option_entity) {
+      $context['sandbox']['results'][] = [$sku_product_option_entity, 'taxonomy_term'];
     }
 
     $context['sandbox']['progress'] = 0;

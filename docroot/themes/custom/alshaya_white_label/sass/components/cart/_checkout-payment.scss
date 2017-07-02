@@ -13,9 +13,16 @@
       padding: 0;
 
       legend {
-        background: $white-four;
+        display: block;
         width: 100%;
-        padding: 1.25rem;
+        padding: 0 1rem;
+
+        .fieldset-legend {
+          display: block;
+          width: 100%;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid $white;
+        }
       }
 
       .fieldset-wrapper {
@@ -104,15 +111,58 @@
 }
 
 #payment_details {
-  margin-top: 0;
-  padding: 0.25rem 1rem;
+  @include clearfix;
 
-  .form-item-payment-methods-payment-details-cc-number {
+  margin-top: 0;
+  clear: both;
+  padding: 1rem;
+
+  .form-item-acm-payment-methods-payment-details-cc-number {
     width: 12.5rem;
   }
 
-  .form-item-payment-methods-payment-details-cc-exp-year,
-  .form-item-payment-methods-payment-details-cc-exp-month {
+  .card-types-wrapper {
+    position: absolute;
+    top: -3rem;
+    #{$right}: 1.8rem;
+
+    .card-type {
+      display: inline-block;
+      height: 2rem;
+      width: 3rem;
+      background: $white;
+
+      &-visa {
+        background: $white url('../imgs/cards/visa-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &:hover {
+          background-image: url('../imgs/cards/visa-active.png');
+        }
+      }
+
+      &-mastercard {
+        background: $white url('../imgs/cards/mastercard-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &:hover {
+          background-image: url('../imgs/cards/mastercard-active.png');
+        }
+      }
+
+      &-diners-club {
+        background: $white url('../imgs/cards/dinersclub-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &:hover {
+          background-image: url('../imgs/cards/dinersclub-active.png');
+        }
+      }
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-cc-exp-year,
+  .form-item-acm-payment-methods-payment-details-cc-exp-month {
     float: $left;
     width: 105px;
     height: 35px;
@@ -129,21 +179,37 @@
       background: $white;
     }
 
-    #edit-payment-methods-payment-details-cc-exp-year,
-    #edit-payment-methods-payment-details-cc-exp-month {
+    select {
       border: none;
       border-radius: 0;
       padding: 4px 10px;
       appearance: none;
-      margin: 0 5px;
-      float: $left;
     }
   }
 
-  .form-item-payment-methods-payment-details-cc-cvv {
+  .form-item-acm-payment-methods-payment-details-cc-cvv {
     width: 5.3125rem;
     clear: both;
-    margin-top: 8em;
     margin-bottom: 1em;
+  }
+
+  .cc_cvv_help_text {
+    width: 40%;
+    padding-#{$left}: 4rem;
+    position: absolute;
+    top: 44%;
+    #{$left}: 24%;
+
+    &::before {
+      content: "";
+      height: 2rem;
+      width: 3rem;
+      background: $white url(../imgs/cards/back-card.png) no-repeat;
+      background-size: 100%;
+      margin-#{$right}: 0.5rem;
+      position: absolute;
+      #{$left}: 0;
+      top: 0;
+    }
   }
 }

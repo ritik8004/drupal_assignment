@@ -239,6 +239,11 @@
 
     &.order-transaction {
       width: 13.75rem;
+
+      @include breakpoint($only-tablet) {
+        min-width: 9.75rem;
+        width: 9.75rem;
+      }
     }
 
     &.above-mobile {

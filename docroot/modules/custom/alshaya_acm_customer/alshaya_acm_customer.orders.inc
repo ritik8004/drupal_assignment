@@ -5,7 +5,6 @@
  * Contains utility functions to process orders and provide related data.
  */
 
-use Drupal\acq_checkout\ACQAddressFormatter;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
 use Drupal\user\UserInterface;
@@ -139,33 +138,6 @@ function alshaya_acm_customer_get_order_status(array $order) {
 }
 
 /**
- * Apply conditions and get order item status.
- *
- * @param array $item
- *   Item array.
- *
- * @return string
- *   Status of item, ensure string can be used directly as class too.
- */
-function alshaya_acm_customer_get_order_item_status(array $item) {
-  if (empty($item['shipped']) && empty($item['refunded'])) {
-    return 'pending';
-  }
-
-  if (empty($item['refunded']) && $item['shipped'] === $item['ordered']) {
-    return 'delivered';
-  }
-
-  if (empty($item['shipped']) && $item['refunded'] === $item['ordered']) {
-    return 'returned';
-  }
-
-  // @TODO: Check condition for partial delivery, partial pending.
-  // @TODO: Check condition for partial delivery, partial returned.
-  return 'pending';
-}
-
-/**
  * Get total number of items in order.
  *
  * @param array $order
@@ -231,15 +203,28 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
  *   Processed order detail array.
  */
 function alshaya_acm_customer_get_processed_order_details(array $order) {
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
   $orderDetails = [];
 
   $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
 
-  $orderDetails['contact_no'] = $order['shipping']['address']['phone'];
+  $orderDetails['contact_no'] = $order['shipping']['address']['telephone'];
 
-  $addressFormatter = new ACQAddressFormatter();
-  $orderDetails['delivery_address'] = $addressFormatter->render((object) $order['shipping']['address']);
-  $orderDetails['billing_address'] = $addressFormatter->render((object) $order['billing']);
+  $delivery_address = [
+    '#theme' => 'alshaya_address',
+    '#address' => $address_book_manager->getAddressArrayFromMagentoAddress($order['shipping']['address']),
+  ];
+
+  $orderDetails['delivery_address'] = render($delivery_address);
+
+  $billing_address = [
+    '#theme' => 'alshaya_address',
+    '#address' => $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']),
+  ];
+
+  $orderDetails['billing_address'] = render($billing_address);
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
