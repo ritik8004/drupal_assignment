@@ -1166,8 +1166,8 @@ header {
   text-align: center;
   padding-top: 0.25rem;
   will-change: $left;
-  transition: #{$left 0.5s ease-in-out};
   -moz-transition: #{$left 0.5s ease-in-out};
+  transition: #{$left 0.5s ease-in-out};
   -moz-transform: translateZ(0);
 
   span {
@@ -1371,8 +1371,8 @@ header {
     width: 100%;
     height: 100%;
     // transition: transform 0.5s ease-in-out;
-    transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     -moz-transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
+    transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     -moz-transform: translateZ(0);
     #{$left}: -100%;
     // transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
