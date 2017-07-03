@@ -699,8 +699,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ field_store_address__value|raw }}'
             make_link: false
             path: ''
             absolute: false
@@ -1138,8 +1138,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ field_store_address__value|raw }}'
             make_link: false
             path: ''
             absolute: false
@@ -2045,8 +2045,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ field_store_address__value|raw }}'
             make_link: false
             path: ''
             absolute: false
