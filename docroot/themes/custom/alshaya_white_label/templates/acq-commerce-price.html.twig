@@ -9,3 +9,19 @@
     <span class="price-currency suffix">{{ currency_format }}</span>
   </span>
 {% endif %}
+
+{%  if  promotions is not empty %}
+  <div class="cart-promotions">
+    {% for id, promotion in promotions %}
+      <div class="tooltip-wrap">
+        <div class="contains--tooltip">
+          <div class="tooltip--head">
+          </div>
+          <div class="tooltip">
+            {{ promotion | raw }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

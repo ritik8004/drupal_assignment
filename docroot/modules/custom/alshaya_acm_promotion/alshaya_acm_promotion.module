@@ -24,3 +24,10 @@ function alshaya_acm_promotion_alshaya_profile_installed(array $modules) {
 function alshaya_acm_promotion_views_data_alter(array &$data) {
   $data['search_api_index_product']['field_skus']['argument']['id'] = 'alshaya_sku_ignore_whitespaces';
 }
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function alshaya_acm_promotion_theme_registry_alter(&$theme_registry) {
+  $theme_registry['acq_commerce_price']['variables']['promotions'] = NULL;
+}
