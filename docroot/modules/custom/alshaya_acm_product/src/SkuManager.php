@@ -217,15 +217,15 @@ class SkuManager {
    *   The SKU Entity, for which linked promotions need to be fetched.
    * @param bool $getLinks
    *   Boolen to identify if Links are required.
+   * @param array $types
+   *   Type of promotion to filter on.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
-   *
-   * @throws \Drupal\Core\Database\InvalidQueryException
-   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
-   * @throws \Drupal\Core\Entity\Exception\UndefinedLinkTemplateException
    */
-  public function getPromotionsFromSkuId(SKU $sku, $getLinks = FALSE) {
+  public function getPromotionsFromSkuId(SKU $sku,
+                                         $getLinks = FALSE,
+                                         array $types = ['cart', 'category']) {
     $promos = [];
 
     // Fetch child skus, if its a parent sku.
@@ -238,7 +238,6 @@ class SkuManager {
 
     // Convert array of sku text into sku enity Ids.
     // @TODO: Remove this & refactor this function if we store sku ids in Products.
-
     foreach ($child_skus as $key => $child_sku) {
       $child_sku_ids[$key] = $this->getEntityIdBySku($child_sku);
     }
@@ -246,6 +245,8 @@ class SkuManager {
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
     $query->condition('field_acq_promotion_sku', $child_sku_ids, 'IN');
+    $query->condition('field_acq_promotion_sku', $types, 'IN');
+
     $promotionIDs = $query->execute();
 
     if (!empty($promotionIDs)) {
