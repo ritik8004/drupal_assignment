@@ -780,6 +780,36 @@ function alshaya_master_install() {
     'A @entity_type with @field_name @value already exists.' => [
       'ar' => 'يوجد @entity_type لديه اسم المستخدم @field_name و رقم الجوال @value مسجل',
     ],
+    'Something went wrong, please try again later.' => [
+      'ar' => 'هناك خطأ ما, يرجى المحاولة لاحقاً.',
+    ],
+    'Your account has not been activated or is blocked.' => [
+      'ar' => 'لم يتم تفعيل حسابك أو تم منعه',
+    ],
+    'Colour' => [
+      'ar' => 'اللون',
+    ],
+    'Brand' => [
+      'ar' => 'العلامة التجارية',
+    ],
+    'Available at three stores near' => [
+      'ar' => 'متوفر في 3 محلات بالقرب من ',
+    ],
+    'change' => [
+      'ar' => 'تغيير',
+    ],
+    'Discount' => [
+      'ar' => 'الخصم',
+    ],
+    'under @stop' => [
+      'ar' => 'أقل من @stop د.ك.',
+    ],
+    'Features and benefits' => [
+      'ar' => 'المزايا و الفوائد',
+    ],
+    'Specifications' => [
+      'ar' => 'المواصفات',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
