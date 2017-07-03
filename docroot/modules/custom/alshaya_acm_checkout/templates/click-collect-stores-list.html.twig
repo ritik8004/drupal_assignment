@@ -15,8 +15,8 @@
         <div class="store-open-hours">{{ store.open_hours }}</div>
         <div class="store-delivery-time">{{ store.delivery_time  }}</div>
         <div class="store-actions">
-          <a class="select-store" data-store-code="{{ store.code }}" data-node="{{ store.nid }}">{{ 'select this store'|trans }}</a>
-          <a href="{{ store.view_on_map_link }}">{{ 'View on map'|trans }}</a>
+          <a href="#" class="select-store" data-store-code="{{ store.code }}" data-node="{{ store.nid }}">{{ 'select this store'|trans }}</a>
+          <a href="#" class="store-on-map" data-store-code="{{ store.code }}" data-node="{{ store.nid }}">{{ 'View on map'|trans }}</a>
         </div>
       </li>
     {% endfor %}
