@@ -26,12 +26,20 @@
       }
     }
 
+    .view-display-id-page_3 .view-header,
     .view-display-id-page_1 .view-header {
       color: $black;
       display: block;
       font-family: $arial;
       font-weight: normal;
     }
+  }
+
+  .view-empty {
+    color: $black;
+    display: block;
+    font-family: $arial;
+    font-weight: bold;
   }
 
   .c-side-1 {
