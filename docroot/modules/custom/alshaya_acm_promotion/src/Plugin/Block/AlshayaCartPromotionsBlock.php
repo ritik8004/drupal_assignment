@@ -78,8 +78,8 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
 
     if (!empty($promotion_nodes)) {
       foreach ($promotion_nodes as $key => $promotion_node) {
-        $promotion_rule_id = $promotion_node->get('field_acq_promotion_rule_id')->getValue();
-        $options[$promotion_rule_id] = $promotion_node->getTitle();
+        $promotion_rule_id = $promotion_node->get('field_acq_promotion_rule_id')->first()->getValue();
+        $options[$promotion_rule_id['value']] = $promotion_node->getTitle();
       }
     }
 
@@ -111,10 +111,12 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     $promotions = [];
     $selected_promotions = $this->configuration['promotions'];
     if (!empty($selected_promotions)) {
-      foreach ($selected_promotions as $key => $selected_promotion) {
-        $nodes = $this->alshayaAcmPromotionManager->loadPromotionByRuleId($selected_promotion);
-        foreach ($nodes as $node) {
-          $promotions[] = $node->get('field_acq_promotion_description')->first()->getValue();
+      foreach ($selected_promotions as $key => $promotion_rule_id) {
+        if ($promotion_rule_id) {
+          $node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($promotion_rule_id);
+          if ($node) {
+            $promotions[] = $node->get('field_acq_promotion_description')->first()->getValue();
+          }
         }
       }
     }

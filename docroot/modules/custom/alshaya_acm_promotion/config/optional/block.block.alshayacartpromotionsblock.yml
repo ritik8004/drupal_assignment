@@ -18,10 +18,11 @@ settings:
   provider: alshaya_acm_promotion
   label_display: '0'
   promotions:
-    - '100'
-    - '101'
-    - '102'
-    - '103'
+    - '3'
+    - '4'
+    - 0
+    - 0
+    - 0
 visibility:
   request_path:
     id: request_path
