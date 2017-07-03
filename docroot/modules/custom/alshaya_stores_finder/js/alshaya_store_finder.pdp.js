@@ -23,6 +23,9 @@
   // Check records already exists.
   var records = false;
 
+  // Display search form.
+  var displaySearchForm;
+
   var autocomplete;
 
   Drupal.pdp = Drupal.pdp || {};
@@ -54,8 +57,8 @@
 
       });
 
-      $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-store-link, .search-stores-button, .cancel-change-location', function (e) {
-        if (e.target.className === 'change-store-link') {
+      $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-location-link, .search-stores-button, .cancel-change-location', function (e) {
+        if (e.target.className === 'change-location-link') {
           $(this).siblings('.change-location').show();
           $(this).hide();
         }
@@ -102,13 +105,18 @@
         }
       });
 
+      // Validate the product is same on ajax call.
+      var validateProduct = Drupal.pdp.validateCurrentProduct(settings);
       // Call storesDisplay to render stores, if click and collect available for selected sku.
-      if (settings.alshaya_acm.storeFinder === true) {
+      if (settings.alshaya_acm.storeFinder === true && validateProduct) {
         Drupal.pdp.storesDisplay();
       }
 
+      if (typeof displaySearchForm === 'undefined') {
+        displaySearchForm = settings.alshaya_acm.searchForm;
+      }
       // If geolocation permission is denied then display the search form.
-      if (!geoPerm) {
+      if (!geoPerm && validateProduct && displaySearchForm) {
         Drupal.pdp.dispalySearchStoreForm();
       }
 
@@ -177,6 +185,25 @@
     }
   };
 
+  Drupal.pdp.getProductInfo = function () {
+    // Get the SKU.
+    var sku = $('#pdp-stores-container').data('sku');
+    var skuClean = $('#pdp-stores-container').data('sku-clean');
+    var variant = null;
+    // Get the type.
+    var type = $('#pdp-stores-container').data('product-type');
+    if (type === 'configurable') {
+      variant = $('.selected-variant-sku-' + skuClean).val();
+    }
+
+    return {
+      type: type,
+      sku: sku,
+      selectedVariant: variant,
+      skuClean: skuClean
+    };
+  };
+
   Drupal.pdp.changeLocationAutocomplete = function () {
     var field = $('.click-collect-form').find('input[name="store-location"]')[0];
     var allStoresAutocomplete = Drupal.geolocation.initAutocomplete(field);
@@ -189,8 +216,16 @@
 
   // Dispaly search store form.
   Drupal.pdp.dispalySearchStoreForm = function () {
-    var skuClean = $('#pdp-stores-container').attr('sku-clean');
-    if ($('.selected-variant-sku-' + skuClean).length) {
+    var productInfo = Drupal.pdp.getProductInfo();
+    var check = false;
+    if (productInfo.type === 'configurable') {
+      check = (productInfo.selectedVariant) ? productInfo.selectedVariant.length : false;
+    }
+    else {
+      check = productInfo.sku.length;
+    }
+
+    if (check) {
       $('.click-collect-empty-selection').hide();
       $('.click-collect-form').show();
       $('.click-collect-form').find('.available-store-text').hide();
@@ -218,50 +253,51 @@
       asfCoords = coords;
     }
 
-    // Get the SKU.
-    var sku = $('#pdp-stores-container').attr('sku');
-    var skuClean = $('#pdp-stores-container').attr('sku-clean');
-
-    // Get the type.
-    var type = $('#pdp-stores-container').attr('type');
-
-    if (type === 'configurable') {
-      if ($('.selected-variant-sku-' + skuClean).length) {
-        $('.click-collect-empty-selection').hide();
-        sku = $('.selected-variant-sku-' + skuClean).val();
+    // Get the Product info.
+    var productInfo = Drupal.pdp.getProductInfo();
+    var sku = '';
+    if (productInfo) {
+      sku = productInfo.sku;
+      if (productInfo.type === 'configurable') {
+        if (typeof productInfo.selectedVariant !== 'undefined' && productInfo.selectedVariant !== null) {
+          $('.click-collect-empty-selection').hide();
+          sku = productInfo.selectedVariant;
+        }
+        else {
+          $('.click-collect-empty-selection').show();
+          $('.click-collect-form').hide();
+          return;
+        }
       }
-      else {
-        $('.click-collect-empty-selection').show();
-        $('.click-collect-form').hide();
-        return;
+
+      if (asfCoords !== null) {
+        Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-form').find('.google-store-location'));
+
+        var checkLocation = true;
+        if (lastCoords !== null) {
+          checkLocation = (lastCoords.latitude !== asfCoords.latitude || lastCoords.longitude !== asfCoords.longitude);
+        }
+
+        if ((lastSku === null || lastSku !== sku) || checkLocation) {
+          lastSku = sku;
+          lastCoords = asfCoords;
+
+          $.ajax({
+            url: Drupal.url('stores/product/' + lastSku + '/' + asfCoords.latitude + '/' + asfCoords.longitude),
+            beforeSend: function (xmlhttprequest) {
+              var progressElement = '<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>';
+              $('.click-collect-top-stores').html(progressElement);
+              $('.click-collect-all-stores .stores-list-all').html(progressElement);
+            },
+            success: function (response) {
+              displaySearchForm = false;
+              Drupal.pdp.fillStores(response, asfCoords);
+            }
+          });
+        }
       }
     }
 
-    if (asfCoords !== null) {
-      Drupal.pdp.getFormattedAddress(asfCoords.latitude, asfCoords.longitude, $('.click-collect-form').find('.google-store-location'));
-
-      var checkLocation = true;
-      if (lastCoords !== null) {
-        checkLocation = (lastCoords.latitude !== asfCoords.latitude || lastCoords.longitude !== asfCoords.longitude);
-      }
-
-      if ((lastSku === null || lastSku !== sku) || checkLocation) {
-        lastSku = sku;
-        lastCoords = asfCoords;
-
-        $.ajax({
-          url: Drupal.url('stores/product/' + lastSku + '/' + asfCoords.latitude + '/' + asfCoords.longitude),
-          beforeSend: function (xmlhttprequest) {
-            var progressElement = '<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>';
-            $('.click-collect-top-stores').html(progressElement);
-            $('.click-collect-all-stores .stores-list-all').html(progressElement);
-          },
-          success: function (response) {
-            Drupal.pdp.fillStores(response, asfCoords);
-          }
-        });
-      }
-    }
   };
 
   // Fill the stores with result.
@@ -315,5 +351,67 @@
     });
   };
 
+  /**
+   * Validate the current product for ajax call.
+   *
+   * On pdp page when we open the cross sell product's modal window and
+   * try to change the attributes for configurable product, it calls the
+   * Drupal.pdp.storesDisplay() function, but for modal we don't want to
+   * call this function. so we are checking here the size attribute that
+   * is changed is for the same product.
+   *
+   * @param {Array} settings
+   *  An array of settings that will be used.
+   *
+   * @return {boolean}
+   *   Return true if both sku are same else false.
+   */
+  Drupal.pdp.validateCurrentProduct = function (settings) {
+    var productInfo = Drupal.pdp.getProductInfo();
+    var validate = true;
+    if (typeof settings.alshaya_acm.product_sku !== 'undefined') {
+      validate = (settings.alshaya_acm.product_sku === productInfo.sku);
+    }
+    return validate;
+  };
+
+  /**
+   * Update click and collect on size change ajax call.
+   *
+   * We don't want to call this function for each size change call. we
+   * want to call this function for pdp page only. so, there are some
+   * variables which are accessible to javascript only. that's why we
+   * are writing this function here instead of writing in AjaxResponse
+   * of size change.
+   *
+   * @param {Drupal.Ajax} [ajax]
+   *   The Drupal Ajax object.
+   * @param {object} response
+   *   Object holding the server response.
+   * @param {object} [response.settings]
+   *   An array of settings that will be used.
+   * @param {number} [status]
+   *   The XMLHttpRequest status.
+   */
+  Drupal.AjaxCommands.prototype.updatePDPClickCollect = function (ajax, response, status) {
+    if (Drupal.pdp.validateCurrentProduct(response.data)) {
+      if (response.data.alshaya_acm.storeFinder) {
+        $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
+        $('#pdp-stores-container.click-collect > h3')
+          .removeClass('ui-state-disabled')
+          .addClass('ui-state-active ui-accordion-header-active');
+        $('#pdp-stores-container.click-collect > .c-accordion_content').show();
+
+        Drupal.pdp.storesDisplay();
+      }
+      else {
+        $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
+        $('#pdp-stores-container.click-collect > h3')
+          .removeClass('ui-state-active ui-accordion-header-active')
+          .addClass('ui-state-disabled');
+        $('#pdp-stores-container.click-collect > .c-accordion_content').hide();
+      }
+    }
+  };
 
 })(jQuery, Drupal);
