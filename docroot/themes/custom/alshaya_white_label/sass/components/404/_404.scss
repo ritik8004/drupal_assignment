@@ -7,6 +7,18 @@
   max-width: 76.375rem;
   margin: auto;
 
+  html[lang=ar] & {
+    line-height: 1.125;
+  }
+
+  .maintenance-page & {
+    line-height: normal;
+
+    html[lang=ar] & {
+      direction: ltr;
+    }
+  }
+
   &::after {
     content: '';
     position: absolute;
@@ -17,6 +29,10 @@
     background: $faun;
     z-index: -1;
     border: solid 1px $white-two;
+  }
+
+  .not-found__image {
+    direction: ltr;
   }
 
   .not-found__body {
@@ -30,7 +46,11 @@
     font-family: $alshaya-thin;
     color: $matterhorn;
     display: table;
-    height: 22.375rem;
+    height: 25.875rem;
+
+    .maintenance-page & {
+      font-family: $alshaya-thin-nodir;
+    }
 
     .not-found__body__container {
       display: table-cell;
@@ -44,6 +64,18 @@
       font-weight: normal;
       color: $marine-blue;
       margin-bottom: 5px;
+      margin-top: 0;
+
+      .maintenance-page & {
+        font-family: $alshaya-bold-nodir;
+      }
+
+      &.title--arabic {
+        font-family: $alshaya-arabic-thin-nodir;
+        font-size: 30px;
+        direction: rtl;
+        color: $marine-blue;
+      }
     }
 
     h2 {
@@ -52,11 +84,26 @@
       color: $marine-blue;
       font-family: $alshaya-bold;
       font-weight: normal;
+
+      .maintenance-page & {
+        font-family: $alshaya-bold-nodir;
+      }
     }
   }
 
   img {
     vertical-align: middle;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
+
+    &.arabic {
+      font-family: $alshaya-arabic-thin-nodir;
+      font-size: 20px;
+      direction: rtl;
+    }
   }
 }
 
@@ -67,7 +114,7 @@
 
   .not-found {
     position: relative;
-    min-height: 26.5rem;
+    min-height: auto;
 
     &::after {
       content: '';

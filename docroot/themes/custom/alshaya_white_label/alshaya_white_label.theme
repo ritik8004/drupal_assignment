@@ -579,11 +579,7 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
   $variables['maintenance_image'] = '';
   if (!empty($image)) {
     if ($file = file_load($image)) {
-      $variables['maintenance_image'] = [
-        '#theme' => 'image_style',
-        '#style_name' => '1284x424',
-        '#uri' => $file->getFileUri(),
-      ];
+      $variables['maintenance_image'] = file_create_url($file->getFileUri());
     }
   }
 }
@@ -600,11 +596,7 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
   $variables['image_404'] = '';
   if (!empty($image)) {
     if ($file = file_load($image)) {
-      $variables['image_404'] = [
-        '#theme' => 'image_style',
-        '#style_name' => '1284x424',
-        '#uri' => $file->getFileUri(),
-      ];
+      $variables['image_404'] = file_create_url($file->getFileUri());
     }
   }
 }
