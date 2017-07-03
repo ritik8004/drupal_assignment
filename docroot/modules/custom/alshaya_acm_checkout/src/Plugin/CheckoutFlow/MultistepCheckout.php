@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
@@ -303,6 +302,8 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
         $temp_store->set('order', $response['order']);
 
+        $current_user_id = 0;
+
         // Clear orders list cache if user is logged in.
         if (\Drupal::currentUser()->isAnonymous()) {
           // Store the email address of customer in tempstore.
@@ -321,13 +322,11 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
             $account->get('field_mobile_number')->setValue($billing['telephone']);
             $account->save();
           }
-
-          // Invalidate the cache tag when order is placed to reflect on the
-          // user's recent orders.
-          Cache::invalidateTags(['user:' . $current_user_id . ':orders']);
         }
 
-        \Drupal::cache()->invalidate('orders_list_' . $email);
+        /** @var \Drupal\alshaya_acm_customer\OrdersManager $orders_manager */
+        $orders_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+        $orders_manager->clearOrderCache($email, $current_user_id);
 
         // Create a new cart now.
         $this->cartStorage->createCart();

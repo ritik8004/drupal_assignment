@@ -394,5 +394,23 @@ html[lang=ar] {
         margin-top: 0.3125rem;
       }
     }
+
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      input[type=text] {
+        font-family: $arial-nodir;
+      }
+    }
+
+    .mobile-number-field {
+      input[type=text],
+      .country-code-prefix {
+        font-family: $arial-nodir;
+      }
+
+      input[type=text] {
+        padding-top: 0.125rem;
+      }
+    }
   }
 }
