@@ -385,17 +385,30 @@ body {
   }
 }
 
-.logged-in .menu--account li:first-child {
-  margin-#{$right}: -0.3125rem;
-}
-
-html[lang=ar] {
-  .block-language-blocklanguage-interface {
-    margin-right: -0.0625rem;
+@include breakpoint($desktop) {
+  .logged-in .menu--account li:first-child {
+    margin-#{$right}: -0.3125rem;
   }
 
-  .c-menu-secondary a.register-link,
-  .c-menu-secondary .menu--account {
-    margin-left: -0.375rem;
+  .c-menu-secondary {
+    .menu--account,
+    .block-alshaya-stores-finder {
+      margin-#{$right}: -0.3125rem;
+    }
+
+    a.register-link {
+      margin-#{$right}: -0.3125rem;
+    }
+  }
+
+  html[lang=ar] {
+    .block-language-blocklanguage-interface {
+      margin-right: -0.0625rem;
+    }
+
+    .c-menu-secondary a.register-link,
+    .c-menu-secondary .menu--account {
+      margin-left: -0.375rem;
+    }
   }
 }
