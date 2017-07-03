@@ -26,6 +26,19 @@ function alshaya_acm_promotion_views_data_alter(array &$data) {
 }
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
+  return [
+    'cart_top_promotions' => [
+      'variables' => [
+        'promotions' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_theme_registry_alter().
  */
 function alshaya_acm_promotion_theme_registry_alter(&$theme_registry) {
