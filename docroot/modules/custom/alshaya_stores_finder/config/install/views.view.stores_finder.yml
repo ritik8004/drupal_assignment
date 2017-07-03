@@ -1381,7 +1381,7 @@ display:
           admin_label: ''
           empty: false
           tokenize: false
-          content: "<div class=\"load-more-button mobile-only-hide\">\n    <a href=\"\">Load More</a>\n  </div>"
+          content: "<div class=\"load-more-button\">\n    <a href=\"\">Load More</a>\n  </div>"
           plugin_id: text_custom
     cache_metadata:
       max-age: -1
