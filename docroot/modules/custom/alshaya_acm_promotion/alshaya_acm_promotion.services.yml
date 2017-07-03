@@ -1,0 +1,4 @@
+services:
+  alshaya_acm_promotion.manager:
+    class: Drupal\alshaya_acm_promotion\AlshayaPromotionsManager
+    arguments: [ '@entity_type.manager' , '@logger.factory' ]

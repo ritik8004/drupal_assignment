@@ -278,8 +278,16 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
   }
 
   if ((float) $totals['discount'] != 0) {
+    $cart_rules = $cart->getCart()->cart_rules;
+    foreach ($cart_rules as $rule_id) {
+      $promotionManager = \Drupal::service('alshaya_acm_promotion.manager');
+      $promotion = $promotionManager->getPromotionByRuleId($rule_id);
+      if ($promotion) {
+        $promotions[] = $promotion->get('field_acq_promotion_description')->first()->getValue();
+      }
+    }
     $form['totals']['discount']['value'] = [
-      '#markup' => alshaya_acm_price_format($totals['discount']),
+      '#markup' => alshaya_acm_price_format($totals['discount'], $promotions),
     ];
   }
 
@@ -423,6 +431,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
     'alshaya_cart_product_name' => [
       'variables' => [
         'sku_attributes' => '',
+        'promotions' => '',
         'item_code' => '',
         'total_price' => '',
         'name' => '',
@@ -443,11 +452,15 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
  * @return mixed|null
  *   Return rendered theme with html for price.
  */
-function alshaya_acm_price_format($price) {
+function alshaya_acm_price_format($price, $promotions = []) {
   $output = [
     '#theme' => 'acq_commerce_price',
     '#price' => $price,
   ];
+
+  if ($promotions) {
+    $output['#promotions'] = $promotions;
+  }
 
   return render($output);
 }
@@ -650,6 +663,8 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
 
   // Get parent sku of the sku.
   $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
+  $promotion_types = ['cart'];
+  $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, FALSE, $promotion_types);
 
   if ($parent_sku) {
     /* @var \Drupal\node\Entity\Node $parent_node */
@@ -679,6 +694,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     '#theme' => 'alshaya_cart_product_name',
     '#sku_attributes' => $sku_attributes,
     '#name' => $name,
+    '#promotions' => $promotions,
     '#image' => $sku_image,
     '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item['price']),
     '#item_code' => $sku_entity->getSku(),

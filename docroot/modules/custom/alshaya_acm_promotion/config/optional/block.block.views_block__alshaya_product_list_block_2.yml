@@ -2,23 +2,25 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.skus_sku_reference_color
+    - views.view.alshaya_product_list
   module:
     - ctools
-    - facets
+    - views
   theme:
     - alshaya_white_label
-id: skusskureferencecolor_promotion
+id: views_block__alshaya_product_list_block_2
 theme: alshaya_white_label
-region: sidebar_first
-weight: -23
+region: content
+weight: 3
 provider: null
-plugin: 'facet_block:skus_sku_reference_color'
+plugin: 'views_block:alshaya_product_list-block_2'
 settings:
-  id: 'facet_block:skus_sku_reference_color'
-  label: Colour
-  provider: facets
+  id: 'views_block:alshaya_product_list-block_2'
+  label: ''
+  provider: views
   label_display: visible
+  views_label: ''
+  items_per_page: none
 visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'

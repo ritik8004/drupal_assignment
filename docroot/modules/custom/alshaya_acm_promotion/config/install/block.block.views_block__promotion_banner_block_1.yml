@@ -2,23 +2,26 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets_summary.facets_summary.filter_bar_plp
+    - views.view.promotion_banner
   module:
     - ctools
-    - facets_summary
+    - views
   theme:
     - alshaya_white_label
-id: filterbarplp_2
+id: views_block__promotion_banner_block_1
 theme: alshaya_white_label
 region: content
-weight: -19
+weight: -31
 provider: null
-plugin: 'facets_summary_block:filter_bar_plp'
+plugin: 'views_block:promotion_banner-block_1'
 settings:
-  id: 'facets_summary_block:filter_bar_plp'
-  label: 'Filter bar PLP'
-  provider: facets_summary
+  id: 'views_block:promotion_banner-block_1'
+  label: ''
+  provider: views
   label_display: '0'
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
 visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'

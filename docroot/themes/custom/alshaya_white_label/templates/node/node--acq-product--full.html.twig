@@ -36,6 +36,12 @@ set classes = [
         </div>
       {% endif %}
 
+      {% if content.promotions %}
+        <div class="promotions">
+          {{ content.promotions }}
+        </div>
+      {% endif %}
+
       <div class="content--item-code">
         <span class="field__label">{{ 'Item Code'|t }}:</span>
         {{ content.item_code }}
