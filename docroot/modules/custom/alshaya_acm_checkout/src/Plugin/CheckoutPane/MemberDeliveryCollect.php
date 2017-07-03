@@ -39,7 +39,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $cart = $this->getCart();
-    
+
     $pane_form['guest_delivery_collect']['text_filter'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Find your closest collection point'),

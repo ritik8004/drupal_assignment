@@ -87,16 +87,15 @@
       });
 
       // Select this store and view on map.
-      $('#click-and-collect-list-view', context).once('bind-events').on('click', 'a[data-store-code]', function (e) {
+      $('#click-and-collect-list-view', context).once('bind-events').on('click', 'a.select-store, a.store-on-map', function (e) {
         e.preventDefault();
         // Find the store object with the given store-code from the store list.
-        var storeObj = _.findWhere(storeList, {code: $(this).data('store-code')});
+        var storeObj = _.findWhere(storeList, {code: $(this).closest('li').data('store-code')});
         // Choose the selected store to proceed with checkout.
         if (e.target.className === 'select-store') {
           Drupal.clickAndCollect.storeSelectedStore($(this), storeObj);
-        }
-        // Choose the selected store to display on map.
-        if (e.target.className === 'store-on-map') {
+        } // Choose the selected store to display on map.
+        else if (e.target.className === 'store-on-map') {
           Drupal.clickAndCollect.storeViewOnMapSelected($(this), storeObj);
           $('#click-and-collect-list-view').hide();
           $('#click-and-collect-map-view').show();
@@ -193,12 +192,15 @@
   Drupal.clickAndCollect.storeViewOnMapSelected = function (selectedButton, StoreObj) {
     // Create/Get map object.
     var map = Drupal.clickAndCollect.mapCreate();
-    // Remove any/all existing marker.
-    Drupal.geolocation.removeMapMarker(map);
-    // Create a new marker with the current store information.
-    var thismarker = Drupal.clickAndCollect.mapCreateMarker(StoreObj, map, 1);
+    // Get the index of current location.
+    var index = (parseInt(selectedButton.closest('li').data('index')) - 1);
+    // Get the lat/lng of current store to center the map.
+    var newLocation = new google.maps.LatLng(parseFloat(StoreObj.lat), parseFloat(StoreObj.lng));
+    map.googleMap.setCenter(newLocation);
+    // Zoom the current map to store location.
+    map.googleMap.setZoom(11);
     // Make the marker by default open.
-    google.maps.event.trigger(thismarker, 'click');
+    google.maps.event.trigger(map.mapMarkers[index], 'click');
   };
 
   // Display All the stores on map.
