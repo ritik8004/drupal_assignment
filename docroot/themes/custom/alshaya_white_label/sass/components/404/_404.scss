@@ -1,0 +1,176 @@
+// 404 and Maintenance.
+
+.not-found {
+  position: relative;
+  min-height: 26.5rem;
+  padding-top: 1.5rem;
+  max-width: 76.375rem;
+  margin: 0 auto 2rem;
+
+  html[lang=ar] & {
+    line-height: 1.125;
+  }
+
+  .maintenance-page & {
+    line-height: normal;
+
+    html[lang=ar] & {
+      direction: ltr;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    background: $faun;
+    z-index: -1;
+    border: solid 1px $white-two;
+  }
+
+  .not-found__image {
+    direction: ltr;
+  }
+
+  .not-found__body {
+    position: absolute;
+    z-index: 1;
+    right: 5.375rem;
+    width: 38.75rem;
+    bottom: 0;
+    text-align: center;
+    font-size: 1.5625rem;
+    font-family: $alshaya-thin;
+    color: $matterhorn;
+    display: table;
+    height: 25.875rem;
+
+    .maintenance-page & {
+      font-family: $alshaya-thin-nodir;
+    }
+
+    .not-found__body__container {
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    h1 {
+      line-height: 1;
+      font-size: 2.25rem;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      color: $marine-blue;
+      margin-bottom: 5px;
+      margin-top: 0;
+
+      .maintenance-page & {
+        font-family: $alshaya-bold-nodir;
+      }
+
+      &.title--arabic {
+        font-family: $alshaya-arabic-thin-nodir;
+        font-size: 30px;
+        direction: rtl;
+        color: $marine-blue;
+      }
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 0;
+      font-size: 1.5625rem;
+      color: $marine-blue;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+
+      .maintenance-page & {
+        font-family: $alshaya-bold-nodir;
+      }
+    }
+  }
+
+  img {
+    vertical-align: middle;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
+
+    &.arabic {
+      font-family: $alshaya-arabic-thin-nodir;
+      font-size: 20px;
+      direction: rtl;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .not-found__image {
+    display: none;
+  }
+
+  .not-found {
+    position: relative;
+    min-height: auto;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      background: $faun;
+      z-index: -1;
+      border: solid 1px $white-two;
+    }
+
+    .not-found__body {
+      position: relative;
+      margin: auto;
+      left: 0;
+      right: 0;
+      width: 80%;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .not-found .not-found__body {
+    font-size: 1rem;
+
+    & .arabic {
+      font-size: 1rem;
+    }
+  }
+
+  .not-found .not-found__body h2 {
+    font-size: 1.125rem;
+  }
+}
+
+.maintenance-page {
+  border-top: 24px solid $white-four;
+  margin-top: 0;
+
+  html[lang=ar] & {
+    margin-top: 0;
+  }
+
+  .maintenance__logo {
+    @include breakpoint($upto-desktop) {
+      text-align: right;
+      margin: 2rem 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      float: right;
+      margin-top: 1rem;
+      margin-right: 2rem;
+    }
+  }
+}
