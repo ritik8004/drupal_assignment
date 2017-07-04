@@ -150,9 +150,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $shipping_address = $this->addressBookManager->getAddressFromEntity($entity, FALSE);
         }
       }
-      else {
-        $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
-      }
+
+      $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
 
       if (isset($shipping_address['address_line1'])) {
         $line1[] = $shipping_address['address_line2'];
