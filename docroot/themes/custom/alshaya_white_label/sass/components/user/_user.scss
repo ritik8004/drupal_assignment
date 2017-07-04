@@ -441,12 +441,13 @@
 
   & > a {
     @include breakpoint($tablet) {
-      #{$left}: 10em;
-      bottom: 0.75em;
+      #{$left}: 9em;
+      bottom: 0.5em;
       width: auto;
 
       html[lang='ar'] & {
         #{$left}: 12em;
+        bottom: 0.75em;
       }
     }
 
