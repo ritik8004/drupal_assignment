@@ -120,17 +120,18 @@
           if ($('.current-view').length !== 0) {
             setTimeout(function() {
               $('.current-view form #edit-submit-stores-finder').trigger('click');
+              // Close the overlay.
+              $('body').removeClass('modal-overlay--spinner');
             }, 500);
           }
           else {
             setTimeout(function() {
               $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+              // Close the overlay.
+              $('body').removeClass('modal-overlay--spinner');
             }, 500);
           }
         });
-
-        // Close the overlay.
-        $('body').removeClass('modal-overlay--spinner');
       }
 
       // Remove the store node title from breadcrumb.
