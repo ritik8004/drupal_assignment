@@ -28,6 +28,7 @@ function alshaya_loyalty_get_validation_settings() {
       'length' => (int) $config->get('apcn_max_length'),
       'value_start_with' => $config->get('apcn_value_starts_with'),
       'enable_disable_loyalty' => $config->get('enable_disable_loyalty'),
+      'privilege_card_earn_text' => $config->get('privilege_card_earn_text'),
     ];
   }
 
@@ -309,6 +310,12 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#disabled' => !empty($default_value) && \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE,
     '#prefix' => '<div class="details-privilege-card-wrapper-inside">',
   ];
+
+  // 'Privilege card earn text' only for the basket page.
+  if ($form['#form_id'] == 'customer_cart_form') {
+    $privilege_earn_text = alshaya_loyalty_get_validation_settings()['privilege_card_earn_text'];
+    $form['privilege_card_wrapper']['privilege_card_number']['#prefix'] .= "<div class='privilege-earn-text'>$privilege_earn_text</div>";
+  }
 
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
     '#type' => 'tel',
