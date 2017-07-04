@@ -13,10 +13,10 @@
           <span class="store-address">{{ store.address|striptags }}</span>
         </div>
         <div class="store-open-hours">{{ store.open_hours }}</div>
-        <div class="store-delivery-time"><span class="label--delivery-time">{{ 'Collect in store from'|trans }}</span>{{ store.delivery_time }}</div>
+        <div class="store-delivery-time"><span class="label--delivery-time">{{ 'Collect in store from'|t }}</span>{{ store.delivery_time }}</div>
         <div class="store-actions">
-          <a href="#" class="select-store">{{ 'select this store'|trans }}</a>
-          <a href="#" class="store-on-map">{{ 'View on map'|trans }}</a>
+          <a href="#" class="select-store">{{ 'select this store'|t }}</a>
+          <a href="#" class="store-on-map">{{ 'View on map'|t }}</a>
         </div>
       </li>
     {% endfor %}
