@@ -61,7 +61,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
-      '#markup' => '<a href="#" class="stores-list-view">' . $this->t('List view') . '</a>',
+      '#markup' => '<a href="#" class="stores-list-view active">' . $this->t('List view') . '</a>',
     ];
 
     $pane_form['store_finder']['toggle_map_view'] = [
@@ -124,7 +124,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         'alshaya_click_collect' => ['cart_id' => $cart->id()],
       ],
       'library' => [
-        'alshaya_click_collect/click-and-collect',
+        'alshaya_click_collect/click-and-collect.checkout',
       ],
     ];
 

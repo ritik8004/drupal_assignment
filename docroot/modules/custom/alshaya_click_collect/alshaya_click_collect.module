@@ -100,7 +100,7 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
         '#store_finder_form' => render($store_form),
         '#attached' => [
           'library' => [
-            'alshaya_click_collect/pdp',
+            'alshaya_click_collect/click-and-collect.pdp',
           ],
         ],
       ];

@@ -135,7 +135,7 @@ class ClickCollectController extends ControllerBase {
     if (count($stores) > 0) {
       $build = [
         '#theme' => 'click_collect_stores_list',
-        '#title' => t('Available at @count stores', ['@count' => count($stores)]),
+        '#title' => t('Available at @count stores near', ['@count' => count($stores)]),
         '#stores' => $stores,
       ];
       $output = render($build);
