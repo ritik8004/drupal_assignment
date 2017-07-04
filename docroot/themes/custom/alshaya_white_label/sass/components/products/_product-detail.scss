@@ -1062,6 +1062,12 @@
         padding: 0.5rem 0;
       }
 
+      .ladda-button .ladda-spinner {
+        html[lang=ar] & {
+          margin-left: -1rem;
+        }
+      }
+
       button[type="submit"] {
         font-family: $arial;
         font-weight: bold;
