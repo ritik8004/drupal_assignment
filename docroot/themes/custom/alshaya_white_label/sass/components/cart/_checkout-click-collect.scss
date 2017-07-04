@@ -5,6 +5,7 @@
     .form-item-store-location {
       display: inline-block;
       margin-#{$left}: 1.563rem;
+      margin-#{$right}: 1.25rem;
 
       label[for=edit-store-location] {
         @include u-visibility(none);
@@ -20,21 +21,81 @@
       }
     }
 
+    .stores-list-view,
+    .stores-map-view {
+      width: 11.63rem;
+      display: inline-block;
+      text-align: center;
+      padding: 0.9375rem 0;
+      max-height: 3rem;
+      color: $cerulean-two;
+      font-size: 0.875rem;
+      position: relative;
+      padding-#{$left}: 2.5rem;
+
+      &.active {
+        border: 1px solid $marine-blue-two;
+        font-weight: bold;
+        color: $marine-blue-two;
+      }
+    }
+
+    .stores-list-view {
+      @include icon(list, before) {
+        color: $cerulean-two;
+        width: 1.625rem;
+        height: 0.8rem;
+        vertical-align: top;
+        font-size: 2.75rem;
+        line-height: 0.6;
+        position: absolute;
+        #{$left}: 2.188rem;
+        top: 0.75rem;
+      }
+
+      &.active {
+        &::before {
+          color: $marine-blue-two;
+        }
+      }
+    }
+
+    .stores-map-view {
+      @include icon(map, before) {
+        color: $cerulean-two;
+        margin-#{$right}: 0.4rem;
+        margin-#{$left}: 0.3125rem;
+        vertical-align: middle;
+        font-size: 1.938rem;
+        line-height: 1;
+        position: absolute;
+        top: 0.5625rem;
+        #{$left}: 2.188rem;
+      }
+
+      &.active {
+        &::before {
+          color: $marine-blue-two;
+        }
+      }
+    }
+
     .label-store-location {
       font-family: $arial;
       font-size: 0.8125rem;
       color: $grey-ash;
-      margin-#{$left}: 1.313rem;
+      margin-#{$left}: 3.375rem;
       display: inline-block;
+      position: relative;
 
-      &::before {
-        content: '';
-        background: url('../imgs/icons/ic-search-store.svg') no-repeat;
+      @include icon(search, before) {
+        position: absolute;
+        font-size: 2.125rem;
         width: 1.563rem;
         height: 1.563rem;
-        display: inline-block;
-        margin-#{$right}: 0.5rem;
-        vertical-align: middle;
+        position: absolute;
+        #{$left}: 1rem;
+        top: 1.438rem;
       }
     }
 
@@ -45,7 +106,7 @@
           font-size: 0.875rem;
           color: $black;
           margin-#{$left}: 1.375rem;
-          margin-top: 2.125rem;
+          margin-top: 1.875rem;
           margin-bottom: 0.625rem;
         }
       }
@@ -75,7 +136,9 @@
           .store-open-hours,
           .store-delivery-time,
           .store-actions {
-            display: table-cell;
+            @include breakpoint($desktop) {
+              display: table-cell;
+            }
           }
 
           .store-name-and-address {
@@ -121,6 +184,12 @@
               font-family: $alshaya-bold;
               font-size: 0.75rem;
               min-width: 10.13rem;
+
+              &:hover {
+                background-color: $pumpkin-orange;
+                color: $white-five;
+                border-color: $pumpkin-orange;
+              }
             }
 
             .view-map {
