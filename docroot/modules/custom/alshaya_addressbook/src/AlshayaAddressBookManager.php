@@ -336,9 +336,6 @@ class AlshayaAddressBookManager {
     $magento_address['extension']['address_block_segment'] = $address['locality'];
     $magento_address['country_id'] = $address['country_code'];
 
-    // @TODO: Remove this after Magento makes it optional.
-    $magento_address['city'] = 'NA';
-
     return $magento_address;
   }
 
