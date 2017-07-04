@@ -136,7 +136,7 @@
         background: $white url('../imgs/cards/visa-inactive.png') no-repeat;
         background-size: 100%;
 
-        &:hover {
+        &.active {
           background-image: url('../imgs/cards/visa-active.png');
         }
       }
@@ -145,7 +145,7 @@
         background: $white url('../imgs/cards/mastercard-inactive.png') no-repeat;
         background-size: 100%;
 
-        &:hover {
+        &.active {
           background-image: url('../imgs/cards/mastercard-active.png');
         }
       }
@@ -154,7 +154,7 @@
         background: $white url('../imgs/cards/dinersclub-inactive.png') no-repeat;
         background-size: 100%;
 
-        &:hover {
+        &.active {
           background-image: url('../imgs/cards/dinersclub-active.png');
         }
       }
@@ -171,7 +171,6 @@
 
     label {
       float: $left;
-      padding: 5px 20px 5px 0;
     }
 
     &::after {
@@ -199,6 +198,18 @@
     position: absolute;
     top: 44%;
     #{$left}: 24%;
+
+    @include breakpoint($tablet) {
+      width: 65%;
+      top: 40%;
+      #{$left}: 30%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 40%;
+      top: 44%;
+      #{$left}: 24%;
+    }
 
     &::before {
       content: "";

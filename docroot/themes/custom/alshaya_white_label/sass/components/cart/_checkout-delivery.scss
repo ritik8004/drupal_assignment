@@ -431,6 +431,7 @@
     top: 0 !important;
     #{$left}: 0 !important;
     background: rgba(255, 255, 255, 0.7);
+    z-index: 99;
 
     .message {
       display: none;
@@ -445,7 +446,7 @@
       top: 0;
       z-index: 100;
       background: url(../imgs/icons/MC-loader.svg) center no-repeat !important;
-      background-size: 3.5rem !important;
+      background-size: 5.5rem !important;
       padding-#{$left}: 0.625rem;
       padding-#{$right}: 0.625rem;
       width: 100%;
@@ -787,35 +788,3 @@
     margin-left: 1.5rem;
   }
 }
-
-// #edit-guest-delivery-home-address-shipping,
-// #edit-member-delivery-home-address-form-form {
-//   .form-item-guest-delivery-home-address-shipping-address-line2,
-//   .form-item-member-delivery-home-address-form-form-address-line2 {
-//     label:last-of-type {
-//       font-size: 1rem;
-//       color: $greyish;
-//       position: absolute;
-//       #{$left}: 0;
-//       top: -0.125rem;
-//       transition: 0.2s ease all;
-//     }
-
-//     input:not(:focus):valid ~ label:not(.error),
-//     input:focus ~ label:not(.error) {
-//       top: -1.25em;
-//       bottom: 0;
-//       left: 0;
-//       opacity: 1;
-//       font-size: 0.75rem;
-//     }
-
-//     input[type="text"]:focus ~ label:last-of-type {
-//       top: -1.25em;
-//       bottom: 0;
-//       #{$left}: 0;
-//       opacity: 1;
-//       font-size: 0.75rem;
-//     }
-//   }
-// }

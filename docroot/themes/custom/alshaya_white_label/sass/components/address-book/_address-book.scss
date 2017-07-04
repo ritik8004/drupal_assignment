@@ -375,11 +375,14 @@
       padding-bottom: 0 !important;
     }
 
+    .form-item.verified,
     .form-type-select {
       display: none !important;
     }
 
+    .form-type-textfield,
     .form-item-field-mobile-number-0-mobile,
+    .form-item-billing-address-address-billing-mobile-number-mobile,
     .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
     .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
     .form-item-field-address-0-address-mobile-number-mobile {
@@ -441,7 +444,7 @@
   }
 }
 
-.address-book-address .form-type-select,
+.address-book-address .form-item.form-type-select,
 .form-item-guest-delivery-home-address-shipping-administrative-area,
 .form-item-member-delivery-home-address-form-form-administrative-area {
   &::after {
@@ -450,6 +453,10 @@
     width: 2.188rem;
     background: $white !important;
     border-#{$left}: 1px solid $white-five;
+  }
+
+  .error {
+    top: 0 !important;
   }
 
   select.form-select,

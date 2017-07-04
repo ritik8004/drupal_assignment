@@ -1236,14 +1236,3 @@ article[gtm-sku-type="simple"] {
     }
   }
 }
-
-// Add to cart block breaking in arabic due to ladda button - fixing it through this hack.
-@include breakpoint($upto-desktop) {
-  html[lang="ar"] {
-    .c-pdp .content__sidebar .ladda-spinner {
-      left: 43% !important;
-      position: absolute !important;
-      top: 1rem !important;
-    }
-  }
-}

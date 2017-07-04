@@ -46,6 +46,7 @@
 
     .address-container-inline > .form-item {
       max-width: 144px;
+      display: inline-block;
       margin-right: 0;
       vertical-align: top;
       width: 100%;
@@ -75,15 +76,15 @@
       padding-top: 0;
     }
 
-    select {
-      background: none;
-      border: none;
-      border-bottom: 1px solid $grey-ash;
-      height: 1.6rem;
-      outline: none;
-      -webkit-appearance: none;
-      border-radius: 0;
-    }
+    // select {
+    //   background: none;
+    //   border: none;
+    //   border-bottom: 1px solid $grey-ash;
+    //   height: 1.6rem;
+    //   outline: none;
+    //   -webkit-appearance: none;
+    //   border-radius: 0;
+    // }
 
     .form-actions {
       margin-bottom: 5.625rem;
