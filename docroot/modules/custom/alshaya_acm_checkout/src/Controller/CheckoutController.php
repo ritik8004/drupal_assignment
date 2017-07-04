@@ -94,7 +94,7 @@ class CheckoutController implements ContainerInjectionInterface {
 
     $update = [];
     $update['customer_address_id'] = $address['customer_address_id'];
-    $update['country'] = $address['country'];
+    $update['country_id'] = $address['country_id'];
     $update['customer_id'] = $cart->customerId();
 
     $cart->setShipping($update);
