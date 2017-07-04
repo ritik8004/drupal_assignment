@@ -6,8 +6,6 @@
 (function ($, Drupal) {
   'use strict';
 
-  /* global google */
-
   // Coordinates of the user's location.
   var asfCoords = null;
 
@@ -29,7 +27,7 @@
   Drupal.pdp = Drupal.pdp || {};
   Drupal.geolocation = Drupal.geolocation || {};
 
-  Drupal.behaviors.pdpClickCollect= {
+  Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
       if (typeof Drupal.geolocation.loadGoogle === 'function') {
         // First load the library from google.
@@ -41,7 +39,7 @@
 
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Get the permission track the user location.
-         Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationError, Drupal.pdp.LocationError);
+        Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationError, Drupal.pdp.LocationError);
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
@@ -67,7 +65,7 @@
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
-          Drupal.pdp.storesDisplay(asoords);
+          Drupal.pdp.storesDisplay(asfCoords);
           return false;
         }
         else {

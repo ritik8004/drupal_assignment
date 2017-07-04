@@ -1,9 +1,20 @@
 (function ($, Drupal) {
   'use strict';
 
+  /* global google */
   Drupal.click_collect = Drupal.click_collect || {};
 
-  // {Drupal.Clickcollect}
+  /**
+   * Click and collect constructor.
+   *
+   * @constructor
+   *
+   * @param {HTMLElement} field
+   *   The html element to which we need to attach autocomplete.
+   * @param {Array} callbacks
+   *   The callback functions to be called on place changed.
+   *
+   */
   Drupal.ClickCollect = function (field, callbacks) {
     var click_collect = this;
 
@@ -27,7 +38,7 @@
   };
 
   // Initialize autocomplete for given field.
-  Drupal.ClickCollect.prototype.googleAutocomplete = function(field) {
+  Drupal.ClickCollect.prototype.googleAutocomplete = function (field) {
     // Create the autocomplete object, restricting the search to geographical
     // location types.
     return new google.maps.places.Autocomplete(

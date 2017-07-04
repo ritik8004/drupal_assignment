@@ -79,10 +79,11 @@
         else if (e.target.className === 'store-on-map') {
           Drupal.checkoutClickCollect.storeViewOnMapSelected($(this), storeObj);
           $('a.stores-map-view').trigger('click');
-          /*$('#click-and-collect-list-view').hide();
+
+          /* $('#click-and-collect-list-view').hide();
           $('#click-and-collect-map-view').show();
           $('.stores-list-view').toggleClass('active');
-          $('.stores-map-view').toggleClass('active');*/
+          $('.stores-map-view').toggleClass('active'); */
         }
         return false;
       });
