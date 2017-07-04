@@ -1,18 +1,16 @@
 /**
  * @file
- * Sliders.
+ * Select2 select.
  */
 
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.accordion = {
+  Drupal.behaviors.select2select = {
     attach: function (context, settings) {
-      $('.form-item-field-address-0-address-administrative-area select')
-        .once()
-        .each(function () {
-          $(this).select2();
-        });
+      $('.select2-select').once('bind-events').each(function () {
+        $(this).select2();
+      });
     }
   };
 })(jQuery, Drupal);
