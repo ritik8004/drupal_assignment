@@ -10,7 +10,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\BaseCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
@@ -491,20 +491,17 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
       $config = \Drupal::config('alshaya_stores_finder.settings');
+      $settings = ['alshaya_acm' => ['product_sku' => $sku->getSku()]];
       if (!alshaya_acm_product_available_click_collect($tree_pointer->getSku())) {
-        $response->addCommand(new HtmlCommand('#pdp-stores-container.click-collect > h3 > .subtitle', $config->get('pdp_click_collect_unavailable')));
-        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'removeClass', ['ui-state-active ui-accordion-header-active']));
-        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > .c-accordion_content', 'hide'));
-        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'addClass', ['ui-state-disabled']));
-        $response->addCommand(new SettingsCommand(['alshaya_acm' => ['storeFinder' => FALSE]]));
+        $settings['alshaya_acm']['storeFinder'] = FALSE;
+        $settings['alshaya_acm']['subtitle_txt'] = $config->get('pdp_click_collect_unavailable');
       }
       else {
-        $response->addCommand(new HtmlCommand('#pdp-stores-container.click-collect > h3 > .subtitle', $config->get('pdp_click_collect_subtitle')));
-        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'removeClass', ['ui-state-disabled']));
-        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'addClass', ['ui-state-active ui-accordion-header-active']));
-        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > .c-accordion_content', 'show'));
-        $response->addCommand(new SettingsCommand(['alshaya_acm' => ['storeFinder' => TRUE]]));
+        $settings['alshaya_acm']['storeFinder'] = TRUE;
+        $settings['alshaya_acm']['subtitle_txt'] = $config->get('pdp_click_collect_subtitle');
       }
+      $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
+      $response->addCommand(new BaseCommand('updatePDPClickCollect', $settings));
     }
 
     return $response;

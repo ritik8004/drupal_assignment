@@ -91,6 +91,7 @@ class StoreFinderAvailableStores extends FormBase {
         ],
         'alshaya_acm' => [
           'storeFinder' => TRUE,
+          'searchForm' => TRUE,
         ],
       ],
     ];
