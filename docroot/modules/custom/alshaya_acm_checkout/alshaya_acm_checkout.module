@@ -260,7 +260,9 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
   }
 
   // At this stage we always want to have fresh data.
-  \Drupal::cache()->invalidate('orders_list_' . $email);
+  /** @var \Drupal\alshaya_acm_customer\OrdersManager $orders_manager */
+  $orders_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+  $orders_manager->clearOrderCache($email);
 
   $orders = alshaya_acm_customer_get_user_orders($email);
 
