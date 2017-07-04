@@ -42,7 +42,7 @@ class AcqPromotionsManager {
    *   EntityTypeManager object.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   The api wrapper.
-   * @param \Drupal\Core\Logger\LoggerChannelFactory|\Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    * @param \Drupal\Core\Language\LanguageManager $languageManager
    *   Language Manager service.
@@ -168,7 +168,7 @@ class AcqPromotionsManager {
 
     $node->save();
 
-    // Create promotiont translations based on the language codes available in
+    // Create promotion translations based on the language codes available in
     // promotion labels.
     foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
       if ($langcode !== $site_default_langcode) {
