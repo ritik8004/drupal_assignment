@@ -128,10 +128,12 @@ class AcqPromotionsManager {
     // Add SKU ID's to promotion.
     if (!empty($promotion['products'])) {
       // Assign value to $node object.
-      foreach ($promotion['products'] as $delta => $product) {
+      $delta = 0;
+      foreach ($promotion['products'] as $key => $product) {
         $sku = SKU::loadFromSku($product['product_sku']);
         if ($sku instanceof SKU) {
           $node->get('field_acq_promotion_sku')->set($delta, $sku->id());
+          $delta++;
         }
       }
     }
