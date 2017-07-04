@@ -224,7 +224,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#type' => 'textfield',
     '#prefix' => '<div class="coupon-code-wrapper">',
     '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span></div>',
-    '#default_value' => !empty($form_state->getValue('coupon')) ? $form_state->getValue('coupon') : '',
+    '#default_value' => $cart->getCoupon(),
   ];
 
   if (!empty($cart_items)) {
@@ -279,11 +279,14 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
 
   if ((float) $totals['discount'] != 0) {
     $cart_rules = $cart->getCart()->cart_rules;
+    $promotions = [];
     foreach ($cart_rules as $rule_id) {
       $promotionManager = \Drupal::service('alshaya_acm_promotion.manager');
       $promotion = $promotionManager->getPromotionByRuleId($rule_id);
       if ($promotion) {
-        $promotions[] = $promotion->get('field_acq_promotion_description')->first()->getValue();
+        $descriptions = $promotion->get('field_acq_promotion_description')->getValue();
+        $promotions[$rule_id]['description'] = array_shift($descriptions);
+        $promotions[$rule_id]['title'] = $promotion->getTitle();
       }
     }
     $form['totals']['discount']['value'] = [

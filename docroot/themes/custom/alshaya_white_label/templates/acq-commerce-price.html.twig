@@ -10,18 +10,26 @@
   </span>
 {% endif %}
 
-{%  if  promotions is not empty %}
+{% if promotions is not empty %}
   <div class="cart-promotions">
-    {% for id, promotion in promotions %}
       <div class="tooltip-wrap">
         <div class="contains--tooltip">
           <div class="tooltip--head">
           </div>
           <div class="tooltip">
-            {{ promotion.value | raw }}
+            {% for id, promotion in promotions %}
+              <div class="promotion-{{ id }}">
+                <div class="promotion-label">
+                  <strong>{{ promotion.title }}</strong>
+                </div>
+                <div class="promotion-description">
+                  {{ promotion.description.value | raw }}
+                </div>
+              </div>
+              <br>
+            {% endfor %}
           </div>
         </div>
       </div>
-    {% endfor %}
   </div>
 {% endif %}
