@@ -306,7 +306,14 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#element_validate' => [
       '_alshaya_loyalty_validate_field_value',
     ],
+    '#ajax' => [
+      'callback' => 'alshaya_loyalty_privilege_card_validation_ajax_callback',
+      'event' => 'change',
+      'method' => 'replace',
+      'wrapper' => 'details-privilege-card-wrapper',
+    ],
     '#default_value' => !empty($default_value) ? $default_value : $validation['value_start_with'],
+    '#limit_validation_errors' => [['privilege_card_number']],
     '#disabled' => !empty($default_value) && \Drupal::currentUser()->isAuthenticated() ? TRUE : FALSE,
     '#prefix' => '<div class="details-privilege-card-wrapper-inside">',
   ];
@@ -327,7 +334,6 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
       ],
     ],
     '#element_validate' => [
-      '_alshaya_loyalty_validate_field_value',
       '_alshaya_loyalty_compare_field_values',
     ],
     '#ajax' => [
