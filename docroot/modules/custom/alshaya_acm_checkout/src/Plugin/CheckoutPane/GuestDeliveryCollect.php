@@ -56,6 +56,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Find your closest collection point'),
+      '#prefix' => '<div class="label-store-location">' . $this->t('Find your closest collection point') . '</div>',
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
