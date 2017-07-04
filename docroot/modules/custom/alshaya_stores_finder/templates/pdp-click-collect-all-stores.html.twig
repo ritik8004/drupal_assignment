@@ -28,7 +28,7 @@
       <li>
         <div class="store-low-stock">{{ store.low_stock_text }}</div>
         <div class="store-name">{{ store.name }}</div>
-        <div class="store-address">{{ store.address }}</div>
+        <div class="store-address">{{ store.address|striptags }}</div>
         <div class="store-delivery-time">{{ store.delivery_time  }}</div>
       </li>
     {% endfor %}

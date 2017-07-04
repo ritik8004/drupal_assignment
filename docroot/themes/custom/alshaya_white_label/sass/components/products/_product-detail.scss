@@ -756,7 +756,6 @@
 .pac-container {
   border: 1px solid $white-two;
   box-shadow: none;
-  width: 11.44rem !important;
 
   .pac-icon {
     @include u-visibility(none);
@@ -996,6 +995,23 @@
 
     .stores-list-all {
       margin-top: 0.5rem;
+
+      .ajax-progress-throbber {
+        position: absolute;
+
+        .message {
+          display: none;
+        }
+
+        .throbber {
+          background-image: url(../imgs/icons/MC-loader.svg) !important;
+          background-position: $right center !important;
+          background-repeat: no-repeat !important;
+          background-size: 1.5rem;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+        }
+      }
     }
   }
 }
