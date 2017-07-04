@@ -51,6 +51,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#type' => 'container',
       '#title' => t('store finder'),
       '#tree' => FALSE,
+      '#id' => 'store-finder-wrapper',
     ];
 
     $pane_form['store_finder']['store_location'] = [
@@ -59,11 +60,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
-      '#markup' => $this->t('List view'),
+      '#markup' => '<a href="#" class="stores-list-view">' . $this->t('List view') . '</a>',
     ];
 
     $pane_form['store_finder']['toggle_map_view'] = [
-      '#markup' => $this->t('Map view'),
+      '#markup' => '<a href="#" class="stores-map-view">' . $this->t('Map view') . '</a>',
     ];
 
     $pane_form['store_finder']['list_view'] = [
@@ -73,25 +74,51 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['store_finder']['map_view'] = [
       '#type' => 'container',
+      '#id' => 'click-and-collect-map-view',
     ];
 
     $pane_form['store_finder']['map_view']['content'] = [
-      '#markup' => $this->t('Map view'),
+      '#markup' => '<div class="geolocation-common-map-container"></div>',
     ];
 
     $pane_form['selected_store'] = [
       '#type' => 'container',
       '#title' => t('selected store'),
       '#tree' => FALSE,
+      '#id' => 'selected-store-wrapper',
+      '#attributes' => ['style' => 'display:none;'],
     ];
 
     $pane_form['selected_store']['content'] = [
-      '#markup' => '<div id="selected-store-wrapper" class="selected-store-wrapper"></div>',
+      '#markup' => '<div id="selected-store-content" class="selected-store-content"></div>',
     ];
+
     $pane_form['#attached'] = [
       'drupalSettings' => [
         'geolocation' => [
           'google_map_url' => $this->getGoogleMapsApiUrl(),
+          'google_map_settings' => [
+            'type' => static::$ROADMAP,
+            'zoom' => 10,
+            'minZoom' => 0,
+            'maxZoom' => 18,
+            'rotateControl' => 0,
+            'mapTypeControl' => 1,
+            'streetViewControl' => 1,
+            'zoomControl' => 1,
+            'fullscreenControl' => 0,
+            'scrollwheel' => 1,
+            'disableDoubleClickZoom' => 0,
+            'draggable' => 1,
+            'height' => '815px',
+            'width' => '100%',
+            'info_auto_display' => 0,
+            'marker_icon_path' => '/themes/custom/alshaya_white_label/imgs/icons/google-map-marker.svg',
+            'disableAutoPan' => 1,
+            'style' => '',
+            'preferScrollingToZooming' => 0,
+            'gestureHandling' => 'auto',
+          ],
         ],
         'alshaya_acm_checkout' => ['cart_id' => $cart->id()],
       ],
