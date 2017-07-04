@@ -81,6 +81,8 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $account = $this->currentUser;
     }
 
+    $is_customer = alshaya_acm_customer_is_customer($account);
+
     // Get the current route to set active class.
     $currentRoute = \Drupal::routeMatch()->getRouteName();
 
@@ -98,12 +100,14 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $links['my_account']['text'] = $this->t('Account');
     }
 
-    // Orders link.
-    $links['orders'] = [
-      'text' => $this->t('orders'),
-      'route' => 'acq_customer.orders',
-      'options' => ['user' => $account->id()],
-    ];
+    if ($is_customer) {
+      // Orders link.
+      $links['orders'] = [
+        'text' => $this->t('orders'),
+        'route' => 'acq_customer.orders',
+        'options' => ['user' => $account->id()],
+      ];
+    }
 
     // Contact details link.
     $links['contact_details'] = [
@@ -112,23 +116,26 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       'options' => ['user' => $account->id()],
     ];
 
-    // Address book link.
-    $links['address_book'] = [
-      'text' => $this->t('address book'),
-      'route' => 'entity.profile.type.address_book.user_profile_form',
-      'options' => [
-        'user' => $account->id(),
-        'profile_type' => 'address_book',
-      ],
-    ];
+    if ($is_customer) {
+      // Address book link.
+      $links['address_book'] = [
+        'text' => $this->t('address book'),
+        'route' => 'entity.profile.type.address_book.user_profile_form',
+        'options' => [
+          'user' => $account->id(),
+          'profile_type' => 'address_book',
+        ],
+      ];
+    }
 
-    // Communication preferences link.
-    // TODO: Update the route name once link is available.
-    $links['communication_preference'] = [
-      'text' => $this->t('communication preferences'),
-      'route' => 'alshaya_user.user_communication_preference',
-      'options' => ['user' => $account->id()],
-    ];
+    if ($is_customer) {
+      // Communication preferences link.
+      $links['communication_preference'] = [
+        'text' => $this->t('communication preferences'),
+        'route' => 'alshaya_user.user_communication_preference',
+        'options' => ['user' => $account->id()],
+      ];
+    }
 
     // Change password link.
     $links['change_password'] = [
