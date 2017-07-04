@@ -5,7 +5,7 @@
   min-height: 26.5rem;
   padding-top: 1.5rem;
   max-width: 76.375rem;
-  margin: auto;
+  margin: 0 auto 2rem;
 
   html[lang=ar] & {
     line-height: 1.125;
@@ -80,6 +80,7 @@
 
     h2 {
       margin-top: 0;
+      margin-bottom: 0;
       font-size: 1.5625rem;
       color: $marine-blue;
       font-family: $alshaya-bold;
@@ -141,9 +142,35 @@
 @media screen and (max-width: 767px) {
   .not-found .not-found__body {
     font-size: 1rem;
+
+    & .arabic {
+      font-size: 1rem;
+    }
   }
 
   .not-found .not-found__body h2 {
     font-size: 1.125rem;
+  }
+}
+
+.maintenance-page {
+  border-top: 24px solid $white-four;
+  margin-top: 0;
+
+  html[lang=ar] & {
+    margin-top: 0;
+  }
+
+  .maintenance__logo {
+    @include breakpoint($upto-desktop) {
+      text-align: right;
+      margin: 2rem 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      float: right;
+      margin-top: 1rem;
+      margin-right: 2rem;
+    }
   }
 }
