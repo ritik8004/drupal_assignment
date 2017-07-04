@@ -295,6 +295,10 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       $form_state->set('uid', $uid);
       return;
     }
+    else {
+      $form_state->setErrorByName('name', t('Unrecognized email address or password.'));
+      return;
+    }
   }
 
   // For admin users, we process the email validate to have name set.
@@ -465,7 +469,7 @@ function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, Fo
   }
 
   // For all users who don't have customer_id, we store password only in Drupal.
-  if (empty($user->get('acq_customer_id')->getValue())) {
+  if (!alshaya_acm_customer_is_customer($user)) {
     call_user_func_array($form_state->prepareCallback('::validateForm'), [&$form, &$form_state]);
     return;
   }
@@ -503,10 +507,8 @@ function alshaya_acm_customer_change_pwd_form_update_password(array &$form, Form
     $user = $build_info['args'][0];
   }
 
-  $roles = $user->getRoles();
-
   // For all users except just authenticated, we store password only in Drupal.
-  if (count($roles) > 1) {
+  if (!alshaya_acm_customer_is_customer($user)) {
     call_user_func_array($form_state->prepareCallback('::submitForm'), [&$form, &$form_state]);
     return;
   }
@@ -593,7 +595,7 @@ function alshaya_acm_customer_is_customer($user) {
     return FALSE;
   }
 
-  if (empty($user->get('acq_customer_id')->getValue())) {
+  if (empty($user->get('acq_customer_id')->getString())) {
     return FALSE;
   }
 
