@@ -23,7 +23,11 @@ class CustomerController extends ControllerBase {
    * @return array
    *   Build array.
    */
-  public function listOrders(UserInterface $user = NULL) {
+  public function listOrders(UserInterface $user) {
+    if (!alshaya_acm_customer_is_customer($user)) {
+      throw new AccessDeniedHttpException();
+    }
+
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $build = [];

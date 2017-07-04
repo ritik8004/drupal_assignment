@@ -10,7 +10,9 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountProxy;
 use Drupal\user\UserInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_module_implements_alter().
@@ -279,10 +281,9 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
   /** @var \Drupal\user\Entity\User $user */
   if ($user = user_load_by_mail($mail)) {
     // For all users except just authenticated, we can rely on Drupal auth.
-    if (empty($user->get('acq_customer_id')->getValue())) {
-      $do_api_check = FALSE;
-    }
-    elseif (!$user->isActive()) {
+    $do_api_check = alshaya_acm_customer_is_customer($user);
+
+    if ($do_api_check && !$user->isActive()) {
       $form_state->setErrorByName('name', t('Your account has not been activated or is blocked.'));
       $do_api_check = FALSE;
     }
@@ -570,4 +571,31 @@ function alshaya_acm_customer_alshaya_profile_installed() {
 
     alshaya_i18n_save_translations($strings);
   }
+}
+
+/**
+ * Helper function to check if user is valid customer.
+ *
+ * @param \Drupal\user\UserInterface|\Drupal\Core\Session\AccountProxy $user
+ *   User to check if it is valid customer.
+ *
+ * @return bool
+ *   True if user is customer, false otherwise.
+ */
+function alshaya_acm_customer_is_customer($user) {
+  if ($user instanceof UserInterface) {
+    // Do nothing, we need this to have else condition.
+  }
+  elseif ($user instanceof AccountProxy) {
+    $user = User::load($user->id());
+  }
+  else {
+    return FALSE;
+  }
+
+  if (empty($user->get('acq_customer_id')->getValue())) {
+    return FALSE;
+  }
+
+  return TRUE;
 }
