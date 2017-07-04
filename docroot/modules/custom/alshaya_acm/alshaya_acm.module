@@ -285,8 +285,9 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
       $promotion = $promotionManager->getPromotionByRuleId($rule_id);
       if ($promotion) {
         $descriptions = $promotion->get('field_acq_promotion_description')->getValue();
+        $promotions_text = $promotion->get('field_acq_promotion_label')->getValue();
         $promotions[$rule_id]['description'] = array_shift($descriptions);
-        $promotions[$rule_id]['title'] = $promotion->getTitle();
+        $promotions[$rule_id]['text'] = array_shift($promotions_text);
       }
     }
     $form['totals']['discount']['value'] = [

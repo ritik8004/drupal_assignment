@@ -252,14 +252,16 @@ class SkuManager {
     if (!empty($promotionIDs)) {
       $promotions = Node::loadMultiple($promotionIDs);
       foreach ($promotions as $promotion) {
+        $promotion_text = $promotion->get('field_acq_promotion_label')->getValue();
+
         /* @var \Drupal\node\Entity\Node $promotion */
         if ($getLinks) {
-          $promos[$promotion->id()] = $promotion->toLink($promotion->getTitle())->toString()->getGeneratedLink();
+          $promos[$promotion->id()] = $promotion->toLink($promotion_text[0]['value'])->toString()->getGeneratedLink();
         }
         else {
           $descriptions = $promotion->get('field_acq_promotion_description')->getValue();
           $promos[$promotion->id()] = [
-            'text' => $promotion->getTitle(),
+            'text' => array_shift($promotion_text),
             'description' => array_shift($descriptions),
           ];
         }
