@@ -52,7 +52,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
 
-    if (empty($address['country'])) {
+    if (empty($address['country_id'])) {
       $address_default_value = [
         'country_code' => _alshaya_custom_get_site_level_country_code(),
       ];
