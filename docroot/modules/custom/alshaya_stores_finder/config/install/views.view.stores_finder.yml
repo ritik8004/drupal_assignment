@@ -340,59 +340,6 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
-        field_latitude_longitude_boundary:
-          id: field_latitude_longitude_boundary
-          table: node__field_latitude_longitude
-          field: field_latitude_longitude_boundary
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value:
-            lat_north_east: ''
-            lng_north_east: ''
-            lat_south_west: ''
-            lng_south_west: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: 'Find stores nearest to'
-            description: ''
-            use_operator: false
-            operator: field_latitude_longitude_boundary_op
-            identifier: field_latitude_longitude_boundary
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              webmaster: '0'
-            input_by_geocoding_widget: 1
-            geocoder_plugin_settings:
-              plugin_id: google_geocoding_api
-              settings:
-                components:
-                  route: ''
-                  locality: ''
-                  administrativeArea: ''
-                  postalCode: ''
-                  country: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: geolocation_filter_boundary
         langcode:
           id: langcode
           table: node_field_data
@@ -467,7 +414,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - url
         - 'user.node_grants:view'
         - user.permissions
       tags:
@@ -489,6 +435,8 @@ display:
         style: false
         row: false
         fields: false
+        filters: false
+        filter_groups: false
       displays:
         page_1: page_1
         page_2: page_2
@@ -699,8 +647,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ field_store_address__value|raw }}'
             make_link: false
             path: ''
             absolute: false
@@ -818,6 +766,146 @@ display:
         type: none
         options:
           offset: 0
+      filters:
+        status:
+          value: '1'
+          table: node_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: node
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+          group: 1
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          value:
+            store: store
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: in
+          value:
+            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+        field_latitude_longitude_proximity:
+          proximity_source: exposed
+          proximity_lat: ''
+          proximity_lng: ''
+          proximity_units: km
+          proximity_argument: ''
+          entity_id_argument: ''
+          boundary_filter: ''
+          client_location: false
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: '25'
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_latitude_longitude_proximity_op
+            label: ''
+            description: ''
+            use_operator: false
+            operator: field_latitude_longitude_proximity_op
+            identifier: field_latitude_longitude_proximity
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              advanced_page_creator: '0'
+              advanced_page_reviewer: '0'
+              media_creator: '0'
+              acq_product_creator: '0'
+              media_manager: '0'
+              acq_product_reviewer: '0'
+              acq_promotion_creator: '0'
+              acq_promotion_reviewer: '0'
+              department_page_creator: '0'
+              department_page_reviewer: '0'
+              webmaster: '0'
+              reviewer: '0'
+              store_creator: '0'
+              store_reviewer: '0'
+              geolocation_default_article_creator: '0'
+              geolocation_default_article_reviewer: '0'
+            input_by_geocoding_widget: 1
+            geocoder_plugin_settings:
+              plugin_id: google_geocoding_api
+              settings:
+                components:
+                  route: ''
+                  locality: ''
+                  administrativeArea: ''
+                  postalCode: ''
+                  country: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: geolocation_filter_proximity
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
     cache_metadata:
       max-age: -1
       contexts:
@@ -849,6 +937,7 @@ display:
         fields: false
         pager: false
         empty: false
+        footer: false
       header:
         result:
           id: result
@@ -892,70 +981,6 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
-        field_latitude_longitude_boundary:
-          id: field_latitude_longitude_boundary
-          table: node__field_latitude_longitude
-          field: field_latitude_longitude_boundary
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value:
-            lat_north_east: ''
-            lng_north_east: ''
-            lat_south_west: ''
-            lng_south_west: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: field_latitude_longitude_boundary_op
-            identifier: field_latitude_longitude_boundary
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              advanced_page_creator: '0'
-              advanced_page_reviewer: '0'
-              media_creator: '0'
-              acq_product_creator: '0'
-              media_manager: '0'
-              acq_product_reviewer: '0'
-              department_page_creator: '0'
-              department_page_reviewer: '0'
-              webmaster: '0'
-              reviewer: '0'
-              store_creator: '0'
-              store_reviewer: '0'
-            input_by_geocoding_widget: 1
-            geocoder_plugin_settings:
-              plugin_id: google_geocoding_api
-              settings:
-                components:
-                  route: ''
-                  locality: ''
-                  administrativeArea: ''
-                  postalCode: ''
-                  country: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: geolocation_filter_boundary
         langcode:
           id: langcode
           table: node_field_data
@@ -996,6 +1021,81 @@ display:
           entity_type: node
           entity_field: langcode
           plugin_id: language
+        field_latitude_longitude_proximity:
+          proximity_source: exposed
+          proximity_lat: ''
+          proximity_lng: ''
+          proximity_units: km
+          proximity_argument: ''
+          entity_id_argument: ''
+          boundary_filter: field_latitude_longitude_boundary
+          client_location: false
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: '25'
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_latitude_longitude_proximity_op
+            label: ''
+            description: ''
+            use_operator: false
+            operator: field_latitude_longitude_proximity_op
+            identifier: field_latitude_longitude_proximity
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              advanced_page_creator: '0'
+              advanced_page_reviewer: '0'
+              media_creator: '0'
+              acq_product_creator: '0'
+              media_manager: '0'
+              acq_product_reviewer: '0'
+              acq_promotion_creator: '0'
+              acq_promotion_reviewer: '0'
+              department_page_creator: '0'
+              department_page_reviewer: '0'
+              webmaster: '0'
+              reviewer: '0'
+              store_creator: '0'
+              store_reviewer: '0'
+              geolocation_default_article_creator: '0'
+              geolocation_default_article_reviewer: '0'
+            input_by_geocoding_widget: 1
+            geocoder_plugin_settings:
+              plugin_id: google_geocoding_api
+              settings:
+                components:
+                  route: ''
+                  locality: ''
+                  administrativeArea: ''
+                  postalCode: ''
+                  country: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: geolocation_filter_proximity
       filter_groups:
         operator: AND
         groups:
@@ -1138,8 +1238,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ field_store_address__value|raw }}'
             make_link: false
             path: ''
             absolute: false
@@ -1271,6 +1371,18 @@ display:
             value: 'Sorry, there are no stores or locations available to display.'
             format: mail_text
           plugin_id: text
+      footer:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          tokenize: false
+          content: "<div class=\"load-more-button\">\n    <a href=\"\">Load More</a>\n  </div>"
+          plugin_id: text_custom
     cache_metadata:
       max-age: -1
       contexts:
@@ -1799,28 +1911,75 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
-        field_latitude_longitude_boundary:
-          id: field_latitude_longitude_boundary
-          table: node__field_latitude_longitude
-          field: field_latitude_longitude_boundary
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: in
           value:
-            lat_north_east: ''
-            lng_north_east: ''
-            lat_south_west: ''
-            lng_south_west: ''
+            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: langcode_op
+            label: 'Translation language'
+            description: null
+            use_operator: false
+            operator: langcode_op
+            identifier: langcode
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+        field_latitude_longitude_proximity:
+          proximity_source: exposed
+          proximity_lat: ''
+          proximity_lng: ''
+          proximity_units: km
+          proximity_argument: ''
+          entity_id_argument: ''
+          boundary_filter: field_latitude_longitude_boundary
+          client_location: false
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: '25'
           group: 1
           exposed: true
           expose:
-            operator_id: ''
+            operator_id: field_latitude_longitude_proximity_op
             label: ''
             description: ''
             use_operator: false
-            operator: field_latitude_longitude_boundary_op
-            identifier: field_latitude_longitude_boundary
+            operator: field_latitude_longitude_proximity_op
+            identifier: field_latitude_longitude_proximity
             required: false
             remember: false
             multiple: false
@@ -1834,12 +1993,16 @@ display:
               acq_product_creator: '0'
               media_manager: '0'
               acq_product_reviewer: '0'
+              acq_promotion_creator: '0'
+              acq_promotion_reviewer: '0'
               department_page_creator: '0'
               department_page_reviewer: '0'
               webmaster: '0'
               reviewer: '0'
               store_creator: '0'
               store_reviewer: '0'
+              geolocation_default_article_creator: '0'
+              geolocation_default_article_reviewer: '0'
             input_by_geocoding_widget: 1
             geocoder_plugin_settings:
               plugin_id: google_geocoding_api
@@ -1862,47 +2025,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: geolocation_filter_boundary
-        langcode:
-          id: langcode
-          table: node_field_data
-          field: langcode
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: in
-          value:
-            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: node
-          entity_field: langcode
-          plugin_id: language
+          plugin_id: geolocation_filter_proximity
       filter_groups:
         operator: AND
         groups:
@@ -2045,8 +2168,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ field_store_address__value|raw }}'
             make_link: false
             path: ''
             absolute: false

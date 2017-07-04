@@ -56,9 +56,26 @@
 }
 
 .load-more-button {
-  color: $marine-blue-two;
-  font-size: 0.813rem;
-  border: 1px solid $marine-blue-two;
-  padding: 0.563rem 7.12rem;
-  font-family: $arial;
+  clear: both;
+  display: block;
+
+  @include breakpoint($tablet) {
+    padding-top: 1rem;
+    max-width: 35.8%;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 26.5%;
+    padding-#{$right}: 1%;
+  }
+
+  a {
+    color: $marine-blue-two;
+    display: block;
+    font-size: 0.813rem;
+    text-align: center;
+    border: 1px solid $marine-blue-two;
+    padding: 0.563rem 4.12rem;
+    font-family: $arial;
+  }
 }

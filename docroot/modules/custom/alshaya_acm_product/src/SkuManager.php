@@ -245,7 +245,7 @@ class SkuManager {
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
     $query->condition('field_acq_promotion_sku', $child_sku_ids, 'IN');
-    $query->condition('field_acq_promotion_sku', $types, 'IN');
+    $query->condition('field_acq_promotion_type', $types, 'IN');
 
     $promotionIDs = $query->execute();
 
@@ -257,9 +257,10 @@ class SkuManager {
           $promos[$promotion->id()] = $promotion->toLink($promotion->getTitle())->toString()->getGeneratedLink();
         }
         else {
+          $descriptions = $promotion->get('field_acq_promotion_description')->getValue();
           $promos[$promotion->id()] = [
             'text' => $promotion->getTitle(),
-            'description' => $promotion->get('field_acq_promotion_description')->first()->getValue(),
+            'description' => array_shift($descriptions),
           ];
         }
       }

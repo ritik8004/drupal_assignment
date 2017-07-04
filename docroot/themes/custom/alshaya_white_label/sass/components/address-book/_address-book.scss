@@ -552,3 +552,26 @@
     padding-bottom: 2rem;
   }
 }
+
+.user-form {
+  .field--type-mobile-number {
+    max-width: 11.7rem;
+    width: calc(50% - 0.75rem);
+
+    .mobile-number-field {
+      .form-item-field-mobile-number-0-mobile {
+        position: static !important;
+        padding-bottom: 0 !important;
+        width: 5.625rem !important;
+
+        @include breakpoint($mobile) {
+          margin-top: 0.625rem;
+        }
+
+        @include breakpoint($tablet) {
+          margin-top: 0.4375rem;
+        }
+      }
+    }
+  }
+}

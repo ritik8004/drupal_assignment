@@ -20,9 +20,17 @@
         Drupal.alshaya_stores_finder.paginateStores(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit);
       }
 
-      $('.set-center-location').on('click', function () {
+      $('.set-center-location .views-field-field-store-address').on('click', function () {
+        // Get all elements having 'selected' class and then remove class.
+        var active_stores = $('.list-view-locator.selected');
+        if (active_stores.length > 0) {
+          active_stores.removeClass('selected');
+        }
+        // Add class to parent for making it active.
+        $(this).parents('.list-view-locator').addClass('selected');
+
         // Id of the row.
-        var elementID = $(this).attr('id');
+        var elementID = $(this).parents('.set-center-location').attr('id');
         Drupal.geolocation.loadGoogle(function () {
           var geolocationMap = {};
 
@@ -66,7 +74,7 @@
 
       $('.current-location').on('click', function () {
         // Start overlay here.
-        $('.alias--store-finder').addClass('modal-overlay--spinner');
+        $('body').addClass('modal-overlay--spinner');
 
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
@@ -77,7 +85,8 @@
 
       // Error callback.
       var errorCallback = function (error) {
-        $('.alias--store-finder').removeClass('modal-overlay--spinner');
+        // Close the overlay.
+        $('body').removeClass('modal-overlay--spinner');
       };
 
       // Success callback.
@@ -97,35 +106,32 @@
         geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
             if ($('.current-view').length) {
-              $('.current-view .ui-autocomplete-input').val(results[1].formatted_address);
+              $('.current-view #edit-geolocation-geocoder-google-geocoding-api').val(results[1].formatted_address);
+              $('.current-view input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+              $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
             }
             else {
-              $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').val(results[1].formatted_address);
+              $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-geocoding-api').val(results[1].formatted_address);
+              $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+              $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
             }
           }
 
-          // Set proximity boundries.
-          var south_west_lat = results[1].geometry.bounds.getSouthWest().lat();
-          var south_west_lng = results[1].geometry.bounds.getSouthWest().lng();
-          var north_east_lat = results[1].geometry.bounds.getNorthEast().lat();
-          var north_east_lng = results[1].geometry.bounds.getNorthEast().lng();
-
           if ($('.current-view').length !== 0) {
-            $('.current-view input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
-            $('.current-view input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
-            $('.current-view input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
-            $('.current-view input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
-            $('.current-view form #edit-submit-stores-finder').trigger('click');
+            setTimeout(function() {
+              $('.current-view form #edit-submit-stores-finder').trigger('click');
+              // Close the overlay.
+              $('body').removeClass('modal-overlay--spinner');
+            }, 500);
           }
           else {
-            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_north_east]"]').val(north_east_lat);
-            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_north_east]"]').val(north_east_lng);
-            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lat_south_west]"]').val(south_west_lat);
-            $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_boundary[lng_south_west]"]').val(south_west_lng);
-            $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+            setTimeout(function() {
+              $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+              // Close the overlay.
+              $('body').removeClass('modal-overlay--spinner');
+            }, 500);
           }
         });
-        $('.alias--store-finder').removeClass('modal-overlay--spinner');
       }
 
       // Remove the store node title from breadcrumb.
@@ -141,12 +147,16 @@
 
       // Trigger click on autocomplete selection.
       $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
-          $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+          setTimeout(function() {
+            $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+          }, 500);
       });
 
       // Trigger click on autocomplete selection.
       $('.block-views-exposed-filter-blockstores-finder-page-3 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
-        $('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-submit-stores-finder').trigger('click');
+        setTimeout(function() {
+          $('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-submit-stores-finder').trigger('click');
+        }, 500);
       });
 
     }

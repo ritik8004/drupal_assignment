@@ -78,7 +78,7 @@ class StoresFinderController extends ControllerBase {
     $list_view = views_embed_view('stores_finder', 'page_1');
     $response->addCommand(new HtmlCommand('.view-display-id-page_2', $list_view));
     // Firing click event.
-    $response->addCommand(new InvokeCommand('#row-' . $node->id(), 'trigger', ['click']));
+    $response->addCommand(new InvokeCommand('#row-' . $node->id() . ' .views-field-field-store-address', 'trigger', ['click']));
     // Adding class for selection.
     $response->addCommand(new InvokeCommand('.row-' . $node->id(), 'addClass', ['selected']));
     // Hide the map view exposed filter.
@@ -124,7 +124,7 @@ class StoresFinderController extends ControllerBase {
       $response->addCommand(new InvokeCommand(NULL, 'updateStoreFinderBreadcrumb'));
 
       // Clear value from search field.
-      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api', 'val', ['']));
+      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-geolocation-geocoder-google-geocoding-api', 'val', ['']));
     }
     else {
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
@@ -143,7 +143,7 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['mobile-store-detail']));
 
     // Clear value from search field.
-    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api', 'val', ['']));
+    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-geolocation-geocoder-google-geocoding-api', 'val', ['']));
     return $response;
   }
 

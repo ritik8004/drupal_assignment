@@ -177,11 +177,6 @@
         $('.c-my-account-nav').removeClass('block--display');
       });
 
-      // Toggle Function for Store Locator.
-      $(document).off().on('click', '.hours--label', function () {
-        $(this).toggleClass('open');
-      });
-
       /**
       * Add active state to the menu.
       */

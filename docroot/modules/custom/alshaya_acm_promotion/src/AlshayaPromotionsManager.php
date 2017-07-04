@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_promotion;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\node\Entity\Node;
 
 /**
  * Class AlshayaPromotionsManager.
@@ -62,6 +63,20 @@ class AlshayaPromotionsManager {
 
       return $node;
     }
+  }
+
+  /**
+   * Helper function to fetch all promotions.
+   */
+  public function getAllPromotions() {
+    $nodes = [];
+    $query = $this->nodeStorage->getQuery();
+    $nids = $query->condition('type', 'acq_promotion')->execute();
+    if (!empty($nids)) {
+      $nodes = Node::loadMultiple($nids);
+    }
+
+    return $nodes;
   }
 
 }
