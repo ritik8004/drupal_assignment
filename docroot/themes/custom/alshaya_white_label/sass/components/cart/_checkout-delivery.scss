@@ -46,8 +46,9 @@
         }
       }
 
-      .form-type-select label {
-        display: none;
+      .form-item.form-type-select label {
+        top: -1.1375rem;
+        font-size: 0.75rem;
       }
 
       .form-item-guest-delivery-home-address-street2,
@@ -323,6 +324,7 @@
   }
 }
 
+#edit-guest-delivery-home-address-shipping-methods--wrapper,
 #edit-acm-payment-methods-payment-options,
 #edit-member-delivery-home-address-shipping-methods--wrapper {
   border: none;
@@ -405,6 +407,10 @@
       }
     }
   }
+}
+
+#edit-guest-delivery-home-address-shipping-methods--wrapper {
+  display: block;
 }
 
 #edit-member-delivery-collect {
@@ -491,6 +497,14 @@
             float: $right;
             width: 96.5%;
             line-height: 1;
+
+            @include breakpoint($tablet) {
+              width: 93.5%;
+            }
+
+            @include breakpoint($desktop) {
+              width: 96.5%;
+            }
           }
         }
 
@@ -534,8 +548,18 @@
   main {
     form {
       #edit-guest-delivery-home {
-        .fieldset-wrapper {
-          margin: 3.75rem 1.375rem;
+        .title {
+          margin: 1.375rem;
+        }
+
+        .address-book-address {
+          @include breakpoint($mobile) {
+            margin: 1.5rem 0;
+          }
+
+          @include breakpoint($tablet) {
+            margin: 3.75rem 1.375rem 0;
+          }
         }
       }
 
@@ -614,7 +638,6 @@
 
         #address_wrapper {
           padding: 0;
-          max-width: 24.75rem;
           margin-top: 0;
 
           @include breakpoint($desktop) {
@@ -765,34 +788,34 @@
   }
 }
 
-#edit-guest-delivery-home-address-shipping,
-#edit-member-delivery-home-address-form-form {
-  .form-item-guest-delivery-home-address-shipping-address-line2,
-  .form-item-member-delivery-home-address-form-form-address-line2 {
-    label:last-of-type {
-      font-size: 1rem;
-      color: $greyish;
-      position: absolute;
-      #{$left}: 0;
-      top: -0.125rem;
-      transition: 0.2s ease all;
-    }
+// #edit-guest-delivery-home-address-shipping,
+// #edit-member-delivery-home-address-form-form {
+//   .form-item-guest-delivery-home-address-shipping-address-line2,
+//   .form-item-member-delivery-home-address-form-form-address-line2 {
+//     label:last-of-type {
+//       font-size: 1rem;
+//       color: $greyish;
+//       position: absolute;
+//       #{$left}: 0;
+//       top: -0.125rem;
+//       transition: 0.2s ease all;
+//     }
 
-    input:not(:focus):valid ~ label:not(.error),
-    input:focus ~ label:not(.error) {
-      top: -1.25em;
-      bottom: 0;
-      left: 0;
-      opacity: 1;
-      font-size: 0.75rem;
-    }
+//     input:not(:focus):valid ~ label:not(.error),
+//     input:focus ~ label:not(.error) {
+//       top: -1.25em;
+//       bottom: 0;
+//       left: 0;
+//       opacity: 1;
+//       font-size: 0.75rem;
+//     }
 
-    input[type="text"]:focus ~ label:last-of-type {
-      top: -1.25em;
-      bottom: 0;
-      #{$left}: 0;
-      opacity: 1;
-      font-size: 0.75rem;
-    }
-  }
-}
+//     input[type="text"]:focus ~ label:last-of-type {
+//       top: -1.25em;
+//       bottom: 0;
+//       #{$left}: 0;
+//       opacity: 1;
+//       font-size: 0.75rem;
+//     }
+//   }
+// }

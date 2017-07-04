@@ -422,10 +422,11 @@
   }
 
   .country-code-prefix {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
     color: $greyish;
     width: 3rem;
     float: $left;
+    font-size: 1rem;
   }
 
   #edit-field-address-0-address-administrative-area {
@@ -440,6 +441,7 @@
   }
 }
 
+.address-book-address .form-type-select,
 .form-item-guest-delivery-home-address-shipping-administrative-area,
 .form-item-member-delivery-home-address-form-form-administrative-area {
   &::after {
@@ -450,6 +452,7 @@
     border-#{$left}: 1px solid $white-five;
   }
 
+  select.form-select,
   #edit-guest-delivery-home-address-shipping-administrative-area,
   #edit-member-delivery-home-address-form-form-administrative-area {
     border: none;
@@ -540,10 +543,15 @@
   }
 }
 
+#address_wrapper .address-book-address,
 #address-book-form-open .address-book-address {
   .country-label {
     font-size: 0.75rem;
     margin-bottom: 0.9375em;
+  }
+
+  .country-name {
+    font-size: 1rem;
   }
 
   .select2-container {

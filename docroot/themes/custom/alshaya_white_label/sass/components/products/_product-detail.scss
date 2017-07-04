@@ -38,14 +38,6 @@
 }
 
 .acq-content-product {
-  @include if-ltr {
-    direction: ltr;
-  }
-
-  @include if-rtl {
-    direction: rtl;
-  }
-
   @include clearfix;
 
   @include breakpoint($tablet) {

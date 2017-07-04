@@ -140,10 +140,10 @@
     color: $red-error;
   }
 
-  .form-type-tel,
-  .form-type-email,
-  .form-type-textfield,
-  .form-type-textarea {
+  .form-item.form-type-tel,
+  .form-item.form-type-email,
+  .form-item.form-type-textfield,
+  .form-item.form-type-textarea {
     label:last-of-type {
       font-size: 1rem;
       color: $greyish;
