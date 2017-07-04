@@ -42,10 +42,11 @@
             // Get the place details from the autocomplete object.
             var place = autocomplete.getPlace();
 
-            var coords = {
+            coords = {
               lat: place.geometry.location.lat(),
               lng: place.geometry.location.lng()
             };
+            console.log(coords);
             // Get all available stores for the selected coordinates.
             Drupal.clickAndCollect.storeListAll(coords);
           });
@@ -56,7 +57,7 @@
       $('.tab').once('initiate-stores').on('click', function () {
         if ($(this).hasClass('tab-click-collect') && $('#click-and-collect-list-view').html().length <= 0) {
           // Display the loader.
-          $('#click-and-collect-list-view').html(progressElement);
+          $('#store-finder-wrapper').html(progressElement);
 
           // Get the permission track the user location.
           try {
@@ -144,7 +145,7 @@
   Drupal.clickAndCollect.storeListAll = function (coords) {
     if (coords !== null) {
 
-      var cartId = drupalSettings.alshaya_acm_checkout.cart_id;
+      var cartId = drupalSettings.alshaya_click_collect.cart_id;
       var checkLocation = true;
 
       if (typeof lastCoords !== 'undefined' && lastCoords !== null) {

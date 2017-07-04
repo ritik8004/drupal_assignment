@@ -16,25 +16,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
   $items = [];
 
-  $items['click_collect_stores_list'] = [
-    'render element' => 'elements',
-    'variables' => [
-      'title' => NULL,
-      'stores' => NULL,
-    ],
-  ];
-
   $items['alshaya_address'] = [
     'render element' => 'elements',
     'variables' => [
       'address' => [],
-    ],
-  ];
-
-  $items['click_collect_selected_store'] = [
-    'render element' => 'elements',
-    'variables' => [
-      'store' => NULL,
     ],
   ];
 

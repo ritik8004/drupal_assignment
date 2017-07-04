@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_stores_finder\Form;
+namespace Drupal\alshaya_click_collect\Form;
 
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Form\FormBase;
@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a configuration form for configurable actions.
  */
-class StoreFinderAvailableStores extends FormBase {
+class ClickCollectAvailableStores extends FormBase {
 
   use GoogleMapsDisplayTrait;
   /**

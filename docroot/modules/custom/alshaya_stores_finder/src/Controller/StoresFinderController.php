@@ -2,8 +2,6 @@
 
 namespace Drupal\alshaya_stores_finder\Controller;
 
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_stores_finder\Form\StoreFinderAvailableStores;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\CssCommand;
@@ -16,7 +14,6 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class StoresFinderController.
@@ -172,64 +169,6 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new AppendCommand('.block-system-breadcrumb-block ol', $store_finder_node_li));
 
     return $response;
-  }
-
-  /**
-   * Get stores for a product near user's location.
-   *
-   * @param string $sku
-   *   SKU to check for stores.
-   * @param float $lat
-   *   User's latitude.
-   * @param float $lon
-   *   User's longitude.
-   * @param int $limit
-   *   Limit for top stores.
-   *
-   * @return array
-   *   Return array of top tree and all stores.
-   */
-  public function getProductStores($sku, $lat, $lon, $limit = 3) {
-    $final_all_stores = $final_top_three = '';
-    if ($sku_entity = SKU::loadFromSku($sku)) {
-      if ($stores = $this->storesFinderUtility->getSkuStores($sku, $lat, $lon)) {
-        $top_three = [];
-        $top_three['#theme'] = 'pdp_click_collect_top_stores';
-        $top_three['#stores'] = array_slice($stores, 0, $limit);
-        $top_three['#has_more'] = count($stores) > $limit ? t('Other stores nearby') : '';
-
-        if ($top_three['#has_more']) {
-          $store_form = \Drupal::formBuilder()->getForm(StoreFinderAvailableStores::class);
-          $config = $this->configFactory->get('alshaya_stores_finder.settings');
-          $all_stores = [];
-          $all_stores['#theme'] = 'pdp_click_collect_all_stores';
-          $all_stores['#stores'] = $stores;
-          $all_stores['#title'] = $config->get('pdp_click_collect_title');
-          $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
-          $all_stores['#store_finder_form'] = render($store_form);
-        }
-      }
-    }
-
-    return ['top_three' => $top_three, 'all_stores' => $all_stores];
-  }
-
-  /**
-   * Get Json output of stores for a product near user's location.
-   *
-   * @param string $sku
-   *   SKU to check for stores.
-   * @param float $lat
-   *   User's latitude.
-   * @param float $lon
-   *   User's longitude.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Return json response to use in jquery ajax.
-   */
-  public function getProductStoresJson($sku, $lat, $lon) {
-    $data = $this->getProductStores($sku, $lat, $lon);
-    return new JsonResponse(['top_three' => render($data['top_three']), 'all_stores' => render($data['all_stores'])]);
   }
 
 }

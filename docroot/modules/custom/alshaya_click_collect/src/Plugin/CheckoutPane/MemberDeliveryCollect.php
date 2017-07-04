@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
+namespace Drupal\alshaya_click_collect\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
