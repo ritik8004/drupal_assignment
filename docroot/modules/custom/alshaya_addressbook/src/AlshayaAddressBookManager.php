@@ -339,7 +339,7 @@ class AlshayaAddressBookManager {
     // @TODO: Remove this after Magento makes it optional.
     // This will stay here for long - check MMCSP-916.
     // City is core attribute in Magento and hard to remove validation.
-    $magento_address['city'] = 'NA';
+    $magento_address['city'] = '&#8203;';
 
     return $magento_address;
   }
