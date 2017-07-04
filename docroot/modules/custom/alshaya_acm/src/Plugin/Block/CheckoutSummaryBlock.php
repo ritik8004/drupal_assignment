@@ -145,6 +145,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       // Delivery address.
       $shipping_address = (array) $cart->getShipping();
 
+      // @TODO: Work around for MMCSP-1344. Loading address from address book
+      // if customer_address_id is available even if other values are set.
       if (isset($shipping_address['customer_address_id'])) {
         if ($entity = $this->addressBookManager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
           $shipping_address = $this->addressBookManager->getAddressFromEntity($entity, FALSE);
