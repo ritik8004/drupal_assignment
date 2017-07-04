@@ -25,6 +25,21 @@
         color: $marine-blue;
       }
     }
+
+    .view-display-id-page_3 .view-header,
+    .view-display-id-page_1 .view-header {
+      color: $black;
+      display: block;
+      font-family: $arial;
+      font-weight: normal;
+    }
+  }
+
+  .view-empty {
+    color: $black;
+    display: block;
+    font-family: $arial;
+    font-weight: bold;
   }
 
   .c-side-1 {
@@ -64,7 +79,7 @@
     }
   }
 
-  .current-view {
+  .mobile-store-detail {
     @include breakpoint($only-mobile) {
       #views-exposed-form-stores-finder-page-1 {
         display: none;
@@ -72,7 +87,8 @@
     }
   }
 
-  .back-link {
+  .back-link,
+  .mobile-only-back-to-glossary {
     a {
       display: block;
       width: inherit;
@@ -80,19 +96,20 @@
       font-size: 0.5rem;
       height: 0;
 
-      &::after {
+      @include icon(chevron#{$left}, after) {
         position: absolute;
-        content: ' ';
-        background: url('../imgs/icons/ic-chevron-70.svg');
-        background-repeat: no-repeat;
-        width: 9px;
-        height: 1rem;
-        transform: rotate(180deg);
+        display: inline-block;
+        color: $marine-blue-two;
+        font-size: 1.875rem;
+        top: 0.125rem;
+        padding: 0.5rem;
+        #{$left}: 0.125rem;
       }
     }
   }
 
   @include breakpoint($tablet) {
+    .mobile-only-back-to-glossary,
     .view-on--map {
       display: none;
     }
@@ -177,9 +194,9 @@
     }
 
     .views-field-field-store-address {
-      font-size: 14px;
+      font-size: 0.875rem;
       margin-top: 0.1875rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.5rem;
     }
   }
 
@@ -234,6 +251,8 @@
   }
 
   .map-view-link {
+    margin-#{$left}: -1px;
+
     @include icon(map, before) {
       color: $cerulean-two;
       margin-#{$right}: 0.4rem;
@@ -281,12 +300,15 @@
   }
 
   .label--location {
-    padding-#{$left}: 1.5rem;
+    padding-#{$left}: 3.5rem;
     padding-#{$right}: 1rem;
+    text-indent: -2rem;
+    width: 52%;
 
     @include breakpoint($desktop) {
-      padding-#{$left}: 1.4rem;
+      padding-#{$left}: 3.4rem;
       padding-#{$right}: 0;
+      width: 36.8%;
     }
   }
 
@@ -329,12 +351,13 @@
     display: none;
   }
 
-  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
+  .form-item-geolocation-geocoder-google-geocoding-api #edit-geolocation-geocoder-google-geocoding-api {
     background: none;
     border: 1px solid $greyish;
     border-#{$right}: 2.3125rem solid $white-five;
     padding: 0.6rem;
-    padding-#{$right}: 2.125rem;
+    padding-#{$right}: 1rem;
     font-size: 0.75rem;
     color: $grey-ash;
 
@@ -446,6 +469,7 @@
     padding-bottom: 0;
     margin-bottom: 1.625rem;
     position: relative;
+    cursor: pointer;
 
     .row-title {
       font-weight: bold;
@@ -486,9 +510,10 @@
     }
 
     .views-field-field-store-open-hours {
-      .hours--wrapper,
-      .view-on--map,
-      .get--directions {
+      .hours--wrapper .hours--label,
+      .hours--wrapper .open--hours,
+      .view-on--map a,
+      .get--directions a {
         border-bottom: 1px solid $white;
         padding: 1rem;
         padding-#{$left}: 3.5rem;
@@ -555,7 +580,8 @@
       width: 47%;
       margin-#{$right}: 0.5%;
 
-      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
+      .form-item-geolocation-geocoder-google-geocoding-api {
         width: 48% !important;
       }
     }
@@ -697,7 +723,8 @@
     }
   }
 
-  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
+  .form-item-geolocation-geocoder-google-geocoding-api {
     position: relative;
 
     @include breakpoint($tablet) {
@@ -773,7 +800,8 @@
   }
 
   .store-finder--wrapper {
-    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api {
+    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
+    .form-item-geolocation-geocoder-google-geocoding-api {
       float: $right;
       width: 63.2%;
 
@@ -939,7 +967,7 @@
       }
 
       &::after {
-        transform: none;
+        transform: translateY(-50%);
       }
     }
 
@@ -991,11 +1019,13 @@
       display: inline-block;
       color: $cerulean-two;
       font-size: 1.875rem;
-      top: -0.5rem;
-      #{$right}: -0.7rem;
+      top: 50%;
+      transform: translateY(-50%);
+      #{$right}: 0.7rem;
+      pointer-events: none;
 
       @include breakpoint($tablet) {
-        #{$right}: -0.6rem;
+        #{$right}: 0.5rem;
       }
     }
   }
@@ -1015,7 +1045,7 @@
     background: url('../imgs/icons/ic-directions.svg');
     top: 50%;
     transform: translateY(-50%);
-    #{$right}: 0;
+    #{$right}: 1rem;
     width: 18px;
     height: 18px;
   }
@@ -1051,12 +1081,6 @@
   }
 
   .view-display-id-page_1 {
-    .list-view-locator {
-      @include breakpoint($only-mobile) {
-        display: none;
-      }
-    }
-
     .store-mobile {
       &:first-child {
         border-top: 1px solid $white;
@@ -1102,18 +1126,20 @@
     color: $cerulean-two;
     cursor: pointer;
     font-weight: 700;
+    padding-bottom: 0.4rem;
   }
 
-  .hours--wrapper,
-  .view-on--map,
-  .get--directions {
+  .hours--wrapper .hours--label,
+  .hours--wrapper .open--hours,
+  .view-on--map a,
+  .get--directions a {
     padding: 1rem;
     padding-#{$left}: 0;
-    padding-top: 0;
+    padding-top: 1rem;
   }
 
   .open--hours {
     line-height: 1.57;
-    margin-top: 0.9rem;
+    margin-top: 0;
   }
 }
