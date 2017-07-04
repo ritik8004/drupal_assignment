@@ -929,6 +929,12 @@
     margin-top: 40px;
   }
 
+  .l-two--sf.c-user--node {
+    @include breakpoint($only-tablet) {
+      margin-top: 1rem;
+    }
+  }
+
   @include breakpoint($only-mobile) {
     .l-two--sf {
       margin-top: 0;
