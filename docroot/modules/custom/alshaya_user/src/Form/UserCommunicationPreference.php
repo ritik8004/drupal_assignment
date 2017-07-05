@@ -10,6 +10,7 @@ use Drupal\user\Entity\User;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Provides communication preference form.
@@ -82,6 +83,10 @@ class UserCommunicationPreference extends FormBase {
     $this->user_profile = $account = $user;
 
     $account = User::load($this->user_profile->id());
+
+    if (!alshaya_acm_customer_is_customer($account)) {
+      throw new AccessDeniedHttpException();
+    }
 
     $form_state->set('user', $account);
 

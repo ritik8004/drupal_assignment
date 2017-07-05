@@ -241,8 +241,12 @@
       width: 13.75rem;
 
       @include breakpoint($only-tablet) {
-        min-width: 9.75rem;
-        width: 9.75rem;
+        min-width: 10.75rem;
+        width: 10.75rem;
+      }
+
+      &:nth-child(3) {
+        font-size: 0.725rem;
       }
     }
 
@@ -309,6 +313,7 @@
 
   .order-summary-row td {
     background-color: $white-five;
+    line-height: 1.2;
   }
 
   .order-item-row {
@@ -386,11 +391,18 @@
   font-family: $arial;
   line-height: 1;
   color: $white-five;
-  min-width: 11.625rem;
   top: -5.25rem;
   font-size: 0.75rem;
   text-transform: lowercase;
   font-weight: bold;
+
+  @include breakpoint($desktop) {
+    min-width: 11.625rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    top: -4rem;
+  }
 }
 
 .alshaya-acm-customer-order-list-search {
