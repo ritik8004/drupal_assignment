@@ -18,6 +18,23 @@
   .region__content {
     margin: 1.25rem 0;
   }
+
+  #backtotop {
+    @include breakpoint($only-mobile) {
+      z-index: 5;
+      line-height: 45px;
+
+      &::after {
+        margin-top: -2.4rem;
+      }
+    }
+  }
+
+  .c-footer-primary {
+    @include breakpoint($only-mobile) {
+      margin-top: 5.5rem;
+    }
+  }
 }
 
 .acq-content-product {
@@ -440,6 +457,22 @@
   .c-accordion {
     &-delivery-options {
       border-bottom: 1px solid $white;
+
+      &.click-collect {
+        h3 {
+          &.ui-state-disabled {
+            color: $white;
+
+            span {
+              color: $white;
+
+              &.title-price {
+                @include u-visibility(none);
+              }
+            }
+          }
+        }
+      }
     }
 
     &__title {
@@ -529,6 +562,10 @@
     border-top: none;
   }
 
+  .ui-state-disabled::after {
+    display: none;
+  }
+
   &-content {
     font-family: $arial;
     font-size: 0.75rem;
@@ -585,7 +622,7 @@
       }
     }
 
-    input[type="button"] {
+    button {
       float: $right;
       width: 6.563rem;
       height: 2.188rem;
@@ -593,38 +630,7 @@
       font-family: $alshaya-thin;
       appearance: none;
       font-size: 0.75rem;
-      color: $white-two;
-      text-transform: lowercase;
-      display: inline-block;
-      vertical-align: middle;
-      text-align: center;
-      padding: 0.5rem 0;
-      border: none;
-    }
-  }
-
-  .click-collect-content .search-store {
-    label {
-      @include clearfix;
-    }
-
-    input[type="text"] {
-      float: $left;
-      width: 162px;
-      height: 2.188rem;
-      padding: 0.3125rem;
-      border: solid 1px $white;
-    }
-
-    input[type="button"] {
-      float: $right;
-      width: 6.563rem;
-      height: 2.188rem;
-      background-color: $cerulean-two;
-      font-family: $alshaya-thin;
-      appearance: none;
-      font-size: 0.75rem;
-      color: $white-two;
+      color: $white-five;
       text-transform: lowercase;
       display: inline-block;
       vertical-align: middle;
@@ -635,7 +641,138 @@
   }
 }
 
+.available_store {
+  span.label {
+    font-family: $arial;
+    font-size: 0.75rem;
+    line-height: 2;
+    color: $brownish-grey;
+    margin: 0;
+  }
+
+  .change-location-link,
+  .change-store-link {
+    color: $cerulean-two;
+    font-size: 0.75rem;
+    font-family: $arial;
+    font-weight: bold;
+    cursor: pointer;
+
+    @include u-visibility(inline);
+  }
+
+  .available-store-text {
+    font-family: $arial;
+    font-size: 0.75rem;
+    line-height: 2;
+    color: $brownish-grey;
+    margin: 0;
+
+    .google-store-location {
+      font-weight: bold;
+
+      @include u-visibility(inline);
+    }
+  }
+
+  .search-store {
+    label {
+      @include clearfix;
+    }
+
+    input[type="text"] {
+      float: $left;
+      width: 162px;
+      height: 2.188rem;
+      padding: 0.3125rem;
+      border: solid 1px $white;
+      font-size: 0.75rem;
+      color: $greyish;
+
+      @include breakpoint($desktop) {
+        width: 185px;
+      }
+
+      &::placeholder {
+        color: $greyish;
+      }
+    }
+
+    button {
+      float: $right;
+      width: 6.563rem;
+      height: 2.188rem;
+      background-color: $cerulean-two;
+      font-family: $alshaya-thin;
+      appearance: none;
+      font-size: 0.75rem;
+      color: $white-five;
+      text-transform: lowercase;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: none;
+    }
+
+    .form-item-location label {
+      @include u-visibility(none);
+    }
+  }
+
+  .change-location {
+    display: inline-block;
+
+    .change-store-location {
+      width: 4.438rem;
+      height: 1.125rem;
+      font-size: 0.5625rem;
+      border: 1px solid $white-two;
+      margin-#{$left}: -2px;
+    }
+
+    .cancel-change-location {
+      width: 1.125rem;
+      height: 1.125rem;
+      background: $white-two;
+      float: none;
+      position: relative;
+      border: none;
+      color: $white-two;
+      vertical-align: middle;
+
+      @include icon(close, after) {
+        position: absolute;
+        font-size: 1.188rem;
+        top: -1px;
+        #{$left}: -1px;
+        color: $black;
+      }
+    }
+  }
+}
+
+// Google Places Autocomplete results.
+.pac-container {
+  border: 1px solid $white-two;
+  box-shadow: none;
+  width: 11.44rem !important;
+
+  .pac-icon {
+    @include u-visibility(none);
+  }
+
+  .pac-item,
+  .pac-matched,
+  .pac-item-query {
+    font-size: 0.5625rem !important;
+    color: $cerulean-two !important;
+  }
+}
+
 .click-collect-top-stores {
+  position: relative;
+
   ul {
     padding-#{$left}: 0;
     margin: 0;
@@ -646,7 +783,7 @@
       line-height: 1.5;
       color: $grey-ash;
       list-style: none;
-      padding: 1.125rem 0;
+      padding: 0.6875rem 0;
       border-top: 1px solid $white;
 
       @include clearfix;
@@ -660,6 +797,7 @@
           text-align: center;
           float: $left;
           margin-top: 2px;
+          line-height: 1.4;
         }
 
         &-info-wrap {
@@ -683,6 +821,30 @@
       }
     }
   }
+
+  .ajax-progress-throbber {
+    position: absolute;
+    top: -3rem;
+    #{$left}: 102%;
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-position: $right center !important;
+      background-repeat: no-repeat !important;
+      background-size: 1.5rem;
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: -2rem;
+      #{$left}: 70%;
+    }
+  }
 }
 
 .other-stores-link {
@@ -692,6 +854,7 @@
   color: $marine-blue;
   padding: 1.063rem 0;
   border-top: 1px solid $white;
+  cursor: pointer;
 }
 
 .click-collect-all-stores {
@@ -705,6 +868,7 @@
     background: $white-five;
     overflow: hidden;
     width: 100%;
+    z-index: 99;
 
     @include breakpoint($tablet) {
       width: 38%;
@@ -726,6 +890,7 @@
       text-align: center;
       color: $white-two;
       background-color: $marine-blue;
+      cursor: pointer;
     }
 
     .all-stores-info {
@@ -764,6 +929,7 @@
       margin: 0;
       height: 380px;
       overflow: scroll;
+      clear: both;
 
       li {
         font-family: $arial;
@@ -771,7 +937,7 @@
         line-height: 1.5;
         color: $grey-ash;
         list-style: none;
-        padding: 1.125rem 0;
+        padding: 0.6875rem 0;
         border-top: 1px solid $white;
 
         strong,
@@ -800,7 +966,7 @@
 
           &-name {
             font-weight: bold;
-            color: $black;
+            color: $blue-three;
           }
 
           &-delivery-time {
@@ -822,12 +988,27 @@
         }
       }
     }
+
+    .form-item-location {
+      margin-bottom: 0.5rem;
+      float: $left;
+    }
+
+    .stores-list-all {
+      margin-top: 0.5rem;
+    }
   }
 }
 
 .field--name {
   &-field-skus {
-    border-bottom: 1px solid $whisper-dark;
+    .c-pdp & {
+      border-bottom: 1px solid $whisper-dark;
+    }
+
+    .acq-content-product-modal & {
+      border-bottom: none;
+    }
 
     @include breakpoint($only-mobile) {
       height: 8rem;
@@ -1009,5 +1190,23 @@
   ul {
     margin: 0;
     list-style: none;
+  }
+}
+
+// Rearranging quantity on PDP for simple products
+article[gtm-sku-type="simple"] {
+  .acq-content-product {
+    .sku-base-form {
+      .form-item-quantity {
+        float: $left !important;
+      }
+
+      button[type="submit"] {
+        @include breakpoint($only-tablet) {
+          float: $right;
+          margin-top: 1rem;
+        }
+      }
+    }
   }
 }

@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_api;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
@@ -25,31 +26,55 @@ class AlshayaApiWrapper {
   protected $token;
 
   /**
+   * Language code.
+   *
+   * @var string
+   */
+  protected $langcode;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->config = $config_factory->get('alshaya_api.settings');
+    $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->logger = $logger_factory->get('alshaya_api');
+  }
+
+  /**
+   * Function to override context langcode for API calls.
+   *
+   * @param string $langcode
+   *   Language code to use for API calls.
+   */
+  public function updateStoreContext($langcode) {
+    // Calling code will be responsible for doing all checks on the value.
+    $this->langcode = $langcode;
   }
 
   /**
    * Function to get all the stores from the API.
    *
-   * @param int $store_id
-   *   Store id.
+   * @param string $langcode
+   *   Language code.
    *
    * @return mixed
    *   Stores array.
    */
-  public function getStores($store_id) {
-    $endpoint = 'storeLocator/search?searchCriteria[filterGroups][0][filters][0][field]=store_id&searchCriteria[filterGroups][0][filters][0][value]=' . $store_id;
+  public function getStores($langcode) {
+    $this->updateStoreContext($langcode);
+
+    $endpoint = 'storeLocator/search?searchCriteria=';
 
     $response = $this->invokeApi($endpoint, [], 'GET');
+
     $stores = json_decode($response, TRUE);
 
     return $stores;
@@ -64,6 +89,9 @@ class AlshayaApiWrapper {
    *   Latitude of user.
    * @param float $lon
    *   Longitude of user.
+   *
+   * @return mixed
+   *   Response from the API.
    */
   public function getProductStores($sku, $lat, $lon) {
     if (\Drupal::state()->get('store_development_mode', 0)) {
@@ -74,6 +102,31 @@ class AlshayaApiWrapper {
     $sku = urlencode($sku);
 
     $endpoint = 'click-and-collect/stores/product/' . $sku . '/lat/' . $lat . '/lon/' . $lon;
+    $response = $this->invokeApi($endpoint, [], 'GET');
+    $stores = json_decode($response, TRUE);
+    return $stores;
+  }
+
+  /**
+   * Function to get click and collect stores available nearby for a cart.
+   *
+   * @param int $cart_id
+   *   The cart ID.
+   * @param float $lat
+   *   Latitude of user.
+   * @param float $lon
+   *   Longitude of user.
+   *
+   * @return mixed
+   *   Response from the API.
+   */
+  public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
+    if (\Drupal::state()->get('store_development_mode', 0) || empty($lat) || empty($long)) {
+      $lat = 29;
+      $lon = 48;
+    }
+
+    $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $response = $this->invokeApi($endpoint, [], 'GET');
     $stores = json_decode($response, TRUE);
     return $stores;
@@ -97,7 +150,10 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function invokeApi($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
-    $url = $this->config->get('magento_host') . '/' . $this->config->get('magento_api_base') . '/' . $endpoint;
+    $url = $this->config->get('magento_host');
+    $url .= '/' . $this->config->get('magento_lang_prefix') . $this->langcode;
+    $url .= '/' . $this->config->get('magento_api_base');
+    $url .= '/' . $endpoint;
 
     $curl = curl_init();
 

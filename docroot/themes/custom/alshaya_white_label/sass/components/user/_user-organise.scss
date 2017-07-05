@@ -27,7 +27,7 @@
           padding-#{$left}: 0.25rem;
           padding-bottom: 0.3rem;
           font-size: 0.75rem;
-          color: $white;
+          color: $greyish;
           text-transform: lowercase;
           border-bottom: 1px solid $white;
         }
@@ -36,7 +36,7 @@
         .form-item-privilege-card-number2,
         .form-item-privilege-card-number {
           padding-left: 5px;
-          color: $grey-shade;
+          color: $greyish;
           font-size: 12px;
 
           .form-item--error-message {
@@ -46,6 +46,7 @@
           input {
             padding-bottom: 0.2rem;
             margin-top: 0.2rem;
+            color: $black;
 
             &::placeholder {
               color: $grey-shade;
@@ -66,6 +67,34 @@
 
           label:not(.error) {
             top: -1rem;
+          }
+
+          .ajax-progress-throbber {
+            position: absolute;
+            margin-#{$left}: 0.5rem;
+            top: 1rem;
+
+            .message {
+              display: none;
+            }
+
+            .throbber {
+              background-image: url(../imgs/icons/MC-loader.svg) !important;
+              background-position: $right center !important;
+              background-repeat: no-repeat !important;
+              background-size: 2.5rem;
+              padding: 1rem;
+
+              @include breakpoint($only-mobile) {
+                background-size: 1.5rem;
+                padding: 0.5rem;
+              }
+            }
+
+            @include breakpoint($only-mobile) {
+              top: 0.4375rem;
+              margin-#{$left}: -1.75rem;
+            }
           }
         }
 

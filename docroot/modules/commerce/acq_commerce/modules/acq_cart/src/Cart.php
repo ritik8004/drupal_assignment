@@ -55,6 +55,17 @@ class Cart implements CartInterface {
   }
 
   /**
+   * Function to update cart object.
+   *
+   * @param object $cart
+   *   The cart.
+   */
+  public function updateCartObject($cart) {
+    $this->cart = $cart;
+    $this->updateCartItemsCount();
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function id() {
@@ -326,30 +337,32 @@ class Cart implements CartInterface {
    * {@inheritdoc}
    */
   public function getShippingMethod() {
-    $shipping = NULL;
-
+    // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
-      $shipping = $this->cart->carrier;
+      return $this->cart->carrier;
     }
 
-    return $shipping;
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
+      return explode('_', $this->cart->extension['shipping_method']);
+    }
+
+    return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getShippingMethodAsString() {
+    // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
       $method = $this->cart->carrier;
-
-      return implode(
-        ',',
-        [
-          $method['carrier_code'],
-          $method['method_code'],
-        ]
-      );
+      return implode(',', [$method['carrier_code'], $method['method_code']]);
     }
+
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
+      return $this->cart->extension['shipping_method'];
+    }
+
     return '';
   }
 
@@ -468,11 +481,11 @@ class Cart implements CartInterface {
       $cart = $this->cart;
 
       // Don't set blank addresses, Magento doesn't like this.
-      if (isset($cart->shipping) && empty($cart->shipping->street)) {
+      if (isset($cart->shipping) && empty($cart->shipping->customer_address_id) && empty($cart->shipping->street)) {
         unset($cart->shipping);
       }
 
-      if (isset($cart->billing) && empty($cart->billing->street)) {
+      if (isset($cart->billing) && empty($cart->billing->customer_address_id) && empty($cart->billing->street)) {
         unset($cart->billing);
       }
 
@@ -487,7 +500,9 @@ class Cart implements CartInterface {
   public function convertToCustomerCart(array $cart) {
     $this->cart->cart_id = $cart['cart_id'];
     $this->cart->customer_id = $cart['customer_id'];
-    $this->cart->customer_email = $cart['customer_email'];
+    if (!empty($cart['customer_email'])) {
+      $this->cart->customer_email = $cart['customer_email'];
+    }
   }
 
   /**

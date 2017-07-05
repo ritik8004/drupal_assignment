@@ -311,7 +311,7 @@ function alshaya_master_install() {
       'ar' => 'الهاتف',
     ],
     'The phone number %value provided for %field is not a valid mobile number for country %country.' => [
-      'en' => 'The %value provided is not a valid mobile number.',
+      'en' => 'The number provided %value is not a valid mobile number.',
       'ar' => 'غير صحيح %value رقم الجوال',
     ],
     'Delivery to' => [
@@ -342,6 +342,9 @@ function alshaya_master_install() {
       'ar' => 'رقم المحل',
     ],
     'Further instructions have been sent to your email address.' => [
+      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
+    ],
+    'Further instructions have been sent to your e-mail address.' => [
       'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
     ],
     'Please agree to the Terms and Conditions.' => [
@@ -658,7 +661,7 @@ function alshaya_master_install() {
       'ar' => 'وفر',
     ],
     'Back to top' => [
-      'ar' => 'الرجوع إلى أعلى',
+      'ar' => 'أعلى الصفحة',
     ],
     'The password does not satisfy the password policies.' => [
       'ar' => 'كلمة السر غير مطابقة لسياسات كلمة السر',
@@ -670,7 +673,7 @@ function alshaya_master_install() {
       'ar' => 'البحث عن أقرب المحلات إليك',
     ],
     'Near me' => [
-      'ar' => 'الأقرب إلي',
+      'ar' => 'المحلات القريبة مني',
     ],
     'Get directions' => [
       'ar' => 'احصل على الإتجاهات',
@@ -719,6 +722,63 @@ function alshaya_master_install() {
     ],
     '<p>This service is <strong>FREE</strong> of charge.</p>' => [
       'ar' => '<p>استلم من المحل مجاناً</p>',
+    ],
+    'Please enter an email address' => [
+      'ar' => 'يرجى إدخال عنوان بريدك الإلكتروني',
+    ],
+    'Select Area' => [
+      'ar' => 'يرجى اختيار المنطقة / القطعة',
+    ],
+    'The email address @email is already taken.' => [
+      'ar' => 'عنوان البريد الإلكتروني @email مستعمل مسبقاً',
+    ],
+    'You have selected to delete this address, are you sure?' => [
+      'ar' => 'هل أنت متأكد من حذف هذا العنوان؟',
+    ],
+    'yes, delete this address' => [
+      'ar' => 'نعم, احذف هذا العنوان',
+    ],
+    'Delete address' => [
+      'ar' => 'حذف العنوان',
+    ],
+    'No, take me back' => [
+      'ar' => 'الرجوع إلى الصفحة السابقة',
+    ],
+    'Address is added successfully.' => [
+      'ar' => 'تم إضافة العنوان بنجاح',
+    ],
+    'Address is deleted successfully.' => [
+      'ar' => 'تم حذف العنوان بنجاح',
+    ],
+    'Address is updated successfully.' => [
+      'ar' => 'تم تحديث العنوان بنجاح',
+    ],
+    'Primary address is updated successfully.' => [
+      'ar' => 'تم تحديث العنوان الرئيسي بنجاح',
+    ],
+    'added' => [
+      'ar' => 'تمت الإضافة',
+    ],
+    'Area' => [
+      'ar' => 'المنطقة',
+    ],
+    'You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.' => [
+      'ar' => 'لقد حاولت استخدام رابطاً معداً للاستخدام مرة واحدة. هذا الرابط إما قد تم استخدامه أو لم يعد صالحاً، لذا يرجى طلب رابط جديد باستخدام الطلب أدناه.',
+    ],
+    'Load More' => [
+      'ar' => 'عرض المزيد',
+    ],
+    'Unrecognized email address or password.' => [
+      'ar' => ' لم يتم التعرف على عنوان البريد الإلكتروني أو كلمة السر',
+    ],
+    'shop' => [
+      'ar' => 'تسوق',
+    ],
+    'register' => [
+      'ar' => 'سجل الآن',
+    ],
+    'A @entity_type with @field_name @value already exists.' => [
+      'ar' => 'يوجد @entity_type لديه اسم المستخدم @field_name و رقم الجوال @value مسجل',
     ],
   ];
   alshaya_i18n_save_translations($strings);

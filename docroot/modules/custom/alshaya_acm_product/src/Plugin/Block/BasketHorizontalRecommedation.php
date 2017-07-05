@@ -75,13 +75,13 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
           $skus[] = $item['sku'];
         }
       }
-    }
 
-    foreach ($skus as $sku) {
-      if ($sku_entity = SKU::loadFromSku($sku)) {
-        $cross_sell_skus = $sku_entity->getCrossSell();
-        foreach ($cross_sell_skus as $cross_sell_sku) {
-          $view_skus[] = $cross_sell_sku['value'];
+      foreach ($skus as $sku) {
+        if ($sku_entity = SKU::loadFromSku($sku)) {
+          $cross_sell_skus = $sku_entity->getCrossSell();
+          foreach ($cross_sell_skus as $cross_sell_sku) {
+            $view_skus[] = $cross_sell_sku['value'];
+          }
         }
       }
     }

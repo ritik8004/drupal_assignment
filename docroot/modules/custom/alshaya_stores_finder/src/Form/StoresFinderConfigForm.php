@@ -55,6 +55,13 @@ class StoresFinderConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('pdp_click_collect_subtitle'),
     ];
 
+    $form['pdp_click_collect_unavailable'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('PDP: Click and Collect unavailable'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('pdp_click_collect_unavailable'),
+    ];
+
     $form['pdp_click_collect_price'] = [
       '#type' => 'textfield',
       '#title' => $this->t('PDP: Click and Collect price'),
@@ -97,6 +104,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
     $config->set('enable_disable_store_finder_search', $form_state->getValue('enable_disable_store_finder_search'));
     $config->set('pdp_click_collect_title', $form_state->getValue('pdp_click_collect_title'));
     $config->set('pdp_click_collect_subtitle', $form_state->getValue('pdp_click_collect_subtitle'));
+    $config->set('pdp_click_collect_unavailable', $form_state->getValue('pdp_click_collect_unavailable'));
     $config->set('pdp_click_collect_price', $form_state->getValue('pdp_click_collect_price'));
     $config->set('pdp_click_collect_help_text', $form_state->getValue('pdp_click_collect_help_text'));
     $config->set('pdp_click_collect_select_option_text', $form_state->getValue('pdp_click_collect_select_option_text'));

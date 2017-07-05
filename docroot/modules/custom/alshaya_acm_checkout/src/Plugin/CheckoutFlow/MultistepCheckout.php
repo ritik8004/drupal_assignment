@@ -3,10 +3,12 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\Url;
+use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -57,6 +59,13 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   /**
    * {@inheritdoc}
    */
+  public function processForm(array $form, FormStateInterface $form_state) {
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
@@ -85,7 +94,15 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   protected function processStepId($requested_step_id) {
-    $cart = $this->cartStorage->getCart();
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    // Redirect user to basket page if there are no items in cart and user is
+    // trying to checkout.
+    if ($requested_step_id != 'confirmation' && (empty($cart) || !$cart->items())) {
+      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+      $response->send();
+    }
+
     $cart_step_id = $cart->getCheckoutStep();
     $step_ids = array_keys($this->getVisibleSteps());
     $step_id = $requested_step_id;
@@ -97,18 +114,17 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         $this->redirectToStep($step_id);
       }
 
-      // If the requested step is not valid we redirect them to proper URL.
-      // This will mostly happen when user logs in.
-      if (!empty($requested_step_id)) {
+      // We don't want to allow access to /cart/checkout without step id.
+      // This is required for proper templates to get applied.
+      if (empty($requested_step_id)) {
         $this->redirectToStep($step_id);
       }
-    }
 
-    // Redirect user to basket page if there are no items in cart and user is
-    // trying to checkout.
-    if ($step_id != 'confirmation' && !$cart->items()) {
-      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
-      $response->send();
+      // If the requested step is not valid we redirect them to proper URL.
+      // This will mostly happen when user logs in.
+      if (!empty($requested_step_id) && $requested_step_id != $step_id) {
+        $this->redirectToStep($step_id);
+      }
     }
 
     $config = $this->getConfiguration();
@@ -201,22 +217,87 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $panes = $this->getPanes($this->stepId);
+    foreach ($panes as $pane_id => $pane) {
+      if ($pane->isVisible()) {
+        $pane->validatePaneForm($form[$pane_id], $form_state, $form);
+      }
+    }
+
+    if ($form_state->getErrors()) {
+      return;
+    }
+
+    if ($form_state->getTriggeringElement()['#parents'][0] == 'actions') {
+      // We submit panes in validate itself to allow setting form errors.
+      foreach ($panes as $pane_id => $pane) {
+        if ($pane->isVisible()) {
+          $pane->submitPaneForm($form[$pane_id], $form_state, $form);
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    parent::submitForm($form, $form_state);
+    if ($form_state->getTriggeringElement()['#parents'][0] != 'actions') {
+      return;
+    }
 
     if ($next_step_id = $this->getNextStepId()) {
+      $current_step_id = $this->getStepId();
+      try {
+        /** @var \Drupal\acq_cart\Cart $cart */
+        $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('alshaya_acm_checkout')->error('Error while updating cart in @step: @message', [
+          '@step' => $this->stepId,
+          '@message' => $e->getMessage(),
+        ]);
+
+        // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
+        if ($e->getMessage() == $this->t('This product is out of stock.')->render()
+          || $e->getMessage() == $this->t('Some of the products are out of stock.')->render()
+          || $e->getMessage() == $this->t('Not all of your products are available in the requested quantity.')->render()
+          || strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
+
+          $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+          $response->send();
+          exit;
+        }
+
+        // Show message from Magento to user if allowed in config.
+        if (\Drupal::config('alshaya_acm_checkout.settings')->get('checkout_display_magento_error')) {
+          drupal_set_message($e->getMessage(), 'error');
+        }
+        else {
+          drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        }
+
+        $this->redirectToStep($current_step_id);
+      }
+
+      $cart->setCheckoutStep($next_step_id);
+      $form_state->setRedirect('acq_checkout.form', [
+        'step' => $next_step_id,
+      ]);
+
       if ($next_step_id == 'confirmation') {
         $cart = $this->cartStorage->getCart();
-
-        // Invoke hook to allow other modules to process before order is finally
-        // placed.
-        \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);
-
-        $this->cartStorage->pushCart();
         $cart_id = $this->cartStorage->getCartId();
 
-        // Place an order.
-        $response = $this->apiWrapper->placeOrder($cart_id);
+        try {
+          // Place an order.
+          $response = $this->apiWrapper->placeOrder($cart_id);
+        }
+        catch (\Exception $e) {
+          drupal_set_message($e->getMessage(), 'error');
+          $this->redirectToStep('payment');
+        }
 
         // Store the order details from response in tempstore.
         $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
@@ -230,6 +311,20 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         }
         else {
           $email = \Drupal::currentUser()->getEmail();
+          $current_user_id = \Drupal::currentUser()->id();
+
+          // Update user's mobile number if empty.
+          $account = User::load($current_user_id);
+
+          if (empty($account->get('field_mobile_number')->getString())) {
+            $billing = (array) $cart->getBilling();
+            $account->get('field_mobile_number')->setValue($billing['telephone']);
+            $account->save();
+          }
+
+          // Invalidate the cache tag when order is placed to reflect on the
+          // user's recent orders.
+          Cache::invalidateTags(['user:' . $current_user_id . ':orders']);
         }
 
         \Drupal::cache()->invalidate('orders_list_' . $email);

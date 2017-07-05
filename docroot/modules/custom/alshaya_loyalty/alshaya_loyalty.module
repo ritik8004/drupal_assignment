@@ -69,8 +69,10 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     case 'customer_cart_form':
       // Get the current cart.
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+
       // Get current cart items.
-      $cart_items = $cart->items();
+      $cart_items = $cart ? $cart->items() : NULL;
+
       // Add Privilege cart form elements only if there is something in cart.
       if (!empty($cart_items)) {
         $add_privilege_fields = TRUE;
@@ -95,6 +97,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     case 'user_form':
       // Allow loyalty only if its enabled.
       if ($loyalty_settings['enable_disable_loyalty']) {
+        $form['field_privilege_card_number']['widget'][0]['value']['#type'] = 'tel';
         _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
       }
       else {
@@ -401,7 +404,7 @@ function alshaya_loyalty_preprocess_input(&$variables) {
   // Attach library for privilege card input field.
   if (isset($variables['element'], $variables['element']['#name']) && strpos($variables['element']['#name'], 'privilege_card_number') !== FALSE) {
     $variables['attributes']['class'][] = 'c-input__privilege-card ';
-    $variables['#attached']['library'][] = 'alshaya_loyalty/format_input';
+    $variables['#attached']['library'][] = 'alshaya_loyalty/privilege_card_number';
   }
 }
 
@@ -423,11 +426,13 @@ function alshaya_loyalty_preprocess_user(&$variables) {
  *
  * @param string $number
  *   The loyalty card number.
+ * @param bool $space
+ *   Add space around glue.
  *
  * @return string
  *   Return the formatted string.
  */
-function alshaya_loyalty_format_card_number($number) {
+function alshaya_loyalty_format_card_number($number, $space = FALSE) {
   $number = str_replace(['-', ' '], '', $number);
   $cc_length = strlen($number);
   $processed_number = substr($number, -4);
@@ -435,7 +440,8 @@ function alshaya_loyalty_format_card_number($number) {
   for ($i = $cc_length - 5; $i >= 0; $i--) {
     $calc = ((($i + 1) - $cc_length) % 4);
     if ($calc == 0) {
-      $processed_number = '-' . $processed_number;
+      $glue = $space ? ' - ' : '-';
+      $processed_number = $glue . $processed_number;
     }
     $processed_number = $number[$i] . $processed_number;
   }
@@ -470,13 +476,13 @@ function alshaya_loyalty_alshaya_acm_customer_update_account_alter(User $user, a
  * Implements hook_acq_commerce_update_customer_api_request_alter().
  */
 function alshaya_loyalty_acq_commerce_update_customer_api_request_alter(array &$request_options) {
-  if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
+  if (isset($request_options['json'], $request_options['json']['customer']['email'])) {
     /** @var \Drupal\user\Entity\User $user */
-    $user = user_load_by_mail($request_options['form_params']['customer[email]']);
+    $user = user_load_by_mail($request_options['json']['customer']['email']);
 
     if (!empty($user)) {
       $privilege_card_number = $user->get('field_privilege_card_number')->getString();
-      $request_options['form_params']['customer[extension][loyalty_card_number]'] = $privilege_card_number;
+      $request_options['json']['customer']['extension']['loyalty_card_number'] = $privilege_card_number;
     }
   }
 }

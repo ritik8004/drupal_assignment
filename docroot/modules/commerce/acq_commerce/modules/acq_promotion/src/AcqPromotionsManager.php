@@ -5,6 +5,7 @@ namespace Drupal\acq_promotion;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\node\Entity\Node;
 
 /**
  * Class AcqPromotionsManager.
@@ -42,15 +43,31 @@ class AcqPromotionsManager {
   }
 
   /**
-   * Sync promotions from API to Drupal.
+   * Synchronize promotions through the API.
+   *
+   * @param mixed $types
+   *   The type of promotion to synchronize.
    */
-  public function syncPromotions() {
-    $promotions = $this->apiWrapper->getPromotions();
+  public function syncPromotions($types = ['category', 'cart']) {
+    $types = is_array($types) ? $types : [$types];
+    $ids = [];
 
-    foreach ($promotions as $promotion) {
-      // @TODO: Add basic validations to remove junk data here.
-      $this->syncPromotion($promotion);
+    foreach ($types as $type) {
+      $promotions = $this->apiWrapper->getPromotions($type);
+
+      foreach ($promotions as $promotion) {
+        // Add type to $promotion array, to be saved later.
+        $promotion['promotion_type'] = $type;
+
+        // @TODO: Add basic validations to remove junk data here.
+        $this->syncPromotion($promotion);
+
+        $ids[] = $promotion['rule_id'];
+      }
     }
+
+    // Unpublish promotions, which are not part of API response.
+    $this->unpublishPromotions($ids);
   }
 
   /**
@@ -69,6 +86,7 @@ class AcqPromotionsManager {
 
     // Create promotion.
     if (empty($nids)) {
+      /* @var $node \Drupal\node\Entity\Node */
       $node = $this->nodeStorage->create([
         'type' => 'acq_promotion',
       ]);
@@ -85,6 +103,7 @@ class AcqPromotionsManager {
       }
 
       // We will use only the first matching node.
+      /* @var $node \Drupal\node\Entity\Node */
       $node = $this->nodeStorage->load(reset($nids));
 
       if (serialize($promotion) == $node->get('field_acq_promotion_data')->getString()) {
@@ -107,9 +126,52 @@ class AcqPromotionsManager {
     // Store everything as serialized string in DB.
     $node->get('field_acq_promotion_data')->setValue(serialize($promotion));
 
+    // Set the Promotion type.
+    $node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
+
+    // Add product NID's to promotion.
+    if (!empty($promotion['products'])) {
+      // Fetch all products NID's related to SKU ID's.
+      $productNIDs = [];
+      foreach ($promotion['products'] as $product) {
+        $productQuery = $this->nodeStorage->getQuery();
+        $productQuery->condition('type', 'acq_product');
+        $productQuery->condition('field_skus', $product['product_id'], 'IN');
+        $productNIDs += $productQuery->execute();
+      }
+
+      // Assign value to $node object.
+      $productNIDs = array_values($productNIDs);
+      if (!empty($productNIDs)) {
+        foreach ($productNIDs as $delta => $productNID) {
+          $node->get('field_acq_promotion_product')->set($delta, $productNID);
+        }
+      }
+    }
+
     // Invoke the alter hook to allow modules to update the node from API data.
     \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $node, $promotion);
 
     $node->save();
   }
+
+  /**
+   * Unpublish Promotion nodes, not part of API Response.
+   *
+   * @param array $validIDs
+   *   Valid Rule ID's from API.
+   */
+  protected function unpublishPromotions($validIDs = []) {
+    $query = $this->nodeStorage->getQuery();
+    $query->condition('type', 'acq_promotion');
+    $query->condition('field_acq_promotion_rule_id', $validIDs, 'NOT IN');
+    $nids = $query->execute();
+    foreach ($nids as $nid) {
+      /* @var $node \Drupal\node\Entity\Node */
+      $node = $this->nodeStorage->load($nid);
+      $node->setPublished(Node::NOT_PUBLISHED);
+      $node->save();
+    }
+  }
+
 }

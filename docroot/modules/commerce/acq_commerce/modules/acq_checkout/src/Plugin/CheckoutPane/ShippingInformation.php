@@ -123,7 +123,7 @@ class ShippingInformation extends AddressFormBase {
     $field_names = [
       'first_name' => 'firstname',
       'last_name' => 'lastname',
-      'phone' => 'phone',
+      'telephone' => 'telephone',
       'street' => 'street',
       'street2' => 'street2',
     ];
@@ -132,7 +132,7 @@ class ShippingInformation extends AddressFormBase {
       'city',
       'region',
       'postcode',
-      'country',
+      'country_id',
     ];
 
     foreach ($field_names as $field_key => $field_name) {
@@ -148,10 +148,10 @@ class ShippingInformation extends AddressFormBase {
 
       $address = [
         'region' => $values['dynamic_parts']['region'],
-        'country' => $values['dynamic_parts']['country'],
+        'country_id' => $values['dynamic_parts']['country_id'],
         'street' => $values['street'],
         'street2' => $values['street2'],
-        'phone' => $values['phone'],
+        'telephone' => $values['telephone'],
         'postcode' => $values['dynamic_parts']['postcode'],
         'city' => $values['dynamic_parts']['city'],
         'firstname' => $values['first_name'],

@@ -26,6 +26,11 @@ body.ie {
   summary a.details-title {
     color: $grey-ash;
   }
+
+  .webform-submission-alshaya-contact-form textarea {
+    // Removes the scrollbar which IE adds by default.
+    overflow: hidden !important;
+  }
 }
 
 /**
@@ -88,5 +93,38 @@ body.ucbrowser {
 body.chrome {
   &.alias--cart #table-cart-items td select {
     text-indent: 0.4rem;
+  }
+}
+
+/**
+ * Samsung - Specific issues and hacks.
+ */
+.samsung {
+  &.s-tab2:not(.chrome) {
+    html[lang=en] & {
+      .webform-submission-alshaya-contact-form,
+      form.user-form {
+        .form-item-mobile-number-mobile {
+          top: 0.3rem !important;
+        }
+      }
+    }
+
+    html[lang=ar] & {
+      .webform-submission-alshaya-contact-form,
+      form.user-form {
+        .form-item-mobile-number-mobile {
+          top: 0.1rem !important;
+        }
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  body.ucbrowser.alias--cart {
+    #table-cart-items td select {
+      padding-left: 50px;
+    }
   }
 }

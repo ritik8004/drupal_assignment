@@ -48,7 +48,7 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCartId() {
+  public function getCartId($create_new = TRUE) {
     $cookies = \Drupal::request()->cookies->all();
     $cart_id = NULL;
 
@@ -61,9 +61,14 @@ class CartSessionStorage implements CartStorageInterface {
     if ($cart) {
       return $cart->id();
     }
+    elseif ($create_new) {
+      $cart = $this->createCart();
+      return $cart->id();
+    }
+    else {
+      return NULL;
+    }
 
-    $cart = $this->createCart();
-    return $cart->id();
   }
 
   /**
@@ -95,13 +100,13 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCart() {
+  public function getCart($create_new = TRUE) {
     $cart = $this->session->get(self::STORAGE_KEY);
 
     // No cart in session, try to load an updated cart.
     if (!$cart) {
       try {
-        $cart = $this->updateCart();
+        $cart = $this->updateCart($create_new);
       }
       catch (\Exception $e) {
         // Intentionally suppressing the error here. This will happen when there
@@ -135,9 +140,9 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function updateCart() {
-    $cart_id = $this->getCartId();
-    $update = [];
+  public function updateCart($create_new = TRUE) {
+    $cart_id = $this->getCartId($create_new);
+    $update = NULL;
 
     $cart = $this->session->get(self::STORAGE_KEY);
 
@@ -150,27 +155,39 @@ class CartSessionStorage implements CartStorageInterface {
     }
 
     // Don't tell conductor our stored totals for no reason.
-    if (isset($cart->totals)) {
-      unset($cart->totals);
+    if (isset($update->totals)) {
+      unset($update->totals);
     }
 
-    try {
-      $cart = (object) $this->apiWrapper->updateCart($cart_id, $update);
-    }
-    catch (\Exception $e) {
-      $this->restoreCart($cart_id);
-      throw $e;
-    }
+    if ($cart_id) {
+      try {
+        $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
+      }
+      catch (\Exception $e) {
+        $this->restoreCart($cart_id);
+        throw $e;
+      }
 
-    if (empty($cart)) {
-      return;
+      if (empty($cartObject)) {
+        return;
+      }
+
+      $cartObject->cart_id = $cart_id;
+
+      if ($cart) {
+        $cart->updateCartObject($cartObject);
+      }
+      else {
+        $cart = new Cart($cartObject);
+      }
+
+      $this->addCart($cart);
+
+      return $cart;
     }
-
-    $cart->cart_id = $cart_id;
-    $cart = new Cart($cart);
-    $this->addCart($cart);
-
-    return $cart;
+    else {
+      return NULL;
+    }
   }
 
   /**
@@ -219,7 +236,7 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function associateCart($customer_id) {
+  public function associateCart($customer_id, $customer_email = '') {
     // We first update the session cart.
     $cart = $this->session->get(self::STORAGE_KEY);
     if (!$cart) {
@@ -229,6 +246,7 @@ class CartSessionStorage implements CartStorageInterface {
     $data = [
       'cart_id' => $cart->id(),
       'customer_id' => $customer_id,
+      'customer_email' => $customer_email
     ];
     $cart->convertToCustomerCart($data);
     $this->session->set(self::STORAGE_KEY, $cart);

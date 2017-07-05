@@ -5,9 +5,48 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['click_collect_stores_list'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'title' => NULL,
+      'stores' => NULL,
+    ],
+  ];
+
+  $items['alshaya_address'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'address' => [],
+    ],
+  ];
+
+  return $items;
+}
+
+/**
+ * Format price value with currency.
+ *
+ * Default template: acq-commerce-price.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - price: a price value.
+ */
+function template_preprocess_alshaya_address(array &$variables) {
+  $country_list = \Drupal::service('address.country_repository')->getList();
+  $variables['address']['country'] = $country_list[$variables['address']['country_code']];
+}
 
 /**
  * Implements hook_acq_checkout_pane_pane_info_alter().
@@ -25,22 +64,6 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Attach GTM attributes to identify buttons.
-  if (!empty($form['checkout_guest'])) {
-    $checkout_guest_options = [
-      'attributes' => [
-        'gtm-type' => 'checkout-as-guest',
-      ],
-    ];
-    $form['checkout_guest']['checkout_guest']['checkout_as_guest']['#url']->setOptions($checkout_guest_options);
-  }
-  if (!empty($form['checkout_login'])) {
-    $form['checkout_login']['checkout_login']['form']['actions']['submit']['#attributes']['gtm-type'] = 'checkout-signin';
-  }
-  if (!empty($form['acm_payment_methods'])) {
-    $form['acm_payment_methods']['payment_options']['#attributes']['gtm-type'] = 'cart-checkout-payment';
-  }
-
   // Add markup to show selected card type.
   if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details'], $form['acm_payment_methods']['payment_details']['cc_number'])) {
     $form['acm_payment_methods']['payment_details']['cc_number']['#weight'] = 0;
@@ -55,6 +78,25 @@ function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInt
     $form['acm_payment_methods']['payment_details']['cc_cvv']['#suffix'] = '<div class="cc_cvv_help_text">' . t('This code is a three or four digit number printed on the front or back of the credit card') . '</div>';
     $form['acm_payment_methods']['payment_details']['cc_exp_month']['#weight'] = 2;
     $form['acm_payment_methods']['payment_details']['cc_exp_year']['#weight'] = 2;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_acm_checkout_taxonomy_term_presave(EntityInterface $entity) {
+  /** @var \Drupal\taxonomy\Entity\Term $entity */
+  if ($entity->getVocabularyId() == 'payment_method') {
+    if ($entity->get('field_payment_default')->getString() == 1) {
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+      $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+      if ($current_default = $checkout_options_manager->getDefaultPayment()) {
+        if ($current_default->id() != $entity->id()) {
+          $current_default->get('field_payment_default')->setValue(2);
+          $current_default->save();
+        }
+      }
+    }
   }
 }
 
@@ -75,13 +117,14 @@ function _alshaya_acm_checkout_clean_address($address) {
     'first_name',
     'lastname',
     'last_name',
-    'phone',
+    'telephone',
     'street',
     'street2',
     'city',
     'region',
     'postcode',
-    'country',
+    'country_id',
+    'extension',
   ];
 
   foreach ($address as $key => $value) {
@@ -96,8 +139,8 @@ function _alshaya_acm_checkout_clean_address($address) {
     $address['region'] = $address['region_id'];
   }
 
-  if (!empty($address['phone'])) {
-    $address['phone'] = _alshaya_acm_checkout_clean_address_phone($address['phone']);
+  if (!empty($address['telephone'])) {
+    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['telephone']);
   }
 
   return $address;
@@ -118,11 +161,17 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
   if (is_string($phone)) {
     $phone_string = $phone;
   }
-  elseif (is_object($phone)) {
-    $phone_string = \Drupal::service('mobile_number.util')->libUtil()->format($phone, 1);
-  }
-  elseif (is_array($phone)) {
-    $phone_string = $phone['value'];
+  elseif (is_array($phone) || is_object($phone)) {
+    $phone = (array) $phone;
+    if (isset($phone['country_code'])) {
+      $phone_string = \Drupal::service('mobile_number.util')->getPhoneNumberAsString($phone['mobile'], $phone['country_code']);
+    }
+    elseif (isset($phone['country-code'])) {
+      $phone_string = \Drupal::service('mobile_number.util')->getPhoneNumberAsString($phone['mobile'], $phone['country-code']);
+    }
+    elseif (isset($phone['value'])) {
+      $phone_string = $phone['value'];
+    }
   }
 
   return $phone_string;

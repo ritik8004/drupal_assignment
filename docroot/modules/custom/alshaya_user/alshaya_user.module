@@ -109,6 +109,8 @@ function alshaya_user_form_user_register_form_submit($form, FormStateInterface $
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_user_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  unset($form['name']['#attributes']['autofocus']);
+
   // Add forgot password link.
   $form['account']['forgot_password'] = [
     '#markup' => Link::createFromRoute(t('Forgot password?'), 'user.pass')->toString(),
@@ -242,6 +244,7 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
   $element['country-code']['#value'] = $default_site_country;
   $options = $element['country-code']['#options'];
   $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
+  $element['country-code']['#attributes']['class'][] = 'hidden';
 
   // Make mobile number required only for few forms.
   $mobile_numer_required_forms = [
@@ -258,6 +261,7 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
   // the prefix.
   $country_mobile_code = \Drupal::service('mobile_number.util')->getCountryCode($default_site_country);
   if ($country_mobile_code) {
+    $element['#attached']['library'][] = 'alshaya_user/alshaya_mobile_number';
     $element['mobile']['#prefix'] = '<div class="country-code-prefix">' . '+' . $country_mobile_code . '</div>';
   }
 
@@ -300,14 +304,14 @@ function alshaya_user_alshaya_acm_customer_update_account_alter(User $user, arra
  * Implements hook_acq_commerce_update_customer_api_request_alter().
  */
 function alshaya_user_acq_commerce_update_customer_api_request_alter(array &$request_options) {
-  if (isset($request_options['form_params'], $request_options['form_params']['customer[email]'])) {
+  if (isset($request_options['json'], $request_options['json']['customer']['email'])) {
     /** @var \Drupal\user\Entity\User $user */
-    $user = user_load_by_mail($request_options['form_params']['customer[email]']);
+    $user = user_load_by_mail($request_options['json']['customer']['email']);
 
     if (!empty($user)) {
       $phone_number = $user->get('field_mobile_number')->getValue();
       $contact_number = !empty($phone_number) ? $phone_number[0]['value'] : '';
-      $request_options['form_params']['customer[extension][phone_number]'] = $contact_number;
+      $request_options['json']['customer']['extension']['phone_number'] = $contact_number;
     }
   }
 }

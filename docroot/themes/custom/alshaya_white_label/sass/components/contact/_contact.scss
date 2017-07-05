@@ -38,10 +38,14 @@
   }
 
   .form-item-mobile-number-mobile input {
-    width: 107px !important;
-
     &::placeholder {
       visibility: hidden;
+
+      .ie & {
+        visibility: visible;
+        color: transparent;
+        opacity: 1 !important;
+      }
     }
   }
 
@@ -55,7 +59,6 @@
       top: 0;
 
       &.error {
-        top: -0.25rem;
         left: -4em;
         width: 9rem;
       }
@@ -88,13 +91,20 @@
         }
 
         position: absolute;
-        #{$left}: -5rem;
+        #{$left}: -3rem;
         width: 21rem;
       }
     }
   }
+
+  .country-code-prefix {
+    @include breakpoint($only-mobile) {
+      margin-top: 0.5rem;
+    }
+  }
 }
 
+.address-book-address,
 .contact-form,
 .user-communication-preference {
   max-width: 24.75rem;
@@ -153,6 +163,46 @@
       bottom: 0;
       #{$left}: 0;
       opacity: 1;
+      font-size: 0.75rem;
+    }
+  }
+
+  .country-field-wrapper {
+    @include clearfix;
+
+    position: relative;
+    height: 5rem;
+
+    .country-label {
+      font-size: 1rem;
+      color: $greyish;
+      transition: 0.2s ease all;
+    }
+  }
+
+  .form-type-email {
+    .description {
+      padding-top: 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .country-field-wrapper {
+    @include clearfix;
+
+    position: relative;
+    height: 5rem;
+
+    .country-label {
+      font-size: 1rem;
+      color: $greyish;
+      transition: 0.2s ease all;
+    }
+  }
+
+  .form-type-email {
+    .description {
+      padding-top: 0.5rem;
       font-size: 0.75rem;
     }
   }
@@ -228,12 +278,138 @@
   }
 }
 
-.webform-submission-alshaya-contact-form {
+.webform-submission-alshaya-contact-form,
+form.user-form {
   .mobile-number-field {
     width: 100%;
+    display: block;
+    clear: both;
+    border-bottom: 1px solid $grey-ash;
+    padding-bottom: 0.125rem;
+
+    .country-code-prefix {
+      border-bottom: none;
+    }
 
     .form-type-textfield {
-      top: 1.5rem;
+      top: 0.4rem;
+
+      html[lang=ar] & {
+        top: 0.2rem;
+      }
+
+      label.error {
+        position: absolute !important;
+        top: 1.2rem !important;
+      }
+
+      .c-input__bar {
+        top: 0.25rem;
+
+        html[lang=ar] & {
+          top: 0.3125rem;
+        }
+      }
+
+      input {
+        border-bottom: none !important;
+
+        &::placeholder {
+          opacity: 0;
+        }
+      }
+    }
+
+    html[lang=ar] & {
+      margin-top: 0.5rem !important;
+
+      label.form-required {
+        position: absolute !important;
+      }
+    }
+  }
+}
+
+form.user-form {
+  .mobile-number-field {
+    padding-bottom: 2px;
+
+    .form-item--error-message {
+      position: absolute;
+      top: 4rem;
+      width: 19rem;
+    }
+
+    .c-input__bar {
+      top: 0.125rem !important;
+
+      html[lang=ar] & {
+        top: 0.1875rem !important;
+      }
+    }
+
+    html[lang=ar] & {
+      .form-type-textfield {
+        top: 0.4rem !important;
+      }
+    }
+
+    &.form-item--error {
+      margin-bottom: 4.5rem;
+    }
+  }
+
+  .form-actions {
+    @include breakpoint($desktop) {
+      margin-top: 1.5rem;
+    }
+  }
+}
+
+.c-user-edit .user-form {
+  #edit-account {
+    margin-top: 2.813rem;
+  }
+}
+
+html[lang=ar] {
+  .webform-submission-alshaya-contact-form {
+    .form-item-mobile-number-mobile {
+      label.error {
+        top: 1.125rem !important;
+        left: -0.4375rem !important;
+      }
+
+      .form-item--error-message {
+        right: 0 !important;
+        direction: rtl;
+      }
+    }
+  }
+
+  form.user-form {
+    .form-type-email {
+      input[type=email] {
+        margin-top: 0.3125rem;
+      }
+    }
+
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      input[type=text] {
+        font-family: $arial-nodir;
+      }
+    }
+
+    .mobile-number-field {
+      input[type=text],
+      .country-code-prefix {
+        font-family: $arial-nodir;
+      }
+
+      input[type=text] {
+        padding-top: 0.125rem;
+      }
     }
   }
 }

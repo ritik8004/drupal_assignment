@@ -3,4 +3,5 @@ services:
     class: Drupal\alshaya_api\AlshayaApiWrapper
     arguments:
       - '@config.factory'
+      - '@language_manager'
       - '@logger.factory'

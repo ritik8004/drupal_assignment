@@ -8,7 +8,7 @@ id: taxonomy_term.shipping_method.field_shipping_method_code
 field_name: field_shipping_method_code
 entity_type: taxonomy_term
 bundle: shipping_method
-label: Code
+label: 'Method Code'
 description: ''
 required: true
 translatable: false

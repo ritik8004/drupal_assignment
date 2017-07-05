@@ -41,9 +41,20 @@
         $(this).next('.menu__in').next().toggleClass('menu__list--active');
       });
 
+      var $menuInFirst = $('.has-child > .menu__link-wrapper');
+      $menuInFirst.on('click', function () {
+        $('.menu--one__list-item.has-child').addClass('not-active');
+        $(this).parent().removeClass('not-active').addClass('active-menu');
+      });
+
       var $menuBack = $('.back--link');
       $menuBack.click(function () {
         $(this).parents('.menu__list').first().toggleClass('menu__list--active');
+      });
+
+      var $menuBackFirst = $('.menu--two__list > .back--link');
+      $menuBackFirst.on('click', function () {
+        $('.menu--one__list-item.has-child').removeClass('not-active active-menu');
       });
 
       $('.mobile--menu, .mobile--search').click(function (e) {
@@ -58,7 +69,7 @@
 
       $('.c-menu-primary .mobile--search').off().on('click', function (e) {
         e.preventDefault();
-        $('.c-menu-primary #block-exposedformsearchpage').toggle();
+        $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
         $(this).parent().toggleClass('search-active');
       });
 
@@ -113,10 +124,18 @@
       $('.main--menu').hover(function () {
         header_timer = setTimeout(function () {
           $('body').addClass('overlay');
-        }, 400);
+        }, 300);
       }, function () {
         clearTimeout(header_timer);
         $('body').removeClass('overlay');
+      });
+
+      // Close mobile menu when clicked outside the menu.
+      var mobileMenu = $('.main--menu');
+      $('body').click(function (e) {
+        if (mobileMenu.hasClass('menu--active') && e.target === $('.menu--active')[0]) {
+          $('.mobile--close').trigger('click');
+        }
       });
 
       $('.logged-out .account').click(function () {
@@ -173,7 +192,7 @@
         $('.block-alshaya-main-menu').mouseenter(function () {
           setTimeout(function () {
             $(parent).parent().addClass('active--menu--links');
-          }, 410);
+          }, 310);
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {

@@ -48,7 +48,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $cart = $cart_storage->getCart();
 
   // Get current cart items.
-  $cart_items = $cart->items();
+  $cart_items = $cart ? $cart->items() : NULL;
 
   if (empty($cart_items)) {
     // Add empty message wrapper container.
@@ -339,9 +339,10 @@ function alshaya_acm_preprocess_page_title(&$variables) {
   // Change cart page title with quantity count.
   if ($route_match->getRouteName() == 'acq_cart.cart') {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+    $count = $cart ? $cart->getCartItemsCount() : 0;
 
     $variables['title'] = [
-      '#markup' => t("Basket (%count)", ['%count' => $cart->getCartItemsCount()]),
+      '#markup' => t("Basket (%count)", ['%count' => $count]),
     ];
   }
 }
@@ -412,18 +413,10 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'cart_link' => '',
         'number_of_items' => '',
         'products' => '',
-        'subtotal' => '',
-        'tax' => '',
-        'shipping' => '',
-        'discount' => '',
-        'ordertotal' => '',
+        'totals' => [],
         'currency_format' => '',
         'currency_code_position' => '',
-        'delivery_address' => '',
-        'delivery_method' => '',
-        'delivery_label' => '',
-        'address_label' => '',
-        'shipping_url' => '',
+        'delivery' => [],
       ],
       'template' => 'block--checkout-summary',
     ],
@@ -611,6 +604,29 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store');
   $config->set('store_id', '3');
   $config->save();
+
+  // Add translation for the error messages we check in API response.
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'This product is out of stock.' => [
+      'ar' => 'هذا المنتج غير متوفر في المخزن.',
+    ],
+    "We don't have as many" => [
+      'ar' => 'ليس لدينا العديد من',
+    ],
+    'Some of the products are out of stock.' => [
+      'ar' => 'بعض المنتجات غير متوفرة بالمخزن.',
+    ],
+    'Not all of your products are available in the requested quantity.' => [
+      'ar' => 'بعض المنتجات غير متوفرة بالمخزن.',
+    ],
+    'Coupon code is not valid' => [
+      'ar' => 'رمز قسيمة الخصم غير صالحة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

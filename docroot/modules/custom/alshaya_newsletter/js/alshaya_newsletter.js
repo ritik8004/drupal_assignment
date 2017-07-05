@@ -11,18 +11,16 @@
         l.ladda('start');
       });
 
+      // Hide multiple inline error messages for email field.
+      $('#alshaya-newsletter-subscribe .form-type-email input').once().on('keyup', function() {
+        var ajaxWrapper = '#alshaya-newsletter-subscribe #footer-newsletter-form-wrapper';
+        if($('#alshaya-newsletter-subscribe .form-type-email label.error').is(':visible') === true) {
+          $(ajaxWrapper).empty();
+        }
+      });
+
       $.fn.stopNewsletterSpinner = function(data) {
         l.ladda('stop');
-        if (data.message === 'success') {
-          $('.ladda-label').html(Drupal.t('added'));
-        }
-        else {
-          $('.ladda-label').html(Drupal.t('error'));
-        }
-        setTimeout(
-          function() {
-            $('.ladda-label').html(Drupal.t('sign up'));
-          }, data.interval);
       };
     }
   };

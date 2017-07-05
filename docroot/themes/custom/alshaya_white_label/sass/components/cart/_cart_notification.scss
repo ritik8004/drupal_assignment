@@ -1,23 +1,13 @@
 #cart_notification {
   z-index: 999;
   position: absolute;
-  top: 7.1rem;
-  #{$right}: calc((100% - 1214px) / 2);
-
-  @include breakpoint($only-tablet) {
-    top: 4.063rem;
-    #{$right}: calc((100% - 691px) / 2);
-  }
-
-  @include breakpoint($only-mobile) {
-    top: 2.813rem;
-    #{$right}: calc((100% - 337px) / 2);
-  }
+  top: 3.9rem;
+  #{$left}: -0.75rem;
 
   .notification,
   .error {
-    width: 16.37rem;
-    background: #fff;
+    width: 17.37rem;
+    background: $white-five;
     border: 2px solid $pumpkin-orange;
     box-shadow: 4px 4px 0 0 $white-two;
     padding: 0.8rem;
@@ -25,15 +15,14 @@
 
     &::before {
       content: '';
-      position: absolute;
+      position: relative;
       width: 0;
       height: 0;
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;
       border-bottom: 11px solid $pumpkin-orange;
       clear: both;
-      margin-top: -1.5rem;
-      margin-#{$left}: 14rem;
+      top: -2.5rem;
     }
 
     .col-1 {
@@ -97,4 +86,13 @@
 
 .edit-add-to-cart + .ajax-progress-throbber {
   display: none;
+}
+
+html[lang=ar] #cart_notification {
+  .notification,
+  .error {
+    &::before {
+      top: -2.9rem;
+    }
+  }
 }

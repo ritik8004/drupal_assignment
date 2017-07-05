@@ -68,17 +68,45 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
     // @TODO: After the payment details are entered, prevent this form from
     // showing again if a user navigates back to this step or present an option
     // for the user to cancel the last payment method and enter a new one.
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
 
+    foreach ($plugins as $plugin) {
+      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']);
+    }
+
     // Get available payment methods and compare to enabled payment method
     // plugins.
     $apiWrapper = $this->getApiWrapper();
     $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
     $payment_methods = array_intersect($payment_methods, array_keys($plugins));
+
+    // Get the methods allowed for selected delivery method.
+    $shipping_method = $cart->getShippingMethodAsString();
+    $allowed_methods = $checkout_options_manager->getAllowedPaymentMethodCodes($shipping_method);
+
+    // Update payment methods to show only those which are allowed for selected
+    // delivery method.
+    $payment_methods = array_intersect($payment_methods, $allowed_methods);
+
+    $selected_plugin_id = $cart->getPaymentMethod(FALSE);
+
+    // Avoid warnings because of empty array from getPaymentMethod.
+    if (is_array($selected_plugin_id) && empty($selected_plugin_id)) {
+      $selected_plugin_id = NULL;
+    }
+
+    // If selected method is no longer available, we start fresh.
+    if ($selected_plugin_id && !in_array($selected_plugin_id, $payment_methods)) {
+      $selected_plugin_id = '';
+      $cart->setPaymentMethod(NULL, []);
+    }
 
     // Only one payment method available, load and return that methods plugin.
     if (count($payment_methods) === 1) {
@@ -87,6 +115,13 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       $plugin = $this->getPlugin($plugin_id);
       $pane_form += $plugin->buildPaneForm($pane_form, $form_state, $complete_form);
       return $pane_form;
+    }
+    elseif (empty($selected_plugin_id)) {
+      $default_plugin_id = $checkout_options_manager->getDefaultPaymentCode();
+
+      if (in_array($default_plugin_id, $payment_methods)) {
+        $selected_plugin_id = $default_plugin_id;
+      }
     }
 
     // More than one payment method available, so build a form to let the user
@@ -98,25 +133,37 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       if (!isset($plugins[$plugin_id])) {
         continue;
       }
-      $payment_options[$plugin_id] = $plugins[$plugin_id]['label'];
-    }
 
-    $plugin_id = $cart->getPaymentMethod(FALSE);
+      $payment_term = $checkout_options_manager->loadPaymentMethod($plugin_id);
+
+      $method_name = '
+        <div class="payment-method-name">
+          <div class="method-title">' . $payment_term->getName() . '</div>
+          <div class="method-side-info method-' . $plugin_id . '"></div>
+          <div class="method-description">' . $payment_term->get('description')->getValue()[0]['value'] . '</div>
+        </div>
+      ';
+
+      $payment_options[$plugin_id] = $method_name;
+    }
 
     $pane_form['payment_options'] = [
       '#type' => 'radios',
       '#title' => $this->t('Payment Options'),
       '#options' => $payment_options,
-      '#default_value' => $plugin_id,
+      '#default_value' => $selected_plugin_id,
       '#ajax' => [
         'wrapper' => 'payment_details',
         'callback' => [$this, 'rebuildPaymentDetails'],
       ],
+      '#attributes' => [
+        'gtm-type' => 'cart-checkout-payment',
+      ],
     ];
 
-    if ($plugin_id) {
-      $cart->setPaymentMethod($plugin_id);
-      $plugin = $this->getPlugin($plugin_id);
+    if ($selected_plugin_id) {
+      $cart->setPaymentMethod($selected_plugin_id);
+      $plugin = $this->getPlugin($selected_plugin_id);
       $pane_form += $plugin->buildPaneForm($pane_form, $form_state, $complete_form);
     }
     else {
@@ -166,7 +213,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $plugin = $this->getSelectedPlugin();
     $plugin->submitPaymentForm($pane_form, $form_state, $complete_form);
-    \Drupal::service('acq_cart.cart_storage')->updateCart();
   }
 
 }

@@ -29,22 +29,13 @@
       };
 
       function centerDots() {
-        var parent = $('.c-slider-promo__items');
-        var dots = $('.slick-dots');
+        var parent = $('.slick-list');
         var button = $('.slick-next, .slick-prev');
 
         var parentHeight = parent.height();
-        var dotsHeight = dots.height() + (16 * 2);
-        var buttonHeight = button.height() / 2;
-        var windowWidth = $(window).width();
+        var buttonHeight = button.height();
 
-        var center;
-        if (windowWidth > 767) {
-          center = (parentHeight - buttonHeight) / 2;
-        }
-        else {
-          center = (parentHeight - (dotsHeight + buttonHeight)) / 2;
-        }
+        var center = (parentHeight / 2) - (buttonHeight / 2);
         button.css({top: center});
       }
 
@@ -60,13 +51,25 @@
       // eslint-disable-next-line.
       $(window).resize(debounce(function () {
         centerDots();
-      }, 250));
+      }, 500));
 
       var windowWidth = $(window).width();
       setTimeout(function () {
         $(window).width(windowWidth);
         centerDots();
       }, 500);
+
+      // Open homepage slider link in new tab.
+      // This is used to fix behaviour of UC browser.
+      var sliderLinks = $('.c-slider-promo a');
+      sliderLinks.each(function () {
+        $(this).click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var link = $(this).attr('href');
+          window.open(link);
+        });
+      });
     }
   };
 

@@ -1,11 +1,24 @@
+.c-footer {
+  position: relative;
+  margin-top: 3.5rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 2.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 3.75rem;
+  }
+}
+
 .c-footer-primary {
   border-top: 2px solid $peacock-blue;
   padding-top: 1rem;
   padding-bottom: 2.25rem;
   position: relative;
   background: $white-five;
-  margin-top: 3.5rem;
-  z-index: 2;
+  -webkit-transform: translate3d(0, 0, 0);
+  z-index: 4;
 
   @include breakpoint($tablet) {
     padding: 1.25em 1.5em;
@@ -17,25 +30,18 @@
     }
   }
 
-  @include breakpoint($only-tablet) {
-    margin-top: 2.75rem;
-  }
-
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
-    margin-top: 3.75rem;
   }
 
   .primary--footer--right {
     @include breakpoint($tablet) {
       float: $right;
-      margin-#{$right}: 0.8rem;
     }
 
     @include breakpoint($desktop) {
-      width: 33%;
+      width: 28.3625%;
       margin-#{$right}: 0;
-      padding-#{$right}: 0.4rem;
     }
 
     .language--switcher.only-first-time {
@@ -94,7 +100,7 @@
 
   .footer--categories {
     @include breakpoint($only-tablet) {
-      margin-#{$right}: 3.25rem;
+      margin-#{$right}: 1.25rem;
     }
   }
 
@@ -108,13 +114,13 @@
     }
 
     @include breakpoint($desktop) {
-      width: 67%;
-      padding-#{$left}: 1rem;
+      padding: 0;
+      width: 69.2982%;
     }
   }
 
   .l-container {
-    @include container(66.35rem);
+    @include container(64.125rem);
   }
 
   &__region {
@@ -131,9 +137,8 @@
   @extend %list-clear;
 
   @include breakpoint($desktop) {
-    margin-#{$right}: 3.4rem;
     float: $left;
-    width: calc(50% - 2.6rem);
+    width: 50%;
 
     &:last-child {
       margin-#{$right}: 0;
@@ -158,6 +163,14 @@
     &:hover {
       color: $cerulean-two;
       text-decoration: underline;
+    }
+  }
+
+  .cols-6 & {
+    &:last-child {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 1rem;
+      }
     }
   }
 }
@@ -224,8 +237,11 @@
 .c-footer-menu--about {
   @include breakpoint($desktop) {
     float: $left;
-    margin-#{$left}: 2.2rem;
-    max-width: 80px;
+    width: 50%;
+
+    .c-footer-menu {
+      width: 100%;
+    }
   }
 }
 
@@ -267,7 +283,7 @@
 
   @include breakpoint($desktop) {
     max-width: 18.98rem;
-    margin-#{$left}: 2.2rem;
+    margin-#{$left}: 0;
     margin-#{$right}: 0;
 
     .newsletter-block-label {
@@ -322,8 +338,17 @@
         right: 0;
         top: 100%;
         color: $red-error;
-        padding: 0.25em 0;
+        padding: 0.3125rem 0;
+        z-index: 9;
+        font-size: 0.75rem;
+        background: $white-five;
+        margin-top: 0.1875rem;
+        text-align: $left;
       }
+    }
+
+    input[type=email]::placeholder {
+      color: $greyish;
     }
   }
 
@@ -367,7 +392,7 @@
     }
 
     @include breakpoint($desktop) {
-      #{$right}: 0.8rem;
+      #{$right}: 0;
     }
 
     &:focus {
@@ -385,18 +410,30 @@
     }
   }
 
+  .inline-error ~ #footer-newsletter-form-wrapper {
+    margin-top: 1.2rem;
+  }
+
   .edit-newsletter[data-style=zoom-in][data-loading] {
     background: $marine-blue-two;
   }
 
-  .subscription-status .success {
-    background: $tealish;
-    color: $white-four;
-    font-size: 0.75rem;
-    padding: 0.3125rem 0.875rem;
-    margin-top: 0.1875rem;
-    font-weight: bold;
-    display: block;
+  .subscription-status {
+    .success {
+      background: $tealish;
+      color: $white-four;
+      font-size: 0.75rem;
+      padding: 0.3125rem 0.875rem;
+      margin-top: 0.1875rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .error {
+      margin-top: 0.1875rem;
+      padding: 0.3125rem 0;
+      display: block;
+    }
   }
 }
 
@@ -418,8 +455,8 @@
 
   @include breakpoint($desktop) {
     float: $left;
-    margin-#{$left}: 3.25rem;
-    width: calc(60% - 2rem);
+    margin-#{$left}: 0;
+    width: 50%;
   }
 
   @include breakpoint($only-tablet) {
@@ -552,11 +589,12 @@
   overflow: hidden;
 
   @include breakpoint($desktop) {
-    margin-#{$left}: 2.5rem;
+    margin-#{$left}: 0;
   }
 
   @include breakpoint($only-tablet) {
     margin-#{$left}: 0;
+    max-width: 21.94rem;
   }
 
   .c-social-links {
@@ -585,7 +623,7 @@
 
 .region__footer-primary {
   @include breakpoint($tablet) {
-    padding-left: 0.312rem;
+    // padding-left: 0.312rem;
   }
 
   @include breakpoint($only-tablet) {

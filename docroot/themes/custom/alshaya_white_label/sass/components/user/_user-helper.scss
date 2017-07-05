@@ -372,7 +372,9 @@
           label.error {
             position: absolute;
             #{$left}: 0;
-            top: 1.875rem;
+            top: 1.563rem;
+            background: $white-five;
+            width: 100%;
           }
         }
       }
@@ -399,7 +401,8 @@
       }
 
       p {
-        margin-top: 1rem;
+        margin-top: -0.125rem;
+        margin-#{$left}: 1.813rem;
         margin-bottom: 1.4rem;
         font-size: 0.75rem;
 
@@ -578,6 +581,7 @@
         float: $left;
         max-width: 16.8125rem;
         width: 24%;
+        padding-top: 1rem;
       }
     }
 

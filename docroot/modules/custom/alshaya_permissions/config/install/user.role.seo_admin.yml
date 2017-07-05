@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_core
+third_party_settings:
+  lightning_core:
+    description: ''
+id: seo_admin
+label: 'SEO admin'
+weight: 17
+is_admin: null
+permissions:
+  - 'access google knowledge graph'
+  - 'access content overview'
+  - 'access toolbar'
+  - 'administer robots.txt'
+  - 'administer sitemap settings'
+  - 'edit any acq_product content'
+  - 'edit any acq_promotion content'
+  - 'edit any advanced_page content'
+  - 'edit any department_page content'
+  - 'edit any page content'
+  - 'edit any store content'
+  - 'edit terms in acq_product_category'
+  - 'view the administration theme'

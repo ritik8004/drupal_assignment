@@ -10,6 +10,8 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -45,6 +47,18 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['sku_teaser'] = [
+    'variables' => [
+      'gallery' => NULL,
+      'product_url' => NULL,
+      'product_label' => NULL,
+      'price' => NULL,
+      'final_price' => NULL,
+      'discount' => NULL,
+      'out_of_stock' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -77,7 +91,7 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
         if ($attribute_data['code'] == $key) {
           foreach ($attribute_data['values'] as $index => $value) {
             $sku->get($field_key)->set($index, $value['value_id']);
-            if ($term = $product_options_manager->loadProductOptionByOptionId($key, $value['value_id'])) {
+            if ($term = $product_options_manager->loadProductOptionByOptionId($key, $value['value_id'], $sku->language()->getId())) {
               $sku->get($field_key)->set($index, $term->getName());
             }
           }
@@ -91,8 +105,11 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() == 'acq_product') {
+  if (($entity->bundle() == 'acq_product') && ($view_mode != 'search_result')) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
     $sku = $entity->get('field_skus')->first()->getString();
     $sku_entity = SKU::loadFromSku($sku);
@@ -136,7 +153,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       alshaya_acm_product_get_gallery($build, $sku_entity);
 
-      _alshaya_acm_product_build_price($build, $sku_entity);
+      $skuManager->buildPrice($build, $sku_entity);
 
       $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
 
@@ -178,7 +195,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ]);
       }
 
-      if ($attr_brand = $sku_entity->get('attr_brand')->getString()) {
+      if ($attr_brand = $sku_entity->get('attr_product_brand')->getString()) {
         $specifications['value']['#items'][] = t('Product brand: @value', [
           '@value' => $attr_brand,
         ]);
@@ -227,62 +244,25 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
 
       if ($sku_media) {
-        $build['image'] = alshaya_acm_product_get_sku_image($sku_media, '192x168');
+        $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
       }
 
-      _alshaya_acm_product_build_price($build, $sku_entity);
+      $skuManager->buildPrice($build, $sku_entity);
     }
     elseif ($view_mode == 'modal') {
       // Get the image.
       // @TODO: We need to display the full slider and zoom box.
       // $build['image_url'] = NULL.
       alshaya_acm_product_get_gallery($build, $sku_entity);
-      _alshaya_acm_product_build_price($build, $sku_entity);
+      $skuManager->buildPrice($build, $sku_entity);
       $build['item_code']['#markup'] = $sku;
 
       $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
 
+      $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
+
       if ($sku_media) {
-        $build['image'] = alshaya_acm_product_get_sku_image($sku_media, '192x168');
-      }
-    }
-    elseif ($view_mode == 'search_result') {
-      // Get the image.
-      $build['image_url'] = [];
-      $sku_media = alshaya_acm_product_get_sku_media($sku_entity);
-
-      $search_main_image = $thumbnails = [];
-
-      // Loop through all media items and prepare thumbnails array.
-      foreach ($sku_media as $delta => $media_item) {
-        // For now we are displaying only image slider on search results page
-        // and PLP.
-        if ($media_item['media_type'] == 'image') {
-          if (empty($search_main_image)) {
-            $search_main_image = alshaya_acm_product_get_sku_image($media_item, '291x288');
-          }
-
-          $thumbnails[] = alshaya_acm_product_get_sku_image($media_item, '59x60', '291x288');
-        }
-      }
-
-      $build['image'] = [
-        '#theme' => 'alshaya_search_gallery',
-        '#mainImage' => $search_main_image,
-        '#thumbnails' => $thumbnails,
-        '#attached' => [
-          'library' => [
-            'alshaya_search/alshaya_search',
-          ],
-        ],
-      ];
-
-      _alshaya_acm_product_build_price($build, $sku_entity);
-
-      if (!alshaya_acm_is_product_in_stock($sku_entity)) {
-        $build['out_of_stock'] = [
-          '#markup' => '<span>' . t('out of stock') . '</span>',
-        ];
+        $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
       }
     }
   }
@@ -475,6 +455,24 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $selector = '.quantity-' . $sku_identifier;
     $response->addCommand(new HtmlCommand($selector, $form['quantity']));
 
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+      $config = \Drupal::config('alshaya_stores_finder.settings');
+      if (!alshaya_acm_product_available_click_collect($tree_pointer->getSku())) {
+        $response->addCommand(new HtmlCommand('#pdp-stores-container.click-collect > h3 > .subtitle', $config->get('pdp_click_collect_unavailable')));
+        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'removeClass', ['ui-state-active ui-accordion-header-active']));
+        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > .c-accordion_content', 'hide'));
+        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'addClass', ['ui-state-disabled']));
+        $response->addCommand(new SettingsCommand(['alshaya_acm' => ['storeFinder' => FALSE]]));
+      }
+      else {
+        $response->addCommand(new HtmlCommand('#pdp-stores-container.click-collect > h3 > .subtitle', $config->get('pdp_click_collect_subtitle')));
+        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'removeClass', ['ui-state-disabled']));
+        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > h3', 'addClass', ['ui-state-active ui-accordion-header-active']));
+        $response->addCommand(new InvokeCommand('#pdp-stores-container.click-collect > .c-accordion_content', 'show'));
+        $response->addCommand(new SettingsCommand(['alshaya_acm' => ['storeFinder' => TRUE]]));
+      }
+    }
+
     return $response;
   }
 
@@ -506,51 +504,6 @@ function alshaya_acm_product_preprocess_node(&$variables) {
       // SKU stock.
       $variables['sku_out_of_stock'] = !alshaya_acm_is_product_in_stock($sku_entity);
     }
-  }
-}
-
-/**
- * Helper function to add price, final_price and discount info in build array.
- *
- * @param array $build
- *   Build array to modify.
- * @param \Drupal\acq_sku\Entity\SKU $sku_entity
- *   SKU entity to use for getting price.
- */
-function _alshaya_acm_product_build_price(array &$build, SKU $sku_entity) {
-  // Get the price, discounted price and discount.
-  $build['price'] = $build['final_price'] = $build['discount'] = [];
-
-  if ($price = (float) $sku_entity->get('price')->getString()) {
-    $build['price'] = [
-      '#theme' => 'acq_commerce_price',
-      '#price' => $price,
-    ];
-
-    // Get the discounted price.
-    if ($final_price = (float) $sku_entity->get('final_price')->getString()) {
-      // Final price could be same as price, we dont need to show discount then.
-      if ($final_price >= $price) {
-        return;
-      }
-
-      $build['final_price'] = [
-        '#theme' => 'acq_commerce_price',
-        '#price' => $final_price,
-      ];
-
-      // Get discount if discounted price available.
-      $discount = floor((($price - $final_price) * 100) / $price);
-      $build['discount'] = [
-        '#markup' => t('Save @discount', ['@discount' => $discount . '%']),
-      ];
-    }
-  }
-  elseif ($final_price = (float) $sku_entity->get('final_price')->getString()) {
-    $build['price'] = [
-      '#theme' => 'acq_commerce_price',
-      '#price' => $final_price,
-    ];
   }
 }
 

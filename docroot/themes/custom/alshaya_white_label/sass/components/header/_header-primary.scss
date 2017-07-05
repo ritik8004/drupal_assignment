@@ -68,7 +68,7 @@ header {
 
     @include breakpoint($only-tablet) {
       margin-top: 1.063rem;
-      padding-bottom: 1.5rem;
+      padding-bottom: 0.3125rem;
 
       .block-system-branding-block {
         .site-brand-home img {
@@ -87,6 +87,10 @@ header {
     }
   }
 
+  .facets-hidden-container {
+    display: none;
+  }
+
   .region__header {
     display: table;
     width: 100%;
@@ -94,6 +98,16 @@ header {
     > div {
       display: table-cell;
       vertical-align: middle;
+    }
+
+    .block-views-exposed-filter-blocksearch-page {
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        top: 5.125rem;
+        display: none;
+        width: 100%;
+        left: 0;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -153,9 +167,11 @@ header {
     @include breakpoint($only-tablet) {
       position: absolute;
       text-align: center;
-      bottom: -43px;
+      bottom: -3.8125rem;
       #{$left}: 0;
       #{$right}: 0;
+      background: white;
+      display: table-cell !important;
 
       .form-item-keywords {
         float: none !important;
@@ -163,7 +179,7 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      display: none !important;
+      display: none;
     }
 
     @include breakpoint($upto-desktop) {
@@ -261,6 +277,10 @@ header {
       @include breakpoint($only-mobile) {
         display: none;
       }
+
+      .price-currency.prefix {
+        padding-right: 0.45em;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -354,8 +374,43 @@ header {
 	SITE HEADER - MOBILE MENU
 */
 
+.block-views-exposed-filter-blocksearch-page {
+  form {
+    @include breakpoint($only-mobile) {
+      border: 0.5rem solid $marine-blue-two;
+
+      .form-item {
+        display: block;
+
+        input {
+          max-width: none;
+          width: 100%;
+        }
+      }
+
+      .form-actions {
+        display: none;
+      }
+    }
+  }
+
+  input {
+    color: $grey-ash;
+    font-family: $alshaya-thin;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.6875rem !important;
+      font-size: 0.625rem;
+    }
+  }
+}
+
 .c-menu-primary {
   display: none;
+
+  @include breakpoint($only-tablet) {
+    height: 60px;
+  }
 
   #block-exposedformsearchpage,
   .block-views-exposed-filter-blocksearch-page {
@@ -413,12 +468,13 @@ header {
     .store {
       float: $right;
       margin-#{$right}: 1.5625rem;
+      margin-top: 1rem;
     }
 
     .mobile--menu {
       float: $left;
-      padding: 1rem 1.5625rem;
-      margin-top: -1rem;
+      padding: 1.594rem 1.515rem;
+      margin-top: -0.4rem;
     }
   }
 
@@ -466,7 +522,7 @@ header {
     display: block;
 
     a {
-      padding: 0.87rem 0.875rem 0.5rem 0.625rem;
+      padding: 0.9rem 0.875rem 0.664rem 0.625rem;
     }
 
     .store {
@@ -496,6 +552,7 @@ header {
       display: table-cell;
       text-align: center;
       padding: 0;
+      border: 1px solid transparent;
 
       &:hover {
         background: none;
@@ -555,7 +612,7 @@ header {
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     position: relative;
-    z-index: 4;
+    z-index: 3;
     max-width: 80.25rem;
     margin: 0 auto;
 
@@ -583,7 +640,19 @@ header {
       list-style: none;
       text-align: center;
       text-transform: lowercase;
-      height: 2.625rem;
+      height: 2.6875rem;
+
+      a.menu--one__link {
+        padding: 0.625rem;
+        padding-bottom: 0.6rem;
+        display: block;
+        height: 2.75rem;
+        border-bottom: 1px solid $white;
+        border-top: 2px solid transparent;
+        position: relative;
+        z-index: 100;
+        margin-top: -1px;
+      }
 
       a.menu--one__link {
         padding: 0.625rem;
@@ -612,7 +681,7 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          transform: translateY(0%);
+          transform: translateY(-2rem);
         }
       }
 
@@ -637,10 +706,11 @@ header {
         top: 100%;
         #{$left}: 0;
         width: 100%;
-        transform: translateY(-2.625rem);
+        transform: translateY(-3.625rem);
         z-index: -1;
-        transition: all 0.5s ease-in-out 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
-        transition-delay: 0.4s;
+        transition: all 0.5s ease-in 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
+        transition-delay: 0.3s;
+        border-top: 3rem solid transparent;
       }
     }
 
@@ -674,7 +744,7 @@ header {
     #{$left}: 0;
     background: $white-five;
     z-index: 10;
-    padding-top: 1.5625rem !important;
+    padding-top: 0.5625rem;
     padding-#{$left}: 0;
     padding-#{$right}: calc((100% - 1284px) / 2);
     min-height: 22.125rem;
@@ -888,8 +958,9 @@ header {
       height: 100;
       top: 0;
       #{$left}: 0;
-      bottom: 0;
-      #{$left}: 0;
+      bottom: -6rem;
+      #{$right}: 0;
+      transform: translate3d(0, 0, 0);
       background-color: rgba(0, 0, 0, 0.48);
     }
   }
@@ -899,14 +970,16 @@ header {
 
     ul.menu--one__list {
       background: $white-five;
-      width: 16.875rem;
+      width: 84.375%;
       height: 100%;
       position: fixed;
-      top: 2.9375rem;
+      top: 2.9rem;
+      bottom: 0;
       z-index: 20;
-      overflow-y: scroll;
+      overflow-y: auto;
       margin-top: 0;
       padding-bottom: 3.125rem;
+      transform: translate3d(0, 0, 0);
     }
   }
 
@@ -927,14 +1000,21 @@ header {
     color: $marine-blue;
     display: block;
     font-size: 12px;
-    padding: 1rem 0;
-    padding-bottom: 0.9375rem;
-    padding-#{$right}: 0.25rem;
+    padding: 0;
     text-transform: lowercase;
+
+    a {
+      padding: 1rem 0;
+      padding-bottom: 0.9375rem;
+      padding-#{$right}: 1.4rem;
+    }
   }
 
   .back--link {
     @extend .menu__list-item;
+
+    padding: 1rem 0;
+    padding-#{$right}: 0.25rem;
   }
 
   .menu--one__list-item {
@@ -949,13 +1029,16 @@ header {
 
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $white;
-      padding-top: 0.9375rem;
-      padding-bottom: 0.9375rem;
+
+      a {
+        padding-top: 0.9375rem;
+        padding-bottom: 0.9375rem;
+      }
     }
 
     .menu__in {
-      margin-top: -30px;
-      margin-#{$right}: 0.4rem;
+      margin-top: -34px;
+      margin-#{$right}: 0;
     }
 
     .menu--three__list-item {
@@ -967,8 +1050,11 @@ header {
   .menu--three__list-item {
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $white;
-      padding-top: 0.9375rem;
-      padding-bottom: 0.9375rem;
+
+      a {
+        padding-top: 0.9375rem;
+        padding-bottom: 0.9375rem;
+      }
     }
   }
 
@@ -979,9 +1065,21 @@ header {
   }
 
   .menu__in {
-    background: url('../imgs/icons/ic-chevronright-copy-9.svg') no-repeat;
     float: $right;
-    margin-top: -0.75rem;
+    margin-top: -2.0625rem;
+    width: 1.3125rem;
+    height: 1.3125rem;
+    position: relative;
+    #{$right}: 0;
+    display: inline-block;
+    pointer-events: none;
+
+    @include icon(chevron#{$right}, after) {
+      color: $marine-blue-two;
+      font-size: 1.313rem;
+      cursor: pointer;
+      pointer-events: none;
+    }
   }
 
   .menu__back {
@@ -991,7 +1089,6 @@ header {
     vertical-align: middle;
   }
 
-  .menu__in,
   .menu__back {
     width: 7px;
     height: 11px;
@@ -1025,7 +1122,7 @@ header {
     height: auto !important;
     background: $white-five;
     padding-bottom: 4em !important;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   .menu-two__link-wrapper.contains-sublink .menu--three__link {
@@ -1043,7 +1140,7 @@ header {
       }
 
       .menu--three__list-item .menu__in {
-        margin-#{$right}: 0.9375rem;
+        margin-#{$right}: 0.625rem;
       }
 
       .menu--four__list {
@@ -1080,7 +1177,9 @@ header {
   text-align: center;
   padding-top: 0.25rem;
   will-change: $left;
+  -moz-transition: #{$left 0.5s ease-in-out};
   transition: #{$left 0.5s ease-in-out};
+  -moz-transform: translateZ(0);
 
   span {
     background: url('../imgs/icons/ic-close.svg') center center no-repeat;
@@ -1100,10 +1199,11 @@ header {
   top: 0;
   background: $white;
   z-index: 10;
-  display: table;
   transition: #{$left 0.5s ease-in-out};
+  -moz-transform: translateZ(0);
   #{$left}: -100%;
-  width: 270px;
+  width: 84.375%;
+  font-size: 0;
 
   .one {
     @include breakpoint($only-tablet) {
@@ -1113,12 +1213,16 @@ header {
 
     font-family: $alshaya-thin;
     font-size: 14px;
-    padding: 0.9rem 1.5rem;
-    display: table-cell;
+    padding: 0.9rem 1rem;
+    display: inline-block;
+    vertical-align: middle;
     text-align: center;
+    height: 47px;
+    width: 61%;
 
     &.shop {
       padding: 0.9rem 2.05rem;
+      width: 39%;
     }
   }
 
@@ -1138,11 +1242,11 @@ header {
   }
 
   .menu--active .mobile--close {
-    #{$left}: 280px;
+    #{$left}: 87.375%;
   }
 
   .main--menu ul.menu--one__list {
-    width: 16.875rem;
+    width: 84.375%;
   }
 }
 
@@ -1196,7 +1300,7 @@ header {
     }
 
     ul.menu--one__list {
-      top: 87px;
+      top: 86px;
     }
 
     .mobile--close {
@@ -1204,7 +1308,7 @@ header {
     }
 
     .c-my-account-nav {
-      top: 5.4375rem;
+      top: 86px;
     }
   }
 
@@ -1213,7 +1317,7 @@ header {
   }
 
   ul.menu--one__list {
-    top: 2.9375rem;
+    top: 2.9rem;
   }
 
   .mobile--close {
@@ -1241,9 +1345,22 @@ header {
 .site-brand-home {
   margin: 0;
 
+  @include breakpoint($only-mobile) {
+    max-width: 10rem;
+
+    html[lang=ar] & {
+      max-width: 6.5625rem;
+    }
+  }
+
   a {
     display: block;
     font-size: 2rem;
+    max-width: 10.0625rem;
+
+    @include breakpoint($tablet) {
+      max-width: none;
+    }
 
     @include breakpoint($desktop) {
       height: 2.875rem;
@@ -1265,7 +1382,9 @@ header {
     width: 100%;
     height: 100%;
     // transition: transform 0.5s ease-in-out;
+    -moz-transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
+    -moz-transform: translateZ(0);
     #{$left}: -100%;
     // transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
     will-change: $left;
@@ -1283,5 +1402,69 @@ header {
   @include breakpoint($desktop) {
     border-top: 1px solid $white;
     border-bottom: 1px solid $white;
+    height: 2.75rem;
   }
+}
+
+html[lang='ar'] {
+  .cart-link-total .price-currency.suffix {
+    padding-right: 0.5rem;
+  }
+
+  .block-system-branding-block {
+    .site-brand-home {
+      @include breakpoint($only-tablet) {
+        width: 13rem;
+      }
+    }
+
+    .site-brand-home img {
+      width: 6.563rem;
+
+      @include breakpoint($only-tablet) {
+        width: auto;
+        height: 60px;
+        max-width: 11.9375rem;
+      }
+
+      @include breakpoint($desktop) {
+        width: 14.94rem;
+        margin-top: -1.063rem;
+      }
+    }
+  }
+}
+
+.main--menu .not-active {
+  @include breakpoint($upto-desktop) {
+    display: none;
+  }
+}
+
+.main--menu .active-menu.not-active {
+  @include breakpoint($upto-desktop) {
+    display: block;
+  }
+}
+
+.c-header .block-views-exposed-filter-blocksearch-page {
+  @include breakpoint($desktop) {
+    position: relative;
+    left: -24px;
+    top: 2px;
+
+    html[lang=ar] & {
+      right: 10px;
+      top: -3px;
+    }
+  }
+}
+
+// Remove tap background from ios mobile and tablet devices.
+html {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+#block-cartminiblock {
+  position: relative;
 }

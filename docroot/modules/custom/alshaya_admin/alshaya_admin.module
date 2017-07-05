@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_admin_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    $group = $implementations['alshaya_admin'];
+    unset($implementations['alshaya_admin']);
+    $implementations['alshaya_admin'] = $group;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_admin_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Promotion options restricted for all users, except user id 1.
+  $user = \Drupal::currentUser();
+  if ($user->id() != 1) {
+    $form['options']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_admin_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Disable field for SEO admin role only.
+  $user_roles = \Drupal::currentUser()->getRoles();
+  if (!in_array('seo_admin', $user_roles)) {
+    return;
+  }
+
+  // Disable non seo related field from node and term forms.
+  if (isset($form['#entity_type']) && ($form['#entity_type'] == 'node' || $form['#entity_type'] == 'taxonomy_term')) {
+    $bundle = $form_state->getFormObject()->getEntity()->bundle();
+
+    // Get fields for the entity.
+    $entityManager = \Drupal::service('entity_field.manager');
+    $fields = $entityManager->getFieldDefinitions($form['#entity_type'], $bundle);
+
+    // Disable field except field_meta_tags and simple_sitemap.
+    foreach ($fields as $field_name => $field_definition) {
+      if ($field_name != 'field_meta_tags' && $field_name != 'simple_sitemap') {
+        $form[$field_name]['#disabled'] = TRUE;
+      }
+    }
+
+    // Disable remaining fields which are not covered above.
+    if (isset($form['menu'])) {
+      $form['menu']['#disabled'] = TRUE;
+    }
+    if (isset($form['content_translation'])) {
+      $form['content_translation']['#disabled'] = TRUE;
+    }
+    if (isset($form['content_translation']['status'])) {
+      $form['content_translation']['status']['#disabled'] = TRUE;
+    }
+    // Relations field is hidden because it was loosing value after submit.
+    if (isset($form['relations'])) {
+      $form['relations']['#type'] = 'hidden';
+    }
+  }
+}

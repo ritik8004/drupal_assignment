@@ -36,7 +36,7 @@
         "drupal/mailsystem": "^4.1",
         "drupal/mimemail": "1.x-dev",
         "drupal/search_api_solr": "^1.0-rc3",
-        "drupal/search_api_autocomplete": "1.x-dev",
+        "drupal/search_api_autocomplete": "1.0-alpha2",
         "drupal/acquia_connector": "1.9.0",
         "drupal/geolocation": "^1.10",
         "drupal/block_field": "^1.0@alpha",
@@ -49,7 +49,8 @@
         "drupal/better_exposed_filters": "3.x-dev",
         "drupal/r4032login": "1.x-dev",
         "drupal/datalayer": "^1.0@beta",
-        "drupal/search_api_solr_multilingual": "^1.0@beta"
+        "drupal/search_api_solr_multilingual": "^1.0@beta",
+        "drupal/views_block_filter_block": "1.x-dev"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -99,9 +100,6 @@
                 "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
                 "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
             },
-            "drupal/search_api_autocomplete": {
-                "Failed site install due to missing search_api_autocomplete config dependency": "https://www.drupal.org/files/issues/2824390-15.patch"
-            },
             "drupal/search_api_spellcheck": {
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
             },
@@ -114,7 +112,7 @@
             "drupal/facets": {
                 "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
                 "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-24.patch",
+                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-42.patch",
                 "Fix undefined index:active in facets_system_breadcrumb_alter()": "https://www.drupal.org/files/issues/undefIndexActive_2869850.2.patch"
             },
             "drupal/simple_sitemap": {
@@ -143,8 +141,14 @@
             "drupal/r4032login": {
                 "Alter/Override options parameter": "https://www.drupal.org/files/issues/2883264-4.patch"
             },
+            "drupal/mobile_number": {
+                "Fix notices": "https://www.drupal.org/files/issues/2886786.patch"
+            },
             "drupal/profile" : {
                 "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
+            },
+            "drupal/redirect" : {
+                "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
             }
         },
         "installer-paths": {

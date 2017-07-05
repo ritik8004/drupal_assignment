@@ -4,11 +4,13 @@
   }
 }
 
+#edit-billing-address,
+.checkout-login,
 .c-add-address,
 .c-address-book {
   .c-page-title {
     border-bottom: 1px solid $white;
-    padding-bottom: 0.7rem;
+    padding-bottom: 0.75rem;
     margin-bottom: 1.25rem;
 
     @include breakpoint($tablet) {
@@ -33,6 +35,7 @@
     display: none;
   }
 
+  #address_wrapper,
   .profile-form {
     @extend .contact-form;
 
@@ -168,6 +171,18 @@
     @include breakpoint($only-mobile) {
       #{$right}: 1rem;
       margin-bottom: 0.625rem;
+    }
+  }
+}
+
+html[lang=ar] {
+  .profile-form {
+    .mobile-number-field .form-type-textfield {
+      top: 1px;
+    }
+
+    input.local-number {
+      margin-top: 0.15rem;
     }
   }
 }

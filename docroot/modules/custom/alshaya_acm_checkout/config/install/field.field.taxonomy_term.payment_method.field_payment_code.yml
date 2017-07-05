@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_payment_code
+    - taxonomy.vocabulary.payment_method
+id: taxonomy_term.payment_method.field_payment_code
+field_name: field_payment_code
+entity_type: taxonomy_term
+bundle: payment_method
+label: Code
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

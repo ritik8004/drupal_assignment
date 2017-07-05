@@ -114,9 +114,9 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $account->get('field_last_name')->setValue($order['lastname']);
 
     // Set the mobile number from last order details.
-    if (isset($order['shipping'], $order['shipping']['address'], $order['shipping']['address']['phone'])) {
+    if (isset($order['shipping'], $order['shipping']['address'], $order['shipping']['address']['telephone'])) {
       $number = [
-        'value' => $order['billing']['phone'],
+        'value' => $order['billing']['telephone'],
       ];
 
       $account->get('field_mobile_number')->setValue($number);

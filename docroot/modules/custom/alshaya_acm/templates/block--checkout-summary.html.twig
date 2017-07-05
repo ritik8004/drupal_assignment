@@ -25,60 +25,63 @@
       </ul>
     </div>
   </div>
+
   <div class="totals">
 
     {#Sub total#}
     <div class="sub-total">
       <span>{% trans %}Sub total{% endtrans %}</span>
-      {{ subtotal }}
+      {{ totals.subtotal }}
     </div>
 
     {#Tax#}
-    {% if tax > 0 %}
+    {% if totals.tax %}
       <div class="tax-total">
         {% trans %}Tax{% endtrans %}
-        {{ tax }}
+        {{ totals.tax }}
       </div>
     {% endif %}
 
     {#Discount#}
-    {% if discount %}
+    {% if totals.discount %}
       <div class="sub-total discount-total">
         {% trans %}Discount{% endtrans %}
-        {{ discount }}
+        {{ totals.discount }}
       </div>
     {% endif %}
 
     {#Shipping#}
-    {% if shipping %}
+    {% if totals.shipping %}
       <div class="sub-total discount-shipping">
         <span>{{ 'Delivery'|t }}</span>
-        {{ shipping }}
+        {{ totals.shipping }}
       </div>
     {% endif %}
 
     {#Order total#}
     <div class="order-total">
       <span>{% trans %}Order Total{% endtrans %}</span>
-      {{ ordertotal }}
+      {{ totals.grand }}
     </div>
 
-    {% if shipping is empty %}
+    {% if delivery is empty %}
       <span class="status">{% trans %}Before Delivery{% endtrans %}</span>
     {% endif %}
   </div>
 
-  {% if delivery_method %}
+  {% if delivery %}
   <div class="delivery-type">
-    {{ delivery_label }} <a href="{{ shipping_url }}">{% trans %}Change{% endtrans %}</a>
-    <div class="method">{{ delivery_method }}</div>
+    {{ delivery.label }} <a href="{{ delivery.url }}">{% trans %}Change{% endtrans %}</a>
+    <div class="method">
+      {{ delivery.method_name }}
+      <br />
+      {{ delivery.method_description }}
+    </div>
   </div>
-  {% endif %}
 
-  {% if delivery_address %}
   <div class="address">
-    {{ address_label }} <a href="{{ shipping_url }}">{% trans %}Edit{% endtrans %}</a>
-    <div class="delivery-address">{{ delivery_address }}</div>
+    {{ delivery.address_label }} <a href="{{ delivery.url }}">{% trans %}Edit{% endtrans %}</a>
+    <div class="delivery-address">{{ delivery.address|raw }}</div>
   </div>
   {% endif %}
 </div>

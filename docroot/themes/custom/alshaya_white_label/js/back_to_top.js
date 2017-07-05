@@ -8,35 +8,24 @@
 
   Drupal.behaviors.backToTop = {
     attach: function () {
-      var backToTop = $('#backtotop');
-      var footer = $('.c-footer-primary');
-      var sticky = false;
+      $('#backtotop').prependTo('.c-footer');
 
-      if (backToTop.length > 0) {
-        $(window).scroll(function () {
-          backToTopScroll();
-        });
-      }
-
-      function backToTopScroll() {
-        var backToTopPosition = backToTop[0].getBoundingClientRect();
-        var backToTopBottom = backToTopPosition.bottom;
-
-        var footerPosition = footer[0].getBoundingClientRect();
-        var footerTop = footerPosition.top;
-
-        var windowHeight = $(window).height();
-
-        if (backToTopBottom >= (footerTop - 17) || sticky) {
-          backToTop.css('bottom', windowHeight - footerTop + 'px');
-          sticky = true;
-
-          if (backToTopBottom >= windowHeight) {
-            sticky = false;
-            backToTop.css('bottom', '');
-          }
+      $(window).scroll(function () {
+        if ($(window).scrollTop() + $(window).height() < $(document).height() - $('.c-footer').height()) {
+          $('#backtotop').css({
+            position: 'fixed',
+            bottom: '1px',
+            top: 'auto'
+          });
         }
-      }
+
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - $('.c-footer').height()) {
+          $('#backtotop').css({
+            position: 'absolute',
+            top: '-70px'
+          });
+        }
+      });
     }
   };
 })(jQuery, Drupal);

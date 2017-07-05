@@ -267,6 +267,10 @@
     @include breakpoint($desktop) {
       margin-top: 2.938rem;
     }
+
+    input {
+      color: $black-two;
+    }
   }
 
   .field--name-field-first-name,
@@ -658,6 +662,10 @@
         .second-third {
           height: 96px;
 
+          @include breakpoint($only-tablet) {
+            width: 13.5rem;
+          }
+
           @include breakpoint($only-mobile) {
             width: 100%;
             vertical-align: top;
@@ -749,8 +757,8 @@
           font-size: 12px;
           margin-bottom: 5px;
 
-          @include breakpoint($only-mobile) {
-            font-size: 10px;
+          @include breakpoint($upto-desktop) {
+            font-size: 0.625rem;
           }
         }
 
@@ -762,8 +770,8 @@
           font-weight: bold;
           letter-spacing: 0.5px;
 
-          @include breakpoint($only-mobile) {
-            font-size: 12px;
+          @include breakpoint($upto-desktop) {
+            font-size: 0.75rem;
           }
         }
 
@@ -870,15 +878,30 @@
   }
 }
 
+.c-change-password {
+  input {
+    height: 100% !important;
+    line-height: 1;
+
+    html[lang=ar] & {
+      font-family: $arial-nodir;
+    }
+  }
+}
+
 .c-change-password,
 .c-user-edit {
   border: 0;
 
   .c-page-title {
-    padding-top: 0.2rem;
     border-bottom: 1px solid $white-three;
     position: static;
-    padding-bottom: 10px;
+    padding-bottom: 1rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 0.437rem;
+      padding-bottom: 0.75rem;
+    }
   }
 
   .c-content .messages--error {
@@ -1104,5 +1127,11 @@ html[lang="ar"] {
     &-heart {
       transform: scale(-1, 1);
     }
+  }
+}
+
+.c-input__privilege-card {
+  html[lang=ar] & {
+    font-family: $arial-nodir;
   }
 }

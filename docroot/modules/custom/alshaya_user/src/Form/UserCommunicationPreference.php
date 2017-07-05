@@ -87,14 +87,12 @@ class UserCommunicationPreference extends FormBase {
 
     // Display email as communication preference.
     $options = [
-      'email' => $this->t('Email (@mail)', ['@mail' => $account->getEmail()]),
+      'email' => $this->t('Email') . ' <span>(' . $account->getEmail() . ')</span>',
     ];
 
     // Display mobile as communication preference if not empty.
     if (!empty($account->field_mobile_number->getValue())) {
-      $options['mobile'] = $this->t('Mobile (@mobile)', [
-        '@mobile' => $this->formatMobileNumber($this->mobileUtil, $account),
-      ]);
+      $options['mobile'] = $this->t('Mobile') . ' <span>(' . $this->formatMobileNumber($this->mobileUtil, $account) . ')</span>';
     }
 
     $preference = $this->userData->get('user', $this->user_profile->id(), 'communication_preference');

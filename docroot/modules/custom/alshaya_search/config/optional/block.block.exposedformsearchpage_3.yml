@@ -4,6 +4,7 @@ dependencies:
   config:
     - views.view.search
   module:
+    - ctools
     - system
     - views
   theme:
@@ -23,6 +24,6 @@ settings:
 visibility:
   request_path:
     id: request_path
-    pages: "/search\r\n/taxonomy/term/*"
+    pages: /search
     negate: false
     context_mapping: {  }

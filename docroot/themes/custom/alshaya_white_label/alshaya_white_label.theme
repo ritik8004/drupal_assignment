@@ -6,12 +6,10 @@
  */
 
 use Drupal\alshaya_user\Form\UserCommunicationPreference;
-use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_preprocess_html().
@@ -53,10 +51,18 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
-  $current_route = \Drupal::routeMatch()->getRouteName();
+  $current_route = \Drupal::routeMatch();
   // If store finder glossary view.
-  if ($current_route == 'view.stores_finder.page_2') {
+  if ($current_route->getRouteName() == 'view.stores_finder.page_2') {
     $variables['attributes']['class'][] = 'store-finder-view';
+  }
+
+  // Add class for page PLP.
+  if ($current_route->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $current_route->getParameter('taxonomy_term');
+    if ($term->bundle() == 'acq_product_category') {
+      $variables['attributes']['class'][] = 'plp-page-only';
+    }
   }
 }
 
@@ -87,11 +93,13 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['data-bundle-class'] = $bundle_class;
     }
   }
+  elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
+    $variables['attributes']['class'][] = 'block-views-exposed-filter-blocksearch-page';
+  }
 
   if ($variables['plugin_id'] === 'basket_horizontal_recommendation') {
     $variables['attributes']['class'][] = 'horizontal-crossell';
   }
-
 }
 
 /**
@@ -107,8 +115,7 @@ function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggesti
  * Implements template_view_grid_alter().
  */
 function alshaya_white_label_theme_suggestions_views_view_grid_alter(array &$suggestions, &$variables) {
-  $routmatch = \Drupal::routeMatch();
-  if ($routmatch->getRouteName() == 'entity.profile.type.address_book.user_profile_form') {
+  if ($variables['view']->id() == 'address_book') {
     $suggestions[] = "views_view_grid__address_book";
   }
 }
@@ -172,128 +179,6 @@ function alshaya_white_label_preprocess_field__node__field_store_open_hours__sto
 }
 
 /**
- * Implements template_preprocess_profile().
- */
-function alshaya_white_label_preprocess_profile__address_book(&$variables) {
-  /* @var \Drupal\profile\Entity\Profile $profile */
-  $profile = $variables['content']['field_address']['#object'];
-
-  if ($profile) {
-    $values = $profile->get('field_address')->getValue();
-    $telephone = $profile->get('field_mobile_number')->getValue();
-    $variables['delivery_to'] = '';
-    $variables['delivery_address'] = '';
-    $variables['contact_no'] = '';
-  }
-
-  // Contact info.
-  if (isset($telephone[0]) && !empty($telephone[0]['value'])) {
-    $variables['contact_no'] = $telephone[0]['value'];
-  }
-
-  if (isset($values[0])) {
-    // If name is available.
-    if (isset($values[0]['given_name']) && !empty($values[0]['given_name'])) {
-      $variables['delivery_to'] = $values[0]['given_name'] . ' ' . $values[0]['family_name'];
-    }
-
-    // Get country list.
-    $country_list = \Drupal::service('address.country_repository')->getList();
-
-    $administrative_area = $values[0]['administrative_area'];
-    if (!empty($administrative_area)) {
-      $term = Term::load($administrative_area);
-      if ($term) {
-        $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-        $administrative_area = $term->getName();
-      }
-    }
-
-    // Address info.
-    $variables['delivery_address'] = [
-      'organization' => $values[0]['organization'],
-      'address_line1' => $values[0]['address_line1'],
-      'address_line2' => $values[0]['address_line2'],
-      'postal_code' => $values[0]['postal_code'],
-      'sorting_code' => $values[0]['sorting_code'],
-      'dependent_locality' => $values[0]['dependent_locality'],
-      'locality' => $values[0]['locality'],
-      'administrative_area' => $administrative_area,
-      'country' => $country_list[$values[0]['country_code']],
-    ];
-
-    // If profile is default profile.
-    $variables['is_default_profile'] = $profile->isDefault() ?: '';
-
-    // Operation links.
-    $variables['edit_operation'] = '';
-    $variables['delete_operation'] = '';
-    $variables['set_default_operation'] = '';
-    $current_user = \Drupal::currentUser();
-
-    // Current language.
-    $current_language = \Drupal::languageManager()->getCurrentLanguage();
-
-    // Edit operation.
-    if ($profile->access('update') && $profile->hasLinkTemplate('edit-form')) {
-      $variables['edit_operation'] = [
-        'title' => t('Edit'),
-        'url' => Url::fromRoute('alshaya_addressbook.edit_address_ajax',
-          ['profile' => $profile->id(), 'js' => 'nojs'],
-          [
-            'attributes' => [
-              'class' => ['use-ajax'],
-              'rel' => 'address-book-form-wrapper',
-            ],
-          ]),
-      ];
-    }
-
-    // Delete operation.
-    if ($profile->access('delete') && $profile->hasLinkTemplate('delete-form')) {
-      $variables['delete_operation'] = [
-        'title' => t('Delete'),
-        'url' => $profile->urlInfo('delete-form', [
-          'attributes' => [
-            'class' => ['use-ajax'],
-            'data-dialog-type' => 'modal',
-            'data-dialog-options' => Json::encode(['width' => '341']),
-          ],
-          'language' => $current_language,
-        ]),
-      ];
-    }
-
-    // Primary address operation.
-    if (!$profile->isDefault()) {
-      $variables['set_default_operation'] = [
-        'title' => t('Primary address'),
-        'url' => $profile->toUrl('set-default', [
-          'query' => [
-            'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
-          ],
-        ]),
-        'parameter' => $profile,
-      ];
-    }
-  }
-
-  $variables['#attached']['library'][] = 'modal/modal';
-  $variables['#attached']['library'][] = 'core/drupal.ajax';
-}
-
-/**
- * Implements hook_preprocess_links__dropbutton__operations().
- */
-function alshaya_white_label_preprocess_links__dropbutton__operations(&$variables) {
-  $route_name = \Drupal::routeMatch()->getRouteName();
-  // Unset/Remove operation links for address_book page.
-  if ($route_name == 'entity.profile.type.address_book.user_profile_form' || $route_name == 'entity.profile.type.address_book.user_profile_form.add' || $route_name == 'entity.profile.edit_form') {
-    unset($variables['links']);
-  }
-}
-
-/**
  * Implements hook_preprocess_node().
  */
 function alshaya_white_label_preprocess_node(&$variables) {
@@ -319,6 +204,10 @@ function alshaya_white_label_preprocess_node(&$variables) {
     // Hide the node title on product list/search page.
     $variables['label'] = NULL;
   }
+  elseif ($variables['node']->bundle() === 'acq_product') {
+    $variables['attributes']['data-nid'] = $variables['node']->id();
+  }
+
 }
 
 /**
@@ -553,7 +442,7 @@ function alshaya_white_label_preprocess_user(&$variables) {
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
     $variables['contact_number'] = UserCommunicationPreference::formatMobileNumber($mobile_util, $user, 1, TRUE);
     $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
-    $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card) : '';
+    $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card, TRUE) : '';
 
     $module_handler = \Drupal::moduleHandler();
     if ($module_handler->moduleExists('alshaya_loyalty')) {

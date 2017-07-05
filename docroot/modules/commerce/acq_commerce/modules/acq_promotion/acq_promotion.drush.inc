@@ -13,9 +13,13 @@ function acq_promotion_drush_command() {
 
   $commands['sync-commerce-promotions'] = [
     'description' => 'Run a full synchronization of all commerce promotion records.',
-    'aliases'     => ['acspm'],
-    'examples'    => [
+    'aliases' => ['acspm'],
+    'options' => [
+      'types' => dt('A list of promotion type to synchronize, separated by a comma.'),
+    ],
+    'examples' => [
       'drush acspm' => 'Run a full synchronization of all available promotions.',
+      'drush acspm --types=cart' => 'Run a full synchronization of all available cart promotions.',
     ],
   ];
 
@@ -23,10 +27,19 @@ function acq_promotion_drush_command() {
 }
 
 /**
- * Implements drush product sync command.
+ * Drush command callback for the promotion import.
  */
 function drush_acq_promotion_sync_commerce_promotions() {
-  drush_print(dt('Synchronizing all commerce promotions, this usually takes some time...'));
-  \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
+  if ($types = drush_get_option('types')) {
+    drush_print(dt('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]));
+    $types = explode(',', $types);
+    $types = array_map('trim', $types);
+    \Drupal::service('acq_promotion.promotions_manager')->syncPromotions($types);
+  }
+  else {
+    drush_print(dt('Synchronizing all commerce promotions, this usually takes some time...'));
+    \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
+  }
+
   drush_print(dt('Done.'));
 }

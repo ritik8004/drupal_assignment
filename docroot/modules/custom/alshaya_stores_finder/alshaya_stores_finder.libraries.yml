@@ -12,3 +12,4 @@ pdp:
     - core/jquery.once
     - core/drupal
     - core/drupal.ajax
+    - geolocation/geolocation.geocoder.googlegeocodingapi

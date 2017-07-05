@@ -1,0 +1,4 @@
+/* Css to hide the mobile number flag from all places */
+.country-select {
+    display: none !important;
+}

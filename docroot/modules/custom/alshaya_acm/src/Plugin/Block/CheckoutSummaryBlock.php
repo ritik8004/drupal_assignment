@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_acm\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
-use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -27,6 +27,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $cartStorage;
 
   /**
+   * Address book manager.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  protected $addressBookManager;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -37,10 +44,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The plugin implementation definition.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart session.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
+   *   Address book manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage, AlshayaAddressBookManager $address_book_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->cartStorage = $cart_storage;
+    $this->addressBookManager = $address_book_manager;
   }
 
   /**
@@ -51,7 +61,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('acq_cart.cart_storage')
+      $container->get('acq_cart.cart_storage'),
+      $container->get('alshaya_addressbook.manager')
     );
   }
 
@@ -77,65 +88,6 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $cart = $this->cartStorage->getCart();
     $items = $cart->items();
 
-    // URL to change delivery address or shipping method.
-    $options = ['absolute' => TRUE];
-    $shipping_url = Url::fromRoute('acq_checkout.form', ['step' => 'shipping'], $options);
-    $shipping_url = $shipping_url->toString();
-
-    // @todo: Delivery type is Home delivery or Click and collect.
-    // We should get the type from cartStorage object.
-    $type = 'hd';
-
-    if ($type == 'hd') {
-      $delivery_label = $this->t("Home Delivery");
-      $address_label = $this->t("Delivery Address");
-    }
-    else {
-      $delivery_label = $this->t("Click & Collect");
-      $address_label = $this->t("Collection Store");
-    }
-
-    // Shipping method & carrier.
-    $shipping_method = $cart->getShippingMethod();
-    $carrier_code = isset($shipping_method['carrier_code']) ?
-      $shipping_method['carrier_code'] : NULL;
-
-    $method_code = isset($shipping_method['method_code']) ?
-      $shipping_method['method_code'] : NULL;
-
-    // Display shipping method section only if a method is set.
-    if ($method_code != NULL && $carrier_code != NULL) {
-      $shipping_method_string = $this->t('@method by @carrier',
-        ['@method' => $method_code, '@carrier' => $carrier_code]
-      );
-    }
-    else {
-      $shipping_method_string = NULL;
-    }
-
-    // Delivery address.
-    $shipping_address = $cart->getShipping();
-
-    // We check if address is set, we will use Address line 1 as our indicator
-    // as it is a mandatory field.
-    if (isset($shipping_address->street)) {
-      $shipping_address_string = $shipping_address->street;
-
-      $shipping_address_string .= isset($shipping_address->street2) ?
-        $shipping_address->street2 . ', ' : '';
-      $shipping_address_string .= isset($shipping_address->city) ?
-        $shipping_address->city . ', ' : '';
-      $shipping_address_string .= isset($shipping_address->region) ?
-        $shipping_address->region . ', ' : '';
-      $shipping_address_string .= isset($shipping_address->country) ?
-        $shipping_address->country . ', ' : '';
-      $shipping_address_string .= isset($shipping_address->postcode) ?
-        $shipping_address->postcode : '';
-    }
-    else {
-      $shipping_address_string = NULL;
-    }
-
     // Products and No.of items.
     $products = [];
     $cart_count = 0;
@@ -144,20 +96,21 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       // Load the first image.
       $image = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
-      // Check if we can find a parent SKU for this.
-      $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
+      $node = alshaya_acm_product_get_display_node($item['sku']);
+      $sku_attributes = alshaya_acm_product_get_sku_configurable_values($item['sku']);
 
-      if (is_object($parent_sku) && $parent_sku instanceof SKUInterface) {
-        /* @var \Drupal\node\Entity\Node $parent_node */
-        $parent_node = alshaya_acm_product_get_display_node($parent_sku->getSKU());
-        if ($parent_node) {
-          $item['name'] = [
-            '#title' => $parent_node->getTitle(),
-            '#type' => 'link',
-            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]),
-          ];
-        }
-      }
+      $item['name'] = [
+        '#theme' => 'alshaya_cart_product_name',
+        '#sku_attributes' => $sku_attributes,
+        '#name' => [
+          '#title' => $node->getTitle(),
+          '#type' => 'link',
+          '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
+        ],
+        '#image' => NULL,
+        '#total_price' => NULL,
+        '#item_code' => NULL,
+      ];
 
       // Create products array to be used in twig.
       $products[] = [
@@ -172,31 +125,73 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $cart_count += $item['qty'];
     }
 
+    $delivery = [];
+
+    // @TODO: Pending development for CnC.
+    if ($method = $cart->getShippingMethodAsString()) {
+      // URL to change delivery address or shipping method.
+      $options = ['absolute' => TRUE];
+      $delivery['url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
+
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+      $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+      $term = $checkout_options_manager->loadShippingMethod($method);
+      $delivery['label'] = $this->t("Home Delivery");
+      $delivery['address_label'] = $this->t("Delivery Address");
+
+      $delivery['method_name'] = $term->getName();
+      $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
+
+      // Delivery address.
+      $shipping_address = (array) $cart->getShipping();
+
+      if (isset($shipping_address['customer_address_id']) && empty($shipping_address['street'])) {
+        if ($entity = $this->addressBookManager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
+          $shipping_address = $this->addressBookManager->getAddressFromEntity($entity, FALSE);
+        }
+      }
+      else {
+        $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
+      }
+
+      if (isset($shipping_address['address_line1'])) {
+        $line1[] = $shipping_address['address_line2'];
+        $line1[] = $shipping_address['dependent_locality'];
+
+        $line2[] = $shipping_address['locality'] . ',';
+
+        $line2[] = $shipping_address['address_line1'];
+        $line2[] = $this->t('@area Area', ['@area' => _alshaya_addressbook_get_area_from_id($shipping_address['administrative_area'])]);
+
+        $country_list = \Drupal::service('address.country_repository')->getList();
+        $line3[] = $country_list[$shipping_address['country_code']];
+
+        $delivery['address'] = implode(',<br>', [
+          implode(' ', $line1),
+          implode(' ', $line2),
+          implode(' ', $line3),
+        ]);
+      }
+    }
+
     // Totals.
-    $subtotal = $tax = $discount = 0;
-    $totals = $cart->totals();
+    $totals = [];
+    $cart_totals = $cart->totals();
 
     // Subtotal.
-    $subtotal = alshaya_acm_price_format($totals['sub']);
+    $totals['subtotal'] = alshaya_acm_price_format($cart_totals['sub']);
 
     // Tax.
-    if ((float) $totals['tax'] > 0) {
-      $tax = alshaya_acm_price_format($totals['tax']);
-    }
+    $totals['tax'] = (float) $cart_totals['tax'] > 0 ? alshaya_acm_price_format($cart_totals['tax']) : NULL;
 
     // Discount.
-    $discount = NULL;
-    if ((float) $totals['discount'] > 0) {
-      $discount = alshaya_acm_price_format($totals['discount']);
-    }
+    $totals['discount'] = (float) $cart_totals['discount'] > 0 ? alshaya_acm_price_format($cart_totals['discount']) : NULL;
 
-    $shipping = NULL;
-    if ((float) $totals['shipping'] != 0) {
-      $shipping = alshaya_acm_price_format($totals['shipping']);
-    }
+    // Shipping.
+    $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;
 
     // Grand Total or Order total.
-    $order_total = alshaya_acm_price_format($totals['grand']);
+    $totals['grand'] = alshaya_acm_price_format($cart_totals['grand']);
 
     // Generate the cart link.
     $url = Url::fromRoute('acq_cart.cart')->toString();
@@ -206,16 +201,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#cart_link' => $url,
       '#number_of_items' => $cart_count,
       '#products' => $products,
-      '#subtotal' => $subtotal,
-      '#tax' => $tax,
-      '#discount' => $discount,
-      '#shipping' => $shipping,
-      '#ordertotal' => $order_total,
-      '#delivery_address' => $shipping_address_string,
-      '#delivery_method' => $shipping_method_string,
-      '#delivery_label' => $delivery_label,
-      '#address_label' => $address_label,
-      '#shipping_url' => $shipping_url,
+      '#totals' => $totals,
+      '#delivery' => $delivery,
       '#attached' => [
         'library' => [
           'alshaya_acm/alshaya.acm.js',

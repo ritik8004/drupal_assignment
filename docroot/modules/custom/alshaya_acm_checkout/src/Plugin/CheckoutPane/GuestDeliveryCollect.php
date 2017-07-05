@@ -38,7 +38,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $pane_form['guest_delivery_collect']['summary'] = [
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      return $pane_form;
+    }
+
+    $pane_form['summary'] = [
       '#markup' => $this->t('Coming soon'),
     ];
 

@@ -35,6 +35,10 @@ form.user-communication-preference {
 
     @include breakpoint($only-mobile) {
       padding-bottom: 0.375rem;
+
+      .ucbrowser & {
+        padding-bottom: 0.5rem;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -65,9 +69,29 @@ form.user-communication-preference {
     }
   }
 
-  input[checked=checked] {
+  input[type=checkbox]:checked {
     ~ label {
       font-weight: bold;
+    }
+  }
+
+  html[lang=ar] & {
+    .form-item-communication-preference-email,
+    .form-item-communication-preference-mobile {
+      span {
+        font-family: $arial-nodir;
+      }
+    }
+
+    .form-item-communication-preference-mobile {
+      label {
+        position: relative;
+      }
+
+      span {
+        direction: ltr;
+        display: inline-block;
+      }
     }
   }
 }
