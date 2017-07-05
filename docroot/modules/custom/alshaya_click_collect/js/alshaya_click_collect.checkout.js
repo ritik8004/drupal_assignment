@@ -99,7 +99,7 @@
         }
       });
 
-        $('#selected-store-wrapper', context).once('bind-events').on('click', 'a.change-store', function (e) {
+      $('#selected-store-wrapper', context).once('bind-events').on('click', 'a.change-store', function (e) {
         if (e.target.className === 'change-store') {
           $('#selected-store-wrapper').hide();
           $('#store-finder-wrapper').show();
@@ -259,7 +259,7 @@
   // Create marker on map for the given store object.
   Drupal.checkoutClickCollect.mapCreateMarker = function (store, mapObj, index) {
     // Copied from /contrib/geolocation/js/geolocation-common-map.js.
-    var locationEle= $('.geolocation-common-map-locations').find('.geolocation[data-store-code="'+ store.code +'"]');
+    var locationEle = $('.geolocation-common-map-locations').find('.geolocation[data-store-code="' + store.code + '"]');
     var position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
     var markerConfig = {
       position: position,
