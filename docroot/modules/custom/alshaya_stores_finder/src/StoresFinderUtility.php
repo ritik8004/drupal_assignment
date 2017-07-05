@@ -176,7 +176,7 @@ class StoresFinderUtility {
       $store['address'] = $store_node->get('field_store_address')->getString();
       $store['open_hours'] = $store_node->get('field_store_open_hours')->getString();
       $store['nid'] = $store_node->id();
-      $store['view_on_map_link'] = Url::fromRoute('alshaya_acm_checkout.cc_store_map_view', ['node' => $store_node->id()])->toString();
+      $store['view_on_map_link'] = Url::fromRoute('alshaya_click_collect.cc_store_map_view', ['node' => $store_node->id()])->toString();
 
       if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
         $store['lat'] = $lat_lng[0]['lat'];

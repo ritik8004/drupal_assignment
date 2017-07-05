@@ -129,6 +129,10 @@ class AlshayaApiWrapper {
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $response = $this->invokeApi($endpoint, [], 'GET');
     $stores = json_decode($response, TRUE);
+    if (is_array($stores) && !empty($stores['message'])) {
+      return [];
+    }
+
     return $stores;
   }
 

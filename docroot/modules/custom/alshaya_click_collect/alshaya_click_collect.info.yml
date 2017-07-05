@@ -1,0 +1,8 @@
+name: 'Alshaya click and collect'
+type: module
+description: 'click and collect functionality for pdp and checkout.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm_checkout
+  - alshaya_acm_product
