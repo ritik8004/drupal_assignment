@@ -84,7 +84,7 @@ class ClickCollectAvailableStores extends FormBase {
     ];
 
     $form['#attached'] = [
-      'library' => ['alshaya_stores_finder/pdp'],
+      'library' => ['alshaya_click_collect/click-and-collect.pdp'],
       'drupalSettings' => [
         'geolocation' => [
           'google_map_url' => $this->getGoogleMapsApiUrl(),

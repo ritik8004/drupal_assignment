@@ -25,3 +25,11 @@ alshaya_click_collect.cc_selected_store:
     _controller: '\Drupal\alshaya_click_collect\Controller\ClickCollectController::selectedStore'
   requirements:
     _permission: 'access content'
+
+alshaya_click_collect.configuration:
+  path: '/admin/config/system/click-collect'
+  defaults:
+    _form: '\Drupal\alshaya_click_collect\Form\ClickCollectConfigForm'
+    _title: 'Click and Collect configuration'
+  requirements:
+    _permission: 'access administration pages'

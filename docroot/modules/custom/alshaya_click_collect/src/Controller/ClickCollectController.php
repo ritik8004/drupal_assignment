@@ -198,7 +198,7 @@ class ClickCollectController extends ControllerBase {
 
         if ($top_three['#has_more']) {
           $store_form = \Drupal::formBuilder()->getForm(ClickCollectAvailableStores::class);
-          $config = $this->configFactory->get('alshaya_stores_finder.settings');
+          $config = $this->configFactory->get('alshaya_click_collect.settings');
           $all_stores = [];
           $all_stores['#theme'] = 'pdp_click_collect_all_stores';
           $all_stores['#stores'] = $stores;
