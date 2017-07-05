@@ -82,6 +82,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div class="geolocation-common-map-container"></div>',
     ];
 
+    $pane_form['store_finder']['map_view']['locations'] = [
+      '#markup' => '<div class="geolocation-common-map-locations" style="display: none;"></div>',
+    ];
+
     $pane_form['selected_store'] = [
       '#type' => 'container',
       '#title' => t('selected store'),

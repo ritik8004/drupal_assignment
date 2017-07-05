@@ -113,6 +113,7 @@ class ClickCollectController extends ControllerBase {
         $store['opening_hours'] = $store['code'];
       }
     });
+
     return $stores;
   }
 
@@ -131,17 +132,28 @@ class ClickCollectController extends ControllerBase {
    */
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
-    $output = t('Sorry, No Store found for selected location.');
+
+    $list = t('Sorry, No Store found for selected location.');
     if (count($stores) > 0) {
       $build = [
         '#theme' => 'click_collect_stores_list',
         '#title' => t('Available at @count stores near', ['@count' => count($stores)]),
         '#stores' => $stores,
       ];
-      $output = render($build);
+      $list = render($build);
+
+      $build = [
+        '#theme' => 'click_collect_store_info_window_list',
+        '#stores' => $stores,
+      ];
+      $map = render($build);
     }
 
-    return new JsonResponse(['output' => $output, 'raw' => $stores]);
+    return new JsonResponse([
+      'output' => $list,
+      'raw' => $stores,
+      'mapList' => $map,
+    ]);
   }
 
   /**

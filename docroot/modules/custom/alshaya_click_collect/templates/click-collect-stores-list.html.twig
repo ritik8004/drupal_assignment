@@ -1,7 +1,7 @@
 {% if title %}
   <div class="all-stores-info">
-    <h3>{{ title }}</h3>
-    <span class="selected-store-location"></span>
+    <h3>{{ title }} <span class="selected-store-location"></span></h3>
+
   </div>
 {% endif %}
 
@@ -11,9 +11,21 @@
       <li class="select-store" data-store-code="{{ store.code }}" data-node="{{ store.nid }}" data-index="{{ loop.index }}">
         <div class="store-name-and-address">
           <span class="store-name">{{ store.name }}</span>
-          <span class="store-address">{{ store.address|striptags }}</span>
+          <span class="store-address">{{ store.address|raw }}</span>
         </div>
-        <div class="store-open-hours">{{ store.open_hours }}</div>
+        <div class="store-open-hours">
+          <div class="hours--wrapper selector--hours">
+              <div class="hours--label" onclick='jQuery(this).toggleClass("open");'>{{ 'Opening Hours'|t }}</div>
+              <div class="open--hours">
+                {% for item in store.open_hours %}
+                  <div>
+                    <span class="key-value-key">{{ item.key }}</span>
+                    <span class="key-value-value">{{ item.value }}</span>
+                  </div>
+                {% endfor %}
+              </div>
+          </div>
+        </div>
         <div class="store-delivery-time"><span class="label--delivery-time">{{ 'Collect in store from'|t }}</span>{{ store.delivery_time }}</div>
         <div class="store-actions">
           <a href="#" class="select-store">{{ 'select this store'|t }}</a>
@@ -23,4 +35,3 @@
     {% endfor %}
   </ul>
 {% endif %}
-
