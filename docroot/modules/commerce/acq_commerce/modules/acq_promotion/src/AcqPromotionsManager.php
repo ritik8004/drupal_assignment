@@ -150,8 +150,15 @@ class AcqPromotionsManager {
       $node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
     }
 
+    // Set promotion type to percent & discount value depending on the promotion
+    // being imported.
+    if (($promotion['type'] === 'NO_COUPON') && isset($promotion['action']) && ($promotion['action'] === 'by_percent')) {
+      $node->get('field_acq_promotion_disc_type')->setValue('percent');
+      $node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
+    }
+
     // Add SKU ID's to promotion.
-    if (!empty($promotion['products'])) {
+    if (!empty($promotion['products']) && ($promotion['type'] !== 'SPECIFIC_COUPON')) {
       // Assign value to $node object.
       $delta = 0;
       foreach ($promotion['products'] as $key => $product) {
@@ -162,7 +169,6 @@ class AcqPromotionsManager {
         }
       }
     }
-
     // Invoke the alter hook to allow modules to update the node from API data.
     \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $node, $promotion);
 
