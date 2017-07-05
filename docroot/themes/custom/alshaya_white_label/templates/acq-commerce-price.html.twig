@@ -1,13 +1,40 @@
-{% if currency_code_position == 'before' %}
-  <span class="price-wrapper">
-    <span class="price-currency prefix">{{ currency_format }}</span>
-    <span class="price-amount">{{ price }}</span>
-  </span>
+{% if final_price %}
+  <div class="has--special--price">
 {% else %}
+  <div class="price">
+{% endif %}
   <span class="price-wrapper">
-    <span class="price-amount">{{ price }}</span>
-    <span class="price-currency suffix">{{ currency_format }}</span>
+    <div class="price">
+      {% if currency_code_position == 'before' %}
+        <span class="price-currency suffix">{{ currency_format }}</span>
+      {% endif %}
+      <span class="price-amount">{{ price }}</span>
+      {% if currency_code_position != 'before' %}
+        <span class="price-currency suffix">{{ currency_format }}</span>
+      {% endif %}
+    </div>
   </span>
+</div>
+
+{% if final_price %}
+  <div class="special--price">
+    <span class="price-wrapper">
+      <div class="price">
+        {% if currency_code_position == 'before' %}
+          <span class="price-currency suffix">{{ currency_format }}</span>
+        {% endif %}
+        <span class="price-amount">{{ final_price }}</span>
+        {% if currency_code_position != 'before' %}
+          <span class="price-currency suffix">{{ currency_format }}</span>
+        {% endif %}
+      </div>
+    </span>
+  </div>
+  <div class="price--discount">
+    {% for id, discount in discounts %}
+      {{ discount }}
+    {% endfor %}
+  </div>
 {% endif %}
 
 {% if promotions is not empty %}
