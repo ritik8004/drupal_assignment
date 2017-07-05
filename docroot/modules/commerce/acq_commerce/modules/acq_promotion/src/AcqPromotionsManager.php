@@ -153,12 +153,12 @@ class AcqPromotionsManager {
     // Set promotion type to percent & discount value depending on the promotion
     // being imported.
     if (($promotion['type'] === 'NO_COUPON') && isset($promotion['action']) && ($promotion['action'] === 'by_percent')) {
-      $node->get('field_acq_promotion_disc_type')->setValue('percent');
+      $node->get('field_acq_promotion_disc_type')->setValue('percentage');
       $node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
     }
 
     // Add SKU ID's to promotion.
-    if (!empty($promotion['products']) && ($promotion['type'] !== 'SPECIFIC_COUPON')) {
+    if (!empty($promotion['products'])) {
       // Assign value to $node object.
       $delta = 0;
       foreach ($promotion['products'] as $key => $product) {
