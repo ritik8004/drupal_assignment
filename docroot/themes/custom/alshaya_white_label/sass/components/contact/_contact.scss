@@ -143,6 +143,20 @@
     padding-top: 0;
   }
 
+  .form-item--error {
+    input.error {
+      color: $black;
+      border-bottom: 2px solid $red-error !important;
+    }
+
+    .c-input__bar {
+      &::after,
+      &::before {
+        background: $red-error;
+      }
+    }
+  }
+
   .form-item.form-type-tel,
   .form-item.form-type-email,
   .form-item.form-type-textfield,
@@ -409,6 +423,14 @@ html[lang=ar] {
       input[type=text] {
         padding-top: 0.125rem;
       }
+    }
+  }
+}
+
+.path--user .c-address-book {
+  .address-book-address {
+    .country-field-wrapper {
+      height: 5rem;
     }
   }
 }
