@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "881192297fbcd36d29510b326fe91530",
+    "content-hash": "f80e3dc6c883fd23d60e0e6999d6b7f4",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2043,7 +2043,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486737287"
+                    "datestamp": "1486736883"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2098,7 +2098,8 @@
                 },
                 "patches_applied": {
                     "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
-                    "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch"
+                    "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch",
+                    "Add alter hook for admin check": "https://www.drupal.org/files/issues/2892237-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4410,10 +4411,6 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
-                    "name": "Dave Reid",
-                    "homepage": "https://www.drupal.org/user/53892"
-                },
-                {
                     "name": "Drupal Media Team",
                     "homepage": "https://www.drupal.org/user/3260690"
                 },
@@ -5489,7 +5486,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha7",
-                    "datestamp": "1497287643"
+                    "datestamp": "1493902084"
                 },
                 "patches_applied": {
                     "Update access check for set-default profile": "https://www.drupal.org/files/issues/2885005-2.patch"
@@ -5715,7 +5712,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/redirect-8.x-1.0-alpha5.zip",
-                "reference": null,
+                "reference": "8.x-1.0-alpha5",
                 "shasum": "927aa4c8d8b40b0cd2442bee86f2f386d25e53ca"
             },
             "require": {
@@ -6035,7 +6032,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc3",
-                    "datestamp": "1497007742"
+                    "datestamp": "1495024986"
                 },
                 "patches_applied": {
                     "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--13.patch"
@@ -6394,16 +6391,8 @@
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
-                    "name": "badjava",
-                    "homepage": "https://www.drupal.org/user/83372"
-                },
-                {
                     "name": "chx",
                     "homepage": "https://www.drupal.org/user/9446"
-                },
-                {
-                    "name": "japerry",
-                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "kalman.hosszu",
@@ -12872,7 +12861,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork maintainer"
+                    "role": "Fork Maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
