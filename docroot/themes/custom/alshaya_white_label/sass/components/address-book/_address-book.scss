@@ -433,12 +433,7 @@
       display: none !important;
     }
 
-    .form-type-textfield,
-    .form-item-field-mobile-number-0-mobile,
-    .form-item-billing-address-address-billing-mobile-number-mobile,
-    .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
-    .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
-    .form-item-field-address-0-address-mobile-number-mobile {
+    .form-type-textfield {
       position: static !important;
       float: $right;
       width: 8.625rem;
@@ -526,7 +521,7 @@
   }
 }
 
-.form-item-field-address-0-address-administrative-area {
+.form-type-select {
   .select2-selection {
     border: none;
     font-family: "alshaya-thin";
