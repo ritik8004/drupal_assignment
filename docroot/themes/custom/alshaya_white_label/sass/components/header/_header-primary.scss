@@ -654,6 +654,17 @@ header {
         margin-top: -1px;
       }
 
+      a.menu--one__link {
+        padding: 0.625rem;
+        padding-bottom: 0.6rem;
+        display: block;
+        height: 2.625rem;
+        border-bottom: 1px solid transparent;
+        border-top: 2px solid transparent;
+        position: relative;
+        top: -1px;
+      }
+
       &.active {
         a.menu--one__link {
           background: $white-five;
