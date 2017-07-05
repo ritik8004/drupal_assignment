@@ -209,7 +209,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $update = [];
     $update['customer_address_id'] = $address['customer_address_id'];
-    $update['country'] = $address['country_id'];
     $update['country_id'] = $address['country_id'];
     $update['customer_id'] = $cart->customerId();
 
@@ -293,7 +292,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       $update = [];
       $update['customer_address_id'] = $customer_address_id;
       $update['country_id'] = $address_values['country_code'];
-      $update['country'] = $address_values['country_code'];
       $update['customer_id'] = $cart->customerId();
 
       $cart->setShipping($update);
