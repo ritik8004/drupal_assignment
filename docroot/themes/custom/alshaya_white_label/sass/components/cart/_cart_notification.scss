@@ -1,8 +1,18 @@
 #cart_notification {
   z-index: 999;
   position: absolute;
-  top: 3.9rem;
-  #{$left}: -0.75rem;
+  top: 2.7rem;
+  #{$right}: -0.25rem;
+
+  @include breakpoint($tablet) {
+    top: 3.3rem;
+    #{$right}: -0.125rem;
+  }
+
+  @include breakpoint($desktop) {
+    top: 3.7rem;
+    #{$right}: -0.1875rem;
+  }
 
   &.has--notification::before {
     content: '';
