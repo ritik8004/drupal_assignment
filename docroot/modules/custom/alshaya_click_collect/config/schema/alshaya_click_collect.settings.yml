@@ -1,0 +1,24 @@
+# Schema for the configuration files of the alshaya click and collect settings.
+
+alshaya_click_collect.settings:
+  type: config_object
+  label: 'Click and Collect configuration'
+  mapping:
+    pdp_click_collect_title:
+      type: label
+      label: 'PDP: Click and Collect title'
+    pdp_click_collect_subtitle:
+      type: label
+      label: 'PDP: Click and Collect sub-title'
+    pdp_click_collect_unavailable:
+      type: label
+      label: 'PDP: Click and Collect Unavailable'
+    pdp_click_collect_price:
+      type: float
+      label: 'PDP: Click and Collect price'
+    pdp_click_collect_help_text:
+      type: text_format
+      label: 'PDP: Click and Collect help text'
+    pdp_click_collect_select_option_text:
+      type: text_format
+      label: 'PDP: Click and Collect select option text'
