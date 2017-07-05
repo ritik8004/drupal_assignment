@@ -706,6 +706,10 @@ html[lang=ar] {
 
     #table-cart-totals td {
       text-align: right;
+
+      @include breakpoint($only-mobile) {
+        text-align: left;
+      }
     }
 
     #table-cart-items {
