@@ -326,10 +326,11 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function setShippingMethod($carrier, $method) {
+  public function setShippingMethod($carrier, $method, array $extension = []) {
     $this->cart->carrier = [
       'carrier_code' => $carrier,
       'method_code' => $method,
+      'extension' => $extension,
     ];
   }
 
