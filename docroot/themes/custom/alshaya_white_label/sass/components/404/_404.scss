@@ -161,6 +161,11 @@
     margin-top: 0;
   }
 
+  .maintenance__logo--wrapper {
+    max-width: 76.375rem;
+    margin: auto;
+  }
+
   .maintenance__logo {
     @include breakpoint($upto-desktop) {
       text-align: right;

@@ -870,7 +870,7 @@ function alshaya_master_install() {
   // Enable the style combo for rich text.
   \Drupal::configFactory()->getEditable('editor.editor.rich_text')
     ->set('settings.toolbar.rows.0', $editor_config)
-    ->set('settings.plugins.stylescombo.styles', "h1.title|Heading\r\nh1.title--arabic| Heading Arabic\r\nh2.subhead|Sub Heading\r\np.arabic|Arabic Text")
+    ->set('settings.plugins.stylescombo.styles', "p.normal|Normal\r\nh1.title|Heading\r\nh1.title--arabic| Heading Arabic\r\nh2.subhead|Sub Heading\r\np.arabic|Arabic Text")
     ->save();
 
   // Set the Status Messages block.
