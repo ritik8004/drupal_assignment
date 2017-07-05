@@ -157,8 +157,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     if ($values['same_as_shipping'] == 1) {
       $shipping_address = $cart->getShipping();
 
-      // @TODO: Work around for MMCSP-1344. Loading address from address book
-      // if customer_address_id is available.
+      // Loading address from address book if customer_address_id is available.
       if (isset($shipping_address['customer_address_id'])) {
         if ($entity = $address_book_manager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
           $shipping_address = $address_book_manager->getAddressFromEntity($entity, FALSE);

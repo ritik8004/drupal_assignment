@@ -336,8 +336,6 @@ class AlshayaAddressBookManager {
     $magento_address['extension']['address_block_segment'] = $address['locality'];
     $magento_address['country_id'] = $address['country_code'];
 
-    // @TODO: Remove this after Magento makes it optional.
-    // This will stay here for long - check MMCSP-916.
     // City is core attribute in Magento and hard to remove validation.
     $magento_address['city'] = '&#8203;';
 

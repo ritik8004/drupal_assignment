@@ -214,8 +214,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $shipping_address = $order['shipping']['address'];
 
-  // @TODO: Work around for MMCSP-1344. Loading address from address book
-  // if customer_address_id is available.
+  // Loading address from address book if customer_address_id is available.
   if (!empty($shipping_address['customer_address_id'])) {
     if ($entity = $address_book_manager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
       $shipping_address = $address_book_manager->getAddressFromEntity($entity, FALSE);
