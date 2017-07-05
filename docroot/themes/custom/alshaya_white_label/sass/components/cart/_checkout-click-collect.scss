@@ -244,7 +244,7 @@
             .store-actions {
               position: absolute;
               top: 25%;
-              right: 6%;
+              #{$right}: 6%;
             }
           }
 
@@ -479,7 +479,7 @@
         .store-actions {
           position: absolute;
           top: 25%;
-          right: 6%;
+          #{$right}: 6%;
         }
       }
 
