@@ -9,6 +9,7 @@
         var length = $('#cart_notification').html().length;
         if (length > 0) {
           $('#cart_notification').empty();
+          $('body').removeClass('notification--on');
           $('#cart_notification').removeClass('has--notification')
         }
       });
@@ -57,6 +58,7 @@
         $('html,body').animate({
           scrollTop: $('.header--wrapper').offset().top
         }, 'slow');
+          $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification')
       };
 
