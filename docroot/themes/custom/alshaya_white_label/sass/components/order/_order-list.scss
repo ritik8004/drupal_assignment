@@ -151,7 +151,7 @@
     width: 125px;
 
     @include breakpoint($desktop) {
-      margin-#{$left}: 28px;
+      margin-#{$left}: 0.875rem;
       width: 153px;
     }
   }
@@ -413,16 +413,18 @@
     .form-item-search {
       width: 47.5%;
       margin-#{$right}: 2.5%;
+      height: 2.1875rem;
 
       input {
         -webkit-animation: fadeEffect 2s;
         animation: fadeEffect 2s;
         display: none;
         position: absolute;
-        width: calc(100% + 1rem);
+        width: 105%;
         top: 2.875rem;
-        #{$left}: -0.5rem;
-        #{$right}: 0;
+        #{$left}: 0;
+        margin-#{$left}: -2.5%;
+        #{$right}: -2.5%;
         border: 0.5625rem solid $white;
         padding: 1rem 0.5rem 0.9375rem 1rem;
         background: $white-five;
@@ -455,6 +457,7 @@
       width: 48%;
 
       select {
+        height: 2.1875rem;
         width: 100%;
       }
     }
