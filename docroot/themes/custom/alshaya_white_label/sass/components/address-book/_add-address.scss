@@ -88,9 +88,13 @@
     }
 
     .form-actions {
-      margin-bottom: 5.625rem;
+      margin-bottom: 2.625rem;
       font-size: 0.75rem;
       font-weight: 700;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 5.625rem;
+      }
 
       .form-submit {
         margin-top: 0;

@@ -288,6 +288,7 @@
         min-width: auto;
         color: $cerulean-two;
         text-transform: capitalize;
+        text-align: center;
       }
     }
 
@@ -312,7 +313,20 @@
       }
     }
 
-    &.active,
+    &.active {
+      .address--data {
+        background: $white-five;
+      }
+
+      .address--deliver-to-this-address {
+        a {
+          color: $marine-blue-two;
+          border: 1px solid $marine-blue-two;
+          background-color: $white-five;
+        }
+      }
+    }
+
     &:hover {
       .address--data {
         background: $white-four;
@@ -343,13 +357,12 @@
     margin-bottom: 1rem;
 
     @include breakpoint($tablet) {
-      margin-bottom: 2.25rem;
+      margin-bottom: 0;
       margin-top: 0.437rem;
     }
 
     @include breakpoint($desktop) {
       padding-bottom: 1rem;
-      margin-bottom: 3rem;
       margin-top: 0;
     }
   }
@@ -447,8 +460,8 @@
         border-bottom: none !important;
         margin-top: 1.188rem;
 
-        &.local-number {
-          border-bottom: none;
+        &.local-number.form-text {
+          border-bottom: none !important;
 
           &::placeholder {
             color: transparent !important;
@@ -501,6 +514,7 @@
     width: 2.188rem;
     background: $white !important;
     border-#{$left}: 1px solid $white-five;
+    border-radius: 0 !important;
   }
 
   select.error {
@@ -546,10 +560,6 @@
   }
 
   .select2-selection__arrow {
-    height: 2.188rem !important;
-    width: 2.188rem !important;
-    border-#{$left}: 0.0625rem solid $white-five;
-
     @include icon(chevrondown, after) {
       font-size: 1.5rem;
       position: absolute;
@@ -637,6 +647,15 @@
           margin-top: 0.4375rem;
         }
       }
+    }
+  }
+}
+
+// A Hack for user page addressbook mobile field country code prefix.
+.path--user {
+  .address-book-address {
+    .country-code-prefix {
+      margin-top: 1.5rem;
     }
   }
 }

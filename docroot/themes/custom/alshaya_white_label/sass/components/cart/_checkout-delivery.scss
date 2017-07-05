@@ -145,6 +145,7 @@
     }
 
     .tabs--content {
+      #edit-member-delivery-collect,
       #edit-guest-delivery-collect {
         // TODO: Remove this when click and collect is themed for the mobile.
         @include breakpoint($only-mobile) {
@@ -572,7 +573,7 @@
     form {
       #edit-guest-delivery-home {
         .title {
-          margin: 1.375rem;
+          margin: 1.375rem !important;
         }
 
         .address-book-address {
@@ -581,7 +582,7 @@
           }
 
           @include breakpoint($tablet) {
-            margin: 3.75rem 1.375rem 0;
+            margin: 1.75rem 1.375rem 0;
           }
         }
       }
@@ -623,23 +624,20 @@
 
         #address-book-form-wrapper,
         #selected-address-wrapper {
-          margin: 3.75rem 1.375rem;
+          margin: 1.75rem 1.375rem;
 
           #cancel-address-add-edit {
             background: transparent;
             margin-top: 0;
             text-transform: lowercase;
-            color: $marine-blue-two;
+            color: $cerulean-two;
+            font-weight: bold;
             padding: 0.5rem 2.5rem;
           }
         }
 
         .title {
           margin: 1rem 0;
-
-          @include breakpoint($tablet) {
-            margin: 1rem;
-          }
         }
 
         #addresses-header {
