@@ -155,4 +155,16 @@
     $('#address-book-form-wrapper').slideDown();
   };
 
+  // Ajax command to rebind client side validations on checkout pages on request.
+  $.fn.rebindCheckoutClientSideValidations = function (data) {
+    try {
+      // 400 here is same as animation time, we need the field to be
+      // visible for clientside validation to get applied properly.
+      // @TODO: We should look for better solution here.
+      setTimeout('Drupal.behaviors.cvJqueryValidate.attach(jQuery("#block-alshaya-white-label-content"))', 400);
+    }
+    catch (e) {
+    }
+  }
+
 })(jQuery, Drupal);
