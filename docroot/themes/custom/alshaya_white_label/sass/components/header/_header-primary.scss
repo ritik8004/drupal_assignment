@@ -362,6 +362,10 @@ header {
       position: relative;
       list-style: none;
       z-index: 4;
+
+      .notification--on & {
+        z-index: 3;
+      }
     }
   }
 
