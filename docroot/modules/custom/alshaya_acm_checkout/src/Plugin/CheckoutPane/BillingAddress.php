@@ -151,14 +151,24 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     $values = $form_state->getValue($pane_form['#parents']);
     $cart = $this->getCart();
 
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
     if ($values['same_as_shipping'] == 1) {
-      $cart->setBilling(_alshaya_acm_checkout_clean_address($cart->getShipping()));
+      $shipping_address = $cart->getShipping();
+
+      // Loading address from address book if customer_address_id is available.
+      if (isset($shipping_address['customer_address_id'])) {
+        if ($entity = $address_book_manager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
+          $shipping_address = $address_book_manager->getAddressFromEntity($entity, FALSE);
+        }
+      }
+
+      $cart->setBilling(_alshaya_acm_checkout_clean_address($shipping_address));
     }
     else {
       $address_values = $values['address']['billing'];
 
-      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
       $address = $address_book_manager->getMagentoAddressFromAddressArray($address_values);
 
       $cart->setBilling(_alshaya_acm_checkout_clean_address($address));

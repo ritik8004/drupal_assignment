@@ -112,6 +112,11 @@
       color: $black;
     }
 
+    .item-code {
+      font-family: $alshaya-thin;
+      font-size: 0.75rem;
+    }
+
     .item--bundle {
       color: $cerulean-two;
       margin-top: 0.75rem;
@@ -701,6 +706,10 @@ html[lang=ar] {
 
     #table-cart-totals td {
       text-align: right;
+
+      @include breakpoint($only-mobile) {
+        text-align: left;
+      }
     }
 
     #table-cart-items {
