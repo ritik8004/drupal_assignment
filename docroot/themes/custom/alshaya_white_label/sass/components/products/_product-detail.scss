@@ -38,14 +38,6 @@
 }
 
 .acq-content-product {
-  @include if-ltr {
-    direction: ltr;
-  }
-
-  @include if-rtl {
-    direction: rtl;
-  }
-
   @include clearfix;
 
   @include breakpoint($tablet) {
@@ -1105,9 +1097,19 @@
           z-index: 4;
           margin: 0;
           #{$left}: 0;
+          height: 2.188rem;
+
+          .ladda-label {
+            html[lang="ar"] & {
+              margin-top: 0;
+              position: absolute;
+              top: 1rem;
+              left: 33%;
+            }
+          }
         }
 
-        @include breakpoint($mobile) {
+        @include breakpoint($tablet) {
           float: $left;
         }
 
@@ -1227,6 +1229,8 @@ article[gtm-sku-type="simple"] {
         @include breakpoint($only-tablet) {
           float: $right;
           margin-top: 1rem;
+          height: 2.188rem;
+          text-align: center;
         }
       }
     }
