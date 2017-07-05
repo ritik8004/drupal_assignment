@@ -14,7 +14,7 @@
             </div>
         {% endfor %}
         {% if item_code is not empty %}
-            <div>{{ 'Item code'|t }}: {{ item_code }}</div>
+            <div><span class="item-code">{{ 'Item code'|t }}</span>: {{ item_code }}</div>
         {% endif %}
         {% if include_in_bundle is not empty %}
             <div class="item--bundle">{{ include_in_bundle }}</div>
