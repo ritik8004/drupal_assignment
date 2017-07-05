@@ -20,7 +20,7 @@
             {% for id, promotion in promotions %}
               <div class="promotion-{{ id }}">
                 <div class="promotion-label">
-                  <strong>{{ promotion.title }}</strong>
+                  <strong>{{ promotion.text.value }}</strong>
                 </div>
                 <div class="promotion-description">
                   {{ promotion.description.value | raw }}

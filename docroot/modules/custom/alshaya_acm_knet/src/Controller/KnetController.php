@@ -9,7 +9,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -120,7 +119,7 @@ class KnetController extends ControllerBase {
     $data = \Drupal::state()->get($state_key);
 
     if (empty($data)) {
-      return new AccessDeniedHttpException();
+      throw new AccessDeniedHttpException();
     }
 
     $message = '';
@@ -141,8 +140,7 @@ class KnetController extends ControllerBase {
 
     $this->ordersManager->clearOrderCache($data['email'], $data['user_id']);
 
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
-    $response->send();
+    return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
   }
 
   /**
@@ -171,8 +169,7 @@ class KnetController extends ControllerBase {
 
     $this->ordersManager->clearOrderCache(\Drupal::currentUser()->getEmail(), \Drupal::currentUser()->id());
 
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
-    $response->send();
+    return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
   }
 
   /**
@@ -201,8 +198,7 @@ class KnetController extends ControllerBase {
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
 
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
-    $response->send();
+    return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
   }
 
 }

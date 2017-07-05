@@ -227,10 +227,10 @@
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })
-            .toArray()
-            .reduce(function (first, second) {
-              return Math.max(first, second);
-            });
+          .toArray()
+          .reduce(function (first, second) {
+            return Math.max(first, second);
+          });
 
           menuLevel2.each(function () {
             $(this).height(maxHeight);

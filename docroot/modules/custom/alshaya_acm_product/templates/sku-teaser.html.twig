@@ -29,10 +29,10 @@
     {% for id, promotion in promotions %}
       {% if (promotion.render_link) %}
         <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
-          {{ promotion.text }}
+          {{ promotion.text.value }}
         </a>
       {% else %}
-        {{ promotion.text }}
+        {{ promotion.text.value }}
       {% endif %}
     {% endfor %}
   </div>

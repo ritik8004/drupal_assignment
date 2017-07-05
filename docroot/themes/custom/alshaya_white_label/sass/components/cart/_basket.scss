@@ -358,6 +358,7 @@
     position: relative;
     font-size: 0.875rem;
 
+    .form-item-privilege-card-number,
     .form-item-privilege-card-number2 {
       border-top: 0;
 
@@ -393,9 +394,13 @@
 
   .form-item {
     position: relative;
-    border-top: 1px solid $white;
     padding: 0 1.5rem;
     padding-top: 0.2rem;
+    border-top: 1px solid $white;
+
+    .alias--cart & {
+      border-top: none;
+    }
   }
 
   details[open] summary {
@@ -883,5 +888,18 @@ html[lang=ar] {
     @include breakpoint($only-tablet) {
       margin-left: 0;
     }
+  }
+}
+
+.privilege-earn-text {
+  color: $grey-ash;
+  font-size: 0.75rem;
+  border-bottom: 0;
+  font-weight: bold;
+  padding-#{$left}: 1.5rem;
+  padding-top: 1rem;
+
+  .alias--cart & {
+    border-top: 1px solid $white;
   }
 }

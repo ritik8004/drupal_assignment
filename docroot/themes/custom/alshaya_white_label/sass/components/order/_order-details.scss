@@ -354,9 +354,17 @@
 }
 
 #block-userrecentorders {
+  @include breakpoint($only-tablet) {
+    margin-top: -1.5em;
+  }
+
   h2.subtitle {
     margin-top: 2.5rem;
     border-bottom: none;
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.875rem;
+    }
 
     .path--user & {
       padding-bottom: 0.5625rem;

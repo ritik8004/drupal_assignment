@@ -1,0 +1,207 @@
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
+index f9c4cc52..7399f0a6 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
+@@ -5,3 +5,4 @@ services:
+       - '@entity_type.manager'
+       - '@acq_commerce.api'
+       - '@logger.factory'
++      - '@language_manager'
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
+index 707b797b..49858534 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
+@@ -2,8 +2,10 @@ langcode: en
+ status: true
+ dependencies:
+   config:
++    - field.field.node.acq_promotion.field_acq_promotion_banner
+     - field.field.node.acq_promotion.field_acq_promotion_data
+     - field.field.node.acq_promotion.field_acq_promotion_description
++    - field.field.node.acq_promotion.field_acq_promotion_label
+     - field.field.node.acq_promotion.field_acq_promotion_rule_id
+     - field.field.node.acq_promotion.field_acq_promotion_sku
+     - field.field.node.acq_promotion.field_acq_promotion_type
+@@ -24,13 +26,22 @@ bundle: acq_promotion
+ mode: default
+ content:
+   field_acq_promotion_description:
+-    weight: 0
++    weight: 1
+     label: hidden
+     settings: {  }
+     third_party_settings: {  }
+     type: text_default
+     region: content
++  field_acq_promotion_label:
++    weight: 0
++    label: hidden
++    settings:
++      link_to_entity: false
++    third_party_settings: {  }
++    type: string
++    region: content
+ hidden:
++  field_acq_promotion_banner: true
+   field_acq_promotion_data: true
+   field_acq_promotion_rule_id: true
+   field_acq_promotion_sku: true
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_label.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_label.yml
+new file mode 100644
+index 00000000..e2524ced
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_label.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.node.field_acq_promotion_label
++    - node.type.acq_promotion
++id: node.acq_promotion.field_acq_promotion_label
++field_name: field_acq_promotion_label
++entity_type: node
++bundle: acq_promotion
++label: Label
++description: ''
++required: false
++translatable: true
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: string
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_label.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_label.yml
+new file mode 100644
+index 00000000..164b561b
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_label.yml
+@@ -0,0 +1,20 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - node
++id: node.field_acq_promotion_label
++field_name: field_acq_promotion_label
++entity_type: node
++type: string
++settings:
++  max_length: 255
++  is_ascii: false
++  case_sensitive: false
++module: core
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/language.content_settings.node.acq_promotion.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/language.content_settings.node.acq_promotion.yml
+index 4b37f111..243481e7 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/language.content_settings.node.acq_promotion.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/language.content_settings.node.acq_promotion.yml
+@@ -3,8 +3,13 @@ status: true
+ dependencies:
+   config:
+     - node.type.acq_promotion
++  module:
++    - content_translation
++third_party_settings:
++  content_translation:
++    enabled: true
+ id: node.acq_promotion
+ target_entity_type_id: node
+ target_bundle: acq_promotion
+ default_langcode: site_default
+-language_alterable: false
++language_alterable: true
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
+index d67eaf1b..722bc3fb 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
+@@ -4,6 +4,7 @@
+
+ use Drupal\acq_commerce\Conductor\APIWrapper;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Language\LanguageManager;
+ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+ use Drupal\node\Entity\Node;
+ use Drupal\acq_sku\Entity\SKU;
+@@ -14,6 +15,13 @@
+ class AcqPromotionsManager {
+
+   /**
++   * Language Manager service.
++   *
++   * @var \Drupal\Core\Language\LanguageManager
++   */
++  protected $languageManager;
++
++  /**
+    * Node Entity Storage.
+    *
+    * @var \Drupal\node\NodeStorageInterface
+@@ -34,13 +42,16 @@ class AcqPromotionsManager {
+    *   EntityTypeManager object.
+    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+    *   The api wrapper.
+-   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
++   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+    *   LoggerFactory object.
++   * @param \Drupal\Core\Language\LanguageManager $languageManager
++   *   Language Manager service.
+    */
+-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
++  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, LanguageManager $languageManager) {
+     $this->nodeStorage = $entity_type_manager->getStorage('node');
+     $this->apiWrapper = $api_wrapper;
+     $this->logger = $logger_factory->get('acq_promotion');
++    $this->languageManager = $languageManager;
+   }
+
+   /**
+@@ -85,6 +96,15 @@ protected function syncPromotion(array $promotion) {
+
+     $nids = $query->execute();
+
++    $promotions_labels = $promotion['labels'];
++    $promotion_label_languages = [];
++    $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
++
++    foreach ($promotions_labels as $promotion_label) {
++      $promtion_label_language = acq_commerce_get_langcode_from_store_id($promotion_label['store_id']);
++      $promotion_label_languages[$promtion_label_language] = $promotion_label['store_label'];
++    }
++
+     // Create promotion.
+     if (empty($nids)) {
+       /* @var $node \Drupal\node\Entity\Node */
+@@ -125,6 +145,11 @@ protected function syncPromotion(array $promotion) {
+     // Set the Promotion type.
+     $node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
+
++    // Set the Promotion label.
++    if (isset($promotion_label_languages[$site_default_langcode])) {
++      $node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
++    }
++
+     // Add SKU ID's to promotion.
+     if (!empty($promotion['products'])) {
+       // Assign value to $node object.
+@@ -142,6 +167,16 @@ protected function syncPromotion(array $promotion) {
+     \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $node, $promotion);
+
+     $node->save();
++
++    // Create promotion translations based on the language codes available in
++    // promotion labels.
++    foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
++      if ($langcode !== $site_default_langcode) {
++        $node_translation = $node->addTranslation($langcode);
++        $node_translation->get('field_acq_promotion_label')->setValue($promotion_label_languages[$langcode]);
++        $node_translation->save();
++      }
++    }
+   }
+
+   /**

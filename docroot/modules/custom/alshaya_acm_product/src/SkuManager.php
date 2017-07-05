@@ -4,7 +4,10 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManager;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 
@@ -23,20 +26,40 @@ class SkuManager {
   protected $connection;
 
   /**
+   * The language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
+   * The Entity repository service.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
    *   Database service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager service.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @param \Drupal\Core\Language\LanguageManager $languageManager
+   *   The lnaguage manager service.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   The entity repository service.
    */
   public function __construct(Connection $connection,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              LanguageManager $languageManager,
+                              EntityRepositoryInterface $entityRepository) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
+    $this->languageManager = $languageManager;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -252,14 +275,20 @@ class SkuManager {
     if (!empty($promotionIDs)) {
       $promotions = Node::loadMultiple($promotionIDs);
       foreach ($promotions as $promotion) {
+        $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+        // Get the promotion with language fallback, if it did not have a
+        // translation for $langcode.
+        $promotion = $this->entityRepository->getTranslationFromContext($promotion, $langcode);
+        $promotion_text = $promotion->get('field_acq_promotion_label')->getValue();
+
         /* @var \Drupal\node\Entity\Node $promotion */
         if ($getLinks) {
-          $promos[$promotion->id()] = $promotion->toLink($promotion->getTitle())->toString()->getGeneratedLink();
+          $promos[$promotion->id()] = $promotion->toLink($promotion_text[0]['value'])->toString()->getGeneratedLink();
         }
         else {
           $descriptions = $promotion->get('field_acq_promotion_description')->getValue();
           $promos[$promotion->id()] = [
-            'text' => $promotion->getTitle(),
+            'text' => array_shift($promotion_text),
             'description' => array_shift($descriptions),
           ];
         }
