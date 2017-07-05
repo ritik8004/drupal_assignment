@@ -4,6 +4,19 @@
   top: 3.9rem;
   #{$left}: -0.75rem;
 
+  &.has--notification::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 11px solid $pumpkin-orange;
+    clear: both;
+    top: -11px;
+    #{$right}: 15px;
+  }
+
   .notification,
   .error {
     width: 17.37rem;
@@ -12,18 +25,6 @@
     box-shadow: 4px 4px 0 0 $white-two;
     padding: 0.8rem;
     display: inline-block;
-
-    &::before {
-      content: '';
-      position: relative;
-      width: 0;
-      height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 11px solid $pumpkin-orange;
-      clear: both;
-      top: -2.5rem;
-    }
 
     .col-1 {
       float: $left;
@@ -71,15 +72,6 @@
         color: $white-five;
         font-family: $alshaya-thin;
       }
-    }
-  }
-}
-
-.firefox #cart_notification {
-  .notification {
-    &::before {
-      top: 0.875rem;
-      #{$right}: 0.5rem;
     }
   }
 }
