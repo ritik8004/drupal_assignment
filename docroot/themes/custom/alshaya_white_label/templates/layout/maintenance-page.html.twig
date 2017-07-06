@@ -20,10 +20,11 @@
       <main>
         <div class="c-content">
           <div class="c-content__region">
-            <div class="maintenance__logo">
-              {% include active_theme_path() ~ '/mothercare-logo-sm-ar.svg' %}
+            <div class="maintenance__logo--wrapper">
+              <div class="maintenance__logo">
+                {% include active_theme_path() ~ '/mothercare-logo-sm-ar.svg' %}
+              </div>
             </div>
-
             <div class="l-container not-found">
               {% if maintenance_text is not empty %}
                 <div class="not-found__body">

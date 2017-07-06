@@ -82,6 +82,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div class="geolocation-common-map-container"></div>',
     ];
 
+    $pane_form['store_finder']['map_view']['locations'] = [
+      '#markup' => '<div class="geolocation-common-map-locations" style="display: none;"></div>',
+    ];
+
     $pane_form['selected_store'] = [
       '#type' => 'container',
       '#title' => t('selected store'),
@@ -129,6 +133,24 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     return $pane_form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $extension = [];
+
+    // @TODO: Make this dynamic.
+    $extension['store_code'] = 'RA1-1512-MOT';
+    $extension['click_and_collect_type'] = 'ship_to_store';
+
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+    $term = $checkout_options_manager->getClickandColectShippingMethodTerm();
+
+    $cart = $this->getCart();
+    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
   }
 
 }

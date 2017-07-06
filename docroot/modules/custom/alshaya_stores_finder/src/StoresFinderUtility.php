@@ -174,7 +174,7 @@ class StoresFinderUtility {
       $store['name'] = $store_node->label();
       $store['code'] = $store_node->get('field_store_locator_id')->getString();
       $store['address'] = $store_node->get('field_store_address')->getString();
-      $store['open_hours'] = $store_node->get('field_store_open_hours')->getString();
+      $store['open_hours'] = $store_node->get('field_store_open_hours')->getValue();
       $store['nid'] = $store_node->id();
       $store['view_on_map_link'] = Url::fromRoute('alshaya_click_collect.cc_store_map_view', ['node' => $store_node->id()])->toString();
 

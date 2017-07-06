@@ -54,6 +54,13 @@
         }
       });
 
+      // Scrolling the page to top if edit address is clicked.
+      $('.address .address--edit a').on('click', function () {
+        $('html,body').animate({
+          scrollTop: 0
+        }, 'slow');
+      });
+
       // Mobile grey block hiding over the image after 3secs.
       $('.mobilegallery .subtext').show().delay(3000).fadeOut();
     }
