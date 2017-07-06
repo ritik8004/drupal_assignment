@@ -490,7 +490,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new HtmlCommand('.promotions', $promotion_links));
 
     if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
-      $config = \Drupal::config('alshaya_stores_finder.settings');
+      $config = \Drupal::config('alshaya_click_collect.settings');
       $settings = ['alshaya_acm' => ['product_sku' => $sku->getSku()]];
       if (!alshaya_acm_product_available_click_collect($tree_pointer->getSku())) {
         $settings['alshaya_acm']['storeFinder'] = FALSE;

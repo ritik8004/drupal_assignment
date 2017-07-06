@@ -39,7 +39,7 @@
 
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Get the permission track the user location.
-        Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationError, Drupal.pdp.LocationError);
+        Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
@@ -215,7 +215,6 @@
                 $('.click-collect-all-stores .stores-list-all').html(progressElement);
               },
               success: function (response) {
-                displaySearchForm = false;
                 Drupal.pdp.fillStores(response, asfCoords);
               }
             });
@@ -229,6 +228,7 @@
   // Fill the stores with result.
   Drupal.pdp.fillStores = function (response, asfCoords) {
     if (response.top_three) {
+      displaySearchForm = false;
       records = true;
       $('.click-collect-top-stores').html(response.top_three);
       $('.click-collect-form').find('.store-finder-form-wrapper .search-store').hide();
@@ -248,6 +248,7 @@
       }
     }
     else {
+      displaySearchForm = true;
       $('.click-collect-top-stores').html('');
       $('.click-collect-all-stores').html('');
       $('.click-collect-form').find('.available-store-text').hide();
