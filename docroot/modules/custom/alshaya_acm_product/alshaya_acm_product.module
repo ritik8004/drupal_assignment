@@ -248,8 +248,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
 
+      $promotion_types = ['cart'];
+
       // Get promotions for the product.
-      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE);
+      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
           '#markup' => implode(', ', $promotions),
@@ -266,8 +268,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
       }
 
+      $promotion_types = ['cart'];
+
       // Get promotions for the product.
-      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE);
+      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
           '#markup' => implode(', ', $promotions),
@@ -295,8 +299,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
       }
 
+      $promotion_types = ['cart'];
+
       // Get promotions for the product.
-      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE);
+      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
           '#markup' => implode(', ', $promotions),
@@ -504,7 +510,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // Update the promotions for the product.
     $promotion_links = '';
-    $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($tree_pointer, TRUE);
+    $promotion_types = ['cart'];
+    $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($tree_pointer, TRUE, $promotion_types);
     if (!empty($promotions)) {
       $promotion_links = implode(', ', $promotions);
     }
