@@ -995,12 +995,22 @@
           margin-top: 0.375rem;
         }
 
+        @include breakpoint($only-tablet) {
+          float: $right;
+        }
+
         @include breakpoint($desktop) {
           width: 65%;
           margin-#{$left}: 0;
           padding-#{$left}: 0;
           font-size: 0;
           margin-top: 2px;
+        }
+      }
+
+      p {
+        @include breakpoint($only-tablet) {
+          float: $left;
         }
       }
 
