@@ -747,7 +747,7 @@ body.alias--cart {
   #table-cart-totals {
     font-size: 14px;
 
-    table[id^=edit-totals-] tr[data-drupal-selector="edit-totals-discount"] {
+    table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
       td {
         color: $scarlet;
       }
@@ -777,6 +777,19 @@ body.alias--cart {
 
     @include breakpoint($desktop) {
       margin-#{$right}: 21.7%;
+    }
+
+    .cart-promotions {
+      .tooltip--head::after {
+        position: absolute;
+        #{$right}: 0;
+        top: -0.25rem;
+      }
+
+      .tooltip {
+        #{$left}: -2rem;
+        top: 1.3rem;
+      }
     }
 
     .edit-continue-shopping-mobile,
