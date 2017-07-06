@@ -5,13 +5,12 @@
   #{$right}: -0.25rem;
 
   @include breakpoint($tablet) {
-    top: 3.3rem;
-    #{$right}: -0.125rem;
+    top: 4.2rem;
+    #{$right}: 0.1125rem;
   }
 
   @include breakpoint($desktop) {
     top: 3.7rem;
-    #{$right}: -0.1875rem;
   }
 
   &.has--notification::before {
