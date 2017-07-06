@@ -103,7 +103,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $pane_form['address']['shipping_methods'] = [
       '#type' => 'radios',
-      '#title' => t('Shipping Methods'),
+      '#title' => $this->t('select delivery options'),
       '#default_value' => $default_shipping,
       '#validated' => TRUE,
       '#options' => $shipping_methods,

@@ -5,7 +5,9 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\profile\Entity\Profile;
@@ -209,7 +211,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $update = [];
     $update['customer_address_id'] = $address['customer_address_id'];
-    $update['country'] = $address['country_id'];
     $update['country_id'] = $address['country_id'];
     $update['customer_id'] = $cart->customerId();
 
@@ -249,8 +250,12 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    *   Ajax response to reload page on successfully adding new address.
    */
   public function saveAddressAjaxCallback($form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+
     if ($form_state->getErrors()) {
-      return $form;
+      $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form['member_delivery_home']['address_form']));
+      $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'show'));
+      return $response;
     }
 
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
@@ -293,7 +298,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       $update = [];
       $update['customer_address_id'] = $customer_address_id;
       $update['country_id'] = $address_values['country_code'];
-      $update['country'] = $address_values['country_code'];
       $update['customer_id'] = $cart->customerId();
 
       $cart->setShipping($update);

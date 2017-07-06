@@ -6,6 +6,7 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -111,6 +112,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
   public static function updateAddressAjaxCallback($form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('.address_wrapper', $form['billing_address']['address']));
+    $response->addCommand(new InvokeCommand(NULL, 'rebindCheckoutClientSideValidations'));
     return $response;
   }
 
