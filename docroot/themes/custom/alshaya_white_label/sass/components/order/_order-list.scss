@@ -63,6 +63,10 @@
       top: -0.5rem;
       #{$right}: 0;
     }
+
+    @include breakpoint($desktop) {
+      top: -0.2rem;
+    }
   }
 }
 
@@ -170,7 +174,8 @@
     @include icon(search, after) {
       background-color: $whisper-dark;
       border: 1px solid $whisper-dark;
-      font-size: 22px;
+      line-height: 20px;
+      font-size: 1.625rem;
       pointer-events: none;
       position: absolute;
       text-align: center;
