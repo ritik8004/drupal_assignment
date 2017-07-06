@@ -149,7 +149,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       // even if other values are set.
       if (isset($shipping_address['customer_address_id'])) {
         if ($entity = $this->addressBookManager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
-          $shipping_address = $this->addressBookManager->getAddressFromEntity($entity, FALSE);
+          $shipping_address = $this->addressBookManager->getAddressFromEntity($entity);
         }
       }
 

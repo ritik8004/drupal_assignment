@@ -205,7 +205,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
-    $address = $address_book_manager->getAddressFromEntity($entity, FALSE);
+    $address = $address_book_manager->getAddressFromEntity($entity);
 
     $update = [];
     $update['customer_address_id'] = $address['customer_address_id'];
@@ -233,7 +233,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
   public static function generateShippingEstimates(Profile $entity) {
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-    $full_address = $address_book_manager->getAddressFromEntity($entity, FALSE);
+    $full_address = $address_book_manager->getAddressFromEntity($entity);
     return GuestDeliveryHome::generateShippingEstimates($full_address);
   }
 

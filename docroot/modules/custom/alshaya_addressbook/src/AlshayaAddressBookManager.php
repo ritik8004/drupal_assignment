@@ -231,10 +231,12 @@ class AlshayaAddressBookManager {
    *   Cleaned/Hacked address array.
    */
   protected function getCleanAddress(array $address) {
-    // This is very annoying, when we save in Magento it allows to save region
-    // but when we pass from here it gives error because Kuwait doesn't have
-    // region.
-    unset($address['region']);
+    if ($address['country_id'] == 'KW') {
+      // This is very annoying, when we save in Magento it allows to save region
+      // but when we pass from here it gives error because Kuwait doesn't have
+      // region.
+      unset($address['region']);
+    }
 
     return $address;
   }
@@ -244,13 +246,11 @@ class AlshayaAddressBookManager {
    *
    * @param \Drupal\profile\Entity\Profile $entity
    *   Address entity.
-   * @param bool $return_clean
-   *   Flag to specify if cleaned address is required in response or not.
    *
    * @return array
    *   Address array.
    */
-  public function getAddressFromEntity(Profile $entity, $return_clean = TRUE) {
+  public function getAddressFromEntity(Profile $entity) {
     $address_id = $entity->get('field_address_id')->getString();
     $entity_address = $entity->get('field_address')->first()->getValue();
 
@@ -269,7 +269,7 @@ class AlshayaAddressBookManager {
     $address['default_shipping'] = (int) $entity->isDefault();
     $address['default_billing'] = (int) $entity->isDefault();
 
-    return $return_clean ? $this->getCleanAddress($address) : $address;
+    return $this->getCleanAddress($address);
   }
 
   /**
