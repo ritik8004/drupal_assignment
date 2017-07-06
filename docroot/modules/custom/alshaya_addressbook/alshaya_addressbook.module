@@ -618,5 +618,5 @@ function _alshaya_addressbook_get_area_from_id($tid) {
     return $term->getName();
   }
 
-  return '';
+  return $tid;
 }
