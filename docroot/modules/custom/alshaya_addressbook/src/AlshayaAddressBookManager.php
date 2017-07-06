@@ -114,7 +114,7 @@ class AlshayaAddressBookManager {
     unset($customer['extension']);
 
     foreach ($customer['addresses'] as $index => $address) {
-      $customer['addresses'][$index] = $this->getCleanAddress($address);
+      $customer['addresses'][$index] = $address;
       $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
       $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
 
@@ -193,7 +193,7 @@ class AlshayaAddressBookManager {
         continue;
       }
 
-      $customer['addresses'][$index] = $this->getCleanAddress($address);
+      $customer['addresses'][$index] = $address;
       $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
       $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
 
@@ -219,26 +219,6 @@ class AlshayaAddressBookManager {
     }
 
     return FALSE;
-  }
-
-  /**
-   * Hack to get sync working.
-   *
-   * @param array $address
-   *   Address array.
-   *
-   * @return array
-   *   Cleaned/Hacked address array.
-   */
-  protected function getCleanAddress(array $address) {
-    if ($address['country_id'] == 'KW') {
-      // This is very annoying, when we save in Magento it allows to save region
-      // but when we pass from here it gives error because Kuwait doesn't have
-      // region.
-      unset($address['region']);
-    }
-
-    return $address;
   }
 
   /**
@@ -269,7 +249,7 @@ class AlshayaAddressBookManager {
     $address['default_shipping'] = (int) $entity->isDefault();
     $address['default_billing'] = (int) $entity->isDefault();
 
-    return $this->getCleanAddress($address);
+    return $address;
   }
 
   /**
