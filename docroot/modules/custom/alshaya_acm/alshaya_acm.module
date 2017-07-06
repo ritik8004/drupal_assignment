@@ -150,9 +150,19 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       _alshaya_acm_check_cart_item_stock($sku_entity, $item, $out_of_stock_message);
 
       // Add sub total price of product.
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $item_quantity = $item['quantity']['#default_value'];
+      $item_price = $cart_item[$id]['price'];
+      $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $item_quantity, $item_price);
       $item['sub_total'] = [
-        '#markup' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
+        '#theme' => 'acq_commerce_price',
+        '#price' => $item_cart_price['price'],
       ];
+
+      if ($item_cart_price['discount']) {
+        $item['sub_total']['#discount'] = $item_cart_price['discount'];
+        $item['sub_total']['#final_price'] = $item_cart_price['final_price'];
+      }
 
       // Adding class attribute to columns for mobile view.
       $item['name']['#wrapper_attributes'] = ['class' => ['name']];
