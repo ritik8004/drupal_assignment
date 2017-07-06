@@ -383,6 +383,32 @@
   text-transform: lowercase;
 }
 
+.block-alshaya-user-recent-orders {
+  .no--orders {
+    @include breakpoint($tablet) {
+      text-align: $left;
+      font-weight: normal;
+      color: $brownish-grey;
+      padding-top: 1.7rem;
+
+      & + a {
+        margin-top: 1.5rem;
+        margin-bottom: 2.675rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1.4rem;
+      padding-top: 0;
+
+      & + a {
+        margin-top: 1.375rem;
+        margin-bottom: 3rem;
+      }
+    }
+  }
+}
+
 .open--accordion {
   .order-summary-row td {
     background-color: $whisper-light;

@@ -361,6 +361,7 @@
   h2.subtitle {
     margin-top: 2.5rem;
     border-bottom: none;
+    font-weight: normal;
 
     @include breakpoint($only-tablet) {
       font-size: 0.875rem;
