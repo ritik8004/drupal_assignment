@@ -1,11 +1,13 @@
-<div id="selected-store-info" data-store-code="{{ store.code }}" data-store-node="{{ store.nid }}">
+<div class="store-name-and-address" id="selected-store-info" data-store-code="{{ store.code }}" data-store-node="{{ store.nid }}">
   <span class="store-name">{{ store.name }}</span>
-  <span class="store-address">{{ store.address }}</span>
+  <span class="store-address">{{ store.address|raw }}</span>
 </div>
 <div class="store-open-hours">{{ store.open_hours }}</div>
-<div class="store-delivery-time">{{ store.delivery_time  }}</div>
-<div class="store-actions">
-  <a class="change-store">{{ 'change store'|trans }}</a>
-  <a href="{{ store.view_on_map_link }}">{{ 'View on map'|trans }}</a>
+<div class="store-delivery-time">
+  <span class="label--delivery-time">{{ 'Collect in store from'|t }}</span>
+  <span class="delivery--time--value">{{ store.delivery_time }}</span>
 </div>
-
+<div class="store-actions">
+  <a class="change-store">{{ 'change store'|t }}</a>
+  <a class="store-on-map" href="{{ store.view_on_map_link }}">{{ 'View on map'|t }}</a>
+</div>
