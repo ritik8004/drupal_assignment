@@ -45,6 +45,10 @@
   }
 }
 
+.view-address-book {
+  padding-top: 1.5rem;
+}
+
 .address {
   .address--data {
     overflow: hidden;
@@ -146,30 +150,6 @@
       min-height: none;
       padding: 0;
       padding-#{$right}: 1.25rem;
-    }
-
-    .ajax-progress-throbber {
-      position: absolute;
-      top: 0.625rem;
-      #{$left}: 4.375rem;
-
-      .message {
-        display: none;
-      }
-
-      .throbber {
-        background-image: url(../imgs/icons/MC-loader.svg) !important;
-        background-position: $right center !important;
-        background-repeat: no-repeat !important;
-        background-size: 1.5rem;
-        padding-#{$left}: 0.625rem;
-        padding-#{$right}: 0.625rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        top: 0.625rem;
-        #{$left}: 4.375rem;
-      }
     }
   }
 
@@ -481,6 +461,7 @@
       .form-item--error-message {
         position: absolute;
         #{$left}: 0;
+        min-width: 20rem;
       }
     }
   }
@@ -573,6 +554,14 @@
   }
 }
 
+.path--user .address-book-address .form-item.form-type-select {
+  .select2-selection__arrow {
+    height: 2.188rem !important;
+    width: 2.188rem !important;
+    border-#{$left}: 0.0625rem solid $white-five;
+  }
+}
+
 .profile-address-book-edit-form,
 #address-book-form-open {
   .form-actions {
@@ -580,16 +569,6 @@
 
     input[disabled] {
       color: transparent !important;
-    }
-
-    .ajax-progress {
-      position: absolute;
-      top: 0.7rem;
-      left: 8%;
-
-      @include breakpoint($only-mobile) {
-        left: 46%;
-      }
     }
   }
 }
@@ -656,6 +635,33 @@
   .address-book-address {
     .country-code-prefix {
       margin-top: 1.5rem;
+    }
+  }
+}
+
+#edit-billing-address,
+#address-book-form-wrapper,
+#address_wrapper,
+#edit-field-address-wrapper {
+  .address-book-address {
+    .form-item.form-type-textfield {
+      label:last-of-type {
+        font-size: 1rem;
+        color: $greyish;
+        position: absolute;
+        #{$left}: 0;
+        top: -0.125rem;
+        transition: 0.2s ease all;
+      }
+
+      input:focus ~ label:last-of-type,
+      label.active-label:not(.error) {
+        top: -1.25em;
+        bottom: 0;
+        #{$left}: 0;
+        opacity: 1;
+        font-size: 0.75rem;
+      }
     }
   }
 }

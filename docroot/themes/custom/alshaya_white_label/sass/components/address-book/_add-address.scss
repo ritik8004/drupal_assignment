@@ -70,11 +70,11 @@
 
     .form-item {
       margin-top: 1rem;
-      padding-bottom: 1rem;
+      padding-bottom: 1.5rem;
 
       @include breakpoint($tablet) {
         margin-top: 0.5rem;
-        padding-bottom: 1rem;
+        padding-bottom: 2rem;
       }
 
       @include breakpoint($desktop) {
@@ -152,39 +152,6 @@
 
       @include breakpoint($tablet) {
         margin-top: 1.2rem;
-      }
-    }
-  }
-}
-
-// Making it more specific to address page.
-.c-address-book #block-alshaya-white-label-content {
-  .ajax-progress-throbber {
-    margin-bottom: 0.625rem;
-
-    .message {
-      display: none;
-    }
-
-    .throbber {
-      background-image: url(../imgs/icons/MC-loader.svg) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      #{$right}: 1rem;
-      margin-bottom: 0.625rem;
-    }
-  }
-
-  .form-actions {
-    .ajax-progress-throbber {
-      .throbber {
-        background-image: url(../imgs/icons/MC-loader-white.svg) !important;
       }
     }
   }

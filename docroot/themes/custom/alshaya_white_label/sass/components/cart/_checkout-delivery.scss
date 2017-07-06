@@ -441,6 +441,7 @@
 }
 
 // Adding throbber overlay for any ajax call on payment and checkout delivery page.
+.page-standard.c-address-book,
 .page-standard.user-page.checkout-payment,
 .page-standard.user-page.c-delivery-checkout {
   .ajax-progress-throbber {
