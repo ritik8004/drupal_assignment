@@ -79,11 +79,6 @@
         else if (e.target.className === 'store-on-map') {
           Drupal.checkoutClickCollect.storeViewOnMapSelected($(this), storeObj);
           $('a.stores-map-view').trigger('click');
-
-          /* $('#click-and-collect-list-view').hide();
-          $('#click-and-collect-map-view').show();
-          $('.stores-list-view').toggleClass('active');
-          $('.stores-map-view').toggleClass('active'); */
         }
         return false;
       });
@@ -153,15 +148,22 @@
           url: Drupal.url('click-and-collect/stores/cart/' + cartId + '/' + ascoords.lat + '/' + ascoords.lng),
           beforeSend: function (xmlhttprequest) {
             $('#click-and-collect-list-view').html(progressElement);
-            $('#click-and-collect-map-view > .geolocation-common-map-container').html(progressElement);
           },
           success: function (response) {
             storeList = response.raw;
             $('#click-and-collect-list-view').html(response.output);
-            $('#click-and-collect-map-view > .geolocation-common-map-locations').html(response.mapList);
-            var $element = $('#click-and-collect-list-view').find('.selected-store-location');
-            Drupal.click_collect.getFormattedAddress(ascoords.lat, ascoords.lng, $element);
-            Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
+            if (storeList !== null && storeList.length > 0) {
+              $('#click-and-collect-map-view > .geolocation-common-map-locations').html(response.mapList);
+              var $element = $('#click-and-collect-list-view').find('.selected-store-location');
+              Drupal.click_collect.getFormattedAddress(ascoords.lat, ascoords.lng, $element);
+              var map = Drupal.checkoutClickCollect.mapCreate();
+              Drupal.geolocation.removeMapMarker(map);
+              Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
+            }
+            else {
+              $('#click-and-collect-map-view').hide();
+            }
+
           },
           complete: function (xmlhttprequest, status) {
             if (status === 'error' || status === 'parsererror') {
@@ -222,9 +224,10 @@
     // Create/Get map object.
     var map = Drupal.checkoutClickCollect.mapCreate();
 
+    // Set the index to 0 to display marker label starting with 1.
+    index = 0;
+
     if (map) {
-      // Set the index to 0 to display marker label starting with 1.
-      index = 0;
       // Invoke function to add marker for each store.
       _.invoke(storeItems, Drupal.checkoutClickCollect.mapPushMarker, {geolocationMap: map});
     }
@@ -264,7 +267,6 @@
       infoWindowSolitary: true,
       label: (index).toString()
     };
-    // markerConfig.icon: param.geolocationMap.settings.google_map_settings.marker_icon_path;
     return Drupal.geolocation.setMapMarker(mapObj, markerConfig, false);
   };
 

@@ -27,12 +27,15 @@
           </div>
         </div>
         <div class="store-delivery-time">
-          <span class="label--delivery-time">{{ 'Collect in store from'|t }}</span>
-          <span class="delivery--time--value">{{ store.delivery_time }}</span>
+          {% if store.delivery_time %}
+            <span class="label--delivery-time">{{ 'Collect in store from'|t }}</span>
+            <span class="delivery--time--value">{{ store.delivery_time }}</span>
+          {% endif %}
         </div>
         <div class="store-actions">
           <a href="#" class="select-store">{{ 'select this store'|t }}</a>
-          <a href="#" class="store-on-map">{{ 'View on map'|t }}</a>
+          <a href="#" class="store-on-map desktop-only">{{ 'View on map'|t }}</a>
+          <a href="http://maps.google.com/?q={{ store.lat }},{{ store.lng }}" class="view-on-map mobile-only">{{ 'View on map'|t }}</a>
         </div>
       </li>
     {% endfor %}

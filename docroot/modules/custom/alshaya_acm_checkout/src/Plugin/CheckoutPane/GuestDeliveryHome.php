@@ -121,10 +121,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $complete_form['actions']['get_shipping_methods'] = [
       '#type' => 'button',
       '#value' => $this->t('deliver to this address'),
-      '#ajax' => [
+      /*'#ajax' => [
         'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
-      ],
+      ],*/
       '#weight' => -50,
     ];
 

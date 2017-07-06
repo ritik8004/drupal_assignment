@@ -8,4 +8,6 @@ pdp_click_collect_help_text:
 pdp_click_collect_select_option_text:
   value: '<p><span class="highlight">Select a size</span> to check stock availability near to you</p>'
   format: rich_text
+click_collect_sts: '2-3 days'
+click_collect_rnc: '1 hour'
 langcode: en

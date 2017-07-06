@@ -33,6 +33,20 @@ class ClickCollectConfigForm extends ConfigFormBase {
 
     $config = $this->config('alshaya_click_collect.settings');
 
+    $form['click_collect_sts'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Click and Collect STS (Ship to store)'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('click_collect_sts'),
+    ];
+
+    $form['click_collect_rnc'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Click and Collect R&C (Reach and collect)'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('click_collect_rnc'),
+    ];
+
     $form['pdp_click_collect_title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('PDP: Click and Collect title'),
@@ -86,6 +100,8 @@ class ClickCollectConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_click_collect.settings');
+    $config->set('click_collect_sts', $form_state->getValue('click_collect_sts'));
+    $config->set('click_collect_rnc', $form_state->getValue('click_collect_rnc'));
     $config->set('pdp_click_collect_title', $form_state->getValue('pdp_click_collect_title'));
     $config->set('pdp_click_collect_subtitle', $form_state->getValue('pdp_click_collect_subtitle'));
     $config->set('pdp_click_collect_unavailable', $form_state->getValue('pdp_click_collect_unavailable'));
