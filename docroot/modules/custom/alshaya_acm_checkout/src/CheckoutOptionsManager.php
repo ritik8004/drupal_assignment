@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_checkout;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -21,25 +20,15 @@ class CheckoutOptionsManager {
   protected $termStorage;
 
   /**
-   * The factory for configuration objects.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * CheckoutOptionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   EntityTypeManager object.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The factory for configuration objects.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
-    $this->configFactory = $config_factory;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
   }
 
@@ -59,12 +48,6 @@ class CheckoutOptionsManager {
    *   Term object.
    */
   public function loadShippingMethod($code, $name = '', $carrier_code = '', $method_code = '') {
-    // Simple check to avoid 500 errors. Might not come in production but
-    // issue might come during development.
-    if (empty($code)) {
-      return;
-    }
-
     // Clean the code every-time.
     $code = substr(str_replace(',', '_', $code), 0, 32);
 
@@ -264,26 +247,6 @@ class CheckoutOptionsManager {
     }
 
     return $term;
-  }
-
-  /**
-   * Function to get the click and collect method code.
-   *
-   * @return string|null
-   *   Click and collect method code.
-   */
-  public function getClickandColectShippingMethod() {
-    return $this->configFactory->get('alshaya_acm_checkout.settings')->get('click_collect_method');
-  }
-
-  /**
-   * Function to get the fully loaded term object for click and collect method.
-   *
-   * @return \Drupal\taxonomy\Entity\Term|null
-   *   Term object for the click and collect method.
-   */
-  public function getClickandColectShippingMethodTerm() {
-    return $this->loadShippingMethod($this->getClickandColectShippingMethod());
   }
 
 }
