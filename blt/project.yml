@@ -10,7 +10,6 @@ project:
 git:
   default_branch: develop
   remotes:
-#    - 'alshayasde@svn-6182.devcloud.hosting.acquia.com:alshayasde.git'
     - 'alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git'
 drush:
   aliases:
@@ -51,6 +50,9 @@ modules:
   test:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
+  prod:
+    enable: [acquia_connector, shield]
+    uninstall: [devel, views_ui]
   uat:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
@@ -58,9 +60,6 @@ modules:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
   pprod:
-    enable: [acquia_connector, shield]
-    uninstall: [devel, views_ui]
-  prod:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
 behat:
@@ -74,3 +73,4 @@ multisite:
     - g
 cm:
   strategy: features
+
