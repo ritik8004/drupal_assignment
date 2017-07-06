@@ -157,6 +157,11 @@ class AcqPromotionsManager {
       $node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
     }
 
+    // Check promotion action type & store in Drupal.
+    if (!empty($promotion['action'])) {
+      $node->get('field_acq_promotion_action')->setValue($promotion['action']);
+    }
+
     // Add SKU ID's to promotion.
     if (!empty($promotion['products'])) {
       // Assign value to $node object.
