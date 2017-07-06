@@ -5,6 +5,8 @@ dependencies:
     - field.field.node.acq_promotion.field_acq_promotion_banner
     - field.field.node.acq_promotion.field_acq_promotion_data
     - field.field.node.acq_promotion.field_acq_promotion_description
+    - field.field.node.acq_promotion.field_acq_promotion_disc_type
+    - field.field.node.acq_promotion.field_acq_promotion_discount
     - field.field.node.acq_promotion.field_acq_promotion_label
     - field.field.node.acq_promotion.field_acq_promotion_rule_id
     - field.field.node.acq_promotion.field_acq_promotion_sku
@@ -43,6 +45,8 @@ content:
 hidden:
   field_acq_promotion_banner: true
   field_acq_promotion_data: true
+  field_acq_promotion_disc_type: true
+  field_acq_promotion_discount: true
   field_acq_promotion_rule_id: true
   field_acq_promotion_sku: true
   field_acq_promotion_type: true

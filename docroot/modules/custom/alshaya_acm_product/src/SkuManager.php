@@ -164,6 +164,32 @@ class SkuManager {
   }
 
   /**
+   * Helper function to build discounted price for Sku in cart.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   Sku entity from cart for which discount needs to be calculated.
+   * @param int $item_quantity
+   *   Item quantity as in the cart.
+   * @param float $item_price
+   *   Unit price for the sku item in the cart.
+   *
+   * @return mixed
+   *   Calculated cart item price.
+   */
+  public function buildCartItemPrice(SKU $sku_entity, $item_quantity, $item_price) {
+    $sku_cart_price['price'] = (float) $sku_entity->get('price')->getString() * $item_quantity;
+    $final_price = (float) $item_price * $item_quantity;
+
+    if ($final_price !== $sku_cart_price['price']) {
+      $sku_cart_price['final_price'] = $final_price;
+      $discount = (($sku_cart_price['price'] - $final_price) * 100 / $sku_cart_price['price']);
+      $sku_cart_price['discount'] = t('Save @discount', ['@discount' => $discount . '%']);
+    }
+
+    return $sku_cart_price;
+  }
+
+  /**
    * Helper function to fetch sku from entity id rather than loading the SKU.
    *
    * @param int $sku_entity_id
@@ -280,7 +306,8 @@ class SkuManager {
         // translation for $langcode.
         $promotion = $this->entityRepository->getTranslationFromContext($promotion, $langcode);
         $promotion_text = $promotion->get('field_acq_promotion_label')->getValue();
-
+        $discount_type = $promotion->get('field_acq_promotion_disc_type')->getValue();
+        $discount_value = $promotion->get('field_acq_promotion_discount')->getValue();
         /* @var \Drupal\node\Entity\Node $promotion */
         if ($getLinks) {
           $promos[$promotion->id()] = $promotion->toLink($promotion_text[0]['value'])->toString()->getGeneratedLink();
@@ -290,6 +317,8 @@ class SkuManager {
           $promos[$promotion->id()] = [
             'text' => array_shift($promotion_text),
             'description' => array_shift($descriptions),
+            'discount_type' => array_shift($discount_type),
+            'discount_value' => array_shift($discount_value),
           ];
         }
       }

@@ -750,6 +750,10 @@ body.alias--cart {
     table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
       td {
         color: $scarlet;
+
+        &:nth-child(2) {
+          background: $white-five;
+        }
       }
 
       td:first-child {
@@ -782,13 +786,50 @@ body.alias--cart {
     .cart-promotions {
       .tooltip--head::after {
         position: absolute;
-        #{$right}: 0;
-        top: -0.25rem;
+        #{$right}: -0.625rem;
+        top: -0.0625rem;
+
+        @include breakpoint($desktop) {
+          #{$right}: -1.4rem;
+        }
       }
 
       .tooltip {
-        #{$left}: -2rem;
-        top: 1.3rem;
+        #{$left}: 0.8rem;
+        top: 1.5rem;
+
+        @include breakpoint (($only-mobile) (orientation landscape)) {
+          #{$left}: 10.8rem;
+        }
+
+        @include breakpoint($tablet) {
+          #{$left}: -4.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          #{$left}: 10rem;
+          top: -1.2rem;
+        }
+
+        &::before {
+          @include breakpoint($desktop) {
+            #{$right}: 10.75rem;
+            top: 1.9em;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-#{$right}: 8px solid $cerulean-two;
+          }
+        }
+
+        &::after {
+          @include breakpoint($desktop) {
+            #{$right}: 10.6975rem;
+            top: 1.9em;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-#{$right}: 8px solid $alice-blue;
+          }
+        }
       }
     }
 
@@ -968,6 +1009,7 @@ body.alias--cart {
       text-align: center;
       vertical-align: middle;
       padding: 0.6rem 1.125rem;
+      max-height: 2.188rem;
     }
   }
 }
@@ -1029,4 +1071,17 @@ body.alias--cart {
 
 body.path--cart .c-content__region {
   position: relative;
+}
+
+html[lang=ar] {
+  .alias--cart #table-cart-totals .cart-promotions .tooltip {
+    @include breakpoint (($only-mobile) (orientation portrait)) {
+      right: -0.7rem;
+      top: 1.6rem;
+    }
+
+    @include breakpoint (($only-mobile) (orientation landscape)) {
+      #{$left}: 7.8rem;
+    }
+  }
 }
