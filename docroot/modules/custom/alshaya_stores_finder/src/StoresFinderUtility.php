@@ -251,6 +251,13 @@ class StoresFinderUtility {
       $node->get('field_store_address')->setValue('');
     }
 
+    if (isset($store['sts_delivery_time_label'])) {
+      $node->get('field_store_sts_label')->setValue($store['sts_delivery_time_label']);
+    }
+    else {
+      $node->get('field_store_sts_label')->setValue('');
+    }
+
     $open_hours = [];
 
     foreach ($store['store_hours'] as $store_hour) {
