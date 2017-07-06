@@ -115,17 +115,11 @@
 
   // Success callback.
   Drupal.checkoutClickCollect.locationSuccess = function (position) {
-
-    /* ascoords = {
-     lat: position.coords.latitude,
-     lng: position.coords.longitude
-     }; */
-    geoPerm = true;
-
     ascoords = {
-      lat: 29.3204817,
-      lng: 48.04878039999994
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
     };
+    geoPerm = true;
     Drupal.checkoutClickCollect.storeListAll(ascoords);
   };
 
