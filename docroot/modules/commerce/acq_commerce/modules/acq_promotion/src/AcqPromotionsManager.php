@@ -178,8 +178,10 @@ class AcqPromotionsManager {
     // promotion labels.
     foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
       if ($langcode !== $site_default_langcode) {
-        $node_translation = $node->getTranslation($langcode);
-        if (!$node_translation) {
+        if ($node->hasTranslation($langcode)) {
+          $node_translation = $node->getTranslation($langcode);
+        }
+        else {
           $node_translation = $node->addTranslation($langcode);
         }
         $node_translation->get('field_acq_promotion_label')->setValue($promotion_label_languages[$langcode]);

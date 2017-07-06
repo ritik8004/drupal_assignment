@@ -177,22 +177,13 @@ class SkuManager {
    *   Calculated cart item price.
    */
   public function buildCartItemPrice(SKU $sku_entity, $item_quantity, $item_price) {
-    $sku_cart_price['price'] = $item_quantity * $item_price;
-    $final_price = $sku_cart_price['price'];
-    // Fetch any category promotions applicable to this item.
-    $promotion_types = ['category'];
-    $promotions = $this->getPromotionsFromSkuId($sku_entity, FALSE, $promotion_types);
+    $sku_cart_price['price'] = (float) $sku_entity->get('price')->getString() * $item_quantity;
+    $final_price = (float) $item_price * $item_quantity;
 
-    if (!empty($promotions)) {
-      foreach ($promotions as $promotion_id => $promotion) {
-        if ($promotion['discount_type']['value'] === 'percentage') {
-          $sku_cart_price['discounts'][$promotion_id] = t('Save @discount', ['@discount' => $promotion['discount_value']['value'] . '%']);
-          $final_price -= (($final_price * $promotion['discount_value']['value']) / 100);
-        }
-      }
-      if ($final_price !== $sku_cart_price['price']) {
-        $sku_cart_price['final_price'] = $final_price;
-      }
+    if ($final_price !== $sku_cart_price['price']) {
+      $sku_cart_price['final_price'] = $final_price;
+      $discount = (($sku_cart_price['price'] - $final_price) * 100 / $sku_cart_price['price']);
+      $sku_cart_price['discount'] = t('Save @discount', ['@discount' => $discount . '%']);
     }
 
     return $sku_cart_price;
