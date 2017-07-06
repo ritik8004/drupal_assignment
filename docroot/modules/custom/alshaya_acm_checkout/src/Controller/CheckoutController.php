@@ -90,7 +90,7 @@ class CheckoutController implements ContainerInjectionInterface {
   public function useAddress(Profile $profile) {
     $cart = $this->cartStorage->getCart();
 
-    $address = $this->addressBookManager->getAddressFromEntity($profile, FALSE);
+    $address = $this->addressBookManager->getAddressFromEntity($profile);
 
     $update = [];
     $update['customer_address_id'] = $address['customer_address_id'];
@@ -114,7 +114,7 @@ class CheckoutController implements ContainerInjectionInterface {
    *   AjaxResponse object.
    */
   public function editAddress(Profile $profile) {
-    $magento_address = $this->addressBookManager->getAddressFromEntity($profile, FALSE);
+    $magento_address = $this->addressBookManager->getAddressFromEntity($profile);
     $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($magento_address);
 
     $address['id'] = $magento_address['address_id'];
