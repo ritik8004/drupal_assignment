@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f80e3dc6c883fd23d60e0e6999d6b7f4",
+    "content-hash": "28b228d1c2233fbb1a917ffda797edd0",
     "packages": [
         {
             "name": "acquia/blt",
@@ -6087,7 +6087,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/search_api_solr_multilingual-8.x-1.0-beta3.zip",
-                "reference": "8.x-1.0-beta3",
+                "reference": null,
                 "shasum": "ee105412f8c40311bc197ea08e4504c15bdc2816"
             },
             "require": {
@@ -6106,7 +6106,8 @@
                 },
                 "patches_applied": {
                     "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
-                    "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
+                    "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch",
+                    "Disable field type check on Acquia Search": "patches/search_api_solr_multilingual--disable-field-type-check.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6520,7 +6521,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486729083"
+                    "datestamp": "1486726083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6534,10 +6535,6 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
-                },
-                {
-                    "name": "miteshmap",
-                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
