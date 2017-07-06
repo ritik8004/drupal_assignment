@@ -546,14 +546,20 @@ function alshaya_acm_get_product_stock(SKU $sku_entity, $reset = FALSE) {
   if ($reset || !isset($stock[$sku_entity->getSku()])) {
     $stock[$sku_entity->getSku()] = NULL;
 
-    // Stock check.
-    $sku_stock = acq_sku_get_sku_stock($sku_entity, $reset);
+    try {
+      // Stock check.
+      $sku_stock = acq_sku_get_sku_stock($sku_entity, $reset);
 
-    if (empty($sku_stock) || (!empty($sku_stock) && !$sku_stock['is_in_stock'])) {
-      $stock[$sku_entity->getSku()] = NULL;
+      if (empty($sku_stock) || (!empty($sku_stock) && !$sku_stock['is_in_stock'])) {
+        $stock[$sku_entity->getSku()] = NULL;
+      }
+      elseif (isset($sku_stock['is_in_stock'])) {
+        $stock[$sku_entity->getSku()] = $sku_stock;
+      }
     }
-    elseif (isset($sku_stock['is_in_stock'])) {
-      $stock[$sku_entity->getSku()] = $sku_stock;
+    catch (\Exception $e) {
+      // Error is already logged so we just suppress it here and don't pass
+      // in frontend.
     }
   }
   return $stock[$sku_entity->getSku()];
