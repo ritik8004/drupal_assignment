@@ -621,6 +621,11 @@
         border-bottom: 1px solid $whisper-dark;
         position: relative;
 
+        @include breakpoint($only-tablet) {
+          display: table;
+          width: 100%;
+        }
+
         @include breakpoint($desktop) {
           width: 921px;
         }
@@ -652,7 +657,7 @@
           }
 
           @include breakpoint($only-tablet) {
-            width: 10.5rem;
+            width: 32%;
             height: 96px;
             padding-#{$left}: 0.5rem;
 
@@ -674,7 +679,14 @@
           height: 96px;
 
           @include breakpoint($only-tablet) {
-            width: 13.5rem;
+            width: 40%;
+
+            .order-name {
+              width: 100%;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
 
           @include breakpoint($only-mobile) {
@@ -705,6 +717,12 @@
           }
         }
 
+        .fourth {
+          @include breakpoint($only-tablet) {
+            width: 28%;
+          }
+        }
+
         > div {
           padding: 0;
           display: table-cell;
@@ -713,6 +731,10 @@
           > div {
             padding: 0 16px;
             white-space: nowrap;
+
+            @include breakpoint($only-tablet) {
+              white-space: normal;
+            }
           }
         }
 
