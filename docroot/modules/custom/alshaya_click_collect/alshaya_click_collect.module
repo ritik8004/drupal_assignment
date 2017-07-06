@@ -56,6 +56,13 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['click_collect_store_info_window_list'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'stores' => NULL,
+    ],
+  ];
+
   $items['click_collect_selected_store'] = [
     'render element' => 'elements',
     'variables' => [

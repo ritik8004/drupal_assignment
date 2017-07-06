@@ -88,6 +88,17 @@
         return false;
       });
 
+      // Select this store and view on map.
+      $('#click-and-collect-map-view', context).once('bind-events').on('click', 'a.select-store', function (e) {
+        e.preventDefault();
+        // Choose the selected store to proceed with checkout.
+        if (e.target.className === 'select-store') {
+          // Find the store object with the given store-code from the store list.
+          var storeObj = _.findWhere(storeList, {code: $(this).data('store-code')});
+          Drupal.checkoutClickCollect.storeSelectedStore($(this), storeObj);
+        }
+      });
+
       $('#selected-store-wrapper', context).once('bind-events').on('click', 'a.change-store', function (e) {
         if (e.target.className === 'change-store') {
           $('#selected-store-wrapper').hide();
@@ -148,11 +159,22 @@
           url: Drupal.url('click-and-collect/stores/cart/' + cartId + '/' + ascoords.lat + '/' + ascoords.lng),
           beforeSend: function (xmlhttprequest) {
             $('#click-and-collect-list-view').html(progressElement);
+            $('#click-and-collect-map-view > .geolocation-common-map-container').html(progressElement);
           },
           success: function (response) {
             storeList = response.raw;
             $('#click-and-collect-list-view').html(response.output);
+            $('#click-and-collect-map-view > .geolocation-common-map-locations').html(response.mapList);
+            var $element = $('#click-and-collect-list-view').find('.selected-store-location');
+            Drupal.click_collect.getFormattedAddress(ascoords.lat, ascoords.lng, $element);
             Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
+          },
+          complete: function (xmlhttprequest, status) {
+            if (status === 'error' || status === 'parsererror') {
+              $('#click-and-collect-list-view').html(Drupal.t('There\'s some error'));
+              $('#click-and-collect-map-view').html(Drupal.t('There\'s some error'));
+              throw new Error(Drupal.t('The callback URL is not working: !url', {'!url': 'test'}));
+            }
           }
         });
       }
@@ -173,6 +195,11 @@
         $('#selected-store-wrapper > #selected-store-content').html(response.output);
         $('#selected-store-wrapper').show();
         $('#store-finder-wrapper').hide();
+      },
+      complete: function (xmlhttprequest, status) {
+        if (status === 'error' || status === 'parsererror') {
+          $('#selected-store-wrapper > #selected-store-content').html(Drupal.t('There\'s some error'));
+        }
       }
     });
   };
@@ -232,12 +259,13 @@
   // Create marker on map for the given store object.
   Drupal.checkoutClickCollect.mapCreateMarker = function (store, mapObj, index) {
     // Copied from /contrib/geolocation/js/geolocation-common-map.js.
+    var locationEle = $('.geolocation-common-map-locations').find('.geolocation[data-store-code="' + store.code + '"]');
     var position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
     var markerConfig = {
       position: position,
       map: mapObj.googleMap,
       title: store.name,
-      infoWindowContent: store.address,
+      infoWindowContent: locationEle.html(),
       infoWindowSolitary: true,
       label: (index).toString()
     };
