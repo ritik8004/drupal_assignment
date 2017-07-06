@@ -16,5 +16,6 @@ alshaya_master.404_maintenance_setting:
   path: '/admin/config/404-maintenance-settings'
   defaults:
     _form: '\Drupal\alshaya_master\Form\Alshaya404MaintenanceSettings'
+    _title: 'Alshaya 404 and maintenance mode settings'
   requirements:
-    _permission: 'administer content'
+    _permission: 'administer site configuration'

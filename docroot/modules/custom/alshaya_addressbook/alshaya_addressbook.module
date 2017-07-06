@@ -384,7 +384,7 @@ function _alshaya_addressbook_area_list($country_code = 'KW') {
     /* \Drupal\taxonomy\Entity\Term $term */
     foreach ($term_tree as $term) {
       $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-      $area_list[$term->id()] = $term->getName();
+      $area_list[$term->getName()] = $term->getName();
     }
   }
 
@@ -626,5 +626,5 @@ function _alshaya_addressbook_get_area_from_id($tid) {
     return $term->getName();
   }
 
-  return '';
+  return $tid;
 }

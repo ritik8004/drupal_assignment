@@ -267,9 +267,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $skuManager->buildPrice($build, $sku_entity);
     }
     elseif ($view_mode == 'modal') {
-      // Get the image.
-      // @TODO: We need to display the full slider and zoom box.
-      // $build['image_url'] = NULL.
       alshaya_acm_product_get_gallery($build, $sku_entity);
       $skuManager->buildPrice($build, $sku_entity);
       $build['item_code']['#markup'] = $sku;

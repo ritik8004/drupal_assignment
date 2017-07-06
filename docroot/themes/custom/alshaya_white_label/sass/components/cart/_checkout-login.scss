@@ -172,13 +172,13 @@
       @include breakpoint($tablet) {
         position: absolute;
         bottom: 1.5em;
-        #{$left}: 13em;
+        #{$left}: 15em;
         width: auto;
         font-size: 0.75rem;
       }
 
       @include breakpoint($desktop) {
-        #{$left}: 18em;
+        #{$left}: 20em;
       }
     }
 

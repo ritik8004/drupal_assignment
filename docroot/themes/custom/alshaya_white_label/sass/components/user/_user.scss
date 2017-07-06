@@ -865,6 +865,7 @@
       padding-bottom: 0.5rem;
       font-size: 1.25rem;
       letter-spacing: 0.312rem;
+      line-height: 1.2;
     }
 
     .form-item--error-message {
@@ -970,11 +971,14 @@
       p,
       ul {
         display: inline-block;
-        width: 50%;
         font-size: 12px;
         margin: 0;
         padding-#{$left}: 0;
         vertical-align: top;
+
+        @include breakpoint($tablet) {
+          width: 50%;
+        }
 
         @include breakpoint($desktop) {
           float: $left;
@@ -991,12 +995,22 @@
           margin-top: 0.375rem;
         }
 
+        @include breakpoint($only-tablet) {
+          float: $right;
+        }
+
         @include breakpoint($desktop) {
           width: 65%;
           margin-#{$left}: 0;
           padding-#{$left}: 0;
           font-size: 0;
           margin-top: 2px;
+        }
+      }
+
+      p {
+        @include breakpoint($only-tablet) {
+          float: $left;
         }
       }
 
@@ -1010,8 +1024,12 @@
 
       li {
         list-style: none;
-        margin-bottom: 21px;
-        font-size: 12px;
+        margin-bottom: 1.5625rem;
+        font-size: 0.75rem;
+
+        @include breakpoint($tablet) {
+          margin-bottom: 1.3125rem;
+        }
 
         @include breakpoint($desktop) {
           display: inline-block;
@@ -1053,9 +1071,13 @@
 
         @include icon(infomation, before) {
           font-size: 1.8rem;
-          margin-#{$right}: 1rem;
+          margin-#{$right}: 0.8rem;
           vertical-align: bottom;
           line-height: 25px;
+
+          @include breakpoint($tablet) {
+            margin-#{$right}: 1rem;
+          }
 
           @include breakpoint($desktop) {
             margin-#{$right}: 0.675rem;

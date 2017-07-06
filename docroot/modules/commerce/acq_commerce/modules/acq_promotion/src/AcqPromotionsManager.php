@@ -150,6 +150,13 @@ class AcqPromotionsManager {
       $node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
     }
 
+    // Set promotion type to percent & discount value depending on the promotion
+    // being imported.
+    if (($promotion['type'] === 'NO_COUPON') && isset($promotion['action']) && ($promotion['action'] === 'by_percent')) {
+      $node->get('field_acq_promotion_disc_type')->setValue('percentage');
+      $node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
+    }
+
     // Add SKU ID's to promotion.
     if (!empty($promotion['products'])) {
       // Assign value to $node object.
@@ -162,7 +169,6 @@ class AcqPromotionsManager {
         }
       }
     }
-
     // Invoke the alter hook to allow modules to update the node from API data.
     \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $node, $promotion);
 
@@ -172,7 +178,12 @@ class AcqPromotionsManager {
     // promotion labels.
     foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
       if ($langcode !== $site_default_langcode) {
-        $node_translation = $node->addTranslation($langcode);
+        if ($node->hasTranslation($langcode)) {
+          $node_translation = $node->getTranslation($langcode);
+        }
+        else {
+          $node_translation = $node->addTranslation($langcode);
+        }
         $node_translation->get('field_acq_promotion_label')->setValue($promotion_label_languages[$langcode]);
         $node_translation->save();
       }

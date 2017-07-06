@@ -5,13 +5,12 @@
   #{$right}: -0.25rem;
 
   @include breakpoint($tablet) {
-    top: 3.3rem;
-    #{$right}: -0.125rem;
+    top: 3.5rem;
+    #{$right}: 0.1125rem;
   }
 
   @include breakpoint($desktop) {
     top: 3.7rem;
-    #{$right}: -0.1875rem;
   }
 
   &.has--notification::before {
@@ -60,7 +59,8 @@
       font-size: 0.688rem;
       float: $left;
       width: 9.5rem;
-      margin-#{left}: 0.6875rem;
+      margin-#{$left}: 0.6875rem;
+      text-align: $left;
 
       .name {
         font-family: $alshaya-thin;
@@ -69,6 +69,7 @@
         width: 100%;
         display: block;
         margin-bottom: 5px;
+        text-align: $left;
       }
 
       a {
@@ -91,6 +92,11 @@
 }
 
 html[lang=ar] #cart_notification {
+  @include breakpoint($tablet) {
+    top: 4.2rem;
+    #{$right}: 0.1125rem;
+  }
+
   .notification,
   .error {
     &::before {

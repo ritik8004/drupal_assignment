@@ -106,10 +106,25 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     if (is_array($item) && isset($item['quantity'])) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku_entity */
       $sku_entity = SKU::loadFromSku($id);
+      $is_item_free = FALSE;
 
-      $item['price'] = [
-        '#markup' => alshaya_acm_price_format($cart_item[$id]['price']),
-      ];
+      // Check if a discount equal to the price of product was applied.
+      if ($cart_item[$id]['discount_amount'] === $cart_item[$id]['price']) {
+        $is_item_free = TRUE;
+      }
+
+      if ($is_item_free) {
+        $item['price'] = [
+          '#markup' => alshaya_acm_price_format($cart_item[$id]['price']) . '</div>',
+          '#prefix' => '<div class="has--special--price">',
+          '#suffix' => '</div>',
+        ];
+      }
+      else {
+        $item['price'] = [
+          '#markup' => alshaya_acm_price_format($cart_item[$id]['price']),
+        ];
+      }
 
       $item['name'] = _alshaya_acm_update_product_name($sku_entity, $item, $cart_item[$id]);
 
@@ -150,9 +165,26 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       _alshaya_acm_check_cart_item_stock($sku_entity, $item, $out_of_stock_message);
 
       // Add sub total price of product.
-      $item['sub_total'] = [
-        '#markup' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item[$id]['price']),
-      ];
+      if ($is_item_free) {
+        $item['sub_total'] = [
+          '#markup' => '<div class="final-price">FREE</div>',
+        ];
+      }
+      else {
+        $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+        $item_quantity = $item['quantity']['#default_value'];
+        $item_price = $cart_item[$id]['price'];
+        $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $item_quantity, $item_price);
+        $item['sub_total'] = [
+          '#theme' => 'acq_commerce_price',
+          '#price' => $item_cart_price['price'],
+        ];
+
+        if ($item_cart_price['discount']) {
+          $item['sub_total']['#discount'] = $item_cart_price['discount'];
+          $item['sub_total']['#final_price'] = $item_cart_price['final_price'];
+        }
+      }
 
       // Adding class attribute to columns for mobile view.
       $item['name']['#wrapper_attributes'] = ['class' => ['name']];
@@ -546,14 +578,20 @@ function alshaya_acm_get_product_stock(SKU $sku_entity, $reset = FALSE) {
   if ($reset || !isset($stock[$sku_entity->getSku()])) {
     $stock[$sku_entity->getSku()] = NULL;
 
-    // Stock check.
-    $sku_stock = acq_sku_get_sku_stock($sku_entity, $reset);
+    try {
+      // Stock check.
+      $sku_stock = acq_sku_get_sku_stock($sku_entity, $reset);
 
-    if (empty($sku_stock) || (!empty($sku_stock) && !$sku_stock['is_in_stock'])) {
-      $stock[$sku_entity->getSku()] = NULL;
+      if (empty($sku_stock) || (!empty($sku_stock) && !$sku_stock['is_in_stock'])) {
+        $stock[$sku_entity->getSku()] = NULL;
+      }
+      elseif (isset($sku_stock['is_in_stock'])) {
+        $stock[$sku_entity->getSku()] = $sku_stock;
+      }
     }
-    elseif (isset($sku_stock['is_in_stock'])) {
-      $stock[$sku_entity->getSku()] = $sku_stock;
+    catch (\Exception $e) {
+      // Error is already logged so we just suppress it here and don't pass
+      // in frontend.
     }
   }
   return $stock[$sku_entity->getSku()];
