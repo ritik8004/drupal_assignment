@@ -98,6 +98,22 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div id="selected-store-content" class="selected-store-content"></div>',
     ];
 
+    $pane_form['selected_store']['mobile_number'] = [
+      '#type' => 'mobile_number',
+      '#title' => t('Mobile Number'),
+      '#verify' => 0,
+      '#tfa' => 0,
+      '#required' => TRUE,
+    ];
+
+    $pane_form['selected_store']['store_code'] = [
+      '#type' => 'hidden',
+    ];
+
+    $pane_form['selected_store']['shipping_type'] = [
+      '#type' => 'hidden',
+    ];
+
     $pane_form['#attached'] = [
       'drupalSettings' => [
         'geolocation' => [
@@ -131,6 +147,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         'alshaya_click_collect/click-and-collect.checkout',
       ],
     ];
+
+    $complete_form['actions']['next']['#limit_validation_errors'] = [['address', 'selected_store']];
 
     return $pane_form;
   }

@@ -68,7 +68,6 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
     'render element' => 'elements',
     'variables' => [
       'store' => NULL,
-      'fields' => NULL,
     ],
   ];
 

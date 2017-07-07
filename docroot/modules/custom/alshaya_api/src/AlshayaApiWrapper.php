@@ -121,7 +121,7 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
-    if (\Drupal::state()->get('store_development_mode', 0) || empty($lat) || empty($long)) {
+    if (\Drupal::state()->get('store_development_mode', 0) || empty($lat) || empty($lon)) {
       $lat = 29;
       $lon = 48;
     }

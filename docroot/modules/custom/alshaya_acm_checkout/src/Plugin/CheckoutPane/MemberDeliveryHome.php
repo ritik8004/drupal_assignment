@@ -181,7 +181,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#suffix' => '</div>',
     ];
 
-    $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
+    $complete_form['actions']['next']['#limit_validation_errors'] = [['address', 'selected_store']];
 
     $complete_form['actions']['back_to_basket'] = [
       '#type' => 'link',

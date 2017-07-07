@@ -172,43 +172,27 @@ class ClickCollectController extends ControllerBase {
   public function selectedStore() {
     // Get all the post data, which contains store information passed in ajax.
     $store = \Drupal::request()->request->all();
+
     $output = t("There's no store selected.");
     if (!empty($store)) {
-      $elements['store_code'] = [
-        '#type' => 'hidden',
-        '#name' => 'store_code',
-        '#value' => $store['code'],
-      ];
-
       $ship_type = '';
       if (!empty($store['sts_available'])) {
         $ship_type = 'ship_to_store';
       }
       elseif (!empty($store['rnc_available'])) {
-        $ship_type = 'reach_and_collect';
+        $ship_type = 'reserve_and_collect';
       }
-
-      $elements['click_and_collect_type'] = [
-        '#type' => 'hidden',
-        '#name' => 'click_and_collect_type',
-        '#value' => $ship_type,
-      ];
-
-      $elements['contact_number'] = [
-        '#type' => 'mobile_number',
-        '#name' => 'contact number',
-        '#value' => '',
-      ];
-
-      $build = [
+      $build['selected_store'] = [
         '#theme' => 'click_collect_selected_store',
         '#store' => $store,
-        '#fields' => render($elements),
       ];
       $output = render($build);
     }
-
-    return new JsonResponse(['output' => render($build), 'raw' => $store]);
+    return new JsonResponse([
+      'output' => $output,
+      'raw' => $store,
+      'shipping_type' => $ship_type,
+    ]);
   }
 
   /**

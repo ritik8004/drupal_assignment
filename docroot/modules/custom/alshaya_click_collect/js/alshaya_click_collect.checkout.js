@@ -41,9 +41,13 @@
         if ($(this).hasClass('tab-click-collect') && $('#click-and-collect-list-view').html().length <= 0) {
           // Display the loader.
           $('#click-and-collect-list-view').html(progressElement);
+          $('[data-drupal-selector="edit-actions-get-shipping-methods"]').hide();
 
           // Get the permission track the user location.
           Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+        }
+        else if ($(this).hasClass('tab-home-delivery')) {
+          $('[data-drupal-selector="edit-actions-get-shipping-methods"]').show();
         }
       });
 
@@ -191,6 +195,9 @@
         $('#selected-store-wrapper > #selected-store-content').html(response.output);
         $('#selected-store-wrapper').show();
         $('#store-finder-wrapper').hide();
+        $('#selected-store-wrapper').find('input[name="store_code"]').val(StoreObj.code);
+        $('#selected-store-wrapper').find('input[name="shipping_type"]').val(response.shipping_type);
+        $('input[data-drupal-selector="edit-actions-next"]').show();
       },
       complete: function (xmlhttprequest, status) {
         if (status === 'error' || status === 'parsererror') {
