@@ -73,9 +73,8 @@
         // Find the store object with the given store-code from the store list.
         var storeObj = _.findWhere(storeList, {code: $(this).closest('li').data('store-code')});
         // Choose the selected store to proceed with checkout.
-        if (e.target.classList[0] === 'select-store') {
+        if (e.target.className === 'select-store') {
           Drupal.checkoutClickCollect.storeSelectedStore($(this), storeObj);
-          $(this).addClass('ajax-ladda-spinner');
         } // Choose the selected store to display on map.
         else if (e.target.className === 'store-on-map') {
           Drupal.checkoutClickCollect.storeViewOnMapSelected($(this), storeObj);
@@ -93,7 +92,7 @@
       $('#click-and-collect-map-view', context).once('bind-events').on('click', 'a.select-store', function (e) {
         e.preventDefault();
         // Choose the selected store to proceed with checkout.
-        if (e.target.classList[0] === 'select-store') {
+        if (e.target.className === 'select-store') {
           // Find the store object with the given store-code from the store list.
           var storeObj = _.findWhere(storeList, {code: $(this).data('store-code')});
           Drupal.checkoutClickCollect.storeSelectedStore($(this), storeObj);
