@@ -114,6 +114,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         $is_item_free = TRUE;
       }
 
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item[$id]['price']);
+
       if ($is_item_free) {
         $item['price'] = [
           '#markup' => alshaya_acm_price_format($cart_item[$id]['price']) . '</div>',
@@ -123,8 +126,14 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       }
       else {
         $item['price'] = [
-          '#markup' => alshaya_acm_price_format($cart_item[$id]['price']),
+          '#theme' => 'acq_commerce_price',
+          '#price' => $item_cart_price['price'],
         ];
+
+        if ($item_cart_price['discount']) {
+          $item['price']['#discount'] = $item_cart_price['discount'];
+          $item['price']['#final_price'] = $item_cart_price['final_price'];
+        }
       }
       $cart_rules = $cart->getCart()->cart_rules;
       $item['name'] = _alshaya_acm_update_product_name($sku_entity, $item, $cart_item[$id], $is_item_free, $cart_rules);
@@ -172,19 +181,12 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ];
       }
       else {
-        $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $item_quantity = $item['quantity']['#default_value'];
-        $item_price = $cart_item[$id]['price'];
-        $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $item_quantity, $item_price);
+        $item_price = $cart_item[$id]['price'] * $item_quantity;
         $item['sub_total'] = [
-          '#theme' => 'acq_commerce_price',
+          '#markup' => alshaya_acm_price_format($item_price),
           '#price' => $item_cart_price['price'],
         ];
-
-        if (!empty($item_cart_price['discount'])) {
-          $item['sub_total']['#discount'] = $item_cart_price['discount'];
-          $item['sub_total']['#final_price'] = $item_cart_price['final_price'];
-        }
       }
 
       // Adding class attribute to columns for mobile view.

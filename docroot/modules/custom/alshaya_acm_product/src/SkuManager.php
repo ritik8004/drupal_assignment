@@ -192,20 +192,18 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   Sku entity from cart for which discount needs to be calculated.
-   * @param int $item_quantity
-   *   Item quantity as in the cart.
    * @param float $item_price
    *   Unit price for the sku item in the cart.
    *
    * @return mixed
    *   Calculated cart item price.
    */
-  public function buildCartItemPrice(SKU $sku_entity, $item_quantity, $item_price) {
-    $sku_cart_price['price'] = (float) $sku_entity->get('price')->getString() * $item_quantity;
-    $final_price = (float) $item_price * $item_quantity;
+  public function buildCartItemPrice(SKU $sku_entity, $item_price) {
+    $sku_cart_price['price'] = (float) $sku_entity->get('price')->getString();
+    $final_price = (float) $item_price;
 
     if ($final_price !== $sku_cart_price['price']) {
-      $sku_cart_price['final_price'] = $final_price;
+      $sku_cart_price['final_price'] = number_format($final_price, 3);
       $discount = (($sku_cart_price['price'] - $final_price) * 100 / $sku_cart_price['price']);
       $sku_cart_price['discount'] = t('Save @discount', ['@discount' => $discount . '%']);
     }
