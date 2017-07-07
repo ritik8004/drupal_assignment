@@ -61,6 +61,13 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#attributes' => [
         'id' => 'address-book-form-wrapper',
       ],
+      '#attached' => [
+        'library' => [
+          'core/drupal.form',
+          'alshaya_white_label/convert_to_select2',
+          'clientside_validation_jquery/cv.jquery.validate',
+        ],
+      ],
     ];
 
     $pane_form['address_form']['title'] = [
