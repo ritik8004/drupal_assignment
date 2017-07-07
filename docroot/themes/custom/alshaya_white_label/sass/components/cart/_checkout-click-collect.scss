@@ -387,8 +387,11 @@
                 border-color: $pumpkin-orange;
               }
 
-              .ladda-label {
-                pointer-events: none;
+              &.ajax-ladda-spinner {
+                background: $white-five url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
+                background-size: 1.95rem !important;
+                color: rgba(0, 0, 0, 0) !important;
+                border-color: $marine-blue-two !important;
               }
 
               @include breakpoint($only-mobile) {
@@ -646,8 +649,11 @@
           padding: 0;
           border-radius: 0;
 
-          .ladda-label {
-            pointer-events: none;
+          &.ajax-ladda-spinner {
+            background: $white-five url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
+            background-size: 1.95rem !important;
+            color: rgba(0, 0, 0, 0) !important;
+            border-color: $marine-blue-two !important;
           }
 
           &:hover {
