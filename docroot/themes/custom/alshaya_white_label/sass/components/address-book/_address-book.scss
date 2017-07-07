@@ -665,3 +665,19 @@
     }
   }
 }
+
+.path--user.fire-fox {
+  .c-address-book {
+    .address-book-address {
+      .mobile-number-field {
+        .country-code-prefix {
+          margin-top: 1.375rem;
+        }
+
+        input {
+          height: 1.5rem;
+        }
+      }
+    }
+  }
+}
