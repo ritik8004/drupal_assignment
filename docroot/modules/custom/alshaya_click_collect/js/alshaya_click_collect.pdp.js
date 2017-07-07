@@ -40,6 +40,17 @@
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Get the permission track the user location.
         Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+
+        if ($(this).attr('state') === 'disabled') {
+          $('#pdp-stores-container.click-collect > h3')
+            .removeClass('ui-state-active ui-accordion-header-active')
+            .addClass('ui-state-disabled');
+          $('#pdp-stores-container.click-collect > .c-accordion_content').hide();
+        }
+        else {
+          // Get the permission track the user location.
+          Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+        }
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
@@ -105,6 +116,8 @@
       if (!geoPerm && validateProduct && displaySearchForm) {
         Drupal.pdp.dispalySearchStoreForm();
       }
+
+
 
     }
   };
