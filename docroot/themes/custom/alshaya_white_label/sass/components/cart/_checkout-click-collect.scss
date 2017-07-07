@@ -377,11 +377,21 @@
               font-family: $alshaya-bold;
               font-size: 0.75rem;
               min-width: 10.13rem;
+              background: $white-five;
+              padding: 0;
+              border-radius: 0;
 
               &:hover {
                 background-color: $pumpkin-orange;
                 color: $white-five;
                 border-color: $pumpkin-orange;
+              }
+
+              &.ajax-ladda-spinner {
+                background: $white-five url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
+                background-size: 1.95rem !important;
+                color: rgba(0, 0, 0, 0) !important;
+                border-color: $marine-blue-two !important;
               }
 
               @include breakpoint($only-mobile) {
@@ -423,6 +433,7 @@
               font-size: 0.75rem;
               font-weight: bold;
               position: relative;
+              cursor: pointer;
 
               @include breakpoint($desktop) {
                 color: $grey-ash;
@@ -555,6 +566,7 @@
           color: $grey-ash;
           font-size: 0.875rem;
           position: relative;
+          cursor: pointer;
 
           @include breakpoint($desktop) {
             padding-bottom: 0;
@@ -633,6 +645,16 @@
           font-family: $alshaya-bold;
           font-size: 0.75rem;
           min-width: 10.13rem;
+          background: $white-five;
+          padding: 0;
+          border-radius: 0;
+
+          &.ajax-ladda-spinner {
+            background: $white-five url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
+            background-size: 1.95rem !important;
+            color: rgba(0, 0, 0, 0) !important;
+            border-color: $marine-blue-two !important;
+          }
 
           &:hover {
             background-color: $pumpkin-orange;

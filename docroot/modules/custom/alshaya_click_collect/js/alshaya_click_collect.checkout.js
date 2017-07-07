@@ -183,7 +183,7 @@
       data: StoreObj,
       dataType: 'json',
       beforeSend: function (xmlhttprequest) {
-        // selectedButton.ladda('start');
+        selectedButton.addClass('ajax-ladda-spinner');
       },
       success: function (response) {
         $('#selected-store-wrapper > #selected-store-content').html(response.output);
@@ -194,6 +194,7 @@
         if (status === 'error' || status === 'parsererror') {
           $('#selected-store-wrapper > #selected-store-content').html(Drupal.t('There\'s some error'));
         }
+        selectedButton.removeClass('ajax-ladda-spinner');
       }
     });
   };
