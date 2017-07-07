@@ -19,6 +19,7 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
   $items['pdp_click_collect_default'] = [
     'render element' => 'elements',
     'variables' => [
+      'state' => NULL,
       'sku' => NULL,
       'type' => NULL,
       'title' => NULL,
@@ -89,29 +90,28 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
 
     $config = \Drupal::config('alshaya_click_collect.settings');
 
-    // Check if click and collect is available for this product.
-    // @TODO: ELSE: Do we need to show that click and collect is not available?
-    if (alshaya_acm_product_available_click_collect($sku)) {
-      // Here we just show static text, we will get stores info using ajax.
-      // We need lat/lon info of user to get stores.
-      $store_form = \Drupal::formBuilder()->getForm(clickCollectAvailableStores::class);
-      $build['click_and_collect'] = [
-        '#theme' => 'pdp_click_collect_default',
-        '#sku' => $sku,
-        '#type' => $sku_entity->bundle(),
-        '#title' => $config->get('pdp_click_collect_title'),
-        '#title_price' => alshaya_acm_price_get_formatted_price((float) $config->get('pdp_click_collect_price')),
-        '#subtitle' => $config->get('pdp_click_collect_subtitle'),
-        '#help_text' => $config->get('pdp_click_collect_help_text.value'),
-        '#select_option_text' => $config->get('pdp_click_collect_select_option_text.value'),
-        '#store_finder_form' => render($store_form),
-        '#attached' => [
-          'library' => [
-            'alshaya_click_collect/click-and-collect.pdp',
-          ],
+    $state = alshaya_acm_product_available_click_collect($sku);
+
+    // Here we just show static text, we will get stores info using ajax.
+    // We need lat/lon info of user to get stores.
+    $store_form = \Drupal::formBuilder()->getForm(clickCollectAvailableStores::class);
+    $build['click_and_collect'] = [
+      '#theme' => 'pdp_click_collect_default',
+      '#state' => $state ? 'enabled' : 'disabled',
+      '#sku' => $sku,
+      '#type' => $sku_entity->bundle(),
+      '#title' => $config->get('pdp_click_collect_title'),
+      '#title_price' => alshaya_acm_price_get_formatted_price((float) $config->get('pdp_click_collect_price')),
+      '#subtitle' => $state ? $config->get('pdp_click_collect_subtitle') : $config->get('pdp_click_collect_unavailable'),
+      '#help_text' => $config->get('pdp_click_collect_help_text.value'),
+      '#select_option_text' => $config->get('pdp_click_collect_select_option_text.value'),
+      '#store_finder_form' => render($store_form),
+      '#attached' => [
+        'library' => [
+          'alshaya_click_collect/click-and-collect.pdp',
         ],
-      ];
-    }
+      ],
+    ];
   }
 }
 
