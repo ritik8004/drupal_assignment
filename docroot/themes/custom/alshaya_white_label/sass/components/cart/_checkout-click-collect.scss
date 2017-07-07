@@ -377,11 +377,18 @@
               font-family: $alshaya-bold;
               font-size: 0.75rem;
               min-width: 10.13rem;
+              background: $white-five;
+              padding: 0;
+              border-radius: 0;
 
               &:hover {
                 background-color: $pumpkin-orange;
                 color: $white-five;
                 border-color: $pumpkin-orange;
+              }
+
+              .ladda-label {
+                pointer-events: none;
               }
 
               @include breakpoint($only-mobile) {
@@ -423,6 +430,7 @@
               font-size: 0.75rem;
               font-weight: bold;
               position: relative;
+              cursor: pointer;
 
               @include breakpoint($desktop) {
                 color: $grey-ash;
@@ -555,6 +563,7 @@
           color: $grey-ash;
           font-size: 0.875rem;
           position: relative;
+          cursor: pointer;
 
           @include breakpoint($desktop) {
             padding-bottom: 0;
@@ -633,6 +642,13 @@
           font-family: $alshaya-bold;
           font-size: 0.75rem;
           min-width: 10.13rem;
+          background: $white-five;
+          padding: 0;
+          border-radius: 0;
+
+          .ladda-label {
+            pointer-events: none;
+          }
 
           &:hover {
             background-color: $pumpkin-orange;

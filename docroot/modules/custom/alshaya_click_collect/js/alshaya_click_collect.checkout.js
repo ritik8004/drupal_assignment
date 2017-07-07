@@ -73,7 +73,7 @@
         // Find the store object with the given store-code from the store list.
         var storeObj = _.findWhere(storeList, {code: $(this).closest('li').data('store-code')});
         // Choose the selected store to proceed with checkout.
-        if (e.target.className === 'select-store') {
+        if (e.target.classList[0] === 'select-store') {
           Drupal.checkoutClickCollect.storeSelectedStore($(this), storeObj);
         } // Choose the selected store to display on map.
         else if (e.target.className === 'store-on-map') {
@@ -92,7 +92,7 @@
       $('#click-and-collect-map-view', context).once('bind-events').on('click', 'a.select-store', function (e) {
         e.preventDefault();
         // Choose the selected store to proceed with checkout.
-        if (e.target.className === 'select-store') {
+        if (e.target.classList[0] === 'select-store') {
           // Find the store object with the given store-code from the store list.
           var storeObj = _.findWhere(storeList, {code: $(this).data('store-code')});
           Drupal.checkoutClickCollect.storeSelectedStore($(this), storeObj);
@@ -158,6 +158,8 @@
           success: function (response) {
             storeList = response.raw;
             $('#click-and-collect-list-view').html(response.output);
+            $('#click-and-collect-list-view li .store-actions .select-store').attr( 'data-style', 'zoom-in');
+            var l = $('#click-and-collect-list-view li .store-actions .select-store').ladda();
             $('#click-and-collect-map-view > .geolocation-common-map-locations').html(response.mapList);
             var $element = $('#click-and-collect-list-view').find('.selected-store-location');
             Drupal.click_collect.getFormattedAddress(ascoords.lat, ascoords.lng, $element);
@@ -183,7 +185,7 @@
       data: StoreObj,
       dataType: 'json',
       beforeSend: function (xmlhttprequest) {
-        // selectedButton.ladda('start');
+        selectedButton.ladda('start');
       },
       success: function (response) {
         $('#selected-store-wrapper > #selected-store-content').html(response.output);
@@ -194,6 +196,7 @@
         if (status === 'error' || status === 'parsererror') {
           $('#selected-store-wrapper > #selected-store-content').html(Drupal.t('There\'s some error'));
         }
+        selectedButton.ladda('stop');
       }
     });
   };
@@ -254,6 +257,12 @@
   Drupal.checkoutClickCollect.mapCreateMarker = function (store, mapObj, index) {
     // Copied from /contrib/geolocation/js/geolocation-common-map.js.
     var locationEle = $('.geolocation-common-map-locations').find('.geolocation[data-store-code="' + store.code + '"]');
+
+    // Create ladda button inside infowindow.
+    var selectStoreLink = locationEle.find('.select-store');
+    selectStoreLink.attr( 'data-style', 'zoom-in');
+    var laddaBtn = selectStoreLink.ladda();
+
     var position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
     var markerConfig = {
       position: position,

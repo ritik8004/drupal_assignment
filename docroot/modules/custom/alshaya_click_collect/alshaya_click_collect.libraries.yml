@@ -11,6 +11,7 @@ click-and-collect.checkout:
     js/alshaya_click_collect.checkout.js: {}
   dependencies:
     - alshaya_click_collect/click-and-collect
+    - alshaya_master/ladda
 
 click-and-collect.pdp:
   js:
