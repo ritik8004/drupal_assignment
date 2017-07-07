@@ -6,7 +6,6 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -73,17 +72,23 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       $same_as_shipping = (int) $values['same_as_shipping'];
     }
 
-    if ($same_as_shipping === 1) {
-      // Add empty wrapper to use when we click on No.
-      $pane_form['address'] = [
-        '#type' => 'container',
-        '#attributes' => [
-          'class' => ['address_wrapper'],
+    $pane_form['address'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['address_wrapper'],
+      ],
+      '#attached' => [
+        'library' => [
+          'core/drupal.form',
+          'alshaya_white_label/convert_to_select2',
+          'clientside_validation_jquery/cv.jquery.validate',
         ],
-      ];
-    }
-    else {
+      ],
+    ];
+
+    if ($same_as_shipping !== 1) {
       $billing_address = (array) $cart->getBilling();
+
       if (!empty($billing_address['country_id'])) {
         /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
         $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
@@ -112,7 +117,6 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
   public static function updateAddressAjaxCallback($form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('.address_wrapper', $form['billing_address']['address']));
-    $response->addCommand(new InvokeCommand(NULL, 'rebindCheckoutClientSideValidations'));
     return $response;
   }
 

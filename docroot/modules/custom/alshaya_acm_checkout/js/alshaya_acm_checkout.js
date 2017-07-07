@@ -135,6 +135,11 @@
           });
         };
       }
+
+      // Re-bind client side validations for billing address after form is updated.
+      $('[data-drupal-selector="edit-billing-address-address-billing-given-name"]').once('bind-events').each(function () {
+        Drupal.behaviors.cvJqueryValidate.attach(jQuery("#block-alshaya-white-label-content"));
+      });
     }
   };
 
@@ -154,17 +159,5 @@
     // Show the form.
     $('#address-book-form-wrapper').slideDown();
   };
-
-  // Ajax command to rebind client side validations on checkout pages on request.
-  $.fn.rebindCheckoutClientSideValidations = function (data) {
-    try {
-      // 400 here is same as animation time, we need the field to be
-      // visible for clientside validation to get applied properly.
-      // @TODO: We should look for better solution here.
-      setTimeout('Drupal.behaviors.cvJqueryValidate.attach(jQuery("#block-alshaya-white-label-content"))', 400);
-    }
-    catch (e) {
-    }
-  }
 
 })(jQuery, Drupal);
