@@ -1014,3 +1014,7 @@ html[lang=ar] {
     border-top: 1px solid $white;
   }
 }
+
+html[lang=ar] .path--cart h1.c-page-title::before {
+  display: none;
+}
