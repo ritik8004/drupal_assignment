@@ -190,7 +190,7 @@ function alshaya_white_label_preprocess_field__node__field_store_address__store(
   if (!empty($variables['items'])) {
     // Adding 'raw' filter for the html tags that show up.
     foreach ($variables['items'] as &$item) {
-      $item['content']['#template'] = '{{ value|replace({"\n": "<br>"})|raw }}';
+      $item['content']['#template'] = '{{ value|raw|nl2br }}';
     }
   }
 }
