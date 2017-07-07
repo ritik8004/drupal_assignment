@@ -832,8 +832,8 @@
     }
 
     @include breakpoint($only-mobile) {
-      top: -2rem;
-      #{$left}: 70%;
+      top: -0.875rem;
+      #{$left}: 45%;
     }
   }
 }
@@ -860,6 +860,39 @@
     overflow: hidden;
     width: 100%;
     z-index: 99;
+
+    @include breakpoint($only-mobile) {
+      display: block;
+      position: relative;
+      border: none;
+      z-index: 0;
+      padding: 0;
+      overflow: visible;
+      height: auto;
+
+      .close-inline-modal,
+      .all-stores-info,
+      .available_store {
+        display: none;
+      }
+
+      .stores-list-all {
+        ul {
+          overflow: visible;
+          height: auto;
+
+          li {
+            &:first-child {
+              border-top: none;
+            }
+
+            .store-name {
+              color: $breadcrumb-active;
+            }
+          }
+        }
+      }
+    }
 
     @include breakpoint($tablet) {
       width: 38%;
