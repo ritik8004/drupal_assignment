@@ -41,6 +41,8 @@
         // Get the permission track the user location.
         Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
 
+        // Check if we have to show the block as disabled. Since accordion classes
+        // are added in JS, this is handled in JS.
         if ($(this).attr('state') === 'disabled') {
           $('#pdp-stores-container.click-collect > h3')
             .removeClass('ui-state-active ui-accordion-header-active')
