@@ -181,7 +181,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#suffix' => '</div>',
     ];
 
-    $complete_form['actions']['next']['#limit_validation_errors'] = [['address', 'selected_store']];
+    $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
 
     $complete_form['actions']['back_to_basket'] = [
       '#type' => 'link',
@@ -199,6 +199,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getValue('selected_tab') != 'checkout-home-delivery') {
+      return;
+    }
+
     $values = $form_state->getValue($pane_form['#parents']);
 
     $shipping_method = isset($values['address']['shipping_methods']) ? $values['address']['shipping_methods'] : NULL;

@@ -98,6 +98,24 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div id="selected-store-content" class="selected-store-content"></div>',
     ];
 
+    $pane_form['selected_store']['firstname'] = [
+      '#type' => 'textfield',
+      '#title' => t('First Name'),
+      '#required' => TRUE,
+    ];
+
+    $pane_form['selected_store']['lastname'] = [
+      '#type' => 'textfield',
+      '#title' => t('Last Name'),
+      '#required' => TRUE,
+    ];
+
+    $pane_form['selected_store']['email'] = [
+      '#type' => 'email',
+      '#title' => t('Email'),
+      '#required' => TRUE,
+    ];
+
     $pane_form['selected_store']['mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => t('Mobile Number'),
@@ -156,7 +174,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
   /**
    * {@inheritdoc}
    */
-  public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+  public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getValue('selected_tab') != 'checkout-click-collect') {
+      return;
+    }
+
     $extension = [];
 
     // @TODO: Make this dynamic.

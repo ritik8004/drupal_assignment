@@ -46,26 +46,39 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     ];
 
     $cart = $this->getCart();
+    $shipping_method = $cart->getShippingMethodAsString();
+    $shipping_method = substr($shipping_method, 0, 32);
 
-    $pane_form['summary'] = [
-      '#markup' => $this->t('Is the delivery address the same as your billing address?'),
-    ];
+    if ($shipping_method != \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
+      $pane_form['summary'] = [
+        '#markup' => $this->t('Is the delivery address the same as your billing address?'),
+      ];
 
-    $pane_form['same_as_shipping'] = [
-      '#type' => 'radios',
-      '#options' => [
-        1 => $this->t('Yes'),
-        2 => $this->t('No'),
-      ],
-      '#attributes' => ['class' => ['same-as-shipping']],
-      '#ajax' => [
-        'callback' => [$this, 'updateAddressAjaxCallback'],
-      ],
-      '#default_value' => 1,
-    ];
+      $pane_form['same_as_shipping'] = [
+        '#type' => 'radios',
+        '#options' => [
+          1 => $this->t('Yes'),
+          2 => $this->t('No'),
+        ],
+        '#attributes' => ['class' => ['same-as-shipping']],
+        '#ajax' => [
+          'callback' => [$this, 'updateAddressAjaxCallback'],
+        ],
+        '#default_value' => 1,
+      ];
 
-    // By default we want to use same address as shipping.
-    $same_as_shipping = 1;
+      // By default we want to use same address as shipping.
+      $same_as_shipping = 1;
+    }
+    else {
+      // For click and collect we always want the billing address.
+      $same_as_shipping = 3;
+
+      $pane_form['same_as_shipping'] = [
+        '#type' => 'value',
+        '#value' => 3,
+      ];
+    }
 
     if ($form_state->getValues()) {
       $values = $form_state->getValue($pane_form['#parents']);
@@ -160,9 +173,9 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
-    if ($values['same_as_shipping'] == 1) {
-      $shipping_address = $cart->getShipping();
+    $shipping_address = (array) $cart->getShipping();
 
+    if ($values['same_as_shipping'] == 1) {
       // Loading address from address book if customer_address_id is available.
       if (isset($shipping_address['customer_address_id'])) {
         if ($entity = $address_book_manager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
@@ -175,9 +188,34 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     else {
       $address_values = $values['address']['billing'];
 
-      $address = $address_book_manager->getMagentoAddressFromAddressArray($address_values);
+      $address = _alshaya_acm_checkout_clean_address($address_book_manager->getMagentoAddressFromAddressArray($address_values));
 
-      $cart->setBilling(_alshaya_acm_checkout_clean_address($address));
+      $cart->setBilling($address);
+
+      // If shipping method is click and collect, we set billing address to
+      // shipping except the shipping phone, firstname and lastname.
+      if ($values['same_as_shipping'] == 3) {
+        $original_shipping_address = $shipping_address;
+        $shipping_address = $address;
+        $shipping_address['firstname'] = $original_shipping_address['firstname'];
+        $shipping_address['lastname'] = $original_shipping_address['lastname'];
+        $shipping_address['telephone'] = $original_shipping_address['telephone'];
+        $cart->setShipping($shipping_address);
+
+        // Because we are setting the shipping address here we have to set
+        // the shipping method again.
+        $extension = [];
+
+        $extension['store_code'] = $cart->getExtension('store_code');
+        $extension['click_and_collect_type'] = $cart->getExtension('click_and_collect_type');
+
+        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+        $term = $checkout_options_manager->getClickandColectShippingMethodTerm();
+
+        $cart = $this->getCart();
+        $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
+      }
     }
   }
 

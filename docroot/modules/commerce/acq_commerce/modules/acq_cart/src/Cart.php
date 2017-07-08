@@ -482,11 +482,11 @@ class Cart implements CartInterface {
       $cart = $this->cart;
 
       // Don't set blank addresses, Magento doesn't like this.
-      if (isset($cart->shipping) && empty($cart->shipping->customer_address_id) && empty($cart->shipping->street)) {
+      if (isset($cart->shipping) && empty($cart->shipping->country_id)) {
         unset($cart->shipping);
       }
 
-      if (isset($cart->billing) && empty($cart->billing->customer_address_id) && empty($cart->billing->street)) {
+      if (isset($cart->billing) && empty($cart->billing->country_id)) {
         unset($cart->billing);
       }
 

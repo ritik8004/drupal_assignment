@@ -232,6 +232,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getValue('selected_tab') != 'checkout-home-delivery') {
+      return;
+    }
+
     if ($form_state->getErrors()) {
       return;
     }
@@ -315,13 +319,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $cart->convertToCustomerCart($customer_cart);
       \Drupal::service('acq_cart.cart_storage')->addCart($cart);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // We have done everything in validatePaneForm().
   }
 
 }
