@@ -5,6 +5,69 @@
     }
 
     table tr {
+      .sku-promotions {
+        @include clearfix;
+
+        .sku-promotion-link {
+          font-size: 12px !important;
+          color: $scarlet !important;
+          width: auto !important;
+          padding-top: 1px;
+
+          html[lang=ar] & {
+            line-height: 1.2;
+          }
+        }
+
+        .tooltip--head::after {
+          #{$right}: -20px;
+          top: 0;
+          position: absolute;
+        }
+
+        .tooltip {
+          #{$left}: 7.4rem;
+          top: -0.9rem;
+
+          p {
+            margin: 0;
+          }
+
+          &::before {
+            #{$left}: -6px;
+            top: 37%;
+            border-bottom-width: 6px;
+            border-#{$right}-color: #0084cc;
+            border-bottom-color: rgba(0, 132, 204, 0);
+          }
+
+          &::after {
+            top: 39%;
+            border-bottom-width: 5px;
+            #{$left}: -5px;
+            border-#{$right}-color: #f0f6fc;
+            border-bottom-color: rgba(0, 132, 204, 0);
+          }
+
+          @include breakpoint($only-mobile) {
+            max-width: 6rem;
+          }
+        }
+
+        .tooltip-wrap {
+          display: inline-block;
+
+          &:first-child {
+            margin-top: 0.75rem;
+          }
+        }
+
+        .tooltip--head::after {
+          margin-#{$left}: 0;
+          color: #0084cc;
+        }
+      }
+
       &.sku-out-stock {
         opacity: 0.7;
         background-color: $white-four;
@@ -32,6 +95,30 @@
         &.price {
           @include breakpoint($upto-tablet) {
             display: none;
+          }
+        }
+
+        &.subtotal {
+          @include breakpoint($tablet) {
+            .price-currency.suffix {
+              float: $left;
+              padding: 0;
+            }
+
+            span.price-amount {
+              float: $right !important;
+            }
+
+            .price--discount {
+              clear: both;
+              overflow: hidden;
+              float: $right;
+            }
+
+            .price {
+              clear: both;
+              overflow: hidden;
+            }
           }
         }
       }
@@ -145,6 +232,10 @@
     .mobile-only {
       @include breakpoint($tablet) {
         display: none;
+      }
+
+      &.dark {
+        @include clearfix;
       }
     }
 
@@ -654,6 +745,17 @@
   }
 }
 
+#table-cart-totals {
+  .price-amount {
+    float: $right !important;
+  }
+
+  .price-currency {
+    float: $left !important;
+    padding: 0;
+  }
+}
+
 html[lang=ar] {
   .tooltip--head::after {
     @include breakpoint($desktop) {
@@ -911,4 +1013,8 @@ html[lang=ar] {
   .alias--cart & {
     border-top: 1px solid $white;
   }
+}
+
+html[lang=ar] .path--cart h1.c-page-title::before {
+  display: none;
 }

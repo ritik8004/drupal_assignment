@@ -844,5 +844,68 @@
         }
       }
     }
+
+    .store-open-hours {
+      .hours--label {
+        color: $grey-ash;
+        font-size: 0.875rem;
+        position: relative;
+
+        @include breakpoint($desktop) {
+          padding-bottom: 0;
+
+          @include icon(chevrondown, after) {
+            color: $grey-ash;
+            font-size: 1.938rem;
+            position: absolute;
+            top: 0.5rem;
+            #{$left}: 5.688rem;
+            padding-#{$left}: 0.625rem;
+          }
+
+          &.open {
+            @include icon(chevronup, after) {
+              color: $grey-ash;
+              font-size: 1.938rem;
+              position: absolute;
+              top: 0.5rem;
+              #{$left}: 5.688rem;
+              padding-#{$left}: 0.625rem;
+            }
+
+            + .open--hours {
+              display: block;
+            }
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          font-size: 0.625rem;
+          color: $black;
+          font-weight: bold;
+          padding-bottom: 0;
+        }
+      }
+
+      .open--hours {
+        @include breakpoint($desktop) {
+          display: none;
+          color: $grey-ash;
+          font-size: 0.875rem;
+          line-height: 1.57;
+
+          .key-value-key {
+            width: 51%;
+            display: inline-block;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          color: $greyish;
+          font-size: 0.625rem;
+          padding-top: 0.25rem;
+        }
+      }
+    }
   }
 }

@@ -98,6 +98,40 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div id="selected-store-content" class="selected-store-content"></div>',
     ];
 
+    $pane_form['selected_store']['firstname'] = [
+      '#type' => 'textfield',
+      '#title' => t('First Name'),
+      '#required' => TRUE,
+    ];
+
+    $pane_form['selected_store']['lastname'] = [
+      '#type' => 'textfield',
+      '#title' => t('Last Name'),
+      '#required' => TRUE,
+    ];
+
+    $pane_form['selected_store']['email'] = [
+      '#type' => 'email',
+      '#title' => t('Email'),
+      '#required' => TRUE,
+    ];
+
+    $pane_form['selected_store']['mobile_number'] = [
+      '#type' => 'mobile_number',
+      '#title' => t('Mobile Number'),
+      '#verify' => 0,
+      '#tfa' => 0,
+      '#required' => TRUE,
+    ];
+
+    $pane_form['selected_store']['store_code'] = [
+      '#type' => 'hidden',
+    ];
+
+    $pane_form['selected_store']['shipping_type'] = [
+      '#type' => 'hidden',
+    ];
+
     $pane_form['#attached'] = [
       'drupalSettings' => [
         'geolocation' => [
@@ -132,7 +166,31 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       ],
     ];
 
+    $complete_form['actions']['next']['#limit_validation_errors'] = [['address', 'selected_store']];
+
     return $pane_form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getValue('selected_tab') != 'checkout-click-collect') {
+      return;
+    }
+
+    $extension = [];
+
+    // @TODO: Make this dynamic.
+    $extension['store_code'] = 'RA1-1512-MOT';
+    $extension['click_and_collect_type'] = 'ship_to_store';
+
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+    $term = $checkout_options_manager->getClickandColectShippingMethodTerm();
+
+    $cart = $this->getCart();
+    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
   }
 
 }

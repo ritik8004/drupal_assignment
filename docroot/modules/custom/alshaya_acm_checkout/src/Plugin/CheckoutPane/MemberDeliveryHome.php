@@ -199,6 +199,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getValue('selected_tab') != 'checkout-home-delivery') {
+      return;
+    }
+
     $values = $form_state->getValue($pane_form['#parents']);
 
     $shipping_method = isset($values['address']['shipping_methods']) ? $values['address']['shipping_methods'] : NULL;

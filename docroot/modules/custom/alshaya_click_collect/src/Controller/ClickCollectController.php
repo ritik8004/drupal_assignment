@@ -100,12 +100,19 @@ class ClickCollectController extends ControllerBase {
     $api_wrapper = \Drupal::service('alshaya_api.api');
     $stores = $api_wrapper->getCartStores($cart_id, $lat, $lon);
 
+    $config = $this->configFactory->get('alshaya_click_collect.settings');
     // Add missing information to store data.
-    array_walk($stores, function (&$store) {
+    array_walk($stores, function (&$store) use ($config) {
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $extra_data = $store_utility->getStoreExtraData($store);
       if (!empty($extra_data)) {
-        $store = array_merge($extra_data, $extra_data);
+        $store = array_merge($store, $extra_data);
+        if (!empty($store['sts_available'])) {
+          $store['delivery_time'] = $config->get('click_collect_sts');
+        }
+        elseif (!empty($store['rnc_available'])) {
+          $store['delivery_time'] = $config->get('click_collect_rnc');
+        }
       }
       else {
         $store['name'] = $store['code'];
@@ -133,7 +140,7 @@ class ClickCollectController extends ControllerBase {
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
 
-    $list = $map = t('Sorry, No Store found for selected location.');
+    $list = $map = t('Sorry, No store found for selected location.');
     if (count($stores) > 0) {
       $build = [
         '#theme' => 'click_collect_stores_list',
@@ -165,16 +172,27 @@ class ClickCollectController extends ControllerBase {
   public function selectedStore() {
     // Get all the post data, which contains store information passed in ajax.
     $store = \Drupal::request()->request->all();
+
     $output = t("There's no store selected.");
     if (!empty($store)) {
-      $build = [
+      $ship_type = '';
+      if (!empty($store['sts_available'])) {
+        $ship_type = 'ship_to_store';
+      }
+      elseif (!empty($store['rnc_available'])) {
+        $ship_type = 'reserve_and_collect';
+      }
+      $build['selected_store'] = [
         '#theme' => 'click_collect_selected_store',
         '#store' => $store,
       ];
       $output = render($build);
     }
-
-    return new JsonResponse(['output' => render($build), 'raw' => $store]);
+    return new JsonResponse([
+      'output' => $output,
+      'raw' => $store,
+      'shipping_type' => $ship_type,
+    ]);
   }
 
   /**
