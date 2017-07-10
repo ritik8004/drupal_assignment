@@ -193,12 +193,10 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       $cart->setBilling($address);
 
       // If shipping method is click and collect, we set billing address to
-      // shipping except the shipping phone, firstname and lastname.
+      // shipping except the shipping phone.
       if ($values['same_as_shipping'] == 3) {
         $original_shipping_address = $shipping_address;
         $shipping_address = $address;
-        $shipping_address['firstname'] = $original_shipping_address['firstname'];
-        $shipping_address['lastname'] = $original_shipping_address['lastname'];
         $shipping_address['telephone'] = $original_shipping_address['telephone'];
         $cart->setShipping($shipping_address);
 
