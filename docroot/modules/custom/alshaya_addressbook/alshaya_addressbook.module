@@ -117,6 +117,14 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       '#multiple' => FALSE,
       '#default_value' => $administrative_area_default_value,
       '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list(),
+      '#attributes' => [
+        'class' => ['select2-select'],
+      ],
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/convert_to_select2',
+        ],
+      ],
     ];
     $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
     $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);

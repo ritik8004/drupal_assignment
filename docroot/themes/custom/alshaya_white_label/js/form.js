@@ -8,7 +8,7 @@
 
   Drupal.behaviors.formsInput = {
     attach: function (context, settings) {
-      $('.profile-form input, .c-user-edit .user-form input, .user-login-form input, .order-confirmation .user-register-form input').each(function () {
+      $('.address-book-address input, .profile-form input, .c-user-edit .user-form input, .user-login-form input, .order-confirmation .user-register-form input').each(function () {
         if ($.trim($(this).val()).length !== 0) {
           $(this).parent().find('label').last().addClass('active-label');
         }
@@ -17,7 +17,7 @@
         }
       });
 
-      $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .c-user-edit .user-form input').focusout(function () {
+      $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .c-user-edit .user-form input, .address-book-address input').focusout(function () {
         if ($(this).val() !== '') {
           $(this).parent().find('label').last().addClass('active-label');
         }
@@ -35,7 +35,7 @@
       }
 
       $(window).on('load', function () {
-        $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input').each(function () {
+        $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .address-book-address input').each(function () {
           if ($(this).val() !== '') {
             $(this).parent().find('label').last().addClass('active-label');
           }

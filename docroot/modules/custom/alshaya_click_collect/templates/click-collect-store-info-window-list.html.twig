@@ -1,0 +1,42 @@
+{% if stores %}
+  {% for store in stores %}
+    <div class="geolocation" data-store-code="{{ store.code }}" data-lat="{{ store.lat }}" data-lng="{{ store.lng }}">
+      <div class="store-name-and-address">
+        <span class="store-name">{{ store.name }}</span>
+        <span class="store-address">{{ store.address|raw }}</span>
+      </div>
+      <div class="store-open-hours">
+        <div class="hours--wrapper selector--hours">
+            <div class="hours--label" onclick='jQuery(this).toggleClass("open");'>{{ 'Opening Hours'|t }}</div>
+            <div class="open--hours">
+              {% for item in store.open_hours %}
+                <div>
+                  <span class="key-value-key">{{ item.key }}</span>
+                  <span class="key-value-value">{{ item.value }}</span>
+                </div>
+              {% endfor %}
+            </div>
+        </div>
+      </div>
+      <div class="view-on--map">
+        <a href="http://maps.google.com/?q={{ store.lat }},{{ store.lng }}" target='_blank'>
+          {% trans %}
+          View on map
+          {% endtrans %}
+        </a>
+      </div>
+      <div class="store-actions">
+        <a href="#" class="select-store" data-store-code="{{ store.code }}" data-lat="{{ store.lat }}" data-lng="{{ store.lng }}">{{ 'select this store'|t }}</a>
+      </div>
+      <div class="get--directions">
+        <div>
+          <a href="https://www.google.com/maps/dir/Current+Location/{{ store.lat }},{{ store.lng }}" target='_blank'>
+            {% trans %}
+            Get directions
+            {% endtrans %}
+          </a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}

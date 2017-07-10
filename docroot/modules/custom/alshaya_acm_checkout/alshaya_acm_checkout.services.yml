@@ -5,4 +5,4 @@ services:
       - { name: event_subscriber }
   alshaya_acm_checkout.options_manager:
     class: Drupal\alshaya_acm_checkout\CheckoutOptionsManager
-    arguments: [ '@entity_type.manager', '@logger.factory' ]
+    arguments: [ '@entity_type.manager', '@config.factory', '@logger.factory' ]

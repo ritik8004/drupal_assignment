@@ -168,7 +168,7 @@
   Drupal.alshaya_stores_finder.paginateStores = function(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit) {
     var viewLocatorCount = $(storeLocatorSelector).length;
 
-    if (viewLocatorCount > loadmoreItemLimit) {
+      if (viewLocatorCount > loadmoreItemLimit) {
       $(storeLocatorSelector).slice(loadmoreItemLimit, viewLocatorCount).hide();
 
       $(loadMoreButtonSelector).on('click', function (e) {

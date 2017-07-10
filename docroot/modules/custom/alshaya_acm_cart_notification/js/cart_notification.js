@@ -49,7 +49,7 @@
         if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_name === 'configurables[size]')) {
           $(this).stopSpinner(['success']);
         }
-        else if (!settings.hasOwnProperty('extraData') && l.ladda('isLoading')) {
+        else if (!settings.hasOwnProperty('extraData')) {
           $.ladda('stopAll');
         }
       });

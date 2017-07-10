@@ -1,4 +1,4 @@
-<div id="pdp-stores-container" class="click-collect c-accordion-delivery-options" sku="{{ sku }}" sku-clean="{{ sku|clean_class }}" type="{{ type }}">
+<div id="pdp-stores-container" class="click-collect c-accordion-delivery-options" data-sku="{{ sku }}" data-sku-clean="{{ sku|clean_class }}" data-product-type="{{ type }}" state="{{ state }}">
   <h3 class="c-accordion__title">
     {% if title %}
       {{ title }}
@@ -14,7 +14,7 @@
           <div class="select-size-text">{{ select_option_text|raw }}</div>
         </div>
       </div>
-      <div class="click-collect-form">
+      <div class="click-collect-form" style="display: none;">
     {% else %}
       <div class="click-collect-form">
     {% endif %}
@@ -26,7 +26,7 @@
             {{ 'Available at three stores near'|t }} <div class="google-store-location"></div>
             <div class="change-location" style="display: none;">
               <input type="textfield" name="store-location" class="change-store-location"/>
-              <button type="button" name="cancel-change-location" id="cancel-change-location" class="cancel-change-location">X</button>
+              <button type="button" name="cancel-change-location" id="cancel-change-location" class="cancel-change-location"></button>
             </div>
             <div class="change-location-link">{{ 'change'|t }}</div>
           </div>

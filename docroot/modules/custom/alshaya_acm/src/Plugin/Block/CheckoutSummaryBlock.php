@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm\Plugin\Block;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
@@ -34,6 +35,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $addressBookManager;
 
   /**
+   * Stores the configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -42,13 +50,16 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The plugin_id for the plugin instance.
    * @param string $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart session.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
    *   Address book manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage, AlshayaAddressBookManager $address_book_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, CartStorageInterface $cart_storage, AlshayaAddressBookManager $address_book_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->configFactory = $config_factory;
     $this->cartStorage = $cart_storage;
     $this->addressBookManager = $address_book_manager;
   }
@@ -61,6 +72,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('config.factory'),
       $container->get('acq_cart.cart_storage'),
       $container->get('alshaya_addressbook.manager')
     );
@@ -71,13 +83,15 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build() {
     // Load the CheckoutFlow plugin.
-    $config = \Drupal::config('acq_checkout.settings');
+    $config = $this->configFactory->get('acq_checkout.settings');
     $checkout_flow_plugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
     $plugin_manager = \Drupal::service('plugin.manager.acq_checkout_flow');
     $checkout_flow = $plugin_manager->createInstance($checkout_flow_plugin, []);
 
     // Get the current step.
     $current_step_id = $checkout_flow->getStepId();
+
+    $checkout_config = $this->configFactory->get('alshaya_acm_checkout.settings');
 
     if ($current_step_id == 'login' || $current_step_id == 'confirmation') {
       return [];
@@ -127,8 +141,9 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     $delivery = [];
 
-    // @TODO: Pending development for CnC.
     if ($method = $cart->getShippingMethodAsString()) {
+      $method = substr($method, 0, 32);
+
       // URL to change delivery address or shipping method.
       $options = ['absolute' => TRUE];
       $delivery['url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
@@ -136,42 +151,59 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
       $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
       $term = $checkout_options_manager->loadShippingMethod($method);
-      $delivery['label'] = $this->t("Home Delivery");
-      $delivery['address_label'] = $this->t("Delivery Address");
 
-      $delivery['method_name'] = $term->getName();
-      $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
+      $method_code = $term->get('field_shipping_code')->getString();
 
-      // Delivery address.
-      $shipping_address = (array) $cart->getShipping();
+      if ($method_code == $checkout_config->get('click_collect_method')) {
+        $delivery['label'] = $this->t('Click & Collect');
+        $delivery['method_name'] = '';
+        $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
+        $delivery['address_label'] = $this->t('Collection Store');
 
-      // Loading address from address book if customer_address_id is available
-      // even if other values are set.
-      if (isset($shipping_address['customer_address_id'])) {
-        if ($entity = $this->addressBookManager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
-          $shipping_address = $this->addressBookManager->getAddressFromEntity($entity, FALSE);
-        }
+        $store_code = $cart->getExtension('store_code');
+
+        // Not injected here to avoid module dependency.
+        $store = \Drupal::service('alshaya_stores_finder.utility')->getStoreFromCode($store_code);
+
+        $delivery['address'] = $store->get('field_store_address')->getString();
       }
+      else {
+        $delivery['label'] = $this->t('Home Delivery');
+        $delivery['method_name'] = $term->getName();
+        $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
+        $delivery['address_label'] = $this->t('Delivery Address');
 
-      $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
+        // Delivery address.
+        $shipping_address = (array) $cart->getShipping();
 
-      if (isset($shipping_address['address_line1'])) {
-        $line1[] = $shipping_address['address_line2'];
-        $line1[] = $shipping_address['dependent_locality'];
+        // Loading address from address book if customer_address_id is available
+        // even if other values are set.
+        if (isset($shipping_address['customer_address_id'])) {
+          if ($entity = $this->addressBookManager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
+            $shipping_address = $this->addressBookManager->getAddressFromEntity($entity);
+          }
+        }
 
-        $line2[] = $shipping_address['locality'] . ',';
+        $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
 
-        $line2[] = $shipping_address['address_line1'];
-        $line2[] = $this->t('@area Area', ['@area' => _alshaya_addressbook_get_area_from_id($shipping_address['administrative_area'])]);
+        if (isset($shipping_address['address_line1'])) {
+          $line1[] = $shipping_address['address_line2'];
+          $line1[] = $shipping_address['dependent_locality'];
 
-        $country_list = \Drupal::service('address.country_repository')->getList();
-        $line3[] = $country_list[$shipping_address['country_code']];
+          $line2[] = $shipping_address['locality'] . ',';
 
-        $delivery['address'] = implode(',<br>', [
-          implode(' ', $line1),
-          implode(' ', $line2),
-          implode(' ', $line3),
-        ]);
+          $line2[] = $shipping_address['address_line1'];
+          $line2[] = $this->t('@area Area', ['@area' => _alshaya_addressbook_get_area_from_id($shipping_address['administrative_area'])]);
+
+          $country_list = \Drupal::service('address.country_repository')->getList();
+          $line3[] = $country_list[$shipping_address['country_code']];
+
+          $delivery['address'] = implode(',<br>', [
+            implode(' ', $line1),
+            implode(' ', $line2),
+            implode(' ', $line3),
+          ]);
+        }
       }
     }
 

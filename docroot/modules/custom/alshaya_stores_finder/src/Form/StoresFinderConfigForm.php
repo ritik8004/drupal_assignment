@@ -41,51 +41,6 @@ class StoresFinderConfigForm extends ConfigFormBase {
       '#options' => [0 => $this->t('Disable'), 1 => $this->t('Enable')],
     ];
 
-    $form['pdp_click_collect_title'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('PDP: Click and Collect title'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('pdp_click_collect_title'),
-    ];
-
-    $form['pdp_click_collect_subtitle'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('PDP: Click and Collect sub-title'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('pdp_click_collect_subtitle'),
-    ];
-
-    $form['pdp_click_collect_unavailable'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('PDP: Click and Collect unavailable'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('pdp_click_collect_unavailable'),
-    ];
-
-    $form['pdp_click_collect_price'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('PDP: Click and Collect price'),
-      '#description' => $this->t('Leave blank for free'),
-      '#required' => FALSE,
-      '#default_value' => $config->get('pdp_click_collect_price'),
-    ];
-
-    $form['pdp_click_collect_help_text'] = [
-      '#type' => 'text_format',
-      '#format' => 'rich_text',
-      '#title' => $this->t('PDP: Click and Collect help text'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('pdp_click_collect_help_text.value'),
-    ];
-
-    $form['pdp_click_collect_select_option_text'] = [
-      '#type' => 'text_format',
-      '#format' => 'rich_text',
-      '#title' => $this->t('PDP: Click and Collect select option text'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('pdp_click_collect_select_option_text.value'),
-    ];
-
     $form['load_more_item_limit'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Load more item count'),
@@ -111,12 +66,6 @@ class StoresFinderConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_stores_finder.settings');
     $config->set('enable_disable_store_finder_search', $form_state->getValue('enable_disable_store_finder_search'));
-    $config->set('pdp_click_collect_title', $form_state->getValue('pdp_click_collect_title'));
-    $config->set('pdp_click_collect_subtitle', $form_state->getValue('pdp_click_collect_subtitle'));
-    $config->set('pdp_click_collect_unavailable', $form_state->getValue('pdp_click_collect_unavailable'));
-    $config->set('pdp_click_collect_price', $form_state->getValue('pdp_click_collect_price'));
-    $config->set('pdp_click_collect_help_text', $form_state->getValue('pdp_click_collect_help_text'));
-    $config->set('pdp_click_collect_select_option_text', $form_state->getValue('pdp_click_collect_select_option_text'));
     $config->set('load_more_item_limit', $form_state->getValue('load_more_item_limit'));
     $config->set('search_proximity_radius', $form_state->getValue('search_proximity_radius'));
     $config->save();
