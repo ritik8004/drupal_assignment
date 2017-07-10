@@ -7,7 +7,7 @@
   'use strict';
 
   // Coordinates of the user's location.
-  var asfCoords = null;
+  var asCoords = null;
 
   // Last checked SKU (or variant SKU).
   var lastSku = null;
@@ -33,7 +33,7 @@
         // First load the library from google.
         Drupal.geolocation.loadGoogle(function () {
           var field = $('.click-collect-form').find('input[name="location"]')[0];
-          new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay]);
+          new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
         });
       }
 
@@ -78,7 +78,7 @@
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
-          Drupal.pdp.storesDisplay(asfCoords);
+          Drupal.pdp.storesDisplay();
           return false;
         }
         else {
@@ -99,7 +99,7 @@
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
-          Drupal.pdp.storesDisplay(asfCoords);
+          Drupal.pdp.storesDisplay();
           return false;
         }
       });
@@ -107,7 +107,7 @@
       // Validate the product is same on ajax call.
       var validateProduct = Drupal.pdp.validateCurrentProduct(settings);
       // Call storesDisplay to render stores, if click and collect available for selected sku.
-      if (settings.alshaya_acm.storeFinder === true && validateProduct) {
+      if (settings.alshaya_acm.storeFinder === true && validateProduct && asCoords !== null) {
         Drupal.pdp.storesDisplay();
       }
 
@@ -118,9 +118,6 @@
       if (!geoPerm && validateProduct && displaySearchForm) {
         Drupal.pdp.dispalySearchStoreForm();
       }
-
-
-
     }
   };
 
@@ -132,12 +129,21 @@
 
   // Success callback.
   Drupal.pdp.LocationSuccess = function (position) {
-    asfCoords = {
+    asCoords = {
       lat: position.coords.latitude,
       lng: position.coords.longitude
     };
     geoPerm = true;
     Drupal.pdp.storesDisplay();
+  };
+
+  // Set the location coordinates, but don't render the stores.
+  Drupal.pdp.setStoreCoords = function () {
+    asCoords = this;
+
+    if (records) {
+      Drupal.pdp.storesDisplay(asCoords);
+    }
   };
 
   Drupal.pdp.getProductInfo = function () {
@@ -186,13 +192,13 @@
   // Make Ajax call to get stores and render html.
   Drupal.pdp.storesDisplay = function (coords) {
     if (typeof this.lat !== 'undefined' && typeof coords === 'undefined') {
-      asfCoords = this;
+      asCoords = this;
     }
     else if (coords) {
-      asfCoords = coords;
+      asCoords = coords;
     }
 
-    if (asfCoords) {
+    if (asCoords) {
       // Get the Product info.
       var productInfo = Drupal.pdp.getProductInfo();
       var sku = '';
@@ -210,27 +216,26 @@
           }
         }
 
-        if (asfCoords !== null) {
-          Drupal.click_collect.getFormattedAddress(asfCoords.lat, asfCoords.lng, $('.click-collect-form').find('.google-store-location'));
-
+        if (asCoords !== null) {
           var checkLocation = true;
           if (lastCoords !== null) {
-            checkLocation = (lastCoords.lat !== asfCoords.lat || lastCoords.lng !== asfCoords.lng);
+            checkLocation = (lastCoords.lat !== asCoords.lat || lastCoords.lng !== asCoords.lng);
           }
 
           if ((lastSku === null || lastSku !== sku) || checkLocation) {
             lastSku = sku;
-            lastCoords = asfCoords;
+            lastCoords = asCoords;
 
             $.ajax({
-              url: Drupal.url('stores/product/' + lastSku + '/' + asfCoords.lat + '/' + asfCoords.lng),
+              url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
               beforeSend: function (xmlhttprequest) {
-                var progressElement = '<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>';
+                var progressElement = $('<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>');
                 $('.click-collect-top-stores').html(progressElement);
                 $('.click-collect-all-stores .stores-list-all').html(progressElement);
               },
               success: function (response) {
-                Drupal.pdp.fillStores(response, asfCoords);
+                Drupal.click_collect.getFormattedAddress(asCoords.lat, asCoords.lng, $('.click-collect-form').find('.google-store-location'));
+                Drupal.pdp.fillStores(response, asCoords);
               }
             });
           }
@@ -241,7 +246,7 @@
   };
 
   // Fill the stores with result.
-  Drupal.pdp.fillStores = function (response, asfCoords) {
+  Drupal.pdp.fillStores = function (response, asCoords) {
     if (response.top_three) {
       displaySearchForm = false;
       records = true;
@@ -253,7 +258,7 @@
       Drupal.pdp.changeLocationAutocomplete();
       if (response.all_stores) {
         $('.click-collect-all-stores').html(response.all_stores);
-        Drupal.click_collect.getFormattedAddress(asfCoords.lat, asfCoords.lng, $('.click-collect-all-stores').find('.google-store-location'));
+        Drupal.click_collect.getFormattedAddress(asCoords.lat, asCoords.lng, $('.click-collect-all-stores').find('.google-store-location'));
         Drupal.pdp.allStoresAutocomplete();
         Drupal.pdp.allStoreschangeLocationAutocomplete();
       }
