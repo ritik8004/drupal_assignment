@@ -20,10 +20,23 @@
         }
 
         if ($(window).scrollTop() + $(window).height() > $(document).height() - $('.c-footer').height()) {
-          $('#backtotop').css({
-            position: 'absolute',
-            top: '-70px'
-          });
+          if ($(window).width() <= 768) {
+            $('#backtotop').css({
+              position: 'absolute',
+              top: '-70px'
+            });
+
+            $('.nodetype--acq_product #backtotop').css({
+              position: 'absolute',
+              top: '-35px'
+            });
+          }
+          else {
+            $('#backtotop').css({
+              position: 'absolute',
+              top: '-70px'
+            });
+          }
         }
       });
     }
