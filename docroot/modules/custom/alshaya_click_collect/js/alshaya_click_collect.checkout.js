@@ -29,10 +29,10 @@
       if (typeof Drupal.geolocation.loadGoogle === 'function') {
         // First load the library from google.
         Drupal.geolocation.loadGoogle(function () {
-          var field = $('#edit-guest-delivery-collect').find('input[name="store_location"]')[0];
+          var field = $('.store-location-input')[0];
+
           // Create autocomplete object for places.
           new Drupal.ClickCollect(field, [Drupal.checkoutClickCollect.storeListAll]);
-
         });
       }
 
@@ -40,9 +40,13 @@
       $('.tab').once('initiate-stores').on('click', function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
 
+        Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+
         if ($(this).hasClass('tab-click-collect') && $('#click-and-collect-list-view').html().length <= 0) {
           // Display the loader.
           $('#click-and-collect-list-view').html(progressElement);
+
+          Drupal.checkoutClickCollect.storeListAll(ascoords);
 
           // Get the permission track the user location.
           Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
@@ -55,7 +59,7 @@
       });
 
       // Toggle between store list view and map view.
-      $('#edit-guest-delivery-collect', context).once('bind-events').on('click', 'a.stores-list-view, a.stores-map-view', function (e) {
+      $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('bind-events').on('click', 'a.stores-list-view, a.stores-map-view', function (e) {
         if (e.target.className === 'stores-list-view') {
           e.preventDefault();
           $('#click-and-collect-list-view').show();
@@ -132,14 +136,12 @@
       lng: position.coords.longitude
     };
     geoPerm = true;
-    Drupal.checkoutClickCollect.storeListAll(ascoords);
   };
 
   // Error callback.
   Drupal.checkoutClickCollect.locationError = function (error) {
     // Do nothing, we already have the search form displayed by default.
     geoPerm = false;
-    $('#click-and-collect-list-view').html('');
   };
 
   // Make Ajax call to get stores list and render html.
@@ -191,6 +193,9 @@
           }
         });
       }
+    }
+    else {
+      $('#click-and-collect-list-view').html('');
     }
   };
 
