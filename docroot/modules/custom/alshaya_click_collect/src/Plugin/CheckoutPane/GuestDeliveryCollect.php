@@ -58,6 +58,9 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#type' => 'textfield',
       '#title' => $this->t('Find your closest collection point'),
       '#prefix' => '<div class="label-store-location">' . $this->t('Find your closest collection point') . '</div>',
+      '#attributes' => [
+        'class' => ['store-location-input'],
+      ],
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
@@ -98,6 +101,18 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div id="selected-store-content" class="selected-store-content"></div>',
     ];
 
+    $pane_form['selected_store']['mobile_help'] = [
+      '#markup' => '<div class="cc-mobile-help-text">' . $this->t("<p>Pleasse provide the mobile number of the person collecting the order.</p> We'll send you a text message when the order is ready to collect") . '</div>',
+    ];
+
+    $pane_form['selected_store']['mobile_number'] = [
+      '#type' => 'mobile_number',
+      '#title' => t('Mobile Number'),
+      '#verify' => 0,
+      '#tfa' => 0,
+      '#required' => TRUE,
+    ];
+
     // @TODO: For back and forth, get default first/last name from customer.
     $default_firstname = '';
     $default_lastname = '';
@@ -121,14 +136,6 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $pane_form['selected_store']['email'] = [
       '#type' => 'email',
       '#title' => t('Email'),
-      '#required' => TRUE,
-    ];
-
-    $pane_form['selected_store']['mobile_number'] = [
-      '#type' => 'mobile_number',
-      '#title' => t('Mobile Number'),
-      '#verify' => 0,
-      '#tfa' => 0,
       '#required' => TRUE,
     ];
 
