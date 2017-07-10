@@ -180,7 +180,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
           '#price' => $item_cart_price['price'],
         ];
 
-        if ($item_cart_price['discount']) {
+        if (!empty($item_cart_price['discount'])) {
           $item['sub_total']['#discount'] = $item_cart_price['discount'];
           $item['sub_total']['#final_price'] = $item_cart_price['final_price'];
         }
