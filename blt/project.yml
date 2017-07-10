@@ -44,7 +44,7 @@ modules:
     uninstall: [acsf, acquia_connector, shield]
   ci:
     enable: {  }
-    uninstall: [acquia_connector, shield]
+    uninstall: [acquia_connector, shield, alshaya_captcha]
   dev:
     enable: [acquia_connector, shield]
     uninstall: {  }
