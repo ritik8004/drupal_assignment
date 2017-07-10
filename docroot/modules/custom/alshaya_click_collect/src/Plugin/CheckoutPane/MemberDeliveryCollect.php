@@ -121,7 +121,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     }
 
     $pane_form['selected_store']['mobile_help'] = [
-      '#markup' => '<div class="cc-mobile-help-text">' . $this->t("<p>Pleasse provide the mobile number of the person collecting the order.</p> We'll send you a text message when the order is ready to collect") . '</div>',
+      '#markup' => '<div class="cc-help-text cc-mobile-help-text">' . $this->t("<p>Please provide the mobile number of the person collecting the order.</p>We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
     // @TODO: Verify mobile validation. Check in addressbook (Rohit/Mitesh).
