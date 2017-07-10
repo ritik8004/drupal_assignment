@@ -367,6 +367,10 @@
       font-size: 0.875rem;
     }
 
+    @include breakpoint($desktop) {
+      margin-top: 2.8rem;
+    }
+
     .path--user & {
       padding-bottom: 0.5625rem;
       border-bottom: 1px solid $white;
