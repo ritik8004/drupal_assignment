@@ -23,12 +23,12 @@
           if ($(window).width() <= 768) {
             $('#backtotop').css({
               position: 'absolute',
-              top: '-70px'
+              top: '-65px'
             });
 
             $('.nodetype--acq_product #backtotop').css({
               position: 'absolute',
-              top: '-35px'
+              top: '-30px'
             });
           }
           else {
