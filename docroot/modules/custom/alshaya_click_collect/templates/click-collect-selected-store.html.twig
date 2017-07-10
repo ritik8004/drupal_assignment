@@ -22,5 +22,6 @@
 </div>
 <div class="store-actions">
   <a class="change-store">{{ 'change store'|t }}</a>
+  <a href="http://maps.google.com/?q={{ store.lat }},{{ store.lng }}" class="view-on-map mobile-only">{{ 'View on map'|t }}</a>
   <a class="store-on-map" href="{{ store.view_on_map_link }}">{{ 'View on map'|t }}</a>
 </div>
