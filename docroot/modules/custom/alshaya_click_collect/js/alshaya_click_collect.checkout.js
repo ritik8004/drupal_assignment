@@ -10,11 +10,13 @@
   // Selected coordinates.
   var ascoords;
   // Default progress element copied from /core/misc/ajax.js.
-  var progressElement = '<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>';
+  var progressElement = $('<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>');
   // Store list
   var storeList;
   // Index to show in marker as label.
   var index;
+  // Map wrapper
+  var mapWrapper = $('#click-and-collect-map-view');
 
   // Geolocation map object.
   var geolocationMap = {};
@@ -30,7 +32,6 @@
         // First load the library from google.
         Drupal.geolocation.loadGoogle(function () {
           var field = $('.store-location-input')[0];
-
           // Create autocomplete object for places.
           new Drupal.ClickCollect(field, [Drupal.checkoutClickCollect.storeListAll]);
         });
@@ -40,13 +41,9 @@
       $('.tab').once('initiate-stores').on('click', function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
 
-        Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
-
         if ($(this).hasClass('tab-click-collect') && $('#click-and-collect-list-view').html().length <= 0) {
           // Display the loader.
-          $('#click-and-collect-list-view').html(progressElement);
-
-          Drupal.checkoutClickCollect.storeListAll(ascoords);
+          $('#click-and-collect-list-view').after(progressElement);
 
           // Get the permission track the user location.
           Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
@@ -74,6 +71,13 @@
           $('#click-and-collect-map-view').show();
           $('.stores-list-view').toggleClass('active');
           $('.stores-map-view').toggleClass('active');
+
+          if (typeof ascoords !== 'undefined') {
+            var map = Drupal.checkoutClickCollect.mapCreate();
+            var center = map.googleMap.getCenter();
+            google.maps.event.trigger(map.googleMap, 'resize');
+            map.googleMap.setCenter(center);
+          }
           return false;
         }
       });
@@ -136,12 +140,14 @@
       lng: position.coords.longitude
     };
     geoPerm = true;
+    Drupal.checkoutClickCollect.storeListAll(ascoords);
   };
 
   // Error callback.
   Drupal.checkoutClickCollect.locationError = function (error) {
     // Do nothing, we already have the search form displayed by default.
     geoPerm = false;
+    progressElement.remove();
   };
 
   // Make Ajax call to get stores list and render html.
@@ -166,21 +172,36 @@
         $.ajax({
           url: Drupal.url('click-and-collect/stores/cart/' + cartId + '/' + ascoords.lat + '/' + ascoords.lng),
           beforeSend: function (xmlhttprequest) {
-            $('#click-and-collect-list-view').html(progressElement);
+            if ($('a.stores-map-view').hasClass('active')) {
+              $('#click-and-collect-map-view').after(progressElement);
+            }
+            else {
+              $('#click-and-collect-list-view').after(progressElement);
+            }
           },
           success: function (response) {
             storeList = response.raw;
+            var hideMap = true;
+            progressElement.remove();
             $('#click-and-collect-list-view').html(response.output);
             if (storeList !== null && storeList.length > 0) {
-              $('#click-and-collect-map-view > .geolocation-common-map-locations').html(response.mapList);
+              mapWrapper.children('.geolocation-common-map-locations').html(response.mapList);
               var $element = $('#click-and-collect-list-view').find('.selected-store-location');
               Drupal.click_collect.getFormattedAddress(ascoords.lat, ascoords.lng, $element);
               var map = Drupal.checkoutClickCollect.mapCreate();
               Drupal.geolocation.removeMapMarker(map);
               Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
+              mapWrapper.children('.geolocation-common-map-locations').hide();
+              if ($('a.stores-map-view').hasClass('active')) {
+                hideMap = false;
+              }
+            }
+
+            if (hideMap) {
+              $('#click-and-collect-map-view').hide();
             }
             else {
-              $('#click-and-collect-map-view').hide();
+              $('#click-and-collect-map-view').show();
             }
 
           },
@@ -264,9 +285,7 @@
     // Create googleMap if property is not set.
     // Tried to mimic from /contrib/geolocation/js/geolocation-common-map.js.
     if (typeof geolocationMap.googleMap === 'undefined') {
-      var mapWrapper = $('#click-and-collect-map-view');
       geolocationMap.container = mapWrapper.children('.geolocation-common-map-container');
-      geolocationMap.container.show();
       geolocationMap.lat = ascoords.lat;
       geolocationMap.lng = ascoords.lng;
       geolocationMap.googleMap = Drupal.geolocation.addMap(geolocationMap);
