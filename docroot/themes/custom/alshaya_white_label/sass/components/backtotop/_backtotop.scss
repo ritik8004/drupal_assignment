@@ -1,6 +1,6 @@
 #backtotop {
   @include breakpoint($only-mobile) {
-    #{$right}: -0.1875rem;
+    #{$right}: 0;
   }
 
   @include icon(arrowup, after) {
