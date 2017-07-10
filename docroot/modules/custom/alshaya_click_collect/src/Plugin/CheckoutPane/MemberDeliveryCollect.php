@@ -111,8 +111,6 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     if ($cart->getExtension('store_code') && $shipping) {
       // Check if value available in shipping address.
       $default_mobile = $shipping['telephone'];
-      $default_firstname = $shipping['firstname'];
-      $default_lastname = $shipping['lastname'];
     }
     else {
       // Check once in customer profile.
@@ -120,25 +118,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       if ($account_phone = $account->get('field_mobile_number')->getValue()) {
         $default_mobile = $account_phone[0]['value'];
       }
-      $default_firstname = $account->get('field_first_name')->getString();
-      $default_lastname = $account->get('field_last_name')->getString();
     }
-
-    // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['firstname'] = [
-      '#type' => 'textfield',
-      '#title' => t('First Name'),
-      '#required' => TRUE,
-      '#default_value' => $default_firstname,
-    ];
-
-    // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['lastname'] = [
-      '#type' => 'textfield',
-      '#title' => t('Last Name'),
-      '#required' => TRUE,
-      '#default_value' => $default_lastname,
-    ];
 
     // @TODO: Verify mobile validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['mobile_number'] = [
@@ -234,8 +214,6 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $address = [
       'country_id' => _alshaya_custom_get_site_level_country_code(),
       'telephone' => _alshaya_acm_checkout_clean_address_phone($values['mobile_number']),
-      'firstname' => $values['firstname'],
-      'lastname' => $values['lastname'],
     ];
 
     $cart->setShipping($address);

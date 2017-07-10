@@ -98,16 +98,24 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div id="selected-store-content" class="selected-store-content"></div>',
     ];
 
+    // @TODO: For back and forth, get default first/last name from customer.
+    $default_firstname = '';
+    $default_lastname = '';
+
+    // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['firstname'] = [
       '#type' => 'textfield',
       '#title' => t('First Name'),
       '#required' => TRUE,
+      '#default_value' => $default_firstname,
     ];
 
+    // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['lastname'] = [
       '#type' => 'textfield',
       '#title' => t('Last Name'),
       '#required' => TRUE,
+      '#default_value' => $default_lastname,
     ];
 
     $pane_form['selected_store']['email'] = [
