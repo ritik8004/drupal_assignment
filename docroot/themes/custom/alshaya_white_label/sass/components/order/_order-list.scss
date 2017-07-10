@@ -320,16 +320,20 @@
       white-space: nowrap;
       overflow: hidden;
       position: relative;
-      max-width: 175px;
+      max-width: 10.9375rem;
       display: inline-block;
 
       &::after {
         content: "...";
         background: $white-five;
         position: absolute;
-        right: 0;
+        #{$right}: 0;
         width: 1rem;
       }
+    }
+
+    @include breakpoint($tablet) {
+      max-width: 10rem;
     }
   }
 
