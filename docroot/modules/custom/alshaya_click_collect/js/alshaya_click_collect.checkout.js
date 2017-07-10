@@ -187,8 +187,7 @@
             $('#click-and-collect-list-view').html(response.output);
             if (storeList !== null && storeList.length > 0) {
               mapWrapper.children('.geolocation-common-map-locations').html(response.mapList);
-              var $element = $('#click-and-collect-list-view').find('.selected-store-location');
-              Drupal.click_collect.getFormattedAddress(ascoords.lat, ascoords.lng, $element);
+              Drupal.click_collect.getFormattedAddress(ascoords, $('#click-and-collect-list-view').find('.selected-store-location'));
               var map = Drupal.checkoutClickCollect.mapCreate();
               Drupal.geolocation.removeMapMarker(map);
               Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
@@ -238,7 +237,7 @@
         $('#selected-store-wrapper').find('input[name="store_code"]').val(StoreObj.code);
         $('#selected-store-wrapper').find('input[name="shipping_type"]').val(response.shipping_type);
         $('input[data-drupal-selector="edit-actions-ccnext"]').show();
-        Drupal.behaviors.cvJqueryValidate.attach(jQuery("#block-alshaya-white-label-content"));
+        Drupal.behaviors.cvJqueryValidate.attach($('#block-alshaya-white-label-content'));
       },
       complete: function (xmlhttprequest, status) {
         if (status === 'error' || status === 'parsererror') {

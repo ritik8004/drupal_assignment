@@ -234,7 +234,7 @@
                 $('.click-collect-all-stores .stores-list-all').html(progressElement);
               },
               success: function (response) {
-                Drupal.click_collect.getFormattedAddress(asCoords.lat, asCoords.lng, $('.click-collect-form').find('.google-store-location'));
+                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'));
                 Drupal.pdp.fillStores(response, asCoords);
               }
             });
@@ -258,7 +258,7 @@
       Drupal.pdp.changeLocationAutocomplete();
       if (response.all_stores) {
         $('.click-collect-all-stores').html(response.all_stores);
-        Drupal.click_collect.getFormattedAddress(asCoords.lat, asCoords.lng, $('.click-collect-all-stores').find('.google-store-location'));
+        Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
         Drupal.pdp.allStoresAutocomplete();
         Drupal.pdp.allStoreschangeLocationAutocomplete();
       }
