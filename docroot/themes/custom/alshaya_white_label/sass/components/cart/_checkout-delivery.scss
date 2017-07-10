@@ -432,14 +432,6 @@
   display: block;
 }
 
-#edit-member-delivery-collect {
-  padding: 5px;
-
-  @include breakpoint($tablet) {
-    padding: 1.5rem;
-  }
-}
-
 // Adding throbber overlay for any ajax call on payment and checkout delivery page.
 .page-standard.c-address-book,
 .page-standard.user-page.checkout-payment,
