@@ -89,6 +89,14 @@ body.ucbrowser {
       }
     }
   }
+
+  .c-plp {
+    html[lang=ar] & {
+      .form-item-sort-bef-combine select {
+        padding-left: 40px;
+      }
+    }
+  }
 }
 
 #text-resize-control {
