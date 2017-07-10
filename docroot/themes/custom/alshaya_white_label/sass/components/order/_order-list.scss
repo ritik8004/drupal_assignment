@@ -293,7 +293,7 @@
     transform: translateY(-50%);
 
     @include breakpoint($tablet) {
-      #{$right}: 1.2rem;
+      #{$right}: 0.8rem;
     }
 
     @include breakpoint($desktop) {
@@ -319,8 +319,17 @@
     @include breakpoint($tablet) {
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
+      position: relative;
       max-width: 175px;
+      display: inline-block;
+
+      &::after {
+        content: "...";
+        background: $white-five;
+        position: absolute;
+        right: 0;
+        width: 1rem;
+      }
     }
   }
 
@@ -358,12 +367,15 @@
 
 .block-alshaya-acm-customer > a {
   font-family: $arial;
-  font-size: 1;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: $windows-blue;
   position: absolute;
   #{$right}: 0;
   top: 0;
+
+  @include breakpoint($desktop) {
+    top: 0.3125rem;
+  }
 }
 
 .no--orders {
@@ -419,6 +431,14 @@
     background-color: $whisper-light;
   }
 
+  .order--items {
+    @include breakpoint($tablet) {
+      &::after {
+        background-color: $whisper-light;
+      }
+    }
+  }
+
   .toggle--icon {
     .icon-ic_chevrondown {
       @include icon(chevronup);
@@ -430,7 +450,7 @@
   font-family: $arial;
   line-height: 1;
   color: $white-five;
-  top: -5.25rem;
+  top: -5.55rem;
   font-size: 0.75rem;
   text-transform: lowercase;
   font-weight: bold;
