@@ -4,7 +4,6 @@ namespace Drupal\alshaya_click_collect\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
-use Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -227,7 +226,7 @@ class ClickCollectController extends ControllerBase {
         $top_three['#has_more'] = count($stores) > $limit ? t('Other stores nearby') : '';
 
         if ($top_three['#has_more']) {
-          $store_form = \Drupal::formBuilder()->getForm(ClickCollectAvailableStores::class);
+          $store_form = \Drupal::formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
           $config = $this->configFactory->get('alshaya_click_collect.settings');
           $all_stores = [];
           $all_stores['#theme'] = 'pdp_click_collect_all_stores';
