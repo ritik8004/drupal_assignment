@@ -126,7 +126,7 @@
 .alias--cart-checkout-login,
 .alias--cart-checkout-payment,
 .alias--cart-checkout-confirmation {
-  margin-top: 0;
+  margin-top: 0 !important;
 
   .c-post-content {
     background-color: $white-four;
