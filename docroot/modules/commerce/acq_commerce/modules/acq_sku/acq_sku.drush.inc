@@ -20,7 +20,7 @@ function acq_sku_drush_command() {
       'drush acsp' => 'Run a full product synchronization of all available product options.',
     ],
   ];
-  
+
   $commands['sync-commerce-products'] = [
     'description' => 'Run a full synchronization of all commerce product records.',
     'aliases'     => ['acsp'],
@@ -69,12 +69,13 @@ function drush_acq_sku_sync_commerce_cats() {
 
 
 /**
- * Implements drush category sync command.
+ * Implements drush product attribute sync command.
  */
 function drush_acq_sku_sync_commerce_product_options() {
   drush_print(dt('Synchronizing all commerce product options, please wait...'));
   $container = \Drupal::getContainer();
   $container->get('acq_sku.product_options_manager')->synchronizeProductOptions();
+  \Drupal::logger('acq_sku')->notice('Product attribute sync completed.');
   drush_print(dt('Done.'));
 }
 

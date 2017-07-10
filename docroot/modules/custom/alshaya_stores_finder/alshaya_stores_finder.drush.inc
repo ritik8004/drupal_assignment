@@ -27,5 +27,7 @@ function drush_alshaya_stores_finder_sync_stores() {
 
   \Drupal::service('alshaya_stores_finder.utility')->syncStores();
 
+  \Drupal::logger('acq_store_finder')->notice('Store sync completed.');
+
   drush_print(dt('Done.'));
 }
