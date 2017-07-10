@@ -4,7 +4,6 @@ namespace Drupal\alshaya_acm\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
-use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -43,13 +42,6 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $configFactory;
 
   /**
-   * Stores Finder Utility service object.
-   *
-   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
-   */
-  protected $storesFinder;
-
-  /**
    * Constructor.
    *
    * @param array $configuration
@@ -64,15 +56,12 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The cart session.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
    *   Address book manager.
-   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $stores_finder
-   *   Stores Finder Utility service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, CartStorageInterface $cart_storage, AlshayaAddressBookManager $address_book_manager, StoresFinderUtility $stores_finder) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, CartStorageInterface $cart_storage, AlshayaAddressBookManager $address_book_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->cartStorage = $cart_storage;
     $this->addressBookManager = $address_book_manager;
-    $this->storesFinder = $stores_finder;
   }
 
   /**
@@ -85,8 +74,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('acq_cart.cart_storage'),
-      $container->get('alshaya_addressbook.manager'),
-      $container->get('alshaya_stores_finder.utility')
+      $container->get('alshaya_addressbook.manager')
     );
   }
 
@@ -173,7 +161,10 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         $delivery['address_label'] = $this->t('Collection Store');
 
         $store_code = $cart->getExtension('store_code');
-        $store = $this->storesFinder->getStoreFromCode($store_code);
+
+        // Not injected here to avoid module dependency.
+        $store = \Drupal::service('alshaya_stores_finder.utility')->getStoreFromCode($store_code);
+
         $delivery['address'] = $store->get('field_store_address')->getString();
       }
       else {
