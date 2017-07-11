@@ -1,0 +1,16 @@
+// Theming of Welcome User block in header.
+@include breakpoint($desktop) {
+  #block-welcomeuser {
+    display: inline-block;
+
+    h3 {
+      margin: 0 1.5rem;
+      display: block;
+      font-family: $alshaya-thin;
+      font-size: 0.6875rem;
+      font-weight: 100;
+      color: $marine-blue-two;
+    }
+  }
+}
+
