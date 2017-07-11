@@ -290,8 +290,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   }
 
   $form['privilege_card_wrapper'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
+    '#type' => 'details',
     '#title' => t('Enter a privilege card number'),
     '#open' => $default_value ? TRUE : FALSE,
     '#weight' => 3,
