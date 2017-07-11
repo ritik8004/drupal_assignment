@@ -2,6 +2,8 @@
 
 namespace Drupal\alshaya_acm_checkout;
 
+use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -12,6 +14,20 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  * @package Drupal\alshaya_acm_checkout
  */
 class CheckoutOptionsManager {
+
+  /**
+   * API Wrapper object.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  protected $apiWrapper;
+
+  /**
+   * The cart storage service.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartStorage;
 
   /**
    * Term storage object.
@@ -34,12 +50,18 @@ class CheckoutOptionsManager {
    *   EntityTypeManager object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   ApiWrapper object.
+   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
+   *   Cart Storage service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, APIWrapper $api_wrapper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->configFactory = $config_factory;
+    $this->apiWrapper = $api_wrapper;
+    $this->cartStorage = $cart_storage;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
   }
 
@@ -284,6 +306,110 @@ class CheckoutOptionsManager {
    */
   public function getClickandColectShippingMethodTerm() {
     return $this->loadShippingMethod($this->getClickandColectShippingMethod());
+  }
+
+  /**
+   * Helper function to get shipping estimates.
+   *
+   * @param array|object $address
+   *   Array of object of address.
+   *
+   * @return array
+   *   Available shipping methods.
+   */
+  public function loadShippingEstimates($address) {
+    // Below code is to ensure we call the API only once.
+    static $options;
+    $static_key = base64_encode(serialize($address));
+    if (isset($options[$static_key]) && !empty($options[$static_key])) {
+      return $options[$static_key];
+    }
+
+    $address = (array) $address;
+
+    $address = _alshaya_acm_checkout_clean_address($address);
+
+    $cart = $this->cartStorage->getCart();
+
+    $shipping_methods = [];
+    $shipping_method_options = [];
+
+    if (!empty($address) && !empty($address['country_id'])) {
+      $shipping_methods = $this->apiWrapper->getShippingEstimates($cart->id(), $address);
+    }
+
+    if (!empty($shipping_methods)) {
+      foreach ($shipping_methods as $method) {
+        // Key needs to hold both carrier and method.
+        $key = implode('_', [$method['carrier_code'], $method['method_code']]);
+
+        $code = $this->getCleanShippingMethodCode($key);
+        $name = t('@method_title by @carrier_title', ['@method_title' => $method['method_title'], '@carrier_title' => $method['carrier_title']]);
+        $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
+
+        $term = $this->loadShippingMethod($code, $name, $method['carrier_code'], $method['method_code']);
+
+        $shipping_method_options[$code] = [
+          'term' => $term,
+          'price' => $price,
+        ];
+      }
+    }
+
+    $options[$static_key] = $shipping_method_options;
+
+    return $shipping_method_options;
+  }
+
+  /**
+   * Helper function to get shipping estimates for home delivery.
+   *
+   * @param array|object $address
+   *   Array of object of address.
+   *
+   * @return array
+   *   Available shipping method options.
+   */
+  public function getHomeDeliveryShippingEstimates($address) {
+    $shipping_method_options = [];
+
+    if ($shipping_methods = $this->loadShippingEstimates($address)) {
+      foreach ($shipping_methods as $code => $data) {
+        // We don't display click and collect delivery method for home delivery.
+        if ($code == \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
+          continue;
+        }
+
+        $method_name = '
+          <div class="shipping-method-name">
+            <div class="shipping-method-title">' . $data['term']->getName() . '</div>
+            <div class="shipping-method-price">' . $data['price'] . '</div>
+            <div class="shipping-method-description">' . $data['term']->get('description')->getValue()[0]['value'] . '</div>
+          </div>
+        ';
+
+        $shipping_method_options[$code] = $method_name;
+      }
+    }
+
+    return $shipping_method_options;
+  }
+
+  /**
+   * Helper function to get clean code.
+   *
+   * @param string $code
+   *   Code from API.
+   *
+   * @return string
+   *   Cleaned code.
+   */
+  public function getCleanShippingMethodCode($code) {
+    // @TODO: Currently what we get back in orders is first 32 characters
+    // and concatenated by underscore.
+    $code = str_replace(',', '_', $code);
+    $code = substr($code, 0, 32);
+    return $code;
   }
 
 }
