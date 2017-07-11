@@ -7,7 +7,6 @@ dependencies:
   - content_translation
   - ctools
   - editor
-  - facets
   - field
   - filter
   - language
