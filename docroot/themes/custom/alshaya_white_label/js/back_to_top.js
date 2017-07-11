@@ -12,31 +12,13 @@
 
       $(window).scroll(function () {
         if ($(window).scrollTop() + $(window).height() < $(document).height() - $('.c-footer').height()) {
-          $('#backtotop').css({
-            position: 'fixed',
-            bottom: '1px',
-            top: 'auto'
-          });
+          $('#backtotop').addClass('backtotop-nofooter');
+          $('#backtotop').removeClass('backtotop-withfooter');
         }
 
         if ($(window).scrollTop() + $(window).height() > $(document).height() - $('.c-footer').height()) {
-          if ($(window).width() <= 768) {
-            $('#backtotop').css({
-              position: 'absolute',
-              top: '-65px'
-            });
-
-            $('.nodetype--acq_product #backtotop').css({
-              position: 'absolute',
-              top: '-30px'
-            });
-          }
-          else {
-            $('#backtotop').css({
-              position: 'absolute',
-              top: '-70px'
-            });
-          }
+          $('#backtotop').addClass('backtotop-withfooter');
+          $('#backtotop').removeClass('backtotop-nofooter');
         }
       });
     }
