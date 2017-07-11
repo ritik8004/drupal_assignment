@@ -10,7 +10,6 @@ Feature: Homepage
     Given I am on homepage
     Then I should be able to see the header
     And I should be able to see the footer
-    And the page title should be "Home | Mothercare Kuwait"
 
   @arabic
   Scenario: On Arabic site,
@@ -21,7 +20,6 @@ Feature: Homepage
     When I follow "عربية"
     Then I should be able to see the header in Arabic
     And I should be able to see the footer in Arabic
-    And the page title should be "الرئيسية | مذركير الكويت"
 
   @javascript
   Scenario: As a Guest user

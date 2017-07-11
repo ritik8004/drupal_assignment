@@ -78,13 +78,11 @@ Feature: Test Sign in and Forgot password features
 
     Given I am on "/user/login"
     And I follow "Forgot password?"
-    Then the page title should be "Reset your password | Mothercare Kuwait"
     And the url should match "/user/password"
     When I fill in "edit-name" with "shweta+2@axelerant.com"
     And I press "Submit"
     Then I should see "Further instructions have been sent to your email address."
     And the url should match "/user/login"
-    And the page title should be "Sign in | Mothercare Kuwait"
 
   @arabic
   Scenario: As a Guest user
@@ -94,13 +92,11 @@ Feature: Test Sign in and Forgot password features
     Given I am on "/user/login"
     And I follow "عربية"
     And I follow "هل نسيت كلمة السر؟"
-    Then the page title should be "Reset your password | مذركير الكويت"
     And the url should match "/user/password"
     When I fill in "edit-name" with "shweta+2@axelerant.com"
     And I press "إضافة"
     Then I should see "تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني"
     And the url should match "/user/login"
-    And the page title should be "تسجيل الدخول | مذركير الكويت"
 
   Scenario: As a Guest user
     An error message should be displayed
