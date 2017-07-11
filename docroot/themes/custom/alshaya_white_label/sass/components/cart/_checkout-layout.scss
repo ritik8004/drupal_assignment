@@ -128,6 +128,12 @@
 .alias--cart-checkout-confirmation {
   margin-top: 0 !important;
 
+  .user-form {
+    label.option {
+      margin-#{$right}: 0.25rem;
+    }
+  }
+
   .c-post-content {
     background-color: $white-four;
   }
