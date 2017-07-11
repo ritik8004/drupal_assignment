@@ -3,6 +3,7 @@
 namespace Drupal\acq_promotion;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
@@ -30,6 +31,13 @@ class AcqPromotionsManager {
   protected $skuStorage;
 
   /**
+   * Entity Repository service.
+   * 
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * Node Entity Storage.
    *
    * @var \Drupal\node\NodeStorageInterface
@@ -54,13 +62,20 @@ class AcqPromotionsManager {
    *   LoggerFactory object.
    * @param \Drupal\Core\Language\LanguageManager $languageManager
    *   Language Manager service.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity Repository service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, LanguageManager $languageManager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              APIWrapper $api_wrapper,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              LanguageManager $languageManager,
+                              EntityRepositoryInterface $entityRepository) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_promotion');
     $this->languageManager = $languageManager;
+    $this->entityRepository = $entityRepository;
   }
 
   /**

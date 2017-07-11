@@ -6,3 +6,4 @@ services:
       - '@acq_commerce.api'
       - '@logger.factory'
       - '@language_manager'
+      - '@entity.repository'

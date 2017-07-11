@@ -111,6 +111,7 @@ class PromotionSyncResource extends ResourceBase {
    *   Throws exception expected.
    */
   public function post(array $promotions = []) {
+    $promotions = $promotions['promotions'];
     foreach ($promotions as $promotion) {
       $attached_promotion_skus = [];
       $fetched_promotion_skus = [];
@@ -159,7 +160,7 @@ class PromotionSyncResource extends ResourceBase {
       }
     }
 
-    return new ResourceResponse(["hello" => "world"]);
+    return new ResourceResponse($promotions);
   }
 
 }
