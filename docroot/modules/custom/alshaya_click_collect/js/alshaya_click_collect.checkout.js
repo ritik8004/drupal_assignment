@@ -37,21 +37,25 @@
         });
       }
 
-      // Get the permission track the user location.
-      Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+      $('body').once('get-location').each(function () {
+        // Get the permission track the user location.
+        Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+      });
 
-      // Ask for location permission when click and collect tab selected.
-      $('.tab').once('initiate-stores').on('click', function () {
+      $('.tab').once('initiate-stores').each(function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
 
-        if ($(this).hasClass('tab-click-collect') && $('#click-and-collect-list-view').html().length <= 0) {
-          // Display the loader.
-          Drupal.checkoutClickCollect.storeListAll(ascoords);
-          $('#edit-actions input:not(.cc-action)').addClass('hidden');
-        }
-        else {
-          $('#edit-actions input:not(.cc-action)').removeClass('hidden');
-        }
+        $(this).on('click', function () {
+          if ($(this).hasClass('tab-click-collect')) {
+            if ($('#click-and-collect-list-view').html().length <= 0) {
+              Drupal.checkoutClickCollect.storeListAll(ascoords);
+            }
+            $('#edit-actions input:not(.cc-action)').addClass('hidden');
+          }
+          else {
+            $('#edit-actions input:not(.cc-action)').removeClass('hidden');
+          }
+        });
       });
 
       // Toggle between store list view and map view.
@@ -241,7 +245,7 @@
       },
       complete: function (xmlhttprequest, status) {
         if (status === 'error' || status === 'parsererror') {
-          $('#selected-store-wrapper > #selected-store-content').html(Drupal.t('There\'s some error'));
+          $('#selected-store-wrapper > #selected-store-content').html(Drupal.t('Some error occurred, please try again.'));
         }
         selectedButton.removeClass('ajax-ladda-spinner');
       }

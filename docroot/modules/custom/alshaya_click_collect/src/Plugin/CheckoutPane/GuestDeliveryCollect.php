@@ -7,6 +7,7 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\geolocation\GoogleMapsDisplayTrait;
 
 /**
@@ -96,7 +97,6 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#title' => t('selected store'),
       '#tree' => FALSE,
       '#id' => 'selected-store-wrapper',
-      '#attributes' => ['style' => 'display:none;'],
     ];
 
     $pane_form['selected_store']['content'] = [
@@ -112,7 +112,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $default_lastname = '';
 
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['firstname'] = [
+    $pane_form['selected_store']['cc_firstname'] = [
       '#type' => 'textfield',
       '#title' => t('First Name'),
       '#required' => TRUE,
@@ -120,14 +120,14 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['lastname'] = [
+    $pane_form['selected_store']['cc_lastname'] = [
       '#type' => 'textfield',
       '#title' => t('Last Name'),
       '#required' => TRUE,
       '#default_value' => $default_lastname,
     ];
 
-    $pane_form['selected_store']['email'] = [
+    $pane_form['selected_store']['cc_email'] = [
       '#type' => 'email',
       '#title' => t('Email'),
       '#required' => TRUE,
@@ -187,12 +187,19 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       ],
     ];
 
-    $complete_form['actions']['ccnext'] = $complete_form['actions']['next'];
-    $complete_form['actions']['ccnext']['#limit_validation_errors'] = [array_keys($pane_form['selected_store'])];
-    $complete_form['actions']['ccnext']['#attributes']['class'][] = 'cc-action';
-    $complete_form['actions']['ccnext']['#ajax'] = [
-      'callback' => [$this, 'submitMemberDeliveryCollect'],
-      'wrapper' => 'selected-store-wrapper',
+    $complete_form['actions']['ccnext'] = [
+      '#name' => 'ccnext',
+      '#type' => 'submit',
+      '#value' => $complete_form['actions']['next']['#value'] . ' ',
+      '#attributes' => [
+        'class' => ['cc-action'],
+      ],
+      '#ajax' => [
+        'callback' => [$this, 'submitMemberDeliveryCollect'],
+        'wrapper' => 'selected-store-wrapper',
+      ],
+      '#submit' => [],
+      '#limit_validation_errors' => [['selected_store']],
     ];
 
     return $pane_form;
@@ -221,7 +228,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       $api_wrapper = \Drupal::service('acq_commerce.api');
 
       try {
-        $customer = $api_wrapper->createCustomer($values['firstname'], $values['lastname'], $values['email']);
+        $customer = $api_wrapper->createCustomer($values['cc_firstname'], $values['cc_lastname'], $values['cc_email']);
       }
       catch (\Exception $e) {
         // @TODO: Handle create customer errors here.
@@ -235,7 +242,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       $customer_cart = $api_wrapper->createCart($customer['customer_id']);
 
       if (empty($customer_cart['customer_email'])) {
-        $customer_cart['customer_email'] = $values['email'];
+        $customer_cart['customer_email'] = $values['cc_email'];
       }
 
       $cart->convertToCustomerCart($customer_cart);
