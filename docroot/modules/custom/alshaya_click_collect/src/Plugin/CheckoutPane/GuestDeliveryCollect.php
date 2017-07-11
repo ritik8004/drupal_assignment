@@ -111,6 +111,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $default_firstname = '';
     $default_lastname = '';
 
+    // First/Last/Email/Mobile have cc_ prefix to ensure validations work fine
+    // and don't conflict with address form fields.
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['cc_firstname'] = [
       '#type' => 'textfield',
@@ -190,6 +192,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $complete_form['actions']['ccnext'] = [
       '#name' => 'ccnext',
       '#type' => 'submit',
+      // Drupal processes limit_validations_errors based on value of the button
+      // and we want to have same button "proceed to payment" for both the tabs
+      // but still want different validations to work on both.
+      // Space here is added just to keep them separate for drupal but still
+      // have same text in frontend.
       '#value' => $complete_form['actions']['next']['#value'] . ' ',
       '#attributes' => [
         'class' => ['cc-action'],
@@ -198,6 +205,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         'callback' => [$this, 'submitMemberDeliveryCollect'],
         'wrapper' => 'selected-store-wrapper',
       ],
+      // This is required for limit_validation_errors to work.
       '#submit' => [],
       '#limit_validation_errors' => [['selected_store']],
     ];
