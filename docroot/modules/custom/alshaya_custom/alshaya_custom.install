@@ -76,7 +76,7 @@ function alshaya_custom_modules_installed($modules) {
   // Set the 'header' region for user menu.
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_account_menu')
     ->set('region', 'menu_secondary')
-    ->set('weight', -11)
+    ->set('weight', -32)
     ->save();
 
   // Set the Main Navigation Block.
