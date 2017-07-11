@@ -4,6 +4,8 @@ namespace Drupal\alshaya_click_collect\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\geolocation\GoogleMapsDisplayTrait;
 
@@ -135,7 +137,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div class="cc-help-text cc-mobile-help-text"><p>' . $this->t("Please provide the mobile number of the person collecting the order") . '</p>' . $this->t("We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
-    $pane_form['selected_store']['mobile_number'] = [
+    $pane_form['selected_store']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => t('Mobile Number'),
       '#verify' => 0,
@@ -185,7 +187,13 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       ],
     ];
 
-    $complete_form['actions']['next']['#limit_validation_errors'] = [['address', 'selected_store']];
+    $complete_form['actions']['ccnext'] = $complete_form['actions']['next'];
+    $complete_form['actions']['ccnext']['#limit_validation_errors'] = [array_keys($pane_form['selected_store'])];
+    $complete_form['actions']['ccnext']['#attributes']['class'][] = 'cc-action';
+    $complete_form['actions']['ccnext']['#ajax'] = [
+      'callback' => [$this, 'submitMemberDeliveryCollect'],
+      'wrapper' => 'selected-store-wrapper',
+    ];
 
     return $pane_form;
   }
@@ -198,18 +206,80 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       return;
     }
 
+    if ($form_state->getErrors()) {
+      return;
+    }
+
+    $values = $form_state->getValues($pane_form['#parents']);
+
+    $cart = $this->getCart();
+
+    // We are only looking to convert guest carts.
+    if (!($cart->customerId())) {
+      // Get the customer id of Magento from this email.
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+
+      try {
+        $customer = $api_wrapper->createCustomer($values['firstname'], $values['lastname'], $values['email']);
+      }
+      catch (\Exception $e) {
+        // @TODO: Handle create customer errors here.
+        // Probably just the email error.
+        \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
+        $form_state->setErrorByName('custom', '');
+        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        return;
+      }
+
+      $customer_cart = $api_wrapper->createCart($customer['customer_id']);
+
+      if (empty($customer_cart['customer_email'])) {
+        $customer_cart['customer_email'] = $values['email'];
+      }
+
+      $cart->convertToCustomerCart($customer_cart);
+      \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+    }
+
     $extension = [];
 
-    // @TODO: Make this dynamic.
-    $extension['store_code'] = 'RA1-1512-MOT';
-    $extension['click_and_collect_type'] = 'ship_to_store';
+    $extension['store_code'] = $values['store_code'];
+    $extension['click_and_collect_type'] = $values['shipping_type'];
 
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
     $term = $checkout_options_manager->getClickandColectShippingMethodTerm();
 
-    $cart = $this->getCart();
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
+
+    $address = [
+      'country_id' => _alshaya_custom_get_site_level_country_code(),
+      'telephone' => _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']),
+    ];
+
+    $cart->setShipping($address);
+  }
+
+  /**
+   * Ajax callback to submit member delivery collect.
+   *
+   * @param mixed|array $form
+   *   Form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state object.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response to reload page on successfully adding new address.
+   */
+  public function submitMemberDeliveryCollect($form, FormStateInterface $form_state) {
+    if ($form_state->getErrors()) {
+      return $form['guest_delivery_collect']['selected_store'];
+    }
+
+    $response = new AjaxResponse();
+    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString()));
+    return $response;
   }
 
 }

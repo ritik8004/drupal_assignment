@@ -197,7 +197,7 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
   $code = $checkout_options_manager->getClickandColectShippingMethod();
 
   // This is just to create click and collect method term during install.
-  $checkout_options_manager->loadShippingMethod($code, $code, $acq_checkout_settings->get('click_collect_method_carrier_code'), $acq_checkout_settings->get('click_collect_method_method_code'));
+  $checkout_options_manager->loadShippingMethod($code, $code, $code, $acq_checkout_settings->get('click_collect_method_carrier_code'), $acq_checkout_settings->get('click_collect_method_method_code'));
 }
 
 /**

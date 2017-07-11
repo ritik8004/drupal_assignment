@@ -72,6 +72,8 @@ class CheckoutOptionsManager {
    *   Shipping method code.
    * @param string $name
    *   Name of shipping method, available during checkout.
+   * @param string $description
+   *   Description of shipping method, available during checkout.
    * @param string $carrier_code
    *   Carrier code.
    * @param string $method_code
@@ -80,7 +82,7 @@ class CheckoutOptionsManager {
    * @return \Drupal\taxonomy\Entity\Term|null
    *   Term object.
    */
-  public function loadShippingMethod($code, $name = '', $carrier_code = '', $method_code = '') {
+  public function loadShippingMethod($code, $name = '', $description = '', $carrier_code = '', $method_code = '') {
     // Simple check to avoid 500 errors. Might not come in production but
     // issue might come during development.
     if (empty($code)) {
@@ -106,7 +108,7 @@ class CheckoutOptionsManager {
         'name' => $name,
       ]);
 
-      $term->get('description')->setValue($name);
+      $term->get('description')->setValue($description);
       $term->get('field_shipping_method_desc')->setValue($name);
       $term->get('field_shipping_code')->setValue($code);
       $term->get('field_shipping_carrier_code')->setValue($carrier_code);
@@ -352,10 +354,9 @@ class CheckoutOptionsManager {
         $key = $method['carrier_code'] . '_' . $method['method_code'];
 
         $code = $this->getCleanShippingMethodCode($key);
-        $name = t('@method_title by @carrier_title', ['@method_title' => $method['method_title'], '@carrier_title' => $method['carrier_title']]);
         $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
 
-        $term = $this->loadShippingMethod($code, $name, $method['carrier_code'], $method['method_code']);
+        $term = $this->loadShippingMethod($code, $method['carrier_title'], $method['method_title'], $method['carrier_code'], $method['method_code']);
 
         $shipping_method_options[$code] = [
           'term' => $term,
