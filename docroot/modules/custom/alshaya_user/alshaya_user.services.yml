@@ -4,6 +4,9 @@ services:
     tags:
       - { name: event_subscriber }
   alshaya_user.breadcrumb:
-     class: Drupal\alshaya_user\Breadcrumb\AlshayaUserBreadcrumbBuilder
-     tags:
+    class: Drupal\alshaya_user\Breadcrumb\AlshayaUserBreadcrumbBuilder
+    tags:
       - { name: breadcrumb_builder, priority: 100 }
+  alshaya_user.info:
+    class: Drupal\alshaya_user\AlshayaUserInfo
+    arguments: [ '@current_user', '@entity.repository' ]
