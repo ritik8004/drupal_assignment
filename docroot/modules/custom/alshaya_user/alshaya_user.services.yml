@@ -9,4 +9,4 @@ services:
       - { name: breadcrumb_builder, priority: 100 }
   alshaya_user.info:
     class: Drupal\alshaya_user\AlshayaUserInfo
-    arguments: [ '@current_user', '@entity.repository' ]
+    arguments: [ '@current_user', '@entity.repository', '@mobile_number.util' ]
