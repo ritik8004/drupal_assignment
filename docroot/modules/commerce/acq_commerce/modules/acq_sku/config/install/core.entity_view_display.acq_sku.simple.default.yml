@@ -1,11 +1,11 @@
-uuid: 677f443f-fc16-429e-9ba2-7c0603698f1b
 langcode: en
 status: true
 dependencies:
   config:
+    - acq_sku.type.simple
+    - field.field.acq_sku.simple.field_acq_sku_promotions
     - image.style.large
   module:
-    - acq_sku
     - image
 id: acq_sku.simple.default
 targetEntityType: acq_sku
@@ -20,6 +20,7 @@ content:
       image_style: large
       image_link: ''
     third_party_settings: {  }
+    region: content
   name:
     label: hidden
     type: string
@@ -27,11 +28,32 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    region: content
   price:
     label: above
     type: string
     weight: 1
-    settings: {  }
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
+    region: content
 hidden:
+  attr_at_glance: true
+  attr_brand_logo: true
+  attr_bullet_points: true
+  attr_collection: true
+  attr_color: true
+  attr_product_brand: true
+  attr_reserve_and_collect: true
+  attr_season: true
+  attr_ship_to_store: true
+  attr_size: true
+  attr_style: true
+  attr_whats_in_the_box: true
+  attributes: true
+  field_acq_sku_promotions: true
+  final_price: true
+  langcode: true
+  media: true
   sku: true
+  special_price: true
