@@ -16,14 +16,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
   $items = [];
 
-  $items['click_collect_stores_list'] = [
-    'render element' => 'elements',
-    'variables' => [
-      'title' => NULL,
-      'stores' => NULL,
-    ],
-  ];
-
   $items['alshaya_address'] = [
     'render element' => 'elements',
     'variables' => [
@@ -135,7 +127,7 @@ function _alshaya_acm_checkout_clean_address($address) {
 
   if (!empty($address['region'])) {
     // TODO: We may just require region and not region_id, need to verify later.
-    $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country']);
+    $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country_id']);
     $address['region'] = $address['region_id'];
   }
 
@@ -260,7 +252,9 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
   }
 
   // At this stage we always want to have fresh data.
-  \Drupal::cache()->invalidate('orders_list_' . $email);
+  /** @var \Drupal\alshaya_acm_customer\OrdersManager $orders_manager */
+  $orders_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+  $orders_manager->clearOrderCache($email);
 
   $orders = alshaya_acm_customer_get_user_orders($email);
 

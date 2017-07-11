@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - acq_sku.type.configurable
+    - acq_sku.type.grouped
+    - acq_sku.type.simple
+    - field.storage.node.field_acq_promotion_sku
+    - node.type.acq_promotion
+id: node.acq_promotion.field_acq_promotion_sku
+field_name: field_acq_promotion_sku
+entity_type: node
+bundle: acq_promotion
+label: SKU
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:acq_sku'
+  handler_settings:
+    target_bundles:
+      configurable: configurable
+      grouped: grouped
+      simple: simple
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: configurable
+field_type: entity_reference

@@ -114,7 +114,7 @@ class AlshayaAddressBookManager {
     unset($customer['extension']);
 
     foreach ($customer['addresses'] as $index => $address) {
-      $customer['addresses'][$index] = $this->getCleanAddress($address);
+      $customer['addresses'][$index] = $address;
       $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
       $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
 
@@ -193,7 +193,7 @@ class AlshayaAddressBookManager {
         continue;
       }
 
-      $customer['addresses'][$index] = $this->getCleanAddress($address);
+      $customer['addresses'][$index] = $address;
       $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
       $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
 
@@ -222,35 +222,15 @@ class AlshayaAddressBookManager {
   }
 
   /**
-   * Hack to get sync working.
-   *
-   * @param array $address
-   *   Address array.
-   *
-   * @return array
-   *   Cleaned/Hacked address array.
-   */
-  protected function getCleanAddress(array $address) {
-    // This is very annoying, when we save in Magento it allows to save region
-    // but when we pass from here it gives error because Kuwait doesn't have
-    // region.
-    unset($address['region']);
-
-    return $address;
-  }
-
-  /**
    * Function to get address array to send to Magento from Entity.
    *
    * @param \Drupal\profile\Entity\Profile $entity
    *   Address entity.
-   * @param bool $return_clean
-   *   Flag to specify if cleaned address is required in response or not.
    *
    * @return array
    *   Address array.
    */
-  public function getAddressFromEntity(Profile $entity, $return_clean = TRUE) {
+  public function getAddressFromEntity(Profile $entity) {
     $address_id = $entity->get('field_address_id')->getString();
     $entity_address = $entity->get('field_address')->first()->getValue();
 
@@ -269,7 +249,7 @@ class AlshayaAddressBookManager {
     $address['default_shipping'] = (int) $entity->isDefault();
     $address['default_billing'] = (int) $entity->isDefault();
 
-    return $return_clean ? $this->getCleanAddress($address) : $address;
+    return $address;
   }
 
   /**
@@ -336,8 +316,8 @@ class AlshayaAddressBookManager {
     $magento_address['extension']['address_block_segment'] = $address['locality'];
     $magento_address['country_id'] = $address['country_code'];
 
-    // @TODO: Remove this after Magento makes it optional.
-    $magento_address['city'] = 'NA';
+    // City is core attribute in Magento and hard to remove validation.
+    $magento_address['city'] = '&#8203;';
 
     return $magento_address;
   }

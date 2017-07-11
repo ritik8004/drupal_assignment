@@ -1,0 +1,40 @@
+diff --git a/src/Plugin/search_api/backend/AbstractSearchApiSolrMultilingualBackend.php b/src/Plugin/search_api/backend/AbstractSearchApiSolrMultilingualBackend.php
+index 0244bd8..e4ea3cc 100644
+--- a/src/Plugin/search_api/backend/AbstractSearchApiSolrMultilingualBackend.php
++++ b/src/Plugin/search_api/backend/AbstractSearchApiSolrMultilingualBackend.php
+@@ -455,32 +455,9 @@ abstract class AbstractSearchApiSolrMultilingualBackend extends SearchApiSolrBac
+    * @throws \Drupal\search_api_solr_multilingual\SearchApiSolrMultilingualException
+    */
+   protected function isPartOfSchema($kind, $name) {
+-    static $previous_calls;
+-
+-    $state_key = 'sasm.' . $this->getServer()->id() . '.schema_parts';
+-    $state = \Drupal::state();
+-    $schema_parts = $state->get($state_key);
+-    // @todo reset that drupal state from time to time
+-
+-    if (
+-      !is_array($schema_parts) || empty($schema_parts[$kind]) ||
+-      (!in_array($name, $schema_parts[$kind]) && !isset($previous_calls[$kind]))
+-    ) {
+-      $response = $this->getSolrConnector()
+-        ->coreRestGet('schema/' . strtolower($kind));
+-      if (empty($response[$kind])) {
+-        throw new SearchApiSolrException('Missing information about ' . $kind . ' in response to REST request.');
+-      }
+-      // Delete the old state.
+-      $schema_parts[$kind] = [];
+-      foreach ($response[$kind] as $row) {
+-        $schema_parts[$kind][] = $row['name'];
+-      }
+-      $state->set($state_key, $schema_parts);
+-      $previous_calls[$kind] = TRUE;
+-    }
+-
+-    return in_array($name, $schema_parts[$kind]);
++    // On Acquia Search, we cannot access the handler schema/fieldtypes
++    // so we will assume that the fields exist.
++    return TRUE;
+   }
+ 
+   /**

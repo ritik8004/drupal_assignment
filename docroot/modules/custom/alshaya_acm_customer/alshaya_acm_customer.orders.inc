@@ -212,9 +212,18 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['contact_no'] = $order['shipping']['address']['telephone'];
 
+  $shipping_address = $order['shipping']['address'];
+
+  // Loading address from address book if customer_address_id is available.
+  if (!empty($shipping_address['customer_address_id'])) {
+    if ($entity = $address_book_manager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
+      $shipping_address = $address_book_manager->getAddressFromEntity($entity);
+    }
+  }
+
   $delivery_address = [
     '#theme' => 'alshaya_address',
-    '#address' => $address_book_manager->getAddressArrayFromMagentoAddress($order['shipping']['address']),
+    '#address' => $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address),
   ];
 
   $orderDetails['delivery_address'] = render($delivery_address);

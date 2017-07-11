@@ -1,0 +1,40 @@
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.drush.inc b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.drush.inc
+index 7c6ff268..67592f68 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.drush.inc
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.drush.inc
+@@ -41,5 +41,7 @@ function drush_acq_promotion_sync_commerce_promotions() {
+     \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
+   }
+ 
++  \Drupal::logger('acq_promotion')->notice('Promotion sync completed.');
++
+   drush_print(dt('Done.'));
+ }
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
+index a96094a2..572ce24e 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
+@@ -20,7 +20,7 @@ function acq_sku_drush_command() {
+       'drush acsp' => 'Run a full product synchronization of all available product options.',
+     ],
+   ];
+-  
++
+   $commands['sync-commerce-products'] = [
+     'description' => 'Run a full synchronization of all commerce product records.',
+     'aliases'     => ['acsp'],
+@@ -69,12 +69,13 @@ function drush_acq_sku_sync_commerce_cats() {
+ 
+ 
+ /**
+- * Implements drush category sync command.
++ * Implements drush product attribute sync command.
+  */
+ function drush_acq_sku_sync_commerce_product_options() {
+   drush_print(dt('Synchronizing all commerce product options, please wait...'));
+   $container = \Drupal::getContainer();
+   $container->get('acq_sku.product_options_manager')->synchronizeProductOptions();
++  \Drupal::logger('acq_sku')->notice('Product attribute sync completed.');
+   drush_print(dt('Done.'));
+ }
+ 

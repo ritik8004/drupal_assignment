@@ -7,6 +7,7 @@
 #edit-billing-address,
 .checkout-login,
 .c-add-address,
+.alias--cart-checkout-payment,
 .c-address-book {
   .c-page-title {
     border-bottom: 1px solid $white;
@@ -35,7 +36,7 @@
     display: none;
   }
 
-  #address_wrapper,
+  .address-book-address,
   .profile-form {
     @extend .contact-form;
 
@@ -45,6 +46,7 @@
 
     .address-container-inline > .form-item {
       max-width: 144px;
+      display: inline-block;
       margin-right: 0;
       vertical-align: top;
       width: 100%;
@@ -57,7 +59,7 @@
         max-width: 186px;
 
         &:first-child {
-          margin-#{$right}: 1em;
+          margin-#{$right}: 1rem;
         }
       }
     }
@@ -67,27 +69,32 @@
     }
 
     .form-item {
-      padding-bottom: 3rem;
+      margin-top: 1rem;
+      padding-bottom: 1.5rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 0.5rem;
+        padding-bottom: 2rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 1rem;
+        padding-bottom: 2rem;
+      }
     }
 
     .form-wrapper.field--type-telephone {
       padding-top: 0;
     }
 
-    select {
-      background: none;
-      border: none;
-      border-bottom: 1px solid $grey-ash;
-      height: 1.6rem;
-      outline: none;
-      -webkit-appearance: none;
-      border-radius: 0;
-    }
-
     .form-actions {
-      margin-bottom: 5.625rem;
+      margin-bottom: 2.625rem;
       font-size: 0.75rem;
       font-weight: 700;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 5.625rem;
+      }
 
       .form-submit {
         margin-top: 0;
@@ -150,31 +157,6 @@
   }
 }
 
-// Making it more specific to address page.
-.c-address-book #block-alshaya-white-label-content {
-  .ajax-progress-throbber {
-    margin-bottom: 0.625rem;
-
-    .message {
-      display: none;
-    }
-
-    .throbber {
-      background-image: url(../imgs/icons/MC-loader.svg) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      #{$right}: 1rem;
-      margin-bottom: 0.625rem;
-    }
-  }
-}
-
 html[lang=ar] {
   .profile-form {
     .mobile-number-field .form-type-textfield {
@@ -182,7 +164,7 @@ html[lang=ar] {
     }
 
     input.local-number {
-      margin-top: 0.15rem;
+      margin-top: 1.188rem;
     }
   }
 }

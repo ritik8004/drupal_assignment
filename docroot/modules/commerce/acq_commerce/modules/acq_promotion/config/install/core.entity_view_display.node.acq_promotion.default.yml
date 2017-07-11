@@ -2,36 +2,54 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.acq_promotion.field_acq_promotion_banner
     - field.field.node.acq_promotion.field_acq_promotion_data
     - field.field.node.acq_promotion.field_acq_promotion_description
+    - field.field.node.acq_promotion.field_acq_promotion_disc_type
+    - field.field.node.acq_promotion.field_acq_promotion_discount
+    - field.field.node.acq_promotion.field_acq_promotion_label
     - field.field.node.acq_promotion.field_acq_promotion_rule_id
+    - field.field.node.acq_promotion.field_acq_promotion_sku
+    - field.field.node.acq_promotion.field_acq_promotion_type
     - node.type.acq_promotion
   module:
+    - panelizer
     - text
     - user
+third_party_settings:
+  panelizer:
+    enable: false
+    custom: false
+    allow: false
+    default: default
 id: node.acq_promotion.default
 targetEntityType: node
 bundle: acq_promotion
 mode: default
 content:
   field_acq_promotion_description:
-    weight: 2
+    weight: 1
     label: hidden
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
-  links:
-    weight: 1
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  sharethis:
+  field_acq_promotion_label:
     weight: 0
-    region: content
-    settings: {  }
+    label: hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
+    type: string
+    region: content
 hidden:
-  field_acq_promotion_rule_id: true
+  field_acq_promotion_banner: true
   field_acq_promotion_data: true
+  field_acq_promotion_disc_type: true
+  field_acq_promotion_discount: true
+  field_acq_promotion_rule_id: true
+  field_acq_promotion_sku: true
+  field_acq_promotion_type: true
   langcode: true
+  links: true
+  sharethis: true

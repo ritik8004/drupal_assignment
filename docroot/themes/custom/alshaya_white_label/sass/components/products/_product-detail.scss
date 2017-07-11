@@ -38,14 +38,6 @@
 }
 
 .acq-content-product {
-  @include if-ltr {
-    direction: ltr;
-  }
-
-  @include if-rtl {
-    direction: rtl;
-  }
-
   @include clearfix;
 
   @include breakpoint($tablet) {
@@ -756,7 +748,6 @@
 .pac-container {
   border: 1px solid $white-two;
   box-shadow: none;
-  width: 11.44rem !important;
 
   .pac-icon {
     @include u-visibility(none);
@@ -841,8 +832,8 @@
     }
 
     @include breakpoint($only-mobile) {
-      top: -2rem;
-      #{$left}: 70%;
+      top: -0.875rem;
+      #{$left}: 45%;
     }
   }
 }
@@ -869,6 +860,39 @@
     overflow: hidden;
     width: 100%;
     z-index: 99;
+
+    @include breakpoint($only-mobile) {
+      display: block;
+      position: relative;
+      border: none;
+      z-index: 0;
+      padding: 0;
+      overflow: visible;
+      height: auto;
+
+      .close-inline-modal,
+      .all-stores-info,
+      .available_store {
+        display: none;
+      }
+
+      .stores-list-all {
+        ul {
+          overflow: visible;
+          height: auto;
+
+          li {
+            &:first-child {
+              border-top: none;
+            }
+
+            .store-name {
+              color: $breadcrumb-active;
+            }
+          }
+        }
+      }
+    }
 
     @include breakpoint($tablet) {
       width: 38%;
@@ -996,6 +1020,23 @@
 
     .stores-list-all {
       margin-top: 0.5rem;
+
+      .ajax-progress-throbber {
+        position: absolute;
+
+        .message {
+          display: none;
+        }
+
+        .throbber {
+          background-image: url(../imgs/icons/MC-loader.svg) !important;
+          background-position: $right center !important;
+          background-repeat: no-repeat !important;
+          background-size: 1.5rem;
+          padding-left: 0.625rem;
+          padding-right: 0.625rem;
+        }
+      }
     }
   }
 }
@@ -1062,6 +1103,12 @@
         padding: 0.5rem 0;
       }
 
+      .ladda-button .ladda-spinner {
+        html[lang=ar] & {
+          margin-left: -1rem;
+        }
+      }
+
       button[type="submit"] {
         font-family: $arial;
         font-weight: bold;
@@ -1083,9 +1130,19 @@
           z-index: 4;
           margin: 0;
           #{$left}: 0;
+          height: 2.188rem;
+
+          .ladda-label {
+            html[lang="ar"] & {
+              margin-top: 0;
+              position: absolute;
+              top: 1rem;
+              left: 33%;
+            }
+          }
         }
 
-        @include breakpoint($mobile) {
+        @include breakpoint($tablet) {
           float: $left;
         }
 
@@ -1205,6 +1262,8 @@ article[gtm-sku-type="simple"] {
         @include breakpoint($only-tablet) {
           float: $right;
           margin-top: 1rem;
+          height: 2.188rem;
+          text-align: center;
         }
       }
     }

@@ -41,7 +41,7 @@ import: '${repo.root}/blt/setup.local.xml'
 modules:
   local:
     enable: [dblog, devel, seckit, views_ui]
-    uninstall: [acsf, acquia_connector, shield]
+    uninstall: [acsf, acquia_connector, shield, alshaya_captcha]
   ci:
     enable: {  }
     uninstall: [acquia_connector, shield]

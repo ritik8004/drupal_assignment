@@ -780,6 +780,36 @@ function alshaya_master_install() {
     'A @entity_type with @field_name @value already exists.' => [
       'ar' => 'يوجد @entity_type لديه اسم المستخدم @field_name و رقم الجوال @value مسجل',
     ],
+    'Something went wrong, please try again later.' => [
+      'ar' => 'هناك خطأ ما, يرجى المحاولة لاحقاً.',
+    ],
+    'Your account has not been activated or is blocked.' => [
+      'ar' => 'لم يتم تفعيل حسابك أو تم منعه',
+    ],
+    'Colour' => [
+      'ar' => 'اللون',
+    ],
+    'Brand' => [
+      'ar' => 'العلامة التجارية',
+    ],
+    'Available at three stores near' => [
+      'ar' => 'متوفر في 3 محلات بالقرب من ',
+    ],
+    'change' => [
+      'ar' => 'تغيير',
+    ],
+    'Discount' => [
+      'ar' => 'الخصم',
+    ],
+    'under @stop' => [
+      'ar' => 'أقل من @stop د.ك.',
+    ],
+    'Features and benefits' => [
+      'ar' => 'المزايا و الفوائد',
+    ],
+    'Specifications' => [
+      'ar' => 'المواصفات',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
@@ -823,7 +853,24 @@ function alshaya_master_install() {
 
   // Add <i class> for allowed html in rich text.
   \Drupal::configFactory()->getEditable('filter.format.rich_text')
-    ->set('filters.filter_html.settings.allowed_html', '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <br> <h1> <pre> <drupal-entity data-*> <i class> <span class>')
+    ->set('filters.filter_html.settings.allowed_html', '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h2 class> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <p class> <br> <h1> <h1 class> <pre> <drupal-entity data-*> <i class> <span class>')
+    ->save();
+
+  // Get config for rich text editor.
+  $editor_config = \Drupal::configFactory()->getEditable('editor.editor.rich_text')->get('settings.toolbar.rows.0');
+  if (is_array($editor_config)) {
+    foreach ($editor_config as &$setting) {
+      if ($setting['name'] == 'Block Formatting') {
+        $setting['items'][] = 'Styles';
+        break;
+      }
+    }
+  }
+
+  // Enable the style combo for rich text.
+  \Drupal::configFactory()->getEditable('editor.editor.rich_text')
+    ->set('settings.toolbar.rows.0', $editor_config)
+    ->set('settings.plugins.stylescombo.styles', "p.normal|Normal\r\nh1.title|Heading\r\nh1.title--arabic| Heading Arabic\r\nh2.subhead|Sub Heading\r\np.arabic|Arabic Text")
     ->save();
 
   // Set the Status Messages block.

@@ -8,7 +8,6 @@ use Drupal\Core\Link;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -81,6 +80,8 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $account = $this->currentUser;
     }
 
+    $is_customer = alshaya_acm_customer_is_customer($account);
+
     // Get the current route to set active class.
     $currentRoute = \Drupal::routeMatch()->getRouteName();
 
@@ -98,12 +99,14 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $links['my_account']['text'] = $this->t('Account');
     }
 
-    // Orders link.
-    $links['orders'] = [
-      'text' => $this->t('orders'),
-      'route' => 'acq_customer.orders',
-      'options' => ['user' => $account->id()],
-    ];
+    if ($is_customer) {
+      // Orders link.
+      $links['orders'] = [
+        'text' => $this->t('orders'),
+        'route' => 'acq_customer.orders',
+        'options' => ['user' => $account->id()],
+      ];
+    }
 
     // Contact details link.
     $links['contact_details'] = [
@@ -112,23 +115,26 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       'options' => ['user' => $account->id()],
     ];
 
-    // Address book link.
-    $links['address_book'] = [
-      'text' => $this->t('address book'),
-      'route' => 'entity.profile.type.address_book.user_profile_form',
-      'options' => [
-        'user' => $account->id(),
-        'profile_type' => 'address_book',
-      ],
-    ];
+    if ($is_customer) {
+      // Address book link.
+      $links['address_book'] = [
+        'text' => $this->t('address book'),
+        'route' => 'entity.profile.type.address_book.user_profile_form',
+        'options' => [
+          'user' => $account->id(),
+          'profile_type' => 'address_book',
+        ],
+      ];
+    }
 
-    // Communication preferences link.
-    // TODO: Update the route name once link is available.
-    $links['communication_preference'] = [
-      'text' => $this->t('communication preferences'),
-      'route' => 'alshaya_user.user_communication_preference',
-      'options' => ['user' => $account->id()],
-    ];
+    if ($is_customer) {
+      // Communication preferences link.
+      $links['communication_preference'] = [
+        'text' => $this->t('communication preferences'),
+        'route' => 'alshaya_user.user_communication_preference',
+        'options' => ['user' => $account->id()],
+      ];
+    }
 
     // Change password link.
     $links['change_password'] = [
@@ -157,7 +163,8 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       }
 
       $items[$key] = [
-        '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)->toString(),
+        '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)
+          ->toString(),
       ];
 
       // Add class for sign-out.
@@ -180,13 +187,18 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     }
 
     $build = [];
-
     $build['my_account_title'] = [
-      '#markup' => '<h3 class="my-account-title">' . $this->getTitle() . '</h3>',
+      '#markup' => '<h3 class="my-account-title">' . $this->t('Welcome, @name', [
+        '@name' => \Drupal::service('alshaya_user.info')
+          ->getName(),
+      ]) . '</h3>',
     ];
 
     $build['my_account_mobile_title'] = [
-      '#markup' => '<h3 class="my-account-mobile-title1">' . $this->t('my account') . '</h3><h4 class="my-account-mobile-title2">' . $this->getSubtitle() . '</h4>',
+      '#markup' => '<h3 class="my-account-mobile-title1">' . $this->t('my account') . '</h3><h4 class="my-account-mobile-title2">' . $this->t('logged in as @name', [
+        '@name' => \Drupal::service('alshaya_user.info')
+          ->getName(),
+      ]) . '</h4>',
     ];
 
     $build['my_account_links'] = [
@@ -215,48 +227,6 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
    */
   public function getCacheTags() {
     return Cache::mergeTags(parent::getCacheTags(), ['user:' . $this->currentUser->id()]);
-  }
-
-  /**
-   * Get the dynamic value as title for the block.
-   *
-   * @return string
-   *   Title for the block.
-   */
-  protected function getTitle() {
-    $user = User::load($this->currentUser->id());
-    $title = '';
-    if ($user) {
-      $user = $this->entityRepository->getTranslationFromContext($user);
-      $fname = $user->get('field_first_name')->getString();
-      $lname = $user->get('field_last_name')->getString();
-      if (!empty($fname)) {
-        $title = $this->t('Welcome, @fname @lname', ['@fname' => $fname, '@lname' => $lname]);
-      }
-    }
-
-    return $title;
-  }
-
-  /**
-   * Get the dynamic value as subtitle for the block, to be shown in mobile.
-   *
-   * @return string
-   *   Title for the block.
-   */
-  public function getSubtitle() {
-    $user = User::load($this->currentUser->id());
-    $title = '';
-    if ($user) {
-      $user = $this->entityRepository->getTranslationFromContext($user);
-      $fname = $user->get('field_first_name')->getString();
-      $lname = $user->get('field_last_name')->getString();
-      if (!empty($fname)) {
-        $title = $this->t('logged in as @fname @lname', ['@fname' => $fname, '@lname' => $lname]);
-      }
-    }
-
-    return $title;
   }
 
 }
