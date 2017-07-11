@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_promotion
+    - serialization
+    - user
+id: acq_promotionsync
+plugin_id: acq_promotionsync
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+      - xml
+    supported_auth:
+      - cookie

@@ -13,8 +13,8 @@ use Psr\Log\LoggerInterface;
  * Provides a resource to get view modes by entity and bundle.
  *
  * @RestResource(
- *   id = "promotion_sync_resource",
- *   label = @Translation("Promotion sync resource"),
+ *   id = "acq_promotionsync",
+ *   label = @Translation("Acquia Commerce Promotion Sync"),
  *   uri_paths = {
  *     "canonical" = "/promotionsync",
  *     "https://www.drupal.org/link-relations/create" = "/promotionsync"
@@ -81,7 +81,11 @@ class PromotionSyncResource extends ResourceBase {
    *   Throws exception expected.
    */
   public function post(array $promotions = []) {
+//    foreach ($promotions as $promotion) {
+//
+//    }
 
+    return new ResourceResponse(["hello" => "world"]);
   }
 
 }
