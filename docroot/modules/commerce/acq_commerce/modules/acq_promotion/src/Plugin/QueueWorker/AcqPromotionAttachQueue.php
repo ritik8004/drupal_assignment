@@ -45,12 +45,12 @@ class AcqPromotionAttachQueue extends AlshayaPromotionQueueBase {
     $skus = $data['skus'];
     $promotion_nid = $data['promotion'];
 
-    foreach ($skus as $sku) {
-      $sku_entity = SKU::loadFromSku($sku);
+    foreach ($skus as $key => $sku) {
+      $sku_entity = SKU::loadFromSku($sku['sku']);
       $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
       $sku_promotions += $promotion_nid;
       $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
-
+      $sku->final_price->value = $sku['final_price'];
       $sku_entity->save();
     }
     $this->logger->info('Attached Promotion:@promo to SKUs: @skus',
