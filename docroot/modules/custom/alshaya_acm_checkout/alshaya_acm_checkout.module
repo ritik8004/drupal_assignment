@@ -186,6 +186,18 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
 
     alshaya_i18n_save_translations($strings);
   }
+
+  $acq_checkout_settings = \Drupal::config('alshaya_acm_checkout.settings');
+
+  // Create shipping method term for click and collect during install.
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+  // Get the code based on rules of combining carrier and method codes.
+  $code = $checkout_options_manager->getClickandColectShippingMethod();
+
+  // This is just to create click and collect method term during install.
+  $checkout_options_manager->loadShippingMethod($code, $code, $code, $acq_checkout_settings->get('click_collect_method_carrier_code'), $acq_checkout_settings->get('click_collect_method_method_code'));
 }
 
 /**

@@ -154,7 +154,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
       $method_code = $term->get('field_shipping_code')->getString();
 
-      if ($method_code == $checkout_config->get('click_collect_method')) {
+      if ($method_code == $checkout_options_manager->getClickandColectShippingMethod()) {
         $delivery['label'] = $this->t('Click & Collect');
         $delivery['method_name'] = '';
         $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();

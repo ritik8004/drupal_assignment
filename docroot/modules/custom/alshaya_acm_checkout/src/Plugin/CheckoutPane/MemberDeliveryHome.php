@@ -149,7 +149,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       ],
     ];
 
-    if ($address['customer_address_id']) {
+    if (!empty($address['customer_address_id'])) {
       $pane_form['header']['title']['#markup'] = '<div class="title delivery-address-title">' . $this->t('delivery address') . '</div>';
 
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */

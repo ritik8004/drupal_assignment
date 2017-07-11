@@ -126,6 +126,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         'wrapper' => 'address_wrapper',
       ],
       '#weight' => -50,
+      '#limit_validation_errors' => [['address']],
     ];
 
     $complete_form['actions']['back_to_basket'] = [
@@ -171,61 +172,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    *   Available shipping methods.
    */
   public static function generateShippingEstimates($address) {
-    // Below code is to ensure we call the API only once.
-    static $options;
-    $static_key = base64_encode(serialize($address));
-    if (isset($options[$static_key]) && !empty($options[$static_key])) {
-      return $options[$static_key];
-    }
-
-    $address = (array) $address;
-
-    $address = _alshaya_acm_checkout_clean_address($address);
-
-    $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
-
-    $shipping_methods = [];
-    $shipping_method_options = [];
-
-    if (!empty($address) && !empty($address['country_id'])) {
-      $shipping_methods = \Drupal::service('acq_commerce.api')->getShippingEstimates($cart->id(), $address);
-    }
-
-    if (!empty($shipping_methods)) {
-      foreach ($shipping_methods as $method) {
-        // Key needs to hold both carrier and method.
-        $key = implode('_', [$method['carrier_code'], $method['method_code']]);
-
-        // @TODO: Currently what we get back in orders is first 32 characters
-        // and concatenated by underscore.
-        $code = substr($key, 0, 32);
-        $name = t('@method_title by @carrier_title', ['@method_title' => $method['method_title'], '@carrier_title' => $method['carrier_title']]);
-        $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
-
-        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-        $term = $checkout_options_manager->loadShippingMethod($code, $name, $method['carrier_code'], $method['method_code']);
-
-        // We don't display click and collect delivery method for home delivery.
-        if ($code == \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
-          continue;
-        }
-
-        $method_name = '
-          <div class="shipping-method-name">
-            <div class="shipping-method-title">' . $term->getName() . '</div>
-            <div class="shipping-method-price">' . $price . '</div>
-            <div class="shipping-method-description">' . $term->get('description')->getValue()[0]['value'] . '</div>
-          </div>
-        ';
-
-        $shipping_method_options[$code] = $method_name;
-      }
-    }
-
-    $options[$static_key] = $shipping_method_options;
-
-    return $shipping_method_options;
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+    return $checkout_options_manager->getHomeDeliveryShippingEstimates($address);
   }
 
   /**
@@ -290,7 +239,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
     $term = $checkout_options_manager->loadShippingMethod($shipping_method);
 
-    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
+    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), []);
 
     // We are only looking to convert guest carts.
     if (!($cart->customerId())) {

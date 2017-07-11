@@ -62,6 +62,9 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#type' => 'textfield',
       '#title' => $this->t('Find your closest collection point'),
       '#prefix' => '<div class="label-store-location">' . $this->t('Find your closest collection point') . '</div>',
+      '#attributes' => [
+        'class' => ['store-location-input'],
+      ],
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
@@ -105,11 +108,9 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $default_mobile = '';
 
     $shipping = (array) $cart->getShipping();
-    if ($cart->getExtension('store_code') && $shipping) {
+    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
       $default_mobile = $shipping['telephone'];
-      $default_firstname = $shipping['firstname'];
-      $default_lastname = $shipping['lastname'];
     }
     else {
       // Check once in customer profile.
@@ -117,28 +118,14 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       if ($account_phone = $account->get('field_mobile_number')->getValue()) {
         $default_mobile = $account_phone[0]['value'];
       }
-      $default_firstname = $account->get('field_first_name')->getString();
-      $default_lastname = $account->get('field_last_name')->getString();
     }
 
-    // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['firstname'] = [
-      '#type' => 'textfield',
-      '#title' => t('First Name'),
-      '#required' => TRUE,
-      '#default_value' => $default_firstname,
-    ];
-
-    // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['lastname'] = [
-      '#type' => 'textfield',
-      '#title' => t('Last Name'),
-      '#required' => TRUE,
-      '#default_value' => $default_lastname,
+    $pane_form['selected_store']['mobile_help'] = [
+      '#markup' => '<div class="cc-help-text cc-mobile-help-text">' . $this->t("<p>Please provide the mobile number of the person collecting the order.</p>We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
     // @TODO: Verify mobile validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['mobile_number'] = [
+    $pane_form['selected_store']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => $this->t('Mobile Number'),
       '#verify' => 0,
@@ -192,7 +179,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     ];
 
     $complete_form['actions']['ccnext'] = $complete_form['actions']['next'];
-    $complete_form['actions']['ccnext']['#limit_validation_errors'] = [['mobile_number']];
+    $complete_form['actions']['ccnext']['#limit_validation_errors'] = [['cc_mobile_number']];
     $complete_form['actions']['ccnext']['#attributes']['class'][] = 'cc-action';
     $complete_form['actions']['ccnext']['#ajax'] = [
       'callback' => [$this, 'submitMemberDeliveryCollect'],
@@ -230,9 +217,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $address = [
       'country_id' => _alshaya_custom_get_site_level_country_code(),
-      'telephone' => _alshaya_acm_checkout_clean_address_phone($values['mobile_number']),
-      'firstname' => $values['firstname'],
-      'lastname' => $values['lastname'],
+      'telephone' => _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']),
     ];
 
     $cart->setShipping($address);
