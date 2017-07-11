@@ -97,7 +97,7 @@ class UserCommunicationPreference extends FormBase {
 
     // Display mobile as communication preference if not empty.
     if (!empty($account->field_mobile_number->getValue())) {
-      $options['mobile'] = $this->t('Mobile') . ' <span>(' . $this->formatMobileNumber($this->mobileUtil, $account) . ')</span>';
+      $options['mobile'] = $this->t('Mobile') . ' <span>(' . \Drupal::service('alshaya_user.info')->getFormattedMobileNumber() . ')</span>';
     }
 
     $preference = $this->userData->get('user', $this->user_profile->id(), 'communication_preference');
@@ -113,40 +113,6 @@ class UserCommunicationPreference extends FormBase {
     $form['actions']['submit'] = ['#type' => 'submit', '#value' => $this->t('Save')];
 
     return $form;
-  }
-
-  /**
-   * Format mobile number.
-   *
-   * @param object $mobileUtil
-   *   The MobileNumber util service object.
-   * @param object $account
-   *   The user account object.
-   * @param int $format
-   *   The preferable mobile number format.
-   * @param bool $replace_space
-   *   Replaces spaces in the mobile number with hyphens.
-   *
-   * @see \libphonenumber\PhoneNumberFormat
-   *
-   * @return string|null
-   *   Return formatted mobile number or null if empty.
-   */
-  public static function formatMobileNumber($mobileUtil, $account, $format = 1, $replace_space = FALSE) {
-    // Display mobile as communication preference if not empty.
-    if (empty($account->field_mobile_number->getValue())) {
-      return NULL;
-    }
-    // Get mobile values.
-    $mobile_raw = $account->field_mobile_number->getValue()[0];
-    // Get phonenumber object.
-    $mobile_value = $mobileUtil->getMobileNumber($mobile_raw['value']);
-    $mobile_number = $mobileUtil->libUtil()->format($mobile_value, $format);
-
-    if ($replace_space) {
-      $mobile_number = str_replace(' ', ' - ', $mobile_number);
-    }
-    return $mobile_number;
   }
 
   /**
