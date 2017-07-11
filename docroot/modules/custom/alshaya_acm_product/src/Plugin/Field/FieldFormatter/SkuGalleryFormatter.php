@@ -109,8 +109,9 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     if ($entity_adapter instanceof EntityAdapter) {
       $node = $entity_adapter->getValue();
       if ($node instanceof Node) {
-        $product_url = $node->url();
-        $product_label = $node->getTitle();
+        $translatedNode = $node->getTranslation(\Drupal::service('language_manager')->getCurrentLanguage()->getId());
+        $product_url = $translatedNode->url();
+        $product_label = $translatedNode->getTitle();
       }
     }
 

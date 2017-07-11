@@ -137,7 +137,7 @@
     border: 1px solid $whisper-dark;
     background-color: $whisper-dark;
     border-radius: 0;
-    padding: 10px 30px 9px 16px;
+    padding: 0.3125rem 1.875rem 0.25rem 1rem;
     -webkit-appearance: none;
     appearance: none;
     outline: none;
@@ -155,7 +155,7 @@
 
   .form-text {
     border: 1px solid $whisper-dark;
-    padding: 10px 8px 9px 16px;
+    padding: 0.3125rem 0.8rem 0.25rem 1rem;
     width: 125px;
 
     @include breakpoint($desktop) {
@@ -320,16 +320,20 @@
       white-space: nowrap;
       overflow: hidden;
       position: relative;
-      max-width: 175px;
+      max-width: 10.9375rem;
       display: inline-block;
 
       &::after {
         content: "...";
         background: $white-five;
         position: absolute;
-        right: 0;
+        #{$right}: 0;
         width: 1rem;
       }
+    }
+
+    @include breakpoint($tablet) {
+      max-width: 10rem;
     }
   }
 
@@ -519,6 +523,7 @@
       select {
         height: 2.1875rem;
         width: 100%;
+        direction: $dir;
       }
     }
 

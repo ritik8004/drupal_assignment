@@ -6,19 +6,6 @@
  */
 
 /**
- * Implements hook_alshaya_profile_installed().
- */
-function alshaya_acm_promotion_alshaya_profile_installed(array $modules) {
-  try {
-    // Sync the promotions.
-    \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
-  }
-  catch (\Exception $e) {
-    \Drupal::logger('alshaya_acm_promotion')->error('Error occurred while syncronizing promotions during install: @error', ['@error' => $e->getMessage()]);
-  }
-}
-
-/**
  * Implements hook_views_data_alter().
  */
 function alshaya_acm_promotion_views_data_alter(array &$data) {

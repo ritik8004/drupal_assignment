@@ -21,6 +21,28 @@
     position: relative;
   }
 
+  .order-transaction + td .dark {
+    @include breakpoint($tablet) {
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+      max-width: 7.1rem;
+      display: inline-block;
+
+      &::after {
+        content: "...";
+        background: $white-smoke;
+        position: absolute;
+        #{$right}: 0;
+        padding-#{$left}: 0.1875rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 10.375rem;
+    }
+  }
+
   .print--button {
     display: none;
     position: absolute;

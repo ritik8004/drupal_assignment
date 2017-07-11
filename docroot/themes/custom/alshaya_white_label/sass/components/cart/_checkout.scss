@@ -999,17 +999,17 @@ body.alias--cart {
 
     .checkout-top-button {
       cursor: pointer;
-      background: #ff6d22;
-      color: #fff;
+      background: $pumpkin-orange;
+      color: $white-five;
       font-size: 0.75rem;
       font-family: $arial;
       width: 10.81rem;
       height: 2.188rem;
-      display: table-cell;
+      display: inline-block;
       text-align: center;
-      vertical-align: middle;
-      padding: 0.6rem 1.125rem;
+      padding: 0 1.125rem;
       max-height: 2.188rem;
+      line-height: 2.7;
     }
   }
 }
