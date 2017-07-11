@@ -116,22 +116,6 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     }
 
     /**
-     * @Given /^the page title should be "([^"]*)"$/
-     */
-    public function thePageTitleShouldBe($arg1) {
-        $titleElement = $this->getSession()->getPage()->find('css', 'head title');
-        if ($titleElement === null) {
-            throw new \Exception('Page title element was not found!');
-        } else {
-            $title = $titleElement->getText();
-            $expectedTitle = $arg1;
-            if ($expectedTitle !== $title) {
-                throw new \Exception("Incorrect title! Expected:$expectedTitle | Actual:$title ");
-            }
-        }
-    }
-
-    /**
      * @When /^I subscribe using a valid Email ID$/
      */
     public function iSubscribeUsingAValidEmailID() {
