@@ -95,7 +95,11 @@
 
   .joinclub {
     float: $right;
-    width: 48%;
+    width: 42.5%;
+
+    @include breakpoint($desktop) {
+      width: 48%;
+    }
 
     #block-jointheclub {
       h3 {
@@ -110,10 +114,25 @@
         font-size: 0.75rem;
         color: $grey-ash;
         margin: 0.4rem 0;
-        text-transform: lowercase;
+        text-transform: none;
+        padding-#{$left}: 0.5rem;
 
         @include breakpoint($tablet) {
           margin: 0.5rem 0;
+          line-height: 1.2;
+          padding-#{$left}: 0;
+
+          span {
+            vertical-align: middle;
+          }
+
+          .icon-reward {
+            top: -0.125rem;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          text-transform: lowercase;
         }
       }
 
@@ -127,14 +146,16 @@
         max-width: 15.5rem;
 
         @include breakpoint($tablet) {
-          margin-#{$left}: -2.6875rem;
+          margin-#{$left}: -2rem;
           width: 100%;
+          min-width: 14.5rem;
         }
 
         @include breakpoint($desktop) {
           float: $right;
           width: 58%;
           margin-#{$left}: 0;
+          min-width: 0;
         }
       }
 

@@ -31,6 +31,7 @@
     border-bottom: 1px solid $white;
     margin-top: 1.25rem;
     font-size: 0.875rem;
+    font-weight: normal;
 
     @include breakpoint($desktop) {
       margin-top: 2.625rem;
@@ -333,7 +334,7 @@
     }
 
     @include breakpoint($tablet) {
-      max-width: 10rem;
+      max-width: 10.2rem;
     }
   }
 
