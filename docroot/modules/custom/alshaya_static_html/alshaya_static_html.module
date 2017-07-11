@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Asset\AttachedAssetsInterface;
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_static_html_preprocess_node__static_html(&$variables) {
+  // Get the node object.
+  $node = $variables['elements']['#node'];
+
+  // Get CSS and JS.
+  $css = $node->get('field_css')->getString();
+  $js = $node->get('field_javascript')->getString();
+
+  // Add CSS in head.
+  $variables['inline_css'] = [
+    '#type' => 'inline_template',
+    '#template' => '{{ inline_css | raw }}',
+    '#context' => [
+      'inline_css' => '<style>' . $css . '</style>',
+    ],
+  ];
+
+  // Add JS in head.
+  $variables['inline_js'] = [
+    '#type' => 'inline_template',
+    '#template' => '{{ inline_js | raw }}',
+    '#context' => [
+      'inline_js' => '<script>' . $js . '</script>',
+    ],
+  ];
+
+  // Adding here as we overriding the template in module.
+  $variables['content'] = $variables['elements']['body'];
+
+  // Attach jquery library.
+  $variables['#attached']['library'][] = 'core/jquery';
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_static_html_theme() {
+  $theme['node__static_html'] = [
+    'template' => 'node--static-html',
+  ];
+  return $theme;
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function alshaya_static_html_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  // Set the jquery in header for the inline js.
+  $javascript['core/assets/vendor/jquery/jquery.min.js']['scope'] = 'header';
+}

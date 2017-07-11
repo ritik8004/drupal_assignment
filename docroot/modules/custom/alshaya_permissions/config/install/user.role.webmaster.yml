@@ -71,3 +71,6 @@ permissions:
   - 'administer robots.txt'
   - 'administer redirects'
   - 'administer redirect settings'
+  - 'create static_html content'
+  - 'delete any static_html content'
+  - 'edit any static_html content'

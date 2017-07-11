@@ -1,0 +1,6 @@
+excluded:
+  - block.block.views_block__alshaya_product_list_block_2
+  - block.block.views_block__products_products_block
+  - block.block.views_block__promotion_banner_block_1
+  - facets.facet_source.search_api__views_block__alshaya_product_list__block_2
+required: true
