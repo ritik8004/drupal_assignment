@@ -102,7 +102,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     $pane_form['selected_store']['customer_help'] = [
-      '#markup' => '<div class="cc-help-text cc-customer-help-text">' . $this->t("<p>Please provide your contact details.</p>We’ll be using this information to keep intouch with you") . '</div>',
+      '#markup' => '<div class="cc-help-text cc-customer-help-text"><p>' . $this->t("Please provide your contact details") . '</p>' . $this->t("We’ll be using this information to keep in touch with you") . '</div>',
     ];
 
     // @TODO: For back and forth, get default first/last name from customer.
@@ -132,7 +132,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     $pane_form['selected_store']['mobile_help'] = [
-      '#markup' => '<div class="cc-help-text cc-mobile-help-text">' . $this->t("<p>Please provide the mobile number of the person collecting the order.</p>We'll send you a text message when the order is ready to collect") . '</div>',
+      '#markup' => '<div class="cc-help-text cc-mobile-help-text"><p>' . $this->t("Please provide the mobile number of the person collecting the order") . '</p>' . $this->t("We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
     $pane_form['selected_store']['mobile_number'] = [
