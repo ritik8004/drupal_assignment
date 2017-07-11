@@ -8,7 +8,6 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -115,13 +114,14 @@ class PromotionSyncResource extends ResourceBase {
     foreach ($promotions as $promotion) {
       $attached_promotion_skus = [];
       $fetched_promotion_skus = [];
+      $fetched_promotion_sku_attach_data = [];
 
       // Check if this promotion exists in Drupal.
       $promotion_node = $this->promotionManager->getPromotionByRuleId($promotion['rule_id']);
 
       // If promotion exists, we update the related skus & final price.
       if ($promotion_node) {
-        $attached_skus = $this->promotionManager->getSkusForPromotion($promotion);
+        $attached_skus = $this->promotionManager->getSkusForPromotion($promotion_node);
 
         // Extract sku text from sku objects.
         if (!empty($attached_skus)) {
@@ -154,8 +154,9 @@ class PromotionSyncResource extends ResourceBase {
         // Create a queue for adding promotions to skus.
         if (!empty($fetched_promotion_skus)) {
           $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
-          $data['promotion'] = $promotion->id();
+          $data['promotion'] = $promotion_node->id();
           $data['skus'] = $fetched_promotion_sku_attach_data;
+          $promotion_attach_queue->createItem($data);
         }
       }
     }
