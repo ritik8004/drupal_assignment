@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.static_html.body
+    - field.field.node.static_html.field_css
+    - field.field.node.static_html.field_javascript
+    - node.type.static_html
+  module:
+    - text
+    - user
+id: node.static_html.teaser
+targetEntityType: node
+bundle: static_html
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    region: content
+  sharethis:
+    weight: 10
+    region: content
+hidden:
+  field_css: true
+  field_javascript: true
+  langcode: true
