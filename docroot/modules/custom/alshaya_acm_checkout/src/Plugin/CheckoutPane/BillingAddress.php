@@ -21,6 +21,21 @@ use Drupal\Core\Form\FormStateInterface;
 class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
 
   /**
+   * Billing address case - same as shipping.
+   */
+  const BILLING_ADDR_CASE_SAME_AS_SHIPPING = 1;
+
+  /**
+   * Billing address case - not same as shipping.
+   */
+  const BILLING_ADDR_CASE_NOT_SAME_AS_SHIPPING = 2;
+
+  /**
+   * Billing address case - click and collect.
+   */
+  const BILLING_ADDR_CASE_CLICK_COLLECT = 3;
+
+  /**
    * {@inheritdoc}
    */
   public function isVisible() {
@@ -54,11 +69,11 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     if ($shipping_method == $checkout_options_manager->getClickandColectShippingMethod()) {
       // For click and collect we always want the billing address.
-      $same_as_shipping = 3;
+      $same_as_shipping = self::BILLING_ADDR_CASE_CLICK_COLLECT;
 
       $pane_form['same_as_shipping'] = [
         '#type' => 'value',
-        '#value' => 3,
+        '#value' => $same_as_shipping,
       ];
     }
     else {
@@ -69,18 +84,18 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       $pane_form['same_as_shipping'] = [
         '#type' => 'radios',
         '#options' => [
-          1 => $this->t('Yes'),
-          2 => $this->t('No'),
+          self::BILLING_ADDR_CASE_SAME_AS_SHIPPING => $this->t('Yes'),
+          self::BILLING_ADDR_CASE_NOT_SAME_AS_SHIPPING => $this->t('No'),
         ],
         '#attributes' => ['class' => ['same-as-shipping']],
         '#ajax' => [
           'callback' => [$this, 'updateAddressAjaxCallback'],
         ],
-        '#default_value' => 1,
+        '#default_value' => self::BILLING_ADDR_CASE_SAME_AS_SHIPPING,
       ];
 
       // By default we want to use same address as shipping.
-      $same_as_shipping = 1;
+      $same_as_shipping = self::BILLING_ADDR_CASE_SAME_AS_SHIPPING;
     }
 
     if ($form_state->getValues()) {
@@ -102,7 +117,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       ],
     ];
 
-    if ($same_as_shipping !== 1) {
+    if ($same_as_shipping !== self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
       $billing_address = (array) $cart->getBilling();
 
       if (!empty($billing_address['country_id'])) {
@@ -110,6 +125,17 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
         $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
         $address_default_value = $address_book_manager->getAddressArrayFromMagentoAddress($billing_address);
         $form_state->setTemporaryValue('default_value_mobile', $address_default_value['mobile_number']);
+      }
+      elseif ($same_as_shipping == self::BILLING_ADDR_CASE_CLICK_COLLECT) {
+        /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+        $api_wrapper = \Drupal::service('acq_commerce.api');
+
+        $customer = $api_wrapper->getCustomer($cart->customerEmail());
+        $address_default_value = [
+          'given_name' => $customer['firstname'],
+          'family_name' => $customer['lastname'],
+          'country_code' => _alshaya_custom_get_site_level_country_code(),
+        ];
       }
       else {
         $address_default_value = [
@@ -146,7 +172,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $values = $form_state->getValue($pane_form['#parents']);
 
-    if ($values['same_as_shipping'] != 1) {
+    if ($values['same_as_shipping'] != self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
       $address_values = $values['address']['billing'];
 
       /** @var \Drupal\profile\Entity\Profile $profile */
@@ -178,7 +204,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $shipping_address = (array) $cart->getShipping();
 
-    if ($values['same_as_shipping'] == 1) {
+    if ($values['same_as_shipping'] == self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
       // Loading address from address book if customer_address_id is available.
       if (isset($shipping_address['customer_address_id'])) {
         if ($entity = $address_book_manager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
@@ -197,7 +223,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
 
       // If shipping method is click and collect, we set billing address to
       // shipping except the shipping phone.
-      if ($values['same_as_shipping'] == 3) {
+      if ($values['same_as_shipping'] == self::BILLING_ADDR_CASE_CLICK_COLLECT) {
         $original_shipping_address = $shipping_address;
         $shipping_address = $address;
         $shipping_address['telephone'] = $original_shipping_address['telephone'];

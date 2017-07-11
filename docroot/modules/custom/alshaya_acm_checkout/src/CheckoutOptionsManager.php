@@ -90,7 +90,7 @@ class CheckoutOptionsManager {
     }
 
     // Clean the code every-time.
-    $code = substr(str_replace(',', '_', $code), 0, 32);
+    $code = $this->getCleanShippingMethodCode($code);
 
     $query = $this->termStorage->getQuery();
     $query->condition('vid', 'shipping_method');

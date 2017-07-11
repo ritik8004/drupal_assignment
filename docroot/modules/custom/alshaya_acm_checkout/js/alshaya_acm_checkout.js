@@ -12,9 +12,11 @@
   Drupal.behaviors.ZZAlshayaAcmCheckout = {
     attach: function (context, settings) {
       $('#edit-delivery-tabs').once('bind-events').each(function () {
+        $('input[data-drupal-selector="edit-actions-next"]').hide();
+
         $('.tab[gtm-type]', $(this)).on('click', function () {
           $('#selected-tab').val($(this).attr('gtm-type'));
-          Drupal.behaviors.cvJqueryValidate.attach(jQuery("#block-alshaya-white-label-content"));
+          Drupal.behaviors.cvJqueryValidate.attach($("#block-alshaya-white-label-content"));
         });
       });
 

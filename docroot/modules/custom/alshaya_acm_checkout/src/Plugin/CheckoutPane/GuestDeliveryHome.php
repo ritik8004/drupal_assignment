@@ -102,7 +102,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $default_shipping = $cart->getShippingMethodAsString();
 
     // Convert to code.
-    $default_shipping = str_replace(',', '_', substr($default_shipping, 0, 32));
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+    $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($default_shipping);
 
     if (!empty($shipping_methods) && empty($default_shipping)) {
       $default_shipping = array_keys($shipping_methods)[0];
@@ -128,6 +130,8 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#weight' => -50,
       '#limit_validation_errors' => [['address']],
     ];
+
+    $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
 
     $complete_form['actions']['back_to_basket'] = [
       '#type' => 'link',

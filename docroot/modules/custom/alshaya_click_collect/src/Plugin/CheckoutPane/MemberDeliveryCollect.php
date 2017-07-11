@@ -124,6 +124,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#markup' => '<div class="cc-help-text cc-mobile-help-text">' . $this->t("<p>Please provide the mobile number of the person collecting the order.</p>We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
+    // Here we have cc_ prefix to ensure validations work fine and don't
+    // conflict with address form fields.
     // @TODO: Verify mobile validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
@@ -178,12 +180,25 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       ],
     ];
 
-    $complete_form['actions']['ccnext'] = $complete_form['actions']['next'];
-    $complete_form['actions']['ccnext']['#limit_validation_errors'] = [['cc_mobile_number']];
-    $complete_form['actions']['ccnext']['#attributes']['class'][] = 'cc-action';
-    $complete_form['actions']['ccnext']['#ajax'] = [
-      'callback' => [$this, 'submitMemberDeliveryCollect'],
-      'wrapper' => 'selected-store-wrapper',
+    $complete_form['actions']['ccnext'] = [
+      '#name' => 'ccnext',
+      '#type' => 'submit',
+      // Drupal processes limit_validations_errors based on value of the button
+      // and we want to have same button "proceed to payment" for both the tabs
+      // but still want different validations to work on both.
+      // Space here is added just to keep them separate for drupal but still
+      // have same text in frontend.
+      '#value' => $complete_form['actions']['next']['#value'] . ' ',
+      '#attributes' => [
+        'class' => ['cc-action'],
+      ],
+      '#ajax' => [
+        'callback' => [$this, 'submitMemberDeliveryCollect'],
+        'wrapper' => 'selected-store-wrapper',
+      ],
+      // This is required for limit_validation_errors to work.
+      '#submit' => [],
+      '#limit_validation_errors' => [['cc_mobile_number']],
     ];
 
     return $pane_form;
