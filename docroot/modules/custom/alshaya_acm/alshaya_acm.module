@@ -639,7 +639,7 @@ function alshaya_acm_is_product_in_stock(SKU $sku_entity, $recheck = FALSE, $res
         }
       }
 
-      return empty($quantities) ? [] : max($quantities);
+      return empty($quantities) ? FALSE : max($quantities);
     }
   }
 
