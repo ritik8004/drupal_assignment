@@ -5,16 +5,17 @@
     margin-bottom: 0.8rem;
 
     @include breakpoint($tablet) {
-      margin-bottom: 1.9rem;
+      margin-bottom: 1.25rem;
     }
 
     @include breakpoint($only-tablet) {
-      padding-bottom: 0.75rem;
+      padding-bottom: 0.65rem;
       margin-top: 0.437rem;
     }
 
     @include breakpoint($desktop) {
       padding-bottom: 1rem;
+      margin-bottom: 1.9rem;
     }
   }
 
@@ -29,9 +30,11 @@
   .subtitle {
     border-bottom: 1px solid $white;
     margin-top: 1.25rem;
+    font-size: 0.875rem;
 
     @include breakpoint($desktop) {
       margin-top: 2.625rem;
+      font-size: 1rem;
     }
   }
 
@@ -60,6 +63,10 @@
       top: -0.5rem;
       #{$right}: 0;
     }
+
+    @include breakpoint($desktop) {
+      top: -0.2rem;
+    }
   }
 }
 
@@ -81,6 +88,7 @@
     select {
       float: $right;
       outline: none;
+      height: 2.1875rem;
     }
 
     label {
@@ -93,7 +101,7 @@
         display: block;
         pointer-events: none;
         position: absolute;
-        top: -30px;
+        top: -27px;
       }
 
       @include breakpoint($desktop) {
@@ -129,7 +137,7 @@
     border: 1px solid $whisper-dark;
     background-color: $whisper-dark;
     border-radius: 0;
-    padding: 10px 30px 9px 16px;
+    padding: 0.3125rem 1.875rem 0.25rem 1rem;
     -webkit-appearance: none;
     appearance: none;
     outline: none;
@@ -147,11 +155,11 @@
 
   .form-text {
     border: 1px solid $whisper-dark;
-    padding: 10px 8px 9px 16px;
+    padding: 0.3125rem 0.8rem 0.25rem 1rem;
     width: 125px;
 
     @include breakpoint($desktop) {
-      margin-#{$left}: 28px;
+      margin-#{$left}: 0.875rem;
       width: 153px;
     }
   }
@@ -159,10 +167,15 @@
   .form-actions {
     position: relative;
 
+    @include breakpoint($desktop) {
+      margin-#{$right}: 0.3125rem;
+    }
+
     @include icon(search, after) {
       background-color: $whisper-dark;
       border: 1px solid $whisper-dark;
-      font-size: 22px;
+      line-height: 20px;
+      font-size: 1.625rem;
       pointer-events: none;
       position: absolute;
       text-align: center;
@@ -241,8 +254,12 @@
       width: 13.75rem;
 
       @include breakpoint($only-tablet) {
-        min-width: 9.75rem;
-        width: 9.75rem;
+        min-width: 10.75rem;
+        width: 10.75rem;
+      }
+
+      &:nth-child(3) {
+        font-size: 0.725rem;
       }
     }
 
@@ -276,7 +293,7 @@
     transform: translateY(-50%);
 
     @include breakpoint($tablet) {
-      #{$right}: 1.2rem;
+      #{$right}: 0.8rem;
     }
 
     @include breakpoint($desktop) {
@@ -302,13 +319,27 @@
     @include breakpoint($tablet) {
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 175px;
+      position: relative;
+      max-width: 10.9375rem;
+      display: inline-block;
+
+      &::after {
+        content: "...";
+        background: $white-five;
+        position: absolute;
+        #{$right}: 0;
+        width: 1rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      max-width: 10rem;
     }
   }
 
   .order-summary-row td {
     background-color: $white-five;
+    line-height: 1.2;
   }
 
   .order-item-row {
@@ -340,12 +371,15 @@
 
 .block-alshaya-acm-customer > a {
   font-family: $arial;
-  font-size: 1;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: $windows-blue;
   position: absolute;
   #{$right}: 0;
   top: 0;
+
+  @include breakpoint($desktop) {
+    top: 0.3125rem;
+  }
 }
 
 .no--orders {
@@ -370,9 +404,43 @@
   text-transform: lowercase;
 }
 
+.block-alshaya-user-recent-orders {
+  .no--orders {
+    @include breakpoint($tablet) {
+      text-align: $left;
+      font-weight: normal;
+      color: $brownish-grey;
+      padding-top: 1.7rem;
+
+      & + a {
+        margin-top: 1.5rem;
+        margin-bottom: 2.675rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1.4rem;
+      padding-top: 0;
+
+      & + a {
+        margin-top: 1.375rem;
+        margin-bottom: 3rem;
+      }
+    }
+  }
+}
+
 .open--accordion {
   .order-summary-row td {
     background-color: $whisper-light;
+  }
+
+  .order--items {
+    @include breakpoint($tablet) {
+      &::after {
+        background-color: $whisper-light;
+      }
+    }
   }
 
   .toggle--icon {
@@ -386,11 +454,18 @@
   font-family: $arial;
   line-height: 1;
   color: $white-five;
-  min-width: 11.625rem;
-  top: -5.25rem;
+  top: -5.55rem;
   font-size: 0.75rem;
   text-transform: lowercase;
   font-weight: bold;
+
+  @include breakpoint($desktop) {
+    min-width: 11.625rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    top: -4rem;
+  }
 }
 
 .alshaya-acm-customer-order-list-search {
@@ -401,16 +476,18 @@
     .form-item-search {
       width: 47.5%;
       margin-#{$right}: 2.5%;
+      height: 2.1875rem;
 
       input {
         -webkit-animation: fadeEffect 2s;
         animation: fadeEffect 2s;
         display: none;
         position: absolute;
-        width: calc(100% + 1rem);
+        width: 105%;
         top: 2.875rem;
-        #{$left}: -0.5rem;
-        #{$right}: 0;
+        #{$left}: 0;
+        margin-#{$left}: -2.5%;
+        #{$right}: -2.5%;
         border: 0.5625rem solid $white;
         padding: 1rem 0.5rem 0.9375rem 1rem;
         background: $white-five;
@@ -425,6 +502,7 @@
         position: relative;
         line-height: 2.0625rem;
         color: $grey-ash;
+        height: 2.1875rem;
 
         @include icon(search, before) {
           pointer-events: none;
@@ -443,7 +521,9 @@
       width: 48%;
 
       select {
+        height: 2.1875rem;
         width: 100%;
+        direction: $dir;
       }
     }
 

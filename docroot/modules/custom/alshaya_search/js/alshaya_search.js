@@ -4,12 +4,10 @@
     attach: function (context, settings) {
       $('#edit-sort-bef-combine option[value="search_api_relevance ASC"]').remove();
       // Do not allow search form submit on empty search text.
-      var selectors = 'form[data-bef-auto-submit-full-form], [data-bef-auto-submit-full-form] form, [data-bef-auto-submit]';
-
-      $(selectors, context).find('[data-bef-auto-submit-click]').click(function () {
-        var $keyword = $(selectors, context).find('input[name="keywords"]');
+      $('form[data-bef-auto-submit-full-form]', context).submit(function (e) {
+        var $keyword = $(this).find('input[name="keywords"]');
         if (typeof $keyword.val() == 'undefined' || $.trim($keyword.val()) === '') {
-          return false;
+          e.preventDefault();
         }
       });
 
@@ -34,7 +32,7 @@
           $(this).find('ul').prepend('<input type="text" placeholder="'
             + Drupal.t('Enter your filter name')
             + '" class="facets-search-input">').on('keyup', function () {
-              var facetFilterKeyword = $(this).find('.facets-search-input').val();
+              var facetFilterKeyword = $(this).find('.facets-search-input').val().toLowerCase();
               if (facetFilterKeyword) {
               // Hide show more if above keyword has some data.
                 if (settings.facets.softLimit !== undefined) {
@@ -43,7 +41,7 @@
                 $(this).find('li').each(function () {
                 // Hide all facet links.
                   $(this).hide();
-                  if ($(this).find('.facet-item__value').html().search(facetFilterKeyword) >= 0) {
+                  if ($(this).find('.facet-item__value').html().toLowerCase().search(facetFilterKeyword) >= 0) {
                     $(this).show();
                   }
                 });

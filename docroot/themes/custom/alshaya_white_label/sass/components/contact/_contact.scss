@@ -134,16 +134,33 @@
   }
 
   label.error {
-    font-size: 12px;
-    margin-top: 8px;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
     display: block;
     color: $red-error;
+    top: 0;
+    padding-top: 0;
   }
 
-  .form-type-tel,
-  .form-type-email,
-  .form-type-textfield,
-  .form-type-textarea {
+  .form-item--error {
+    input.error {
+      color: $black;
+      border-bottom: 2px solid $red-error !important;
+    }
+
+    .c-input__bar {
+      &::after,
+      &::before {
+        background: $red-error;
+      }
+    }
+  }
+
+  .form-item.form-type-tel,
+  .form-item.form-type-email,
+  .form-item.form-type-textfield,
+  .form-item.form-type-textarea {
     label:last-of-type {
       font-size: 1rem;
       color: $greyish;
@@ -158,7 +175,9 @@
     input:focus ~ label:last-of-type,
     textarea:focus ~ label:last-of-type,
     .active-label:last-of-type,
-    input:visited ~ label:last-of-type {
+    input:visited ~ label:last-of-type,
+    input:not(:focus):valid ~ label:not(.error),
+    input:not(:active):valid ~ label:not(.error) {
       top: -1.25em;
       bottom: 0;
       #{$left}: 0;
@@ -171,11 +190,18 @@
     @include clearfix;
 
     position: relative;
-    height: 5rem;
+    height: 3rem;
+    margin-bottom: 1rem;
 
     .country-label {
-      font-size: 1rem;
+      font-size: 0.75rem;
       color: $greyish;
+      transition: 0.2s ease all;
+    }
+
+    .country-name {
+      font-size: 1rem;
+      color: $black;
       transition: 0.2s ease all;
     }
   }
@@ -184,19 +210,6 @@
     .description {
       padding-top: 0.5rem;
       font-size: 0.75rem;
-    }
-  }
-
-  .country-field-wrapper {
-    @include clearfix;
-
-    position: relative;
-    height: 5rem;
-
-    .country-label {
-      font-size: 1rem;
-      color: $greyish;
-      transition: 0.2s ease all;
     }
   }
 
@@ -341,7 +354,7 @@ form.user-form {
     }
 
     .c-input__bar {
-      top: 0.125rem !important;
+      top: 3px !important;
 
       html[lang=ar] & {
         top: 0.1875rem !important;
@@ -392,6 +405,32 @@ html[lang=ar] {
       input[type=email] {
         margin-top: 0.3125rem;
       }
+    }
+
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      input[type=text] {
+        font-family: $arial-nodir;
+      }
+    }
+
+    .mobile-number-field {
+      input[type=text],
+      .country-code-prefix {
+        font-family: $arial-nodir;
+      }
+
+      input[type=text] {
+        padding-top: 0.125rem;
+      }
+    }
+  }
+}
+
+.path--user .c-address-book {
+  .address-book-address {
+    .country-field-wrapper {
+      height: 5rem;
     }
   }
 }

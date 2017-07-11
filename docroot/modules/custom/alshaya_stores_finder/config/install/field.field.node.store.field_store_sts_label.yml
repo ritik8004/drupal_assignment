@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_store_sts_label
+    - node.type.store
+id: node.store.field_store_sts_label
+field_name: field_store_sts_label
+entity_type: node
+bundle: store
+label: 'STS Label'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

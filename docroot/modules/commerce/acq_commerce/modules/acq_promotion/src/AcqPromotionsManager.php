@@ -4,13 +4,22 @@ namespace Drupal\acq_promotion;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\node\Entity\Node;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Class AcqPromotionsManager.
  */
 class AcqPromotionsManager {
+
+  /**
+   * Language Manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
 
   /**
    * Node Entity Storage.
@@ -33,13 +42,16 @@ class AcqPromotionsManager {
    *   EntityTypeManager object.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   The api wrapper.
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\Core\Language\LanguageManager $languageManager
+   *   Language Manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, LanguageManager $languageManager) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_promotion');
+    $this->languageManager = $languageManager;
   }
 
   /**
@@ -84,6 +96,15 @@ class AcqPromotionsManager {
 
     $nids = $query->execute();
 
+    $promotions_labels = $promotion['labels'];
+    $promotion_label_languages = [];
+    $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
+
+    foreach ($promotions_labels as $promotion_label) {
+      $promtion_label_language = acq_commerce_get_langcode_from_store_id($promotion_label['store_id']);
+      $promotion_label_languages[$promtion_label_language] = $promotion_label['store_label'];
+    }
+
     // Create promotion.
     if (empty($nids)) {
       /* @var $node \Drupal\node\Entity\Node */
@@ -106,11 +127,6 @@ class AcqPromotionsManager {
       /* @var $node \Drupal\node\Entity\Node */
       $node = $this->nodeStorage->load(reset($nids));
 
-      if (serialize($promotion) == $node->get('field_acq_promotion_data')->getString()) {
-        // Promotion data from API matches what is already stored, not updating.
-        return;
-      }
-
       $this->logger->info('Updating promotion for rule id @rule_id', ['@rule_id' => $promotion['rule_id']]);
     }
 
@@ -129,30 +145,49 @@ class AcqPromotionsManager {
     // Set the Promotion type.
     $node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
 
-    // Add product NID's to promotion.
-    if (!empty($promotion['products'])) {
-      // Fetch all products NID's related to SKU ID's.
-      $productNIDs = [];
-      foreach ($promotion['products'] as $product) {
-        $productQuery = $this->nodeStorage->getQuery();
-        $productQuery->condition('type', 'acq_product');
-        $productQuery->condition('field_skus', $product['product_id'], 'IN');
-        $productNIDs += $productQuery->execute();
-      }
+    // Set the Promotion label.
+    if (isset($promotion_label_languages[$site_default_langcode])) {
+      $node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
+    }
 
+    // Set promotion type to percent & discount value depending on the promotion
+    // being imported.
+    if (($promotion['type'] === 'NO_COUPON') && isset($promotion['action']) && ($promotion['action'] === 'by_percent')) {
+      $node->get('field_acq_promotion_disc_type')->setValue('percentage');
+      $node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
+    }
+
+    // Add SKU ID's to promotion.
+    if (!empty($promotion['products'])) {
       // Assign value to $node object.
-      $productNIDs = array_values($productNIDs);
-      if (!empty($productNIDs)) {
-        foreach ($productNIDs as $delta => $productNID) {
-          $node->get('field_acq_promotion_product')->set($delta, $productNID);
+      $delta = 0;
+      foreach ($promotion['products'] as $key => $product) {
+        $sku = SKU::loadFromSku($product['product_sku']);
+        if ($sku instanceof SKU) {
+          $node->get('field_acq_promotion_sku')->set($delta, $sku->id());
+          $delta++;
         }
       }
     }
-
     // Invoke the alter hook to allow modules to update the node from API data.
     \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $node, $promotion);
 
     $node->save();
+
+    // Create promotion translations based on the language codes available in
+    // promotion labels.
+    foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
+      if ($langcode !== $site_default_langcode) {
+        if ($node->hasTranslation($langcode)) {
+          $node_translation = $node->getTranslation($langcode);
+        }
+        else {
+          $node_translation = $node->addTranslation($langcode);
+        }
+        $node_translation->get('field_acq_promotion_label')->setValue($promotion_label_languages[$langcode]);
+        $node_translation->save();
+      }
+    }
   }
 
   /**

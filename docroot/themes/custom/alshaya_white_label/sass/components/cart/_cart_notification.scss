@@ -1,8 +1,30 @@
 #cart_notification {
   z-index: 999;
   position: absolute;
-  top: 3.9rem;
-  #{$left}: -0.75rem;
+  top: 2.7rem;
+  #{$right}: -0.25rem;
+
+  @include breakpoint($tablet) {
+    top: 3.5rem;
+    #{$right}: 0.1125rem;
+  }
+
+  @include breakpoint($desktop) {
+    top: 3.7rem;
+  }
+
+  &.has--notification::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 11px solid $pumpkin-orange;
+    clear: both;
+    top: -11px;
+    #{$right}: 15px;
+  }
 
   .notification,
   .error {
@@ -12,18 +34,6 @@
     box-shadow: 4px 4px 0 0 $white-two;
     padding: 0.8rem;
     display: inline-block;
-
-    &::before {
-      content: '';
-      position: relative;
-      width: 0;
-      height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 11px solid $pumpkin-orange;
-      clear: both;
-      top: -2.5rem;
-    }
 
     .col-1 {
       float: $left;
@@ -49,7 +59,8 @@
       font-size: 0.688rem;
       float: $left;
       width: 9.5rem;
-      margin-#{left}: 0.6875rem;
+      margin-#{$left}: 0.6875rem;
+      text-align: $left;
 
       .name {
         font-family: $alshaya-thin;
@@ -58,6 +69,7 @@
         width: 100%;
         display: block;
         margin-bottom: 5px;
+        text-align: $left;
       }
 
       a {
@@ -75,20 +87,16 @@
   }
 }
 
-.firefox #cart_notification {
-  .notification {
-    &::before {
-      top: 0.875rem;
-      #{$right}: 0.5rem;
-    }
-  }
-}
-
 .edit-add-to-cart + .ajax-progress-throbber {
   display: none;
 }
 
 html[lang=ar] #cart_notification {
+  @include breakpoint($tablet) {
+    top: 4.2rem;
+    #{$right}: 0.1125rem;
+  }
+
   .notification,
   .error {
     &::before {

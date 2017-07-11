@@ -117,6 +117,14 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       '#multiple' => FALSE,
       '#default_value' => $administrative_area_default_value,
       '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list(),
+      '#attributes' => [
+        'class' => ['select2-select'],
+      ],
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/convert_to_select2',
+        ],
+      ],
     ];
     $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
     $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
@@ -376,7 +384,7 @@ function _alshaya_addressbook_area_list($country_code = 'KW') {
     /* \Drupal\taxonomy\Entity\Term $term */
     foreach ($term_tree as $term) {
       $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-      $area_list[$term->id()] = $term->getName();
+      $area_list[$term->getName()] = $term->getName();
     }
   }
 
@@ -618,5 +626,5 @@ function _alshaya_addressbook_get_area_from_id($tid) {
     return $term->getName();
   }
 
-  return '';
+  return $tid;
 }

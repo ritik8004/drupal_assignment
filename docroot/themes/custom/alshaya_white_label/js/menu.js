@@ -177,11 +177,6 @@
         $('.c-my-account-nav').removeClass('block--display');
       });
 
-      // Toggle Function for Store Locator.
-      $(document).off().on('click', '.hours--label', function () {
-        $(this).toggleClass('open');
-      });
-
       /**
       * Add active state to the menu.
       */
@@ -228,7 +223,7 @@
       var menuLevel2 = $('.menu--two__list');
 
       function setMenuHeight() {
-        if (windowWidth > 767) {
+        if (menuLevel2.length > 0 && windowWidth > 767) {
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })

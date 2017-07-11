@@ -84,7 +84,8 @@ Feature: Homepage
     When I subscribe using a valid Email ID
     And I press "sign up"
     And I wait for AJAX to finish
-    Then I should see "Thank you for your subscription."
+    Then I should see the following success messages:
+    | Thank you for your subscription. |
 
   @javascript @arabic
   Scenario: As a Guest user
@@ -119,3 +120,4 @@ Feature: Homepage
     And I press "سجل الآن"
     And I wait for AJAX to finish
     Then I should see "عنوان البريد الإلكتروني هذا مشترك من قبل."
+

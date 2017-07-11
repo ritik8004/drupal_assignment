@@ -50,7 +50,6 @@
 
 header {
   position: relative;
-  z-index: 4;
 
   .c-header__region {
     margin: 1.3625rem auto;
@@ -103,7 +102,7 @@ header {
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
         position: absolute;
-        top: 5.125rem;
+        top: 5.45rem;
         display: none;
         width: 100%;
         left: 0;
@@ -362,6 +361,10 @@ header {
       position: relative;
       list-style: none;
       z-index: 4;
+
+      .notification--on & {
+        z-index: 3;
+      }
     }
   }
 
@@ -1166,7 +1169,9 @@ header {
   text-align: center;
   padding-top: 0.25rem;
   will-change: $left;
+  -moz-transition: #{$left 0.5s ease-in-out};
   transition: #{$left 0.5s ease-in-out};
+  -moz-transform: translateZ(0);
 
   span {
     background: url('../imgs/icons/ic-close.svg') center center no-repeat;
@@ -1187,6 +1192,7 @@ header {
   background: $white;
   z-index: 10;
   transition: #{$left 0.5s ease-in-out};
+  -moz-transform: translateZ(0);
   #{$left}: -100%;
   width: 84.375%;
   font-size: 0;
@@ -1368,7 +1374,9 @@ header {
     width: 100%;
     height: 100%;
     // transition: transform 0.5s ease-in-out;
+    -moz-transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
+    -moz-transform: translateZ(0);
     #{$left}: -100%;
     // transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
     will-change: $left;
@@ -1447,4 +1455,8 @@ html[lang='ar'] {
 // Remove tap background from ios mobile and tablet devices.
 html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+#block-cartminiblock {
+  position: relative;
 }

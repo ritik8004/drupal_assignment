@@ -75,6 +75,28 @@ body.ucbrowser {
       }
     }
   }
+
+  // Fix for direction attribute support for UC browser.
+  // Select elements for size and quantity.
+  .c-pdp {
+    html[lang=ar] & {
+      .form-item-configurables-size select {
+        padding-left: 42px;
+      }
+
+      .form-item-quantity select {
+        padding-left: 44px;
+      }
+    }
+  }
+
+  .c-plp {
+    html[lang=ar] & {
+      .form-item-sort-bef-combine select {
+        padding-left: 40px;
+      }
+    }
+  }
 }
 
 #text-resize-control {
@@ -124,7 +146,7 @@ body.chrome {
 html[lang=ar] {
   body.ucbrowser.alias--cart {
     #table-cart-items td select {
-      padding-left: 50px;
+      padding-left: 40px;
     }
   }
 }

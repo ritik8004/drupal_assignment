@@ -40,8 +40,18 @@
     height: auto !important;
   }
 
-  .facet-item__value {
-    margin-left: 1rem;
+  label {
+    font-size: 0;
+
+    .facet-item__value {
+      margin-#{$left}: 1rem;
+    }
+
+    .facet-item__count,
+    .facet-item__value {
+      font-size: 0.875rem;
+      text-transform: lowercase;
+    }
   }
 }
 

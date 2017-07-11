@@ -5,6 +5,7 @@ namespace Drupal\alshaya_master\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Entity\File;
+use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 
 /**
@@ -77,6 +78,13 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
         'file_validate_extensions' => ['png gif jpg jpeg apng svg'],
       ],
     ];
+
+    $form['link_to_maintenance_page'] = [
+      '#title' => $this->t('Link to put site in maintenance mode'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('system.site_maintenance_mode', [], ['query' => ['destination' => 'admin/config/404-maintenance-settings']]),
+    ];
+
     return $form;
   }
 

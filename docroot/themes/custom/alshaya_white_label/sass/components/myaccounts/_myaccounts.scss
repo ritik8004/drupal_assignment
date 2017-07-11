@@ -54,6 +54,14 @@
         width: 100%;
         float: $left;
       }
+
+      .contact--number,
+      .card--number {
+        .light {
+          direction: ltr;
+          text-align: $left;
+        }
+      }
     }
   }
 

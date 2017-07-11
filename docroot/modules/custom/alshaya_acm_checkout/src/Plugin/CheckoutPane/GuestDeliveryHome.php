@@ -52,7 +52,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
 
-    if (empty($address['country'])) {
+    if (empty($address['country_id'])) {
       $address_default_value = [
         'country_code' => _alshaya_custom_get_site_level_country_code(),
       ];
@@ -81,6 +81,13 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#attributes' => [
         'id' => ['address_wrapper'],
       ],
+      '#attached' => [
+        'library' => [
+          'core/drupal.form',
+          'alshaya_white_label/convert_to_select2',
+          'clientside_validation_jquery/cv.jquery.validate',
+        ],
+      ],
     ];
 
     $pane_form['address']['shipping'] = [
@@ -103,7 +110,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $pane_form['address']['shipping_methods'] = [
       '#type' => 'radios',
-      '#title' => t('Shipping Methods'),
+      '#title' => $this->t('select delivery options'),
       '#default_value' => $default_shipping,
       '#validated' => TRUE,
       '#options' => $shipping_methods,
@@ -225,6 +232,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getValue('selected_tab') != 'checkout-home-delivery') {
+      return;
+    }
+
     if ($form_state->getErrors()) {
       return;
     }
@@ -308,13 +319,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $cart->convertToCustomerCart($customer_cart);
       \Drupal::service('acq_cart.cart_storage')->addCart($cart);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // We have done everything in validatePaneForm().
   }
 
 }
