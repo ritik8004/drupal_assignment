@@ -108,7 +108,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $default_mobile = '';
 
     $shipping = (array) $cart->getShipping();
-    if ($cart->getExtension('store_code') && $shipping) {
+    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
       $default_mobile = $shipping['telephone'];
     }
