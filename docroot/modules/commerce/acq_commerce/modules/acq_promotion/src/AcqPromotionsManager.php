@@ -3,6 +3,7 @@
 namespace Drupal\acq_promotion;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -38,6 +39,13 @@ class AcqPromotionsManager {
   protected $entityRepository;
 
   /**
+   * Entity Manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityManager
+   */
+  protected $entityManager;
+
+  /**
    * Node Entity Storage.
    *
    * @var \Drupal\node\NodeStorageInterface
@@ -64,18 +72,22 @@ class AcqPromotionsManager {
    *   Language Manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository service.
+   * @param \Drupal\Core\Entity\EntityManager $entityManager
+   *   Entity Manager service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               APIWrapper $api_wrapper,
                               LoggerChannelFactoryInterface $logger_factory,
                               LanguageManager $languageManager,
-                              EntityRepositoryInterface $entityRepository) {
+                              EntityRepositoryInterface $entityRepository,
+                              EntityManager $entityManager) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_promotion');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
+    $this->entityManager = $entityManager;
   }
 
   /**
@@ -293,6 +305,64 @@ class AcqPromotionsManager {
     }
 
     return $skus;
+  }
+
+  /**
+   * Helper function to create Promotion node from conductor response.
+   *
+   * @param array $promotion
+   *   Promotion response from Conductor.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   Promotion node.
+   */
+  public function createPromotionFromConductorResponse(array $promotion) {
+    $promotion_node = $this->nodeStorage->create([
+      'type' => 'acq_promotion',
+    ]);
+
+    $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
+
+    $promotion_node->get('title')->setValue($promotion['name']);
+
+    // Set the description.
+    $promotion_node->get('field_acq_promotion_description')->setValue(['value' => $promotion['description'], 'format' => 'rich_text']);
+
+    // Set the status.
+    $promotion_node->setPublished((bool) $promotion['status']);
+
+    // Store everything as serialized string in DB.
+    $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
+
+    // Set the Promotion type.
+    $promotion_node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
+
+    // Set the Promotion label.
+    if (isset($promotion_label_languages[$site_default_langcode])) {
+      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
+    }
+
+    // Set promotion type to percent & discount value depending on the promotion
+    // being imported.
+    if (($promotion['type'] === 'NO_COUPON') && isset($promotion['action']) && ($promotion['action'] === 'by_percent')) {
+      $promotion_node->get('field_acq_promotion_disc_type')->setValue('percentage');
+      $promotion_node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
+    }
+
+    // Check promotion action type & store in Drupal.
+    if (!empty($promotion['action'])) {
+      $promotion_node->get('field_acq_promotion_action')->setValue($promotion['action']);
+    }
+
+    $status = $promotion_node->save();
+
+    if ($status) {
+      return $promotion_node;
+    }
+    else {
+      $this->logger->critical('Error occured while creating Promotion node for rule id: @rule_id.', ['@rule_id' => $promotion['rule_id']]);
+      return NULL;
+    }
   }
 
 }

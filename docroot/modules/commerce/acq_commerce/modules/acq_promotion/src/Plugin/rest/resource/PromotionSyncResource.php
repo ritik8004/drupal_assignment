@@ -119,6 +119,16 @@ class PromotionSyncResource extends ResourceBase {
       // Check if this promotion exists in Drupal.
       $promotion_node = $this->promotionManager->getPromotionByRuleId($promotion['rule_id']);
 
+      // Extract list of sku text attached with the promotion passed.
+      $products = $promotion['products'];
+      foreach ($products as $product) {
+        $fetched_promotion_skus[] = $product['product_sku'];
+        $fetched_promotion_sku_attach_data[$product['product_sku']] = [
+          'sku' => $product['product_sku'],
+          'final_price' => $product['final_price'],
+        ];
+      }
+
       // If promotion exists, we update the related skus & final price.
       if ($promotion_node) {
         $attached_skus = $this->promotionManager->getSkusForPromotion($promotion_node);
@@ -128,16 +138,6 @@ class PromotionSyncResource extends ResourceBase {
           foreach ($attached_skus as $attached_sku) {
             $attached_promotion_skus[] = $attached_sku->getSku();
           }
-        }
-
-        // Extract list of sku text attached with the promotion passed.
-        $products = $promotion['products'];
-        foreach ($products as $product) {
-          $fetched_promotion_skus[] = $product['product_sku'];
-          $fetched_promotion_sku_attach_data[$product['product_sku']] = [
-            'sku' => $product['product_sku'],
-            'final_price' => $product['final_price'],
-          ];
         }
 
         // Get list of skus for which promotions should be detached.
@@ -150,14 +150,17 @@ class PromotionSyncResource extends ResourceBase {
           $data['skus'] = $detach_promotion_skus;
           $promotion_detach_queue->createItem($data);
         }
+      }
+      else {
+        // Create promotions node using Metadata from Promotions Object.
+        $promotion_node = $this->promotionManager->createPromotionFromConductorResponse($promotion);
+      }
 
-        // Create a queue for adding promotions to skus.
-        if (!empty($fetched_promotion_skus)) {
-          $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
-          $data['promotion'] = $promotion_node->id();
-          $data['skus'] = $fetched_promotion_sku_attach_data;
-          $promotion_attach_queue->createItem($data);
-        }
+      if (($promotion_node) && (!empty($fetched_promotion_skus))) {
+        $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
+        $data['promotion'] = $promotion_node->id();
+        $data['skus'] = $fetched_promotion_sku_attach_data;
+        $promotion_attach_queue->createItem($data);
       }
     }
 

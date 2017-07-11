@@ -3,6 +3,7 @@
 namespace Drupal\acq_promotion\Plugin\QueueWorker;
 
 use Drupal\acq_promotion\AlshayaPromotionQueueBase;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Processes Skus to detach Promotions.
@@ -41,11 +42,18 @@ class AcqPromotionDetachQueue extends AlshayaPromotionQueueBase {
    */
   public function processItem($data) {
     $skus = $data['skus'];
-    $promotion_node = $data['promotion'];
+    $promotion_nid = $data['promotion'];
 
     foreach ($skus as $sku) {
-      $this->logger->info("Sku being detached. " . $sku);
+      $sku_entity = SKU::loadFromSku($sku);
+      $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
+      $sku_promotions = array_diff($sku_promotions, [$promotion_nid]);
+      $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
+
+      $sku_entity->save();
     }
+    $this->logger->info('Detached Promotion:@promo from SKUs: @skus',
+      ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
   }
 
 }

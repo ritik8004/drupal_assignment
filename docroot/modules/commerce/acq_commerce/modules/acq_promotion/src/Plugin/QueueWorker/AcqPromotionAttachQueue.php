@@ -3,6 +3,8 @@
 namespace Drupal\acq_promotion\Plugin\QueueWorker;
 
 use Drupal\acq_promotion\AlshayaPromotionQueueBase;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\node\Entity\Node;
 
 /**
  * Processes Skus to attach Promotions.
@@ -41,11 +43,18 @@ class AcqPromotionAttachQueue extends AlshayaPromotionQueueBase {
    */
   public function processItem($data) {
     $skus = $data['skus'];
-    $promotion_node = $data['promotion'];
+    $promotion_nid = $data['promotion'];
 
     foreach ($skus as $sku) {
-      $this->logger->info("Sku being attached. " . $sku['sku']);
+      $sku_entity = SKU::loadFromSku($sku);
+      $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
+      $sku_promotions += $promotion_nid;
+      $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
+
+      $sku_entity->save();
     }
+    $this->logger->info('Attached Promotion:@promo to SKUs: @skus',
+      ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
   }
 
 }
