@@ -904,6 +904,7 @@
         @include breakpoint($desktop) {
           padding-bottom: 0;
           color: $black;
+          margin-bottom: 0.875rem;
 
           @include icon(chevrondown, after) {
             color: $black;
@@ -999,6 +1000,43 @@
             display: inline-block;
           }
         }
+      }
+    }
+
+    .cc-help-text {
+      color: $black;
+      font-weight: bold;
+
+      p {
+        color: $grey-ash;
+        font-weight: normal;
+        margin-top: 1.625rem;
+        margin-bottom: 0;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 0.875rem;
+        padding-#{$left}: 1.375rem;
+        padding-#{$right}: 1.313rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        font-size: 0.75rem;
+        padding-#{$left}: 0.9375rem;
+        padding-#{$right}: 0.9375rem;
+      }
+    }
+
+    .mobile-number-field {
+      margin-#{$left}: 1.375rem;
+      width: 21.5%;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: 0.9375rem;
+      }
+
+      input[type=text] {
+        height: 1.5rem;
       }
     }
   }
