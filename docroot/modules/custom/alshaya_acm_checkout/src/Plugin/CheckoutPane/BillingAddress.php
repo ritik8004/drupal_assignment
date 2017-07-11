@@ -45,11 +45,23 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#weight' => -49,
     ];
 
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
     $cart = $this->getCart();
     $shipping_method = $cart->getShippingMethodAsString();
-    $shipping_method = substr($shipping_method, 0, 32);
+    $shipping_method = $checkout_options_manager->getCleanShippingMethodCode($shipping_method);
 
-    if ($shipping_method != \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
+    if ($shipping_method == $checkout_options_manager->getClickandColectShippingMethod()) {
+      // For click and collect we always want the billing address.
+      $same_as_shipping = 3;
+
+      $pane_form['same_as_shipping'] = [
+        '#type' => 'value',
+        '#value' => 3,
+      ];
+    }
+    else {
       $pane_form['summary'] = [
         '#markup' => $this->t('Is the delivery address the same as your billing address?'),
       ];
@@ -69,15 +81,6 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
 
       // By default we want to use same address as shipping.
       $same_as_shipping = 1;
-    }
-    else {
-      // For click and collect we always want the billing address.
-      $same_as_shipping = 3;
-
-      $pane_form['same_as_shipping'] = [
-        '#type' => 'value',
-        '#value' => 3,
-      ];
     }
 
     if ($form_state->getValues()) {

@@ -295,7 +295,15 @@ class CheckoutOptionsManager {
    *   Click and collect method code.
    */
   public function getClickandColectShippingMethod() {
-    return $this->configFactory->get('alshaya_acm_checkout.settings')->get('click_collect_method');
+    $settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+
+    $carrier = $settings->get('click_collect_method_carrier_code');
+    $method = $settings->get('click_collect_method_method_code');
+
+    // Code hold both carrier and method.
+    $code = $carrier . '_' . $method;
+
+    return $this->getCleanShippingMethodCode($code);
   }
 
   /**
@@ -341,7 +349,7 @@ class CheckoutOptionsManager {
     if (!empty($shipping_methods)) {
       foreach ($shipping_methods as $method) {
         // Key needs to hold both carrier and method.
-        $key = implode('_', [$method['carrier_code'], $method['method_code']]);
+        $key = $method['carrier_code'] . '_' . $method['method_code'];
 
         $code = $this->getCleanShippingMethodCode($key);
         $name = t('@method_title by @carrier_title', ['@method_title' => $method['method_title'], '@carrier_title' => $method['carrier_title']]);

@@ -17,9 +17,12 @@ alshaya_acm_checkout.settings:
     checkout_customer_service:
       type: text_format
       label: 'Checkout Customer Service'
-    click_collect_method:
+    click_collect_method_method_code:
       type: string
-      label: 'Click and Collect delivery method code'
+      label: 'Click and Collect delivery method - method code'
+    click_collect_method_carrier_code:
+      type: string
+      label: 'Click and Collect delivery method - carrier code'
     checkout_display_magento_error:
       type: integer
       label: 'Display error message from magento'
