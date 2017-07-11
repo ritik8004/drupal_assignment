@@ -396,3 +396,17 @@ function _alshaya_user_password_policy_history_insert_password_hash(AccountInter
 
   }
 }
+
+/**
+ * Implements hook_field_info_alter().
+ */
+function alshaya_user_field_info_alter(&$info) {
+  // Change default mobile number constraint to custom.
+  if (isset($info['mobile_number'])) {
+    // This is to replace a custom token (@entity_type) just for error message
+    // in mobile number.
+    $info['mobile_number']['constraints'] = [
+      'AlshayaMobileNumber' => [],
+    ];
+  }
+}

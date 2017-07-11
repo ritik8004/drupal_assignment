@@ -768,7 +768,7 @@ function alshaya_master_install() {
     'Load More' => [
       'ar' => 'عرض المزيد',
     ],
-    'Unrecognized email address or password.' => [
+    'Unrecognized username or password. <a href=":password">Forgot your password?</a>' => [
       'ar' => ' لم يتم التعرف على عنوان البريد الإلكتروني أو كلمة السر',
     ],
     'shop' => [
