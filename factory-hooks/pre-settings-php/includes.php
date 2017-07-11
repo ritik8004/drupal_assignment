@@ -34,15 +34,6 @@ $config['alshaya_acm_knet.settings']['use_secure_response_url'] = 0;
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
 $config['acq_commerce.conductor']['debug'] = TRUE;
 
-// 01 is prefixed most of the time so we don't get proper env here.
-// Clean the env, we do it only for dev and test.
-if (strpos($env, 'dev') !== FALSE) {
-  $env = 'dev';
-}
-elseif (strpos($env, 'test') !== FALSE) {
-  $env = 'test';
-}
-
 switch ($env) {
   case 'local':
     // Disable stock check in local.
@@ -53,9 +44,9 @@ switch ($env) {
     $config['alshaya_acm_knet.settings']['resource_path'] = '/home/vagrant/knet-resource/';
     $config['acq_commerce.conductor']['debug'] = FALSE;
 
-  case 'dev':
-  case 'test':
-  case 'uat':
+  case '01dev':
+  case '01test':
+  case '01uat':
     $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
 
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
