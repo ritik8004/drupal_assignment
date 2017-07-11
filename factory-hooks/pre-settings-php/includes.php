@@ -55,6 +55,7 @@ switch ($env) {
 
   case 'dev':
   case 'test':
+  case 'uat':
     $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
 
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
@@ -67,9 +68,9 @@ switch ($env) {
     break;
 
   default:
-    $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
+    $config['acq_commerce.conductor']['url'] = 'https://pprod.dev.alshaya.acm.acquia.io/';
 
-    $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $config['alshaya_api.settings']['magento_host'] = 'http://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;
