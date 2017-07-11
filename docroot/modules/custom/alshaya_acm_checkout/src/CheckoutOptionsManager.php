@@ -384,7 +384,7 @@ class CheckoutOptionsManager {
     if ($shipping_methods = $this->loadShippingEstimates($address)) {
       foreach ($shipping_methods as $code => $data) {
         // We don't display click and collect delivery method for home delivery.
-        if ($code == \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
+        if ($code == $this->getClickandColectShippingMethod()) {
           continue;
         }
 

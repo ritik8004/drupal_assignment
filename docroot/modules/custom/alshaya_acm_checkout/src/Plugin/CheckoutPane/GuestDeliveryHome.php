@@ -126,6 +126,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         'wrapper' => 'address_wrapper',
       ],
       '#weight' => -50,
+      '#limit_validation_errors' => [['address']],
     ];
 
     $complete_form['actions']['back_to_basket'] = [
