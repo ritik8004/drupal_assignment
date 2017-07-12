@@ -44,7 +44,7 @@
 
       $('.tab').once('initiate-stores').each(function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
-        if (settings.alshaya_click_collect.selecte_store) {
+        if (settings.alshaya_click_collect.selected_store) {
           $('input[data-drupal-selector="edit-actions-ccnext"]').show();
         }
 

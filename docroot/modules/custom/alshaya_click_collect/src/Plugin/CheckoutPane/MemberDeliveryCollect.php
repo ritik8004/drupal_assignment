@@ -186,7 +186,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
         ],
         'alshaya_click_collect' => [
           'cart_id' => $cart->id(),
-          'selecte_store' => ($store_code) ? TRUE : FALSE,
+          'selected_store' => ($store_code) ? TRUE : FALSE,
         ],
       ],
       'library' => [
