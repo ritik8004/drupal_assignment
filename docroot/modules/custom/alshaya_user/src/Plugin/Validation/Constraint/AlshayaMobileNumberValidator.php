@@ -2,24 +2,14 @@
 
 namespace Drupal\alshaya_user\Plugin\Validation\Constraint;
 
-use Drupal\Component\Utility\Unicode;
-use Drupal\mobile_number\Exception\MobileNumberException;
-use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\Validator\Constraint;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Symfony\Component\Validator\ConstraintValidator;
+use Drupal\mobile_number\Plugin\Validation\Constraint\MobileNumberValidator;
 
 /**
- * Validates a mobile number.
- *
- * Validates:
- *   - Number validity
- *   - Allowed country
- *   - Verification flood
- *   - Mobile number verification
- *   - Uniqueness.
+ * Alter unique type validation on mobile number.
  */
-class AlshayaMobileNumberValidator extends ConstraintValidator {
+class AlshayaMobileNumberValidator extends MobileNumberValidator {
 
   use StringTranslationTrait;
 
@@ -27,74 +17,24 @@ class AlshayaMobileNumberValidator extends ConstraintValidator {
    * {@inheritdoc}
    */
   public function validate($item, Constraint $constraint) {
-    /** @var \Drupal\mobile_number\Plugin\Field\FieldType\MobileNumberItem $item */
-    $values = $item->getValue();
-    if ((empty($values['value']) && empty($values['local_number']))) {
-      return;
-    }
-
-    $util = \Drupal::service('mobile_number.util');
-
-    $field_label = $item->getFieldDefinition()->getLabel();
-    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
-    $entity = $item->getEntity();
-    $entity_type = $entity->getEntityType()->getLowercaseLabel();
-    $allowed_countries = $item->getFieldDefinition()->getSetting('countries');
-    $verify = $item->getFieldDefinition()->getSetting('verify');
-    $unique = $item->getFieldDefinition()
-      ->getFieldStorageDefinition()
-      ->getSetting('unique');
-    $tfa = $item->get('tfa')->getValue();
-
-    try {
-      $mobile_number = $item->getMobileNumber(TRUE);
-      $country = $util->getCountry($mobile_number);
-      $display_number = $util->libUtil()->format($mobile_number, 2);
-      if (!in_array($util->getCountry($mobile_number), $allowed_countries) && $allowed_countries) {
-        $this->context->addViolation($constraint->allowedCountry, [
-          '@value' => $util->getCountryName($country),
-          '@field_name' => Unicode::strtolower($field_label),
-        ]);
-      }
-      else {
-        $bypass_verification = \Drupal::currentUser()->hasPermission('bypass mobile number verification requirement');
-        $verification = $item->verify();
-
-        if ($verification === -1) {
-          $this->context->addViolation($constraint->flood, [
-            '@value' => $display_number,
-            '@field_name' => Unicode::strtolower($field_label),
-          ]);
-        }
-        elseif ($verification === FALSE) {
-          $this->context->addViolation($constraint->verification, [
-            '@value' => $display_number,
-            '@field_name' => Unicode::strtolower($field_label),
-          ]);
-        }
-        elseif (!$verification && !$bypass_verification && ($tfa || $verify === MobileNumberUtilInterface::MOBILE_NUMBER_VERIFY_REQUIRED)) {
-          $this->context->addViolation($constraint->verifyRequired, [
-            '@value' => $display_number,
-            '@entity_type' => $entity_type,
-            '@field_name' => Unicode::strtolower($field_label),
-          ]);
-        }
-        elseif ($unique && !$item->isUnique($unique)) {
+    // Overriding the original validate().
+    parent::validate($item, $constraint);
+    $violations = $this->context->getViolations();
+    if (!empty($violations)) {
+      for ($i = 0; $i < count($violations); $i++) {
+        $violation = $violations->get($i);
+        $parameters = $violation->getParameters();
+        $message_template = $violation->getMessageTemplate();
+        // Remove violation which is of type unique and add new violation.
+        if ($message_template == $constraint->unique) {
+          $violations->remove($i);
           $this->context->addViolation($constraint->unique, [
-            '@value' => $display_number,
+            '@value' => $parameters['@value'],
             '@entity_type' => $this->t('customer'),
-            '@field_name' => Unicode::strtolower($field_label),
+            '@field_name' => $parameters['@field_name'],
           ]);
         }
       }
-    }
-    catch (MobileNumberException $e) {
-      $this->context->addViolation($constraint->validity, [
-        '@value' => $values['local_number'],
-        '@entity_type' => $entity_type,
-        '@field_name' => Unicode::strtolower($field_label),
-        '@message' => $e->getMessage(),
-      ]);
     }
   }
 
