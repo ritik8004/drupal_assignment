@@ -171,6 +171,11 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
  * Validation for first name.
  */
 function _alshaya_addressbook_firstname_validate($element, FormStateInterface $form_state) {
+  $selected_tab = $form_state->getValue('selected_tab');
+  if (!empty($selected_tab) && $selected_tab == 'checkout-click-collect') {
+    return;
+  }
+
   return _alshaya_addressbook_name_validation($element, $form_state, 'given_name');
 }
 
@@ -178,6 +183,10 @@ function _alshaya_addressbook_firstname_validate($element, FormStateInterface $f
  * Validation for the last name.
  */
 function _alshaya_addressbook_lastname_validate($element, FormStateInterface $form_state) {
+  $selected_tab = $form_state->getValue('selected_tab');
+  if (!empty($selected_tab) && $selected_tab == 'checkout-click-collect') {
+    return;
+  }
   return _alshaya_addressbook_name_validation($element, $form_state, 'family_name');
 }
 

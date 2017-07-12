@@ -44,6 +44,9 @@
 
       $('.tab').once('initiate-stores').each(function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
+        if (settings.alshaya_click_collect.selecte_store) {
+          $('input[data-drupal-selector="edit-actions-ccnext"]').show();
+        }
 
         $(this).on('click', function () {
           if ($(this).hasClass('tab-click-collect')) {
@@ -123,6 +126,7 @@
         if (e.target.className === 'change-store') {
           $('#selected-store-wrapper').hide();
           $('#store-finder-wrapper').show();
+          $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
         }
       });
 
