@@ -156,17 +156,20 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $method_code = $term->get('field_shipping_code')->getString();
 
       if ($method_code == $checkout_options_manager->getClickandColectShippingMethod()) {
-        $delivery['label'] = $this->t('Click & Collect');
-        $delivery['method_name'] = '';
-        $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
-        $delivery['address_label'] = $this->t('Collection Store');
+        if ($store_code = $cart->getExtension('store_code')) {
+          $delivery['label'] = $this->t('Click & Collect');
+          $delivery['method_name'] = '';
+          $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
+          $delivery['address_label'] = $this->t('Collection Store');
 
-        $store_code = $cart->getExtension('store_code');
+          // Not injected here to avoid module dependency.
+          $store = \Drupal::service('alshaya_stores_finder.utility')->getStoreFromCode($store_code);
 
-        // Not injected here to avoid module dependency.
-        $store = \Drupal::service('alshaya_stores_finder.utility')->getStoreFromCode($store_code);
-
-        $delivery['address'] = $store->get('field_store_address')->getString();
+          $delivery['address'] = $store->get('field_store_address')->getString();
+        }
+        else {
+          $delivery = [];
+        }
       }
       else {
         $delivery['label'] = $this->t('Home Delivery');

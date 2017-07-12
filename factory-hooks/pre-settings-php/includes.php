@@ -56,6 +56,10 @@ switch ($env) {
 
     $config['alshaya_api.settings']['username'] = 'acquiaapi';
     $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
+
+    // For other environments, this must be set using admin config forms.
+    // Info about how to do is available in user guide.
+    $config['geolocation.settings']['google_map_api_key'] = 'AIzaSyBy52QEZ0Icl555Khpi4Ep1gGkxmADdEm0';
     break;
 
   default:

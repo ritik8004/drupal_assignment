@@ -207,7 +207,13 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       ],
       // This is required for limit_validation_errors to work.
       '#submit' => [],
-      '#limit_validation_errors' => [['selected_store']],
+      '#limit_validation_errors' => [
+        ['selected_store'],
+        ['cc_mobile_number'],
+        ['cc_firstname'],
+        ['cc_lastname'],
+        ['cc_email'],
+      ],
     ];
 
     return $pane_form;

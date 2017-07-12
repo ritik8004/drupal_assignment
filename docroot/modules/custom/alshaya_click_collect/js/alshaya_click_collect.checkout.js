@@ -57,10 +57,10 @@
             if ($('#click-and-collect-list-view').html().length <= 0) {
               Drupal.checkoutClickCollect.storeListAll(ascoords);
             }
-            $('#edit-actions input:not(.cc-action)').addClass('hidden');
+            $('#edit-actions input:not(.cc-action)').addClass('hidden-important');
           }
           else {
-            $('#edit-actions input:not(.cc-action)').removeClass('hidden');
+            $('#edit-actions input:not(.cc-action)').removeClass('hidden-important');
           }
         });
       });
