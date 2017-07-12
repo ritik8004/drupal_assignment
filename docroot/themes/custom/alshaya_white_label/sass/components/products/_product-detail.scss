@@ -234,6 +234,7 @@
       select.form-select {
         @include select-style(8.75rem);
 
+        min-width: 8.75rem;
         width: 100%;
       }
     }
@@ -1060,7 +1061,7 @@
       height: 8rem;
     }
 
-    .js-form-wrapper {
+    .sku-base-form > .js-form-wrapper {
       @include breakpoint($mobile) {
         @include u-visibility(inline-block);
 
