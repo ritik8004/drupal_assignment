@@ -778,7 +778,7 @@ function alshaya_master_install() {
       'ar' => 'سجل الآن',
     ],
     'A @entity_type with @field_name @value already exists.' => [
-      'ar' => 'يوجد @entity_type لديه اسم المستخدم @field_name و رقم الجوال @value مسجل',
+      'ar' => ' يوجد @entity_type مسجل بهذا @field_name @value',
     ],
     'Something went wrong, please try again later.' => [
       'ar' => 'هناك خطأ ما, يرجى المحاولة لاحقاً.',
