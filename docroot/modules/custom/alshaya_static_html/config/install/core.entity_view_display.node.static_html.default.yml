@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.static_html.field_css
     - field.field.node.static_html.field_javascript
     - field.field.node.static_html.field_meta_tags
+    - field.field.node.static_html.field_static_html_images
     - node.type.static_html
   module:
     - metatag
@@ -50,4 +51,5 @@ content:
 hidden:
   field_css: true
   field_javascript: true
+  field_static_html_images: true
   langcode: true
