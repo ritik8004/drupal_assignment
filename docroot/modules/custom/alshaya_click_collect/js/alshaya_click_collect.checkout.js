@@ -310,6 +310,7 @@
   Drupal.checkoutClickCollect.mapCreateMarker = function (store, mapObj, index) {
     // Copied from /contrib/geolocation/js/geolocation-common-map.js.
     var locationEle = $('.geolocation-common-map-locations').find('.geolocation[data-store-code="' + store.code + '"]');
+    locationEle = locationEle.wrapInner('<div class="scroll-fix"></div>');
     var position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
     var markerConfig = {
       position: position,
