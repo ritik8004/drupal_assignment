@@ -106,6 +106,11 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
       '#select_option_text' => $config->get('pdp_click_collect_select_option_text.value'),
       '#store_finder_form' => render($store_form),
       '#attached' => [
+        'drupalSettings' => [
+          'alshaya_click_collect' => [
+            'pdp' => ['ajax_call' => FALSE],
+          ],
+        ],
         'library' => [
           'alshaya_click_collect/click-and-collect.pdp',
         ],
