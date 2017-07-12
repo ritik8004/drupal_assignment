@@ -749,6 +749,11 @@
   border: 1px solid $white-two;
   box-shadow: none;
 
+  // Hide the Powered by Google logo.
+  &::after {
+    display: none !important;
+  }
+
   .pac-icon {
     @include u-visibility(none);
   }

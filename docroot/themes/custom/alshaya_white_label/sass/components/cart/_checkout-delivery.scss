@@ -299,6 +299,10 @@
       @include breakpoint($desktop) {
         #{$right}: -0.3125rem;
       }
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
     }
 
     .tab-click-collect.active--tab--head::before {
@@ -306,6 +310,10 @@
 
       @include breakpoint($desktop) {
         #{$left}: -0.3125rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        display: none;
       }
     }
 
