@@ -73,4 +73,11 @@ class WelcomeUserBlock extends BlockBase implements ContainerFactoryPluginInterf
     return Cache::mergeTags(parent::getCacheTags(), ['user:' . $this->currentUser->id()]);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['user']);
+  }
+
 }
