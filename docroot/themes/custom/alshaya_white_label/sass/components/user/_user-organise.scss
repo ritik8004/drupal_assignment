@@ -19,17 +19,20 @@
         }
       }
 
-      .privilege-card-wrapper .form-wrapper {
+      .privilege-card-wrapper {
         margin-top: 0;
         padding-#{$left}: 0.3125rem;
 
-        summary {
-          padding-#{$left}: 0.25rem;
-          padding-bottom: 0.3rem;
+        .title {
+          margin: 0;
+        }
+
+        .sub-title {
           font-size: 0.75rem;
           color: $greyish;
           text-transform: lowercase;
-          border-bottom: 1px solid $white;
+          margin: 0;
+          font-family: $alshaya-thin;
         }
 
         label,
@@ -37,7 +40,7 @@
         .form-item-privilege-card-number {
           padding-left: 5px;
           color: $greyish;
-          font-size: 12px;
+          font-size: 12px !important;
 
           .form-item--error-message {
             padding-top: 0.4rem;
