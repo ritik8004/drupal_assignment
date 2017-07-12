@@ -42,6 +42,10 @@
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
       });
 
+      $('.hours--wrapper > .hours--label').on('click', function(){
+        $(this).toggleClass("open");
+      });
+
       $('.tab').once('initiate-stores').each(function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
 
@@ -146,6 +150,7 @@
       lng: position.coords.longitude
     };
     geoPerm = true;
+    Drupal.checkoutClickCollect.storeListAll(ascoords);
   };
 
   // Error callback.
@@ -174,49 +179,34 @@
       if (checkLocation) {
         lastCoords = ascoords;
 
-        $.ajax({
+        var storeListAjax = Drupal.ajax({
           url: Drupal.url('click-and-collect/stores/cart/' + cartId + '/' + ascoords.lat + '/' + ascoords.lng),
-          beforeSend: function (xmlhttprequest) {
-            if ($('a.stores-map-view').hasClass('active')) {
-              $('#click-and-collect-map-view').after(progressElement);
-            }
-            else {
-              $('#click-and-collect-list-view').after(progressElement);
-            }
-          },
-          success: function (response) {
-            storeList = response.raw;
-            var hideMap = true;
-            progressElement.remove();
-            $('#click-and-collect-list-view').html(response.output);
+          element: $('#store-finder-wrapper').get(0),
+          base: false,
+          progress: {type: 'throbber'},
+          submit: {js: true}
+        });
+
+        // Custom command function to render map and map markers.
+        storeListAjax.commands.clickCollectStoresView = function (ajax, response, status) {
+          if (status === 'success') {
+            storeList = response.data.raw;
+            var showMap = false;
+
             if (storeList !== null && storeList.length > 0) {
-              mapWrapper.children('.geolocation-common-map-locations').html(response.mapList);
               Drupal.click_collect.getFormattedAddress(ascoords, $('#click-and-collect-list-view').find('.selected-store-location'));
               var map = Drupal.checkoutClickCollect.mapCreate();
               Drupal.geolocation.removeMapMarker(map);
               Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
-              mapWrapper.children('.geolocation-common-map-locations').hide();
               if ($('a.stores-map-view').hasClass('active')) {
-                hideMap = false;
+                showMap = true;
               }
             }
-
-            if (hideMap) {
-              $('#click-and-collect-map-view').hide();
-            }
-            else {
-              $('#click-and-collect-map-view').show();
-            }
-
-          },
-          complete: function (xmlhttprequest, status) {
-            if (status === 'error' || status === 'parsererror') {
-              $('#click-and-collect-list-view').html(Drupal.t('There\'s some error'));
-              $('#click-and-collect-map-view').html(Drupal.t('There\'s some error'));
-              throw new Error(Drupal.t('The callback URL is not working: !url', {'!url': 'test'}));
-            }
+            $('#click-and-collect-map-view').toggle(showMap);
           }
-        });
+        };
+
+        storeListAjax.execute();
       }
     }
     else {
@@ -226,30 +216,13 @@
 
   // Render html for Selected store.
   Drupal.checkoutClickCollect.storeSelectedStore = function (selectedButton, StoreObj) {
-    $.ajax({
+    Drupal.ajax({
       url: Drupal.url('click-and-collect/selected-store'),
-      type: 'post',
-      data: StoreObj,
-      dataType: 'json',
-      beforeSend: function (xmlhttprequest) {
-        selectedButton.addClass('ajax-ladda-spinner');
-      },
-      success: function (response) {
-        $('#selected-store-wrapper > #selected-store-content').html(response.output);
-        $('#selected-store-wrapper').show();
-        $('#store-finder-wrapper').hide();
-        $('#selected-store-wrapper').find('input[name="store_code"]').val(StoreObj.code);
-        $('#selected-store-wrapper').find('input[name="shipping_type"]').val(response.shipping_type);
-        $('input[data-drupal-selector="edit-actions-ccnext"]').show();
-        Drupal.behaviors.cvJqueryValidate.attach($('#block-alshaya-white-label-content'));
-      },
-      complete: function (xmlhttprequest, status) {
-        if (status === 'error' || status === 'parsererror') {
-          $('#selected-store-wrapper > #selected-store-content').html(Drupal.t('Some error occurred, please try again.'));
-        }
-        selectedButton.removeClass('ajax-ladda-spinner');
-      }
-    });
+      element: selectedButton.get(0),
+      base: false,
+      progress: {type: 'throbber'},
+      submit: StoreObj
+    }).execute();
   };
 
   // View selected store on map
