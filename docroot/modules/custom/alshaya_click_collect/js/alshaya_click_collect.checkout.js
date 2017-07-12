@@ -46,11 +46,15 @@
         $(this).toggleClass("open");
       });
 
-      $('.tab').once('initiate-stores').each(function () {
-        $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
-        if (settings.alshaya_click_collect.selected_store) {
+      if (settings.alshaya_click_collect.selected_store) {
+        if ($('#selected-store-wrapper').is(':visible')) {
           $('input[data-drupal-selector="edit-actions-ccnext"]').show();
         }
+        $('[data-drupal-selector="edit-actions-next"]').hide();
+      }
+
+      $('.tab').once('initiate-stores').each(function () {
+        $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
 
         $(this).on('click', function () {
           if ($(this).hasClass('tab-click-collect')) {
