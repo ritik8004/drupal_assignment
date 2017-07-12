@@ -5,8 +5,10 @@ dependencies:
     - field.field.node.static_html.body
     - field.field.node.static_html.field_css
     - field.field.node.static_html.field_javascript
+    - field.field.node.static_html.field_meta_tags
     - node.type.static_html
   module:
+    - metatag
     - path
     - text
     - workbench_moderation
@@ -45,6 +47,12 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textarea
+    region: content
+  field_meta_tags:
+    weight: 34
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_firehose
     region: content
   langcode:
     type: language_select

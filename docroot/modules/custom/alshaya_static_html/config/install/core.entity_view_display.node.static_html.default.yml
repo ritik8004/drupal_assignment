@@ -5,8 +5,10 @@ dependencies:
     - field.field.node.static_html.body
     - field.field.node.static_html.field_css
     - field.field.node.static_html.field_javascript
+    - field.field.node.static_html.field_meta_tags
     - node.type.static_html
   module:
+    - metatag
     - panelizer
     - text
     - user
@@ -27,6 +29,13 @@ content:
     weight: 2
     settings: {  }
     third_party_settings: {  }
+    region: content
+  field_meta_tags:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
     region: content
   links:
     weight: 1
