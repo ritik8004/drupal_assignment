@@ -2,9 +2,9 @@
   <tbody class="recent__orders--body">
     <tr class="order-summary-row">
       <td class="order-transaction">
-        <div class="light">{{ 'Order ID' | t }}</div>
+        <div class="light tablet-light">{{ 'Order ID' | t }}</div>
         <div class="dark">{{ order.id }}</div>
-        <div class="light">{{ order.date }}</div>
+        <div class="light order--date--time">{{ order.date }}</div>
 
         <div class="mobile-only">
           <div class="dark order--items">{{ order.item_names | join(', ') }}</div>
@@ -56,7 +56,7 @@
       <tr class="order-item-row">
         <td>{{ item.image }}</td>
 
-        <td>
+        <td class="order__details--summary order__details--description">
           <div class="dark">{{ item.name }}</div>
           <div class="light">{{ 'Item code' | t }} {{ item.sku }}</div>
           <div class="light">{{ 'Quantity' | t }}: {{ item.ordered }}</div>
@@ -72,12 +72,12 @@
           </div>
         </td>
 
-        <td class="desktop-only">
+        <td class="desktop-only order__details--summary">
           <div class="light">{{ 'Unit Price' | t }}</div>
           <span class="currency-code dark prefix">{{ item.price }}</span>
         </td>
 
-        <td class="above-mobile total--price">
+        <td class="above-mobile total--price order__details--summary">
           <div class="light">{{ 'Total' | t }}</div>
           <span class="currency-code dark prefix">{{ item.total_price }}</span>
         </td>

@@ -233,11 +233,12 @@
 .recent__orders--list {
   margin-bottom: 0;
   border: none;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 
   @include breakpoint($desktop) {
     table-layout: fixed;
-    height: 98px;
+    height: 5.9rem;
   }
 
   .recent__orders--body td {
@@ -250,42 +251,101 @@
     }
   }
 
-  td {
-    padding: 1.313rem 1.5rem !important;
+  &.user__order--detail .order-summary-row td {
+    padding: 1.2rem 1.5rem 0.675rem;
 
-    @include breakpoint($tablet) {
-      width: 12.5rem;
+    @include breakpoint($desktop) {
+      padding: 1.313rem 1.5rem;
+    }
+
+    &.above-mobile {
+      width: 14.38rem;
+
+      @include breakpoint($only-tablet) {
+        padding-right: 1rem;
+        vertical-align: middle;
+        width: 10.5rem;
+      }
+
+      @include breakpoint($desktop) {
+        width: 22.9%;
+      }
+    }
+
+    &.destop-only {
+      width: 6.875rem;
+    }
+
+    &.toggle--icon {
+      width: 14.38rem;
+
+      @include breakpoint($desktop) {
+        width: 28.7%;
+      }
     }
 
     &.order-transaction {
       width: 13.75rem;
 
       @include breakpoint($only-tablet) {
-        min-width: 10.75rem;
-        width: 10.75rem;
+        min-width: 10.1rem;
+        width: 10.1rem;
+        padding-#{$right}: 0;
+      }
+
+      @include breakpoint($desktop) {
+        width: 20.8%;
       }
 
       &:nth-child(3) {
         font-size: 0.725rem;
       }
     }
+  }
 
-    &.above-mobile {
-      width: 14.38rem !important;
+  td {
+    @include breakpoint($tablet) {
+      width: 11.5rem;
     }
 
-    &.destop-only {
-      width: 6.875rem !important;
+    @include breakpoint($desktop) {
+      width: 18.3%;
     }
+  }
 
-    &.toggle--icon {
-      width: 14.38rem !important;
+  .order__details--description {
+    @include breakpoint($only-tablet) {
+      padding-#{$right}: 0;
     }
+  }
+
+  .order-item-row td {
+    padding: 1.313rem 1.5rem 1.8rem;
+
+    &:first-child {
+      @include breakpoint($only-tablet) {
+        padding-#{$right}: 0;
+      }
+    }
+  }
+
+  .order-item-row .order__details--summary {
+    @include breakpoint($desktop) {
+      padding-top: 1.75rem;
+    }
+  }
+
+  .currency-code.prefix {
+    display: block;
   }
 
   .order-summary-row {
     cursor: pointer;
     position: relative;
+
+    .tablet-only {
+      margin-top: 0.5rem;
+    }
   }
 
   .toggle--icon {
@@ -304,7 +364,7 @@
     }
 
     @include breakpoint($desktop) {
-      #{$right}: 2rem;
+      #{$right}: 1.5rem;
     }
   }
 
@@ -327,7 +387,7 @@
       white-space: nowrap;
       overflow: hidden;
       position: relative;
-      max-width: 10.9375rem;
+      max-width: 9.2rem;
       display: inline-block;
 
       &::after {
@@ -335,11 +395,11 @@
         background: $white-five;
         position: absolute;
         #{$right}: 0;
-        width: 1rem;
+        width: 0.75rem;
       }
     }
 
-    @include breakpoint($tablet) {
+    @include breakpoint($desktop) {
       max-width: 10.2rem;
     }
   }
@@ -361,7 +421,14 @@
 
   .order-item-row {
     td .tablet-only {
-      margin-top: 32px;
+      margin-top: 1.875rem;
+    }
+
+    .dark {
+      @include breakpoint($only-tablet) {
+        margin-bottom: 0.1875rem;
+        margin-top: 0.3125rem;
+      }
     }
   }
 
@@ -383,6 +450,10 @@
   position: absolute;
   #{$right}: 0;
   top: 0;
+
+  @include breakpoint($tablet) {
+    top: 1.875rem;
+  }
 
   @include breakpoint($desktop) {
     top: 0.3125rem;
@@ -461,17 +532,18 @@
   font-family: $arial;
   line-height: 1;
   color: $white-five;
-  top: -5.55rem;
+  top: -5.3rem;
   font-size: 0.75rem;
   text-transform: lowercase;
   font-weight: bold;
+  height: 2.1875rem;
 
   @include breakpoint($desktop) {
     min-width: 11.625rem;
   }
 
   @include breakpoint($only-tablet) {
-    top: -4rem;
+    top: -4.2rem;
   }
 }
 
@@ -550,6 +622,15 @@
           display: block;
         }
       }
+    }
+  }
+}
+
+.block-alshaya-my-account-links {
+  .my-account-mobile-title1 {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.4rem;
+      padding-top: 0.75rem;
     }
   }
 }
