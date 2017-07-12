@@ -32,6 +32,13 @@
         }
       });
 
+      $(window).on('resize', function (e) {
+        if ($(window).width() > 768) {
+          $('.back-link').click(function (event) {
+            event.preventDefault();
+          });
+        }
+      });
     }
   };
 
