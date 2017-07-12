@@ -1,0 +1,1077 @@
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
+index 7399f0a6..0cdd1fbd 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
+@@ -6,3 +6,4 @@ services:
+       - '@acq_commerce.api'
+       - '@logger.factory'
+       - '@language_manager'
++      - '@entity.repository'
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/acq_promotion.settings.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/acq_promotion.settings.yml
+new file mode 100644
+index 00000000..6129f32e
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/acq_promotion.settings.yml
+@@ -0,0 +1 @@
++promotion_attach_batch_size: 50
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml
+index aa40ed34..2e58e924 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_form_display.node.acq_promotion.default.yml
+@@ -2,9 +2,13 @@ langcode: en
+ status: true
+ dependencies:
+   config:
++    - field.field.node.acq_promotion.field_acq_promotion_action
+     - field.field.node.acq_promotion.field_acq_promotion_banner
+     - field.field.node.acq_promotion.field_acq_promotion_data
+     - field.field.node.acq_promotion.field_acq_promotion_description
++    - field.field.node.acq_promotion.field_acq_promotion_disc_type
++    - field.field.node.acq_promotion.field_acq_promotion_discount
++    - field.field.node.acq_promotion.field_acq_promotion_label
+     - field.field.node.acq_promotion.field_acq_promotion_rule_id
+     - field.field.node.acq_promotion.field_acq_promotion_sku
+     - field.field.node.acq_promotion.field_acq_promotion_type
+@@ -26,16 +30,24 @@ content:
+     region: content
+     settings: {  }
+     third_party_settings: {  }
++  field_acq_promotion_action:
++    weight: 11
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++    type: string_textfield
++    region: content
+   field_acq_promotion_banner:
+     type: image_image
+-    weight: 8
++    weight: 12
+     settings:
+       preview_image_style: thumbnail
+       progress_indicator: throbber
+     third_party_settings: {  }
+     region: content
+   field_acq_promotion_data:
+-    weight: 10
++    weight: 15
+     settings:
+       rows: 5
+       placeholder: ''
+@@ -50,8 +62,30 @@ content:
+     third_party_settings: {  }
+     type: text_textarea
+     region: content
+-  field_acq_promotion_rule_id:
++  field_acq_promotion_disc_type:
+     weight: 9
++    settings: {  }
++    third_party_settings: {  }
++    type: options_select
++    region: content
++  field_acq_promotion_discount:
++    weight: 10
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++    type: string_textfield
++    region: content
++  field_acq_promotion_label:
++    weight: 8
++    settings:
++      size: 60
++      placeholder: ''
++    third_party_settings: {  }
++    type: string_textfield
++    region: content
++  field_acq_promotion_rule_id:
++    weight: 13
+     settings:
+       size: 60
+       placeholder: ''
+@@ -59,7 +93,7 @@ content:
+     type: string_textfield
+     region: content
+   field_acq_promotion_sku:
+-    weight: 12
++    weight: 17
+     settings:
+       match_operator: CONTAINS
+       size: 60
+@@ -69,7 +103,7 @@ content:
+     region: content
+   field_acq_promotion_type:
+     type: options_select
+-    weight: 11
++    weight: 16
+     region: content
+     settings: {  }
+     third_party_settings: {  }
+@@ -107,6 +141,11 @@ content:
+       size: 60
+       placeholder: ''
+     third_party_settings: {  }
++  translation:
++    weight: 14
++    region: content
++    settings: {  }
++    third_party_settings: {  }
+   uid:
+     type: entity_reference_autocomplete
+     weight: 2
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
+index 2241c0bd..8aee0c2d 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/core.entity_view_display.node.acq_promotion.default.yml
+@@ -2,6 +2,7 @@ langcode: en
+ status: true
+ dependencies:
+   config:
++    - field.field.node.acq_promotion.field_acq_promotion_action
+     - field.field.node.acq_promotion.field_acq_promotion_banner
+     - field.field.node.acq_promotion.field_acq_promotion_data
+     - field.field.node.acq_promotion.field_acq_promotion_description
+@@ -43,6 +44,7 @@ content:
+     type: string
+     region: content
+ hidden:
++  field_acq_promotion_action: true
+   field_acq_promotion_banner: true
+   field_acq_promotion_data: true
+   field_acq_promotion_disc_type: true
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_action.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_action.yml
+new file mode 100644
+index 00000000..4a236b73
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.field.node.acq_promotion.field_acq_promotion_action.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.node.field_acq_promotion_action
++    - node.type.acq_promotion
++id: node.acq_promotion.field_acq_promotion_action
++field_name: field_acq_promotion_action
++entity_type: node
++bundle: acq_promotion
++label: Action
++description: ''
++required: false
++translatable: false
++default_value: {  }
++default_value_callback: ''
++settings: {  }
++field_type: string
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_action.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_action.yml
+new file mode 100644
+index 00000000..b9f243e7
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/field.storage.node.field_acq_promotion_action.yml
+@@ -0,0 +1,20 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - node
++id: node.field_acq_promotion_action
++field_name: field_acq_promotion_action
++entity_type: node
++type: string
++settings:
++  max_length: 255
++  is_ascii: false
++  case_sensitive: false
++module: core
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/rest.resource.acq_promotionsync.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/rest.resource.acq_promotionsync.yml
+new file mode 100644
+index 00000000..6ff124cd
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/rest.resource.acq_promotionsync.yml
+@@ -0,0 +1,17 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - acq_promotion
++    - serialization
++    - user
++id: acq_promotionsync
++plugin_id: acq_promotionsync
++granularity: method
++configuration:
++  POST:
++    supported_formats:
++      - json
++      - xml
++    supported_auth:
++      - cookie
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
+index d2e8f532..a2c597a2 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
+@@ -3,7 +3,10 @@
+ namespace Drupal\acq_promotion;
+ 
+ use Drupal\acq_commerce\Conductor\APIWrapper;
++use Drupal\Core\Entity\EntityManager;
++use Drupal\Core\Entity\EntityRepositoryInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Language\LanguageInterface;
+ use Drupal\Core\Language\LanguageManager;
+ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+ use Drupal\node\Entity\Node;
+@@ -22,6 +25,27 @@ class AcqPromotionsManager {
+   protected $languageManager;
+ 
+   /**
++   * Sku Entity storage.
++   *
++   * @var \Drupal\Core\Entity\EntityStorageInterface
++   */
++  protected $skuStorage;
++
++  /**
++   * Entity Repository service.
++   * 
++   * @var \Drupal\Core\Entity\EntityRepositoryInterface
++   */
++  protected $entityRepository;
++
++  /**
++   * Entity Manager service.
++   *
++   * @var \Drupal\Core\Entity\EntityManager
++   */
++  protected $entityManager;
++
++  /**
+    * Node Entity Storage.
+    *
+    * @var \Drupal\node\NodeStorageInterface
+@@ -46,12 +70,24 @@ class AcqPromotionsManager {
+    *   LoggerFactory object.
+    * @param \Drupal\Core\Language\LanguageManager $languageManager
+    *   Language Manager service.
++   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
++   *   Entity Repository service.
++   * @param \Drupal\Core\Entity\EntityManager $entityManager
++   *   Entity Manager service.
+    */
+-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, LanguageManager $languageManager) {
++  public function __construct(EntityTypeManagerInterface $entity_type_manager,
++                              APIWrapper $api_wrapper,
++                              LoggerChannelFactoryInterface $logger_factory,
++                              LanguageManager $languageManager,
++                              EntityRepositoryInterface $entityRepository,
++                              EntityManager $entityManager) {
+     $this->nodeStorage = $entity_type_manager->getStorage('node');
++    $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
+     $this->apiWrapper = $api_wrapper;
+     $this->logger = $logger_factory->get('acq_promotion');
+     $this->languageManager = $languageManager;
++    $this->entityRepository = $entityRepository;
++    $this->entityManager = $entityManager;
+   }
+ 
+   /**
+@@ -157,6 +193,11 @@ protected function syncPromotion(array $promotion) {
+       $node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
+     }
+ 
++    // Check promotion action type & store in Drupal.
++    if (!empty($promotion['action'])) {
++      $node->get('field_acq_promotion_action')->setValue($promotion['action']);
++    }
++
+     // Add SKU ID's to promotion.
+     if (!empty($promotion['products'])) {
+       // Assign value to $node object.
+@@ -209,4 +250,119 @@ protected function unpublishPromotions($validIDs = []) {
+     }
+   }
+ 
++  /**
++   * Helper function to fetch promotion node givern rule id.
++   *
++   * @param int $rule_id
++   *   Rule id of the promotion to load.
++   *
++   * @return \Drupal\node\Entity\Node|null
++   *   Return node if a promotion found associated with the rule id else Null.
++   */
++  public function getPromotionByRuleId($rule_id) {
++    $query = $this->nodeStorage->getQuery();
++    $query->condition('type', 'acq_promotion');
++    $query->condition('field_acq_promotion_rule_id', $rule_id);
++    $nids = $query->execute();
++
++    if (empty($nids)) {
++      return NULL;
++    }
++    else {
++      // Log a message for admin to check errors in data.
++      if (count($nids) > 1) {
++        $this->logger->critical('Multiple nodes found for rule id @rule_id', ['@rule_id' => $rule_id]);
++        return NULL;
++      }
++
++      // We only load the first node.
++      /* @var $node \Drupal\node\Entity\Node */
++      $node = $this->nodeStorage->load(reset($nids));
++      $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
++      // Get the promotion with language fallback, if it did not have a
++      // translation for $langcode.
++      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
++      return $node;
++    }
++  }
++
++  /**
++   * Helper function to get skus attached with a promotion.
++   *
++   * @param \Drupal\node\Entity\Node $promotion
++   *   Promotion node for which we need to find skus.
++   *
++   * @return array
++   *   Array of sku objects attached with the promotion.
++   */
++  public function getSkusForPromotion(Node $promotion) {
++    $skus = [];
++    $query = $this->skuStorage->getQuery();
++    $query->condition('field_acq_sku_promotions', $promotion->id());
++    $sku_ids = $query->execute();
++    if (!empty($sku_ids)) {
++      $skus = SKU::loadMultiple($sku_ids);
++    }
++
++    return $skus;
++  }
++
++  /**
++   * Helper function to create Promotion node from conductor response.
++   *
++   * @param array $promotion
++   *   Promotion response from Conductor.
++   *
++   * @return \Drupal\Core\Entity\EntityInterface
++   *   Promotion node.
++   */
++  public function createPromotionFromConductorResponse(array $promotion) {
++    $promotion_node = $this->nodeStorage->create([
++      'type' => 'acq_promotion',
++    ]);
++
++    $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
++
++    $promotion_node->get('title')->setValue($promotion['name']);
++
++    // Set the description.
++    $promotion_node->get('field_acq_promotion_description')->setValue(['value' => $promotion['description'], 'format' => 'rich_text']);
++
++    // Set the status.
++    $promotion_node->setPublished((bool) $promotion['status']);
++
++    // Store everything as serialized string in DB.
++    $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
++
++    // Set the Promotion type.
++    $promotion_node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
++
++    // Set the Promotion label.
++    if (isset($promotion_label_languages[$site_default_langcode])) {
++      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
++    }
++
++    // Set promotion type to percent & discount value depending on the promotion
++    // being imported.
++    if (($promotion['type'] === 'NO_COUPON') && isset($promotion['action']) && ($promotion['action'] === 'by_percent')) {
++      $promotion_node->get('field_acq_promotion_disc_type')->setValue('percentage');
++      $promotion_node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
++    }
++
++    // Check promotion action type & store in Drupal.
++    if (!empty($promotion['action'])) {
++      $promotion_node->get('field_acq_promotion_action')->setValue($promotion['action']);
++    }
++
++    $status = $promotion_node->save();
++
++    if ($status) {
++      return $promotion_node;
++    }
++    else {
++      $this->logger->critical('Error occured while creating Promotion node for rule id: @rule_id.', ['@rule_id' => $promotion['rule_id']]);
++      return NULL;
++    }
++  }
++
+ }
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AlshayaPromotionQueueBase.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AlshayaPromotionQueueBase.php
+new file mode 100644
+index 00000000..4a606e14
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AlshayaPromotionQueueBase.php
+@@ -0,0 +1,62 @@
++<?php
++
++namespace Drupal\acq_promotion;
++
++use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
++use Drupal\Core\Queue\QueueWorkerBase;
++use Psr\Log\LoggerInterface;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++abstract class AlshayaPromotionQueueBase extends QueueWorkerBase implements ContainerFactoryPluginInterface {
++  /**
++   * Logger service.
++   *
++   * @var \Drupal\Core\Logger\LoggerInterface
++   */
++  protected $logger;
++
++  /**
++   * AcqPromotionAttachQueue constructor.
++   *
++   * @param array $configuration
++   *   Plugin config.
++   * @param string $plugin_id
++   *   Plugin unique id.
++   * @param mixed $plugin_definition
++   *   Plugin definition.
++   * @param \Psr\Log\LoggerInterface $logger
++   *   Logger service.
++   */
++  public function __construct(array $configuration,
++                              $plugin_id,
++                              $plugin_definition,
++                              LoggerInterface $logger) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
++    $this->logger = $logger;
++  }
++
++  /**
++   * Creates an instance of the plugin.
++   *
++   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
++   *   The container to pull out services used in the plugin.
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin ID for the plugin instance.
++   * @param mixed $plugin_definition
++   *   The plugin implementation definition.
++   *
++   * @return static
++   *   Returns an instance of this plugin.
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('logger.factory')->get('acq_commerce')
++    );
++  }
++
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionAttachQueue.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionAttachQueue.php
+new file mode 100644
+index 00000000..5d493d9e
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionAttachQueue.php
+@@ -0,0 +1,71 @@
++<?php
++
++namespace Drupal\acq_promotion\Plugin\QueueWorker;
++
++use Drupal\acq_promotion\AlshayaPromotionQueueBase;
++use Drupal\acq_sku\Entity\SKU;
++use Drupal\node\Entity\Node;
++
++/**
++ * Processes Skus to attach Promotions.
++ *
++ * @QueueWorker(
++ *   id = "acq_promotion_attach_queue",
++ *   title = @Translation("Acq Commerce Promotion attach queue"),
++ * )
++ */
++class AcqPromotionAttachQueue extends AlshayaPromotionQueueBase {
++
++  /**
++   * Works on a single queue item.
++   *
++   * @param mixed $data
++   *   The data that was passed to
++   *   \Drupal\Core\Queue\QueueInterface::createItem() when the item was queued.
++   *
++   * @throws \Drupal\Core\Queue\RequeueException
++   *   Processing is not yet finished. This will allow another process to claim
++   *   the item immediately.
++   * @throws \Exception
++   *   A QueueWorker plugin may throw an exception to indicate there was a
++   *   problem. The cron process will log the exception, and leave the item in
++   *   the queue to be processed again later.
++   * @throws \Drupal\Core\Queue\SuspendQueueException
++   *   More specifically, a SuspendQueueException should be thrown when a
++   *   QueueWorker plugin is aware that the problem will affect all subsequent
++   *   workers of its queue. For example, a callback that makes HTTP requests
++   *   may find that the remote server is not responding. The cron process will
++   *   behave as with a normal Exception, and in addition will not attempt to
++   *   process further items from the current item's queue during the current
++   *   cron run.
++   *
++   * @see \Drupal\Core\Cron::processQueues()
++   */
++  public function processItem($data) {
++    $skus = $data['skus'];
++    $promotion_nid = $data['promotion'];
++
++    foreach ($skus as $key => $sku) {
++      $update_sku_flag = FALSE;
++      $sku_entity = SKU::loadFromSku($sku['sku']);
++      $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
++      if (!in_array($promotion_nid, $sku_promotions, TRUE)) {
++        $sku_promotions += $promotion_nid;
++        $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
++        $update_sku_flag = TRUE;
++      }
++
++      if ($sku->final_price->value !== $sku['final_price']) {
++        $sku->final_price->value = $sku['final_price'];
++        $update_sku_flag = TRUE;
++      }
++
++      if ($update_sku_flag) {
++        $sku_entity->save();
++      }
++    }
++    $this->logger->info('Attached Promotion:@promo to SKUs: @skus',
++      ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
++  }
++
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php
+new file mode 100644
+index 00000000..98a8e356
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php
+@@ -0,0 +1,60 @@
++<?php
++
++namespace Drupal\acq_promotion\Plugin\QueueWorker;
++
++use Drupal\acq_promotion\AlshayaPromotionQueueBase;
++use Drupal\acq_sku\Entity\SKU;
++
++/**
++ * Processes Skus to detach Promotions.
++ *
++ * @QueueWorker(
++ *   id = "acq_promotion_detach_queue",
++ *   title = @Translation("Acq Commerce Promotion detach queue"),
++ * )
++ */
++class AcqPromotionDetachQueue extends AlshayaPromotionQueueBase {
++
++  /**
++   * Works on a single queue item.
++   *
++   * @param mixed $data
++   *   The data that was passed to
++   *   \Drupal\Core\Queue\QueueInterface::createItem() when the item was queued.
++   *
++   * @throws \Drupal\Core\Queue\RequeueException
++   *   Processing is not yet finished. This will allow another process to claim
++   *   the item immediately.
++   * @throws \Exception
++   *   A QueueWorker plugin may throw an exception to indicate there was a
++   *   problem. The cron process will log the exception, and leave the item in
++   *   the queue to be processed again later.
++   * @throws \Drupal\Core\Queue\SuspendQueueException
++   *   More specifically, a SuspendQueueException should be thrown when a
++   *   QueueWorker plugin is aware that the problem will affect all subsequent
++   *   workers of its queue. For example, a callback that makes HTTP requests
++   *   may find that the remote server is not responding. The cron process will
++   *   behave as with a normal Exception, and in addition will not attempt to
++   *   process further items from the current item's queue during the current
++   *   cron run.
++   *
++   * @see \Drupal\Core\Cron::processQueues()
++   */
++  public function processItem($data) {
++    $skus = $data['skus'];
++    $promotion_nid = $data['promotion'];
++
++    foreach ($skus as $sku) {
++      $sku_entity = SKU::loadFromSku($sku);
++      $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
++      $sku_promotions = array_diff($sku_promotions, [$promotion_nid]);
++      $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
++
++      $sku_entity->save();
++    }
++    // @TODO: API call to conduct for syncing these skus for final_price update.
++    $this->logger->info('Detached Promotion:@promo from SKUs: @skus',
++      ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
++  }
++
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/rest/resource/PromotionSyncResource.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/rest/resource/PromotionSyncResource.php
+new file mode 100644
+index 00000000..e1c623b6
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/rest/resource/PromotionSyncResource.php
+@@ -0,0 +1,195 @@
++<?php
++
++namespace Drupal\acq_promotion\Plugin\rest\resource;
++
++use Drupal\acq_promotion\AcqPromotionsManager;
++use Drupal\Core\Config\ConfigFactory;
++use Drupal\Core\Queue\QueueFactory;
++use Drupal\Core\Session\AccountProxyInterface;
++use Drupal\rest\Plugin\ResourceBase;
++use Drupal\rest\ResourceResponse;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++use Psr\Log\LoggerInterface;
++
++/**
++ * Class PromotionSyncResource.
++ *
++ * @package Drupal\acq_promotion\Plugin
++ *
++ * @ingroup acq_promotion
++ *
++ * @RestResource(
++ *   id = "acq_promotionsync",
++ *   label = @Translation("Acquia Commerce Promotion Sync"),
++ *   uri_paths = {
++ *     "canonical" = "/promotionsync",
++ *     "https://www.drupal.org/link-relations/create" = "/promotionsync"
++ *   }
++ * )
++ */
++class PromotionSyncResource extends ResourceBase {
++
++  /**
++   * A current user instance.
++   *
++   * @var \Drupal\Core\Session\AccountProxyInterface
++   */
++  protected $currentUser;
++
++  /**
++   * The promotion manager service.
++   *
++   * @var \Drupal\acq_promotion\AcqPromotionsManager
++   */
++  protected $promotionManager;
++
++  /**
++   * Queue Factory service.
++   *
++   * @var \Drupal\Core\Queue\QueueFactory
++   */
++  protected $queue;
++
++  /**
++   * Config factory service.
++   * 
++   * @var \Drupal\Core\Config\ConfigFactory
++   */
++  protected $configFactory;
++
++  /**
++   * Constructs a new PromotionSyncResource object.
++   *
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin_id for the plugin instance.
++   * @param mixed $plugin_definition
++   *   The plugin implementation definition.
++   * @param array $serializer_formats
++   *   The available serialization formats.
++   * @param \Psr\Log\LoggerInterface $logger
++   *   A logger instance.
++   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
++   *   A current user instance.
++   * @param \Drupal\acq_promotion\AcqPromotionsManager $promotionManager
++   *   Promotion Manager service.
++   * @param \Drupal\Core\Queue\QueueFactory $queue
++   *   Queue factory service.
++   * @param \Drupal\Core\Config\ConfigFactory $configFactory
++   *   Config factory service.
++   */
++  public function __construct(
++    array $configuration,
++    $plugin_id,
++    $plugin_definition,
++    array $serializer_formats,
++    LoggerInterface $logger,
++    AccountProxyInterface $current_user,
++    AcqPromotionsManager $promotionManager,
++    QueueFactory $queue,
++    ConfigFactory $configFactory) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
++
++    $this->currentUser = $current_user;
++    $this->promotionManager = $promotionManager;
++    $this->logger = $logger;
++    $this->queue = $queue;
++    $this->configFactory = $configFactory;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->getParameter('serializer.formats'),
++      $container->get('logger.factory')->get('acq_promotion'),
++      $container->get('current_user'),
++      $container->get('acq_promotion.promotions_manager'),
++      $container->get('queue'),
++      $container->get('config.factory')
++    );
++  }
++
++  /**
++   * Responds to POST requests.
++   *
++   * Returns a list of bundles for specified entity.
++   *
++   * @param array $promotions
++   *   List of promotions being updated/created.
++   *
++   * @return \Drupal\rest\ResourceResponse
++   *   Throws exception expected.
++   */
++  public function post(array $promotions = []) {
++    $promotions = $promotions['promotions'];
++    $acq_promotion_attach_batch_size = $this->configFactory
++      ->get('acq_promotion.settings')
++      ->get('promotion_attach_batch_size');
++
++    foreach ($promotions as $promotion) {
++      $attached_promotion_skus = [];
++      $fetched_promotion_skus = [];
++      $fetched_promotion_sku_attach_data = [];
++
++      // Extract list of sku text attached with the promotion passed.
++      $products = $promotion['products'];
++      foreach ($products as $product) {
++        $fetched_promotion_skus[] = $product['product_sku'];
++        $fetched_promotion_sku_attach_data[$product['product_sku']] = [
++          'sku' => $product['product_sku'],
++          'final_price' => $product['final_price'],
++        ];
++      }
++
++      // Check if this promotion exists in Drupal.
++      $promotion_node = $this->promotionManager->getPromotionByRuleId($promotion['rule_id']);
++
++      // If promotion exists, we update the related skus & final price.
++      if ($promotion_node) {
++        $attached_skus = $this->promotionManager->getSkusForPromotion($promotion_node);
++
++        // Extract sku text from sku objects.
++        if (!empty($attached_skus)) {
++          foreach ($attached_skus as $attached_sku) {
++            $attached_promotion_skus[] = $attached_sku->getSku();
++          }
++        }
++
++        // Get list of skus for which promotions should be detached.
++        $detach_promotion_skus = array_diff($attached_promotion_skus, $fetched_promotion_skus);
++
++        // Create a queue for removing promotions from skus.
++        if (!empty($detach_promotion_skus)) {
++          $promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
++          $data['promotion'] = $promotion_node->id();
++          $data['skus'] = $detach_promotion_skus;
++          $promotion_detach_queue->createItem($data);
++        }
++      }
++      else {
++        // Create promotions node using Metadata from Promotions Object.
++        $promotion_node = $this->promotionManager->createPromotionFromConductorResponse($promotion);
++      }
++
++      // Attach promotions to skus.
++      if ($promotion_node && (!empty($fetched_promotion_skus))) {
++        $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
++        $data['promotion'] = $promotion_node->id();
++        $chunks = array_chunk($fetched_promotion_sku_attach_data, $acq_promotion_attach_batch_size);
++        foreach ($chunks as $chunk) {
++          $data['skus'] = $chunk;
++          $promotion_attach_queue->createItem($data);
++        }
++      }
++    }
++
++    return new ResourceResponse($promotions);
++  }
++
++}
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.info.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.info.yml
+index 29e6331b..2b908764 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.info.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.info.yml
+@@ -5,8 +5,10 @@ core: 8.x
+ package: Commerce
+ dependencies:
+   - acq_commerce
++  - acq_promotion
+   - key_value_field
+   - rest
+   - inline_entity_form
+   - workbench_moderation
+   - panelizer
++  - acq_promotion
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
+index ae07ace8..05c0df62 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
+@@ -36,10 +36,12 @@ function acq_sku_install() {
+   $role = Role::load('anonymous');
+   $role->grantPermission('restful post acq_categorysync');
+   $role->grantPermission('restful post acq_productsync');
++  $role->grantPermission('restful post acq_promotionsync');
+   $role->save();
+ 
+   $role = Role::load('authenticated');
+   $role->grantPermission('restful post acq_categorysync');
+   $role->grantPermission('restful post acq_productsync');
++  $role->grantPermission('restful post acq_promotionsync');
+   $role->save();
+ }
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/core.entity_view_display.acq_sku.configurable.default.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/core.entity_view_display.acq_sku.configurable.default.yml
+index 4d989d37..5bc537bc 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/core.entity_view_display.acq_sku.configurable.default.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/core.entity_view_display.acq_sku.configurable.default.yml
+@@ -1,9 +1,9 @@
+-uuid: 9c7339b4-9dfa-48af-9863-9e0b944146d3
+ langcode: en
+ status: true
+ dependencies:
+   config:
+     - acq_sku.type.configurable
++    - field.field.acq_sku.configurable.field_acq_sku_promotions
+     - field.field.acq_sku.configurable.field_configurable_attributes
+     - field.field.acq_sku.configurable.field_configured_skus
+   module:
+@@ -21,6 +21,7 @@ content:
+       image_style: ''
+       image_link: ''
+     third_party_settings: {  }
++    region: content
+   name:
+     label: hidden
+     type: string
+@@ -28,6 +29,7 @@ content:
+     settings:
+       link_to_entity: false
+     third_party_settings: {  }
++    region: content
+   price:
+     label: above
+     type: string
+@@ -35,6 +37,7 @@ content:
+     settings:
+       link_to_entity: false
+     third_party_settings: {  }
++    region: content
+   sku:
+     label: above
+     type: string
+@@ -42,7 +45,25 @@ content:
+     settings:
+       link_to_entity: false
+     third_party_settings: {  }
++    region: content
+ hidden:
++  attr_at_glance: true
++  attr_brand_logo: true
++  attr_bullet_points: true
++  attr_collection: true
++  attr_color: true
++  attr_product_brand: true
++  attr_reserve_and_collect: true
++  attr_season: true
++  attr_ship_to_store: true
++  attr_size: true
++  attr_style: true
++  attr_whats_in_the_box: true
+   attributes: true
++  field_acq_sku_promotions: true
+   field_configurable_attributes: true
+   field_configured_skus: true
++  final_price: true
++  langcode: true
++  media: true
++  special_price: true
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/core.entity_view_display.acq_sku.simple.default.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/core.entity_view_display.acq_sku.simple.default.yml
+index 694d5ac1..e6f7a016 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/core.entity_view_display.acq_sku.simple.default.yml
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/core.entity_view_display.acq_sku.simple.default.yml
+@@ -1,11 +1,11 @@
+-uuid: 677f443f-fc16-429e-9ba2-7c0603698f1b
+ langcode: en
+ status: true
+ dependencies:
+   config:
++    - acq_sku.type.simple
++    - field.field.acq_sku.simple.field_acq_sku_promotions
+     - image.style.large
+   module:
+-    - acq_sku
+     - image
+ id: acq_sku.simple.default
+ targetEntityType: acq_sku
+@@ -20,6 +20,7 @@ content:
+       image_style: large
+       image_link: ''
+     third_party_settings: {  }
++    region: content
+   name:
+     label: hidden
+     type: string
+@@ -27,11 +28,32 @@ content:
+     settings:
+       link_to_entity: false
+     third_party_settings: {  }
++    region: content
+   price:
+     label: above
+     type: string
+     weight: 1
+-    settings: {  }
++    settings:
++      link_to_entity: false
+     third_party_settings: {  }
++    region: content
+ hidden:
++  attr_at_glance: true
++  attr_brand_logo: true
++  attr_bullet_points: true
++  attr_collection: true
++  attr_color: true
++  attr_product_brand: true
++  attr_reserve_and_collect: true
++  attr_season: true
++  attr_ship_to_store: true
++  attr_size: true
++  attr_style: true
++  attr_whats_in_the_box: true
++  attributes: true
++  field_acq_sku_promotions: true
++  final_price: true
++  langcode: true
++  media: true
+   sku: true
++  special_price: true
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_acq_sku_promotions.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_acq_sku_promotions.yml
+new file mode 100644
+index 00000000..323fa7d1
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_acq_sku_promotions.yml
+@@ -0,0 +1,27 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - acq_sku.type.configurable
++    - field.storage.acq_sku.field_acq_sku_promotions
++    - node.type.acq_promotion
++id: acq_sku.configurable.field_acq_sku_promotions
++field_name: field_acq_sku_promotions
++entity_type: acq_sku
++bundle: configurable
++label: Promotions
++description: ''
++required: false
++translatable: false
++default_value: {  }
++default_value_callback: ''
++settings:
++  handler: 'default:node'
++  handler_settings:
++    target_bundles:
++      acq_promotion: acq_promotion
++    sort:
++      field: _none
++    auto_create: false
++    auto_create_bundle: ''
++field_type: entity_reference
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.field.acq_sku.simple.field_acq_sku_promotions.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.field.acq_sku.simple.field_acq_sku_promotions.yml
+new file mode 100644
+index 00000000..d1a323f0
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.field.acq_sku.simple.field_acq_sku_promotions.yml
+@@ -0,0 +1,27 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - acq_sku.type.simple
++    - field.storage.acq_sku.field_acq_sku_promotions
++    - node.type.acq_promotion
++id: acq_sku.simple.field_acq_sku_promotions
++field_name: field_acq_sku_promotions
++entity_type: acq_sku
++bundle: simple
++label: Promotions
++description: ''
++required: false
++translatable: true
++default_value: {  }
++default_value_callback: ''
++settings:
++  handler: 'default:node'
++  handler_settings:
++    target_bundles:
++      acq_promotion: acq_promotion
++    sort:
++      field: _none
++    auto_create: false
++    auto_create_bundle: ''
++field_type: entity_reference
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.storage.acq_sku.field_acq_sku_promotions.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.storage.acq_sku.field_acq_sku_promotions.yml
+new file mode 100644
+index 00000000..22843e7b
+--- /dev/null
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/field.storage.acq_sku.field_acq_sku_promotions.yml
+@@ -0,0 +1,19 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - acq_sku
++    - node
++id: acq_sku.field_acq_sku_promotions
++field_name: field_acq_sku_promotions
++entity_type: acq_sku
++type: entity_reference
++settings:
++  target_type: node
++module: core
++locked: false
++cardinality: -1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
