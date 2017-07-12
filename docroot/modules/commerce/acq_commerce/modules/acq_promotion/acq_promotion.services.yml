@@ -7,4 +7,5 @@ services:
       - '@logger.factory'
       - '@language_manager'
       - '@entity.repository'
-      - '@entity.manager'
+      - '@queue'
+      - '@config.factory'

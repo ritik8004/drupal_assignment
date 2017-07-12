@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_promotion\Plugin\QueueWorker;
 
+use Drupal\acq_commerce\Conductor\ConductorException;
 use Drupal\acq_promotion\AlshayaPromotionQueueBase;
 use Drupal\acq_sku\Entity\SKU;
 
@@ -52,7 +53,22 @@ class AcqPromotionDetachQueue extends AlshayaPromotionQueueBase {
 
       $sku_entity->save();
     }
-    // @TODO: API call to conduct for syncing these skus for final_price update.
+
+    $sku_texts = array_keys($skus);
+    $sku_query_string = implode(',', $sku_texts);
+
+    $endpoint = $this->apiVersion . '/ingest/product/sync?skus=' . $sku_query_string;
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return $client->post($endpoint, $opt);
+    };
+
+    try {
+      $this->tryIngestRequest($doReq, 'productFullSync', 'products');
+    }
+    catch (ConductorException $e) {
+    }
+
     $this->logger->info('Detached Promotion:@promo from SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
   }

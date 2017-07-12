@@ -44,20 +44,6 @@ class PromotionSyncResource extends ResourceBase {
   protected $promotionManager;
 
   /**
-   * Queue Factory service.
-   *
-   * @var \Drupal\Core\Queue\QueueFactory
-   */
-  protected $queue;
-
-  /**
-   * Config factory service.
-   * 
-   * @var \Drupal\Core\Config\ConfigFactory
-   */
-  protected $configFactory;
-
-  /**
    * Constructs a new PromotionSyncResource object.
    *
    * @param array $configuration
@@ -74,10 +60,6 @@ class PromotionSyncResource extends ResourceBase {
    *   A current user instance.
    * @param \Drupal\acq_promotion\AcqPromotionsManager $promotionManager
    *   Promotion Manager service.
-   * @param \Drupal\Core\Queue\QueueFactory $queue
-   *   Queue factory service.
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   *   Config factory service.
    */
   public function __construct(
     array $configuration,
@@ -86,16 +68,12 @@ class PromotionSyncResource extends ResourceBase {
     array $serializer_formats,
     LoggerInterface $logger,
     AccountProxyInterface $current_user,
-    AcqPromotionsManager $promotionManager,
-    QueueFactory $queue,
-    ConfigFactory $configFactory) {
+    AcqPromotionsManager $promotionManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->currentUser = $current_user;
     $this->promotionManager = $promotionManager;
     $this->logger = $logger;
-    $this->queue = $queue;
-    $this->configFactory = $configFactory;
   }
 
   /**
@@ -109,9 +87,7 @@ class PromotionSyncResource extends ResourceBase {
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('acq_promotion'),
       $container->get('current_user'),
-      $container->get('acq_promotion.promotions_manager'),
-      $container->get('queue'),
-      $container->get('config.factory')
+      $container->get('acq_promotion.promotions_manager')
     );
   }
 
@@ -128,70 +104,9 @@ class PromotionSyncResource extends ResourceBase {
    */
   public function post(array $promotions = []) {
     $promotions = $promotions['promotions'];
-    $acq_promotion_attach_batch_size = $this->configFactory
-      ->get('acq_promotion.settings')
-      ->get('promotion_attach_batch_size');
+    $output = $this->promotionManager->processPromotions($promotions);
 
-    foreach ($promotions as $promotion) {
-      $attached_promotion_skus = [];
-      $fetched_promotion_skus = [];
-      $fetched_promotion_sku_attach_data = [];
-
-      // Extract list of sku text attached with the promotion passed.
-      $products = $promotion['products'];
-      foreach ($products as $product) {
-        $fetched_promotion_skus[] = $product['product_sku'];
-        $fetched_promotion_sku_attach_data[$product['product_sku']] = [
-          'sku' => $product['product_sku'],
-          'final_price' => $product['final_price'],
-        ];
-      }
-
-      // Check if this promotion exists in Drupal.
-      $promotion_node = $this->promotionManager->getPromotionByRuleId($promotion['rule_id']);
-
-      // If promotion exists, we update the related skus & final price.
-      if ($promotion_node) {
-        // Update promotion metadata.
-        $this->promotionManager->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
-        $attached_skus = $this->promotionManager->getSkusForPromotion($promotion_node);
-
-        // Extract sku text from sku objects.
-        if (!empty($attached_skus)) {
-          foreach ($attached_skus as $attached_sku) {
-            $attached_promotion_skus[] = $attached_sku->getSku();
-          }
-        }
-
-        // Get list of skus for which promotions should be detached.
-        $detach_promotion_skus = array_diff($attached_promotion_skus, $fetched_promotion_skus);
-
-        // Create a queue for removing promotions from skus.
-        if (!empty($detach_promotion_skus)) {
-          $promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
-          $data['promotion'] = $promotion_node->id();
-          $data['skus'] = $detach_promotion_skus;
-          $promotion_detach_queue->createItem($data);
-        }
-      }
-      else {
-        // Create promotions node using Metadata from Promotions Object.
-        $promotion_node = $this->promotionManager->syncPromotionWithMiddlewareResponse($promotion);
-      }
-
-      // Attach promotions to skus.
-      if ($promotion_node && (!empty($fetched_promotion_skus))) {
-        $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
-        $data['promotion'] = $promotion_node->id();
-        $chunks = array_chunk($fetched_promotion_sku_attach_data, $acq_promotion_attach_batch_size);
-        foreach ($chunks as $chunk) {
-          $data['skus'] = $chunk;
-          $promotion_attach_queue->createItem($data);
-        }
-      }
-    }
-
-    return new ResourceResponse($promotions);
+    return new ResourceResponse($output);
   }
 
 }
