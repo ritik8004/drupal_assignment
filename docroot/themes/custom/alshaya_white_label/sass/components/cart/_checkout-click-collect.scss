@@ -1105,5 +1105,15 @@
         margin-top: 2.25rem;
       }
     }
+
+    .form-item-cc-firstname,
+    .form-item-cc-lastname,
+    .form-item-cc-email {
+      label.error {
+        display: block;
+        padding-top: 0;
+        margin-top: 0.5rem;
+      }
+    }
   }
 }
