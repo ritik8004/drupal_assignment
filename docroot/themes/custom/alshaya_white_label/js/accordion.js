@@ -34,8 +34,7 @@
         var mobileFilterBarSelector = getFilterBarSelector();
 
         var countFilters = $(mobileFilterBarSelector + ' ul li').length;
-        if (countFilters === 0 && $.trim($(mobileFilterBarSelector)
-            .html()).length === 0) {
+        if (countFilters === 0 && $.trim($(mobileFilterBarSelector).html()).length === 0) {
           $(mobileFilterBarSelector)
             .once()
             .append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
@@ -327,10 +326,13 @@
        */
 
       if ($('.checkout .multistep-checkout').length) {
-        $('.tab-home-delivery, .tab-new-customer')
-          .addClass('active--tab--head');
-        $('#edit-guest-delivery-home, #edit-member-delivery-home, #edit-checkout-guest')
-          .addClass('active--tab--content');
+        var selectedTab = $('#selected-tab').val();
+        if (selectedTab !== 'checkout-click-collect') {
+          $('.tab-home-delivery, .tab-new-customer')
+            .addClass('active--tab--head');
+          $('#edit-guest-delivery-home, #edit-member-delivery-home, #edit-checkout-guest')
+            .addClass('active--tab--content');
+        }
 
         $('.tab').click(function () {
           $('.multistep-checkout .tab').removeClass('active--tab--head');
