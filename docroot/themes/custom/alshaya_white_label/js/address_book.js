@@ -32,6 +32,13 @@
         }
       });
 
+      // On change password block - inserting the page-title field into the link
+      // so that clicking the whole title works.
+      if ($(window).width() > 768) {
+        $('.back-link').click(function (event) {
+          event.preventDefault();
+        });
+      }
     }
   };
 

@@ -333,20 +333,6 @@
     top: -1.25rem;
   }
 
-  .c-page-title {
-    margin-bottom: 1rem;
-
-    @include breakpoint($tablet) {
-      margin-bottom: 0;
-      margin-top: 0.437rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding-bottom: 1rem;
-      margin-top: 0;
-    }
-  }
-
   .block-system > a {
     @extend %button-wide;
 
@@ -363,7 +349,7 @@
     }
 
     @include breakpoint($desktop) {
-      top: -0.3125rem;
+      top: -0.5rem;
       min-width: 11.75rem;
     }
 
