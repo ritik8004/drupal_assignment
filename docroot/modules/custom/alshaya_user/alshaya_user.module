@@ -405,8 +405,7 @@ function alshaya_user_field_info_alter(&$info) {
   if (isset($info['mobile_number'])) {
     // This is to replace a custom token (@entity_type) just for error message
     // in mobile number.
-    $info['mobile_number']['constraints'] = [
-      'AlshayaMobileNumber' => [],
-    ];
+    unset($info['mobile_number']['constraints']['MobileNumber']);
+    $info['mobile_number']['constraints']['AlshayaMobileNumber'] = [];
   }
 }
