@@ -52,6 +52,7 @@ class AcqPromotionDetachQueue extends AlshayaPromotionQueueBase {
 
       $sku_entity->save();
     }
+    // @TODO: API call to conduct for syncing these skus for final_price update.
     $this->logger->info('Detached Promotion:@promo from SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
   }

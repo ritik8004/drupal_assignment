@@ -3,6 +3,7 @@
 namespace Drupal\acq_promotion\Plugin\rest\resource;
 
 use Drupal\acq_promotion\AcqPromotionsManager;
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\rest\Plugin\ResourceBase;
@@ -11,7 +12,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Provides a resource to get view modes by entity and bundle.
+ * Class PromotionSyncResource.
+ *
+ * @package Drupal\acq_promotion\Plugin
+ *
+ * @ingroup acq_promotion
  *
  * @RestResource(
  *   id = "acq_promotionsync",
@@ -46,6 +51,13 @@ class PromotionSyncResource extends ResourceBase {
   protected $queue;
 
   /**
+   * Config factory service.
+   * 
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $configFactory;
+
+  /**
    * Constructs a new PromotionSyncResource object.
    *
    * @param array $configuration
@@ -64,6 +76,8 @@ class PromotionSyncResource extends ResourceBase {
    *   Promotion Manager service.
    * @param \Drupal\Core\Queue\QueueFactory $queue
    *   Queue factory service.
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
+   *   Config factory service.
    */
   public function __construct(
     array $configuration,
@@ -73,13 +87,15 @@ class PromotionSyncResource extends ResourceBase {
     LoggerInterface $logger,
     AccountProxyInterface $current_user,
     AcqPromotionsManager $promotionManager,
-    QueueFactory $queue) {
+    QueueFactory $queue,
+    ConfigFactory $configFactory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->currentUser = $current_user;
     $this->promotionManager = $promotionManager;
     $this->logger = $logger;
     $this->queue = $queue;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -94,7 +110,8 @@ class PromotionSyncResource extends ResourceBase {
       $container->get('logger.factory')->get('acq_promotion'),
       $container->get('current_user'),
       $container->get('acq_promotion.promotions_manager'),
-      $container->get('queue')
+      $container->get('queue'),
+      $container->get('config.factory')
     );
   }
 
@@ -111,13 +128,14 @@ class PromotionSyncResource extends ResourceBase {
    */
   public function post(array $promotions = []) {
     $promotions = $promotions['promotions'];
+    $acq_promotion_attach_batch_size = $this->configFactory
+      ->get('acq_promotion.settings')
+      ->get('promotion_attach_batch_size');
+
     foreach ($promotions as $promotion) {
       $attached_promotion_skus = [];
       $fetched_promotion_skus = [];
       $fetched_promotion_sku_attach_data = [];
-
-      // Check if this promotion exists in Drupal.
-      $promotion_node = $this->promotionManager->getPromotionByRuleId($promotion['rule_id']);
 
       // Extract list of sku text attached with the promotion passed.
       $products = $promotion['products'];
@@ -128,6 +146,9 @@ class PromotionSyncResource extends ResourceBase {
           'final_price' => $product['final_price'],
         ];
       }
+
+      // Check if this promotion exists in Drupal.
+      $promotion_node = $this->promotionManager->getPromotionByRuleId($promotion['rule_id']);
 
       // If promotion exists, we update the related skus & final price.
       if ($promotion_node) {
@@ -156,11 +177,15 @@ class PromotionSyncResource extends ResourceBase {
         $promotion_node = $this->promotionManager->createPromotionFromConductorResponse($promotion);
       }
 
-      if (($promotion_node) && (!empty($fetched_promotion_skus))) {
+      // Attach promotions to skus.
+      if ($promotion_node && (!empty($fetched_promotion_skus))) {
         $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
         $data['promotion'] = $promotion_node->id();
-        $data['skus'] = $fetched_promotion_sku_attach_data;
-        $promotion_attach_queue->createItem($data);
+        $chunks = array_chunk($fetched_promotion_sku_attach_data, $acq_promotion_attach_batch_size);
+        foreach ($chunks as $chunk) {
+          $data['skus'] = $chunk;
+          $promotion_attach_queue->createItem($data);
+        }
       }
     }
 

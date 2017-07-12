@@ -5,8 +5,10 @@ core: 8.x
 package: Commerce
 dependencies:
   - acq_commerce
+  - acq_promotion
   - key_value_field
   - rest
   - inline_entity_form
   - workbench_moderation
   - panelizer
+  - acq_promotion
