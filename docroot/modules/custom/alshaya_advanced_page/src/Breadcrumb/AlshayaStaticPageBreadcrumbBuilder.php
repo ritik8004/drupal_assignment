@@ -17,7 +17,7 @@ class AlshayaStaticPageBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function applies(RouteMatchInterface $route_match) {
     // Breadcrumb for static pages.
-    $static_bundle = ['advanced_page', 'page'];
+    $static_bundle = ['advanced_page', 'static_html'];
     return ($route_match->getRouteName() == 'entity.node.canonical'
     && (in_array($route_match->getParameter('node')->bundle(), $static_bundle)));
   }

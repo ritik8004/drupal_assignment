@@ -1,6 +1,6 @@
 <?php
 global $_alshaya_acm_categories;
- 
+
 $_alshaya_acm_categories = 
 array (
   0 => 
@@ -4062,7 +4062,7 @@ array (
             'description' => '',
             'position' => 1,
             'level' => 3,
-            'in_menu' => true,
+            'in_menu' => false,
             'product_ids' => 
             array (
             ),

@@ -68,6 +68,7 @@ function alshaya_install() {
     'alshaya_stores_finder',
     'alshaya_user',
     'alshaya_acm_knet',
+    'alshaya_static_html',
   ];
 
   foreach ($modules as $module) {
