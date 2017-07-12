@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: static_html_pattern
+label: 'Static Html Pattern'
+type: 'canonical_entities:node'
+pattern: '[node:title]'
+selection_criteria:
+  281c90b3-455b-4872-8857-043cd41efafd:
+    id: node_type
+    bundles:
+      static_html: static_html
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 281c90b3-455b-4872-8857-043cd41efafd
+selection_logic: and
+weight: -5
+relationships: {  }

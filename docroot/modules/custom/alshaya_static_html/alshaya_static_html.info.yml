@@ -8,12 +8,16 @@ dependencies:
   - ctools
   - editor
   - field
+  - file
   - filter
+  - image
   - language
   - menu_ui
+  - metatag
   - node
   - panelizer
   - path
+  - pathauto
   - system
   - text
   - user
