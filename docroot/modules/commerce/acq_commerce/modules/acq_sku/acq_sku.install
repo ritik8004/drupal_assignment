@@ -36,12 +36,10 @@ function acq_sku_install() {
   $role = Role::load('anonymous');
   $role->grantPermission('restful post acq_categorysync');
   $role->grantPermission('restful post acq_productsync');
-  $role->grantPermission('restful post acq_promotionsync');
   $role->save();
 
   $role = Role::load('authenticated');
   $role->grantPermission('restful post acq_categorysync');
   $role->grantPermission('restful post acq_productsync');
-  $role->grantPermission('restful post acq_promotionsync');
   $role->save();
 }

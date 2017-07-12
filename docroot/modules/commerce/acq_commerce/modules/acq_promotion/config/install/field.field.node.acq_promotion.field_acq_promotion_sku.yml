@@ -7,6 +7,8 @@ dependencies:
     - acq_sku.type.simple
     - field.storage.node.field_acq_promotion_sku
     - node.type.acq_promotion
+  module:
+    - acq_sku
 id: node.acq_promotion.field_acq_promotion_sku
 field_name: field_acq_promotion_sku
 entity_type: node

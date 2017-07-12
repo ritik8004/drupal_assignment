@@ -33,7 +33,7 @@ class AcqPromotionsManager {
 
   /**
    * Entity Repository service.
-   * 
+   *
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
    */
   protected $entityRepository;
