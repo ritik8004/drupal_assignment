@@ -161,6 +161,9 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       elseif (($currentRoute == 'entity.profile.edit_form' || $currentRoute == 'entity.profile.type.address_book.user_profile_form.add') && $link['route'] == 'entity.profile.type.address_book.user_profile_form') {
         $options = $activeLinkOptions;
       }
+      elseif ($link['route'] == 'acq_customer.orders' && $currentRoute == 'alshaya_acm_customer.orders_detail') {
+        $options = $activeLinkOptions;
+      }
 
       $items[$key] = [
         '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)

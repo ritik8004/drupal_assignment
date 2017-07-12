@@ -48,12 +48,12 @@
   };
 
   // Get formatted address from geocode.
-  Drupal.click_collect.getFormattedAddress = function (latitude, longitude, $target) {
+  Drupal.click_collect.getFormattedAddress = function (coords, $target) {
     if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
       Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
     }
     var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
-    var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+    var latlng = {lat: parseFloat(coords.lat), lng: parseFloat(coords.lng)};
     geocoder.geocode({location: latlng}, function (results, status) {
       if (status === 'OK') {
         $target.html(results[2].formatted_address);

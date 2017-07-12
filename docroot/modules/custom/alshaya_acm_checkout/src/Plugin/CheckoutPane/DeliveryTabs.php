@@ -53,8 +53,11 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
     $selected_method = 'checkout-home-delivery';
 
     if ($method = $cart->getShippingMethodAsString()) {
-      $method = substr($method, 0, 32);
-      if ($method == \Drupal::config('alshaya_acm_checkout.settings')->get('click_collect_method')) {
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+      $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+      $method = $checkout_options_manager->getCleanShippingMethodCode($method);
+      if ($method == $checkout_options_manager->getClickandColectShippingMethod()) {
         $selected_method = 'checkout-click-collect';
       }
     }

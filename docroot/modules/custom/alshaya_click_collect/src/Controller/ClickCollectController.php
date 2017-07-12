@@ -113,11 +113,6 @@ class ClickCollectController extends ControllerBase {
           $store['delivery_time'] = $config->get('click_collect_rnc');
         }
       }
-      else {
-        $store['name'] = $store['code'];
-        $store['address'] = $store['code'];
-        $store['opening_hours'] = $store['code'];
-      }
     });
 
     return $stores;

@@ -34,7 +34,8 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('checkout_guest_login', $form_state->getValue('checkout_guest_login'));
     $config->set('checkout_terms_condition', $form_state->getValue('checkout_terms_condition'));
     $config->set('checkout_customer_service', $form_state->getValue('checkout_customer_service'));
-    $config->set('click_collect_method', $form_state->getValue('click_collect_method'));
+    $config->set('click_collect_method_method_code', $form_state->getValue('click_collect_method_method_code'));
+    $config->set('click_collect_method_carrier_code', $form_state->getValue('click_collect_method_carrier_code'));
     $config->set('checkout_display_magento_error', $form_state->getValue('checkout_display_magento_error'));
 
     $config->save();
@@ -90,12 +91,18 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('checkout_customer_service.value'),
     ];
 
-    $form['click_collect_method'] = [
+    $form['click_collect_method_method_code'] = [
       '#type' => 'textfield',
-      '#maxlength' => 32,
-      '#title' => $this->t('Click and Collect delivery method code'),
+      '#title' => $this->t('Click and Collect delivery method - method code'),
       '#required' => TRUE,
-      '#default_value' => $config->get('click_collect_method'),
+      '#default_value' => $config->get('click_collect_method_method_code'),
+    ];
+
+    $form['click_collect_method_carrier_code'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Click and Collect delivery method - carrier code'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('click_collect_method_carrier_code'),
     ];
 
     $form['checkout_display_magento_error'] = [
