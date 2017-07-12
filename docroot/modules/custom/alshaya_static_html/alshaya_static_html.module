@@ -82,5 +82,5 @@ function _alshaya_static_html_check_static_html() {
     return FALSE;
   }
 
-  return $current_route->getParameter('node');
+  return $node;
 }
