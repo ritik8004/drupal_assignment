@@ -187,7 +187,7 @@
           submit: {js: true}
         });
 
-        // Entity saved successfully.
+        // Custom command function to render map and map markers.
         storeListAjax.commands.clickCollectStoresView = function (ajax, response, status) {
           if (status === 'success') {
             storeList = response.data.raw;

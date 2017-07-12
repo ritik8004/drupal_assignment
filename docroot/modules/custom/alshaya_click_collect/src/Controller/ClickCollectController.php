@@ -4,6 +4,7 @@ namespace Drupal\alshaya_click_collect\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_click_collect\Ajax\ClickCollectStoresCommand;
+use Drupal\alshaya_click_collect\Ajax\StoreDisplayFillCommand;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -260,7 +261,38 @@ class ClickCollectController extends ControllerBase {
    */
   public function getProductStoresJson($sku, $lat, $lon) {
     $data = $this->getProductStores($sku, $lat, $lon);
-    return new JsonResponse(['top_three' => render($data['top_three']), 'all_stores' => render($data['all_stores'])]);
+
+    $response = new AjaxResponse();
+    $settings['alshaya_click_collect']['pdp'] = ['top_three' => FALSE, 'all_stores' => FALSE];
+    if (!empty($data['top_three'])) {
+      $settings['alshaya_click_collect']['pdp']['top_three'] = TRUE;
+      $response->addCommand(new HtmlCommand('.click-collect-top-stores', $data['top_three']));
+      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper .search-store', 'hide'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'show'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text .change-location-link', 'show'));
+      if (!empty($data['all_stores'])) {
+        $settings['alshaya_click_collect']['pdp']['all_stores'] = TRUE;
+        $response->addCommand(new HtmlCommand('.click-collect-all-stores', $data['all_stores']));
+      }
+      else {
+        $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
+        $response->addCommand(new InvokeCommand('.click-collect-all-stores', 'hide'));
+      }
+    }
+    else {
+      $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
+      $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
+      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper .search-store', 'show'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'hide'));
+    }
+
+    $response->addCommand(new InvokeCommand('.click-collect-form', 'show'));
+    $response->addCommand(new StoreDisplayFillCommand('storeDisplayFill', $settings));
+    $response->addCommand(new SettingsCommand(['alshaya_click_collect' => ['pdp' => ['ajax_call' => TRUE]]], TRUE), TRUE);
+
+    return $response;
   }
 
 }
