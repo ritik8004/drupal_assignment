@@ -19,7 +19,9 @@ class AlshayaMobileNumberValidator extends MobileNumberValidator {
   public function validate($item, Constraint $constraint) {
     // Overriding the original validate().
     parent::validate($item, $constraint);
+    // Get all violations.
     $violations = $this->context->getViolations();
+    // Check if any violation available.
     if (!empty($violations)) {
       for ($i = 0; $i < count($violations); $i++) {
         $violation = $violations->get($i);
