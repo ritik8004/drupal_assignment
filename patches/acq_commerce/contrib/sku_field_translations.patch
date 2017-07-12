@@ -1,0 +1,47 @@
+diff --git a/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_configurable_attributes.yml b/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_configurable_attributes.yml
+index 16a631a..9cb579b 100644
+--- a/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_configurable_attributes.yml
++++ b/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_configurable_attributes.yml
+@@ -12,7 +12,7 @@ bundle: configurable
+ label: 'Configurable Attributes'
+ description: ''
+ required: false
+-translatable: false
++translatable: true
+ default_value: {  }
+ default_value_callback: ''
+ settings: {  }
+diff --git a/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_configured_skus.yml b/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_configured_skus.yml
+index 96ac4eb..1eceb6b 100644
+--- a/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_configured_skus.yml
++++ b/modules/acq_sku/config/install/field.field.acq_sku.configurable.field_configured_skus.yml
+@@ -14,10 +14,8 @@ bundle: configurable
+ label: 'Configured SKUs'
+ description: ''
+ required: false
+-translatable: false
+-default_value:
+-  -
+-    value: {  }
++translatable: true
++default_value: {  }
+ default_value_callback: ''
+ settings: {  }
+ field_type: sku
+diff --git a/modules/acq_sku/config/install/field.field.acq_sku.grouped.field_grouped_skus.yml b/modules/acq_sku/config/install/field.field.acq_sku.grouped.field_grouped_skus.yml
+index 5c4e243..a581faa 100644
+--- a/modules/acq_sku/config/install/field.field.acq_sku.grouped.field_grouped_skus.yml
++++ b/modules/acq_sku/config/install/field.field.acq_sku.grouped.field_grouped_skus.yml
+@@ -14,10 +14,8 @@ bundle: grouped
+ label: 'Grouped SKUs'
+ description: ''
+ required: false
+-translatable: false
+-default_value:
+-  -
+-    value: {  }
++translatable: true
++default_value: {  }
+ default_value_callback: ''
+ settings: {  }
+ field_type: sku

@@ -102,6 +102,47 @@
       margin-top: 0.5rem;
     }
   }
+
+  #edit-mobile-number.mobile-number-field {
+    @include clearfix;
+
+    max-width: 186px;
+    height: auto;
+
+    label {
+      position: absolute;
+      top: -17px;
+    }
+
+    input,
+    .country-code-prefix {
+      line-height: 25px;
+      height: 25px;
+      margin: 0;
+    }
+
+    .c-input__bar {
+      position: static;
+
+      &::before,
+      &::after {
+        bottom: -1px;
+        top: auto;
+        top: initial;
+      }
+    }
+
+    #edit-mobile-number-mobile-error {
+      left: 0;
+      top: 21px !important;
+      position: absolute !important;
+      display: block !important;
+    }
+
+    #edit-mobile-number-mobile-error ~ .form-item--error-message {
+      top: 40px;
+    }
+  }
 }
 
 .address-book-address,
