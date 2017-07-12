@@ -105,12 +105,6 @@
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
-
-          asCoords = {
-            lat: 29,
-            lng: 48
-          };
-
           Drupal.pdp.storesDisplay();
           return false;
         }
