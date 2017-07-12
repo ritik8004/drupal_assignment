@@ -97,14 +97,20 @@ class AlshayaUserInfo {
   }
 
   /**
-   * Get formatter mobile number.
+   * Get formatted mobile number.
+   *
+   * @param string $mobileNumber
+   *   The mobile number to format.
    *
    * @return mixed|string
    *   Formatted mobile number string or empty if it does not exist.
    */
-  public function getFormattedMobileNumber() {
-    $mobileNumber = explode(', ', $this->userObject->get('field_mobile_number')->getString())[0];
-    if (!empty($mobileNumber)) {
+  public function getFormattedMobileNumber($mobileNumber = '') {
+    // Assign users own mobile number.
+    if (empty($mobileNumber)) {
+      $mobileNumber = explode(', ', $this->userObject->get('field_mobile_number')->getString())[0];
+    }
+    if (!empty($mobileNumber && is_string($mobileNumber))) {
       $mobile_value = $this->mobileUtil->getMobileNumber($mobileNumber);
       $mobile_number = $this->mobileUtil->libUtil()->format($mobile_value, PhoneNumberFormat::INTERNATIONAL);
       return str_replace(' ', ' - ', $mobile_number);

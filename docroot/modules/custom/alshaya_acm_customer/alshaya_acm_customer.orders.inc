@@ -210,7 +210,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
 
-  $orderDetails['contact_no'] = \Drupal::service('alshaya_user.info')->getFormattedMobileNumber();
+  $orderDetails['contact_no'] = \Drupal::service('alshaya_user.info')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
   $shipping_address = $order['shipping']['address'];
 
