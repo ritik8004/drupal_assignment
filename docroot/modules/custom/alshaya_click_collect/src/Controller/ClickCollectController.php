@@ -3,8 +3,13 @@
 namespace Drupal\alshaya_click_collect\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_click_collect\Ajax\ClickCollectStoresCommand;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
@@ -134,27 +139,27 @@ class ClickCollectController extends ControllerBase {
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
 
-    $list = $map = t('Sorry, No store found for selected location.');
+    $build['store_list'] = $build['map_info_window'] = t('Sorry, No store found for your location.');
     if (count($stores) > 0) {
-      $build = [
+      $build['store_list'] = [
         '#theme' => 'click_collect_stores_list',
         '#title' => t('Available at @count stores near', ['@count' => count($stores)]),
         '#stores' => $stores,
       ];
-      $list = render($build);
 
-      $build = [
+      $build['map_info_window'] = [
         '#theme' => 'click_collect_store_info_window_list',
         '#stores' => $stores,
       ];
-      $map = render($build);
     }
 
-    return new JsonResponse([
-      'output' => $list,
-      'raw' => $stores,
-      'mapList' => $map,
-    ]);
+    // Respond to client that the entity was saved properly.
+    $response = new AjaxResponse();
+    $response->addCommand(new HtmlCommand('#click-and-collect-list-view', $build['store_list']));
+    $response->addCommand(new HtmlCommand('#click-and-collect-map-view .geolocation-common-map-locations', $build['map_info_window']));
+    $response->addCommand(new InvokeCommand('#click-and-collect-map-view .geolocation-common-map-locations', 'hide'));
+    $response->addCommand(new ClickCollectStoresCommand(['raw' => $stores]));
+    return $response;
   }
 
   /**
@@ -180,13 +185,17 @@ class ClickCollectController extends ControllerBase {
         '#theme' => 'click_collect_selected_store',
         '#store' => $store,
       ];
-      $output = render($build);
     }
-    return new JsonResponse([
-      'output' => $output,
-      'raw' => $store,
-      'shipping_type' => $ship_type,
-    ]);
+
+    $response = new AjaxResponse();
+    $response->addCommand(new HtmlCommand('#selected-store-content', $build));
+    $response->addCommand(new InvokeCommand('#selected-store-wrapper', 'show'));
+    $response->addCommand(new InvokeCommand('#store-finder-wrapper', 'hide'));
+    $response->addCommand(new InvokeCommand('#selected-store-wrapper input[name="store_code"]', 'val', [$store['code']]));
+    $response->addCommand(new InvokeCommand('#selected-store-wrapper input[name="shipping_type"]', 'val', [$ship_type]));
+    $response->addCommand(new InvokeCommand('input[data-drupal-selector="edit-actions-ccnext"]', 'show'));
+    $response->addCommand(new SettingsCommand(['alshaya_click_collect' => ['selected_store' => ['raw' => $store]]]));
+    return $response;
   }
 
   /**
