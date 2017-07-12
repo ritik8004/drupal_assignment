@@ -239,6 +239,9 @@ class AcqPromotionsManager {
     // Set the description.
     $promotion_node->get('field_acq_promotion_description')->setValue(['value' => $promotion['description'], 'format' => 'rich_text']);
 
+    // Set promotion rule_id.
+    $promotion_node->get('field_acq_promotion_rule_id')->setValue($promotion['rule_id']);
+
     // Set the status.
     $promotion_node->setPublished((bool) $promotion['status']);
 
