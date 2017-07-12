@@ -245,8 +245,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Wrap Promotion code in a fieldset.
   $form['promotion_code_wrapper'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
+    '#type' => 'details',
     '#title' => t('Add a promo code'),
     '#prefix' => '<div class="promo-continue-shopping-wrapper">',
   ];
