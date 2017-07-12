@@ -48,13 +48,44 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       return $pane_form;
     }
 
+    $default_mobile = $shipping_type = $store_code = $selected_store_data = '';
+    $default_firstname = $default_lastname = $default_email = '';
+
     $cart = $this->getCart();
+    $shipping = (array) $cart->getShipping();
+
+    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
+      // Check if value available in shipping address.
+      $default_mobile = $shipping['telephone'];
+      $store_code = $cart->getExtension('store_code');
+      $shipping_type = $cart->getExtension('click_and_collect_type');
+
+      // Not injected here to avoid module dependency.
+      // Get store info.
+      $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+      $store = $store_utility->getStoreExtraData(['code' => $store_code]);
+      $selected_store = [
+        '#theme' => 'click_collect_selected_store',
+        '#store' => $store,
+      ];
+
+      $selected_store_data = render($selected_store);
+      // Get Customer info.
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+      $customer = $api_wrapper->getCustomer($cart->customerEmail());
+
+      $default_firstname = $customer['firstname'];
+      $default_lastname = $customer['lastname'];
+      $default_email = $cart->customerEmail();
+    }
 
     $pane_form['store_finder'] = [
       '#type' => 'container',
       '#title' => t('store finder'),
       '#tree' => FALSE,
       '#id' => 'store-finder-wrapper',
+      '#attributes' => ($store_code) ? ['style' => 'display:none;'] : [],
     ];
 
     $pane_form['store_finder']['store_location'] = [
@@ -97,19 +128,16 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#title' => t('selected store'),
       '#tree' => FALSE,
       '#id' => 'selected-store-wrapper',
+      '#attributes' => ($store_code) ? [] : ['style' => 'display:none;'],
     ];
 
     $pane_form['selected_store']['content'] = [
-      '#markup' => '<div id="selected-store-content" class="selected-store-content"></div>',
+      '#markup' => '<div id="selected-store-content" class="selected-store-content">' . $selected_store_data . '</div>',
     ];
 
     $pane_form['selected_store']['customer_help'] = [
       '#markup' => '<div class="cc-help-text cc-customer-help-text"><p>' . $this->t("Please provide your contact details") . '</p>' . $this->t("We’ll be using this information to keep in touch with you") . '</div>',
     ];
-
-    // @TODO: For back and forth, get default first/last name from customer.
-    $default_firstname = '';
-    $default_lastname = '';
 
     // First/Last/Email/Mobile have cc_ prefix to ensure validations work fine
     // and don't conflict with address form fields.
@@ -133,6 +161,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#type' => 'email',
       '#title' => t('Email'),
       '#required' => TRUE,
+      '#default_value' => $default_email,
     ];
 
     $pane_form['selected_store']['mobile_help'] = [
@@ -145,14 +174,17 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#verify' => 0,
       '#tfa' => 0,
       '#required' => TRUE,
+      '#default_value' => ['value' => $default_mobile],
     ];
 
     $pane_form['selected_store']['store_code'] = [
       '#type' => 'hidden',
+      '#default_value' => $store_code,
     ];
 
     $pane_form['selected_store']['shipping_type'] = [
       '#type' => 'hidden',
+      '#default_value' => $shipping_type,
     ];
 
     $pane_form['#attached'] = [
@@ -182,7 +214,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
             'gestureHandling' => 'auto',
           ],
         ],
-        'alshaya_click_collect' => ['cart_id' => $cart->id()],
+        'alshaya_click_collect' => [
+          'cart_id' => $cart->id(),
+          'selected_store' => ($store_code) ? TRUE : FALSE,
+        ],
       ],
       'library' => [
         'alshaya_click_collect/click-and-collect.checkout',
