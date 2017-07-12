@@ -1,0 +1,85 @@
+.c-user--node {
+  .c-page-title {
+    font-size: 1.375rem;
+
+    @include breakpoint($desktop) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .subtitle {
+    border-bottom: 1px solid $white;
+  }
+}
+
+.c-user-password,
+.c-user-register,
+.c-user-login {
+  h1 {
+    @extend %page-title;
+
+    position: absolute;
+    font-family: $alshaya-bold;
+    color: $marine-blue;
+    font-weight: normal;
+    top: -4.5rem;
+
+    @include breakpoint($tablet) {
+      top: -5.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      top: -4.5rem;
+    }
+  }
+}
+
+.c-user-password,
+.c-user-register {
+  h1 {
+    top: -3.7rem;
+
+    @include breakpoint($tablet) {
+      top: -5.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      top: -0.9rem;
+    }
+  }
+}
+
+.block-page-title-block {
+  position: relative;
+  border-bottom: 1px solid $white;
+  padding: 0.45rem 0 0.3rem;
+
+  @include breakpoint($tablet) {
+    padding: 1.5rem 0 0.75rem;
+
+    h1.c-page-title {
+      @include breakpoint($tablet) {
+        cursor: default;
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    padding: 0 0 0.75rem;
+  }
+
+  .back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(chevron#{$left}, before) {
+        font-size: 1.875rem;
+        margin-#{$left}: -0.75rem;
+      }
+
+      h1.c-page-title {
+        display: inline-block;
+        line-height: 1.5;
+        vertical-align: top;
+      }
+    }
+  }
+}

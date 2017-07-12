@@ -1,32 +1,4 @@
 .c-order-list {
-  .c-page-title {
-    border-bottom: 1px solid $white;
-    padding-bottom: 0.875rem;
-    margin-bottom: 0.8rem;
-
-    @include breakpoint($tablet) {
-      margin-bottom: 1.25rem;
-    }
-
-    @include breakpoint($only-tablet) {
-      padding-bottom: 0.65rem;
-      margin-top: 0.437rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding-bottom: 1rem;
-      margin-bottom: 1.9rem;
-    }
-  }
-
-  .block-page-title-block .back-link + .c-page-title {
-    @include breakpoint($only-mobile) {
-      margin-top: 1rem;
-      padding-top: 0;
-      padding-bottom: 0.7rem;
-    }
-  }
-
   .subtitle {
     border-bottom: 1px solid $white;
     margin-top: 1.25rem;
@@ -61,7 +33,7 @@
       margin-top: 0;
       padding-bottom: 0;
       position: absolute;
-      top: -0.5rem;
+      top: 0.5rem;
       #{$right}: 0;
     }
 
@@ -123,14 +95,39 @@
       text-align: center;
       #{$right}: 0;
       width: 35px;
+
+      @include breakpoint($tablet) {
+        background: $whisper-dark;
+        z-index: 1;
+      }
     }
 
     @include breakpoint($tablet) {
-      margin-#{$left}: 4px;
+      margin-#{$left}: 0.25rem;
+
+      &::before {
+        width: 7.9375rem;
+        content: "";
+        background: $whisper-dark;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        #{$right}: 2.1875rem;
+        height: 2.1875rem;
+        z-index: 1;
+      }
     }
 
     @include breakpoint($desktop) {
       margin-#{$left}: 23px;
+
+      &::before {
+        width: 9.375rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 14.25rem;
     }
   }
 
@@ -138,14 +135,21 @@
     border: 1px solid $whisper-dark;
     background-color: $whisper-dark;
     border-radius: 0;
-    padding: 0.3125rem 1.875rem 0.25rem 1rem;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.25rem;
+    padding-#{$left}: 1rem;
+    padding-#{$right}: 3.3rem;
     -webkit-appearance: none;
     appearance: none;
     outline: none;
     min-width: 135px;
+    direction: $dir;
 
     @include breakpoint($tablet) {
       min-width: 162px;
+      background-color: transparent;
+      position: relative;
+      z-index: 3;
     }
 
     @include breakpoint($desktop) {
@@ -220,21 +224,24 @@
   }
 }
 
+.block-alshaya-user-recent-orders + .c-order-help {
+  @include breakpoint($tablet) {
+    border-top: 1px solid $white;
+  }
+}
+
 .recent__orders--list {
   margin-bottom: 0;
-  border-top: none;
+  border: none;
+  border-collapse: collapse;
 
   @include breakpoint($desktop) {
     table-layout: fixed;
+    height: 98px;
   }
 
-  &:first-child {
-    border-top-width: 1px;
-  }
-
-  &:last-child {
-    border-width: 2px;
-    border-bottom: 1px solid $white;
+  .recent__orders--body td {
+    border-top: 1px solid $white;
   }
 
   &:nth-of-type(1) {
@@ -244,7 +251,6 @@
   }
 
   td {
-    border-top: 1px solid $white;
     padding: 1.313rem 1.5rem !important;
 
     @include breakpoint($tablet) {

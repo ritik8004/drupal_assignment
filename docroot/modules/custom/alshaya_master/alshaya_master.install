@@ -768,7 +768,7 @@ function alshaya_master_install() {
     'Load More' => [
       'ar' => 'عرض المزيد',
     ],
-    'Unrecognized email address or password.' => [
+    'Unrecognized username or password. <a href=":password">Forgot your password?</a>' => [
       'ar' => ' لم يتم التعرف على عنوان البريد الإلكتروني أو كلمة السر',
     ],
     'shop' => [
@@ -778,7 +778,7 @@ function alshaya_master_install() {
       'ar' => 'سجل الآن',
     ],
     'A @entity_type with @field_name @value already exists.' => [
-      'ar' => 'يوجد @entity_type لديه اسم المستخدم @field_name و رقم الجوال @value مسجل',
+      'ar' => ' يوجد @entity_type مسجل بهذا @field_name @value',
     ],
     'Something went wrong, please try again later.' => [
       'ar' => 'هناك خطأ ما, يرجى المحاولة لاحقاً.',

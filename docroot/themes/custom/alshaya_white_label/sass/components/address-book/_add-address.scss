@@ -9,21 +9,6 @@
 .c-add-address,
 .alias--cart-checkout-payment,
 .c-address-book {
-  .c-page-title {
-    border-bottom: 1px solid $white;
-    padding-bottom: 0.75rem;
-    margin-bottom: 1.25rem;
-
-    @include breakpoint($tablet) {
-      margin-top: 0.25rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.8rem;
-    }
-  }
-
   .messages--error {
     margin-top: 1rem;
 

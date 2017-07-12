@@ -159,7 +159,7 @@ class StoresFinderUtility {
    *   Return the store array with additional data from store node.
    */
   public function getStoreExtraData(array $store_data, $store_node = NULL) {
-    if (empty($store_node)) {
+    if (!empty($store_data) && empty($store_node)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
       if ($store_node = $this->getStoreFromCode($store_data['code'])) {
@@ -174,7 +174,9 @@ class StoresFinderUtility {
       $store['name'] = $store_node->label();
       $store['code'] = $store_node->get('field_store_locator_id')->getString();
       $store['address'] = $store_node->get('field_store_address')->getString();
+      $store['phone_number'] = $store_node->get('field_store_phone')->getString();
       $store['open_hours'] = $store_node->get('field_store_open_hours')->getValue();
+      $store['delivery_time'] = $store_node->get('field_store_sts_label')->getString();
       $store['nid'] = $store_node->id();
       $store['view_on_map_link'] = Url::fromRoute('alshaya_click_collect.cc_store_map_view', ['node' => $store_node->id()])->toString();
 

@@ -74,3 +74,4 @@ permissions:
   - 'create static_html content'
   - 'delete any static_html content'
   - 'edit any static_html content'
+  - 'use text format full_text'
