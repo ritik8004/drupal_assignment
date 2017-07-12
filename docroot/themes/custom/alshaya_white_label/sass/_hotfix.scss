@@ -155,3 +155,21 @@ html[lang=ar] {
 .ie .address .address--primary a::before {
   margin-top: 30px !important;
 }
+
+html[lang="ar"] {
+  .safari {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.65rem;
+    }
+  }
+}
+
+html[lang="en"] {
+  .ie,
+  .safari {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.4rem;
+    }
+  }
+}
+
