@@ -164,6 +164,30 @@ class SkuManager {
   }
 
   /**
+   * Function to get price block build for a SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   SKU Entity.
+   *
+   * @return array
+   *   Price block build array.
+   */
+  public function getPriceBlock(SKU $sku_entity) {
+    $build = [];
+
+    $this->buildPrice($build, $sku_entity);
+
+    $price_build = [
+      '#theme' => 'product_price_block',
+      '#price' => $build['price'],
+      '#final_price' => $build['final_price'],
+      '#discount' => $build['discount'],
+    ];
+
+    return $price_build;
+  }
+
+  /**
    * Helper function to build discounted price for Sku in cart.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
