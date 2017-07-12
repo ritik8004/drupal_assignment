@@ -374,19 +374,25 @@
     height: 4.063rem;
     margin-top: 0.5rem;
     padding: 1.125rem 0;
+    border-bottom: 1px solid $white;
+
+    &:first-child {
+      border-top: 1px solid $white;
+    }
 
     @include breakpoint($tablet) {
       height: 70px;
       margin-top: 1.875rem;
       padding: 1.125rem 1.5rem;
-      border-top: 1px solid $white;
-      border-bottom: 1px solid $white;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 1.125rem 1rem;
+      height: auto;
     }
 
     &:nth-child(odd) {
-      @include breakpoint($tablet) {
-        background-color: $white-four;
-      }
+      background-color: $white-four;
     }
 
     label {
@@ -403,7 +409,7 @@
         .shipping-method {
           &-name {
             float: $right;
-            width: 85%;
+            width: 88%;
 
             @include breakpoint($tablet) {
               width: 90%;
@@ -414,6 +420,13 @@
             }
           }
 
+          &-title,
+          &-description {
+            @include breakpoint($only-mobile) {
+              width: 68%;
+            }
+          }
+
           &-title {
             font-size: 0.875rem;
             font-weight: bold;
@@ -421,9 +434,11 @@
           }
 
           &-price {
-            @include breakpoint($tablet) {
-              float: $right;
-              margin-top: -10px;
+            float: $right;
+            margin-top: -10px;
+
+            @include breakpoint($only-mobile) {
+              font-weight: bold;
             }
           }
 
@@ -432,6 +447,14 @@
           }
         }
       }
+    }
+  }
+
+  #edit-guest-delivery-home-address-shipping-methods {
+    font-size: 0;
+
+    .form-type-radio {
+      margin-top: 0;
     }
   }
 }
