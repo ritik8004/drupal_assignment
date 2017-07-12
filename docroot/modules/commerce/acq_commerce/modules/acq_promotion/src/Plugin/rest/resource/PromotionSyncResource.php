@@ -152,6 +152,8 @@ class PromotionSyncResource extends ResourceBase {
 
       // If promotion exists, we update the related skus & final price.
       if ($promotion_node) {
+        // Update promotion metadata.
+        $this->promotionManager->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
         $attached_skus = $this->promotionManager->getSkusForPromotion($promotion_node);
 
         // Extract sku text from sku objects.
@@ -174,7 +176,7 @@ class PromotionSyncResource extends ResourceBase {
       }
       else {
         // Create promotions node using Metadata from Promotions Object.
-        $promotion_node = $this->promotionManager->createPromotionFromConductorResponse($promotion);
+        $promotion_node = $this->promotionManager->syncPromotionWithMiddlewareResponse($promotion);
       }
 
       // Attach promotions to skus.

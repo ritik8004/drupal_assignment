@@ -3,7 +3,6 @@
 namespace Drupal\acq_promotion;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -39,13 +38,6 @@ class AcqPromotionsManager {
   protected $entityRepository;
 
   /**
-   * Entity Manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityManager
-   */
-  protected $entityManager;
-
-  /**
    * Node Entity Storage.
    *
    * @var \Drupal\node\NodeStorageInterface
@@ -72,22 +64,18 @@ class AcqPromotionsManager {
    *   Language Manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository service.
-   * @param \Drupal\Core\Entity\EntityManager $entityManager
-   *   Entity Manager service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               APIWrapper $api_wrapper,
                               LoggerChannelFactoryInterface $logger_factory,
                               LanguageManager $languageManager,
-                              EntityRepositoryInterface $entityRepository,
-                              EntityManager $entityManager) {
+                              EntityRepositoryInterface $entityRepository) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_promotion');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
-    $this->entityManager = $entityManager;
   }
 
   /**
@@ -312,16 +300,28 @@ class AcqPromotionsManager {
    *
    * @param array $promotion
    *   Promotion response from Conductor.
+   * @param null $promotion_node
+   *   Promotion node in case we need to update Promotion.
    *
    * @return \Drupal\Core\Entity\EntityInterface
    *   Promotion node.
    */
-  public function createPromotionFromConductorResponse(array $promotion) {
-    $promotion_node = $this->nodeStorage->create([
-      'type' => 'acq_promotion',
-    ]);
+  public function syncPromotionWithMiddlewareResponse(array $promotion,
+                                                        $promotion_node = NULL) {
+    if (!$promotion_node) {
+      $promotion_node = $this->nodeStorage->create([
+        'type' => 'acq_promotion',
+      ]);
+    }
 
+    $promotions_labels = $promotion['labels'];
+    $promotion_label_languages = [];
     $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
+
+    foreach ($promotions_labels as $promotion_label) {
+      $promtion_label_language = acq_commerce_get_langcode_from_store_id($promotion_label['store_id']);
+      $promotion_label_languages[$promtion_label_language] = $promotion_label['store_label'];
+    }
 
     $promotion_node->get('title')->setValue($promotion['name']);
 
@@ -355,6 +355,21 @@ class AcqPromotionsManager {
     }
 
     $status = $promotion_node->save();
+
+    // Create promotion translations based on the language codes available in
+    // promotion labels.
+    foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
+      if ($langcode !== $site_default_langcode) {
+        if ($promotion_node->hasTranslation($langcode)) {
+          $node_translation = $promotion_node->getTranslation($langcode);
+        }
+        else {
+          $node_translation = $promotion_node->addTranslation($langcode);
+        }
+        $node_translation->get('field_acq_promotion_label')->setValue($promotion_label_languages[$langcode]);
+        $node_translation->save();
+      }
+    }
 
     if ($status) {
       return $promotion_node;
