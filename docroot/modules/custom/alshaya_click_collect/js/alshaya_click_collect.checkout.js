@@ -42,6 +42,10 @@
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
       });
 
+      $('.hours--wrapper > .hours--label').on('click', function(){
+        $(this).toggleClass("open");
+      });
+
       $('.tab').once('initiate-stores').each(function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
 
