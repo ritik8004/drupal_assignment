@@ -14,6 +14,7 @@ dependencies:
   - node
   - panelizer
   - path
+  - pathauto
   - system
   - text
   - user
