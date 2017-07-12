@@ -20,7 +20,7 @@
     background: $white-five;
     padding: 0;
     padding-bottom: 21px;
-    padding-#{$left}: 25px;
+    padding-#{$left}: 20px;
     z-index: 8;
 
     @include breakpoint($only-mobile) {

@@ -26,6 +26,10 @@ function alshaya_user_install() {
     'I would like to receive exclusive deals from Mothercare' => [
       'ar' => 'أرغب في استلام عروض حصرية من مذركير',
     ],
+    'customer' => [
+      'en' => 'user',
+      'ar' => 'زبون',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }

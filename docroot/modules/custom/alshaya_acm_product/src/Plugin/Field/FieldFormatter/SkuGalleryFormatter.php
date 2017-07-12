@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -178,9 +179,9 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
       $this->skuManager->buildPrice($elements[$delta], $sku);
 
-      $elements[$delta]['#price'] = isset($elements[$delta]['price']) ? $elements[$delta]['price'] : '';
-      $elements[$delta]['#final_price'] = isset($elements[$delta]['final_price']) ? $elements[$delta]['final_price'] : '';
-      $elements[$delta]['#discount'] = isset($elements[$delta]['discount']) ? $elements[$delta]['discount'] : '';
+      $build['price_block'] = $this->skuManager->getPriceBlock($sku);
+      $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+      $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
       if (!alshaya_acm_is_product_in_stock($sku)) {
         $elements[$delta]['#out_of_stock'] = [
