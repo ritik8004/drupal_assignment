@@ -49,7 +49,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       return $pane_form;
     }
 
-    $default_mobile = '';
+    $default_mobile = $shipping_type = $store_code = $selected_store_data = '';
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
@@ -58,17 +58,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       $default_mobile = $shipping['telephone'];
       $store_code = $cart->getExtension('store_code');
       $shipping_type = $cart->getExtension('click_and_collect_type');
-    }
-    else {
-      // Check once in customer profile.
-      $account = User::load(\Drupal::currentUser()->id());
-      if ($account_phone = $account->get('field_mobile_number')->getValue()) {
-        $default_mobile = $account_phone[0]['value'];
-      }
-    }
 
-    $selected_store_data = '';
-    if (!empty($store_code)) {
       // Not injected here to avoid module dependency.
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
@@ -76,8 +66,14 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
         '#theme' => 'click_collect_selected_store',
         '#store' => $store,
       ];
-
       $selected_store_data = render($selected_store);
+    }
+    else {
+      // Check once in customer profile.
+      $account = User::load(\Drupal::currentUser()->id());
+      if ($account_phone = $account->get('field_mobile_number')->getValue()) {
+        $default_mobile = $account_phone[0]['value'];
+      }
     }
 
     $pane_form['store_finder'] = [
@@ -135,21 +131,6 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#markup' => '<div id="selected-store-content" class="selected-store-content">' . $selected_store_data . '</div>',
     ];
 
-    $default_mobile = '';
-
-    $shipping = (array) $cart->getShipping();
-    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
-      // Check if value available in shipping address.
-      $default_mobile = $shipping['telephone'];
-    }
-    else {
-      // Check once in customer profile.
-      $account = User::load(\Drupal::currentUser()->id());
-      if ($account_phone = $account->get('field_mobile_number')->getValue()) {
-        $default_mobile = $account_phone[0]['value'];
-      }
-    }
-
     $pane_form['selected_store']['mobile_help'] = [
       '#markup' => '<div class="cc-help-text cc-mobile-help-text">' . $this->t("<p>Please provide the mobile number of the person collecting the order.</p>We'll send you a text message when the order is ready to collect") . '</div>',
     ];
@@ -168,12 +149,12 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $pane_form['selected_store']['store_code'] = [
       '#type' => 'hidden',
-      '#default_value' => $cart->getExtension('store_code'),
+      '#default_value' => $store_code,
     ];
 
     $pane_form['selected_store']['shipping_type'] = [
       '#type' => 'hidden',
-      '#default_value' => $cart->getExtension('click_and_collect_type'),
+      '#default_value' => $shipping_type,
     ];
 
     $pane_form['#attached'] = [
