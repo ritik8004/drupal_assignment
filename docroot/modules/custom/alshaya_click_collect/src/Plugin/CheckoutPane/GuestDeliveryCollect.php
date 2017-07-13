@@ -85,13 +85,12 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     // Get Customer info.
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
     $api_wrapper = \Drupal::service('acq_commerce.api');
-
     if (!empty($form_values)) {
       $default_firstname = $form_values['cc_firstname'];
       $default_lastname = $form_values['cc_lastname'];
       $default_email = $form_values['cc_email'];
     }
-    elseif ($customer = $api_wrapper->getCustomer($cart->customerEmail())) {
+    elseif (!empty($cart->customerEmail()) && $customer = $api_wrapper->getCustomer($cart->customerEmail())) {
       $default_firstname = $customer['firstname'];
       $default_lastname = $customer['lastname'];
       $default_email = $cart->customerEmail();
