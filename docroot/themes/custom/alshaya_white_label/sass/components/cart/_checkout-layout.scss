@@ -101,19 +101,28 @@
   .delivery-type,
   .address {
     background: $white-four;
-    font-size: 12px;
+    font-size: 0.875rem;
     padding: 2em;
     line-height: 1.5;
     font-weight: bold;
+    color: $black;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.75rem;
+    }
 
     a {
+      font-size: 0.75rem;
       float: $right;
+      color: $cerulean-two;
     }
 
     .method,
     .delivery-address {
+      font-size: 0.75rem;
       font-weight: normal;
       margin-top: 1em;
+      color: $grey-ash;
     }
   }
 }
