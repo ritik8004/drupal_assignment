@@ -278,8 +278,9 @@
     @include breakpoint($only-mobile) {
       float: $right;
       margin-bottom: 1.6875rem;
-      margin-right: 1.7rem;
+      margin-right: 5rem;
       padding-#{$left}: 2rem;
+      margin-top: -0.75rem;
 
       &:last-child {
         clear: both;
@@ -841,8 +842,18 @@ html[lang=ar] {
     }
   }
 
+  #table-cart-totals .price-currency {
+    @include breakpoint($only-mobile) {
+      margin-left: -1.5rem;
+    }
+  }
+
   .tooltip--wrap {
     margin-left: 0;
+
+    @include breakpoint($only-mobile) {
+      margin-left: 3.7rem;
+    }
 
     @include breakpoint($desktop) {
       padding-right: 0;
