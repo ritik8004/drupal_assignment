@@ -45,3 +45,25 @@ function alshaya_product_views_pre_execute(ViewExecutable $view) {
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_product_alshaya_i18n_onetime_translation_add() {
+  // Add translations for PLP page view.
+  $product_list_view = \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'views.view.alshaya_product_list');
+  $product_list_view->set('display.default.display_options.exposed_form.options.exposed_sorts_label', 'رتب حسب');
+  $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'الاسم تنازلي|الاسم من ي إلى أ
+الاسم تصاعدي|الاسم من أ إلى ي
+السعر تنازلي|السعر من أعلى إلى أدنى
+السعر تصاعدي|السعر من أدنى إلى أعلى');
+  $product_list_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');
+  $product_list_view->set('display.default.display_options.exposed_form.options.sort_desc_label', 'تنازلي');
+  $product_list_view->set('display.default.display_options.sorts.price.expose.label', 'السعر');
+  $product_list_view->set('display.default.display_options.sorts.final_price.expose.label', 'السعر');
+  $product_list_view->set('display.default.display_options.sorts.title.expose.label', 'الاسم');
+  $product_list_view->set('display.default.display_options.header.result.content', '@total القطع');
+  $product_list_view->set('display.default.display_options.pager.options.views_infinite_scroll.button_text', 'عرض المزيد');
+  $product_list_view->save();
+}
