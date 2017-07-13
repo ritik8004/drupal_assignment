@@ -59,7 +59,6 @@ class AcqPromotionAttachQueue extends AlshayaPromotionQueueBase {
         $update_sku_flag = TRUE;
       }
 
-      drush_print_r($update_sku_flag);
       if ($update_sku_flag) {
         $sku_entity->save();
       }
