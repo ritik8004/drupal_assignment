@@ -417,6 +417,48 @@
   }
 }
 
+#details-privilege-card-wrapper {
+  .privilege-card-wrapper {
+    padding-left: 0;
+  }
+
+  .privilege-card-wrapper-title {
+    border-bottom: 1px solid $white;
+  }
+
+  .c-user-register & {
+    margin-top: 3rem;
+
+    .card__header {
+      display: none;
+    }
+  }
+}
+
+.card__header,
+.privilege-card-wrapper-title {
+  padding: 1rem;
+  position: relative;
+  outline: none;
+  font-family: $arial;
+
+  @include breakpoint($tablet) {
+    padding: 1rem 1.5rem;
+  }
+
+  @include icon(chevrondown, after) {
+    position: absolute;
+    #{$right}: 0.625rem;
+    font-size: 1.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &.ui-state-active {
+    @include icon(chevronup, after);
+  }
+}
+
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
     border-top: 1px solid $white;
@@ -431,7 +473,7 @@
     width: 19.56rem;
   }
 
-  summary {
+  .privilege-card-wrapper-title {
     padding: 1rem;
     position: relative;
     outline: none;
@@ -448,13 +490,18 @@
       top: 50%;
       transform: translateY(-50%);
     }
+
+    &.ui-state-active {
+      @include icon(chevronup, after);
+    }
   }
 
-  summary::-webkit-details-marker {
+  .card__content {
     display: none;
   }
 
-  details {
+  .coupon-code-wrapper,
+  #details-privilege-card-wrapper {
     border-bottom: 1px solid $white;
     position: relative;
     font-size: 0.875rem;
