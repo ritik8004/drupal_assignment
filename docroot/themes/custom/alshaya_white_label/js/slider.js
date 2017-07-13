@@ -3,21 +3,12 @@
  * Sliders.
  */
 
+/* global isRTL */
+
 /* global debounce */
 
 (function ($, Drupal) {
   'use strict';
-
-  function isRTL() {
-    var html = $('html');
-    var dir = html.attr('dir');
-    if (typeof dir === 'undefined' || dir === 'ltr') {
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
 
   Drupal.behaviors.sliderBanner = {
     attach: function (context, settings) {
