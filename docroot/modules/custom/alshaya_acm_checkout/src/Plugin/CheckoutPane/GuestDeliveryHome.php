@@ -97,14 +97,26 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#require_email' => TRUE,
     ];
 
-    $shipping_methods = self::generateShippingEstimates($address);
-
     $default_shipping = $cart->getShippingMethodAsString();
 
-    // Convert to code.
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+    // Convert to code.
     $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($default_shipping);
+
+    // This is getting very messy but required for the moment, we need to look
+    // for better approach here.
+    // Issue: below code is tightly plugged with click and collect.
+    $click_collect_method = $checkout_options_manager->getClickandColectShippingMethod();
+
+    $shipping_methods = [];
+
+    // We call generate shipping estimates only if we are not using click and
+    // method as of now.
+    if (!empty($default_shipping) && $default_shipping != $click_collect_method) {
+      $shipping_methods = self::generateShippingEstimates($address);
+    }
 
     if (!empty($shipping_methods) && empty($default_shipping)) {
       $default_shipping = array_keys($shipping_methods)[0];
@@ -131,7 +143,17 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#limit_validation_errors' => [['address']],
     ];
 
-    $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
+    $complete_form['actions']['next']['#limit_validation_errors'] = [
+      ['address'],
+      ['given_name'],
+      ['family_name'],
+      ['mobile_number'],
+      ['address_line1'],
+      ['address_line2'],
+      ['administrative_area'],
+      ['dependent_locality'],
+      ['locality'],
+    ];
 
     $complete_form['actions']['back_to_basket'] = [
       '#type' => 'link',

@@ -147,6 +147,14 @@
       $('#edit-delivery-tabs').once('select-default').each(function () {
         var selectedTab = $('#selected-tab').val();
         $('.tab[gtm-type="' + selectedTab + '"]', $(this)).trigger('click');
+
+        if ($('.form-item-cc-mobile-number-mobile').is(':visible')) {
+          // If we are coming back to delivery from payment we show the button.
+          $('input[data-drupal-selector="edit-actions-ccnext"]').show();
+        }
+        else {
+          $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
+        }
       });
     }
   };

@@ -91,10 +91,12 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       $default_lastname = $form_values['cc_lastname'];
       $default_email = $form_values['cc_email'];
     }
-    elseif ($customer = $api_wrapper->getCustomer($cart->customerEmail())) {
-      $default_firstname = $customer['firstname'];
-      $default_lastname = $customer['lastname'];
-      $default_email = $cart->customerEmail();
+    elseif ($customer_email = $cart->customerEmail()) {
+      if ($customer = $api_wrapper->getCustomer($cart->customerEmail())) {
+        $default_firstname = $customer['firstname'];
+        $default_lastname = $customer['lastname'];
+        $default_email = $cart->customerEmail();
+      }
     }
 
     $pane_form['store_finder'] = [
