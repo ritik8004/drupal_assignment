@@ -9,8 +9,6 @@
   var lastCoords;
   // Selected coordinates.
   var ascoords;
-  // Default progress element copied from /core/misc/ajax.js.
-  var progressElement = $('<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>');
   // Store list
   var storeList;
   // Index to show in marker as label.
@@ -42,8 +40,8 @@
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
       });
 
-      $('.hours--wrapper > .hours--label').on('click', function(){
-        $(this).toggleClass("open");
+      $('.hours--wrapper > .hours--label').on('click', function () {
+        $(this).toggleClass('open');
       });
 
       if (settings.alshaya_click_collect.selected_store) {
@@ -175,15 +173,10 @@
   Drupal.checkoutClickCollect.locationError = function (error) {
     // Do nothing, we already have the search form displayed by default.
     geoPerm = false;
-    progressElement.remove();
   };
 
   // Make Ajax call to get stores list and render html.
   Drupal.checkoutClickCollect.storeListAll = function (coords) {
-    if (typeof this.lat !== 'undefined' && typeof coords === 'undefined') {
-      coords = this;
-    }
-
     if (typeof coords !== 'undefined') {
       ascoords = coords;
 
