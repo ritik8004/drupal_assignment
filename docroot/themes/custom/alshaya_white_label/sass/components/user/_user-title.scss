@@ -88,3 +88,17 @@
     }
   }
 }
+
+.c-communication-preferences {
+  .block-page-title-block {
+    padding: 0.45rem 0 0.3rem;
+
+    @include breakpoint($tablet) {
+      padding: 1.5rem 0 0.75rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 0 0 1rem;
+    }
+  }
+}
