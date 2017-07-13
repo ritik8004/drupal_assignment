@@ -420,7 +420,10 @@
       padding-bottom: 0 !important;
 
       label.error {
-        display: none !important;
+        top: 2.3rem;
+        border-top: 0.0625rem solid $red-error;
+        padding-top: 0.3125rem;
+        width: 100%;
       }
 
       input {
