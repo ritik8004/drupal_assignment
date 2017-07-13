@@ -153,6 +153,55 @@ html[lang=ar] {
       padding-left: 40px;
     }
   }
+
+  #table-cart-items {
+    margin-top: 1rem;
+
+    tr td.name div.items {
+      width: 42%;
+    }
+
+    .contains--tooltip .tooltip {
+      @include breakpoint($desktop) {
+        right: 4rem;
+      }
+    }
+  }
+
+  #table-cart-totals {
+    td:first-child {
+      text-align: left;
+
+      @include breakpoint(($only-tablet) (orientation portrait)) {
+        position: relative;
+        left: 6em;
+      }
+
+      @include breakpoint(($only-tablet) (orientation landscape)) {
+        position: relative;
+        left: 3em;
+      }
+    }
+
+    .price-wrapper {
+      .price-amount {
+        @include breakpoint($only-mobile) {
+          left: 4rem;
+        }
+
+        @include breakpoint($desktop) {
+          float: right !important;
+        }
+      }
+
+      .price-currency {
+        @include breakpoint($desktop) {
+          float: left !important;
+          padding: 0 0 0 1em;
+        }
+      }
+    }
+  }
 }
 
 .ie .address .address--primary span::before,
