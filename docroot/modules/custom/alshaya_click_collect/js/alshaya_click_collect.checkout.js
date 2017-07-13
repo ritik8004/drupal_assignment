@@ -62,9 +62,11 @@
               Drupal.checkoutClickCollect.storeListAll(ascoords);
             }
             $('#edit-actions input:not(.cc-action)').addClass('hidden-important');
+            $('#edit-actions input.cc-action').removeClass('hidden-important');
           }
           else {
             $('#edit-actions input:not(.cc-action)').removeClass('hidden-important');
+            $('#edit-actions input.cc-action').addClass('hidden-important');
           }
         });
       });
