@@ -139,20 +139,16 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
       ],
+      '#submit' => [],
       '#weight' => -50,
-      '#limit_validation_errors' => [['address']],
+      '#limit_validation_errors' => [
+        ['guest_delivery_home', 'address', 'shipping'],
+      ],
     ];
 
     $complete_form['actions']['next']['#limit_validation_errors'] = [
-      ['address'],
-      ['given_name'],
-      ['family_name'],
-      ['mobile_number'],
-      ['address_line1'],
-      ['address_line2'],
-      ['administrative_area'],
-      ['dependent_locality'],
-      ['locality'],
+      ['guest_delivery_home', 'address', 'shipping'],
+      ['guest_delivery_home', 'address', 'shipping_methods'],
     ];
 
     $complete_form['actions']['back_to_basket'] = [
