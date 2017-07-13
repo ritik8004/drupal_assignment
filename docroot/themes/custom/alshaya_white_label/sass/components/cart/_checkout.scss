@@ -282,12 +282,17 @@
 
 .acq-cart-summary {
   .caption {
-    font-size: 14px;
+    font-size: 0.875rem;
     background: $white-three;
-    padding: 1rem 1.25rem;
+    padding: 1rem 1.5rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.75rem;
+    }
 
     .title {
       color: $black-two;
+      font-weight: bold;
     }
 
     a {
@@ -303,8 +308,12 @@
     width: 100%;
     background: $white-four;
     padding: 1em 1.5rem;
-    font-size: 14px;
+    font-size: 0.875rem;
     position: relative;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.75rem;
+    }
 
     @include icon(chevrondown, after) {
       position: absolute;
@@ -326,7 +335,7 @@
     ul {
       list-style: none;
       padding: 0;
-      font-size: 12px;
+      font-size: 0;
 
       .left {
         float: $left;
@@ -347,8 +356,12 @@
     width: 100%;
     list-style: none;
     display: inline-block;
-    border: 1px solid $white;
+    border-top: 1px solid $white;
     padding: 1.563rem;
+
+    &:last-child {
+      border-bottom: 1px solid $white;
+    }
   }
 
   .left {
@@ -359,12 +372,15 @@
   .right {
     float: $right;
     width: 70%;
-    padding-#{$left}: 1.4rem;
 
     a,
     span {
       text-decoration: none;
-      font-size: 13px;
+      font-size: 0.8125rem;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 0.75rem;
+      }
     }
 
     > span {
@@ -388,24 +404,52 @@
 }
 
 .totals {
-  font-size: 14px;
+  font-size: 0.875rem;
   background: $white-three;
-  padding: 1.563rem 1.25rem;
+  padding: 1.563rem 1.5rem;
+
+  @include breakpoint($upto-desktop) {
+    font-size: 0.75rem;
+  }
 
   table {
     width: 100%;
+  }
+
+  .sub-total {
+    margin-bottom: 0.2rem;
   }
 
   .sub-total,
   .order-total {
     > span {
       display: inline-block;
-      width: 45%;
+      width: 51%;
+
+      @include breakpoint($upto-desktop) {
+        width: 55%;
+      }
     }
 
     .total--amount,
-    .price {
-      float: $right;
+    > .price {
+      display: inline-block;
+      width: 47%;
+
+      @include breakpoint($upto-desktop) {
+        width: 42%;
+      }
+
+      .price-wrapper {
+        width: 100%;
+        display: inline-block;
+
+        .price {
+          .price-amount {
+            float: $right;
+          }
+        }
+      }
     }
   }
 
