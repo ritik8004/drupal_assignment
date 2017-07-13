@@ -4,14 +4,16 @@
       $('.acq-cart-summary').once('bind-events').each(function () {
         $('.content-items', $(this)).slideUp();
 
-        $('.content-head', $(this)).on('click', function() {
+        $('.content-head', $(this)).on('click', function () {
           $(this).parent().toggleClass('active--accordion');
           $(this).next().slideToggle();
         });
       });
 
       // Hide apply coupon button on page load.
-      $('#apply_coupon').hide();
+      var applyCoupon = $('#apply_coupon');
+      applyCoupon.hide();
+      applyCoupon.prev().andSelf().wrapAll('<div class="card__content">');
 
       $('[data-drupal-selector="customer-cart-form"]', context).once('bind-events').each(function () {
         // Display apply coupon button if there's a value, else hide it.
@@ -35,7 +37,7 @@
         });
       });
 
-      $.fn.updateOutOfStockDom = function(message) {
+      $.fn.updateOutOfStockDom = function (message) {
         if ($('#out-of-stock-message').length) {
           $('#out-of-stock-message').html(message);
         }

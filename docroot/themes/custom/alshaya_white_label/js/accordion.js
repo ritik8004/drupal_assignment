@@ -6,6 +6,29 @@
 (function ($, Drupal) {
   'use strict';
 
+  Drupal.behaviors.privilegeCardAccordion = {
+    attach: function (context, settings) {
+      $('.promo-continue-shopping-wrapper').each(function () {
+        $(this).accordion({
+          header: '.card__header',
+          collapsible: true,
+          heightStyle: 'content',
+          active: false
+        });
+      });
+
+      jQuery('.privilege-card-wrapper').each(function () {
+        $(this).accordion({
+          header: '.privilege-card-wrapper-title',
+          collapsible: true,
+          active: false
+        });
+      });
+
+      $('.form-item-coupon, #apply_coupon').css('display', '');
+    }
+  };
+
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
 
@@ -34,11 +57,12 @@
         var mobileFilterBarSelector = getFilterBarSelector();
 
         var countFilters = $(mobileFilterBarSelector + ' ul li').length;
-        if (countFilters === 0 && $.trim($(mobileFilterBarSelector).html()).length === 0) {
+        if (countFilters === 0 && $.trim($(mobileFilterBarSelector)
+          .html()).length === 0) {
           $(mobileFilterBarSelector)
             .once()
             .append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-              + ' (' + countFilters + ')</h3>');
+            + ' (' + countFilters + ')</h3>');
           $(mobileFilterBarSelector).addClass('empty');
         }
         else {

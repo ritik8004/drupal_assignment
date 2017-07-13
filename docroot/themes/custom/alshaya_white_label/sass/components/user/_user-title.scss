@@ -34,7 +34,6 @@
   }
 }
 
-.c-user-password,
 .c-user-register {
   h1 {
     top: -3.7rem;
@@ -49,7 +48,18 @@
   }
 }
 
-.block-page-title-block {
+.c-user-password {
+  h1 {
+    top: -3.7rem;
+  }
+}
+
+.c-change-password .block-page-title-block,
+.c-communication-preferences .block-page-title-block,
+.c-user-edit .block-page-title-block,
+.c-order-list .block-page-title-block,
+.c-user--node .block-page-title-block,
+.c-address-book .block-page-title-block {
   position: relative;
   border-bottom: 1px solid $white;
   padding: 0.45rem 0 0.3rem;
@@ -80,6 +90,20 @@
         line-height: 1.5;
         vertical-align: top;
       }
+    }
+  }
+}
+
+.c-communication-preferences {
+  .block-page-title-block {
+    padding: 0.45rem 0 0.3rem;
+
+    @include breakpoint($tablet) {
+      padding: 1.5rem 0 0.75rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 0 0 1rem;
     }
   }
 }

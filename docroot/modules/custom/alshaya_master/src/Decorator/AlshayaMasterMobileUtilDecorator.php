@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_addressbook\Decorator;
+namespace Drupal\alshaya_master\Decorator;
 
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\mobile_number\MobileNumberUtil;
@@ -10,11 +10,12 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\Utility\Token;
+use libphonenumber\PhoneNumberFormat;
 
 /**
- * Class AddressBookMobileUtilDecorator.
+ * Class AlshayaMasterMobileUtilDecorator.
  */
-class AddressBookMobileUtilDecorator extends MobileNumberUtil {
+class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
 
   /**
    * The mobile util service.
@@ -24,7 +25,7 @@ class AddressBookMobileUtilDecorator extends MobileNumberUtil {
   protected $mobileUtil;
 
   /**
-   * AddressBookMobileUtilDecorator constructor.
+   * AlshayaMasterMobileUtilDecorator constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   The original mobile_util service.
@@ -70,7 +71,7 @@ class AddressBookMobileUtilDecorator extends MobileNumberUtil {
    */
   public function getPhoneNumberAsString($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
     $phone = $this->getMobileNumber($number, $country, $types);
-    return $this->libUtil()->format($phone, 1);
+    return $this->libUtil()->format($phone, PhoneNumberFormat::INTERNATIONAL);
   }
 
   /**
@@ -89,6 +90,26 @@ class AddressBookMobileUtilDecorator extends MobileNumberUtil {
   public function getMobileNumberAsString($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
     $phone = $this->getMobileNumber($number, $country, $types);
     return $phone->getNationalNumber();
+  }
+
+  /**
+   * Get formatter mobile number.
+   *
+   * @param string $number
+   *   The phone number.
+   * @param null|string $country
+   *   Country code.
+   * @param array $types
+   *   Phone number formats to check for.
+   *
+   * @return mixed|string
+   *   Formatted mobile number string or empty if it does not exist.
+   */
+  public function getFormattedMobileNumber($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
+    if (!empty($number) && is_string($number)) {
+      return str_replace(' ', ' - ', $this->getPhoneNumberAsString($number, $country, $types));
+    }
+    return '';
   }
 
 }

@@ -97,7 +97,7 @@ class UserCommunicationPreference extends FormBase {
 
     // Display mobile as communication preference if not empty.
     if (!empty($account->field_mobile_number->getValue())) {
-      $options['mobile'] = $this->t('Mobile') . ' <span>(' . \Drupal::service('alshaya_user.info')->getFormattedMobileNumber() . ')</span>';
+      $options['mobile'] = $this->t('Mobile') . ' <span>(' . \Drupal::service('mobile_number.util')->getFormattedMobileNumber($account->field_mobile_number->getValue()[0]['value']) . ')</span>';
     }
 
     $preference = $this->userData->get('user', $this->user_profile->id(), 'communication_preference');

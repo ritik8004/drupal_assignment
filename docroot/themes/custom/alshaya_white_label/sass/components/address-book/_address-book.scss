@@ -420,7 +420,10 @@
       padding-bottom: 0 !important;
 
       label.error {
-        display: none !important;
+        top: 2.3rem;
+        border-top: 0.0625rem solid $red-error;
+        padding-top: 0.3125rem;
+        width: 100%;
       }
 
       input {
@@ -505,15 +508,14 @@
 
 .form-type-select {
   .select2-selection {
-    border: none;
+    border: none !important;
     font-family: "alshaya-thin";
     font-size: 1rem;
     padding: 0.25rem 0.5rem;
     width: 100%;
-    border-radius: 0;
-    border-color: $grey-ash;
-    background: $white;
-    height: 2.188rem;
+    border-radius: 0 !important;
+    background: $white !important;
+    height: 2.188rem !important;
   }
 
   .select2-container {
