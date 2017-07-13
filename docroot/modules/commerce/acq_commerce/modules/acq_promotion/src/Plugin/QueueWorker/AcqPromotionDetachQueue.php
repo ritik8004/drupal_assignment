@@ -44,13 +44,17 @@ class AcqPromotionDetachQueue extends AlshayaPromotionQueueBase {
   public function processItem($data) {
     $skus = $data['skus'];
     $promotion_nid = $data['promotion'];
+    $promotion_detach_item[] = ['target_id' => $promotion_nid];
 
     foreach ($skus as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
       $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
-      $sku_promotions = array_diff($sku_promotions, [$promotion_nid]);
-      $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
 
+      $sku_promotions = array_udiff($sku_promotions, $promotion_detach_item, function ($array1, $array2) {
+        return $array1['target_id'] - $array2['target_id'];
+      });
+
+      $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
       $sku_entity->save();
     }
 
@@ -69,7 +73,7 @@ class AcqPromotionDetachQueue extends AlshayaPromotionQueueBase {
     catch (ConductorException $e) {
     }
 
-    $this->logger->info('Detached Promotion:@promo from SKUs: @skus',
+    $this->loggerFactory->get('acq_sku')->info('Detached Promotion:@promo from SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
   }
 

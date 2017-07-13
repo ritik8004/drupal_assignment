@@ -44,14 +44,13 @@ class AcqPromotionAttachQueue extends AlshayaPromotionQueueBase {
   public function processItem($data) {
     $skus = $data['skus'];
     $promotion_nid = $data['promotion'];
-
+    $promotion_attach_item = ['target_id' => $promotion_nid];
     foreach ($skus as $key => $sku) {
       $update_sku_flag = FALSE;
       $sku_entity = SKU::loadFromSku($sku['sku']);
       $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
-      if (!in_array($promotion_nid, $sku_promotions, TRUE)) {
-        $sku_promotions += $promotion_nid;
-        $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
+      if (!in_array($promotion_attach_item, $sku_promotions, TRUE)) {
+        $sku_entity->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
         $update_sku_flag = TRUE;
       }
 
@@ -60,11 +59,12 @@ class AcqPromotionAttachQueue extends AlshayaPromotionQueueBase {
         $update_sku_flag = TRUE;
       }
 
+      drush_print_r($update_sku_flag);
       if ($update_sku_flag) {
         $sku_entity->save();
       }
     }
-    $this->logger->info('Attached Promotion:@promo to SKUs: @skus',
+    $this->loggerFactory->get('acq_sku')->info('Attached Promotion:@promo to SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
   }
 
