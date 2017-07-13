@@ -722,16 +722,16 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
         (!isset($promotions[$promotion->id()]))) {
         $langcode = \Drupal::service('language_manager')->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
         $promotion = \Drupal::service('entity.repository')->getTranslationFromContext($promotion, $langcode);
-        $promotion_text = $promotion->get('field_acq_promotion_label')->getValue();
-        $discount_type = $promotion->get('field_acq_promotion_disc_type')->getValue();
-        $discount_value = $promotion->get('field_acq_promotion_discount')->getValue();
-        $descriptions = $promotion->get('field_acq_promotion_description')->getValue();
+        $promotion_text = $promotion->get('field_acq_promotion_label')->getString();
+        $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
+        $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
+        $description = $promotion->get('field_acq_promotion_description')->getString();
 
         $promotions[$promotion->id()] = [
-          'text' => array_shift($promotion_text),
-          'description' => array_shift($descriptions),
-          'discount_type' => array_shift($discount_type),
-          'discount_value' => array_shift($discount_value),
+          'text' => $promotion_text,
+          'description' => $description,
+          'discount_type' => $discount_type,
+          'discount_value' => $discount_value,
         ];
         break;
       }

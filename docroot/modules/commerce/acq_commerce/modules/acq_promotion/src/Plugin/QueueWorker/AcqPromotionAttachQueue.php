@@ -45,24 +45,37 @@ class AcqPromotionAttachQueue extends AlshayaPromotionQueueBase {
     $skus = $data['skus'];
     $promotion_nid = $data['promotion'];
     $promotion_attach_item = ['target_id' => $promotion_nid];
+    $skus_not_found = [];
+
     foreach ($skus as $key => $sku) {
       $update_sku_flag = FALSE;
       $sku_entity = SKU::loadFromSku($sku['sku']);
-      $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
-      if (!in_array($promotion_attach_item, $sku_promotions, TRUE)) {
-        $sku_entity->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
-        $update_sku_flag = TRUE;
-      }
+      if ($sku_entity) {
+        $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
+        if (!in_array($promotion_attach_item, $sku_promotions, TRUE)) {
+          $sku_entity->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
+          $update_sku_flag = TRUE;
+        }
 
-      if ($sku->final_price->value !== $sku['final_price']) {
-        $sku->final_price->value = $sku['final_price'];
-        $update_sku_flag = TRUE;
-      }
+        if ($sku->final_price->value !== $sku['final_price']) {
+          $sku->final_price->value = $sku['final_price'];
+          $update_sku_flag = TRUE;
+        }
 
-      if ($update_sku_flag) {
-        $sku_entity->save();
+        if ($update_sku_flag) {
+          $sku_entity->save();
+        }
+      }
+      else {
+        $skus_not_found[] = $sku['sku'];
       }
     }
+
+    if (!empty($skus_not_found)) {
+      $this->loggerFactory->get('acq_sku')->warning('Skus @skus not found in Drupal.',
+        ['@skus' => implode(',', $skus_not_found)]);
+    }
+
     $this->loggerFactory->get('acq_sku')->info('Attached Promotion:@promo to SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
   }

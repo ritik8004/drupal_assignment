@@ -1,7 +1,7 @@
 {% if promotions is not empty %}
   <div class="cart-promotions-wrapper" id="block-basketpromotionmessage">
     {% for id, promotion in promotions %}
-      <p class="promotion">{{ promotion.value | raw }}</p>
+      <p class="promotion">{{ promotion | raw }}</p>
     {% endfor %}
   </div>
 {% endif %}
