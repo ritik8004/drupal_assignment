@@ -57,7 +57,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       return $pane_form;
     }
 
-    $default_mobile = $shipping_type = $store_code = $selected_store_data = '';
+    $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
+
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
@@ -70,11 +71,13 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       // Not injected here to avoid module dependency.
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
-      $selected_store = [
-        '#theme' => 'click_collect_selected_store',
-        '#store' => $store,
-      ];
-      $selected_store_data = render($selected_store);
+      if (!empty($store)) {
+        $selected_store = [
+          '#theme' => 'click_collect_selected_store',
+          '#store' => $store,
+        ];
+        $selected_store_data = render($selected_store);
+      }
     }
     else {
       // Check once in customer profile.
@@ -195,6 +198,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
         'alshaya_click_collect' => [
           'cart_id' => $cart->id(),
           'selected_store' => ($store_code) ? TRUE : FALSE,
+          'selected_store_obj' => $store,
         ],
       ],
       'library' => [

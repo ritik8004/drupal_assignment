@@ -56,7 +56,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       return $pane_form;
     }
 
-    $default_mobile = $shipping_type = $store_code = $selected_store_data = '';
+    $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
+
     $default_firstname = $default_lastname = $default_email = '';
 
     $cart = $this->getCart();
@@ -82,12 +83,14 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       // Get store info.
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
-      $selected_store = [
-        '#theme' => 'click_collect_selected_store',
-        '#store' => $store,
-      ];
 
-      $selected_store_data = render($selected_store);
+      if (!empty($store)) {
+        $selected_store = [
+          '#theme' => 'click_collect_selected_store',
+          '#store' => $store,
+        ];
+        $selected_store_data = render($selected_store);
+      }
     }
 
     // Get Customer info.
@@ -243,6 +246,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         'alshaya_click_collect' => [
           'cart_id' => $cart->id(),
           'selected_store' => ($store_code) ? TRUE : FALSE,
+          'selected_store_obj' => $store,
         ],
       ],
       'library' => [

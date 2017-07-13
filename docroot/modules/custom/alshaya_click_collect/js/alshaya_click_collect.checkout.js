@@ -83,6 +83,14 @@
         }
       });
 
+      $('#store-finder-wrapper').on('click', '.label-store-location', function () {
+        ascoords = {
+          lat: 29,
+          lng: 48
+        };
+        Drupal.checkoutClickCollect.storeListAll(ascoords);
+      });
+
       // Select this store and view on map.
       $('#click-and-collect-list-view', context).once('bind-events').on('click', 'a.select-store, a.store-on-map', function (e) {
         e.preventDefault();
@@ -99,8 +107,10 @@
           $('#click-and-collect-map-view').show();
           $('.stores-list-view').toggleClass('active');
           $('.stores-map-view').toggleClass('active');
+          // Get the index of current location.
+          var markerPoint = (parseInt($(this).closest('li').data('index')) - 1);
           // Choose the selected store to display on map.
-          Drupal.checkoutClickCollect.storeViewOnMapSelected($(this), storeObj);
+          Drupal.checkoutClickCollect.storeViewOnMapSelected(storeObj, markerPoint);
         }
 
         return false;
@@ -110,19 +120,54 @@
       $('#click-and-collect-map-view', context).once('bind-events').on('click', 'a.select-store', function (e) {
         e.preventDefault();
         // Choose the selected store to proceed with checkout.
-        if (e.target.className === 'select-store') {
+        if (e.target.className.indexOf('select-store') >= 0) {
           // Find the store object with the given store-code from the store list.
           var storeObj = _.findWhere(storeList, {code: $(this).data('store-code')});
           Drupal.checkoutClickCollect.storeSelectedStore($(this), storeObj);
         }
+        return false;
       });
 
-      $('#selected-store-wrapper', context).once('bind-events').on('click', 'a.change-store', function (e) {
-        if (e.target.className === 'change-store') {
+      $('#selected-store-wrapper', context).once('bind-events').on('click', 'a.change-store, a.store-on-map', function (e) {
+        e.preventDefault();
+        if (e.target.className.indexOf('change-store') >= 0) {
           $('#selected-store-wrapper').hide();
           $('#store-finder-wrapper').show();
+          $('#click-and-collect-list-view').show();
+          $('#click-and-collect-map-view').hide();
+          $('.stores-list-view').addClass('active');
+          $('.stores-map-view').removeClass('active');
           $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
         }
+        else if (e.target.className.indexOf('store-on-map') >= 0) {
+          var newMap = true;
+          var slectedStoreObj;
+          if (typeof storeList !== 'undefined' && storeList.length > 0) {
+            $('#selected-store-wrapper').hide();
+            $('#store-finder-wrapper').show();
+            $('#click-and-collect-list-view').hide();
+            $('#click-and-collect-map-view').show();
+
+            $('.stores-list-view').toggleClass('active');
+            $('.stores-map-view').toggleClass('active');
+            slectedStoreObj = _.findWhere(storeList, {code: $(this).data('store-code')});
+            if (slectedStoreObj) {
+              newMap = false;
+              // Get the index of current location.
+              var markerPoint = storeList.indexOf(slectedStoreObj);
+              // Choose the selected store to display on map.
+              Drupal.checkoutClickCollect.storeViewOnMapSelected(slectedStoreObj, markerPoint);
+            }
+          }
+          // Create a new map, If loading it from database.
+          if (newMap) {
+            slectedStoreObj = drupalSettings.alshaya_click_collect.selected_store_obj;
+            Drupal.checkoutClickCollect.selectedStoreOnMap($(this), slectedStoreObj);
+            newMap = false;
+          }
+
+        }
+        return false;
       });
 
       // Load the store list if geoperm is true.
@@ -162,6 +207,123 @@
     geoPerm = false;
   };
 
+  // Render html for Selected store.
+  Drupal.checkoutClickCollect.storeSelectedStore = function (selectedButton, StoreObj) {
+    Drupal.ajax({
+      url: Drupal.url('click-and-collect/selected-store'),
+      element: selectedButton.get(0),
+      base: false,
+      progress: {type: 'throbber'},
+      submit: StoreObj
+    }).execute();
+  };
+
+  // Selected store on map.
+  Drupal.checkoutClickCollect.selectedStoreOnMap = function (selectedButton, StoreObj) {
+
+    var selectedOnMap = Drupal.ajax({
+      url: Drupal.url('click-and-collect/store-map-view/' + StoreObj.nid),
+      element: selectedButton.get(0),
+      base: false,
+      progress: {type: 'throbber'},
+      submit: StoreObj
+    });
+
+    // Custom command function to render map and map markers.
+    selectedOnMap.commands.clickCollectStoresView = function (ajax, response, status) {
+      if (status === 'success') {
+        storeList = response.data.raw;
+
+        if (storeList !== null && storeList.length > 0) {
+          var map = Drupal.checkoutClickCollect.mapCreate();
+          Drupal.geolocation.removeMapMarker(map);
+          Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
+
+          $('#store-finder-wrapper').show();
+          $('#click-and-collect-list-view').hide();
+          $('#click-and-collect-map-view').show();
+          $('#selected-store-wrapper').hide();
+          $('.stores-list-view').toggleClass('active');
+          $('.stores-map-view').toggleClass('active');
+
+          Drupal.checkoutClickCollect.storeViewOnMapSelected(storeList[0], 0);
+        }
+      }
+    };
+    selectedOnMap.execute();
+  };
+
+  // View selected store on map
+  Drupal.checkoutClickCollect.storeViewOnMapSelected = function (StoreObj, makerIndex) {
+    // Create/Get map object.
+    var map = Drupal.checkoutClickCollect.mapCreate();
+    // Adjust the map, when we trigger the map view.
+    google.maps.event.trigger(map.googleMap, 'resize');
+    // Zoom the current map to store location.
+    map.googleMap.setZoom(11);
+    // Make the marker by default open.
+    google.maps.event.trigger(map.mapMarkers[makerIndex], 'click');
+    // Get the lat/lng of current store to center the map.
+    var newLocation = new google.maps.LatLng(parseFloat(StoreObj.lat), parseFloat(StoreObj.lng));
+    // Set the google map center.
+    map.googleMap.setCenter(newLocation);
+  };
+
+  // Display All the stores on map.
+  Drupal.checkoutClickCollect.storeViewOnMapAll = function (storeItems) {
+    if (storeItems === null) {
+      storeItems = storeList;
+    }
+    // Create/Get map object.
+    var map = Drupal.checkoutClickCollect.mapCreate();
+    // Set the index to 0 to display marker label starting with 1.
+    index = 0;
+    if (map) {
+      // Invoke function to add marker for each store.
+      _.invoke(storeItems, Drupal.checkoutClickCollect.mapPushMarker, {geolocationMap: map});
+    }
+  };
+
+  // Create map.
+  Drupal.checkoutClickCollect.mapCreate = function (force) {
+    var recreate = (typeof force !== 'undefined') ? force : false;
+    // Create googleMap if property is not set.
+    // Tried to mimic from /contrib/geolocation/js/geolocation-common-map.js.
+    if (recreate || typeof geolocationMap.googleMap === 'undefined') {
+      geolocationMap = {};
+      geolocationMap.settings = {};
+      geolocationMap.settings.google_map_settings = drupalSettings.geolocation.google_map_settings;
+      geolocationMap.container = mapWrapper.children('.geolocation-common-map-container');
+      geolocationMap.lat = ascoords.lat;
+      geolocationMap.lng = ascoords.lng;
+      geolocationMap.googleMap = Drupal.geolocation.addMap(geolocationMap);
+    }
+    return geolocationMap;
+  };
+
+  // push marker to add to map.
+  Drupal.checkoutClickCollect.mapPushMarker = function (param, extra) {
+    index++;
+    Drupal.checkoutClickCollect.mapCreateMarker(this, param.geolocationMap, index);
+  };
+
+  // Create marker on map for the given store object.
+  Drupal.checkoutClickCollect.mapCreateMarker = function (store, mapObj, index) {
+    // Copied from /contrib/geolocation/js/geolocation-common-map.js.
+    var locationEle = $('.geolocation-common-map-locations').find('.geolocation[data-store-code="' + store.code + '"]');
+    locationEle = locationEle.wrapInner('<div class="scroll-fix"></div>');
+    var position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
+    var markerConfig = {
+      position: position,
+      map: mapObj.googleMap,
+      title: store.name,
+      infoWindowContent: locationEle.html(),
+      infoWindowSolitary: true,
+      label: (index).toString()
+    };
+    return Drupal.geolocation.setMapMarker(mapObj, markerConfig, false);
+  };
+
   // Make Ajax call to get stores list and render html.
   Drupal.checkoutClickCollect.storeListAll = function (coords) {
     if (typeof coords !== 'undefined') {
@@ -193,7 +355,7 @@
 
             if (storeList !== null && storeList.length > 0) {
               Drupal.click_collect.getFormattedAddress(ascoords, $('#click-and-collect-list-view').find('.selected-store-location'));
-              var map = Drupal.checkoutClickCollect.mapCreate();
+              var map = Drupal.checkoutClickCollect.mapCreate(true);
               Drupal.geolocation.removeMapMarker(map);
               Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
               if ($('a.stores-map-view').hasClass('active')) {
@@ -212,86 +374,5 @@
     }
   };
 
-  // Render html for Selected store.
-  Drupal.checkoutClickCollect.storeSelectedStore = function (selectedButton, StoreObj) {
-    Drupal.ajax({
-      url: Drupal.url('click-and-collect/selected-store'),
-      element: selectedButton.get(0),
-      base: false,
-      progress: {type: 'throbber'},
-      submit: StoreObj
-    }).execute();
-  };
-
-  // View selected store on map
-  Drupal.checkoutClickCollect.storeViewOnMapSelected = function (selectedButton, StoreObj) {
-    // Create/Get map object.
-    var map = Drupal.checkoutClickCollect.mapCreate();
-    // Adjust the map, when we trigger the map view.
-    google.maps.event.trigger(map.googleMap, 'resize');
-    // Get the index of current location.
-    var index = (parseInt(selectedButton.closest('li').data('index')) - 1);
-    // Zoom the current map to store location.
-    map.googleMap.setZoom(11);
-    // Make the marker by default open.
-    google.maps.event.trigger(map.mapMarkers[index], 'click');
-    // Get the lat/lng of current store to center the map.
-    var newLocation = new google.maps.LatLng(parseFloat(StoreObj.lat), parseFloat(StoreObj.lng));
-    // Set the google map center.
-    map.googleMap.setCenter(newLocation);
-  };
-
-  // Display All the stores on map.
-  Drupal.checkoutClickCollect.storeViewOnMapAll = function (storeItems) {
-    if (storeItems === null) {
-      storeItems = storeList;
-    }
-    // Create/Get map object.
-    var map = Drupal.checkoutClickCollect.mapCreate();
-
-    // Set the index to 0 to display marker label starting with 1.
-    index = 0;
-
-    if (map) {
-      // Invoke function to add marker for each store.
-      _.invoke(storeItems, Drupal.checkoutClickCollect.mapPushMarker, {geolocationMap: map});
-    }
-  };
-
-  // Create map.
-  Drupal.checkoutClickCollect.mapCreate = function () {
-    // Create googleMap if property is not set.
-    // Tried to mimic from /contrib/geolocation/js/geolocation-common-map.js.
-    if (typeof geolocationMap.googleMap === 'undefined') {
-      geolocationMap.container = mapWrapper.children('.geolocation-common-map-container');
-      geolocationMap.lat = ascoords.lat;
-      geolocationMap.lng = ascoords.lng;
-      geolocationMap.googleMap = Drupal.geolocation.addMap(geolocationMap);
-    }
-    return geolocationMap;
-  };
-
-  // push marker to add to map.
-  Drupal.checkoutClickCollect.mapPushMarker = function (param, extra) {
-    index++;
-    Drupal.checkoutClickCollect.mapCreateMarker(this, param.geolocationMap, index);
-  };
-
-  // Create marker on map for the given store object.
-  Drupal.checkoutClickCollect.mapCreateMarker = function (store, mapObj, index) {
-    // Copied from /contrib/geolocation/js/geolocation-common-map.js.
-    var locationEle = $('.geolocation-common-map-locations').find('.geolocation[data-store-code="' + store.code + '"]');
-    locationEle = locationEle.wrapInner('<div class="scroll-fix"></div>');
-    var position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
-    var markerConfig = {
-      position: position,
-      map: mapObj.googleMap,
-      title: store.name,
-      infoWindowContent: locationEle.html(),
-      infoWindowSolitary: true,
-      label: (index).toString()
-    };
-    return Drupal.geolocation.setMapMarker(mapObj, markerConfig, false);
-  };
 
 })(jQuery, Drupal);
