@@ -11,13 +11,8 @@
    */
   Drupal.behaviors.ZZAlshayaAcmCheckout = {
     attach: function (context, settings) {
-      $('#edit-delivery-tabs').once('bind-events').each(function () {
-        $('input[data-drupal-selector="edit-actions-next"]').hide();
-
-        $('.tab[gtm-type]', $(this)).on('click', function () {
-          $('#selected-tab').val($(this).attr('gtm-type'));
-          Drupal.behaviors.cvJqueryValidate.attach($("#block-alshaya-white-label-content"));
-        });
+      $('.delivery-home-next').once('bind-events').each(function () {
+        $(this).hide();
       });
 
       // Bind this only once after every ajax call.

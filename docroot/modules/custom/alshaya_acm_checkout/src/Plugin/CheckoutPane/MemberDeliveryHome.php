@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
@@ -23,6 +24,8 @@ use Drupal\profile\Entity\Profile;
  * )
  */
 class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterface {
+  // Add trait to get selected delivery method tab.
+  use CheckoutDeliveryMethodTrait;
 
   /**
    * {@inheritdoc}
@@ -45,6 +48,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     if (\Drupal::currentUser()->isAnonymous()) {
+      return $pane_form;
+    }
+
+    if ($this->getSelectedDeliveryMethod() != 'hd') {
       return $pane_form;
     }
 
@@ -185,6 +192,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     ];
 
     $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
+    $complete_form['actions']['next']['#attributes']['class'][] = 'delivery-home-next';
 
     $complete_form['actions']['back_to_basket'] = [
       '#type' => 'link',

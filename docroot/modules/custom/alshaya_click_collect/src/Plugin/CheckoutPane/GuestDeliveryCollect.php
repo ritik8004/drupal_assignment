@@ -4,6 +4,7 @@ namespace Drupal\alshaya_click_collect\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -23,6 +24,9 @@ use Drupal\geolocation\GoogleMapsDisplayTrait;
 class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInterface {
   // Add trait to get map url from getGoogleMapsApiUrl().
   use GoogleMapsDisplayTrait;
+
+  // Add trait to get selected delivery method tab.
+  use CheckoutDeliveryMethodTrait;
 
   /**
    * {@inheritdoc}
@@ -48,7 +52,12 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       return $pane_form;
     }
 
+    if ($this->getSelectedDeliveryMethod() != 'cc') {
+      return $pane_form;
+    }
+
     $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
+
     $default_firstname = $default_lastname = $default_email = '';
 
     $cart = $this->getCart();

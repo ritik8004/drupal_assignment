@@ -51,22 +51,9 @@
         $('[data-drupal-selector="edit-actions-next"]').hide();
       }
 
-      $('.tab').once('initiate-stores').each(function () {
+      $('#click-and-collect-list-view').once('initiate-stores').each(function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
-
-        $(this).on('click', function () {
-          if ($(this).hasClass('tab-click-collect')) {
-            if ($('#click-and-collect-list-view').html().length <= 0) {
-              Drupal.checkoutClickCollect.storeListAll(ascoords);
-            }
-            $('#edit-actions input:not(.cc-action)').addClass('hidden-important');
-            $('#edit-actions input.cc-action').removeClass('hidden-important');
-          }
-          else {
-            $('#edit-actions input:not(.cc-action)').removeClass('hidden-important');
-            $('#edit-actions input.cc-action').addClass('hidden-important');
-          }
-        });
+        Drupal.checkoutClickCollect.storeListAll(ascoords);
       });
 
       // Toggle between store list view and map view.
