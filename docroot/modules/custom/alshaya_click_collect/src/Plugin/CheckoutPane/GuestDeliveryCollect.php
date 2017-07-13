@@ -54,12 +54,22 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
-    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
+    $store_code = '';
+    $shipping_type = '';
+
+    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
+      $store_code = $form_values['cc_firstname'];
+      $shipping_type = $form_values['cc_lastname'];
+      $default_mobile = $form_values['cc_mobile'];
+    }
+    elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
       $default_mobile = $shipping['telephone'];
       $store_code = $cart->getExtension('store_code');
       $shipping_type = $cart->getExtension('click_and_collect_type');
+    }
 
+    if ($store_code && $shipping_type) {
       // Not injected here to avoid module dependency.
       // Get store info.
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
@@ -70,11 +80,18 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       ];
 
       $selected_store_data = render($selected_store);
-      // Get Customer info.
-      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-      $api_wrapper = \Drupal::service('acq_commerce.api');
-      $customer = $api_wrapper->getCustomer($cart->customerEmail());
+    }
 
+    // Get Customer info.
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('acq_commerce.api');
+
+    if (!empty($form_values)) {
+      $default_firstname = $form_values['cc_firstname'];
+      $default_lastname = $form_values['cc_lastname'];
+      $default_email = $form_values['cc_email'];
+    }
+    elseif ($customer = $api_wrapper->getCustomer($cart->customerEmail())) {
       $default_firstname = $customer['firstname'];
       $default_lastname = $customer['lastname'];
       $default_email = $cart->customerEmail();
