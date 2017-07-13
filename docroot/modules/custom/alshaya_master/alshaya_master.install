@@ -466,7 +466,7 @@ function alshaya_master_install() {
       'ar' => 'تطبيق',
     ],
     'Re-enter Privilege Card Number' => [
-      'ar' => 'يرجى إدخال رقم بطاقة نادي الامتيازات ثانيةً',
+      'ar' => 'يرجى إدخال رقم بطاقة نادي الامتيازات مرةً أخرى',
     ],
     'Your cart has been updated.' => [
       'ar' => 'قطعة/قطع أضيفت إلى سلة تسوقك',
@@ -815,6 +815,24 @@ function alshaya_master_install() {
     ],
     'logged in as @name' => [
       'ar' => 'تم تسجيل الدخول: @name',
+    ],
+    'This email address is already subscribed.' => [
+      'ar' => 'هذا العنوان البريد الإلكتروني مستعمل مسبقاً',
+    ],
+    'Thank you for your subscription.' => [
+      'ar' => 'شكراً لاشتراككم في نشرتنا الاخبارية',
+    ],
+    'Save @discount' => [
+      'ar' => 'وفر @discount',
+    ],
+    'Filter' => [
+      'ar' => 'حدّد اختيارك',
+    ],
+    'Welcome, @name' => [
+      'ar' => 'أهلاً بك, @name',
+    ],
+    'You have no recent orders to display.' => [
+      'ar' => 'لا توجد طلبيات لعرضها',
     ],
   ];
   alshaya_i18n_save_translations($strings);
