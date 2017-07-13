@@ -280,7 +280,7 @@
     select {
       @include select-style(4.375rem);
 
-      background-color: transparent;
+      background-color: $white-two !important;
     }
   }
 }
