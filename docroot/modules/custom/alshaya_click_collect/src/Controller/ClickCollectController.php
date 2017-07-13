@@ -16,7 +16,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class ClickCollectController.
@@ -202,8 +201,19 @@ class ClickCollectController extends ControllerBase {
   /**
    * Map view of the selected store.
    */
-  public function storeMapView() {
-    return new JsonResponse(['output' => '']);
+  public function storeMapView($node) {
+    // Get all the post data, which contains store information passed in ajax.
+    $store = \Drupal::request()->request->all();
+    $build['map_info_window'] = [
+      '#theme' => 'click_collect_store_info_window_list',
+      '#stores' => [$store],
+    ];
+
+    $response = new AjaxResponse();
+    $response->addCommand(new HtmlCommand('#click-and-collect-map-view .geolocation-common-map-locations', $build['map_info_window']));
+    $response->addCommand(new InvokeCommand('#click-and-collect-map-view .geolocation-common-map-locations', 'hide'));
+    $response->addCommand(new ClickCollectStoresCommand(['raw' => [$store]]));
+    return $response;
   }
 
   /**
