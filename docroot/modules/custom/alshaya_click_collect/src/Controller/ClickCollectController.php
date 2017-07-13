@@ -133,8 +133,8 @@ class ClickCollectController extends ControllerBase {
    * @param float $lon
    *   The longitude.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Return json response to use in jquery ajax.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
    */
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
@@ -165,8 +165,8 @@ class ClickCollectController extends ControllerBase {
   /**
    * Render selected store html.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Output the rendered html with selected store information.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
    */
   public function selectedStore() {
     // Get all the post data, which contains store information passed in ajax.
@@ -200,8 +200,11 @@ class ClickCollectController extends ControllerBase {
 
   /**
    * Map view of the selected store.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
    */
-  public function storeMapView($node) {
+  public function storeMapView() {
     // Get all the post data, which contains store information passed in ajax.
     $store = \Drupal::request()->request->all();
     $build['map_info_window'] = [
@@ -266,8 +269,8 @@ class ClickCollectController extends ControllerBase {
    * @param float $lon
    *   User's longitude.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Return json response to use in jquery ajax.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
    */
   public function getProductStoresJson($sku, $lat, $lon) {
     $data = $this->getProductStores($sku, $lat, $lon);
