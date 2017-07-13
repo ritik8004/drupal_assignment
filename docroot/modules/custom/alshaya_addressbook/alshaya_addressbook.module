@@ -310,11 +310,11 @@ function alshaya_addressbook_entity_type_alter(array &$entity_types) {
  */
 function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
   $strings = [
-    'First name' => [
+    'First Name' => [
       'ar' => 'الاسم الأول',
       'context' => 'Address label',
     ],
-    'Last name' => [
+    'Last Name' => [
       'ar' => 'اسم العائلة',
       'context' => 'Address label',
     ],
@@ -330,8 +330,8 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
       'ar' => 'اسم الشارع',
       'context' => 'Address label',
     ],
-    'Street name/number' => [
-      'ar' => 'اسم الشارع',
+    'Street Name / No.' => [
+      'ar' => 'رقم الشارع / اسم الشارع ',
       'context' => 'Address label',
     ],
     'City' => [
@@ -346,7 +346,15 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
       'ar' => 'الرمز البريدي',
       'context' => 'Address label',
     ],
-    'Building name/number' => [
+    'Pin code' => [
+      'en' => 'Postal code',
+      'context' => 'Address label',
+    ],
+    'Pin code' => [
+      'ar' => 'الرمز البريدي',
+      'context' => 'Address label',
+    ],
+    'Building Name / No.' => [
       'ar' => 'رقم المبنى / اسم المبنى',
       'context' => 'Address label',
     ],
@@ -354,12 +362,16 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
       'ar' => 'رقم القطعة',
       'context' => 'Address label',
     ],
-    'Floor (optional)' => [
+    'Floor (Optional)' => [
       'ar' => 'رقم الدور(اختياري)',
       'context' => 'Address label',
     ],
     'Select Area' => [
       'ar' => 'يرجى اختيار المنطقة / القطعة',
+      'context' => 'Address label',
+    ],
+    'State' => [
+      'ar' => 'الحالة',
       'context' => 'Address label',
     ],
   ];
