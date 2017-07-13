@@ -110,7 +110,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $is_item_free = FALSE;
 
       // Check if a discount equal to the price of product was applied.
-      if ($cart_item[$id]['discount_amount'] === $cart_item[$id]['price']) {
+      if ($cart_item[$id]['discount_amount'] === $cart_item[$id]['price'] * $item['quantity']) {
         $is_item_free = TRUE;
       }
 
@@ -130,7 +130,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
           '#price' => $item_cart_price['price'],
         ];
 
-        if ($item_cart_price['discount']) {
+        if (!empty($item_cart_price['discount'])) {
           $item['price']['#discount'] = $item_cart_price['discount'];
           $item['price']['#final_price'] = $item_cart_price['final_price'];
         }
