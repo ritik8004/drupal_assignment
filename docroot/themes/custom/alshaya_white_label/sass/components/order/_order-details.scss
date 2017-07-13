@@ -381,7 +381,7 @@
   }
 
   h2.subtitle {
-    margin-top: 2.5rem;
+    margin-top: 2.7rem;
     border-bottom: none;
     font-weight: normal;
 
@@ -390,7 +390,7 @@
     }
 
     @include breakpoint($desktop) {
-      margin-top: 2.8rem;
+      margin-top: 2.5rem;
     }
 
     .path--user & {
@@ -405,9 +405,12 @@
     @include breakpoint($upto-desktop) {
       font-size: 0.625rem;
     }
-  }
 
-  td.desktop-only {
-    padding-left: 0;
+    &.order--date--time {
+      @include breakpoint($only-tablet) {
+        font-size: 0.75rem;
+        margin-top: 0.875rem;
+      }
+    }
   }
 }
