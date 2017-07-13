@@ -146,6 +146,15 @@ class AcqPromotionsManager {
       $node = $this->nodeStorage->load($nid);
       $node->setPublished(Node::NOT_PUBLISHED);
       $node->save();
+
+      // Detach promotion from all skus.
+      $attached_skus = $this->getSkusForPromotion($node);
+      if ($attached_skus) {
+        $data['skus'] = $attached_skus;
+        $data['promotion'] = $node->id();
+        $acq_promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
+        $acq_promotion_detach_queue->createItem($data);
+      }
     }
   }
 
