@@ -5,6 +5,10 @@
     }
   }
 
+  @include breakpoint($tablet) {
+    padding-left: 1.5rem;
+  }
+
   .c-page-title {
     border-bottom: 1px solid $white;
     margin-bottom: 0.75rem;
@@ -91,7 +95,7 @@
         }
 
         position: absolute;
-        #{$left}: -3rem;
+        #{$left}: 0;
         width: 21rem;
       }
     }
@@ -134,9 +138,11 @@
 
     #edit-mobile-number-mobile-error {
       left: 0;
-      top: 21px !important;
+      top: 17px !important;
       position: absolute !important;
       display: block !important;
+      width: auto;
+      right: 0;
     }
 
     #edit-mobile-number-mobile-error ~ .form-item--error-message {
