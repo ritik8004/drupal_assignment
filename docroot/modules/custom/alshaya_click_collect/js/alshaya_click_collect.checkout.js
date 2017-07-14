@@ -83,16 +83,6 @@
         }
       });
 
-      /*
-      $('#store-finder-wrapper').on('click', '.label-store-location', function () {
-        ascoords = {
-          lat: 29,
-          lng: 48
-        };
-        Drupal.checkoutClickCollect.storeListAll(ascoords);
-      });
-      */
-
       // Select this store and view on map.
       $('#click-and-collect-list-view', context).once('bind-events').on('click', 'a.select-store, a.store-on-map', function (e) {
         e.preventDefault();
@@ -114,7 +104,6 @@
           // Choose the selected store to display on map.
           Drupal.checkoutClickCollect.storeViewOnMapSelected(storeObj, markerPoint);
         }
-
         return false;
       });
 
