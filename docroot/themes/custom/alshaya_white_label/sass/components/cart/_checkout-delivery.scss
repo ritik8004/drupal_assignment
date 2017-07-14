@@ -353,11 +353,12 @@
 
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
 #edit-acm-payment-methods-payment-options,
-#edit-member-delivery-home-address-shipping-methods--wrapper {
-  border: none;
+#edit-member-delivery-home-address-shipping-methods--wrapper,
+.shipping-methods-container {
+  border: none !important;
 
   legend {
-    display: block;
+    display: block !important;
     width: 100%;
 
     .fieldset-legend {
@@ -455,21 +456,22 @@
   }
 
   #edit-guest-delivery-home-address-shipping-methods,
-  #edit-member-delivery-home-address-shipping-methods {
+  #edit-member-delivery-home-address-shipping-methods,
+  .fieldset-wrapper > div {
     font-size: 0;
 
     .form-type-radio {
-      margin-top: 0;
+      margin-top: 0 !important;
 
       &:first-child {
-        margin-top: 1.875rem;
+        margin-top: 1.875rem !important;
 
         @include breakpoint($only-tablet) {
-          margin-top: 1.188rem;
+          margin-top: 1.188rem !important;
         }
 
         @include breakpoint($desktop) {
-          margin-top: 2.375rem;
+          margin-top: 2.375rem !important;
         }
       }
     }
@@ -482,7 +484,8 @@
   }
 }
 
-#edit-guest-delivery-home-address-shipping-methods--wrapper {
+#edit-guest-delivery-home-address-shipping-methods--wrapper,
+.shipping-methods-container {
   display: block;
 }
 
@@ -621,6 +624,10 @@
       #edit-guest-delivery-home {
         .title {
           margin: 1.375rem !important;
+
+          @include breakpoint($only-mobile) {
+            margin: 1.375rem 0 !important;
+          }
         }
 
         .address-book-address {
@@ -884,6 +891,60 @@
 #edit-member-delivery-home-address-book-wrapper {
   @include breakpoint($tablet) {
     margin-left: 1.5rem;
+  }
+}
+
+.select-transaction-type {
+  font-family: $alshaya-bold;
+  font-size: 1rem;
+  line-height: 1.12;
+  color: $marine-blue-two;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.show-only-buttons {
+  @include breakpoint($only-mobile) {
+    #edit-delivery-tabs {
+      margin-bottom: 3rem;
+    }
+
+    .tab-separator {
+      font-size: 0.75rem;
+      color: $grey-ash;
+      margin: 0.5rem 0;
+      display: block !important;
+    }
+
+    .tab-click-collect,
+    .tab-home-delivery {
+      border-color: $greyish !important;
+      border-width: 1px !important;
+      padding: 0.5rem 0 !important;
+      display: block !important;
+
+      a p {
+        color: $grey-ash;
+      }
+    }
+
+    #edit-guest-delivery-collect,
+    #edit-guest-delivery-home,
+    #edit-actions {
+      display: none !important;
+    }
+
+    .select-transaction-type {
+      display: block;
+    }
+  }
+}
+
+.show-form {
+  @include breakpoint($only-mobile) {
+    .tabs--content fieldset.active--tab--content {
+      display: block !important;
+    }
   }
 }
 

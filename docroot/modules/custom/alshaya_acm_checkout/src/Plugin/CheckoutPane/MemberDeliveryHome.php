@@ -190,6 +190,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#options' => $shipping_methods,
       '#prefix' => '<div id="shipping_methods_wrapper">',
       '#suffix' => '</div>',
+      '#attributes' => ['class' => ['shipping-methods-container']],
     ];
 
     $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];

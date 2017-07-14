@@ -140,6 +140,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#options' => $shipping_methods,
       '#prefix' => '<div id="shipping_methods_wrapper">',
       '#suffix' => '</div>',
+      '#attributes' => ['class' => ['shipping-methods-container']],
     ];
 
     $complete_form['actions']['get_shipping_methods'] = [
