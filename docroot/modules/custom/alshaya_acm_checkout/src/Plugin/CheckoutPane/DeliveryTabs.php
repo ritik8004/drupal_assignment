@@ -35,6 +35,7 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+
     $show_only_buttons_mobile = $this->isMethodParamAvailable() ? 'show-form' : 'show-only-buttons';
     $complete_form['#attributes']['class'][] = $show_only_buttons_mobile;
 
@@ -61,13 +62,12 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#markup' => '<div class="select-transaction-type">' . $this->t('select a transaction type') . '</div>',
     ];
 
-    $selected_method = $this->getSelectedDeliveryMethod();
-
     $url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
-
     // Set hd as method in params for home delivery.
     $url->setRouteParameter('method', 'hd');
 
+    $selected_method = $this->getSelectedDeliveryMethod();
+    // Set home delivery method active.
     $active_class = ($selected_method == 'hd') ? 'active--tab--head' : '';
 
     $home_delivery = '<div class="tab tab-home-delivery ' . $active_class . '" gtm-type="checkout-home-delivery">';
@@ -87,6 +87,7 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
     // Set cc as method in params for click and collect.
     $url->setRouteParameter('method', 'cc');
 
+    // Set click and collect delivery mehtod active.
     $active_class = ($selected_method == 'cc') ? 'active--tab--head' : '';
 
     $click_collect = '<div class="tab tab-click-collect ' . $active_class . '" gtm-type="checkout-click-collect">';
