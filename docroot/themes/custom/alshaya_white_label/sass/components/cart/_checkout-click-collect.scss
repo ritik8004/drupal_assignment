@@ -206,6 +206,15 @@
         margin-top: 0;
       }
 
+      span.empty {
+        display: block;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid $greyish;
+        text-align: center;
+        color: $grey-ash;
+      }
+
       .all-stores-info {
         @include breakpoint($only-tablet) {
           display: none;
