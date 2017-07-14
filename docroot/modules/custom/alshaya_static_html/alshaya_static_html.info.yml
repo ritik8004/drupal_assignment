@@ -1,0 +1,25 @@
+name: 'Alshaya Static Html'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - ckeditor
+  - content_translation
+  - ctools
+  - editor
+  - field
+  - file
+  - filter
+  - image
+  - language
+  - menu_ui
+  - metatag
+  - node
+  - panelizer
+  - path
+  - pathauto
+  - system
+  - text
+  - user
+  - views
+  - workbench_moderation

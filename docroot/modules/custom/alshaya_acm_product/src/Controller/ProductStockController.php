@@ -8,7 +8,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -54,7 +53,10 @@ class ProductStockController extends ControllerBase {
         $data = BubbleableMetadata::createFromRenderArray($build);
         // Retrieve the attachments from the $data.
         $attachments = $data->getAttachments();
-
+        $url = '/en/mothercare-three-position-baby-carrier-black?ajax_form=1';
+        $attachments['drupalSettings']['ajax']['edit-add-to-cart']['url'] = $url;
+        $attachments['drupalSettings']['ajax']['edit-configurables-size']['url'] = $url;
+        $attachments['drupalSettings']['ajaxTrustedUrl'][] = '/en/mothercare-three-position-baby-carrier-black';
         // Generate the settings to be sent back with the ajax response.
         if (!empty($attachments['drupalSettings'])) {
           $settings .= '<script type="text/javascript">jQuery.extend(drupalSettings, ';
@@ -93,7 +95,6 @@ class ProductStockController extends ControllerBase {
     $form['add_to_cart'] = \Drupal::service('acq_sku.form_builder')->getForm($plugin, $sku_entity);
     $form['add_to_cart']['#weight'] = 50;
 
-    $form['add_to_cart']['add_to_cart']['#ajax']['url'] = new Url('entity.node.canonical', ['node' => 67]);
     $form['add_to_cart']['add_to_cart']['#ajax']['options']['query'][FormBuilderInterface::AJAX_FORM_REQUEST] = TRUE;
     return $form;
   }

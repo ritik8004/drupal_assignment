@@ -16,15 +16,28 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
   $items = [];
 
-  $items['click_collect_stores_list'] = [
+  $items['alshaya_address'] = [
     'render element' => 'elements',
     'variables' => [
-      'title' => NULL,
-      'stores' => NULL,
+      'address' => [],
     ],
   ];
 
   return $items;
+}
+
+/**
+ * Format price value with currency.
+ *
+ * Default template: acq-commerce-price.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - price: a price value.
+ */
+function template_preprocess_alshaya_address(array &$variables) {
+  $country_list = \Drupal::service('address.country_repository')->getList();
+  $variables['address']['country'] = $country_list[$variables['address']['country_code']];
 }
 
 /**
@@ -96,13 +109,14 @@ function _alshaya_acm_checkout_clean_address($address) {
     'first_name',
     'lastname',
     'last_name',
-    'phone',
+    'telephone',
     'street',
     'street2',
     'city',
     'region',
     'postcode',
-    'country',
+    'country_id',
+    'extension',
   ];
 
   foreach ($address as $key => $value) {
@@ -113,12 +127,12 @@ function _alshaya_acm_checkout_clean_address($address) {
 
   if (!empty($address['region'])) {
     // TODO: We may just require region and not region_id, need to verify later.
-    $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country']);
+    $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country_id']);
     $address['region'] = $address['region_id'];
   }
 
-  if (!empty($address['phone'])) {
-    $address['phone'] = _alshaya_acm_checkout_clean_address_phone($address['phone']);
+  if (!empty($address['telephone'])) {
+    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['telephone']);
   }
 
   return $address;
@@ -139,11 +153,17 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
   if (is_string($phone)) {
     $phone_string = $phone;
   }
-  elseif (is_object($phone)) {
-    $phone_string = \Drupal::service('mobile_number.util')->libUtil()->format($phone, 1);
-  }
-  elseif (is_array($phone)) {
-    $phone_string = $phone['value'];
+  elseif (is_array($phone) || is_object($phone)) {
+    $phone = (array) $phone;
+    if (isset($phone['country_code'])) {
+      $phone_string = \Drupal::service('mobile_number.util')->getPhoneNumberAsString($phone['mobile'], $phone['country_code']);
+    }
+    elseif (isset($phone['country-code'])) {
+      $phone_string = \Drupal::service('mobile_number.util')->getPhoneNumberAsString($phone['mobile'], $phone['country-code']);
+    }
+    elseif (isset($phone['value'])) {
+      $phone_string = $phone['value'];
+    }
   }
 
   return $phone_string;
@@ -166,6 +186,18 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
 
     alshaya_i18n_save_translations($strings);
   }
+
+  $acq_checkout_settings = \Drupal::config('alshaya_acm_checkout.settings');
+
+  // Create shipping method term for click and collect during install.
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+  // Get the code based on rules of combining carrier and method codes.
+  $code = $checkout_options_manager->getClickandColectShippingMethod();
+
+  // This is just to create click and collect method term during install.
+  $checkout_options_manager->loadShippingMethod($code, $code, $code, $acq_checkout_settings->get('click_collect_method_carrier_code'), $acq_checkout_settings->get('click_collect_method_method_code'));
 }
 
 /**
@@ -232,7 +264,9 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
   }
 
   // At this stage we always want to have fresh data.
-  \Drupal::cache()->invalidate('orders_list_' . $email);
+  /** @var \Drupal\alshaya_acm_customer\OrdersManager $orders_manager */
+  $orders_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+  $orders_manager->clearOrderCache($email);
 
   $orders = alshaya_acm_customer_get_user_orders($email);
 

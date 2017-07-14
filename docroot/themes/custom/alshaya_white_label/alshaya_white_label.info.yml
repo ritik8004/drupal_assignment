@@ -47,3 +47,6 @@ libraries-override:
   geolocation/geolocation.googlemapsapi:
     js:
       js/geolocation-google-maps-api.js: js/geolocation/alshaya_geolocation_google_maps_api.js
+
+ckeditor_stylesheets:
+  - css/ckeditor.css

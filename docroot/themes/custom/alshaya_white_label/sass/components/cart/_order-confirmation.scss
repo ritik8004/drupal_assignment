@@ -59,6 +59,10 @@
         font-weight: bold;
       }
     }
+
+    .price-amount {
+      float: $right;
+    }
   }
 
   .continue--shopping--mobile {
@@ -67,6 +71,12 @@
     td {
       padding: 0;
       padding-top: 1rem;
+
+      a {
+        @include breakpoint($only-mobile) {
+          padding: 0.65rem 1em;
+        }
+      }
     }
 
     @include breakpoint($tablet) {
@@ -100,7 +110,7 @@
 
   .order-summary {
     @include breakpoint($tablet) {
-      margin-top: 0.7rem;
+      margin-top: 2.1rem;
       margin-bottom: 2.7rem;
       background-color: $pale-grey;
       padding: 1.125rem;
@@ -113,7 +123,7 @@
     }
 
     @include breakpoint($desktop) {
-      margin-top: 1.42rem;
+      margin-top: 2.5rem;
       margin-bottom: 1.8rem;
     }
   }
@@ -164,6 +174,10 @@
     margin-top: 1rem;
     margin-bottom: 1.65rem;
     text-align: center;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 3rem;
+    }
 
     @include breakpoint($tablet) {
       margin-bottom: 0;
@@ -415,6 +429,10 @@
     svg {
       width: 7rem;
       max-height: 4.375rem;
+
+      @include breakpoint($tablet) {
+        overflow: visible;
+      }
     }
   }
 

@@ -1,11 +1,24 @@
+.c-footer {
+  position: relative;
+  margin-top: 3.5rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 2.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 3.75rem;
+  }
+}
+
 .c-footer-primary {
   border-top: 2px solid $peacock-blue;
   padding-top: 1rem;
   padding-bottom: 2.25rem;
   position: relative;
   background: $white-five;
-  margin-top: 3.5rem;
-  z-index: 2;
+  -webkit-transform: translate3d(0, 0, 0);
+  z-index: 4;
 
   @include breakpoint($tablet) {
     padding: 1.25em 1.5em;
@@ -17,13 +30,8 @@
     }
   }
 
-  @include breakpoint($only-tablet) {
-    margin-top: 2.75rem;
-  }
-
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
-    margin-top: 3.75rem;
   }
 
   .primary--footer--right {
@@ -586,6 +594,7 @@
 
   @include breakpoint($only-tablet) {
     margin-#{$left}: 0;
+    max-width: 21.94rem;
   }
 
   .c-social-links {

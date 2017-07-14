@@ -132,7 +132,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       // If no order available for the user.
       if (empty($orders)) {
         $build['no_order_description'] = [
-          '#markup' => '<div class="no--orders">' . $this->t("You don't have any orders to display.") . '</div>',
+          '#markup' => '<div class="no--orders">' . $this->t("You have no recent orders to display.") . '</div>',
         ];
         $build['go_shopping'] = [
           '#type' => 'link',

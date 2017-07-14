@@ -1,4 +1,5 @@
 brand_logo_base_path: 'media/attribute/swatch'
+brand_logo_extension: 'jpg'
 size_guide_link: 0
 size_guide_modal_content:
   format: rich_text

@@ -3,4 +3,39 @@ alshaya_seo.google_knowledge_graph_form:
   parent: system.admin_config_search
   description: 'Administer the Google Knowledge Graph data.'
   route_name: alshaya_seo.google_knowledge_graph_form
+
+alshaya_seo.settings:
+  title: 'SEO Settings'
+  route_name: alshaya_seo.settings
   weight: 5
+  parent: system.admin
+
+alshaya_seo.google_knowledge_graph_form:
+  title: 'Google Knowledge Graph'
+  description: 'Administer the Google Knowledge Graph data.'
+  parent: alshaya_seo.settings
+  route_name: alshaya_seo.google_knowledge_graph_form
+
+alshaya_seo.taxonomy:
+  title: 'Product Category'
+  description: 'Manage seo related for product category terms.'
+  parent: alshaya_seo.settings
+  route_name: entity.taxonomy_vocabulary.collection
+
+alshaya_seo.content:
+  title: 'Content'
+  description: 'Manage seo related data for content.'
+  parent: alshaya_seo.settings
+  route_name: system.admin_content
+
+alshaya_seo.robotstxt_settings:
+  title: 'RobotsTxt'
+  parent: alshaya_seo.settings
+  description: 'Manage your robots.txt file.'
+  route_name: robotstxt.admin_settings_form
+
+alshaya_seo.sitemap_settings:
+  title: 'Simple XML sitemap'
+  description: 'Configure and generate the XML sitemap, add custom links to it.'
+  parent: alshaya_seo.settings
+  route_name: simple_sitemap.settings

@@ -73,14 +73,25 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    * {@inheritdoc}
    */
   public function synchronizeTree($vocabulary, $remoteRoot = NULL) {
-
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
+
+    $config = \Drupal::config('acq_commerce.conductor');
+    $debug = $config->get('debug');
+    $debug_dir = $config->get('debug_dir');
 
     foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
       if ($store_id) {
         // Load Conductor Category data.
         $categories = [$this->loadCategoryData($store_id)];
+
+        if ($debug && !empty($debug_dir)) {
+          // Export category data into file.
+          $filename = $debug_dir . '/categories_' . $langcode . '.data';
+          $fp = fopen($filename, 'w');
+          fwrite($fp, var_export($categories, 1));
+          fclose($fp);
+        }
 
         // Recurse the category tree and create / update nodes.
         $this->syncCategory($categories, NULL);

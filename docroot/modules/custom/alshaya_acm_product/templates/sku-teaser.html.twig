@@ -4,22 +4,22 @@
   <a href="{{ product_url }}">{{ product_label }}</a>
 </h2>
 
-{% if final_price %}
-  <div class="has--special--price">
-{% else %}
-  <div class="price">
-{% endif %}
-  {{ price }}
+<div class="price-block {{ price_block_identifier }}">
+  {{ price_block }}
 </div>
 
-{% if final_price %}
-  <div class="special--price">
-    {{ final_price }}
-  </div>
+<div class="out-of-stock">Checking stock...</div>
 
-  <div class="price--discount">
-    {{ discount }}
+{% if promotions %}
+  <div class="promotions">
+    {% for id, promotion in promotions %}
+      {% if (promotion.render_link) %}
+        <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+          {{ promotion.text.value }}
+        </a>
+      {% else %}
+        {{ promotion.text.value }}
+      {% endif %}
+    {% endfor %}
   </div>
 {% endif %}
-
-<div class="out-of-stock">Checking stock...</div>

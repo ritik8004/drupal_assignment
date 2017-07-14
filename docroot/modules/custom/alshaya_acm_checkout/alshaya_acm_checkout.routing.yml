@@ -13,3 +13,11 @@ alshaya_acm_checkout.use_delivery_address:
     _title: ''
   requirements:
     _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'
+
+alshaya_acm_checkout.edit_delivery_address:
+  path: 'checkout-delivery/edit-address/{profile}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_checkout\Controller\CheckoutController::editAddress'
+    _title: ''
+  requirements:
+    _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'

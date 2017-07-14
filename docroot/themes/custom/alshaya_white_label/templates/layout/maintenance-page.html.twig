@@ -12,10 +12,41 @@
  */
 #}
 <div>
-    {% if maintenance_text is not empty %}
-        {{ maintenance_text|raw }}
-    {% endif %}
-    {% if maintenance_image is not empty %}
-        {{ maintenance_image }}
-    {% endif %}
-</div>
+  <!-- ______________________ MAIN _______________________ -->
+
+  <div class="clearfix">
+    <div{{ attributes.addClass('l-container') }}>
+
+      <main>
+        <div class="c-content">
+          <div class="c-content__region">
+            <div class="maintenance__logo--wrapper">
+              <div class="maintenance__logo">
+                {% include active_theme_path() ~ '/mothercare-logo-sm-ar.svg' %}
+              </div>
+            </div>
+            <div class="l-container not-found">
+              {% if maintenance_text is not empty %}
+                <div class="not-found__body">
+                  <div class="not-found__body__container">
+                    {{ maintenance_text|raw }}
+                  </div>
+                </div>
+              {% endif %}
+              {% if maintenance_image is not empty %}
+                <div class="not-found__image">
+                  <img src="{{ maintenance_image }}" />
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        {{ feed_icons }}
+
+      </main>
+      <!-- /content-inner /content -->
+
+    </div>
+  </div>
+  <!-- /main -->

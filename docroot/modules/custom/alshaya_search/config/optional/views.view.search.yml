@@ -81,7 +81,7 @@ display:
           offset: 0
           id: 0
           total_pages: null
-          query_type: POST
+          query_type: GET
           tags:
             previous: ‹‹
             next: ››

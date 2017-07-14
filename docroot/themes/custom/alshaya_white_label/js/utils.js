@@ -4,11 +4,27 @@
  */
 
 /* eslint-disable */
+function isRTL() {
+/* eslint-enable */
+  'use strict';
+
+  var html = jQuery('html');
+  var dir = html.attr('dir');
+  if (typeof dir === 'undefined' || dir === 'ltr') {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+/* eslint-disable */
 function debounce(func, wait, immediate) {
 /* eslint-enable */
   'use strict';
 
   var timeout;
+
   return function () {
     var context = this;
     var args = arguments;

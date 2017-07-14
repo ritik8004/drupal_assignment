@@ -15,4 +15,5 @@ stock_check:
     - core/drupal.ajax
     - core/drupal.dialog.ajax
     - alshaya_master/ladda
+    - alshaya_acm_product/product_view
     - alshaya_acm_cart_notification/cart_notification_js

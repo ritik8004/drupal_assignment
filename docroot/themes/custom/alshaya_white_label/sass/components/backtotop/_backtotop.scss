@@ -1,6 +1,6 @@
 #backtotop {
   @include breakpoint($only-mobile) {
-    #{$right}: -0.1875rem;
+    #{$right}: 0;
   }
 
   @include icon(arrowup, after) {
@@ -16,12 +16,13 @@
   }
 
   &:hover {
-    opacity: 0.75;
+    opacity: 0.75 !important;
   }
 
   #{$right}: 20px;
   text-indent: 0;
   bottom: 1px;
+  opacity: 1 !important;
   cursor: pointer;
   position: fixed;
   font-size: 0.5rem;
@@ -35,4 +36,23 @@
   height: 4.375rem;
   width: 4.375rem;
   line-height: 120px;
+
+  &.backtotop-nofooter {
+    position: fixed;
+    bottom: 1px;
+    top: auto;
+  }
+
+  &.backtotop-withfooter {
+    position: absolute;
+    top: -4.375rem;
+
+    @include breakpoint($only-mobile) {
+      top: -4rem;
+
+      .nodetype--acq_product & {
+        top: -1.875rem;
+      }
+    }
+  }
 }

@@ -15,6 +15,5 @@ input[type=checkbox]:checked ~ label {
 
   &::before {
     color: $windows-blue;
-    padding-#{$right}: -4px;
   }
 }

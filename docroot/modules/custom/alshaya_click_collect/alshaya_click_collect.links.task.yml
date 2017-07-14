@@ -1,0 +1,4 @@
+alshaya_click_collect.configuration:
+  route_name: alshaya_click_collect.configuration
+  title: 'click and collect configuration'
+  base_route: alshaya_click_collect.configuration

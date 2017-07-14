@@ -15,7 +15,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $address = $form_state->getTemporaryValue('address');
-    $country = isset($address->country) ? $address->country : 'US';
+    $country = isset($address->country_id) ? $address->country_id : 'US';
     $countryRepository = \Drupal::service('address.country_repository');
     $subdivisionRepository = \Drupal::service('address.subdivision_repository');
     $addressFormatRepository = \Drupal::service('address.address_format_repository');
@@ -51,10 +51,10 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
       '#required' => TRUE,
       '#placeholder' => $this->t('Address Line 1*'),
     ];
-    $pane_form['address']['phone'] = [
+    $pane_form['address']['telephone'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Telephone'),
-      '#default_value' => isset($address->phone) ? $address->phone : '',
+      '#default_value' => isset($address->telephone) ? $address->telephone : '',
       '#required' => TRUE,
       '#placeholder' => $this->t('Telephone'),
     ];
@@ -94,7 +94,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
       '#required' => TRUE,
       '#placeholder' => $labels['postalCode'],
     ];
-    $pane_form['address']['dynamic_parts']['country'] = [
+    $pane_form['address']['dynamic_parts']['country_id'] = [
       '#type' => 'select',
       '#title' => $this->t('Country'),
       '#options' => $countryRepository->getList(),
@@ -116,7 +116,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
     $pane_id = $form_state->getTemporaryValue('pane_id');
     $dynamic_parts =& $form[$pane_id]['address']['dynamic_parts'];
     $values = $form_state->getValue($form['#parents']);
-    $country = $values[$pane_id]['address']['dynamic_parts']['country'];
+    $country = $values[$pane_id]['address']['dynamic_parts']['country_id'];
     $countryRepository = \Drupal::service('address.country_repository');
     $addressFormatRepository = \Drupal::service('address.address_format_repository');
     $address_format = $addressFormatRepository->get($country);

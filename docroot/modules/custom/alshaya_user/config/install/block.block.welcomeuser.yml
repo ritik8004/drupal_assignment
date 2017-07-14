@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_user
+    - user
+  theme:
+    - alshaya_white_label
+id: welcomeuser
+theme: alshaya_white_label
+region: menu_secondary
+weight: -33
+provider: null
+plugin: 'welcome user'
+settings:
+  id: 'welcome user'
+  label: 'Welcome User'
+  provider: alshaya_user
+  label_display: '0'
+visibility:
+  user_role:
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

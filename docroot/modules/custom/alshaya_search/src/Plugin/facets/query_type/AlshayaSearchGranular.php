@@ -28,7 +28,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
    * {@inheritdoc}
    */
   public function calculateResultFilter($value) {
-    $range = $this->getRange($value);
+    $range = $this->getRange(ceil($value));
 
     // If this is the first range, display, "under X".
     if ($range['start'] === 0) {

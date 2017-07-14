@@ -98,7 +98,8 @@
             },
             "drupal/search_api_solr_multilingual": {
                 "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
-                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
+                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch",
+                "Disable field type check on Acquia Search": "patches/search_api_solr_multilingual--disable-field-type-check.patch"
             },
             "drupal/search_api_spellcheck": {
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
@@ -133,7 +134,8 @@
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
-                "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch"
+                "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch",
+                "Add alter hook for admin check": "https://www.drupal.org/files/issues/2892237-2.patch"
             },
             "drupal/user_registrationpassword": {
                 "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-13.patch"

@@ -245,6 +245,8 @@ header,
   @include breakpoint($only-mobile) {
     padding-#{$left}: 0.625rem;
     font-weight: 700;
+    font-size: 0.625rem;
+    padding-#{$left}: 0.25rem;
   }
 }
 

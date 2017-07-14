@@ -30,14 +30,9 @@ $env = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_ENV['AH_SITE_ENVIRONMENT'] : 'loc
 $config['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource/' . $env . '/mckw/';
 $config['alshaya_acm_knet.settings']['use_secure_response_url'] = 0;
 
-// 01 is prefixed most of the time so we don't get proper env here.
-// Clean the env, we do it only for dev and test.
-if (strpos($env, 'dev') !== FALSE) {
-  $env = 'dev';
-}
-elseif (strpos($env, 'test') !== FALSE) {
-  $env = 'test';
-}
+// Set the debug dir of conductor.
+$config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
+$config['acq_commerce.conductor']['debug'] = TRUE;
 
 switch ($env) {
   case 'local':
@@ -47,9 +42,11 @@ switch ($env) {
 
     // Set the knet resource path which should be outside GIT root.
     $config['alshaya_acm_knet.settings']['resource_path'] = '/home/vagrant/knet-resource/';
+    $config['acq_commerce.conductor']['debug'] = FALSE;
 
-  case 'dev':
-  case 'test':
+  case '01dev':
+  case '01test':
+  case '01uat':
     $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
 
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
@@ -59,12 +56,16 @@ switch ($env) {
 
     $config['alshaya_api.settings']['username'] = 'acquiaapi';
     $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
+
+    // For other environments, this must be set using admin config forms.
+    // Info about how to do is available in user guide.
+    $config['geolocation.settings']['google_map_api_key'] = 'AIzaSyBy52QEZ0Icl555Khpi4Ep1gGkxmADdEm0';
     break;
 
   default:
-    $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
+    $config['acq_commerce.conductor']['url'] = 'https://pprod.dev.alshaya.acm.acquia.io/';
 
-    $config['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
+    $config['alshaya_api.settings']['magento_host'] = 'http://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;

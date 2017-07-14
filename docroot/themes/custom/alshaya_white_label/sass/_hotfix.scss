@@ -75,9 +75,35 @@ body.ucbrowser {
       }
     }
   }
+
+  // Fix for direction attribute support for UC browser.
+  // Select elements for size and quantity.
+  .c-pdp {
+    html[lang=ar] & {
+      .form-item-configurables-size select {
+        padding-left: 42px;
+      }
+
+      .form-item-quantity select {
+        padding-left: 44px;
+      }
+    }
+  }
+
+  .c-plp {
+    html[lang=ar] & {
+      .form-item-sort-bef-combine select {
+        padding-left: 40px;
+      }
+    }
+  }
 }
 
 #text-resize-control {
+  display: none !important;
+}
+
+.hidden-important {
   display: none !important;
 }
 
@@ -100,18 +126,22 @@ body.chrome {
  * Samsung - Specific issues and hacks.
  */
 .samsung {
-  .webform-submission-alshaya-contact-form .form-item-mobile-number-mobile {
-    html[lang=ar] & {
-      @include breakpoint($only-mobile) {
-        top: 0.2rem !important;
+  &.s-tab2:not(.chrome) {
+    html[lang=en] & {
+      .webform-submission-alshaya-contact-form,
+      form.user-form {
+        .form-item-mobile-number-mobile {
+          top: 0.3rem !important;
+        }
       }
     }
-  }
 
-  &.s-tab2:not(.chrome) {
     html[lang=ar] & {
-      .webform-submission-alshaya-contact-form .form-item-mobile-number-mobile {
-        top: 0.15rem !important;
+      .webform-submission-alshaya-contact-form,
+      form.user-form {
+        .form-item-mobile-number-mobile {
+          top: 0.1rem !important;
+        }
       }
     }
   }
@@ -120,7 +150,79 @@ body.chrome {
 html[lang=ar] {
   body.ucbrowser.alias--cart {
     #table-cart-items td select {
-      padding-left: 50px;
+      padding-left: 40px;
+    }
+  }
+
+  #table-cart-items {
+    margin-top: 1rem;
+
+    tr td.name div.items {
+      width: 42%;
+    }
+
+    .contains--tooltip .tooltip {
+      @include breakpoint($desktop) {
+        right: 4rem;
+      }
+    }
+  }
+
+  #table-cart-totals {
+    td:first-child {
+      text-align: left;
+
+      @include breakpoint(($only-tablet) (orientation portrait)) {
+        position: relative;
+        left: 6em;
+      }
+
+      @include breakpoint(($only-tablet) (orientation landscape)) {
+        position: relative;
+        left: 3em;
+      }
+    }
+
+    .price-wrapper {
+      .price-amount {
+        @include breakpoint($only-mobile) {
+          left: 4rem;
+        }
+
+        @include breakpoint($desktop) {
+          float: right !important;
+        }
+      }
+
+      .price-currency {
+        @include breakpoint($desktop) {
+          float: left !important;
+          padding: 0 0 0 1em;
+        }
+      }
     }
   }
 }
+
+.ie .address .address--primary span::before,
+.ie .address .address--primary a::before {
+  margin-top: 30px !important;
+}
+
+html[lang="ar"] {
+  .safari {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.65rem;
+    }
+  }
+}
+
+html[lang="en"] {
+  .ie,
+  .safari {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.4rem;
+    }
+  }
+}
+

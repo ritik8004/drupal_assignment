@@ -178,6 +178,11 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 
   // Avoid notices and warnings in local.
   if (empty($media)) {
+    // Check once if there is parent SKU available, use media files of parent.
+    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity)) {
+      return alshaya_acm_product_get_gallery($build, $parent_sku);
+    }
+
     return [];
   }
 
@@ -417,7 +422,7 @@ function alshaya_acm_product_available_click_collect($sku) {
 function alshaya_acm_product_get_brand_logo($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
-  $title = $sku_entity->get('attr_product_brand')->getString();
+  $title = $sku_entity->get('attr_brand_logo')->getString();
 
   $cid = 'brand_logo:' . Html::cleanCssIdentifier($title);
 
@@ -430,6 +435,7 @@ function alshaya_acm_product_get_brand_logo($sku) {
 
     $host = \Drupal::config('alshaya_api.settings')->get('magento_host');
     $media_path = \Drupal::config('alshaya_acm_product.settings')->get('brand_logo_base_path');
+    $extension = \Drupal::config('alshaya_acm_product.settings')->get('brand_logo_extension');
 
     $directory = $media_path;
 
@@ -441,8 +447,8 @@ function alshaya_acm_product_get_brand_logo($sku) {
     }
 
     $directory_uri = 'public://brand-logo/' . $directory;
-    $image_uri = $directory_uri . '/' . $file_name . '.jpeg';
-    $image_url = $host . '/' . $directory . '/' . $file_name . '.jpeg';
+    $image_uri = $directory_uri . '/' . $file_name . '.' . $extension;
+    $image_url = $host . '/' . $directory . '/' . $file_name . '.' . $extension;
 
     $file_storage = \Drupal::entityTypeManager()->getStorage('file');
 

@@ -11,6 +11,7 @@ use Drupal\profile\Entity\ProfileInterface;
 use Drupal\user\UserInterface;
 use Drupal\profile\Entity\ProfileTypeInterface;
 use Drupal\Core\Link;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * AlshayaAddressBookController class.
@@ -66,6 +67,11 @@ class AlshayaAddressBookController extends ProfileController {
    *   Returns form array.
    */
   public function userProfileForm(RouteMatchInterface $route_match, UserInterface $user, ProfileTypeInterface $profile_type) {
+    // Custom check, we don't provide address book functionality for admins.
+    if (!alshaya_acm_customer_is_customer($user)) {
+      throw new AccessDeniedHttpException();
+    }
+
     /** @var \Drupal\profile\Entity\ProfileType $profile_type */
 
     /** @var \Drupal\profile\Entity\ProfileInterface|bool $active_profile */

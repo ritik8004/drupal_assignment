@@ -147,19 +147,5 @@
       "value": 1495713253,
       "lang": "ar"
     }
-  ],
-  "body": [
-    {
-      "value": "<p>Get 10 KWD Discount for every 50 KWD purchase.<\/p>\r\n",
-      "format": "rich_text",
-      "summary": "",
-      "lang": "en"
-    },
-    {
-      "value": "<p>\u0627\u062d\u0635\u0644 \u0639\u0644\u0649 \u062e\u0635\u0645 10 \u062f\u064a\u0646\u0627\u0631 \u0644\u0643\u0644 50 \u062f\u064a\u0646\u0627\u0631 \u0634\u0631\u0627\u0621.<\/p>\r\n",
-      "format": "rich_text",
-      "summary": "",
-      "lang": "ar"
-    }
   ]
 }
