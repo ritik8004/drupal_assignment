@@ -35,6 +35,9 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $show_only_buttons_mobile = $this->isMethodParamAvailable() ? 'show-form' : 'show-only-buttons';
+    $complete_form['#attributes']['class'][] = $show_only_buttons_mobile;
+
     // Add hidden field to store currently selected tab class.
     $complete_form['selected_tab'] = [
       '#type' => 'hidden',
@@ -45,16 +48,29 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#weight' => -99,
     ];
 
+    $complete_form['actions']['back_to_basket'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Back to basket'),
+      '#url' => Url::fromRoute('acq_cart.cart'),
+      '#attributes' => [
+        'class' => ['back-to-basket'],
+      ],
+    ];
+
     $pane_form['select_transation_type'] = [
       '#markup' => '<div class="select-transaction-type">' . $this->t('select a transaction type') . '</div>',
     ];
+
+    $selected_method = $this->getSelectedDeliveryMethod();
 
     $url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
 
     // Set hd as method in params for home delivery.
     $url->setRouteParameter('method', 'hd');
 
-    $home_delivery = '<div class="tab tab-home-delivery" gtm-type="checkout-home-delivery">';
+    $active_class = ($selected_method == 'hd') ? 'active--tab--head' : '';
+
+    $home_delivery = '<div class="tab tab-home-delivery ' . $active_class . '" gtm-type="checkout-home-delivery">';
     $home_delivery .= '<a href="' . $url->toString() . '">';
     $home_delivery .= '<h2>' . $this->t('Home delivery') . '</h2>';
     $home_delivery .= '<p>' . $this->t('Standard delivery for purchases over KD 250') . '</p>';
@@ -71,7 +87,9 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
     // Set cc as method in params for click and collect.
     $url->setRouteParameter('method', 'cc');
 
-    $click_collect = '<div class="tab tab-click-collect" gtm-type="checkout-click-collect">';
+    $active_class = ($selected_method == 'cc') ? 'active--tab--head' : '';
+
+    $click_collect = '<div class="tab tab-click-collect ' . $active_class . '" gtm-type="checkout-click-collect">';
     $click_collect .= '<a href="' . $url->toString() . '">';
     $click_collect .= '<h2>' . $this->t('Click & Collect') . '</h2>';
     $click_collect .= '<p>' . $this->t('Collect your order in-store') . '</p>';

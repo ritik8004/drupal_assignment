@@ -48,13 +48,15 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (\Drupal::currentUser()->isAuthenticated()) {
+    if (!$this->isVisible()) {
       return $pane_form;
     }
 
     if ($this->getSelectedDeliveryMethod() != 'cc') {
       return $pane_form;
     }
+
+    $pane_form['#attributes']['class'][] = 'active--tab--content';
 
     $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
 

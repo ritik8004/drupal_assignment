@@ -6,7 +6,6 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 
 /**
  * Provides the delivery home pane for guests.
@@ -40,13 +39,15 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (\Drupal::currentUser()->isAuthenticated()) {
+    if (!$this->isVisible()) {
       return $pane_form;
     }
 
     if ($this->getSelectedDeliveryMethod() != 'hd') {
       return $pane_form;
     }
+
+    $pane_form['#attributes']['class'][] = 'active--tab--content';
 
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
@@ -161,15 +162,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     ];
 
     $complete_form['actions']['next']['#attributes']['class'][] = 'delivery-home-next';
-
-    $complete_form['actions']['back_to_basket'] = [
-      '#type' => 'link',
-      '#title' => $this->t('Back to basket'),
-      '#url' => Url::fromRoute('acq_cart.cart'),
-      '#attributes' => [
-        'class' => ['back-to-basket'],
-      ],
-    ];
 
     return $pane_form;
   }

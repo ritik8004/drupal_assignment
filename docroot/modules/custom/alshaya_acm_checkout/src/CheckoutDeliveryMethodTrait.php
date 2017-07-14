@@ -22,6 +22,16 @@ trait CheckoutDeliveryMethodTrait {
   protected static $deliveryMethodSelected;
 
   /**
+   * Function to check if parameter in query is available of not.
+   *
+   * @return bool
+   *   True if method available in request param and has value.
+   */
+  protected function isMethodParamAvailable() {
+    return (bool) \Drupal::request()->get('method');
+  }
+
+  /**
    * Function to get selected delivery method code.
    *
    * @return mixed|string
@@ -36,32 +46,37 @@ trait CheckoutDeliveryMethodTrait {
 
       $allowed_methods = ['hd', 'cc'];
 
-      // We method is not allowed (someone trying to trick the system), we
-      // set it to null and allow code below decide the active tab.
-      if (!empty($method) && !in_array($method, $allowed_methods)) {
-        $method = '';
+      // Check once if we have a method available in cart.
+      $cart_method = '';
+      $cart = $this->getCart();
+      if ($cart_method_code = $cart->getShippingMethodAsString()) {
+        $cart_method = 'hd';
+
+        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+        // Check if method available in cart is click and collect.
+        $cart_method_code = $checkout_options_manager->getCleanShippingMethodCode($cart_method_code);
+        if ($cart_method_code == $checkout_options_manager->getClickandColectShippingMethod()) {
+          $cart_method = 'cc';
+        }
+      }
+
+      // We method is not allowed (someone trying to trick the system), redirect
+      // to default or cart method.
+      if ($method && !in_array($method, $allowed_methods)) {
+        $redirect_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
+
+        if ($cart_method) {
+          $redirect_url->setRouteParameter('method', $cart_method);
+        }
+
+        throw new NeedsRedirectException($redirect_url->toString());
       }
 
       if (empty($method)) {
-        // We use the first method from allowed methods.
+        // We use the first method from allowed methods as default.
         $method = reset($allowed_methods);
-
-        // Check once if we have a method available in cart.
-        $cart = $this->getCart();
-        if ($cart_method = $cart->getShippingMethodAsString()) {
-          /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-          $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-
-          // Check if method available in cart is click and collect.
-          $cart_method = $checkout_options_manager->getCleanShippingMethodCode($cart_method);
-          if ($cart_method == $checkout_options_manager->getClickandColectShippingMethod()) {
-            $method = 'cc';
-          }
-        }
-
-        $redirect_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
-        $redirect_url->setRouteParameter('method', $method);
-        throw new NeedsRedirectException($redirect_url->toString());
       }
 
       self::$deliveryMethodSelected = $method;

@@ -47,13 +47,15 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (\Drupal::currentUser()->isAnonymous()) {
+    if (!$this->isVisible()) {
       return $pane_form;
     }
 
     if ($this->getSelectedDeliveryMethod() != 'hd') {
       return $pane_form;
     }
+
+    $pane_form['#attributes']['class'][] = 'active--tab--content';
 
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
 
@@ -193,15 +195,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
     $complete_form['actions']['next']['#attributes']['class'][] = 'delivery-home-next';
-
-    $complete_form['actions']['back_to_basket'] = [
-      '#type' => 'link',
-      '#title' => $this->t('Back to basket'),
-      '#url' => Url::fromRoute('acq_cart.cart'),
-      '#attributes' => [
-        'class' => ['back-to-basket'],
-      ],
-    ];
 
     return $pane_form;
   }
