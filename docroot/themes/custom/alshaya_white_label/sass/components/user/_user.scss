@@ -1060,12 +1060,12 @@
     }
 
     p {
-      font-size: 0.8rem;
+      font-size: 0.8125rem;
       font-weight: 700;
       line-height: 1.56rem;
 
       @include breakpoint($desktop) {
-        font-size: 0.9rem;
+        font-size: 0.9375rem;
         width: 33.5%;
         text-indent: -2.45rem;
         padding-#{$left}: 2.4rem;
