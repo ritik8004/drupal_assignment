@@ -69,15 +69,15 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $shipping_type = '';
 
     if ($form_values = $form_state->getValue($pane_form['#parents'])) {
-      $store_code = $form_values['cc_firstname'];
-      $shipping_type = $form_values['cc_lastname'];
+      $store_code = $form_values['store_code'];
+      $shipping_type = $form_values['shipping_type'];
       $default_mobile = $form_values['cc_mobile'];
     }
     elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
-      $default_mobile = $shipping['telephone'];
       $store_code = $cart->getExtension('store_code');
       $shipping_type = $cart->getExtension('click_and_collect_type');
+      $default_mobile = $shipping['telephone'];
     }
 
     if ($store_code && $shipping_type) {
@@ -282,6 +282,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         ['cc_email'],
       ],
     ];
+
+    $complete_form['actions']['next']['#attributes']['class'][] = 'hidden-important';
 
     return $pane_form;
   }

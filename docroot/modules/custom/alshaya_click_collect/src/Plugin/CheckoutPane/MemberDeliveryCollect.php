@@ -229,6 +229,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#limit_validation_errors' => [['cc_mobile_number']],
     ];
 
+    $complete_form['actions']['next']['#attributes']['class'][] = 'hidden-important';
+
     return $pane_form;
   }
 
