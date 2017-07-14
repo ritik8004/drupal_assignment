@@ -337,7 +337,7 @@
     @extend %button-wide;
 
     display: block;
-    margin-bottom: 1.25rem;
+    margin-top: 1.25rem;
 
     @include breakpoint($tablet) {
       display: inline-block;
@@ -346,11 +346,15 @@
       #{$right}: 0;
       min-width: 10.2rem;
       text-transform: lowercase;
+      margin-top: 1.75rem;
+      margin-bottom: 0;
     }
 
     @include breakpoint($desktop) {
       top: -0.5rem;
       min-width: 11.75rem;
+      margin-top: 0;
+      margin-bottom: 1.25rem;
     }
 
     + .form-item {
@@ -624,6 +628,10 @@
   .address-book-address {
     .country-code-prefix {
       margin-top: 1.5rem;
+
+      @include breakpoint($desktop) {
+        margin-top: 1.4rem;
+      }
     }
   }
 }

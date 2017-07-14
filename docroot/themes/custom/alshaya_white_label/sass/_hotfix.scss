@@ -204,6 +204,11 @@ html[lang=ar] {
   }
 }
 
+.ie .address .address--options {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 .ie .address .address--primary span::before,
 .ie .address .address--primary a::before {
   margin-top: 30px !important;
@@ -222,6 +227,14 @@ html[lang="en"] {
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.4rem;
+    }
+  }
+}
+
+.ucbrowser {
+  .form-type-textfield {
+    label {
+      width: 100%;
     }
   }
 }
