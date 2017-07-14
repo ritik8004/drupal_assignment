@@ -89,6 +89,15 @@
       &.is-visible {
         display: block;
         padding-top: 0.5rem;
+        top: 3rem;
+      }
+    }
+
+    .form-type-textfield .c-input__bar {
+      top: -1px !important;
+
+      html[lang="ar"] & {
+        top: -1px !important;
       }
     }
   }
