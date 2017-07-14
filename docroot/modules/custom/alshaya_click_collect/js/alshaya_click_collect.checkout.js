@@ -40,7 +40,7 @@
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
       });
 
-      $('.hours--wrapper > .hours--label').on('click', function () {
+      $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
 
@@ -48,11 +48,11 @@
         if ($('#selected-store-wrapper').is(':visible')) {
           $('input[data-drupal-selector="edit-actions-ccnext"]').show();
         }
-        $('[data-drupal-selector="edit-actions-next"]').hide();
       }
 
-      $('#click-and-collect-list-view').once('initiate-stores').each(function () {
+      $('#store-finder-wrapper').once('initiate-stores').each(function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
+        $('[data-drupal-selector="edit-actions-next"]').hide();
         Drupal.checkoutClickCollect.storeListAll(ascoords);
       });
 
@@ -83,14 +83,6 @@
         }
       });
 
-      $('#store-finder-wrapper').on('click', '.label-store-location', function () {
-        ascoords = {
-          lat: 29,
-          lng: 48
-        };
-        Drupal.checkoutClickCollect.storeListAll(ascoords);
-      });
-
       // Select this store and view on map.
       $('#click-and-collect-list-view', context).once('bind-events').on('click', 'a.select-store, a.store-on-map', function (e) {
         e.preventDefault();
@@ -112,7 +104,6 @@
           // Choose the selected store to display on map.
           Drupal.checkoutClickCollect.storeViewOnMapSelected(storeObj, markerPoint);
         }
-
         return false;
       });
 

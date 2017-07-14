@@ -56,7 +56,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
-
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
 
     $cart = $this->getCart();

@@ -348,16 +348,7 @@
       /**
        * Toggles the Tabs.
        */
-
       if ($('.checkout .multistep-checkout').length) {
-        var selectedTab = $('#selected-tab').val();
-        if (selectedTab !== 'checkout-click-collect') {
-          $('.tab-home-delivery, .tab-new-customer')
-            .addClass('active--tab--head');
-          $('#edit-guest-delivery-home, #edit-member-delivery-home, #edit-checkout-guest')
-            .addClass('active--tab--content');
-        }
-
         $('.multistep-checkout legend').click(function () {
           $(this).next('.fieldset-wrapper').slideToggle();
         });
@@ -366,7 +357,6 @@
       /**
        * Toggles the Search on Order list.
        */
-
       if ($('.alshaya-acm-customer-order-list-search').length) {
         $('.alshaya-acm-customer-order-list-search label')
           .on('click', function () {
