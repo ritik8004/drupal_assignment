@@ -1021,4 +1021,15 @@ function alshaya_master_install() {
     ->set('display_denied_message', FALSE)
     ->set('redirect_authenticated_users_to', '/user')
     ->save();
+
+  // Set the page cache for 5 minutes.
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::configFactory()->getEditable('system.performance')
+      ->set('cache', [
+        'page' => [
+          'max_age' => 300,
+        ],
+      ])
+      ->save();
+  }
 }
