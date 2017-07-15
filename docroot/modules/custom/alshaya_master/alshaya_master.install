@@ -1023,13 +1023,11 @@ function alshaya_master_install() {
     ->save();
 
   // Set the page cache for 5 minutes.
-  if (isset($_ENV['AH_SITE_NAME'])) {
-    \Drupal::configFactory()->getEditable('system.performance')
-      ->set('cache', [
-        'page' => [
-          'max_age' => 300,
-        ],
-      ])
-      ->save();
-  }
+  \Drupal::configFactory()->getEditable('system.performance')
+    ->set('cache', [
+      'page' => [
+        'max_age' => 300,
+      ],
+    ])
+    ->save();
 }
