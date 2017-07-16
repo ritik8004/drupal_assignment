@@ -66,6 +66,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
+    $default_shipping = '';
 
     if (empty($address['country_id'])) {
       $address_default_value = [
@@ -85,7 +86,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     if ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $address = $address_book_manager->getMagentoAddressFromAddressArray($form_values['address']['shipping']);
-      $default_shipping = $form_values['address']['shipping_methods'];
+
+      if (!empty($form_values['address']['shipping_methods'])) {
+        $default_shipping = $form_values['address']['shipping_methods'];
+      }
     }
     else {
       $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($cart->getShippingMethodAsString());
