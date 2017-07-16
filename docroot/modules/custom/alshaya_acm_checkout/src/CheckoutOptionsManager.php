@@ -337,6 +337,12 @@ class CheckoutOptionsManager {
    *   Available shipping methods.
    */
   public function loadShippingEstimates($address) {
+    $cart = $this->cartStorage->getCart();
+
+    if (empty($cart->customerId())) {
+      return [];
+    }
+
     // Below code is to ensure we call the API only once.
     static $options;
     $static_key = base64_encode(serialize($address));
@@ -347,8 +353,6 @@ class CheckoutOptionsManager {
     $address = (array) $address;
 
     $address = _alshaya_acm_checkout_clean_address($address);
-
-    $cart = $this->cartStorage->getCart();
 
     $shipping_methods = [];
     $shipping_method_options = [];

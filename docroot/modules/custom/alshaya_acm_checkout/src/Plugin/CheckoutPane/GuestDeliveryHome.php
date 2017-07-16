@@ -5,7 +5,11 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides the delivery home pane for guests.
@@ -83,6 +87,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $address = $address_book_manager->getMagentoAddressFromAddressArray($form_values['address']['shipping']);
       $default_shipping = $form_values['address']['shipping_methods'];
     }
+    else {
+      $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($cart->getShippingMethodAsString());
+    }
 
     if ($email = $cart->customerEmail()) {
       $address_default_value['organization'] = $email;
@@ -111,11 +118,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $shipping_methods = [];
 
-    $default_shipping = !empty($default_shipping) ? $default_shipping : $cart->getShippingMethodAsString();
-
-    // Convert to code.
-    $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($default_shipping);
-
     // This is getting very messy but required for the moment, we need to look
     // for better approach here.
     // Issue: below code is tightly plugged with click and collect.
@@ -132,15 +134,51 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       }
     }
 
+    $selected_address = '';
+
+    if ($shipping_methods) {
+      $drupal_address = $address_book_manager->getAddressArrayFromMagentoAddress($address);
+
+      $change_address_button = [
+        '#type' => 'link',
+        '#title' => $this->t('Edit'),
+        '#url' => Url::fromRoute('<none>'),
+        '#attributes' => [
+          'id' => 'change-address',
+          'class' => ['button'],
+        ],
+      ];
+
+      $selected_address_build = [
+        '#theme' => 'checkout_selected_address',
+        '#delivery_to' => $drupal_address['given_name'] . ' ' . $drupal_address['family_name'],
+        '#delivery_address' => $drupal_address,
+        '#contact_no' => $drupal_address['mobile_number']['value'],
+        '#change_address' => render($change_address_button),
+      ];
+
+      $selected_address = '<div id="selected-address-wrapper">' . render($selected_address_build) . '</div>';
+    }
+
+    $pane_form['address']['selected_address'] = [
+      '#markup' => $selected_address,
+    ];
+
+    $shipping_methods_count_class = 'shipping-method-options-count-' . count($shipping_methods);
+
     $pane_form['address']['shipping_methods'] = [
       '#type' => 'radios',
-      '#title' => $this->t('select delivery options'),
+      '#title' => count($shipping_methods) == 1 ? $this->t('delivery option') : $this->t('select delivery options'),
       '#default_value' => $default_shipping,
       '#validated' => TRUE,
       '#options' => $shipping_methods,
-      '#prefix' => '<div id="shipping_methods_wrapper">',
+      '#prefix' => '<div id="shipping_methods_wrapper" class="' . $shipping_methods_count_class . '">',
       '#suffix' => '</div>',
-      '#attributes' => ['class' => ['shipping-methods-container']],
+      '#attributes' => [
+        'class' => [
+          'shipping-methods-container',
+        ],
+      ],
     ];
 
     $complete_form['actions']['get_shipping_methods'] = [
@@ -171,21 +209,19 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * Ajax handler for re-use address checkbox.
    */
   public static function updateAddressAjaxCallback($form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+
     $address_fields =& $form['guest_delivery_home']['address'];
 
-    if (!$form_state->getErrors()) {
-      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-
-      $values = $form_state->getValue($form['#parents']);
-      $address_values = $values['guest_delivery_home']['address']['shipping'];
-      $address = $address_book_manager->getMagentoAddressFromAddressArray($address_values);
-
-      $address_fields['shipping_methods']['#options'] = self::generateShippingEstimates($address);
-      $address_fields['shipping_methods']['#default_value'] = array_keys($address_fields['shipping_methods']['#options'])[0];
+    if ($form_state->getErrors()) {
+      $response->addCommand(new ReplaceCommand('[data-drupal-selector="edit-guest-delivery-home-address-shipping"]', $address_fields['shipping']));
+    }
+    else {
+      $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
+      $response->addCommand(new InvokeCommand(NULL, 'guestShowShippingMethods'));
     }
 
-    return $address_fields;
+    return $response;
   }
 
   /**
@@ -236,7 +272,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     if ($violations = $profile->validate()) {
       foreach ($violations->getByFields(['field_address']) as $violation) {
         $error_field = explode('.', $violation->getPropertyPath());
-        $form_state->setErrorByName('guest_delivery_home][address][address][' . $error_field[2], $violation->getMessage());
+        $form_state->setErrorByName('guest_delivery_home][address][shipping][' . $error_field[2], $violation->getMessage());
       }
     }
 
@@ -245,13 +281,46 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     if ($user = user_load_by_mail($email)) {
-      $form_state->setErrorByName('guest_delivery_home[address][shipping][email', $this->t('You already have an account, please login.'));
+      $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $this->t('You already have an account, please login.'));
       return;
     }
 
     $address = $address_book_manager->getMagentoAddressFromAddressArray($address_values);
 
     $cart = $this->getCart();
+
+    // We are only looking to convert guest carts.
+    if (!($cart->customerId())) {
+      // Get the customer id of Magento from this email.
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+
+      try {
+        $customer = $api_wrapper->createCustomer($address['firstname'], $address['lastname'], $email);
+      }
+      catch (\Exception $e) {
+        // @TODO: Handle create customer errors here.
+        // Probably just the email error.
+        \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
+        $error = $this->t('@title does not contain a valid email.', ['@title' => 'Email']);
+        $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $error);
+        return;
+      }
+
+      $customer_cart = $api_wrapper->createCart($customer['customer_id']);
+
+      if (empty($customer_cart['customer_email'])) {
+        $customer_cart['customer_email'] = $email;
+      }
+
+      $cart->convertToCustomerCart($customer_cart);
+      \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+    }
+
+    if ($form_state->getErrors()) {
+      return;
+    }
+
     $cart->setShipping(_alshaya_acm_checkout_clean_address($address));
 
     $shipping_method = NULL;
@@ -268,34 +337,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $term = $checkout_options_manager->loadShippingMethod($shipping_method);
 
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), []);
-
-    // We are only looking to convert guest carts.
-    if (!($cart->customerId())) {
-      // Get the customer id of Magento from this email.
-      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-      $api_wrapper = \Drupal::service('acq_commerce.api');
-
-      try {
-        $customer = $api_wrapper->createCustomer($address['firstname'], $address['lastname'], $email);
-      }
-      catch (\Exception $e) {
-        // @TODO: Handle create customer errors here.
-        // Probably just the email error.
-        \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
-        $form_state->setErrorByName('custom', '');
-        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
-        return;
-      }
-
-      $customer_cart = $api_wrapper->createCart($customer['customer_id']);
-
-      if (empty($customer_cart['customer_email'])) {
-        $customer_cart['customer_email'] = $email;
-      }
-
-      $cart->convertToCustomerCart($customer_cart);
-      \Drupal::service('acq_cart.cart_storage')->addCart($cart);
-    }
   }
 
 }

@@ -74,6 +74,12 @@ trait CheckoutDeliveryMethodTrait {
         throw new NeedsRedirectException($redirect_url->toString());
       }
 
+      if (empty($method) && $cart_method) {
+        $redirect_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
+        $redirect_url->setRouteParameter('method', $cart_method);
+        throw new NeedsRedirectException($redirect_url->toString());
+      }
+
       if (empty($method)) {
         // We use the first method from allowed methods as default.
         $method = reset($allowed_methods);

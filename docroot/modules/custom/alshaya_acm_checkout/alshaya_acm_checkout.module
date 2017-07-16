@@ -23,6 +23,16 @@ function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['checkout_selected_address'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'delivery_to' => NULL,
+      'delivery_address' => NULL,
+      'contact_no' => NULL,
+      'change_address' => NULL,
+    ],
+  ];
+
   return $items;
 }
 

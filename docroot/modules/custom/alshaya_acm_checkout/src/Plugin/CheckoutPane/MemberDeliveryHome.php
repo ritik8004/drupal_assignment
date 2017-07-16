@@ -182,13 +182,15 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       }
     }
 
+    $shipping_methods_count_class = 'shipping-method-options-count-' . count($shipping_methods);
+
     $pane_form['address']['shipping_methods'] = [
       '#type' => 'radios',
-      '#title' => $this->t('select delivery options'),
+      '#title' => count($shipping_methods) == 1 ? $this->t('delivery option') : $this->t('select delivery options'),
       '#default_value' => $default_shipping,
       '#validated' => TRUE,
       '#options' => $shipping_methods,
-      '#prefix' => '<div id="shipping_methods_wrapper">',
+      '#prefix' => '<div id="shipping_methods_wrapper" class="' . $shipping_methods_count_class . '">',
       '#suffix' => '</div>',
       '#attributes' => ['class' => ['shipping-methods-container']],
     ];

@@ -275,6 +275,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       // This is required for limit_validation_errors to work.
       '#submit' => [],
       '#limit_validation_errors' => [
+        ['guest_delivery_collect'],
         ['selected_store'],
         ['cc_mobile_number'],
         ['cc_firstname'],
@@ -302,6 +303,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $values = $form_state->getValues($pane_form['#parents']);
 
+    if ($user = user_load_by_mail($values['cc_email'])) {
+      $form_state->setErrorByName('cc_email', $this->t('You already have an account, please login.'));
+      return;
+    }
+
     $cart = $this->getCart();
 
     // We are only looking to convert guest carts.
@@ -317,8 +323,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         // @TODO: Handle create customer errors here.
         // Probably just the email error.
         \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
-        $form_state->setErrorByName('custom', '');
-        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        $error = $this->t('@title does not contain a valid email.', ['@title' => 'Email']);
+        $form_state->setErrorByName('cc_email', $error);
         return;
       }
 
