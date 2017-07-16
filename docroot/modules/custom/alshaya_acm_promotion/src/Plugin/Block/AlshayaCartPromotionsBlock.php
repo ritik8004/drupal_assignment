@@ -109,6 +109,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    */
   public function build() {
     $promotions = [];
+    $build = [];
     $selected_promotions = $this->configuration['promotions'];
     if (!empty($selected_promotions)) {
       foreach ($selected_promotions as $key => $promotion_rule_id) {
@@ -119,12 +120,12 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
           }
         }
       }
-    }
 
-    $build = [
-      '#theme' => 'cart_top_promotions',
-      '#promotions' => $promotions,
-    ];
+      $build = [
+        '#theme' => 'cart_top_promotions',
+        '#promotions' => $promotions,
+      ];
+    }
 
     return $build;
   }
