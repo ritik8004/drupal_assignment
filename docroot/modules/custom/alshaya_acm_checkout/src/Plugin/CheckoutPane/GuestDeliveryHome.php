@@ -319,6 +319,8 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $cart->convertToCustomerCart($customer_cart);
       \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+
+      $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
     }
 
     if ($form_state->getErrors()) {

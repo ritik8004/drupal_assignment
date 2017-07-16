@@ -56,13 +56,14 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
+
+    // This class is required to make theme work properly.
+    $pane_form['#attributes']['class'][] = 'c-address-book';
+
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
 
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
-
-    // This class is required to make theme work properly.
-    $pane_form['#attributes']['class'] = 'c-address-book';
 
     $pane_form['address_form'] = [
       '#type' => 'container',

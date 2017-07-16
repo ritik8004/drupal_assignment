@@ -71,9 +71,9 @@
 
       $('#change-address').once('bind-events').each(function () {
         $('#add-address-button').hide();
-        $('#edit-member-delivery-home-addresses').hide();
         $('#edit-member-delivery-home-header-add-profile').hide();
         $('#address-book-address').slideUp();
+        $('#edit-member-delivery-home-addresses').hide();
 
         $(this).on('click', function (e) {
           e.preventDefault();
