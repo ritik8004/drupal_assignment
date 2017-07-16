@@ -6,10 +6,16 @@ alshaya_click_collect.settings:
   mapping:
     click_collect_sts:
       type: label
-      label: 'Click and Collect STS (Ship to store)'
+      label: 'Click and Collect Ship to store short description'
+    click_collect_sts_desc:
+      type: label
+      label: 'Click and Collect Ship to store full description'
     click_collect_rnc:
       type: label
-      label: 'Click and Collect R&C (Reach and collect)'
+      label: 'Click and Collect Reserve and collect short description'
+    click_collect_rnc_desc:
+      type: label
+      label: 'Click and Collect Reserve and collect full description'
     pdp_click_collect_title:
       type: label
       label: 'PDP: Click and Collect title'

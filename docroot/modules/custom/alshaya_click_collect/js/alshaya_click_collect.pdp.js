@@ -8,19 +8,14 @@
 
   // Coordinates of the user's location.
   var asCoords = null;
-
   // Last checked SKU (or variant SKU).
   var lastSku = null;
-
   // Last coords.
   var lastCoords = null;
-
   // Geolocation permission.
   var geoPerm = false;
-
   // Check records already exists.
   var records = false;
-
   // Display search form.
   var displaySearchForm;
 
@@ -112,10 +107,6 @@
 
       // Validate the product is same on ajax call.
       var validateProduct = Drupal.pdp.validateCurrentProduct(settings);
-      // Call storesDisplay to render stores, if click and collect available for selected sku.
-      if (settings.alshaya_acm.storeFinder === true && validateProduct && asCoords !== null) {
-        Drupal.pdp.storesDisplay();
-      }
 
       if (typeof displaySearchForm === 'undefined') {
         displaySearchForm = settings.alshaya_acm.searchForm;
@@ -150,8 +141,8 @@
   };
 
   // Set the location coordinates, but don't render the stores.
-  Drupal.pdp.setStoreCoords = function () {
-    asCoords = this;
+  Drupal.pdp.setStoreCoords = function (coords) {
+    asCoords = coords;
 
     if (records) {
       Drupal.pdp.storesDisplay(asCoords);
@@ -202,11 +193,8 @@
   };
 
   // Make Ajax call to get stores and render html.
-  Drupal.pdp.storesDisplay = function (coords) {
-    if (typeof this.lat !== 'undefined' && typeof coords === 'undefined') {
-      asCoords = this;
-    }
-    else if (coords) {
+  Drupal.pdp.storesDisplay = function (coords, $trigger) {
+    if (coords) {
       asCoords = coords;
     }
 
@@ -238,9 +226,13 @@
             lastSku = sku;
             lastCoords = asCoords;
 
+            if (typeof $trigger === 'undefined') {
+              $trigger = $('.click-collect-form');
+            }
+
             var storeDisplayAjax = Drupal.ajax({
               url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
-              element: $('.click-collect-form').get(0),
+              element: $trigger.get(0),
               base: false,
               progress: {type: 'throbber'},
               submit: {js: true}
@@ -252,11 +244,6 @@
                 if (response.data.top_three) {
                   displaySearchForm = false;
                   records = true;
-                  Drupal.pdp.changeLocationAutocomplete();
-                  if (response.data.all_stores) {
-                    Drupal.pdp.allStoresAutocomplete();
-                    Drupal.pdp.allStoreschangeLocationAutocomplete();
-                  }
                 }
                 else {
                   displaySearchForm = true;
@@ -273,13 +260,13 @@
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay]);
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function () {
     var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay]);
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   /**

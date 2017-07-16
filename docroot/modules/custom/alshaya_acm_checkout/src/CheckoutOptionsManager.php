@@ -73,16 +73,18 @@ class CheckoutOptionsManager {
    * @param string $name
    *   Name of shipping method, available during checkout.
    * @param string $description
-   *   Description of shipping method, available during checkout.
+   *   Description of shipping method, used in cart and order pages.
    * @param string $carrier_code
    *   Carrier code.
    * @param string $method_code
    *   Method code.
+   * @param string $order_description
+   *   Description of shipping method, used on order page.
    *
    * @return \Drupal\taxonomy\Entity\Term|null
    *   Term object.
    */
-  public function loadShippingMethod($code, $name = '', $description = '', $carrier_code = '', $method_code = '') {
+  public function loadShippingMethod($code, $name = '', $description = '', $carrier_code = '', $method_code = '', $order_description = '') {
     // Simple check to avoid 500 errors. Might not come in production but
     // issue might come during development.
     if (empty($code)) {
@@ -108,10 +110,17 @@ class CheckoutOptionsManager {
         'name' => $name,
       ]);
 
-      $term->get('description')->setValue($description);
-      $term->get('field_shipping_method_desc')->setValue($name);
+      // Following will be used as default, it will be available for
+      // configuration in term edit page.
+      if (empty($order_description)) {
+        $order_description = t('Your order will be delivered at the following address');
+      }
+
+      $term->get('field_shipping_method_cart_desc')->setValue($description);
+      $term->get('field_shipping_method_desc')->setValue($order_description);
       $term->get('field_shipping_code')->setValue($code);
       $term->get('field_shipping_carrier_code')->setValue($carrier_code);
+      $term->get('field_shipping_method_code')->setValue($method_code);
       $term->get('field_shipping_method_code')->setValue($method_code);
 
       $term->save();
@@ -328,6 +337,12 @@ class CheckoutOptionsManager {
    *   Available shipping methods.
    */
   public function loadShippingEstimates($address) {
+    $cart = $this->cartStorage->getCart();
+
+    if (empty($cart->customerId())) {
+      return [];
+    }
+
     // Below code is to ensure we call the API only once.
     static $options;
     $static_key = base64_encode(serialize($address));
@@ -338,8 +353,6 @@ class CheckoutOptionsManager {
     $address = (array) $address;
 
     $address = _alshaya_acm_checkout_clean_address($address);
-
-    $cart = $this->cartStorage->getCart();
 
     $shipping_methods = [];
     $shipping_method_options = [];
@@ -393,7 +406,7 @@ class CheckoutOptionsManager {
           <div class="shipping-method-name">
             <div class="shipping-method-title">' . $data['term']->getName() . '</div>
             <div class="shipping-method-price">' . $data['price'] . '</div>
-            <div class="shipping-method-description">' . $data['term']->get('description')->getValue()[0]['value'] . '</div>
+            <div class="shipping-method-description">' . $data['term']->get('field_shipping_method_cart_desc')->getString() . '</div>
           </div>
         ';
 
@@ -419,6 +432,26 @@ class CheckoutOptionsManager {
     $code = str_replace(',', '_', $code);
     $code = substr($code, 0, 32);
     return $code;
+  }
+
+  /**
+   * Function to get description for the selected click and collect type.
+   *
+   * @param string $type
+   *   Click and Collect type.
+   *
+   * @return string
+   *   Description from config.
+   */
+  public function getClickandCollectShippingDescription($type) {
+    $settings = $this->configFactory->get('alshaya_click_collect.settings');
+
+    if ($type == 'ship_to_store') {
+      return $settings->get('click_collect_sts_desc');
+    }
+    else {
+      return $settings->get('click_collect_rnc_desc');
+    }
   }
 
 }

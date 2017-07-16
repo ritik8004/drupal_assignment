@@ -53,8 +53,13 @@
   <tbody>
     <tr class="order-details-row">
       <td>
-        <div class="label">{{ "Delivery to"|t }}</div>
-        <div class="dark">{{ account.first_name }} {{ account.last_name }}</div>
+        {% if order_details.collection_by %}
+          <div class="label">{{ "Collection by"|t }}</div>
+          <div class="dark">{{ order_details.collection_by }}</div>
+        {% else %}
+          <div class="label">{{ "Delivery to"|t }}</div>
+          <div class="dark">{{ order_details.delivery_to }}</div>
+        {% endif %}
 
         <div class="contact">
           <div class="label">{{ "Contact number"|t }}</div>
@@ -62,12 +67,39 @@
         </div>
       </td>
       <td>
-        <div class="label">{{ "Delivery address"|t }}</div>
-        <div class="dark">{{ order_details.delivery_address }}</div>
+        {% if order_details.collection_by %}
+          <div class="label">{{ 'Collection Address'|t }}</div>
+          <div class="dark store-name-and-address">
+            <div class="store-name">{{ order_details.store_name }}</div>
+            <div class="store-address">{{ order_details.store_address|raw }}</div>
+            <div class="store-phone">{{ order_details.store_phone }}</div>
+          </div>
+        {% else %}
+          <div class="label">{{ "Delivery address"|t }}</div>
+          <div class="dark">{{ order_details.delivery_address }}</div>
+        {% endif %}
       </td>
       <td>
-        <div class="label">{{ "Billing address"|t }}</div>
-        <div class="dark">{{ order_details.billing_address }}</div>
+        {% if order_details.collection_by %}
+          <div class="label font-small">{{ 'Collection times'|t }}</div>
+          <div class="dark">
+            <div class="store-open-hours">
+              <div class="hours--wrapper selector--hours">
+                <div class="open--hours">
+                  {% for item in order_details.store_open_hours %}
+                    <div>
+                      <span class="key-value-key">{{ item.key }}</span>
+                      <span class="key-value-value">{{ item.value }}</span>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% elseif not order_details.billing_same_as_shipping %}
+          <div class="label">{{ "Billing address"|t }}</div>
+          <div class="dark">{{ order_details.billing_address }}</div>
+        {% endif %}
       </td>
       <td class="blend">
         <div class="label">{{ "Payment method"|t }}</div>
