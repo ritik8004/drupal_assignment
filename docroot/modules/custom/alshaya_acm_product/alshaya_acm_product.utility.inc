@@ -288,6 +288,10 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 function alshaya_acm_product_get_display_node($sku, $langcode = '') {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
 
+  if (empty($sku_entity)) {
+    return NULL;
+  }
+
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
   $plugin = $sku_entity->getPluginInstance();
 
