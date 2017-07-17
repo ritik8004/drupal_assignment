@@ -126,28 +126,22 @@ class StoresFinderUtility {
    *   Stores array.
    */
   public function getSkuStores($sku, $lat, $lon) {
-    $stores = [];
+    $stores = $this->apiWrapper->getProductStores($sku, $lat, $lon);
 
-    $stores_data = $this->apiWrapper->getProductStores($sku, $lat, $lon);
+    // Add missing information to store data.
+    array_walk($stores, function (&$store) use (&$index) {
+      $store['rnc_available'] = (int) $store['rnc_available'];
+      $store['sts_available'] = (int) $store['sts_available'];
+      $store['sequence'] = $index++;
 
-    foreach ($stores_data as $store_data) {
-      $store = [];
-
-      $store['code'] = $store_data['code'];
-      $store['distance'] = $store_data['distance'];
-      $store['rnc_available'] = $store_data['rnc_available'];
-      $store['sts_available'] = $store_data['sts_available'];
-      $store['sts_delivery_time_label'] = $store_data['sts_delivery_time_label'];
-      $store['low_stock'] = $store_data['low_stock'];
-
-      if ($store_node = $this->getTranslatedStoreFromCode($store_data['code'])) {
-        $extra_data = $this->getStoreExtraData($store_data, $store_node);
-        $stores[$store_node->id()] = array_merge($store, $extra_data);
+      if ($store_node = $this->getTranslatedStoreFromCode($store['code'])) {
+        $extra_data = $this->getStoreExtraData($store, $store_node);
+        $store = array_merge($store, $extra_data);
       }
-    }
+    });
 
     // Sort the stores first by distance and then by name.
-    alshaya_master_utility_usort($stores, 'distance', 'ASC', 'name', 'ASC');
+    alshaya_master_utility_usort($stores, 'distance', 'asc', 'name', 'asc');
 
     // Add sequence and proper delivery_time label and low stock text.
     foreach ($stores as $index => $store) {
@@ -155,7 +149,6 @@ class StoresFinderUtility {
 
       $time = $store['rnc_available'] ? t('1 hour') : $store['sts_delivery_time_label'];
       $stores[$index]['delivery_time'] = t('Collect from store in <em>@time</em>', ['@time' => $time]);
-
       $stores[$index]['low_stock_text'] = $store['low_stock'] ? t('Low stock') : '';
     }
 
