@@ -434,24 +434,4 @@ class CheckoutOptionsManager {
     return $code;
   }
 
-  /**
-   * Function to get description for the selected click and collect type.
-   *
-   * @param string $type
-   *   Click and Collect type.
-   *
-   * @return string
-   *   Description from config.
-   */
-  public function getClickandCollectShippingDescription($type) {
-    $settings = $this->configFactory->get('alshaya_click_collect.settings');
-
-    if ($type == 'ship_to_store') {
-      return $settings->get('click_collect_sts_desc');
-    }
-    else {
-      return $settings->get('click_collect_rnc_desc');
-    }
-  }
-
 }

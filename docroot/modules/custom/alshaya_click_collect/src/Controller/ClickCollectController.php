@@ -101,20 +101,23 @@ class ClickCollectController extends ControllerBase {
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
 
     // Get the stores from Magento.
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
     $api_wrapper = \Drupal::service('alshaya_api.api');
     $stores = $api_wrapper->getCartStores($cart_id, $lat, $lon);
 
     $config = $this->configFactory->get('alshaya_click_collect.settings');
     // Add missing information to store data.
     array_walk($stores, function (&$store) use ($config) {
+      $store['rnc_available'] = (int) $store['rnc_available'];
+      $store['sts_available'] = (int) $store['sts_available'];
+
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $extra_data = $store_utility->getStoreExtraData($store);
+
       if (!empty($extra_data)) {
         $store = array_merge($store, $extra_data);
-        if (!empty($store['sts_available'])) {
-          $store['delivery_time'] = $config->get('click_collect_sts');
-        }
-        elseif (!empty($store['rnc_available'])) {
+
+        if (!empty($store['rnc_available'])) {
           $store['delivery_time'] = $config->get('click_collect_rnc');
         }
       }
@@ -138,6 +141,9 @@ class ClickCollectController extends ControllerBase {
    */
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
+
+    // Sort the stores first by distance and then by name.
+    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
     $build['store_list'] = $build['map_info_window'] = '<span class="empty">' . t('Sorry, No store found for your location.') . '</span>';
     if (count($stores) > 0) {

@@ -5,7 +5,6 @@
  * Contains utility functions to process orders and provide related data.
  */
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\Component\Utility\Unicode;
 use Drupal\user\UserInterface;
 
@@ -174,10 +173,14 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
 
   // We will display the name of first order item.
   $item = reset($order['items']);
-  $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($item['sku']);
-  if (is_object($parent_sku) && $parent_sku instanceof SKUInterface) {
-    $item['name'] = $parent_sku->label();
+
+  $product_node = alshaya_acm_product_get_display_node($item['sku']);
+
+  if (empty($product_node)) {
+    return [];
   }
+
+  $item['name'] = $product_node->getTitle();
 
   $orderRow['name'] = Unicode::truncate($item['name'], 25, FALSE, TRUE);
 
@@ -357,11 +360,11 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $product['total'] = alshaya_acm_price_format($item['ordered'] * $item['price']);
     $product['attributes'] = [];
 
+    $product_node = alshaya_acm_product_get_display_node($item['sku']);
+    $product['name'] = $product_node->getTitle();
+
     // Check if we can find a parent SKU for this to get proper name.
     if ($parentSku = alshaya_acm_product_get_parent_sku_by_sku($item['sku'])) {
-      // We will use the parent SKU name for display.
-      $product['name'] = $parentSku->label();
-
       // Try to find attributes to display for this product.
       $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
     }

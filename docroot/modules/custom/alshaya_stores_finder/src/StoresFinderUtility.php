@@ -89,6 +89,30 @@ class StoresFinderUtility {
   }
 
   /**
+   * Utility function to get translated store node from store code.
+   *
+   * @param string $store_code
+   *   Store code.
+   *
+   * @return \Drupal\node\Entity\Node
+   *   Store node.
+   */
+  public function getTranslatedStoreFromCode($store_code) {
+    if ($store_node = $this->getStoreFromCode($store_code)) {
+
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+      if ($store_node->hasTranslation($langcode)) {
+        $store_node = $store_node->getTranslation($langcode);
+      }
+
+      return $store_node;
+    }
+
+    return NULL;
+  }
+
+  /**
    * Function to get stores for a product variant near the user's location.
    *
    * @param string $sku
@@ -102,8 +126,6 @@ class StoresFinderUtility {
    *   Stores array.
    */
   public function getSkuStores($sku, $lat, $lon) {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
     $stores = [];
 
     $stores_data = $this->apiWrapper->getProductStores($sku, $lat, $lon);
@@ -118,17 +140,10 @@ class StoresFinderUtility {
       $store['sts_delivery_time_label'] = $store_data['sts_delivery_time_label'];
       $store['low_stock'] = $store_data['low_stock'];
 
-      if ($store_node = $this->getStoreFromCode($store_data['code'])) {
-        if ($store_node->hasTranslation($langcode)) {
-          $store_node = $store_node->getTranslation($langcode);
-        }
-        else {
-          continue;
-        }
+      if ($store_node = $this->getTranslatedStoreFromCode($store_data['code'])) {
         $extra_data = $this->getStoreExtraData($store_data, $store_node);
         $stores[$store_node->id()] = array_merge($store, $extra_data);
       }
-
     }
 
     // Sort the stores first by distance and then by name.
@@ -160,13 +175,7 @@ class StoresFinderUtility {
    */
   public function getStoreExtraData(array $store_data, $store_node = NULL) {
     if (!empty($store_data) && empty($store_node)) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-      if ($store_node = $this->getStoreFromCode($store_data['code'])) {
-        if ($store_node->hasTranslation($langcode)) {
-          $store_node = $store_node->getTranslation($langcode);
-        }
-      }
+      $store_node = $this->getTranslatedStoreFromCode($store_data['code']);
     }
 
     $store = [];
