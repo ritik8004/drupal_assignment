@@ -4,6 +4,10 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
@@ -18,6 +22,8 @@ use Drupal\Core\Url;
  * )
  */
 class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterface {
+  // Add trait to get selected delivery method tab.
+  use CheckoutDeliveryMethodTrait;
 
   /**
    * {@inheritdoc}
@@ -37,12 +43,21 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (\Drupal::currentUser()->isAuthenticated()) {
+    if (!$this->isVisible()) {
       return $pane_form;
     }
 
+    if ($this->getSelectedDeliveryMethod() != 'hd') {
+      return $pane_form;
+    }
+
+    $pane_form['#attributes']['class'][] = 'active--tab--content';
+
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
     $pane_form['guest_delivery_home']['title'] = [
@@ -51,6 +66,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
+    $default_shipping = '';
 
     if (empty($address['country_id'])) {
       $address_default_value = [
@@ -70,6 +86,13 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     if ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $address = $address_book_manager->getMagentoAddressFromAddressArray($form_values['address']['shipping']);
+
+      if (!empty($form_values['address']['shipping_methods'])) {
+        $default_shipping = $form_values['address']['shipping_methods'];
+      }
+    }
+    else {
+      $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($cart->getShippingMethodAsString());
     }
 
     if ($email = $cart->customerEmail()) {
@@ -97,27 +120,69 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#require_email' => TRUE,
     ];
 
-    $shipping_methods = self::generateShippingEstimates($address);
+    $shipping_methods = [];
 
-    $default_shipping = $cart->getShippingMethodAsString();
-
-    // Convert to code.
-    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-    $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($default_shipping);
-
-    if (!empty($shipping_methods) && empty($default_shipping)) {
-      $default_shipping = array_keys($shipping_methods)[0];
+    // This is getting very messy but required for the moment, we need to look
+    // for better approach here.
+    // Issue: below code is tightly plugged with click and collect.
+    if ($default_shipping == $checkout_options_manager->getClickandColectShippingMethod()) {
+      $default_shipping = '';
     }
+    else {
+      // We call generate shipping estimates only if we are not using click and
+      // method as of now.
+      $shipping_methods = self::generateShippingEstimates($address);
+
+      if (!empty($shipping_methods) && empty($default_shipping)) {
+        $default_shipping = array_keys($shipping_methods)[0];
+      }
+    }
+
+    $selected_address = '';
+
+    if ($shipping_methods) {
+      $drupal_address = $address_book_manager->getAddressArrayFromMagentoAddress($address);
+
+      $change_address_button = [
+        '#type' => 'link',
+        '#title' => $this->t('Edit'),
+        '#url' => Url::fromRoute('<none>'),
+        '#attributes' => [
+          'id' => 'change-address',
+          'class' => ['button'],
+        ],
+      ];
+
+      $selected_address_build = [
+        '#theme' => 'checkout_selected_address',
+        '#delivery_to' => $drupal_address['given_name'] . ' ' . $drupal_address['family_name'],
+        '#delivery_address' => $drupal_address,
+        '#contact_no' => $drupal_address['mobile_number']['value'],
+        '#change_address' => render($change_address_button),
+      ];
+
+      $selected_address = '<div id="selected-address-wrapper">' . render($selected_address_build) . '</div>';
+    }
+
+    $pane_form['address']['selected_address'] = [
+      '#markup' => $selected_address,
+    ];
+
+    $shipping_methods_count_class = 'shipping-method-options-count-' . count($shipping_methods);
 
     $pane_form['address']['shipping_methods'] = [
       '#type' => 'radios',
-      '#title' => $this->t('select delivery options'),
+      '#title' => count($shipping_methods) == 1 ? $this->t('delivery option') : $this->t('select delivery options'),
       '#default_value' => $default_shipping,
       '#validated' => TRUE,
       '#options' => $shipping_methods,
-      '#prefix' => '<div id="shipping_methods_wrapper">',
+      '#prefix' => '<div id="shipping_methods_wrapper" class="' . $shipping_methods_count_class . '">',
       '#suffix' => '</div>',
+      '#attributes' => [
+        'class' => [
+          'shipping-methods-container',
+        ],
+      ],
     ];
 
     $complete_form['actions']['get_shipping_methods'] = [
@@ -127,20 +192,19 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         'callback' => [$this, 'updateAddressAjaxCallback'],
         'wrapper' => 'address_wrapper',
       ],
+      '#submit' => [],
       '#weight' => -50,
-      '#limit_validation_errors' => [['address']],
-    ];
-
-    $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
-
-    $complete_form['actions']['back_to_basket'] = [
-      '#type' => 'link',
-      '#title' => $this->t('Back to basket'),
-      '#url' => Url::fromRoute('acq_cart.cart'),
-      '#attributes' => [
-        'class' => ['back-to-basket'],
+      '#limit_validation_errors' => [
+        ['guest_delivery_home', 'address', 'shipping'],
       ],
     ];
+
+    $complete_form['actions']['next']['#limit_validation_errors'] = [
+      ['guest_delivery_home', 'address', 'shipping'],
+      ['guest_delivery_home', 'address', 'shipping_methods'],
+    ];
+
+    $complete_form['actions']['next']['#attributes']['class'][] = 'delivery-home-next';
 
     return $pane_form;
   }
@@ -149,21 +213,19 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * Ajax handler for re-use address checkbox.
    */
   public static function updateAddressAjaxCallback($form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+
     $address_fields =& $form['guest_delivery_home']['address'];
 
-    if (!$form_state->getErrors()) {
-      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-
-      $values = $form_state->getValue($form['#parents']);
-      $address_values = $values['guest_delivery_home']['address']['shipping'];
-      $address = $address_book_manager->getMagentoAddressFromAddressArray($address_values);
-
-      $address_fields['shipping_methods']['#options'] = self::generateShippingEstimates($address);
-      $address_fields['shipping_methods']['#default_value'] = array_keys($address_fields['shipping_methods']['#options'])[0];
+    if ($form_state->getErrors()) {
+      $response->addCommand(new ReplaceCommand('[data-drupal-selector="edit-guest-delivery-home-address-shipping"]', $address_fields['shipping']));
+    }
+    else {
+      $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
+      $response->addCommand(new InvokeCommand(NULL, 'guestShowShippingMethods'));
     }
 
-    return $address_fields;
+    return $response;
   }
 
   /**
@@ -193,6 +255,12 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       return;
     }
 
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
     $values = $form_state->getValue($pane_form['#parents']);
     $address_values = $values['address']['shipping'];
     $email = $address_values['organization'];
@@ -208,7 +276,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     if ($violations = $profile->validate()) {
       foreach ($violations->getByFields(['field_address']) as $violation) {
         $error_field = explode('.', $violation->getPropertyPath());
-        $form_state->setErrorByName('guest_delivery_home][address][address][' . $error_field[2], $violation->getMessage());
+        $form_state->setErrorByName('guest_delivery_home][address][shipping][' . $error_field[2], $violation->getMessage());
       }
     }
 
@@ -217,33 +285,13 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     if ($user = user_load_by_mail($email)) {
-      $form_state->setErrorByName('guest_delivery_home[address][shipping][email', $this->t('You already have an account, please login.'));
+      $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $this->t('You already have an account, please login.'));
       return;
     }
 
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     $address = $address_book_manager->getMagentoAddressFromAddressArray($address_values);
 
     $cart = $this->getCart();
-    $cart->setShipping(_alshaya_acm_checkout_clean_address($address));
-
-    $shipping_method = NULL;
-
-    if (isset($values['address']['shipping_methods'])) {
-      $shipping_method = $values['address']['shipping_methods'];
-      unset($values['address']['shipping_methods']);
-    }
-
-    if (empty($shipping_method)) {
-      return;
-    }
-
-    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-    $term = $checkout_options_manager->loadShippingMethod($shipping_method);
-
-    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), []);
 
     // We are only looking to convert guest carts.
     if (!($cart->customerId())) {
@@ -258,8 +306,8 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         // @TODO: Handle create customer errors here.
         // Probably just the email error.
         \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
-        $form_state->setErrorByName('custom', '');
-        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        $error = $this->t('@title does not contain a valid email.', ['@title' => 'Email']);
+        $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $error);
         return;
       }
 
@@ -271,7 +319,32 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $cart->convertToCustomerCart($customer_cart);
       \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+
+      // For cart that is just created and not pushed yet, we don't get the
+      // shipping estimates so need to push here once.
+      $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
     }
+
+    if ($form_state->getErrors()) {
+      return;
+    }
+
+    $cart->setShipping(_alshaya_acm_checkout_clean_address($address));
+
+    $shipping_method = NULL;
+
+    if (isset($values['address']['shipping_methods'])) {
+      $shipping_method = $values['address']['shipping_methods'];
+      unset($values['address']['shipping_methods']);
+    }
+
+    if (empty($shipping_method) || $shipping_method == $checkout_options_manager->getClickandColectShippingMethod()) {
+      return;
+    }
+
+    $term = $checkout_options_manager->loadShippingMethod($shipping_method);
+
+    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), []);
   }
 
 }

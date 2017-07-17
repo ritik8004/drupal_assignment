@@ -4,6 +4,7 @@ namespace Drupal\alshaya_click_collect\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -25,6 +26,9 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
   // Add trait to get map url from getGoogleMapsApiUrl().
   use GoogleMapsDisplayTrait;
 
+  // Add trait to get selected delivery method tab.
+  use CheckoutDeliveryMethodTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -45,11 +49,18 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (\Drupal::currentUser()->isAnonymous()) {
+    if (!$this->isVisible()) {
       return $pane_form;
     }
 
-    $default_mobile = $shipping_type = $store_code = $selected_store_data = '';
+    if ($this->getSelectedDeliveryMethod() != 'cc') {
+      return $pane_form;
+    }
+
+    $pane_form['#attributes']['class'][] = 'active--tab--content';
+
+    $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
+
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
@@ -62,11 +73,13 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       // Not injected here to avoid module dependency.
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
-      $selected_store = [
-        '#theme' => 'click_collect_selected_store',
-        '#store' => $store,
-      ];
-      $selected_store_data = render($selected_store);
+      if (!empty($store)) {
+        $selected_store = [
+          '#theme' => 'click_collect_selected_store',
+          '#store' => $store,
+        ];
+        $selected_store_data = render($selected_store);
+      }
     }
     else {
       // Check once in customer profile.
@@ -187,6 +200,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
         'alshaya_click_collect' => [
           'cart_id' => $cart->id(),
           'selected_store' => ($store_code) ? TRUE : FALSE,
+          'selected_store_obj' => $store,
         ],
       ],
       'library' => [
@@ -214,6 +228,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#submit' => [],
       '#limit_validation_errors' => [['cc_mobile_number']],
     ];
+
+    $complete_form['actions']['next']['#attributes']['class'][] = 'hidden-important';
 
     return $pane_form;
   }
