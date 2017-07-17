@@ -53,9 +53,10 @@
                 // If soft limit is rendered, show the link.
                   $(this).parent().find('.facets-soft-limit-link').show();
                   if (!$(this).parent().find('.facets-soft-limit-link').hasClass('open')) {
-                  // Show only soft limit items, if facets were collapsed.
-                    var zero_based_limit = settings.facets.softLimit.color - 1;
-                    $(this).find('li:gt(' + zero_based_limit + ')').hide();
+                    // Show only soft limit items, if facets were collapsed.
+                    var facetName = $(this).attr('data-drupal-facet-id');
+                    var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
+                    $(this).find('li:gt(' + zeroBasedLimit + ')').hide();
                   }
                 }
               }
