@@ -108,6 +108,9 @@ class ClickCollectController extends ControllerBase {
     $config = $this->configFactory->get('alshaya_click_collect.settings');
     // Add missing information to store data.
     array_walk($stores, function (&$store) use ($config) {
+      $store['rnc_available'] = (int) $store['rnc_available'];
+      $store['sts_available'] = (int) $store['sts_available'];
+
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $extra_data = $store_utility->getStoreExtraData($store);
 
@@ -138,6 +141,9 @@ class ClickCollectController extends ControllerBase {
    */
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
+
+    // Sort the stores first by distance and then by name.
+    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
     $build['store_list'] = $build['map_info_window'] = t('Sorry, No store found for your location.');
     if (count($stores) > 0) {
