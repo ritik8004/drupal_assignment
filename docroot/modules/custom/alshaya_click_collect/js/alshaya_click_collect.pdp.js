@@ -13,7 +13,7 @@
   // Last coords.
   var lastCoords = null;
   // Geolocation permission.
-  var geoPerm = false;
+  var geoPerm;
   // Check records already exists.
   var records = false;
   // Display search form.
@@ -53,8 +53,6 @@
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
 
         $('.click-collect-all-stores').toggle('slow', function () {
-          // Dispaly formatted address to make sure it has location.
-          Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
           // Scroll
           $('html,body').animate({
             scrollTop: $('.click-collect-all-stores').offset().top
@@ -105,20 +103,11 @@
         }
       });
 
-      // Validate the product is same on ajax call.
-      var validateProduct = Drupal.pdp.validateCurrentProduct(settings);
-
-      if (typeof displaySearchForm === 'undefined') {
-        displaySearchForm = settings.alshaya_acm.searchForm;
-      }
-      // If geolocation permission is denied then display the search form.
-      if (!geoPerm && validateProduct && displaySearchForm) {
-        Drupal.pdp.dispalySearchStoreForm();
-      }
+      // Display search store form if conditions matched.
+      Drupal.pdp.InvokeSearchStoreFormDisplay(settings);
 
       // Dispaly formatted address once we have store list.
       if (settings.alshaya_click_collect.pdp.ajax_call) {
-        Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'));
         Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
       }
     }
@@ -127,7 +116,8 @@
   // Error callback.
   Drupal.pdp.LocationError = function (error) {
     geoPerm = false;
-    // Do nothing, we already have the search form displayed by default.
+    // Display search store form if conditions matched.
+    Drupal.pdp.InvokeSearchStoreFormDisplay(drupalSettings);
   };
 
   // Success callback.
@@ -137,7 +127,7 @@
       lng: position.coords.longitude
     };
     geoPerm = true;
-    Drupal.pdp.storesDisplay();
+    Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
   };
 
   // Set the location coordinates, but don't render the stores.
@@ -173,8 +163,21 @@
     new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay]);
   };
 
-  // Dispaly search store form.
-  Drupal.pdp.dispalySearchStoreForm = function () {
+  // Invoke display search store form if conditions matched.
+  Drupal.pdp.InvokeSearchStoreFormDisplay = function (settings) {
+    // Validate the product is same on ajax call.
+    var validateProduct = Drupal.pdp.validateCurrentProduct(settings);
+    // Get the settings for search form display.
+    displaySearchForm = settings.alshaya_click_collect.searchForm;
+
+    // If geolocation permission is denied then display the search form.
+    if (typeof geoPerm !== 'undefined' && !geoPerm && validateProduct && displaySearchForm) {
+      Drupal.pdp.displaySearchStoreForm();
+    }
+  };
+
+  // Display search store form.
+  Drupal.pdp.displaySearchStoreForm = function () {
     var productInfo = Drupal.pdp.getProductInfo();
     var check = false;
     if (productInfo.type === 'configurable') {
@@ -188,7 +191,7 @@
       $('.click-collect-empty-selection').hide();
       $('.click-collect-form').show();
       $('.click-collect-form').find('.available-store-text').hide();
-      $('.click-collect-form').find('.store-finder-form-wrapper .search-store').show();
+      $('.click-collect-form').find('.store-finder-form-wrapper').show();
     }
   };
 
@@ -241,7 +244,9 @@
             // Custom command function to render map and map markers.
             storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
               if (status === 'success') {
+                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'));
                 if (response.data.top_three) {
+                  Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
                   displaySearchForm = false;
                   records = true;
                 }
@@ -313,7 +318,7 @@
    */
   Drupal.AjaxCommands.prototype.updatePDPClickCollect = function (ajax, response, status) {
     if (Drupal.pdp.validateCurrentProduct(response.data)) {
-      if (response.data.alshaya_acm.storeFinder) {
+      if (response.data.alshaya_click_collect.storeFinder) {
         $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
         $('#pdp-stores-container.click-collect > h3')
           .removeClass('ui-state-disabled')

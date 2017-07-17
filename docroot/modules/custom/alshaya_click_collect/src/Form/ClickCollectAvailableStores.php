@@ -89,10 +89,8 @@ class ClickCollectAvailableStores extends FormBase {
         'geolocation' => [
           'google_map_url' => $this->getGoogleMapsApiUrl(),
         ],
-        'alshaya_acm' => [
-          'storeFinder' => TRUE,
-          'searchForm' => TRUE,
-        ],
+        'alshaya_acm' => ['storeFinder' => TRUE],
+        'alshaya_click_collect' => ['searchForm' => TRUE],
       ],
     ];
 
