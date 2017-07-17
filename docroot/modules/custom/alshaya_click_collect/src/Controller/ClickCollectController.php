@@ -101,6 +101,7 @@ class ClickCollectController extends ControllerBase {
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
 
     // Get the stores from Magento.
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
     $api_wrapper = \Drupal::service('alshaya_api.api');
     $stores = $api_wrapper->getCartStores($cart_id, $lat, $lon);
 
@@ -109,12 +110,11 @@ class ClickCollectController extends ControllerBase {
     array_walk($stores, function (&$store) use ($config) {
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $extra_data = $store_utility->getStoreExtraData($store);
+
       if (!empty($extra_data)) {
         $store = array_merge($store, $extra_data);
-        if (!empty($store['sts_available'])) {
-          $store['delivery_time'] = $config->get('click_collect_sts');
-        }
-        elseif (!empty($store['rnc_available'])) {
+
+        if (!empty($store['rnc_available'])) {
           $store['delivery_time'] = $config->get('click_collect_rnc');
         }
       }
