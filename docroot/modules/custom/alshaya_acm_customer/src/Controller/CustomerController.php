@@ -95,11 +95,16 @@ class CustomerController extends ControllerBase {
 
       // Loop through each order and prepare the array for template.
       foreach ($ordersPaged as $order) {
-        $orderDetails[] = [
-          '#theme' => 'user_order_list_item',
-          '#order' => alshaya_acm_customer_get_processed_order_summary($order),
-          '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $user->id(), 'order_id' => $order['increment_id']])->toString(),
-        ];
+        if ($order_summary = alshaya_acm_customer_get_processed_order_summary($order)) {
+          $orderDetails[] = [
+            '#theme' => 'user_order_list_item',
+            '#order' => $order_summary,
+            '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', [
+              'user' => $user->id(),
+              'order_id' => $order['increment_id'],
+            ])->toString(),
+          ];
+        }
       }
 
       // Load my-account-help block for rendering on order list page.
