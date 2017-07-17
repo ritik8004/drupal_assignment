@@ -318,7 +318,7 @@
    */
   Drupal.AjaxCommands.prototype.updatePDPClickCollect = function (ajax, response, status) {
     if (Drupal.pdp.validateCurrentProduct(response.data)) {
-      if (response.data.alshaya_click_collect.storeFinder) {
+      if (response.data.alshaya_acm.storeFinder) {
         $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
         $('#pdp-stores-container.click-collect > h3')
           .removeClass('ui-state-disabled')
