@@ -96,6 +96,19 @@ body.ucbrowser {
         padding-left: 40px;
       }
     }
+
+    @include breakpoint($only-tablet) {
+      .filter--mobile {
+        .c-facet__blocks__wrapper--mobile.is-filter {
+          #{$left}: -7rem;
+        }
+
+        .view-filters.is-filter {
+          position: absolute;
+          #{$left}: 1rem;
+        }
+      }
+    }
   }
 }
 
