@@ -64,12 +64,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
-    // Get the default values from user input on validation failed.
-    if ($inputs = $form_state->getUserInput()) {
-      $store_code = $inputs['store_code'];
-      $shipping_type = $inputs['shipping_type'];
-    }
-    elseif ($form_values = $form_state->getValue($pane_form['#parents'])) {
+    $form_values = $form_state->getValue($pane_form['#parents']);
+    $inputs = $form_state->getUserInput();
+
+    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $store_code = $form_values['store_code'];
       $shipping_type = $form_values['shipping_type'];
       $default_mobile = $form_values['cc_mobile'];
@@ -167,14 +165,21 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div id="selected-store-content" class="selected-store-content">' . $selected_store_data . '</div>',
     ];
 
-    $pane_form['selected_store']['customer_help'] = [
+    $pane_form['selected_store']['elements'] = [
+      '#type' => 'container',
+      '#title' => t('selected store'),
+      '#tree' => FALSE,
+      '#id' => 'selected-store-elements-wrapper',
+    ];
+
+    $pane_form['selected_store']['elements']['customer_help'] = [
       '#markup' => '<div class="cc-help-text cc-customer-help-text"><p>' . $this->t("Please provide your contact details") . '</p>' . $this->t("We’ll be using this information to keep in touch with you") . '</div>',
     ];
 
     // First/Last/Email/Mobile have cc_ prefix to ensure validations work fine
     // and don't conflict with address form fields.
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['cc_firstname'] = [
+    $pane_form['selected_store']['elements']['cc_firstname'] = [
       '#type' => 'textfield',
       '#title' => t('First Name'),
       '#required' => TRUE,
@@ -182,25 +187,25 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['cc_lastname'] = [
+    $pane_form['selected_store']['elements']['cc_lastname'] = [
       '#type' => 'textfield',
       '#title' => t('Last Name'),
       '#required' => TRUE,
       '#default_value' => $default_lastname,
     ];
 
-    $pane_form['selected_store']['cc_email'] = [
+    $pane_form['selected_store']['elements']['cc_email'] = [
       '#type' => 'email',
       '#title' => t('Email'),
       '#required' => TRUE,
       '#default_value' => $default_email,
     ];
 
-    $pane_form['selected_store']['mobile_help'] = [
+    $pane_form['selected_store']['elements']['mobile_help'] = [
       '#markup' => '<div class="cc-help-text cc-mobile-help-text"><p>' . $this->t("Please provide the mobile number of the person collecting the order") . '</p>' . $this->t("We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
-    $pane_form['selected_store']['cc_mobile_number'] = [
+    $pane_form['selected_store']['elements']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => t('Mobile Number'),
       '#verify' => 0,
@@ -271,7 +276,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       ],
       '#ajax' => [
         'callback' => [$this, 'submitMemberDeliveryCollect'],
-        'wrapper' => 'selected-store-wrapper',
+        'wrapper' => 'selected-store-elements-wrapper',
       ],
       // This is required for limit_validation_errors to work.
       '#submit' => [],
@@ -371,7 +376,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    */
   public function submitMemberDeliveryCollect($form, FormStateInterface $form_state) {
     if ($form_state->getErrors()) {
-      return $form['guest_delivery_collect']['selected_store'];
+      return $form['guest_delivery_collect']['selected_store']['elements'];
     }
 
     $response = new AjaxResponse();

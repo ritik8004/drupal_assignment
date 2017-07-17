@@ -64,12 +64,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
-    // Get the default values from user input on validation failed.
-    if ($inputs = $form_state->getUserInput()) {
-      $store_code = $inputs['store_code'];
-      $shipping_type = $inputs['shipping_type'];
-    }
-    elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
+    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
       $default_mobile = $shipping['telephone'];
       $store_code = $cart->getExtension('store_code');
@@ -151,14 +146,21 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#markup' => '<div id="selected-store-content" class="selected-store-content">' . $selected_store_data . '</div>',
     ];
 
-    $pane_form['selected_store']['mobile_help'] = [
+    $pane_form['selected_store']['elements'] = [
+      '#type' => 'container',
+      '#title' => t('selected store'),
+      '#tree' => FALSE,
+      '#id' => 'selected-store-elements-wrapper',
+    ];
+
+    $pane_form['selected_store']['elements']['mobile_help'] = [
       '#markup' => '<div class="cc-help-text cc-mobile-help-text">' . $this->t("<p>Please provide the mobile number of the person collecting the order.</p>We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
     // Here we have cc_ prefix to ensure validations work fine and don't
     // conflict with address form fields.
     // @TODO: Verify mobile validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['cc_mobile_number'] = [
+    $pane_form['selected_store']['elements']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => $this->t('Mobile Number'),
       '#verify' => 0,
@@ -229,7 +231,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       ],
       '#ajax' => [
         'callback' => [$this, 'submitMemberDeliveryCollect'],
-        'wrapper' => 'selected-store-wrapper',
+        'wrapper' => 'selected-store-elements-wrapper',
       ],
       // This is required for limit_validation_errors to work.
       '#submit' => [],
