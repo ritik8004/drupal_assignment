@@ -139,7 +139,7 @@ class ClickCollectController extends ControllerBase {
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
 
-    $build['store_list'] = $build['map_info_window'] = t('Sorry, No store found for your location.');
+    $build['store_list'] = $build['map_info_window'] = '<span class="empty">' . t('Sorry, No store found for your location.') . '</span>';
     if (count($stores) > 0) {
       $build['store_list'] = [
         '#theme' => 'click_collect_stores_list',
