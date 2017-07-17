@@ -164,7 +164,6 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['selected_store']['elements'] = [
       '#type' => 'container',
-      '#title' => t('selected store'),
       '#tree' => FALSE,
       '#id' => 'selected-store-elements-wrapper',
     ];

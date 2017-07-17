@@ -175,13 +175,7 @@ class StoresFinderUtility {
    */
   public function getStoreExtraData(array $store_data, $store_node = NULL) {
     if (!empty($store_data) && empty($store_node)) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-      if ($store_node = $this->getStoreFromCode($store_data['code'])) {
-        if ($store_node->hasTranslation($langcode)) {
-          $store_node = $store_node->getTranslation($langcode);
-        }
-      }
+      $store_node = $this->getTranslatedStoreFromCode($store_data['code']);
     }
 
     $store = [];

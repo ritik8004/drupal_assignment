@@ -148,7 +148,6 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $pane_form['selected_store']['elements'] = [
       '#type' => 'container',
-      '#title' => t('selected store'),
       '#tree' => FALSE,
       '#id' => 'selected-store-elements-wrapper',
     ];
