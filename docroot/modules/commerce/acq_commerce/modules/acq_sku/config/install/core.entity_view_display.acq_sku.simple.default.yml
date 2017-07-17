@@ -1,0 +1,37 @@
+uuid: 677f443f-fc16-429e-9ba2-7c0603698f1b
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.large
+  module:
+    - acq_sku
+    - image
+id: acq_sku.simple.default
+targetEntityType: acq_sku
+bundle: simple
+mode: default
+content:
+  image:
+    label: hidden
+    type: image
+    weight: 0
+    settings:
+      image_style: large
+      image_link: ''
+    third_party_settings: {  }
+  name:
+    label: hidden
+    type: string
+    weight: 2
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  price:
+    label: above
+    type: string
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  sku: true
