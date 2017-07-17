@@ -721,7 +721,6 @@
       height: 1.125rem;
       font-size: 0.5625rem;
       border: 1px solid $white-two;
-      margin-#{$left}: -2px;
     }
 
     .cancel-change-location {
@@ -749,6 +748,7 @@
 .pac-container {
   border: 1px solid $white-two;
   box-shadow: none;
+  min-width: 11.25rem;
 
   // Hide the Powered by Google logo.
   &::after {
@@ -852,6 +852,27 @@
   padding: 1.063rem 0;
   border-top: 1px solid $white;
   cursor: pointer;
+}
+
+.click-collect-form,
+.store-finder-form-wrapper {
+  + .ajax-progress-throbber {
+    position: relative;
+    margin: 0.3125rem 0;
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-position: $right center !important;
+      background-repeat: no-repeat !important;
+      background-size: 1.5rem;
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+    }
+  }
 }
 
 .click-collect-all-stores {

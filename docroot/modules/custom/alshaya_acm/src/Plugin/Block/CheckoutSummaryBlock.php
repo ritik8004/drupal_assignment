@@ -159,7 +159,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         if ($store_code = $cart->getExtension('store_code')) {
           $delivery['label'] = $this->t('Click & Collect');
           $delivery['method_name'] = '';
-          $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
+          $delivery['method_description'] = $checkout_options_manager->getClickandCollectShippingDescription($cart->getExtension('click_and_collect_type'));
           $delivery['address_label'] = $this->t('Collection Store');
 
           // Not injected here to avoid module dependency.
@@ -174,7 +174,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       else {
         $delivery['label'] = $this->t('Home Delivery');
         $delivery['method_name'] = $term->getName();
-        $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
+        $delivery['method_description'] = $term->get('field_shipping_method_cart_desc')->getString();
         $delivery['address_label'] = $this->t('Delivery Address');
 
         // Delivery address.

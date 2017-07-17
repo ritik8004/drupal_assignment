@@ -348,47 +348,7 @@
       /**
        * Toggles the Tabs.
        */
-
       if ($('.checkout .multistep-checkout').length) {
-        var selectedTab = $('#selected-tab').val();
-        if (selectedTab !== 'checkout-click-collect') {
-          $('.tab-home-delivery, .tab-new-customer')
-            .addClass('active--tab--head');
-          $('#edit-guest-delivery-home, #edit-member-delivery-home, #edit-checkout-guest')
-            .addClass('active--tab--content');
-        }
-
-        $('.tab').click(function () {
-          $('.multistep-checkout .tab').removeClass('active--tab--head');
-          $('.multistep-checkout fieldset').removeClass('active--tab--content');
-
-          if ($(this).hasClass('tab-home-delivery')) {
-            $('.tab-home-delivery').addClass('active--tab--head');
-            $('#edit-guest-delivery-home, #edit-member-delivery-home')
-              .addClass('active--tab--content');
-          }
-          else {
-            if ($(this).hasClass('tab-click-collect')) {
-              $('.tab-click-collect').addClass('active--tab--head');
-              $('#edit-guest-delivery-collect, #edit-member-delivery-collect')
-                .addClass('active--tab--content');
-            }
-            else {
-              if ($(this).hasClass('tab-new-customer')) {
-                $('.tab-new-customer').addClass('active--tab--head');
-                $('#edit-checkout-guest').addClass('active--tab--content');
-              }
-              else {
-                if ($(this).hasClass('tab-returning-customer')) {
-                  $('.tab-returning-customer').addClass('active--tab--head');
-                  $('#edit-checkout-login').addClass('active--tab--content');
-
-                }
-              }
-            }
-          }
-        });
-
         $('.multistep-checkout legend').click(function () {
           $(this).next('.fieldset-wrapper').slideToggle();
         });
@@ -397,7 +357,6 @@
       /**
        * Toggles the Search on Order list.
        */
-
       if ($('.alshaya-acm-customer-order-list-search').length) {
         $('.alshaya-acm-customer-order-list-search label')
           .on('click', function () {

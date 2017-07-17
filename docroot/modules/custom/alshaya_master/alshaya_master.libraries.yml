@@ -7,7 +7,6 @@ ladda:
   css:
     theme:
       css/ladda.min.css: {}
-      css/cart_notification.css: {}
   dependencies:
     - core/jquery
     - core/drupal

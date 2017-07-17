@@ -208,38 +208,70 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails = [];
 
-  $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
-
-  $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
-
-  $shipping_address = $order['shipping']['address'];
-
-  // Loading address from address book if customer_address_id is available.
-  if (!empty($shipping_address['customer_address_id'])) {
-    if ($entity = $address_book_manager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
-      $shipping_address = $address_book_manager->getAddressFromEntity($entity);
-    }
-  }
-
-  $delivery_address = [
-    '#theme' => 'alshaya_address',
-    '#address' => $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address),
-  ];
-
-  $orderDetails['delivery_address'] = render($delivery_address);
-
-  $billing_address = [
-    '#theme' => 'alshaya_address',
-    '#address' => $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']),
-  ];
-
-  $orderDetails['billing_address'] = render($billing_address);
-
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $shippingTerm = $checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
+  $shipping_method_code = $checkoutOptionsManager->getCleanShippingMethodCode($order['shipping']['method']['carrier_code']);
+  $shippingTerm = $checkoutOptionsManager->loadShippingMethod($shipping_method_code);
   $orderDetails['delivery_method'] = $shippingTerm->getName();
   $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
+
+  $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['billing']['telephone']);
+
+  if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
+    $orderDetails['collection_by'] = $order['firstname'] . ' ' . $order['lastname'];
+
+    $shipping_assignment = reset($order['extension']['shipping_assignments']);
+    $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
+
+    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
+    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+    $store_node = $store_utility->getStoreFromCode($store_code);
+    $orderDetails['store_name'] = $store_node->label();
+    $orderDetails['store_address'] = $store_node->get('field_store_address')->getString();
+    $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
+    $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
+
+    $orderDetails['view_on_map_link'] = '';
+    if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
+      $lat = $lat_lng[0]['lat'];
+      $lng = $lat_lng[0]['lng'];
+      $orderDetails['view_on_map_link'] = 'http://maps.google.com/?q=' . $lat . ',' . $lng;
+    }
+  }
+  else {
+    $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
+    $shipping_address = $order['shipping']['address'];
+
+    // Loading address from address book if customer_address_id is available.
+    if (!empty($shipping_address['customer_address_id'])) {
+      if ($entity = $address_book_manager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
+        $shipping_address = $address_book_manager->getAddressFromEntity($entity);
+      }
+    }
+
+    $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
+    $billing_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']);
+
+    $orderDetails['billing_same_as_shipping'] = 0;
+
+    if (serialize($shipping_address_array) == serialize($billing_address_array)) {
+      $orderDetails['billing_same_as_shipping'] = 1;
+    }
+
+    $delivery_address = [
+      '#theme' => 'alshaya_address',
+      '#address' => $shipping_address_array,
+    ];
+
+    $orderDetails['delivery_address'] = render($delivery_address);
+
+    $billing_address = [
+      '#theme' => 'alshaya_address',
+      '#address' => $billing_address_array,
+    ];
+
+    $orderDetails['billing_address'] = render($billing_address);
+  }
 
   $orderDetails['payment_method'] = $order['payment']['method_title'];
 

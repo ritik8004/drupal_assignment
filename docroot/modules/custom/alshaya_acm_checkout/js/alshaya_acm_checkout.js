@@ -11,13 +11,8 @@
    */
   Drupal.behaviors.ZZAlshayaAcmCheckout = {
     attach: function (context, settings) {
-      $('#edit-delivery-tabs').once('bind-events').each(function () {
-        $('input[data-drupal-selector="edit-actions-next"]').hide();
-
-        $('.tab[gtm-type]', $(this)).on('click', function () {
-          $('#selected-tab').val($(this).attr('gtm-type'));
-          Drupal.behaviors.cvJqueryValidate.attach($("#block-alshaya-white-label-content"));
-        });
+      $('.delivery-home-next').once('bind-events').each(function () {
+        $(this).hide();
       });
 
       // Bind this only once after every ajax call.
@@ -55,6 +50,9 @@
           $('#shipping_methods_wrapper fieldset').show();
           $('[data-drupal-selector="edit-actions-get-shipping-methods"]').hide();
           $('[data-drupal-selector="edit-actions-next"]').show();
+          $('#selected-address-wrapper').show();
+          $('#shipping_methods_wrapper').show();
+          $('.address-book-address').hide();
 
           // Select the first method by default.
           if ($('#shipping_methods_wrapper input[type="radio"]:checked').length === 0) {
@@ -65,22 +63,29 @@
           $('#shipping_methods_wrapper fieldset').hide();
           $('[data-drupal-selector="edit-actions-get-shipping-methods"]').show();
           $('[data-drupal-selector="edit-actions-next"]').hide();
+          $('#selected-address-wrapper').hide();
+          $('#shipping_methods_wrapper').hide();
+          $('.address-book-address').show();
         }
       }
 
       $('#change-address').once('bind-events').each(function () {
         $('#add-address-button').hide();
-        $('#edit-member-delivery-home-addresses').hide();
         $('#edit-member-delivery-home-header-add-profile').hide();
+        $('#address-book-address').slideUp();
+        $('#edit-member-delivery-home-addresses').hide();
 
         $(this).on('click', function (e) {
           e.preventDefault();
 
           $('#add-address-button').show();
           $('#selected-address-wrapper').slideUp();
+          $('#shipping_methods_wrapper').slideUp();
           $('[data-drupal-selector="edit-actions-next"]').hide();
+          $('[data-drupal-selector="edit-actions-get-shipping-methods"]').show();
           $('#shipping_methods_wrapper').slideUp();
           $('#edit-member-delivery-home-addresses').slideDown();
+          $('.address-book-address').slideDown();
           $('.delivery-address-title').html(Drupal.t('choose delivery address'));
           $('#edit-member-delivery-home-header-add-profile').show();
         });
@@ -149,6 +154,15 @@
       $('[data-drupal-selector="edit-billing-address-address-billing-given-name"]').once('bind-events').each(function () {
         Drupal.behaviors.cvJqueryValidate.attach(jQuery("#block-alshaya-white-label-content"));
       });
+
+      // Show the form by default if user has no address saved in address book.
+      $('#edit-member-delivery-home-addresses').once('member-has-address-check').each(function () {
+        if ($('.views-row', $(this)).length === 0) {
+          $('#addresses-header').hide();
+          $(this).hide();
+          $('#address-book-form-wrapper').show();
+        }
+      });
     }
   };
 
@@ -167,6 +181,15 @@
 
     // Show the form.
     $('#address-book-form-wrapper').slideDown();
+  };
+
+  // Ajax command to show shipping options and selected address for guest.
+  $.fn.guestShowShippingMethods = function (data) {
+    $('#shipping_address_form_wrapper').slideUp();
+    $('#selected-address-wrapper').slideDown();
+    $('#shipping_methods_wrapper').slideDown();
+    $('[data-drupal-selector="edit-actions-get-shipping-methods"]').hide();
+    $('[data-drupal-selector="edit-actions-next"]').show();
   };
 
 })(jQuery, Drupal);

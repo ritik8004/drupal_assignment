@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
@@ -23,6 +24,8 @@ use Drupal\profile\Entity\Profile;
  * )
  */
 class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterface {
+  // Add trait to get selected delivery method tab.
+  use CheckoutDeliveryMethodTrait;
 
   /**
    * {@inheritdoc}
@@ -44,17 +47,23 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (\Drupal::currentUser()->isAnonymous()) {
+    if (!$this->isVisible()) {
       return $pane_form;
     }
+
+    if ($this->getSelectedDeliveryMethod() != 'hd') {
+      return $pane_form;
+    }
+
+    $pane_form['#attributes']['class'][] = 'active--tab--content';
+
+    // This class is required to make theme work properly.
+    $pane_form['#attributes']['class'][] = 'c-address-book';
 
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
 
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
-
-    // This class is required to make theme work properly.
-    $pane_form['#attributes']['class'] = 'c-address-book';
 
     $pane_form['address_form'] = [
       '#type' => 'container',
@@ -174,26 +183,21 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       }
     }
 
+    $shipping_methods_count_class = 'shipping-method-options-count-' . count($shipping_methods);
+
     $pane_form['address']['shipping_methods'] = [
       '#type' => 'radios',
-      '#title' => $this->t('select delivery options'),
+      '#title' => count($shipping_methods) == 1 ? $this->t('delivery option') : $this->t('select delivery options'),
       '#default_value' => $default_shipping,
       '#validated' => TRUE,
       '#options' => $shipping_methods,
-      '#prefix' => '<div id="shipping_methods_wrapper">',
+      '#prefix' => '<div id="shipping_methods_wrapper" class="' . $shipping_methods_count_class . '">',
       '#suffix' => '</div>',
+      '#attributes' => ['class' => ['shipping-methods-container']],
     ];
 
     $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
-
-    $complete_form['actions']['back_to_basket'] = [
-      '#type' => 'link',
-      '#title' => $this->t('Back to basket'),
-      '#url' => Url::fromRoute('acq_cart.cart'),
-      '#attributes' => [
-        'class' => ['back-to-basket'],
-      ],
-    ];
+    $complete_form['actions']['next']['#attributes']['class'][] = 'delivery-home-next';
 
     return $pane_form;
   }

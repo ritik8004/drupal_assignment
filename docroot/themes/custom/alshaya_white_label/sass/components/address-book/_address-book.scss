@@ -236,7 +236,7 @@
     }
   }
 
-  &.active {
+  &:hover {
     .address--data {
       background: $white-four;
     }
@@ -250,7 +250,6 @@
 
       @include breakpoint($desktop) {
         padding-right: 0;
-        text-align: right;
       }
     }
   }
@@ -293,7 +292,7 @@
       }
     }
 
-    &.active {
+    &.default {
       .address--data {
         background: $white-five;
       }
@@ -455,7 +454,7 @@
       .form-item--error-message {
         position: absolute;
         #{$left}: 0;
-        min-width: 20rem;
+        min-width: 21rem;
       }
     }
   }
