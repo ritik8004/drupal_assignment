@@ -59,16 +59,16 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $pane_form['#attributes']['class'][] = 'active--tab--content';
 
     $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
-
     $default_firstname = $default_lastname = $default_email = '';
 
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
-    $store_code = '';
-    $shipping_type = '';
-
-    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
+    if ($inputs = $form_state->getUserInput()) {
+      $store_code = $inputs['store_code'];
+      $shipping_type = $inputs['shipping_type'];
+    }
+    elseif ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $store_code = $form_values['store_code'];
       $shipping_type = $form_values['shipping_type'];
       $default_mobile = $form_values['cc_mobile'];
