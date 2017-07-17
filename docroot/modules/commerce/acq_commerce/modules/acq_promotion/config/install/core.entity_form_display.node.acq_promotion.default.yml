@@ -10,7 +10,6 @@ dependencies:
     - field.field.node.acq_promotion.field_acq_promotion_discount
     - field.field.node.acq_promotion.field_acq_promotion_label
     - field.field.node.acq_promotion.field_acq_promotion_rule_id
-    - field.field.node.acq_promotion.field_acq_promotion_sku
     - field.field.node.acq_promotion.field_acq_promotion_type
     - image.style.thumbnail
     - node.type.acq_promotion
@@ -91,15 +90,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
-    region: content
-  field_acq_promotion_sku:
-    weight: 17
-    settings:
-      match_operator: CONTAINS
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: entity_reference_autocomplete
     region: content
   field_acq_promotion_type:
     type: options_select
