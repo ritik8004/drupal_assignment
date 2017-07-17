@@ -411,7 +411,7 @@
         }
       },
       'eventCallback': function() {
-        document.location = 'cart/checkout/delivery';
+        document.location = '/cart/checkout/delivery';
       }
     };
     
@@ -430,7 +430,7 @@
         }
       },
       'eventCallback': function () {
-        document.location = 'cart/checkout/confirmation';
+        document.location = '/cart/checkout/confirmation';
       }
     };
     
@@ -449,7 +449,7 @@
         }
       },
       'eventCallback': function() {
-        document.localtion = 'cart/checkout/payment';
+        document.location = '/cart/checkout/payment';
       }
     };
 
