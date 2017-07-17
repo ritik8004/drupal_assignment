@@ -285,8 +285,9 @@ class ClickCollectController extends ControllerBase {
     $settings['alshaya_click_collect']['pdp'] = ['top_three' => FALSE, 'all_stores' => FALSE];
     if (!empty($data['top_three'])) {
       $settings['alshaya_click_collect']['pdp']['top_three'] = TRUE;
+      $settings['alshaya_click_collect']['searchForm'] = FALSE;
       $response->addCommand(new HtmlCommand('.click-collect-top-stores', $data['top_three']));
-      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper .search-store', 'hide'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'show'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text .change-location-link', 'show'));
@@ -302,14 +303,15 @@ class ClickCollectController extends ControllerBase {
     else {
       $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
       $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
-      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper .search-store', 'show'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'show'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'hide'));
     }
 
+    $settings['alshaya_click_collect']['pdp']['ajax_call'] = TRUE;
     $response->addCommand(new InvokeCommand('.click-collect-form', 'show'));
     $response->addCommand(new StoreDisplayFillCommand('storeDisplayFill', $settings));
-    $response->addCommand(new SettingsCommand(['alshaya_click_collect' => ['pdp' => ['ajax_call' => TRUE]]], TRUE), TRUE);
+    $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
 
     return $response;
   }
