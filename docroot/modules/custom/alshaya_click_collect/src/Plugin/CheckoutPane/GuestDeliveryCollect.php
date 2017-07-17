@@ -64,6 +64,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
+    // Get the default values from user input on validation failed.
     if ($inputs = $form_state->getUserInput()) {
       $store_code = $inputs['store_code'];
       $shipping_type = $inputs['shipping_type'];

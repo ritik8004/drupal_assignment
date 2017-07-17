@@ -64,12 +64,26 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
-    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
+    // Get the default values from user input on validation failed.
+    if ($inputs = $form_state->getUserInput()) {
+      $store_code = $inputs['store_code'];
+      $shipping_type = $inputs['shipping_type'];
+    }
+    elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
       $default_mobile = $shipping['telephone'];
       $store_code = $cart->getExtension('store_code');
       $shipping_type = $cart->getExtension('click_and_collect_type');
+    }
 
+    // Check once in customer profile.
+    if ($account = User::load(\Drupal::currentUser()->id())) {
+      if ($account_phone = $account->get('field_mobile_number')->getValue()) {
+        $default_mobile = $account_phone[0]['value'];
+      }
+    }
+
+    if ($store_code && $shipping_type) {
       // Not injected here to avoid module dependency.
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
@@ -79,13 +93,6 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
           '#store' => $store,
         ];
         $selected_store_data = render($selected_store);
-      }
-    }
-    else {
-      // Check once in customer profile.
-      $account = User::load(\Drupal::currentUser()->id());
-      if ($account_phone = $account->get('field_mobile_number')->getValue()) {
-        $default_mobile = $account_phone[0]['value'];
       }
     }
 
