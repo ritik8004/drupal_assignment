@@ -10,6 +10,11 @@
 
   Drupal.behaviors.sell = {
     attach: function (context, settings) {
+
+      var crossSell = $('.horizontal-crossell .owl-carousel');
+      var upSell = $('.horizontal-upell .owl-carousel');
+      var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
+
       var options = {
         loop: true,
         responsiveClass: true,
@@ -29,16 +34,6 @@
           }
         }
       };
-
-      if (isRTL()) {
-        $('.block-basket-horizontal-recommendation .owl-carousel').attr('dir', 'rtl');
-        $('.block-basket-horizontal-recommendation .owl-carousel').owlCarousel(
-          $.extend({}, options, {rtl: true})
-        );
-      }
-      else {
-        $('.block-basket-horizontal-recommendation .owl-carousel').owlCarousel(options);
-      }
 
       var optionsPdp = {
         loop: true,
@@ -60,25 +55,21 @@
         }
       };
 
-      if (isRTL()) {
-        $('.horizontal-crossell .owl-carousel').attr('dir', 'rtl');
-        $('.horizontal-crossell .owl-carousel').owlCarousel(
-          $.extend({}, optionsPdp, {rtl: true})
-        );
-      }
-      else {
-        $('.horizontal-crossell .owl-carousel').owlCarousel(optionsPdp);
+      function applyRtl(ocObject, options) {
+        if (isRTL()) {
+          ocObject.attr('dir', 'rtl');
+          ocObject.owlCarousel(
+            $.extend({}, options, {rtl: true})
+          );
+        }
+        else {
+          ocObject.owlCarousel(options);
+        }
       }
 
-      if (isRTL()) {
-        $('.horizontal-upell .owl-carousel').attr('dir', 'rtl');
-        $('.horizontal-upell .owl-carousel').owlCarousel(
-          $.extend({}, optionsPdp, {rtl: true})
-        );
-      }
-      else {
-        $('.horizontal-upell .owl-carousel').owlCarousel(optionsPdp);
-      }
+      applyRtl(basketHR, options);
+      applyRtl(crossSell, optionsPdp);
+      applyRtl(upSell, optionsPdp);
 
       $('.owl-carousel').owlCarousel({
         loop: true,
