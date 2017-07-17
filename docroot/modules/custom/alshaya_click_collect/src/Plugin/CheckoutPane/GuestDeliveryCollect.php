@@ -64,9 +64,6 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
-    $form_values = $form_state->getValue($pane_form['#parents']);
-    $inputs = $form_state->getUserInput();
-
     if ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $store_code = $form_values['store_code'];
       $shipping_type = $form_values['shipping_type'];
