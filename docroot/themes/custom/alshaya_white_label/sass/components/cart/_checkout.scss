@@ -424,7 +424,7 @@
   .order-total {
     > span {
       display: inline-block;
-      width: 51%;
+      width: 60%;
 
       @include breakpoint($upto-desktop) {
         width: 55%;
@@ -434,7 +434,7 @@
     .total--amount,
     > .price {
       display: inline-block;
-      width: 47%;
+      width: 37%;
 
       @include breakpoint($upto-desktop) {
         width: 42%;
@@ -705,6 +705,13 @@ body.alias--cart {
         clear: both;
         font-family: $arial;
 
+        @include breakpoint($only-mobile) {
+          position: relative;
+          display: inline-block;
+          min-height: 4.5rem;
+          margin-top: -0.5rem;
+        }
+
         @include breakpoint($upto-tablet) {
           font-size: 10px;
         }
@@ -720,6 +727,21 @@ body.alias--cart {
           width: 21.75%;
           padding: 1rem;
           padding-#{$left}: 3.5rem;
+        }
+
+        .delivery-options-tooltip-wrapper {
+          @include breakpoint($only-mobile) {
+            width: 9rem;
+            display: inline-block;
+            position: absolute;
+            #{$left}: 10rem;
+          }
+
+          .tooltip--wrap {
+            @include breakpoint($only-mobile) {
+              margin-bottom: 1.5rem;
+            }
+          }
         }
       }
 
@@ -1127,6 +1149,35 @@ html[lang=ar] {
 
     @include breakpoint (($only-mobile) (orientation landscape)) {
       #{$left}: 7.8rem;
+    }
+  }
+
+  .delivery-options-tooltip-wrapper .tooltip--head::after {
+    position: absolute;
+
+    @include breakpoint($mobile) {
+      top: -0.25rem;
+      left: 1.9rem;
+    }
+
+    @include breakpoint($tablet) {
+      left: 0.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      left: 5.5rem;
+    }
+  }
+
+  .delivery-options-tooltip-wrapper .tooltip {
+    #{$left}: -3.2rem;
+
+    @include breakpoint($desktop) {
+      right: 2.4rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      #{$left}: -2.9rem;
     }
   }
 }
