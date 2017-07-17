@@ -713,6 +713,19 @@
           }
         }
       }
+
+      .gm-style-iw {
+        .select-store {
+          + .ajax-progress-throbber {
+            position: absolute !important;
+
+            .throbber {
+              height: 4.125rem;
+              position: absolute;
+            }
+          }
+        }
+      }
     }
   }
 
