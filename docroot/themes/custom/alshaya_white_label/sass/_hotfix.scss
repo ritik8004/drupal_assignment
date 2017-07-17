@@ -235,6 +235,14 @@ html[lang="ar"] {
   }
 }
 
+html[lang="ar"] {
+  .ucbrowser {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.55rem;
+    }
+  }
+}
+
 html[lang="en"] {
   .ie,
   .safari {
