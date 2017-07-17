@@ -357,7 +357,7 @@
     list-style: none;
     display: inline-block;
     border-top: 1px solid $white;
-    padding: 1.563rem;
+    padding: 1.5rem;
 
     &:last-child {
       border-bottom: 1px solid $white;
@@ -372,6 +372,21 @@
   .right {
     float: $right;
     width: 70%;
+
+    @include breakpoint($only-tablet) {
+      width: 62%
+    }
+
+    .dark {
+      a {
+        color: $black;
+      }
+    }
+
+    span.price-wrapper {
+      color: $black;
+      font-weight: bold;
+    }
 
     a,
     span {
@@ -399,6 +414,11 @@
     .product-qty {
       color: $greyish;
       margin-bottom: 3px;
+    }
+
+    .sku-attributes {
+      color: $greyish;
+      font-weight: normal;
     }
   }
 }
