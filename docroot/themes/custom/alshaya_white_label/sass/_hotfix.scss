@@ -234,9 +234,18 @@ html[lang=ar] {
 }
 
 html[lang="ar"] {
+  .ie,
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
+    }
+  }
+}
+
+html[lang="ar"] {
+  .ucbrowser {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.55rem;
     }
   }
 }
