@@ -66,12 +66,6 @@
         $('.mobile-number-field').addClass('form-item--error');
       }
 
-      // Click event trigger for privilege card field on register page.
-      $('.user-register-form .privilege-card-wrapper-title').bind('click touchstart', function () {
-        $('.privilege-card-wrapper summary').click();
-        return false;
-      });
-
       if ($('.password-tooltip').length > 0) {
         $('#edit-pass').focus(function () {
           $(this).addClass('is-active');
