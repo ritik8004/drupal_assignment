@@ -105,11 +105,6 @@
 
       // Display search store form if conditions matched.
       Drupal.pdp.InvokeSearchStoreFormDisplay(settings);
-
-      // Dispaly formatted address once we have store list.
-      if (settings.alshaya_click_collect.pdp.ajax_call) {
-        Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
-      }
     }
   };
 
@@ -233,6 +228,13 @@
               $trigger = $('.click-collect-form');
             }
 
+            // Add formatted address based on lat/lng before ajax for top three stores.
+            Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'));
+            // Add formatted address based on lat/lng before ajax for all stores. If html elements available.
+            if ($('.click-collect-all-stores').find('.google-store-location').length > 0) {
+              Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
+            }
+
             var storeDisplayAjax = Drupal.ajax({
               url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
               element: $trigger.get(0),
@@ -244,8 +246,8 @@
             // Custom command function to render map and map markers.
             storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
               if (status === 'success') {
-                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'));
-                if (response.data.top_three) {
+                if (response.data.alshaya_click_collect.pdp.top_three) {
+                  // Add formatted address based on lat/lng before ajax for all stores. If html elements
                   Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
                   displaySearchForm = false;
                   records = true;
