@@ -3,19 +3,21 @@
 {% if title %}
   <div class="all-stores-info">
     <h3>{{ title }}</h3>
-    <div class="text">{{ subtitle }}</div>
   </div>
 {% endif %}
-<div class="available_store">
-  <div class="available-store-text">
-    {{ 'Available at three stores near'|t }}
-    <div class="google-store-location"></div>
+<div class="text">
+  {{ help_text|raw }}
+  <div class="available_store">
+    <div class="available-store-text">
+      {{ 'Available at three stores near'|t }} <div class="google-store-location"></div>
+    </div>
     <div class="change-location" style="display: none;">
       <input type="textfield" name="store-location" class="change-store-location"/>
       <button type="button" name="cancel-change-location" id="cancel-change-location" class="cancel-change-location"></button>
     </div>
     <div class="change-location-link">{{ 'change'|t }}</div>
   </div>
+  <p>{{ subtitle }}</p>
   <div class="store-finder-form-wrapper" style="display: none;">
     <div id="all-stores-search-store" class="search-store">{{ store_finder_form }}</div>
   </div>

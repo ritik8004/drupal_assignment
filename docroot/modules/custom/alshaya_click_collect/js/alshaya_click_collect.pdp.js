@@ -71,7 +71,7 @@
         else if (e.target.className === 'cancel-change-location') {
           e.preventDefault();
           $(this).parent().hide();
-          $('.click-collect-all-stores').find('.available-store-text .change-location-link').show();
+          $('.click-collect-all-stores').find('.available_store .change-location-link').show();
           return false;
         }
         else if (e.target.className === 'search-stores-button' && !records) {
@@ -93,7 +93,7 @@
         else if (e.target.className === 'cancel-change-location') {
           e.preventDefault();
           $(this).parent().hide();
-          $('.click-collect-form').find('.available-store-text .change-location-link').show();
+          $('.click-collect-form').find('.available_store .change-location-link').show();
           return false;
         }
         else if (e.target.className === 'search-stores-button' && !records) {
@@ -186,6 +186,7 @@
       $('.click-collect-empty-selection').hide();
       $('.click-collect-form').show();
       $('.click-collect-form').find('.available-store-text').hide();
+      $('.click-collect-form').find('.available_store').hide();
       $('.click-collect-form').find('.store-finder-form-wrapper').show();
     }
   };

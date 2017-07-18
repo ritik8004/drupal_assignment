@@ -35,6 +35,7 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
     'variables' => [
       'title' => NULL,
       'subtitle' => NULL,
+      'help_text' => NULL,
       'stores' => NULL,
       'store_finder_form' => NULL,
     ],
