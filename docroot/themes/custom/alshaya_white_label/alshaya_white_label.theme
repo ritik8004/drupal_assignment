@@ -77,6 +77,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
   else {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('page-standard');
   }
+
+  if (\Drupal::routeMatch()->getRouteName() === "acq_customer.orders") {
+    $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
+  }
 }
 
 /**
