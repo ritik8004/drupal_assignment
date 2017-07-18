@@ -154,6 +154,15 @@
       $('[data-drupal-selector="edit-billing-address-address-billing-given-name"]').once('bind-events').each(function () {
         Drupal.behaviors.cvJqueryValidate.attach(jQuery("#block-alshaya-white-label-content"));
       });
+
+      // Show the form by default if user has no address saved in address book.
+      $('#edit-member-delivery-home-addresses').once('member-has-address-check').each(function () {
+        if ($('.views-row', $(this)).length === 0) {
+          $('#addresses-header').hide();
+          $(this).hide();
+          $('#address-book-form-wrapper').show();
+        }
+      });
     }
   };
 

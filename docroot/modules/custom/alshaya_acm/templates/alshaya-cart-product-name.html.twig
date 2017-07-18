@@ -7,7 +7,7 @@
             <div class="dark">{{ name }}</div>
         {% endif %}
         {% for sku_attribute in sku_attributes %}
-            <div>
+            <div class="sku-attributes">
                 {% trans %}
                 {{ sku_attribute.label }}: {{ sku_attribute.value }}
                 {% endtrans %}

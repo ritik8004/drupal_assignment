@@ -179,9 +179,10 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
       $this->skuManager->buildPrice($elements[$delta], $sku);
 
-      $build['price_block'] = $this->skuManager->getPriceBlock($sku);
+      $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku);
+
       $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
-      $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
+      $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
       if (!alshaya_acm_is_product_in_stock($sku)) {
         $elements[$delta]['#out_of_stock'] = [

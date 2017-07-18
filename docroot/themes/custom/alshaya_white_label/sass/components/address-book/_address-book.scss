@@ -47,6 +47,10 @@
 
 .view-address-book {
   padding-top: 1.5rem;
+
+  @include breakpoint($desktop) {
+    padding-top: 2.5rem;
+  }
 }
 
 .address {
@@ -88,8 +92,8 @@
   }
 
   .address--userinfo {
-    float: left;
-    padding-right: 1rem;
+    float: $left;
+    padding-#{$right}: 1rem;
     vertical-align: top;
     width: 55%;
 
@@ -98,13 +102,13 @@
     }
 
     @include breakpoint($desktop) {
-      padding-right: 1.5rem;
+      padding-#{$right}: 1.5rem;
       width: 59%;
     }
   }
 
   .address--delivery {
-    float: left;
+    float: $left;
     width: 44%;
 
     @include breakpoint($tablet) {
@@ -236,7 +240,7 @@
     }
   }
 
-  &.active {
+  &:hover {
     .address--data {
       background: $white-four;
     }
@@ -250,7 +254,6 @@
 
       @include breakpoint($desktop) {
         padding-right: 0;
-        text-align: right;
       }
     }
   }
@@ -293,7 +296,7 @@
       }
     }
 
-    &.active {
+    &.default {
       .address--data {
         background: $white-five;
       }

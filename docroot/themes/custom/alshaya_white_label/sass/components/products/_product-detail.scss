@@ -631,6 +631,11 @@
       padding: 0.5rem 0;
       border: none;
     }
+
+    .highlight {
+      color: $windows-blue;
+      font-weight: bold;
+    }
   }
 }
 
@@ -978,8 +983,8 @@
     ul {
       padding-#{$left}: 0;
       margin: 0;
-      height: 380px;
-      overflow: scroll;
+      height: 21.56rem;
+      overflow-y: scroll;
       clear: both;
 
       li {

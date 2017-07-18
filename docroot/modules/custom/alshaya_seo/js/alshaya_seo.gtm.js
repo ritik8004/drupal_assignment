@@ -397,7 +397,7 @@
 
     return productData;
   };
-  
+
   Drupal.alshaya_seo_gtm_push_customer_type = function (customerType) {
     var data = {
       'event': 'checkoutOption',
@@ -410,7 +410,7 @@
         }
       }
     };
-    
+
     dataLayer.push(data);
   };
 
@@ -426,7 +426,7 @@
         }
       }
     };
-    
+
     dataLayer.push(data);
   };
 
