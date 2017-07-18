@@ -161,6 +161,18 @@ body.chrome {
 }
 
 html[lang=ar] {
+  .acq-cart-summary {
+    .price-wrapper {
+      .price-amount {
+        float: right !important;
+      }
+
+      .price-currency {
+        float: left !important;
+      }
+    }
+  }
+
   body.ucbrowser.alias--cart {
     #table-cart-items td select {
       padding-left: 40px;
@@ -172,12 +184,6 @@ html[lang=ar] {
 
     tr td.name div.items {
       width: 42%;
-    }
-
-    .contains--tooltip .tooltip {
-      @include breakpoint($desktop) {
-        right: 4rem;
-      }
     }
   }
 
@@ -228,9 +234,18 @@ html[lang=ar] {
 }
 
 html[lang="ar"] {
+  .ie,
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
+    }
+  }
+}
+
+html[lang="ar"] {
+  .ucbrowser {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.55rem;
     }
   }
 }

@@ -17,8 +17,10 @@
 </div>
 
 <div class="store-delivery-time">
+  {% if store.delivery_time %}
   <span class="label--delivery-time">{{ 'Collect in store from'|t }}</span>
   <span class="delivery--time--value">{{ store.delivery_time }}</span>
+  {% endif %}
 </div>
 <div class="store-actions">
   <a href="#" class="change-store">{{ 'change store'|t }}</a>

@@ -411,7 +411,7 @@
         }
       },
       'eventCallback': function() {
-        document.location = '/cart/checkout/delivery';
+        document.location = Drupal.url('cart/checkout/delivery');
       }
     };
     
@@ -430,7 +430,7 @@
         }
       },
       'eventCallback': function () {
-        document.location = '/cart/checkout/confirmation';
+        document.location = Drupal.url('cart/checkout/confirmation');
       }
     };
     
@@ -449,7 +449,7 @@
         }
       },
       'eventCallback': function() {
-        document.location = '/cart/checkout/payment';
+        document.location = Drupal.url('cart/checkout/payment');
       }
     };
 
@@ -509,7 +509,7 @@
           }
         },
         'eventCallback': function() {
-          document.location = location;
+          document.location = Drupal.url(location);
         }
       };
 

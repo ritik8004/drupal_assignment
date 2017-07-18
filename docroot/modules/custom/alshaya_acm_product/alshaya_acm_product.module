@@ -351,8 +351,10 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
       $click_collect_delivery['#type'] = alshaya_acm_product_available_click_collect($id) ? 'click-collect' : 'click-collect not-available';
 
       $delivery_options = '<div class="delivery-options-mobile">' . t('Available delivery options') . '</div>';
+      $delivery_options .= '<div class="delivery-options-tooltip-wrapper">';
       $delivery_options .= isset($home_delivery) ? render($home_delivery) : '';
       $delivery_options .= isset($click_collect_delivery) ? render($click_collect_delivery) : '';
+      $delivery_options .= '</div>';
 
       $form['cart'][$id]['delivery_options'] = [
         '#markup' => $delivery_options,
