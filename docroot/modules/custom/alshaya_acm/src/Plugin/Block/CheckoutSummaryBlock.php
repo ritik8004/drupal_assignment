@@ -168,7 +168,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           }
           else {
             $cc_settings = $this->configFactory->get('alshaya_click_collect.settings');
-            $duration = $cc_settings->get('click_collect_rnc_desc');
+            $duration = $cc_settings->get('click_collect_rnc');
           }
 
           $delivery['method_description'] = $this->t('Your order will be available in %duration', ['%duration' => $duration]);
