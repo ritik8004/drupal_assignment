@@ -32,8 +32,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * {@inheritdoc}
    */
   public function isVisible() {
-    $cc_status = $this->getClickAndCollectAvailability();
-    return \Drupal::currentUser()->isAnonymous() && ($cc_status == 1);
+    return \Drupal::currentUser()->isAnonymous() && $this->getClickAndCollectAvailability();
   }
 
   /**

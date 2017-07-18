@@ -33,8 +33,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    * {@inheritdoc}
    */
   public function isVisible() {
-    $cc_status = $this->getClickAndCollectAvailability();
-    return \Drupal::currentUser()->isAuthenticated() && ($cc_status == 1);
+    return \Drupal::currentUser()->isAuthenticated() && $this->getClickAndCollectAvailability();
   }
 
   /**
