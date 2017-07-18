@@ -145,7 +145,7 @@ class ClickCollectController extends ControllerBase {
     // Sort the stores first by distance and then by name.
     alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
-    $build['store_list'] = $build['map_info_window'] = t('Sorry, No store found for your location.');
+    $build['store_list'] = $build['map_info_window'] = '<span class="empty">' . t('Sorry, No store found for your location.') . '</span>';
     if (count($stores) > 0) {
       $build['store_list'] = [
         '#theme' => 'click_collect_stores_list',
