@@ -40,7 +40,7 @@ function alshaya_seo_install() {
   // Update user metatag defaults.
   $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.user');
   $tags = $config_factory->get('tags');
-  $tags['title'] = '[user:name] | [site:name]';
+  $tags['title'] = '[user:field_first_name] [user:field_last_name] | [site:name]';
   $config_factory->set('tags', $tags);
   $config_factory->save();
 
