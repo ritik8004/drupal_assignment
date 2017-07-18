@@ -54,13 +54,6 @@ class ClickCollectConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('click_collect_rnc'),
     ];
 
-    $form['click_collect_rnc_desc'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Click and Collect Reserve and collect short description'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('click_collect_rnc_desc'),
-    ];
-
     $form['pdp_click_collect_title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('PDP: Click and Collect title'),
@@ -117,7 +110,6 @@ class ClickCollectConfigForm extends ConfigFormBase {
     $config->set('checkout_click_collect_available', $form_state->getValue('checkout_click_collect_available'));
     $config->set('checkout_click_collect_unavailable', $form_state->getValue('checkout_click_collect_unavailable'));
     $config->set('click_collect_rnc', $form_state->getValue('click_collect_rnc'));
-    $config->set('click_collect_rnc_desc', $form_state->getValue('click_collect_rnc_desc'));
     $config->set('pdp_click_collect_title', $form_state->getValue('pdp_click_collect_title'));
     $config->set('pdp_click_collect_subtitle', $form_state->getValue('pdp_click_collect_subtitle'));
     $config->set('pdp_click_collect_unavailable', $form_state->getValue('pdp_click_collect_unavailable'));
