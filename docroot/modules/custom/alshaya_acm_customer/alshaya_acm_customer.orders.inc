@@ -130,7 +130,7 @@ function alshaya_acm_customer_get_order_status(array $order) {
   }
 
   return [
-    'text' => $order['state'],
+    'text' => $order['extension']['customer_status'],
     'class' => $class,
     'key' => $order['status'],
   ];
