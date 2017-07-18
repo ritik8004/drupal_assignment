@@ -219,7 +219,7 @@
       font-family: $alshaya-thin;
     }
 
-    &.promo-banner > .filter--mobile {
+    .promo-banner > .filter--mobile {
       top: 21rem;
 
       @include breakpoint($only-tablet) {
