@@ -198,9 +198,6 @@ function alshaya_master_install() {
     'search item or keyword' => [
       'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
     ],
-    'Total: @count items' => [
-      'ar' => 'الإجمالي: عدد القطع @count',
-    ],
     'View order details' => [
       'ar' => 'عرض تفاصيل الطلبية',
     ],
