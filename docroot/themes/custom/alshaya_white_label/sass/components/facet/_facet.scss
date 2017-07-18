@@ -12,7 +12,9 @@
   ul {
     @extend %list-clear;
 
-    padding-top: 20px;
+    @include breakpoint($desktop) {
+      padding-top: 1.25rem;
+    }
 
     input[type="text"] {
       border: 1px solid $white;
