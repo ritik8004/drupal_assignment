@@ -25,3 +25,9 @@ alshaya_click_collect.settings:
     pdp_click_collect_select_option_text:
       type: text_format
       label: 'PDP: Click and Collect select option text'
+    checkout_click_collect_available:
+      type: label
+      label: 'Checkout: Click and Collect available'
+    checkout_click_collect_unavailable:
+      type: label
+      label: 'Checkout: Click and Collect unavailable'

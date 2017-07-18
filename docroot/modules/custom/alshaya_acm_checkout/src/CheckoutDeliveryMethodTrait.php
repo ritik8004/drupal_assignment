@@ -108,4 +108,46 @@ trait CheckoutDeliveryMethodTrait {
     return $classes[$method];
   }
 
+  /**
+   * Check if products in cart are available for click and collect.
+   *
+   * @return int
+   *   0 if not available, 1 if click and collect available.
+   */
+  protected function getClickAndCollectAvailability() {
+    $status = &drupal_static(__FUNCTION__);
+    if (isset($status)) {
+      return $status;
+    }
+    // Include the utility file.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    // Get the cart items.
+    $items = $this->getCart()->items();
+    // Click and collect status.
+    $cc_status = [];
+    // Available products array for click and collect.
+    $available = [];
+    if (!empty($items)) {
+      // Loop through each cart items to get the status of click and collect.
+      foreach ($items as $index => $line_item) {
+        // Check the status of click and collect for the given sku.
+        $cc_status[$line_item['sku']] = alshaya_acm_product_available_click_collect($line_item['sku']);
+      }
+      // Filter out all the products that are available for click and collect.
+      $available = array_filter($cc_status);
+    }
+
+    // If available products are less then the total cart products.
+    if (count($available) < count($items)) {
+      $status = 0;
+    }
+    // If all products are available for click and collect.
+    elseif (count($available) == count($items)) {
+      $status = 1;
+    }
+
+    return $status;
+  }
+
 }

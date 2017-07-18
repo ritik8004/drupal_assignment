@@ -276,6 +276,15 @@
           }
         }
       }
+
+      &.disabled--tab--head {
+        border-color: $light-greyish;
+
+        h2,
+        p {
+          color: $light-greyish;
+        }
+      }
     }
 
     .tab-home-delivery.active--tab--head::after,
