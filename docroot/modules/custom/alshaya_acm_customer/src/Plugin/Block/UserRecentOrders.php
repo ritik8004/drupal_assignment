@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_customer\Plugin\Block;
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
@@ -168,6 +167,14 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
+              $product_node = alshaya_acm_product_get_display_node($item['sku']);
+
+              // We don't display the product if it is not available in Drupal.
+              if (empty($product_node)) {
+                unset($order['items'][$key]);
+                continue;
+              }
+
               // Load the first image.
               $order['items'][$key]['image'] = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
@@ -184,13 +191,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               ];
 
               // Item name for order.
-              $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($order['items'][$key]['sku']);
-              if (is_object($parent_sku) && $parent_sku instanceof SKUInterface) {
-                $order['item_names'][] = $parent_sku->label();
-              }
-              else {
-                $order['item_names'][] = $order['items'][$key]['name'];
-              }
+              $order['item_names'][] = $product_node->getTitle();
 
               $order['status'] = alshaya_acm_customer_get_order_status($order);
             }
