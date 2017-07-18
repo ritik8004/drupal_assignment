@@ -125,26 +125,19 @@ trait CheckoutDeliveryMethodTrait {
     // Get the cart items.
     $items = $this->getCart()->items();
     // Click and collect status.
-    $cc_status = [];
-    // Available products array for click and collect.
-    $available = [];
+    $status = 1;
+
     if (!empty($items)) {
       // Loop through each cart items to get the status of click and collect.
       foreach ($items as $index => $line_item) {
         // Check the status of click and collect for the given sku.
-        $cc_status[$line_item['sku']] = alshaya_acm_product_available_click_collect($line_item['sku']);
+        if (!alshaya_acm_product_available_click_collect($line_item['sku'])) {
+          // If click and collect is not available for a product.
+          // Set status 0 and break the loop.
+          $status = 0;
+          break;
+        }
       }
-      // Filter out all the products that are available for click and collect.
-      $available = array_filter($cc_status);
-    }
-
-    // If available products are less then the total cart products.
-    if (count($available) < count($items)) {
-      $status = 0;
-    }
-    // If all products are available for click and collect.
-    elseif (count($available) == count($items)) {
-      $status = 1;
     }
 
     return $status;

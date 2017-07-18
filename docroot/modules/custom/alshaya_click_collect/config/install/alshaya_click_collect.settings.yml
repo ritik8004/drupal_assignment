@@ -9,7 +9,6 @@ pdp_click_collect_select_option_text:
   value: '<p><span class="highlight">Select a size</span> to check stock availability near to you</p>'
   format: rich_text
 click_collect_rnc: '1 hour'
-click_collect_rnc_desc: 'Your order will be available in 1 hour'
 checkout_click_collect_available: 'Collect your order in-store'
 checkout_click_collect_unavailable: 'Sorry Collect your order in-store is unavailable'
 langcode: en
