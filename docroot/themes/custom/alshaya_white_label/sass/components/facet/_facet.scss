@@ -54,6 +54,10 @@
       font-size: 0.875rem;
       text-transform: lowercase;
     }
+
+    .facet-item__count {
+      margin-#{$left}: 0.125rem;
+    }
   }
 }
 
