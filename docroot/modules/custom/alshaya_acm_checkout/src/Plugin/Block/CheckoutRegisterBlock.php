@@ -141,7 +141,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $form['field_last_name']['#access'] = FALSE;
     $form['privilege_card_wrapper']['#access'] = FALSE;
 
-    $form['actions']['submit']['#value'] = $this->t('save');
+    $form['actions']['submit']['#value'] = $this->t('save', [], ['context' => 'Checkout']);
 
     $build['form'] = $form;
 
