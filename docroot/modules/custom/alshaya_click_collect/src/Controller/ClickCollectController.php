@@ -291,7 +291,6 @@ class ClickCollectController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'show'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .available_store', 'show'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available_store .change-location-link', 'show'));
       if (!empty($data['all_stores'])) {
         $settings['alshaya_click_collect']['pdp']['all_stores'] = TRUE;
@@ -308,7 +307,6 @@ class ClickCollectController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'show'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'hide'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .available_store', 'hide'));
     }
 
     $settings['alshaya_click_collect']['pdp']['ajax_call'] = TRUE;
