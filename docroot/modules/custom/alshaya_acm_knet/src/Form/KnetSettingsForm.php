@@ -35,7 +35,6 @@ class KnetSettingsForm extends ConfigFormBase {
       ->set('payment_pending', $form_state->getValue('payment_pending'))
       ->set('payment_processed', $form_state->getValue('payment_processed'))
       ->set('payment_failed', $form_state->getValue('payment_failed'))
-      ->set('payment_cancelled', $form_state->getValue('payment_cancelled'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -94,14 +93,6 @@ class KnetSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Payment failed'),
       '#required' => TRUE,
       '#default_value' => $config->get('payment_failed'),
-    ];
-
-    $form['payment_cancelled'] = [
-      '#type' => 'textfield',
-      '#description' => $this->t('Order status to set when payment is cancelled.'),
-      '#title' => $this->t('Payment Cancelled'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('payment_cancelled'),
     ];
 
     return parent::buildForm($form, $form_state);
