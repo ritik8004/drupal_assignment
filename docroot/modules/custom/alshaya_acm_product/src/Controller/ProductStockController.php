@@ -102,7 +102,7 @@ class ProductStockController extends ControllerBase {
     $product_node_ajax_url = $product_node_url->toString();
 
     $form['add_to_cart']['add_to_cart']['#attached']['drupalSettings']['ajax']['edit-add-to-cart']['url'] = $product_node_ajax_url;
-    $form['add_to_cart']['ajax']['configurables']['size']['#attached']['drupalSettings']['ajax']['edit-configurable-size']['url'] = $product_node_ajax_url;
+    $form['add_to_cart']['ajax']['configurables']['size']['#attached']['drupalSettings']['ajax']['edit-configurables-size']['url'] = $product_node_ajax_url;
     $form['add_to_cart']['add_to_cart']['#attached']['drupalSettings']['ajaxTrustedUrl'][] = $product_node_ajax_url;
     $form['add_to_cart']['ajax']['configurables']['size']['#attached']['drupalSettings']['ajaxTrustedUrl'][] = $product_node_ajax_url;
 
