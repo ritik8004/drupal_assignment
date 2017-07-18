@@ -50,11 +50,13 @@
     @include breakpoint($tablet) {
       width: 60%;
       float: $left;
+      min-height: 31.25rem;
     }
 
     @include breakpoint($desktop) {
       width: 70%;
       float: $left;
+      min-height: 36.325rem;
     }
   }
 
