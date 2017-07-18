@@ -247,7 +247,7 @@
             storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
               if (status === 'success') {
                 if (response.data.alshaya_click_collect.pdp.top_three) {
-                  // Add formatted address based on lat/lng before ajax for all stores. If html elements
+                  // Show formatted address after ajax for all stores, once we have html elements.
                   Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
                   displaySearchForm = false;
                   records = true;
