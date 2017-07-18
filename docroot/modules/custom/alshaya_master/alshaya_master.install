@@ -922,6 +922,12 @@ function alshaya_master_install() {
     'Phone number in %field is required.' => [
       'ar' => 'يرجى إدخال رقم الجوال',
     ],
+    '1 hour' => [
+      'ar' => 'ساعة واحدة',
+    ],
+    'Your order will be available in %duration' => [
+      'ar' => 'سيتم توصيل طلبيتك خلال %duration',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
