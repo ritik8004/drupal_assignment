@@ -68,9 +68,9 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $selected_method = $this->getSelectedDeliveryMethod();
     // Set home delivery method active.
-    $active_class = ($selected_method == 'hd') ? 'active--tab--head' : '';
+    $current_class = ($selected_method == 'hd') ? 'active--tab--head' : '';
 
-    $home_delivery = '<div class="tab tab-home-delivery ' . $active_class . '" gtm-type="checkout-home-delivery">';
+    $home_delivery = '<div class="tab tab-home-delivery ' . $current_class . '" gtm-type="checkout-home-delivery">';
     $home_delivery .= '<a href="' . $url->toString() . '">';
     $home_delivery .= '<h2>' . $this->t('Home delivery') . '</h2>';
     $home_delivery .= '<p>' . $this->t('Standard delivery for purchases over KD 250') . '</p>';
@@ -84,16 +84,32 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#markup' => '<div class="tab tab-separator">' . $this->t('OR') . '</div>',
     ];
 
-    // Set cc as method in params for click and collect.
-    $url->setRouteParameter('method', 'cc');
+    $cc_config = \Drupal::config('alshaya_click_collect.settings');
+    // Get the status of click and collect for current cart items.
+    $cc_status = $this->getClickAndCollectAvailability();
+    if ($cc_status == 1) {
+      // Set cc as method in params for click and collect.
+      $url->setRouteParameter('method', 'cc');
+      // Set click and collect delivery method active.
+      $current_class = ($selected_method == 'cc') ? 'active--tab--head' : '';
+      // Link to click and collect.
+      $cc_link = $url->toString();
+      // Click and collect sub title.
+      $subtitle = $cc_config->get('checkout_click_collect_available');
+    }
+    else {
+      // Do not render link if click and collect is not available.
+      $cc_link = '#';
+      // Set current class disabled.
+      $current_class = 'disabled--tab--head';
+      // Click and collect sub title not available at all.
+      $subtitle = $cc_config->get('checkout_click_collect_unavailable');
+    }
 
-    // Set click and collect delivery mehtod active.
-    $active_class = ($selected_method == 'cc') ? 'active--tab--head' : '';
-
-    $click_collect = '<div class="tab tab-click-collect ' . $active_class . '" gtm-type="checkout-click-collect">';
-    $click_collect .= '<a href="' . $url->toString() . '">';
+    $click_collect = '<div class="tab tab-click-collect ' . $current_class . '" gtm-type="checkout-click-collect">';
+    $click_collect .= '<a href="' . $cc_link . '">';
     $click_collect .= '<h2>' . $this->t('Click & Collect') . '</h2>';
-    $click_collect .= '<p>' . $this->t('Collect your order in-store') . '</p>';
+    $click_collect .= '<p>' . $subtitle . '</p>';
     $click_collect .= '</a></div>';
 
     $pane_form['click_collect'] = [

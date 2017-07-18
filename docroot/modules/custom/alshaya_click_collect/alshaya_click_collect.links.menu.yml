@@ -1,4 +1,6 @@
 alshaya_click_collect.configuration:
+  title: 'Click and collect configuration'
+  parent: acq_commerce.configuration
+  description: 'Configure Click and collect texts for pdp and checkout pages.'
+  weight: 10
   route_name: alshaya_click_collect.configuration
-  title: 'click and collect configuration'
-  parent: system.admin_config_system
