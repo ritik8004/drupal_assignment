@@ -228,7 +228,14 @@ html[lang=ar] {
 }
 
 html[lang="ar"] {
-  .ie,
+  .ie {
+    &.path--user .profile-address-book-edit-form .address-book-address .country-code-prefix {
+      margin-top: 1.65rem;
+    }
+  }
+}
+
+html[lang="ar"] {
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
