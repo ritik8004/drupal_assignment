@@ -157,6 +157,30 @@
             }
           }
         }
+        else if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_value === "deliver to this address")) {
+          // Trigger GTM push for checkout delivery option if one of them is pre-selected.
+          var responses = xhr.responseJSON;
+          for (var i=0; i<responses.length; i++) {
+            if ((responses[i].method === 'replaceWith') && (responses[i].selector === '#address_wrapper')) {
+              var selectedMethod = $(responses[i].data).find('input:checked');
+
+              // Attach change event listener to the input elements.
+              $(responses[i].data).find('input').change(function() {
+                var selectedMethod = $('.form-item-guest-delivery-home-address-shipping-methods input:checked');
+                if (selectedMethod === 1) {
+                  var selectedMethodLabel = selectedMethod.siblings('label').find('shipping-method-title').text();
+                  Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+                }
+              });
+
+              if (selectedMethod.length === 1) {
+                var selectedMethodLabel = selectedMethod.siblings('label').find('.shipping-method-title').text();
+                Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+              }
+              break;
+            }
+          }
+        }
       });
 
       /** Quantity update in cart. **/
@@ -255,7 +279,7 @@
       if (cartCheckoutDeliverySelector.length !== 0) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
-          Drupal.alshaya_seo_gtm_push_delivery_type('Home Delivery');
+          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
         }
         // Fire checkout option event when user switches delivery option.
         cartCheckoutDeliverySelector.find('[data-drupal-selector="edit-delivery-tabs"] .tab').once('js-event').each(function() {
@@ -270,7 +294,7 @@
                 deliveryType = 'Click & Collect';
               }
 
-              Drupal.alshaya_seo_gtm_push_delivery_type(deliveryType);
+              Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
             }
           });
         });
@@ -281,14 +305,14 @@
         var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
         if (preselectedMethod.length === 1) {
           var preselectedMethodLabel = preselectedMethod.siblings('label').text();
-          Drupal.alshaya_seo_gtm_push_selected_payment(preselectedMethodLabel);
+          Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
         }
 
         $('[gtm-type="cart-checkout-payment"] input', context).once('js-event').change(function() {
           var selectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
           if (selectedMethod === 1) {
             var selectedMethodLabel = selectedMethod.siblings('label').text();
-            Drupal.alshaya_seo_gtm_push_selected_payment(selectedMethodLabel);
+            Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 4);
           }
         });
       }
@@ -414,30 +438,14 @@
     dataLayer.push(data);
   };
 
-  Drupal.alshaya_seo_gtm_push_selected_payment = function(paymentMethod) {
+  Drupal.alshaya_seo_gtm_push_checkout_option = function(optionLabel, step) {
     var data = {
       'event': 'checkoutOption',
       'ecommerce': {
         'checkout_option': {
           'actionField': {
-            'step': 4,
-            'option': paymentMethod
-          }
-        }
-      }
-    };
-
-    dataLayer.push(data);
-  };
-
-  Drupal.alshaya_seo_gtm_push_delivery_type = function(deliveryType) {
-    var data = {
-      'event': 'checkoutOption',
-      'ecommerce': {
-        'checkout_option': {
-          'actionField': {
-            'step': 2,
-            'option': deliveryType
+            'step':step,
+            'option': optionLabel
           }
         }
       }

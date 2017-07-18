@@ -177,6 +177,7 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchSkuAtttributes($skuId) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
     $attributes = [];
@@ -480,7 +481,7 @@ class AlshayaGtmManager {
     }
 
     $actionData = [
-      'id' => $order_id,
+      'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
       'revenue' => (float) $order['totals']['grand'],
       'tax' => (float) $order['totals']['tax'] ?: 0.00,
@@ -493,7 +494,7 @@ class AlshayaGtmManager {
       'deliveryOption' => 'Home Delivery',
       'paymentOption' => $order['payment']['method_title'],
       'discountAmount' => $order['totals']['discount'],
-      'transactionID' => $order_id,
+      'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
     ];
 
