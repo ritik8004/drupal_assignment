@@ -11,7 +11,7 @@ dependencies:
 id: filterbarplp
 theme: alshaya_white_label
 region: content
-weight: -19
+weight: -15
 provider: null
 plugin: 'facets_summary_block:filter_bar_plp'
 settings:
