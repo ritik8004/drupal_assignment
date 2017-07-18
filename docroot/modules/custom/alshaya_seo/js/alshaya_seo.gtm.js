@@ -391,7 +391,6 @@
       'dimension1': '',
       'dimension2': '',
       'dimension3': product.attr('gtm-dimension3'),
-      'dimension4': product.attr('gtm-stock'),
       'dimension5': product.attr('gtm-sku-type'),
       'metric1': product.attr('gtm-cart-value')
     };
@@ -409,9 +408,6 @@
             'option': customerType
           }
         }
-      },
-      'eventCallback': function() {
-        document.location = 'cart/checkout/delivery';
       }
     };
     
@@ -428,9 +424,6 @@
             'option': paymentMethod
           }
         }
-      },
-      'eventCallback': function () {
-        document.location = 'cart/checkout/confirmation';
       }
     };
     
@@ -447,9 +440,6 @@
             'option': deliveryType
           }
         }
-      },
-      'eventCallback': function() {
-        document.localtion = 'cart/checkout/payment';
       }
     };
 
@@ -492,24 +482,12 @@
     };
 
     if (event === 'promotionClick') {
-      var location = '';
-
-      if (highlights.find('a').length !== 0) {
-        location = highlights.find('a').attr('href');
-      }
-      else {
-        location = window.location.pathname;
-      }
-
       data = {
         'event': event,
         'ecommerce': {
           'promoClick': {
             'promotions': promotions
           }
-        },
-        'eventCallback': function() {
-          document.location = location;
         }
       };
 
