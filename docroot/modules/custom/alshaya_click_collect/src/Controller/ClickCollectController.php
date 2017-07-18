@@ -310,7 +310,7 @@ class ClickCollectController extends ControllerBase {
 
     $settings['alshaya_click_collect']['pdp']['ajax_call'] = TRUE;
     $response->addCommand(new InvokeCommand('.click-collect-form', 'show'));
-    $response->addCommand(new StoreDisplayFillCommand('storeDisplayFill', $settings));
+    $response->addCommand(new StoreDisplayFillCommand($settings));
     $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
 
     return $response;
