@@ -12,8 +12,9 @@
   var lastSku = null;
   // Last coords.
   var lastCoords = null;
-  // Geolocation permission.
-  var geoPerm;
+  // Geolocation permission, set default to false to show search form.
+  // When user doesn't react to location permission.
+  var geoPerm = false;
   // Check records already exists.
   var records = false;
   // Display search form.
@@ -50,15 +51,25 @@
         }
       });
 
+      // Hit the search store button on hitting enter when on textbox.
+      $('.click-collect-form').once('prevent-enter').on('keypress', '.store-location-input', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+          e.preventDefault();
+          $('.click-collect-form').find('.search-stores-button').click();
+          return false;
+        }
+      });
+
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
-
-        $('.click-collect-all-stores').toggle('slow', function () {
-          // Scroll
-          $('html,body').animate({
-            scrollTop: $('.click-collect-all-stores').offset().top
-          }, 'slow');
-        });
-
+        if ($(window).width() >= 768) {
+          $('.click-collect-all-stores').toggle('slow', function () {
+            // Scroll
+            $('html,body').animate({
+              scrollTop: $('.click-collect-all-stores').offset().top
+            }, 'slow');
+          });
+        }
       });
 
       $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-location-link, .search-stores-button, .cancel-change-location', function (e) {
