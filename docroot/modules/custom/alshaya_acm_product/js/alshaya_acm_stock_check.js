@@ -18,9 +18,9 @@
 
         $.ajax({
           url: Drupal.url('stock-check-ajax/node/' + productId),
-          type:"POST",
-          contentType:"application/json;",
-          dataType:"json",
+          type: "POST",
+          contentType: "application/json;",
+          dataType: "json",
           success: function (result) {
             productStock.html(result.html);
           }
@@ -34,9 +34,9 @@
           var $wrapper = $(this);
           $.ajax({
             url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-            type:"POST",
-            contentType:"application/json;",
-            dataType:"json",
+            type: "POST",
+            contentType: "application/json;",
+            dataType: "json",
             success: function (result) {
               $wrapper.html(result.html);
               // Add class to share this wrapper if product out of stock.
@@ -58,9 +58,9 @@
           var $wrapper = $(this);
           $.ajax({
             url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-            type:"POST",
-            contentType:"application/json;",
-            dataType:"json",
+            type: "POST",
+            contentType: "application/json;",
+            dataType: "json",
             success: function (result) {
               $wrapper.html(result.html);
               // Add class to share this wrapper if product out of stock.
@@ -83,9 +83,9 @@
 
           $.ajax({
             url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-            type:"POST",
-            contentType:"application/json;",
-            dataType:"json",
+            type: "POST",
+            contentType: "application/json;",
+            dataType: "json",
             success: function (result) {
               $wrapper.html(result.html);
               Drupal.attachBehaviors($wrapper[0]);
