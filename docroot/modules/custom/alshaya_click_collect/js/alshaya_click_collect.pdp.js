@@ -12,8 +12,9 @@
   var lastSku = null;
   // Last coords.
   var lastCoords = null;
-  // Geolocation permission.
-  var geoPerm;
+  // Geolocation permission, set default to false to show search form.
+  // When user doesn't react to location permission.
+  var geoPerm = false;
   // Check records already exists.
   var records = false;
   // Display search form.
