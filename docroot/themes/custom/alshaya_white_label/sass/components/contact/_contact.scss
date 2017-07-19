@@ -37,118 +37,118 @@
     }
   }
 
-  .form-item-mobile-number-mobile {
-    display: inline-block;
-  }
+  // .form-item-mobile-number-mobile {
+  //   display: inline-block;
+  // }
 
-  .form-item-mobile-number-mobile input {
-    &::placeholder {
-      visibility: hidden;
+  // .form-item-mobile-number-mobile input {
+  //   &::placeholder {
+  //     visibility: hidden;
 
-      .ie & {
-        visibility: visible;
-        color: transparent;
-        opacity: 1 !important;
-      }
-    }
-  }
+  //     .ie & {
+  //       visibility: visible;
+  //       color: transparent;
+  //       opacity: 1 !important;
+  //     }
+  //   }
+  // }
 
-  #edit-mobile-number {
-    label {
-      bottom: 0;
-      #{$left}: 0;
-      opacity: 1;
-      font-size: 0.75rem;
-      position: relative;
-      top: 0;
+  // #edit-mobile-number {
+  //   label {
+  //     bottom: 0;
+  //     #{$left}: 0;
+  //     opacity: 1;
+  //     font-size: 0.75rem;
+  //     position: relative;
+  //     top: 0;
 
-      &.error {
-        left: -4em;
-        width: 9rem;
-      }
-    }
+  //     &.error {
+  //       left: -4em;
+  //       width: 9rem;
+  //     }
+  //   }
 
-    .country-select {
-      color: $greyish;
-    }
-  }
+  //   .country-select {
+  //     color: $greyish;
+  //   }
+  // }
 
-  .mobile-number-field {
-    @include breakpoint($only-mobile) {
-      float: none;
-      clear: both;
-      display: block !important;
-    }
-  }
+  // .mobile-number-field {
+  //   @include breakpoint($only-mobile) {
+  //     float: none;
+  //     clear: both;
+  //     display: block !important;
+  //   }
+  // }
 
-  .mobile-number-field.form-item--error {
-    margin-bottom: 4rem;
+  // .mobile-number-field.form-item--error {
+  //   margin-bottom: 4rem;
 
-    .form-item-mobile-number-mobile {
-      @include breakpoint($only-mobile) {
-        position: static;
-      }
+  //   .form-item-mobile-number-mobile {
+  //     @include breakpoint($only-mobile) {
+  //       position: static;
+  //     }
 
-      .form-item--error-message {
-        @include breakpoint($only-mobile) {
-          #{$left}: 0;
-        }
+  //     .form-item--error-message {
+  //       @include breakpoint($only-mobile) {
+  //         #{$left}: 0;
+  //       }
 
-        position: absolute;
-        #{$left}: 0;
-        width: 21rem;
-      }
-    }
-  }
+  //       position: absolute;
+  //       #{$left}: 0;
+  //       width: 21rem;
+  //     }
+  //   }
+  // }
 
-  .country-code-prefix {
-    @include breakpoint($only-mobile) {
-      margin-top: 0.5rem;
-    }
-  }
+  // .country-code-prefix {
+  //   @include breakpoint($only-mobile) {
+  //     margin-top: 0.5rem;
+  //   }
+  // }
 
-  #edit-mobile-number.mobile-number-field {
-    @include clearfix;
+  // #edit-mobile-number.mobile-number-field {
+  //   @include clearfix;
 
-    max-width: 186px;
-    height: auto;
+  //   max-width: 186px;
+  //   height: auto;
 
-    label {
-      position: absolute;
-      top: -17px;
-    }
+  //   label {
+  //     position: absolute;
+  //     top: -17px;
+  //   }
 
-    input,
-    .country-code-prefix {
-      line-height: 25px;
-      height: 25px;
-      margin: 0;
-    }
+  //   input,
+  //   .country-code-prefix {
+  //     line-height: 25px;
+  //     height: 25px;
+  //     margin: 0;
+  //   }
 
-    .c-input__bar {
-      position: static;
+  //   .c-input__bar {
+  //     position: static;
 
-      &::before,
-      &::after {
-        bottom: -1px;
-        top: auto;
-        top: initial;
-      }
-    }
+  //     &::before,
+  //     &::after {
+  //       bottom: -1px;
+  //       top: auto;
+  //       top: initial;
+  //     }
+  //   }
 
-    #edit-mobile-number-mobile-error {
-      left: 0;
-      top: 17px !important;
-      position: absolute !important;
-      display: block !important;
-      width: auto;
-      right: 0;
-    }
+  //   #edit-mobile-number-mobile-error {
+  //     left: 0;
+  //     top: 17px !important;
+  //     position: absolute !important;
+  //     display: block !important;
+  //     width: auto;
+  //     right: 0;
+  //   }
 
-    #edit-mobile-number-mobile-error ~ .form-item--error-message {
-      top: 40px;
-    }
-  }
+  //   #edit-mobile-number-mobile-error ~ .form-item--error-message {
+  //     top: 40px;
+  //   }
+  // }
 }
 
 .address-book-address,
@@ -177,7 +177,7 @@
 
   input.error,
   textarea.error {
-    border-bottom: 2px solid $red-error;
+    border-bottom: 1px solid $red-error;
   }
 
   label.error {
@@ -193,7 +193,7 @@
   .form-item--error {
     input.error {
       color: $black;
-      border-bottom: 2px solid $red-error !important;
+      border-bottom: 1px solid $red-error !important;
     }
 
     .c-input__bar {
@@ -340,90 +340,90 @@
 
 .webform-submission-alshaya-contact-form,
 form.user-form {
-  .mobile-number-field {
-    width: 100%;
-    display: block;
-    clear: both;
-    border-bottom: 1px solid $grey-ash;
-    padding-bottom: 0.125rem;
+  // .mobile-number-field {
+  //   width: 100%;
+  //   display: block;
+  //   clear: both;
+  //   border-bottom: 1px solid $grey-ash;
+  //   padding-bottom: 0.125rem;
 
-    .country-code-prefix {
-      border-bottom: none;
-    }
+  //   .country-code-prefix {
+  //     border-bottom: none;
+  //   }
 
-    .form-type-textfield {
-      top: 0.4rem;
+  //   .form-type-textfield {
+  //     top: 0.4rem;
 
-      html[lang=ar] & {
-        top: 0.2rem;
-      }
+  //     html[lang=ar] & {
+  //       top: 0.2rem;
+  //     }
 
-      label.error {
-        position: absolute !important;
-        top: 1.2rem !important;
-      }
+  //     label.error {
+  //       position: absolute !important;
+  //       top: 1.2rem !important;
+  //     }
 
-      .c-input__bar {
-        top: 0.25rem;
+  //     .c-input__bar {
+  //       top: 0.25rem;
 
-        html[lang=ar] & {
-          top: 0.3125rem;
-        }
-      }
+  //       html[lang=ar] & {
+  //         top: 0.3125rem;
+  //       }
+  //     }
 
-      input {
-        border-bottom: none !important;
+  //     input {
+  //       border-bottom: none !important;
 
-        &::placeholder {
-          opacity: 0;
-        }
-      }
-    }
+  //       &::placeholder {
+  //         opacity: 0;
+  //       }
+  //     }
+  //   }
 
-    html[lang=ar] & {
-      margin-top: 0.5rem !important;
+  //   html[lang=ar] & {
+  //     margin-top: 0.5rem !important;
 
-      label.form-required {
-        position: absolute !important;
-      }
-    }
-  }
+  //     label.form-required {
+  //       position: absolute !important;
+  //     }
+  //   }
+  // }
 }
 
 form.user-form {
-  .mobile-number-field {
-    padding-bottom: 2px;
+  // .mobile-number-field {
+  //   padding-bottom: 2px;
 
-    .form-item--error-message {
-      position: absolute;
-      top: 4rem;
-      width: 19rem;
-    }
+  //   .form-item--error-message {
+  //     position: absolute;
+  //     top: 4rem;
+  //     width: 19rem;
+  //   }
 
-    .c-input__bar {
-      top: 3px !important;
+  //   .c-input__bar {
+  //     top: 3px !important;
 
-      html[lang=ar] & {
-        top: 0.1875rem !important;
-      }
-    }
+  //     html[lang=ar] & {
+  //       top: 0.1875rem !important;
+  //     }
+  //   }
 
-    html[lang=ar] & {
-      .form-type-textfield {
-        top: 0.4rem !important;
-      }
-    }
+  //   html[lang=ar] & {
+  //     .form-type-textfield {
+  //       top: 0.4rem !important;
+  //     }
+  //   }
 
-    &.form-item--error {
-      margin-bottom: 4.5rem;
-    }
-  }
+  //   &.form-item--error {
+  //     margin-bottom: 4.5rem;
+  //   }
+  // }
 
-  .form-actions {
-    @include breakpoint($desktop) {
-      margin-top: 1.5rem;
-    }
-  }
+  // .form-actions {
+  //   @include breakpoint($desktop) {
+  //     margin-top: 1.5rem;
+  //   }
+  // }
 }
 
 .c-user-edit .user-form {
@@ -434,17 +434,17 @@ form.user-form {
 
 html[lang=ar] {
   .webform-submission-alshaya-contact-form {
-    .form-item-mobile-number-mobile {
-      label.error {
-        top: 1.125rem !important;
-        left: -0.4375rem !important;
-      }
+    // .form-item-mobile-number-mobile {
+    //   label.error {
+    //     top: 1.125rem !important;
+    //     left: -0.4375rem !important;
+    //   }
 
-      .form-item--error-message {
-        right: 0 !important;
-        direction: rtl;
-      }
-    }
+    //   .form-item--error-message {
+    //     right: 0 !important;
+    //     direction: rtl;
+    //   }
+    // }
   }
 
   form.user-form {
@@ -461,16 +461,16 @@ html[lang=ar] {
       }
     }
 
-    .mobile-number-field {
-      input[type=text],
-      .country-code-prefix {
-        font-family: $arial-nodir;
-      }
+    // .mobile-number-field {
+    //   input[type=text],
+    //   .country-code-prefix {
+    //     font-family: $arial-nodir;
+    //   }
 
-      input[type=text] {
-        padding-top: 0.125rem;
-      }
-    }
+    //   input[type=text] {
+    //     padding-top: 0.125rem;
+    //   }
+    // }
   }
 }
 
