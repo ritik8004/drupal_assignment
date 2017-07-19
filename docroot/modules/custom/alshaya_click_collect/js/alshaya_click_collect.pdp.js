@@ -51,7 +51,7 @@
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
-        if ($(window).width() > 767) {
+        if ($(window).width() >= 768) {
           $('.click-collect-all-stores').toggle('slow', function () {
             // Scroll
             $('html,body').animate({
