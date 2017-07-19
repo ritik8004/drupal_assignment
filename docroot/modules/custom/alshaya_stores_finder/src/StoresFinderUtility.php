@@ -257,6 +257,8 @@ class StoresFinderUtility {
       $node->get('field_store_address')->setValue('');
     }
 
+    $node->get('field_store_area')->setValue($store['area']);
+
     if (isset($store['sts_delivery_time_label'])) {
       $node->get('field_store_sts_label')->setValue($store['sts_delivery_time_label']);
     }

@@ -64,12 +64,32 @@
           $(this).cartladdastop(this.element);
           // Invoke the original function.
           this.PrivilegeCarderror(xmlhttprequest, uri, customMessage);
+          $('.alias--cart #details-privilege-card-wrapper').each(function () {
+            $(this).accordion({
+              header: '.card__header',
+              collapsible: true
+            });
+          });
         };
 
         Drupal.Ajax.prototype.success = function (response, status) {
           $(this).cartladdastop(this.element);
           // Invoke the original function.
           this.PrivilegeCardsuccess(response, status);
+
+          $('.coupon-code-wrapper, .alias--cart #details-privilege-card-wrapper').each(function () {
+            $(this).accordion({
+              header: '.card__header',
+              collapsible: true
+            });
+          });
+
+          $('.alias--user-register #details-privilege-card-wrapper').each(function () {
+            $(this).accordion({
+              header: '.privilege-card-wrapper-title',
+              collapsible: true
+            });
+          });
         };
 
         $.fn.cartladdastop = function(element) {

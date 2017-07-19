@@ -8,24 +8,31 @@
 
   Drupal.behaviors.privilegeCardAccordion = {
     attach: function (context, settings) {
-      $('.promo-continue-shopping-wrapper').each(function () {
-        $(this).accordion({
-          header: '.card__header',
-          collapsible: true,
-          heightStyle: 'content',
-          active: false
-        });
+      var applyCoupon = $('#apply_coupon');
+      applyCoupon.hide();
+      if (context === document) {
+        applyCoupon.prev().andSelf().wrapAll('<div class="card__content">');
+      }
+      $('.coupon-code-wrapper, .alias--cart #details-privilege-card-wrapper').each(function () {
+        if (context === document) {
+          $(this).accordion({
+            header: '.card__header',
+            collapsible: true,
+            heightStyle: 'content',
+            active: false
+          });
+        }
       });
 
-      jQuery('.privilege-card-wrapper').each(function () {
-        $(this).accordion({
-          header: '.privilege-card-wrapper-title',
-          collapsible: true,
-          active: false
-        });
+      $('.alias--user-register #details-privilege-card-wrapper').each(function () {
+        if (context === document) {
+          $(this).accordion({
+            header: '.privilege-card-wrapper-title',
+            collapsible: true,
+            active: false
+          });
+        }
       });
-
-      $('.form-item-coupon, #apply_coupon').css('display', '');
     }
   };
 
