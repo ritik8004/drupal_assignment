@@ -1,8 +1,8 @@
 privilege_card_number:
   js:
-    js/cleave.min.js: {}
     js/privilege_card_number.js: {}
   dependencies:
     - core/drupal
     - core/jquery
     - core/jquery.once
+    - alshaya_white_label/cleave
