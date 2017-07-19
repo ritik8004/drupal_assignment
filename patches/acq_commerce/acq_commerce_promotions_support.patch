@@ -1,26 +1,3 @@
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.install b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.install
-index 51f37ce2..dc753ab7 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.install
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.install
-@@ -4,3 +4,18 @@
-  * @file
-  * Contains install hooks for acq_promotion.
-  */
-+
-+use Drupal\user\Entity\Role;
-+
-+/**
-+ * Implements hook_install().
-+ */
-+function acq_promotion_install() {
-+  $role = Role::load('anonymous');
-+  $role->grantPermission('restful post acq_promotionsync');
-+  $role->save();
-+
-+  $role = Role::load('authenticated');
-+  $role->grantPermission('restful post acq_promotionsync');
-+  $role->save();
-+}
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
 index 7399f0a6..ecda31bd 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
@@ -277,36 +254,13 @@ index 00000000..b9f243e7
 +indexes: {  }
 +persist_with_no_fields: false
 +custom_storage: false
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/rest.resource.acq_promotionsync.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/rest.resource.acq_promotionsync.yml
-new file mode 100644
-index 00000000..6ff124cd
---- /dev/null
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/config/install/rest.resource.acq_promotionsync.yml
-@@ -0,0 +1,17 @@
-+langcode: en
-+status: true
-+dependencies:
-+  module:
-+    - acq_promotion
-+    - serialization
-+    - user
-+id: acq_promotionsync
-+plugin_id: acq_promotionsync
-+granularity: method
-+configuration:
-+  POST:
-+    supported_formats:
-+      - json
-+      - xml
-+    supported_auth:
-+      - cookie
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
 index d2e8f532..db1088e7 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
 @@ -3,11 +3,16 @@
  namespace Drupal\acq_promotion;
-
+ 
  use Drupal\acq_commerce\Conductor\APIWrapper;
 +use Drupal\Core\Config\ConfigFactory;
 +use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -318,12 +272,12 @@ index d2e8f532..db1088e7 100644
  use Drupal\node\Entity\Node;
  use Drupal\acq_sku\Entity\SKU;
 +use GuzzleHttp\Client;
-
+ 
  /**
   * Class AcqPromotionsManager.
 @@ -22,6 +27,20 @@ class AcqPromotionsManager {
    protected $languageManager;
-
+ 
    /**
 +   * Sku Entity storage.
 +   *
@@ -344,7 +298,7 @@ index d2e8f532..db1088e7 100644
     * @var \Drupal\node\NodeStorageInterface
 @@ -36,6 +55,20 @@ class AcqPromotionsManager {
    protected $apiWrapper;
-
+ 
    /**
 +   * Queue Factory service.
 +   *
@@ -391,7 +345,7 @@ index d2e8f532..db1088e7 100644
 +    $this->queue = $queue;
 +    $this->configFactory = $configFactory;
    }
-
+ 
    /**
 @@ -63,150 +112,283 @@ public function __construct(EntityTypeManagerInterface $entity_type_manager, API
    public function syncPromotions($types = ['category', 'cart']) {
@@ -401,7 +355,7 @@ index d2e8f532..db1088e7 100644
 +    $promotions = [];
      foreach ($types as $type) {
        $promotions = $this->apiWrapper->getPromotions($type);
-
+ 
 -      foreach ($promotions as $promotion) {
 +      foreach ($promotions as $key => $promotion) {
          // Add type to $promotion array, to be saved later.
@@ -414,13 +368,13 @@ index d2e8f532..db1088e7 100644
          $ids[] = $promotion['rule_id'];
        }
      }
-
+ 
 +    $this->processPromotions($fetched_promotions);
 +
      // Unpublish promotions, which are not part of API response.
      $this->unpublishPromotions($ids);
    }
-
+ 
    /**
 -   * Create/Update promotion from API data to Drupal.
 +   * Unpublish Promotion nodes, not part of API Response.
@@ -444,7 +398,7 @@ index d2e8f532..db1088e7 100644
 +      $node = $this->nodeStorage->load($nid);
 +      $node->setPublished(Node::NOT_PUBLISHED);
 +      $node->save();
-
+ 
 -    $promotions_labels = $promotion['labels'];
 -    $promotion_label_languages = [];
 -    $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
@@ -462,7 +416,7 @@ index d2e8f532..db1088e7 100644
 +      }
      }
 +  }
-
+ 
 -    // Create promotion.
 -    if (empty($nids)) {
 -      /* @var $node \Drupal\node\Entity\Node */
@@ -485,7 +439,7 @@ index d2e8f532..db1088e7 100644
 +    $query->condition('type', 'acq_promotion');
 +    $query->condition('field_acq_promotion_rule_id', $rule_id);
 +    $nids = $query->execute();
-
+ 
 -      $this->logger->info('Creating promotion for rule id @rule_id', ['@rule_id' => $promotion['rule_id']]);
 +    if (empty($nids)) {
 +      return NULL;
@@ -498,7 +452,7 @@ index d2e8f532..db1088e7 100644
 +        $this->logger->critical('Multiple nodes found for rule id @rule_id', ['@rule_id' => $rule_id]);
 +        return NULL;
        }
-
+ 
 -      // We will use only the first matching node.
 +      // We only load the first node.
        /* @var $node \Drupal\node\Entity\Node */
@@ -510,7 +464,7 @@ index d2e8f532..db1088e7 100644
 +      return $node;
 +    }
 +  }
-
+ 
 -      $this->logger->info('Updating promotion for rule id @rule_id', ['@rule_id' => $promotion['rule_id']]);
 +  /**
 +   * Helper function to get skus attached with a promotion.
@@ -529,7 +483,7 @@ index d2e8f532..db1088e7 100644
 +    if (!empty($sku_ids)) {
 +      $skus = SKU::loadMultiple($sku_ids);
      }
-
+ 
 -    // Set the name into title.
 -    $node->get('title')->setValue($promotion['name']);
 +    return $skus;
@@ -564,32 +518,32 @@ index d2e8f532..db1088e7 100644
 +    }
 +
 +    $promotion_node->get('title')->setValue($promotion['name']);
-
+ 
      // Set the description.
 -    $node->get('field_acq_promotion_description')->setValue(['value' => $promotion['description'], 'format' => 'rich_text']);
 +    $promotion_node->get('field_acq_promotion_description')->setValue(['value' => $promotion['description'], 'format' => 'rich_text']);
 +
 +    // Set promotion rule_id.
 +    $promotion_node->get('field_acq_promotion_rule_id')->setValue($promotion['rule_id']);
-
+ 
      // Set the status.
 -    $node->setPublished((bool) $promotion['status']);
 +    $promotion_node->setPublished((bool) $promotion['status']);
-
+ 
      // Store everything as serialized string in DB.
 -    $node->get('field_acq_promotion_data')->setValue(serialize($promotion));
 +    $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
-
+ 
      // Set the Promotion type.
 -    $node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
 +    $promotion_node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
-
+ 
      // Set the Promotion label.
      if (isset($promotion_label_languages[$site_default_langcode])) {
 -      $node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
 +      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
      }
-
+ 
      // Set promotion type to percent & discount value depending on the promotion
      // being imported.
      if (($promotion['type'] === 'NO_COUPON') && isset($promotion['action']) && ($promotion['action'] === 'by_percent')) {
@@ -598,7 +552,7 @@ index d2e8f532..db1088e7 100644
 +      $promotion_node->get('field_acq_promotion_disc_type')->setValue('percentage');
 +      $promotion_node->get('field_acq_promotion_discount')->setValue($promotion['discount']);
      }
-
+ 
 -    // Add SKU ID's to promotion.
 -    if (!empty($promotion['products'])) {
 -      // Assign value to $node object.
@@ -618,10 +572,10 @@ index d2e8f532..db1088e7 100644
      // Invoke the alter hook to allow modules to update the node from API data.
 -    \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $node, $promotion);
 +    \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $promotion_node, $promotion);
-
+ 
 -    $node->save();
 +    $status = $promotion_node->save();
-
+ 
      // Create promotion translations based on the language codes available in
      // promotion labels.
      foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
@@ -648,7 +602,7 @@ index d2e8f532..db1088e7 100644
 +      return NULL;
 +    }
    }
-
+ 
    /**
 -   * Unpublish Promotion nodes, not part of API Response.
 +   * Helper function to process Promotions obtained from middleware.
@@ -717,7 +671,7 @@ index d2e8f532..db1088e7 100644
 +          $data['promotion'] = $promotion_node->id();
 +          $data['skus'] = $detach_promotion_skus;
 +          $promotion_detach_queue->createItem($data);
-+          $output['detached_message'] = t('Skus @skus queued up to detach
++          $output['detached_message'] = t('Skus @skus queued up to detach 
 +          promotion rule: @rule_id', [
 +             '@skus' => implode(',', $data['skus']),
 +             '@rule_id' => $promotion['rule_id'],
@@ -746,7 +700,7 @@ index d2e8f532..db1088e7 100644
 +
 +    return $output;
    }
-
+ 
  }
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AlshayaPromotionQueueBase.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AlshayaPromotionQueueBase.php
 new file mode 100644
@@ -1025,124 +979,6 @@ index 00000000..56aeaa3f
 +
 +    $this->loggerFactory->get('acq_sku')->info('Detached Promotion:@promo from SKUs: @skus',
 +      ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
-+  }
-+
-+}
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/rest/resource/PromotionSyncResource.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/rest/resource/PromotionSyncResource.php
-new file mode 100644
-index 00000000..77881fd4
---- /dev/null
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/rest/resource/PromotionSyncResource.php
-@@ -0,0 +1,112 @@
-+<?php
-+
-+namespace Drupal\acq_promotion\Plugin\rest\resource;
-+
-+use Drupal\acq_promotion\AcqPromotionsManager;
-+use Drupal\Core\Config\ConfigFactory;
-+use Drupal\Core\Queue\QueueFactory;
-+use Drupal\Core\Session\AccountProxyInterface;
-+use Drupal\rest\Plugin\ResourceBase;
-+use Drupal\rest\ResourceResponse;
-+use Symfony\Component\DependencyInjection\ContainerInterface;
-+use Psr\Log\LoggerInterface;
-+
-+/**
-+ * Class PromotionSyncResource.
-+ *
-+ * @package Drupal\acq_promotion\Plugin
-+ *
-+ * @ingroup acq_promotion
-+ *
-+ * @RestResource(
-+ *   id = "acq_promotionsync",
-+ *   label = @Translation("Acquia Commerce Promotion Sync"),
-+ *   uri_paths = {
-+ *     "canonical" = "/promotionsync",
-+ *     "https://www.drupal.org/link-relations/create" = "/promotionsync"
-+ *   }
-+ * )
-+ */
-+class PromotionSyncResource extends ResourceBase {
-+
-+  /**
-+   * A current user instance.
-+   *
-+   * @var \Drupal\Core\Session\AccountProxyInterface
-+   */
-+  protected $currentUser;
-+
-+  /**
-+   * The promotion manager service.
-+   *
-+   * @var \Drupal\acq_promotion\AcqPromotionsManager
-+   */
-+  protected $promotionManager;
-+
-+  /**
-+   * Constructs a new PromotionSyncResource object.
-+   *
-+   * @param array $configuration
-+   *   A configuration array containing information about the plugin instance.
-+   * @param string $plugin_id
-+   *   The plugin_id for the plugin instance.
-+   * @param mixed $plugin_definition
-+   *   The plugin implementation definition.
-+   * @param array $serializer_formats
-+   *   The available serialization formats.
-+   * @param \Psr\Log\LoggerInterface $logger
-+   *   A logger instance.
-+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
-+   *   A current user instance.
-+   * @param \Drupal\acq_promotion\AcqPromotionsManager $promotionManager
-+   *   Promotion Manager service.
-+   */
-+  public function __construct(
-+    array $configuration,
-+    $plugin_id,
-+    $plugin_definition,
-+    array $serializer_formats,
-+    LoggerInterface $logger,
-+    AccountProxyInterface $current_user,
-+    AcqPromotionsManager $promotionManager) {
-+    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-+
-+    $this->currentUser = $current_user;
-+    $this->promotionManager = $promotionManager;
-+    $this->logger = $logger;
-+  }
-+
-+  /**
-+   * {@inheritdoc}
-+   */
-+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-+    return new static(
-+      $configuration,
-+      $plugin_id,
-+      $plugin_definition,
-+      $container->getParameter('serializer.formats'),
-+      $container->get('logger.factory')->get('acq_promotion'),
-+      $container->get('current_user'),
-+      $container->get('acq_promotion.promotions_manager')
-+    );
-+  }
-+
-+  /**
-+   * Responds to POST requests.
-+   *
-+   * Returns a list of bundles for specified entity.
-+   *
-+   * @param array $promotions
-+   *   List of promotions being updated/created.
-+   *
-+   * @return \Drupal\rest\ResourceResponse
-+   *   Throws exception expected.
-+   */
-+  public function post(array $promotions = []) {
-+    $promotions = $promotions['promotions'];
-+    $output = $this->promotionManager->processPromotions($promotions);
-+
-+    return new ResourceResponse($output);
 +  }
 +
 +}
