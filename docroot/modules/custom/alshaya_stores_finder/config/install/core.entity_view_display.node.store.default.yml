@@ -5,6 +5,7 @@ dependencies:
     - field.field.node.store.field_latitude_longitude
     - field.field.node.store.field_meta_tags
     - field.field.node.store.field_store_address
+    - field.field.node.store.field_store_area
     - field.field.node.store.field_store_locator_id
     - field.field.node.store.field_store_open_hours
     - field.field.node.store.field_store_phone
@@ -93,6 +94,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_store_area: true
   field_store_locator_id: true
   field_store_sts_label: true
   langcode: true
