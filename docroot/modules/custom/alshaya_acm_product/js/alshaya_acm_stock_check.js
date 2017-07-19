@@ -27,7 +27,7 @@
         });
       });
 
-      // Stock check on PDP full view mode.
+      // Stock check on PDP main Product.
       $('article[data-vmode="full"]', context).find('.basic-details-wrapper article').once('js-event').each(function(){
         var skuId = $(this).attr('data-skuid');
         if (skuId !== undefined) {
@@ -50,6 +50,7 @@
         }
       });
 
+      // Check stock for modal & load add cart form if stock-check successful.
       $('article[data-vmode="modal"]').find('.basic-details-wrapper article').once('js-event').each(function(){
         var skuId = $(this).attr('data-skuid');
         var stockCheckProcessed = 'stock-check-processed';
@@ -74,9 +75,9 @@
         }
       });
 
+      // Check stock for mobile & load add cart form if stock-check successful.
       $('.horizontal-crossell.mobile-only-block article[data-vmode="teaser"], .horizontal-upell.mobile-only-block article[data-vmode="teaser"]').find('article').once('js-event').each(function() {
         var skuId = $(this).attr('data-skuid');
-        var editCartElementSettings, editConfigSizeElementSettings;
         if (skuId !== undefined) {
           var $wrapper = $(this);
 
@@ -87,27 +88,6 @@
             dataType:"json",
             success: function (result) {
               $wrapper.html(result.html);
-              Drupal.attachBehaviors($wrapper[0]);
-              Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
-            }
-          });
-        }
-      });
-      $('.content__sidebar article[data-vmode="teaser"]').find('table.mobile--only--sell article').once('js-event').each(function(){
-        var skuId = $(this).attr('data-skuid');
-        if (skuId !== undefined) {
-          var $wrapper = $(this);
-          $.ajax({
-            url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-            type:"POST",
-            contentType:"application/json;",
-            dataType:"json",
-            success: function (result) {
-              $wrapper.html(result.html);
-              // Add class to share this wrapper if product out of stock.
-              if (result.max_quantity <= 0) {
-                $wrapper.closest('article[data-vmode="full"]').find('sharethis-wrapper').addClass('out-of-stock');
-              }
               Drupal.attachBehaviors($wrapper[0]);
               Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
             }
