@@ -232,7 +232,16 @@ function alshaya_user_user_presave(EntityInterface $entity) {
 function alshaya_user_element_info_alter(array &$info) {
   if (isset($info['mobile_number']['#process'])) {
     $info['mobile_number']['#process'][] = '_alshaya_user_mobile_number_process';
+    //$info['mobile_number']['#element_validate'][] = '_alshaya_user_mobile_number_validate';
+    array_unshift($info['mobile_number']['#element_validate'], '_alshaya_user_mobile_number_validate');
   }
+}
+
+function _alshaya_user_mobile_number_validate(array &$element, FormStateInterface $form_state) {
+  $pp = $form_state->getValue('mobile_number');
+  $pp['local_number'] = explode(' ', $pp['local_number'])[1];
+  $pp['mobile'] = explode(' ', $pp['mobile'])[1];
+  $form_state->setValue('mobile_number', $pp);
 }
 
 /**
@@ -412,5 +421,12 @@ function alshaya_user_field_info_alter(&$info) {
     // in mobile number.
     unset($info['mobile_number']['constraints']['MobileNumber']);
     $info['mobile_number']['constraints']['AlshayaMobileNumber'] = [];
+  }
+}
+
+function alshaya_user_field_widget_form_alter(&$element, \Drupal\Core\Form\FormStateInterface &$form_state, $context) {
+  if ($context['field']['type'] == 'mytype') {
+    // Be sure not to overwrite existing attributes.
+    $element['#attributes']['class'][] = 'myclass';
   }
 }
