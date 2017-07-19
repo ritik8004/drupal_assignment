@@ -138,7 +138,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         }
       }
 
-      $promotions = $this->skuManager->getPromotionsFromSkuId($sku);
+      $promotion_types = ['cart'];
+      $promotions = $this->skuManager->getPromotionsFromSkuId($sku, FALSE, $promotion_types);
       $current_route_name = $this->currentRouteMatch->getRouteName();
       $current_node = $this->currentRouteMatch->getParameter('node');
 

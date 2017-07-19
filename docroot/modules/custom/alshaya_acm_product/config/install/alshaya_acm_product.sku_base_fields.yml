@@ -59,6 +59,16 @@ fields:
     visible_view: 0
     visible_form: 1
 
+  product_collection:
+    parent: 'attributes'
+    label: 'Collection'
+    description: 'Used in facets.'
+    cardinality: 1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
   product_brand:
     parent: 'attributes'
     label: 'Brand'

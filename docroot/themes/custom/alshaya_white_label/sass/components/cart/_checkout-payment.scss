@@ -73,6 +73,16 @@
     }
   }
 
+  @include breakpoint($only-mobile) {
+    .form-type-radio:first-child {
+      margin-#{$right}: 2rem;
+    }
+
+    .address_wrapper {
+      margin-top: 1.438rem;
+    }
+  }
+
   .js-form-type-radio {
     @include u-visibility(inline-block);
 
@@ -88,6 +98,10 @@
 
 #edit-checkout-terms {
   padding: 0.25rem 1rem;
+
+  @include breakpoint($only-mobile) {
+    padding: 0.25rem 0;
+  }
 
   .form-item-checkout-terms-terms {
     margin-top: 0;

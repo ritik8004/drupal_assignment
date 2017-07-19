@@ -12,6 +12,7 @@ use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
@@ -109,9 +110,12 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $is_item_free = FALSE;
 
       // Check if a discount equal to the price of product was applied.
-      if ($cart_item[$id]['discount_amount'] === $cart_item[$id]['price']) {
+      if ($cart_item[$id]['discount_amount'] === ($cart_item[$id]['price'] * $item['quantity']['#default_value'])) {
         $is_item_free = TRUE;
       }
+
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item[$id]['price']);
 
       if ($is_item_free) {
         $item['price'] = [
@@ -122,11 +126,17 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       }
       else {
         $item['price'] = [
-          '#markup' => alshaya_acm_price_format($cart_item[$id]['price']),
+          '#theme' => 'acq_commerce_price',
+          '#price' => $item_cart_price['price'],
         ];
-      }
 
-      $item['name'] = _alshaya_acm_update_product_name($sku_entity, $item, $cart_item[$id]);
+        if (!empty($item_cart_price['discount'])) {
+          $item['price']['#discount'] = $item_cart_price['discount'];
+          $item['price']['#final_price'] = $item_cart_price['final_price'];
+        }
+      }
+      $cart_rules = $cart->getCart()->cart_rules;
+      $item['name'] = _alshaya_acm_update_product_name($sku_entity, $item, $cart_item[$id], $is_item_free, $cart_rules);
 
       // Add remove link as suffix of quantity.
       $remove_url = Url::fromUserInput('/cart/remove/' . $id);
@@ -171,19 +181,12 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         ];
       }
       else {
-        $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $item_quantity = $item['quantity']['#default_value'];
-        $item_price = $cart_item[$id]['price'];
-        $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $item_quantity, $item_price);
+        $item_price = $cart_item[$id]['price'] * $item_quantity;
         $item['sub_total'] = [
-          '#theme' => 'acq_commerce_price',
+          '#markup' => alshaya_acm_price_format($item_price),
           '#price' => $item_cart_price['price'],
         ];
-
-        if (!empty($item_cart_price['discount'])) {
-          $item['sub_total']['#discount'] = $item_cart_price['discount'];
-          $item['sub_total']['#final_price'] = $item_cart_price['final_price'];
-        }
       }
 
       // Adding class attribute to columns for mobile view.
@@ -696,7 +699,7 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
  * @return array
  *   Item name build array.
  */
-function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $cart_item) {
+function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $cart_item, $is_free_item = FALSE, $cart_rules = []) {
   // Get SKU attributes.
   $sku_attributes = alshaya_acm_product_get_sku_configurable_values($sku_entity);
 
@@ -706,6 +709,34 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
   $promotion_types = ['cart'];
   $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, FALSE, $promotion_types);
+
+  // @TODO: Remove this once we have products appearing correclty with cart promotions.
+  // Currently the only way to display cart promotion is to check cart_rules
+  // applied to the current cart & check if its type is buy_X_get_Y. Use this
+  // promotion to render the tooltip help text.
+  if ($is_free_item) {
+    foreach ($cart_rules as $cart_rule) {
+      $promotion = \Drupal::service('alshaya_acm_promotion.manager')->getPromotionByRuleId($cart_rule);
+      $promotion_action = $promotion->get('field_acq_promotion_action')->getString();
+      if (($promotion_action === 'buy_x_get_y_cheapest_free') &&
+        (!isset($promotions[$promotion->id()]))) {
+        $langcode = \Drupal::service('language_manager')->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+        $promotion = \Drupal::service('entity.repository')->getTranslationFromContext($promotion, $langcode);
+        $promotion_text = $promotion->get('field_acq_promotion_label')->getString();
+        $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
+        $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
+        $description = $promotion->get('field_acq_promotion_description')->getString();
+
+        $promotions[$promotion->id()] = [
+          'text' => $promotion_text,
+          'description' => $description,
+          'discount_type' => $discount_type,
+          'discount_value' => $discount_value,
+        ];
+        break;
+      }
+    }
+  }
 
   if ($parent_sku) {
     /* @var \Drupal\node\Entity\Node $parent_node */

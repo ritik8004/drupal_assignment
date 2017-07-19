@@ -4,12 +4,12 @@ dependencies:
   module:
     - acq_sku
     - node
-id: node.field_acq_promotion_sku
-field_name: field_acq_promotion_sku
-entity_type: node
+id: acq_sku.field_acq_sku_promotions
+field_name: field_acq_sku_promotions
+entity_type: acq_sku
 type: entity_reference
 settings:
-  target_type: acq_sku
+  target_type: node
 module: core
 locked: false
 cardinality: -1

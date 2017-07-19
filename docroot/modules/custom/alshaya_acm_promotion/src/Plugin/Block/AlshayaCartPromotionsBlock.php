@@ -116,7 +116,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         if ($promotion_rule_id) {
           $node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($promotion_rule_id);
           if ($node) {
-            $promotions[] = $node->get('field_acq_promotion_description')->first()->getValue();
+            $promotions[] = $node->get('field_acq_promotion_description')->getString();
           }
         }
       }

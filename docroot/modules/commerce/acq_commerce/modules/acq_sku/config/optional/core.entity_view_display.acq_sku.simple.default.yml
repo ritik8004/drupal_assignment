@@ -2,38 +2,37 @@ langcode: en
 status: true
 dependencies:
   config:
-    - acq_sku.type.configurable
-    - core.entity_view_mode.acq_sku.search_result
-    - field.field.acq_sku.configurable.field_configurable_attributes
-    - field.field.acq_sku.configurable.field_configured_skus
+    - acq_sku.type.simple
+    - field.field.acq_sku.simple.field_acq_sku_promotions
+    - image.style.large
   module:
     - image
-id: acq_sku.configurable.search_result
+id: acq_sku.simple.default
 targetEntityType: acq_sku
-bundle: configurable
-mode: search_result
+bundle: simple
+mode: default
 content:
   image:
+    label: hidden
     type: image
     weight: 0
-    region: content
-    label: hidden
     settings:
-      image_style: ''
+      image_style: large
       image_link: ''
     third_party_settings: {  }
+    region: content
   name:
-    type: string
-    weight: 1
     label: hidden
+    type: string
+    weight: 2
     settings:
       link_to_entity: false
     third_party_settings: {  }
     region: content
   price:
-    label: hidden
+    label: above
     type: string
-    weight: 2
+    weight: 1
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -48,18 +47,13 @@ hidden:
   attr_reserve_and_collect: true
   attr_season: true
   attr_ship_to_store: true
-  attr_short_description: true
   attr_size: true
   attr_style: true
   attr_whats_in_the_box: true
   attributes: true
-  brand: true
-  crosssell: true
-  field_configurable_attributes: true
-  field_configured_skus: true
+  field_acq_sku_promotions: true
   final_price: true
   langcode: true
   media: true
   sku: true
   special_price: true
-  upsell: true
