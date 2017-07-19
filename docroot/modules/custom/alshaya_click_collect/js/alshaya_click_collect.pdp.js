@@ -51,14 +51,14 @@
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
-
-        $('.click-collect-all-stores').toggle('slow', function () {
-          // Scroll
-          $('html,body').animate({
-            scrollTop: $('.click-collect-all-stores').offset().top
-          }, 'slow');
-        });
-
+        if ($(window).width() >= 768) {
+          $('.click-collect-all-stores').toggle('slow', function () {
+            // Scroll
+            $('html,body').animate({
+              scrollTop: $('.click-collect-all-stores').offset().top
+            }, 'slow');
+          });
+        }
       });
 
       $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-location-link, .search-stores-button, .cancel-change-location', function (e) {
