@@ -281,7 +281,6 @@ class AcqPromotionsManager {
     \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $promotion_node, $promotion);
 
     $status = $promotion_node->save();
-
     // Create promotion translations based on the language codes available in
     // promotion labels.
     foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
@@ -290,7 +289,7 @@ class AcqPromotionsManager {
           $node_translation = $promotion_node->getTranslation($langcode);
         }
         else {
-          $node_translation = $promotion_node->addTranslation($langcode);
+          $node_translation = $promotion_node->addTranslation($langcode, $promotion_node->toArray());
         }
         $node_translation->get('field_acq_promotion_label')->setValue($promotion_label_languages[$langcode]);
         $node_translation->save();
