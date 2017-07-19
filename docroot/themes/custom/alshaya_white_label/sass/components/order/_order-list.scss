@@ -33,12 +33,12 @@
       margin-top: 0;
       padding-bottom: 0;
       position: absolute;
-      top: 0.5rem;
+      top: 1.2rem;
       #{$right}: 0;
     }
 
     @include breakpoint($desktop) {
-      top: -0.2rem;
+      top: -0.25rem;
     }
   }
 }
@@ -107,8 +107,8 @@
       }
 
       @include breakpoint($desktop) {
-        min-width: 11.75rem;
-        max-width: 11.75rem;
+        min-width: 11.6rem;
+        max-width: 11.6rem;
         margin-#{$right}: 1px;
       }
     }
@@ -118,6 +118,7 @@
       text-align: $left;
       max-height: 2.1875rem;
       outline: transparent;
+      padding: 0.25rem 0.8rem;
 
       .select2-selection__arrow {
         top: 0;
@@ -130,6 +131,7 @@
     .select2-selection__arrow {
       @include icon(chevrondown, after) {
         border-#{$left}: 1px solid $white-five;
+        color: $black;
         font-size: 1.75rem;
         line-height: 35px;
         pointer-events: none;
@@ -154,12 +156,21 @@
 
   .form-text {
     border: 1px solid $whisper-dark;
-    padding: 0.3125rem 0.8rem 0.25rem 1rem;
-    width: 125px;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.25rem;
+    padding-#{$left}: 1rem;
+    padding-#{$right}: 0.8rem;
+    width: 7.8125rem;
+
+    @include breakpoint($tablet) {
+      width: 7.9375rem;
+      padding-#{$left}: 0.75rem;
+    }
 
     @include breakpoint($desktop) {
       margin-#{$left}: 0.75rem;
-      width: 153px;
+      padding-#{$left}: 1rem;
+      width: 9.4375rem;
     }
   }
 
@@ -173,7 +184,8 @@
     @include icon(search, after) {
       background-color: $whisper-dark;
       border: 1px solid $whisper-dark;
-      line-height: 20px;
+      color: $black;
+      line-height: 19px;
       font-size: 1.625rem;
       pointer-events: none;
       position: absolute;
