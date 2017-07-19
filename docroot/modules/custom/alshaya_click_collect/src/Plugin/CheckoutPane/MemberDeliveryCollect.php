@@ -33,7 +33,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAuthenticated();
+    return \Drupal::currentUser()->isAuthenticated() && $this->getClickAndCollectAvailability();
   }
 
   /**
@@ -69,9 +69,19 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       $default_mobile = $shipping['telephone'];
       $store_code = $cart->getExtension('store_code');
       $shipping_type = $cart->getExtension('click_and_collect_type');
+    }
 
-      // Not injected here to avoid module dependency.
+    // Check once in customer profile.
+    if ($account = User::load(\Drupal::currentUser()->id())) {
+      if ($account_phone = $account->get('field_mobile_number')->getValue()) {
+        $default_mobile = $account_phone[0]['value'];
+      }
+    }
+
+    if ($store_code && $shipping_type) {
+      /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
       if (!empty($store)) {
         $selected_store = [
@@ -79,13 +89,6 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
           '#store' => $store,
         ];
         $selected_store_data = render($selected_store);
-      }
-    }
-    else {
-      // Check once in customer profile.
-      $account = User::load(\Drupal::currentUser()->id());
-      if ($account_phone = $account->get('field_mobile_number')->getValue()) {
-        $default_mobile = $account_phone[0]['value'];
       }
     }
 
@@ -99,8 +102,9 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Find your closest collection point'),
-      '#prefix' => '<div class="label-store-location">' . $this->t('Find your closest collection point') . '</div>',
+      '#title' => $this->t('find your closest collection point'),
+      '#prefix' => '<div class="label-store-location">' . $this->t('find your closest collection point') . '</div>',
+      '#placeholder' => t('Enter a location'),
       '#attributes' => [
         'class' => ['store-location-input'],
       ],
@@ -144,14 +148,20 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#markup' => '<div id="selected-store-content" class="selected-store-content">' . $selected_store_data . '</div>',
     ];
 
-    $pane_form['selected_store']['mobile_help'] = [
+    $pane_form['selected_store']['elements'] = [
+      '#type' => 'container',
+      '#tree' => FALSE,
+      '#id' => 'selected-store-elements-wrapper',
+    ];
+
+    $pane_form['selected_store']['elements']['mobile_help'] = [
       '#markup' => '<div class="cc-help-text cc-mobile-help-text">' . $this->t("<p>Please provide the mobile number of the person collecting the order.</p>We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
     // Here we have cc_ prefix to ensure validations work fine and don't
     // conflict with address form fields.
     // @TODO: Verify mobile validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['cc_mobile_number'] = [
+    $pane_form['selected_store']['elements']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => $this->t('Mobile Number'),
       '#verify' => 0,
@@ -222,7 +232,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       ],
       '#ajax' => [
         'callback' => [$this, 'submitMemberDeliveryCollect'],
-        'wrapper' => 'selected-store-wrapper',
+        'wrapper' => 'selected-store-elements-wrapper',
       ],
       // This is required for limit_validation_errors to work.
       '#submit' => [],
@@ -260,10 +270,17 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $cart = $this->getCart();
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
 
-    $address = [
-      'country_id' => _alshaya_custom_get_site_level_country_code(),
-      'telephone' => _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']),
-    ];
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    $address = $address_book_manager->getAddressStructureWithEmptyValues();
+
+    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
+
+    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
+    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+    $store_node = $store_utility->getTranslatedStoreFromCode($values['store_code']);
+
+    $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
 
     $cart->setShipping($address);
   }

@@ -85,77 +85,71 @@
 
   .form-type-select {
     position: relative;
-
-    @include icon(chevrondown, after) {
-      border-#{$left}: 1px solid $white-five;
-      font-size: 28px;
-      line-height: 35px;
-      pointer-events: none;
-      position: absolute;
-      text-align: center;
-      #{$right}: 0;
-      width: 35px;
-
-      @include breakpoint($tablet) {
-        background: $whisper-dark;
-        z-index: 1;
-      }
-    }
+    vertical-align: top;
 
     @include breakpoint($tablet) {
       margin-#{$left}: 0.25rem;
-
-      &::before {
-        width: 7.9375rem;
-        content: "";
-        background: $whisper-dark;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        #{$right}: 2.1875rem;
-        height: 2.1875rem;
-        z-index: 1;
-      }
     }
 
     @include breakpoint($desktop) {
       margin-#{$left}: 23px;
+      width: 14.25rem;
+    }
 
-      &::before {
-        width: 9.375rem;
+    .select2 {
+      min-width: 8.9375rem;
+      position: relative;
+      outline: transparent;
+
+      @include breakpoint($tablet) {
+        min-width: 10.0625rem;
+        max-width: 10.0625rem;
+      }
+
+      @include breakpoint($desktop) {
+        min-width: 11.75rem;
+        max-width: 11.75rem;
+        margin-#{$right}: 1px;
       }
     }
 
-    @include breakpoint($desktop) {
-      width: 14.25rem;
+    .select2-selection {
+      font-size: 0.75rem;
+      text-align: $left;
+      max-height: 2.1875rem;
+      outline: transparent;
+
+      .select2-selection__arrow {
+        top: 0;
+        #{$right}: 0;
+        width: 2.1875rem;
+        height: 2.1875rem;
+      }
+    }
+
+    .select2-selection__arrow {
+      @include icon(chevrondown, after) {
+        border-#{$left}: 1px solid $white-five;
+        font-size: 1.75rem;
+        line-height: 35px;
+        pointer-events: none;
+        position: absolute;
+        text-align: center;
+        #{$right}: 0;
+        #{$left}: auto;
+        top: 0;
+        width: 2.1875rem;
+
+        @include breakpoint($tablet) {
+          background: $whisper-dark;
+          z-index: 1;
+        }
+      }
     }
   }
 
   .form-select {
-    border: 1px solid $whisper-dark;
-    background-color: $whisper-dark;
-    border-radius: 0;
-    padding-top: 0.3125rem;
-    padding-bottom: 0.25rem;
-    padding-#{$left}: 1rem;
-    padding-#{$right}: 3.3rem;
-    -webkit-appearance: none;
-    appearance: none;
-    outline: none;
-    min-width: 135px;
-    direction: $dir;
-
-    @include breakpoint($tablet) {
-      min-width: 162px;
-      background-color: transparent;
-      position: relative;
-      z-index: 3;
-    }
-
-    @include breakpoint($desktop) {
-      margin-#{$left}: 12px;
-      min-width: 185px;
-    }
+    display: none;
   }
 
   .form-text {
@@ -164,7 +158,7 @@
     width: 125px;
 
     @include breakpoint($desktop) {
-      margin-#{$left}: 0.875rem;
+      margin-#{$left}: 0.75rem;
       width: 153px;
     }
   }
@@ -201,6 +195,10 @@
     #{$left}: -5px;
     z-index: 1;
     opacity: 0;
+
+    html[lang=ar] & {
+      width: 2.125rem;
+    }
   }
 }
 
@@ -220,6 +218,35 @@
 
     @include breakpoint($desktop) {
       width: 21.375rem;
+    }
+  }
+}
+
+.select2-container--open {
+  z-index: 5;
+
+  .order-list-select {
+    &.select2-dropdown--below {
+      border: 0;
+      border-bottom: 1px solid $white;
+      border-radius: 0;
+    }
+  }
+}
+
+.order-list-select {
+  .select2-results .select2-results__option {
+    font-size: 0.75rem;
+    padding-#{$left}: 0.75rem;
+    padding-top: 0.75rem;
+    background-color: $white-five;
+    height: 2.1875rem;
+    border-left: 1px solid $white;
+    border-right: 1px solid $white;
+
+    &.select2-results__option--highlighted {
+      background-color: $marine-blue;
+      border-color: $marine-blue;
     }
   }
 }

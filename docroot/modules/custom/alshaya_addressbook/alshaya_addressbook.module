@@ -363,7 +363,7 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
       'context' => 'Address label',
     ],
     'Floor (Optional)' => [
-      'ar' => 'رقم الدور(اختياري)',
+      'ar' => 'رقم الدور (اختياري)',
       'context' => 'Address label',
     ],
     'Select Area' => [
@@ -372,6 +372,10 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
     ],
     'State' => [
       'ar' => 'الحالة',
+      'context' => 'Address label',
+    ],
+    'Email' => [
+      'ar' => 'البريد الإلكتروني',
       'context' => 'Address label',
     ],
   ];

@@ -50,11 +50,13 @@
     @include breakpoint($tablet) {
       width: 60%;
       float: $left;
+      min-height: 31.25rem;
     }
 
     @include breakpoint($desktop) {
       width: 70%;
       float: $left;
+      min-height: 36.325rem;
     }
   }
 
@@ -631,6 +633,11 @@
       padding: 0.5rem 0;
       border: none;
     }
+
+    .highlight {
+      color: $windows-blue;
+      font-weight: bold;
+    }
   }
 }
 
@@ -666,6 +673,10 @@
 
       @include u-visibility(inline);
     }
+  }
+
+  .store-finder-form-wrapper {
+    margin-top: 0.6875rem;
   }
 
   .search-store {
@@ -978,8 +989,8 @@
     ul {
       padding-#{$left}: 0;
       margin: 0;
-      height: 380px;
-      overflow: scroll;
+      height: 21.56rem;
+      overflow-y: scroll;
       clear: both;
 
       li {

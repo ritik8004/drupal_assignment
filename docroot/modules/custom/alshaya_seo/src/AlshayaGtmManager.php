@@ -77,7 +77,6 @@ class AlshayaGtmManager {
     'dimension1' => 'gtm-dimension1',
     'dimension2' => 'gtm-dimension2',
     'dimension3' => 'gtm-dimension3',
-    'dimension4' => 'gtm-stock',
     'dimension5' => 'gtm-sku-type',
     'metric1' => '',
   ];
@@ -178,24 +177,28 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchSkuAtttributes($skuId) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
     $attributes = [];
 
     $attributes['gtm-name'] = $sku->label();
-    $price = $sku->get('price')->getString() ?: $sku->get('final_price')->getString();
-    $attributes['gtm-price'] = number_format($price, 3);
-    $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString();
+    $price = $sku->get('final_price')->getString() ? $sku->get('final_price')->getString() : 0.000;
+    $attributes['gtm-price'] = (float) number_format((float) $price, 3, '.', '');
+    $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
     $attributes['gtm-product-sku'] = $sku->getSku();
 
-    // Dimension1 & 2 corrrespond to size & color.
+    // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
     $attributes['gtm-dimension2'] = '';
-
     $attributes['gtm-dimension3'] = '';
     $attributes['gtm-stock'] = '';
     $attributes['gtm-sku-type'] = $sku->bundle();
+
+    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
+      $attributes['gtm-sku-type'] = $parent_sku->bundle();
+    }
 
     return $attributes;
   }
@@ -348,9 +351,7 @@ class AlshayaGtmManager {
   public function processAttributesForPdp(array $attributes) {
     $processed_attributes['ecommerce'] = [];
     $processed_attributes['ecommerce']['currencyCode'] = $this->configFactory->get('acq_commerce.currency')->get('currency_code');
-    $processed_attributes['ecommerce']['detail']['actionField'] = [
-      'list' => $this->convertCurrentRouteToGtmPageName($this->getGtmContainer()),
-    ];
+
     // Set dimension1 & 2 to empty until product added to cart.
     $attributes['gtm-dimension1'] = '';
     $attributes['gtm-dimension2'] = '';
@@ -480,7 +481,7 @@ class AlshayaGtmManager {
     }
 
     $actionData = [
-      'id' => $order_id,
+      'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
       'revenue' => (float) $order['totals']['grand'],
       'tax' => (float) $order['totals']['tax'] ?: 0.00,
@@ -493,7 +494,7 @@ class AlshayaGtmManager {
       'deliveryOption' => 'Home Delivery',
       'paymentOption' => $order['payment']['method_title'],
       'discountAmount' => $order['totals']['discount'],
-      'transactionID' => $order_id,
+      'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
     ];
 

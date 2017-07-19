@@ -1,4 +1,16 @@
 .path--cart {
+  @include breakpoint($only-tablet) {
+    .price-wrapper .price {
+      max-width: 5rem !important;
+    }
+  }
+
+  tr[data-drupal-selector="edit-totals-discount"] td:first-child {
+    @include breakpoint($only-tablet) {
+      font-size: 0.6rem !important;
+    }
+  }
+
   #table-cart-items {
     @include breakpoint($upto-tablet) {
       margin-top: 1.9rem;
@@ -107,13 +119,13 @@
         &.subtotal {
           @include breakpoint($tablet) {
             .price-currency.suffix {
-              float: $left;
+              float: left;
               padding: 0;
             }
 
             span.price-amount {
               @include breakpoint($only-mobile) {
-                float: $left !important;
+                float: left !important;
               }
 
               float: right !important;
@@ -272,28 +284,6 @@
     }
   }
 
-  .tooltip--wrap {
-    padding-#{$left}: 2.2rem;
-
-    @include breakpoint($only-mobile) {
-      float: $right;
-      margin-bottom: 1.6875rem;
-      margin-right: 5rem;
-      padding-#{$left}: 2rem;
-      margin-top: -0.75rem;
-
-      &:last-child {
-        clear: both;
-      }
-    }
-
-    @include breakpoint($tablet) {
-      padding-#{$left}: 0;
-      margin-top: 0.625rem;
-      margin-bottom: 2.125rem;
-    }
-  }
-
   .contains--tooltip {
     position: relative;
 
@@ -305,7 +295,7 @@
       z-index: 1;
       padding: 10px 11px;
       top: 1rem;
-      #{$left}: -4.5rem;
+      #{$left}: -4.3rem;
       color: $windows-blue;
       background-color: $alice-blue;
       border: 1px solid $cerulean-two;
@@ -411,6 +401,11 @@
   }
 
   .promo-continue-shopping-wrapper {
+    input[type="text"],
+    input[type="tel"] {
+      font-size: 1rem !important;
+    }
+
     #edit-continue-shopping {
       @include breakpoint($tablet) {
         display: none;
@@ -419,6 +414,10 @@
   }
 
   &.alias--cart h1 {
+    @include breakpoint($tablet) {
+      margin-bottom: 1.1rem;
+    }
+
     @include breakpoint($only-tablet) {
       margin-bottom: 1.75rem;
     }
@@ -516,11 +515,21 @@
     display: none;
   }
 
+  .coupon-code-wrapper {
+    .card__header.ui-state-active {
+      border-bottom: 1px solid $white;
+    }
+  }
+
   .coupon-code-wrapper,
   #details-privilege-card-wrapper {
     border-bottom: 1px solid $white;
     position: relative;
     font-size: 0.875rem;
+
+    input.error {
+      font-size: 0.875rem;
+    }
 
     .form-item-privilege-card-number,
     .form-item-privilege-card-number2 {
@@ -619,6 +628,7 @@
     color: $white-five;
     cursor: pointer;
     margin-#{$left}: 1.5rem;
+    font-size: 0.75rem;
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: 1.5rem;
@@ -834,29 +844,9 @@
 }
 
 html[lang=ar] {
-  .tooltip--head::after {
-    @include breakpoint($desktop) {
-      position: absolute;
-      left: 4rem;
-      top: -0.25rem;
-    }
-  }
-
   #table-cart-totals .price-currency {
     @include breakpoint($only-mobile) {
       margin-left: -1.5rem;
-    }
-  }
-
-  .tooltip--wrap {
-    margin-left: 0;
-
-    @include breakpoint($only-mobile) {
-      margin-left: 3.7rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding-right: 0;
     }
   }
 
@@ -1036,53 +1026,11 @@ html[lang=ar] {
     padding-right: 1.6rem !important;
   }
 
-  .tooltip--wrap {
-    min-width: 15em;
-
-    @include breakpoint($tablet) {
-      min-width: 12em;
-    }
-  }
-
   .customer-cart-form .price-currency.suffix {
     @include breakpoint($only-tablet) {
       margin-right: 0.25rem;
       padding: 0;
       line-height: 1;
-    }
-  }
-
-  .path--cart .contains--tooltip {
-    @include breakpoint($only-mobile) {
-      .tooltip {
-        right: -2.5rem;
-      }
-
-      .tooltip--head::after {
-        position: absolute;
-        left: 0;
-        top: -0.25rem;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      .tooltip--head::after {
-        position: absolute;
-        left: 1.9rem;
-        top: -0.25rem;
-      }
-
-      .tooltip {
-        right: -3.5rem;
-
-        @include breakpoint($desktop) {
-          right: -3.875rem;
-        }
-      }
-    }
-
-    @include breakpoint($desktop) {
-      right: 0;
     }
   }
 
@@ -1138,4 +1086,11 @@ html[lang=ar] {
 
 html[lang=ar] .path--cart h1.c-page-title::before {
   display: none;
+}
+
+.delivery-options-tooltip-wrapper {
+  @include breakpoint($only-mobile) {
+    width: 10rem;
+    display: inline-block;
+  }
 }

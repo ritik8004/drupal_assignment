@@ -32,7 +32,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAnonymous();
+    return \Drupal::currentUser()->isAnonymous() && $this->getClickAndCollectAvailability();
   }
 
   /**
@@ -59,14 +59,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $pane_form['#attributes']['class'][] = 'active--tab--content';
 
     $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
-
     $default_firstname = $default_lastname = $default_email = '';
 
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
-
-    $store_code = '';
-    $shipping_type = '';
 
     if ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $store_code = $form_values['store_code'];
@@ -121,8 +117,9 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Find your closest collection point'),
-      '#prefix' => '<div class="label-store-location">' . $this->t('Find your closest collection point') . '</div>',
+      '#title' => $this->t('find your closest collection point'),
+      '#prefix' => '<div class="label-store-location">' . $this->t('find your closest collection point') . '</div>',
+      '#placeholder' => t('Enter a location'),
       '#attributes' => [
         'class' => ['store-location-input'],
       ],
@@ -166,14 +163,20 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div id="selected-store-content" class="selected-store-content">' . $selected_store_data . '</div>',
     ];
 
-    $pane_form['selected_store']['customer_help'] = [
+    $pane_form['selected_store']['elements'] = [
+      '#type' => 'container',
+      '#tree' => FALSE,
+      '#id' => 'selected-store-elements-wrapper',
+    ];
+
+    $pane_form['selected_store']['elements']['customer_help'] = [
       '#markup' => '<div class="cc-help-text cc-customer-help-text"><p>' . $this->t("Please provide your contact details") . '</p>' . $this->t("We’ll be using this information to keep in touch with you") . '</div>',
     ];
 
     // First/Last/Email/Mobile have cc_ prefix to ensure validations work fine
     // and don't conflict with address form fields.
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['cc_firstname'] = [
+    $pane_form['selected_store']['elements']['cc_firstname'] = [
       '#type' => 'textfield',
       '#title' => t('First Name'),
       '#required' => TRUE,
@@ -181,25 +184,25 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['cc_lastname'] = [
+    $pane_form['selected_store']['elements']['cc_lastname'] = [
       '#type' => 'textfield',
       '#title' => t('Last Name'),
       '#required' => TRUE,
       '#default_value' => $default_lastname,
     ];
 
-    $pane_form['selected_store']['cc_email'] = [
+    $pane_form['selected_store']['elements']['cc_email'] = [
       '#type' => 'email',
       '#title' => t('Email'),
       '#required' => TRUE,
       '#default_value' => $default_email,
     ];
 
-    $pane_form['selected_store']['mobile_help'] = [
+    $pane_form['selected_store']['elements']['mobile_help'] = [
       '#markup' => '<div class="cc-help-text cc-mobile-help-text"><p>' . $this->t("Please provide the mobile number of the person collecting the order") . '</p>' . $this->t("We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
-    $pane_form['selected_store']['cc_mobile_number'] = [
+    $pane_form['selected_store']['elements']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => t('Mobile Number'),
       '#verify' => 0,
@@ -270,7 +273,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       ],
       '#ajax' => [
         'callback' => [$this, 'submitMemberDeliveryCollect'],
-        'wrapper' => 'selected-store-wrapper',
+        'wrapper' => 'selected-store-elements-wrapper',
       ],
       // This is required for limit_validation_errors to work.
       '#submit' => [],
@@ -349,10 +352,17 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
 
-    $address = [
-      'country_id' => _alshaya_custom_get_site_level_country_code(),
-      'telephone' => _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']),
-    ];
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    $address = $address_book_manager->getAddressStructureWithEmptyValues();
+
+    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
+
+    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
+    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+    $store_node = $store_utility->getTranslatedStoreFromCode($values['store_code']);
+
+    $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
 
     $cart->setShipping($address);
   }
@@ -370,7 +380,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    */
   public function submitMemberDeliveryCollect($form, FormStateInterface $form_state) {
     if ($form_state->getErrors()) {
-      return $form['guest_delivery_collect']['selected_store'];
+      return $form['guest_delivery_collect']['selected_store']['elements'];
     }
 
     $response = new AjaxResponse();
