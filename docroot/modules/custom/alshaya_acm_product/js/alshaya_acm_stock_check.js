@@ -18,7 +18,7 @@
 
         $.ajax({
           url: Drupal.url('stock-check-ajax/node/' + productId),
-          type: "POST",
+          type: "GET",
           contentType: "application/json;",
           dataType: "json",
           success: function (result) {
@@ -34,7 +34,7 @@
           var $wrapper = $(this);
           $.ajax({
             url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-            type: "POST",
+            type: "GET",
             contentType: "application/json;",
             dataType: "json",
             success: function (result) {
@@ -58,7 +58,7 @@
           var $wrapper = $(this);
           $.ajax({
             url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-            type: "POST",
+            type: "GET",
             contentType: "application/json;",
             dataType: "json",
             success: function (result) {
@@ -83,7 +83,7 @@
 
           $.ajax({
             url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-            type: "POST",
+            type: "GET",
             contentType: "application/json;",
             dataType: "json",
             success: function (result) {
