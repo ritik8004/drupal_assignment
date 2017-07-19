@@ -414,6 +414,10 @@
   }
 
   &.alias--cart h1 {
+    @include breakpoint($tablet) {
+      margin-bottom: 1.1rem;
+    }
+
     @include breakpoint($only-tablet) {
       margin-bottom: 1.75rem;
     }
