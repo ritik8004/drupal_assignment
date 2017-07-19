@@ -51,6 +51,16 @@
         }
       });
 
+      // Hit the search store button on hitting enter when on textbox.
+      $('.click-collect-form').once('prevent-enter').on('keypress', '.store-location-input', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+          e.preventDefault();
+          $('.click-collect-form').find('.search-stores-button').click();
+          return false;
+        }
+      });
+
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
         if ($(window).width() >= 768) {
           $('.click-collect-all-stores').toggle('slow', function () {
