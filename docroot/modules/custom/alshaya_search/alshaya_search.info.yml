@@ -4,10 +4,12 @@ type: module
 core: 8.x
 dependencies:
   - acq_sku
+  - alshaya_acm_product
   - alshaya_image_styles
   - alshaya_product_zoom
   - better_exposed_filters
   - block
+  - ctools
   - facets
   - facets_summary
   - file
@@ -20,6 +22,7 @@ dependencies:
   - search_api_spellcheck
   - system
   - taxonomy
+  - text
   - user
   - views
   - redirect_domain

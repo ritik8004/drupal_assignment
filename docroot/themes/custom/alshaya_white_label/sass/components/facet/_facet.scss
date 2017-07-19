@@ -12,7 +12,9 @@
   ul {
     @extend %list-clear;
 
-    padding-top: 20px;
+    @include breakpoint($desktop) {
+      padding-top: 1.25rem;
+    }
 
     input[type="text"] {
       border: 1px solid $white;
@@ -51,6 +53,10 @@
     .facet-item__value {
       font-size: 0.875rem;
       text-transform: lowercase;
+    }
+
+    .facet-item__count {
+      margin-#{$left}: 0.125rem;
     }
   }
 }
