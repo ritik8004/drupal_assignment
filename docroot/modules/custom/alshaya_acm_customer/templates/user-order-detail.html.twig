@@ -92,26 +92,7 @@
 
       <tr class="order-details-row">
         <td>
-          {% if order_details.collection_by %}
-            <div class="label font-small">{{ "Collection by"|t }}</div>
-            <div class="dark">{{ order_details.collection_by }}</div>
-          {% else %}
-            <div class="label font-small">{{ "Delivery to"|t }}</div>
-            <div class="dark">{{ order_details.delivery_to }}</div>
-          {% endif %}
-
-          <div class="contact">
-            <div class="label font-small">{{ "Contact number"|t }}</div>
-            <div class="dark">{{ order_details.contact_no }}</div>
-          </div>
-
-          <div class="mobile-only payment--details">
-            <div class="label font-small">{{ "Payment method"|t }}</div>
-            <div class="dark">{{ order_details.payment_method }}</div>
-          </div>
-        </td>
-        <td>
-          {% if order_details.collection_by %}
+          {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ 'Collection Address'|t }}</div>
             <div class="dark store-name-and-address">
               <div class="store-name">{{ order_details.store_name }}</div>
@@ -121,21 +102,23 @@
                 <a href="{{ order_details.view_on_map_link }}" target="_blank">{{ 'View on map'|t }}</a>
               </div>
             </div>
-          {% elseif order_details.billing_same_as_shipping %}
-            <div class="label font-small">{{ "Shipping & Billing Address"|t }}</div>
-            <div class="dark">{{ order_details.delivery_address }}</div>
+
+            <div class="contact">
+              <div class="label font-small">{{ "Collector contact no."|t }}</div>
+              <div class="dark">{{ order_details.contact_no }}</div>
+            </div>
           {% else %}
-            <div class="label font-small">{{ "Delivery Address"|t }}</div>
+            <div class="label font-small">{{ "Delivery details"|t }}</div>
             <div class="dark">{{ order_details.delivery_address }}</div>
           {% endif %}
 
-          <div class="mobile-only delivery--method">
-            <div class="label font-small">{{ "Delivery method"|t }}</div>
-            <div class="dark">{{ order_details.delivery_method }}</div>
+          <div class="mobile-only payment--details">
+            <div class="label font-small">{{ "Payment method"|t }}</div>
+            <div class="dark">{{ order_details.payment_method }}</div>
           </div>
         </td>
-        <td class="desktop-only blend">
-          {% if order_details.collection_by %}
+        <td>
+          {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ 'Collection times'|t }}</div>
             <div class="dark">
               <div class="store-open-hours">
@@ -151,8 +134,19 @@
                 </div>
               </div>
             </div>
-          {% elseif not order_details.billing_same_as_shipping %}
-            <div class="label font-small">{{ "Billing address"|t }}</div>
+          {% else %}
+            <div class="label font-small">{{ "Billing details"|t }}</div>
+            <div class="dark">{{ order_details.billing_address }}</div>
+          {% endif %}
+
+          <div class="mobile-only delivery--method">
+            <div class="label font-small">{{ "Delivery method"|t }}</div>
+            <div class="dark">{{ order_details.delivery_method }}</div>
+          </div>
+        </td>
+        <td class="desktop-only blend">
+          {% if order_details.type == 'cc' %}
+            <div class="label font-small">{{ "Billing details"|t }}</div>
             <div class="dark">{{ order_details.billing_address }}</div>
           {% endif %}
         </td>

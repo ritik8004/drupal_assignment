@@ -96,7 +96,7 @@
               </div>
             </div>
           </div>
-        {% elseif not order_details.billing_same_as_shipping %}
+        {% else %}
           <div class="label">{{ "Billing address"|t }}</div>
           <div class="dark">{{ order_details.billing_address }}</div>
         {% endif %}

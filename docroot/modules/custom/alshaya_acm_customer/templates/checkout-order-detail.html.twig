@@ -101,9 +101,6 @@
                 <a href="{{ order_details.view_on_map_link }}" target="_blank">{{ 'View on map'|t }}</a>
               </div>
             </div>
-          {% elseif order_details.billing_same_as_shipping %}
-            <div class="label font-small">{{ "Shipping & Billing Address"|t }}</div>
-            <div class="dark">{{ order_details.delivery_address }}</div>
           {% else %}
             <div class="label font-small">{{ "Delivery Address"|t }}</div>
             <div class="dark">{{ order_details.delivery_address }}</div>
@@ -131,7 +128,7 @@
                 </div>
               </div>
             </div>
-          {% elseif not order_details.billing_same_as_shipping %}
+          {% else %}
             <div class="label font-small">{{ "Billing address"|t }}</div>
             <div class="dark">{{ order_details.billing_address }}</div>
           {% endif %}
