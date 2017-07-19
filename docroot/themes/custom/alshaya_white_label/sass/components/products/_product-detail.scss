@@ -639,6 +639,67 @@
   }
 }
 
+.store-finder-form-wrapper {
+  margin-top: 0.6875rem;
+
+  span.label {
+    font-family: $arial;
+    font-size: 0.75rem;
+    line-height: 2;
+    color: $grey-ash;
+    margin: 0;
+  }
+
+  .search-store {
+    label {
+      @include clearfix;
+    }
+
+    input[type="text"] {
+      float: $left;
+      width: 63%;
+      height: 2.188rem;
+      padding: 0.3125rem;
+      border: solid 1px $white;
+      font-size: 0.75rem;
+      color: $greyish;
+
+      @include breakpoint($desktop) {
+        width: 185px;
+      }
+
+      @include breakpoint($tablet) {
+        width: 54%;
+      }
+
+      &::placeholder {
+        color: $greyish;
+      }
+    }
+
+    button {
+      float: $right;
+      width: 6.563rem;
+      height: 2.188rem;
+      background-color: $cerulean-two;
+      font-family: $alshaya-thin;
+      appearance: none;
+      font-size: 0.75rem;
+      color: $white-five;
+      text-transform: lowercase;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: none;
+    }
+
+    .form-item-location label {
+      @include u-visibility(none);
+    }
+  }
+}
+
 .available_store {
   span.label {
     font-family: $arial;
@@ -670,51 +731,6 @@
       font-weight: bold;
 
       @include u-visibility(inline);
-    }
-  }
-
-  .search-store {
-    label {
-      @include clearfix;
-    }
-
-    input[type="text"] {
-      float: $left;
-      width: 162px;
-      height: 2.188rem;
-      padding: 0.3125rem;
-      border: solid 1px $white;
-      font-size: 0.75rem;
-      color: $greyish;
-
-      @include breakpoint($desktop) {
-        width: 185px;
-      }
-
-      &::placeholder {
-        color: $greyish;
-      }
-    }
-
-    button {
-      float: $right;
-      width: 6.563rem;
-      height: 2.188rem;
-      background-color: $cerulean-two;
-      font-family: $alshaya-thin;
-      appearance: none;
-      font-size: 0.75rem;
-      color: $white-five;
-      text-transform: lowercase;
-      display: inline-block;
-      vertical-align: middle;
-      text-align: center;
-      padding: 0.5rem 0;
-      border: none;
-    }
-
-    .form-item-location label {
-      @include u-visibility(none);
     }
   }
 
@@ -820,6 +836,12 @@
             font-style: normal;
           }
         }
+
+        &-address {
+          p {
+            margin: 0;
+          }
+        }
       }
     }
   }
@@ -857,6 +879,10 @@
   padding: 1.063rem 0;
   border-top: 1px solid $white;
   cursor: pointer;
+
+  @include breakpoint($only-mobile) {
+    color: $cerulean-two;
+  }
 }
 
 .click-collect-form,
@@ -887,7 +913,7 @@
     #{$right}: 0;
     height: 31.5rem;
     border: 1px solid $marine-blue;
-    padding: 1.25rem;
+    padding: 1rem 1.5rem;
     background: $white-five;
     overflow: hidden;
     width: 100%;
@@ -949,9 +975,25 @@
       cursor: pointer;
     }
 
-    .all-stores-info {
-      padding-bottom: 1em;
+    .text {
+      font-size: 0.75rem;
+      color: $grey-ash;
+      line-height: 1.5;
 
+      .available-store-text {
+        line-height: inherit;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+
+    .all-stores-info {
       a {
         font-family: $arial;
         font-size: 0.75rem;
@@ -973,10 +1015,12 @@
       }
 
       h3 {
-        font-family: $alshaya-bold;
+        font-family: $arial;
         font-weight: bold;
         color: $marine-blue;
         margin-top: 0;
+        margin-bottom: 0.5625rem;
+        font-size: 0.875rem;
       }
     }
 
@@ -993,8 +1037,12 @@
         line-height: 1.5;
         color: $grey-ash;
         list-style: none;
-        padding: 0.6875rem 0;
+        padding: 0.9375rem 0;
         border-top: 1px solid $white;
+
+        p {
+          margin: 0;
+        }
 
         strong,
         em {
@@ -1026,11 +1074,11 @@
           }
 
           &-delivery-time {
-            padding-top: 12px;
+            padding-top: 0.75rem;
 
             em {
               font-weight: bold;
-              font-style: normal;
+              color: $black;
             }
           }
 
@@ -1051,7 +1099,9 @@
     }
 
     .stores-list-all {
-      margin-top: 0.5rem;
+      @include breakpoint($tablet) {
+        margin-top: 1.063rem;
+      }
 
       .ajax-progress-throbber {
         position: absolute;
