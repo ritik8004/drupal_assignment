@@ -94,6 +94,13 @@
           });
         }
       });
+
+      // Remove checking stock message from the response for configurable size AJAX.
+      $(document).ajaxComplete(function(xhr, event, settings) {
+        if (settings.hasOwnProperty('extraData') && (settings.extraData._triggering_element_name === "configurables[size]")) {
+          $('.stock-checker').remove();
+        }
+      });
     }
   };
 
