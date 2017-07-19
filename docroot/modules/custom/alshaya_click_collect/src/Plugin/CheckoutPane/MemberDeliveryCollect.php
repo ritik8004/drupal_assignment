@@ -79,8 +79,9 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     }
 
     if ($store_code && $shipping_type) {
-      // Not injected here to avoid module dependency.
+      /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
       if (!empty($store)) {
         $selected_store = [
@@ -269,10 +270,17 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $cart = $this->getCart();
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
 
-    $address = [
-      'country_id' => _alshaya_custom_get_site_level_country_code(),
-      'telephone' => _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']),
-    ];
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    $address = $address_book_manager->getAddressStructureWithEmptyValues();
+
+    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
+
+    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
+    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+    $store_node = $store_utility->getTranslatedStoreFromCode($values['store_code']);
+
+    $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
 
     $cart->setShipping($address);
   }

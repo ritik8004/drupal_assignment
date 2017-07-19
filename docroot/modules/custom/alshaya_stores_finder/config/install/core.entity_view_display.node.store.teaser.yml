@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.store.field_store_locator_id
     - field.field.node.store.field_store_open_hours
     - field.field.node.store.field_store_phone
+    - field.field.node.store.field_store_sts_label
     - node.type.store
   module:
     - user
@@ -30,4 +31,5 @@ hidden:
   field_store_locator_id: true
   field_store_open_hours: true
   field_store_phone: true
+  field_store_sts_label: true
   langcode: true

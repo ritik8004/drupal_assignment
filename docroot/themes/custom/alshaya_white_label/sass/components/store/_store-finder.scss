@@ -704,6 +704,7 @@
       display: inline-block;
       max-height: 39rem;
       overflow-y: scroll;
+      transform: translate3d(0, 0, 0);
       vertical-align: top;
       max-width: 26.5%;
       margin-#{$right}: 1%;
