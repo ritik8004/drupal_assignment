@@ -143,11 +143,13 @@ class StoresFinderUtility {
     // Sort the stores first by distance and then by name.
     alshaya_master_utility_usort($stores, 'distance', 'asc', 'name', 'asc');
 
+    $config = \Drupal::config('alshaya_click_collect.settings');
     // Add sequence and proper delivery_time label and low stock text.
     foreach ($stores as $index => $store) {
       $stores[$index]['sequence'] = $index + 1;
 
-      $time = $store['rnc_available'] ? t('1 hour') : $store['sts_delivery_time_label'];
+      // Display configured value for rnc else sts delivery time.
+      $time = $store['rnc_available'] ? $config->get('click_collect_rnc') : $store['sts_delivery_time_label'];
       $stores[$index]['delivery_time'] = t('Collect from store in <em>@time</em>', ['@time' => $time]);
       $stores[$index]['low_stock_text'] = $store['low_stock'] ? t('Low stock') : '';
     }

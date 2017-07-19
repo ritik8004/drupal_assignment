@@ -20,7 +20,6 @@
     {% endif %}
       <div class="text">
         {{ help_text|raw }}
-        <p>{{ subtitle }}</p>
         <div class="available_store">
           <div class="available-store-text" style="display: none;">
             {{ 'Available at three stores near'|t }} <div class="google-store-location"></div>
@@ -30,9 +29,10 @@
             </div>
             <div class="change-location-link">{{ 'change'|t }}</div>
           </div>
-          <div class="store-finder-form-wrapper" style="display: none;">
-            <div id="search-store" class="search-store">{{ store_finder_form }}</div>
-          </div>
+        </div>
+        <p>{{ subtitle }}</p>
+        <div class="store-finder-form-wrapper" style="display: none;">
+          <div id="search-store" class="search-store">{{ store_finder_form }}</div>
         </div>
       </div>
     </div>

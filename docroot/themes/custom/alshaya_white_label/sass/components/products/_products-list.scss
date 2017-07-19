@@ -75,6 +75,7 @@
                 width: 35px;
                 height: 35px;
                 position: relative;
+                float: $right;
               }
             }
           }
@@ -431,7 +432,7 @@
   }
 
   position: relative;
-  z-index: 2;
+  z-index: 5;
 
   .c-facet__label {
     @include breakpoint($only-mobile) {
