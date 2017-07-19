@@ -37,14 +37,24 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  attr_at_glance: true
+  attr_brand_logo: true
   attr_bullet_points: true
+  attr_collection: true
   attr_color: true
+  attr_product_brand: true
+  attr_reserve_and_collect: true
+  attr_season: true
+  attr_ship_to_store: true
   attr_short_description: true
   attr_size: true
+  attr_style: true
+  attr_whats_in_the_box: true
   attributes: true
   brand: true
   crosssell: true
   final_price: true
+  langcode: true
   media: true
   sku: true
   special_price: true
