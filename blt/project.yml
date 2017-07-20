@@ -3,7 +3,7 @@ project:
   prefix: MMCPA
   human_name: Alshaya
   profile:
-    name: alshaya
+    name: alshaya_transac
   local:
     protocol: http
     hostname: 'local.${project.machine_name}.com'
