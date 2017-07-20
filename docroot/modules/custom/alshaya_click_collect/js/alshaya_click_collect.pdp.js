@@ -139,10 +139,7 @@
   // Set the location coordinates, but don't render the stores.
   Drupal.pdp.setStoreCoords = function (coords) {
     asCoords = coords;
-
-    if (records) {
-      Drupal.pdp.storesDisplay(asCoords);
-    }
+    Drupal.pdp.storesDisplay(asCoords);
   };
 
   Drupal.pdp.getProductInfo = function () {
