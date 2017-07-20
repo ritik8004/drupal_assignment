@@ -240,7 +240,7 @@ html[lang=ar] {
       .price-currency {
         @include breakpoint($desktop) {
           float: left !important;
-          padding: 0 2.5rem 0 1rem;
+          padding: 0 0.5rem 0 1rem;
         }
       }
     }
