@@ -468,12 +468,14 @@
     padding: 1rem 0;
     padding-bottom: 0;
     margin-bottom: 1.625rem;
+    border: 1px solid transparent;
     position: relative;
     cursor: pointer;
 
     &:hover,
     &.selected {
-      background-color: $white-smoke-light;
+      background-color: $white-five;
+      border: 1px solid $white;
     }
 
     .row-title {
@@ -526,6 +528,11 @@
         @include breakpoint($tablet) {
           padding-#{$left}: 3.25rem;
         }
+      }
+
+      .get--directions a,
+      .view-on--map a {
+        border-bottom: 0;
       }
 
       a {
@@ -1154,4 +1161,8 @@
   overflow: hidden;
   white-space: nowrap;
   font-family: $arial;
+
+  .location-content {
+    white-space: normal;
+  }
 }
