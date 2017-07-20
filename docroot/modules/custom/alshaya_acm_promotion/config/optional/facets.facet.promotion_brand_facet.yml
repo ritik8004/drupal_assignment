@@ -5,7 +5,12 @@ dependencies:
     - search_api.index.product
     - views.view.alshaya_product_list
   module:
+    - alshaya_search
     - search_api
+third_party_settings:
+  alshaya_search:
+    display_textbox: 1
+    display_textbox_item_count: '1'
 id: promotion_brand_facet
 name: 'Promotion brand facet'
 url_alias: skus_sku_reference_brand_promotions
