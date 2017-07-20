@@ -220,29 +220,6 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       $address = _alshaya_acm_checkout_clean_address($address_book_manager->getMagentoAddressFromAddressArray($address_values));
 
       $cart->setBilling($address);
-
-      // If shipping method is click and collect, we set billing address to
-      // shipping except the shipping phone.
-      if ($values['same_as_shipping'] == self::BILLING_ADDR_CASE_CLICK_COLLECT) {
-        $original_shipping_address = $shipping_address;
-        $shipping_address = $address;
-        $shipping_address['telephone'] = $original_shipping_address['telephone'];
-        $cart->setShipping($shipping_address);
-
-        // Because we are setting the shipping address here we have to set
-        // the shipping method again.
-        $extension = [];
-
-        $extension['store_code'] = $cart->getExtension('store_code');
-        $extension['click_and_collect_type'] = $cart->getExtension('click_and_collect_type');
-
-        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-        $term = $checkout_options_manager->getClickandColectShippingMethodTerm();
-
-        $cart = $this->getCart();
-        $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
-      }
     }
   }
 
