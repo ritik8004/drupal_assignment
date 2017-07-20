@@ -174,7 +174,7 @@ function alshaya_search_block_view_alter(array &$build, BlockPluginInterface $bl
     $facet_configuration = $block->getConfiguration();
     $facet_mapping = $facet_configuration['id'];
     $facet_id = explode(PluginBase::DERIVATIVE_SEPARATOR, $facet_mapping)[1];
-    $display_textbox_item_count = 0;
+    $display_textbox_item_count = FALSE;
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet_storage = \Drupal::service('entity_type.manager')->getStorage('facets_facet');
     $facet = $facet_storage->load($facet_id);

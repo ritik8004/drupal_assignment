@@ -31,7 +31,7 @@
       $('.block-facets-ajax').each(function () {
         var blockPluginId = $(this).attr('data-block-plugin-id');
         if ($.inArray(blockPluginId, facetPlugins !== -1) &&
-          ($(this).find('li.facet-item').length > facetsDisplayTextbox[blockPluginId]) &&
+          ($(this).find('li.facet-item').length >= facetsDisplayTextbox[blockPluginId]) &&
           ($(this).find('.facets-search-input').length === 0)) {
           // Prepend the text field before the checkboxes, if not exists.
           $(this).find('ul').prepend('<input type="text" placeholder="'
