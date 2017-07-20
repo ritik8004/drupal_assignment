@@ -5,7 +5,6 @@
   z-index: 4;
 
   @include breakpoint($tablet) {
-    height: 4.375rem;
     padding: 0 1.5em;
   }
 

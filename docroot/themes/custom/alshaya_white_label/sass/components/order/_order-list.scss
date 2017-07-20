@@ -116,9 +116,12 @@
     .select2-selection {
       font-size: 0.75rem;
       text-align: $left;
-      max-height: 2.1875rem;
       outline: transparent;
       padding: 0.25rem 0.8rem;
+      border: none;
+      height: 2.1875rem;
+      background: $whisper-dark;
+      border-radius: 0;
 
       .select2-selection__arrow {
         top: 0;
