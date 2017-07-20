@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 
@@ -50,16 +51,20 @@ class SkuManager {
    *   The lnaguage manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The entity repository service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger service.
    */
   public function __construct(Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
                               LanguageManager $languageManager,
-                              EntityRepositoryInterface $entityRepository) {
+                              EntityRepositoryInterface $entityRepository,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
+    $this->logger = $logger_factory->get('alshaya_acm_product');
   }
 
   /**
@@ -360,6 +365,139 @@ class SkuManager {
     }
 
     return $promos;
+  }
+
+  /**
+   * Function to return labels files for a SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   Sku Entity.
+   * @param string $type
+   *   Type of image required - plp or pdp.
+   * @param bool $reset
+   *   Flag to reset cache and generate array again from serialized string.
+   *
+   * @return array
+   *   Array of media files.
+   */
+  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
+    static $static_labels_cache = [];
+
+    $sku = $sku_entity->getSku();
+
+    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
+      return $static_labels_cache[$sku][$type];
+    }
+
+    if ($labels = $sku_entity->get('attr_labels')->getString()) {
+      $update_sku = FALSE;
+
+      $labels_data = unserialize($labels);
+
+      if (empty($data)) {
+        return [];
+      }
+
+      foreach ($labels_data as &$data) {
+        if ($type == 'pdp') {
+          if (empty($data['pdp_image_fid'])) {
+            try {
+              // Prepare the File object when we access it the first time.
+              $data['pdp_image_fid'] = $sku->downloadLabelsImage($data, 'pdp_image');
+              $update_sku = TRUE;
+            }
+            catch (\Exception $e) {
+              $this->logger->error($e->getMessage());
+              continue;
+            }
+          }
+
+          $data['pdp_image_file'] = File::load($data['plp_image_fid']);
+        }
+
+        if ($type == 'plp') {
+          if (empty($data['plp_image'])) {
+            try {
+              // Prepare the File object when we access it the first time.
+              $data['plp_image_fid'] = $sku->downloadLabelsImage($data, 'plp_image');
+              $update_sku = TRUE;
+            }
+            catch (\Exception $e) {
+              \Drupal::logger('alshaya_acm_product')->error($e->getMessage());
+              continue;
+            }
+          }
+
+          $data['plp_image_file'] = File::load($data['pdp_image_fid']);
+        }
+
+        $static_labels_cache[$sku][$type][] = $data;
+
+        // Disable subsequent images if flag is true.
+        if ($data['disable_subsequents']) {
+          break;
+        }
+      }
+
+      // We save the fids in SKU back to reuse.
+      if ($update_sku) {
+        $sku_entity->get('attr_labels')->setValue(serialize($static_labels_cache[$sku]));
+        $sku_entity->save();
+      }
+    }
+
+    return $static_labels_cache[$sku][$type];
+  }
+
+  /**
+   * Function to save image file into public dir.
+   *
+   * @param array $data
+   *   File data.
+   * @param string $file_key
+   *   File key.
+   *
+   * @return int
+   *   File id.
+   */
+  protected function downloadLabelsImage(array $data, $file_key) {
+    // Preparing args for all info/error messages.
+    $args = ['@file' => $data[$file_key], '@sku_id' => $this->id()];
+
+    // Download the file contents.
+    $file_data = file_get_contents($data[$file_key]);
+
+    // Check to ensure errors like 404, 403, etc. are catched and empty file
+    // not saved in SKU.
+    if (empty($file_data)) {
+      throw new \Exception(new FormattableMarkup('Failed to download labels image file "@file" for SKU id @sku_id.', $args));
+    }
+
+    // Get the path part in the url, remove hostname.
+    $path = parse_url($data[$file_key], PHP_URL_PATH);
+
+    // Remove slashes from start and end.
+    $path = trim($path, '/');
+
+    // Get the file name.
+    $file_name = basename($path);
+
+    // Prepare the directory path.
+    $directory = 'public://labels/' . str_replace('/' . $file_name, '', $path);
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    // Save the file as file entity.
+    // @TODO: Check for a way to remove old files and file objects.
+    // To be done here and in SKU.php both.
+    /** @var \Drupal\file\Entity\File $file */
+    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+      return $file->id();
+    }
+    else {
+      throw new \Exception(new FormattableMarkup('Failed to save labels image file "@file" for SKU id @sku_id.', $args));
+    }
   }
 
 }
