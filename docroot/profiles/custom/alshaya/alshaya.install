@@ -31,5 +31,9 @@ function alshaya_install() {
       ->save();
   }
 
+  $modules = [];
+
+  // TODO: List the modules common for transac and non-transac profiles.
+
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', [$modules]);
 }
