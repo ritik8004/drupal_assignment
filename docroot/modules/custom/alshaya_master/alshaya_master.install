@@ -174,6 +174,9 @@ function alshaya_master_install() {
     'Enter card details' => [
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
+    'enter card details' => [
+      'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
+    ],
     '<p>By registering you agreed to our <a href="/terms">Terms and Conditions</a>.</p>' => [
       'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms">الشروط والأحكام</a></p>',
     ],
@@ -921,6 +924,12 @@ function alshaya_master_install() {
     ],
     'Phone number in %field is required.' => [
       'ar' => 'يرجى إدخال رقم الجوال',
+    ],
+    '1 hour' => [
+      'ar' => 'ساعة واحدة',
+    ],
+    'Your order will be available in %duration' => [
+      'ar' => 'سيتم توصيل طلبيتك خلال %duration',
     ],
   ];
   alshaya_i18n_save_translations($strings);

@@ -292,7 +292,7 @@
           $('.block-views-blockplp-promotional-banner-block-1')
             .addClass('promo-banner');
           $('.block-views-blockplp-promotional-banner-block-1')
-            .siblings('.block-views-exposed-filter-blocksearch-page')
+            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1')
             .addClass('promo-banner');
         }
       }

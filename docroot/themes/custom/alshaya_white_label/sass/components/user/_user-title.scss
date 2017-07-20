@@ -42,6 +42,7 @@
 
     @include breakpoint($desktop) {
       top: -4.5rem;
+      margin-#{$left}: 0.5rem;
     }
   }
 }
@@ -106,7 +107,9 @@
   }
 }
 
-.c-communication-preferences {
+.c-communication-preferences,
+.c-order-list,
+.c-user-edit {
   .block-page-title-block {
     padding: 0.45rem 0 0.3rem;
 

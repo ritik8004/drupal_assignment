@@ -123,8 +123,8 @@
       #{$right}: 0;
       top: 0;
       height: 2.1875rem;
-      padding-#{$right}: 1rem;
-      padding-top: 0.3rem;
+      padding-#{$right}: 1.1rem;
+      padding-top: 0.425rem;
       border: 1px solid $greyish;
       border-#{$left}: 0;
       z-index: 1;
@@ -470,6 +470,11 @@
     margin-bottom: 1.625rem;
     position: relative;
     cursor: pointer;
+
+    &:hover,
+    &.selected {
+      background-color: $white-smoke-light;
+    }
 
     .row-title {
       font-weight: bold;

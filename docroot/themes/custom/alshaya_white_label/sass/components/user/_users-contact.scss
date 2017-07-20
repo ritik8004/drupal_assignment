@@ -13,7 +13,7 @@
     }
 
     .mobile-number-field {
-      margin-top: 1.5rem;
+      margin-top: 1.7rem !important;
 
       label {
         color: #adadad;
@@ -72,7 +72,7 @@
   }
 
   .field--name-field-first-name {
-    margin-#{$right}: 1.25rem;
+    margin-#{$right}: 1.5rem;
   }
 
   .field--name-field-first-name,
@@ -80,6 +80,10 @@
     float: $left;
     max-width: 11.7rem;
     width: calc(50% - 12px);
+
+    input {
+      margin-top: 0.5rem;
+    }
   }
 
   .mobile-number-field {

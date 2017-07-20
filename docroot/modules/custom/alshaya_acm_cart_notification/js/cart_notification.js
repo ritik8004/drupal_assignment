@@ -3,8 +3,7 @@
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-
-      $(window).on('click', function () {
+      $(window).on('click', function() {
         // check if element is Visible
         var length = $('#cart_notification').html().length;
         if (length > 0) {

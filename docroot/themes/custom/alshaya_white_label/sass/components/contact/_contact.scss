@@ -430,6 +430,15 @@ form.user-form {
   #edit-account {
     margin-top: 2.813rem;
   }
+
+  .form-wrapper,
+  .form-item {
+    margin-top: 1.975rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1.25rem;
+    }
+  }
 }
 
 html[lang=ar] {

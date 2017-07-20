@@ -16,21 +16,15 @@ targetEntityType: taxonomy_term
 bundle: acq_product_category
 mode: default
 content:
-  description:
-    label: hidden
-    type: text_default
-    weight: 0
-    settings: {  }
-    third_party_settings: {  }
-    region: content
   field_meta_tags:
-    weight: 1
+    weight: 0
     label: above
     settings: {  }
     third_party_settings: {  }
     type: metatag_empty_formatter
     region: content
 hidden:
+  description: true
   field_category_include_menu: true
   field_commerce_id: true
   field_main_menu_highlight: true
