@@ -385,7 +385,7 @@
         });
 
         // Track sorts.
-        $('select[name="sort_bef_combine"]').on('change', function() {
+        $('select[name="sort_bef_combine"]').once('js-event').on('change', function() {
           var sortValue = $(this).find('option:selected').text();
           var data = {
             'event' : 'sort',
