@@ -68,7 +68,7 @@ switch ($env) {
 
     $config['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
 
-    $config['alshaya_api.settings']['magento_host'] = 'http://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
+    $config['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;
@@ -81,7 +81,7 @@ switch ($env) {
 
     $config['acq_commerce.conductor']['url'] = 'https://pprod.dev.alshaya.acm.acquia.io/';
 
-    $config['alshaya_api.settings']['magento_host'] = 'http://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
+    $config['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;
@@ -94,7 +94,7 @@ switch ($env) {
     // 01live.
     $config['acq_commerce.conductor']['url'] = 'https://prod.dev.alshaya.acm.acquia.io/';
 
-    $config['alshaya_api.settings']['magento_host'] = 'http://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
+    $config['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
     $config['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
     $config['alshaya_api.settings']['verify_ssl'] = 0;
