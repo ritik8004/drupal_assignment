@@ -232,7 +232,18 @@ function alshaya_user_user_presave(EntityInterface $entity) {
 function alshaya_user_element_info_alter(array &$info) {
   if (isset($info['mobile_number']['#process'])) {
     $info['mobile_number']['#process'][] = '_alshaya_user_mobile_number_process';
+    array_unshift($info['mobile_number']['#element_validate'], '_alshaya_user_mobile_number_validate');
   }
+}
+
+/**
+ * Validate for the mobile number field to remove the prefix before submit.
+ */
+function _alshaya_user_mobile_number_validate(array &$element, FormStateInterface $form_state) {
+  $pp = $form_state->getValue('mobile_number');
+  $pp['local_number'] = explode(' ', $pp['local_number'])[1];
+  $pp['mobile'] = explode(' ', $pp['mobile'])[1];
+  $form_state->setValue('mobile_number', $pp);
 }
 
 /**
@@ -263,7 +274,8 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
   $country_mobile_code = \Drupal::service('mobile_number.util')->getCountryCode($default_site_country);
   if ($country_mobile_code) {
     $element['#attached']['library'][] = 'alshaya_user/alshaya_mobile_number';
-    $element['mobile']['#prefix'] = '<div class="country-code-prefix">' . '+' . $country_mobile_code . '</div>';
+    $element['#attached']['drupalSettings']['alshaya_mobile_prefix'] = $country_mobile_code;
+    $element['#attached']['library'][] = 'alshaya_white_label/mobile_number';
   }
 
   return $element;

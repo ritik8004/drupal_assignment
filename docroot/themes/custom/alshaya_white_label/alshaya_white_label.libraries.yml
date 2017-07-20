@@ -37,6 +37,12 @@ unmask_password:
   js:
     js/unmask_password.js: {}
 
+mobile_number:
+  js:
+    js/mobile_number.js: {}
+  dependencies:
+    - alshaya_white_label/cleave
+
 slider_banner:
   js:
     js/slider.js: {}
@@ -101,3 +107,7 @@ ucfix:
 utils:
   js:
     js/utils.js: {}
+
+cleave:
+  js:
+    vendor/js/cleave.min.js: {}
