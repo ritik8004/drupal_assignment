@@ -28,6 +28,7 @@ class ProductStockController extends ControllerBase {
    *   Response object returning availability.
    */
   public function checkStock(EntityInterface $entity) {
+
     if ($entity instanceof Node) {
       $sku = $entity->get('field_skus')->first()->getString();
       $sku_entity = SKU::loadFromSku($sku);
