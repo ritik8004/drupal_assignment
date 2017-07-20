@@ -21,6 +21,6 @@
 #}
 <article{{ attributes }}>
   {{- sku|without('add_to_cart') -}}
-  <div class="stock-checker">Checking stock...</div>
+  <div class="stock-checker">{{ "Checking stock..." | t }}</div>
 </article>
 
