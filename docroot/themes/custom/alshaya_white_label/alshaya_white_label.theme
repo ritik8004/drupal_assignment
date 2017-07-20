@@ -81,6 +81,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   if (\Drupal::routeMatch()->getRouteName() === "acq_customer.orders") {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
+
+  $variables['nojs_message'] = \Drupal::config('alshaya_master.settings')->get('js_disable_message');
 }
 
 /**
