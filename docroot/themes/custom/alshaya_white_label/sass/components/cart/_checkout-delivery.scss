@@ -238,6 +238,10 @@
       border: 1px solid $light-greyish;
       background: $white-five;
 
+      p {
+        color: $grey-ash;
+      }
+
       @include breakpoint($tablet) {
         border-bottom: 0;
         display: inline-block;
