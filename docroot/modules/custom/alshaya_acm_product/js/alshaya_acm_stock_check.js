@@ -11,8 +11,8 @@
    */
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
-      // Stock check on PLP & search pages.
-      $('.views-element-container', context).find('.c-products__item article').once('js-event').each(function(){
+      // Stock check on PLP,search & Promo pages.
+      $('.c-products-list', context).find('.c-products__item article').once('js-event').each(function(){
         var productId = $(this).attr('data-nid');
         var productStock = $(this).find('.out-of-stock');
 
