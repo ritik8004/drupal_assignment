@@ -303,6 +303,7 @@ class Configurable extends SKUPluginBase {
       $sku->field_configurable_attributes->getString()
     );
 
+    $tree['configurables'] = [];
     foreach ($configurables as $configurable) {
       $tree['configurables'][$configurable['code']] = $configurable;
     }
