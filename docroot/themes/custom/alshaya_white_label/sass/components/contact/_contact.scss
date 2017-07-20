@@ -238,6 +238,28 @@
       margin-top: 1.25rem;
     }
   }
+
+  .form-actions {
+    @include breakpoint($desktop) {
+      margin-top: 0.8rem;
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: 1rem;
+    }
+
+    input {
+      margin-top: 0;
+    }
+  }
+
+  .form-item-field-subscribe-newsletter-value {
+    label {
+      padding-#{$left}: 1.875rem;
+      text-indent: -2rem;
+      display: block;
+    }
+  }
 }
 
 html[lang=ar] {

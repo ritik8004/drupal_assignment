@@ -54,6 +54,7 @@ textarea {
       border: none;
       border-bottom: 1px solid $grey-ash;
       padding: 0;
+      color: $black;
 
       &:focus {
         outline: 0 !important;
@@ -72,7 +73,19 @@ textarea {
   }
 }
 
+// Prevents the browser password reveal for IE.
 input::-ms-clear,
 input::-ms-reveal {
   display: none;
+}
+
+.profile-address-book-add-form,
+.profile-address-book-edit-form,
+.c-delivery-checkout .multistep-checkout {
+  .country-field-wrapper {
+    .country-name {
+      border-bottom: 1px solid $grey-ash;
+      padding-bottom: 0.5rem;
+    }
+  }
 }

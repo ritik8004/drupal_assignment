@@ -459,7 +459,7 @@
   }
 }
 
-.form-type-select {
+.address-book-address .form-type-select {
   .select2-selection {
     border: none !important;
     font-family: "alshaya-thin";
@@ -481,7 +481,9 @@
     color: $greyish;
     padding: 0.25rem !important;
   }
+}
 
+.form-type-select {
   .select2-selection__arrow {
     @include icon(chevrondown, after) {
       font-size: 1.5rem;
