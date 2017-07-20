@@ -502,6 +502,10 @@
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
 .shipping-methods-container {
   display: block;
+
+  > legend {
+    padding-bottom: 0 !important;
+  }
 }
 
 // Adding throbber overlay for any ajax call on payment and checkout delivery page.
@@ -959,6 +963,20 @@
   @include breakpoint($only-mobile) {
     .tabs--content fieldset.active--tab--content {
       display: block !important;
+    }
+  }
+}
+
+.shipping-method-options-count-1 {
+  .form-type-radio {
+    label {
+      &::before {
+        display: none !important;
+      }
+
+      .shipping-method-name {
+        width: 100% !important;
+      }
     }
   }
 }
