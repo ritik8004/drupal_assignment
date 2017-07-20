@@ -369,17 +369,19 @@
 
         // Track facet filters.
         $('li.facet-item').once('js-event').on('click', function() {
-          var selectedVal = $(this).find('label>span.facet-item__value').text();
-          var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
-          var filterValue = facetTitle + ':' + selectedVal;
+          if ($(this).find('input.facets-checkbox').attr('checked') === undefined) {
+            var selectedVal = $(this).find('label>span.facet-item__value').text();
+            var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
+            var filterValue = facetTitle + ':' + selectedVal;
 
-          var data = {
-            'event' : 'filter',
-            'section' : section,
-            'filterValue': filterValue
-          };
+            var data = {
+              'event' : 'filter',
+              'section' : section,
+              'filterValue': filterValue
+            };
 
-          dataLayer.push(data);
+            dataLayer.push(data);
+          }
         });
 
         // Track sorts.
