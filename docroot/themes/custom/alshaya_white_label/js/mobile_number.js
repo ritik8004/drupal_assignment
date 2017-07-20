@@ -3,6 +3,8 @@
  * Set mobile number field.
  */
 
+/* global Cleave */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -20,5 +22,5 @@
         });
       });
     }
-  }
+  };
 })(jQuery, Drupal);
