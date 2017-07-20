@@ -670,7 +670,7 @@
         width: 185px;
       }
 
-      @include breakpoint($tablet) {
+      @include breakpoint($only-tablet) {
         width: 54%;
       }
 
@@ -769,9 +769,11 @@
 
 // Google Places Autocomplete results.
 .pac-container {
-  border: 1px solid $white-two;
+  border: 1px solid $white;
   box-shadow: none;
   min-width: 11.25rem;
+  margin-top: -1px;
+  box-sizing: initial;
 
   // Hide the Powered by Google logo.
   &::after {
@@ -782,11 +784,20 @@
     @include u-visibility(none);
   }
 
+  .pac-item {
+    padding: 0.125rem 0.3125rem;
+    font-family: $arial;
+
+    &:hover {
+      background-color: $white-four;
+    }
+  }
+
   .pac-item,
   .pac-matched,
   .pac-item-query {
-    font-size: 0.5625rem !important;
-    color: $cerulean-two !important;
+    font-size: 0.75rem !important;
+    color: $grey-ash !important;
   }
 }
 
