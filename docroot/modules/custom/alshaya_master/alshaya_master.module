@@ -427,18 +427,3 @@ function _alshaya_admin_site_information_submit($form, FormStateInterface $form_
 function alshaya_admin_config_translation_info_alter(&$info) {
   $info['system.site_information_settings']['names'][] = 'alshaya_master.settings';
 }
-
-/**
- * Implements hook_page_attachments().
- */
-function alshaya_master_page_attachments(array &$attachments) {
-  $attachments['#attached']['html_head']['js_disabled'] = [
-    [
-      '#type' => 'html_tag',
-      '#tag' => 'noscript',
-      '#value' => '<div class="js-disabled">' . \Drupal::config('alshaya_master.settings')->get('js_disable_message') . '</div>',
-      '#weight' => 100,
-    ],
-    'js_disabled',
-  ];
-}
