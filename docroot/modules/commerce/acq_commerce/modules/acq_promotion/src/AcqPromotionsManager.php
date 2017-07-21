@@ -113,6 +113,8 @@ class AcqPromotionsManager {
     $types = is_array($types) ? $types : [$types];
     $ids = [];
     $promotions = [];
+    $fetched_promotions = [];
+
     foreach ($types as $type) {
       $promotions = $this->apiWrapper->getPromotions($type);
 
