@@ -9,7 +9,7 @@ product_view:
 stock_check:
   version: 1.x
   js:
-    js/alshaya_acm_stock_check.js: { attributes: { defer: true } }
+    js/alshaya_acm_stock_check.js: {}
   dependencies:
     - core/jquery
     - core/drupal.ajax
