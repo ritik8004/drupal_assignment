@@ -128,3 +128,14 @@ fields:
     configurable: 0
     visible_view: 0
     visible_form: 1
+
+  labels:
+    serialize: 1
+    parent: 'extension'
+    label: 'Product Labels'
+    description: 'Product Labels.'
+    cardinality: 1
+    type: 'text_long'
+    configurable: 0
+    visible_view: 0
+    visible_form: 0
