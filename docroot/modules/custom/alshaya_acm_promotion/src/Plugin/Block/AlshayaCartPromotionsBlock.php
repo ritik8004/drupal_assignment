@@ -144,11 +144,14 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
           $node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($promotion_rule_id);
           $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
             ->getId();
-          // Get the promotion with language fallback, if it did not have a
-          // translation for $langcode.
-          $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
           if ($node) {
-            $promotions[] = $node->get('field_acq_promotion_label')->getString();
+            // Get the promotion with language fallback, if it did not have a
+            // translation for $langcode.
+            $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+            if ($node) {
+              $promotions[] = $node->get('field_acq_promotion_label')
+                ->getString();
+            }
           }
         }
       }
