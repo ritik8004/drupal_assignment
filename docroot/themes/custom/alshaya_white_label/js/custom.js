@@ -66,4 +66,22 @@
     }
   };
 
+  Drupal.behaviors.pdpModal = {
+    attach: function (context, settings) {
+      function modalOverlay(button, className) {
+        $(button).click(function () {
+          $('body').removeClass(className);
+        });
+      }
+
+      $('.nodetype--acq_product .above-mobile-block').click(function () {
+        $('body').addClass('pdp-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
+        });
+      });
+    }
+  };
+
 })(jQuery, Drupal);

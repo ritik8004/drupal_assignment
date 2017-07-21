@@ -75,6 +75,7 @@
                 width: 35px;
                 height: 35px;
                 position: relative;
+                float: $right;
               }
             }
           }
@@ -83,6 +84,7 @@
             border: 2px solid $cerulean-two;
             padding: 0.407rem 1.5rem;
             text-transform: lowercase;
+            height: 2.188rem;
 
             a {
               color: $cerulean-two;
@@ -416,7 +418,8 @@
       font-size: 0.813rem;
       border: 1px solid $marine-blue;
       padding: 0.563rem 7.12rem;
-      font-family: $alshaya-thin;
+      font-family: $alshaya-bold;
+      text-transform: lowercase;
     }
   }
 }
@@ -431,7 +434,7 @@
   }
 
   position: relative;
-  z-index: 2;
+  z-index: 5;
 
   .c-facet__label {
     @include breakpoint($only-mobile) {
@@ -444,7 +447,7 @@
     }
 
     @include icon(chevrondown, after) {
-      #{$right}: -2.25rem;
+      #{$right}: -2.188rem;
       height: 2.1875rem;
       width: 2.1875rem;
       background-color: $white-two;

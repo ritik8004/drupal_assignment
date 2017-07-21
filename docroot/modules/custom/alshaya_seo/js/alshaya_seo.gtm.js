@@ -368,22 +368,24 @@
         }
 
         // Track facet filters.
-        $('li.facet-item', context).once('js-event').on('click', function() {
-          var selectedVal = $(this).find('label>span.facet-item__value').text();
-          var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
-          var filterValue = facetTitle + ':' + selectedVal;
+        $('li.facet-item').once('js-event').on('click', function() {
+          if ($(this).find('input.facets-checkbox').attr('checked') === undefined) {
+            var selectedVal = $(this).find('label>span.facet-item__value').text();
+            var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
+            var filterValue = facetTitle + ':' + selectedVal;
 
-          var data = {
-            'event' : 'filter',
-            'section' : section,
-            'filterValue': filterValue
-          };
+            var data = {
+              'event' : 'filter',
+              'section' : section,
+              'filterValue': filterValue
+            };
 
-          dataLayer.push(data);
+            dataLayer.push(data);
+          }
         });
 
         // Track sorts.
-        $('select[name="sort_bef_combine"]').on('change', function() {
+        $('select[name="sort_bef_combine"]').once('js-event').on('change', function() {
           var sortValue = $(this).find('option:selected').text();
           var data = {
             'event' : 'sort',

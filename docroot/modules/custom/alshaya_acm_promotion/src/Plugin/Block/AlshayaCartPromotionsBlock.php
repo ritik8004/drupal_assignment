@@ -3,7 +3,10 @@
 namespace Drupal\alshaya_acm_promotion\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
@@ -26,6 +29,20 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   protected $alshayaAcmPromotionManager;
 
   /**
+   * The Language Manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
+   * The Entity repository service.
+   *
+   * @var \Drupal\Core\Entity\EntityRepository
+   */
+  protected $entityRepository;
+
+  /**
    * Constructs a new AlshayaCartPromotionsBlock object.
    *
    * @param array $configuration
@@ -36,15 +53,23 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    *   The plugin implementation definition.
    * @param \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $alshaya_acm_promotion_manager
    *   The alshaya promotion manager service.
+   * @param \Drupal\Core\Entity\EntityRepository $entityRepository
+   *   The entity repository service.
+   * @param \Drupal\Core\Language\LanguageManager $languageManager
+   *   The language manager service.
    */
   public function __construct(
         array $configuration,
         $plugin_id,
         $plugin_definition,
-        AlshayaPromotionsManager $alshaya_acm_promotion_manager
+        AlshayaPromotionsManager $alshaya_acm_promotion_manager,
+        EntityRepository $entityRepository,
+        LanguageManager $languageManager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->alshayaAcmPromotionManager = $alshaya_acm_promotion_manager;
+    $this->languageManager = $languageManager;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -55,7 +80,9 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_acm_promotion.manager')
+      $container->get('alshaya_acm_promotion.manager'),
+      $container->get('entity.repository'),
+      $container->get('language_manager')
     );
   }
 
@@ -115,12 +142,21 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       foreach ($selected_promotions as $key => $promotion_rule_id) {
         if ($promotion_rule_id) {
           $node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($promotion_rule_id);
+          $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
+            ->getId();
           if ($node) {
-            $promotions[] = $node->get('field_acq_promotion_description')->first()->getValue();
+            // Get the promotion with language fallback, if it did not have a
+            // translation for $langcode.
+            $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+            if ($node) {
+              $promotions[] = $node->get('field_acq_promotion_label')
+                ->getString();
+            }
           }
         }
       }
 
+      $promotions = array_filter($promotions);
       $build = [
         '#theme' => 'cart_top_promotions',
         '#promotions' => $promotions,

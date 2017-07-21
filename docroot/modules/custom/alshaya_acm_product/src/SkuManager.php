@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 
@@ -50,16 +51,20 @@ class SkuManager {
    *   The lnaguage manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The entity repository service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger service.
    */
   public function __construct(Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
                               LanguageManager $languageManager,
-                              EntityRepositoryInterface $entityRepository) {
+                              EntityRepositoryInterface $entityRepository,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
+    $this->logger = $logger_factory->get('alshaya_acm_product');
   }
 
   /**
@@ -192,20 +197,18 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   Sku entity from cart for which discount needs to be calculated.
-   * @param int $item_quantity
-   *   Item quantity as in the cart.
    * @param float $item_price
    *   Unit price for the sku item in the cart.
    *
    * @return mixed
    *   Calculated cart item price.
    */
-  public function buildCartItemPrice(SKU $sku_entity, $item_quantity, $item_price) {
-    $sku_cart_price['price'] = (float) $sku_entity->get('price')->getString() * $item_quantity;
-    $final_price = (float) $item_price * $item_quantity;
+  public function buildCartItemPrice(SKU $sku_entity, $item_price) {
+    $sku_cart_price['price'] = (float) $sku_entity->get('price')->getString();
+    $final_price = (float) $item_price;
 
     if ($final_price !== $sku_cart_price['price']) {
-      $sku_cart_price['final_price'] = $final_price;
+      $sku_cart_price['final_price'] = number_format($final_price, 3);
       $discount = (($sku_cart_price['price'] - $final_price) * 100 / $sku_cart_price['price']);
       $sku_cart_price['discount'] = t('Save @discount', ['@discount' => $discount . '%']);
     }
@@ -276,7 +279,7 @@ class SkuManager {
       $result = $query->execute();
 
       while ($row = $result->fetchAssoc()) {
-        $child_skus[] = $row['field_configured_skus_value'];
+        $child_skus[] = SKU::loadFromSku($row['field_configured_skus_value']);
       }
     }
 
@@ -300,55 +303,201 @@ class SkuManager {
                                          $getLinks = FALSE,
                                          array $types = ['cart', 'category']) {
     $promos = [];
-
+    $promotion_nids = [];
+    $promotions = [];
     // Fetch child skus, if its a parent sku.
     $child_skus = $this->getChildSkus($sku);
 
     // If not child skus, its a simple product.
     if (empty($child_skus)) {
-      $child_skus[] = $sku->getSku();
+      $child_skus[] = $sku;
     }
 
-    // Convert array of sku text into sku enity Ids.
-    // @TODO: Remove this & refactor this function if we store sku ids in Products.
-    foreach ($child_skus as $key => $child_sku) {
-      $child_sku_ids[$key] = $this->getEntityIdBySku($child_sku);
+    $promotions[] = $sku->get('field_acq_sku_promotions')->getValue();
+
+    foreach ($child_skus as $child_sku) {
+      if ($child_sku) {
+        $promotions[] = $child_sku->get('field_acq_sku_promotions')->getValue();
+      }
     }
 
-    $query = $this->nodeStorage->getQuery();
-    $query->condition('type', 'acq_promotion');
-    $query->condition('field_acq_promotion_sku', $child_sku_ids, 'IN');
-    $query->condition('field_acq_promotion_type', $types, 'IN');
+    foreach ($promotions as $promotion) {
+      foreach ($promotion as $promo) {
+        $promotion_nids[] = $promo['target_id'];
+      }
+    }
 
-    $promotionIDs = $query->execute();
-
-    if (!empty($promotionIDs)) {
-      $promotions = Node::loadMultiple($promotionIDs);
-      foreach ($promotions as $promotion) {
-        $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
-        // Get the promotion with language fallback, if it did not have a
-        // translation for $langcode.
-        $promotion = $this->entityRepository->getTranslationFromContext($promotion, $langcode);
-        $promotion_text = $promotion->get('field_acq_promotion_label')->getValue();
-        $discount_type = $promotion->get('field_acq_promotion_disc_type')->getValue();
-        $discount_value = $promotion->get('field_acq_promotion_discount')->getValue();
-        /* @var \Drupal\node\Entity\Node $promotion */
-        if ($getLinks) {
-          $promos[$promotion->id()] = $promotion->toLink($promotion_text[0]['value'])->toString()->getGeneratedLink();
-        }
-        else {
-          $descriptions = $promotion->get('field_acq_promotion_description')->getValue();
-          $promos[$promotion->id()] = [
-            'text' => array_shift($promotion_text),
-            'description' => array_shift($descriptions),
-            'discount_type' => array_shift($discount_type),
-            'discount_value' => array_shift($discount_value),
-          ];
+    $promotion_nids = array_unique($promotion_nids);
+    if (!empty($promotion_nids)) {
+      $promotion_nodes = Node::loadMultiple($promotion_nids);
+      foreach ($promotion_nodes as $promotion_node) {
+        $promotion_type = $promotion_node->get('field_acq_promotion_type')->getString();
+        if (in_array($promotion_type, $types, TRUE)) {
+          $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
+            ->getId();
+          // Get the promotion with language fallback, if it did not have a
+          // translation for $langcode.
+          $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $langcode);
+          $promotion_text = $promotion_node->get('field_acq_promotion_label')
+            ->getString();
+          $discount_type = $promotion_node->get('field_acq_promotion_disc_type')
+            ->getString();
+          $discount_value = $promotion_node->get('field_acq_promotion_discount')
+            ->getString();
+          /* @var \Drupal\node\Entity\Node $promotion */
+          if ($getLinks) {
+            $promos[$promotion_node->id()] = $promotion_node->toLink($promotion_text)
+              ->toString()
+              ->getGeneratedLink();
+          }
+          else {
+            $description = $promotion_node->get('field_acq_promotion_description')
+              ->getString();
+            $promos[$promotion_node->id()] = [
+              'text' => $promotion_text,
+              'description' => $description,
+              'discount_type' => $discount_type,
+              'discount_value' => $discount_value,
+            ];
+          }
         }
       }
     }
 
     return $promos;
+  }
+
+  /**
+   * Function to return labels files for a SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   Sku Entity.
+   * @param string $type
+   *   Type of image required - plp or pdp.
+   * @param bool $reset
+   *   Flag to reset cache and generate array again from serialized string.
+   *
+   * @return array
+   *   Array of media files.
+   */
+  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
+    static $static_labels_cache = [];
+
+    $sku = $sku_entity->getSku();
+
+    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
+      return $static_labels_cache[$sku][$type];
+    }
+
+    if ($labels = $sku_entity->get('attr_labels')->getString()) {
+      $update_sku = FALSE;
+
+      $labels_data = unserialize($labels);
+
+      if (empty($data)) {
+        return [];
+      }
+
+      foreach ($labels_data as &$data) {
+        if ($type == 'pdp') {
+          if (empty($data['pdp_image_fid'])) {
+            try {
+              // Prepare the File object when we access it the first time.
+              $data['pdp_image_fid'] = $sku->downloadLabelsImage($data, 'pdp_image');
+              $update_sku = TRUE;
+            }
+            catch (\Exception $e) {
+              $this->logger->error($e->getMessage());
+              continue;
+            }
+          }
+
+          $data['pdp_image_file'] = File::load($data['plp_image_fid']);
+        }
+
+        if ($type == 'plp') {
+          if (empty($data['plp_image'])) {
+            try {
+              // Prepare the File object when we access it the first time.
+              $data['plp_image_fid'] = $sku->downloadLabelsImage($data, 'plp_image');
+              $update_sku = TRUE;
+            }
+            catch (\Exception $e) {
+              \Drupal::logger('alshaya_acm_product')->error($e->getMessage());
+              continue;
+            }
+          }
+
+          $data['plp_image_file'] = File::load($data['pdp_image_fid']);
+        }
+
+        $static_labels_cache[$sku][$type][] = $data;
+
+        // Disable subsequent images if flag is true.
+        if ($data['disable_subsequents']) {
+          break;
+        }
+      }
+
+      // We save the fids in SKU back to reuse.
+      if ($update_sku) {
+        $sku_entity->get('attr_labels')->setValue(serialize($static_labels_cache[$sku]));
+        $sku_entity->save();
+      }
+    }
+
+    return $static_labels_cache[$sku][$type];
+  }
+
+  /**
+   * Function to save image file into public dir.
+   *
+   * @param array $data
+   *   File data.
+   * @param string $file_key
+   *   File key.
+   *
+   * @return int
+   *   File id.
+   */
+  protected function downloadLabelsImage(array $data, $file_key) {
+    // Preparing args for all info/error messages.
+    $args = ['@file' => $data[$file_key], '@sku_id' => $this->id()];
+
+    // Download the file contents.
+    $file_data = file_get_contents($data[$file_key]);
+
+    // Check to ensure errors like 404, 403, etc. are catched and empty file
+    // not saved in SKU.
+    if (empty($file_data)) {
+      throw new \Exception(new FormattableMarkup('Failed to download labels image file "@file" for SKU id @sku_id.', $args));
+    }
+
+    // Get the path part in the url, remove hostname.
+    $path = parse_url($data[$file_key], PHP_URL_PATH);
+
+    // Remove slashes from start and end.
+    $path = trim($path, '/');
+
+    // Get the file name.
+    $file_name = basename($path);
+
+    // Prepare the directory path.
+    $directory = 'public://labels/' . str_replace('/' . $file_name, '', $path);
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    // Save the file as file entity.
+    // @TODO: Check for a way to remove old files and file objects.
+    // To be done here and in SKU.php both.
+    /** @var \Drupal\file\Entity\File $file */
+    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+      return $file->id();
+    }
+    else {
+      throw new \Exception(new FormattableMarkup('Failed to save labels image file "@file" for SKU id @sku_id.', $args));
+    }
   }
 
 }

@@ -428,6 +428,10 @@ function alshaya_acm_product_get_brand_logo($sku) {
 
   $title = $sku_entity->get('attr_brand_logo')->getString();
 
+  if (empty($title)) {
+    return [];
+  }
+
   $cid = 'brand_logo:' . Html::cleanCssIdentifier($title);
 
   if ($cache = \Drupal::cache('data')->get($cid)) {

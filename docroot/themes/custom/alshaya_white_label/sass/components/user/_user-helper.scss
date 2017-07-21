@@ -145,7 +145,7 @@
 .c-user-login.user-page {
   @include breakpoint($only-mobile) {
     margin-top: 2.5rem;
-    padding-top: 1.6rem;
+    padding-top: 1.7rem;
   }
 
   @include breakpoint($tablet) {
@@ -223,7 +223,7 @@
       }
 
       @include breakpoint($desktop) {
-        margin-top: 2.1rem;
+        margin-top: 1.3rem;
       }
 
       input {
@@ -696,6 +696,12 @@ main .user-register-form {
 
       p {
         margin: 0.6rem 0;
+      }
+    }
+
+    .field--type-image {
+      @include breakpoint($only-tablet) {
+        margin-top: 0.5rem;
       }
     }
   }

@@ -3,12 +3,22 @@
     padding-top: 0;
   }
 
+  .item-list {
+    @include breakpoint($only-tablet) {
+      margin-top: 1rem;
+    }
+  }
+
   .c-page-title {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #ddd;
 
     @include breakpoint($tablet) {
       margin-bottom: 2.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1.8rem;
     }
 
     @include breakpoint($desktop) {
@@ -513,6 +523,21 @@ html[lang=ar] {
       td.right--align {
         padding-#{$right}: 2.5rem !important;
         padding-#{$left}: 0 !important;
+      }
+    }
+  }
+}
+
+.order-detail {
+  .user__order--detail {
+    tr.order-item-row,
+    tr.order-details-row,
+    tr.order-summary-row {
+      td {
+        @include breakpoint($only-tablet) {
+          padding: 1.375rem 0.5rem 3.438rem 1rem !important;
+          min-width: 9rem;
+        }
       }
     }
   }

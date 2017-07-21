@@ -161,6 +161,24 @@ body.chrome {
 }
 
 html[lang=ar] {
+  .delivery-options-tooltip-wrapper {
+    @include breakpoint($only-mobile) {
+      right: 8.5rem;
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: -0.2rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: -0.2rem !important;
+    }
+  }
+
+  #table-cart-totals .edit-checkout .ladda-label {
+    font-size: 0.7rem !important;
+  }
+
   .acq-cart-summary {
     .price-wrapper {
       .price-amount {
@@ -184,39 +202,45 @@ html[lang=ar] {
 
     tr td.name div.items {
       width: 42%;
+
+      @include breakpoint($only-tablet) {
+        width: 50%;
+      }
     }
   }
 
   #table-cart-totals {
     td:first-child {
       text-align: left;
+    }
 
-      @include breakpoint(($only-tablet) (orientation portrait)) {
-        position: relative;
-        left: 6em;
+    tr > td:first-child {
+      @include breakpoint($desktop) {
+        padding-right: 0;
+        padding-left: 2.7rem;
       }
+    }
 
-      @include breakpoint(($only-tablet) (orientation landscape)) {
-        position: relative;
-        left: 3em;
+    td:last-child {
+      @include breakpoint($only-mobile) {
+        width: 48%;
       }
+    }
+
+    .price {
+      display: inline-block;
     }
 
     .price-wrapper {
       .price-amount {
-        @include breakpoint($only-mobile) {
-          left: 4rem;
-        }
-
-        @include breakpoint($desktop) {
-          float: right !important;
-        }
+        float: right !important;
+        left: 0;
       }
 
       .price-currency {
         @include breakpoint($desktop) {
           float: left !important;
-          padding: 0 0 0 1em;
+          padding: 0 0.5rem 0 1rem;
         }
       }
     }

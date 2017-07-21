@@ -79,7 +79,7 @@
             // We need to minus one count as the facets also include clear all link.
             countFilters = countFilters - 1;
             // If there are filters applied, we need to show the count next to the label.
-            $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+            $('<h3 class="applied-filter-count c-accordion__title ui-state-active">' + Drupal.t('applied filters')
               + '(' + countFilters + ')</h3>')
               .insertBefore(mobileFilterBarSelector + ' ul');
           }
@@ -292,7 +292,7 @@
           $('.block-views-blockplp-promotional-banner-block-1')
             .addClass('promo-banner');
           $('.block-views-blockplp-promotional-banner-block-1')
-            .siblings('.block-views-exposed-filter-blocksearch-page')
+            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1')
             .addClass('promo-banner');
         }
       }

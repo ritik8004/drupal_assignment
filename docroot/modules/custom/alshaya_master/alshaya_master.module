@@ -395,3 +395,35 @@ function alshaya_master_back_to_top_admin_prevent_alter(&$is_admin) {
     }
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_master_form_system_site_information_settings_alter(&$form, FormStateInterface $form_state) {
+  $disable_message = \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('js_disable_message');
+  $form['js_disable_message'] = [
+    '#type' => 'textarea',
+    '#title' => t('Disabled js message'),
+    '#description' => t('Message to be shown when JS is disabled on site'),
+    '#default_value' => $disable_message,
+  ];
+
+  $form['#submit'][] = '_alshaya_admin_site_information_submit';
+}
+
+/**
+ * Submit handler for the site information form.
+ */
+function _alshaya_admin_site_information_submit($form, FormStateInterface $form_state) {
+  $disable_message = $form_state->getValue('js_disable_message');
+  \Drupal::configFactory()->getEditable('alshaya_master.settings')
+    ->set('js_disable_message', $disable_message)
+    ->save();
+}
+
+/**
+ * Implements hook_config_translation_info_alter().
+ */
+function alshaya_admin_config_translation_info_alter(&$info) {
+  $info['system.site_information_settings']['names'][] = 'alshaya_master.settings';
+}

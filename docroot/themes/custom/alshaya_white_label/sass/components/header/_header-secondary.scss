@@ -170,7 +170,7 @@
       .en a {
         @include icon(language, after);
 
-        font-family: $alshaya-thin;
+        font-family: $alshaya-thin-nodir;
       }
     }
 
@@ -306,7 +306,7 @@
 }
 
 .mobile--overlay .branding__menu {
-  z-index: 5;
+  z-index: 7;
   background: transparent;
 
   &.navbar-fixed-top,

@@ -174,6 +174,9 @@ function alshaya_master_install() {
     'Enter card details' => [
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
+    'enter card details' => [
+      'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
+    ],
     '<p>By registering you agreed to our <a href="/terms">Terms and Conditions</a>.</p>' => [
       'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms">الشروط والأحكام</a></p>',
     ],
@@ -400,10 +403,12 @@ function alshaya_master_install() {
       'ar' => 'حقيبة التسوق',
     ],
     'has been added to your cart.' => [
-      'ar' => 'تم إضافة القطعة/القطع إلى حقيبتك',
+      'ar' => 'تم إضافته إلى سلتك',
+      'en' => 'has been added to your basket.',
     ],
     'view cart' => [
       'ar' => 'عرض سلة التسوق',
+      'en' => 'view basket',
     ],
     'Some items in your basket are out of stock. Please remove them to proceed.' => [
       'ar' => 'بعض القطع في حقيبة تسوقك نفذت من المخزون و تم إزالتها من حقيبة تسوقك',
@@ -467,15 +472,13 @@ function alshaya_master_install() {
     ],
     'Your cart has been updated.' => [
       'ar' => 'قطعة/قطع أضيفت إلى سلة تسوقك',
+      'en' => 'Your basket has been updated.',
     ],
     'Horizontal Recommendations' => [
       'ar' => 'ما ننصح به',
     ],
     'Loading ...' => [
       'ar' => 'تحميل...',
-    ],
-    'Item %sku has been removed from cart.' => [
-      'ar' => 'تمت إزالة العنصر %sku من السلة.',
     ],
     'Your shopping basket is empty' => [
       'ar' => 'حقيبة التسوق الخاصة بك فارغة',
@@ -485,6 +488,11 @@ function alshaya_master_install() {
     ],
     'add to cart' => [
       'ar' => 'أضف إلى سلة التسوق',
+      'en' => 'add to basket',
+    ],
+    'Add to cart' => [
+      'ar' => 'أضف إلى سلة التسوق',
+      'en' => 'Add to basket',
     ],
     '@name field is required.' => [
       'ar' => 'يرجى إدخال @name',
@@ -550,6 +558,9 @@ function alshaya_master_install() {
       'ar' => 'أدخل المنطقة',
     ],
     'Search Stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'search stores' => [
       'ar' => 'البحث عن المحلات',
     ],
     'Hover over image to zoom' => [
@@ -716,6 +727,7 @@ function alshaya_master_install() {
     ],
     'The product has been removed from your cart.' => [
       'ar' => 'تم إزالة المنتج من سلتك ',
+      'en' => 'The product has been removed from your basket.',
     ],
     '<p>This service is <strong>FREE</strong> of charge.</p>' => [
       'ar' => '<p>استلم من المحل مجاناً</p>',
@@ -921,6 +933,57 @@ function alshaya_master_install() {
     ],
     'Phone number in %field is required.' => [
       'ar' => 'يرجى إدخال رقم الجوال',
+    ],
+    '1 hour' => [
+      'ar' => 'ساعة واحدة',
+    ],
+    'Your order will be available in %duration' => [
+      'ar' => 'سيتم توصيل طلبيتك خلال %duration',
+    ],
+    'View Full Product Details' => [
+      'ar' => 'عرض جميع تفاصيل المنتج',
+    ],
+    'At a glance' => [
+      'ar' => 'في لمحة',
+    ],
+    'Double tap image to zoom' => [
+      'ar' => 'اضغط مرتين للتكبير',
+    ],
+    'Checking stock...' => [
+      'ar' => 'التحقق من توفر الكمية...',
+    ],
+    'Out of stock' => [
+      'ar' => 'نفدت الكمية',
+    ],
+    'out of stock' => [
+      'ar' => 'نفدت الكمية',
+    ],
+    'Check in-store availability' => [
+      'ar' => 'تحقق من توفر الكمية في المحلات',
+    ],
+    'Did you mean:' => [
+      'ar' => 'هل تقصد:',
+    ],
+    '<p><span class="highlight">Select a size</span> to check stock availability near to you</p>' => [
+      'ar' => '<p><span class="highlight">اختر المقاس</span> للتأكد من توفر الكمية في المحل الأقرب إليك',
+    ],
+    'Other stores nearby' => [
+      'ar' => 'محلات أخرى قريبة إليك',
+    ],
+    'Available at three stores near' => [
+      'ar' => 'متوفر في 3 محلات بالقرب من ',
+    ],
+    'Tap to enlarge' => [
+      'ar' => 'اضغط للتكبير',
+    ],
+    'Swipe to view more images' => [
+      'ar' => 'اسحب لعرض المزيد',
+    ],
+    'Collect from store in <em>@time</em>' => [
+      'ar' => 'استلم من المحل بعد <em>@time</em>',
+    ],
+    'You already have an account, please login.' => [
+      'ar' => 'يبدو أن تم  تسجيل حسابك مسبقاً, يرجى تسجيل الدخول.',
     ],
   ];
   alshaya_i18n_save_translations($strings);

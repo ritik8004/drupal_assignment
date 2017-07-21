@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_product\Plugin\views\argument_default;
 
-use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Cache\Cache;
@@ -36,11 +36,11 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
   protected $routeMatch;
 
   /**
-   * The skuManager service.
+   * Acq Promotion manager service.
    *
-   * @var \Drupal\alshaya_acm_product\SkuManager
+   * @var \Drupal\acq_promotion\AcqPromotionsManager
    */
-  protected $skuManager;
+  protected $acqPromotionsManager;
 
   /**
    * ProductCategoryTermId constructor.
@@ -55,13 +55,18 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
    *   Entity type manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route match.
-   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
-   *   The sku manager service.
+   * @param \Drupal\acq_promotion\AcqPromotionsManager $acqPromotionsManager
+   *   The acq promotion manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, RouteMatchInterface $route_match, SkuManager $skuManager) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              EntityTypeManagerInterface $entity_manager,
+                              RouteMatchInterface $route_match,
+                              AcqPromotionsManager $acqPromotionsManager) {
     $this->entityManager = $entity_manager;
     $this->routeMatch = $route_match;
-    $this->skuManager = $skuManager;
+    $this->acqPromotionsManager = $acqPromotionsManager;
   }
 
   /**
@@ -74,7 +79,7 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('current_route_match'),
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('acq_promotion.promotions_manager')
     );
   }
 
@@ -90,12 +95,12 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
 
     if (($node = $this->routeMatch->getParameter('node')) && $node instanceof Node) {
       if ($node->bundle() === 'acq_promotion') {
-        $sku_ids = $node->get('field_acq_promotion_sku')->getValue();
-        foreach ($sku_ids as $sku_entity_id) {
-          $sku_id = $this->skuManager->getSkuByEntityId($sku_entity_id['target_id']);
-          $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_id);
+        $attached_skus = $this->acqPromotionsManager->getSkusForPromotion($node);
+        foreach ($attached_skus as $sku) {
+          $sku_text = $sku->getSku();
+          $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_text);
           if ($parent_sku === NULL) {
-            $skus[] = $sku_id;
+            $skus[] = $sku_text;
           }
           else {
             $skus[] = $parent_sku->getSku();
