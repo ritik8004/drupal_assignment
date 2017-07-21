@@ -8,6 +8,12 @@
       margin-bottom: 24px;
     }
 
+    .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
+      @include breakpoint($only-mobile) {
+        border: none;
+      }
+    }
+
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
       overflow: hidden;
@@ -301,8 +307,7 @@
     }
 
     @include breakpoint($mobile) {
-      width: 50%;
-      max-width: 9rem;
+      width: 49.2%;
     }
 
     @include breakpoint($tablet) {

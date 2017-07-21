@@ -27,6 +27,8 @@ class IngestAPIWrapper {
     $this->clientFactory = $client_factory;
     $this->logger = $logger_factory->get('acq_sku');
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
+    $this->debug = $config_factory->get('acq_commerce.conductor')->get('debug');
+    $this->debugDir = $config_factory->get('acq_commerce.conductor')->get('debug_dir');
   }
 
   /**
@@ -36,6 +38,13 @@ class IngestAPIWrapper {
     foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
       if (empty($store_id)) {
         continue;
+      }
+
+      if ($this->debug && !empty($this->debugDir)) {
+        // Export product data into file.
+        $filename = $this->debugDir . '/products_' . $langcode . '.data';
+        $fp = fopen($filename, 'w');
+        fclose($fp);
       }
 
       $endpoint = $this->apiVersion . '/ingest/product/sync?store_id=' . $store_id;

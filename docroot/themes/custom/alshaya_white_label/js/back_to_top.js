@@ -12,18 +12,13 @@
 
       $(window).scroll(function () {
         if ($(window).scrollTop() + $(window).height() < $(document).height() - $('.c-footer').height()) {
-          $('#backtotop').css({
-            position: 'fixed',
-            bottom: '1px',
-            top: 'auto'
-          });
+          $('#backtotop').addClass('backtotop-nofooter');
+          $('#backtotop').removeClass('backtotop-withfooter');
         }
 
         if ($(window).scrollTop() + $(window).height() > $(document).height() - $('.c-footer').height()) {
-          $('#backtotop').css({
-            position: 'absolute',
-            top: '-70px'
-          });
+          $('#backtotop').addClass('backtotop-withfooter');
+          $('#backtotop').removeClass('backtotop-nofooter');
         }
       });
     }

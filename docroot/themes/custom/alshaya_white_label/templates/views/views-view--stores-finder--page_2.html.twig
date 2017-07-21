@@ -62,7 +62,7 @@
   {% endif %}
     {% if rows %}
     <div class="view-content">
-      {% set batchLength = (rows|length / 2)|round(0, 'floor') %}
+      {% set batchLength = (rows|length / 2)|round(0, 'ceil') %}
       {% for col in rows|batch(batchLength) %}
         <div class="c-side c-side-{{ loop.index }}">
           {% for row in col %}

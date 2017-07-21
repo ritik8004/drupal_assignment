@@ -18,21 +18,13 @@ set classes = [
 
       <h1>{{ label }}</h1>
 
-      {% if content.final_price %}
-        <div class="has--special--price">
-      {% else %}
-        <div class="price">
-      {% endif %}
-        {{ content.price }}
+      <div class="price-block {{ content.price_block_identifier }}">
+        {{ content.price_block }}
       </div>
 
-      {% if content.final_price %}
-        <div class="special--price">
-          {{ content.final_price }}
-        </div>
-
-        <div class="price--discount">
-          ({{ content.discount }})
+      {% if content.promotions %}
+        <div class="promotions">
+          {{ content.promotions }}
         </div>
       {% endif %}
 

@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_static_html_preprocess_html(&$variables) {
+  // Get the node object.
+  $node = _alshaya_static_html_check_static_html();
+
+  // If somehow not getting node object.
+  if (!$node) {
+    return;
+  }
+
+  // Get CSS and JS.
+  $css = $node->get('field_css')->getString();
+  $js = $node->get('field_javascript')->getString();
+
+  // Add CSS in head.
+  $variables['inline_css'] = [
+    '#type' => 'inline_template',
+    '#template' => '{{ inline_css | raw }}',
+    '#context' => [
+      'inline_css' => '<style>' . $css . '</style>',
+    ],
+  ];
+
+  // Add JS in head.
+  $variables['inline_js'] = [
+    '#type' => 'inline_template',
+    '#template' => '{{ inline_js | raw }}',
+    '#context' => [
+      'inline_js' => '<script>' . $js . '</script>',
+    ],
+  ];
+
+  // Attach jquery library.
+  $variables['#attached']['library'][] = 'core/jquery';
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_static_html_block_view_alter(array &$build, BlockPluginInterface $block) {
+  if ($build['#configuration']['id'] == 'page_title_block') {
+    // Unset block/page title for the static_html bundle.
+    $node = \Drupal::request()->attributes->get('node');
+    if ($node instanceof Node && $node->bundle() == 'static_html') {
+      $block->setTitle('');
+    }
+  }
+}
+
+/**
+ * Checks and return the static_html node or false.
+ *
+ * @return mixed
+ *   Static html node object or false.
+ */
+function _alshaya_static_html_check_static_html() {
+  // Get current route object.
+  $current_route = \Drupal::routeMatch();
+
+  // If not node page.
+  if ($current_route->getRouteName() != 'entity.node.canonical') {
+    return FALSE;
+  }
+
+  /* @var \Drupal\node\Entity\Node $node*/
+  $node = $current_route->getParameter('node');
+
+  // If not static html node.
+  if ($node->bundle() != 'static_html') {
+    return FALSE;
+  }
+
+  return $node;
+}

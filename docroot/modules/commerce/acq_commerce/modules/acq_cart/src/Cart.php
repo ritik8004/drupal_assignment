@@ -326,10 +326,11 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function setShippingMethod($carrier, $method) {
+  public function setShippingMethod($carrier, $method, array $extension = []) {
     $this->cart->carrier = [
       'carrier_code' => $carrier,
       'method_code' => $method,
+      'extension' => $extension,
     ];
   }
 
@@ -481,11 +482,11 @@ class Cart implements CartInterface {
       $cart = $this->cart;
 
       // Don't set blank addresses, Magento doesn't like this.
-      if (isset($cart->shipping) && empty($cart->shipping->customer_address_id) && empty($cart->shipping->street)) {
+      if (isset($cart->shipping) && empty($cart->shipping->country_id)) {
         unset($cart->shipping);
       }
 
-      if (isset($cart->billing) && empty($cart->billing->customer_address_id) && empty($cart->billing->street)) {
+      if (isset($cart->billing) && empty($cart->billing->country_id)) {
         unset($cart->billing);
       }
 

@@ -49,6 +49,7 @@ sell:
     js/sell.js: {}
   dependencies:
     - core/jquery
+    - alshaya_white_label/utils
     - alshaya_white_label/owlcarousel
 
 autosize_textarea:

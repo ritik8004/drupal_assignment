@@ -4,11 +4,13 @@ namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,6 +35,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $skuManager;
 
   /**
+   * The current route matcher service.
+   *
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  protected $currentRouteMatch;
+
+  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -49,6 +58,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   The view mode.
    * @param array $third_party_settings
    *   Any third party settings.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
+   *   Current route matcher service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku Manager service.
    */
@@ -59,9 +70,11 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               $label,
                               $view_mode,
                               array $third_party_settings,
+                              CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
+    $this->currentRouteMatch = $currentRouteMatch;
   }
 
   /**
@@ -97,19 +110,19 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     if ($entity_adapter instanceof EntityAdapter) {
       $node = $entity_adapter->getValue();
       if ($node instanceof Node) {
-        $product_url = $node->url();
-        $product_label = $node->getTitle();
+        $translatedNode = $node->getTranslation(\Drupal::service('language_manager')->getCurrentLanguage()->getId());
+        $product_url = $translatedNode->url();
+        $product_label = $translatedNode->getTitle();
       }
     }
 
     foreach ($items as $delta => $item) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
       $sku = $this->viewValue($item);
-
+      $promotion_cache_tags = [];
       // Get the image.
       $build['image_url'] = [];
       $sku_media = $this->skuManager->getSkuMedia($sku);
-
       $search_main_image = $thumbnails = [];
 
       // Loop through all media items and prepare thumbnails array.
@@ -123,6 +136,22 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
           $thumbnails[] = $this->skuManager->getSkuImage($media_item, '59x60', '291x288');
         }
+      }
+
+      $promotions = $this->skuManager->getPromotionsFromSkuId($sku);
+      $current_route_name = $this->currentRouteMatch->getRouteName();
+      $current_node = $this->currentRouteMatch->getParameter('node');
+
+      foreach ($promotions as $key => $promotion) {
+        $promotions[$key]['render_link'] = TRUE;
+        // Check if current page is promotion page,
+        // render current promotion as text.
+        if (($current_route_name === 'entity.node.canonical') &&
+          ($current_node->bundle() === 'acq_promotion') &&
+          ((int) $current_node->id() === $key)) {
+          $promotions[$key]['render_link'] = FALSE;
+        }
+        $promotion_cache_tags[] = 'node:' . $key;
       }
 
       $sku_gallery = [
@@ -141,16 +170,18 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         '#gallery' => $sku_gallery,
         '#product_url' => $product_url,
         '#product_label' => $product_label,
+        '#promotions' => $promotions,
         '#cache' => [
-          'tags' => ['sku:' . $sku->id()],
+          'tags' => array_merge($promotion_cache_tags, ['sku:' . $sku->id()]),
+          'contexts' => ['url'],
         ],
       ];
 
       $this->skuManager->buildPrice($elements[$delta], $sku);
 
-      $elements[$delta]['#price'] = isset($elements[$delta]['price']) ? $elements[$delta]['price'] : '';
-      $elements[$delta]['#final_price'] = isset($elements[$delta]['final_price']) ? $elements[$delta]['final_price'] : '';
-      $elements[$delta]['#discount'] = isset($elements[$delta]['discount']) ? $elements[$delta]['discount'] : '';
+      $build['price_block'] = $this->skuManager->getPriceBlock($sku);
+      $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+      $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
       if (!alshaya_acm_is_product_in_stock($sku)) {
         $elements[$delta]['#out_of_stock'] = [
@@ -188,6 +219,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
+      $container->get('current_route_match'),
       $container->get('alshaya_acm_product.skumanager')
     );
   }

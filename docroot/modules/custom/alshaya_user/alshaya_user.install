@@ -12,7 +12,7 @@ function alshaya_user_install() {
   // Save texts for communication preference page.
   $strings = [
     'Mobile' => [
-      'ar' => 'متحرك',
+      'ar' => 'رقم الجوال',
     ],
     'Select your preferred communication channel' => [
       'ar' => 'يرجى اختيار وسيلة التواصل المناسبة ',
@@ -25,6 +25,10 @@ function alshaya_user_install() {
     ],
     'I would like to receive exclusive deals from Mothercare' => [
       'ar' => 'أرغب في استلام عروض حصرية من مذركير',
+    ],
+    'customer' => [
+      'en' => 'user',
+      'ar' => 'زبون',
     ],
   ];
   alshaya_i18n_save_translations($strings);

@@ -50,7 +50,6 @@
 
 header {
   position: relative;
-  z-index: 4;
 
   .c-header__region {
     margin: 1.3625rem auto;
@@ -103,7 +102,7 @@ header {
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
         position: absolute;
-        top: 5.125rem;
+        top: 5.45rem;
         display: none;
         width: 100%;
         left: 0;
@@ -362,6 +361,10 @@ header {
       position: relative;
       list-style: none;
       z-index: 4;
+
+      .notification--on & {
+        z-index: 3;
+      }
     }
   }
 

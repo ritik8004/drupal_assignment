@@ -73,5 +73,6 @@ function alshaya_search_modules_installed($modules) {
   $search_view->set('display.default.display_options.sorts.title.expose.label', 'الاسم');
   $search_view->set('display.default.display_options.empty.area.content.value', "<p>لا يوجد نتائج لبحثك</p>\r\n");
   $search_view->set('display.default.display_options.header.result.content', '@total القطع');
+  $search_view->set('display.default.display_options.pager.options.views_infinite_scroll.button_text', 'عرض المزيد');
   $search_view->save();
 }

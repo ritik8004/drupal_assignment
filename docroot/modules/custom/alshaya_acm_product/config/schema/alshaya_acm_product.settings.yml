@@ -5,6 +5,9 @@ alshaya_acm_product.settings:
     brand_logo_base_path:
       type: string
       label: 'Base path on server for Brand Logo'
+    brand_logo_extension:
+      type: string
+      label: 'File extension for Brand Logo'
     size_guide_link:
       type: integer
       label: 'Enable Size Guide link'

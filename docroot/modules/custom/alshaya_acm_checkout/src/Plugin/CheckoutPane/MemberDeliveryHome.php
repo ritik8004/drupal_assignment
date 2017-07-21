@@ -5,7 +5,9 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\profile\Entity\Profile;
@@ -58,6 +60,13 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#type' => 'container',
       '#attributes' => [
         'id' => 'address-book-form-wrapper',
+      ],
+      '#attached' => [
+        'library' => [
+          'core/drupal.form',
+          'alshaya_white_label/convert_to_select2',
+          'clientside_validation_jquery/cv.jquery.validate',
+        ],
       ],
     ];
 
@@ -140,7 +149,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       ],
     ];
 
-    if ($address['customer_address_id']) {
+    if (!empty($address['customer_address_id'])) {
       $pane_form['header']['title']['#markup'] = '<div class="title delivery-address-title">' . $this->t('delivery address') . '</div>';
 
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
@@ -154,7 +163,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
         $default_shipping = $cart->getShippingMethodAsString();
 
         // Convert to code.
-        $default_shipping = str_replace(',', '_', substr($default_shipping, 0, 32));
+        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+        $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($default_shipping);
 
         if (!empty($shipping_methods) && empty($default_shipping)) {
           $default_shipping = array_keys($shipping_methods)[0];
@@ -190,6 +202,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($form_state->getValue('selected_tab') != 'checkout-home-delivery') {
+      return;
+    }
+
     $values = $form_state->getValue($pane_form['#parents']);
 
     $shipping_method = isset($values['address']['shipping_methods']) ? $values['address']['shipping_methods'] : NULL;
@@ -205,11 +221,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
-    $address = $address_book_manager->getAddressFromEntity($entity, FALSE);
+    $address = $address_book_manager->getAddressFromEntity($entity);
 
     $update = [];
     $update['customer_address_id'] = $address['customer_address_id'];
-    $update['country'] = $address['country_id'];
     $update['country_id'] = $address['country_id'];
     $update['customer_id'] = $cart->customerId();
 
@@ -233,7 +248,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
   public static function generateShippingEstimates(Profile $entity) {
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-    $full_address = $address_book_manager->getAddressFromEntity($entity, FALSE);
+    $full_address = $address_book_manager->getAddressFromEntity($entity);
     return GuestDeliveryHome::generateShippingEstimates($full_address);
   }
 
@@ -249,8 +264,12 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    *   Ajax response to reload page on successfully adding new address.
    */
   public function saveAddressAjaxCallback($form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+
     if ($form_state->getErrors()) {
-      return $form;
+      $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form['member_delivery_home']['address_form']));
+      $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'show'));
+      return $response;
     }
 
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
@@ -293,7 +312,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       $update = [];
       $update['customer_address_id'] = $customer_address_id;
       $update['country_id'] = $address_values['country_code'];
-      $update['country'] = $address_values['country_code'];
       $update['customer_id'] = $cart->customerId();
 
       $cart->setShipping($update);

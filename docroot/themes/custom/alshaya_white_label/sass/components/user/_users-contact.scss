@@ -93,15 +93,6 @@
     }
   }
 
-  .c-page-title {
-    padding-bottom: 1rem;
-
-    @include breakpoint($only-tablet) {
-      padding-bottom: 0.75rem;
-      margin-top: 0.437rem;
-    }
-  }
-
   #user-form {
     @include breakpoint($tablet) {
       #edit-submit {

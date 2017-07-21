@@ -1,12 +1,3 @@
 enable_disable_store_finder_search: 1
-pdp_click_collect_title: 'Click and Collect'
-pdp_click_collect_subtitle: 'Collect the order from store in 99 days'
-pdp_click_collect_unavailable: 'Sorry Collect your order in-store is unavailable'
-pdp_click_collect_price: ''
-pdp_click_collect_help_text:
-  value: '<p>This service is <strong>FREE</strong> of charge.</p>'
-  format: rich_text
-pdp_click_collect_select_option_text:
-  value: '<p><span class="highlight">Select a size</span> to check stock availability near to you</p>'
-  format: rich_text
 load_more_item_limit: 10
+search_proximity_radius: 25

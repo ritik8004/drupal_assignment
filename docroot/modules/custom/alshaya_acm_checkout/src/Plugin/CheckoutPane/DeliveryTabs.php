@@ -48,6 +48,28 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#markup' => '<hr />',
     ];
 
+    $cart = $this->getCart();
+
+    $selected_method = 'checkout-home-delivery';
+
+    if ($method = $cart->getShippingMethodAsString()) {
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+      $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+      $method = $checkout_options_manager->getCleanShippingMethodCode($method);
+      if ($method == $checkout_options_manager->getClickandColectShippingMethod()) {
+        $selected_method = 'checkout-click-collect';
+      }
+    }
+
+    $complete_form['selected_tab'] = [
+      '#type' => 'hidden',
+      '#default_value' => $selected_method,
+      '#attributes' => [
+        'id' => 'selected-tab',
+      ],
+    ];
+
     return $pane_form;
   }
 

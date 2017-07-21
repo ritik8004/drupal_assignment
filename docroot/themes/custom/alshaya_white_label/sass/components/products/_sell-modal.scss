@@ -120,7 +120,7 @@
     }
 
     @include if-rtl {
-      @include icon(chevronright, before);
+      @include icon(chevronleft, before);
 
       &::before {
         float: $right;

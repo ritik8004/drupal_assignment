@@ -9,6 +9,8 @@
         var length = $('#cart_notification').html().length;
         if (length > 0) {
           $('#cart_notification').empty();
+          $('body').removeClass('notification--on');
+          $('#cart_notification').removeClass('has--notification')
         }
       });
 
@@ -47,7 +49,7 @@
         if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_name === 'configurables[size]')) {
           $(this).stopSpinner(['success']);
         }
-        else if (!settings.hasOwnProperty('extraData') && l.ladda('isLoading')) {
+        else if (!settings.hasOwnProperty('extraData')) {
           $.ladda('stopAll');
         }
       });
@@ -56,6 +58,8 @@
         $('html,body').animate({
           scrollTop: $('.header--wrapper').offset().top
         }, 'slow');
+          $('body').addClass('notification--on');
+        $('#cart_notification').addClass('has--notification')
       };
 
       $.fn.stopSpinner = function (data) {

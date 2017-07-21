@@ -30,7 +30,8 @@
   @include icon(close);
 
   position: absolute;
-  right: 0;
+  #{$right}: 0;
+  #{$left}: auto;
   top: 50%;
   width: 30px;
   margin: 0;
@@ -41,8 +42,14 @@
   color: $white-two;
   background-color: $marine-blue;
 
+  &::before {
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+  }
+
   @include breakpoint($only-tablet) {
-    right: -1.4rem;
+    #{$right}: -1.4rem;
   }
 }
 

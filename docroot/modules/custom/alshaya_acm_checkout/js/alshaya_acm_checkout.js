@@ -11,6 +11,15 @@
    */
   Drupal.behaviors.ZZAlshayaAcmCheckout = {
     attach: function (context, settings) {
+      $('#edit-delivery-tabs').once('bind-events').each(function () {
+        $('input[data-drupal-selector="edit-actions-next"]').hide();
+
+        $('.tab[gtm-type]', $(this)).on('click', function () {
+          $('#selected-tab').val($(this).attr('gtm-type'));
+          Drupal.behaviors.cvJqueryValidate.attach($("#block-alshaya-white-label-content"));
+        });
+      });
+
       // Bind this only once after every ajax call.
       $('[data-drupal-selector="edit-acm-payment-methods-payment-details-cc-number"]').once('validate-cc').each(function () {
         $(this).validateCreditCard(function (result) {
@@ -135,6 +144,11 @@
           });
         };
       }
+
+      // Re-bind client side validations for billing address after form is updated.
+      $('[data-drupal-selector="edit-billing-address-address-billing-given-name"]').once('bind-events').each(function () {
+        Drupal.behaviors.cvJqueryValidate.attach(jQuery("#block-alshaya-white-label-content"));
+      });
     }
   };
 

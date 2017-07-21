@@ -118,8 +118,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     if ($address_book_manager->deleteUserAddressFromApi($entity)) {
-      drupal_set_message($this->getDeletionMessage());
-      $this->logDeletionMessage();
+      parent::submitForm($form, $form_state);
     }
 
     $form_state->setRedirectUrl($this->getRedirectUrl());

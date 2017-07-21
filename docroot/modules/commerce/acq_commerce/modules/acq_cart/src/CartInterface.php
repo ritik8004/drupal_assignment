@@ -159,8 +159,10 @@ interface CartInterface {
    *   The current shipping carrier.
    * @param string $method
    *   The current shipping method.
+   * @param array $extension
+   *   Additional data passed in extension.
    */
-  public function setShippingMethod($carrier, $method);
+  public function setShippingMethod($carrier, $method, array $extension = []);
 
   /**
    * Sets the shipping address.

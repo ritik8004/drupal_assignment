@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\User;
+use Drupal\Core\Url;
 
 /**
  * Check if the current user has is only authenticated user.
@@ -277,10 +278,13 @@ function alshaya_user_preprocess_page_title(&$variables) {
   if (strpos($current_path, '/user') !== FALSE && $user = \Drupal::request()->attributes->get('user')) {
     $arg = explode('/', $current_path);
     if (!empty($arg[3])) {
-      $variables['title_prefix']['back_link'] = [
-        '#markup' => Link::createFromRoute('back', 'entity.user.canonical', ['user' => $user->id()], [
-          'attributes' => ['class' => ['back-link']],
-        ])->toString(),
+      $link = Url::fromRoute('entity.user.canonical', ['user' => $user->id()])->toString();
+      $variables['title_prefix'] = [
+        '#markup' => "<a href=" . $link . " class='back-link'>",
+        '#weight' => 100,
+      ];
+      $variables['title_suffix'] = [
+        '#markup' => "</a>",
         '#weight' => 100,
       ];
     }
@@ -394,5 +398,18 @@ function _alshaya_user_password_policy_history_insert_password_hash(AccountInter
       ->fields(['uid', 'pass_hash', 'timestamp'], $values)
       ->execute();
 
+  }
+}
+
+/**
+ * Implements hook_field_info_alter().
+ */
+function alshaya_user_field_info_alter(&$info) {
+  // Change default mobile number constraint to custom.
+  if (isset($info['mobile_number'])) {
+    // This is to replace a custom token (@entity_type) just for error message
+    // in mobile number.
+    unset($info['mobile_number']['constraints']['MobileNumber']);
+    $info['mobile_number']['constraints']['AlshayaMobileNumber'] = [];
   }
 }

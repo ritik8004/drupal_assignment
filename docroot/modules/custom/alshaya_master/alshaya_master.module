@@ -379,3 +379,19 @@ function alshaya_master_alshaya_profile_installed() {
     $node_type->delete();
   }
 }
+
+/**
+ * Implements hook_back_to_top_admin_prevent_alter().
+ */
+function alshaya_master_back_to_top_admin_prevent_alter(&$is_admin) {
+  $route = \Drupal::routeMatch();
+  // If user/edit route.
+  if ($route->getRouteName() == 'entity.user.edit_form') {
+    // If current user has access to administration theme, means user/edit will
+    // open in the admin theme. In that case nothing to do.
+    $current_user = \Drupal::currentUser();
+    if (!$current_user->hasPermission('view the administration theme')) {
+      $is_admin = FALSE;
+    }
+  }
+}

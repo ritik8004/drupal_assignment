@@ -1,6 +1,6 @@
 #backtotop {
   @include breakpoint($only-mobile) {
-    #{$right}: -0.1875rem;
+    #{$right}: 0;
   }
 
   @include icon(arrowup, after) {
@@ -36,4 +36,23 @@
   height: 4.375rem;
   width: 4.375rem;
   line-height: 120px;
+
+  &.backtotop-nofooter {
+    position: fixed;
+    bottom: 1px;
+    top: auto;
+  }
+
+  &.backtotop-withfooter {
+    position: absolute;
+    top: -4.375rem;
+
+    @include breakpoint($only-mobile) {
+      top: -4rem;
+
+      .nodetype--acq_product & {
+        top: -1.875rem;
+      }
+    }
+  }
 }

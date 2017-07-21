@@ -41,5 +41,7 @@ function drush_acq_promotion_sync_commerce_promotions() {
     \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
   }
 
+  \Drupal::logger('acq_promotion')->notice('Promotion sync completed.');
+
   drush_print(dt('Done.'));
 }

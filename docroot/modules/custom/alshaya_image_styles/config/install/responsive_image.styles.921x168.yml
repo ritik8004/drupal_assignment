@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.304x132
+    - image.style.702x202
+    - image.style.921x168
+  theme:
+    - alshaya_white_label
+id: 921x168
+label: 921x168
+image_style_mappings:
+  -
+    breakpoint_id: alshaya_white_label.desktop
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: 921x168
+  -
+    breakpoint_id: alshaya_white_label.tablet
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: 702x202
+  -
+    breakpoint_id: alshaya_white_label.mobile
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: 304x132
+breakpoint_group: alshaya_white_label
+fallback_image_style: 921x168

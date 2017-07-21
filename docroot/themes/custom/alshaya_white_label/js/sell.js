@@ -3,13 +3,14 @@
  * Sell.
  */
 
+/* global isRTL */
+
 (function ($, Drupal) {
   'use strict';
 
   Drupal.behaviors.sell = {
     attach: function (context, settings) {
-
-      $('.block-basket-horizontal-recommendation .owl-carousel').owlCarousel({
+      var options = {
         loop: true,
         responsiveClass: true,
         dots: true,
@@ -27,7 +28,17 @@
             nav: true
           }
         }
-      });
+      };
+
+      if (isRTL()) {
+        $('.block-basket-horizontal-recommendation .owl-carousel').attr('dir', 'rtl');
+        $('.block-basket-horizontal-recommendation .owl-carousel').owlCarousel(
+          $.extend({}, options, {rtl: true})
+        );
+      }
+      else {
+        $('.block-basket-horizontal-recommendation .owl-carousel').owlCarousel(options);
+      }
 
       $('.owl-carousel').owlCarousel({
         loop: true,

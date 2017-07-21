@@ -4,12 +4,10 @@
     attach: function (context, settings) {
       $('#edit-sort-bef-combine option[value="search_api_relevance ASC"]').remove();
       // Do not allow search form submit on empty search text.
-      var selectors = 'form[data-bef-auto-submit-full-form], [data-bef-auto-submit-full-form] form, [data-bef-auto-submit]';
-
-      $(selectors, context).find('[data-bef-auto-submit-click]').click(function () {
-        var $keyword = $(selectors, context).find('input[name="keywords"]');
+      $('form[data-bef-auto-submit-full-form]', context).submit(function (e) {
+        var $keyword = $(this).find('input[name="keywords"]');
         if (typeof $keyword.val() == 'undefined' || $.trim($keyword.val()) === '') {
-          return false;
+          e.preventDefault();
         }
       });
 

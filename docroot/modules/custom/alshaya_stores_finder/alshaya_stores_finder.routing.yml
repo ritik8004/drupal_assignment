@@ -23,9 +23,3 @@ alshaya_stores_finder.configuration:
     _title: 'Store finder configuration'
   requirements:
     _permission: 'access administration pages'
-alshaya_stores_finder.pdp_stores:
-  path: '/stores/product/{sku}/{lat}/{lon}'
-  defaults:
-    _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::getProductStoresJson'
-  requirements:
-    _permission: 'access content'

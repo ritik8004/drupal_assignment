@@ -3,12 +3,12 @@
 namespace Drupal\alshaya_acm_knet\Controller;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -31,18 +31,28 @@ class KnetController extends ControllerBase {
   protected $knetSettings;
 
   /**
+   * Orders Manager object.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   APIWrapper object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory object.
    */
-  public function __construct(APIWrapper $api_wrapper, ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(APIWrapper $api_wrapper, ConfigFactoryInterface $config_factory, OrdersManager $orders_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->knetSettings = $config_factory->get('alshaya_acm_knet.settings');
+    $this->ordersManager = $orders_manager;
     $this->logger = $logger_factory->get('alshaya_acm_knet');
   }
 
@@ -53,6 +63,7 @@ class KnetController extends ControllerBase {
     return new static(
       $container->get('acq_commerce.api'),
       $container->get('config.factory'),
+      $container->get('alshaya_acm_customer.orders_manager'),
       $container->get('logger.factory')
     );
   }
@@ -108,7 +119,7 @@ class KnetController extends ControllerBase {
     $data = \Drupal::state()->get($state_key);
 
     if (empty($data)) {
-      return new AccessDeniedHttpException();
+      throw new AccessDeniedHttpException();
     }
 
     $message = '';
@@ -127,8 +138,9 @@ class KnetController extends ControllerBase {
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
 
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
-    $response->send();
+    $this->ordersManager->clearOrderCache($data['email'], $data['user_id']);
+
+    return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
   }
 
   /**
@@ -155,8 +167,9 @@ class KnetController extends ControllerBase {
 
     $this->apiWrapper->updateOrderStatus($order_id, $this->knetSettings->get('payment_failed'), $message);
 
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
-    $response->send();
+    $this->ordersManager->clearOrderCache(\Drupal::currentUser()->getEmail(), \Drupal::currentUser()->id());
+
+    return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
   }
 
   /**
@@ -185,8 +198,7 @@ class KnetController extends ControllerBase {
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
 
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'confirmation'])->toString());
-    $response->send();
+    return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
   }
 
 }
