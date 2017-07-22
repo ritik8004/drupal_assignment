@@ -401,6 +401,10 @@
           }
           map.infoWindow = currentInfoWindow;
         }
+
+        // Set the marker to center of the map on click.
+        map.googleMap.setCenter(currentMarker.getPosition());
+
         currentInfoWindow.open(map.googleMap, currentMarker);
       });
 
