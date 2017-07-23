@@ -87,16 +87,6 @@
   }
 
   .mobile-number-field {
-    .form-item--error-message {
-      display: none;
-
-      &.is-visible {
-        display: block;
-        padding-top: 0.5rem;
-        top: 3rem;
-      }
-    }
-
     .form-type-textfield .c-input__bar {
       top: -1px !important;
 
