@@ -1,6 +1,6 @@
 /**
  * @file
- * Product Zoom Gallery
+ * Product Zoom Gallery.
  */
 
 (function ($) {

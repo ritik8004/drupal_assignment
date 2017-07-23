@@ -184,7 +184,7 @@
     bottom: 3.125rem;
 
     p {
-      margin: 3px;
+      margin: 0.1875rem;
     }
   }
 
@@ -251,7 +251,7 @@
   #product-image-gallery,
   #lightSlider {
     position: relative;
-    height: 100px;
+    height: 6.25rem;
     margin: 0 auto;
     padding-left: 0;
 
@@ -282,9 +282,9 @@
     }
 
     .slick-slide {
-      width: 112px !important;
-      height: 102px !important;
-      padding: 2px;
+      width: 7rem !important;
+      height: 6.375rem !important;
+      padding: 0.125rem;
       border: 1px solid transparent;
 
       img {
@@ -310,8 +310,8 @@
 @include breakpoint($desktop) {
   #product-image-gallery,
   #lightSlider {
-    height: 520px;
-    margin: 0 10px 0 0;
+    height: 32.5rem;
+    margin: 0 0.625rem 0 0;
     width: 100%;
     position: relative;
     padding-left: 0;
@@ -360,12 +360,12 @@
     }
 
     .slick-slide {
-      width: 90px !important;
-      height: 81px !important;
-      margin: 5px 0;
+      width: 5.625rem !important;
+      height: 5.0625rem !important;
+      margin: 0.3125rem 0;
 
       img {
-        padding: 2px;
+        padding: 0.125rem;
         width: 100%;
         height: auto;
       }
@@ -377,7 +377,10 @@
   font-size: 0;
   text-indent: 9999em;
   color: transparent;
-  padding: 2rem;
-  background: transparent url(../imgs/icons/MC-loader.svg) 1.5rem center no-repeat;
+  background: transparent url(../imgs/icons/MC-loader.svg) center no-repeat;
+  background-size: 2rem 2rem;
   border: none;
+  width: 2rem !important;
+  left: 48% !important;
+  height: 2rem !important;
 }

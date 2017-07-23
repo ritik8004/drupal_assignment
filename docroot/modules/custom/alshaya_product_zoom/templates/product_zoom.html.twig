@@ -44,10 +44,8 @@
           </li>
         {% else %}
           <li>
-            {#<a href="{{ thumbs.fullurl }}" class="mobilegallery__thumbnails__image a-gallery">#}
-              <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
-            </a>
-          {#</li>#}
+            <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+          </li>
         {% endif %}
       {% endfor %}
     </ul>
