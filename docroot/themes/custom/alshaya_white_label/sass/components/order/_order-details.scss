@@ -35,16 +35,22 @@
     @include breakpoint($tablet) {
       white-space: nowrap;
       overflow: hidden;
-      position: relative;
       max-width: 7.1rem;
-      display: inline-block;
+      text-overflow: ellipsis;
 
-      &::after {
-        content: "...";
-        background: $white-smoke;
-        position: absolute;
-        #{$right}: 0;
-        padding-#{$left}: 0.1875rem;
+      html[lang=ar] & {
+        position: relative;
+        display: inline-block;
+        text-overflow: inherit;
+
+        &::after {
+          content: "...";
+          background: $white-five;
+          position: absolute;
+          left: 0;
+          padding-right: 1px;
+          width: 0.75rem;
+        }
       }
     }
 
@@ -498,6 +504,42 @@ html[lang=ar] {
           min-width: 9rem;
         }
       }
+    }
+  }
+}
+
+#block-alshaya-white-label-content .order-items li {
+  .second-third .second .dark {
+    @include breakpoint($tablet) {
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 9.825rem;
+      text-overflow: ellipsis;
+
+      html[lang=ar] & {
+        position: relative;
+        display: inline-block;
+        text-overflow: inherit;
+
+        &::after {
+          content: "...";
+          background: $white-five;
+          position: absolute;
+          left: 0;
+          padding-right: 1px;
+          width: 0.75rem;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 10.825rem;
+    }
+  }
+
+  &:hover .second-third .second .dark::after {
+    html[lang=ar] & {
+      background-color: $white-smoke;
     }
   }
 }
