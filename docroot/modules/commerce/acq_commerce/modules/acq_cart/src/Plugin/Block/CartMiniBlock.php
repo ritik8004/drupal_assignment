@@ -32,13 +32,11 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
    */
   public function build() {
     // Something to show till we get the AJAX response back.
-    $loading_message = $this->t('Loading ...');
     $output = [
-      '#markup' => '<div id="mini-cart-wrapper">' . $loading_message . '</div><div id="cart_notification"></div>',
-      '#attached' => [
-        'library' => 'acq_cart/acq-cart-custom-js',
-      ],
+      '#lazy_builder' => ['acq_cart.mini_cart:getMiniCart', array()],
+      '#create_placeholder' => TRUE
     ];
+
     return $output;
   }
 
