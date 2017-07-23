@@ -44,8 +44,8 @@
         items.addClass('cloud-zoom-processed', context).CloudZoom();
       }
 
-      $('#lightSlider').slick(slickOptions);
-      $('#drupal-modal #lightSlider').slick(slickOptions);
+      $('#lightSlider', context).slick(slickOptions);
+      $('#drupal-modal #lightSlider', context).slick(slickOptions);
 
       // Slider - 3 For Mobile - Image Gallery.
       $('#product-image-gallery-mobile', context).lightSlider({
