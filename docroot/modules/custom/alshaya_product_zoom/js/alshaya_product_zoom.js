@@ -1,7 +1,34 @@
+/**
+ * @file
+ * Product Zoom Gallery
+ */
+
 (function ($) {
   'use strict';
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
+      var slickOptions = {
+        slidesToShow: 5,
+        vertical: true,
+        arrows: true,
+        responsive: [
+          {
+            breakpoint: 1025,
+            settings: {
+              slidesToShow: 3,
+              vertical: false
+            }
+          },
+          {
+            breakpoint: 767,
+            settings: {
+              slidesToShow: 1,
+              vertical: false
+            }
+          }
+        ]
+      };
+
       // Remove unwanted attributes in slider for users.
       $('.gallery-wrapper #cloud-zoom img').removeAttr('title');
       $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
@@ -17,36 +44,8 @@
         items.addClass('cloud-zoom-processed', context).CloudZoom();
       }
 
-      // Slider 1 - For Desktop - Image zoom.
-      if ($(window).width() < 1025) {
-        $('#lightSlider', context).lightSlider({
-          vertical: false,
-          item: 3,
-          verticalHeight: 100
-        });
-        // Slider 1 - For Desktop - Image zoom.
-        $('#drupal-modal #lightSlider', context).lightSlider({
-          vertical: false,
-          item: 3,
-          loop: true,
-          verticalHeight: 100
-        });
-      }
-      else {
-        $('#lightSlider', context).lightSlider({
-          vertical: true,
-          item: 5,
-          loop: true,
-          verticalHeight: 440
-        });
-        // Slider 1 - For Desktop - Image zoom.
-        $('#drupal-modal #lightSlider', context).lightSlider({
-          vertical: true,
-          item: 5,
-          loop: true,
-          verticalHeight: 440
-        });
-      }
+      $('#lightSlider').slick(slickOptions);
+      $('#drupal-modal #lightSlider').slick(slickOptions);
 
       // Slider - 3 For Mobile - Image Gallery.
       $('#product-image-gallery-mobile', context).lightSlider({
@@ -55,6 +54,7 @@
           el.children('iframe').remove();
         }
       });
+
       // Show mobile slider only on mobile resolution.
       toggleProductImageGallery();
       $(window).on('resize', function (e) {
@@ -73,26 +73,31 @@
         height: 768,
         dialogClass: 'dialog-product-image-gallery-container',
         open: function () {
-
-          if ($(window).width() < 1025) {
-            $('#product-image-gallery', context).lightSlider({
-              vertical: false,
-              item: 5,
-              loop: true,
-              verticalHeight: 100
-            }).refresh();
-          } else {
-            $('#product-image-gallery', context).lightSlider({
-              vertical: true,
-              item: 5,
-              loop: true,
-              verticalHeight: 440
-            });
-          }
+          var slickModalOptions = {
+            slidesToShow: 5,
+            vertical: true,
+            arrows: true,
+            responsive: [
+              {
+                breakpoint: 1025,
+                settings: {
+                  slidesToShow: 5,
+                  vertical: false
+                }
+              },
+              {
+                breakpoint: 767,
+                settings: {
+                  slidesToShow: 1,
+                  vertical: false
+                }
+              }
+            ]
+          };
+          $('#product-image-gallery').slick(slickModalOptions);
 
           // ZoomIn ZoomOut in Gallery view with a draggable container.
           if ($('#full-image-wrapper').length > 0) {
-            $('#full-image').css({top: 0, left: -200});
 
             var maskWidth = $('#full-image-wrapper').width();
             var maskHeight = $('#full-image-wrapper').height();
@@ -220,17 +225,29 @@
           $('#yt-vi-container iframe').remove();
           appendVideoIframe($('#yt-vi-container'), URL, width, height);
           $('#cloud-zoom-wrap').hide();
-          $(this).siblings('.lslide').removeClass('active');
-          $(this).addClass('active');
+          $(this).siblings('.slick-slide').removeClass('slick-current');
+          $(this).addClass('slick-current');
         }
       });
 
       $('#lightSlider li a', context).on('click', function (e) {
         e.preventDefault();
         if ($(this).hasClass('cloudzoom__thumbnails__image')) {
-          $(this).parent().siblings('.lslide').removeClass('active');
-          $(this).parent().addClass('active');
+          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+          $(this).parent().addClass('slick-current');
         }
+      });
+
+      $('#product-image-gallery li a', context).on('click', function (e) {
+        e.preventDefault();
+        if ($(this).hasClass('imagegallery__thumbnails__image')) {
+          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+          $(this).parent().addClass('slick-current');
+        }
+      });
+
+      $('#product-image-gallery a').on('click', 'touchstart', function (e) {
+        e.preventDefault();
       });
 
       $('.acq-content-product-modal #lightSlider li', context).on('click', function () {

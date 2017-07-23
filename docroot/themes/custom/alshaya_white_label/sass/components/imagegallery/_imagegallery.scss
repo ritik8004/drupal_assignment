@@ -66,95 +66,32 @@
     overflow: hidden;
   }
 
-  @include breakpoint($only-tablet) {
-    .lSSlideWrapper {
-      max-width: 100%;
-      overflow: hidden;
-      position: static;
-    }
+  .imagegallery__wrapper {
+    #product-image-gallery {
+      position: relative;
 
-    .lSAction {
-      & > a {
-        @include u-visibility(block);
-
-        width: 44px;
-        height: 96px;
-        cursor: pointer;
-        position: absolute;
-        margin-top: 0;
-        margin-left: 0;
-        opacity: 1;
-        text-align: center;
-        font-size: 22px;
-
-        &::before {
-          display: block;
-          padding-top: 36px;
-        }
-      }
-
-      .lSPrev {
-        @include icon(chevronleft);
-
-        left: 24px;
-        top: 531px;
-        background-color: $white-five;
-      }
-
-      .lSNext {
-        @include icon(chevronright);
-
-        left: 650px;
-        top: 531px;
-        background-color: $white-five;
+      @include breakpoint($desktop) {
+        width: 90px;
+        margin-#{$right}: 10px;
+        float: $left;
       }
     }
 
-    li {
-      img {
-        width: 112px;
-        height: 96px;
+    & > .imagegallery__full {
+      @include breakpoint($tablet) {
+        height: 480px !important;
       }
-    }
-  }
 
-  @include breakpoint($desktop) {
-    .lSAction {
-      & > a {
-        @include u-visibility(block);
+      @include breakpoint($desktop) {
+        height: 504px !important;
+        float: $right;
+        width: calc(100% - (92px + 1rem)) !important;
+        padding-right: 35px;
+      }
 
+      .imagegallery__full__image {
         width: 100%;
-        left: 0;
-        height: 42px;
-        cursor: pointer;
-        position: absolute;
-        margin-top: 0;
-        margin-left: 0;
-        opacity: 1;
-        text-align: center;
-        font-size: 30px;
-        color: $black-two;
-        z-index: 0;
-
-        &::before {
-          padding-top: 5px;
-
-          @include u-visibility(block);
-        }
-      }
-
-      .lSPrev {
-        @include icon(chevronup);
-
-        top: 0;
-        background-color: $white-five;
-      }
-
-      .lSNext {
-        @include icon(chevrondown);
-
-        bottom: 0;
-        background-color: $white-five;
+        height: auto;
       }
     }
   }
@@ -196,97 +133,6 @@
     .zoomin {
       background: url(../imgs/assets/ic-zoomin.png) no-repeat;
       background-size: contain;
-    }
-  }
-}
-
-.imagegallery__wrapper {
-  max-width: 100%;
-
-  @include breakpoint($only-tablet) {
-    max-width: 582px;
-    margin: 0 auto;
-  }
-
-  @include clearfix;
-
-  .lSSlideOuter {
-    .lSPager {
-      @include u-visibility(none);
-    }
-
-    @include breakpoint($only-tablet) {
-      width: 100%;
-      margin-right: 0;
-    }
-
-    @include breakpoint($desktop) {
-      float: left;
-      width: 90px;
-      margin-right: 1rem;
-    }
-
-    .lSSlideWrapper {
-      @include breakpoint($desktop) {
-        height: 514px !important;
-      }
-
-      #product-image-gallery {
-        &.pager-yes {
-          @include breakpoint($desktop) {
-            margin-top: 42px;
-          }
-        }
-
-        li {
-          padding: 3px;
-
-          &.active {
-            border: 1px solid;
-          }
-
-          img {
-            width: 81px;
-            height: 72px;
-          }
-        }
-      }
-
-      @include breakpoint($only-tablet) {
-        #product-image-gallery {
-          margin-top: 24px;
-
-          li {
-            img {
-              width: 112px;
-              height: 96px;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  & > .imagegallery__full {
-    @include breakpoint($tablet) {
-      height: 480px !important;
-    }
-
-    @include breakpoint($desktop) {
-      height: 504px !important;
-      float: right;
-      width: calc(100% - (92px + 1rem)) !important;
-      padding-right: 35px;
-    }
-
-    img {
-      width: 100%;
-      left: 0 !important;
-    }
-
-    iframe {
-      width: 100% !important;
-      height: 725px !important;
     }
   }
 }

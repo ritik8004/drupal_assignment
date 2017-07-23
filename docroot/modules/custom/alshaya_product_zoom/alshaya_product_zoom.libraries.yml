@@ -32,4 +32,4 @@ product.cloud_zoom:
     - core/drupal.dialog
     - core/jquery.ui.draggable
     - alshaya_product_zoom/cloud_zoom
-    - alshaya_product_zoom/lightslider
+    - alshaya_white_label/slick
