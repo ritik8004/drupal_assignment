@@ -144,6 +144,7 @@
         #{$left}: auto;
         top: 0;
         width: 2.1875rem;
+        height: 2.1875rem;
 
         @include breakpoint($tablet) {
           background: $whisper-dark;

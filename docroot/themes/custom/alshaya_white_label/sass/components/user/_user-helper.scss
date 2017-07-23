@@ -505,6 +505,10 @@
       @include breakpoint($desktop) {
         margin-top: 1.75rem;
         margin-bottom: 4rem;
+
+        .field--type-image {
+          float: $right;
+        }
       }
 
       h3 {
