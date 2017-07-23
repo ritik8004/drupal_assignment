@@ -1,7 +1,0 @@
-acq-cart-custom-js:
-  version: 1.x
-  js:
-    js/acq_cart_custom.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
