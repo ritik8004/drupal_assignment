@@ -387,7 +387,7 @@
 
       // Poll the DOM to check if the show more/less link is available, before placing it inside the ul.
       var i = setInterval(function () {
-        if ($('.c-plp-only .block-facet--checkbox a.facets-soft-limit-link').length) {
+        if ($('.block-facet--checkbox a.facets-soft-limit-link').length) {
           clearInterval(i);
           $('.block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
@@ -402,7 +402,7 @@
       }, 100);
 
       var j = setInterval(function () {
-        if ($('.c-plp-only .region__content .block-facet--checkbox a.facets-soft-limit-link').length) {
+        if ($('.region__content .block-facet--checkbox a.facets-soft-limit-link').length) {
           clearInterval(j);
           $('.region__content .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');

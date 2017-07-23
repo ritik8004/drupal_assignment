@@ -576,6 +576,12 @@
         background-color: $white-four;
       }
 
+      &:hover li a .second-third .second .dark::after {
+        html[lang=ar] & {
+          background-color: $white-four;
+        }
+      }
+
       a {
         @include icon(chevron#{$right}, after) {
           font-size: 1.875rem;

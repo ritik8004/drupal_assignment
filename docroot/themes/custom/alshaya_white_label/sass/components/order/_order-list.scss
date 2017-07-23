@@ -144,6 +144,7 @@
         #{$left}: auto;
         top: 0;
         width: 2.1875rem;
+        height: 2.1875rem;
 
         @include breakpoint($tablet) {
           background: $whisper-dark;
@@ -428,16 +429,22 @@
     @include breakpoint($tablet) {
       white-space: nowrap;
       overflow: hidden;
-      position: relative;
       max-width: 9.2rem;
-      display: inline-block;
+      text-overflow: ellipsis;
 
-      &::after {
-        content: "...";
-        background: $white-five;
-        position: absolute;
-        #{$right}: 0;
-        width: 0.75rem;
+      html[lang=ar] & {
+        position: relative;
+        display: inline-block;
+        text-overflow: inherit;
+
+        &::after {
+          content: "...";
+          background: $white-five;
+          position: absolute;
+          left: 0;
+          padding-right: 1px;
+          width: 0.75rem;
+        }
       }
     }
 

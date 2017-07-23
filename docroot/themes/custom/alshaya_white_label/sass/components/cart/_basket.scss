@@ -975,6 +975,19 @@ html[lang=ar] {
     font-size: 0.75rem;
   }
 
+  .alias--cart #table-cart-totals td:first-child {
+    @include breakpoint($desktop) {
+      font-size: 0.875rem !important;
+      padding-left: 1.7rem;
+    }
+
+    span {
+      @include breakpoint($desktop) {
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+
   .path--cart .customer-cart-form .items {
     padding-right: 1.2rem;
 
