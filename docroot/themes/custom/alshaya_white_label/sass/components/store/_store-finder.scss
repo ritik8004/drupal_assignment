@@ -209,7 +209,7 @@
       font-size: 12px;
     }
 
-    &#edit-submit-stores-finder {
+    &[id^=edit-submit-stores-finder] {
       background: url('../imgs/icons/store-search.svg');
       border: none;
       background-repeat: no-repeat;
@@ -352,7 +352,7 @@
   }
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-  .form-item-geolocation-geocoder-google-geocoding-api #edit-geolocation-geocoder-google-geocoding-api {
+  .form-item-geolocation-geocoder-google-geocoding-api [id^=edit-geolocation-geocoder-google-geocoding-api] {
     background: none;
     border: 1px solid $greyish;
     border-#{$right}: 2.3125rem solid $white-five;
