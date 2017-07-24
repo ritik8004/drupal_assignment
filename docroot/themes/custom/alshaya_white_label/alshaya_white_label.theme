@@ -465,19 +465,27 @@ function alshaya_white_label_preprocess_user(&$variables) {
   $user = $variables['user'];
   if ($user) {
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
-    if (!empty($user->get('field_mobile_number')->getValue())) {
-      $variables['contact_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($user->get('field_mobile_number')->getValue()[0]['value']);
-    }
-    $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
-    $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card, TRUE) : '';
 
-    $module_handler = \Drupal::moduleHandler();
-    if ($module_handler->moduleExists('alshaya_loyalty')) {
+    // We always initialise the variable to get no notices.
+    $variables['contact_number'] = '';
+    $variables['privilege_card'] = '';
+
+    if ($mobile_number = $user->get('field_mobile_number')->getValue()) {
+      $variables['contact_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($mobile_number[0]['value']);
+    }
+
+    // Check if loyalty module is enabled.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
       // Get loyalty settings.
       $loyalty_settings = alshaya_loyalty_get_validation_settings();
-      // If site has loyalty 'off'.
-      if (!$loyalty_settings['enable_disable_loyalty']) {
-        $variables['privilege_card'] = '';
+
+      // Check if site has loyalty enabled in config.
+      if ($loyalty_settings['enable_disable_loyalty']) {
+
+        // Check if we have some value stored for the user.
+        if ($privilege_card = $user->get('field_privilege_card_number')->getValue()) {
+          $variables['privilege_card'] = alshaya_loyalty_format_card_number($privilege_card[0]['value'], TRUE);
+        }
       }
     }
   }
