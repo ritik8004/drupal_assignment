@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @package Drupal\acq_promotion
  */
-abstract class AlshayaPromotionQueueBase extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+abstract class AcqPromotionQueueBase extends QueueWorkerBase implements ContainerFactoryPluginInterface {
   use IngestRequestTrait;
 
   /**
