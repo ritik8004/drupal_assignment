@@ -145,9 +145,9 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     $mini_cart_html = \Drupal::service('acq_cart.mini_cart')->getMiniCart();
 
     $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
+    $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
     $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
     $response->addCommand(new HtmlCommand('#cart_notification', $html));
-    $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
   }
   return $response;
 }
