@@ -263,8 +263,7 @@
   }
 
   .form-item-quantity {
-    @include select-wrapper(4.375rem);
-
+    position: relative;
     margin-bottom: 1.5rem;
     margin-top: 2.1875rem;
     float: $left;
@@ -279,10 +278,8 @@
       #{$left}: 0;
     }
 
-    select {
-      @include select-style(4.375rem);
-
-      background-color: $white-two !important;
+    .select2-container {
+      @include select2-style(4.375rem);
     }
   }
 }
@@ -1286,6 +1283,7 @@
 
   .selected-text {
     font-weight: bold;
+    display: inline-block;
   }
 
   .select-buttons {
@@ -1380,4 +1378,8 @@ article[gtm-sku-type="simple"] {
     vertical-align: middle;
     margin-#{$right}: 0.3125rem;
   }
+}
+
+.select2-container--open {
+  z-index: 999;
 }
