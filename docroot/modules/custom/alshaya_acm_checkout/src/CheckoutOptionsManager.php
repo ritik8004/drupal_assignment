@@ -172,39 +172,6 @@ class CheckoutOptionsManager {
   }
 
   /**
-   * Get all allowed payment method codes for particular shipping methods.
-   *
-   * @param string $shipping_method
-   *   Shipping method code.
-   *
-   * @return array
-   *   Array of payment method codes allowed for the shipping method.
-   */
-  public function getAllowedPaymentMethodCodes($shipping_method) {
-    $shipping_method_term = $this->loadShippingMethod($shipping_method);
-
-    $query = $this->termStorage->getQuery();
-    $query->condition('vid', 'payment_method');
-    $query->condition('field_payment_shipping_methods', $shipping_method_term->id());
-
-    $result = $query->execute();
-
-    if (empty($result)) {
-      $this->logger->warning('No payment methods found for shipping method @method', ['@method' => $shipping_method]);
-      return [];
-    }
-
-    $terms = $this->termStorage->loadMultiple($result);
-
-    $methods = [];
-    foreach ($terms as $term) {
-      $methods[] = $term->get('field_payment_code')->getString();
-    }
-
-    return $methods;
-  }
-
-  /**
    * Function to get default payment method term.
    *
    * @return \Drupal\taxonomy\Entity\Term
@@ -271,10 +238,6 @@ class CheckoutOptionsManager {
       }
 
       $term->get('field_payment_code')->setValue($code);
-
-      if ($shipping_methods = $this->getAllShippingTerms(FALSE)) {
-        $term->get('field_payment_shipping_methods')->setValue($shipping_methods);
-      }
 
       $term->save();
 
