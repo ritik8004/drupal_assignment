@@ -11,7 +11,6 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
@@ -143,12 +142,12 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id . ':visible', $html));
   }
   else {
-    $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
-    $car_quantity_html = "<span class='quantity'>" . $cart->getCartItemsCount() . "</span>";
+    $mini_cart_html = \Drupal::service('acq_cart.mini_cart')->getMiniCart();
+
     $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
     $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
     $response->addCommand(new HtmlCommand('#cart_notification', $html));
-    $response->addCommand(new ReplaceCommand('#mini-cart-wrapper span.quantity', $car_quantity_html));
+    $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
   }
   return $response;
 }
