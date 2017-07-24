@@ -45,10 +45,10 @@
             {% for id, promotion in promotions %}
               <div class="promotion-{{ id }}">
                 <div class="promotion-label">
-                  <strong>{{ promotion.text.value }}</strong>
+                  <strong>{{ promotion.text }}</strong>
                 </div>
                 <div class="promotion-description">
-                  {{ promotion.description.value | raw }}
+                  {{ promotion.description | raw }}
                 </div>
               </div>
               <br>

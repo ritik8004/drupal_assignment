@@ -48,6 +48,26 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_size:
+    label: Size
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_size'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_product_collection:
+    label: Collection
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_product_collection'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
 datasource_settings:
   'entity:node':
     bundles:

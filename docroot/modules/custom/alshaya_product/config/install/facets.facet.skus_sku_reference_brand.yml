@@ -5,7 +5,12 @@ dependencies:
     - search_api.index.product
     - views.view.alshaya_product_list
   module:
+    - alshaya_search
     - search_api
+third_party_settings:
+  alshaya_search:
+    display_textbox: 1
+    display_textbox_item_count: '1'
 id: skus_sku_reference_brand
 name: 'SKUs » SKU Reference » Brand'
 url_alias: skus_sku_reference_brand
@@ -19,7 +24,7 @@ widget:
   config:
     show_numbers: true
     soft_limit: 5
-query_operator: and
+query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
 enable_parent_when_child_gets_disabled: true

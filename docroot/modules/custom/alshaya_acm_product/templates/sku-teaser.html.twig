@@ -8,17 +8,17 @@
   {{ price_block }}
 </div>
 
-<div class="out-of-stock">Checking stock...</div>
+<div class="out-of-stock">{{ "Checking stock..." | t }}</div>
 
 {% if promotions %}
   <div class="promotions">
     {% for id, promotion in promotions %}
       {% if (promotion.render_link) %}
         <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
-          {{ promotion.text.value }}
+          {{ promotion.text }}
         </a>
       {% else %}
-        {{ promotion.text.value }}
+        {{ promotion.text }}
       {% endif %}
     {% endfor %}
   </div>

@@ -258,6 +258,7 @@ class ClickCollectController extends ControllerBase {
           $all_stores['#title'] = $config->get('pdp_click_collect_title');
           $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
           $all_stores['#store_finder_form'] = render($store_form);
+          $all_stores['#help_text'] = $config->get('pdp_click_collect_help_text.value');
         }
       }
     }
@@ -290,7 +291,7 @@ class ClickCollectController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'show'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text .change-location-link', 'show'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .available_store .change-location-link', 'show'));
       if (!empty($data['all_stores'])) {
         $settings['alshaya_click_collect']['pdp']['all_stores'] = TRUE;
         $response->addCommand(new HtmlCommand('.click-collect-all-stores', $data['all_stores']));

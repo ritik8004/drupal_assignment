@@ -79,7 +79,7 @@
             // We need to minus one count as the facets also include clear all link.
             countFilters = countFilters - 1;
             // If there are filters applied, we need to show the count next to the label.
-            $('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
+            $('<h3 class="applied-filter-count c-accordion__title ui-state-active">' + Drupal.t('applied filters')
               + '(' + countFilters + ')</h3>')
               .insertBefore(mobileFilterBarSelector + ' ul');
           }
@@ -292,7 +292,7 @@
           $('.block-views-blockplp-promotional-banner-block-1')
             .addClass('promo-banner');
           $('.block-views-blockplp-promotional-banner-block-1')
-            .siblings('.block-views-exposed-filter-blocksearch-page')
+            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1')
             .addClass('promo-banner');
         }
       }
@@ -387,7 +387,7 @@
 
       // Poll the DOM to check if the show more/less link is available, before placing it inside the ul.
       var i = setInterval(function () {
-        if ($('.c-plp-only .block-facet--checkbox a.facets-soft-limit-link').length) {
+        if ($('.block-facet--checkbox a.facets-soft-limit-link').length) {
           clearInterval(i);
           $('.block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
@@ -402,7 +402,7 @@
       }, 100);
 
       var j = setInterval(function () {
-        if ($('.c-plp-only .region__content .block-facet--checkbox a.facets-soft-limit-link').length) {
+        if ($('.region__content .block-facet--checkbox a.facets-soft-limit-link').length) {
           clearInterval(j);
           $('.region__content .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');

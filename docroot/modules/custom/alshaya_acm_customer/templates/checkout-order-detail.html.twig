@@ -74,10 +74,10 @@
         <td class="order__user--info">
           {% if order_details.collection_by %}
             <div class="label font-small">{{ "Collection by"|t }}</div>
-            <div class="dark">{{ order_details.collection_by }}</div>
+            <div>{{ order_details.collection_by }}</div>
           {% else %}
             <div class="label font-small">{{ "Delivery to"|t }}</div>
-            <div class="dark">{{ order_details.delivery_to }}</div>
+            <div>{{ order_details.delivery_to }}</div>
           {% endif %}
 
           <div class="contact">
@@ -111,7 +111,7 @@
             <div class="dark">{{ order_details.delivery_method }}</div>
           </div>
         </td>
-        <td class="desktop-only blend">
+        <td class="desktop-only">
           {% if order_details.collection_by %}
             <div class="label font-small">{{ 'Collection times'|t }}</div>
             <div class="dark">

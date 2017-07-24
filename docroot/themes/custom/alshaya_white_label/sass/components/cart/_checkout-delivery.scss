@@ -238,6 +238,10 @@
       border: 1px solid $light-greyish;
       background: $white-five;
 
+      p {
+        color: $grey-ash;
+      }
+
       @include breakpoint($tablet) {
         border-bottom: 0;
         display: inline-block;
@@ -409,6 +413,8 @@
       &.option {
         @include clearfix;
 
+        top: 0;
+
         &::before {
           display: block;
           float: $left;
@@ -496,6 +502,10 @@
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
 .shipping-methods-container {
   display: block;
+
+  > legend {
+    padding-bottom: 0 !important;
+  }
 }
 
 // Adding throbber overlay for any ajax call on payment and checkout delivery page.
@@ -646,13 +656,6 @@
 
           @include breakpoint($tablet) {
             margin: 1.75rem 1.375rem 0;
-          }
-
-          .mobile-number-field .form-type-textfield {
-            .c-input__bar::before,
-            .c-input__bar::after {
-              top: 0;
-            }
           }
         }
       }
@@ -960,6 +963,20 @@
   @include breakpoint($only-mobile) {
     .tabs--content fieldset.active--tab--content {
       display: block !important;
+    }
+  }
+}
+
+.shipping-method-options-count-1 {
+  .form-type-radio {
+    label {
+      &::before {
+        display: none !important;
+      }
+
+      .shipping-method-name {
+        width: 100% !important;
+      }
     }
   }
 }

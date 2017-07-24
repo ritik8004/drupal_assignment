@@ -232,7 +232,18 @@ function alshaya_user_user_presave(EntityInterface $entity) {
 function alshaya_user_element_info_alter(array &$info) {
   if (isset($info['mobile_number']['#process'])) {
     $info['mobile_number']['#process'][] = '_alshaya_user_mobile_number_process';
+    array_unshift($info['mobile_number']['#element_validate'], '_alshaya_user_mobile_number_validate');
   }
+}
+
+/**
+ * Validate for the mobile number field to remove the prefix before submit.
+ */
+function _alshaya_user_mobile_number_validate(array &$element, FormStateInterface $form_state) {
+  $pp = $form_state->getValue('mobile_number');
+  $pp['local_number'] = explode(' ', $pp['local_number'])[1];
+  $pp['mobile'] = explode(' ', $pp['mobile'])[1];
+  $form_state->setValue('mobile_number', $pp);
 }
 
 /**
@@ -263,7 +274,8 @@ function _alshaya_user_mobile_number_process(array &$element, FormStateInterface
   $country_mobile_code = \Drupal::service('mobile_number.util')->getCountryCode($default_site_country);
   if ($country_mobile_code) {
     $element['#attached']['library'][] = 'alshaya_user/alshaya_mobile_number';
-    $element['mobile']['#prefix'] = '<div class="country-code-prefix">' . '+' . $country_mobile_code . '</div>';
+    $element['#attached']['drupalSettings']['alshaya_mobile_prefix'] = $country_mobile_code;
+    $element['#attached']['library'][] = 'alshaya_white_label/mobile_number';
   }
 
   return $element;
@@ -330,17 +342,16 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
   $signup_mail->set('register_withpassword.subject', 'على موقع [site:name] [user:field_first_name:value] تفاصيل حساب');
   $signup_mail->set('register_withpassword.body', '<h1>،[user:field_first_name:value] مرحباً</h1>
 
-أهلاً بك في موقع [site:name] و شكراً على الانضمام. إلينا
+أهلاً بك في موقع [site:name] .و شكراً على الانضمام إلينا
 
 [user:mail] :لقد قمت بالتسجيل عن طريق عنوان البريد الإلكتروني
 
-.وتقوم بتعديل وتحديث بياناتك الشخصية في أي وقت <a href="[user:registrationpassword-url]">My Account</a> الآن يمكنك الدخول إلى صفحة
+:يمكنك الآن تسجيل الدخول وتقوم بتعديل وتحديث بياناتك الشخصية في أي وقت بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
+<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
 
-نتمنى لك تجربة تسوق ممتعة مع موقع [site:name]
+.إذا كان لديك أي سؤال، يرجى الاطلاع على <a href="[site:url]">صفحة الأسئلة المتكررة</a>  أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن
 
-.هنا أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن <a href="[site:url]">FAQs page</a> إذا كان لديك أي سؤال، يرجى الاطلاع على صفحة
-
-مع أطيب التحيات،
+،مع أطيب التحيات
 فريق عمل [site:name]
 هاتف:12-12-182
 <a href="[site:url]">[site:url-brief]</a>');
@@ -361,9 +372,12 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
 
 <a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
 
-لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها.
+.لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها
 
-فريق عمل [site:name]');
+،مع أطيب التحيات
+فريق عمل [site:name]
+هاتف:12-12-182
+<a href="[site:url]">[site:url-brief]</a>');
   $reset_password_mail->save();
 }
 

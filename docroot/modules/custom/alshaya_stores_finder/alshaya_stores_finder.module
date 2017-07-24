@@ -44,6 +44,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       $store_finder_config = \Drupal::config('alshaya_stores_finder.settings');
       $store_finder_search_config = $store_finder_config->get('enable_disable_store_finder_search');
 
+      $form['#attributes']['class'][] = 'stores-finder-exposed-form';
+
       $form['list_view'] = [
         '#title' => t('List view'),
         '#type' => 'link',

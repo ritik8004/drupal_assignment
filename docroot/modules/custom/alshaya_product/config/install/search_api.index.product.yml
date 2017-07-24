@@ -128,6 +128,16 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_skus
+  attr_product_collection:
+    label: 'SKUs » SKU Reference » Collection'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_product_collection'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
 datasource_settings:
   'entity:node':
     bundles:

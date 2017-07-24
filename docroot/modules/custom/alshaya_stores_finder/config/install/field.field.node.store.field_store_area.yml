@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_store_area
+    - node.type.store
+id: node.store.field_store_area
+field_name: field_store_area
+entity_type: node
+bundle: store
+label: Area
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -35,6 +35,15 @@
         });
       }
 
+      // Prevent submission of forms when pressing Enter key in a text input.
+      $('#store-finder-wrapper').once('prevent-enter').on('keypress', '.store-location-input', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
       $('body').once('get-location').each(function () {
         // Get the permission track the user location.
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);

@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.acq_promotion.field_acq_promotion_action
     - field.field.node.acq_promotion.field_acq_promotion_banner
     - field.field.node.acq_promotion.field_acq_promotion_data
     - field.field.node.acq_promotion.field_acq_promotion_description
@@ -9,19 +10,11 @@ dependencies:
     - field.field.node.acq_promotion.field_acq_promotion_discount
     - field.field.node.acq_promotion.field_acq_promotion_label
     - field.field.node.acq_promotion.field_acq_promotion_rule_id
-    - field.field.node.acq_promotion.field_acq_promotion_sku
     - field.field.node.acq_promotion.field_acq_promotion_type
     - node.type.acq_promotion
   module:
-    - panelizer
     - text
     - user
-third_party_settings:
-  panelizer:
-    enable: false
-    custom: false
-    allow: false
-    default: default
 id: node.acq_promotion.default
 targetEntityType: node
 bundle: acq_promotion
@@ -43,12 +36,12 @@ content:
     type: string
     region: content
 hidden:
+  field_acq_promotion_action: true
   field_acq_promotion_banner: true
   field_acq_promotion_data: true
   field_acq_promotion_disc_type: true
   field_acq_promotion_discount: true
   field_acq_promotion_rule_id: true
-  field_acq_promotion_sku: true
   field_acq_promotion_type: true
   langcode: true
   links: true

@@ -123,8 +123,8 @@
       #{$right}: 0;
       top: 0;
       height: 2.1875rem;
-      padding-#{$right}: 1rem;
-      padding-top: 0.3rem;
+      padding-#{$right}: 1.1rem;
+      padding-top: 0.425rem;
       border: 1px solid $greyish;
       border-#{$left}: 0;
       z-index: 1;
@@ -209,7 +209,7 @@
       font-size: 12px;
     }
 
-    &#edit-submit-stores-finder {
+    &[id^=edit-submit-stores-finder] {
       background: url('../imgs/icons/store-search.svg');
       border: none;
       background-repeat: no-repeat;
@@ -352,7 +352,7 @@
   }
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-  .form-item-geolocation-geocoder-google-geocoding-api #edit-geolocation-geocoder-google-geocoding-api {
+  .form-item-geolocation-geocoder-google-geocoding-api [id^=edit-geolocation-geocoder-google-geocoding-api] {
     background: none;
     border: 1px solid $greyish;
     border-#{$right}: 2.3125rem solid $white-five;
@@ -468,8 +468,15 @@
     padding: 1rem 0;
     padding-bottom: 0;
     margin-bottom: 1.625rem;
+    border: 1px solid transparent;
     position: relative;
     cursor: pointer;
+
+    &:hover,
+    &.selected {
+      background-color: $white-five;
+      border: 1px solid $white;
+    }
 
     .row-title {
       font-weight: bold;
@@ -521,6 +528,11 @@
         @include breakpoint($tablet) {
           padding-#{$left}: 3.25rem;
         }
+      }
+
+      .get--directions a,
+      .view-on--map a {
+        border-bottom: 0;
       }
 
       a {
@@ -1149,4 +1161,8 @@
   overflow: hidden;
   white-space: nowrap;
   font-family: $arial;
+
+  .location-content {
+    white-space: normal;
+  }
 }
