@@ -286,7 +286,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       $term->get('field_category_include_menu')->setValue($category['in_menu']);
       $term->get('description')->setValue($category['description']);
-      $term->setFormat('rich_text');
 
       $term->save();
 
