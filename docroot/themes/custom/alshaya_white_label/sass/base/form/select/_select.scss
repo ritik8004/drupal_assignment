@@ -65,3 +65,39 @@ select:focus::-ms-value {
     z-index: 1;
   }
 }
+
+@mixin select2-style($select-width) {
+  width: $select-width !important;
+
+  .select2-selection {
+    font-size: 0.75rem;
+    height: 2.1875rem;
+    padding: 0.25rem 0.2rem;
+    text-align: $left;
+    width: 4.375rem;
+    background: $white-two;
+    border: none;
+    border-radius: 0;
+  }
+
+  .select2-selection__arrow {
+    top: 0;
+    #{$right}: 0;
+    width: 2.1875rem;
+    height: 2.1875rem;
+
+    &::after {
+      // IE10 needs this in px.
+      line-height: 35px;
+      font-size: 1.75rem;
+      top: 0;
+      #{$left}: auto;
+      border-#{$left}: 1px solid $white-five;
+      width: 2.1875rem;
+      height: 2.1875rem;
+      #{$right}: 0;
+      text-align: center;
+      display: inline-block;
+    }
+  }
+}

@@ -16,6 +16,12 @@
         minimumResultsForSearch: -1,
         dropdownCssClass: 'order-list-select'
       });
+
+      // PDP page quantity field, also works in crosssell, upsell modal views.
+      $('.form-item-quantity .form-select').select2({
+        minimumResultsForSearch: -1,
+        dropdownCssClass: 'order-list-select'
+      });
     }
   };
 })(jQuery, Drupal);
