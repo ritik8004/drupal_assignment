@@ -2,9 +2,8 @@
 
 namespace Drupal\acq_promotion\Plugin\QueueWorker;
 
-use Drupal\acq_promotion\AlshayaPromotionQueueBase;
+use Drupal\acq_promotion\AcqPromotionQueueBase;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\node\Entity\Node;
 
 /**
  * Processes Skus to attach Promotions.
@@ -14,7 +13,7 @@ use Drupal\node\Entity\Node;
  *   title = @Translation("Acq Commerce Promotion attach queue"),
  * )
  */
-class AcqPromotionAttachQueue extends AlshayaPromotionQueueBase {
+class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
 
   /**
    * Works on a single queue item.
