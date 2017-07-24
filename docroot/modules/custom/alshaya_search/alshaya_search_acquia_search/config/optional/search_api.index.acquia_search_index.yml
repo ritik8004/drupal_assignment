@@ -3,13 +3,13 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_skus
-    - search_api.server.solr
+    - search_api.server.acquia_search_server
   module:
     - acq_sku
     - search_api
     - node
 id: acquia_search_index
-name: 'Local Solr'
+name: 'Acquia Search Solr Index'
 description: ''
 read_only: false
 field_settings:
@@ -87,4 +87,4 @@ tracker_settings:
 options:
   index_directly: true
   cron_limit: 50
-server: solr
+server: acquia_search_server
