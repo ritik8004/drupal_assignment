@@ -146,7 +146,7 @@
       };
 
       // Trigger click on autocomplete selection.
-      $('[class*="views-exposed-form stores-finder-exposed-form"]').each( function () {
+      $('[class*="block-views-exposed-filter-blockstores-finder-page"]').each( function () {
         var storeFinder = $(this);
         // Add class to store finder exposed form.
         // Adding class to hook_form_alter for store finder form is adding it to the
