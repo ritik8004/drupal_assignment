@@ -38,7 +38,7 @@ class ProductStockController extends ControllerBase {
 
     $max_quantity = alshaya_acm_is_product_in_stock($sku_entity);
     if (!$max_quantity) {
-      $build['#markup'] = '<span>' . $this->t('out of stock') . '</span>';
+      $build['#markup'] = '<span class="out-of-stock">' . $this->t('out of stock') . '</span>';
       $response['html'] = \Drupal::service('renderer')->render($build);
       $response['max_quantity'] = 0;
     }
