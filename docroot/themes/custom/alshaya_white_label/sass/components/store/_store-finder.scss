@@ -118,7 +118,7 @@
   .input--wrapper {
     position: relative;
 
-    #edit-actions {
+    [id^=edit-actions] {
       position: absolute;
       #{$right}: 0;
       top: 0;
@@ -352,32 +352,38 @@
   }
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-  .form-item-geolocation-geocoder-google-geocoding-api [id^=edit-geolocation-geocoder-google-geocoding-api] {
-    background: none;
-    border: 1px solid $greyish;
-    border-#{$right}: 2.3125rem solid $white-five;
-    padding: 0.6rem;
-    padding-#{$right}: 1rem;
-    font-size: 0.75rem;
-    color: $grey-ash;
-
-    @include breakpoint($only-mobile) {
-      padding-#{$left}: 1.25rem;
-      padding-top: 0;
-      padding-bottom: 0;
-      line-height: 2.1875rem;
-      height: 2.1875rem;
-    }
-
-    &.ui-autocomplete-loading {
-      background-size: 30px;
-    }
-
-    @include breakpoint($tablet) {
-      max-width: 23.125rem;
-      border: 1px solid $white;
+  .form-item-geolocation-geocoder-google-geocoding-api {
+    [id^=edit-geolocation-geocoder-google-geocoding-api] {
+      background: none;
+      border: 1px solid $greyish;
       border-#{$right}: 2.3125rem solid $white-five;
-      height: 2.1875rem;
+      padding: 0.6rem;
+      padding-#{$right}: 1rem;
+      font-size: 0.75rem;
+      color: $grey-ash;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 1.25rem;
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: 2.1875rem;
+        height: 2.1875rem;
+      }
+
+      &.ui-autocomplete-loading {
+        background-size: 30px;
+      }
+
+      @include breakpoint($tablet) {
+        max-width: 23.125rem;
+        border: 1px solid $white;
+        border-#{$right}: 2.3125rem solid $white-five;
+        height: 2.1875rem;
+      }
+    }
+
+    .form-item--error-message {
+      display: none;
     }
   }
 
