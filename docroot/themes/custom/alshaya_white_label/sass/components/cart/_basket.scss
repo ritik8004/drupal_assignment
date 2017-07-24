@@ -940,7 +940,7 @@ html[lang=ar] {
   }
 
   .edit-continue-shopping-mobile {
-    border: 1px solid $cobalt-blue !important;
+    border: 0 none !important;
     width: 10.8125rem;
     padding: 0.67rem !important;
     color: $cobalt-blue !important;
@@ -973,6 +973,19 @@ html[lang=ar] {
   .alias--cart #table-cart-items tr th,
   .ladda-label {
     font-size: 0.75rem;
+  }
+
+  .alias--cart #table-cart-totals td:first-child {
+    @include breakpoint($desktop) {
+      font-size: 0.875rem !important;
+      padding-left: 1.7rem;
+    }
+
+    span {
+      @include breakpoint($desktop) {
+        font-size: 0.75rem !important;
+      }
+    }
   }
 
   .path--cart .customer-cart-form .items {

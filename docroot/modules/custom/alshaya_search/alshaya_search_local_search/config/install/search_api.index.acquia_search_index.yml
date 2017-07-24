@@ -48,20 +48,20 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_collection:
-    label: Collection
+  attr_size:
+    label: Size
     datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_collection'
+    property_path: 'field_skus:entity:attr_size'
     type: string
     dependencies:
       config:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_size:
-    label: Size
+  attr_product_collection:
+    label: Collection
     datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_size'
+    property_path: 'field_skus:entity:attr_product_collection'
     type: string
     dependencies:
       config:
