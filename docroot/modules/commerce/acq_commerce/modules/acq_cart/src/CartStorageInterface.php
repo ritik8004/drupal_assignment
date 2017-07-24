@@ -22,6 +22,11 @@ interface CartStorageInterface {
   public function restoreCart($cart_id);
 
   /**
+   * Clears the cart details in session and cookies.
+   */
+  public function clearCart();
+
+  /**
    * Gets the current card ID.
    *
    * @param bool $create_new
