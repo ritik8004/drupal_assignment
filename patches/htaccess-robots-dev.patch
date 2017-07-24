@@ -14,17 +14,3 @@ index 0629f97..e341962 100644
    # Rules to correctly serve gzip compressed CSS and JS files.
    # Requires both mod_rewrite and mod_headers to be enabled.
    <IfModule mod_headers.c>
-diff --git a/docroot/robots-dev.txt b/docroot/robots-dev.txt
-new file mode 100644
-index 0000000..c071f80
---- /dev/null
-+++ b/docroot/robots-dev.txt
-@@ -0,0 +1,8 @@
-+#
-+# robots-dev.txt
-+#
-+# This file is to prevent the crawling and indexing of any urls.
-+#
-+
-+# Directories
-+Disallow: /
