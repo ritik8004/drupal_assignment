@@ -395,6 +395,11 @@
       .key-value-key {
         display: inline-block;
         width: 45%;
+
+        @include breakpoint($upto-desktop) {
+          width: 100%;
+          margin-bottom: 2px;
+        }
       }
     }
   }
