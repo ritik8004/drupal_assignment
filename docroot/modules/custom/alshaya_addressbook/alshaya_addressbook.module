@@ -153,7 +153,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   ];
 
   if (!empty($form_state->getTemporaryValue('default_value_mobile'))) {
-    $mobile_number['mobile_number']['#default_value'] = $form_state->getTemporaryValue('default_value_mobile');
+    $mobile_number['mobile_number']['#default_value'] = str_replace(' ', '', $form_state->getTemporaryValue('default_value_mobile'));
   }
 
   // Adding mobile number field to appropriate position.
@@ -282,15 +282,25 @@ function _alshaya_addressbook_mobile_process_validate($form, FormStateInterface 
   // If no error.
   if (!$form_state->getErrors()) {
     $mobile = $form_state->getValue('field_address')[0]['address']['mobile_number'];
+
+    /** @var \Drupal\mobile_number\MobileNumberUtilInterface $util */
     $util = \Drupal::service('mobile_number.util');
-    $mobile_country_code = $util->getCountryCode($mobile['country-code']);
+
+    $mobile_country_code = '+' . $util->getCountryCode($mobile['country-code']);
+
+    // Remove the country code prefix added in mobile field.
+    $mobile['mobile'] = str_replace($mobile_country_code, '', $mobile['mobile']);
+
+    $mobile_number = $util->getMobileNumber($mobile['mobile'], $mobile['country-code']);
+
     $value[] = [
       'country' => $mobile['country-code'],
       'local_number' => $mobile['mobile'],
-      'value' => '+' . $mobile_country_code . $mobile['mobile'],
+      'value' => $util->getCallableNumber($mobile_number),
       'country-code' => $mobile['country-code'],
       'mobile' => $mobile['mobile'],
     ];
+
     $form_state->setValue('field_mobile_number', $value);
   }
 }
