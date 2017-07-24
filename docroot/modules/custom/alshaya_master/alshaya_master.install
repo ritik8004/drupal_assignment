@@ -175,7 +175,7 @@ function alshaya_master_install() {
       'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
     ],
     'enter card details' => [
-      'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
+      'ar' => 'الرجاء إدخال معلومات البطاقة',
     ],
     '<p>By registering you agreed to our <a href="/terms">Terms and Conditions</a>.</p>' => [
       'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms">الشروط والأحكام</a></p>',
@@ -187,7 +187,7 @@ function alshaya_master_install() {
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
     ],
     '@number is not a valid privilege card number.' => [
-      'ar' => '@number رقم بطاقة نادي الامتيازات غير صحيح',
+      'ar' => 'رقم بطاقة نادي الامتيازات @number غير صحيح',
     ],
     'connect with us' => [
       'ar' => 'تواصل معنا',
@@ -984,6 +984,18 @@ function alshaya_master_install() {
     ],
     'You already have an account, please login.' => [
       'ar' => 'يبدو أن تم  تسجيل حسابك مسبقاً, يرجى تسجيل الدخول.',
+    ],
+    'Earn one draw entry for every KD 5 spent online' => [
+      'ar' => 'إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني',
+    ],
+    'Size Guide' => [
+      'ar' => 'دليل المقاسات',
+    ],
+    '<p>Sorry unable to find the resource.</p>' => [
+      'ar' => 'ناسف لم نتمكن من العثور على المصدر',
+    ],
+    'Sorry Collect your order in-store is unavailable' => [
+      'ar' => 'عفواً، خدمة استلم طلبيتك من المحل غير متوفرة',
     ],
   ];
   alshaya_i18n_save_translations($strings);
