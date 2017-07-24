@@ -327,6 +327,15 @@
         }
       });
 
+      // Close the filter menu when a facet is selected/unselected.
+      $('.filter--mobile li.facet-item').once().on('click', function () {
+        var facetBlocks = $(this).closest('.c-facet__blocks');
+        facetBlocks.toggle();
+        facetBlocks.siblings('.c-facet__label').toggleClass('is-active');
+        $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
+          .toggleClass('show-overlay');
+      });
+
       // Click event for fake clear all link on mobile filter.
       var mobileFilterBarSelector = getFilterBarSelector();
       $('.clear-all-fake', context).stop().on('click', function () {
