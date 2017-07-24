@@ -46,7 +46,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Get the current cart.
   $cart_storage = \Drupal::service('acq_cart.cart_storage');
-  $cart = $cart_storage->getCart();
+  $cart = $cart_storage->getCart(FALSE);
 
   // Get current cart items.
   $cart_items = $cart ? $cart->items() : NULL;
@@ -389,7 +389,7 @@ function alshaya_acm_preprocess_page_title(&$variables) {
 
   // Change cart page title with quantity count.
   if ($route_match->getRouteName() == 'acq_cart.cart') {
-    $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+    $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
     $count = $cart ? $cart->getCartItemsCount() : 0;
 
     $variables['title'] = [

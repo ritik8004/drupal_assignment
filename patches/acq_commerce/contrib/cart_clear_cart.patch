@@ -1,0 +1,78 @@
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index 6de502e..2151c1a 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -87,14 +87,40 @@ public function addCart(CartInterface $cart) {
+    * {@inheritdoc}
+    */
+   public function restoreCart($cart_id) {
+-    // @TODO: Need to rethink about this and get it done in single API call.
+-    $cart = (object) $this->apiWrapper->getCart($cart_id);
++    try {
++      // @TODO: Need to rethink about this and get it done in single API call.
++      $cart = (object) $this->apiWrapper->getCart($cart_id);
+ 
+-    if ($cart) {
+-      $cart->cart_id = $cart_id;
+-      $cart = new Cart($cart);
+-      $this->addCart($cart);
++      if ($cart) {
++        $cart->cart_id = $cart_id;
++        $cart = new Cart($cart);
++        $this->addCart($cart);
++      }
+     }
++    catch (\Exception $e) {
++      $this->logger->warning('Error occurred while restoring cart id %cart_id: %message', [
++        '%cart_id' => $cart_id,
++        '%message' => $e->getMessage(),
++      ]);
++
++      $this->clearCart();
++    }
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function clearCart() {
++    // Set header to clear.
++    user_cookie_save([
++      'acq_cart_id' => NULL,
++    ]);
++
++    // Clear in drupal request for next calls in same page load.
++    \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', NULL);
++
++    // Clear the values in session.
++    $this->session->remove(self::STORAGE_KEY);
+   }
+ 
+   /**
+@@ -146,6 +172,10 @@ public function updateCart($create_new = TRUE) {
+ 
+     $cart = $this->session->get(self::STORAGE_KEY);
+ 
++    if ($cart_id && empty($cart)) {
++      $this->restoreCart($cart_id);
++    }
++
+     // If cart exists, derive update array and update cookie.
+     if ($cart) {
+       user_cookie_save([
+diff --git a/modules/acq_cart/src/CartStorageInterface.php b/modules/acq_cart/src/CartStorageInterface.php
+index 6566d4e..95f3f75 100644
+--- a/modules/acq_cart/src/CartStorageInterface.php
++++ b/modules/acq_cart/src/CartStorageInterface.php
+@@ -22,6 +22,11 @@
+   public function restoreCart($cart_id);
+ 
+   /**
++   * Clears the cart details in session and cookies.
++   */
++  public function clearCart();
++
++  /**
+    * Gets the current card ID.
+    *
+    * @param bool $create_new
