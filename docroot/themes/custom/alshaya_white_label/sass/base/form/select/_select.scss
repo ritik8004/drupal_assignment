@@ -74,7 +74,7 @@ select:focus::-ms-value {
     height: 2.1875rem;
     padding: 0.25rem 0.2rem;
     text-align: $left;
-    width: 4.375rem;
+    width: $select-width;
     background: $white-two;
     border: none;
     border-radius: 0;
