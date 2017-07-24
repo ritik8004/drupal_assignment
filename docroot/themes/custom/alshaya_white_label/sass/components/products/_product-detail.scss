@@ -1363,20 +1363,39 @@ article[gtm-sku-type="simple"] {
   }
 }
 
-.nodetype--acq_product .stock-checker {
-  font-family: $alshaya-thin;
-  padding: 0.625rem 0;
-  font-size: 0.75rem;
+.nodetype--acq_product,
+.path--cart {
+  .stock-checker {
+    font-family: $alshaya-thin;
+    padding: 0.625rem 0;
+    font-size: 0.75rem;
 
-  &::before {
-    content: " ";
-    width: 1.25rem;
-    height: 1.25rem;
-    background: url(../imgs/icons/MC-loader.svg) no-repeat;
-    background-size: contain;
-    display: inline-block;
+    &::before {
+      content: " ";
+      width: 1.25rem;
+      height: 1.25rem;
+      background: url(../imgs/icons/MC-loader.svg) no-repeat;
+      background-size: contain;
+      display: inline-block;
+      vertical-align: middle;
+      margin-#{$right}: 0.3125rem;
+    }
+  }
+
+  .out-of-stock {
+    background-color: $cherry;
+    font-family: $alshaya-thin;
+    display: block;
     vertical-align: middle;
-    margin-#{$right}: 0.3125rem;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 0.6rem 1.5rem;
+    color: $white;
+    font-size: 0.75rem;
+
+    @include breakpoint($desktop) {
+      display: inline-block;
+    }
   }
 }
 
