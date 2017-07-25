@@ -654,6 +654,10 @@
     padding-top: 2.7rem;
   }
 
+  .price-wrapper .price {
+    margin: 0 auto;
+  }
+
   & > h3 {
     color: $marine-blue;
     margin-bottom: 0.3rem;
@@ -688,6 +692,10 @@
       @include breakpoint($upto-desktop) {
         min-height: 10rem;
         object-fit: contain;
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: 8.875rem;
       }
     }
 
@@ -800,6 +808,10 @@
 
   @include breakpoint($only-tablet) {
     margin-top: 0.6875rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.5rem;
   }
 }
 

@@ -20,7 +20,7 @@
 
       // Create a new instance of ladda for the specified button
       $('.edit-add-to-cart', context).attr('data-style', 'zoom-in');
-      var l = $('.edit-add-to-cart').ladda();
+      var l = $('.edit-add-to-cart', context).ladda();
 
       $('.edit-add-to-cart', context).on('click', function () {
         // Start loading
@@ -64,13 +64,13 @@
       $.fn.stopSpinner = function (data) {
         l.ladda('stop');
         if (data.message === 'success') {
-          $('.edit-add-to-cart').find('.ladda-label').html(Drupal.t('added'));
+          $('.edit-add-to-cart', context).find('.ladda-label').html(Drupal.t('added'));
           if ($('.ui-dailog')) {
             $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
           }
         }
         else if (data.message === 'failure') {
-          $('.edit-add-to-cart').find('.ladda-label').html(Drupal.t('error'));
+          $('.edit-add-to-cart', context).find('.ladda-label').html(Drupal.t('error'));
         }
         setTimeout(
           function () {

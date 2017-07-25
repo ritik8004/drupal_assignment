@@ -263,8 +263,7 @@
   }
 
   .form-item-quantity {
-    @include select-wrapper(4.375rem);
-
+    position: relative;
     margin-bottom: 1.5rem;
     margin-top: 2.1875rem;
     float: $left;
@@ -279,10 +278,8 @@
       #{$left}: 0;
     }
 
-    select {
-      @include select-style(4.375rem);
-
-      background-color: $white-two !important;
+    .select2-container {
+      @include select2-style(4.375rem);
     }
   }
 }
@@ -1286,6 +1283,7 @@
 
   .selected-text {
     font-weight: bold;
+    display: inline-block;
   }
 
   .select-buttons {
@@ -1365,19 +1363,42 @@ article[gtm-sku-type="simple"] {
   }
 }
 
-.nodetype--acq_product .stock-checker {
-  font-family: $alshaya-thin;
-  padding: 0.625rem 0;
-  font-size: 0.75rem;
+.nodetype--acq_product,
+.path--cart {
+  .stock-checker {
+    font-family: $alshaya-thin;
+    padding: 0.625rem 0;
+    font-size: 0.75rem;
 
-  &::before {
-    content: " ";
-    width: 1.25rem;
-    height: 1.25rem;
-    background: url(../imgs/icons/MC-loader.svg) no-repeat;
-    background-size: contain;
-    display: inline-block;
-    vertical-align: middle;
-    margin-#{$right}: 0.3125rem;
+    &::before {
+      content: " ";
+      width: 1.25rem;
+      height: 1.25rem;
+      background: url(../imgs/icons/MC-loader.svg) no-repeat;
+      background-size: contain;
+      display: inline-block;
+      vertical-align: middle;
+      margin-#{$right}: 0.3125rem;
+    }
   }
+
+  .out-of-stock {
+    background-color: $cherry;
+    font-family: $alshaya-thin;
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 0.6rem 1.5rem;
+    color: $white;
+    font-size: 0.75rem;
+
+    @include breakpoint($desktop) {
+      display: inline-block;
+    }
+  }
+}
+
+.select2-container--open {
+  z-index: 999;
 }

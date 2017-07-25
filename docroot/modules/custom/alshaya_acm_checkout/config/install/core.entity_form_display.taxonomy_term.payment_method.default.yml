@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.field.taxonomy_term.payment_method.field_payment_code
     - field.field.taxonomy_term.payment_method.field_payment_default
-    - field.field.taxonomy_term.payment_method.field_payment_shipping_methods
     - taxonomy.vocabulary.payment_method
   module:
     - path
@@ -35,15 +34,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
-    region: content
-  field_payment_shipping_methods:
-    weight: 32
-    settings:
-      match_operator: CONTAINS
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: entity_reference_autocomplete
     region: content
   langcode:
     type: language_select

@@ -48,6 +48,11 @@
         @include breakpoint($desktop) {
           width: 33%;
         }
+
+        a {
+          color: $grey-ash;
+          pointer-events: none;
+        }
       }
 
       @include breakpoint($desktop) {
