@@ -267,13 +267,13 @@
       }
 
       &-prev {
-        #{$left}: 0;
-        #{$right}: auto;
+        left: 0;
+        right: auto;
       }
 
       &-next {
-        #{$left}: auto;
-        #{$right}: 0;
+        left: auto;
+        right: 0;
       }
 
       &-current {

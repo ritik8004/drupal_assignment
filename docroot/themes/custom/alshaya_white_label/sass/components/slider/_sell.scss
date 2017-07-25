@@ -351,13 +351,13 @@
 
 .price--discount span,
 .special--price .price-wrapper {
-  color: $special-price;
+  color: $special-price !important;
 }
 
 .price--discount {
   margin-top: 0.5625rem;
   font-size: 0.625rem;
-  color: $cherry;
+  color: $special-price;
 
   @include breakpoint($tablet) {
     margin-top: 0.75rem;
