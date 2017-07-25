@@ -162,6 +162,10 @@
       });
 
       /** Sub-delivery option virtual page tracking. **/
+      if (subDeliveryOptionSelector.length > 0) {
+        Drupal.alshaya_seo_gtm_push_virtual_checkout_option();
+      }
+
       subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function() {
         // Push default selected sub-delivery option to GTM.
         if ($(this).find('input[checked="checked"]').length > 0) {
@@ -487,7 +491,7 @@
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function(highlights, gtmPageType, event) {
     var promotions = [];
 
-    highlights.each(function(key, highlight) {
+    highlights.each(function(key) {
       var promotion = {
         'id': '',
         'name': gtmPageType,
@@ -538,6 +542,19 @@
           'products': [product]
         }
       }
+    };
+
+    dataLayer.push(data);
+  };
+
+  /**
+   * Helper function to push virtual checkout options.
+   */
+  Drupal.alshaya_seo_gtm_push_virtual_checkout_option = function() {
+    var data = {
+      'event':'VirtualPageview',
+      'virtualPageURL':'/virtualpv/checkout/subdelivery',
+      'virtualPageTitle' : 'Checkout Sub-Delivery'
     };
 
     dataLayer.push(data);
