@@ -262,6 +262,8 @@
             $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
               .toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
+            $('body').toggleClass('filter-open-no-scroll');
+            facetLabel.parent().siblings('.view-filters').toggleClass('low-zindex');
             facetBlock.toggle();
           });
         }
@@ -310,6 +312,8 @@
       $('.filter-menu-label .label').once().on('click', function () {
         $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
           .toggleClass('show-overlay');
+        $('body').toggleClass('filter-open-no-scroll');
+        $('.c-facet__blocks__wrapper .c-facet__label').parent().siblings('.view-filters').toggleClass('low-zindex');
         $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
         $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
       });
