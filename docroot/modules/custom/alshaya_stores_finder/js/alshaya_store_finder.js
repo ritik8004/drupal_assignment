@@ -146,17 +146,18 @@
       };
 
       // Trigger click on autocomplete selection.
-      $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
+      $('[class*="block-views-exposed-filter-blockstores-finder-page"]').each( function () {
+        var storeFinder = $(this);
+        // Add class to store finder exposed form.
+        // Adding class to hook_form_alter for store finder form is adding it to the
+        // wrapper div. So, adding it using js to apply css.
+        storeFinder.find('form').addClass('store-finder-exposed-form');
+        // Trigger form submit on selecting location in autocomplete.
+        storeFinder.find('.ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
           setTimeout(function() {
-            $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+            storeFinder.find('input[id^="edit-submit-stores-finder"]').trigger('click');
           }, 500);
-      });
-
-      // Trigger click on autocomplete selection.
-      $('.block-views-exposed-filter-blockstores-finder-page-3 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
-        setTimeout(function() {
-          $('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-submit-stores-finder').trigger('click');
-        }, 500);
+        });
       });
 
     }

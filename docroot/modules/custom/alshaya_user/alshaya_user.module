@@ -119,9 +119,6 @@ function alshaya_user_form_user_login_form_alter(&$form, FormStateInterface $for
 
   // Change submit button text.
   $form['actions']['submit']['#value'] = t('sign in');
-
-  // Attach the JS library.
-  $form['#attached']['library'][] = 'alshaya_user/user_login';
 }
 
 /**
@@ -224,61 +221,6 @@ function alshaya_user_user_presave(EntityInterface $entity) {
 
     $entity->get('field_mobile_number')->setValue($values);
   }
-}
-
-/**
- * Implements hook_element_info_alter().
- */
-function alshaya_user_element_info_alter(array &$info) {
-  if (isset($info['mobile_number']['#process'])) {
-    $info['mobile_number']['#process'][] = '_alshaya_user_mobile_number_process';
-    array_unshift($info['mobile_number']['#element_validate'], '_alshaya_user_mobile_number_validate');
-  }
-}
-
-/**
- * Validate for the mobile number field to remove the prefix before submit.
- */
-function _alshaya_user_mobile_number_validate(array &$element, FormStateInterface $form_state) {
-  $pp = $form_state->getValue('mobile_number');
-  $pp['local_number'] = explode(' ', $pp['local_number'])[1];
-  $pp['mobile'] = explode(' ', $pp['mobile'])[1];
-  $form_state->setValue('mobile_number', $pp);
-}
-
-/**
- * Processor for the mobile number field to disable the country code.
- */
-function _alshaya_user_mobile_number_process(array &$element, FormStateInterface $form_state) {
-  $default_site_country = _alshaya_custom_get_site_level_country_code();
-
-  // Set default country as per site.
-  $element['country-code']['#value'] = $default_site_country;
-  $options = $element['country-code']['#options'];
-  $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
-  $element['country-code']['#attributes']['class'][] = 'hidden';
-
-  // Make mobile number required only for few forms.
-  $mobile_numer_required_forms = [
-    'webform_submission_alshaya_contact_form',
-    'profile_address_book_add_form',
-    'profile_address_book_edit_form',
-    'profile_address_book_form',
-  ];
-  if (in_array($form_state->getBuildInfo()['form_id'], $mobile_numer_required_forms)) {
-    $element['mobile']['#required'] = TRUE;
-  }
-
-  // Getting mobile country code for the current site country and use that for
-  // the prefix.
-  $country_mobile_code = \Drupal::service('mobile_number.util')->getCountryCode($default_site_country);
-  if ($country_mobile_code) {
-    $element['#attached']['library'][] = 'alshaya_user/alshaya_mobile_number';
-    $element['#attached']['drupalSettings']['alshaya_mobile_prefix'] = $country_mobile_code;
-    $element['#attached']['library'][] = 'alshaya_white_label/mobile_number';
-  }
-
-  return $element;
 }
 
 /**

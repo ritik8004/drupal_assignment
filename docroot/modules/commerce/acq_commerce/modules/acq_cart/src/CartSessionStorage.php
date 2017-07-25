@@ -87,14 +87,40 @@ class CartSessionStorage implements CartStorageInterface {
    * {@inheritdoc}
    */
   public function restoreCart($cart_id) {
-    // @TODO: Need to rethink about this and get it done in single API call.
-    $cart = (object) $this->apiWrapper->getCart($cart_id);
+    try {
+      // @TODO: Need to rethink about this and get it done in single API call.
+      $cart = (object) $this->apiWrapper->getCart($cart_id);
 
-    if ($cart) {
-      $cart->cart_id = $cart_id;
-      $cart = new Cart($cart);
-      $this->addCart($cart);
+      if ($cart) {
+        $cart->cart_id = $cart_id;
+        $cart = new Cart($cart);
+        $this->addCart($cart);
+      }
     }
+    catch (\Exception $e) {
+      $this->logger->warning('Error occurred while restoring cart id %cart_id: %message', [
+        '%cart_id' => $cart_id,
+        '%message' => $e->getMessage(),
+      ]);
+
+      $this->clearCart();
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function clearCart() {
+    // Set header to clear.
+    user_cookie_save([
+      'acq_cart_id' => NULL,
+    ]);
+
+    // Clear in drupal request for next calls in same page load.
+    \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', NULL);
+
+    // Clear the values in session.
+    $this->session->remove(self::STORAGE_KEY);
   }
 
   /**
@@ -145,6 +171,10 @@ class CartSessionStorage implements CartStorageInterface {
     $update = NULL;
 
     $cart = $this->session->get(self::STORAGE_KEY);
+
+    if ($cart_id && empty($cart)) {
+      $this->restoreCart($cart_id);
+    }
 
     // If cart exists, derive update array and update cookie.
     if ($cart) {

@@ -87,14 +87,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
     $payment_methods = array_intersect($payment_methods, array_keys($plugins));
 
-    // Get the methods allowed for selected delivery method.
-    $shipping_method = $cart->getShippingMethodAsString();
-    $allowed_methods = $checkout_options_manager->getAllowedPaymentMethodCodes($shipping_method);
-
-    // Update payment methods to show only those which are allowed for selected
-    // delivery method.
-    $payment_methods = array_intersect($payment_methods, $allowed_methods);
-
     $selected_plugin_id = $cart->getPaymentMethod(FALSE);
 
     // Avoid warnings because of empty array from getPaymentMethod.
@@ -109,14 +101,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     // Only one payment method available, load and return that methods plugin.
-    if (count($payment_methods) === 1) {
-      $plugin_id = reset($payment_methods);
-      $cart->setPaymentMethod($plugin_id);
-      $plugin = $this->getPlugin($plugin_id);
-      $pane_form += $plugin->buildPaneForm($pane_form, $form_state, $complete_form);
-      return $pane_form;
-    }
-    elseif (empty($selected_plugin_id)) {
+    if (empty($selected_plugin_id)) {
       $default_plugin_id = $checkout_options_manager->getDefaultPaymentCode();
 
       if (in_array($default_plugin_id, $payment_methods)) {

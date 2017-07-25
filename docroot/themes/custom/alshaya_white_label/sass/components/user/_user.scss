@@ -874,6 +874,10 @@
       font-size: 1.25rem;
       letter-spacing: 0.312rem;
       line-height: 1.2;
+
+      html[lang=ar] & {
+        letter-spacing: 0;
+      }
     }
 
     .form-item--error-message {

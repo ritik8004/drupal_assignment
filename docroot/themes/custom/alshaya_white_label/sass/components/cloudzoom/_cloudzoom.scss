@@ -39,8 +39,6 @@
   }
 
   .cloudzoom__thumbnails {
-    clear: $left;
-
     @include breakpoint($only-tablet) {
       width: 100%;
       float: none;
@@ -55,30 +53,7 @@
       position: static;
     }
 
-    .lSSlideOuter {
-      @include breakpoint($only-tablet) {
-        padding: 0 3.75rem;
-        max-width: 27rem;
-        margin: 0 auto;
-        position: relative;
-      }
-
-      &.noPager {
-        padding: 0;
-
-        @include breakpoint($only-tablet) {
-          max-width: 19.5rem;
-        }
-      }
-
-      @include breakpoint($desktop) {
-        padding: 2.625rem 0;
-      }
-
-      .lSSlideWrapper {
-        position: static;
-      }
-
+    .slick-list {
       #lightSlider {
         li {
           overflow: hidden;
@@ -111,92 +86,7 @@
           }
         }
       }
-
-      @include breakpoint($only-tablet) {
-        .lSAction {
-          & > a {
-            width: 2.75rem;
-            height: 6rem;
-            bottom: 0;
-            font-size: 1.875rem;
-            margin-#{$left}: 0;
-            margin-#{$right}: 0;
-          }
-
-          .lSPrev {
-            @include icon(chevronleft);
-
-            left: 0.3125rem;
-            top: 1.25rem;
-            background-color: $white-five;
-            text-align: center;
-            padding-top: 2.5rem;
-
-            &::before {
-              @include u-center--vertically;
-            }
-          }
-
-          .lSNext {
-            @include icon(chevronright);
-
-            right: 0.625rem;
-            top: 1.25rem;
-            background-color: $white-five;
-            text-align: $left;
-            padding-top: 2.5rem;
-
-            &::before {
-              @include u-center--vertically;
-            }
-          }
-        }
-      }
-
-      @include breakpoint($desktop) {
-        .lSAction {
-          & > a {
-            width: 100%;
-            display: block;
-            #{$left}: 0;
-            height: 2.625rem;
-            cursor: pointer;
-            position: absolute;
-            margin-top: 0;
-            margin-#{$left}: 0;
-            opacity: 1;
-            text-align: center;
-            font-size: 1.875rem;
-            color: $black-two;
-            z-index: 0;
-
-            &::before {
-              padding-top: 0.3125rem;
-
-              @include u-visibility(block);
-            }
-          }
-
-          .lSPrev {
-            @include icon(chevronup);
-
-            top: 0;
-            background-color: $white-five;
-          }
-
-          .lSNext {
-            @include icon(chevrondown);
-
-            bottom: 0;
-            background-color: $white-five;
-          }
-        }
-      }
     }
-  }
-
-  .lSPager {
-    @include u-visibility(none);
   }
 }
 
@@ -272,11 +162,6 @@
   }
 }
 
-.lSSlideOuter .lightSlider,
-.lSSlideOuter .lSPager {
-  padding-#{$left}: 0;
-}
-
 .cloudzoom .cloud-zoom-lens {
   cursor: url(../imgs/assets/ic-zoom.svg) 100 100, auto !important;
 }
@@ -299,7 +184,7 @@
     bottom: 3.125rem;
 
     p {
-      margin: 3px;
+      margin: 0.1875rem;
     }
   }
 
@@ -352,4 +237,150 @@
       }
     }
   }
+}
+
+@include breakpoint($only-tablet) {
+  #lightSlider {
+    max-width: 27rem;
+
+    &.pager-yes {
+      padding: 0 3rem;
+    }
+  }
+
+  #product-image-gallery,
+  #lightSlider {
+    position: relative;
+    height: 6.25rem;
+    margin: 0 auto;
+    padding-left: 0;
+
+    .slick {
+      &-arrow {
+        height: 100%;
+        background: $white-five;
+        top: 0;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      &-prev {
+        #{$left}: 0;
+        #{$right}: auto;
+      }
+
+      &-next {
+        #{$left}: auto;
+        #{$right}: 0;
+      }
+
+      &-current {
+        border: 1px solid $black !important;
+      }
+    }
+
+    .slick-slide {
+      width: 7rem !important;
+      height: 6.375rem !important;
+      padding: 0.125rem;
+      border: 1px solid transparent;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  #product-image-gallery {
+    margin-top: 1rem;
+
+    &.pager-yes {
+      padding: 0 2.5rem;
+    }
+
+    .slick-slide {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  #product-image-gallery,
+  #lightSlider {
+    height: 32.5rem;
+    margin: 0 0.625rem 0 0;
+    width: 100%;
+    position: relative;
+    padding-left: 0;
+
+    &.pager-yes {
+      padding: 2rem 0;
+    }
+
+    .slick {
+      &-arrow {
+        position: absolute;
+        height: 2rem;
+        width: 100%;
+        #{$right}: 0;
+        #{$left}: 0;
+        background: $white-five;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      &-prev {
+        top: 0;
+        bottom: auto;
+
+        @include icon(chevronup) {
+          margin: 0 auto;
+        }
+      }
+
+      &-next {
+        bottom: 0;
+        top: auto;
+
+        @include icon(chevrondown) {
+          margin: 0 auto;
+        }
+      }
+
+      &-current {
+        img {
+          border: 1px solid $black;
+        }
+      }
+    }
+
+    .slick-slide {
+      width: 5.625rem !important;
+      height: 5.0625rem !important;
+      margin: 0.3125rem 0;
+
+      img {
+        padding: 0.125rem;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}
+
+.cloud-zoom-loading {
+  font-size: 0;
+  text-indent: 9999em;
+  color: transparent;
+  background: transparent url(../imgs/icons/MC-loader.svg) center no-repeat;
+  background-size: 2rem 2rem;
+  border: none;
+  width: 2rem !important;
+  left: 48% !important;
+  height: 2rem !important;
 }

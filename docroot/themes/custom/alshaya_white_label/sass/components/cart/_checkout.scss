@@ -852,6 +852,7 @@ body.alias--cart {
 
         &:nth-child(2) {
           background: $white-five;
+          padding-top: 0.5em !important;
         }
       }
 
@@ -885,7 +886,7 @@ body.alias--cart {
     .cart-promotions {
       .tooltip--head::after {
         position: absolute;
-        #{$right}: -0.625rem;
+        #{$right}: 0.5rem;
         top: -0.0625rem;
 
         @include breakpoint($desktop) {
@@ -894,7 +895,7 @@ body.alias--cart {
       }
 
       .tooltip {
-        #{$left}: 0.8rem;
+        left: -2rem;
         top: 1.5rem;
 
         @include breakpoint (($only-mobile) (orientation landscape)) {
@@ -907,13 +908,13 @@ body.alias--cart {
 
         @include breakpoint($desktop) {
           #{$left}: 10rem;
-          top: -1.2rem;
+          top: -0.2rem;
         }
 
         &::before {
           @include breakpoint($desktop) {
             #{$right}: 10.75rem;
-            top: 1.9em;
+            top: 0.5em;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
             border-#{$right}: 8px solid $cerulean-two;
@@ -923,7 +924,7 @@ body.alias--cart {
         &::after {
           @include breakpoint($desktop) {
             #{$right}: 10.6975rem;
-            top: 1.9em;
+            top: 0.5em;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
             border-#{$right}: 8px solid $alice-blue;
@@ -1173,14 +1174,37 @@ body.path--cart .c-content__region {
 }
 
 html[lang=ar] {
-  .alias--cart #table-cart-totals .cart-promotions .tooltip {
-    @include breakpoint (($only-mobile) (orientation portrait)) {
-      right: -0.7rem;
-      top: 1.6rem;
+  .alias--cart #table-cart-totals .cart-promotions {
+    .tooltip {
+      @include breakpoint (($only-mobile) (orientation portrait)) {
+        right: -3rem;
+        top: 0.75rem;
+      }
+
+      @include breakpoint (($only-mobile) (orientation landscape)) {
+        right: 4.5rem;
+        top: 0.75rem;
+      }
     }
 
-    @include breakpoint (($only-mobile) (orientation landscape)) {
-      #{$left}: 7.8rem;
+    @include breakpoint($tablet) {
+      right: -5.15rem;
+      top: 0.8rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      right: -5.1rem !important;
+      top: 0.7rem !important;
+    }
+
+    .tooltip--head::after {
+      left: 0.1rem;
+      top: -1rem;
+
+      @include breakpoint($desktop) {
+        left: -1rem;
+        top: -1.2rem;
+      }
     }
   }
 
@@ -1188,16 +1212,17 @@ html[lang=ar] {
     position: absolute;
 
     @include breakpoint($mobile) {
+      left: 0.9rem;
       top: -0.1rem;
-      left: 1rem;
     }
 
     @include breakpoint($tablet) {
-      left: -0.5rem;
+      left: -0.4rem;
     }
 
     @include breakpoint($desktop) {
-      left: 5.5rem;
+      left: 4rem;
+      top: 0;
     }
   }
 
@@ -1205,7 +1230,7 @@ html[lang=ar] {
     #{$left}: -4.9rem;
 
     @include breakpoint($desktop) {
-      right: 2.4rem;
+      right: 3.9rem;
     }
 
     @include breakpoint($only-mobile) {

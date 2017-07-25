@@ -240,7 +240,7 @@ html[lang=ar] {
       .price-currency {
         @include breakpoint($desktop) {
           float: left !important;
-          padding: 0 0.5rem 0 1rem;
+          padding: 0 2.3rem 0 1rem;
         }
       }
     }
@@ -316,3 +316,10 @@ html[lang="en"] {
   }
 }
 
+.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
+  padding: 10rem 2rem !important;
+}
+
+#stcpDiv {
+  display: none;
+}

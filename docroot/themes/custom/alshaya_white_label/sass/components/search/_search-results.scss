@@ -372,3 +372,7 @@ ul.item-list__checkbox,
     }
   }
 }
+
+.ui-helper-hidden-accessible {
+  @include u-image-replacement;
+}

@@ -92,6 +92,21 @@
           });
         }
       }, 100);
+
+      // Change the title of facet when open.
+      var priceCurrency = settings.alshaya_search_price_currency;
+      if (priceCurrency) {
+        var initialTitle = $('#block-finalprice h3').html();
+        $('#block-finalprice > h3').on('click', function() {
+          if ($(this).hasClass('ui-state-active')) {
+            $('#block-finalprice h3').html(initialTitle + ' (' + priceCurrency + ')');
+          }
+          else {
+            $('#block-finalprice h3').html(initialTitle);
+          }
+        });
+      }
+
     }
   };
 

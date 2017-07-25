@@ -44,7 +44,7 @@ textarea {
     right: 50%;
   }
 
-  form:not(.alshaya-acm-customer-order-list-search, .alshaya-stores-available-stores) {
+  form:not(.alshaya-acm-customer-order-list-search, .alshaya-stores-available-stores, .store-finder-exposed-form) {
     input[type="text"],
     input[type="email"],
     input[type="password"],

@@ -192,7 +192,7 @@ class AlshayaGtmManager {
     // Should stay blank unless added to cart.
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
     $attributes['gtm-dimension2'] = '';
-    $attributes['gtm-dimension3'] = '';
+    $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
     $attributes['gtm-stock'] = '';
     $attributes['gtm-sku-type'] = $sku->bundle();
 
@@ -420,13 +420,22 @@ class AlshayaGtmManager {
     $categories = $productNode->get('field_category')->getValue();
     $terms = [];
 
-    if (count($categories)) {
+    if (count($categories) > 1) {
       foreach ($categories as $category) {
         $term = Term::load($category['target_id']);
         $terms[] = $term->getName();
       }
     }
+    elseif (count($categories) === 1) {
+      // Load parent terms of the category & send them across to GTM too.
+      $category = array_shift($categories);
+      $category_parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($category['target_id']);
+      $category_parents = array_reverse($category_parents);
 
+      foreach ($category_parents as $category_parent) {
+        $terms[] = $category_parent->getName();
+      }
+    }
     return implode('/', $terms);
   }
 
