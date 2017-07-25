@@ -3,7 +3,9 @@
   margin-right: 0.5rem;
 
   &:last-child {
-    border-bottom: 1px solid $white;
+    @include breakpoint($desktop) {
+      border-bottom: 1px solid $white;
+    }
   }
 }
 

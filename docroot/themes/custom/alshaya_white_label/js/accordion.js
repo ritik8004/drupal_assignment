@@ -262,6 +262,7 @@
             $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
               .toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
+            facetLabel.parent().siblings('.view-filters').addClass('low-zindex');
             facetBlock.toggle();
           });
         }

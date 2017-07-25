@@ -667,6 +667,16 @@
       }
     }
   }
+
+  // So that show-overlay adds effect on sort dropdown as well when filter
+  // is open on tablet.
+  &.view-filters.low-zindex {
+    .form-type-select {
+      @include breakpoint($only-tablet) {
+        z-index: 0;
+      }
+    }
+  }
 }
 
 .plp-page-only {
