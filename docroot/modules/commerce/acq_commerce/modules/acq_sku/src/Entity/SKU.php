@@ -530,6 +530,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDescription(t('The time that the entity was last edited.'))
       ->setTranslatable(TRUE);
 
+    $fields['attribute_set'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Attribute Set'))
+      ->setDescription(t('Attribtue set for the SKU.'))
+      ->setTranslatable(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     // Get all the fields added by other modules and add them as base fields.
     $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
 
