@@ -119,7 +119,7 @@
         &.subtotal .price-currency.suffix {
           @include breakpoint($only-tablet) {
             position: relative;
-            left: 0.5em;
+            left: 0;
           }
 
           @include breakpoint($tablet) {
@@ -129,7 +129,7 @@
             }
 
             @include breakpoint($desktop) {
-              padding-right: 0;
+              padding-right: 1.56rem;
             }
 
             span.price-amount {
@@ -205,7 +205,7 @@
       }
 
       @include breakpoint($desktop) {
-        padding-right: 0.56rem;
+        padding-right: 1.56rem;
       }
     }
 
@@ -240,8 +240,8 @@
     }
 
     .item-code {
-      font-family: $alshaya-thin;
-      font-size: 0.75rem;
+      font-family: $arial;
+      font-size: 0.875rem;
     }
 
     .item--bundle {
@@ -1044,6 +1044,20 @@ html[lang=ar] {
 }
 
 html[lang=ar] {
+  .path--cart .customer-cart-form .item-code {
+    font-family: $alshaya-thin;
+  }
+
+  #table-cart-items table tr td.subtotal .price-currency.suffix {
+    left: 0.5rem !important;
+  }
+
+  .alias--cart #table-cart-totals table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] td:nth-child(2) {
+    @include breakpoint($only-mobile) {
+      padding-top: 1.5rem !important;
+    }
+  }
+
   .alias--cart #table-cart-totals .cart-promotions {
     .tooltip {
       right: 10rem;
@@ -1092,6 +1106,7 @@ html[lang=ar] {
 
     @include breakpoint($desktop) {
       float: right !important;
+      padding-right: 0.56rem;
     }
 
     @include breakpoint($only-mobile) {
@@ -1119,8 +1134,16 @@ html[lang=ar] {
     }
   }
 
-  table tr td.subtotal span.price-amount {
-    margin-left: 0.5rem;
+  table tr td.subtotal {
+    span.price-amount {
+      margin-left: 0.5rem;
+    }
+
+    .price-currency.suffix {
+      @include breakpoint($desktop) {
+        padding-right: 0 !important;
+      }
+    }
   }
 }
 
