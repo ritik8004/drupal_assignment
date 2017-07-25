@@ -21,6 +21,9 @@
 
     var intance = click_collect.googleAutocomplete(field);
 
+    // Set initial restrict to default country.
+    intance.setComponentRestrictions({country: [drupalSettings.alshaya_click_collect.country]});
+
     intance.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
       var place = intance.getPlace();
