@@ -15,21 +15,32 @@
       }
       $('.coupon-code-wrapper, .alias--cart #details-privilege-card-wrapper').each(function () {
         if (context === document) {
+          var error = $(this).find('.form-item--error-message');
+          var active = false;
+          if (error.length > 0) {
+            active = 0;
+          }
           $(this).accordion({
             header: '.card__header',
             collapsible: true,
             heightStyle: 'content',
-            active: false
+            active: active
           });
         }
       });
 
       $('.alias--user-register #details-privilege-card-wrapper').each(function () {
         if (context === document) {
+          var error = $(this).find('.form-item--error-message');
+          var active = false;
+          if (error.length > 0) {
+            active = 0;
+          }
+
           $(this).accordion({
             header: '.privilege-card-wrapper-title',
             collapsible: true,
-            active: false
+            active: active
           });
         }
       });
