@@ -20,6 +20,7 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="cart-checkout-delivery"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="cart-checkout-payment"]');
+      var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var originalCartQty = 0;
       var updatedCartQty = 0;
@@ -158,30 +159,21 @@
             }
           }
         }
-        else if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_value === "deliver to this address")) {
-          // Trigger GTM push for checkout delivery option if one of them is pre-selected.
-          var responses = xhr.responseJSON;
-          for (var i=0; i<responses.length; i++) {
-            if ((responses[i].method === 'replaceWith') && (responses[i].selector === '#address_wrapper')) {
-              var selectedMethod = $(responses[i].data).find('input:checked');
+      });
 
-              // Attach change event listener to the input elements.
-              $(responses[i].data).find('input').change(function() {
-                var selectedMethod = $('.form-item-guest-delivery-home-address-shipping-methods input:checked');
-                if (selectedMethod === 1) {
-                  var selectedMethodLabel = selectedMethod.siblings('label').find('shipping-method-title').text();
-                  Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-                }
-              });
-
-              if (selectedMethod.length === 1) {
-                var selectedMethodLabel = selectedMethod.siblings('label').find('.shipping-method-title').text();
-                Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-              }
-              break;
-            }
-          }
+      /** Sub-delivery option virtual page tracking. **/
+      subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function() {
+        // Push default selected sub-delivery option to GTM.
+        if ($(this).find('input[checked="checked"]').length > 0) {
+          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
         }
+
+        // Attach change event listener to shipping method radio buttons.
+        $(this).change(function() {
+          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+        });
       });
 
       /** Quantity update in cart. **/
@@ -414,6 +406,7 @@
       'dimension1': '',
       'dimension2': '',
       'dimension3': product.attr('gtm-dimension3'),
+      'dimension4': product.attr('gtm-dimension4'),
       'dimension5': product.attr('gtm-sku-type'),
       'metric1': product.attr('gtm-cart-value')
     };
