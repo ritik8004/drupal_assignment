@@ -1405,3 +1405,9 @@ article[gtm-sku-type="simple"] {
 .select2-container--open {
   z-index: 999;
 }
+
+.sku-base-form {
+  .ajax-progress-throbber {
+    display: none !important;
+  }
+}
