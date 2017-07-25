@@ -162,6 +162,8 @@
   }
 
   .form-item-configurables-size {
+    clear: both;
+
     label {
       @include u-visibility(none);
     }

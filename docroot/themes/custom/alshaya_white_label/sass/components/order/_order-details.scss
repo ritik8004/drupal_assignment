@@ -45,7 +45,7 @@
 
         &::after {
           content: "...";
-          background: $white-five;
+          background: $white-smoke;
           position: absolute;
           left: 0;
           padding-right: 1px;
@@ -201,10 +201,14 @@
     }
 
     img {
-      min-width: 128px;
+      min-width: 8rem;
 
       @include breakpoint($tablet) {
-        min-width: 137px;
+        min-width: 7.5rem;
+      }
+
+      @include breakpoint($desktop) {
+        min-width: 8.5625rem;
       }
     }
 
@@ -547,7 +551,11 @@ html[lang=ar] {
       td {
         @include breakpoint($only-tablet) {
           padding: 1.375rem 0.5rem 3.438rem 1rem !important;
-          min-width: 9rem;
+          min-width: 7rem;
+
+          &.empty--cell {
+            min-width: 3rem;
+          }
         }
       }
     }
