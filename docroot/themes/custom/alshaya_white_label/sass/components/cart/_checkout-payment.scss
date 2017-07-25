@@ -287,3 +287,15 @@
   }
 }
 
+.alias--cart-checkout-payment {
+  .mobile-number-field {
+    .form-item-billing-address-address-billing-mobile-number-country-code,
+    .verified {
+      display: none !important;
+    }
+
+    & > label {
+      position: static !important;
+    }
+  }
+}
