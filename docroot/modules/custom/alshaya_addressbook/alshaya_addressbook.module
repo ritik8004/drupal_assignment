@@ -324,9 +324,6 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
     ],
     'Street address' => [
       'en' => 'Street',
-      'context' => 'Address label',
-    ],
-    'Street address' => [
       'ar' => 'اسم الشارع',
       'context' => 'Address label',
     ],
@@ -348,9 +345,6 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
     ],
     'Pin code' => [
       'en' => 'Postal code',
-      'context' => 'Address label',
-    ],
-    'Pin code' => [
       'ar' => 'الرمز البريدي',
       'context' => 'Address label',
     ],

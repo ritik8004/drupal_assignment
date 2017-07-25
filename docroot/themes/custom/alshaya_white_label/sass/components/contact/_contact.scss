@@ -36,6 +36,21 @@
       @include u-visibility(none);
     }
   }
+
+  @include breakpoint($only-mobile) {
+    .form-item-first-name,
+    .form-item-last-name {
+      width: 48% !important;
+    }
+
+    .form-item-first-name {
+      margin-right: 0 !important;
+    }
+
+    .form-item-last-name {
+      float: right !important;
+    }
+  }
 }
 
 .address-book-address,

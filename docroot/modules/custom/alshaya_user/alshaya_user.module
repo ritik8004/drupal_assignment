@@ -6,6 +6,7 @@
  */
 
 use Drupal\block\Entity\Block;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Database\Database;
@@ -240,10 +241,20 @@ function alshaya_user_element_info_alter(array &$info) {
  * Validate for the mobile number field to remove the prefix before submit.
  */
 function _alshaya_user_mobile_number_validate(array &$element, FormStateInterface $form_state) {
-  $pp = $form_state->getValue('mobile_number');
-  $pp['local_number'] = explode(' ', $pp['local_number'])[1];
+  $tree_parents = $element['#parents'];
+
+  // Get user input as validation function is using the input value to validate.
+  // @see \Drupal\mobile_number\Element\MobileNumber::mobileNumberValidate
+  $input = $form_state->getUserInput();
+  $pp = NestedArray::getValue($form_state->getUserInput(), $tree_parents);
+  // Remove country code from the value, as we are using a single input for
+  // country code and mobile number or local number.
+  if (!empty($pp['local_number'])) {
+    $pp['local_number'] = explode(' ', $pp['local_number'])[1];
+  }
   $pp['mobile'] = explode(' ', $pp['mobile'])[1];
-  $form_state->setValue('mobile_number', $pp);
+  NestedArray::setValue($input, $tree_parents, $pp);
+  $form_state->setUserInput($input);
 }
 
 /**
