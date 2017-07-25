@@ -253,7 +253,7 @@
     position: relative;
     height: 6.25rem;
     margin: 0 auto;
-    padding-left: 0;
+    padding-#{$left}: 0;
 
     .slick {
       &-arrow {
@@ -314,7 +314,7 @@
     margin: 0 0.625rem 0 0;
     width: 100%;
     position: relative;
-    padding-left: 0;
+    padding-#{$left}: 0;
 
     &.pager-yes {
       padding: 2rem 0;

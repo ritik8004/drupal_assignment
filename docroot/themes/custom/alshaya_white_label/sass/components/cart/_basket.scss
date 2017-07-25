@@ -1027,12 +1027,6 @@ html[lang=ar] {
   .alias--cart {
     .field--name-field-skus .ladda-button[data-style=zoom-in] .ladda-spinner {
       left: 43%;
-
-      @include breakpoint($upto-desktop) {
-        left: 27%;
-        position: relative;
-        top: -0.25rem;
-      }
     }
   }
 
