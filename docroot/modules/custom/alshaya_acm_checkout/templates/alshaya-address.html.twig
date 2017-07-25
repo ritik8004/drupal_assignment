@@ -1,3 +1,7 @@
+<div class="address--name dark">
+  {{ address.given_name }} {{ address.family_name }}
+</div>
+
 {% if address.address_line2 is not empty %}
   <div class="address--content">{{ address.address_line2 }}</div>
 {% endif %}
@@ -19,3 +23,7 @@
 {% if address.postal_code is not empty %}
   <div class="address--content">{{ address.postal_code }}</div>
 {% endif %}
+
+<div class="address--contact">
+  {{ 'Contact:' }} {{ address.telephone }}
+</div>

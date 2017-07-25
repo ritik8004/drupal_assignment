@@ -209,6 +209,9 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
+  /** @var \Drupal\alshaya_master\Decorator\AlshayaMasterMobileUtilDecorator $mobile_number_util */
+  $mobile_number_util = \Drupal::service('mobile_number.util');
+
   $orderDetails = [];
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
@@ -221,7 +224,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['billing']['telephone']);
 
   if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
-    $orderDetails['collection_by'] = $order['firstname'] . ' ' . $order['lastname'];
+    $orderDetails['type'] = 'cc';
 
     $shipping_assignment = reset($order['extension']['shipping_assignments']);
     $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
@@ -242,7 +245,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     }
   }
   else {
-    $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
+    $orderDetails['type'] = 'hd';
     $shipping_address = $order['shipping']['address'];
 
     // Loading address from address book if customer_address_id is available.
@@ -253,13 +256,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     }
 
     $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
-    $billing_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']);
-
-    $orderDetails['billing_same_as_shipping'] = 0;
-
-    if (serialize($shipping_address_array) == serialize($billing_address_array)) {
-      $orderDetails['billing_same_as_shipping'] = 1;
-    }
+    $shipping_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
 
     $delivery_address = [
       '#theme' => 'alshaya_address',
@@ -267,14 +264,17 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     ];
 
     $orderDetails['delivery_address'] = render($delivery_address);
-
-    $billing_address = [
-      '#theme' => 'alshaya_address',
-      '#address' => $billing_address_array,
-    ];
-
-    $orderDetails['billing_address'] = render($billing_address);
   }
+
+  $billing_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']);
+  $billing_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
+
+  $billing_address = [
+    '#theme' => 'alshaya_address',
+    '#address' => $billing_address_array,
+  ];
+
+  $orderDetails['billing_address'] = render($billing_address);
 
   $orderDetails['payment_method'] = $order['payment']['method_title'];
 

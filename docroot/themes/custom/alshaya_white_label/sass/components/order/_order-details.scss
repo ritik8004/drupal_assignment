@@ -389,6 +389,52 @@
       display: none;
     }
   }
+
+  .store-open-hours {
+    .open--hours {
+      .key-value-key {
+        display: inline-block;
+        width: 45%;
+
+        @include breakpoint($upto-desktop) {
+          width: 100%;
+          margin-bottom: 2px;
+        }
+      }
+    }
+  }
+
+  .order-details-row {
+    .delivery-method {
+      margin-top: 1.875rem;
+    }
+  }
+
+  .store-name-and-address {
+    .store-address {
+      p {
+        margin: 0;
+      }
+    }
+
+    .store-map-link {
+      margin-top: 0.875rem;
+
+      a {
+        color: $cerulean-two;
+        font-size: 0.75rem;
+
+        @include icon(map, before) {
+          color: $cerulean-two;
+          vertical-align: middle;
+          font-size: 1.5rem;
+          line-height: 1;
+          display: inline-block;
+          padding-#{$right}: 0.375rem;
+        }
+      }
+    }
+  }
 }
 
 #block-userrecentorders {
