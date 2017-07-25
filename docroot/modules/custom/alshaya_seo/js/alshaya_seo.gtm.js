@@ -88,13 +88,14 @@
 
       /** Add to cart GTM **/
       // Trigger GTM push event on AJAX completion of add to cart button.
-      $(document).ajaxComplete(function(event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_value === "Add to cart")) {
+      $(document).once('js-event').ajaxComplete(function(event, xhr, settings) {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('add to cart').toLowerCase())) {
           var responseJSON = xhr.responseJSON;
           var responseMessage = '';
           $.each(responseJSON, function(key, obj) {
             if (obj.method === 'stopSpinner') {
               responseMessage = obj.args[0].message;
+              return false;
             }
           });
 
@@ -152,7 +153,6 @@
                   }
                 }
               };
-
               dataLayer.push(data);
             }
           }

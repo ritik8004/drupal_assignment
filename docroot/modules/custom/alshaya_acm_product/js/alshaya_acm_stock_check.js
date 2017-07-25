@@ -114,7 +114,7 @@
       'selector': ".edit-add-to-cart",
       'submit': {
         _triggering_element_name: "op",
-        _triggering_element_value: "Add to cart"
+        _triggering_element_value: Drupal.t("add to cart")
       },
       'url': document.location.pathname + '?ajax_form=1',
       'wrapper': "cart_notification"
