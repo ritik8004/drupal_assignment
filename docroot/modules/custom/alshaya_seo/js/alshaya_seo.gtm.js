@@ -66,6 +66,7 @@
           impression.list = pdpListName;
           impression.position = count_pdp_items;
           impressions.push(impression);
+
           count_pdp_items++;
         });
 
@@ -320,22 +321,18 @@
       /** Product Click Handler **/
       // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {
-        $(this).on('click', function (e) {
+        $(this).once('js-event').on('click', function (e) {
           var that = $(this);
-          var product = Drupal.alshaya_seo_gtm_get_product_values(that);
-          product.variant = '';
-          var data = {
-            'event': 'productClick',
-            'ecommerce': {
-              'currencyCode': currencyCode,
-              'click': {
-                'actionField': {'list': listName},
-                'products': [product]
-              }
-            }
-          };
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode);
+        });
+      });
 
-          dataLayer.push(data);
+      /** Product click handler for Modals. **/
+      // Add click link handler to fire 'productClick' event to GTM.
+      $('a[href*="product-quick-view"]').each(function() {
+        $(this).once('js-event').on('click', function (e) {
+          var that = $(this).closest('article[data-vmode="teaser"]');
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode);
         });
       });
 
@@ -424,6 +421,11 @@
     return productData;
   };
 
+  /**
+   * Helper function to push customer type to GTM.
+   *
+   * @param customerType
+   */
   Drupal.alshaya_seo_gtm_push_customer_type = function (customerType) {
     var data = {
       'event': 'checkoutOption',
@@ -440,6 +442,12 @@
     dataLayer.push(data);
   };
 
+  /**
+   * Helper function to push checkout option to GTM.
+   *
+   * @param optionLabel
+   * @param step
+   */
   Drupal.alshaya_seo_gtm_push_checkout_option = function(optionLabel, step) {
     var data = {
       'event': 'checkoutOption',
@@ -456,6 +464,12 @@
     dataLayer.push(data);
   };
 
+  /**
+   * Helper function to push product impressions to GTM.
+   *
+   * @param currencyCode
+   * @param impressions
+   */
   Drupal.alshaya_seo_gtm_push_impressions = function(currencyCode, impressions) {
     if (impressions.length > 0) {
       var data = {
@@ -470,6 +484,13 @@
     }
   };
 
+  /**
+   * Helper function to push promotion impressions to GTM.
+   *
+   * @param highlights
+   * @param gtmPageType
+   * @param event
+   */
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function(highlights, gtmPageType, event) {
     var promotions = [];
 
@@ -502,6 +523,29 @@
       };
 
     }
+
+    dataLayer.push(data);
+  };
+
+  /**
+   * Helper function to push Product click events to GTM.
+   *
+   * @param element
+   * @param currencyCode
+   * @param listName
+   */
+  Drupal.alshaya_seo_gtm_push_product_clicks = function(element, currencyCode) {
+    var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+    product.variant = '';
+    var data = {
+      'event': 'productClick',
+      'ecommerce': {
+        'currencyCode': currencyCode,
+        'click': {
+          'products': [product]
+        }
+      }
+    };
 
     dataLayer.push(data);
   };
