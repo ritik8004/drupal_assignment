@@ -161,7 +161,7 @@
       display: table-cell;
       width: 50%;
       word-spacing: 0.125rem;
-      padding-#{$left}: 0;
+      padding-#{$left}: 2.5rem;
       padding-top: 0.3125rem;
     }
 
@@ -174,10 +174,7 @@
       display: inline-block;
       margin-#{$right}: 0.4rem;
       vertical-align: middle;
-
-      @include breakpoint($only-tablet) {
-        margin-#{$right}: 1.4rem;
-      }
+      text-indent: -2.5rem;
     }
   }
 
@@ -186,7 +183,7 @@
     @include breakpoint($only-mobile) {
       background-color: $pale-grey;
       padding: 1.125rem;
-      padding-#{$left}: 0.8rem;
+      padding-#{$left}: 3.3rem;
       padding-#{$right}: 1.5rem;
       font-size: 0.8125rem;
       color: $cerulean-two;
@@ -423,7 +420,7 @@
       width: 100%;
 
       @include breakpoint($tablet) {
-        width: 80%;
+        width: 72%;
       }
 
       @include breakpoint($only-tablet) {
@@ -441,6 +438,10 @@
     .print--barcode {
       font-size: 0.75rem;
 
+      @include breakpoint($tablet) {
+        width: 28%;
+      }
+
       &.above-mobile {
         @include breakpoint($only-mobile) {
           display: none;
@@ -449,7 +450,7 @@
     }
 
     svg {
-      width: 7rem;
+      max-width: 12.375rem;
       max-height: 4.375rem;
 
       @include breakpoint($tablet) {
