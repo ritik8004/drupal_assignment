@@ -115,7 +115,11 @@ class CybersourceController implements ContainerInjectionInterface {
     // Set the payment method.
     $cart->setPaymentMethod('cybersource');
 
-    // @TODO: This looks not generic.
+    // @TODO: Implement this properly - MMCPA-1876.
+    // Cybersource requires billing info to be available before it processes
+    // credit card. This info is set in the signed fields by Magento. To ensure
+    // we have the values set, we need to pass it to Magento before we start
+    // payment process.
     if (!empty($billing_address['same_as_shipping']) && $billing_address['same_as_shipping'] == 1) {
       $cart->setBilling($cart->getShipping());
     }
