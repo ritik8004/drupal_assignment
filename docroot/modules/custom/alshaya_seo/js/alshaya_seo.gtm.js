@@ -91,7 +91,7 @@
       /** Add to cart GTM **/
       // Trigger GTM push event on AJAX completion of add to cart button.
       $(document).once('js-event').ajaxComplete(function(event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('add to cart').toLowerCase())) {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('add to cart').toLowerCase())) {
           var responseJSON = xhr.responseJSON;
           var responseMessage = '';
           $.each(responseJSON, function(key, obj) {
@@ -301,16 +301,13 @@
       if (cartCheckoutPaymentSelector.length !== 0) {
         var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
         if (preselectedMethod.length === 1) {
-          var preselectedMethodLabel = preselectedMethod.siblings('label').text();
+          var preselectedMethodLabel = preselectedMethod.siblings('label').find('.method-title').text();
           Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
         }
 
-        $('[gtm-type="cart-checkout-payment"] input', context).once('js-event').change(function() {
-          var selectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
-          if (selectedMethod === 1) {
-            var selectedMethodLabel = selectedMethod.siblings('label').text();
-            Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 4);
-          }
+        cartCheckoutPaymentSelector.find('input[gtm-type="cart-checkout-payment"]').once('js-event').change(function() {
+          var selectedMethodLabel = $(this).siblings('label').find('.method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 4);
         });
       }
 
