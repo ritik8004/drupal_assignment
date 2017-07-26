@@ -77,6 +77,7 @@ class AlshayaGtmManager {
     'dimension1' => 'gtm-dimension1',
     'dimension2' => 'gtm-dimension2',
     'dimension3' => 'gtm-dimension3',
+    'dimension4' => 'gtm-dimension4',
     'dimension5' => 'gtm-sku-type',
     'metric1' => '',
   ];
@@ -193,6 +194,7 @@ class AlshayaGtmManager {
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
     $attributes['gtm-dimension2'] = '';
     $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
+    $attributes['gtm-dimension4'] = count($sku->getMedia()) ?: '';
     $attributes['gtm-stock'] = '';
     $attributes['gtm-sku-type'] = $sku->bundle();
 
@@ -500,7 +502,7 @@ class AlshayaGtmManager {
 
     // @Todo: Update deliveryOption once click & collect/delivery option step is built.
     $generalInfo = [
-      'deliveryOption' => 'Home Delivery',
+      'deliveryOption' => $order['shipping']['method']['carrier_code'],
       'paymentOption' => $order['payment']['method_title'],
       'discountAmount' => $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
