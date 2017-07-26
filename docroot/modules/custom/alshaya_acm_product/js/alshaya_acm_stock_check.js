@@ -12,7 +12,7 @@
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
       // Stock check on PLP,search & Promo pages.
-      $('.c-products-list', context).find('.c-products__item article').once('js-event').each(function(){
+      $('article[data-vmode="search_result"]', context).once('js-event').each(function(){
         var productId = $(this).attr('data-nid');
         var productStock = $(this).find('.out-of-stock');
 
@@ -76,7 +76,7 @@
       });
 
       // Check stock for mobile & load add cart form if stock-check successful.
-      $('.horizontal-crossell.mobile-only-block article[data-vmode="teaser"], .horizontal-upell.mobile-only-block article[data-vmode="teaser"]').find('article').once('js-event').each(function() {
+      $('.horizontal-crossell.mobile-only-block article[data-vmode="teaser"], .horizontal-upell.mobile-only-block article[data-vmode="teaser"], .horizontal-crossell article[data-vmode="teaser"], .horizontal-upell article[data-vmode="teaser"]').find('article').once('js-event').each(function() {
         var skuId = $(this).attr('data-skuid');
         if (skuId !== undefined) {
           var $wrapper = $(this);
