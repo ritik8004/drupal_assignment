@@ -1,4 +1,4 @@
-acq_cybersource.product_settings_form:
+acq_cybersource.settings_form:
   path: '/admin/commerce/config/cybersource'
   defaults:
     _form: '\Drupal\acq_cybersource\Form\CybersourceSettingsForm'
