@@ -160,6 +160,7 @@
         if ($('.views-row', $(this)).length === 0) {
           $('#addresses-header').hide();
           $(this).hide();
+          $('#cancel-address-add-edit').hide();
           $('#address-book-form-wrapper').show();
         }
       });
