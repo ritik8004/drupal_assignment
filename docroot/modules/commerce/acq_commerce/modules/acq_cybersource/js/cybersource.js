@@ -33,7 +33,7 @@
 
       $('[data-drupal-selector="edit-actions-next"]').once('bind-events').each(function () {
         $(this).on('click', function (event) {
-          if (Drupal.cybersourceProcessed !== true) {
+          if ($('.cybersource-credit-card-input').length && Drupal.cybersourceProcessed !== true) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -104,7 +104,7 @@
         });
 
         $(this).parents('form:first').on('submit', function (event) {
-          if (Drupal.cybersourceProcessed !== true) {
+          if ($('.cybersource-credit-card-input').length && Drupal.cybersourceProcessed !== true) {
             event.preventDefault();
             event.stopPropagation();
           }
