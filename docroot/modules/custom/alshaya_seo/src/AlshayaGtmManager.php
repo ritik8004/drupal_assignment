@@ -504,7 +504,7 @@ class AlshayaGtmManager {
     $generalInfo = [
       'deliveryOption' => $order['shipping']['method']['carrier_code'],
       'paymentOption' => $order['payment']['method_title'],
-      'discountAmount' => $order['totals']['discount'],
+      'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
     ];
