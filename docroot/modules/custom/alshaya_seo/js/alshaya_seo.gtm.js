@@ -298,17 +298,13 @@
       }
 
       /** Tracking selected payment option **/
-      if (cartCheckoutPaymentSelector.length !== 0) {
+      // Fire this only if on checkout Payment option page & Ajax response brings in cart-checkout-payment div.
+      if ((cartCheckoutPaymentSelector.length !== 0) && ($('fieldset[gtm-type="cart-checkout-payment"]', context).length > 0)) {
         var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
         if (preselectedMethod.length === 1) {
           var preselectedMethodLabel = preselectedMethod.siblings('label').find('.method-title').text();
           Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
         }
-
-        cartCheckoutPaymentSelector.find('input[gtm-type="cart-checkout-payment"]').once('js-event').change(function() {
-          var selectedMethodLabel = $(this).siblings('label').find('.method-title').text();
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 4);
-        });
       }
 
       /** Product Click Handler **/
