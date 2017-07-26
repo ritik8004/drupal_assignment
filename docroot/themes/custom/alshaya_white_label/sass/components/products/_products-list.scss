@@ -1,11 +1,24 @@
 .c-plp {
   padding-top: 1.75rem;
 
+  > .c-sidebar-first {
+    @include breakpoint($desktop) {
+      .c-facet__label,
+      .c-accordion {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+
   .region__content {
     position: relative;
 
     .block-views-blockplp-promotional-banner-block-1.promo-banner {
-      margin-bottom: 24px;
+      margin-bottom: 1.5rem;
+
+      @include breakpoint($desktop) {
+        padding-top: 0.875rem;
+      }
     }
 
     .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
@@ -96,7 +109,11 @@
 
     .filter--mobile {
       @include breakpoint($tablet) {
-        top: 0.25rem;
+        top: 1rem;
+
+        html[lang=ar] & {
+          top: 0.75rem;
+        }
       }
 
       .form-type-select {
@@ -110,6 +127,10 @@
 
         label {
           #{$left}: -3.5rem;
+
+          html[lang=ar] & {
+            #{$left}: -4.5rem;
+          }
         }
       }
 
@@ -192,9 +213,18 @@
       }
     }
 
+    &.promo-banner {
+      .block-page-title-block {
+        @include breakpoint($tablet) {
+          padding-top: 0 !important;
+        }
+      }
+    }
+
     .block-page-title-block {
       @include breakpoint($tablet) {
         width: 73%;
+        padding-top: 0.75rem;
       }
 
       &.mobile {
@@ -221,10 +251,10 @@
     }
 
     .promo-banner > .filter--mobile {
-      top: 21rem;
+      top: 21.76rem !important;
 
       @include breakpoint($only-tablet) {
-        top: 16.75rem;
+        top: 16.44rem !important;
       }
     }
 
@@ -259,7 +289,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      max-width: 20rem;
+      max-width: 50%;
       font-size: 0.875rem;
       margin-top: 0.1875rem;
     }
@@ -332,6 +362,10 @@
       margin-bottom: 0.5625rem;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
 
       a {
         color: $grey-ash;
@@ -659,6 +693,12 @@
         z-index: 1;
         padding: 0.625rem;
         padding-left: 0.75rem;
+
+        html[lang=ar] & {
+          padding-top: 0;
+          padding-bottom: 0;
+          line-height: 1.59;
+        }
       }
 
       @include breakpoint($only-mobile) {
