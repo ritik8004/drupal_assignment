@@ -19,14 +19,14 @@ trait AgentRequestTrait {
    *
    * @var string
    */
-  private $apiVersion;
+  protected $apiVersion;
 
   /**
    * HTTP (Guzzle) Conductor Client Factory.
    *
    * @var ClientFactory
    */
-  private $clientFactory;
+  protected $clientFactory;
 
   /**
    * Debug / Verbose Connection Logging.
@@ -40,7 +40,7 @@ trait AgentRequestTrait {
    *
    * @var \Psr\Log\LoggerInterface
    */
-  private $logger;
+  protected $logger;
 
   /**
    * TryAgentRequest.

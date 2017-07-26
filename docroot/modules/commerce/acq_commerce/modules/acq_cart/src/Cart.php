@@ -385,6 +385,13 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function clearPayment() {
+    unset($this->cart->payment);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function setPaymentMethod($payment_method, array $data = []) {
     $this->cart->payment['method'] = $payment_method;
     if (!empty($data)) {
