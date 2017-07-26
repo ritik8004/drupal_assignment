@@ -208,6 +208,7 @@ header,
   li.ui-menu-item {
     display: inherit;
     padding: 10px 1rem 10px 7.5px;
+    border: 1px solid transparent;
 
     &:not(:last-child) {
       border-bottom: 1px solid $white;
