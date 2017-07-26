@@ -502,7 +502,7 @@ class AlshayaGtmManager {
 
     // @Todo: Update deliveryOption once click & collect/delivery option step is built.
     $generalInfo = [
-      'deliveryOption' => 'Home Delivery',
+      'deliveryOption' => $order['shipping']['method']['carrier_code'],
       'paymentOption' => $order['payment']['method_title'],
       'discountAmount' => $order['totals']['discount'],
       'transactionID' => $order['increment_id'],

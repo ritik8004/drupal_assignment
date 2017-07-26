@@ -22,6 +22,8 @@
       var cartCheckoutPaymentSelector = $('body[gtm-container="cart-checkout-payment"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
+      var isCCPage = false;
+      var isPaymentPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -42,6 +44,16 @@
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === undefined) {
         gtmPageType = 'not defined';
+      }
+
+      // If we are on checkout page -- Click & collect method.
+      if (document.location.search === "?method=cc") {
+        isCCPage = true;
+      }
+
+      // If we are on payment page.
+      if (document.location.pathname === Drupal.url('cart/checkout/payment')) {
+        isPaymentPage = true;
       }
 
       /** Impressions tracking on listing pages with Products. **/
@@ -157,6 +169,20 @@
               };
               dataLayer.push(data);
             }
+          }
+        }
+        else if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
+          var responseJSON = xhr.responseJSON;
+          var responseMessage = '';
+          $.each(responseJSON, function(key, obj) {
+            if (obj.method === 'stopNewsletterSpinner') {
+              responseMessage = obj.args[0].message;
+              return false;
+            }
+          });
+
+          if (responseMessage === "success") {
+            Drupal.alshaya_seo_gtm_push_lead_type('footer');
           }
         }
       });
@@ -295,6 +321,38 @@
             }
           });
         });
+      }
+
+      /** GTM virtual page tracking for click & collect journey. **/
+      if (isCCPage) {
+        if ($('#store-finder-wrapper', context).length > 0) {
+          dataLayer.push({
+            'event':'VirtualPageview',
+            'virtualPageURL':'/virtualpv/click-and-collect/step1/click-and-collect-view',
+            'virtualPageTitle' : 'C&C Step 1 – Click and Collect View'
+          });
+        }
+
+        $('.store-actions a.select-store', context).once('js-event').click(function() {
+          dataLayer.push({
+            'event':'VirtualPageview',
+            'virtualPageURL':' /virtualpv/click-and-collect/step2/select-store',
+            'virtualPageTitle' : 'C&C Step 2 – Select Store'
+          });
+        });
+      }
+
+      if (isPaymentPage) {
+        // Check delivery type.
+        var deliveryType = $('#block-checkoutsummaryblock .delivery-type').text().toLowerCase();
+
+        if (deliveryType === Drupal.t('Click & Collect').toLowerCase()) {
+          dataLayer.push({
+            'event':'VirtualPageview',
+            'virtualPageURL':'/virtualpv/click-and-collect/step3/payment-page',
+            'virtualPageTitle' : 'C&C Step 3 – Payment Page'
+          });
+        }
       }
 
       /** Tracking selected payment option **/
@@ -553,4 +611,12 @@
     dataLayer.push(data);
   };
 
+  /**
+   * Helper function to push lead events.
+   *
+   * @param leadType
+   */
+  Drupal.alshaya_seo_gtm_push_lead_type = function(leadType) {
+    dataLayer.push({'event' : 'leads', 'leadType' : leadType});
+  }
 })(jQuery, Drupal, dataLayer);
