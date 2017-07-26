@@ -109,10 +109,10 @@
 
     .filter--mobile {
       @include breakpoint($tablet) {
-        top: 0.25rem;
+        top: 1rem;
 
         html[lang=ar] & {
-          top: 0;
+          top: 0.75rem;
         }
       }
 
@@ -213,9 +213,18 @@
       }
     }
 
+    &.promo-banner {
+      .block-page-title-block {
+        @include breakpoint($tablet) {
+          padding-top: 0 !important;
+        }
+      }
+    }
+
     .block-page-title-block {
       @include breakpoint($tablet) {
         width: 73%;
+        padding-top: 0.75rem;
       }
 
       &.mobile {
@@ -242,10 +251,10 @@
     }
 
     .promo-banner > .filter--mobile {
-      top: 21rem;
+      top: 21.76rem !important;
 
       @include breakpoint($only-tablet) {
-        top: 16.75rem;
+        top: 16.44rem !important;
       }
     }
 
@@ -280,7 +289,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      max-width: 20rem;
+      max-width: 50%;
       font-size: 0.875rem;
       margin-top: 0.1875rem;
     }
