@@ -11,6 +11,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
@@ -504,10 +505,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
     $selector = '.configurable-wrapper-' . $sku_identifier;
-    $response->addCommand(new HtmlCommand($selector, $dynamic_parts));
+    $response->addCommand(new ReplaceCommand($selector, $dynamic_parts));
 
     $selector = '.quantity-' . $sku_identifier;
-    $response->addCommand(new HtmlCommand($selector, $form['quantity']));
+    $response->addCommand(new ReplaceCommand($selector, $form['quantity']));
 
     // Update the promotions for the product.
     $promotion_links = '';
