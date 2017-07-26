@@ -236,6 +236,12 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
   }
+  elseif ($variables['node']->bundle() === 'store') {
+    $current_route = \Drupal::routeMatch();
+    if ($current_route->getRouteName() == 'alshaya_stores_finder.store_detail') {
+      $variables['previous_page'] = $current_route->getParameter('type')?: 'glossary';
+    }
+  }
 }
 
 /**
