@@ -1,4 +1,4 @@
-acq_cybersource.configuration.cybersource:
+acq_cybersource.settings_form:
   title: 'Cybersource Settings'
-  route_name: 'acq_cybersource.configuration.cybersource'
-  base_route: 'acq_cybersource.configuration.cybersource'
+  route_name: 'acq_cybersource.settings_form'
+  base_route: 'acq_cybersource.settings_form'

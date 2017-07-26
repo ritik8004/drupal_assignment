@@ -2,7 +2,7 @@
 
 namespace Drupal\acq_cybersource\Form;
 
-use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -12,7 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @ingroup acq_cybersource
  */
-class CybersourceSettingsForm extends FormBase {
+class CybersourceSettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
@@ -37,6 +37,7 @@ class CybersourceSettingsForm extends FormBase {
     $config->set('env', $form_state->getValue('env'));
     $config->set('test_url', rtrim($form_state->getValue('test_url'), '/'));
     $config->set('prod_url', rtrim($form_state->getValue('prod_url'), '/'));
+    $config->set('allowed_cc_types', $form_state->getValue('allowed_cc_types'));
 
     $config->save();
 
@@ -71,6 +72,12 @@ class CybersourceSettingsForm extends FormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Production Environment URL'),
       '#default_value' => $config->get('prod_url'),
+    ];
+
+    $form['allowed_cc_types'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Allowed Card types'),
+      '#default_value' => $config->get('allowed_cc_types'),
     ];
 
     return $form;
