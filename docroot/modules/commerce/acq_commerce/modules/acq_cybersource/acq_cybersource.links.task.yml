@@ -1,0 +1,4 @@
+acq_cybersource.configuration.cybersource:
+  title: 'Cybersource Settings'
+  route_name: 'acq_cybersource.configuration.cybersource'
+  base_route: 'acq_cybersource.configuration.cybersource'

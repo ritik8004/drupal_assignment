@@ -181,6 +181,11 @@ interface CartInterface {
   public function getPaymentMethod($full_details = TRUE);
 
   /**
+   * Clears the payment method info in cart.
+   */
+  public function clearPayment();
+
+  /**
    * Sets the payment method.
    *
    * @param string $payment_method
