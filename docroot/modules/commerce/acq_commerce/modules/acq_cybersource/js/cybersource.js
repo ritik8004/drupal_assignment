@@ -72,6 +72,12 @@
                 response.data.card_expiry_date += $('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim();
                 response.data.card_cvn = $('.cybersource-credit-card-cvv-input').val().toString().trim();
 
+                // Here we use iframe to post to Cybersource and then handle
+                // the response in Drupal. We have configured the response url
+                // in Cybersource profile.
+                // This is necessary as Cybersource doesn't allow AJAX requests.
+                // Even if it processes fine, it never sets the CORS header
+                // and browser/javascript remove the response.
                 // Remove old form and iframe if available.
                 $('#cybersource_form_to_iframe, #cybersource_iframe').remove();
 
