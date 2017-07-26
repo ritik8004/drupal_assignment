@@ -211,6 +211,12 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
 
   // This is just to create click and collect method term during install.
   $checkout_options_manager->loadShippingMethod($code, $default_name, '', $acq_checkout_settings->get('click_collect_method_carrier_code'), $acq_checkout_settings->get('click_collect_method_method_code'), $default_order_description);
+
+  // Configure allowed credit cards for cybersource.
+  $configFactory = \Drupal::configFactory()->getEditable('acq_cybersource.settings');
+  // Allowed list is received in comments of MMCPA-164.
+  $configFactory->set('allowed_cc_types', 'VI,MC,DN');
+  $configFactory->save();
 }
 
 /**
