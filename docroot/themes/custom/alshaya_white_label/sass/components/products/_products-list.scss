@@ -1,11 +1,24 @@
 .c-plp {
   padding-top: 1.75rem;
 
+  > .c-sidebar-first {
+    @include breakpoint($desktop) {
+      .c-facet__label,
+      .c-accordion {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+
   .region__content {
     position: relative;
 
     .block-views-blockplp-promotional-banner-block-1.promo-banner {
-      margin-bottom: 24px;
+      margin-bottom: 1.5rem;
+
+      @include breakpoint($desktop) {
+        padding-top: 0.875rem;
+      }
     }
 
     .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
@@ -97,6 +110,10 @@
     .filter--mobile {
       @include breakpoint($tablet) {
         top: 0.25rem;
+
+        html[lang=ar] & {
+          top: 0;
+        }
       }
 
       .form-type-select {
@@ -110,6 +127,10 @@
 
         label {
           #{$left}: -3.5rem;
+
+          html[lang=ar] & {
+            #{$left}: -4.5rem;
+          }
         }
       }
 
@@ -332,6 +353,10 @@
       margin-bottom: 0.5625rem;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
 
       a {
         color: $grey-ash;
@@ -659,6 +684,12 @@
         z-index: 1;
         padding: 0.625rem;
         padding-left: 0.75rem;
+
+        html[lang=ar] & {
+          padding-top: 0;
+          padding-bottom: 0;
+          line-height: 1.59;
+        }
       }
 
       @include breakpoint($only-mobile) {
