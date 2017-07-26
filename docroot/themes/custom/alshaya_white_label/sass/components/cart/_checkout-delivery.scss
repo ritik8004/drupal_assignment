@@ -420,6 +420,10 @@
           float: $left;
           margin-#{$right}: 1rem;
           top: 0.625rem;
+
+          .ucbrowser & {
+            top: 10px;
+          }
         }
 
         .shipping-method {
