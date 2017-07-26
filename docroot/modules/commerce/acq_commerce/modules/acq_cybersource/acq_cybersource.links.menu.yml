@@ -1,0 +1,6 @@
+acq_cybersource.configuration.cybersource:
+  title: 'Cybersource Settings'
+  route_name: 'acq_cybersource.configuration.cybersource'
+  parent: 'acq_commerce.configuration'
+  description: 'Configure settings for Cybersource payment method.'
+  weight: 40
