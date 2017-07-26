@@ -361,6 +361,7 @@
       padding-#{$right}: 1rem;
       font-size: 0.75rem;
       color: $grey-ash;
+      width: 100%;
 
       @include breakpoint($only-mobile) {
         padding-#{$left}: 1.25rem;

@@ -47,6 +47,10 @@
 
       a {
         color: $marine-blue !important;
+
+        html[lang=ar] & {
+          line-height: 1.7;
+        }
       }
     }
 
