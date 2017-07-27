@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_store_finder.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_store_finder_install() {
+  // Set default google map api key.
+  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
+  $config->set('google_map_api_key', 'AIzaSyCb0Tia8JkZRYZMgEeAAlOsuJDnHoWUhh0');
+  $config->save();
+}
