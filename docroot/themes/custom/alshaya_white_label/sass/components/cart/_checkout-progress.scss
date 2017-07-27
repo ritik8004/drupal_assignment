@@ -181,6 +181,10 @@
 
       @include breakpoint($desktop) {
         margin-#{$left}: 0.5rem;
+
+        html[lang=ar] & {
+          width: 75%;
+        }
       }
     }
 
