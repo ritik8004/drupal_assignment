@@ -13,4 +13,12 @@ function alshaya_store_finder_install() {
   $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
   $config->set('google_map_api_key', 'AIzaSyCb0Tia8JkZRYZMgEeAAlOsuJDnHoWUhh0');
   $config->save();
+
+  // Array of language translation strings.
+  $strings = [
+    'Low stock' => [
+      'ar' => 'الكمية محدودة',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
