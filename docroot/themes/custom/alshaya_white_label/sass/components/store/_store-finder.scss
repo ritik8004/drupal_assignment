@@ -79,14 +79,6 @@
     }
   }
 
-  .mobile-store-detail {
-    @include breakpoint($only-mobile) {
-      #views-exposed-form-stores-finder-page-1 {
-        display: none;
-      }
-    }
-  }
-
   .back-link,
   .mobile-only-back-to-glossary {
     a {
@@ -354,6 +346,7 @@
         padding-bottom: 0;
         line-height: 2.1875rem;
         height: 2.1875rem;
+        width: 100%;
       }
 
       &.ui-autocomplete-loading {
@@ -365,6 +358,7 @@
         border: 1px solid $white;
         border-#{$right}: 2.3125rem solid $white-five;
         height: 2.1875rem;
+        width: 100%;
       }
     }
 
@@ -436,8 +430,7 @@
             display: inline-block;
             color: $black;
             font-size: 1.875rem;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0.5rem;
             #{$right}: 0.4rem;
           }
         }
@@ -972,7 +965,7 @@
       }
 
       &::after {
-        transform: translateY(-50%);
+        transform: none;
       }
     }
 
@@ -1018,14 +1011,31 @@
     }
   }
 
+  .get--directions div a {
+    &.device__tablet {
+      display: none;
+
+      @include breakpoint($only-tablet) {
+        display: block;
+      }
+    }
+
+    &.device__desktop {
+      display: none;
+
+      @include breakpoint($desktop) {
+        display: block;
+      }
+    }
+  }
+
   .hours--label {
     @include icon(chevron#{$right}, after) {
       position: absolute;
       display: inline-block;
       color: $cerulean-two;
       font-size: 1.875rem;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 0.5rem;
       #{$right}: 0.7rem;
       pointer-events: none;
 
@@ -1048,8 +1058,7 @@
 
   .get--directions div::after {
     background: url('../imgs/icons/ic-directions.svg');
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1rem;
     #{$right}: 1rem;
     width: 18px;
     height: 18px;
