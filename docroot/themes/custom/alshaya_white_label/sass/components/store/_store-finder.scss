@@ -79,6 +79,12 @@
     }
   }
 
+  .list-view-link {
+    @include breakpoint($desktop) {
+      text-indent: -0.4rem;
+    }
+  }
+
   .back-link,
   .mobile-only-back-to-glossary {
     a {
@@ -1146,6 +1152,7 @@
   .hours--label,
   .hours--label::after {
     color: $black;
+    top: 0;
   }
 
   .get--directions,
@@ -1165,18 +1172,23 @@
     padding-bottom: 0.4rem;
   }
 
+  .get--directions div::after {
+    top: 0.5rem;
+  }
+
   .hours--wrapper .hours--label,
   .hours--wrapper .open--hours,
   .view-on--map a,
   .get--directions a {
-    padding: 1rem;
+    padding: 0.5rem;
     padding-#{$left}: 0;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
   }
 
   .open--hours {
     line-height: 1.57;
     margin-top: 0;
+    padding-top: 0;
   }
 }
 
