@@ -55,6 +55,17 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
       ],
     ];
 
+    $pane_form['payment_details']['cc_cvv'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('CVV'),
+      '#default_value' => '',
+      '#required' => TRUE,
+      '#placeholder' => $this->t('123'),
+      '#attributes' => [
+        'class' => ['cybersource-credit-card-cvv-input', 'cybersource-input'],
+      ],
+    ];
+
     $pane_form['payment_details']['cc_exp_month'] = [
       '#type' => 'select',
       '#title' => $this->t('Expiration Month'),
@@ -94,17 +105,6 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
       '#required' => TRUE,
       '#attributes' => [
         'class' => ['cybersource-credit-card-exp-year-select', 'cybersource-input'],
-      ],
-    ];
-
-    $pane_form['payment_details']['cc_cvv'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('CVV'),
-      '#default_value' => '',
-      '#required' => TRUE,
-      '#placeholder' => $this->t('123'),
-      '#attributes' => [
-        'class' => ['cybersource-credit-card-cvv-input', 'cybersource-input'],
       ],
     ];
 
