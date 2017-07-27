@@ -126,11 +126,16 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $payment_term = $checkout_options_manager->loadPaymentMethod($plugin_id, $plugins[$plugin_id]['label']);
 
+      $description = '';
+      if ($description_value = $payment_term->get('description')->getValue()) {
+        $description = $description_value[0]['value'];
+      }
+
       $method_name = '
         <div class="payment-method-name">
           <div class="method-title">' . $payment_term->getName() . '</div>
           <div class="method-side-info method-' . $plugin_id . '"></div>
-          <div class="method-description">' . $payment_term->get('description')->getValue()[0]['value'] . '</div>
+          <div class="method-description">' . $description . '</div>
         </div>
       ';
 
