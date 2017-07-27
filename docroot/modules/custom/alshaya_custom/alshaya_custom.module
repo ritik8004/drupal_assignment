@@ -12,12 +12,14 @@
  *   Country code.
  */
 function _alshaya_custom_get_site_level_country_code() {
-  $default_site_country = \Drupal::config('system.date')->get('country.default');
+  $default_site_country = &drupal_static(__FUNCTION__);
   if (empty($default_site_country)) {
-    // If no default country is set, take the first as default.
-    $full_country_list = \Drupal::service('address.country_repository')->getList();
-    $default_site_country = key($full_country_list);
+    $default_site_country = \Drupal::config('system.date')->get('country.default');
+    if (empty($default_site_country)) {
+      // If no default country is set, take the first as default.
+      $full_country_list = \Drupal::service('address.country_repository')->getList();
+      $default_site_country = key($full_country_list);
+    }
   }
-
   return $default_site_country;
 }

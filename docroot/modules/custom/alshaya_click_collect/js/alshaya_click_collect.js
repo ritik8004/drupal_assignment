@@ -2,7 +2,12 @@
   'use strict';
 
   /* global google */
+
+  /**
+   * @namespace
+   */
   Drupal.click_collect = Drupal.click_collect || {};
+  Drupal.geolocation = Drupal.geolocation || {};
 
   /**
    * Click and collect constructor.

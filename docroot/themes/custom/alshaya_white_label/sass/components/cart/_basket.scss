@@ -1165,3 +1165,43 @@ html[lang=ar] .path--cart h1.c-page-title::before {
     display: inline-block;
   }
 }
+
+td.price {
+  @include breakpoint($tablet) {
+    .price-type__wrapper,
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      @include clearfix;
+    }
+
+    .price--discount {
+      float: right;
+
+      html[lang=ar] & span {
+        float: left;
+      }
+    }
+
+    .price-type__wrapper {
+      max-width: 130px;
+    }
+
+    .discount-value {
+      padding-left: 0.25rem;
+    }
+
+    .special--price,
+    .has--special--price {
+      .price {
+        .price-currency {
+          float: left !important;
+        }
+
+        .price-amount {
+          float: right !important;
+        }
+      }
+    }
+  }
+}

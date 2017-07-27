@@ -6,6 +6,11 @@
 (function ($, Drupal) {
   'use strict';
 
+  /**
+   * @namespace
+   */
+  Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
+
   Drupal.behaviors.alshayaMobileNumber = {
     attach: function (context, settings) {
       $('input[mobile-prefix]').once('bind-js').each(function () {
@@ -19,6 +24,15 @@
         $(this).inputprefix();
       });
     }
+  };
+
+  // Forcefully initiate inputprefix js for given field.
+  Drupal.alshayaMobileNumber.init = function (element, value) {
+    if (value) {
+      value = value.replace(element.attr('mobile-prefix'), '');
+      element.val(element.attr('mobile-prefix') + value);
+    }
+    element.inputprefix();
   };
 
 })(jQuery, Drupal);

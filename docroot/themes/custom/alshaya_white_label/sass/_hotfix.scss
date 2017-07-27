@@ -227,10 +227,6 @@ html[lang=ar] {
       }
     }
 
-    .price {
-      display: inline-block;
-    }
-
     .price-wrapper {
       .price-amount {
         float: right !important;
@@ -240,7 +236,6 @@ html[lang=ar] {
       .price-currency {
         @include breakpoint($desktop) {
           float: left !important;
-          padding: 0 2.3rem 0 1rem;
         }
       }
     }

@@ -335,6 +335,12 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
                   'products' => $attributes['products'],
                 ],
               ];
+
+              if ($attributes['general']['deliveryOption'] === 'click_and_collect_click_and_collect') {
+                $data_layer['event'] = 'VirtualPageView';
+                $data_layer['virtualPageUrl'] = '/virtualpv/click-and-collect/step4/order-success';
+                $data_layer['virtualPageTitle'] = 'C&C Step 4 – Order Success';
+              }
             }
 
             user_cookie_save([$cookie_key => 1]);

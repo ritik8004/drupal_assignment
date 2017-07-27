@@ -55,16 +55,7 @@ switch ($env) {
 
     $config['alshaya_api.settings']['username'] = 'acquiaapi';
     $config['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
-
-    // For other environments, this must be set using admin config forms.
-    // Info about how to do is available in user guide.
-    $config['geolocation.settings']['google_map_api_key'] = 'AIzaSyBpDOkUs9fx_Rl8pGp1N1G5-8w80b5yDjE';
   break;
-
-  case '01uat':
-    // For other environments, this must be set using admin config forms.
-    // Info about how to do is available in user guide.
-    $config['geolocation.settings']['google_map_api_key'] = 'AIzaSyBpDOkUs9fx_Rl8pGp1N1G5-8w80b5yDjE';
 
   default:
     $config['acq_commerce.conductor']['url'] = 'https://pprod.dev.alshaya.acm.acquia.io/';

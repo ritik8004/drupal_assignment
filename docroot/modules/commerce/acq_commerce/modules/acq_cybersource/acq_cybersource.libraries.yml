@@ -1,0 +1,9 @@
+cybersource:
+  version: VERSION
+  js:
+    js/jquery.creditCardValidator.js: {}
+    js/cybersource.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal

@@ -1,7 +1,6 @@
 checkout_flow:
   version: 1.x
   js:
-    js/jquery.creditCardValidator.js: {}
     js/alshaya_acm_checkout.js: {}
   dependencies:
     - core/jquery

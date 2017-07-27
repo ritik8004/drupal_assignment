@@ -411,7 +411,8 @@ function alshaya_acm_product_available_click_collect($sku) {
   // Product could be either available for ship to store or for reserve and
   // collect. In both cases click and collect option will be considered as
   // available.
-  return ($sts || $rnc);
+  // Magento provides for 2 for disabled and 1 for enabled.
+  return ($sts == 1 || $rnc == 1);
 }
 
 /**

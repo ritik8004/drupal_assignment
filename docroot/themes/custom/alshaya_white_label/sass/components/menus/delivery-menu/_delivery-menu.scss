@@ -18,6 +18,7 @@
   border: 1px solid $cerulean-two;
   box-shadow: 5px 5px 0 0 $shadow;
   position: relative;
+  line-height: normal;
 
   @include breakpoint($only-mobile) {
     max-width: 100%;
