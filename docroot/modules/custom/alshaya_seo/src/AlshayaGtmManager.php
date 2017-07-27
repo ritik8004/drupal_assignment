@@ -10,6 +10,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\PrivateTempStoreFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -41,6 +42,13 @@ class AlshayaGtmManager {
     'system.404' => 'page not found',
     'user.login' => 'login page',
     'acq_cart.cart' => 'cart page',
+    'acq_checkout.form:login' => 'summary page',
+    'acq_checkout.form:click_collect' => 'click and collect page',
+    'acq_checkout.form:delivery' => 'delivery page',
+    'acq_checkout.form:payment' => 'payment page',
+    'acq_checkout.form:confirmation' => 'confirmation page',
+    'view.stores_finder.page_2' => 'store finder',
+    'entity.webform.canonical:alshaya_contact' => 'contact us',
   ];
 
   /**
@@ -111,6 +119,13 @@ class AlshayaGtmManager {
   protected $currentUser;
 
   /**
+   * The request stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -123,17 +138,21 @@ class AlshayaGtmManager {
    *   Private temp store service.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   Current User service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   Request stack service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
                               PrivateTempStoreFactory $privateTempStore,
-                              AccountProxyInterface $currentUser) {
+                              AccountProxyInterface $currentUser,
+                              RequestStack $requestStack) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
     $this->privateTempStore = $privateTempStore;
     $this->currentUser = $currentUser;
+    $this->requestStack = $requestStack;
   }
 
   /**
@@ -192,7 +211,7 @@ class AlshayaGtmManager {
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
-    $attributes['gtm-dimension2'] = '';
+    $attributes['gtm-dimension2'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
     $attributes['gtm-dimension4'] = count($sku->getMedia()) ?: '';
     $attributes['gtm-stock'] = '';
@@ -237,6 +256,7 @@ class AlshayaGtmManager {
       $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
       $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
       $currentRoute['pathinfo'] = $this->currentRouteMatch->getRouteObject();
+      $currentRoute['query'] = $this->requestStack->getCurrentRequest()->query->all();
     }
 
     return $currentRoute;
@@ -273,25 +293,31 @@ class AlshayaGtmManager {
             $routeIdentifier .= ':' . $term->getVocabularyId();
           }
           break;
+
+        case 'acq_cart.form':
+          if (isset($currentRoute['route_params']['step'])) {
+            if (($currentRoute['route_params']['step'] === 'delivery') &&
+              ($currentRoute['query']['method'] === 'cc')) {
+              $routeIdentifier .= ':click_collect';
+            }
+            else {
+              $routeIdentifier .= ':' . $currentRoute['route_params']['step'];
+            }
+          }
+          break;
+
+        case 'entity.webform.canonical':
+          if (isset($currentRoute['route_params']['webform'])) {
+            $routeIdentifier .= ':' . $currentRoute['route_params']['webform']->id();
+          }
       }
       $gtmRoutes = self::ROUTE_GTM_MAPPING;
 
       if (array_key_exists($routeIdentifier, $gtmRoutes)) {
         $gtmPageType = self::ROUTE_GTM_MAPPING[$routeIdentifier];
       }
-
-      if ($currentRoute['route_name'] === 'acq_checkout.form') {
-        if ($currentRoute['route_params']['step'] === 'login') {
-          $gtmPageType = 'cart-checkout-login';
-        }
-
-        if ($currentRoute['route_params']['step'] === 'delivery') {
-          $gtmPageType = 'cart-checkout-delivery';
-        }
-
-        if ($currentRoute['route_params']['step'] === 'payment') {
-          $gtmPageType = 'cart-checkout-payment';
-        }
+      else {
+        $gtmPageType = 'not defined';
       }
     }
 
@@ -500,7 +526,6 @@ class AlshayaGtmManager {
       'coupon' => $order['coupon'],
     ];
 
-    // @Todo: Update deliveryOption once click & collect/delivery option step is built.
     $generalInfo = [
       'deliveryOption' => $order['shipping']['method']['carrier_code'],
       'paymentOption' => $order['payment']['method_title'],
@@ -514,6 +539,40 @@ class AlshayaGtmManager {
       'products' => $products,
       'actionField' => $actionData,
     ];
+  }
+
+  /**
+   * Helper function to fetch general datalayer attributes for a page.
+   */
+  public function fetchGeneralPageAttributes($data_layer) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    if ($data_layer['userId'] !== 0) {
+      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) ? 'repeat buyer' : 'first time buyer';
+    }
+    else {
+      $customer_type = 'first time buyer';
+    }
+
+    $data_layer_attributes = [
+      'language' => $data_layer['drupalLanguage'],
+      'platformType' => 'null',
+      'country' => $data_layer['drupalCountry'],
+      'currency' => 'KWD',
+      'userID' => $data_layer['userUid'],
+      'userEmailID' => $data_layer['userMail'],
+      'customerType' => $customer_type,
+      'userName' => $data_layer['userName'],
+      'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
+    ];
+
+    return $data_layer_attributes;
+  }
+
+  /**
+   * Helper function to fetch page-specific datalayer attributes.
+   */
+  public function fetchPageSpecificAttributes($page_type) {
+    // Page specific attributes here.
   }
 
 }

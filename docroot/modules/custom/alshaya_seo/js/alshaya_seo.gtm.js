@@ -17,14 +17,15 @@
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]', context);
-      var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]');
-      var cartCheckoutDeliverySelector = $('body[gtm-container="cart-checkout-delivery"]');
-      var cartCheckoutPaymentSelector = $('body[gtm-container="cart-checkout-payment"]');
+      var cartCheckoutLoginSelector = $('body[gtm-container="summary page"]');
+      var cartCheckoutDeliverySelector = $('body[gtm-container="delivery page"]');
+      var cartCheckoutPaymentSelector = $('body[gtm-container="payment page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var isCCPage = false;
       var isPaymentPage = false;
       var isRegistrationPage = false;
+      var isRegistrationSuccessPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -60,6 +61,14 @@
       // If we are on registration page.
       if (document.location.pathname === Drupal.url('user/register')) {
         isRegistrationPage = true;
+      }
+
+      if (document.location.pathname === Drupal.url('user/register/complete')) {
+        isRegistrationSuccessPage = true;
+      }
+
+      if (isRegistrationSuccessPage) {
+        Drupal.alshaya_seo_gtm_push_signin_type('registration success');
       }
 
       /** Impressions tracking on listing pages with Products. **/
@@ -633,5 +642,15 @@
    */
   Drupal.alshaya_seo_gtm_push_lead_type = function(leadType) {
     dataLayer.push({'event' : 'leads', 'leadType' : leadType});
-  }
+  };
+
+  /**
+   * Helper funciton to push sign-in type event.
+   *
+   * @param signinType
+   */
+  Drupal.alshaya_seo_gtm_push_signin_type = function(signinType) {
+    dataLayer.push({'event' : 'User Login & Register', 'signinType' : signinType});
+  };
+
 })(jQuery, Drupal, dataLayer);
