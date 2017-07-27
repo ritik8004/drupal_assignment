@@ -455,18 +455,17 @@
 
   .list-view-locator {
     font-size: 14px;
-    background: $white-four;
+    background: $white-five;
     padding: 1rem 0;
     padding-bottom: 0;
     margin-bottom: 1.625rem;
-    border: 1px solid transparent;
+    border: 1px solid $white;
     position: relative;
     cursor: pointer;
 
     &:hover,
     &.selected {
-      background-color: $white-five;
-      border: 1px solid $white;
+      background-color: $white-four;
     }
 
     .row-title {
@@ -937,6 +936,10 @@
       width: 100%;
       height: auto;
     }
+  }
+
+  .list-view-locator {
+    background-color: $white-four;
   }
 
   .hours--wrapper {
