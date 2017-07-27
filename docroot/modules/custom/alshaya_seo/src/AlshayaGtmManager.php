@@ -497,7 +497,7 @@ class AlshayaGtmManager {
       'revenue' => (float) $order['totals']['grand'],
       'tax' => (float) $order['totals']['tax'] ?: 0.00,
       'shippping' => (float) $order['shipping']['method']['amount'] ?: 0.00,
-      'coupon' => '',
+      'coupon' => $order['coupon'],
     ];
 
     // @Todo: Update deliveryOption once click & collect/delivery option step is built.
