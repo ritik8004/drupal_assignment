@@ -71,13 +71,6 @@
       @include breakpoint($upto-tablet) {
         position: relative;
         #{$left}: -0.8rem;
-        top: 0.0625rem;
-      }
-    }
-
-    &.-previous.-complete.-has-link {
-      @include breakpoint($only-mobile) {
-        top: -1px;
       }
     }
 
@@ -108,7 +101,7 @@
         padding-#{$left}: 0.5rem;
 
         &::before {
-          margin-#{$left}: 0.25rem;
+          margin-#{$left}: 0.5rem;
         }
       }
 
@@ -124,7 +117,8 @@
     @include breakpoint($only-mobile) {
       font-size: 0.625rem;
       float: $left;
-      display: grid;
+      display: inline-block;
+      line-height: 7.2;
       text-align: center;
     }
 
@@ -158,6 +152,12 @@
         height: 1.5rem;
         line-height: 1.4rem;
       }
+
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        top: 0.75rem;
+        #{$left}: 40%;
+      }
     }
 
     &::after {
@@ -175,8 +175,8 @@
       height: 0;
 
       @include breakpoint($only-mobile) {
-        width: 77%;
-        #{$left}: 62%;
+        width: 76%;
+        #{$left}: 65%;
       }
 
       @include breakpoint($desktop) {
@@ -190,6 +190,11 @@
 
     a {
       display: inline-block;
+
+      @include breakpoint($only-mobile) {
+        display: inline;
+        line-height: 7.6;
+      }
     }
   }
 
@@ -206,6 +211,12 @@
     &::before {
       background: $marine-blue;
       color: $white-five;
+
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        top: 0.75rem;
+        #{$left}: 40%;
+      }
     }
   }
 
@@ -217,7 +228,11 @@
     padding: 0;
     padding-top: 0.1875rem;
 
-    @include icon(checkshape, before);
+    @include icon(checkshape, before) {
+      @include breakpoint($only-mobile) {
+        top: 0.5rem !important;
+      }
+    }
 
     &::before {
       font-size: 1.5625rem;
@@ -253,6 +268,10 @@
       @include breakpoint($desktop) {
         margin-#{$right}: 0.625rem;
       }
+
+      @include breakpoint($only-mobile) {
+        line-height: 8.1;
+      }
     }
   }
 }
@@ -283,6 +302,12 @@
   .block-acm-checkout-progress {
     @include breakpoint($only-mobile) {
       margin-#{$left}: -0.125rem;
+
+      .checkout-progress__step {
+        &:not(:first-child) {
+          line-height: 8.1;
+        }
+      }
     }
 
     .checkout-progress {
