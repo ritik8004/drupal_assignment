@@ -424,6 +424,9 @@ class AlshayaGtmManager {
       $attributes[$skuId] = $this->fetchSkuAtttributes($skuId);
       // Fetch product for this sku to get the category.
       $productNode = alshaya_acm_product_get_display_node($skuId);
+      // Get product media.
+      $first_sku = $productNode->get('field_skus')->first()->get('entity')->getValue();
+      $attributes[$skuId]['gtm-dimension4'] = count($first_sku->getMedia()) ?: '';
       $attributes[$skuId]['gtm-category'] = $this->fetchProductCategories($productNode);
       $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $attributes[$skuId]['quantity'] = $cartItem['qty'];
@@ -546,7 +549,7 @@ class AlshayaGtmManager {
    */
   public function fetchGeneralPageAttributes($data_layer) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-    if ($data_layer['userId'] !== 0) {
+    if ($data_layer['userUid'] !== 0) {
       $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) ? 'repeat buyer' : 'first time buyer';
     }
     else {
