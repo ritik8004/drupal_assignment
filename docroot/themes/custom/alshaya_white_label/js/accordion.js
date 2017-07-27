@@ -281,22 +281,25 @@
 
         // Close the mobile filter menu on tablet if clicked anywhere else.
         $(window).once().on('click', function (e) {
-          if ($(window).width() >= 768) {
-            if ($(e.target).is('.c-facet__label')) {
-              // Do nothing in this case, we already have a handler for this.
-            }
-            else if ($(e.target).is('.c-facet__title')) {
-              // Do nothing in this case, we already have a handler for this.
-            }
-            else {
-              // Close the menu if it is open.
-              if ($('.filter--mobile .c-facet__blocks').is(':visible')) {
-                $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
-                  .toggleClass('show-overlay');
-                $('.filter--mobile .c-facet__blocks').toggle();
-                $('body').toggleClass('filter-open-no-scroll');
-                $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
-                $('.c-facet__blocks__wrapper .c-facet__label').parent().siblings('.view-filters').toggleClass('low-zindex');
+          // Run only on PLP and Search page.
+          if ($('.page-wrapper > .page-standard').hasClass('c-plp')) {
+            if ($(window).width() >= 768) {
+              if ($(e.target).is('.c-facet__label')) {
+                // Do nothing in this case, we already have a handler for this.
+              }
+              else if ($(e.target).is('.c-facet__title')) {
+                // Do nothing in this case, we already have a handler for this.
+              }
+              else {
+                // Close the menu if it is open.
+                if ($('.filter--mobile .c-facet__blocks').is(':visible')) {
+                  $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
+                    .toggleClass('show-overlay');
+                  $('.filter--mobile .c-facet__blocks').toggle();
+                  $('body').toggleClass('filter-open-no-scroll');
+                  $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
+                  $('.c-facet__blocks__wrapper .c-facet__label').parent().siblings('.view-filters').toggleClass('low-zindex');
+                }
               }
             }
           }
