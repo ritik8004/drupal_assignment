@@ -554,7 +554,7 @@
 }
 
 #edit-acm-payment-methods-payment-options {
-  padding-left: 0;
+  padding-#{$left}: 0;
 
   .form-type-radio {
     width: 100%;
