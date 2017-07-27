@@ -24,6 +24,7 @@
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var isCCPage = false;
       var isPaymentPage = false;
+      var isRegistrationPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -54,6 +55,11 @@
       // If we are on payment page.
       if (document.location.pathname === Drupal.url('cart/checkout/payment')) {
         isPaymentPage = true;
+      }
+
+      // If we are on registration page.
+      if (document.location.pathname === Drupal.url('user/register')) {
+        isRegistrationPage = true;
       }
 
       /** Impressions tracking on listing pages with Products. **/
@@ -186,6 +192,15 @@
           }
         }
       });
+
+      /** Newsletter subscription tracking on Registration page. **/
+      if (isRegistrationPage) {
+        $('input[name="field_subscribe_newsletter[value]"]').change(function() {
+          if ($(this).is(':checked')) {
+            Drupal.alshaya_seo_gtm_push_lead_type('registration');
+          }
+        });
+      }
 
       /** Sub-delivery option virtual page tracking. **/
       if (subDeliveryOptionSelector.length > 0) {
