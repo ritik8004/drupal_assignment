@@ -183,7 +183,6 @@
     $('[data-drupal-selector="edit-member-delivery-home-address-form-address-id"]').val(data.id);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-given-name"]').val(data.given_name);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-family-name"]').val(data.family_name);
-    // $('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]').val(data.mobile);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val(data.administrative_area);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-locality"]').val(data.locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val(data.address_line1);
