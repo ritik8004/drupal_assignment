@@ -394,7 +394,7 @@
       productLinkSelector.each(function () {
         $(this).once('js-event').on('click', function (e) {
           var that = $(this);
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode);
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName);
         });
       });
 
@@ -403,7 +403,7 @@
       $('a[href*="product-quick-view"]').each(function() {
         $(this).once('js-event').on('click', function (e) {
           var that = $(this).closest('article[data-vmode="teaser"]');
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode);
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName);
         });
       });
 
@@ -485,7 +485,7 @@
       'dimension1': '',
       'dimension2': '',
       'dimension3': product.attr('gtm-dimension3'),
-      'dimension4': product.attr('gtm-dimension4'),
+      'dimension4': parseInt(product.attr('gtm-dimension4')),
       'dimension5': product.attr('gtm-sku-type'),
       'metric1': product.attr('gtm-cart-value')
     };
@@ -606,7 +606,7 @@
    * @param currencyCode
    * @param listName
    */
-  Drupal.alshaya_seo_gtm_push_product_clicks = function(element, currencyCode) {
+  Drupal.alshaya_seo_gtm_push_product_clicks = function(element, currencyCode, listName) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
     product.variant = '';
     var data = {
@@ -614,6 +614,7 @@
       'ecommerce': {
         'currencyCode': currencyCode,
         'click': {
+          'actionField': listName,
           'products': [product]
         }
       }
