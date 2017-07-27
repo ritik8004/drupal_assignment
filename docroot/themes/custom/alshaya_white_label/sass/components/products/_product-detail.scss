@@ -1427,3 +1427,22 @@ article[gtm-sku-type="simple"] {
     display: none !important;
   }
 }
+
+.acq-content-product {
+  .select2-container {
+    @include breakpoint($desktop) {
+      display: none;
+    }
+  }
+
+  .form-item-configurables-size {
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    .select2-container {
+      @include select2-style(100%);
+    }
+  }
+}
