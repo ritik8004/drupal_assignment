@@ -302,7 +302,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         // Set the correct step id.
         switch ($current_route['route_params']['step']) {
           case 'login':
-            // @Todo: Discuss with Tohid if ths is what he means by summary page.
             $step = 1;
             break;
 

@@ -546,6 +546,13 @@ class AlshayaGtmManager {
    */
   public function fetchGeneralPageAttributes($data_layer) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    if ($data_layer['userId'] !== 0) {
+      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) ? 'repeat buyer' : 'first time buyer';
+    }
+    else {
+      $customer_type = 'first time buyer';
+    }
+
     $data_layer_attributes = [
       'language' => $data_layer['drupalLanguage'],
       'platformType' => 'null',
@@ -553,7 +560,7 @@ class AlshayaGtmManager {
       'currency' => 'KWD',
       'userID' => $data_layer['userUid'],
       'userEmailID' => $data_layer['userMail'],
-      'customerType' => count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) ? 'repeat buyer' : 'first time buyer',
+      'customerType' => $customer_type,
       'userName' => $data_layer['userName'],
       'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
     ];
