@@ -459,15 +459,15 @@
       @include breakpoint($upto-desktop) {
         width: 42%;
       }
+    }
 
-      .price-wrapper {
-        width: 100%;
-        display: inline-block;
+    .price-wrapper {
+      width: 100%;
+      display: inline-block;
 
-        .price {
-          .price-amount {
-            float: $right;
-          }
+      .price {
+        .price-amount {
+          float: $right;
         }
       }
     }
