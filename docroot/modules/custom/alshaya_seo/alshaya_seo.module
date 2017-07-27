@@ -257,10 +257,14 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
   $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
   $currency_code = \Drupal::config('acq_commerce.currency')
     ->get('currency_code');
-  $data_layer = [];
   $confirmation_page = FALSE;
 
   $current_route = $gtm_manager->getGtmContainer();
+  $gtm_mapping = $gtm_manager::ROUTE_GTM_MAPPING;
+  $general_dl_attributes = $gtm_manager->fetchGeneralPageAttributes($data_layer);
+  $data_layer = $general_dl_attributes;
+
+  $page_type = isset($gtm_mapping[$current_route['route_name']]) ? $gtm_mapping[$current_route['route_name']] : 'not defined';
   switch ($current_route['route_name']) {
     case 'entity.node.canonical':
       if (isset($current_route['route_params'], $current_route['route_params']['node'])) {
@@ -299,18 +303,23 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         // Set the correct step id.
         switch ($current_route['route_params']['step']) {
           case 'login':
+            // @Todo: Discuss with Tohid if ths is what he means by summary page.
+            $page_type = 'summary page';
             $step = 1;
             break;
 
           case 'delivery':
             $step = 2;
+            $page_type = 'delivery page';
             break;
 
           case 'payment':
             $step = 4;
+            $page_type = 'payment page';
             break;
 
           case 'confirmation':
+            $page_type = 'confirmation page';
             // Fetch current order Id.
             $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
             $order_data = $temp_store->get('order');
@@ -365,6 +374,13 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
 
       }
       break;
+  }
+
+  if (($page_type === '') && ($current_route['route_name'] === 'entity.webform.canonical')) {
+    $webform = $current_route['route_params']['webform'];
+    if ($webform->id() === 'alshaya_contact') {
+      $page_type = 'contact us page';
+    }
   }
 }
 

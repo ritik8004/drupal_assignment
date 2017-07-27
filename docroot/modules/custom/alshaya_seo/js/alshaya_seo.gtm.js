@@ -25,6 +25,7 @@
       var isCCPage = false;
       var isPaymentPage = false;
       var isRegistrationPage = false;
+      var isRegistrationSuccessPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -60,6 +61,14 @@
       // If we are on registration page.
       if (document.location.pathname === Drupal.url('user/register')) {
         isRegistrationPage = true;
+      }
+
+      if (document.location.pathname === Drupal.url('user/register/complete')) {
+        isRegistrationSuccessPage = true;
+      }
+
+      if (isRegistrationSuccessPage) {
+        Drupal.alshaya_seo_gtm_push_signin_type('registration success');
       }
 
       /** Impressions tracking on listing pages with Products. **/
@@ -633,5 +642,15 @@
    */
   Drupal.alshaya_seo_gtm_push_lead_type = function(leadType) {
     dataLayer.push({'event' : 'leads', 'leadType' : leadType});
-  }
+  };
+
+  /**
+   * Helper funciton to push sign-in type event.
+   *
+   * @param signinType
+   */
+  Drupal.alshaya_seo_gtm_push_signin_type = function(signinType) {
+    dataLayer.push({'event' : 'User Login & Register', 'signinType' : signinType});
+  };
+
 })(jQuery, Drupal, dataLayer);

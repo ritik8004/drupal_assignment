@@ -9,6 +9,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\user\Entity\User;
 use Drupal\user\PrivateTempStoreFactory;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -41,6 +42,9 @@ class AlshayaGtmManager {
     'system.404' => 'page not found',
     'user.login' => 'login page',
     'acq_cart.cart' => 'cart page',
+    'acq_checkout.form' => '',
+    'view.stores_finder.page_2' => 'store finder',
+    'entity.webform.canonical' => '',
   ];
 
   /**
@@ -514,6 +518,57 @@ class AlshayaGtmManager {
       'products' => $products,
       'actionField' => $actionData,
     ];
+  }
+
+  /**
+   * Helper function to fetch general datalayer attributes for a page.
+   */
+  public function fetchGeneralPageAttributes($data_layer) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $data_layer_attributes = [
+      'language' => $data_layer['drupalLanguage'],
+      'platformType' => 'null',
+      'country' => $data_layer['drupalCountry'],
+      'currency' => 'KWD',
+      'userID' => $data_layer['userUid'],
+      'userEmailID' => $data_layer['userMail'],
+      'customerType' => count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) ? 'repeat buyer' : 'first time buyer',
+      'userName' => $data_layer['userName'],
+      'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
+    ];
+
+    return $data_layer_attributes;
+  }
+
+  /**
+   * Helper function to fetch page-specific datalayer attributes.
+   */
+  public function fetchPageSpecificAttributes($page_type) {
+    $department_name = ''; // Applicable for PLP/PDP
+    $department_id = ''; // Terms ids Applicable for PLP/PDP.
+    $major_category = ''; // Level 1 category for PLP/PDP.
+    $minor_category = ''; // Level 2 category for PLP/PDP.
+    $sub_category = ''; // Level 3 category for PLP/PDP.
+    $listing_name = ''; // Same as department name.
+    $listing_id = ''; // Same as department_id.
+    $product_style_code = ''; // Parent Product sku.
+    $product_sku = ''; // Same as above for simple product & variant for config.
+    $stock_status = ''; // Only on PDP.
+    $product_name = ''; // Only on PDP.
+    $product_brand = ''; // Only on PDP.
+    $product_color = ''; // Only on PDP.
+    $product_size = ''; // Only on PDP.
+    $product_price = ''; // Only on PDP. {final_price}
+    $product_old_price = ''; // Only on PDP. {price}
+    $product_picture_url = ''; // Only on PDP. {url to first image}
+    $product_rating = ''; // Only on PDP. Keep empty for now.
+    $product_reviews = ''; // Keep empty for now.
+    $product_magento_id = ''; // SKU of the Product.
+    $cart_total_value = ''; // Total value of the cart.
+    $cart_items_rr = ''; // Cart pages & above.
+    $cart_items_flocktory = ''; // Cart pages & above.
+    $store_location = ''; // After seleting the store in CC flow.
+    $store_address = ''; // After selecting the store in CC flow.
   }
 
 }
