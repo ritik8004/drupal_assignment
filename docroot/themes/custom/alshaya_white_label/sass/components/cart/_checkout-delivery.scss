@@ -420,6 +420,10 @@
           float: $left;
           margin-#{$right}: 1rem;
           top: 0.625rem;
+
+          .ucbrowser & {
+            top: 10px;
+          }
         }
 
         .shipping-method {
@@ -550,7 +554,7 @@
 }
 
 #edit-acm-payment-methods-payment-options {
-  padding-left: 0;
+  padding-#{$left}: 0;
 
   .form-type-radio {
     width: 100%;
