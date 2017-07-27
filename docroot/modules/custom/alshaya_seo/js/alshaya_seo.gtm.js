@@ -17,9 +17,9 @@
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]', context);
-      var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]');
-      var cartCheckoutDeliverySelector = $('body[gtm-container="cart-checkout-delivery"]');
-      var cartCheckoutPaymentSelector = $('body[gtm-container="cart-checkout-payment"]');
+      var cartCheckoutLoginSelector = $('body[gtm-container="summary page"]');
+      var cartCheckoutDeliverySelector = $('body[gtm-container="delivery page"]');
+      var cartCheckoutPaymentSelector = $('body[gtm-container="payment page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var isCCPage = false;

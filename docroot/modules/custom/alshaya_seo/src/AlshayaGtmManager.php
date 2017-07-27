@@ -9,8 +9,8 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\user\Entity\User;
 use Drupal\user\PrivateTempStoreFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -42,9 +42,13 @@ class AlshayaGtmManager {
     'system.404' => 'page not found',
     'user.login' => 'login page',
     'acq_cart.cart' => 'cart page',
-    'acq_checkout.form' => '',
+    'acq_checkout.form:login' => 'summary page',
+    'acq_checkout.form:click_collect' => 'click and collect page',
+    'acq_checkout.form:delivery' => 'delivery page',
+    'acq_checkout.form:payment' => 'payment page',
+    'acq_checkout.form:confirmation' => 'confirmation page',
     'view.stores_finder.page_2' => 'store finder',
-    'entity.webform.canonical' => '',
+    'entity.webform.canonical:alshaya_contact' => 'contact us',
   ];
 
   /**
@@ -115,6 +119,13 @@ class AlshayaGtmManager {
   protected $currentUser;
 
   /**
+   * The request stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -127,17 +138,21 @@ class AlshayaGtmManager {
    *   Private temp store service.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   Current User service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   Request stack service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
                               PrivateTempStoreFactory $privateTempStore,
-                              AccountProxyInterface $currentUser) {
+                              AccountProxyInterface $currentUser,
+                              RequestStack $requestStack) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
     $this->privateTempStore = $privateTempStore;
     $this->currentUser = $currentUser;
+    $this->requestStack = $requestStack;
   }
 
   /**
@@ -196,7 +211,7 @@ class AlshayaGtmManager {
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
-    $attributes['gtm-dimension2'] = '';
+    $attributes['gtm-dimension2'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
     $attributes['gtm-dimension4'] = count($sku->getMedia()) ?: '';
     $attributes['gtm-stock'] = '';
@@ -241,6 +256,7 @@ class AlshayaGtmManager {
       $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
       $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
       $currentRoute['pathinfo'] = $this->currentRouteMatch->getRouteObject();
+      $currentRoute['query'] = $this->requestStack->getCurrentRequest()->query->all();
     }
 
     return $currentRoute;
@@ -277,25 +293,31 @@ class AlshayaGtmManager {
             $routeIdentifier .= ':' . $term->getVocabularyId();
           }
           break;
+
+        case 'acq_cart.form':
+          if (isset($currentRoute['route_params']['step'])) {
+            if (($currentRoute['route_params']['step'] === 'delivery') &&
+              ($currentRoute['query']['method'] === 'cc')) {
+              $routeIdentifier .= ':click_collect';
+            }
+            else {
+              $routeIdentifier .= ':' . $currentRoute['route_params']['step'];
+            }
+          }
+          break;
+
+        case 'entity.webform.canonical':
+          if (isset($currentRoute['route_params']['webform'])) {
+            $routeIdentifier .= ':' . $currentRoute['route_params']['webform']->id();
+          }
       }
       $gtmRoutes = self::ROUTE_GTM_MAPPING;
 
       if (array_key_exists($routeIdentifier, $gtmRoutes)) {
         $gtmPageType = self::ROUTE_GTM_MAPPING[$routeIdentifier];
       }
-
-      if ($currentRoute['route_name'] === 'acq_checkout.form') {
-        if ($currentRoute['route_params']['step'] === 'login') {
-          $gtmPageType = 'cart-checkout-login';
-        }
-
-        if ($currentRoute['route_params']['step'] === 'delivery') {
-          $gtmPageType = 'cart-checkout-delivery';
-        }
-
-        if ($currentRoute['route_params']['step'] === 'payment') {
-          $gtmPageType = 'cart-checkout-payment';
-        }
+      else {
+        $gtmPageType = 'not defined';
       }
     }
 
@@ -504,7 +526,6 @@ class AlshayaGtmManager {
       'coupon' => $order['coupon'],
     ];
 
-    // @Todo: Update deliveryOption once click & collect/delivery option step is built.
     $generalInfo = [
       'deliveryOption' => $order['shipping']['method']['carrier_code'],
       'paymentOption' => $order['payment']['method_title'],
@@ -544,31 +565,7 @@ class AlshayaGtmManager {
    * Helper function to fetch page-specific datalayer attributes.
    */
   public function fetchPageSpecificAttributes($page_type) {
-    $department_name = ''; // Applicable for PLP/PDP
-    $department_id = ''; // Terms ids Applicable for PLP/PDP.
-    $major_category = ''; // Level 1 category for PLP/PDP.
-    $minor_category = ''; // Level 2 category for PLP/PDP.
-    $sub_category = ''; // Level 3 category for PLP/PDP.
-    $listing_name = ''; // Same as department name.
-    $listing_id = ''; // Same as department_id.
-    $product_style_code = ''; // Parent Product sku.
-    $product_sku = ''; // Same as above for simple product & variant for config.
-    $stock_status = ''; // Only on PDP.
-    $product_name = ''; // Only on PDP.
-    $product_brand = ''; // Only on PDP.
-    $product_color = ''; // Only on PDP.
-    $product_size = ''; // Only on PDP.
-    $product_price = ''; // Only on PDP. {final_price}
-    $product_old_price = ''; // Only on PDP. {price}
-    $product_picture_url = ''; // Only on PDP. {url to first image}
-    $product_rating = ''; // Only on PDP. Keep empty for now.
-    $product_reviews = ''; // Keep empty for now.
-    $product_magento_id = ''; // SKU of the Product.
-    $cart_total_value = ''; // Total value of the cart.
-    $cart_items_rr = ''; // Cart pages & above.
-    $cart_items_flocktory = ''; // Cart pages & above.
-    $store_location = ''; // After seleting the store in CC flow.
-    $store_address = ''; // After selecting the store in CC flow.
+    // Page specific attributes here.
   }
 
 }
