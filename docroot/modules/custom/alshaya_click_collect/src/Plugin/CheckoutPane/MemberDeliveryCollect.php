@@ -211,6 +211,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
           'cart_id' => $cart->id(),
           'selected_store' => ($store_code) ? TRUE : FALSE,
           'selected_store_obj' => $store,
+          // Default site country to limit autocomplete result.
+          'country' => _alshaya_custom_get_site_level_country_code(),
         ],
       ],
       'library' => [
