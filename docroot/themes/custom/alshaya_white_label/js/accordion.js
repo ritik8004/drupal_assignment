@@ -104,8 +104,8 @@
         moveContextualLink('.c-accordion');
 
         // Accordion for delivery option section on PDP.
-        $('.delivery-options-wrapper').once('bind-event').each(function () {
-          $('.c-accordion-delivery-options', $(this)).accordion({
+        $('.delivery-options-wrapper').find('.c-accordion-delivery-options').each(function () {
+          $(this).once('accordion-init').accordion({
             heightStyle: 'content',
             collapsible: true,
             active: false
