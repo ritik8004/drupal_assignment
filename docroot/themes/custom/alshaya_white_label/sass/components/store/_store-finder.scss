@@ -79,11 +79,9 @@
     }
   }
 
-  .mobile-store-detail {
-    @include breakpoint($only-mobile) {
-      #views-exposed-form-stores-finder-page-1 {
-        display: none;
-      }
+  .list-view-link {
+    @include breakpoint($desktop) {
+      text-indent: -0.4rem;
     }
   }
 
@@ -354,6 +352,7 @@
         padding-bottom: 0;
         line-height: 2.1875rem;
         height: 2.1875rem;
+        width: 100%;
       }
 
       &.ui-autocomplete-loading {
@@ -365,6 +364,7 @@
         border: 1px solid $white;
         border-#{$right}: 2.3125rem solid $white-five;
         height: 2.1875rem;
+        width: 100%;
       }
     }
 
@@ -436,8 +436,7 @@
             display: inline-block;
             color: $black;
             font-size: 1.875rem;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0.5rem;
             #{$right}: 0.4rem;
           }
         }
@@ -456,18 +455,17 @@
 
   .list-view-locator {
     font-size: 14px;
-    background: $white-four;
+    background: $white-five;
     padding: 1rem 0;
     padding-bottom: 0;
     margin-bottom: 1.625rem;
-    border: 1px solid transparent;
+    border: 1px solid $white;
     position: relative;
     cursor: pointer;
 
     &:hover,
     &.selected {
-      background-color: $white-five;
-      border: 1px solid $white;
+      background-color: $white-four;
     }
 
     .row-title {
@@ -940,6 +938,10 @@
     }
   }
 
+  .list-view-locator {
+    background-color: $white-four;
+  }
+
   .hours--wrapper {
     .hours--label.open {
       @include icon(chevronup, after) {
@@ -972,7 +974,7 @@
       }
 
       &::after {
-        transform: translateY(-50%);
+        transform: none;
       }
     }
 
@@ -1018,14 +1020,31 @@
     }
   }
 
+  .get--directions div a {
+    &.device__tablet {
+      display: none;
+
+      @include breakpoint($only-tablet) {
+        display: block;
+      }
+    }
+
+    &.device__desktop {
+      display: none;
+
+      @include breakpoint($desktop) {
+        display: block;
+      }
+    }
+  }
+
   .hours--label {
     @include icon(chevron#{$right}, after) {
       position: absolute;
       display: inline-block;
       color: $cerulean-two;
       font-size: 1.875rem;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 0.5rem;
       #{$right}: 0.7rem;
       pointer-events: none;
 
@@ -1048,8 +1067,7 @@
 
   .get--directions div::after {
     background: url('../imgs/icons/ic-directions.svg');
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1rem;
     #{$right}: 1rem;
     width: 18px;
     height: 18px;
@@ -1137,6 +1155,7 @@
   .hours--label,
   .hours--label::after {
     color: $black;
+    top: 0;
   }
 
   .get--directions,
@@ -1156,18 +1175,23 @@
     padding-bottom: 0.4rem;
   }
 
+  .get--directions div::after {
+    top: 0.5rem;
+  }
+
   .hours--wrapper .hours--label,
   .hours--wrapper .open--hours,
   .view-on--map a,
   .get--directions a {
-    padding: 1rem;
+    padding: 0.5rem;
     padding-#{$left}: 0;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
   }
 
   .open--hours {
     line-height: 1.57;
     margin-top: 0;
+    padding-top: 0;
   }
 }
 

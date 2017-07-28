@@ -34,7 +34,7 @@
       <a href="{{ url('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
     </div>
 
-    <a class="use-ajax row-title" href="{{ url('alshaya_stores_finder.store_detail', {'node': row.nid}) }}">{{ row.title }}</a>
+    <a class="use-ajax row-title" href="{{ url('alshaya_stores_finder.store_detail', {'node': row.nid, 'type': 'list'}) }}">{{ row.title }}</a>
 
     <div class="set-center-location" id="row-{{ row.nid }}">
       <div{{ row.attributes.addClass(row_classes) }}>

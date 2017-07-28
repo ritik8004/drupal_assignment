@@ -187,3 +187,14 @@
   };
 
 })(jQuery, Drupal);
+
+// Open Maps app depending on the device ios or Andriod.
+function mapsApp(lat, lng) {
+  // If it is an iPhone..
+  if( (navigator.platform.indexOf("iPhone") != -1)
+    || (navigator.platform.indexOf("iPod") != -1)
+    || (navigator.platform.indexOf("iPad") != -1))
+    window.open("maps://maps.google.com/maps?daddr="+lat+","+lng+"&amp;ll=");
+  else
+    window.open("geo:"+lat+","+lng+"");
+}
