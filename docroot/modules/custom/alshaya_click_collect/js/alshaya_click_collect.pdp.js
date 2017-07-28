@@ -137,7 +137,7 @@
   };
 
   // Set the location coordinates, but don't render the stores.
-  Drupal.pdp.setStoreCoords = function (coords) {
+  Drupal.pdp.setStoreCoords = function (coords, field, restriction, $trigger) {
     asCoords = coords;
     Drupal.pdp.storesDisplay(asCoords);
   };
@@ -199,7 +199,7 @@
   };
 
   // Make Ajax call to get stores and render html.
-  Drupal.pdp.storesDisplay = function (coords, $trigger) {
+  Drupal.pdp.storesDisplay = function (coords, field, restriction, $trigger) {
     if (coords) {
       asCoords = coords;
     }
@@ -275,13 +275,13 @@
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function () {
     var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   /**

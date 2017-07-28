@@ -93,14 +93,14 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#weight' => 6,
       ];
 
-      $form['geolocation_geocoder_google_geocoding_api']['#weight'] = 4;
+      $form['geolocation_geocoder_google_places_api']['#weight'] = 4;
 
       // Adding placeholder to the input field.
-      $form['geolocation_geocoder_google_geocoding_api']['#placeholder'] = t('e.g. Salmiya');
-      $form['geolocation_geocoder_google_geocoding_api']['#access'] = (bool) $store_finder_search_config;
+      $form['geolocation_geocoder_google_places_api']['#placeholder'] = t('e.g. Salmiya');
+      $form['geolocation_geocoder_google_places_api']['#access'] = (bool) $store_finder_search_config;
       $form['actions']['#access'] = (bool) $store_finder_search_config;
       $form['actions']['#weight'] = 5;
-      unset($form['geolocation_geocoder_google_geocoding_api']['#description']);
+      unset($form['geolocation_geocoder_google_places_api']['#description']);
       $form['field_latitude_longitude_proximity']['#attributes']['class'][] = 'hidden';
       $form['field_latitude_longitude_proximity']['#default_value'] = $store_finder_config->get('search_proximity_radius');
       $form['field_latitude_longitude_proximity']['#value'] = $store_finder_config->get('search_proximity_radius');
@@ -116,8 +116,8 @@ function alshaya_stores_finder_views_pre_view(ViewExecutable $view, $display_id,
     $header_text = '';
     $exposed_input = $view->getExposedInput();
     if (!empty($exposed_input)) {
-      if (!empty($exposed_input['geolocation_geocoder_google_geocoding_api'])) {
-        $header_text = t('@total closest stores to') . ' ' . '<strong>' . $exposed_input['geolocation_geocoder_google_geocoding_api'] . '</strong>';
+      if (!empty($exposed_input['geolocation_geocoder_google_places_api'])) {
+        $header_text = t('@total closest stores to') . ' ' . '<strong>' . $exposed_input['geolocation_geocoder_google_places_api'] . '</strong>';
       }
     }
 

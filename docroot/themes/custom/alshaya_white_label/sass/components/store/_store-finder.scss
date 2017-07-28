@@ -336,9 +336,9 @@
     display: none;
   }
 
-  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-  .form-item-geolocation-geocoder-google-geocoding-api {
-    [id^=edit-geolocation-geocoder-google-geocoding-api] {
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
+    [id^=edit-geolocation-geocoder-google-places-api] {
       background: none;
       border: 1px solid $greyish;
       border-#{$right}: 2.3125rem solid $white-five;
@@ -584,8 +584,8 @@
       width: 47%;
       margin-#{$right}: 0.5%;
 
-      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-      .form-item-geolocation-geocoder-google-geocoding-api {
+      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+      .form-item-geolocation-geocoder-google-places-api {
         width: 48% !important;
       }
     }
@@ -728,8 +728,8 @@
     }
   }
 
-  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-  .form-item-geolocation-geocoder-google-geocoding-api {
+  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
     position: relative;
 
     @include breakpoint($tablet) {
@@ -805,8 +805,8 @@
   }
 
   .store-finder--wrapper {
-    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-    .form-item-geolocation-geocoder-google-geocoding-api {
+    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+    .form-item-geolocation-geocoder-google-places-api {
       float: $right;
       width: 63.2%;
 
