@@ -28,15 +28,14 @@
 
         // First load the library from google.
         Drupal.geolocation.loadGoogle(function () {
-          $('input.geolocation-geocoder-google-places-api', context).each( function() {
+          $('input.geolocation-geocoder-google-places-api', context).each(function () {
             var field = $(this).get(0);
             // Create autocomplete object for places.
             new Drupal.ClickCollect(field, [Drupal.alshayaClickCollectPlacesApi.storePlacesDetails], componentRestrictions, field);
-
-            // Handle input and keyup events.
-            $(this).on('input', function () {
+          }) // Handle input and keyup events.
+            .on('input', function () {
               var elementId = $(this).data('source-identifier');
-              if ($("input[name='" + elementId + "-lat']").val() === '' || $("input[name='" + elementId + "-lng']").val() === '' ) {
+              if ($("input[name='" + elementId + "-lat']").val() === '' || $("input[name='" + elementId + "-lng']").val() === '') {
                 $('.geolocation-geocoder-google-places-api-state[data-source-identifier="' + $(this).data('source-identifier') + '"]').val(0);
               }
               return false;
@@ -47,7 +46,7 @@
                 e.preventDefault();
                 var elementId = $(this).data('source-identifier');
 
-                if ($("input[name='" + elementId + "-lat']").val() !== '' || $("input[name='" + elementId + "-lng']").val() !== '' ) {
+                if ($("input[name='" + elementId + "-lat']").val() !== '' || $("input[name='" + elementId + "-lng']").val() !== '') {
                   $(this).parents('form').find('input[type="submit"]').attr('disabled', '');
                   $(this).parents('form').find('input[type="submit"]').click();
                 }
@@ -56,7 +55,6 @@
                 }
               }
             });
-          });
         });
       }
     }
@@ -66,7 +64,7 @@
   Drupal.alshayaClickCollectPlacesApi.storePlacesDetails = function (coords, field) {
     var elementId = $(field).data('source-identifier');
     var lat = (typeof coords.lat !== 'undefined') ? coords.lat : '';
-    var lng = (typeof coords.lng !== 'undefined') ? coords.lat : '';
+    var lng = (typeof coords.lng !== 'undefined') ? coords.lng : '';
     var stateValue = 0;
     if (!$.isEmptyObject(coords)) {
       stateValue = 1;
@@ -76,6 +74,10 @@
     $("input[name='" + elementId + "-lng']").val(lng);
 
     $('.geolocation-geocoder-google-places-api-state[data-source-identifier="' + elementId + '"]').val(stateValue);
+
+    if (!$.isEmptyObject(coords)) {
+      $(field).parents('form').find('input[type="submit"]').click();
+    }
   };
 
 })(jQuery, Drupal);

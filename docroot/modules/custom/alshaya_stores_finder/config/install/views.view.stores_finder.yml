@@ -440,7 +440,20 @@ display:
       displays:
         page_1: page_1
         page_2: page_2
-      sorts: {  }
+      sorts:
+        field_latitude_longitude_proximity:
+          proximity_field: ''
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: geolocation_sort_proximity
       style:
         type: maps_common
         options:
@@ -846,7 +859,7 @@ display:
           value:
             min: ''
             max: ''
-            value: '25'
+            value: '10'
           group: 1
           exposed: true
           expose:
@@ -863,32 +876,21 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-              advanced_page_creator: '0'
-              advanced_page_reviewer: '0'
               media_creator: '0'
-              acq_product_creator: '0'
               media_manager: '0'
-              acq_product_reviewer: '0'
-              acq_promotion_creator: '0'
-              acq_promotion_reviewer: '0'
-              department_page_creator: '0'
-              department_page_reviewer: '0'
               webmaster: '0'
               reviewer: '0'
-              store_creator: '0'
-              store_reviewer: '0'
-              geolocation_default_article_creator: '0'
-              geolocation_default_article_reviewer: '0'
+              seo_admin: '0'
             input_by_geocoding_widget: 1
             geocoder_plugin_settings:
-              plugin_id: google_geocoding_api
+              plugin_id: click_collect_places_api
               settings:
-                components:
+                component_restrictions:
                   route: ''
                   locality: ''
                   administrativeArea: ''
                   postalCode: ''
-                  country: ''
+                  country: kw
           is_grouped: false
           group_info:
             label: ''
@@ -927,7 +929,20 @@ display:
       display_extenders: {  }
       display_description: ''
       path: store-finder/list
-      sorts: {  }
+      sorts:
+        field_latitude_longitude_proximity:
+          proximity_field: ''
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: geolocation_sort_proximity
       defaults:
         sorts: false
         header: false
@@ -1040,7 +1055,7 @@ display:
           value:
             min: ''
             max: ''
-            value: '25'
+            value: '5'
           group: 1
           exposed: true
           expose:
@@ -1057,32 +1072,21 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-              advanced_page_creator: '0'
-              advanced_page_reviewer: '0'
               media_creator: '0'
-              acq_product_creator: '0'
               media_manager: '0'
-              acq_product_reviewer: '0'
-              acq_promotion_creator: '0'
-              acq_promotion_reviewer: '0'
-              department_page_creator: '0'
-              department_page_reviewer: '0'
               webmaster: '0'
               reviewer: '0'
-              store_creator: '0'
-              store_reviewer: '0'
-              geolocation_default_article_creator: '0'
-              geolocation_default_article_reviewer: '0'
+              seo_admin: '0'
             input_by_geocoding_widget: 1
             geocoder_plugin_settings:
-              plugin_id: google_geocoding_api
+              plugin_id: click_collect_places_api
               settings:
-                components:
+                component_restrictions:
                   route: ''
                   locality: ''
                   administrativeArea: ''
                   postalCode: ''
-                  country: ''
+                  country: kw
           is_grouped: false
           group_info:
             label: ''
@@ -1509,7 +1513,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="{{ url(''alshaya_stores_finder.store_detail'', {''node'': nid|raw, ''type'': ''glossary''}) }}" class="use-ajax">{{ title }}</a>'
+            text: '<a href="{{ url(''alshaya_stores_finder.glossary'', {''node'': nid|raw}) }}" class="use-ajax">{{ title }}</a>'
             make_link: false
             path: '/store-glossay/{{ nid }}'
             absolute: false
@@ -1867,7 +1871,20 @@ display:
           inline: {  }
           separator: ''
           hide_empty: false
-      sorts: {  }
+      sorts:
+        field_latitude_longitude_proximity:
+          proximity_field: ''
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: geolocation_sort_proximity
       header:
         result:
           id: result
@@ -1987,32 +2004,21 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-              advanced_page_creator: '0'
-              advanced_page_reviewer: '0'
               media_creator: '0'
-              acq_product_creator: '0'
               media_manager: '0'
-              acq_product_reviewer: '0'
-              acq_promotion_creator: '0'
-              acq_promotion_reviewer: '0'
-              department_page_creator: '0'
-              department_page_reviewer: '0'
               webmaster: '0'
               reviewer: '0'
-              store_creator: '0'
-              store_reviewer: '0'
-              geolocation_default_article_creator: '0'
-              geolocation_default_article_reviewer: '0'
+              seo_admin: '0'
             input_by_geocoding_widget: 1
             geocoder_plugin_settings:
-              plugin_id: google_geocoding_api
+              plugin_id: click_collect_places_api
               settings:
-                components:
+                component_restrictions:
                   route: ''
                   locality: ''
                   administrativeArea: ''
                   postalCode: ''
-                  country: ''
+                  country: kw
           is_grouped: false
           group_info:
             label: ''
