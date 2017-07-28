@@ -715,7 +715,6 @@
 
       @include breakpoint($desktop) {
         max-height: 51rem;
-        border-#{$right}: 1px solid $white;
         padding-#{$right}: 1%;
       }
 
@@ -1163,8 +1162,14 @@
     max-width: 8.625rem;
   }
 
+  .hours--label {
+    @include icon(chevrondown, after);
+  }
+
   .hours--label.open {
     font-weight: bold;
+
+    @include icon(chevronup, after);
   }
 
   .view-on--map,
