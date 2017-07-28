@@ -688,12 +688,6 @@
     select {
       @include select-style(9.375rem);
 
-      html[lang=ar] & {
-        padding-top: 0;
-        padding-bottom: 0;
-        line-height: 1.59;
-      }
-
       @include breakpoint($tablet) {
         background-color: $white-two;
         z-index: 1;
