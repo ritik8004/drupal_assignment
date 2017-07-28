@@ -34,7 +34,7 @@
 {% endif %}
 
 <div class="view-on--map">
-  <a onclick="myNavFunc({{ lat_lng.lat }}, {{ lat_lng.lng }})">
+  <a onclick="mapsApp({{ lat_lng.lat }}, {{ lat_lng.lng }})">
     {% trans %}
     Get directions
     {% endtrans %}
@@ -48,7 +48,7 @@
       Get directions
       {% endtrans %}
     </a>
-    <a class="device__tablet" onclick="myNavFunc({{ lat_lng.lat }}, {{ lat_lng.lng }})">
+    <a class="device__tablet" onclick="mapsApp({{ lat_lng.lat }}, {{ lat_lng.lng }})">
       {% trans %}
       Get directions
       {% endtrans %}
