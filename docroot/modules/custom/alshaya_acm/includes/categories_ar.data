@@ -39,7 +39,7 @@ array (
             'parent_id' => 5,
             'store_id' => 3,
             'name' => 'للأطفال (منذ الولادة وحتى 18 شهراً)',
-            'description' => '',
+            'description' => '<p>Mothercare have a wide range of baby girls clothes that can take your baby girl from 1 year all the way to being a young girl at 10 years old.</p>',
             'position' => 1,
             'level' => 3,
             'in_menu' => true,
@@ -4153,6 +4153,26 @@ array (
             array (
             ),
           ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      14 => 
+      array (
+        'category_id' => 259,
+        'parent_id' => 2,
+        'store_id' => 3,
+        'name' => 'visualtest',
+        'description' => '',
+        'position' => 17,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
         ),
         'extension' => 
         array (

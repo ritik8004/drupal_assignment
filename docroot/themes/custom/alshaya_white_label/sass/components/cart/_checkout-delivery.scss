@@ -413,7 +413,9 @@
       &.option {
         @include clearfix;
 
-        top: 0;
+        .ucbrowser & {
+          top: 0;
+        }
 
         &::before {
           display: block;
@@ -550,7 +552,7 @@
 }
 
 #edit-acm-payment-methods-payment-options {
-  padding-left: 0;
+  padding-#{$left}: 0;
 
   .form-type-radio {
     width: 100%;
@@ -558,6 +560,10 @@
     padding: 1.5rem 0.5rem;
     border-top: 1px solid $white;
     border-bottom: 1px solid $white;
+
+    @include breakpoint($only-mobile) {
+      max-height: 4rem;
+    }
 
     @include breakpoint($tablet) {
       padding: 1.5rem;
@@ -577,6 +583,10 @@
     label {
       &.option {
         @include clearfix;
+
+        .ucbrowser & {
+          display: block;
+        }
 
         &::before {
           display: block;

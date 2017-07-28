@@ -185,21 +185,6 @@
     font-weight: normal;
   }
 
-  .attachment-after {
-    .views-field-title {
-      span {
-        font-size: 14px;
-        font-weight: bold;
-      }
-    }
-
-    .views-field-field-store-address {
-      font-size: 0.875rem;
-      margin-top: 0.1875rem;
-      margin-bottom: 0.5rem;
-    }
-  }
-
   .label--location {
     color: $grey-ash !important;
   }
@@ -361,6 +346,7 @@
       padding-#{$right}: 1rem;
       font-size: 0.75rem;
       color: $grey-ash;
+      width: 100%;
 
       @include breakpoint($only-mobile) {
         padding-#{$left}: 1.25rem;
@@ -581,8 +567,8 @@
     }
 
     .label--location,
-    #edit-list-view,
-    #edit-map-view {
+    .list-view-link,
+    .map-view-link {
       display: none;
     }
   }
@@ -604,8 +590,8 @@
       }
     }
 
-    #edit-list-view,
-    #edit-map-view {
+    .list-view-link,
+    .map-view-link {
       width: 17.6%;
     }
   }
@@ -1131,9 +1117,31 @@
     position: relative;
   }
 
+  .views-field-title {
+    span {
+      font-size: 0.875rem;
+      font-weight: bold;
+    }
+  }
+
+  .views-field-field-store-address {
+    font-size: 0.875rem;
+    margin-top: 0.1875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .scroll-fix {
+    min-width: 12rem;
+  }
+
   .hours--label,
   .hours--label::after {
     color: $black;
+  }
+
+  .get--directions,
+  .hours--label {
+    max-width: 8.625rem;
   }
 
   .hours--label.open {

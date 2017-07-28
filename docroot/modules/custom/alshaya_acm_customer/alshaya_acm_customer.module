@@ -628,8 +628,21 @@ function alshaya_acm_customer_alshaya_profile_installed() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_i18n')) {
     // Save some translations.
     $strings = [];
+
     $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
       'en' => 'Unrecognized email address or password.',
+    ];
+
+    $strings['Collector contact no.'] = [
+      'ar' => 'رقم اتصال المستلم',
+    ];
+
+    $strings['Delivery details'] = [
+      'ar' => 'تفاصيل التوصيل',
+    ];
+
+    $strings['Billing details'] = [
+      'ar' => 'معلومات تحرير الفاتورة',
     ];
 
     alshaya_i18n_save_translations($strings);

@@ -67,7 +67,7 @@
     }
 
     @include breakpoint($desktop) {
-      padding-#{$left}: 1rem;
+      padding-#{$left}: 3.563rem;
 
       @include u-visibility(inline);
     }
@@ -88,6 +88,10 @@
 
     @include breakpoint($desktop) {
       margin-top: 0;
+
+      &:first-child {
+        margin-#{$right}: 1.938rem;
+      }
     }
 
     label.option {

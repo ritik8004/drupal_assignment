@@ -257,10 +257,13 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
   $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
   $currency_code = \Drupal::config('acq_commerce.currency')
     ->get('currency_code');
-  $data_layer = [];
   $confirmation_page = FALSE;
 
   $current_route = $gtm_manager->getGtmContainer();
+  $general_dl_attributes = $gtm_manager->fetchGeneralPageAttributes($data_layer);
+  $data_layer = $general_dl_attributes;
+
+  $page_type = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
   switch ($current_route['route_name']) {
     case 'entity.node.canonical':
       if (isset($current_route['route_params'], $current_route['route_params']['node'])) {
@@ -335,6 +338,12 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
                   'products' => $attributes['products'],
                 ],
               ];
+
+              if ($attributes['general']['deliveryOption'] === 'click_and_collect_click_and_collect') {
+                $data_layer['event'] = 'VirtualPageView';
+                $data_layer['virtualPageUrl'] = '/virtualpv/click-and-collect/step4/order-success';
+                $data_layer['virtualPageTitle'] = 'C&C Step 4 – Order Success';
+              }
             }
 
             user_cookie_save([$cookie_key => 1]);
@@ -360,6 +369,8 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
       }
       break;
   }
+
+  $data_layer['pageType'] = $page_type;
 }
 
 /**

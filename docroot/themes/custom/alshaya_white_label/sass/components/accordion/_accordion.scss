@@ -23,6 +23,7 @@
   margin-top: 0;
   text-transform: lowercase;
   outline: none;
+  cursor: pointer;
 
   &::after {
     @include u-center--vertically;

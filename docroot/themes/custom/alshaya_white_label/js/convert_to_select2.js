@@ -8,6 +8,9 @@
 
   Drupal.behaviors.select2select = {
     attach: function (context, settings) {
+
+      $('.form-item-configurables-size .form-select').select2();
+
       $('.select2-select').once('bind-events').each(function () {
         $(this).select2();
       });

@@ -176,7 +176,7 @@
       @include select-wrapper(12.3125rem);
 
       padding: 0;
-      margin-top: 1.5em;
+      margin-top: 0.5em;
       position: relative;
       z-index: 3;
       width: 100%;
@@ -211,7 +211,7 @@
       @include select-bg(6.5625rem);
 
       padding: 0;
-      margin-top: 1.5em;
+      margin-top: 0.5em;
       width: 100%;
       min-height: 2.188rem;
 
@@ -267,7 +267,7 @@
   .form-item-quantity {
     position: relative;
     margin-bottom: 1.5rem;
-    margin-top: 2.1875rem;
+    margin-top: 1.45rem;
     float: $left;
 
     label {
@@ -1149,11 +1149,17 @@
       height: 8rem;
     }
 
+    .sku-base-form > div,
     .sku-base-form > .js-form-wrapper {
       @include breakpoint($mobile) {
         @include u-visibility(inline-block);
 
         width: 65%;
+        margin-#{$right}: 2rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 1rem;
       }
 
       @include breakpoint($desktop) {
@@ -1242,7 +1248,7 @@
 
         @include breakpoint($desktop) {
           float: $right;
-          margin-top: 2.1875rem;
+          margin-top: 1.1875rem;
         }
       }
     }
@@ -1354,6 +1360,10 @@ article[gtm-sku-type="simple"] {
     .sku-base-form {
       .form-item-quantity {
         float: $left !important;
+
+        @include breakpoint($tablet) {
+          margin-top: 2.5rem;
+        }
       }
 
       button[type="submit"] {
@@ -1362,6 +1372,10 @@ article[gtm-sku-type="simple"] {
           margin-top: 1rem;
           height: 2.188rem;
           text-align: center;
+        }
+
+        @include breakpoint($desktop) {
+          margin-top: 2.1875rem !important;
         }
       }
     }
@@ -1411,5 +1425,24 @@ article[gtm-sku-type="simple"] {
 .sku-base-form {
   .ajax-progress-throbber {
     display: none !important;
+  }
+}
+
+.acq-content-product {
+  .select2-container {
+    @include breakpoint($desktop) {
+      display: none;
+    }
+  }
+
+  .form-item-configurables-size {
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    .select2-container {
+      @include select2-style(100%);
+    }
   }
 }

@@ -196,7 +196,8 @@
     text-align: center;
 
     @include breakpoint($only-mobile) {
-      margin-top: 3rem;
+      margin-top: 1.75rem;
+      padding-#{$left}: 1.5rem;
     }
 
     @include breakpoint($tablet) {
@@ -430,7 +431,7 @@
 
       .dark--text {
         @include breakpoint($only-mobile) {
-          display: block;
+          display: inline-block;
         }
       }
     }
@@ -464,6 +465,10 @@
 
     svg {
       max-height: 4.875rem;
+      // Need height 100% for UC browser.
+      .ucbrowser & {
+        height: 100%;
+      }
     }
 
     .value {

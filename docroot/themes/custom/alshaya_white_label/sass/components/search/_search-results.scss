@@ -208,6 +208,7 @@ header,
   li.ui-menu-item {
     display: inherit;
     padding: 10px 1rem 10px 7.5px;
+    border: 1px solid transparent;
 
     &:not(:last-child) {
       border-bottom: 1px solid $white;
@@ -301,20 +302,20 @@ ul.item-list__checkbox,
 
       &:hover {
         margin-top: 0;
-        margin-right: 0.1875rem !important;
-        margin-left: -0.1875rem !important;
+        margin-#{$right}: 0.1875rem !important;
+        margin-#{$left}: -0.1875rem !important;
         padding: 0.1875rem;
         border: 1px solid $brownish-grey;
       }
 
       &:first-child {
         &:hover {
-          margin-left: 0 !important;
+          margin-#{$left}: 0 !important;
         }
       }
 
       &:last-child {
-        margin-right: 0 !important;
+        margin-#{$right}: 0 !important;
       }
     }
 

@@ -195,6 +195,16 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
     ];
 
     alshaya_i18n_save_translations($strings);
+
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+    // Create all payment plugins in taxonomy terms.
+    $payment_plugins = \Drupal::service('plugin.manager.acq_payment_method');
+    foreach ($payment_plugins as $plugin) {
+      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']);
+    }
+
   }
 
   $acq_checkout_settings = \Drupal::config('alshaya_acm_checkout.settings');
@@ -211,6 +221,12 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
 
   // This is just to create click and collect method term during install.
   $checkout_options_manager->loadShippingMethod($code, $default_name, '', $acq_checkout_settings->get('click_collect_method_carrier_code'), $acq_checkout_settings->get('click_collect_method_method_code'), $default_order_description);
+
+  // Configure allowed credit cards for cybersource.
+  $configFactory = \Drupal::configFactory()->getEditable('acq_cybersource.settings');
+  // Allowed list is received in comments of MMCPA-164.
+  $configFactory->set('allowed_cc_types', 'VI,MC,DN');
+  $configFactory->save();
 }
 
 /**
