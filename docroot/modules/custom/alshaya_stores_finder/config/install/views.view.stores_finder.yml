@@ -442,7 +442,7 @@ display:
         page_2: page_2
       sorts:
         field_latitude_longitude_proximity:
-          proximity_field: ''
+          proximity_field: field_latitude_longitude_proximity
           id: field_latitude_longitude_proximity
           table: node__field_latitude_longitude
           field: field_latitude_longitude_proximity
@@ -775,6 +775,81 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        field_latitude_longitude_proximity:
+          proximity_source: filter
+          proximity_lat: ''
+          proximity_lng: ''
+          proximity_units: km
+          proximity_filter: field_latitude_longitude_proximity
+          proximity_argument: ''
+          entity_id_argument: ''
+          boundary_filter: ''
+          proximity_geocoder: 0
+          proximity_geocoder_plugin_settings:
+            plugin_id: click_collect_places_api
+            settings:
+              component_restrictions:
+                route: ''
+                locality: ''
+                administrativeArea: ''
+                postalCode: ''
+                country: ''
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          set_precision: true
+          precision: 2
+          decimal: .
+          separator: ''
+          format_plural: false
+          format_plural_string: "1\x03@count"
+          prefix: ''
+          suffix: ''
+          plugin_id: geolocation_field_proximity
       pager:
         type: none
         options:
@@ -931,7 +1006,7 @@ display:
       path: store-finder/list
       sorts:
         field_latitude_longitude_proximity:
-          proximity_field: ''
+          proximity_field: field_latitude_longitude_proximity
           id: field_latitude_longitude_proximity
           table: node__field_latitude_longitude
           field: field_latitude_longitude_proximity
@@ -1357,6 +1432,81 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        field_latitude_longitude_proximity:
+          proximity_source: filter
+          proximity_lat: ''
+          proximity_lng: ''
+          proximity_units: km
+          proximity_filter: field_latitude_longitude_proximity
+          proximity_argument: ''
+          entity_id_argument: ''
+          boundary_filter: ''
+          proximity_geocoder: 0
+          proximity_geocoder_plugin_settings:
+            plugin_id: click_collect_places_api
+            settings:
+              component_restrictions:
+                route: ''
+                locality: ''
+                administrativeArea: ''
+                postalCode: ''
+                country: ''
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          set_precision: true
+          precision: 2
+          decimal: .
+          separator: ''
+          format_plural: false
+          format_plural_string: "1\x03@count"
+          prefix: ''
+          suffix: ''
+          plugin_id: geolocation_field_proximity
       pager:
         type: none
         options:
@@ -1873,7 +2023,7 @@ display:
           hide_empty: false
       sorts:
         field_latitude_longitude_proximity:
-          proximity_field: ''
+          proximity_field: field_latitude_longitude_proximity
           id: field_latitude_longitude_proximity
           table: node__field_latitude_longitude
           field: field_latitude_longitude_proximity
@@ -2289,6 +2439,81 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        field_latitude_longitude_proximity:
+          proximity_source: filter
+          proximity_lat: ''
+          proximity_lng: ''
+          proximity_units: km
+          proximity_filter: field_latitude_longitude_proximity
+          proximity_argument: ''
+          entity_id_argument: ''
+          boundary_filter: ''
+          proximity_geocoder: 0
+          proximity_geocoder_plugin_settings:
+            plugin_id: click_collect_places_api
+            settings:
+              component_restrictions:
+                route: ''
+                locality: ''
+                administrativeArea: ''
+                postalCode: ''
+                country: ''
+          id: field_latitude_longitude_proximity
+          table: node__field_latitude_longitude
+          field: field_latitude_longitude_proximity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          set_precision: true
+          precision: 2
+          decimal: .
+          separator: ''
+          format_plural: false
+          format_plural_string: "1\x03@count"
+          prefix: ''
+          suffix: ''
+          plugin_id: geolocation_field_proximity
       empty:
         area:
           id: area
