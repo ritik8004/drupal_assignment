@@ -50,6 +50,16 @@ class CartController extends ControllerBase {
    */
   public function cartRemoveSku($sku) {
     if (!empty($sku)) {
+
+      // If there is a coupon applied on cart.
+      if (!empty($this->cart->getCoupon())) {
+        // If only one item in cart.
+        if (count($this->cart->items()) == 1) {
+          // Remove coupon.
+          $this->cart->setCoupon('');
+        }
+      }
+
       // Remove the item from cart.
       $this->cart->removeItemFromCart($sku);
       // Update cart, after the item has been removed.
