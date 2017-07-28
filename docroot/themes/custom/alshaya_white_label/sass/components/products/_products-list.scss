@@ -495,7 +495,7 @@
     background: $white-two;
     height: 2.1875rem;
     padding: 0.625rem;
-    border-right: 1px solid $white-five;
+    border-#{$right}: 1px solid $white-five;
     font-weight: normal;
     margin: 0;
 
@@ -688,17 +688,17 @@
     select {
       @include select-style(9.375rem);
 
+      html[lang=ar] & {
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: 1.59;
+      }
+
       @include breakpoint($tablet) {
         background-color: $white-two;
         z-index: 1;
         padding: 0.625rem;
         padding-left: 0.75rem;
-
-        html[lang=ar] & {
-          padding-top: 0;
-          padding-bottom: 0;
-          line-height: 1.59;
-        }
       }
 
       @include breakpoint($only-mobile) {

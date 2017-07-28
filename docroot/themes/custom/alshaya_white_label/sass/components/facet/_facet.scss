@@ -65,5 +65,8 @@
   font-size: 0.875rem;
   margin: 0.75rem 0.5rem;
   text-transform: lowercase;
-  color: $black;
+
+  @include breakpoint($desktop) {
+    color: $black;
+  }
 }
