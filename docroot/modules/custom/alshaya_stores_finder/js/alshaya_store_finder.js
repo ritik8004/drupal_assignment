@@ -13,6 +13,11 @@
   Drupal.behaviors.storeFinder = {
     attach: function (context, settings) {
 
+      // Opening hours toggle.
+      $('[data-drupal-selector="views-form-stores-finder-page-1"], .geolocation-common-map-container', context).on('click', '.hours--label', function(el) {
+        $(this).toggleClass('open');
+      });
+
       var storeFinderPageSelector = $('.view-id-stores_finder.view-display-id-page_1', context);
       if (storeFinderPageSelector.length > 0) {
         var loadmoreItemLimit = settings.stores_finder.load_more_item_limit;
