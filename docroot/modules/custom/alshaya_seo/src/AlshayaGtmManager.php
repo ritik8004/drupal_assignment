@@ -562,9 +562,9 @@ class AlshayaGtmManager {
       'country' => $data_layer['drupalCountry'],
       'currency' => 'KWD',
       'userID' => $data_layer['userUid'],
-      'userEmailID' => $data_layer['userMail'],
+      'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
       'customerType' => $customer_type,
-      'userName' => $data_layer['userName'],
+      'userName' => ($data_layer['userUid'] !== 0) ? $data_layer['userName'] : '',
       'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
     ];
 
