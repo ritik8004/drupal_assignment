@@ -106,12 +106,12 @@
         geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
             if ($('.current-view').length) {
-              $('.current-view #edit-geolocation-geocoder-google-geocoding-api').val(results[1].formatted_address);
+              $('.current-view #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
               $('.current-view input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
               $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
             }
             else {
-              $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-geocoding-api').val(results[1].formatted_address);
+              $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
               $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
               $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
             }
