@@ -1429,9 +1429,11 @@ article[gtm-sku-type="simple"] {
 }
 
 .acq-content-product {
-  .select2-container {
-    @include breakpoint($desktop) {
-      display: none;
+  .form-item-configurables-size {
+    .select2-container {
+      @include breakpoint($desktop) {
+        display: none;
+      }
     }
   }
 
