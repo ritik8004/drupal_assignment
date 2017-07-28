@@ -189,7 +189,7 @@
 })(jQuery, Drupal);
 
 // Open Maps app depending on the device ios or Andriod.
-function myNavFunc(lat, lng){
+function mapsApp(lat, lng) {
   // If it is an iPhone..
   if( (navigator.platform.indexOf("iPhone") != -1)
     || (navigator.platform.indexOf("iPod") != -1)
