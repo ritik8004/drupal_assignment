@@ -112,3 +112,7 @@ utils:
 cleave:
   js:
     vendor/js/cleave.min.js: {}
+
+plp_search_js:
+  js:
+    js/plp-search.js: {}

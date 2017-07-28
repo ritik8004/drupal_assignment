@@ -89,6 +89,20 @@ function alshaya_white_label_preprocess_page(&$variables) {
   }
 
   $variables['nojs_message'] = \Drupal::config('alshaya_master.settings')->get('js_disable_message');
+
+  $routmatch = \Drupal::routeMatch();
+  // Attach the plp search js library to PLP page.
+  if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routmatch->getParameter('taxonomy_term');
+    if ($term->bundle() == 'acq_product_category') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+    }
+  }
+
+  // Attach the plp search js library to Search page.
+  if ($routmatch->getRouteName() == 'view.search.page') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+  }
 }
 
 /**
