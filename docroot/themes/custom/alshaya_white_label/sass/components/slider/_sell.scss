@@ -296,7 +296,9 @@
     }
 
     .select2-container {
-      @include select2-style(4.375rem);
+      @include select2-style(12.375rem);
+
+      float: $left;
     }
 
     .form-item-configurables-size {

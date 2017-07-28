@@ -253,13 +253,13 @@
 
     @include breakpoint($only-mobile) {
       float: $right;
-      top: -3px;
+      top: -7px;
       background-color: $whisper-dark;
     }
 
     @include breakpoint($only-tablet) {
       float: $right;
-      top: -3px;
+      top: -7px;
       background-color: $whisper-dark;
     }
   }
@@ -1428,6 +1428,7 @@ article[gtm-sku-type="simple"] {
   }
 }
 
+.ui-dialog,
 .acq-content-product {
   .form-item-configurables-size {
     .select2-container {
@@ -1446,5 +1447,15 @@ article[gtm-sku-type="simple"] {
     .select2-container {
       @include select2-style(100%);
     }
+  }
+}
+
+.ui-dialog {
+  .field--name-field-skus .sku-base-form > .js-form-wrapper {
+    margin-#{$right}: 0;
+  }
+
+  .content__title_wrapper {
+    margin-bottom: 1rem;
   }
 }
