@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Search and PLP DOM modifications and event handlers.
+ */
+
 (function ($) {
   'use strict';
   Drupal.behaviors.alshayaPLPSearch = {
