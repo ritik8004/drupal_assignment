@@ -413,17 +413,15 @@
       &.option {
         @include clearfix;
 
-        top: 0;
+        .ucbrowser & {
+          top: 0;
+        }
 
         &::before {
           display: block;
           float: $left;
           margin-#{$right}: 1rem;
           top: 0.625rem;
-
-          .ucbrowser & {
-            top: 10px;
-          }
         }
 
         .shipping-method {
@@ -563,6 +561,10 @@
     border-top: 1px solid $white;
     border-bottom: 1px solid $white;
 
+    @include breakpoint($only-mobile) {
+      max-height: 4rem;
+    }
+
     @include breakpoint($tablet) {
       padding: 1.5rem;
     }
@@ -581,6 +583,10 @@
     label {
       &.option {
         @include clearfix;
+
+        .ucbrowser & {
+          display: block;
+        }
 
         &::before {
           display: block;

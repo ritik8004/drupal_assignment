@@ -41,7 +41,7 @@
 
       var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)');
       if (items.length) {
-        items.addClass('cloud-zoom-processed', context).CloudZoom();
+        items.addClass('cloud-zoom-processed', context).once('bind-events').CloudZoom();
       }
 
       $('#lightSlider', context).slick(slickOptions);

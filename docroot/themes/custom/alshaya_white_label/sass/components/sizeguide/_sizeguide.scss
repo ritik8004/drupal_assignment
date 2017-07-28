@@ -1,9 +1,17 @@
 // Size Guide Link theme
 .size-guide-link {
   float: $right;
-  padding-top: 0.625rem;
+  padding-top: 0;
   font-size: 0.6875rem;
   color: $cerulean;
+
+  @include breakpoint($desktop) {
+    padding-top: 0.625rem;
+  }
+
+  .sell-sku & {
+    padding-top: 0.625rem;
+  }
 
   + .ajax-progress-throbber {
     @include u-visibility(none);

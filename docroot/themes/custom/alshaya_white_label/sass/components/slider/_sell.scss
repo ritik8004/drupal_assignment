@@ -295,6 +295,10 @@
       }
     }
 
+    .select2-container {
+      @include select2-style(4.375rem);
+    }
+
     .form-item-configurables-size {
       select {
         display: block !important;
