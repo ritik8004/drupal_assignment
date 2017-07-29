@@ -48,13 +48,36 @@
         };
       }
 
-
       if ($.isArray(callbacks)) {
         callbacks.forEach(function (callback) {
           callback.call(this, click_collect.coords, field, restriction, $trigger);
         });
       }
     });
+
+    // No result found.
+    var $noResultEle = $('<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>');
+
+    $(field).on('keyup', function (e) {
+      var keyCode = e.keyCode || e.which;
+      if (keyCode === 13) {
+        return false;
+      }
+
+      if ($(this).val().length > 0) {
+        $noResultEle.get(0).remove();
+        setTimeout(function () {
+          if ($('.pac-container').last().find('.pac-item').length === 0) {
+            $('.pac-container').last().html($noResultEle);
+            $('.pac-container').last().show();
+          }
+          else {
+            $noResultEle.get(0).remove();
+          }
+        }, 1000);
+      }
+    });
+
   };
 
   // Initialize autocomplete for given field.

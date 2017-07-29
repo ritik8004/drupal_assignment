@@ -17,9 +17,6 @@
   Drupal.click_collect = Drupal.click_collect || {};
   Drupal.alshayaClickCollectPlacesApi = Drupal.alshayaClickCollectPlacesApi || {};
 
-  // No result found.
-  var $noResult = $('<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>');
-
   Drupal.behaviors.alshayaClickCollectPlacesApi = {
     attach: function (context, settings) {
       if (typeof Drupal.geolocation.loadGoogle === 'function') {
@@ -57,26 +54,6 @@
                   return false;
                 }
               }
-            })
-            .on('keyup', function (e) {
-              var keyCode = e.keyCode || e.which;
-              if (keyCode === 13) {
-                return false;
-              }
-
-              if ($(this).val().length > 0) {
-                $('.pac-container').first().find('.pac-not-found').remove();
-                setTimeout(function () {
-                  if ($('.pac-container').first().find('.pac-item').length === 0) {
-                    $('.pac-container').first().html($noResult);
-                    $('.pac-container').first().show();
-                  }
-                  else {
-                    $('.pac-container').first().find('.pac-not-found').remove();
-                  }
-                }, 1000);
-              }
-
             });
         });
       }

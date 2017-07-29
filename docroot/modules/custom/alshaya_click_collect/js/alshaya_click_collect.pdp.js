@@ -70,7 +70,9 @@
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
           e.preventDefault();
-          $('.click-collect-form').find('.search-stores-button').click();
+          if (!$.isEmptyObject(asCoords)) {
+            $('.click-collect-form').find('.search-stores-button').click();
+          }
           return false;
         }
       });
@@ -153,7 +155,9 @@
   // Set the location coordinates, but don't render the stores.
   Drupal.pdp.setStoreCoords = function (coords, field, restriction, $trigger) {
     asCoords = coords;
-    Drupal.pdp.storesDisplay(asCoords);
+    if (!$.isEmptyObject(asCoords)) {
+      Drupal.pdp.storesDisplay(asCoords);
+    }
   };
 
   Drupal.pdp.getProductInfo = function () {
@@ -218,7 +222,7 @@
       asCoords = coords;
     }
 
-    if (asCoords) {
+    if (!$.isEmptyObject(asCoords)) {
       // Get the Product info.
       var productInfo = Drupal.pdp.getProductInfo();
       var sku = '';
