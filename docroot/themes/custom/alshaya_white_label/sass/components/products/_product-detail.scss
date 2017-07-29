@@ -783,7 +783,16 @@
     @include u-visibility(none);
   }
 
-  .pac-item {
+  .pac-not-found {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 30px;
+    text-align: left;
+  }
+
+  .pac-item,
+  .pac-not-found {
     padding: 0.125rem 0.3125rem;
     font-family: $arial;
 
@@ -793,6 +802,7 @@
   }
 
   .pac-item,
+  .pac-not-found,
   .pac-matched,
   .pac-item-query {
     font-size: 0.75rem !important;
