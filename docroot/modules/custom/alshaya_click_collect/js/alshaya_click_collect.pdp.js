@@ -36,12 +36,12 @@
 
       // Show/Hide subtitle for delivery options accordions.
       $('.c-accordion-delivery-options').each(function () {
-        $(this).once('accordion-trigger').on('accordionactivate', function (event, ui) {
+        $(this).once('accordion-trigger').on('accordionbeforeactivate', function (event, ui) {
           if (ui.newHeader.length > 0) {
-            $(event.target).find('h3 > .subtitle').hide();
+            $(event.target).find('h3 > .subtitle').slideUp();
           }
           else {
-            $(event.target).find('h3 > .subtitle').show();
+            $(event.target).find('h3 > .subtitle').slideDown('slow');
           }
         });
       });
