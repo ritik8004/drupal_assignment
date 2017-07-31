@@ -654,8 +654,12 @@
           background: $white url('../imgs/cards/knet-inactive.png') no-repeat;
           background-size: 100%;
           position: absolute;
-          #{$right}: 1.8rem;
+          #{$right}: 0.8rem;
           top: 54%;
+
+          @include breakpoint($tablet) {
+            #{$right}: 1.8rem;
+          }
         }
 
         &-cashondelivery,
