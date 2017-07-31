@@ -5,6 +5,7 @@ namespace Drupal\alshaya_seo;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
@@ -13,6 +14,7 @@ use Drupal\user\PrivateTempStoreFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Mobile_Detect;
 
 /**
  * Class AlshayaGtmManager.
@@ -126,6 +128,13 @@ class AlshayaGtmManager {
   protected $requestStack;
 
   /**
+   * The Entity Manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityManager
+   */
+  protected $entityManager;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -140,19 +149,23 @@ class AlshayaGtmManager {
    *   Current User service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   Request stack service.
+   * @param \Drupal\Core\Entity\EntityManager $entityManager
+   *   Entity Manager service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
                               PrivateTempStoreFactory $privateTempStore,
                               AccountProxyInterface $currentUser,
-                              RequestStack $requestStack) {
+                              RequestStack $requestStack,
+                              EntityManager $entityManager) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
     $this->privateTempStore = $privateTempStore;
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
+    $this->entityManager = $entityManager;
   }
 
   /**
@@ -174,7 +187,7 @@ class AlshayaGtmManager {
     $skuAttributes = $this->fetchSkuAtttributes($skuId);
 
     $attributes['gtm-type'] = 'gtm-product-link';
-    $attributes['gtm-category'] = $this->fetchProductCategories($product);
+    $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
@@ -427,7 +440,7 @@ class AlshayaGtmManager {
       // Get product media.
       $first_sku = $productNode->get('field_skus')->first()->get('entity')->getValue();
       $attributes[$skuId]['gtm-dimension4'] = count($first_sku->getMedia()) ?: '';
-      $attributes[$skuId]['gtm-category'] = $this->fetchProductCategories($productNode);
+      $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $attributes[$skuId]['quantity'] = $cartItem['qty'];
       $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
@@ -442,7 +455,7 @@ class AlshayaGtmManager {
    * @param \Drupal\node\Entity\Node $productNode
    *   Product node.
    *
-   * @return string
+   * @return array
    *   Concatenated product categories.
    *
    * @throws \InvalidArgumentException
@@ -460,14 +473,15 @@ class AlshayaGtmManager {
     elseif (count($categories) === 1) {
       // Load parent terms of the category & send them across to GTM too.
       $category = array_shift($categories);
-      $category_parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($category['target_id']);
+      $category_parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($category['target_id']);
       $category_parents = array_reverse($category_parents);
 
       foreach ($category_parents as $category_parent) {
-        $terms[] = $category_parent->getName();
+        $terms[$category_parent->id()] = $category_parent->getName();
       }
     }
-    return implode('/', $terms);
+
+    return $terms;
   }
 
   /**
@@ -509,7 +523,7 @@ class AlshayaGtmManager {
     foreach ($orderItems as $key => $item) {
       $product = $this->fetchSkuAtttributes($item['sku']);
       $productNode = alshaya_acm_product_get_display_node($item['sku']);
-      $product['gtm-category'] = $this->fetchProductCategories($productNode);
+      $product['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $productExtras = [
         'quantity' => $item['ordered'],
@@ -549,6 +563,18 @@ class AlshayaGtmManager {
    */
   public function fetchGeneralPageAttributes($data_layer) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    // Detect platform from headers.
+    $request_headers = $this->requestStack->getCurrentRequest()->headers->all();
+    $request_ua = $this->requestStack->getCurrentRequest()->headers->get('HTTP_USER_AGENT');
+    $mobile_detect = new Mobile_Detect($request_headers, $request_ua);
+    $platform = 'Desktop';
+    if ($mobile_detect->isMobile()) {
+      $platform = 'Mobile';
+    }
+    elseif ($mobile_detect->isTablet()) {
+      $platform = 'Tablet';
+    }
+
     if ($data_layer['userUid'] !== 0) {
       $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) ? 'repeat buyer' : 'first time buyer';
     }
@@ -558,8 +584,8 @@ class AlshayaGtmManager {
 
     $data_layer_attributes = [
       'language' => $data_layer['drupalLanguage'],
-      'platformType' => 'null',
-      'country' => $data_layer['drupalCountry'],
+      'platformType' => $platform,
+      'country' => 'Kuwait',
       'currency' => 'KWD',
       'userID' => $data_layer['userUid'],
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
@@ -574,8 +600,66 @@ class AlshayaGtmManager {
   /**
    * Helper function to fetch page-specific datalayer attributes.
    */
-  public function fetchPageSpecificAttributes($page_type) {
-    // Page specific attributes here.
+  public function fetchPageSpecificAttributes($page_type, $current_route) {
+    $page_dl_attributes = [];
+    switch ($page_type) {
+      case 'product detail page':
+        $node = $current_route['route_params']['node'];
+        $product_sku = $node->get('field_skus')->getValue();
+        $sku_entity = SKU::loadFromSku($product_sku);
+        $sku_attributes = $this->fetchSkuAtttributes($product_sku);
+
+        // Check if this product is in stock.
+        $stock_response = alshaya_acm_is_product_in_stock($sku_entity);
+        $stock_status = $stock_response ? 'in stock' : 'out of stock';
+        $product_terms = $this->fetchProductCategories($node);
+
+        $page_dl_attributes = [
+          'product_style_code' => $product_sku,
+          'product_sku' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
+          'stock_status' => $stock_status,
+          'product_name' => $node->getTitle(),
+          'product_brand' => $sku_attributes['gtm-brand'],
+          'product_color' => '',
+          'product_size' => $sku_attributes['gtm-dimension1'],
+          'product_price' => $sku_attributes['gtm-price'],
+          'product_old_price' => $sku_entity->get('price')->getString(),
+          'product_picture_url' => alshaya_acm_product_get_product_media($node->id(), TRUE),
+          'product_rating' => '',
+          'product_reviews' => '',
+          'product_magento_id' => $product_sku,
+        ];
+
+        $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        break;
+
+      case 'product listing page':
+        $taxonomy_term = $current_route['route_params']['taxonomy_term'];
+        $taxonomy_parents = array_reverse($this->entityManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+        foreach ($taxonomy_parents as $taxonomy_parent) {
+          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+        }
+
+        $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+        break;
+    }
+
+    return $page_dl_attributes;
+  }
+
+  /**
+   * Helper function to get department specific attributes from terms.
+   */
+  public function fetchDepartmentAttributes($terms) {
+    return [
+      'department_name' => implode('|', $terms),
+      'department_id' => implode('|', array_keys($terms)),
+      'listing_name' => implode(',', $terms),
+      'listing_id' => implode(',', array_keys($terms)),
+      'major_category' => array_shift($terms),
+      'minor_category' => array_shift($terms),
+      'sub_category' => array_shift($terms) ?: '',
+    ];
   }
 
 }
