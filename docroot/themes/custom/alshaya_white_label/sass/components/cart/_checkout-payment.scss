@@ -53,11 +53,21 @@
 }
 
 #edit-billing-address {
+  margin-top: 1rem;
+
+  legend {
+    padding: 0 1rem;
+
+    @include breakpoint($tablet) {
+      padding: 0 1.5rem;
+    }
+  }
+
   .fieldset-wrapper {
     padding: 1rem 0;
 
     @include breakpoint($tablet) {
-      padding: 1rem;
+      padding: 1rem 1.5rem;
     }
   }
 
@@ -67,7 +77,7 @@
     }
 
     @include breakpoint($desktop) {
-      padding-#{$left}: 1rem;
+      padding-#{$left}: 1.5rem;
 
       @include u-visibility(inline);
     }
@@ -135,21 +145,34 @@
   }
 }
 
+#edit-acm-payment-methods-payment-options {
+  font-size: 0;
+  height: 0;
+  margin: 0;
+  visibility: hidden;
+}
+
 #payment_details {
   @include clearfix;
 
   margin-top: 0;
   clear: both;
 
-  @include breakpoint($mobile) {
-    padding: 1rem 0;
+  #payment_method_cybersource & {
+    background: $white-five;
+    border-top: 1px solid $white;
+
+    @include breakpoint($mobile) {
+      padding: 1rem 0;
+    }
+
+    @include breakpoint($tablet) {
+      padding: 1.5rem;
+      padding-top: 0.5rem;
+    }
   }
 
-  @include breakpoint($tablet) {
-    padding: 1rem;
-  }
-
-  .form-item-acm-payment-methods-payment-details-cc-number {
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-number {
     width: 12.5rem;
   }
 
@@ -197,8 +220,8 @@
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-cc-exp-year,
-  .form-item-acm-payment-methods-payment-details-cc-exp-month {
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
     float: $left;
     width: 105px;
     height: 35px;
@@ -226,7 +249,7 @@
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-cc-cvv {
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-cvv {
     width: 6.3125rem;
     clear: both;
     margin-bottom: 1em;
