@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -309,4 +310,47 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
   }
 
   return $orders[$order_index];
+}
+
+/**
+ * Implements hook_acq_cybersource_before_get_token_cart_alter().
+ */
+function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartInterface $cart, array $form_data, array &$errors) {
+  $terms_accepted = isset($form_data['checkout_terms'], $form_data['checkout_terms']['terms']) && !empty($form_data['checkout_terms']['terms']);
+  $billing = $form_data['billing_address'];
+
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+  // Do all validations first.
+  if (!$terms_accepted) {
+    $errors['checkout_terms[terms]'] = t('Please agree to the Terms and Conditions.');
+  }
+
+  if (empty($billing['same_as_shipping']) || $billing['same_as_shipping'] != 1) {
+    if ($violations = $address_book_manager->validateAddress($billing['address']['billing'])) {
+      foreach ($violations as $field => $message) {
+        $errors['billing_address[address][billing][' . $field . ']'] = $message;
+      }
+    }
+  }
+
+  if (!empty($errors)) {
+    return;
+  }
+
+  // Cybersource requires billing info to be available before it processes
+  // credit card. This info is set in the signed fields by Magento. To ensure
+  // we have the values set, we need to pass it to Magento before we start
+  // payment process.
+  if (!empty($billing['same_as_shipping']) && $billing['same_as_shipping'] == 1) {
+    $cart->setBilling($cart->getShipping());
+  }
+  else {
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    $address = _alshaya_acm_checkout_clean_address($address_book_manager->getMagentoAddressFromAddressArray($billing['address']['billing']));
+    $cart->setBilling($address);
+  }
+
 }
