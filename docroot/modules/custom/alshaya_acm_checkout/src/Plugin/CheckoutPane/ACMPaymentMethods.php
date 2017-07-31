@@ -170,7 +170,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         ],
       ];
 
-      $title = '<div id="payment_method_' . $payment_plugin . '"';
+      $title = '<div id="payment_method_title_' . $payment_plugin . '"';
       $title .= $payment_plugin == $selected_plugin_id ? ' class="plugin-selected payment-plugin-wrapper-div" ' : ' class="payment-plugin-wrapper-div" ';
       $title .= ' data-value="' . $payment_plugin . '" ';
       $title .= '>';

@@ -19,8 +19,6 @@
       // using custom markup. Here we update the radio buttons on
       // click of payment method names in custom markup.
       $('#payment_details_wrapper').once('bind-events').each(function () {
-        $('[data-drupal-selector="edit-acm-payment-methods-payment-options"] .form-type-radio').hide();
-
         $('.payment-method-name', $(this)).on('click', function () {
           var selected_option = $(this).parents('.payment-plugin-wrapper-div:first').data('value');
           $('[data-drupal-selector="edit-acm-payment-methods-payment-options"]').find('input[value="' + selected_option + '"]').trigger('click');

@@ -67,8 +67,8 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
  */
 function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Add markup to show selected card type.
-  if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details_wrapper'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource']['cc_number'])) {
-    $cc_form =& $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource'];
+  if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details_wrapper'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource']['payment_details'])) {
+    $cc_form =& $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource']['payment_details'];
 
     $cc_form['cc_number']['#suffix'] = '
       <div class="card-types-wrapper">
