@@ -134,6 +134,14 @@
         });
       }
 
+      // Accordion behaviour for list view locator.
+      var listLocator = $('.list-view-locator .hours--label');
+      $(listLocator).on('click', function() {
+        if($(listLocator).hasClass('open')) {
+          $(listLocator).not($(this)).removeClass('open');
+        }
+      });
+
       // Remove the store node title from breadcrumb.
       $.fn.updateStoreFinderBreadcrumb = function(data) {
         var breadcrumb = $('.block-system-breadcrumb-block').length;
