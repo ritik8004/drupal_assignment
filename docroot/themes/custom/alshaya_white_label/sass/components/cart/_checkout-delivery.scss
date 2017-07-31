@@ -589,12 +589,6 @@
         }
       }
 
-      .method-knet {
-        position: absolute;
-        #{$right}: 1rem;
-        top: 54%;
-      }
-
       &::before {
         content: '';
         width: 0.875rem;
@@ -661,6 +655,9 @@
         &-knet {
           background: $white url('../imgs/cards/knet-inactive.png') no-repeat;
           background-size: 100%;
+          position: absolute;
+          #{$right}: 1rem;
+          top: 54%;
         }
 
         &-cashondelivery,
