@@ -67,18 +67,22 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
  */
 function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Add markup to show selected card type.
-  if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details_wrapper'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource']['payment_details'])) {
-    $cc_form =& $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource']['payment_details'];
+  if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details_wrapper'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource']['title'])) {
+    $cc_form =& $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource'];
 
-    $cc_form['cc_number']['#suffix'] = '
-      <div class="card-types-wrapper">
-        <span class="card-type card-type-visa"></span>
-        <span class="card-type card-type-mastercard"></span>
-        <span class="card-type card-type-diners-club"></span>
-      </div>
-    ';
+    $cc_form['card_types'] = [
+      '#markup' => '
+        <div class="card-types-wrapper">
+          <span class="card-type card-type-visa"></span>
+          <span class="card-type card-type-mastercard"></span>
+          <span class="card-type card-type-diners-club"></span>
+        </div>
+      ',
+    ];
 
-    $cc_form['cc_cvv']['#suffix'] = '<div class="cc_cvv_help_text">' . t('This code is a three or four digit number printed on the front or back of the credit card') . '</div>';
+    if (isset($cc_form['payment_details'], $cc_form['payment_details']['cc_cvv'])) {
+      $cc_form['payment_details']['cc_cvv']['#suffix'] = '<div class="cc_cvv_help_text">' . t('This code is a three or four digit number printed on the front or back of the credit card') . '</div>';
+    }
   }
 }
 
