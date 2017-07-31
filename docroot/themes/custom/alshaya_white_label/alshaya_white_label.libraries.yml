@@ -13,6 +13,7 @@ global_styles:
     js/one_time_language_slider.js: {}
     vendor/js/details-polyfill.js: {}
   dependencies:
+    - core/modernizr
     - core/jquery
     - core/jquery.once
     - core/jquery.ui.accordion
@@ -36,6 +37,12 @@ rtl_styles:
 unmask_password:
   js:
     js/unmask_password.js: {}
+
+mobile_number:
+  js:
+    js/mobile_number.js: {}
+  dependencies:
+    - alshaya_white_label/cleave
 
 slider_banner:
   js:
@@ -101,3 +108,11 @@ ucfix:
 utils:
   js:
     js/utils.js: {}
+
+cleave:
+  js:
+    vendor/js/cleave.min.js: {}
+
+plp_search_js:
+  js:
+    js/plp-search.js: {}

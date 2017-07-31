@@ -6,3 +6,6 @@ core: 8.x
 dependencies:
   - alshaya_acm
   - alshaya_custom
+  - acq_checkout
+  - acq_cybersource
+  - acq_payment

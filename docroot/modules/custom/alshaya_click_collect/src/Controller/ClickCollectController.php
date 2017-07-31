@@ -16,7 +16,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class ClickCollectController.
@@ -102,20 +101,23 @@ class ClickCollectController extends ControllerBase {
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
 
     // Get the stores from Magento.
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
     $api_wrapper = \Drupal::service('alshaya_api.api');
     $stores = $api_wrapper->getCartStores($cart_id, $lat, $lon);
 
     $config = $this->configFactory->get('alshaya_click_collect.settings');
     // Add missing information to store data.
     array_walk($stores, function (&$store) use ($config) {
+      $store['rnc_available'] = (int) $store['rnc_available'];
+      $store['sts_available'] = (int) $store['sts_available'];
+
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $extra_data = $store_utility->getStoreExtraData($store);
+
       if (!empty($extra_data)) {
         $store = array_merge($store, $extra_data);
-        if (!empty($store['sts_available'])) {
-          $store['delivery_time'] = $config->get('click_collect_sts');
-        }
-        elseif (!empty($store['rnc_available'])) {
+
+        if (!empty($store['rnc_available'])) {
           $store['delivery_time'] = $config->get('click_collect_rnc');
         }
       }
@@ -134,13 +136,16 @@ class ClickCollectController extends ControllerBase {
    * @param float $lon
    *   The longitude.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Return json response to use in jquery ajax.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
    */
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->getCartStores($cart_id, $lat, $lon);
 
-    $build['store_list'] = $build['map_info_window'] = t('Sorry, No store found for your location.');
+    // Sort the stores first by distance and then by name.
+    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
+
+    $build['store_list'] = $build['map_info_window'] = '<span class="empty">' . t('Sorry, No store found for your location.') . '</span>';
     if (count($stores) > 0) {
       $build['store_list'] = [
         '#theme' => 'click_collect_stores_list',
@@ -166,8 +171,8 @@ class ClickCollectController extends ControllerBase {
   /**
    * Render selected store html.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Output the rendered html with selected store information.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
    */
   public function selectedStore() {
     // Get all the post data, which contains store information passed in ajax.
@@ -201,9 +206,23 @@ class ClickCollectController extends ControllerBase {
 
   /**
    * Map view of the selected store.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
    */
   public function storeMapView() {
-    return new JsonResponse(['output' => '']);
+    // Get all the post data, which contains store information passed in ajax.
+    $store = \Drupal::request()->request->all();
+    $build['map_info_window'] = [
+      '#theme' => 'click_collect_store_info_window_list',
+      '#stores' => [$store],
+    ];
+
+    $response = new AjaxResponse();
+    $response->addCommand(new HtmlCommand('#click-and-collect-map-view .geolocation-common-map-locations', $build['map_info_window']));
+    $response->addCommand(new InvokeCommand('#click-and-collect-map-view .geolocation-common-map-locations', 'hide'));
+    $response->addCommand(new ClickCollectStoresCommand(['raw' => [$store]]));
+    return $response;
   }
 
   /**
@@ -239,6 +258,7 @@ class ClickCollectController extends ControllerBase {
           $all_stores['#title'] = $config->get('pdp_click_collect_title');
           $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
           $all_stores['#store_finder_form'] = render($store_form);
+          $all_stores['#help_text'] = $config->get('pdp_click_collect_help_text.value');
         }
       }
     }
@@ -256,8 +276,8 @@ class ClickCollectController extends ControllerBase {
    * @param float $lon
    *   User's longitude.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Return json response to use in jquery ajax.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
    */
   public function getProductStoresJson($sku, $lat, $lon) {
     $data = $this->getProductStores($sku, $lat, $lon);
@@ -266,11 +286,12 @@ class ClickCollectController extends ControllerBase {
     $settings['alshaya_click_collect']['pdp'] = ['top_three' => FALSE, 'all_stores' => FALSE];
     if (!empty($data['top_three'])) {
       $settings['alshaya_click_collect']['pdp']['top_three'] = TRUE;
+      $settings['alshaya_click_collect']['searchForm'] = FALSE;
       $response->addCommand(new HtmlCommand('.click-collect-top-stores', $data['top_three']));
-      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper .search-store', 'hide'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'show'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text .change-location-link', 'show'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .available_store .change-location-link', 'show'));
       if (!empty($data['all_stores'])) {
         $settings['alshaya_click_collect']['pdp']['all_stores'] = TRUE;
         $response->addCommand(new HtmlCommand('.click-collect-all-stores', $data['all_stores']));
@@ -283,14 +304,15 @@ class ClickCollectController extends ControllerBase {
     else {
       $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
       $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
-      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper .search-store', 'show'));
+      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'show'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'hide'));
     }
 
+    $settings['alshaya_click_collect']['pdp']['ajax_call'] = TRUE;
     $response->addCommand(new InvokeCommand('.click-collect-form', 'show'));
-    $response->addCommand(new StoreDisplayFillCommand('storeDisplayFill', $settings));
-    $response->addCommand(new SettingsCommand(['alshaya_click_collect' => ['pdp' => ['ajax_call' => TRUE]]], TRUE), TRUE);
+    $response->addCommand(new StoreDisplayFillCommand($settings));
+    $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
 
     return $response;
   }

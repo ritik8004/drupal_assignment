@@ -85,15 +85,12 @@
       #{$right}: -1px;
       top: -9px;
       background: $white-five;
+      border-radius: 0;
     }
 
     .form-select {
       @include form-selector(1.56rem);
     }
-  }
-
-  .form-item-guest-delivery-home-address-shipping-methods {
-    margin-bottom: 1rem;
   }
 }
 
@@ -101,19 +98,28 @@
   .delivery-type,
   .address {
     background: $white-four;
-    font-size: 12px;
-    padding: 2em;
+    font-size: 0.875rem;
+    padding: 1rem 1.5rem;
     line-height: 1.5;
     font-weight: bold;
+    color: $black;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.75rem;
+    }
 
     a {
+      font-size: 0.75rem;
       float: $right;
+      color: $cerulean-two;
     }
 
     .method,
     .delivery-address {
+      font-size: 0.75rem;
       font-weight: normal;
       margin-top: 1em;
+      color: $grey-ash;
     }
   }
 }

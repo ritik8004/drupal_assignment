@@ -113,8 +113,7 @@
             "drupal/facets": {
                 "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
                 "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-42.patch",
-                "Fix undefined index:active in facets_system_breadcrumb_alter()": "https://www.drupal.org/files/issues/undefIndexActive_2869850.2.patch"
+                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha9-43.patch"
             },
             "drupal/simple_sitemap": {
                 "Implement changefreq functionality": "https://www.drupal.org/files/issues/2875538-5.patch"
@@ -205,7 +204,8 @@
             "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-knet-ssl-exception.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-knet-ssl-exception.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",

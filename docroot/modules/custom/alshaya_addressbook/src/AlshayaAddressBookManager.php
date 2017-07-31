@@ -322,4 +322,27 @@ class AlshayaAddressBookManager {
     return $magento_address;
   }
 
+  /**
+   * Helper function to get magento address structure.
+   *
+   * @return array
+   *   Magento address array with empty values.
+   */
+  public function getAddressStructureWithEmptyValues() {
+    $magento_address = [];
+
+    $magento_address['firstname'] = '&#8203;';
+    $magento_address['lastname'] = '&#8203;';
+    $magento_address['telephone'] = '&#8203;';
+    $magento_address['street'] = '&#8203;';
+    $magento_address['extension']['address_apartment_segment'] = '&#8203;';
+    $magento_address['extension']['address_area_segment'] = '&#8203;';
+    $magento_address['extension']['address_building_segment'] = '&#8203;';
+    $magento_address['extension']['address_block_segment'] = '&#8203;';
+    $magento_address['country_id'] = _alshaya_custom_get_site_level_country_code();
+    $magento_address['city'] = '&#8203;';
+
+    return $magento_address;
+  }
+
 }

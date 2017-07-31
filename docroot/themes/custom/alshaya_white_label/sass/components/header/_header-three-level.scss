@@ -47,6 +47,10 @@
 
       a {
         color: $marine-blue !important;
+
+        html[lang=ar] & {
+          line-height: 1.7;
+        }
       }
     }
 
@@ -72,6 +76,10 @@
       padding-#{$left}: 0.5rem;
       break-inside: avoid;
     }
+  }
+
+  .menu-two__link-wrapper p {
+    display: none;
   }
 }
 

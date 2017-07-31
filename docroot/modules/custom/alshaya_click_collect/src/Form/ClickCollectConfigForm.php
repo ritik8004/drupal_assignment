@@ -33,16 +33,23 @@ class ClickCollectConfigForm extends ConfigFormBase {
 
     $config = $this->config('alshaya_click_collect.settings');
 
-    $form['click_collect_sts'] = [
+    $form['checkout_click_collect_available'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Click and Collect STS (Ship to store)'),
+      '#title' => $this->t('Checkout: Click and Collect available'),
       '#required' => TRUE,
-      '#default_value' => $config->get('click_collect_sts'),
+      '#default_value' => $config->get('checkout_click_collect_available'),
+    ];
+
+    $form['checkout_click_collect_unavailable'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Checkout: Click and Collect unavailable'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('checkout_click_collect_unavailable'),
     ];
 
     $form['click_collect_rnc'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Click and Collect R&C (Reach and collect)'),
+      '#title' => $this->t('Click and Collect Reserve and collect short description'),
       '#required' => TRUE,
       '#default_value' => $config->get('click_collect_rnc'),
     ];
@@ -100,7 +107,8 @@ class ClickCollectConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_click_collect.settings');
-    $config->set('click_collect_sts', $form_state->getValue('click_collect_sts'));
+    $config->set('checkout_click_collect_available', $form_state->getValue('checkout_click_collect_available'));
+    $config->set('checkout_click_collect_unavailable', $form_state->getValue('checkout_click_collect_unavailable'));
     $config->set('click_collect_rnc', $form_state->getValue('click_collect_rnc'));
     $config->set('pdp_click_collect_title', $form_state->getValue('pdp_click_collect_title'));
     $config->set('pdp_click_collect_subtitle', $form_state->getValue('pdp_click_collect_subtitle'));

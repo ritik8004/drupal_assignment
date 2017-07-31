@@ -369,7 +369,8 @@
             title: location.children('h2').text(),
             infoWindowContent: location.html(),
             infoWindowSolitary: true,
-            label: (key + 1).toString()
+            label: (key + 1).toString(),
+            optimized: false
           };
 
           if (typeof location.data('icon') !== 'undefined') {

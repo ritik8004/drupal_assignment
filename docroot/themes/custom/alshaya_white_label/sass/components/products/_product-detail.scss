@@ -50,11 +50,13 @@
     @include breakpoint($tablet) {
       width: 60%;
       float: $left;
+      min-height: 31.25rem;
     }
 
     @include breakpoint($desktop) {
       width: 70%;
       float: $left;
+      min-height: 36.325rem;
     }
   }
 
@@ -160,6 +162,8 @@
   }
 
   .form-item-configurables-size {
+    clear: both;
+
     label {
       @include u-visibility(none);
     }
@@ -172,7 +176,7 @@
       @include select-wrapper(12.3125rem);
 
       padding: 0;
-      margin-top: 1.5em;
+      margin-top: 0.5em;
       position: relative;
       z-index: 3;
       width: 100%;
@@ -207,7 +211,7 @@
       @include select-bg(6.5625rem);
 
       padding: 0;
-      margin-top: 1.5em;
+      margin-top: 0.5em;
       width: 100%;
       min-height: 2.188rem;
 
@@ -249,22 +253,21 @@
 
     @include breakpoint($only-mobile) {
       float: $right;
-      top: -3px;
+      top: -7px;
       background-color: $whisper-dark;
     }
 
     @include breakpoint($only-tablet) {
       float: $right;
-      top: -3px;
+      top: -7px;
       background-color: $whisper-dark;
     }
   }
 
   .form-item-quantity {
-    @include select-wrapper(4.375rem);
-
+    position: relative;
     margin-bottom: 1.5rem;
-    margin-top: 2.1875rem;
+    margin-top: 1.45rem;
     float: $left;
 
     label {
@@ -277,10 +280,8 @@
       #{$left}: 0;
     }
 
-    select {
-      @include select-style(4.375rem);
-
-      background-color: $white-two !important;
+    .select2-container {
+      @include select2-style(4.375rem);
     }
   }
 }
@@ -631,6 +632,72 @@
       padding: 0.5rem 0;
       border: none;
     }
+
+    .highlight {
+      color: $windows-blue;
+      font-weight: bold;
+    }
+  }
+}
+
+.store-finder-form-wrapper {
+  margin-top: 0.6875rem;
+
+  span.label {
+    font-family: $arial;
+    font-size: 0.75rem;
+    line-height: 2;
+    color: $grey-ash;
+    margin: 0;
+  }
+
+  .search-store {
+    label {
+      @include clearfix;
+    }
+
+    input[type="text"] {
+      float: $left;
+      width: 63%;
+      height: 2.188rem;
+      padding: 0.3125rem;
+      border: solid 1px $white;
+      font-size: 0.75rem;
+      color: $greyish;
+
+      @include breakpoint($desktop) {
+        width: 185px;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 54%;
+      }
+
+      &::placeholder {
+        color: $greyish;
+      }
+    }
+
+    button {
+      float: $right;
+      width: 6.563rem;
+      height: 2.188rem;
+      background-color: $cerulean-two;
+      font-family: $alshaya-thin;
+      appearance: none;
+      font-size: 0.75rem;
+      color: $white-five;
+      text-transform: lowercase;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: none;
+    }
+
+    .form-item-location label {
+      @include u-visibility(none);
+    }
   }
 }
 
@@ -668,51 +735,6 @@
     }
   }
 
-  .search-store {
-    label {
-      @include clearfix;
-    }
-
-    input[type="text"] {
-      float: $left;
-      width: 162px;
-      height: 2.188rem;
-      padding: 0.3125rem;
-      border: solid 1px $white;
-      font-size: 0.75rem;
-      color: $greyish;
-
-      @include breakpoint($desktop) {
-        width: 185px;
-      }
-
-      &::placeholder {
-        color: $greyish;
-      }
-    }
-
-    button {
-      float: $right;
-      width: 6.563rem;
-      height: 2.188rem;
-      background-color: $cerulean-two;
-      font-family: $alshaya-thin;
-      appearance: none;
-      font-size: 0.75rem;
-      color: $white-five;
-      text-transform: lowercase;
-      display: inline-block;
-      vertical-align: middle;
-      text-align: center;
-      padding: 0.5rem 0;
-      border: none;
-    }
-
-    .form-item-location label {
-      @include u-visibility(none);
-    }
-  }
-
   .change-location {
     display: inline-block;
 
@@ -721,7 +743,6 @@
       height: 1.125rem;
       font-size: 0.5625rem;
       border: 1px solid $white-two;
-      margin-#{$left}: -2px;
     }
 
     .cancel-change-location {
@@ -747,8 +768,11 @@
 
 // Google Places Autocomplete results.
 .pac-container {
-  border: 1px solid $white-two;
+  border: 1px solid $white;
   box-shadow: none;
+  min-width: 11.25rem;
+  margin-top: -1px;
+  box-sizing: initial;
 
   // Hide the Powered by Google logo.
   &::after {
@@ -759,11 +783,20 @@
     @include u-visibility(none);
   }
 
+  .pac-item {
+    padding: 0.125rem 0.3125rem;
+    font-family: $arial;
+
+    &:hover {
+      background-color: $white-four;
+    }
+  }
+
   .pac-item,
   .pac-matched,
   .pac-item-query {
-    font-size: 0.5625rem !important;
-    color: $cerulean-two !important;
+    font-size: 0.75rem !important;
+    color: $grey-ash !important;
   }
 }
 
@@ -815,6 +848,12 @@
             font-style: normal;
           }
         }
+
+        &-address {
+          p {
+            margin: 0;
+          }
+        }
       }
     }
   }
@@ -852,6 +891,31 @@
   padding: 1.063rem 0;
   border-top: 1px solid $white;
   cursor: pointer;
+
+  @include breakpoint($only-mobile) {
+    color: $cerulean-two;
+  }
+}
+
+.click-collect-form,
+.store-finder-form-wrapper {
+  + .ajax-progress-throbber {
+    position: relative;
+    margin: 0.3125rem 0;
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-position: $right center !important;
+      background-repeat: no-repeat !important;
+      background-size: 1.5rem;
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+    }
+  }
 }
 
 .click-collect-all-stores {
@@ -861,7 +925,7 @@
     #{$right}: 0;
     height: 31.5rem;
     border: 1px solid $marine-blue;
-    padding: 1.25rem;
+    padding: 1rem 1.5rem;
     background: $white-five;
     overflow: hidden;
     width: 100%;
@@ -923,9 +987,25 @@
       cursor: pointer;
     }
 
-    .all-stores-info {
-      padding-bottom: 1em;
+    .text {
+      font-size: 0.75rem;
+      color: $grey-ash;
+      line-height: 1.5;
 
+      .available-store-text {
+        line-height: inherit;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+
+    .all-stores-info {
       a {
         font-family: $arial;
         font-size: 0.75rem;
@@ -947,18 +1027,20 @@
       }
 
       h3 {
-        font-family: $alshaya-bold;
+        font-family: $arial;
         font-weight: bold;
         color: $marine-blue;
         margin-top: 0;
+        margin-bottom: 0.5625rem;
+        font-size: 0.875rem;
       }
     }
 
     ul {
       padding-#{$left}: 0;
       margin: 0;
-      height: 380px;
-      overflow: scroll;
+      height: 21.56rem;
+      overflow-y: scroll;
       clear: both;
 
       li {
@@ -967,8 +1049,12 @@
         line-height: 1.5;
         color: $grey-ash;
         list-style: none;
-        padding: 0.6875rem 0;
+        padding: 0.9375rem 0;
         border-top: 1px solid $white;
+
+        p {
+          margin: 0;
+        }
 
         strong,
         em {
@@ -1000,11 +1086,11 @@
           }
 
           &-delivery-time {
-            padding-top: 12px;
+            padding-top: 0.75rem;
 
             em {
               font-weight: bold;
-              font-style: normal;
+              color: $black;
             }
           }
 
@@ -1025,7 +1111,9 @@
     }
 
     .stores-list-all {
-      margin-top: 0.5rem;
+      @include breakpoint($tablet) {
+        margin-top: 1.063rem;
+      }
 
       .ajax-progress-throbber {
         position: absolute;
@@ -1061,11 +1149,17 @@
       height: 8rem;
     }
 
+    .sku-base-form > div,
     .sku-base-form > .js-form-wrapper {
       @include breakpoint($mobile) {
         @include u-visibility(inline-block);
 
         width: 65%;
+        margin-#{$right}: 2rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 1rem;
       }
 
       @include breakpoint($desktop) {
@@ -1154,7 +1248,7 @@
 
         @include breakpoint($desktop) {
           float: $right;
-          margin-top: 2.1875rem;
+          margin-top: 1.1875rem;
         }
       }
     }
@@ -1197,6 +1291,7 @@
 
   .selected-text {
     font-weight: bold;
+    display: inline-block;
   }
 
   .select-buttons {
@@ -1213,7 +1308,10 @@
       span {
         @include u-visibility(block);
 
-        margin: 0.3125rem 8px 0.3125rem 0;
+        margin-top: 0.3125rem;
+        margin-bottom: 0.3125rem;
+        margin-#{$right}: 0.5rem;
+        margin-#{$left}: 0;
         border: 1px solid $black;
         text-align: center;
         padding: 0.75rem;
@@ -1262,6 +1360,10 @@ article[gtm-sku-type="simple"] {
     .sku-base-form {
       .form-item-quantity {
         float: $left !important;
+
+        @include breakpoint($tablet) {
+          margin-top: 2.5rem;
+        }
       }
 
       button[type="submit"] {
@@ -1271,7 +1373,89 @@ article[gtm-sku-type="simple"] {
           height: 2.188rem;
           text-align: center;
         }
+
+        @include breakpoint($desktop) {
+          margin-top: 2.1875rem !important;
+        }
       }
     }
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  .stock-checker {
+    font-family: $alshaya-thin;
+    padding: 0.625rem 0;
+    font-size: 0.75rem;
+
+    &::before {
+      content: " ";
+      width: 1.25rem;
+      height: 1.25rem;
+      background: url(../imgs/icons/MC-loader.svg) no-repeat;
+      background-size: contain;
+      display: inline-block;
+      vertical-align: middle;
+      margin-#{$right}: 0.3125rem;
+    }
+  }
+
+  .out-of-stock {
+    background-color: $cherry;
+    font-family: $alshaya-thin;
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 0.6rem 1.5rem;
+    color: $white;
+    font-size: 0.75rem;
+
+    @include breakpoint($desktop) {
+      display: inline-block;
+    }
+  }
+}
+
+.select2-container--open {
+  z-index: 999;
+}
+
+.sku-base-form {
+  .ajax-progress-throbber {
+    display: none !important;
+  }
+}
+
+.ui-dialog,
+.acq-content-product {
+  .form-item-configurables-size {
+    .select2-container {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+  }
+
+  .form-item-configurables-size {
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    .select2-container {
+      @include select2-style(100%);
+    }
+  }
+}
+
+.ui-dialog {
+  .field--name-field-skus .sku-base-form > .js-form-wrapper {
+    margin-#{$right}: 0;
+  }
+
+  .content__title_wrapper {
+    margin-bottom: 1rem;
   }
 }

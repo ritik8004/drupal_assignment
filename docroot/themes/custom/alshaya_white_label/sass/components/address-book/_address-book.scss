@@ -47,6 +47,10 @@
 
 .view-address-book {
   padding-top: 1.5rem;
+
+  @include breakpoint($desktop) {
+    padding-top: 2.5rem;
+  }
 }
 
 .address {
@@ -88,8 +92,8 @@
   }
 
   .address--userinfo {
-    float: left;
-    padding-right: 1rem;
+    float: $left;
+    padding-#{$right}: 1rem;
     vertical-align: top;
     width: 55%;
 
@@ -98,13 +102,13 @@
     }
 
     @include breakpoint($desktop) {
-      padding-right: 1.5rem;
+      padding-#{$right}: 1.5rem;
       width: 59%;
     }
   }
 
   .address--delivery {
-    float: left;
+    float: $left;
     width: 44%;
 
     @include breakpoint($tablet) {
@@ -236,7 +240,7 @@
     }
   }
 
-  &.active {
+  &:hover {
     .address--data {
       background: $white-four;
     }
@@ -250,7 +254,6 @@
 
       @include breakpoint($desktop) {
         padding-right: 0;
-        text-align: right;
       }
     }
   }
@@ -293,7 +296,7 @@
       }
     }
 
-    &.active {
+    &.default {
       .address--data {
         background: $white-five;
       }
@@ -337,7 +340,7 @@
     @extend %button-wide;
 
     display: block;
-    margin-bottom: 1.25rem;
+    margin-top: 1.25rem;
 
     @include breakpoint($tablet) {
       display: inline-block;
@@ -346,11 +349,15 @@
       #{$right}: 0;
       min-width: 10.2rem;
       text-transform: lowercase;
+      margin-top: 1.75rem;
+      margin-bottom: 0;
     }
 
     @include breakpoint($desktop) {
       top: -0.5rem;
       min-width: 11.75rem;
+      margin-top: 0;
+      margin-bottom: 1.25rem;
     }
 
     + .form-item {
@@ -386,82 +393,28 @@
 .webform-submission-alshaya-contact-form,
 #selected-store-wrapper {
   .mobile-number-field {
-    border-bottom: 0.0625rem solid $brownish-grey;
-    padding-bottom: 0 !important;
-    margin-bottom: 2rem;
-    margin-top: 1rem !important;
-    width: 11.63rem;
-    height: 2.813rem;
+    max-width: 11.625rem;
 
     label {
-      top: 0;
-      bottom: 0;
-      #{$left}: 0;
       opacity: 1;
       font-size: 0.75rem !important;
       color: $greyish;
-      position: absolute;
     }
 
-    .form-item {
+    .form-type-textfield {
       margin-top: 0 !important;
       padding-bottom: 0 !important;
     }
 
-    .form-item.verified,
     .form-type-select {
-      display: none !important;
+      display: none;
     }
 
-    .form-type-textfield {
-      position: static !important;
-      float: $right;
-      width: 8.625rem;
-      padding-bottom: 0 !important;
-
-      label.error {
-        top: 2.3rem;
-        border-top: 0.0625rem solid $red-error;
-        padding-top: 0.3125rem;
-        width: 100%;
-      }
-
-      input {
-        border-bottom: none !important;
-        margin-top: 1.188rem;
-
-        &.local-number.form-text {
-          border-bottom: none !important;
-
-          &::placeholder {
-            color: transparent !important;
-            font-size: 0 !important;
-            text-indent: -999rem !important;
-          }
-        }
-      }
-
-      .c-input__bar {
-        &::before,
-        &::after {
-          top: 0.0625rem;
-        }
-      }
-
-      .form-item--error-message {
-        position: absolute;
-        #{$left}: 0;
-        min-width: 20rem;
+    input {
+      html[lang=ar] & {
+        direction: ltr;
       }
     }
-  }
-
-  .country-code-prefix {
-    margin-top: 1.25rem;
-    color: $greyish;
-    width: 3rem;
-    float: $left;
-    font-size: 1rem;
   }
 
   #edit-field-address-0-address-administrative-area {
@@ -506,7 +459,7 @@
   }
 }
 
-.form-type-select {
+.address-book-address .form-type-select {
   .select2-selection {
     border: none !important;
     font-family: "alshaya-thin";
@@ -528,7 +481,9 @@
     color: $greyish;
     padding: 0.25rem !important;
   }
+}
 
+.form-type-select {
   .select2-selection__arrow {
     @include icon(chevrondown, after) {
       font-size: 1.5rem;
@@ -590,42 +545,6 @@
   .select2-container {
     max-width: 100%;
   }
-
-  .mobile-number-field {
-    padding-bottom: 2rem;
-  }
-}
-
-.user-form {
-  .field--type-mobile-number {
-    max-width: 11.7rem;
-    width: calc(50% - 0.75rem);
-
-    .mobile-number-field {
-      .form-item-field-mobile-number-0-mobile {
-        position: static !important;
-        padding-bottom: 0 !important;
-        width: 5.625rem !important;
-
-        @include breakpoint($mobile) {
-          margin-top: 0.625rem;
-        }
-
-        @include breakpoint($tablet) {
-          margin-top: 0.4375rem;
-        }
-      }
-    }
-  }
-}
-
-// A Hack for user page addressbook mobile field country code prefix.
-.path--user {
-  .address-book-address {
-    .country-code-prefix {
-      margin-top: 1.5rem;
-    }
-  }
 }
 
 #edit-billing-address,
@@ -650,22 +569,6 @@
         #{$left}: 0;
         opacity: 1;
         font-size: 0.75rem;
-      }
-    }
-  }
-}
-
-.path--user.fire-fox {
-  .c-address-book {
-    .address-book-address {
-      .mobile-number-field {
-        .country-code-prefix {
-          margin-top: 1.375rem;
-        }
-
-        input {
-          height: 1.5rem;
-        }
       }
     }
   }

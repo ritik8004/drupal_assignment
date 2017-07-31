@@ -118,13 +118,13 @@
   .input--wrapper {
     position: relative;
 
-    #edit-actions {
+    [id^=edit-actions] {
       position: absolute;
       #{$right}: 0;
       top: 0;
       height: 2.1875rem;
-      padding-#{$right}: 1rem;
-      padding-top: 0.3rem;
+      padding-#{$right}: 1.1rem;
+      padding-top: 0.425rem;
       border: 1px solid $greyish;
       border-#{$left}: 0;
       z-index: 1;
@@ -185,21 +185,6 @@
     font-weight: normal;
   }
 
-  .attachment-after {
-    .views-field-title {
-      span {
-        font-size: 14px;
-        font-weight: bold;
-      }
-    }
-
-    .views-field-field-store-address {
-      font-size: 0.875rem;
-      margin-top: 0.1875rem;
-      margin-bottom: 0.5rem;
-    }
-  }
-
   .label--location {
     color: $grey-ash !important;
   }
@@ -209,7 +194,7 @@
       font-size: 12px;
     }
 
-    &#edit-submit-stores-finder {
+    &[id^=edit-submit-stores-finder] {
       background: url('../imgs/icons/store-search.svg');
       border: none;
       background-repeat: no-repeat;
@@ -352,32 +337,39 @@
   }
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-  .form-item-geolocation-geocoder-google-geocoding-api #edit-geolocation-geocoder-google-geocoding-api {
-    background: none;
-    border: 1px solid $greyish;
-    border-#{$right}: 2.3125rem solid $white-five;
-    padding: 0.6rem;
-    padding-#{$right}: 1rem;
-    font-size: 0.75rem;
-    color: $grey-ash;
-
-    @include breakpoint($only-mobile) {
-      padding-#{$left}: 1.25rem;
-      padding-top: 0;
-      padding-bottom: 0;
-      line-height: 2.1875rem;
-      height: 2.1875rem;
-    }
-
-    &.ui-autocomplete-loading {
-      background-size: 30px;
-    }
-
-    @include breakpoint($tablet) {
-      max-width: 23.125rem;
-      border: 1px solid $white;
+  .form-item-geolocation-geocoder-google-geocoding-api {
+    [id^=edit-geolocation-geocoder-google-geocoding-api] {
+      background: none;
+      border: 1px solid $greyish;
       border-#{$right}: 2.3125rem solid $white-five;
-      height: 2.1875rem;
+      padding: 0.6rem;
+      padding-#{$right}: 1rem;
+      font-size: 0.75rem;
+      color: $grey-ash;
+      width: 100%;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 1.25rem;
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: 2.1875rem;
+        height: 2.1875rem;
+      }
+
+      &.ui-autocomplete-loading {
+        background-size: 30px;
+      }
+
+      @include breakpoint($tablet) {
+        max-width: 23.125rem;
+        border: 1px solid $white;
+        border-#{$right}: 2.3125rem solid $white-five;
+        height: 2.1875rem;
+      }
+    }
+
+    .form-item--error-message {
+      display: none;
     }
   }
 
@@ -468,8 +460,15 @@
     padding: 1rem 0;
     padding-bottom: 0;
     margin-bottom: 1.625rem;
+    border: 1px solid transparent;
     position: relative;
     cursor: pointer;
+
+    &:hover,
+    &.selected {
+      background-color: $white-five;
+      border: 1px solid $white;
+    }
 
     .row-title {
       font-weight: bold;
@@ -523,6 +522,11 @@
         }
       }
 
+      .get--directions a,
+      .view-on--map a {
+        border-bottom: 0;
+      }
+
       a {
         display: block;
         z-index: 1;
@@ -563,8 +567,8 @@
     }
 
     .label--location,
-    #edit-list-view,
-    #edit-map-view {
+    .list-view-link,
+    .map-view-link {
       display: none;
     }
   }
@@ -586,8 +590,8 @@
       }
     }
 
-    #edit-list-view,
-    #edit-map-view {
+    .list-view-link,
+    .map-view-link {
       width: 17.6%;
     }
   }
@@ -704,6 +708,7 @@
       display: inline-block;
       max-height: 39rem;
       overflow-y: scroll;
+      transform: translate3d(0, 0, 0);
       vertical-align: top;
       max-width: 26.5%;
       margin-#{$right}: 1%;
@@ -1112,9 +1117,31 @@
     position: relative;
   }
 
+  .views-field-title {
+    span {
+      font-size: 0.875rem;
+      font-weight: bold;
+    }
+  }
+
+  .views-field-field-store-address {
+    font-size: 0.875rem;
+    margin-top: 0.1875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .scroll-fix {
+    min-width: 12rem;
+  }
+
   .hours--label,
   .hours--label::after {
     color: $black;
+  }
+
+  .get--directions,
+  .hours--label {
+    max-width: 8.625rem;
   }
 
   .hours--label.open {
@@ -1147,4 +1174,9 @@
 .scroll-fix {
   overflow: hidden;
   white-space: nowrap;
+  font-family: $arial;
+
+  .location-content {
+    white-space: normal;
+  }
 }

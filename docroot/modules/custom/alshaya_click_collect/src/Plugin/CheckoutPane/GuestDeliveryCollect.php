@@ -4,6 +4,7 @@ namespace Drupal\alshaya_click_collect\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -24,11 +25,14 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
   // Add trait to get map url from getGoogleMapsApiUrl().
   use GoogleMapsDisplayTrait;
 
+  // Add trait to get selected delivery method tab.
+  use CheckoutDeliveryMethodTrait;
+
   /**
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAnonymous();
+    return \Drupal::currentUser()->isAnonymous() && $this->getClickAndCollectAvailability();
   }
 
   /**
@@ -44,40 +48,63 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (\Drupal::currentUser()->isAuthenticated()) {
+    if (!$this->isVisible()) {
       return $pane_form;
     }
 
-    $default_mobile = $shipping_type = $store_code = $selected_store_data = '';
+    if ($this->getSelectedDeliveryMethod() != 'cc') {
+      return $pane_form;
+    }
+
+    $pane_form['#attributes']['class'][] = 'active--tab--content';
+
+    $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
     $default_firstname = $default_lastname = $default_email = '';
 
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
-    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
+    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
+      $store_code = $form_values['store_code'];
+      $shipping_type = $form_values['shipping_type'];
+      $default_mobile = $form_values['cc_mobile'];
+    }
+    elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
-      $default_mobile = $shipping['telephone'];
       $store_code = $cart->getExtension('store_code');
       $shipping_type = $cart->getExtension('click_and_collect_type');
+      $default_mobile = $shipping['telephone'];
+    }
 
+    if ($store_code && $shipping_type) {
       // Not injected here to avoid module dependency.
       // Get store info.
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
-      $selected_store = [
-        '#theme' => 'click_collect_selected_store',
-        '#store' => $store,
-      ];
 
-      $selected_store_data = render($selected_store);
-      // Get Customer info.
-      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-      $api_wrapper = \Drupal::service('acq_commerce.api');
-      $customer = $api_wrapper->getCustomer($cart->customerEmail());
+      if (!empty($store)) {
+        $selected_store = [
+          '#theme' => 'click_collect_selected_store',
+          '#store' => $store,
+        ];
+        $selected_store_data = render($selected_store);
+      }
+    }
 
-      $default_firstname = $customer['firstname'];
-      $default_lastname = $customer['lastname'];
-      $default_email = $cart->customerEmail();
+    // Get Customer info.
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('acq_commerce.api');
+    if (!empty($form_values)) {
+      $default_firstname = $form_values['cc_firstname'];
+      $default_lastname = $form_values['cc_lastname'];
+      $default_email = $form_values['cc_email'];
+    }
+    elseif ($customer_email = $cart->customerEmail()) {
+      if ($customer = $api_wrapper->getCustomer($cart->customerEmail())) {
+        $default_firstname = $customer['firstname'];
+        $default_lastname = $customer['lastname'];
+        $default_email = $cart->customerEmail();
+      }
     }
 
     $pane_form['store_finder'] = [
@@ -90,8 +117,9 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Find your closest collection point'),
-      '#prefix' => '<div class="label-store-location">' . $this->t('Find your closest collection point') . '</div>',
+      '#title' => $this->t('find your closest collection point'),
+      '#prefix' => '<div class="label-store-location">' . $this->t('find your closest collection point') . '</div>',
+      '#placeholder' => t('Enter a location'),
       '#attributes' => [
         'class' => ['store-location-input'],
       ],
@@ -135,14 +163,20 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div id="selected-store-content" class="selected-store-content">' . $selected_store_data . '</div>',
     ];
 
-    $pane_form['selected_store']['customer_help'] = [
+    $pane_form['selected_store']['elements'] = [
+      '#type' => 'container',
+      '#tree' => FALSE,
+      '#id' => 'selected-store-elements-wrapper',
+    ];
+
+    $pane_form['selected_store']['elements']['customer_help'] = [
       '#markup' => '<div class="cc-help-text cc-customer-help-text"><p>' . $this->t("Please provide your contact details") . '</p>' . $this->t("We’ll be using this information to keep in touch with you") . '</div>',
     ];
 
     // First/Last/Email/Mobile have cc_ prefix to ensure validations work fine
     // and don't conflict with address form fields.
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['cc_firstname'] = [
+    $pane_form['selected_store']['elements']['cc_firstname'] = [
       '#type' => 'textfield',
       '#title' => t('First Name'),
       '#required' => TRUE,
@@ -150,25 +184,25 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
-    $pane_form['selected_store']['cc_lastname'] = [
+    $pane_form['selected_store']['elements']['cc_lastname'] = [
       '#type' => 'textfield',
       '#title' => t('Last Name'),
       '#required' => TRUE,
       '#default_value' => $default_lastname,
     ];
 
-    $pane_form['selected_store']['cc_email'] = [
+    $pane_form['selected_store']['elements']['cc_email'] = [
       '#type' => 'email',
       '#title' => t('Email'),
       '#required' => TRUE,
       '#default_value' => $default_email,
     ];
 
-    $pane_form['selected_store']['mobile_help'] = [
+    $pane_form['selected_store']['elements']['mobile_help'] = [
       '#markup' => '<div class="cc-help-text cc-mobile-help-text"><p>' . $this->t("Please provide the mobile number of the person collecting the order") . '</p>' . $this->t("We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
-    $pane_form['selected_store']['cc_mobile_number'] = [
+    $pane_form['selected_store']['elements']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => t('Mobile Number'),
       '#verify' => 0,
@@ -217,6 +251,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         'alshaya_click_collect' => [
           'cart_id' => $cart->id(),
           'selected_store' => ($store_code) ? TRUE : FALSE,
+          'selected_store_obj' => $store,
         ],
       ],
       'library' => [
@@ -238,11 +273,12 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       ],
       '#ajax' => [
         'callback' => [$this, 'submitMemberDeliveryCollect'],
-        'wrapper' => 'selected-store-wrapper',
+        'wrapper' => 'selected-store-elements-wrapper',
       ],
       // This is required for limit_validation_errors to work.
       '#submit' => [],
       '#limit_validation_errors' => [
+        ['guest_delivery_collect'],
         ['selected_store'],
         ['cc_mobile_number'],
         ['cc_firstname'],
@@ -250,6 +286,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         ['cc_email'],
       ],
     ];
+
+    $complete_form['actions']['next']['#attributes']['class'][] = 'hidden-important';
 
     return $pane_form;
   }
@@ -268,6 +306,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $values = $form_state->getValues($pane_form['#parents']);
 
+    if ($user = user_load_by_mail($values['cc_email'])) {
+      $form_state->setErrorByName('cc_email', $this->t('You already have an account, please login.'));
+      return;
+    }
+
     $cart = $this->getCart();
 
     // We are only looking to convert guest carts.
@@ -283,8 +326,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         // @TODO: Handle create customer errors here.
         // Probably just the email error.
         \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
-        $form_state->setErrorByName('custom', '');
-        drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+        $error = $this->t('@title does not contain a valid email.', ['@title' => 'Email']);
+        $form_state->setErrorByName('cc_email', $error);
         return;
       }
 
@@ -309,10 +352,17 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
 
-    $address = [
-      'country_id' => _alshaya_custom_get_site_level_country_code(),
-      'telephone' => _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']),
-    ];
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    $address = $address_book_manager->getAddressStructureWithEmptyValues();
+
+    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
+
+    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
+    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+    $store_node = $store_utility->getTranslatedStoreFromCode($values['store_code']);
+
+    $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
 
     $cart->setShipping($address);
   }
@@ -330,7 +380,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    */
   public function submitMemberDeliveryCollect($form, FormStateInterface $form_state) {
     if ($form_state->getErrors()) {
-      return $form['guest_delivery_collect']['selected_store'];
+      return $form['guest_delivery_collect']['selected_store']['elements'];
     }
 
     $response = new AjaxResponse();

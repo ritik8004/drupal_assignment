@@ -25,3 +25,7 @@
     @include u-visibility(none);
   }
 }
+
+.pdp-modal-overlay {
+  overflow: hidden;
+}

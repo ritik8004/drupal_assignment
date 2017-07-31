@@ -103,7 +103,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       '#attributes' => [
         'class' => 'facets-hidden-container',
       ],
-    ];;
+    ];
 
     $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
     if (!empty($parameters) && isset($parameters['f'])) {

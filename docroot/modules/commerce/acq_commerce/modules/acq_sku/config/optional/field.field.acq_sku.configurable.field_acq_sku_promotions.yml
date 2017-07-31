@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - acq_sku.type.configurable
+    - field.storage.acq_sku.field_acq_sku_promotions
+    - node.type.acq_promotion
+id: acq_sku.configurable.field_acq_sku_promotions
+field_name: field_acq_sku_promotions
+entity_type: acq_sku
+bundle: configurable
+label: Promotions
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      acq_promotion: acq_promotion
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

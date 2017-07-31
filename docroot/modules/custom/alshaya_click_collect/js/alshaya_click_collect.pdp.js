@@ -8,24 +8,21 @@
 
   // Coordinates of the user's location.
   var asCoords = null;
-
   // Last checked SKU (or variant SKU).
   var lastSku = null;
-
   // Last coords.
   var lastCoords = null;
-
-  // Geolocation permission.
+  // Geolocation permission, set default to false to show search form.
+  // When user doesn't react to location permission.
   var geoPerm = false;
-
   // Check records already exists.
   var records = false;
-
   // Display search form.
   var displaySearchForm;
 
   Drupal.pdp = Drupal.pdp || {};
   Drupal.geolocation = Drupal.geolocation || {};
+  Drupal.click_collect = Drupal.click_collect || {};
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
@@ -37,6 +34,18 @@
         });
       }
 
+      // Show/Hide subtitle for delivery options accordions.
+      $('.c-accordion-delivery-options').each(function () {
+        $(this).once('accordion-trigger').on('accordionactivate', function (event, ui) {
+          if (ui.newHeader.length > 0) {
+            $(event.target).find('h3 > .subtitle').hide();
+          }
+          else {
+            $(event.target).find('h3 > .subtitle').show();
+          }
+        });
+      });
+
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Get the permission track the user location.
         Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
@@ -44,10 +53,11 @@
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
         if ($(this).attr('state') === 'disabled') {
-          $('#pdp-stores-container.click-collect > h3')
-            .removeClass('ui-state-active ui-accordion-header-active')
-            .addClass('ui-state-disabled');
-          $('#pdp-stores-container.click-collect > .c-accordion_content').hide();
+          var accordionStatus = $('#pdp-stores-container.click-collect').accordion('option', 'active');
+          if (typeof accordionStatus === 'number' && accordionStatus === 0) {
+            $('#pdp-stores-container.click-collect').accordion('option', 'active', false);
+          }
+          $('#pdp-stores-container.c-accordion-delivery-options').accordion('option', 'disable', true);
         }
         else {
           // Get the permission track the user location.
@@ -55,17 +65,25 @@
         }
       });
 
+      // Hit the search store button on hitting enter when on textbox.
+      $('.click-collect-form').once('prevent-enter').on('keypress', '.store-location-input', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+          e.preventDefault();
+          $('.click-collect-form').find('.search-stores-button').click();
+          return false;
+        }
+      });
+
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
-
-        $('.click-collect-all-stores').toggle('slow', function () {
-          // Dispaly formatted address to make sure it has location.
-          Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
-          // Scroll
-          $('html,body').animate({
-            scrollTop: $('.click-collect-all-stores').offset().top
-          }, 'slow');
-        });
-
+        if ($(window).width() >= 768) {
+          $('.click-collect-all-stores').toggle('slow', function () {
+            // Scroll
+            $('html,body').animate({
+              scrollTop: $('.click-collect-all-stores').offset().top
+            }, 'slow');
+          });
+        }
       });
 
       $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-location-link, .search-stores-button, .cancel-change-location', function (e) {
@@ -110,33 +128,16 @@
         }
       });
 
-      // Validate the product is same on ajax call.
-      var validateProduct = Drupal.pdp.validateCurrentProduct(settings);
-      // Call storesDisplay to render stores, if click and collect available for selected sku.
-      if (settings.alshaya_acm.storeFinder === true && validateProduct && asCoords !== null) {
-        Drupal.pdp.storesDisplay();
-      }
-
-      if (typeof displaySearchForm === 'undefined') {
-        displaySearchForm = settings.alshaya_acm.searchForm;
-      }
-      // If geolocation permission is denied then display the search form.
-      if (!geoPerm && validateProduct && displaySearchForm) {
-        Drupal.pdp.dispalySearchStoreForm();
-      }
-
-      // Dispaly formatted address once we have store list.
-      if (settings.alshaya_click_collect.pdp.ajax_call) {
-        Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'));
-        Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
-      }
+      // Display search store form if conditions matched.
+      Drupal.pdp.InvokeSearchStoreFormDisplay(settings);
     }
   };
 
   // Error callback.
   Drupal.pdp.LocationError = function (error) {
     geoPerm = false;
-    // Do nothing, we already have the search form displayed by default.
+    // Display search store form if conditions matched.
+    Drupal.pdp.InvokeSearchStoreFormDisplay(drupalSettings);
   };
 
   // Success callback.
@@ -146,16 +147,13 @@
       lng: position.coords.longitude
     };
     geoPerm = true;
-    Drupal.pdp.storesDisplay();
+    Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
   };
 
   // Set the location coordinates, but don't render the stores.
-  Drupal.pdp.setStoreCoords = function () {
-    asCoords = this;
-
-    if (records) {
-      Drupal.pdp.storesDisplay(asCoords);
-    }
+  Drupal.pdp.setStoreCoords = function (coords) {
+    asCoords = coords;
+    Drupal.pdp.storesDisplay(asCoords);
   };
 
   Drupal.pdp.getProductInfo = function () {
@@ -182,8 +180,21 @@
     new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay]);
   };
 
-  // Dispaly search store form.
-  Drupal.pdp.dispalySearchStoreForm = function () {
+  // Invoke display search store form if conditions matched.
+  Drupal.pdp.InvokeSearchStoreFormDisplay = function (settings) {
+    // Validate the product is same on ajax call.
+    var validateProduct = Drupal.pdp.validateCurrentProduct(settings);
+    // Get the settings for search form display.
+    displaySearchForm = settings.alshaya_click_collect.searchForm;
+
+    // If geolocation permission is denied then display the search form.
+    if (typeof geoPerm !== 'undefined' && !geoPerm && validateProduct && displaySearchForm) {
+      Drupal.pdp.displaySearchStoreForm();
+    }
+  };
+
+  // Display search store form.
+  Drupal.pdp.displaySearchStoreForm = function () {
     var productInfo = Drupal.pdp.getProductInfo();
     var check = false;
     if (productInfo.type === 'configurable') {
@@ -197,16 +208,13 @@
       $('.click-collect-empty-selection').hide();
       $('.click-collect-form').show();
       $('.click-collect-form').find('.available-store-text').hide();
-      $('.click-collect-form').find('.store-finder-form-wrapper .search-store').show();
+      $('.click-collect-form').find('.store-finder-form-wrapper').show();
     }
   };
 
   // Make Ajax call to get stores and render html.
-  Drupal.pdp.storesDisplay = function (coords) {
-    if (typeof this.lat !== 'undefined' && typeof coords === 'undefined') {
-      asCoords = this;
-    }
-    else if (coords) {
+  Drupal.pdp.storesDisplay = function (coords, $trigger) {
+    if (coords) {
       asCoords = coords;
     }
 
@@ -238,9 +246,20 @@
             lastSku = sku;
             lastCoords = asCoords;
 
+            if (typeof $trigger === 'undefined') {
+              $trigger = $('.click-collect-form');
+            }
+
+            // Add formatted address based on lat/lng before ajax for top three stores.
+            Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'));
+            // Add formatted address based on lat/lng before ajax for all stores. If html elements available.
+            if ($('.click-collect-all-stores').find('.google-store-location').length > 0) {
+              Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
+            }
+
             var storeDisplayAjax = Drupal.ajax({
               url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
-              element: $('.click-collect-form').get(0),
+              element: $trigger.get(0),
               base: false,
               progress: {type: 'throbber'},
               submit: {js: true}
@@ -249,14 +268,11 @@
             // Custom command function to render map and map markers.
             storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
               if (status === 'success') {
-                if (response.data.top_three) {
+                if (response.data.alshaya_click_collect.pdp.top_three) {
+                  // Show formatted address after ajax for all stores, once we have html elements.
+                  Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
                   displaySearchForm = false;
                   records = true;
-                  Drupal.pdp.changeLocationAutocomplete();
-                  if (response.data.all_stores) {
-                    Drupal.pdp.allStoresAutocomplete();
-                    Drupal.pdp.allStoreschangeLocationAutocomplete();
-                  }
                 }
                 else {
                   displaySearchForm = true;
@@ -273,13 +289,13 @@
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay]);
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function () {
     var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay]);
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   /**
@@ -326,21 +342,27 @@
    */
   Drupal.AjaxCommands.prototype.updatePDPClickCollect = function (ajax, response, status) {
     if (Drupal.pdp.validateCurrentProduct(response.data)) {
+      $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
+      var accordionStatus = $('#pdp-stores-container.click-collect').accordion('option', 'active');
       if (response.data.alshaya_acm.storeFinder) {
-        $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
-        $('#pdp-stores-container.click-collect > h3')
-          .removeClass('ui-state-disabled')
-          .addClass('ui-state-active ui-accordion-header-active');
-        $('#pdp-stores-container.click-collect > .c-accordion_content').show();
+        if ($('#pdp-stores-container.click-collect').accordion('option', 'disabled')) {
+          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', false);
+        }
 
+        if (!accordionStatus) {
+          $('#pdp-stores-container.click-collect').accordion('option', 'active', true);
+          $('#pdp-stores-container.click-collect > h3').trigger('click');
+        }
         Drupal.pdp.storesDisplay();
       }
       else {
-        $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
-        $('#pdp-stores-container.click-collect > h3')
-          .removeClass('ui-state-active ui-accordion-header-active')
-          .addClass('ui-state-disabled');
-        $('#pdp-stores-container.click-collect > .c-accordion_content').hide();
+        if (typeof accordionStatus === 'number' && accordionStatus === 0) {
+          $('#pdp-stores-container.click-collect').accordion('option', 'active', false);
+        }
+        if (!$('#pdp-stores-container.click-collect').accordion('option', 'disabled')) {
+          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
+        }
+
       }
     }
   };

@@ -5,11 +5,10 @@ package: Alshaya
 core: 8.x
 dependencies:
   - acq_cart
-  - acq_checkout
   - acq_commerce
   - acq_customer
-  - acq_payment
   - acq_sku
+  - acq_promotion
   - block
   - block_content
   - ctools

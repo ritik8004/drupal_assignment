@@ -3,8 +3,7 @@
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-
-      $(window).on('click', function () {
+      $(window).on('click', function() {
         // check if element is Visible
         var length = $('#cart_notification').html().length;
         if (length > 0) {
@@ -20,29 +19,29 @@
       });
 
       // Create a new instance of ladda for the specified button
-      $('.edit-add-to-cart', context).attr('data-style', 'zoom-in');
+      $('.edit-add-to-cart').attr('data-style', 'zoom-in');
       var l = $('.edit-add-to-cart').ladda();
 
       $('.edit-add-to-cart', context).on('click', function () {
         // Start loading
-        l.ladda('start');
+        $(this).ladda('start');
       });
 
       $('.edit-add-to-cart', context).on('mousedown', function () {
         // Start loading
-        l.ladda('start');
+        $(this).ladda('start');
       });
 
       $('.edit-add-to-cart', context).on('keydown', function (event) {
         if (event.keyCode === 13 || event.keyCode === 32) {
           // Start loading
-          l.ladda('start');
+          $(this).ladda('start');
         }
       });
 
-      $('[data-drupal-selector="edit-configurables-size"]', context).once('bind-events').on('change', function () {
+      $('[data-drupal-selector="edit-configurables-size"]').on('change', function () {
         // Start loading.
-        l.ladda('start');
+        $(this).closest('.sku-base-form').find('.edit-add-to-cart').ladda('start');
       });
 
       $(document).ajaxComplete(function (event, xhr, settings) {
@@ -65,13 +64,13 @@
       $.fn.stopSpinner = function (data) {
         l.ladda('stop');
         if (data.message === 'success') {
-          $('.edit-add-to-cart').find('.ladda-label').html(Drupal.t('added'));
+          $('.edit-add-to-cart', context).find('.ladda-label').html(Drupal.t('added'));
           if ($('.ui-dailog')) {
             $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
           }
         }
         else if (data.message === 'failure') {
-          $('.edit-add-to-cart').find('.ladda-label').html(Drupal.t('error'));
+          $('.edit-add-to-cart', context).find('.ladda-label').html(Drupal.t('error'));
         }
         setTimeout(
           function () {

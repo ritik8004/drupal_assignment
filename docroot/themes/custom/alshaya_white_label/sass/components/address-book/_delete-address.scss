@@ -14,17 +14,17 @@
   .profile-address-book-delete-form {
     color: $black;
     font-size: 0.875rem;
+    min-height: 2rem;
   }
 
   .ui-dialog {
     background: $white-five;
     padding: 0;
-    padding-bottom: 21px;
-    padding-#{$left}: 20px;
+    padding-bottom: 1.25rem;
+    padding-#{$left}: 1.25rem;
     z-index: 8;
 
     @include breakpoint($only-mobile) {
-      max-width: 341px;
       width: 100% !important;
     }
 
@@ -42,6 +42,10 @@
     .ui-dialog-buttonpane {
       margin: 0;
       padding: 0;
+
+      button {
+        margin: 0;
+      }
     }
 
     .ui-button .ui-button-text {
@@ -49,8 +53,8 @@
     }
 
     .ui-dialog-content {
-      margin-bottom: 34px;
-      padding-#{$right}: 50px;
+      margin-bottom: 2rem;
+      padding-#{$right}: 3rem;
     }
   }
 
@@ -93,7 +97,15 @@
 
   .dialog-cancel span {
     color: #3381d0;
-    font-size: 12px;
+    font-size: 10px;
+
+    @include breakpoint($tablet) {
+      font-size: 11px;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 12px;
+    }
   }
 
   button {

@@ -1,3 +1,4 @@
+<div class="price-type__wrapper">
 {% if final_price %}
   <div class="has--special--price">
 {% else %}
@@ -31,7 +32,8 @@
     </span>
   </div>
   <div class="price--discount">
-    {{ discount }}
+    <span class="discount-prefix">{{ discount.prefix }}</span>
+    <span class="discount-value">{{ discount.value }}</span>
   </div>
 {% endif %}
 
@@ -45,10 +47,10 @@
             {% for id, promotion in promotions %}
               <div class="promotion-{{ id }}">
                 <div class="promotion-label">
-                  <strong>{{ promotion.text.value }}</strong>
+                  <strong>{{ promotion.title }}</strong>
                 </div>
                 <div class="promotion-description">
-                  {{ promotion.description.value | raw }}
+                  {{ promotion.label}}
                 </div>
               </div>
               <br>
@@ -58,3 +60,4 @@
       </div>
   </div>
 {% endif %}
+</div>

@@ -56,3 +56,28 @@ function alshaya_i18n_save_translations($strings) {
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_i18n_alshaya_i18n_onetime_translation_add() {
+  // Reset the formula to calculate plural in arabic language.
+  $formulae = \Drupal::state()->get('locale.translation.formulae', []);
+  if (isset($formulae['ar'])) {
+    $formulae['ar'] = [];
+    $formulae['ar']['plurals'] = 5;
+    $formulae['ar']['formula'][0] = 1;
+    $formulae['ar']['formula'][1] = 0;
+    $formulae['ar']['formula'][2] = 2;
+    $formulae['ar']['formula'][3] = 3;
+    $formulae['ar']['formula'][4] = 3;
+    $formulae['ar']['formula'][5] = 3;
+    $formulae['ar']['formula'][6] = 3;
+    $formulae['ar']['formula'][7] = 3;
+    $formulae['ar']['formula'][8] = 3;
+    $formulae['ar']['formula'][9] = 3;
+    $formulae['ar']['formula'][10] = 3;
+    $formulae['ar']['formula']['default'] = 4;
+    \Drupal::state()->set('locale.translation.formulae', $formulae);
+  }
+}

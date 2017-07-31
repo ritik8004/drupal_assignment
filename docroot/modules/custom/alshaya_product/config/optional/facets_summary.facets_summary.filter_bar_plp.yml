@@ -39,6 +39,12 @@ facets:
     separator: ', '
     show_count: true
     weight: 0
+  skus_sku_reference_collection:
+    checked: true
+    label: 'SKUs » SKU Reference » Collection'
+    separator: ', '
+    show_count: true
+    weight: 0
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 processor_configs:
   hide_when_not_rendered:
@@ -52,4 +58,3 @@ processor_configs:
       build: '-10'
     settings:
       link_text: 'clear all'
-empty_behavior: null

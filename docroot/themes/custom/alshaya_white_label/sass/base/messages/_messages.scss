@@ -120,7 +120,7 @@
     padding-top: 0.1875rem;
 
     @include breakpoint($tablet) {
-      width: calc(100% - 3.125rem);
+      width: 80%;
     }
   }
 }

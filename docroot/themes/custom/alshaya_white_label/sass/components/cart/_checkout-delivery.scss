@@ -238,6 +238,10 @@
       border: 1px solid $light-greyish;
       background: $white-five;
 
+      p {
+        color: $grey-ash;
+      }
+
       @include breakpoint($tablet) {
         border-bottom: 0;
         display: inline-block;
@@ -274,6 +278,15 @@
             margin-#{$right}: 0;
             border-#{$right}: none;
           }
+        }
+      }
+
+      &.disabled--tab--head {
+        border-color: $light-greyish;
+
+        h2,
+        p {
+          color: $light-greyish;
         }
       }
     }
@@ -353,11 +366,12 @@
 
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
 #edit-acm-payment-methods-payment-options,
-#edit-member-delivery-home-address-shipping-methods--wrapper {
-  border: none;
+#edit-member-delivery-home-address-shipping-methods--wrapper,
+.shipping-methods-container {
+  border: none !important;
 
   legend {
-    display: block;
+    display: block !important;
     width: 100%;
 
     .fieldset-legend {
@@ -398,6 +412,10 @@
     label {
       &.option {
         @include clearfix;
+
+        .ucbrowser & {
+          top: 0;
+        }
 
         &::before {
           display: block;
@@ -440,27 +458,56 @@
             @include breakpoint($only-mobile) {
               font-weight: bold;
             }
+
+            @include breakpoint($desktop) {
+              font-size: 0.875rem;
+            }
           }
 
           &-description {
-            font-size: 12px;
+            font-size: 0.75rem;
           }
         }
       }
     }
   }
 
-  #edit-guest-delivery-home-address-shipping-methods {
+  #edit-guest-delivery-home-address-shipping-methods,
+  #edit-member-delivery-home-address-shipping-methods,
+  .fieldset-wrapper > div {
     font-size: 0;
 
     .form-type-radio {
-      margin-top: 0;
+      margin-top: 0 !important;
+
+      &:first-child {
+        margin-top: 1.875rem !important;
+
+        @include breakpoint($only-tablet) {
+          margin-top: 1.188rem !important;
+        }
+
+        @include breakpoint($desktop) {
+          margin-top: 2.375rem !important;
+        }
+      }
     }
   }
 }
 
-#edit-guest-delivery-home-address-shipping-methods--wrapper {
+#shipping_methods_wrapper {
+  @include breakpoint($only-mobile) {
+    margin-top: 1.5rem;
+  }
+}
+
+#edit-guest-delivery-home-address-shipping-methods--wrapper,
+.shipping-methods-container {
   display: block;
+
+  > legend {
+    padding-bottom: 0 !important;
+  }
 }
 
 // Adding throbber overlay for any ajax call on payment and checkout delivery page.
@@ -505,7 +552,7 @@
 }
 
 #edit-acm-payment-methods-payment-options {
-  padding-left: 0;
+  padding-#{$left}: 0;
 
   .form-type-radio {
     width: 100%;
@@ -513,6 +560,10 @@
     padding: 1.5rem 0.5rem;
     border-top: 1px solid $white;
     border-bottom: 1px solid $white;
+
+    @include breakpoint($only-mobile) {
+      max-height: 4rem;
+    }
 
     @include breakpoint($tablet) {
       padding: 1.5rem;
@@ -532,6 +583,10 @@
     label {
       &.option {
         @include clearfix;
+
+        .ucbrowser & {
+          display: block;
+        }
 
         &::before {
           display: block;
@@ -598,6 +653,10 @@
       #edit-guest-delivery-home {
         .title {
           margin: 1.375rem !important;
+
+          @include breakpoint($only-mobile) {
+            margin: 1.375rem 0 !important;
+          }
         }
 
         .address-book-address {
@@ -861,6 +920,74 @@
 #edit-member-delivery-home-address-book-wrapper {
   @include breakpoint($tablet) {
     margin-left: 1.5rem;
+  }
+}
+
+.select-transaction-type {
+  font-family: $alshaya-bold;
+  font-size: 1rem;
+  line-height: 1.12;
+  color: $marine-blue-two;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.show-only-buttons {
+  @include breakpoint($only-mobile) {
+    #edit-delivery-tabs {
+      margin-bottom: 3rem;
+    }
+
+    .tab-separator {
+      font-size: 0.75rem;
+      color: $grey-ash;
+      margin: 0.5rem 0;
+      display: block !important;
+    }
+
+    .tab-click-collect,
+    .tab-home-delivery {
+      border-color: $greyish !important;
+      border-width: 1px !important;
+      padding: 0.5rem 0 !important;
+      display: block !important;
+
+      a p {
+        color: $grey-ash;
+      }
+    }
+
+    #edit-guest-delivery-collect,
+    #edit-guest-delivery-home,
+    #edit-actions {
+      display: none !important;
+    }
+
+    .select-transaction-type {
+      display: block;
+    }
+  }
+}
+
+.show-form {
+  @include breakpoint($only-mobile) {
+    .tabs--content fieldset.active--tab--content {
+      display: block !important;
+    }
+  }
+}
+
+.shipping-method-options-count-1 {
+  .form-type-radio {
+    label {
+      &::before {
+        display: none !important;
+      }
+
+      .shipping-method-name {
+        width: 100% !important;
+      }
+    }
   }
 }
 

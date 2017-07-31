@@ -68,6 +68,7 @@ class ClickCollectAvailableStores extends FormBase {
       '#title_display' => 'before',
       '#placeholder' => $this->t('Enter your area'),
       '#prefix' => '<span class="label">' . $this->t('Check in-store availability') . '</span>',
+      '#attributes' => ['class' => ['store-location-input']],
     ];
 
     $form['Search'] = [
@@ -89,10 +90,8 @@ class ClickCollectAvailableStores extends FormBase {
         'geolocation' => [
           'google_map_url' => $this->getGoogleMapsApiUrl(),
         ],
-        'alshaya_acm' => [
-          'storeFinder' => TRUE,
-          'searchForm' => TRUE,
-        ],
+        'alshaya_acm' => ['storeFinder' => TRUE],
+        'alshaya_click_collect' => ['searchForm' => TRUE],
       ],
     ];
 

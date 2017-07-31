@@ -8,7 +8,7 @@
 
   Drupal.behaviors.formsInput = {
     attach: function (context, settings) {
-      $('.address-book-address input, .profile-form input, .c-user-edit .user-form input, .user-login-form input, .order-confirmation .user-register-form input').each(function () {
+      $('.address-book-address input:not([type=hidden]), .profile-form input, .c-user-edit .user-form input, .user-login-form input, .order-confirmation .user-register-form input').each(function () {
         if ($.trim($(this).val()).length !== 0) {
           $(this).parent().find('label').last().addClass('active-label');
         }
@@ -26,16 +26,8 @@
         }
       });
 
-      // Move mobile number error on contact details.
-      var mobileNumber = $('.form-item-field-mobile-number-0-mobile');
-      var mobileNumberError = mobileNumber.find('.form-item--error-message');
-      if (mobileNumberError.length > 0) {
-        mobileNumber.parent().append(mobileNumberError);
-        mobileNumberError.addClass('is-visible');
-      }
-
       $(window).on('load', function () {
-        $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .address-book-address input').each(function () {
+        $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .address-book-address input:not([type=hidden])').each(function () {
           if ($(this).val() !== '') {
             $(this).parent().find('label').last().addClass('active-label');
           }
@@ -58,18 +50,6 @@
             $(this).after(bar);
           }
         });
-      });
-
-      // Handling error for mobile number fields.
-      if ($('.mobile-number-field').find('.form-item-mobile-number-mobile').hasClass('form-item--error') ||
-        $('.mobile-number-field').find('.form-item-field-mobile-number-0-mobile').hasClass('form-item--error')) {
-        $('.mobile-number-field').addClass('form-item--error');
-      }
-
-      // Click event trigger for privilege card field on register page.
-      $('.user-register-form .privilege-card-wrapper-title').bind('click touchstart', function () {
-        $('.privilege-card-wrapper summary').click();
-        return false;
       });
 
       if ($('.password-tooltip').length > 0) {

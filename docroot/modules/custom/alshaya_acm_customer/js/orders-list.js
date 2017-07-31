@@ -22,6 +22,16 @@
         $('.alshaya-acm-customer-order-list-search .form-select[data-drupal-selector="edit-filter"]').bind('change', function () {
           $('.alshaya-acm-customer-order-list-search .form-submit[data-drupal-selector="edit-submit-orders"]').trigger('click');
         });
+
+        // Set the filter to value as in URL.
+        var filter = $.url('?filter');
+        if (filter !== undefined) {
+          $(this).find('select#edit-filter').val(filter);
+        }
+        else {
+          $(this).find('select#edit-filter').val('');
+        }
+
       });
     }
   };

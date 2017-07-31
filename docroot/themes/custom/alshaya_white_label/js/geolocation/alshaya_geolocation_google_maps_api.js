@@ -372,7 +372,8 @@
         // Add the marker icon.
         markerSettings.icon = {
           url: map.settings.google_map_settings.marker_icon_path,
-          labelOrigin: new google.maps.Point(15, 15)
+          labelOrigin: new google.maps.Point(15, 15),
+          scaledSize: new google.maps.Size(31, 48)
         };
         if (drupalSettings.path.currentLanguage === 'ar') {
           markerSettings.icon.labelOrigin = new google.maps.Point(7, 15);
@@ -400,6 +401,10 @@
           }
           map.infoWindow = currentInfoWindow;
         }
+
+        // Set the marker to center of the map on click.
+        map.googleMap.setCenter(currentMarker.getPosition());
+
         currentInfoWindow.open(map.googleMap, currentMarker);
       });
 

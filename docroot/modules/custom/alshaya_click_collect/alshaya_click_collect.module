@@ -35,6 +35,7 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
     'variables' => [
       'title' => NULL,
       'subtitle' => NULL,
+      'help_text' => NULL,
       'stores' => NULL,
       'store_finder_form' => NULL,
     ],
@@ -89,6 +90,7 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
 
     $config = \Drupal::config('alshaya_click_collect.settings');
 
+    // Click and collect availability for given sku.
     $state = alshaya_acm_product_available_click_collect($sku);
 
     // Here we just show static text, we will get stores info using ajax.
@@ -109,6 +111,8 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
         'drupalSettings' => [
           'alshaya_click_collect' => [
             'pdp' => ['ajax_call' => FALSE],
+            // Default site country to limit autocomplete result.
+            'country' => _alshaya_custom_get_site_level_country_code(),
           ],
         ],
         'library' => [
@@ -127,5 +131,6 @@ function alshaya_click_collect_geolocation_google_maps_parameters() {
     'libraries' => [
       'places',
     ],
+    'language' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
   ];
 }

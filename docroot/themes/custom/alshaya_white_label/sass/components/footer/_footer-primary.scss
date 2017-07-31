@@ -1,6 +1,7 @@
 .c-footer {
   position: relative;
   margin-top: 3.5rem;
+  background-color: $white-four;
 
   @include breakpoint($tablet) {
     margin-top: 2.75rem;

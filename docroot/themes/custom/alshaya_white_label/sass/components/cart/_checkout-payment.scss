@@ -67,9 +67,19 @@
     }
 
     @include breakpoint($desktop) {
-      padding-#{$left}: 1rem;
+      padding-#{$left}: 3.563rem;
 
       @include u-visibility(inline);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .form-type-radio:first-child {
+      margin-#{$right}: 2rem;
+    }
+
+    .address_wrapper {
+      margin-top: 1.438rem;
     }
   }
 
@@ -78,6 +88,10 @@
 
     @include breakpoint($desktop) {
       margin-top: 0;
+
+      &:first-child {
+        margin-#{$right}: 1.938rem;
+      }
     }
 
     label.option {
@@ -88,6 +102,10 @@
 
 #edit-checkout-terms {
   padding: 0.25rem 1rem;
+
+  @include breakpoint($only-mobile) {
+    padding: 0.25rem 0;
+  }
 
   .form-item-checkout-terms-terms {
     margin-top: 0;
@@ -103,9 +121,7 @@
 
   .form-type-checkbox {
     .option {
-      @include breakpoint($desktop) {
-        top: 0;
-      }
+      top: 0;
 
       &::before {
         margin-#{$right}: 0.9rem;
@@ -116,7 +132,8 @@
 
     p {
       @include breakpoint($upto-desktop) {
-        margin-#{$left}: 2rem;
+        margin-#{$left}: 0;
+        width: 80%;
       }
     }
   }
@@ -192,6 +209,10 @@
     border: 1px solid $white;
     margin-#{$right}: 10px;
 
+    html[lang=ar] & {
+      width: 9.375rem;
+    }
+
     label {
       float: $left;
     }
@@ -213,6 +234,10 @@
     width: 6.3125rem;
     clear: both;
     margin-bottom: 1em;
+
+    html[lang=ar] & {
+      width: 12.5rem;
+    }
   }
 
   .cc_cvv_help_text {
@@ -238,6 +263,20 @@
       #{$left}: 24%;
     }
 
+    html[lang=ar] & {
+      @include breakpoint($tablet) {
+        width: 46%;
+        top: 40%;
+        #{$left}: 50%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 40%;
+        top: 44%;
+        #{$left}: 30%;
+      }
+    }
+
     &::before {
       content: "";
       height: 2rem;
@@ -252,3 +291,15 @@
   }
 }
 
+.alias--cart-checkout-payment {
+  .mobile-number-field {
+    .form-item-billing-address-address-billing-mobile-number-country-code,
+    .verified {
+      display: none !important;
+    }
+
+    & > label {
+      position: static !important;
+    }
+  }
+}

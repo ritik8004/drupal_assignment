@@ -17,10 +17,15 @@
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]', context);
-      var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]');
-      var cartCheckoutDeliverySelector = $('body[gtm-container="cart-checkout-delivery"]');
-      var cartCheckoutPaymentSelector = $('body[gtm-container="cart-checkout-payment"]');
+      var cartCheckoutLoginSelector = $('body[gtm-container="summary page"]');
+      var cartCheckoutDeliverySelector = $('body[gtm-container="delivery page"]');
+      var cartCheckoutPaymentSelector = $('body[gtm-container="payment page"]');
+      var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container .js-webform-radios', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
+      var isCCPage = false;
+      var isPaymentPage = false;
+      var isRegistrationPage = false;
+      var isRegistrationSuccessPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -41,6 +46,29 @@
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === undefined) {
         gtmPageType = 'not defined';
+      }
+
+      // If we are on checkout page -- Click & collect method.
+      if (document.location.search === "?method=cc") {
+        isCCPage = true;
+      }
+
+      // If we are on payment page.
+      if (document.location.pathname === Drupal.url('cart/checkout/payment')) {
+        isPaymentPage = true;
+      }
+
+      // If we are on registration page.
+      if (document.location.pathname === Drupal.url('user/register')) {
+        isRegistrationPage = true;
+      }
+
+      if (document.location.pathname === Drupal.url('user/register/complete')) {
+        isRegistrationSuccessPage = true;
+      }
+
+      if (isRegistrationSuccessPage) {
+        Drupal.alshaya_seo_gtm_push_signin_type('registration success');
       }
 
       /** Impressions tracking on listing pages with Products. **/
@@ -66,6 +94,7 @@
           impression.list = pdpListName;
           impression.position = count_pdp_items;
           impressions.push(impression);
+
           count_pdp_items++;
         });
 
@@ -88,13 +117,14 @@
 
       /** Add to cart GTM **/
       // Trigger GTM push event on AJAX completion of add to cart button.
-      $(document).ajaxComplete(function(event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_value === "Add to cart")) {
+      $(document).once('js-event').ajaxComplete(function(event, xhr, settings) {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('add to cart').toLowerCase())) {
           var responseJSON = xhr.responseJSON;
           var responseMessage = '';
           $.each(responseJSON, function(key, obj) {
             if (obj.method === 'stopSpinner') {
               responseMessage = obj.args[0].message;
+              return false;
             }
           });
 
@@ -152,11 +182,61 @@
                   }
                 }
               };
-
               dataLayer.push(data);
             }
           }
         }
+        else if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
+          var responseJSON = xhr.responseJSON;
+          var responseMessage = '';
+          $.each(responseJSON, function(key, obj) {
+            if (obj.method === 'stopNewsletterSpinner') {
+              responseMessage = obj.args[0].message;
+              return false;
+            }
+          });
+
+          if (responseMessage === "success") {
+            Drupal.alshaya_seo_gtm_push_lead_type('footer');
+          }
+        }
+      });
+
+      /** Newsletter subscription tracking on Registration page. **/
+      if (isRegistrationPage) {
+        $('input[name="field_subscribe_newsletter[value]"]').change(function() {
+          if ($(this).is(':checked')) {
+            Drupal.alshaya_seo_gtm_push_lead_type('registration');
+          }
+        });
+      }
+
+      /** Sub-delivery option virtual page tracking. **/
+      if (subDeliveryOptionSelector.text() !== '') {
+        Drupal.alshaya_seo_gtm_push_virtual_checkout_option();
+        var checkout_subdl = '';
+        for( var i=0; i<dataLayer.length; i++) {
+          if (dataLayer[i].event === 'checkout') {
+            checkout_subdl = dataLayer[i];
+            break;
+          }
+        }
+        checkout_subdl.ecommerce.checkout.actionField.step = 3;
+        dataLayer.push(checkout_subdl);
+      }
+
+      subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function() {
+        // Push default selected sub-delivery option to GTM.
+        if ($(this).find('input[checked="checked"]').length > 0) {
+          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+        }
+
+        // Attach change event listener to shipping method radio buttons.
+        $(this).change(function() {
+          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+        });
       });
 
       /** Quantity update in cart. **/
@@ -255,7 +335,7 @@
       if (cartCheckoutDeliverySelector.length !== 0) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
-          Drupal.alshaya_seo_gtm_push_delivery_type('Home Delivery');
+          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
         }
         // Fire checkout option event when user switches delivery option.
         cartCheckoutDeliverySelector.find('[data-drupal-selector="edit-delivery-tabs"] .tab').once('js-event').each(function() {
@@ -270,48 +350,69 @@
                 deliveryType = 'Click & Collect';
               }
 
-              Drupal.alshaya_seo_gtm_push_delivery_type(deliveryType);
+              Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
             }
           });
         });
       }
 
-      /** Tracking selected payment option **/
-      if (cartCheckoutPaymentSelector.length !== 0) {
-        var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
-        if (preselectedMethod.length === 1) {
-          var preselectedMethodLabel = preselectedMethod.siblings('label').text();
-          Drupal.alshaya_seo_gtm_push_selected_payment(preselectedMethodLabel);
+      /** GTM virtual page tracking for click & collect journey. **/
+      if (isCCPage) {
+        if ($('#store-finder-wrapper', context).length > 0) {
+          dataLayer.push({
+            'event':'VirtualPageview',
+            'virtualPageURL':'/virtualpv/click-and-collect/step1/click-and-collect-view',
+            'virtualPageTitle' : 'C&C Step 1 – Click and Collect View'
+          });
         }
 
-        $('[gtm-type="cart-checkout-payment"] input', context).once('js-event').change(function() {
-          var selectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
-          if (selectedMethod === 1) {
-            var selectedMethodLabel = selectedMethod.siblings('label').text();
-            Drupal.alshaya_seo_gtm_push_selected_payment(selectedMethodLabel);
-          }
+        $('.store-actions a.select-store', context).once('js-event').click(function() {
+          dataLayer.push({
+            'event':'VirtualPageview',
+            'virtualPageURL':' /virtualpv/click-and-collect/step2/select-store',
+            'virtualPageTitle' : 'C&C Step 2 – Select Store'
+          });
         });
+      }
+
+      if (isPaymentPage) {
+        // Check delivery type.
+        var deliveryType = $('#block-checkoutsummaryblock .delivery-type').text().toLowerCase();
+
+        if (deliveryType === Drupal.t('Click & Collect').toLowerCase()) {
+          dataLayer.push({
+            'event':'VirtualPageview',
+            'virtualPageURL':'/virtualpv/click-and-collect/step3/payment-page',
+            'virtualPageTitle' : 'C&C Step 3 – Payment Page'
+          });
+        }
+      }
+
+      /** Tracking selected payment option **/
+      // Fire this only if on checkout Payment option page & Ajax response brings in cart-checkout-payment div.
+      if ((cartCheckoutPaymentSelector.length !== 0) && ($('fieldset[gtm-type="cart-checkout-payment"]', context).length > 0)) {
+        var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
+        if (preselectedMethod.length === 1) {
+          var preselectedMethodLabel = preselectedMethod.siblings('label').find('.method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
+        }
       }
 
       /** Product Click Handler **/
       // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {
-        $(this).on('click', function (e) {
+        $(this).once('js-event').on('click', function (e) {
           var that = $(this);
-          var product = Drupal.alshaya_seo_gtm_get_product_values(that);
-          product.variant = '';
-          var data = {
-            'event': 'productClick',
-            'ecommerce': {
-              'currencyCode': currencyCode,
-              'click': {
-                'actionField': {'list': listName},
-                'products': [product]
-              }
-            }
-          };
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName);
+        });
+      });
 
-          dataLayer.push(data);
+      /** Product click handler for Modals. **/
+      // Add click link handler to fire 'productClick' event to GTM.
+      $('a[href*="product-quick-view"]').each(function() {
+        $(this).once('js-event').on('click', function (e) {
+          var that = $(this).closest('article[data-vmode="teaser"]');
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName);
         });
       });
 
@@ -344,22 +445,24 @@
         }
 
         // Track facet filters.
-        $('li.facet-item', context).once('js-event').on('click', function() {
-          var selectedVal = $(this).find('label>span.facet-item__value').text();
-          var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
-          var filterValue = facetTitle + ':' + selectedVal;
+        $('li.facet-item').once('js-event').on('click', function() {
+          if ($(this).find('input.facets-checkbox').attr('checked') === undefined) {
+            var selectedVal = $(this).find('label>span.facet-item__value').text();
+            var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
+            var filterValue = facetTitle + ':' + selectedVal;
 
-          var data = {
-            'event' : 'filter',
-            'section' : section,
-            'filterValue': filterValue
-          };
+            var data = {
+              'event' : 'filter',
+              'section' : section,
+              'filterValue': filterValue
+            };
 
-          dataLayer.push(data);
+            dataLayer.push(data);
+          }
         });
 
         // Track sorts.
-        $('select[name="sort_bef_combine"]').on('change', function() {
+        $('select[name="sort_bef_combine"]').once('js-event').on('change', function() {
           var sortValue = $(this).find('option:selected').text();
           var data = {
             'event' : 'sort',
@@ -391,14 +494,19 @@
       'dimension1': '',
       'dimension2': '',
       'dimension3': product.attr('gtm-dimension3'),
-      'dimension4': product.attr('gtm-stock'),
+      'dimension4': parseInt(product.attr('gtm-dimension4')),
       'dimension5': product.attr('gtm-sku-type'),
       'metric1': product.attr('gtm-cart-value')
     };
 
     return productData;
   };
-  
+
+  /**
+   * Helper function to push customer type to GTM.
+   *
+   * @param customerType
+   */
   Drupal.alshaya_seo_gtm_push_customer_type = function (customerType) {
     var data = {
       'event': 'checkoutOption',
@@ -409,53 +517,40 @@
             'option': customerType
           }
         }
-      },
-      'eventCallback': function() {
-        document.location = 'cart/checkout/delivery';
       }
     };
-    
+
     dataLayer.push(data);
   };
 
-  Drupal.alshaya_seo_gtm_push_selected_payment = function(paymentMethod) {
+  /**
+   * Helper function to push checkout option to GTM.
+   *
+   * @param optionLabel
+   * @param step
+   */
+  Drupal.alshaya_seo_gtm_push_checkout_option = function(optionLabel, step) {
     var data = {
       'event': 'checkoutOption',
       'ecommerce': {
         'checkout_option': {
           'actionField': {
-            'step': 4,
-            'option': paymentMethod
+            'step':step,
+            'option': optionLabel
           }
         }
-      },
-      'eventCallback': function () {
-        document.location = 'cart/checkout/confirmation';
-      }
-    };
-    
-    dataLayer.push(data);
-  };
-
-  Drupal.alshaya_seo_gtm_push_delivery_type = function(deliveryType) {
-    var data = {
-      'event': 'checkoutOption',
-      'ecommerce': {
-        'checkout_option': {
-          'actionField': {
-            'step': 2,
-            'option': deliveryType
-          }
-        }
-      },
-      'eventCallback': function() {
-        document.localtion = 'cart/checkout/payment';
       }
     };
 
     dataLayer.push(data);
   };
 
+  /**
+   * Helper function to push product impressions to GTM.
+   *
+   * @param currencyCode
+   * @param impressions
+   */
   Drupal.alshaya_seo_gtm_push_impressions = function(currencyCode, impressions) {
     if (impressions.length > 0) {
       var data = {
@@ -470,10 +565,17 @@
     }
   };
 
+  /**
+   * Helper function to push promotion impressions to GTM.
+   *
+   * @param highlights
+   * @param gtmPageType
+   * @param event
+   */
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function(highlights, gtmPageType, event) {
     var promotions = [];
 
-    highlights.each(function(key, highlight) {
+    highlights.each(function(key) {
       var promotion = {
         'id': '',
         'name': gtmPageType,
@@ -492,30 +594,73 @@
     };
 
     if (event === 'promotionClick') {
-      var location = '';
-
-      if (highlights.find('a').length !== 0) {
-        location = highlights.find('a').attr('href');
-      }
-      else {
-        location = window.location.pathname;
-      }
-
       data = {
         'event': event,
         'ecommerce': {
           'promoClick': {
             'promotions': promotions
           }
-        },
-        'eventCallback': function() {
-          document.location = location;
         }
       };
 
     }
 
     dataLayer.push(data);
+  };
+
+  /**
+   * Helper function to push Product click events to GTM.
+   *
+   * @param element
+   * @param currencyCode
+   * @param listName
+   */
+  Drupal.alshaya_seo_gtm_push_product_clicks = function(element, currencyCode, listName) {
+    var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+    product.variant = '';
+    var data = {
+      'event': 'productClick',
+      'ecommerce': {
+        'currencyCode': currencyCode,
+        'click': {
+          'actionField': listName,
+          'products': [product]
+        }
+      }
+    };
+
+    dataLayer.push(data);
+  };
+
+  /**
+   * Helper function to push virtual checkout options.
+   */
+  Drupal.alshaya_seo_gtm_push_virtual_checkout_option = function() {
+    var data = {
+      'event':'VirtualPageview',
+      'virtualPageURL':'/virtualpv/checkout/subdelivery',
+      'virtualPageTitle' : 'Checkout Sub-Delivery'
+    };
+
+    dataLayer.push(data);
+  };
+
+  /**
+   * Helper function to push lead events.
+   *
+   * @param leadType
+   */
+  Drupal.alshaya_seo_gtm_push_lead_type = function(leadType) {
+    dataLayer.push({'event' : 'leads', 'leadType' : leadType});
+  };
+
+  /**
+   * Helper funciton to push sign-in type event.
+   *
+   * @param signinType
+   */
+  Drupal.alshaya_seo_gtm_push_signin_type = function(signinType) {
+    dataLayer.push({'event' : 'User Login & Register', 'signinType' : signinType});
   };
 
 })(jQuery, Drupal, dataLayer);

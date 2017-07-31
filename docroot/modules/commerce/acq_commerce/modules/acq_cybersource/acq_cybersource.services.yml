@@ -1,0 +1,4 @@
+services:
+  acq_cybersource.api:
+    class: Drupal\acq_cybersource\CybersourceAPIWrapper
+    arguments: ['@acq_commerce.client_factory', '@config.factory', '@language_manager', '@logger.factory']

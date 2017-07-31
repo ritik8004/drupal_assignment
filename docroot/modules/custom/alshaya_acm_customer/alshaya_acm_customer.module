@@ -320,6 +320,8 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
  *   User id of user if successful or null.
  */
 function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associate_cart = FALSE) {
+  global $_alshaya_acm_custom_cart_association_processed;
+
   try {
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
     $api_wrapper = \Drupal::service('acq_commerce.api');
@@ -327,20 +329,35 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
     $customer = $api_wrapper->authenticateCustomer($mail, $pass);
 
     if (!empty($customer) && !empty($customer['customer_id'])) {
+      $_alshaya_acm_custom_cart_association_processed = TRUE;
       \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
       try {
+        /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+        $cart_storage = \Drupal::service('acq_cart.cart_storage');
+
         // If we get a cart_id in the customer response, load it and store it
         // in the session.
         if (!$force_associate_cart && isset($customer['extension']['cart_id'])) {
           $cart = (object) $api_wrapper->getCart($customer['extension']['cart_id']);
           $cart = new Cart($cart);
 
-          \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+          $cart_storage->addCart($cart);
         }
         // Otherwise, associate the current cart with the authenticated user.
         else {
-          \Drupal::service('acq_cart.cart_storage')->associateCart($customer['customer_id'], $customer['email']);
+          // Check first if we have a cart in session.
+          if ($cart = $cart_storage->getCart(FALSE)) {
+            // Check if current cart is not associated to another user.
+            if ($cart->customerEmail() && $cart->customerEmail() != $mail) {
+              // It is associated to someone else. We clear the cart in session.
+              $cart_storage->clearCart();
+            }
+            else {
+              // Cart is not assigned or assigned to same customer.
+              $cart_storage->associateCart($customer['customer_id'], $customer['email']);
+            }
+          }
         }
       }
       catch (\Exception $e) {
@@ -367,6 +384,50 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
   }
 
   return NULL;
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_acm_customer_user_login($account) {
+  // Check if we have already processed once during login.
+  // We duplicate the code as there is special case in login - associate
+  // old cart id returned from Magento only during authenticate customer
+  // API call.
+  global $_alshaya_acm_custom_cart_association_processed;
+
+  if (isset($_alshaya_acm_custom_cart_association_processed) && $_alshaya_acm_custom_cart_association_processed) {
+    return;
+  }
+
+  /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+  $cart_storage = \Drupal::service('acq_cart.cart_storage');
+
+  // We do all checks only for normal users.
+  if (alshaya_acm_customer_is_customer($account)) {
+    // Check first if we have a cart in session.
+    if ($cart = $cart_storage->getCart(FALSE)) {
+      // Check if current cart is not associated to another user.
+      if ($cart->customerEmail() && $cart->customerEmail() != $account->getEmail()) {
+        // It is associated to someone else. We clear the cart in session.
+        $cart_storage->clearCart();
+      }
+      else {
+        // Cart is not assigned or assigned to same customer.
+        try {
+          $cart_storage->associateCart($account->get('acq_customer_id')->getString(), $account->getEmail());
+        }
+        catch (\Exception $e) {
+          // Some error occurred while associating cart, not doing anything
+          // here to allow normal login to work.
+        }
+      }
+    }
+  }
+  else {
+    // Admin just logged in, lets clear the cart if it exists.
+    $cart_storage->clearCart();
+  }
 }
 
 /**
@@ -567,8 +628,21 @@ function alshaya_acm_customer_alshaya_profile_installed() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_i18n')) {
     // Save some translations.
     $strings = [];
+
     $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
       'en' => 'Unrecognized email address or password.',
+    ];
+
+    $strings['Collector contact no.'] = [
+      'ar' => 'رقم اتصال المستلم',
+    ];
+
+    $strings['Delivery details'] = [
+      'ar' => 'تفاصيل التوصيل',
+    ];
+
+    $strings['Billing details'] = [
+      'ar' => 'معلومات تحرير الفاتورة',
     ];
 
     alshaya_i18n_save_translations($strings);

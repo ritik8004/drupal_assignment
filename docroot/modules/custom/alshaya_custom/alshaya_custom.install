@@ -7,12 +7,6 @@
 
 /**
  * Implements hook_install().
- *
- * Perform actions to further customize the site after Lightning has been
- * installed. This module is automatically enabled via the lightning.extend.yml
- * file.
- *
- * @see system_install()
  */
 function alshaya_custom_install() {
   // Enable and set alshaya_white_label as default theme.
@@ -35,7 +29,7 @@ function alshaya_custom_install() {
   }
 
   // Stop lightning from creating user roles in future.
-  \Drupal::configFactory()->getEditable('lightning_core.settings')->setData([
+  \Drupal::configFactory()->getEditable('lightning_roles.settings')->setData([
     'content_roles' => [
       'creator' => [
         'enabled' => FALSE,
@@ -45,6 +39,15 @@ function alshaya_custom_install() {
       ],
     ],
   ])->save();
+
+  // Set the page cache for 5 minutes.
+  \Drupal::configFactory()->getEditable('system.performance')
+    ->set('cache', [
+      'page' => [
+        'max_age' => 300,
+      ],
+    ])
+    ->save();
 }
 
 /**

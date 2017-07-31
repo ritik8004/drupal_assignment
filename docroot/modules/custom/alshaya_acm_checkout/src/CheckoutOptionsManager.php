@@ -73,16 +73,18 @@ class CheckoutOptionsManager {
    * @param string $name
    *   Name of shipping method, available during checkout.
    * @param string $description
-   *   Description of shipping method, available during checkout.
+   *   Description of shipping method, used in cart and order pages.
    * @param string $carrier_code
    *   Carrier code.
    * @param string $method_code
    *   Method code.
+   * @param string $order_description
+   *   Description of shipping method, used on order page.
    *
    * @return \Drupal\taxonomy\Entity\Term|null
    *   Term object.
    */
-  public function loadShippingMethod($code, $name = '', $description = '', $carrier_code = '', $method_code = '') {
+  public function loadShippingMethod($code, $name = '', $description = '', $carrier_code = '', $method_code = '', $order_description = '') {
     // Simple check to avoid 500 errors. Might not come in production but
     // issue might come during development.
     if (empty($code)) {
@@ -108,10 +110,17 @@ class CheckoutOptionsManager {
         'name' => $name,
       ]);
 
-      $term->get('description')->setValue($description);
-      $term->get('field_shipping_method_desc')->setValue($name);
+      // Following will be used as default, it will be available for
+      // configuration in term edit page.
+      if (empty($order_description)) {
+        $order_description = t('Your order will be delivered at the following address');
+      }
+
+      $term->get('field_shipping_method_cart_desc')->setValue($description);
+      $term->get('field_shipping_method_desc')->setValue($order_description);
       $term->get('field_shipping_code')->setValue($code);
       $term->get('field_shipping_carrier_code')->setValue($carrier_code);
+      $term->get('field_shipping_method_code')->setValue($method_code);
       $term->get('field_shipping_method_code')->setValue($method_code);
 
       $term->save();
@@ -160,39 +169,6 @@ class CheckoutOptionsManager {
     }
 
     return $result;
-  }
-
-  /**
-   * Get all allowed payment method codes for particular shipping methods.
-   *
-   * @param string $shipping_method
-   *   Shipping method code.
-   *
-   * @return array
-   *   Array of payment method codes allowed for the shipping method.
-   */
-  public function getAllowedPaymentMethodCodes($shipping_method) {
-    $shipping_method_term = $this->loadShippingMethod($shipping_method);
-
-    $query = $this->termStorage->getQuery();
-    $query->condition('vid', 'payment_method');
-    $query->condition('field_payment_shipping_methods', $shipping_method_term->id());
-
-    $result = $query->execute();
-
-    if (empty($result)) {
-      $this->logger->warning('No payment methods found for shipping method @method', ['@method' => $shipping_method]);
-      return [];
-    }
-
-    $terms = $this->termStorage->loadMultiple($result);
-
-    $methods = [];
-    foreach ($terms as $term) {
-      $methods[] = $term->get('field_payment_code')->getString();
-    }
-
-    return $methods;
   }
 
   /**
@@ -263,10 +239,6 @@ class CheckoutOptionsManager {
 
       $term->get('field_payment_code')->setValue($code);
 
-      if ($shipping_methods = $this->getAllShippingTerms(FALSE)) {
-        $term->get('field_payment_shipping_methods')->setValue($shipping_methods);
-      }
-
       $term->save();
 
       $this->logger->critical('New payment method created for code @code. Please save the description asap.', ['@code' => $code]);
@@ -328,6 +300,12 @@ class CheckoutOptionsManager {
    *   Available shipping methods.
    */
   public function loadShippingEstimates($address) {
+    $cart = $this->cartStorage->getCart();
+
+    if (empty($cart->customerId())) {
+      return [];
+    }
+
     // Below code is to ensure we call the API only once.
     static $options;
     $static_key = base64_encode(serialize($address));
@@ -338,8 +316,6 @@ class CheckoutOptionsManager {
     $address = (array) $address;
 
     $address = _alshaya_acm_checkout_clean_address($address);
-
-    $cart = $this->cartStorage->getCart();
 
     $shipping_methods = [];
     $shipping_method_options = [];
@@ -393,7 +369,7 @@ class CheckoutOptionsManager {
           <div class="shipping-method-name">
             <div class="shipping-method-title">' . $data['term']->getName() . '</div>
             <div class="shipping-method-price">' . $data['price'] . '</div>
-            <div class="shipping-method-description">' . $data['term']->get('description')->getValue()[0]['value'] . '</div>
+            <div class="shipping-method-description">' . $data['term']->get('field_shipping_method_cart_desc')->getString() . '</div>
           </div>
         ';
 

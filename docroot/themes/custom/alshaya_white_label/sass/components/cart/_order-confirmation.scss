@@ -21,16 +21,39 @@
     }
 
     .field--name-field-subscribe-newsletter {
-      margin-top: 2.2rem;
+      margin-top: 1.1rem;
+      margin-bottom: 1rem;
 
-      .js-form-type-checkbox {
+      .form-item {
         margin-top: 1rem;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 3rem;
+        }
       }
 
       p {
+        margin-top: 0.875rem;
+        margin-#{$left}: 1.813rem;
+        margin-bottom: 1.4rem;
         font-size: 0.75rem;
-        margin-top: 0;
-        margin-bottom: 1.2rem;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 5rem;
+        }
+
+        a {
+          color: $cerulean-two;
+          font-weight: bold;
+        }
+      }
+
+      label {
+        position: static;
+        width: 100%;
+        display: block;
+        text-indent: -2rem;
+        padding-#{$left}: 1.9rem;
       }
     }
   }
@@ -138,7 +161,7 @@
       display: table-cell;
       width: 50%;
       word-spacing: 0.125rem;
-      padding-#{$left}: 0;
+      padding-#{$left}: 2.5rem;
       padding-top: 0.3125rem;
     }
 
@@ -151,10 +174,7 @@
       display: inline-block;
       margin-#{$right}: 0.4rem;
       vertical-align: middle;
-
-      @include breakpoint($only-tablet) {
-        margin-#{$right}: 1.4rem;
-      }
+      text-indent: -2.5rem;
     }
   }
 
@@ -163,7 +183,7 @@
     @include breakpoint($only-mobile) {
       background-color: $pale-grey;
       padding: 1.125rem;
-      padding-#{$left}: 0.8rem;
+      padding-#{$left}: 3.3rem;
       padding-#{$right}: 1.5rem;
       font-size: 0.8125rem;
       color: $cerulean-two;
@@ -176,7 +196,8 @@
     text-align: center;
 
     @include breakpoint($only-mobile) {
-      margin-top: 3rem;
+      margin-top: 1.75rem;
+      padding-#{$left}: 1.5rem;
     }
 
     @include breakpoint($tablet) {
@@ -212,7 +233,6 @@
   .user-register-form {
     > div:first-child {
       font-size: 1rem;
-      color: $marine-blue;
       padding-bottom: 0.5em;
       margin-bottom: 1em;
     }
@@ -401,7 +421,7 @@
       width: 100%;
 
       @include breakpoint($tablet) {
-        width: 80%;
+        width: 72%;
       }
 
       @include breakpoint($only-tablet) {
@@ -411,13 +431,17 @@
 
       .dark--text {
         @include breakpoint($only-mobile) {
-          display: block;
+          display: inline-block;
         }
       }
     }
 
     .print--barcode {
       font-size: 0.75rem;
+
+      @include breakpoint($tablet) {
+        width: 28%;
+      }
 
       &.above-mobile {
         @include breakpoint($only-mobile) {
@@ -427,7 +451,7 @@
     }
 
     svg {
-      width: 7rem;
+      max-width: 12.375rem;
       max-height: 4.375rem;
 
       @include breakpoint($tablet) {
@@ -441,6 +465,10 @@
 
     svg {
       max-height: 4.875rem;
+      // Need height 100% for UC browser.
+      .ucbrowser & {
+        height: 100%;
+      }
     }
 
     .value {

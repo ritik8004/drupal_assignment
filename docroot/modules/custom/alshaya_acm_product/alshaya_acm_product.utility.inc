@@ -288,6 +288,10 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 function alshaya_acm_product_get_display_node($sku, $langcode = '') {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
 
+  if (empty($sku_entity)) {
+    return NULL;
+  }
+
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
   $plugin = $sku_entity->getPluginInstance();
 
@@ -407,7 +411,8 @@ function alshaya_acm_product_available_click_collect($sku) {
   // Product could be either available for ship to store or for reserve and
   // collect. In both cases click and collect option will be considered as
   // available.
-  return ($sts || $rnc);
+  // Magento provides for 2 for disabled and 1 for enabled.
+  return ($sts == 1 || $rnc == 1);
 }
 
 /**
@@ -423,6 +428,10 @@ function alshaya_acm_product_get_brand_logo($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   $title = $sku_entity->get('attr_brand_logo')->getString();
+
+  if (empty($title)) {
+    return [];
+  }
 
   $cid = 'brand_logo:' . Html::cleanCssIdentifier($title);
 

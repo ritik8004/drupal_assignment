@@ -157,13 +157,22 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
       if ($method_code == $checkout_options_manager->getClickandColectShippingMethod()) {
         if ($store_code = $cart->getExtension('store_code')) {
+          // Not injected here to avoid module dependency.
+          $store = \Drupal::service('alshaya_stores_finder.utility')->getTranslatedStoreFromCode($store_code);
+
           $delivery['label'] = $this->t('Click & Collect');
           $delivery['method_name'] = '';
-          $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
-          $delivery['address_label'] = $this->t('Collection Store');
 
-          // Not injected here to avoid module dependency.
-          $store = \Drupal::service('alshaya_stores_finder.utility')->getStoreFromCode($store_code);
+          if ($cart->getExtension('click_and_collect_type') == 'ship_to_store') {
+            $duration = $store->get('field_store_sts_label')->getString();
+          }
+          else {
+            $cc_settings = $this->configFactory->get('alshaya_click_collect.settings');
+            $duration = $cc_settings->get('click_collect_rnc');
+          }
+
+          $delivery['method_description'] = $this->t('Your order will be available in %duration', ['%duration' => $duration]);
+          $delivery['address_label'] = $this->t('Collection Store');
 
           $delivery['address'] = $store->get('field_store_address')->getString();
         }
@@ -174,7 +183,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       else {
         $delivery['label'] = $this->t('Home Delivery');
         $delivery['method_name'] = $term->getName();
-        $delivery['method_description'] = $term->get('field_shipping_method_desc')->getString();
+        $delivery['method_description'] = $term->get('field_shipping_method_cart_desc')->getString();
         $delivery['address_label'] = $this->t('Delivery Address');
 
         // Delivery address.

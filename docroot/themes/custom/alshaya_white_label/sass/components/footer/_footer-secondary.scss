@@ -5,7 +5,6 @@
   z-index: 4;
 
   @include breakpoint($tablet) {
-    height: 4.375rem;
     padding: 0 1.5em;
   }
 
@@ -115,7 +114,7 @@
     height: 4.375rem;
     display: table;
     float: $right;
-    margin-right: 1rem;
+    margin-#{$right}: 1rem;
   }
 
   @include breakpoint($only-mobile) {
@@ -148,6 +147,6 @@
 
   @include breakpoint($desktop) {
     width: 56%;
-    margin-right: 9.7rem;
+    margin-#{$right}: 9.7rem;
   }
 }
