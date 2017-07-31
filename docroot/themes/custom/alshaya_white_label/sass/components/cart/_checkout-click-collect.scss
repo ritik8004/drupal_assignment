@@ -249,6 +249,7 @@
         list-style: none;
         padding: 0;
         margin-top: 0;
+        margin-bottom: 0;
 
         li {
           background-color: $white-five;
@@ -289,6 +290,10 @@
             padding-#{$right}: 0;
             padding-bottom: 0;
             margin-bottom: 1.563rem;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
 
             .store-name-and-address,
             .store-open-hours,
@@ -455,6 +460,10 @@
                 font-size: 1.5rem;
                 line-height: 1;
                 display: inline-block;
+              }
+
+              @include breakpoint($only-tablet) {
+                margin-top: 2.313rem;
               }
 
               @include breakpoint($only-mobile) {
@@ -751,6 +760,10 @@
       margin-top: 1.938rem;
     }
 
+    @include breakpoint($tablet) {
+      padding-bottom: 2.6rem;
+    }
+
     .selected-store-content {
       border-bottom: 1px solid $white-two;
       border-top: 1px solid $white-two;
@@ -931,6 +944,10 @@
             font-size: 1.5rem;
             line-height: 1;
             display: inline-block;
+          }
+
+          @include breakpoint($only-tablet) {
+            margin-top: 2.313rem;
           }
 
           @include breakpoint($only-mobile) {
