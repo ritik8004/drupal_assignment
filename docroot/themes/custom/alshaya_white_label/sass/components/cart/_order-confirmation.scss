@@ -77,12 +77,6 @@
       }
     }
 
-    td {
-      .price-wrapper .price-currency {
-        font-weight: bold;
-      }
-    }
-
     .price-amount {
       float: $right;
     }
@@ -155,6 +149,10 @@
     margin-top: 1.68rem;
     margin-bottom: 1.875rem;
     padding-#{$left}: 0.9rem;
+
+    &::before {
+      margin: 0 !important;
+    }
 
     @include breakpoint($tablet) {
       margin: 0;
