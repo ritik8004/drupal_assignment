@@ -30,88 +30,9 @@
           }
         });
       });
-
-      $('[data-drupal-selector="edit-actions-next"]').once('bind-events').each(function () {
-        $(this).on('click', function (event) {
-          if ($('.cybersource-credit-card-input').length && Drupal.cybersourceProcessed !== true) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            var card = $('.cybersource-credit-card-input').val().toString().trim();
-            if (card == '') {
-              // TODO: Handle error here.
-              return;
-            }
-
-            var type = $('.cybersource-credit-card-type-input').val().toString().trim();
-
-            if (type == '') {
-              // TODO: Handle error here.
-              return;
-            }
-
-            // @TODO: Check for basic required field validations at-least
-            // before starting cybersource process.
-            // Ajax POST request to get token.
-            // We also send the address here to set billing info.
-            // @TODO: Another one - this looks not generic.
-            var getTokenData = $('[data-drupal-selector="edit-billing-address"]').serialize() + '&type=' + type;
-
-            $.ajax({
-              type: 'POST',
-              cache: false,
-              url: Drupal.url('cybersource/get-token'),
-              data: getTokenData,
-              dataType: 'json',
-              success: function (response) {
-                // @TODO: Check first here if we have valid token and data to send.
-                // Add credit cart info.
-                response.data.card_number = $('.cybersource-credit-card-input').val().toString().trim();
-                response.data.card_expiry_date = $('.cybersource-credit-card-exp-month-select option:selected').val().toString().trim();
-                response.data.card_expiry_date += '-';
-                response.data.card_expiry_date += $('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim();
-                response.data.card_cvn = $('.cybersource-credit-card-cvv-input').val().toString().trim();
-
-                // Here we use iframe to post to Cybersource and then handle
-                // the response in Drupal. We have configured the response url
-                // in Cybersource profile.
-                // This is necessary as Cybersource doesn't allow AJAX requests.
-                // Even if it processes fine, it never sets the CORS header
-                // and browser/javascript remove the response.
-                // Remove old form and iframe if available.
-                $('#cybersource_form_to_iframe, #cybersource_iframe').remove();
-
-                // Create iframe and post to cybersource form there.
-                var cybersourceForm = $('<form action="' + response.url + '" target="cybersource_iframe" method="post" style="display:none !important;" id="cybersource_form_to_iframe"></form>');
-
-                for (var i in response.data) {
-                  $("<input type='hidden' />").attr("name", i).attr("value", response.data[i]).appendTo(cybersourceForm);
-                }
-
-                var cybersourceIframe = $('<iframe style="display:none!important;" name="cybersource_iframe" id="cybersource_iframe"></iframe>');
-                $('body').append(cybersourceIframe);
-                $('body').append(cybersourceForm);
-                cybersourceForm.submit();
-              },
-              error: function (xmlhttp, message, error) {
-                // TODO: Handle error here.
-                console.log(xmlhttp);
-                console.log(message);
-                console.log(error);
-              }
-            });
-          }
-        });
-
-        $(this).parents('form:first').on('submit', function (event) {
-          if ($('.cybersource-credit-card-input').length && Drupal.cybersourceProcessed !== true) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-        });
-      });
     }
   };
+
 
   Drupal.finishCybersourcePayment = function () {
     // We don't pass credit card info to drupal.
@@ -123,6 +44,104 @@
 
     // Proceed with payment now.
     $('[data-drupal-selector="edit-actions-next"]').trigger('click');
-  }
+  };
+
+  Drupal.cybersourceShowError = function (element, error) {
+    element.parent().find('.form-item--error-message, label.error').remove();
+    var errorDiv = $('<div class="form-item--error-message" />');
+    errorDiv.html(error);
+
+    if (element.is('input:checkbox')) {
+      element.parent().append(errorDiv);
+    }
+    else {
+      element.after(errorDiv);
+    }
+  };
 
 })(jQuery, Drupal);
+
+
+function cybersource_form_submit_handler(form) {
+  'use strict';
+
+  var $ = jQuery.noConflict();
+
+  // Remove all error messages displayed right now.
+  $(form).find('.form-item--error-message, label.error').remove();
+
+  if (Drupal.cybersourceProcessed === true) {
+    form.submit();
+  }
+
+  var formHasErrors = false;
+
+  var type = $('.cybersource-credit-card-type-input').val().toString().trim();
+  if (type === '') {
+    Drupal.cybersourceShowError($('.cybersource-credit-card-input'), Drupal.t('Invalid Credit Card number'));
+    formHasErrors = true;
+  }
+
+  var cvv = $('.cybersource-credit-card-cvv-input').val().toString().trim();
+  if (isNaN(cvv) || cvv.length < 3 || cvv.length > 4) {
+    Drupal.cybersourceShowError($('.cybersource-credit-card-cvv-input'), Drupal.t('Invalid security code (CVV)'));
+    formHasErrors = true;
+  }
+
+  if (formHasErrors) {
+    return false;
+  }
+
+  // Ajax POST request to get token.
+  var getTokenData = 'card_type=' + type + '&';
+
+  // We also send all other form data here to allow other modules to process based on that.
+  getTokenData += $('.cybersource-input').parents('form').find('input:not(.cybersource-input), select:not(.cybersource-input)').serialize();
+
+  $.ajax({
+    type: 'POST',
+    cache: false,
+    url: Drupal.url('cybersource/get-token'),
+    data: getTokenData,
+    dataType: 'json',
+    success: function (response) {
+      if (response.errors) {
+        for (var field in response.errors) {
+          Drupal.cybersourceShowError($('[name="' + field + '"]'), response.errors[field]);
+        }
+        return;
+      }
+
+      // Add credit cart info.
+      response.data.card_number = $('.cybersource-credit-card-input').val().toString().trim();
+      response.data.card_expiry_date = $('.cybersource-credit-card-exp-month-select option:selected').val().toString().trim();
+      response.data.card_expiry_date += '-';
+      response.data.card_expiry_date += $('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim();
+      response.data.card_cvn = parseInt($('.cybersource-credit-card-cvv-input').val().toString().trim());
+
+      // Here we use iframe to post to Cybersource and then handle
+      // the response in Drupal. We have configured the response url
+      // in Cybersource profile.
+      // This is necessary as Cybersource doesn't allow AJAX requests.
+      // Even if it processes fine, it never sets the CORS header
+      // and browser/javascript remove the response.
+      // Remove old form and iframe if available.
+      $('#cybersource_form_to_iframe, #cybersource_iframe').remove();
+
+      // Create iframe and post to cybersource form there.
+      var cybersourceForm = $('<form action="' + response.url + '" target="cybersource_iframe" method="post" style="display:none !important;" id="cybersource_form_to_iframe"></form>');
+
+      for (var input in response.data) {
+        $("<input type='hidden' />").attr('name', input).attr('value', response.data[input]).appendTo(cybersourceForm);
+      }
+
+      var cybersourceIframe = $('<iframe style="display:none!important;" name="cybersource_iframe" id="cybersource_iframe"></iframe>');
+      $('body').append(cybersourceIframe);
+      $('body').append(cybersourceForm);
+      cybersourceForm.submit();
+    },
+    error: function (xmlhttp, message, error) {
+      // TODO: Handle error here.
+    }
+  });
+}

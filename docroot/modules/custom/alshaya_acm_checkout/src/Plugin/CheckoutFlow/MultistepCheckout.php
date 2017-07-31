@@ -68,6 +68,9 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
+    // Disable autocomplete.
+    $form['#attributes']['autocomplete'] = 'off';
+
     $panes = $this->getPanes($this->stepId);
     foreach ($panes as $pane_id => $pane) {
       $form[$pane_id] = [
