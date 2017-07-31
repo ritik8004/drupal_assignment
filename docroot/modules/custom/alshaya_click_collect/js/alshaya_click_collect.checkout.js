@@ -325,7 +325,7 @@
   };
 
   // Make Ajax call to get stores list and render html.
-  Drupal.checkoutClickCollect.storeListAll = function (coords) {
+  Drupal.checkoutClickCollect.storeListAll = function (coords, field, restriction, $trigger) {
     if (typeof coords !== 'undefined') {
       ascoords = coords;
 

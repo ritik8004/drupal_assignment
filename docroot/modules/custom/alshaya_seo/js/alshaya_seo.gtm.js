@@ -17,13 +17,15 @@
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]', context);
-      var cartCheckoutLoginSelector = $('body[gtm-container="cart-checkout-login"]');
-      var cartCheckoutDeliverySelector = $('body[gtm-container="cart-checkout-delivery"]');
-      var cartCheckoutPaymentSelector = $('body[gtm-container="cart-checkout-payment"]');
-      var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
+      var cartCheckoutLoginSelector = $('body[gtm-container="summary page"]');
+      var cartCheckoutDeliverySelector = $('body[gtm-container="delivery page"]');
+      var cartCheckoutPaymentSelector = $('body[gtm-container="payment page"]');
+      var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container .js-webform-radios', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var isCCPage = false;
       var isPaymentPage = false;
+      var isRegistrationPage = false;
+      var isRegistrationSuccessPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
 
@@ -54,6 +56,19 @@
       // If we are on payment page.
       if (document.location.pathname === Drupal.url('cart/checkout/payment')) {
         isPaymentPage = true;
+      }
+
+      // If we are on registration page.
+      if (document.location.pathname === Drupal.url('user/register')) {
+        isRegistrationPage = true;
+      }
+
+      if (document.location.pathname === Drupal.url('user/register/complete')) {
+        isRegistrationSuccessPage = true;
+      }
+
+      if (isRegistrationSuccessPage) {
+        Drupal.alshaya_seo_gtm_push_signin_type('registration success');
       }
 
       /** Impressions tracking on listing pages with Products. **/
@@ -187,9 +202,27 @@
         }
       });
 
+      /** Newsletter subscription tracking on Registration page. **/
+      if (isRegistrationPage) {
+        $('input[name="field_subscribe_newsletter[value]"]').change(function() {
+          if ($(this).is(':checked')) {
+            Drupal.alshaya_seo_gtm_push_lead_type('registration');
+          }
+        });
+      }
+
       /** Sub-delivery option virtual page tracking. **/
-      if (subDeliveryOptionSelector.length > 0) {
+      if (subDeliveryOptionSelector.text() !== '') {
         Drupal.alshaya_seo_gtm_push_virtual_checkout_option();
+        var checkout_subdl = '';
+        for( var i=0; i<dataLayer.length; i++) {
+          if (dataLayer[i].event === 'checkout') {
+            checkout_subdl = dataLayer[i];
+            break;
+          }
+        }
+        checkout_subdl.ecommerce.checkout.actionField.step = 3;
+        dataLayer.push(checkout_subdl);
       }
 
       subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function() {
@@ -370,7 +403,7 @@
       productLinkSelector.each(function () {
         $(this).once('js-event').on('click', function (e) {
           var that = $(this);
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode);
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName);
         });
       });
 
@@ -379,7 +412,7 @@
       $('a[href*="product-quick-view"]').each(function() {
         $(this).once('js-event').on('click', function (e) {
           var that = $(this).closest('article[data-vmode="teaser"]');
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode);
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName);
         });
       });
 
@@ -461,7 +494,7 @@
       'dimension1': '',
       'dimension2': '',
       'dimension3': product.attr('gtm-dimension3'),
-      'dimension4': product.attr('gtm-dimension4'),
+      'dimension4': parseInt(product.attr('gtm-dimension4')),
       'dimension5': product.attr('gtm-sku-type'),
       'metric1': product.attr('gtm-cart-value')
     };
@@ -582,7 +615,7 @@
    * @param currencyCode
    * @param listName
    */
-  Drupal.alshaya_seo_gtm_push_product_clicks = function(element, currencyCode) {
+  Drupal.alshaya_seo_gtm_push_product_clicks = function(element, currencyCode, listName) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
     product.variant = '';
     var data = {
@@ -590,6 +623,7 @@
       'ecommerce': {
         'currencyCode': currencyCode,
         'click': {
+          'actionField': listName,
           'products': [product]
         }
       }
@@ -618,5 +652,15 @@
    */
   Drupal.alshaya_seo_gtm_push_lead_type = function(leadType) {
     dataLayer.push({'event' : 'leads', 'leadType' : leadType});
-  }
+  };
+
+  /**
+   * Helper funciton to push sign-in type event.
+   *
+   * @param signinType
+   */
+  Drupal.alshaya_seo_gtm_push_signin_type = function(signinType) {
+    dataLayer.push({'event' : 'User Login & Register', 'signinType' : signinType});
+  };
+
 })(jQuery, Drupal, dataLayer);

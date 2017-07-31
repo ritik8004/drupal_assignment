@@ -276,7 +276,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $orderDetails['billing_address'] = render($billing_address);
 
-  $orderDetails['payment_method'] = $order['payment']['method_title'];
+  $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code']);
+  $orderDetails['payment_method'] = $payment_method_term->getName();
 
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);

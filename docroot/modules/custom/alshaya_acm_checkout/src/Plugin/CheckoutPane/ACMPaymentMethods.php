@@ -77,10 +77,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
 
-    foreach ($plugins as $plugin) {
-      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']);
-    }
-
     // Get available payment methods and compare to enabled payment method
     // plugins.
     $apiWrapper = $this->getApiWrapper();
@@ -128,7 +124,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         continue;
       }
 
-      $payment_term = $checkout_options_manager->loadPaymentMethod($plugin_id);
+      $payment_term = $checkout_options_manager->loadPaymentMethod($plugin_id, $plugins[$plugin_id]['label']);
 
       $method_name = '
         <div class="payment-method-name">

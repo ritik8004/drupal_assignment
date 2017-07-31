@@ -412,7 +412,9 @@
       &.option {
         @include clearfix;
 
-        top: 0;
+        .ucbrowser & {
+          top: 0;
+        }
 
         &::before {
           display: block;

@@ -3,6 +3,12 @@
     .price-wrapper .price {
       max-width: 5rem !important;
     }
+
+    &.alias--cart-checkout-payment {
+      .price-wrapper .price {
+        max-width: none !important;
+      }
+    }
   }
 
   tr[data-drupal-selector="edit-totals-discount"] td:first-child {

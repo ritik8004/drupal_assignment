@@ -306,14 +306,14 @@ class AlshayaAddressBookManager {
   public function getMagentoAddressFromAddressArray(array $address) {
     $magento_address = [];
 
-    $magento_address['firstname'] = $address['given_name'];
-    $magento_address['lastname'] = $address['family_name'];
+    $magento_address['firstname'] = (string) $address['given_name'];
+    $magento_address['lastname'] = (string) $address['family_name'];
     $magento_address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['mobile_number']);
-    $magento_address['street'] = $address['address_line1'];
-    $magento_address['extension']['address_apartment_segment'] = $address['address_line2'];
-    $magento_address['extension']['address_area_segment'] = $address['administrative_area'];
-    $magento_address['extension']['address_building_segment'] = $address['dependent_locality'];
-    $magento_address['extension']['address_block_segment'] = $address['locality'];
+    $magento_address['street'] = (string) $address['address_line1'];
+    $magento_address['extension']['address_apartment_segment'] = (string) $address['address_line2'];
+    $magento_address['extension']['address_area_segment'] = (string) $address['administrative_area'];
+    $magento_address['extension']['address_building_segment'] = (string) $address['dependent_locality'];
+    $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
     $magento_address['country_id'] = $address['country_code'];
 
     // City is core attribute in Magento and hard to remove validation.

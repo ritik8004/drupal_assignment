@@ -17,3 +17,12 @@ input[type=checkbox]:checked ~ label {
     color: $windows-blue;
   }
 }
+
+// Fix for facets without translations.
+.c-facet {
+  input[type=checkbox] ~ label {
+    &::before {
+      float: $left;
+    }
+  }
+}
