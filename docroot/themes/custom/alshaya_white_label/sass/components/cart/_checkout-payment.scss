@@ -176,50 +176,6 @@
     width: 12.5rem;
   }
 
-  .card-types-wrapper {
-    position: absolute;
-    top: -3rem;
-    #{$right}: 0.8rem;
-
-    @include breakpoint($tablet) {
-      #{$right}: 1.8rem;
-    }
-
-    .card-type {
-      display: inline-block;
-      height: 2rem;
-      width: 3rem;
-      background: $white;
-
-      &-visa {
-        background: $white url('../imgs/cards/visa-inactive.png') no-repeat;
-        background-size: 100%;
-
-        &.active {
-          background-image: url('../imgs/cards/visa-active.png');
-        }
-      }
-
-      &-mastercard {
-        background: $white url('../imgs/cards/mastercard-inactive.png') no-repeat;
-        background-size: 100%;
-
-        &.active {
-          background-image: url('../imgs/cards/mastercard-active.png');
-        }
-      }
-
-      &-diners-club {
-        background: $white url('../imgs/cards/dinersclub-inactive.png') no-repeat;
-        background-size: 100%;
-
-        &.active {
-          background-image: url('../imgs/cards/dinersclub-active.png');
-        }
-      }
-    }
-  }
-
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
     float: $left;
@@ -306,6 +262,52 @@
       position: absolute;
       #{$left}: 0;
       top: 0;
+    }
+  }
+}
+
+#payment_method_cybersource {
+  .card-types-wrapper {
+    position: absolute;
+    top: 1.25rem;
+    #{$right}: 0.8rem;
+
+    @include breakpoint($tablet) {
+      #{$right}: 1.8rem;
+    }
+
+    .card-type {
+      display: inline-block;
+      height: 2rem;
+      width: 3rem;
+      background: $white;
+
+      &-visa {
+        background: $white url('../imgs/cards/visa-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &.active {
+          background-image: url('../imgs/cards/visa-active.png');
+        }
+      }
+
+      &-mastercard {
+        background: $white url('../imgs/cards/mastercard-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &.active {
+          background-image: url('../imgs/cards/mastercard-active.png');
+        }
+      }
+
+      &-diners-club {
+        background: $white url('../imgs/cards/dinersclub-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &.active {
+          background-image: url('../imgs/cards/dinersclub-active.png');
+        }
+      }
     }
   }
 }
