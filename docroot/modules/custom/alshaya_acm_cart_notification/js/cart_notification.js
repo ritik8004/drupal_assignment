@@ -19,29 +19,29 @@
       });
 
       // Create a new instance of ladda for the specified button
-      $('.edit-add-to-cart', context).attr('data-style', 'zoom-in');
-      var l = $('.edit-add-to-cart', context).ladda();
+      $('.edit-add-to-cart').attr('data-style', 'zoom-in');
+      var l = $('.edit-add-to-cart').ladda();
 
       $('.edit-add-to-cart', context).on('click', function () {
         // Start loading
-        l.ladda('start');
+        $(this).ladda('start');
       });
 
       $('.edit-add-to-cart', context).on('mousedown', function () {
         // Start loading
-        l.ladda('start');
+        $(this).ladda('start');
       });
 
       $('.edit-add-to-cart', context).on('keydown', function (event) {
         if (event.keyCode === 13 || event.keyCode === 32) {
           // Start loading
-          l.ladda('start');
+          $(this).ladda('start');
         }
       });
 
-      $('[data-drupal-selector="edit-configurables-size"]', context).once('bind-events').on('change', function () {
+      $('[data-drupal-selector="edit-configurables-size"]').on('change', function () {
         // Start loading.
-        l.ladda('start');
+        $(this).closest('.sku-base-form').find('.edit-add-to-cart').ladda('start');
       });
 
       $(document).ajaxComplete(function (event, xhr, settings) {

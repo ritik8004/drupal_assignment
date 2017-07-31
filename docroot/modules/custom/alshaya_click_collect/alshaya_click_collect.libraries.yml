@@ -17,3 +17,14 @@ click-and-collect.pdp:
     js/alshaya_click_collect.pdp.js: {}
   dependencies:
     - alshaya_click_collect/click-and-collect
+
+# Geolocation views filter geocoder function.
+click-collect.geocoder.googleplacesapi:
+  version: 8.x-1.x
+  js:
+    js/alshaya-click-collect-google-places-api-geocoder.js: {}
+  dependencies:
+    - geolocation/geolocation.geocoder
+    - alshaya_click_collect/click-and-collect
+
+
