@@ -365,7 +365,6 @@
 }
 
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
-#edit-acm-payment-methods-payment-options,
 #edit-member-delivery-home-address-shipping-methods--wrapper,
 .shipping-methods-container {
   border: none !important;
@@ -522,6 +521,7 @@
     #{$left}: 0 !important;
     background: rgba(255, 255, 255, 0.7);
     z-index: 9999;
+    visibility: visible;
 
     .message {
       display: none;
@@ -546,100 +546,130 @@
 }
 
 #edit-acm-payment-methods-payment-options--wrapper {
+  height: 0;
+
   legend {
     display: none;
   }
 }
 
-#edit-acm-payment-methods-payment-options {
+#payment_details_wrapper {
   padding-#{$left}: 0;
+  margin-top: 0;
 
-  .form-type-radio {
+  > .form-wrapper {
+    cursor: pointer;
+    margin-top: 0;
     width: 100%;
-    margin: 0;
-    padding: 1.5rem 0.5rem;
-    border-top: 1px solid $white;
-    border-bottom: 1px solid $white;
+    float: $left;
 
-    @include breakpoint($only-mobile) {
-      max-height: 4rem;
-    }
-
-    @include breakpoint($tablet) {
-      padding: 1.5rem;
-    }
-
-    input[checked="checked"] {
-      & ~ label.option .method-knet {
-        background: $white url('../imgs/cards/knet-active.png') no-repeat;
-        background-size: 100%;
-      }
-    }
-
-    &:nth-child(odd) {
+    &:nth-child(even) {
       background-color: $white-four;
     }
 
-    label {
-      &.option {
-        @include clearfix;
+    &:last-child {
+      .payment-plugin-wrapper-div {
+        border-bottom: 1px solid $white;
+      }
+    }
 
-        .ucbrowser & {
-          display: block;
+    &:first-child {
+      border-top: 2px solid $white;
+
+      .payment-plugin-wrapper-div {
+        border-top: none;
+      }
+    }
+
+    .payment-plugin-wrapper-div {
+      &.plugin-selected {
+        .method-knet {
+          background: $white url('../imgs/cards/knet-active.png') no-repeat;
+          background-size: 100%;
         }
 
         &::before {
-          display: block;
-          float: $left;
-          margin-#{$right}: 0.5rem;
-          top: 0;
+          border: 3px solid $cerulean-two;
         }
 
-        .payment-method {
-          &-name {
-            float: $right;
-            width: 90%;
-            line-height: 1;
+        .method-title {
+          font-weight: bold;
+        }
+      }
 
-            @include breakpoint($tablet) {
-              width: 93.5%;
-            }
+      &::before {
+        content: '';
+        width: 0.875rem;
+        height: 0.875rem;
+        background: white;
+        display: inline-block;
+        border-radius: 100%;
+        border: 1px solid $greyish;
+        margin-#{$right}: 1rem;
+        position: relative;
+        top: 2px;
+      }
 
-            @include breakpoint($desktop) {
-              width: 96.5%;
-            }
+      @include breakpoint($tablet) {
+        padding: 1.5rem 1rem;
+      }
+
+      width: 100%;
+      float: $left;
+      margin: 0;
+      padding: 1.5rem 0.5rem;
+      border-top: 1px solid $white;
+
+      .payment-method {
+        &-name {
+          float: $right;
+          width: 87%;
+
+          @include breakpoint($tablet) {
+            width: 92.5%;
+          }
+
+          @include breakpoint($desktop) {
+            width: 95.5%;
+          }
+        }
+      }
+
+      .method {
+        &-title {
+          font-size: 0.875rem;
+          font-weight: normal;
+          color: $brownish-grey;
+        }
+
+        &-side-info {
+          float: $right;
+          height: 2rem;
+          width: 3rem;
+          background: $white;
+          margin-top: -1.25rem;
+        }
+
+        &-knet {
+          background: $white url('../imgs/cards/knet-inactive.png') no-repeat;
+          background-size: 100%;
+          position: absolute;
+          #{$right}: 0.8rem;
+          top: 54%;
+
+          @include breakpoint($tablet) {
+            #{$right}: 1.8rem;
           }
         }
 
-        .method {
-          &-title {
-            font-size: 0.875rem;
-            font-weight: bold;
-            color: $brownish-grey;
-          }
+        &-cashondelivery,
+        &-checkmo,
+        &-cybersource {
+          display: none;
+        }
 
-          &-side-info {
-            float: $right;
-            height: 2rem;
-            width: 3rem;
-            background: $white;
-            margin-top: -1.25rem;
-          }
-
-          &-knet {
-            background: $white url('../imgs/cards/knet-inactive.png') no-repeat;
-            background-size: 100%;
-          }
-
-          &-cashondelivery,
-          &-checkmo,
-          &-cybersource {
-            display: none;
-          }
-
-          &-description {
-            font-size: 12px;
-          }
+        &-description {
+          font-size: 12px;
         }
       }
     }
