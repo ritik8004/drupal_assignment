@@ -587,6 +587,14 @@
           background: $white url('../imgs/cards/knet-active.png') no-repeat;
           background-size: 100%;
         }
+
+        &::before {
+          border: 3px solid $cerulean-two;
+        }
+
+        .method-title {
+          font-weight: bold;
+        }
       }
 
       &::before {
@@ -600,12 +608,6 @@
         margin-#{$right}: 1rem;
         position: relative;
         top: 2px;
-      }
-
-      &.plugin-selected {
-        &::before {
-          border: 3px solid $cerulean-two;
-        }
       }
 
       @include breakpoint($tablet) {
@@ -638,10 +640,6 @@
           font-size: 0.875rem;
           font-weight: normal;
           color: $brownish-grey;
-
-          .plugin-selected & {
-            font-weight: bold;
-          }
         }
 
         &-side-info {
