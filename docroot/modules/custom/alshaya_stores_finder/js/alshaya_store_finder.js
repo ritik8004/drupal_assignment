@@ -14,7 +14,7 @@
     attach: function (context, settings) {
 
       // Opening hours toggle.
-      $('[data-drupal-selector="views-form-stores-finder-page-1"], .geolocation-common-map-container', context).on('click', '.hours--label', function(el) {
+      $('[data-drupal-selector^="views-form-stores-finder-"]', context).on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
 
@@ -107,32 +107,58 @@
         if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
           Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
         }
+
+        var componentRestrictions = {};
+        if (typeof drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions !== 'undefined') {
+          componentRestrictions = drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions;
+        }
+
         var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
         var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+        var runscript = true;
         geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
-            if ($('.current-view').length) {
-              $('.current-view #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
-              $('.current-view input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
-              $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+
+            if (!$.isEmptyObject(componentRestrictions) && componentRestrictions.country) {
+              $.each(results, function (index, result) {
+                var addressType = result.types[0];
+                if (addressType === 'country') {
+                  if (result.address_components[0].short_name !== componentRestrictions.country) {
+                    runscript = false;
+                    return false;
+                  }
+                }
+              });
             }
-            else {
-              $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
-              $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
-              $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+
+            if (runscript) {
+              if ($('.current-view').length) {
+                $('.current-view #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
+                $('.current-view input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+                $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+              }
+              else {
+                $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
+                $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+                $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+              }
             }
           }
 
           if ($('.current-view').length !== 0) {
             setTimeout(function () {
-              $('.current-view form #edit-submit-stores-finder').trigger('click');
+              if (runscript) {
+                $('.current-view form #edit-submit-stores-finder').trigger('click');
+              }
               // Close the overlay.
               $('body').removeClass('modal-overlay--spinner');
             }, 500);
           }
           else {
             setTimeout(function () {
-              $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+              if (runscript) {
+                $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+              }
               // Close the overlay.
               $('body').removeClass('modal-overlay--spinner');
             }, 500);
@@ -141,12 +167,12 @@
       }
 
       // Accordion behaviour for list view locator.
-      var listLocator = $('.list-view-locator .hours--label');
+      /* var listLocator = $('.list-view-locator .hours--label');
       $(listLocator).on('click', function() {
         if($(listLocator).hasClass('open')) {
           $(listLocator).not($(this)).removeClass('open');
         }
-      });
+      });*/
 
       // Remove the store node title from breadcrumb.
       $.fn.updateStoreFinderBreadcrumb = function (data) {
