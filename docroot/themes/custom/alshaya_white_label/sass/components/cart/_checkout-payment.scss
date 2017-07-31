@@ -3,7 +3,7 @@
     margin-top: 0.75em;
 
     @include breakpoint($tablet) {
-      border: 1px solid $white;
+      border: 2px solid $white;
     }
 
     fieldset {
@@ -57,17 +57,13 @@
 
   legend {
     padding: 0 1rem;
-
-    @include breakpoint($tablet) {
-      padding: 0 1.5rem;
-    }
   }
 
   .fieldset-wrapper {
     padding: 1rem 0;
 
     @include breakpoint($tablet) {
-      padding: 1rem 1.5rem;
+      padding: 1rem;
     }
   }
 

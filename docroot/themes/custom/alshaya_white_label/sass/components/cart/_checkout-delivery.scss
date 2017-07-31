@@ -573,12 +573,26 @@
       }
     }
 
+    &:first-child {
+      border-top: 2px solid $white;
+
+      .payment-plugin-wrapper-div {
+        border-top: none;
+      }
+    }
+
     .payment-plugin-wrapper-div {
       &.plugin-selected {
         .method-knet {
           background: $white url('../imgs/cards/knet-active.png') no-repeat;
           background-size: 100%;
         }
+      }
+
+      .method-knet {
+        position: absolute;
+        #{$right}: 1rem;
+        top: 54%;
       }
 
       &::before {
@@ -601,7 +615,7 @@
       }
 
       @include breakpoint($tablet) {
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
       }
 
       width: 100%;
@@ -628,8 +642,12 @@
       .method {
         &-title {
           font-size: 0.875rem;
-          font-weight: bold;
+          font-weight: normal;
           color: $brownish-grey;
+
+          .plugin-selected & {
+            font-weight: bold;
+          }
         }
 
         &-side-info {
