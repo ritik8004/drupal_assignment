@@ -837,7 +837,8 @@
           text-align: center;
           float: $left;
           margin-top: 2px;
-          line-height: 1.4;
+          line-height: 1.5;
+          font-size: 0.625rem;
         }
 
         &-info-wrap {
@@ -856,6 +857,7 @@
           em {
             font-weight: bold;
             font-style: normal;
+            color: $black;
           }
         }
 
