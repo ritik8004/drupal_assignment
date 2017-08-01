@@ -435,6 +435,7 @@ function alshaya_admin_config_translation_info_alter(&$info) {
 function alshaya_master_element_info_alter(array &$info) {
   if (isset($info['mobile_number']['#process'])) {
     $info['mobile_number']['#process'][] = '_alshaya_master_mobile_number_process';
+    $info['mobile_number']['#value_callback'] = '_alshaya_master_mobile_number_value_callback';
     array_unshift($info['mobile_number']['#element_validate'], '_alshaya_master_mobile_number_validate');
   }
 }
@@ -500,6 +501,38 @@ function _alshaya_master_mobile_number_validate(array &$element, FormStateInterf
   $pp['mobile'] = str_replace($country_mobile_code, '', $pp['mobile']);
   NestedArray::setValue($input, $tree_parents, $pp);
   $form_state->setUserInput($input);
+}
+
+/**
+ * Value callback for the mobile number field to remove the prefix.
+ */
+function _alshaya_master_mobile_number_value_callback(&$element, $input, FormStateInterface $form_state) {
+  /** @var \Drupal\mobile_number\MobileNumberUtilInterface $util */
+  $util = \Drupal::service('mobile_number.util');
+
+  if ($input) {
+    $country = !empty($input['country-code']) ? $input['country-code'] : (count($element['#allowed_countries']) == 1 ? key($element['#allowed_countries']) : NULL);
+
+    // Remove the country code prefix added in mobile field.
+    $country_mobile_code = alshaya_master_get_country_mobile_code($country, $util);
+    $input['mobile'] = str_replace($country_mobile_code, '', $input['mobile']);
+
+    $mobile_number = $util->getMobileNumber($input['mobile'], $country);
+    $result = [
+      'value' => $mobile_number ? $util->getCallableNumber($mobile_number) : '',
+      'country' => $country,
+      'local_number' => $input['mobile'],
+      'tfa' => !empty($input['tfa']) ? 1 : 0,
+      'verified' => 0,
+      'verification_token' => !empty($input['verification_token']) ? $input['verification_token'] : NULL,
+      'verification_code' => !empty($input['verification_code']) ? $input['verification_code'] : NULL,
+    ];
+  }
+  else {
+    $result = !empty($element['#default_value']) ? $element['#default_value'] : [];
+  }
+
+  return $result;
 }
 
 /**

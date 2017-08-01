@@ -324,7 +324,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     }
     $response->addCommand(new SettingsCommand(['alshaya_checkout_address' => ['error' => FALSE]], TRUE), TRUE);
     $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'hide'));
-    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString()));
+    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     return $response;
   }
 
