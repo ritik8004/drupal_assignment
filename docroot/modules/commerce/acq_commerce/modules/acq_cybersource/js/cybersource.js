@@ -16,6 +16,12 @@
 
       // Bind this only once after every ajax call.
       $('.cybersource-credit-card-input').once('bind-events').each(function () {
+        // Update the validate settings to use custom submit handler.
+        $('.cybersource-credit-card-input').parents('form').data('submit-handler', 'cybersource_form_submit_handler');
+        Drupal.cvValidatorObjects[$('.cybersource-credit-card-input').parents('form').attr('id')].destroy();
+        Drupal.behaviors.cvJqueryValidate.attach('body');
+
+
         $(this).validateCreditCard(function (result) {
           // Reset the card type ever-time.
           $('.cybersource-credit-card-type-input').val('');
@@ -47,7 +53,6 @@
   };
 
   Drupal.cybersourceShowError = function (element, error) {
-    element.parent().find('.form-item--error-message, label.error').remove();
     var errorDiv = $('<div class="form-item--error-message" />');
     errorDiv.html(error);
 
@@ -59,6 +64,12 @@
     }
   };
 
+  Drupal.cybersourceShowGlobalError = function (error) {
+    Drupal.cybersourceProcessed = false;
+    $('.cybersource-input').parents('form').find('.cybersource-global-error').remove();
+    $('.cybersource-input').parents('form').prepend(error);
+  }
+
 })(jQuery, Drupal);
 
 
@@ -67,8 +78,15 @@ function cybersource_form_submit_handler(form) {
 
   var $ = jQuery.noConflict();
 
+  // Check again if we are still using cybersource.
+  if ($('.cybersource-credit-card-type-input').length === 0) {
+    // We are not using cybersource, we simply submit the form.
+    form.submit();
+  }
+
   // Remove all error messages displayed right now.
   $(form).find('.form-item--error-message, label.error').remove();
+  $(form).find('.cybersource-global-error').remove();
 
   if (Drupal.cybersourceProcessed === true) {
     form.submit();
@@ -76,15 +94,31 @@ function cybersource_form_submit_handler(form) {
 
   var formHasErrors = false;
 
+  // Do sanity check of credit card number.
   var type = $('.cybersource-credit-card-type-input').val().toString().trim();
   if (type === '') {
     Drupal.cybersourceShowError($('.cybersource-credit-card-input'), Drupal.t('Invalid Credit Card number'));
     formHasErrors = true;
   }
 
+  // Check cvv.
   var cvv = $('.cybersource-credit-card-cvv-input').val().toString().trim();
   if (isNaN(cvv) || cvv.length < 3 || cvv.length > 4) {
     Drupal.cybersourceShowError($('.cybersource-credit-card-cvv-input'), Drupal.t('Invalid security code (CVV)'));
+    formHasErrors = true;
+  }
+
+  // Sanity check - expiry must be in future.
+  var card_expiry_date_month = parseInt($('.cybersource-credit-card-exp-month-select option:selected').val().toString().trim());
+  var card_expiry_date_year = parseInt($('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim());
+
+  var card_expiry_date = card_expiry_date_month + '-' + card_expiry_date_year;
+
+  var today = new Date();
+  var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+
+  if (lastDayOfMonth.getFullYear() === card_expiry_date_year && lastDayOfMonth.getMonth() > card_expiry_date_month) {
+    Drupal.cybersourceShowError($('.cybersource-credit-card-exp-year-select').parent(), Drupal.t('Incorrect credit card expiration date'));
     formHasErrors = true;
   }
 
@@ -107,16 +141,20 @@ function cybersource_form_submit_handler(form) {
     success: function (response) {
       if (response.errors) {
         for (var field in response.errors) {
-          Drupal.cybersourceShowError($('[name="' + field + '"]'), response.errors[field]);
+          // Show the global level errors on top.
+          if (field === 'global') {
+            Drupal.cybersourceShowGlobalError(response.errors[field]);
+          }
+          else {
+            Drupal.cybersourceShowError($('[name="' + field + '"]'), response.errors[field]);
+          }
         }
         return;
       }
 
       // Add credit cart info.
       response.data.card_number = $('.cybersource-credit-card-input').val().toString().trim();
-      response.data.card_expiry_date = $('.cybersource-credit-card-exp-month-select option:selected').val().toString().trim();
-      response.data.card_expiry_date += '-';
-      response.data.card_expiry_date += $('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim();
+      response.data.card_expiry_date = card_expiry_date;
       response.data.card_cvn = parseInt($('.cybersource-credit-card-cvv-input').val().toString().trim());
 
       // Here we use iframe to post to Cybersource and then handle
