@@ -8,6 +8,10 @@
 
   /* global google */
 
+  /**
+   * @namespace
+   */
+  Drupal.geolocation = Drupal.geolocation || {};
   Drupal.alshaya_stores_finder = Drupal.alshaya_stores_finder || {};
 
   Drupal.behaviors.storeFinder = {
