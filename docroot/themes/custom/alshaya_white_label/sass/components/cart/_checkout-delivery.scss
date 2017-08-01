@@ -622,6 +622,10 @@
         }
       }
 
+      &:hover {
+        background-color: $white-four;
+      }
+
       @include breakpoint($tablet) {
         padding: 1.5rem 1rem;
       }
