@@ -547,29 +547,24 @@
   }
 }
 
-#edit-billing-address,
-#address-book-form-wrapper,
-#address_wrapper,
-#edit-field-address-wrapper {
-  .address-book-address {
-    .form-item.form-type-textfield {
-      label:last-of-type {
-        font-size: 1rem;
-        color: $greyish;
-        position: absolute;
-        #{$left}: 0;
-        top: -0.125rem;
-        transition: 0.2s ease all;
-      }
+.address-book-address {
+  .form-item.form-type-textfield {
+    label:last-of-type {
+      font-size: 1rem;
+      color: $greyish;
+      position: absolute;
+      #{$left}: 0;
+      top: -0.125rem;
+      transition: 0.2s ease all;
+    }
 
-      input:focus ~ label:last-of-type,
-      label.active-label:not(.error) {
-        top: -1.25em;
-        bottom: 0;
-        #{$left}: 0;
-        opacity: 1;
-        font-size: 0.75rem;
-      }
+    input:focus ~ label:last-of-type,
+    label.active-label:not(.error) {
+      top: -1.25em;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 1;
+      font-size: 0.75rem;
     }
   }
 }
