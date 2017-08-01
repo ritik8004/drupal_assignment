@@ -90,6 +90,12 @@
   position: relative;
   height: initial;
 
+  &.header--fixed {
+    position: fixed;
+    height: initial;
+    width: 100%;
+  }
+
   &::before {
     content: '';
     position: absolute;
