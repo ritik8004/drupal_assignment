@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo;
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -614,6 +615,15 @@ class AlshayaGtmManager {
         $stock_status = $stock_response ? 'in stock' : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 
+        $product_media = alshaya_acm_product_get_product_media($node->id(), TRUE);
+        if ($product_media) {
+          $product_media_file = $product_media['file'];
+          $product_media_url = file_create_url($product_media_file->getFileUri());
+        }
+        else {
+          $product_media_url = '';
+        }
+
         $page_dl_attributes = [
           'product_style_code' => $product_sku,
           'product_sku' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
@@ -624,7 +634,7 @@ class AlshayaGtmManager {
           'product_size' => $sku_attributes['gtm-dimension1'],
           'product_price' => $sku_attributes['gtm-price'],
           'product_old_price' => $sku_entity->get('price')->getString(),
-          'product_picture_url' => alshaya_acm_product_get_product_media($node->id(), TRUE),
+          'product_picture_url' => $product_media_url,
           'product_rating' => '',
           'product_reviews' => '',
           'product_magento_id' => $product_sku,
@@ -641,6 +651,23 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+        break;
+
+      case 'cart page':
+      case 'summary page':
+      case 'delivery page':
+      case 'payment page':
+      case 'confirmation page':
+        $cart = $this->cartStorage->getCart();
+        $cart_totals = $cart->totals();
+        $page_dl_attributes = [
+          'cartTotalValue' => $cart_totals['grand'],
+          'cartItemsCount' => count($cart->get('items')),
+          'cartItemsRR' => $this->formatCartRr($cart),
+          'cartItemsFlocktory' => $this->formatCartFlocktory($cart),
+          'storeLocation' => '',
+          'storeAddress' => '',
+        ];
         break;
     }
 
@@ -660,6 +687,65 @@ class AlshayaGtmManager {
       'minor_category' => array_shift($terms),
       'sub_category' => array_shift($terms) ?: '',
     ];
+  }
+
+  /**
+   * Helper function to fetch cart Items in RR format.
+   *
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   Cart Object.
+   *
+   * @return array
+   *   Cart items in RR format.
+   */
+  public function formatCartRr(CartInterface $cart) {
+    $items = $cart->get('items');
+    $cart_items_rr = [];
+
+    foreach ($items as $item) {
+      $cart_items_rr[] = [
+        'id' => $item['sku'],
+        'price' => $item['price'],
+        'qnt' => $item['qty'],
+      ];
+    }
+
+    return $cart_items_rr;
+  }
+
+  /**
+   * Helper function to fetch cart Items in flocktory format.
+   *
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   Cart Object.
+   *
+   * @return array
+   *   Cart items in flocktory format.
+   */
+  public function formatCartFlocktory(CartInterface $cart) {
+    $items = $cart->get('items');
+    $cart_items_flock = [];
+
+    foreach ($items as $item) {
+      $sku_media = alshaya_acm_product_get_sku_media($item['sku'], TRUE);
+      if ($sku_media) {
+        $sku_media_file = $sku_media['file'];
+        $sku_media_url = file_create_url($sku_media_file->getFileUri());
+      }
+      else {
+        $sku_media_url = '';
+      }
+
+      $cart_items_flock[] = [
+        'id' => $item['sku'],
+        'price' => $item['price'],
+        'count' => $item['qty'],
+        'title' => $item['name'],
+        'image' => $sku_media_url,
+      ];
+    }
+
+    return $cart_items_flock;
   }
 
 }
