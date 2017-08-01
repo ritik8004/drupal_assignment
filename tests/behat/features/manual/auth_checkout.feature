@@ -6,19 +6,20 @@ Feature: As an authenticated user
   Background:
     Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    And I go to "/user/36/address_book"
-    And I follow "Edit"
+    When I follow "address book"
+    And I wait for the page to load
+    When I follow "Edit"
     And I wait for AJAX to finish
-    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I press "Save"
     And I wait for AJAX to finish
-    And I go to "/ton-fax"
+    When I go to "/ton-fax"
     And I wait for the page to load
-    And I press "Add to basket"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     And I follow "view basket"
     And I wait for the page to load
-    And I press "checkout securely"
+    When I press "checkout securely"
     And I wait for the page to load
 
   Scenario: As an authenticated user
