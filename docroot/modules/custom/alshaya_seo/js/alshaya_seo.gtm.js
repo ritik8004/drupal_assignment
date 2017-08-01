@@ -118,75 +118,7 @@
       /** Add to cart GTM **/
       // Trigger GTM push event on AJAX completion of add to cart button.
       $(document).once('js-event').ajaxComplete(function(event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('add to cart').toLowerCase())) {
-          var responseJSON = xhr.responseJSON;
-          var responseMessage = '';
-          $.each(responseJSON, function(key, obj) {
-            if (obj.method === 'stopSpinner') {
-              responseMessage = obj.args[0].message;
-              return false;
-            }
-          });
-
-          // Only trigger gtm push event for cart if product added to cart successfully.
-          if (responseMessage === 'success') {
-            var targetEl = event.target.activeElement;
-            var addedProductSelector = '';
-            var quantity = 1;
-            var size = '';
-
-            // If the add-to-cart button was triggered from modal, the target element will be modal.
-            if ($(targetEl).hasClass('ui-dialog')) {
-              addedProductSelector = $(targetEl).find('article[gtm-type="gtm-product-link"]');
-              quantity = parseInt($(targetEl).find('.form-item-quantity select').val());
-              size = $(targetEl).find('.form-item-configurables-size select option:selected').text();
-            }
-            else {
-              addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
-              quantity = parseInt($(targetEl).closest('.sku-base-form').find('.form-item-quantity select').val());
-              size = $(targetEl).closest('.sku-base-form').find('.form-item-configurables-size select option:selected').text();
-            }
-
-            if (addedProductSelector) {
-              var product = Drupal.alshaya_seo_gtm_get_product_values(addedProductSelector);
-              // Remove product position: Not needed while adding to cart.
-              delete product.position;
-
-              // Set product quantity to selected quatity.
-              product.quantity = quantity;
-
-              // Set product size to selected size.
-              if (product.dimension5 !== 'simple') {
-                product.dimension1 = size;
-              }
-
-              // Set product variant to the selected variant.
-              if (product.dimension5 !== 'simple') {
-                product.variant = $('.selected-variant-sku-' + product.id.toLowerCase()).val();
-              }
-              else {
-                product.variant = product.id;
-              }
-
-              // Calculate metric 1 value.
-              product.metric1 = product.price * product.quantity;
-
-              var data = {
-                'event': 'addToCart',
-                'ecommerce': {
-                  'currencyCode': currencyCode,
-                  'add': {
-                    'products': [
-                      product
-                    ]
-                  }
-                }
-              };
-              dataLayer.push(data);
-            }
-          }
-        }
-        else if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
           var responseJSON = xhr.responseJSON;
           var responseMessage = '';
           $.each(responseJSON, function(key, obj) {
