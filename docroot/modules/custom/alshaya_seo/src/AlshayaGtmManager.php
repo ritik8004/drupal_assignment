@@ -226,7 +226,7 @@ class AlshayaGtmManager {
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
     $attributes['gtm-dimension2'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
-    $attributes['gtm-dimension4'] = count($sku->getMedia()) ?: '';
+    $attributes['gtm-dimension4'] = count($sku->getMedia()) ?: 'image not available';
     $attributes['gtm-stock'] = '';
     $attributes['gtm-sku-type'] = $sku->bundle();
 
@@ -307,7 +307,7 @@ class AlshayaGtmManager {
           }
           break;
 
-        case 'acq_cart.form':
+        case 'acq_checkout.form':
           if (isset($currentRoute['route_params']['step'])) {
             if (($currentRoute['route_params']['step'] === 'delivery') &&
               ($currentRoute['query']['method'] === 'cc')) {
@@ -439,7 +439,7 @@ class AlshayaGtmManager {
       $productNode = alshaya_acm_product_get_display_node($skuId);
       // Get product media.
       $first_sku = $productNode->get('field_skus')->first()->get('entity')->getValue();
-      $attributes[$skuId]['gtm-dimension4'] = count($first_sku->getMedia()) ?: '';
+      $attributes[$skuId]['gtm-dimension4'] = count($first_sku->getMedia()) ?: 'image not available';
       $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $attributes[$skuId]['quantity'] = $cartItem['qty'];
@@ -605,7 +605,7 @@ class AlshayaGtmManager {
     switch ($page_type) {
       case 'product detail page':
         $node = $current_route['route_params']['node'];
-        $product_sku = $node->get('field_skus')->getValue();
+        $product_sku = $node->get('field_skus')->getString();
         $sku_entity = SKU::loadFromSku($product_sku);
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 

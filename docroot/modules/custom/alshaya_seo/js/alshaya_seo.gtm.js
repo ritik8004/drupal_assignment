@@ -296,6 +296,8 @@
             'virtualPageURL':'/virtualpv/click-and-collect/step1/click-and-collect-view',
             'virtualPageTitle' : 'C&C Step 1 – Click and Collect View'
           });
+
+          Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function() {
