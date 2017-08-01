@@ -116,6 +116,7 @@
         vertical-align: middle;
         padding: 1em;
         line-height: 2.8;
+        margin-top: -2px;
 
         @include breakpoint($only-mobile) {
           text-align: center;
@@ -503,6 +504,10 @@
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
 .shipping-methods-container {
   display: block;
+
+  @include breakpoint($tablet) {
+    margin-bottom: 2.6rem;
+  }
 
   > legend {
     padding-bottom: 0 !important;

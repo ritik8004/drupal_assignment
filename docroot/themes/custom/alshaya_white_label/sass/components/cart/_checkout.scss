@@ -310,6 +310,7 @@
     padding: 1em 1.5rem;
     font-size: 0.875rem;
     position: relative;
+    cursor: pointer;
 
     @include breakpoint($upto-desktop) {
       font-size: 0.75rem;
@@ -317,7 +318,7 @@
 
     @include icon(chevrondown, after) {
       position: absolute;
-      #{$right}: 0.75rem;
+      #{$right}: 1rem;
       font-size: 1.875rem;
       top: 50%;
       color: $black;
