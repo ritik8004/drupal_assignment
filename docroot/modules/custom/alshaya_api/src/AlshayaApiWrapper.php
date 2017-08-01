@@ -60,6 +60,38 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * API to create transaction entry for K-Net.
+   *
+   * @param string $order_id
+   *   Order increment id.
+   * @param string $transaction_id
+   *   K-Net transaction id.
+   *
+   * @return mixed
+   *   Response of API or NULL.
+   */
+  public function addKnetTransaction($order_id, $transaction_id) {
+    $endpoint = 'knet/transaction';
+
+    $data = [
+      'orderId' => $order_id,
+      'transactionId' => $transaction_id,
+    ];
+
+    try {
+      return $this->invokeApi($endpoint, $data, 'JSON');
+    }
+    catch (\Exception $e) {
+      $this->logger->critical('Error occurred while adding transaction for knet order: %info <br> %message', [
+        '%info' => print_r($data, TRUE),
+        '%message' => $e->getMessage(),
+      ]);
+    }
+
+    return NULL;
+  }
+
+  /**
    * Function to get all the stores from the API.
    *
    * @param string $langcode
@@ -121,7 +153,7 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
-    if (\Drupal::state()->get('store_development_mode', 0) || empty($lat) || empty($lon)) {
+    if (\Drupal::state()->get('store_development_mode', 0)) {
       $lat = 29;
       $lon = 48;
     }
@@ -178,6 +210,14 @@ class AlshayaApiWrapper {
     if ($method == 'POST') {
       curl_setopt($curl, CURLOPT_POST, TRUE);
       curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    }
+    elseif ($method == 'JSON') {
+      $data_string = json_encode($data);
+
+      curl_setopt($curl, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($data_string),
+      ]);
     }
 
     $result = curl_exec($curl);
