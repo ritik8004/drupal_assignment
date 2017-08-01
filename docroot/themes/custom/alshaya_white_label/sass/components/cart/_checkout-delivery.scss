@@ -568,10 +568,6 @@
     width: 100%;
     float: $left;
 
-    &:nth-child(even) {
-      background-color: $white-four;
-    }
-
     &:last-child {
       .payment-plugin-wrapper-div {
         border-bottom: 1px solid $white;
@@ -581,6 +577,10 @@
     &:first-child {
       border-top: 2px solid $white;
 
+      @include breakpoint($only-mobile) {
+        border-top-width: 1px;
+      }
+
       .payment-plugin-wrapper-div {
         border-top: none;
       }
@@ -588,6 +588,8 @@
 
     .payment-plugin-wrapper-div {
       &.plugin-selected {
+        background-color: $white-four;
+
         .method-knet {
           background: $white url('../imgs/cards/knet-active.png') no-repeat;
           background-size: 100%;
@@ -613,6 +615,11 @@
         margin-#{$right}: 1rem;
         position: relative;
         top: 2px;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 0.625rem;
+          margin-#{$left}: 0.5625rem;
+        }
       }
 
       @include breakpoint($tablet) {
@@ -628,7 +635,7 @@
       .payment-method {
         &-name {
           float: $right;
-          width: 87%;
+          width: 86%;
 
           @include breakpoint($tablet) {
             width: 92.5%;
@@ -645,6 +652,10 @@
           font-size: 0.875rem;
           font-weight: normal;
           color: $brownish-grey;
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.75rem;
+          }
         }
 
         &-side-info {
