@@ -180,13 +180,8 @@ class ClickCollectController extends ControllerBase {
 
     $output = t("There's no store selected.");
     if (!empty($store)) {
-      $ship_type = '';
-      if (!empty($store['sts_available'])) {
-        $ship_type = 'ship_to_store';
-      }
-      elseif (!empty($store['rnc_available'])) {
-        $ship_type = 'reserve_and_collect';
-      }
+      $ship_type = !empty($store['rnc_available']) ? 'reserve_and_collect' : 'ship_to_store';
+
       $build['selected_store'] = [
         '#theme' => 'click_collect_selected_store',
         '#store' => $store,
