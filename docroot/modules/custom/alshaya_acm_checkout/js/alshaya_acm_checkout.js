@@ -20,8 +20,18 @@
         $(this).hide();
       });
 
+      // In order to show the form between radio buttons we do it
+      // using custom markup. Here we update the radio buttons on
+      // click of payment method names in custom markup.
+      $('#payment_details_wrapper').once('bind-events').each(function () {
+        $('.payment-plugin-wrapper-div', $(this)).on('click', function () {
+          var selected_option = $(this).data('value');
+          $('[data-drupal-selector="edit-acm-payment-methods-payment-options"]').find('input[value="' + selected_option + '"]').trigger('click');
+        });
+      });
+
       // Bind this only once after every ajax call.
-      $('[data-drupal-selector="edit-acm-payment-methods-payment-details-cc-number"]').once('validate-cc').each(function () {
+      $('.cybersource-credit-card-input').once('validate-cc').each(function () {
         $(this).validateCreditCard(function (result) {
           // Reset error and card type active class.
           $(this).parent().removeClass('cc-error');

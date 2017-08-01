@@ -265,18 +265,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $address_values = $values['address']['shipping'];
     $email = $address_values['organization'];
 
-    /** @var \Drupal\profile\Entity\Profile $profile */
-    $profile = \Drupal::entityTypeManager()->getStorage('profile')->create([
-      'type' => 'address_book',
-      'uid' => 0,
-      'field_address' => $address_values,
-    ]);
-
-    /* @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
-    if ($violations = $profile->validate()) {
-      foreach ($violations->getByFields(['field_address']) as $violation) {
-        $error_field = explode('.', $violation->getPropertyPath());
-        $form_state->setErrorByName('guest_delivery_home][address][shipping][' . $error_field[2], $violation->getMessage());
+    if ($violations = $address_book_manager->validateAddress($address_values)) {
+      foreach ($violations as $field => $message) {
+        $form_state->setErrorByName('billing_address][address][shipping][' . $field, $message);
       }
     }
 

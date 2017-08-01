@@ -6,6 +6,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
 use Drupal\user\Entity\User;
 
@@ -24,18 +25,28 @@ class AlshayaAddressBookManager {
   protected $profileStorage;
 
   /**
+   * The mobile utility.
+   *
+   * @var \Drupal\mobile_number\MobileNumberUtilInterface
+   */
+  protected $mobileUtil;
+
+  /**
    * AlshayaAddressBookManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   EntityTypeManager object.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   ApiWrapper object.
+   * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
+   *   The MobileNumber util service object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, MobileNumberUtilInterface $mobile_util, LoggerChannelFactoryInterface $logger_factory) {
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->apiWrapper = $api_wrapper;
+    $this->mobileUtil = $mobile_util;
     $this->logger = $logger_factory->get('alshaya_addressbook');
   }
 
@@ -343,6 +354,58 @@ class AlshayaAddressBookManager {
     $magento_address['city'] = '&#8203;';
 
     return $magento_address;
+  }
+
+  /**
+   * Utility function to validate profile address.
+   *
+   * @param array $address_values
+   *   Address values.
+   *
+   * @return array
+   *   Errors if found else empty array.
+   */
+  public function validateAddress(array $address_values) {
+    $errors = [];
+
+    /** @var \Drupal\profile\Entity\Profile $profile */
+    $profile = $this->profileStorage->create([
+      'type' => 'address_book',
+      'uid' => 0,
+      'field_address' => $address_values,
+      'field_mobile_number' => $address_values['mobile_number'],
+    ]);
+
+    /* @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
+    if ($violations = $profile->validate()) {
+      foreach ($violations->getByFields(['field_address']) as $violation) {
+        $error_field = explode('.', $violation->getPropertyPath());
+        $errors[$error_field[2]] = $violation->getMessage();
+      }
+
+      foreach ($violations->getByFields(['field_mobile_number']) as $violation) {
+        $errors['organization'] = $violation->getMessage();
+      }
+    }
+
+    $mobile = $address_values['mobile_number'];
+
+    $mobile_country_code = '+' . $this->mobileUtil->getCountryCode($mobile['country-code']);
+
+    // Remove the country code prefix added in mobile field.
+    $mobile['mobile'] = str_replace($mobile_country_code, '', $mobile['mobile']);
+
+    $mobile_number = $this->mobileUtil->getMobileNumber($mobile['mobile'], $mobile['country-code']);
+
+    if (empty($mobile_number)) {
+      $errors['mobile_number][mobile'] = t('The phone number %value provided for %field is not a valid mobile number for country %country.', [
+        '%value' => $mobile['mobile'],
+        '%field' => t('Mobile Number'),
+        '%country' => $this->mobileUtil->getCountryName($mobile['country-code']),
+      ]);
+    }
+
+    return $errors;
   }
 
 }

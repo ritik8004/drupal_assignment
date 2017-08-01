@@ -88,8 +88,11 @@ class CybersourceController implements ContainerInjectionInterface {
    *   Response object.
    */
   public function getToken() {
-    $type = \Drupal::request()->request->get('type');
-    $billing_address = \Drupal::request()->request->get('billing_address');
+    $response = new Response();
+    $response->headers->set('Content-Type', 'application/json');
+
+    $type = \Drupal::request()->request->get('card_type');
+    $form_data = \Drupal::request()->request->all();
 
     // Get the code from value provided by JS.
     $cc_type = isset(self::$ccTypeMap[$type]) ? self::$ccTypeMap[$type] : '';
@@ -112,26 +115,20 @@ class CybersourceController implements ContainerInjectionInterface {
     // Get the cart object.
     $cart = $this->cartStorage->getCart(FALSE);
 
+    // Allow all modules to validate and update cart data before doing getToken.
+    $errors = [];
+    \Drupal::moduleHandler()->alter('acq_cybersource_before_get_token_cart', $cart, $form_data, $errors);
+
+    if ($errors) {
+      $response->setContent(json_encode(['errors' => $errors]));
+      return $response;
+    }
+
     // Set the payment method.
     $cart->setPaymentMethod('cybersource');
 
-    // @TODO: Implement this properly - MMCPA-1876.
-    // Cybersource requires billing info to be available before it processes
-    // credit card. This info is set in the signed fields by Magento. To ensure
-    // we have the values set, we need to pass it to Magento before we start
-    // payment process.
-    if (!empty($billing_address['same_as_shipping']) && $billing_address['same_as_shipping'] == 1) {
-      $cart->setBilling($cart->getShipping());
-    }
-    else {
-      // @TODO: Validate the address data and set the fields as per Magento.
-    }
-
     // Update the cart.
     $this->cartStorage->updateCart(FALSE);
-
-    $response = new Response();
-    $response->headers->set('Content-Type', 'application/json');
 
     if ($token_info = $this->apiWrapper->cybersourceTokenRequest($cart_id, $cc_type)) {
       // Do some cleaning.
