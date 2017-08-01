@@ -130,6 +130,13 @@
     }
   }
 
+  .total-row {
+    td:nth-child(3) {
+      padding-left: 0;
+      padding-right: 2.4rem;
+    }
+  }
+
   .delivery-details-row {
     font-size: 0.8125rem;
     font-weight: 700;
