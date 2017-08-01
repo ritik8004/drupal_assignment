@@ -255,6 +255,16 @@
         width: calc(50% - 28px);
       }
 
+      @include breakpoint($only-tablet) {
+        &.tab-click-collect {
+          margin-#{$left}: 2px;
+
+          &.active--tab--head {
+            margin-#{$left}: 3px;
+          }
+        }
+      }
+
       @include breakpoint($tablet) {
         &.active--tab--head {
           position: relative;
