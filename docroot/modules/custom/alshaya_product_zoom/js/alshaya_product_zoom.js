@@ -246,8 +246,15 @@
         }
       });
 
+      // Preventing click on image.
       $('#product-image-gallery a').on('click', 'touchstart', function (e) {
         e.preventDefault();
+      });
+
+      // Preventing click on image.
+      $('.acq-content-product-modal #cloud-zoom-wrap a').on('click', function (event) {
+        event.stopPropagation();
+        event.preventDefault();
       });
 
       $('.acq-content-product-modal #lightSlider li', context).on('click', function () {
