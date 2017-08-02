@@ -224,7 +224,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['delivery_method'] = $shippingTerm->getName();
   $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
 
-  $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['billing']['telephone']);
+  $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
   if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $orderDetails['type'] = 'cc';
