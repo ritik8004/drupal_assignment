@@ -193,6 +193,9 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   // Calculate status of order based on status of items.
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
 
+  // Get the loyalty card number from order detail.
+  $orderRow['loyaltyCard'] = $order['extension']['loyalty_card'];
+
   return $orderRow;
 }
 
