@@ -448,9 +448,12 @@
       'dimension3': product.attr('gtm-dimension3'),
       'dimension4': parseInt(product.attr('gtm-dimension4')),
       'dimension5': product.attr('gtm-sku-type'),
-      'dimension8': product.attr('gtm-path-trace'),
       'metric1': product.attr('gtm-cart-value')
     };
+
+    if (product.attr('gtm-path-trace')) {
+      productData.dimension8 = product.attr('gtm-path-trace');
+    }
 
     return productData;
   };
