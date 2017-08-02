@@ -191,6 +191,8 @@ class AlshayaApiWrapper {
     $url .= '/' . $this->config->get('magento_api_base');
     $url .= '/' . $endpoint;
 
+    $header = [];
+
     $curl = curl_init();
 
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -198,10 +200,7 @@ class AlshayaApiWrapper {
 
     if ($requires_token) {
       $token = $this->getToken();
-
-      curl_setopt($curl, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-      ]);
+      $header[] = 'Authorization: Bearer ' . $token;
     }
 
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
@@ -214,11 +213,15 @@ class AlshayaApiWrapper {
     elseif ($method == 'JSON') {
       $data_string = json_encode($data);
 
-      curl_setopt($curl, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($data_string),
-      ]);
+      $header[] = 'Content-Type: application/json';
+      $header[] = 'Content-Length: ' . strlen($data_string);
+
+      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+      curl_setopt($curl, CURLOPT_POST, TRUE);
+      curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
     }
+
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 
     $result = curl_exec($curl);
     curl_close($curl);
