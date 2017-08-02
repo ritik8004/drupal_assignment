@@ -6,9 +6,8 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
@@ -219,13 +218,13 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $address_fields =& $form['guest_delivery_home']['address'];
 
     if ($form_state->getErrors()) {
-      $response->addCommand(new SettingsCommand(['alshaya_checkout_address' => ['error' => TRUE]], TRUE), TRUE);
-      $response->addCommand(new ReplaceCommand('#address_wrapper .address-book-address', $address_fields['shipping']));
+      $address_fields['shipping_methods']['#access'] = FALSE;
+      $address_fields['selected_address']['#access'] = FALSE;
+
+      $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
     }
     else {
-      $response->addCommand(new SettingsCommand(['alshaya_checkout_address' => ['error' => FALSE]], TRUE), TRUE);
-      $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
-      $response->addCommand(new InvokeCommand(NULL, 'guestShowShippingMethods'));
+      $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     }
 
     return $response;
