@@ -123,6 +123,7 @@
         geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
 
+            // Check if the current location country and the restricted country are same.
             if (!$.isEmptyObject(componentRestrictions) && componentRestrictions.country) {
               $.each(results, function (index, result) {
                 var addressType = result.types[0];
@@ -169,14 +170,6 @@
           }
         });
       }
-
-      // Accordion behaviour for list view locator.
-      /* var listLocator = $('.list-view-locator .hours--label');
-      $(listLocator).on('click', function() {
-        if($(listLocator).hasClass('open')) {
-          $(listLocator).not($(this)).removeClass('open');
-        }
-      });*/
 
       // Remove the store node title from breadcrumb.
       $.fn.updateStoreFinderBreadcrumb = function (data) {
