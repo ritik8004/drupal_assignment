@@ -47,8 +47,8 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I press "place order"
     And I wait for the page to load
-    And I select "ABK" from "bank"
-    And I fill in "cardN" with "8888880000000001"
+    And I select "Knet Test Card [KNET1]" from "bank"
+    And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -78,8 +78,8 @@ Feature: As an authenticated user
     When I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    And I select "ABK" from "bank"
-    And I fill in "cardN" with "8888880000000001"
+    And I select "Knet Test Card [KNET1]" from "bank"
+    And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
