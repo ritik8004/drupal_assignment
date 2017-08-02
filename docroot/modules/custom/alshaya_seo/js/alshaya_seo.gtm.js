@@ -351,6 +351,7 @@
       });
 
       /** Tracking internal promotion impressions. **/
+      // Tracking menu level promotions
       topNavLevelOneSelector.once('js-event').on('mouseenter', function() {
         if ($(this).hasClass('has-child')) {
           var topNavLevelTwo = $(this).children('ul.menu--two__list');
@@ -361,16 +362,26 @@
             highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
           }
           if (highlights.length > 0) {
-            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, gtmPageType);
+            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
           }
         }
 
       });
 
       $('[gtm-type="gtm-highlights"]').once('js-event').on('click', function() {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'Top Navigation', 'promotionClick');
       });
 
+      if ($('.paragraph--type--promo-block').length > 0) {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType);
+      }
+
+      // Tracking view of promotions.
+      $('.paragraph--type--promo-block').each(function() {
+        $(this).once('js-event').on('click', function() {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+        });
+      });
       /** Tracking clicks on fitler & sort options. **/
       if (listName === "PLP" || listName === "Search Results Page") {
         var section = listName;
@@ -509,13 +520,43 @@
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function(highlights, gtmPageType, event) {
     var promotions = [];
 
-    highlights.each(function(key) {
+    highlights.each(function(key, highlight) {
+      var creative = '';
+      if (gtmPageType === 'Top Navigation') {
+        creative = Drupal.url($(highlight).find('.field--name-field-highlight-image img').attr('src'));
+      }
+      else {
+        creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
+      }
+
+      var creativeParts = creative.split('/');
+      var fileName = creativeParts[creativeParts.length - 1];
+      //Strip off any query parameters.
+      if (fileName.indexOf('?') !== -1) {
+        fileName = fileName.substring(0, fileName.indexOf('?'));
+      }
+
+      // Remove file extensions from fileName.
+      if (fileName.lastIndexOf('.') !== -1) {
+        fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+      }
+
       var promotion = {
-        'id': '',
+        'id': fileName,
         'name': gtmPageType,
-        'creative': '',
-        'position': 'slot' + key+1
+        'creative': creative,
+        'position': 'slot' + parseInt(key)+1
       };
+
+      if (event === 'click') {
+        if (gtmPageType !== 'Top Navigation') {
+          promotion.position = 'slot' + parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
+        }
+        else {
+          promotion.position = 'slot' + parseInt($(highlight).closest('highlights').find('[gtm-type="gtm-highlights"]').index($(highlight))) + 1;
+        }
+      }
+
       promotions.push(promotion);
     });
 
