@@ -284,6 +284,18 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
       }
       break;
 
+    case 'entity.taxonomy_term.canonical':
+      $taxonomy_term = $current_route['route_params']['taxonomy_term'];
+      $taxonomy_parents = \Drupal::entityManager()->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id());
+      $category_parents = array_reverse($taxonomy_parents);
+
+      foreach ($taxonomy_parents as $taxonomy_parent) {
+        $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+      }
+
+      $path_trace = implode('/', $terms);
+      break;
+
     case 'acq_checkout.form':
       if (in_array($current_route['route_params']['step'],
         ['login', 'delivery', 'payment', 'confirmation'], TRUE)) {
@@ -293,9 +305,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         foreach ($cart_item_attributes as $key => $cart_item) {
           $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
           $product['quantity'] = $cart_item['quantity'];
-          // @Todo: Update these dimensions with the actual values.
-          $product['dimension6'] = '';
-          $product['dimension7'] = '';
           $products[] = $product;
         }
 

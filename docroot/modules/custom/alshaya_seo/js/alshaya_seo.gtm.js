@@ -311,7 +311,14 @@
 
       if (isPaymentPage) {
         // Check delivery type.
-        var deliveryType = $('#block-checkoutsummaryblock .delivery-type').text().toLowerCase();
+        var deliveryType = $('#block-checkoutsummaryblock .delivery-type')
+          .clone()    //clone the element
+          .children() //select all the children
+          .remove()   //remove all the children
+          .end()  //again go back to selected element
+          .text()
+          .trim()
+          .toLowerCase();
 
         if (deliveryType === Drupal.t('Click & Collect').toLowerCase()) {
           dataLayer.push({

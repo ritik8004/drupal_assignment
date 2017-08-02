@@ -2,9 +2,10 @@
 
 namespace Drupal\alshaya_seo;
 
-use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\Routing\CurrentRouteMatch;
@@ -90,6 +91,8 @@ class AlshayaGtmManager {
     'dimension3' => 'gtm-dimension3',
     'dimension4' => 'gtm-dimension4',
     'dimension5' => 'gtm-sku-type',
+    'dimension6' => 'gtm-dimension6',
+    'dimension7' => 'gtm-dimension7',
     'metric1' => '',
   ];
 
@@ -136,6 +139,20 @@ class AlshayaGtmManager {
   protected $entityManager;
 
   /**
+   * The checkout options Manager service.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager
+   */
+  protected $checkoutOptionsManager;
+
+  /**
+   * Store Finder service.
+   *
+   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
+   */
+  protected $storeFinder;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -152,6 +169,10 @@ class AlshayaGtmManager {
    *   Request stack service.
    * @param \Drupal\Core\Entity\EntityManager $entityManager
    *   Entity Manager service.
+   * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager
+   *   Checkout Options Manager service.
+   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $storesFinderUtility
+   *   Store Finder service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -159,7 +180,9 @@ class AlshayaGtmManager {
                               PrivateTempStoreFactory $privateTempStore,
                               AccountProxyInterface $currentUser,
                               RequestStack $requestStack,
-                              EntityManager $entityManager) {
+                              EntityManager $entityManager,
+                              CheckoutOptionsManager $checkoutOptionsManager,
+                              StoresFinderUtility $storesFinderUtility) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -167,6 +190,8 @@ class AlshayaGtmManager {
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
     $this->entityManager = $entityManager;
+    $this->checkoutOptionsManager = $checkoutOptionsManager;
+    $this->storeFinder = $storesFinderUtility;
   }
 
   /**
@@ -311,6 +336,7 @@ class AlshayaGtmManager {
         case 'acq_checkout.form':
           if (isset($currentRoute['route_params']['step'])) {
             if (($currentRoute['route_params']['step'] === 'delivery') &&
+              isset($currentRoute['query']['method']) &&
               ($currentRoute['query']['method'] === 'cc')) {
               $routeIdentifier .= ':click_collect';
             }
@@ -397,6 +423,8 @@ class AlshayaGtmManager {
     // Set dimension1 & 2 to empty until product added to cart.
     $attributes['gtm-dimension1'] = '';
     $attributes['gtm-dimension2'] = '';
+    $attributes['gtm-dimension6'] = '';
+    $attributes['gtm-dimension7'] = '';
     $attributes['gtm-product-sku'] = '';
     $processed_attributes['ecommerce']['detail']['products'][] = $this->convertHtmlAttributesToDatalayer($attributes);
     return $processed_attributes;
@@ -432,6 +460,16 @@ class AlshayaGtmManager {
     $cart = $this->cartStorage->getCart();
     $cartItems = $cart->get('items');
     $attributes = [];
+    $cart_delivery_method = $cart->getExtension('shipping_method');
+
+    if (($cart->getCheckoutStep() === 'payment') && ($cart_delivery_method === 'click_and_collect_click_and_collect')) {
+      $store_code = $cart->getExtension('store_code');
+      $store = $this->storeFinder->getStoreFromCode($store_code);
+      if ($store) {
+        $dimension6 = $store->label();
+        $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+      }
+    }
 
     foreach ($cartItems as $cartItem) {
       $skuId = $cartItem['sku'];
@@ -445,6 +483,12 @@ class AlshayaGtmManager {
       $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $attributes[$skuId]['quantity'] = $cartItem['qty'];
       $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
+      $attributes[$skuId]['gtm-dimension6'] = '';
+      $attributes[$skuId]['gtm-dimension7'] = '';
+      if ($cart_delivery_method === 'click_and_collect_click_and_collect') {
+        $attributes[$skuId]['gtm-dimension6'] = $dimension6;
+        $attributes[$skuId]['gtm-dimension7'] = $dimension7;
+      }
     }
 
     return $attributes;
@@ -520,6 +564,19 @@ class AlshayaGtmManager {
     }
     $order = $orders[$order_index];
     $orderItems = $order['items'];
+    $dimension6 = '';
+    $dimension7 = '';
+    $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
+
+    if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+      $shipping_assignment = reset($order['extension']['shipping_assignments']);
+      $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
+      $store = $this->storeFinder->getStoreFromCode($store_code);
+      if ($store) {
+        $dimension6 = $store->label();
+        $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+      }
+    }
 
     foreach ($orderItems as $key => $item) {
       $product = $this->fetchSkuAtttributes($item['sku']);
@@ -528,8 +585,8 @@ class AlshayaGtmManager {
       $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $productExtras = [
         'quantity' => $item['ordered'],
-        'dimension6' => '',
-        'dimension7' => '',
+        'dimension6' => $dimension6,
+        'dimension7' => $dimension7,
       ];
 
       $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
@@ -545,8 +602,8 @@ class AlshayaGtmManager {
     ];
 
     $generalInfo = [
-      'deliveryOption' => $order['shipping']['method']['carrier_code'],
-      'paymentOption' => $order['payment']['method_title'],
+      'deliveryOption' => $shipping_method,
+      'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'])->getName(),
       'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
@@ -657,16 +714,64 @@ class AlshayaGtmManager {
       case 'summary page':
       case 'delivery page':
       case 'payment page':
-      case 'confirmation page':
         $cart = $this->cartStorage->getCart();
         $cart_totals = $cart->totals();
         $page_dl_attributes = [
-          'cartTotalValue' => $cart_totals['grand'],
+          'cartTotalValue' => (float) $cart_totals['grand'],
           'cartItemsCount' => count($cart->get('items')),
           'cartItemsRR' => $this->formatCartRr($cart),
           'cartItemsFlocktory' => $this->formatCartFlocktory($cart),
-          'storeLocation' => '',
-          'storeAddress' => '',
+        ];
+        break;
+
+      case 'confirmation page':
+        $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
+        $order_data = $temp_store->get('order');
+
+        // Throw access denied if nothing in session.
+        if (empty($order_data) || empty($order_data['id'])) {
+          throw new AccessDeniedHttpException();
+        }
+
+        $order_id = (int) str_replace('"', '', $order_data['id']);
+
+        if ($this->currentUser->isAnonymous()) {
+          $email = $temp_store->get('email');
+        }
+        else {
+          $email = $this->currentUser->getEmail();
+        }
+
+        $orders = alshaya_acm_customer_get_user_orders($email);
+
+        $order_index = array_search($order_id, array_column($orders, 'order_id'), TRUE);
+
+        if ($order_index === FALSE) {
+          throw new NotFoundHttpException();
+        }
+        $order = $orders[$order_index];
+        $orderItems = $order['items'];
+        $dimension6 = '';
+        $dimension7 = '';
+        $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
+
+        if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+          $shipping_assignment = reset($order['extension']['shipping_assignments']);
+          $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
+          $store = $this->storeFinder->getStoreFromCode($store_code);
+          if ($store) {
+            $dimension6 = $store->label();
+            $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+          }
+        }
+
+        $page_dl_attributes = [
+          'cartTotalValue' => (float) $order['totals']['grand'],
+          'cartItemsCount' => count($orderItems),
+          'cartItemsRR' => $this->formatCartRr($orderItems),
+          'cartItemsFlocktory' => $this->formatCartFlocktory($orderItems),
+          'storeLocation' => $dimension6,
+          'storeAddress' => $dimension7,
         ];
         break;
     }
@@ -692,21 +797,20 @@ class AlshayaGtmManager {
   /**
    * Helper function to fetch cart Items in RR format.
    *
-   * @param \Drupal\acq_cart\CartInterface $cart
-   *   Cart Object.
+   * @param array $items
+   *   Cart items array.
    *
    * @return array
    *   Cart items in RR format.
    */
-  public function formatCartRr(CartInterface $cart) {
-    $items = $cart->get('items');
+  public function formatCartRr(array $items) {
     $cart_items_rr = [];
 
     foreach ($items as $item) {
       $cart_items_rr[] = [
         'id' => $item['sku'],
         'price' => $item['price'],
-        'qnt' => $item['qty'],
+        'qnt' => $item['qty'] ?: $item['ordered'],
       ];
     }
 
@@ -716,14 +820,13 @@ class AlshayaGtmManager {
   /**
    * Helper function to fetch cart Items in flocktory format.
    *
-   * @param \Drupal\acq_cart\CartInterface $cart
-   *   Cart Object.
+   * @param array $items
+   *   Cart items array.
    *
    * @return array
    *   Cart items in flocktory format.
    */
-  public function formatCartFlocktory(CartInterface $cart) {
-    $items = $cart->get('items');
+  public function formatCartFlocktory(array $items) {
     $cart_items_flock = [];
 
     foreach ($items as $item) {
@@ -739,7 +842,7 @@ class AlshayaGtmManager {
       $cart_items_flock[] = [
         'id' => $item['sku'],
         'price' => $item['price'],
-        'count' => $item['qty'],
+        'count' => $item['qty'] ?: $item['ordered'],
         'title' => $item['name'],
         'image' => $sku_media_url,
       ];
