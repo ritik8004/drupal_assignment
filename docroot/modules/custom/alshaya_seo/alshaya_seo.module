@@ -301,6 +301,8 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         ['login', 'delivery', 'payment', 'confirmation'], TRUE)) {
         $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
         $products = [];
+        $privilegeOrder = $cart_item_attributes['privilegeOrder'];
+        unset($cart_item_attributes['privilegeOrder']);
 
         foreach ($cart_item_attributes as $key => $cart_item) {
           $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
@@ -339,9 +341,10 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
             // Send order complete confirmation to GTM only once.
             if ($already_visited !== 1) {
               $attributes = $gtm_manager->fetchCompletedOrderAttributes();
-              $data_layer = $attributes['general'];
+              $data_layer = array_merge($data_layer, $attributes['general']);
               $data_layer['ecommerce'] = [
                 'currencyCode' => $currency_code,
+                'privilegeOrder' => $privilegeOrder,
                 'purchase' => [
                   'actionField' => $attributes['actionField'],
                   'products' => $attributes['products'],
@@ -361,9 +364,10 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         }
 
         if (!$confirmation_page) {
-          $data_layer = [
+          $data_layer_cart = [
             'event' => 'checkout',
             'ecommerce' => [
+              'privilegeOrder' => $privilegeOrder,
               'currencyCode' => $currency_code,
               'checkout' => [
                 'actionField' => [
@@ -373,6 +377,8 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
               ],
             ],
           ];
+
+          $data_layer = array_merge($data_layer, $data_layer_cart);
         }
 
       }

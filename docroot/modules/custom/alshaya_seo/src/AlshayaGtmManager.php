@@ -461,6 +461,10 @@ class AlshayaGtmManager {
     $cartItems = $cart->get('items');
     $attributes = [];
     $cart_delivery_method = $cart->getExtension('shipping_method');
+    $isPrivilegeOrder = FALSE;
+    if (!empty($cart->getExtension('loyalty'))) {
+      $isPrivilegeOrder = TRUE;
+    }
 
     if (($cart->getCheckoutStep() === 'payment') && ($cart_delivery_method === 'click_and_collect_click_and_collect')) {
       $store_code = $cart->getExtension('store_code');
@@ -490,6 +494,8 @@ class AlshayaGtmManager {
         $attributes[$skuId]['gtm-dimension7'] = $dimension7;
       }
     }
+
+    $attributes['privilegeOrder'] = $isPrivilegeOrder;
 
     return $attributes;
   }
@@ -716,11 +722,12 @@ class AlshayaGtmManager {
       case 'payment page':
         $cart = $this->cartStorage->getCart();
         $cart_totals = $cart->totals();
+        $cart_items = $cart->get('items');
         $page_dl_attributes = [
           'cartTotalValue' => (float) $cart_totals['grand'],
-          'cartItemsCount' => count($cart->get('items')),
-          'cartItemsRR' => $this->formatCartRr($cart),
-          'cartItemsFlocktory' => $this->formatCartFlocktory($cart),
+          'cartItemsCount' => count($cart_items),
+          'cartItemsRR' => $this->formatCartRr($cart_items),
+          'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
         ];
         break;
 
@@ -810,7 +817,7 @@ class AlshayaGtmManager {
       $cart_items_rr[] = [
         'id' => $item['sku'],
         'price' => $item['price'],
-        'qnt' => $item['qty'] ?: $item['ordered'],
+        'qnt' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
       ];
     }
 
@@ -842,7 +849,7 @@ class AlshayaGtmManager {
       $cart_items_flock[] = [
         'id' => $item['sku'],
         'price' => $item['price'],
-        'count' => $item['qty'] ?: $item['ordered'],
+        'count' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
         'title' => $item['name'],
         'image' => $sku_media_url,
       ];
