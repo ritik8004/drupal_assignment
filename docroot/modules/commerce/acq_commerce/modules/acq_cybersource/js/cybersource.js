@@ -109,8 +109,8 @@ function cybersource_form_submit_handler(form) {
   }
 
   // Sanity check - expiry must be in future.
-  var card_expiry_date_month = parseInt($('.cybersource-credit-card-exp-month-select option:selected').val().toString().trim());
-  var card_expiry_date_year = parseInt($('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim());
+  var card_expiry_date_month = $('.cybersource-credit-card-exp-month-select option:selected').val().toString().trim();
+  var card_expiry_date_year = $('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim();
 
   var card_expiry_date = card_expiry_date_month + '-' + card_expiry_date_year;
 
