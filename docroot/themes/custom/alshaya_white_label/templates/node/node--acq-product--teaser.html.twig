@@ -12,6 +12,8 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
       {{ content.image }}
     {% endif %}
 
+    {{ content.labels }}
+
     {{ title_prefix }}
     {% if not page %}
       <h2{{ title_attributes.addClass("c-products__item__label") }}>
@@ -37,6 +39,8 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         {% if content.image is not null %}
           {{ content.image }}
         {% endif %}
+
+        {{ content.labels }}
       </td>
 
       <td class="sell--description">
