@@ -180,7 +180,7 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
     }
   }
 
-  return $phone_string;
+  return str_replace(' ', '', $phone_string);
 }
 
 /**
