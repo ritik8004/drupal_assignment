@@ -69,6 +69,16 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_labels'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'labels' => NULL,
+      'sku' => NULL,
+      'mainsku' => NULL,
+      'type' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -115,18 +125,28 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if (($entity->bundle() == 'acq_product') && ($view_mode != 'search_result')) {
+  if (($entity->bundle() == 'acq_product')) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
     $sku = $entity->get('field_skus')->first()->getString();
+    $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
     $sku_entity = SKU::loadFromSku($sku);
 
     $build['#cache']['tags'][] = 'sku:' . $sku_entity->getSku();
 
-    if ($view_mode == 'full') {
+    if ($view_mode == 'search_result') {
+      $build['labels'] = [
+        '#theme' => 'product_labels',
+        '#labels' => $skuManager->getLabels($sku_entity, 'plp'),
+        '#sku' => $sku_identifier,
+        '#mainsku' => $sku_identifier,
+        '#type' => 'plp',
+      ];
+    }
+    elseif ($view_mode == 'full') {
 
       // Get up sell block for the product.
       $items = $sku_entity->get('upsell')->getValue();
@@ -164,7 +184,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       alshaya_acm_product_get_gallery($build, $sku_entity);
 
       $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
-      $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
       $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
       $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
@@ -280,14 +299,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
-      $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
       $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
+
+      $build['labels'] = [
+        '#theme' => 'product_labels',
+        '#labels' => $skuManager->getLabels($sku_entity, 'plp'),
+        '#sku' => $sku_identifier,
+        '#mainsku' => $sku_identifier,
+        '#type' => 'plp',
+      ];
     }
     elseif ($view_mode == 'modal') {
       alshaya_acm_product_get_gallery($build, $sku_entity);
 
       $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
-      $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
       $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
       $build['item_code']['#markup'] = $sku;
