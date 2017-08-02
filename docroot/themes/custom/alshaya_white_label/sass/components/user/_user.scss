@@ -1203,3 +1203,10 @@ html[lang="ar"] {
     font-family: $arial-nodir;
   }
 }
+
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
