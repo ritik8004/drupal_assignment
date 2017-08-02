@@ -211,6 +211,23 @@ class AlshayaGtmManager {
   public function fetchProductGtmAttributes(Node $product, $view_mode) {
     $skuId = $product->get('field_skus')->first()->getString();
     $skuAttributes = $this->fetchSkuAtttributes($skuId);
+    $current_route_name = $this->currentRouteMatch->getRouteName();
+
+    // Expose the path a user has traversed to reach PLP.
+    if ($current_route_name === 'entity.taxonomy_term.canonical') {
+      $taxonomy_term = $this->currentRouteMatch->getParameter('taxonomy_term');
+      if ($taxonomy_term->getVocabularyId() === 'acq_product_category') {
+        $taxonomy_parents = \Drupal::entityManager()->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id());
+        $taxonomy_parents = array_reverse($taxonomy_parents);
+
+        foreach ($taxonomy_parents as $taxonomy_parent) {
+          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+        }
+
+        $path_trace = implode('/', $terms);
+        $attributes['gtm-path-trace'] = $path_trace;
+      }
+    }
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
@@ -218,7 +235,6 @@ class AlshayaGtmManager {
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
-
     $attributes = array_merge($attributes, $skuAttributes);
 
     return $attributes;
