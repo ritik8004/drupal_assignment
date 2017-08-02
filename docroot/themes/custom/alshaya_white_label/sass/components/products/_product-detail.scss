@@ -244,8 +244,12 @@
     }
   }
 
-  #configurable_ajax h2.field--name-name {
-    @include u-visibility(none);
+  #configurable_ajax {
+    position: relative;
+
+    h2.field--name-name {
+      @include u-visibility(none);
+    }
   }
 
   .form-item.form-type-select.form-item-quantity {

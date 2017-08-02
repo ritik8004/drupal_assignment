@@ -17,16 +17,6 @@
     }
   }
 
-  .size-guide-link {
-    @include breakpoint($tablet) {
-      margin-#{$right}: 6.5rem;
-
-      html[lang=ar] & {
-        margin-#{$right}: 5.5rem;
-      }
-    }
-  }
-
   .cloudzoom__thumbnails__image {
     outline: transparent;
   }
