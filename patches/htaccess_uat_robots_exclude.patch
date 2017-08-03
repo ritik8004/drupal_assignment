@@ -1,5 +1,5 @@
 diff --git a/docroot/.htaccess b/docroot/.htaccess
-index ce30359e..7dcbbbeb 100644
+index ce30359e..9287ab27 100644
 --- a/docroot/.htaccess
 +++ b/docroot/.htaccess
 @@ -150,7 +150,7 @@ AddEncoding gzip svgz
@@ -7,6 +7,6 @@ index ce30359e..7dcbbbeb 100644
 
    # Stop search engines from indexing dev URLs.
 -  RewriteCond %{HTTP_HOST} (.*).acsitefactory.com [NC]
-+  RewriteCond %{HTTP_HOST} (.*).(dev|test)-(.*).acsitefactory.com [NC]
++  RewriteCond %{HTTP_HOST} (.*).(dev|test)-alshaya.acsitefactory.com [NC]
    RewriteCond %{REQUEST_URI} ^(.*)?/(robots.txt) [NC]
    RewriteRule /robots.txt$ /robots-dev.txt [L,NC]
