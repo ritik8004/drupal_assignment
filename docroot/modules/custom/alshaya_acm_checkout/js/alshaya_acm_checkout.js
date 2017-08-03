@@ -2,11 +2,6 @@
   'use strict';
 
   /**
-   * @namespace
-   */
-  Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
-
-  /**
    * All custom js for checkout flow.
    *
    * @type {Drupal~behavior}
@@ -126,8 +121,10 @@
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val('');
-          // Init Mobile number prefix js.
+
+          // Reset Mobile number prefix js.
           Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'));
+
           // Show the form.
           $('#address-book-form-wrapper').slideDown();
         });
@@ -199,8 +196,10 @@
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val(data.address_line1);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val(data.dependent_locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val(data.address_line2);
+
     // Init Mobile number prefix js.
     Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'), data.mobile);
+
     // Show the form.
     $('#address-book-form-wrapper').slideDown();
   };

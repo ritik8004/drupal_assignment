@@ -13,17 +13,27 @@
    */
   Drupal.behaviors.checkoutCybersource = {
     attach: function (context, settings) {
-
       // Bind this only once after every ajax call.
       $('.cybersource-credit-card-input').once('bind-events').each(function () {
-        // Update the validate settings to use custom submit handler.
-        $('.cybersource-credit-card-input').parents('form').data('submit-handler', 'cybersource_form_submit_handler');
-        Drupal.cvValidatorObjects[$('.cybersource-credit-card-input').parents('form').attr('id')].destroy();
-        Drupal.behaviors.cvJqueryValidate.attach('body');
+        var form = $('.cybersource-credit-card-input').closest('form');
 
+        if (form.data('submit-handler') !== 'cybersource_form_submit_handler') {
+          try {
+            // Update the validate settings to use custom submit handler.
+            form.data('submit-handler', 'cybersource_form_submit_handler');
+
+            // We try to update the submit handler here.
+            Drupal.cvValidatorObjects[form.attr('id')].settings['submitHandler'] = cybersource_form_submit_handler;
+          }
+          catch (e) {
+            // If any error comes we reload the page.
+            // JS is very critical for cybersource to work.
+            window.location.reload();
+          }
+        }
 
         $(this).validateCreditCard(function (result) {
-          // Reset the card type ever-time.
+          // Reset the card type every-time.
           $('.cybersource-credit-card-type-input').val('');
 
           // Check if we have card_type.
