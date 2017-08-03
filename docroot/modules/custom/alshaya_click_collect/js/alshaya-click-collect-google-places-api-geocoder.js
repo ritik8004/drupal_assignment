@@ -3,10 +3,6 @@
  *   Javascript for the Google Places API geocoder.
  */
 
-/**
- * @property {Object} drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions
- */
-
 (function ($, Drupal) {
   'use strict';
 
@@ -46,11 +42,7 @@
                 e.preventDefault();
                 var elementId = $(this).data('source-identifier');
 
-                if ($("input[name='" + elementId + "-lat']").val() !== '' || $("input[name='" + elementId + "-lng']").val() !== '') {
-                  $(this).parents('form').find('input[type="submit"]').attr('disabled', '');
-                  $(this).parents('form').find('input[type="submit"]').click();
-                }
-                else {
+                if ($("input[name='" + elementId + "-lat']").val() === '' || $("input[name='" + elementId + "-lng']").val() === '') {
                   return false;
                 }
               }
