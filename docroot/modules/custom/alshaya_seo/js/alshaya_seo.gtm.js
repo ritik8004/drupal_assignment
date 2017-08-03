@@ -435,6 +435,12 @@
    *   jQuery object which contains all gtm attributes.
    */
   Drupal.alshaya_seo_gtm_get_product_values = function (product) {
+    var mediaCount = 'image not available';
+
+    if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
+      mediaCount = parseInt(product.attr('gtm-dimension4'));
+    }
+
     var productData = {
       'name': product.attr('gtm-name'),
       'id': product.attr('gtm-main-sku'),
@@ -446,7 +452,7 @@
       'dimension1': '',
       'dimension2': '',
       'dimension3': product.attr('gtm-dimension3'),
-      'dimension4': parseInt(product.attr('gtm-dimension4')),
+      'dimension4': mediaCount,
       'dimension5': product.attr('gtm-sku-type'),
       'metric1': product.attr('gtm-cart-value')
     };
