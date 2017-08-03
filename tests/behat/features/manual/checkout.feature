@@ -59,8 +59,8 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "place order"
     And I wait for the page to load
-    And I select "ABK" from "bank"
-    And I fill in "cardN" with "8888880000000001"
+    And I select "Knet Test Card [KNET1]" from "bank"
+    And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -79,11 +79,16 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     And I follow "select this store"
     And I wait for AJAX to finish
+    When I fill in "edit-cc-firstname" with "Shweta"
+    And I fill in "edit-cc-lastname" with "Sharma"
+    When I fill in "edit-cc-email" with "shweta@axelerant.com"
     And I fill in "edit-cc-mobile-number-mobile" with "97004455"
-    And I select an element having class ".cc-action"
+    When I select an element having class ".cc-action"
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
+    When I fill in "edit-billing-address-address-billing-given-name" with "Shweta"
+    And I fill in "edit-billing-address-address-billing-family-name" with "Sharma"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
@@ -92,8 +97,8 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    And I select "ABK" from "bank"
-    And I fill in "cardN" with "8888880000000001"
+    And I select "Knet Test Card [KNET1]" from "bank"
+    And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
@@ -154,8 +159,8 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "place order"
     And I wait for the page to load
-    And I select "ABK" from "bank"
-    And I fill in "cardN" with "8888880000000001"
+    And I select "Knet Test Card [KNET1]" from "bank"
+    And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
