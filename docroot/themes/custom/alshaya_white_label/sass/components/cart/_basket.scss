@@ -284,6 +284,13 @@
       &.dark {
         @include clearfix;
       }
+
+      .special--price,
+      .price--discount {
+        @include clearfix;
+
+        clear: both;
+      }
     }
 
     .form-actions {
