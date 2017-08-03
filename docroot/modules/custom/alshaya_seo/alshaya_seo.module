@@ -386,7 +386,7 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
     $page_dl_attributes = $gtm_manager->fetchPageSpecificAttributes($page_type, $current_route);
     $data_layer = array_merge($data_layer, $page_dl_attributes);
   }
-  catch(Exception $e) {
+  catch (Exception $e) {
     \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);
   }
 
