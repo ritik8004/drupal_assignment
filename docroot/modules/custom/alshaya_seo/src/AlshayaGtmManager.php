@@ -8,6 +8,7 @@ use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityManager;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
@@ -153,6 +154,13 @@ class AlshayaGtmManager {
   protected $storeFinder;
 
   /**
+   * Langauge Manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -173,6 +181,8 @@ class AlshayaGtmManager {
    *   Checkout Options Manager service.
    * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $storesFinderUtility
    *   Store Finder service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   Language Manager service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -182,7 +192,8 @@ class AlshayaGtmManager {
                               RequestStack $requestStack,
                               EntityManager $entityManager,
                               CheckoutOptionsManager $checkoutOptionsManager,
-                              StoresFinderUtility $storesFinderUtility) {
+                              StoresFinderUtility $storesFinderUtility,
+                              LanguageManagerInterface $languageManager) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -192,6 +203,7 @@ class AlshayaGtmManager {
     $this->entityManager = $entityManager;
     $this->checkoutOptionsManager = $checkoutOptionsManager;
     $this->storeFinder = $storesFinderUtility;
+    $this->languageManager = $languageManager;
   }
 
   /**
@@ -562,6 +574,7 @@ class AlshayaGtmManager {
 
     $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
     $order_data = $temp_store->get('order');
+    $privilegeOrder = FALSE;
 
     // Throw access denied if nothing in session.
     if (empty($order_data) || empty($order_data['id'])) {
@@ -629,6 +642,7 @@ class AlshayaGtmManager {
       'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
+      'privilegeOrder' => $privilegeorder,
     ];
 
     return [
@@ -656,14 +670,14 @@ class AlshayaGtmManager {
     }
 
     if ($data_layer['userUid'] !== 0) {
-      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) ? 'repeat buyer' : 'first time buyer';
+      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) > 1 ? 'repeat buyer' : 'first time buyer';
     }
     else {
       $customer_type = 'first time buyer';
     }
 
     $data_layer_attributes = [
-      'language' => $data_layer['drupalLanguage'],
+      'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
       'country' => 'Kuwait',
       'currency' => 'KWD',
@@ -704,19 +718,19 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = [
-          'product_style_code' => $product_sku,
-          'product_sku' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
-          'stock_status' => $stock_status,
-          'product_name' => $node->getTitle(),
-          'product_brand' => $sku_attributes['gtm-brand'],
-          'product_color' => '',
-          'product_size' => $sku_attributes['gtm-dimension1'],
-          'product_price' => $sku_attributes['gtm-price'],
-          'product_old_price' => $sku_entity->get('price')->getString(),
-          'product_picture_url' => $product_media_url,
-          'product_rating' => '',
-          'product_reviews' => '',
-          'product_magento_id' => $product_sku,
+          'productStyleCode' => $product_sku,
+          'productSku' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
+          'stockStatus' => $stock_status,
+          'productName' => $node->getTitle(),
+          'productBrand' => $sku_attributes['gtm-brand'],
+          'productColor' => '',
+          'productSize' => $sku_attributes['gtm-dimension1'],
+          'productPrice' => $sku_attributes['gtm-price'],
+          'productOldPrice' => $sku_entity->get('price')->getString(),
+          'productPictureUrl' => $product_media_url,
+          'productRating' => '',
+          'productReviews' => '',
+          'productMagentoId' => $product_sku,
         ];
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
@@ -807,13 +821,13 @@ class AlshayaGtmManager {
    */
   public function fetchDepartmentAttributes($terms) {
     return [
-      'department_name' => implode('|', $terms),
-      'department_id' => implode('|', array_keys($terms)),
-      'listing_name' => implode(',', $terms),
-      'listing_id' => implode(',', array_keys($terms)),
-      'major_category' => array_shift($terms),
-      'minor_category' => array_shift($terms),
-      'sub_category' => array_shift($terms) ?: '',
+      'departmentName' => implode('|', $terms),
+      'departmentId' => implode('|', array_keys($terms)),
+      'listingName' => implode(',', $terms),
+      'listingId' => implode(',', array_keys($terms)),
+      'majorCategory' => array_shift($terms),
+      'minorCategory' => array_shift($terms),
+      'subCategory' => array_shift($terms) ?: '',
     ];
   }
 

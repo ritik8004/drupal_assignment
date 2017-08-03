@@ -28,6 +28,7 @@
       var isRegistrationSuccessPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
+      var subListName = '';
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -344,7 +345,9 @@
       productLinkSelector.each(function () {
         $(this).once('js-event').on('click', function (e) {
           var that = $(this);
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName);
+          var position = $('.views-infinite-scroll-content-wrapper .c-products__item').index(that.closest('.c-products__item')) + 1;
+
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
         });
       });
 
@@ -353,7 +356,17 @@
       $('a[href*="product-quick-view"]').each(function() {
         $(this).once('js-event').on('click', function (e) {
           var that = $(this).closest('article[data-vmode="teaser"]');
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName);
+          var position = '';
+
+          if (that.closest('.horizontal-crossell').length > 0) {
+            subListName = listName + '-CS';
+            position = that.closest('.horizontal-crossell').find('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
+          }
+          else if (that.closest('.horizontal-upell').length > 0) {
+            subListName = listName + '-US';
+            position = that.closest('.horizontal-upell').find('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
+          }
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
         });
       });
 
@@ -558,19 +571,23 @@
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }
 
+      var position = parseInt(key) + 1;
+
       var promotion = {
         'id': fileName,
         'name': gtmPageType,
         'creative': creative,
-        'position': 'slot' + parseInt(key)+1
+        'position': 'slot' + position
       };
 
       if (event === 'click') {
         if (gtmPageType !== 'Top Navigation') {
-          promotion.position = 'slot' + parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
+          position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
+          promotion.position = 'slot' + position;
         }
         else {
-          promotion.position = 'slot' + parseInt($(highlight).closest('highlights').find('[gtm-type="gtm-highlights"]').index($(highlight))) + 1;
+          position = parseInt($(highlight).closest('highlights').find('[gtm-type="gtm-highlights"]').index($(highlight))) + 1;
+          promotion.position = 'slot' + position;
         }
       }
 
@@ -606,10 +623,15 @@
    * @param element
    * @param currencyCode
    * @param listName
+   * @param position
    */
-  Drupal.alshaya_seo_gtm_push_product_clicks = function(element, currencyCode, listName) {
+  Drupal.alshaya_seo_gtm_push_product_clicks = function(element, currencyCode, listName, position) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
     product.variant = '';
+    if (position) {
+      product.position = position;
+    }
+
     var data = {
       'event': 'productClick',
       'ecommerce': {
