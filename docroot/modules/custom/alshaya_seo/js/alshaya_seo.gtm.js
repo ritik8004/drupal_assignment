@@ -558,19 +558,23 @@
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }
 
+      var position = parseInt(key) + 1;
+
       var promotion = {
         'id': fileName,
         'name': gtmPageType,
         'creative': creative,
-        'position': 'slot' + parseInt(key)+1
+        'position': 'slot' + position
       };
 
       if (event === 'click') {
         if (gtmPageType !== 'Top Navigation') {
-          promotion.position = 'slot' + parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
+          position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
+          promotion.position = 'slot' + position;
         }
         else {
-          promotion.position = 'slot' + parseInt($(highlight).closest('highlights').find('[gtm-type="gtm-highlights"]').index($(highlight))) + 1;
+          position = parseInt($(highlight).closest('highlights').find('[gtm-type="gtm-highlights"]').index($(highlight))) + 1;
+          promotion.position = 'slot' + position;
         }
       }
 
