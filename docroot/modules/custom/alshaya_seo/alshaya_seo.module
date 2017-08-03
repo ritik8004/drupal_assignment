@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 function alshaya_seo_preprocess_html(&$variables) {
   /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtmManager */
   $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
-  $variables['attributes']['gtm-currency'] = 'KWD';
+  $variables['attributes']['gtm-currency'] = \Drupal::configFactory('acq_commerce.currency')->getRawData()['currency_code'];
   $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
   $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($gtm_manager->getGtmContainer());
 }
@@ -257,7 +257,7 @@ function alshaya_seo_theme($existing, $type, $theme, $path) {
 function alshaya_seo_datalayer_alter(&$data_layer) {
   /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtmManager */
   $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
-  $currency_code = 'KWD';
+  $currency_code = \Drupal::configFactory('acq_commerce.currency')->getRawData()['currency_code'];
   $confirmation_page = FALSE;
   try {
     $current_route = $gtm_manager->getGtmContainer();

@@ -447,7 +447,7 @@ class AlshayaGtmManager {
    */
   public function processAttributesForPdp(array $attributes) {
     $processed_attributes['ecommerce'] = [];
-    $processed_attributes['ecommerce']['currencyCode'] = 'KWD';
+    $processed_attributes['ecommerce']['currencyCode'] = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
 
     // Set dimension1 & 2 to empty until product added to cart.
     $attributes['gtm-dimension1'] = '';
@@ -682,7 +682,7 @@ class AlshayaGtmManager {
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
       'country' => 'Kuwait',
-      'currency' => 'KWD',
+      'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'],
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
       'customerType' => $customer_type,
