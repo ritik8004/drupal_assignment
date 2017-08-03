@@ -574,6 +574,7 @@ class AlshayaGtmManager {
 
     $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
     $order_data = $temp_store->get('order');
+    $privilegeOrder = FALSE;
 
     // Throw access denied if nothing in session.
     if (empty($order_data) || empty($order_data['id'])) {
@@ -641,6 +642,7 @@ class AlshayaGtmManager {
       'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
+      'privilegeOrder' => $privilegeorder,
     ];
 
     return [
@@ -668,7 +670,7 @@ class AlshayaGtmManager {
     }
 
     if ($data_layer['userUid'] !== 0) {
-      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) ? 'repeat buyer' : 'first time buyer';
+      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) > 1 ? 'repeat buyer' : 'first time buyer';
     }
     else {
       $customer_type = 'first time buyer';
