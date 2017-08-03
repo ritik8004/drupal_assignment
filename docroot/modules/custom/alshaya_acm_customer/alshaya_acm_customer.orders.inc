@@ -169,7 +169,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $orderRow = [];
 
   $orderRow['orderId'] = $order['increment_id'];
-  $orderRow['orderDate'] = \Drupal::service('date.formatter')->format(strtotime($order['created_at']), 'order_date');
+  $orderRow['orderDate'] = alshaya_master_get_site_date_from_api_date($order['created_at'], 'order_date');
 
   // We will display the name of first order item.
   $item = reset($order['items']);
@@ -194,7 +194,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
 
   // Get the loyalty card number from order detail.
-  $orderRow['loyaltyCard'] = $order['extension']['loyalty_card'];
+  $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? $order['extension']['loyalty_card'] : '';
 
   return $orderRow;
 }
