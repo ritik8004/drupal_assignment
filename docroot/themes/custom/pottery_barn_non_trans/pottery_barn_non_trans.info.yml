@@ -1,0 +1,5 @@
+name: Pottery Barn Non Transactional
+type: theme
+description: 'Pottery Barn Non Transactional Site theme.'
+core: 8.x
+base theme: alshaya_white_label
