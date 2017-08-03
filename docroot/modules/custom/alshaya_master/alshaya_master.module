@@ -557,3 +557,32 @@ function alshaya_master_get_country_mobile_code($country = NULL, $util = NULL) {
 
   return '+' . $util->getCountryCode($country);
 }
+
+/**
+ * Helper function to convert date received from API to site timezone date.
+ *
+ * @param string $date
+ *   Date string received from API.
+ * @param string $format
+ *   Drupal date format to get the return string.
+ *
+ * @return mixed
+ *   Formated date in site's timezone.
+ */
+function alshaya_master_get_site_date_from_api_date($date, $format = '') {
+  // @TODO: We need confirmation from Magento that we will always have UTC.
+  // Get UTC timezone.
+  $tz_utc = new DateTimeZone('UTC');
+
+  // Get local site timezone.
+  $tz_local = new DateTimeZone(date_default_timezone_get());
+
+  // Get date object for date string.
+  $dt = new DateTime($date, $tz_utc);
+
+  // Convert the timezone.
+  $dt->setTimezone($tz_local);
+
+  // Return formated date in site's timezone.
+  return \Drupal::service('date.formatter')->format($dt->getTimestamp(), $format);
+}
