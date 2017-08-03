@@ -130,6 +130,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         // For now we are displaying only image slider on search results page
         // and PLP.
         if ($media_item['media_type'] === 'image') {
+          $media_item['label'] = $product_label;
           if (empty($search_main_image)) {
             $search_main_image = $this->skuManager->getSkuImage($media_item, '291x288');
           }
