@@ -498,6 +498,9 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
  *   Return rendered theme with html for price.
  */
 function alshaya_acm_price_format($price, $promotions = []) {
+  // Remove the comma coming from Magento, we will add while formatting.
+  $price = str_replace(',', '', $price);
+
   $output = [
     '#theme' => 'acq_commerce_price',
     '#price' => $price,
