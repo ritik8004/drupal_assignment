@@ -171,6 +171,11 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         ],
       ];
 
+      // To avoid issues in JS we always add the cybersource js library.
+      if ($payment_plugin == 'cybersource') {
+        $pane_form['payment_details_wrapper']['payment_method_' . $payment_plugin]['#attached']['library'][] = 'acq_cybersource/cybersource';
+      }
+
       $title = '<div id="payment_method_title_' . $payment_plugin . '"';
       $title .= $payment_plugin == $selected_plugin_id ? ' class="plugin-selected payment-plugin-wrapper-div" ' : ' class="payment-plugin-wrapper-div" ';
       $title .= ' data-value="' . $payment_plugin . '" ';
