@@ -6,13 +6,6 @@ Feature: As an authenticated user
   Background:
     Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "address book"
-    And I wait for the page to load
-    When I follow "Edit"
-    And I wait for AJAX to finish
-    When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
-    And I press "Save"
-    And I wait for AJAX to finish
     When I go to "/ton-fax"
     And I wait for the page to load
     When I press "Add to basket"
@@ -23,16 +16,16 @@ Feature: As an authenticated user
     And I wait for the page to load
 
   Scenario: As an authenticated user
-  I should be able to checkout using Home delivery
-  and pay by Cash-on-delivery
-  When I press "proceed to payment"
-  And I wait for the page to load
-  When I select a payment option "payment_method_title_cashondelivery"
-  And I wait for AJAX to finish
-  And I accept terms and conditions
-  When I press "place order"
-  And I wait for the page to load
-  Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    I should be able to checkout using Home delivery
+    and pay by Cash-on-delivery
+    When I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    When I press "place order"
+    And I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
 
   Scenario: As an authenticated user
     I should be able to checkout using Home delivery
@@ -58,8 +51,8 @@ Feature: As an authenticated user
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
 
   Scenario: As an authenticated user
-  I should be able to use click and collect option
-  and pay by KNET
+    I should be able to use click and collect option
+    and pay by KNET
     When I follow "Click & Collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
