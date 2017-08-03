@@ -221,6 +221,7 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchProductGtmAttributes(Node $product, $view_mode) {
+    $product = $product->getTranslation('en');
     $skuId = $product->get('field_skus')->first()->getString();
     $skuAttributes = $this->fetchSkuAtttributes($skuId);
     $current_route_name = $this->currentRouteMatch->getRouteName();
@@ -266,7 +267,7 @@ class AlshayaGtmManager {
   public function fetchSkuAtttributes($skuId) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
-
+    $sku = $sku->getTranslation('en');
     $attributes = [];
 
     $attributes['gtm-name'] = $sku->label();
@@ -446,7 +447,7 @@ class AlshayaGtmManager {
    */
   public function processAttributesForPdp(array $attributes) {
     $processed_attributes['ecommerce'] = [];
-    $processed_attributes['ecommerce']['currencyCode'] = $this->configFactory->get('acq_commerce.currency')->get('currency_code');
+    $processed_attributes['ecommerce']['currencyCode'] = 'KWD';
 
     // Set dimension1 & 2 to empty until product added to cart.
     $attributes['gtm-dimension1'] = '';
@@ -471,7 +472,9 @@ class AlshayaGtmManager {
         continue;
       }
 
-      $product_details[$datalayer_key] = $attributes[$attribute_key];
+      if (isset($attributes[$attribute_key])) {
+        $product_details[$datalayer_key] = $attributes[$attribute_key];
+      }
     }
 
     return $product_details;
@@ -642,7 +645,6 @@ class AlshayaGtmManager {
       'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
-      'privilegeOrder' => $privilegeorder,
     ];
 
     return [
@@ -699,8 +701,10 @@ class AlshayaGtmManager {
     switch ($page_type) {
       case 'product detail page':
         $node = $current_route['route_params']['node'];
+        $node = $node->getTranslation('en');
         $product_sku = $node->get('field_skus')->getString();
         $sku_entity = SKU::loadFromSku($product_sku);
+        $sku_entity = $sku_entity->getTranslation('en');
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.

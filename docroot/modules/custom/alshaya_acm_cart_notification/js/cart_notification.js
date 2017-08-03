@@ -68,7 +68,7 @@
           var pdpAddCartButton = l;
           var addedProduct = pdpAddCartButton.closest('article[gtm-type="gtm-product-link"]');
           var quantity = parseInt(pdpAddCartButton.closest('.sku-base-form').find('.form-item-quantity select').val());
-          var size = pdpAddCartButton.closest('.sku-base-form').find('.form-item-configurables-size select option:selected').text();
+          var size = Drupal.t(pdpAddCartButton.closest('.sku-base-form').find('.form-item-configurables-size select option:selected').text(), [], [{'langcode': 'en'}]);
           var selectedVariant = '';
 
           if ($('.ui-dialog').length > 0) {
@@ -76,7 +76,7 @@
             var productModalSelector = $('.ui-dialog');
             addedProduct = productModalSelector.find('article[gtm-type="gtm-product-link"]');
             quantity = parseInt(productModalSelector.find('.form-item-quantity select').val());
-            size = productModalSelector.find('.form-item-configurables-size select option:selected').text();
+            size = Drupal.t(productModalSelector.find('.form-item-configurables-size select option:selected').text(), [], [{'langcode': 'en'}]);
 
             if (addedProduct.attr('gtm-sku-type') === 'configurable') {
               selectedVariant = addedProduct.find('.selected-variant-sku-' + addedProduct.attr('gtm-product-sku').toLowerCase()).val();
