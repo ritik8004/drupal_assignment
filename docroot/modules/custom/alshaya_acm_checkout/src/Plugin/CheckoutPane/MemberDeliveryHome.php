@@ -9,7 +9,6 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\profile\Entity\Profile;
@@ -274,7 +273,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     if ($form_state->getErrors()) {
       $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form['member_delivery_home']['address_form']));
       $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'show'));
-      $response->addCommand(new SettingsCommand(['alshaya_checkout_address' => ['error' => TRUE]], TRUE), TRUE);
       return $response;
     }
 
@@ -322,7 +320,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
       $cart->setShipping($update);
     }
-    $response->addCommand(new SettingsCommand(['alshaya_checkout_address' => ['error' => FALSE]], TRUE), TRUE);
+
     $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'hide'));
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     return $response;

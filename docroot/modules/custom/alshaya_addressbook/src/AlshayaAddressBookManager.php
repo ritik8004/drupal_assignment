@@ -291,7 +291,10 @@ class AlshayaAddressBookManager {
       'value' => $magento_address['telephone'],
     ];
     $address['address_line1'] = $magento_address['street'];
-    $address['address_line2'] = $magento_address['extension']['address_apartment_segment'];
+
+    // This one is optional so additional check added.
+    $address['address_line2'] = isset($magento_address['extension']['address_apartment_segment']) ? $magento_address['extension']['address_apartment_segment'] : '';
+
     $address['administrative_area'] = $magento_address['extension']['address_area_segment'];
     $address['locality'] = $magento_address['extension']['address_block_segment'];
     $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];

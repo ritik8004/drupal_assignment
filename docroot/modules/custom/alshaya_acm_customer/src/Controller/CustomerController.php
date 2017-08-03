@@ -212,7 +212,6 @@ class CustomerController extends ControllerBase {
 
     $build['#barcode'] = alshaya_acm_customer_get_barcode($build['order']);
     $build['#account']['mail'] = $user->get('mail')->getString();
-    $build['#account']['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
     $build['#site_logo'] = [
       '#theme' => 'image',
       '#uri' => theme_get_setting('logo.url'),
@@ -259,7 +258,6 @@ class CustomerController extends ControllerBase {
     // Build account details array.
     $account = [];
 
-    // @TODO: Get privilege card number once integration done.
     $account['first_name'] = $order['firstname'];
     $account['last_name'] = $order['lastname'];
     $account['mail'] = $order['email'];

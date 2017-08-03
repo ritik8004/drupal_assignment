@@ -997,6 +997,12 @@ function alshaya_master_install() {
     'Sorry Collect your order in-store is unavailable' => [
       'ar' => 'عفواً، خدمة استلم طلبيتك من المحل غير متوفرة',
     ],
+    'delivery option' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Collection Store' => [
+      'ar' => 'محل الاستلام',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

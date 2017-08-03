@@ -118,75 +118,7 @@
       /** Add to cart GTM **/
       // Trigger GTM push event on AJAX completion of add to cart button.
       $(document).once('js-event').ajaxComplete(function(event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('add to cart').toLowerCase())) {
-          var responseJSON = xhr.responseJSON;
-          var responseMessage = '';
-          $.each(responseJSON, function(key, obj) {
-            if (obj.method === 'stopSpinner') {
-              responseMessage = obj.args[0].message;
-              return false;
-            }
-          });
-
-          // Only trigger gtm push event for cart if product added to cart successfully.
-          if (responseMessage === 'success') {
-            var targetEl = event.target.activeElement;
-            var addedProductSelector = '';
-            var quantity = 1;
-            var size = '';
-
-            // If the add-to-cart button was triggered from modal, the target element will be modal.
-            if ($(targetEl).hasClass('ui-dialog')) {
-              addedProductSelector = $(targetEl).find('article[gtm-type="gtm-product-link"]');
-              quantity = parseInt($(targetEl).find('.form-item-quantity select').val());
-              size = $(targetEl).find('.form-item-configurables-size select option:selected').text();
-            }
-            else {
-              addedProductSelector = $(targetEl).closest('article[gtm-type="gtm-product-link"]');
-              quantity = parseInt($(targetEl).closest('.sku-base-form').find('.form-item-quantity select').val());
-              size = $(targetEl).closest('.sku-base-form').find('.form-item-configurables-size select option:selected').text();
-            }
-
-            if (addedProductSelector) {
-              var product = Drupal.alshaya_seo_gtm_get_product_values(addedProductSelector);
-              // Remove product position: Not needed while adding to cart.
-              delete product.position;
-
-              // Set product quantity to selected quatity.
-              product.quantity = quantity;
-
-              // Set product size to selected size.
-              if (product.dimension5 !== 'simple') {
-                product.dimension1 = size;
-              }
-
-              // Set product variant to the selected variant.
-              if (product.dimension5 !== 'simple') {
-                product.variant = $('.selected-variant-sku-' + product.id.toLowerCase()).val();
-              }
-              else {
-                product.variant = product.id;
-              }
-
-              // Calculate metric 1 value.
-              product.metric1 = product.price * product.quantity;
-
-              var data = {
-                'event': 'addToCart',
-                'ecommerce': {
-                  'currencyCode': currencyCode,
-                  'add': {
-                    'products': [
-                      product
-                    ]
-                  }
-                }
-              };
-              dataLayer.push(data);
-            }
-          }
-        }
-        else if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
           var responseJSON = xhr.responseJSON;
           var responseMessage = '';
           $.each(responseJSON, function(key, obj) {
@@ -364,6 +296,8 @@
             'virtualPageURL':'/virtualpv/click-and-collect/step1/click-and-collect-view',
             'virtualPageTitle' : 'C&C Step 1 – Click and Collect View'
           });
+
+          Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function() {
@@ -377,7 +311,14 @@
 
       if (isPaymentPage) {
         // Check delivery type.
-        var deliveryType = $('#block-checkoutsummaryblock .delivery-type').text().toLowerCase();
+        var deliveryType = $('#block-checkoutsummaryblock .delivery-type')
+          .clone()    //clone the element
+          .children() //select all the children
+          .remove()   //remove all the children
+          .end()  //again go back to selected element
+          .text()
+          .trim()
+          .toLowerCase();
 
         if (deliveryType === Drupal.t('Click & Collect').toLowerCase()) {
           dataLayer.push({
@@ -417,6 +358,7 @@
       });
 
       /** Tracking internal promotion impressions. **/
+      // Tracking menu level promotions
       topNavLevelOneSelector.once('js-event').on('mouseenter', function() {
         if ($(this).hasClass('has-child')) {
           var topNavLevelTwo = $(this).children('ul.menu--two__list');
@@ -427,16 +369,26 @@
             highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
           }
           if (highlights.length > 0) {
-            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, gtmPageType);
+            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
           }
         }
 
       });
 
       $('[gtm-type="gtm-highlights"]').once('js-event').on('click', function() {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'Top Navigation', 'promotionClick');
       });
 
+      if ($('.paragraph--type--promo-block').length > 0) {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType);
+      }
+
+      // Tracking view of promotions.
+      $('.paragraph--type--promo-block').each(function() {
+        $(this).once('js-event').on('click', function() {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+        });
+      });
       /** Tracking clicks on fitler & sort options. **/
       if (listName === "PLP" || listName === "Search Results Page") {
         var section = listName;
@@ -483,6 +435,12 @@
    *   jQuery object which contains all gtm attributes.
    */
   Drupal.alshaya_seo_gtm_get_product_values = function (product) {
+    var mediaCount = 'image not available';
+
+    if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
+      mediaCount = parseInt(product.attr('gtm-dimension4'));
+    }
+
     var productData = {
       'name': product.attr('gtm-name'),
       'id': product.attr('gtm-main-sku'),
@@ -494,10 +452,14 @@
       'dimension1': '',
       'dimension2': '',
       'dimension3': product.attr('gtm-dimension3'),
-      'dimension4': parseInt(product.attr('gtm-dimension4')),
+      'dimension4': mediaCount,
       'dimension5': product.attr('gtm-sku-type'),
       'metric1': product.attr('gtm-cart-value')
     };
+
+    if (product.attr('gtm-path-trace')) {
+      productData.dimension8 = product.attr('gtm-path-trace');
+    }
 
     return productData;
   };
@@ -575,13 +537,43 @@
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function(highlights, gtmPageType, event) {
     var promotions = [];
 
-    highlights.each(function(key) {
+    highlights.each(function(key, highlight) {
+      var creative = '';
+      if (gtmPageType === 'Top Navigation') {
+        creative = Drupal.url($(highlight).find('.field--name-field-highlight-image img').attr('src'));
+      }
+      else {
+        creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
+      }
+
+      var creativeParts = creative.split('/');
+      var fileName = creativeParts[creativeParts.length - 1];
+      //Strip off any query parameters.
+      if (fileName.indexOf('?') !== -1) {
+        fileName = fileName.substring(0, fileName.indexOf('?'));
+      }
+
+      // Remove file extensions from fileName.
+      if (fileName.lastIndexOf('.') !== -1) {
+        fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+      }
+
       var promotion = {
-        'id': '',
+        'id': fileName,
         'name': gtmPageType,
-        'creative': '',
-        'position': 'slot' + key+1
+        'creative': creative,
+        'position': 'slot' + parseInt(key)+1
       };
+
+      if (event === 'click') {
+        if (gtmPageType !== 'Top Navigation') {
+          promotion.position = 'slot' + parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
+        }
+        else {
+          promotion.position = 'slot' + parseInt($(highlight).closest('highlights').find('[gtm-type="gtm-highlights"]').index($(highlight))) + 1;
+        }
+      }
+
       promotions.push(promotion);
     });
 

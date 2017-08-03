@@ -289,13 +289,12 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         ['login', 'delivery', 'payment', 'confirmation'], TRUE)) {
         $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
         $products = [];
+        $privilegeOrder = $cart_item_attributes['privilegeOrder'];
+        unset($cart_item_attributes['privilegeOrder']);
 
         foreach ($cart_item_attributes as $key => $cart_item) {
           $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
           $product['quantity'] = $cart_item['quantity'];
-          // @Todo: Update these dimensions with the actual values.
-          $product['dimension6'] = '';
-          $product['dimension7'] = '';
           $products[] = $product;
         }
 
@@ -330,9 +329,10 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
             // Send order complete confirmation to GTM only once.
             if ($already_visited !== 1) {
               $attributes = $gtm_manager->fetchCompletedOrderAttributes();
-              $data_layer = $attributes['general'];
+              $data_layer = array_merge($data_layer, $attributes['general']);
               $data_layer['ecommerce'] = [
                 'currencyCode' => $currency_code,
+                'privilegeOrder' => $privilegeOrder,
                 'purchase' => [
                   'actionField' => $attributes['actionField'],
                   'products' => $attributes['products'],
@@ -352,9 +352,10 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         }
 
         if (!$confirmation_page) {
-          $data_layer = [
+          $data_layer_cart = [
             'event' => 'checkout',
             'ecommerce' => [
+              'privilegeOrder' => $privilegeOrder,
               'currencyCode' => $currency_code,
               'checkout' => [
                 'actionField' => [
@@ -364,13 +365,16 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
               ],
             ],
           ];
+
+          $data_layer = array_merge($data_layer, $data_layer_cart);
         }
 
       }
       break;
   }
-
   $data_layer['pageType'] = $page_type;
+  $page_dl_attributes = $gtm_manager->fetchPageSpecificAttributes($page_type, $current_route);
+  $data_layer = array_merge($data_layer, $page_dl_attributes);
 }
 
 /**
@@ -402,7 +406,7 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
   // Fetch product for this sku to get the category.
   $product_node = alshaya_acm_product_get_display_node($variables['item_code']);
 
-  $sku_attributes['gtm-category'] = $gtm_manager->fetchProductCategories($product_node);
+  $sku_attributes['gtm-category'] = implode('/', $gtm_manager->fetchProductCategories($product_node));
   $sku_attributes['gtm-main-sku'] = $product_node->get('field_skus')->first()->getString();
   $sku_attributes['gtm-type'] = 'gtm-remove-cart-wrapper';
   $sku_attributes['gtm-size'] = isset($variables['sku_attributes'], $variables['sku_attributes']['attr_size']) ? $variables['sku_attributes']['attr_size']['value'] : '';

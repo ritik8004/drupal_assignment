@@ -49,6 +49,12 @@
       width: 39.7%;
     }
 
+    @include breakpoint($only-tablet) {
+      &:not(.-has-link) {
+        line-height: 1.9;
+      }
+    }
+
     &.-next {
       color: $greyish;
     }
