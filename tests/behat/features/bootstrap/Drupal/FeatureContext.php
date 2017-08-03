@@ -13,7 +13,10 @@ use Behat\Behat\Context\Context;
  */
 class FeatureContext extends RawDrupalContext implements Context, SnippetAcceptingContext {
 
+  private $quantity;
+
   private $product;
+
   /**
    * Every scenario gets its own context instance.
    *
@@ -424,6 +427,39 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $username = $this->getSession()->getPage()->find('css','h3.my-account-title')->getText();
     if( $username == null ){
       throw new \Exception('Authenticated user could not login. Please check the credentials entered.');
+    }
+  }
+
+  /**
+   * @Given /^I select "([^"]*)" quantity$/
+   */
+  public function iSelectQuantity($quantity) {
+
+    $this->getSession()->getPage()->selectFieldOption('quantity', $quantity);
+    $this->quantity = $quantity;
+  }
+
+  /**
+   * @Then /^I should see a message for the product being added to cart "([^"]*)"$/
+   */
+  public function iShouldSeeAMessageForTheProductBeingAddedToCart($arg1) {
+    $page = $this->getSession()->getPage();
+    $actual = $page->find('css','.col-2')->getText();
+    $expected = $arg1. ' has been added to your basket. view basket';
+    if($actual !== $expected ){
+      throw new \Exception('Product has been added to your cart message is not displayed');
+    }
+  }
+
+  /**
+   * @Then /^I should see a message for the product being added to cart in arabic "([^"]*)"$/
+   */
+  public function iShouldSeeAMessageForTheProductBeingAddedToCartInArabic($arg1) {
+    $page = $this->getSession()->getPage();
+    $actual = $page->find('css','.col-2')->getText();
+    $expected = $arg1. ' تم إضافته إلى سلتك عرض سلة التسوق';
+    if($actual !== $expected){
+      throw new \Exception('On arabic site, product has been added to your cart message is not displayed');
     }
   }
 
