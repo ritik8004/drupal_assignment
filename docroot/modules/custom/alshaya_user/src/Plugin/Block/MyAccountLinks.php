@@ -165,6 +165,19 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
         $options = $activeLinkOptions;
       }
 
+      if (!isset($options['attributes']) && (!isset($options['attributes']['class']))) {
+        $options['attributes'] = [];
+        $options['attributes']['class'] = '';
+      }
+
+      if ($key !== 'my_account') {
+        $link_item_class_name = 'my-account-' . strtolower(str_replace(' ', '-', $link['text']));
+        $options['attributes']['class'] .= ' ' . $link_item_class_name;
+      }
+      else {
+        $link_item_class_name = strtolower(str_replace(' ', '-', $link['text']));
+        $options['attributes']['class'] .= ' ' . $link_item_class_name;
+      }
       $items[$key] = [
         '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)
           ->toString(),

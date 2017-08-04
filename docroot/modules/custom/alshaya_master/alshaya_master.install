@@ -178,7 +178,7 @@ function alshaya_master_install() {
       'ar' => 'الرجاء إدخال معلومات البطاقة',
     ],
     '<p>By registering you agreed to our <a class="final-t&c" href="/terms">Terms and Conditions</a>.</p>' => [
-      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms">الشروط والأحكام</a></p>',
+      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a class="final-t&c" href="/terms">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
