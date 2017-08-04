@@ -86,7 +86,11 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     $currentRoute = \Drupal::routeMatch()->getRouteName();
 
     // Prepare active class options.
-    $activeLinkOptions = ['attributes' => ['class' => 'active']];
+    $activeLinkOptions = [
+      'attributes' => [
+        'class' => ['active'],
+      ],
+    ];
 
     // My account link.
     $links['my_account'] = [
@@ -167,16 +171,16 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
       if (!isset($options['attributes']) && (!isset($options['attributes']['class']))) {
         $options['attributes'] = [];
-        $options['attributes']['class'] = '';
+        $options['attributes']['class'] = [];
       }
 
       if ($key !== 'my_account') {
         $link_item_class_name = 'my-account-' . strtolower(str_replace(' ', '-', $link['text']));
-        $options['attributes']['class'] .= ' ' . $link_item_class_name;
+        $options['attributes']['class'][] = ' ' . $link_item_class_name;
       }
       else {
         $link_item_class_name = strtolower(str_replace(' ', '-', $link['text']));
-        $options['attributes']['class'] .= ' ' . $link_item_class_name;
+        $options['attributes']['class'][] = ' ' . $link_item_class_name;
       }
       $items[$key] = [
         '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)

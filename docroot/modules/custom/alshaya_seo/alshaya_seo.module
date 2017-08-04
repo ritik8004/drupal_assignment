@@ -435,15 +435,10 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
 function alshaya_seo_preprocess_menu(&$variables) {
   if ($variables['menu_name'] === 'account') {
     foreach ($variables['items'] as $key => $item) {
-
-      $my_account_menu_item_options = [
-        'attributes' => [
-          'class' => strtolower(str_replace(' ', '', $item['title'])) . '-link',
-        ],
-      ];
-
+      $my_account_menu_item_options['attributes']['class'] = [];
+      $my_account_menu_item_options['attributes']['class'][] = strtolower(str_replace(' ', '', $item['title'])) . '-link';
       if (Unicode::strcasecmp($item['title'], t('Sign in')) === 0) {
-        $my_account_menu_item_options['attributes']['class'] .= ' gtm-sign-in';
+        $my_account_menu_item_options['attributes']['class'][] = 'gtm-sign-in';
         $my_account_menu_item_options['attributes']['set_active_class'] = 1;
       }
       $variables['items'][$key]['url']->setOptions($my_account_menu_item_options);
@@ -453,7 +448,7 @@ function alshaya_seo_preprocess_menu(&$variables) {
     foreach ($variables['items'] as $key => $item) {
       $footer_url_options = [
         'attributes' => [
-          'class' => 'c-footer-menu__link',
+          'class' => ['c-footer-menu__link'],
         ],
       ];
 
