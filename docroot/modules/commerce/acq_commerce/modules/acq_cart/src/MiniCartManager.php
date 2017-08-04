@@ -33,16 +33,11 @@ class MiniCartManager {
     if (!empty($cart)) {
       $totals = $cart->totals();
 
-      // Remove comma, we will add it later.
-      $totals['grand'] = str_replace(',', '', $totals['grand']);
-
       // The grand total including discounts and taxes.
       $grand_total = $totals['grand'] < 0 || $totals['grand'] == NULL ? 0 : $totals['grand'];
 
       // Deduct shipping.
       if (isset($totals['shipping']) && $grand_total) {
-        // Remove comma, we will add it later.
-        $totals['shipping'] = str_replace(',', '', $totals['shipping']);
         $grand_total -= $totals['shipping'];
       }
 

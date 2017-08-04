@@ -110,6 +110,10 @@ class Cart implements CartInterface {
    */
   public function totals() {
     if (isset($this->cart, $this->cart->totals)) {
+      // Remove the comma coming from Magento, we will add while formatting.
+      foreach ($this->cart->totals as &$value) {
+        $value = str_replace(',', '', $value);
+      }
       return $this->cart->totals;
     }
     return NULL;
