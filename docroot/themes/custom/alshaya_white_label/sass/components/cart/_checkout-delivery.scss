@@ -213,6 +213,7 @@
 
     hr {
       display: block;
+      width: 39%;
       width: calc(50% - 40px);
       margin: 0 10px;
       border: 1px solid $cerulean-two;
@@ -252,10 +253,16 @@
         border-bottom: 0;
         display: inline-block;
         padding: 0.5rem 0;
+        width: 46.81%;
+        width: calc(50% - 14px);
       }
 
       @include breakpoint($only-tablet) {
         width: 46.9%;
+
+        .ucbrowser & {
+          width: 46.81%;
+        }
       }
 
       @include breakpoint($desktop) {
