@@ -1,8 +1,4 @@
 .acq-content-product {
-  .sharethis-wrapper {
-    text-align: $left;
-  }
-
   .special--price .price {
     color: $special-price;
   }
@@ -19,5 +15,22 @@
 
   .cloudzoom__thumbnails__image {
     outline: transparent;
+  }
+}
+
+article[gtm-sku-type="simple"] {
+  .acq-content-product-modal {
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        .form-item.form-type-select.form-item-quantity {
+          float: $left;
+        }
+
+        button.edit-add-to-cart {
+          float: $right;
+          margin-top: 1rem;
+        }
+      }
+    }
   }
 }
