@@ -1355,11 +1355,14 @@
   padding: 0.625rem;
   color: $white-four;
   position: relative;
+  padding-#{$left}: 2.313rem;
 
   @include icon(warning, before) {
     font-size: 1.4rem;
     position: absolute;
     top: 0.3125rem;
+    #{$left}: 0;
+    padding-#{$left}: 0.5625rem;
   }
 
   ul {
