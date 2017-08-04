@@ -854,7 +854,10 @@
         }
 
         &-delivery-time {
-          padding-top: 12px;
+          padding-top: 0.75rem;
+          display: inline-block;
+          float: $left;
+          margin-#{$right}: 1.125rem;
 
           em {
             font-weight: bold;
@@ -867,6 +870,14 @@
           p {
             margin: 0;
           }
+        }
+
+        &-low-stock {
+          font-size: 0.6875rem;
+          font-weight: bold;
+          color: $pumpkin-orange;
+          padding-top: 0.8125rem;
+          display: inline-block;
         }
       }
     }
@@ -1114,6 +1125,7 @@
             font-weight: bold;
             color: $pumpkin-orange;
             float: $right;
+            padding-#{$right}: 0.75rem;
           }
         }
       }
