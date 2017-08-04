@@ -39,6 +39,16 @@
   margin: auto;
   margin-bottom: 2.4rem;
 
+  .js-form-wrapper {
+    @include breakpoint($only-mobile) {
+      position: relative;
+    }
+
+    .size-guide-link {
+      padding-top: 1.2rem;
+    }
+  }
+
   @include breakpoint($tablet) {
     padding: 0 2.75rem;
     margin-#{$left}: 0;
@@ -296,7 +306,7 @@
     }
 
     .select2-container {
-      @include select2-style(12.375rem);
+      @include select2-style(100%);
 
       float: $left;
     }
