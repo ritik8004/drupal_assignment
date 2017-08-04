@@ -61,7 +61,7 @@ switch ($env) {
   case '01test':
     $config['acq_commerce.conductor']['url'] = 'https://alshaya-dev.prod.acm.acquia.io/';
     $config['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $config['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@X$yegNUO';
+    $config['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
 
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
     $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
