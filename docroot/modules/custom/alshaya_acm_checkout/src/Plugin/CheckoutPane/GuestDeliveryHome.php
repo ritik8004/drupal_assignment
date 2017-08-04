@@ -304,18 +304,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         return;
       }
 
-      $customer_cart = $api_wrapper->createCart($customer['customer_id']);
-
-      if (empty($customer_cart['customer_email'])) {
-        $customer_cart['customer_email'] = $email;
-      }
-
-      $cart->convertToCustomerCart($customer_cart);
-      \Drupal::service('acq_cart.cart_storage')->addCart($cart);
-
-      // For cart that is just created and not pushed yet, we don't get the
-      // shipping estimates so need to push here once.
-      $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $cart_storage->associateCart($customer['customer_id'], $email);
     }
 
     if ($form_state->getErrors()) {
