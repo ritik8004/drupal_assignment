@@ -8,7 +8,6 @@
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-
       // Global variables & selectors.
       var impressions = [];
       var body = $('body');
@@ -22,13 +21,20 @@
       var cartCheckoutPaymentSelector = $('body[gtm-container="payment page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container .js-webform-radios', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
+      var registrationFormSelector = $('#user-register-form');
+      var couponCode = $('form.customer-cart-form', context).find('input#edit-coupon').val();
+      var storeFinderFormSelector = $('form#views-exposed-form-stores-finder-page-1');
       var isCCPage = false;
       var isPaymentPage = false;
       var isRegistrationPage = false;
       var isRegistrationSuccessPage = false;
+      var isStoreFinderPage = false;
+      var isProfilePage = false;
+      var isConfirmationPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
       var subListName = '';
+      var leadType = '';
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -62,16 +68,78 @@
       // If we are on registration page.
       if (document.location.pathname === Drupal.url('user/register')) {
         isRegistrationPage = true;
+        leadType = 'registration';
+      }
+
+      if ((/user\/(\d)*\/edit/).test(document.location.pathname)) {
+        isProfilePage = true;
+        leadType = 'my account';
+      }
+
+      if (document.location.pathname === Drupal.url('cart/checkout/confirmation')) {
+        isConfirmationPage = true;
+        leadType = 'confirmation page';
       }
 
       if (document.location.pathname === Drupal.url('user/register/complete')) {
         isRegistrationSuccessPage = true;
       }
 
+      if (document.location.pathname === Drupal.url('store-finder/list')) {
+        isStoreFinderPage = true;
+      }
       if (isRegistrationSuccessPage) {
         Drupal.alshaya_seo_gtm_push_signin_type('registration success');
       }
 
+      /** Track privilege card with registrations. **/
+      registrationFormSelector.find('#edit-submit').click(function() {
+        var privilegeCardNumber = $(this).find('input[data-drupal-selector="edit-privilege-card-number"]').val();
+        var privilegeValidation = $(this).find('.privilege-card-wrapper .form-item--error-message').text();
+
+        if ((privilegeValidation === '') && (privilegeCardNumber !== '6362-544') || (privilegeCardNumber !== '')) {
+          dataLayer.push({
+            'event': 'pcMember',
+            'pcType': 'pc club member'
+          });
+        }
+      });
+
+      /** Track coupon code application. **/
+      if (couponCode) {
+        var couponError = $('.form-item-coupon').find('.form-item--error-message').text();
+        var status = '';
+        if (couponError !== '') {
+          status = 'fail';
+        }
+        else {
+          status = 'pass';
+        }
+
+        dataLayer.push({
+          'event': 'promoCode',
+          'couponCode': couponCode,
+          'couponStatus': status
+        });
+      }
+
+      /** Track store finder clicks. **/
+      if (isStoreFinderPage) {
+        var searchTextBox = storeFinderFormSelector.find('input#edit-geolocation-geocoder-google-places-api');
+        var keyword = searchTextBox.val();
+        if (keyword !== '') {
+          var resultCount = storeFinderFormSelector.find('.list-view-locator').length;
+          Drupal.alshaya_seo_gtm_push_store_finder_search(keyword, 'header', resultCount);
+        }
+      }
+
+      if (isCCPage) {
+        if ($('li.select-store', context).length > 0) {
+          var keyword = $('input#edit-store-location').val();
+          var resultCount = $('li.select-store', context).length;
+          Drupal.alshaya_seo_gtm_push_store_finder_search(keyword, 'checkout', resultCount);
+        }
+      }
       /** Impressions tracking on listing pages with Products. **/
       if ((gtmPageType === 'product detail page') || (gtmPageType === 'cart page')) {
         var count_pdp_items = 1;
@@ -136,10 +204,10 @@
       });
 
       /** Newsletter subscription tracking on Registration page. **/
-      if (isRegistrationPage) {
+      if (isRegistrationPage || isProfilePage || isConfirmationPage) {
         $('input[name="field_subscribe_newsletter[value]"]').change(function() {
           if ($(this).is(':checked')) {
-            Drupal.alshaya_seo_gtm_push_lead_type('registration');
+            Drupal.alshaya_seo_gtm_push_lead_type(leadType);
           }
         });
       }
@@ -675,6 +743,22 @@
    */
   Drupal.alshaya_seo_gtm_push_signin_type = function(signinType) {
     dataLayer.push({'event' : 'User Login & Register', 'signinType' : signinType});
+  };
+
+  /**
+   * Helper function to track store finder search.
+   *
+   * @param keyword
+   * @param location
+   * @param resultCount
+   */
+  Drupal.alshaya_seo_gtm_push_store_finder_search = function(keyword, location, resultCount) {
+    dataLayer.push({
+      'event': 'findStore',
+      'location': location,
+      'keyword': keyword,
+      'noOfResult': resultCount
+    });
   };
 
 })(jQuery, Drupal, dataLayer);

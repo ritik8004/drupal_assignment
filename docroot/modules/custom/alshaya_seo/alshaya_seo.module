@@ -92,7 +92,11 @@ function alshaya_seo_page_attachments(array &$attachments) {
  */
 function alshaya_seo_page_attachments_alter(&$page) {
   // Attach the gtm library on every page.
-  if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
+  // Load GTM library on user edit page as well.
+  $current_route_name = \Drupal::routeMatch()->getRouteName();
+
+  if (!\Drupal::service('router.admin_context')->isAdminRoute() ||
+    ($current_route_name === 'entity.user.edit_form')) {
     $page['#attached']['library'][] = 'alshaya_seo/gtm';
   }
 }
@@ -435,25 +439,20 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
 function alshaya_seo_preprocess_menu(&$variables) {
   if ($variables['menu_name'] === 'account') {
     foreach ($variables['items'] as $key => $item) {
-      if (Unicode::strcasecmp($item['title'], 'Sign in') !== 0) {
-        continue;
+      $my_account_menu_item_options['attributes']['class'] = [];
+      $my_account_menu_item_options['attributes']['class'][] = strtolower(str_replace(' ', '', $item['title'])) . '-link';
+      if (Unicode::strcasecmp($item['title'], t('Sign in')) === 0) {
+        $my_account_menu_item_options['attributes']['class'][] = 'gtm-sign-in';
+        $my_account_menu_item_options['attributes']['set_active_class'] = 1;
       }
-
-      $signin_url_options = [
-        'attributes' => [
-          'class' => 'gtm-sign-in',
-        ],
-        'set_active_class' => 1,
-      ];
-
-      $variables['items'][$key]['url']->setOptions($signin_url_options);
+      $variables['items'][$key]['url']->setOptions($my_account_menu_item_options);
     }
   }
   elseif ($variables['menu_name'] === 'footer') {
     foreach ($variables['items'] as $key => $item) {
       $footer_url_options = [
         'attributes' => [
-          'class' => 'c-footer-menu__link',
+          'class' => ['c-footer-menu__link'],
         ],
       ];
 
