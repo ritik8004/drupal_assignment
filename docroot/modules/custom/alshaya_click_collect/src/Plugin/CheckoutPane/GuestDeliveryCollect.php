@@ -337,14 +337,9 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         return;
       }
 
-      $customer_cart = $api_wrapper->createCart($customer['customer_id']);
-
-      if (empty($customer_cart['customer_email'])) {
-        $customer_cart['customer_email'] = $values['cc_email'];
-      }
-
-      $cart->convertToCustomerCart($customer_cart);
-      \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $cart_storage->associateCart($customer['customer_id'], $values['cc_email']);
     }
 
     $extension = [];
