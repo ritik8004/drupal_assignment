@@ -92,7 +92,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
  */
 function alshaya_seo_page_attachments_alter(&$page) {
   // Attach the gtm library on every page.
-  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+  if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
     $page['#attached']['library'][] = 'alshaya_seo/gtm';
   }
 }
