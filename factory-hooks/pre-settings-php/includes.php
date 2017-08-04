@@ -20,8 +20,14 @@ if (empty($config_directories)) {
 }
 
 // Default credentials.
+// TODO: Security.
 $settings['alshaya_custom_shield_default_user'] = 'alshaya_shield';
 $settings['alshaya_custom_shield_default_pass'] = 'AS_S';
+
+// TODO: Security.
+$settings['alshaya_acm_user_username'] = 'alshaya_acm';
+$settings['alshaya_acm_user_email'] = 'noreply-acm@alshaya.com';
+$settings['alshaya_acm_user_password'] = 'AlShAyA_AcM';
 
 // Conductor settings.
 $env = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_ENV['AH_SITE_ENVIRONMENT'] : 'local';
@@ -29,6 +35,13 @@ $env = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_ENV['AH_SITE_ENVIRONMENT'] : 'loc
 // Set the knet resource path which should be outside GIT root.
 $config['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource/' . $env . '/mckw/';
 $config['alshaya_acm_knet.settings']['use_secure_response_url'] = 0;
+
+// TODO: Security.
+$soauth_key_dir = $env == 'local' ? '/var/www/alshaya/box/' : '/home/alshaya/simple-oauth/' . $env . '/';
+$settings['alshaya_acm_soauth_public_key'] = $soauth_key_dir . 'alshaya_acm.pub';
+$settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . 'alshaya_acm';
+$settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
+$settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
 
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
@@ -46,7 +59,9 @@ switch ($env) {
 
   case '01dev':
   case '01test':
-    $config['acq_commerce.conductor']['url'] = 'https://old.dev.alshaya.acm.acquia.io/';
+    $config['acq_commerce.conductor']['url'] = 'https://alshaya-dev.prod.acm.acquia.io/';
+    $config['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
+    $config['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@X$yegNUO';
 
     $config['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
     $config['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
