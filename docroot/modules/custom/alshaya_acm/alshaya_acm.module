@@ -213,11 +213,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // We need to change the markup for submit button.
     // @see alshaya_white_label_theme_suggestions_input_alter().
     $form['actions']['checkout']['#attributes']['data-twig-suggestion'] = 'secure-checkout';
-    $form['actions']['checkout']['#attributes']['class'][] = 'bottom-edit-checkout';
 
     // Added link markup.
     $form['actions_top']['checkout_top'] = [
-      '#markup' => '<a class="checkout-top-button top-edit-checkout" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
+      '#markup' => '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
     ];
   }
   else {
