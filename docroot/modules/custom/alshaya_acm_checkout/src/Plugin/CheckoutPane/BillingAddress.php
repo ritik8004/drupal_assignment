@@ -199,20 +199,11 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     $shipping_address = (array) $cart->getShipping();
 
     if ($values['same_as_shipping'] == self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
-      // Loading address from address book if customer_address_id is available.
-      if (isset($shipping_address['customer_address_id'])) {
-        if ($entity = $address_book_manager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
-          $shipping_address = $address_book_manager->getAddressFromEntity($entity, FALSE);
-        }
-      }
-
-      $cart->setBilling(_alshaya_acm_checkout_clean_address($shipping_address));
+      alshaya_acm_checkout_set_shipping_into_billing($cart);
     }
     else {
       $address_values = $values['address']['billing'];
-
       $address = _alshaya_acm_checkout_clean_address($address_book_manager->getMagentoAddressFromAddressArray($address_values));
-
       $cart->setBilling($address);
     }
   }
