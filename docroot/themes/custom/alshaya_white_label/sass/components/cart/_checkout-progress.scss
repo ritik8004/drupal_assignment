@@ -52,7 +52,7 @@
     @include breakpoint($only-tablet) {
       &:not(.-has-link) {
         .safari & {
-          line-height: 2.0;
+          line-height: 2;
         }
       }
     }
