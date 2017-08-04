@@ -205,11 +205,19 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         '#submit' => ['::submitForm'],
       ];
 
+      if ($next_step_id === 'confirmation') {
+        $actions['next']['#attribtues']['class'][] = 'payment-place-order';
+      }
+
       if ($has_previous_step) {
         $label = $steps[$previous_step_id]['previous_label'];
-        $actions['next']['#suffix'] = Link::createFromRoute($label, 'acq_checkout.form', [
-          'step' => $previous_step_id,
-        ])->toString();
+
+        if ($previous_step_id === 'delivery') {
+          $checkout_next_link_options['attributes']['class'] = 'payment-return-to-delivery';
+        }
+
+        $checkout_next_link = Link::createFromRoute($label, 'acq_checkout.form', ['step' => $previous_step_id], $checkout_next_link_options)->toString();
+        $actions['next']['#suffix'] = $checkout_next_link;
       }
     }
 
