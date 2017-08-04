@@ -259,10 +259,6 @@
 
       @include breakpoint($only-tablet) {
         width: 46.9%;
-
-        .ucbrowser & {
-          width: 46.81%;
-        }
       }
 
       @include breakpoint($desktop) {
