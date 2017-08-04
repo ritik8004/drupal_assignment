@@ -813,15 +813,15 @@
   }
 
   @include icon(warning, after) {
-    background-size: 12px;
-    font-size: 28px;
+    background-size: 0.75rem;
+    font-size: 1.75rem;
     position: absolute;
-    left: 11px;
-    top: 24px;
+    #{$left}: 0.6875rem;
+    top: 1.5rem;
 
     @include breakpoint($tablet) {
-      left: 23px;
-      top: 10px;
+      #{$left}: 1.438rem;
+      top: 0.625rem;
     }
   }
 }
