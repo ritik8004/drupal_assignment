@@ -29,9 +29,12 @@
       var isRegistrationPage = false;
       var isRegistrationSuccessPage = false;
       var isStoreFinderPage = false;
+      var isProfilePage = false;
+      var isConfirmationPage = false;
       var originalCartQty = 0;
       var updatedCartQty = 0;
       var subListName = '';
+      var leadType = '';
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -65,6 +68,17 @@
       // If we are on registration page.
       if (document.location.pathname === Drupal.url('user/register')) {
         isRegistrationPage = true;
+        leadType = 'registration';
+      }
+
+      if ((/user\/(\d)*\/edit/).test(document.location.pathname)) {
+        isProfilePage = true;
+        leadType = 'my account';
+      }
+
+      if (document.location.pathname === Drupal.url('cart/checkout/confirmation')) {
+        isConfirmationPage = true;
+        leadType = 'confirmation page';
       }
 
       if (document.location.pathname === Drupal.url('user/register/complete')) {
@@ -190,10 +204,10 @@
       });
 
       /** Newsletter subscription tracking on Registration page. **/
-      if (isRegistrationPage) {
+      if (isRegistrationPage || isProfilePage || isConfirmationPage) {
         $('input[name="field_subscribe_newsletter[value]"]').change(function() {
           if ($(this).is(':checked')) {
-            Drupal.alshaya_seo_gtm_push_lead_type('registration');
+            Drupal.alshaya_seo_gtm_push_lead_type(leadType);
           }
         });
       }
