@@ -4,7 +4,7 @@
   }
 
   .special--price .price {
-    color: $scarlet;
+    color: $special-price;
   }
 
   .form-item-configurables-size .selected-text {
@@ -14,16 +14,6 @@
   .content__title_wrapper {
     html[lang=ar] & {
       line-height: 1.5;
-    }
-  }
-
-  .size-guide-link {
-    @include breakpoint($tablet) {
-      margin-#{$right}: 6.5rem;
-
-      html[lang=ar] & {
-        margin-#{$right}: 5.5rem;
-      }
     }
   }
 

@@ -1,0 +1,7 @@
+<div class="labels-container" data-type="{{ type }}" data-sku="{{ sku }}" data-main-sku="{{ mainsku }}">
+  {% for label in labels %}
+    <div class="label {{ label.position }}">
+      {{ label.image }}
+    </div>
+  {% endfor %}
+</div>

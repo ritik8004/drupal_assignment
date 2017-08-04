@@ -34,10 +34,10 @@
           {% endtrans %}
         </div>
 
-        {% if account.privilege_card_number %}
+        {% if order.loyaltyCard %}
           <div>
             {% trans %}
-            <p>Your Privileges Card Number is: <strong class="dark--text">{{ account.privilege_card_number }}</strong></p>
+            <p>Your Privileges Card Number is: <strong class="dark--text">{{ order.loyaltyCard }}</strong></p>
             {% endtrans %}
           </div>
         {% endif %}
@@ -61,7 +61,7 @@
     </div>
 
     <div class="order-print-button">
-      <a class="final-print-confirmation" href="{{ print_link }}" target="_blank">{{ "print confirmation"|t }}</a>
+      <a href="{{ print_link }}" target="_blank">{{ "print confirmation"|t }}</a>
     </div>
 
   </div>
@@ -150,7 +150,7 @@
 
       <tr class="collapse-row continue--shopping--mobile">
       <td colspan="2">
-        <a class="final-continue-shopping" href="{{ url('<front>') }}">{{ 'Continue shopping'|t }}</a>
+        <a href="{{ url('<front>') }}">{{ 'Continue shopping'|t }}</a>
         </td>
       </tr>
 

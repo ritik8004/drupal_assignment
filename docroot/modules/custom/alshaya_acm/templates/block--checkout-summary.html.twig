@@ -1,7 +1,7 @@
 <div class="acq-cart-summary">
   <div class="caption">
     <span class="title">{% trans %} Order Summary {% endtrans %}</span>
-    <a class="edit-order-summary" id="checkout-edit-os" href="{{ cart_link }}">{% trans %} Edit {% endtrans %}</a>
+    <a href="{{ cart_link }}">{% trans %} Edit {% endtrans %}</a>
   </div>
   <div class="content">
     <div class="content-head">{% trans %} Items in your basket {% endtrans %} ({{ number_of_items }})</div>
@@ -71,7 +71,7 @@
 
   {% if delivery %}
   <div class="delivery-type">
-    {{ delivery.label }} <a class="change-delivery" id="checkout-edit-delivery" href="{{ delivery.url }}">{% trans %}Change{% endtrans %}</a>
+    {{ delivery.label }} <a href="{{ delivery.url }}">{% trans %}Change{% endtrans %}</a>
     <div class="method">
       {{ delivery.method_name }}
       <br />
@@ -80,7 +80,7 @@
   </div>
 
   <div class="address">
-    {{ delivery.address_label }} <a class="edit-delivery-address" id="checkout-edit-da" href="{{ delivery.url }}">{% trans %}Edit{% endtrans %}</a>
+    {{ delivery.address_label }} <a href="{{ delivery.url }}">{% trans %}Edit{% endtrans %}</a>
     <div class="delivery-address">{{ delivery.address|raw }}</div>
   </div>
   {% endif %}

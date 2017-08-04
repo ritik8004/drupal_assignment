@@ -91,7 +91,7 @@
       {% endif %}
 
       <tr class="order-details-row">
-        <td>
+        <td class="order__user--info">
           {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ 'Collection Address'|t }}</div>
             <div class="store-name-and-address">
@@ -117,7 +117,7 @@
             <div class="dark">{{ order_details.payment_method }}</div>
           </div>
         </td>
-        <td>
+        <td class="order__delivery-details">
           {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ 'Collection times'|t }}</div>
             <div>

@@ -13,6 +13,10 @@ use Behat\Behat\Context\Context;
  */
 class FeatureContext extends RawDrupalContext implements Context, SnippetAcceptingContext {
 
+  private $quantity;
+
+  private $product;
+
   /**
    * Every scenario gets its own context instance.
    *
@@ -128,23 +132,89 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
         $this->getSession()->getPage()->fillField("edit-email",$email_id);
     }
 
-    /**
-     * @Then /^I should see Search results page for "([^"]*)"$/
-     */
-    public function iShouldSeeSearchResultsPageFor($arg1) {
-        $page = $this->getSession()->getPage();
-        $page->hasContent("search results for ".$arg1);
+  /**
+   * @Then /^I should see Search results page for "([^"]*)"$/
+   */
+  public function iShouldSeeSearchResultsPageFor($arg1) {
+    $page = $this->getSession()->getPage();
+    $page->hasContent("search results for " . $arg1);
 
-        $expected_text = $arg1;
-        $all_items = $page->findAll('css','.c-content__region .region__content');
-        foreach ($all_items as $item){
-            $actual_text = $page->find('css','h2.field--name-name')->getText();
+    $expected_text = explode(' ', $arg1);
+    $actual_text = $page->findAll('css', 'h2.field--name-name');
+    $flag = FALSE;
 
-            if (stripos($actual_text, $expected_text) == false){
-                throw new \Exception('Search results are incorrect');
-            }
+    if (!empty($actual_text)) {
+      foreach ($actual_text as $text) {
+        $actual_values1 = $text->find('css', 'a')->getText();
+        foreach ($expected_text as $a) {
+          if (stripos($actual_values1, $a) !== FALSE) {
+            $flag = TRUE;
+          }
         }
+        if (!$flag) {
+          throw new \Exception('Search results are not correct');
+        }
+      }
     }
+
+    else {
+      echo 'Search passed. But, Search term did not yield any results';
+    }
+  }
+
+  /**
+   * @Then /^I should see Search results page in Arabic for "([^"]*)"$/
+   */
+  public function iShouldSeeSearchResultsPageInArabicFor($arg1) {
+
+    $page = $this->getSession()->getPage();
+    $page->hasContent("نتائج البحث عن " . $arg1);
+
+    $expected_text = explode(' ', $arg1);
+    $actual_text = $page->findAll('css', 'h2.field--name-name');
+    $flag = FALSE;
+
+    if (!empty($actual_text)) {
+      foreach ($actual_text as $text) {
+        $actual_values1 = $text->find('css', 'a')->getText();
+        foreach ($expected_text as $a) {
+          if (stripos($actual_values1, $a) !== FALSE) {
+            $flag = TRUE;
+          }
+        }
+        if (!$flag) {
+          throw new \Exception('Search results are not correct');
+        }
+      }
+    }
+
+    else {
+      echo 'Search passed. But, Search term did not yield any results';
+    }
+  }
+
+  /**
+   * @Given /^I select a product$/
+   */
+  public function iSelectAProduct() {
+
+    $page = $this->getSession()->getPage();
+    $this->product = $page->find('css', 'h2.field--name-name')->getText();
+    $page->clickLink($this->product);
+  }
+
+
+  /**
+   * @Then /^I should be able to view the product in the basket$/
+   */
+  public function iShouldBeAbleToViewTheProductInTheBasket() {
+
+    $page = $this->getSession()->getPage();
+    if ($page->hasLink($this->product) == FALSE) {
+
+      throw new \Exception('Product not found in the basket');
+    };
+  }
 
     /**
      * @Given /^the url should be correct "([^"]*)"$/
@@ -359,4 +429,38 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       throw new \Exception('Authenticated user could not login. Please check the credentials entered.');
     }
   }
+
+  /**
+   * @Given /^I select "([^"]*)" quantity$/
+   */
+  public function iSelectQuantity($quantity) {
+
+    $this->getSession()->getPage()->selectFieldOption('quantity', $quantity);
+    $this->quantity = $quantity;
+  }
+
+  /**
+   * @Then /^I should see a message for the product being added to cart "([^"]*)"$/
+   */
+  public function iShouldSeeAMessageForTheProductBeingAddedToCart($arg1) {
+    $page = $this->getSession()->getPage();
+    $actual = $page->find('css','.col-2')->getText();
+    $expected = $arg1. ' has been added to your basket. view basket';
+    if($actual !== $expected ){
+      throw new \Exception('Product has been added to your cart message is not displayed');
+    }
+  }
+
+  /**
+   * @Then /^I should see a message for the product being added to cart in arabic "([^"]*)"$/
+   */
+  public function iShouldSeeAMessageForTheProductBeingAddedToCartInArabic($arg1) {
+    $page = $this->getSession()->getPage();
+    $actual = $page->find('css','.col-2')->getText();
+    $expected = $arg1. ' تم إضافته إلى سلتك عرض سلة التسوق';
+    if($actual !== $expected){
+      throw new \Exception('On arabic site, product has been added to your cart message is not displayed');
+    }
+  }
+
 }

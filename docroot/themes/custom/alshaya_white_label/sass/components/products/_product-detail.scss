@@ -162,8 +162,6 @@
   }
 
   .form-item-configurables-size {
-    clear: both;
-
     label {
       @include u-visibility(none);
     }
@@ -244,8 +242,12 @@
     }
   }
 
-  #configurable_ajax h2.field--name-name {
-    @include u-visibility(none);
+  #configurable_ajax {
+    position: relative;
+
+    h2.field--name-name {
+      @include u-visibility(none);
+    }
   }
 
   .form-item.form-type-select.form-item-quantity {
@@ -852,7 +854,10 @@
         }
 
         &-delivery-time {
-          padding-top: 12px;
+          padding-top: 0.75rem;
+          display: inline-block;
+          float: $left;
+          margin-#{$right}: 1.125rem;
 
           em {
             font-weight: bold;
@@ -865,6 +870,14 @@
           p {
             margin: 0;
           }
+        }
+
+        &-low-stock {
+          font-size: 0.6875rem;
+          font-weight: bold;
+          color: $pumpkin-orange;
+          padding-top: 0.8125rem;
+          display: inline-block;
         }
       }
     }
@@ -1112,6 +1125,7 @@
             font-weight: bold;
             color: $pumpkin-orange;
             float: $right;
+            padding-#{$right}: 0.75rem;
           }
         }
       }
@@ -1348,21 +1362,37 @@
   }
 }
 
-.errors-container .error {
-  background: $cherry;
-  padding: 0.625rem;
-  color: $white-four;
-  position: relative;
+.errors-container {
+  margin-top: 0.5rem;
 
-  @include icon(warning, before) {
-    font-size: 1.4rem;
-    position: absolute;
-    top: 0.3125rem;
+  @include breakpoint($upto-desktop) {
+    width: 100% !important;
   }
 
-  ul {
-    margin: 0;
-    list-style: none;
+  @include breakpoint($only-mobile) {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .error {
+    background: $cherry;
+    padding: 0.625rem;
+    color: $white-four;
+    position: relative;
+    padding-#{$left}: 2.313rem;
+
+    @include icon(warning, before) {
+      font-size: 1.4rem;
+      position: absolute;
+      top: 0.3125rem;
+      #{$left}: 0;
+      padding-#{$left}: 0.5625rem;
+    }
+
+    ul {
+      margin: 0;
+      list-style: none;
+    }
   }
 }
 

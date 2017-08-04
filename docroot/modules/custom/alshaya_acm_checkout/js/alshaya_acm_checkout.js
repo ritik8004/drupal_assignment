@@ -2,11 +2,6 @@
   'use strict';
 
   /**
-   * @namespace
-   */
-  Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
-
-  /**
    * All custom js for checkout flow.
    *
    * @type {Drupal~behavior}
@@ -60,13 +55,8 @@
       });
 
       // Show/hide fields based on availability of shipping methods.
-      if ($('#shipping_methods_wrapper').length) {
-        var noError = true;
-        if (typeof drupalSettings.alshaya_checkout_address !== 'undefined') {
-          noError = !drupalSettings.alshaya_checkout_address.error;
-        }
-
-        if ($('#shipping_methods_wrapper input:radio').length > 0 && noError) {
+      $('#shipping_methods_wrapper').once('bind-events').each(function () {
+        if ($('#shipping_methods_wrapper input:radio').length > 0) {
           $('#shipping_methods_wrapper fieldset').show();
           $('[data-drupal-selector="edit-actions-get-shipping-methods"]').hide();
           $('[data-drupal-selector="edit-actions-next"]').show();
@@ -87,7 +77,7 @@
           $('#shipping_methods_wrapper').hide();
           $('.address-book-address').show();
         }
-      }
+      });
 
       $('#change-address').once('bind-events').each(function () {
         $('#add-address-button').hide();
@@ -126,8 +116,10 @@
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val('');
-          // Init Mobile number prefix js.
+
+          // Reset Mobile number prefix js.
           Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'));
+
           // Show the form.
           $('#address-book-form-wrapper').slideDown();
         });
@@ -173,7 +165,7 @@
 
       // Re-bind client side validations for billing address after form is updated.
       $('[data-drupal-selector="edit-billing-address-address-billing-given-name"]').once('bind-events').each(function () {
-        Drupal.behaviors.cvJqueryValidate.attach(jQuery('#block-alshaya-white-label-content'));
+        Drupal.behaviors.cvJqueryValidate.attach($('#block-alshaya-white-label-content'));
       });
 
       // Show the form by default if user has no address saved in address book.
@@ -199,19 +191,12 @@
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val(data.address_line1);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val(data.dependent_locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val(data.address_line2);
+
     // Init Mobile number prefix js.
     Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'), data.mobile);
+
     // Show the form.
     $('#address-book-form-wrapper').slideDown();
-  };
-
-  // Ajax command to show shipping options and selected address for guest.
-  $.fn.guestShowShippingMethods = function (data) {
-    $('#shipping_address_form_wrapper').slideUp();
-    $('#selected-address-wrapper').slideDown();
-    $('#shipping_methods_wrapper').slideDown();
-    $('[data-drupal-selector="edit-actions-get-shipping-methods"]').hide();
-    $('[data-drupal-selector="edit-actions-next"]').show();
   };
 
 })(jQuery, Drupal);

@@ -213,11 +213,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     // We need to change the markup for submit button.
     // @see alshaya_white_label_theme_suggestions_input_alter().
     $form['actions']['checkout']['#attributes']['data-twig-suggestion'] = 'secure-checkout';
-    $form['actions']['checkout']['#attributes']['class'][] = 'bottom-edit-checkout';
 
     // Added link markup.
     $form['actions_top']['checkout_top'] = [
-      '#markup' => '<a class="checkout-top-button top-edit-checkout" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
+      '#markup' => '<a class="checkout-top-button" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
     ];
   }
   else {
@@ -499,6 +498,9 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
  *   Return rendered theme with html for price.
  */
 function alshaya_acm_price_format($price, $promotions = []) {
+  // Remove the comma coming from Magento, we will add while formatting.
+  $price = str_replace(',', '', $price);
+
   $output = [
     '#theme' => 'acq_commerce_price',
     '#price' => $price,
@@ -770,13 +772,24 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   // Load the first image.
   $sku_image = alshaya_acm_get_product_display_image($sku_entity, '137x144');
 
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
+  $total_price = [
+    '#theme' => 'acq_commerce_price',
+    '#price' => $item_cart_price['price'] * $item['quantity']['#default_value'],
+  ];
+  if (!empty($item_cart_price['discount'])) {
+    $total_price['#discount'] = $item_cart_price['discount'];
+    $total_price['#final_price'] = $item_cart_price['final_price'] * $item['quantity']['#default_value'];
+  }
+
   return [
     '#theme' => 'alshaya_cart_product_name',
     '#sku_attributes' => $sku_attributes,
     '#name' => $name,
     '#promotions' => $promotions,
     '#image' => $sku_image,
-    '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item['price']),
+    '#total_price' => $total_price,
     '#item_code' => $sku_entity->getSku(),
   ];
 }

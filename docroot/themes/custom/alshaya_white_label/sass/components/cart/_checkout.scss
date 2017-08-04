@@ -447,6 +447,10 @@
       display: inline-block;
       width: 60%;
 
+      html[lanng=ar] & {
+        width: 59%;
+      }
+
       @include breakpoint($upto-desktop) {
         width: 55%;
       }
