@@ -221,13 +221,15 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $shipping_method_code = $checkoutOptionsManager->getCleanShippingMethodCode($order['shipping']['method']['carrier_code']);
   $shippingTerm = $checkoutOptionsManager->loadShippingMethod($shipping_method_code);
-  $orderDetails['delivery_method'] = $shippingTerm->getName();
+
   $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
 
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
   if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $orderDetails['type'] = 'cc';
+
+    $orderDetails['delivery_method'] = $shippingTerm->getName();
 
     $shipping_assignment = reset($order['extension']['shipping_assignments']);
     $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
@@ -249,6 +251,12 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   }
   else {
     $orderDetails['type'] = 'hd';
+
+    $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
+      '@shipping_method_name' => $shippingTerm->getName(),
+      '@shipping_method_description' => $shippingTerm->get('field_shipping_method_cart_desc')->getString(),
+    ]);
+
     $shipping_address = $order['shipping']['address'];
 
     // Loading address from address book if customer_address_id is available.
