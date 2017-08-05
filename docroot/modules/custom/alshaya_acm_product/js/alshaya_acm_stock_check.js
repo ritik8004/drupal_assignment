@@ -41,7 +41,13 @@
               $wrapper.html(result.html);
               // Add class to share this wrapper if product out of stock.
               if (result.max_quantity <= 0) {
-                $wrapper.closest('article[data-vmode="full"]').find('sharethis-wrapper').addClass('out-of-stock');
+                var $article = $wrapper.closest('article[data-vmode="full"]');
+                $article.find('sharethis-wrapper').addClass('out-of-stock');
+                // @TODO: It would be better to use event dispatcher on stock check.
+                $article.find('#pdp-stores-container.click-collect').accordion('option', 'active', false);
+                $article.find('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
+                $article.find('.home-delivery').accordion('option', 'active', false);
+                $article.find('.home-delivery').accordion('option', 'disabled', true);
               }
               Drupal.attachBehaviors($wrapper[0]);
               Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
