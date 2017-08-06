@@ -447,6 +447,10 @@
       font-family: $alshaya-bold;
       font-weight: normal;
       color: $marine-blue;
+
+      &.disabled {
+        opacity: 0.4;
+      }
     }
   }
 

@@ -44,10 +44,9 @@
                 var $article = $wrapper.closest('article[data-vmode="full"]');
                 $article.find('sharethis-wrapper').addClass('out-of-stock');
                 // @TODO: It would be better to use event dispatcher on stock check.
-                $article.find('#pdp-stores-container.click-collect').accordion('option', 'active', false);
-                $article.find('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
-                $article.find('.home-delivery').accordion('option', 'active', false);
-                $article.find('.home-delivery').accordion('option', 'disabled', true);
+                $article.find('.delivery-options-wrapper > h2.field__label').addClass('disabled');
+                $article.find('.click-collect').accordion('option', {active: false, disabled: true});
+                $article.find('.home-delivery').accordion('option', {active: false, disabled: true});
               }
               Drupal.attachBehaviors($wrapper[0]);
               Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
