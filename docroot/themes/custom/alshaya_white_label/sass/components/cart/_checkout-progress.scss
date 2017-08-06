@@ -64,6 +64,10 @@
 
     &.-has-link {
       padding: 0.375rem 0;
+
+      .ucbrowser & {
+        line-height: 1.35;
+      }
     }
 
     &.-complete.-previous.-has-link a {
