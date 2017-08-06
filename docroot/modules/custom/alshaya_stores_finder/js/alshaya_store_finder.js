@@ -18,7 +18,7 @@
     attach: function (context, settings) {
 
       // Opening hours toggle.
-      $('[data-drupal-selector^="views-form-stores-finder-"]', context).on('click', '.hours--label', function () {
+      $('[data-drupal-selector^="views-form-stores-finder-"]', context).once('opening-hrs-init').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
 
@@ -31,12 +31,11 @@
         Drupal.alshaya_stores_finder.paginateStores(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit);
       }
 
-      $('.view-stores-finder .list-view-locator').on('click', function () {
-        // Get all elements having 'selected' class and then remove class.
-        $(this).siblings('.list-view-locator').removeClass('selected');
-
-        // Add class to parent for making it active.
-        $(this).addClass('selected');
+      $('.view-stores-finder .list-view-locator', context).once('marker-trigger').on('click', function () {
+        // Add class for making it active and remove 'selected' class from all siblings.
+        $(this)
+          .addClass('selected')
+          .siblings('.list-view-locator').removeClass('selected');
 
         // Id of the row.
         var elementID = $(this).find('.set-center-location').attr('id');
@@ -75,7 +74,7 @@
         });
       });
 
-      $('.current-location').on('click', function () {
+      $('.current-location').once('location-init').on('click', function () {
         // Start overlay here.
         $('body').addClass('modal-overlay--spinner');
 
