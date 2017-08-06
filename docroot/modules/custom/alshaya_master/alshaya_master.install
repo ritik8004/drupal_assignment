@@ -651,7 +651,7 @@ function alshaya_master_install() {
       'ar' => 'اطبع التأكيد',
     ],
     'Your order number is <strong>@order.orderId</strong>' => [
-      'ar' => 'رقم طلبيتك هو: <strong>@order.orderId</strong>',
+      'ar' => 'رقم طلبيتك هو <strong>@order.orderId</strong>',
     ],
     'order details' => [
       'ar' => 'تفاصيل الطلبية',
