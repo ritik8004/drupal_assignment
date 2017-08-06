@@ -51,7 +51,8 @@
 
     @include breakpoint($only-tablet) {
       &:not(.-has-link) {
-        .safari & {
+        .safari &,
+        .ucbrowser & {
           line-height: 2;
         }
       }
