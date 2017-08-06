@@ -39,20 +39,6 @@
           }
         }
       });
-      $('.other-stores-link').on('click', function () {
-        if ($(window).width() < 768) {
-          $('html,body').animate({
-            scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
-          }, 'slow');
-        }
-        else {
-          if ($('body').hasClass('header--fixed')) {
-            $('html,body').animate({
-              scrollTop: $('.content__title_wrapper').offset().top - normalStickyHeaderHeight
-            }, 'slow');
-          }
-        }
-      });
 
       // Scrolling the page to top if edit address is clicked.
       $('.address .address--edit a').on('click', function () {
