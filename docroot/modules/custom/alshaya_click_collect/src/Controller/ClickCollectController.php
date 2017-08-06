@@ -70,6 +70,7 @@ class ClickCollectController extends ControllerBase {
     $this->configFactory = $config_factory;
     $this->cartStorage = $cart_storage;
     $this->entityManager = $entity_manager;
+    $this->logger = $this->getLogger('alshaya_click_collect');
   }
 
   /**
@@ -103,27 +104,39 @@ class ClickCollectController extends ControllerBase {
     // Get the stores from Magento.
     /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
     $api_wrapper = \Drupal::service('alshaya_api.api');
-    $stores = $api_wrapper->getCartStores($cart_id, $lat, $lon);
 
-    $config = $this->configFactory->get('alshaya_click_collect.settings');
-    // Add missing information to store data.
-    array_walk($stores, function (&$store) use ($config) {
-      $store['rnc_available'] = (int) $store['rnc_available'];
-      $store['sts_available'] = (int) $store['sts_available'];
-
+    if ($stores = $api_wrapper->getCartStores($cart_id, $lat, $lon)) {
+      /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
-      $extra_data = $store_utility->getStoreExtraData($store);
 
-      if (!empty($extra_data)) {
-        $store = array_merge($store, $extra_data);
+      $config = $this->configFactory->get('alshaya_click_collect.settings');
 
-        if (!empty($store['rnc_available'])) {
-          $store['delivery_time'] = $config->get('click_collect_rnc');
+      foreach ($stores as $index => &$store) {
+        $store['rnc_available'] = (int) $store['rnc_available'];
+        $store['sts_available'] = (int) $store['sts_available'];
+
+        if ($extra_data = $store_utility->getStoreExtraData($store)) {
+          $store = array_merge($store, $extra_data);
+
+          if (!empty($store['rnc_available'])) {
+            $store['delivery_time'] = $config->get('click_collect_rnc');
+          }
+        }
+        else {
+          // We don't display the stores which are not in our system.
+          unset($stores[$index]);
+
+          // Log into Drupal for admins to check and take required action.
+          $this->logger->warning('Received a store in Cart Stores API response which is not yet available in Drupal. Store code: %store_code', [
+            '%store_code' => $store['code'],
+          ]);
         }
       }
-    });
 
-    return $stores;
+      return $stores;
+    }
+
+    return [];
   }
 
   /**

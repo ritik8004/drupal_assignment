@@ -110,6 +110,20 @@ body.ucbrowser {
       }
     }
   }
+
+  .page-standard.user-page.checkout-delivery {
+    #edit-delivery-tabs {
+      @include breakpoint($only-tablet) {
+        .tab {
+          width: 46.81%;
+        }
+
+        .tab-separator {
+          width: 6.2% !important;
+        }
+      }
+    }
+  }
 }
 
 #text-resize-control {

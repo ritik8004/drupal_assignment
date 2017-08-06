@@ -13,17 +13,27 @@
    */
   Drupal.behaviors.checkoutCybersource = {
     attach: function (context, settings) {
-
       // Bind this only once after every ajax call.
       $('.cybersource-credit-card-input').once('bind-events').each(function () {
-        // Update the validate settings to use custom submit handler.
-        $('.cybersource-credit-card-input').parents('form').data('submit-handler', 'cybersource_form_submit_handler');
-        Drupal.cvValidatorObjects[$('.cybersource-credit-card-input').parents('form').attr('id')].destroy();
-        Drupal.behaviors.cvJqueryValidate.attach('body');
+        var form = $('.cybersource-credit-card-input').closest('form');
 
+        if (form.data('submit-handler') !== 'cybersource_form_submit_handler') {
+          try {
+            // Update the validate settings to use custom submit handler.
+            form.data('submit-handler', 'cybersource_form_submit_handler');
+
+            // We try to update the submit handler here.
+            Drupal.cvValidatorObjects[form.attr('id')].settings['submitHandler'] = cybersource_form_submit_handler;
+          }
+          catch (e) {
+            // If any error comes we reload the page.
+            // JS is very critical for cybersource to work.
+            window.location.reload();
+          }
+        }
 
         $(this).validateCreditCard(function (result) {
-          // Reset the card type ever-time.
+          // Reset the card type every-time.
           $('.cybersource-credit-card-type-input').val('');
 
           // Check if we have card_type.
@@ -109,8 +119,8 @@ function cybersource_form_submit_handler(form) {
   }
 
   // Sanity check - expiry must be in future.
-  var card_expiry_date_month = parseInt($('.cybersource-credit-card-exp-month-select option:selected').val().toString().trim());
-  var card_expiry_date_year = parseInt($('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim());
+  var card_expiry_date_month = $('.cybersource-credit-card-exp-month-select option:selected').val().toString().trim();
+  var card_expiry_date_year = $('.cybersource-credit-card-exp-year-select option:selected').val().toString().trim();
 
   var card_expiry_date = card_expiry_date_month + '-' + card_expiry_date_year;
 

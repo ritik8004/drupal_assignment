@@ -213,6 +213,7 @@
 
     hr {
       display: block;
+      width: 39%;
       width: calc(50% - 40px);
       margin: 0 10px;
       border: 1px solid $cerulean-two;
@@ -227,7 +228,12 @@
       }
     }
 
-    .tab-click-collect:hover ~ hr,
+    .tab-click-collect:hover ~ hr {
+      .no-touchevents & {
+        margin-#{$left}: 55.5%;
+      }
+    }
+
     .tab-click-collect.active--tab--head ~ hr {
       margin-#{$left}: 55.5%;
     }
@@ -247,12 +253,17 @@
         border-bottom: 0;
         display: inline-block;
         padding: 0.5rem 0;
+        width: 46.81%;
         width: calc(50% - 14px);
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 46.9%;
       }
 
       @include breakpoint($desktop) {
         padding: 1.0625rem 0;
-        width: calc(50% - 28px);
+        width: 47.05%;
       }
 
       @include breakpoint($only-tablet) {
@@ -344,14 +355,14 @@
     .tab-separator {
       border: none;
       pointer-events: none;
+      color: $grey-ash;
 
       @include breakpoint($tablet) {
-        width: 1.75rem;
+        width: 6.2%;
       }
 
       @include breakpoint($desktop) {
-        width: 3.4rem;
-        margin: 2px;
+        width: 6.2%;
       }
     }
 
@@ -512,7 +523,7 @@
 }
 
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
-.shipping-methods-container {
+#shipping_methods_wrapper fieldset.shipping-methods-container {
   display: block;
 
   @include breakpoint($tablet) {

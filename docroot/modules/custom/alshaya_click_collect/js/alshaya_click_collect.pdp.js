@@ -86,6 +86,9 @@
             }, 'slow');
           });
         }
+        else {
+          $('.click-collect-all-stores').toggle('slow');
+        }
       });
 
       $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-location-link, .search-stores-button, .cancel-change-location', function (e) {

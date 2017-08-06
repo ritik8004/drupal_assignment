@@ -177,8 +177,8 @@ function alshaya_master_install() {
     'enter card details' => [
       'ar' => 'الرجاء إدخال معلومات البطاقة',
     ],
-    '<p>By registering you agreed to our <a href="/terms">Terms and Conditions</a>.</p>' => [
-      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms">الشروط والأحكام</a></p>',
+    '<p>By registering you agreed to our <a class="final-t&c" href="/terms">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a class="final-t&c" href="/terms">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
@@ -651,7 +651,7 @@ function alshaya_master_install() {
       'ar' => 'اطبع التأكيد',
     ],
     'Your order number is <strong>@order.orderId</strong>' => [
-      'ar' => 'رقم طلبيتك هو: <strong>@order.orderId</strong>',
+      'ar' => 'رقم طلبيتك هو <strong>@order.orderId</strong>',
     ],
     'order details' => [
       'ar' => 'تفاصيل الطلبية',
@@ -996,6 +996,12 @@ function alshaya_master_install() {
     ],
     'Sorry Collect your order in-store is unavailable' => [
       'ar' => 'عفواً، خدمة استلم طلبيتك من المحل غير متوفرة',
+    ],
+    'delivery option' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Collection Store' => [
+      'ar' => 'محل الاستلام',
     ],
   ];
   alshaya_i18n_save_translations($strings);
