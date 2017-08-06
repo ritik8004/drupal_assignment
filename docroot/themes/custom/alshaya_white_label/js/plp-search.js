@@ -166,7 +166,7 @@
           searchCount.removeClass('only-mobile');
           if (viewHeader.length) {
             searchCount.remove();
-            viewHeader.insertBefore(filterSelector);
+            viewHeader.insertBefore(selector);
           }
           searchCount.addClass('tablet');
         }
