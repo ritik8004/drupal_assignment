@@ -111,7 +111,7 @@ body.ucbrowser {
     }
   }
 
-  &.page-standard.user-page.checkout-delivery {
+  .page-standard.user-page.checkout-delivery {
     #edit-delivery-tabs {
       @include breakpoint($only-tablet) {
         .tab {
@@ -119,7 +119,7 @@ body.ucbrowser {
         }
 
         .tab-separator {
-          width: 6.2%;
+          width: 6.2% !important;
         }
       }
     }
