@@ -31,17 +31,15 @@
         Drupal.alshaya_stores_finder.paginateStores(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit);
       }
 
-      $('.set-center-location .views-field-field-store-address').on('click', function () {
+      $('.view-stores-finder .list-view-locator').on('click', function () {
         // Get all elements having 'selected' class and then remove class.
-        var active_stores = $('.list-view-locator.selected');
-        if (active_stores.length > 0) {
-          active_stores.removeClass('selected');
-        }
+        $(this).siblings('.list-view-locator').removeClass('selected');
+
         // Add class to parent for making it active.
-        $(this).parents('.list-view-locator').addClass('selected');
+        $(this).addClass('selected');
 
         // Id of the row.
-        var elementID = $(this).parents('.set-center-location').attr('id');
+        var elementID = $(this).find('.set-center-location').attr('id');
         Drupal.geolocation.loadGoogle(function () {
           var geolocationMap = {};
 
@@ -52,25 +50,20 @@
               }
             });
           }
-
           if (typeof geolocationMap.googleMap !== 'undefined') {
-            var newCenter = new google.maps.LatLng(
-              $('#' + elementID + ' .lat-lng .lat').html(),
-              $('#' + elementID + ' .lat-lng .lng').html()
-            );
+            var currentLat = parseFloat($('#' + elementID + ' .lat-lng .lat').html()).toFixed(6);
+            var currentLng = parseFloat($('#' + elementID + ' .lat-lng .lng').html()).toFixed(6);
+
+            var newCenter = new google.maps.LatLng(currentLat, currentLng);
             geolocationMap.googleMap.setCenter(newCenter);
 
             // Clicking the markup.
             var markers = geolocationMap.mapMarkers;
+
             var current_marker = {};
             for (var i = 0, len = markers.length; i < len; i++) {
-              var marker = markers[i];
-              var mapLat = marker.position.lat().toFixed(6);
-              var mapLng = marker.position.lng().toFixed(6);
-              var htmlLat = parseFloat($('#' + elementID + ' .lat-lng .lat').html()).toFixed(6);
-              var htmlLng = parseFloat($('#' + elementID + ' .lat-lng .lng').html()).toFixed(6);
               // If markup has same latitude and longitude that we clicked.
-              if (mapLat === htmlLat && mapLng === htmlLng) {
+              if (markers[i].position.lat().toFixed(6) === currentLat && markers[i].position.lng().toFixed(6) === currentLng) {
                 current_marker = markers[i];
                 break;
               }
@@ -79,7 +72,6 @@
             // Trigger marker click.
             google.maps.event.trigger(current_marker, 'click');
           }
-
         });
       });
 
