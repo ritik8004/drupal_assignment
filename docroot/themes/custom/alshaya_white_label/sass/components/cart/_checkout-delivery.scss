@@ -523,7 +523,7 @@
 }
 
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
-.shipping-methods-container {
+#shipping_methods_wrapper fieldset.shipping-methods-container {
   display: block;
 
   @include breakpoint($tablet) {
