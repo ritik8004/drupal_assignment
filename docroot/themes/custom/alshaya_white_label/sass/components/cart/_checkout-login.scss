@@ -71,6 +71,12 @@
     vertical-align: top;
     text-align: center;
 
+    &.active {
+      border: 2px solid $marine-blue;
+      color: $marine-blue;
+      font-weight: bold;
+    }
+
     &.active--tab--head {
       color: $marine-blue;
       font-weight: bold;
@@ -81,6 +87,19 @@
       max-width: 4.75rem;
       display: block;
       margin: auto;
+    }
+  }
+
+  .tabs--content.active {
+    @include breakpoint($only-mobile) {
+      #edit-checkout-guest,
+      #edit-checkout-login {
+        display: none;
+
+        &.active {
+          display: block;
+        }
+      }
     }
   }
 }
