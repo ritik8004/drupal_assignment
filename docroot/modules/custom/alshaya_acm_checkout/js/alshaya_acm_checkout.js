@@ -177,6 +177,38 @@
           $('#address-book-form-wrapper').show();
         }
       });
+
+      // Toggle the checkout guest login/returning customers sections on mobile.
+      if ($('#edit-login-tabs').is(":visible")) {
+        var tabs = $('#edit-login-tabs');
+        tabs.parent().toggleClass('active');
+
+        // Show Guest Checkout as selected by default
+        tabs.find('.tab-new-customer').toggleClass('active');
+        tabs.next('#edit-checkout-guest').toggleClass('active');
+
+        // Add click handler for the tabs.
+        tabs.find('.tab').each(function () {
+          $(this).on('click', function () {
+            // Do nothing when clicked on a tab that is already active.
+            if ($(this).hasClass('active')) {
+              return false;
+            }
+            // Add active class.
+            $(this).toggleClass('active');
+            $(this).siblings().toggleClass('active');
+            // Check which tab is clicked and add active class on corresponding fieldset.
+            if ($(this).has('#tab-new-customer')) {
+              $(this).parent().nextAll('#edit-checkout-guest').toggleClass('active');
+              $(this).parent().nextAll('#edit-checkout-login').toggleClass('active');
+            }
+            else {
+              $(this).parent().nextAll('#edit-checkout-guest').toggleClass('active');
+              $(this).parent().nextAll('#edit-checkout-login').toggleClass('active');
+            }
+          });
+        });
+      }
     }
   };
 
