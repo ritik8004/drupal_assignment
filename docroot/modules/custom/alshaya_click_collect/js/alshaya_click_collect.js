@@ -9,6 +9,9 @@
   Drupal.click_collect = Drupal.click_collect || {};
   Drupal.geolocation = Drupal.geolocation || {};
 
+  // No result found html.
+  var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>';
+
   /**
    * Click and collect constructor.
    *
@@ -55,9 +58,6 @@
       }
     });
 
-    // No result found.
-    var $noResultEle = $('<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>');
-
     $(field).once('autocomplete-init').on('keyup', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
@@ -65,24 +65,21 @@
       }
 
       if ($(this).val().length > 0) {
-        setTimeout(function () {
-          var $container = $('.pac-container').last();
-          if ($('.pac-container').length === 2) {
-            $container = $('.pac-container').first();
-          }
-          else if ($('.pac-container').length <= 1) {
-            $container = $('.pac-container');
-          }
+        // Remove the no results found html, we will add again in timeout if no results.
+        $('.pac-container').find('.pac-not-found').remove();
 
-          if ($container.find('.pac-item').length === 0) {
-            $container.siblings('.pac-container').remove();
-            $('.pac-container').html($noResultEle);
+        setTimeout(function () {
+          if ($('.pac-container').find('.pac-item').length <= 0) {
+            $('.pac-container').html(noResultHtml);
             $('.pac-container').show();
+
+            // Now we check every 100ms.
+            setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
           }
-          else {
-            $noResultEle.get(0).remove();
-          }
-        }, 800);
+        }, 1000);
+      }
+      else {
+        $('.pac-container').hide();
       }
     });
 
@@ -122,6 +119,20 @@
     }
     catch (e) {
       // Empty
+    }
+  };
+
+  // Function to check and remove no results message or keep checking
+  // for results to arrive.
+  Drupal.click_collect.locationAutocompleteCheckNoResultsCase = function () {
+    $('.pac-container').find('.pac-not-found').remove();
+
+    if ($('.pac-container').find('.pac-item').length <= 0) {
+      $('.pac-container').html(noResultHtml);
+      $('.pac-container').show();
+
+      // We still check every 100ms as we are not sure when we will get the result.
+      setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
     }
   };
 
