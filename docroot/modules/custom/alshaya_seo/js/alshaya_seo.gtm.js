@@ -531,7 +531,7 @@
       'variant': product.attr('gtm-product-sku'),
       'position': 1,
       'dimension1': '',
-      'dimension2': '',
+      'dimension2': product.attr('gtm-dimension2'),
       'dimension3': product.attr('gtm-dimension3'),
       'dimension4': mediaCount,
       'dimension5': product.attr('gtm-sku-type'),
@@ -705,7 +705,9 @@
       'ecommerce': {
         'currencyCode': currencyCode,
         'click': {
-          'actionField': listName,
+          'actionField': {
+            'list': listName,
+          },
           'products': [product]
         }
       }

@@ -275,8 +275,9 @@ class AlshayaGtmManager {
     }
 
     $attributes = [];
+    $product_node = alshaya_acm_product_get_display_node($sku);
 
-    $attributes['gtm-name'] = $sku->label();
+    $attributes['gtm-name'] = trim($sku->label());
     $price = $sku->get('final_price')->getString() ? $sku->get('final_price')->getString() : 0.000;
     $attributes['gtm-price'] = (float) number_format((float) $price, 3, '.', '');
     $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
@@ -287,12 +288,13 @@ class AlshayaGtmManager {
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
     $attributes['gtm-dimension2'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
-    $attributes['gtm-dimension4'] = count($sku->getMedia()) ?: 'image not available';
+    $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($product_node)) ?: 'image not available';
     $attributes['gtm-stock'] = '';
     $attributes['gtm-sku-type'] = $sku->bundle();
 
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
+      $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
     }
 
     return $attributes;
@@ -519,7 +521,7 @@ class AlshayaGtmManager {
       $productNode = alshaya_acm_product_get_display_node($skuId);
       // Get product media.
       $first_sku = $productNode->get('field_skus')->first()->get('entity')->getValue();
-      $attributes[$skuId]['gtm-dimension4'] = count($first_sku->getMedia()) ?: 'image not available';
+      $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode)) ?: 'image not available';
       $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $attributes[$skuId]['quantity'] = $cartItem['qty'];
@@ -565,7 +567,7 @@ class AlshayaGtmManager {
       $category_parents = array_reverse($category_parents);
 
       foreach ($category_parents as $category_parent) {
-        $terms[$category_parent->id()] = $category_parent->getName();
+        $terms[$category_parent->id()] = trim($category_parent->getName());
       }
     }
 
