@@ -310,7 +310,7 @@ class ClickCollectController extends ControllerBase {
       }
     }
     else {
-      $response->addCommand(new HtmlCommand('.click-collect-top-stores', '<span class="empty">' . t('Sorry, No store found for your location.') . '</span>'));
+      $response->addCommand(new HtmlCommand('.click-collect-top-stores', '<span class="empty-store-list">' . t('Sorry, No store found for your location.') . '</span>'));
       $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
       $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'show'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
