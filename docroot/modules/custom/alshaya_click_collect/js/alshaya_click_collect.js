@@ -1,3 +1,9 @@
+// Global var for no result found html.
+var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>';
+
+// Global var for storing location autocomplete instance.
+var location_autocomplete_instance = null;
+
 (function ($, Drupal) {
   'use strict';
 
@@ -8,9 +14,6 @@
    */
   Drupal.click_collect = Drupal.click_collect || {};
   Drupal.geolocation = Drupal.geolocation || {};
-
-  // No result found html.
-  var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>';
 
   /**
    * Click and collect constructor.
@@ -29,19 +32,30 @@
   Drupal.ClickCollect = function (field, callbacks, restriction, $trigger) {
     var click_collect = this;
 
-    var intance = click_collect.googleAutocomplete(field);
+    try {
+      if (location_autocomplete_instance !== null) {
+        location_autocomplete_instance.unbindAll();
+        google.maps.event.clearInstanceListeners(field);
+        $(".pac-container").remove();
+        location_autocomplete_instance = null;
+      }
+    }
+    catch (e) {
+    }
+
+    location_autocomplete_instance = click_collect.googleAutocomplete(field);
 
     // Set restriction for autocomplete.
     if (!$.isEmptyObject(restriction)) {
-      intance.setComponentRestrictions(restriction);
+      location_autocomplete_instance.setComponentRestrictions(restriction);
     }
     else if (typeof drupalSettings.alshaya_click_collect !== 'undefined' && typeof drupalSettings.alshaya_click_collect.country !== 'undefined') {
-      intance.setComponentRestrictions({country: [drupalSettings.alshaya_click_collect.country]});
+      location_autocomplete_instance.setComponentRestrictions({country: [drupalSettings.alshaya_click_collect.country]});
     }
 
-    intance.addListener('place_changed', function () {
+    location_autocomplete_instance.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
-      var place = intance.getPlace();
+      var place = location_autocomplete_instance.getPlace();
 
       click_collect.coords = {};
       if (typeof place.geometry !== 'undefined') {
