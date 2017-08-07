@@ -163,6 +163,7 @@
     padding-#{$right}: 0.5625rem;
     padding-#{$left}: 2.5rem;
     text-align: left;
+    letter-spacing: 0.5px;
 
     @include breakpoint($tablet) {
       width: 6.625rem;
@@ -240,13 +241,15 @@
     }
   }
 
-  &:hover {
+  &:hover,
+  &.default {
     .address--data {
       background: $white-four;
     }
 
     .address--primary {
       font-weight: 700;
+      letter-spacing: 0;
     }
 
     .address--controls:last-child {
