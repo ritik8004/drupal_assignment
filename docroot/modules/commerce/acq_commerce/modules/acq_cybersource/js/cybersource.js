@@ -46,6 +46,9 @@
           }
         });
       });
+      // Add a full screen throbber.
+      var throbberHTML = $('<div class="cybersource-ajax-progress cybersource-ajax-progress-throbber"><div class="cybersource-throbber"></div></div>');
+      $('.alias--cart-checkout-payment .page-standard.user-page.checkout-payment').once('bind-events').append(throbberHTML);
     }
   };
 
@@ -148,6 +151,12 @@ function cybersource_form_submit_handler(form) {
     url: Drupal.url('cybersource/get-token'),
     data: getTokenData,
     dataType: 'json',
+    beforeSend: function() {
+      $('.cybersource-ajax-progress-throbber').show();
+    },
+    complete: function() {
+      $('.cybersource-ajax-progress-throbber').hide();
+    },
     success: function (response) {
       if (response.errors) {
         for (var field in response.errors) {
