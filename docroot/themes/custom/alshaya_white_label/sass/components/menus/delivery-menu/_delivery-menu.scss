@@ -31,7 +31,7 @@
   @include breakpoint($tablet) {
     width: 32%;
     margin-right: 2%;
-    float: left;
+    float: $left;
   }
 
   &:last-child {
