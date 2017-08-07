@@ -18,7 +18,7 @@
     attach: function (context, settings) {
 
       // Opening hours toggle.
-      $('[data-drupal-selector^="views-form-stores-finder-"]', context).once('opening-hrs-init').on('click', '.hours--label', function () {
+      $('[data-drupal-selector^="views-form-stores-finder-"], .individual--store', context).once('opening-hrs-init').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
 
@@ -58,7 +58,6 @@
 
             // Clicking the markup.
             var markers = geolocationMap.mapMarkers;
-
             var current_marker = {};
             for (var i = 0, len = markers.length; i < len; i++) {
               // If markup has same latitude and longitude that we clicked.
@@ -221,13 +220,13 @@
     }
   };
 
-  // Open Maps app depending on the device ios or Andriod.
-  function mapsApp(lat, lng) {
-    // If it is an iPhone..
-    if ((navigator.platform.indexOf('iPhone') !== -1)
-      || (navigator.platform.indexOf('iPod') !== -1)
-      || (navigator.platform.indexOf('iPad') !== -1)) {window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + lng + '&amp;ll=');}
-    else {window.open('geo:' + lat + ',' + lng + '');}
-  }
-
 })(jQuery, Drupal);
+
+// Open Maps app depending on the device ios or Andriod.
+function mapsApp(lat, lng) {
+  // If it is an iPhone..
+  if ((navigator.platform.indexOf('iPhone') !== -1)
+    || (navigator.platform.indexOf('iPod') !== -1)
+    || (navigator.platform.indexOf('iPad') !== -1)) {window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + lng + '&amp;ll=');}
+  else {window.open('geo:' + lat + ',' + lng + '');}
+}
