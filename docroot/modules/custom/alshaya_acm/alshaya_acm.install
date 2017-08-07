@@ -57,6 +57,13 @@ function alshaya_acm_modules_installed($modules) {
     // Update product category sync root setting.
     $config = \Drupal::configFactory()->getEditable('acq_commerce.conductor');
     $config->set('filter_root_category', TRUE);
+
+    $acq_commerce_conductor_settings = Settings::get('acq_commerce.conductor');
+
+    foreach ($acq_commerce_conductor_settings as $key => $value) {
+      $config->set($key, $value);
+    }
+
     $config->save();
 
     // Update the currency code to one required for the site.
