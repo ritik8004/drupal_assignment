@@ -571,7 +571,7 @@
   }
 
   .cybersource-ajax-progress-throbber {
-    #{$left}: 0 !important;
+    #{$left}: 0;
 
     .cybersource-throbber {
       #{$left}: 0;
