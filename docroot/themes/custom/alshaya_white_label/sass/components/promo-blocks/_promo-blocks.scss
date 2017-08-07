@@ -120,6 +120,7 @@
   .c-promo-1-2__item {
     @include breakpoint($tablet) {
       float: $right;
+      width: 100%;
     }
 
     &:first-child {
