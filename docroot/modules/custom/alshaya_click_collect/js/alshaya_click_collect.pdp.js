@@ -27,10 +27,12 @@
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
       if (typeof Drupal.geolocation.loadGoogle === 'function') {
-        // First load the library from google.
-        Drupal.geolocation.loadGoogle(function () {
-          var field = $('.click-collect-form').find('input[name="location"]')[0];
-          new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
+        $('.click-collect-form').once('autocomplete-init').each(function () {
+          // First load the library from google.
+          Drupal.geolocation.loadGoogle(function () {
+            var field = $('.click-collect-form').find('input[name="location"]')[0];
+            new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
+          });
         });
       }
 

@@ -1,3 +1,10 @@
+// Global var for no result found html.
+var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>';
+
+// Global var for storing location autocomplete instance.
+var location_autocomplete_instance = null;
+var location_autocomplete_no_result_checked = null;
+
 (function ($, Drupal) {
   'use strict';
 
@@ -26,19 +33,40 @@
   Drupal.ClickCollect = function (field, callbacks, restriction, $trigger) {
     var click_collect = this;
 
-    var intance = click_collect.googleAutocomplete(field);
+    try {
+      if (location_autocomplete_instance !== null) {
+        location_autocomplete_instance.unbindAll();
+        google.maps.event.clearInstanceListeners(field);
+        $(".pac-container").remove();
+        location_autocomplete_instance = null;
+      }
+    }
+    catch (e) {
+    }
+
+    location_autocomplete_instance = click_collect.googleAutocomplete(field);
 
     // Set restriction for autocomplete.
     if (!$.isEmptyObject(restriction)) {
-      intance.setComponentRestrictions(restriction);
+      location_autocomplete_instance.setComponentRestrictions(restriction);
     }
     else if (typeof drupalSettings.alshaya_click_collect !== 'undefined' && typeof drupalSettings.alshaya_click_collect.country !== 'undefined') {
-      intance.setComponentRestrictions({country: [drupalSettings.alshaya_click_collect.country]});
+      location_autocomplete_instance.setComponentRestrictions({country: [drupalSettings.alshaya_click_collect.country]});
     }
 
-    intance.addListener('place_changed', function () {
+    location_autocomplete_instance.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
-      var place = intance.getPlace();
+      var place = location_autocomplete_instance.getPlace();
+
+      // Remove no results message.
+      $('.pac-container').find('.pac-not-found').remove();
+
+      try {
+        // Try to clear any no result check timeouts if exist.
+        clearTimeout(location_autocomplete_no_result_checked);
+      }
+      catch (e) {
+      }
 
       click_collect.coords = {};
       if (typeof place.geometry !== 'undefined') {
@@ -55,9 +83,6 @@
       }
     });
 
-    // No result found.
-    var $noResultEle = $('<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>');
-
     $(field).once('autocomplete-init').on('keyup', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
@@ -65,24 +90,31 @@
       }
 
       if ($(this).val().length > 0) {
-        setTimeout(function () {
-          var $container = $('.pac-container').last();
-          if ($('.pac-container').length === 2) {
-            $container = $('.pac-container').first();
-          }
-          else if ($('.pac-container').length <= 1) {
-            $container = $('.pac-container');
-          }
+        // Remove the no results found html, we will add again in timeout if no results.
+        $('.pac-container').find('.pac-not-found').remove();
 
-          if ($container.find('.pac-item').length === 0) {
-            $container.siblings('.pac-container').remove();
-            $('.pac-container').html($noResultEle);
-            $('.pac-container').show();
-          }
-          else {
-            $noResultEle.get(0).remove();
-          }
-        }, 800);
+        try {
+          clearTimeout(location_autocomplete_no_result_checked);
+        }
+        catch (e) {
+        }
+
+        var place = location_autocomplete_instance.getPlace();
+
+        if (typeof place === 'undefined' || typeof place.geometry === 'undefined') {
+          location_autocomplete_no_result_checked = setTimeout(function () {
+            if ($('.pac-container').find('.pac-item').length <= 0) {
+              $('.pac-container').html(noResultHtml);
+              $('.pac-container').show();
+
+              // Now we check every 100ms.
+              location_autocomplete_no_result_checked = setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
+            }
+          }, 1000);
+        }
+      }
+      else {
+        $('.pac-container').hide();
       }
     });
 
@@ -122,6 +154,20 @@
     }
     catch (e) {
       // Empty
+    }
+  };
+
+  // Function to check and remove no results message or keep checking
+  // for results to arrive.
+  Drupal.click_collect.locationAutocompleteCheckNoResultsCase = function () {
+    $('.pac-container').find('.pac-not-found').remove();
+
+    if ($('.pac-container').find('.pac-item').length <= 0) {
+      $('.pac-container').html(noResultHtml);
+      $('.pac-container').show();
+
+      // We still check every 100ms as we are not sure when we will get the result.
+      location_autocomplete_no_result_checked = setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
     }
   };
 
