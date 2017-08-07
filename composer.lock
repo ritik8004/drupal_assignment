@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "57a49c6fac8fa33ac1661b26607d720f",
+    "content-hash": "c3a6baf02d889b0005f20c628e34fcab",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2438,7 +2438,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.7",
-                    "datestamp": "1490994483"
+                    "datestamp": "1497039842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2451,12 +2451,20 @@
                     "homepage": "https://www.drupal.org/user/277818"
                 },
                 {
+                    "name": "elm45",
+                    "homepage": "https://www.drupal.org/user/805178"
+                },
+                {
                     "name": "grasmash",
                     "homepage": "https://www.drupal.org/user/455714"
                 },
                 {
                     "name": "jenter",
                     "homepage": "https://www.drupal.org/user/186584"
+                },
+                {
+                    "name": "littlekope0903",
+                    "homepage": "https://www.drupal.org/user/2867321"
                 },
                 {
                     "name": "sarahjean",
@@ -2573,7 +2581,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta5",
-                    "datestamp": "1494175684"
+                    "datestamp": "1496912342"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2676,7 +2684,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta8",
-                    "datestamp": "1476400139"
+                    "datestamp": "1497478742"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4870,7 +4878,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1485902197"
+                    "datestamp": "1496286243"
                 },
                 "patches_applied": {
                     "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-14.patch"
@@ -5492,7 +5500,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha7",
-                    "datestamp": "1493902084"
+                    "datestamp": "1497287643"
                 },
                 "patches_applied": {
                     "Update access check for set-default profile": "https://www.drupal.org/files/issues/2885005-2.patch"
@@ -5781,7 +5789,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.14",
-                    "datestamp": "1493396643"
+                    "datestamp": "1496919842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6038,7 +6046,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc3",
-                    "datestamp": "1495024986"
+                    "datestamp": "1497007742"
                 },
                 "patches_applied": {
                     "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--13.patch"
@@ -6293,7 +6301,7 @@
                     "datestamp": "1468313039"
                 },
                 "patches_applied": {
-                    "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_3.patch"
+                    "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6388,7 +6396,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1471420739"
+                    "datestamp": "1498511042"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12931,7 +12939,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork maintainer"
+                    "role": "Fork Maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
