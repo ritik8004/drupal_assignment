@@ -37,3 +37,11 @@ acq_commerce.configuration.store:
     _title: 'Store Settings'
   requirements:
     _permission: 'access commerce administration pages'
+
+acq_commerce.test:
+  path: '/admin/commerce/test-connection'
+  defaults:
+    _controller: '\Drupal\acq_commerce\Controller\TestController::testConnection'
+    _title: 'Test Connection'
+  requirements:
+    _permission: 'access commerce administration pages'
