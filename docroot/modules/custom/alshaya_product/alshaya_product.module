@@ -71,7 +71,7 @@ function alshaya_product_alshaya_i18n_onetime_translation_add() {
 /**
  * Implements hook_sharethis_attributes_alter().
  */
-function alshaya_captcha_sharethis_attributes_alter(&$attributes) {
+function alshaya_product_sharethis_attributes_alter(&$attributes) {
   // Add title to sharethis span.
   $attributes['title'] = ucfirst($attributes['displayText']);
 }
