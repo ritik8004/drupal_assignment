@@ -163,7 +163,9 @@ function cybersource_form_submit_handler(form) {
       }
 
       // Add credit cart info.
-      response.data.card_number = $('.cybersource-credit-card-input').val().toString().trim();
+      response.data.card_number = $('.cybersource-credit-card-input').val().toString();
+      // Remove valid data per formatting but invalid for number.
+      response.data.card_number = response.data.card_number.replace(/\s|-/g, '');
       response.data.card_expiry_date = card_expiry_date;
       response.data.card_cvn = parseInt($('.cybersource-credit-card-cvv-input').val().toString().trim());
 
