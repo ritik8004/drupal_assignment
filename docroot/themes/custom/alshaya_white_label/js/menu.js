@@ -62,6 +62,11 @@
       });
 
       $('.hamburger--menu').click(function () {
+        if ($('.search-active').length > 0) {
+          $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
+          $('.search-active').removeClass('search-active');
+        }
+
         $('.main--menu').addClass('menu--active');
         $('html').addClass('html--overlay');
         $('body').addClass('mobile--overlay');
