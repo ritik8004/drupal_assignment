@@ -288,7 +288,7 @@ class AlshayaGtmManager {
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
     $attributes['gtm-dimension2'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
-    $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($product_node)) ?: 'image not available';
+    $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available';
     $attributes['gtm-stock'] = '';
     $attributes['gtm-sku-type'] = $sku->bundle();
 
@@ -521,7 +521,7 @@ class AlshayaGtmManager {
       $productNode = alshaya_acm_product_get_display_node($skuId);
       // Get product media.
       $first_sku = $productNode->get('field_skus')->first()->get('entity')->getValue();
-      $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode)) ?: 'image not available';
+      $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
       $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $attributes[$skuId]['quantity'] = $cartItem['qty'];
