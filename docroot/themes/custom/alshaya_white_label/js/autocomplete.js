@@ -269,7 +269,6 @@
     splitValues: autocompleteSplitValues,
     extractLastTerm: extractLastTerm,
     // jQuery UI autocomplete options.
-
     /**
      * JQuery UI option object.
      *
