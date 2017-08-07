@@ -67,3 +67,11 @@ function alshaya_product_alshaya_i18n_onetime_translation_add() {
   $product_list_view->set('display.default.display_options.pager.options.views_infinite_scroll.button_text', 'عرض المزيد');
   $product_list_view->save();
 }
+
+/**
+ * Implements hook_sharethis_attributes_alter().
+ */
+function alshaya_captcha_sharethis_attributes_alter(&$attributes) {
+  // Add title to sharethis span.
+  $attributes['title'] = ucfirst($attributes['displayText']);
+}
