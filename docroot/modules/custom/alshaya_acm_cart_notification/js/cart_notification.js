@@ -71,16 +71,16 @@
           var size = pdpAddCartButton.closest('.sku-base-form').find('.form-item-configurables-size select option:selected').text();
           var selectedVariant = '';
 
+          if (addedProduct.attr('gtm-sku-type') === 'configurable') {
+            selectedVariant = addedProduct.find('.selected-variant-sku-' + addedProduct.attr('gtm-product-sku').toLowerCase()).val();
+          }
+
           if ($('.ui-dialog').length > 0) {
             // Expose details of product being added to the cart before closing the modal.
             var productModalSelector = $('.ui-dialog');
             addedProduct = productModalSelector.find('article[gtm-type="gtm-product-link"]');
             quantity = parseInt(productModalSelector.find('.form-item-quantity select').val());
             size = productModalSelector.find('.form-item-configurables-size select option:selected').text();
-
-            if (addedProduct.attr('gtm-sku-type') === 'configurable') {
-              selectedVariant = addedProduct.find('.selected-variant-sku-' + addedProduct.attr('gtm-product-sku').toLowerCase()).val();
-            }
 
             $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
           }

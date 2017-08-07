@@ -276,7 +276,7 @@ class AlshayaGtmManager {
 
     $attributes = [];
 
-    $attributes['gtm-name'] = $sku->label();
+    $attributes['gtm-name'] = trim($sku->label());
     $price = $sku->get('final_price')->getString() ? $sku->get('final_price')->getString() : 0.000;
     $attributes['gtm-price'] = (float) number_format((float) $price, 3, '.', '');
     $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
@@ -565,7 +565,7 @@ class AlshayaGtmManager {
       $category_parents = array_reverse($category_parents);
 
       foreach ($category_parents as $category_parent) {
-        $terms[$category_parent->id()] = $category_parent->getName();
+        $terms[$category_parent->id()] = trim($category_parent->getName());
       }
     }
 
