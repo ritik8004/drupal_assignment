@@ -21,7 +21,7 @@
  * @param array $promotion
  *   Array containing details provided by API.
  */
-function hook_acq_promotion_promotion_node_alter(NodeInterface $node, array $promotion) {
+function hook_acq_promotion_promotion_node_alter(Drupal\node\NodeInterface $node, array $promotion) {
 
 }
 
