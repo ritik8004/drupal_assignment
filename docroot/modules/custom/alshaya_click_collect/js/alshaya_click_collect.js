@@ -3,6 +3,7 @@ var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No matches fo
 
 // Global var for storing location autocomplete instance.
 var location_autocomplete_instance = null;
+var location_autocomplete_no_result_checked = null;
 
 (function ($, Drupal) {
   'use strict';
@@ -57,6 +58,16 @@ var location_autocomplete_instance = null;
       // Get the place details from the autocomplete object.
       var place = location_autocomplete_instance.getPlace();
 
+      // Remove no results message.
+      $('.pac-container').find('.pac-not-found').remove();
+
+      try {
+        // Try to clear any no result check timeouts if exist.
+        clearTimeout(location_autocomplete_no_result_checked);
+      }
+      catch (e) {
+      }
+
       click_collect.coords = {};
       if (typeof place.geometry !== 'undefined') {
         click_collect.coords = {
@@ -82,15 +93,25 @@ var location_autocomplete_instance = null;
         // Remove the no results found html, we will add again in timeout if no results.
         $('.pac-container').find('.pac-not-found').remove();
 
-        setTimeout(function () {
-          if ($('.pac-container').find('.pac-item').length <= 0) {
-            $('.pac-container').html(noResultHtml);
-            $('.pac-container').show();
+        try {
+          clearTimeout(location_autocomplete_no_result_checked);
+        }
+        catch (e) {
+        }
 
-            // Now we check every 100ms.
-            setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
-          }
-        }, 1000);
+        var place = location_autocomplete_instance.getPlace();
+
+        if (typeof place === 'undefined' || typeof place.geometry === 'undefined') {
+          location_autocomplete_no_result_checked = setTimeout(function () {
+            if ($('.pac-container').find('.pac-item').length <= 0) {
+              $('.pac-container').html(noResultHtml);
+              $('.pac-container').show();
+
+              // Now we check every 100ms.
+              location_autocomplete_no_result_checked = setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
+            }
+          }, 1000);
+        }
       }
       else {
         $('.pac-container').hide();
@@ -146,7 +167,7 @@ var location_autocomplete_instance = null;
       $('.pac-container').show();
 
       // We still check every 100ms as we are not sure when we will get the result.
-      setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
+      location_autocomplete_no_result_checked = setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
     }
   };
 
