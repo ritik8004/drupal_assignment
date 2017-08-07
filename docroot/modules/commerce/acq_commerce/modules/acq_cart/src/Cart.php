@@ -173,6 +173,10 @@ class Cart implements CartInterface {
     $items[] = ['sku' => $sku, 'qty' => $quantity];
 
     $this->cart->items = $items;
+
+    // We changed items in cart, lets ask user to go through the checkout flow
+    // again to ensure everything is updated properly.
+    $this->setCheckoutStep('');
   }
 
   /**
@@ -190,6 +194,10 @@ class Cart implements CartInterface {
       }
     }
     $this->cart->items = $items;
+
+    // We changed items in cart, lets ask user to go through the checkout flow
+    // again to ensure everything is updated properly.
+    $this->setCheckoutStep('');
   }
 
   /**
@@ -225,6 +233,10 @@ class Cart implements CartInterface {
    */
   public function setItemsInCart(array $items) {
     $this->cart->items = $items;
+
+    // We changed items in cart, lets ask user to go through the checkout flow
+    // again to ensure everything is updated properly.
+    $this->setCheckoutStep('');
   }
 
   /**
@@ -245,6 +257,10 @@ class Cart implements CartInterface {
     }
 
     $this->cart->items = $items;
+
+    // We changed items in cart, lets ask user to go through the checkout flow
+    // again to ensure everything is updated properly.
+    $this->setCheckoutStep('');
   }
 
   /**
