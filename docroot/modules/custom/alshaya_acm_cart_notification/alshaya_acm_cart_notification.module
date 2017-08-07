@@ -89,7 +89,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     $type = $sku_entity->getType();
 
     // Product Name.
-    $product_name = $sku_entity->get('name')->getString();
+    $product_name = \Drupal::entityManager()->getTranslationFromContext($sku_entity)->get('name')->getString();
 
     // Quantity.
     $quantity = $form_state->getValue('quantity');
