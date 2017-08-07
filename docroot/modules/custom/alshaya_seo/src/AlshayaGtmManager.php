@@ -294,6 +294,7 @@ class AlshayaGtmManager {
 
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
+      $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
     }
 
     return $attributes;
