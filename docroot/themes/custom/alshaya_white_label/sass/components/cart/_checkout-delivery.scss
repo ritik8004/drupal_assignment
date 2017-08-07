@@ -539,8 +539,7 @@
 .page-standard.c-address-book,
 .page-standard.user-page.checkout-payment,
 .page-standard.user-page.c-delivery-checkout {
-  .ajax-progress-throbber,
-  .cybersource-ajax-progress-throbber {
+  .ajax-progress-throbber {
     position: fixed !important;
     width: 100% !important;
     height: 100%;
@@ -554,8 +553,7 @@
       display: none;
     }
 
-    .throbber,
-    .cybersource-throbber {
+    .throbber {
       bottom: 0;
       #{$left}: 0;
       margin: auto;
@@ -569,6 +567,17 @@
       padding-#{$right}: 0.625rem;
       width: 100%;
       height: auto;
+    }
+  }
+
+  .cybersource-ajax-progress-throbber {
+    #{$left}: 0 !important;
+
+    .cybersource-throbber {
+      #{$left}: 0;
+      #{$right}: 0;
+      padding-#{$left}: 0.625rem;
+      padding-#{$right}: 0.625rem;
     }
   }
 }
