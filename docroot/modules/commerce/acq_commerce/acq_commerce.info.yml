@@ -3,9 +3,3 @@ type: module
 description: This module lays the foundation to use the Acquia Commerce Connector.
 core: 8.x
 package: Commerce
-dependencies:
-  - rest
-  - simple_oauth
-  - simple_oauth_extras
-  - language
-  - content_translation

@@ -37,8 +37,6 @@ class ConductorSettingsForm extends ConfigFormBase {
     // TODO Validate Conductor URL endpoints with watchdog request.
     $this->config('acq_commerce.conductor')
       ->set('url', $form_state->getValue('url'))
-      ->set('hmac_id', $form_state->getValue('hmac_id'))
-      ->set('hmac_secret', $form_state->getValue('hmac_secret'))
       ->set('timeout', (int) $form_state->getValue('timeout'))
       ->set('verify_ssl', (bool) $form_state->getValue('verify_ssl'))
       ->set('product_page_size', (int) $form_state->getValue('page_size'))
@@ -53,17 +51,13 @@ class ConductorSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('acq_commerce.conductor');
-    $form['basic'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Basic information'),
-    ];
-    $form['basic']['url'] = [
+    $form['url'] = [
       '#type' => 'url',
       '#title' => $this->t('Conductor URL'),
       '#required' => TRUE,
       '#default_value' => $config->get('url'),
     ];
-    $form['basic']['api_version'] = [
+    $form['api_version'] = [
       '#type' => 'select',
       '#title' => $this->t('API version'),
       '#required' => TRUE,
@@ -71,42 +65,23 @@ class ConductorSettingsForm extends ConfigFormBase {
       '#options' => ['v1' => 'V1'],
     ];
 
-    $form['basic']['timeout'] = [
+    $form['timeout'] = [
       '#type' => 'number',
       '#title' => $this->t('Conductor Connection Timeout'),
       '#required' => TRUE,
       '#default_value' => $config->get('timeout'),
     ];
 
-    $form['basic']['verify_ssl'] = [
+    $form['verify_ssl'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Conductor Verify SSL'),
       '#default_value' => $config->get('verify_ssl'),
     ];
 
-    $form['basic']['debug'] = [
+    $form['debug'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Debug Level Logging Of API Connections'),
       '#default_value' => $config->get('debug'),
-    ];
-
-    $form['security'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Security configuration'),
-    ];
-
-    $form['security']['hmac_id'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('HMAC Key ID'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('hmac_id'),
-    ];
-
-    $form['security']['hmac_secret'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('HMAC Key Secret'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('hmac_secret'),
     ];
 
     $form['page_size'] = [

@@ -4,9 +4,6 @@ namespace Drupal\acq_commerce\Conductor;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Http\ClientFactory as DrupalClientFactory;
-use Acquia\Hmac\Guzzle\HmacAuthMiddleware;
-use Acquia\Hmac\Key;
-use GuzzleHttp\HandlerStack;
 
 /**
  * Class ClientFactory.
@@ -114,21 +111,13 @@ final class ClientFactory {
 
     $config = $this->configFactory->get('acq_commerce.conductor');
     if (!strlen($config->get('url'))) {
-      throw new \InvalidArgumentException('No Conductor URL specified.');
+      throw new \InvalidArgumentException('No Conductor Ingest URL specified.');
     }
-
-    // Create key and middleware.
-    $key = new Key($config->get('hmac_id'), $config->get('hmac_secret'));
-    $middleware = new HmacAuthMiddleware($key);
-    // Register the middleware.
-    $stack = HandlerStack::create();
-    $stack->push($middleware);
 
     $clientConfig = [
       'base_uri' => $config->get('url'),
       'timeout'  => (int) $config->get('timeout'),
       'verify'   => (bool) $config->get('verify_ssl'),
-      'handler'  => $stack,
     ];
 
     return $this->clientFactory->fromOptions($clientConfig);

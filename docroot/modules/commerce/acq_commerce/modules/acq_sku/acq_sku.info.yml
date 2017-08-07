@@ -6,11 +6,7 @@ package: Commerce
 dependencies:
   - acq_commerce
   - key_value_field
-  - inline_entity_form
-  - menu_ui
-  - node
-  - path
-  - panelizer
   - rest
-  - taxonomy
+  - inline_entity_form
   - workbench_moderation
+  - panelizer

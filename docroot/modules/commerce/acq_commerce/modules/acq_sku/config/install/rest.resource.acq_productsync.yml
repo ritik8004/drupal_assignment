@@ -6,7 +6,6 @@ dependencies:
     - acq_sku
     - serialization
     - user
-    - simple_oauth
 id: acq_productsync
 plugin_id: acq_productsync
 granularity: method
@@ -14,5 +13,6 @@ configuration:
   POST:
     supported_formats:
       - json
+      - xml
     supported_auth:
-      - oauth2
+      - cookie

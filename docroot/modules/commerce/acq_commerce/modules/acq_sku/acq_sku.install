@@ -5,6 +5,7 @@
  * Contains install hooks for acq_sku.
  */
 
+use Drupal\user\Entity\Role;
 use Drupal\node\Entity\Node;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 
@@ -12,7 +13,7 @@ use Drupal\menu_link_content\Entity\MenuLinkContent;
  * Implements hook_install().
  */
 function acq_sku_install() {
-  Node::create([
+  $node = Node::create([
     'type' => 'page',
     'title' => 'Store',
     'langcode' => 'en',
@@ -25,10 +26,20 @@ function acq_sku_install() {
     ],
   ])->save();
 
-  MenuLinkContent::create([
+  $menu_link = MenuLinkContent::create([
     'title' => 'Store',
     'link' => ['uri' => 'internal:/store'],
     'menu_name' => 'main',
     'weight' => 0,
   ])->save();
+
+  $role = Role::load('anonymous');
+  $role->grantPermission('restful post acq_categorysync');
+  $role->grantPermission('restful post acq_productsync');
+  $role->save();
+
+  $role = Role::load('authenticated');
+  $role->grantPermission('restful post acq_categorysync');
+  $role->grantPermission('restful post acq_productsync');
+  $role->save();
 }
