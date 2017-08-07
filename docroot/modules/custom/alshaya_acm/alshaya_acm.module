@@ -46,7 +46,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   // Get the current cart.
   $cart_storage = \Drupal::service('acq_cart.cart_storage');
-  $cart = $cart_storage->getCart();
+  $cart = $cart_storage->getCart(FALSE);
 
   // Get current cart items.
   $cart_items = $cart ? $cart->items() : NULL;
@@ -177,7 +177,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Add sub total price of product.
       if ($is_item_free) {
         $item['sub_total'] = [
-          '#markup' => '<div class="final-price">FREE</div>',
+          '#markup' => '<div class="final-price">' . t('FREE') . '</div>',
         ];
       }
       else {
@@ -317,11 +317,18 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     foreach ($cart_rules as $rule_id) {
       $promotionManager = \Drupal::service('alshaya_acm_promotion.manager');
       $promotion = $promotionManager->getPromotionByRuleId($rule_id);
+      $langcode = \Drupal::service('language_manager')->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
+        ->getId();
+      // Get the promotion with language fallback, if it did not have a
+      // translation for $langcode.
       if ($promotion) {
-        $descriptions = $promotion->get('field_acq_promotion_description')->getValue();
-        $promotions_text = $promotion->get('field_acq_promotion_label')->getValue();
-        $promotions[$rule_id]['description'] = array_shift($descriptions);
-        $promotions[$rule_id]['text'] = array_shift($promotions_text);
+        $promotion = \Drupal::service('entity.repository')->getTranslationFromContext($promotion, $langcode);
+        if ($promotion) {
+          $promotion_title = $promotion->getTitle();
+          $promotion_label = $promotion->get('field_acq_promotion_label')->getString();
+          $promotions[$rule_id]['title'] = $promotion_title;
+          $promotions[$rule_id]['label'] = $promotion_label;
+        }
       }
     }
     $form['totals']['discount']['value'] = [
@@ -384,7 +391,7 @@ function alshaya_acm_preprocess_page_title(&$variables) {
 
   // Change cart page title with quantity count.
   if ($route_match->getRouteName() == 'acq_cart.cart') {
-    $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+    $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
     $count = $cart ? $cart->getCartItemsCount() : 0;
 
     $variables['title'] = [
@@ -762,13 +769,24 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   // Load the first image.
   $sku_image = alshaya_acm_get_product_display_image($sku_entity, '137x144');
 
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
+  $total_price = [
+    '#theme' => 'acq_commerce_price',
+    '#price' => $item_cart_price['price'] * $item['quantity']['#default_value'],
+  ];
+  if (!empty($item_cart_price['discount'])) {
+    $total_price['#discount'] = $item_cart_price['discount'];
+    $total_price['#final_price'] = $item_cart_price['final_price'] * $item['quantity']['#default_value'];
+  }
+
   return [
     '#theme' => 'alshaya_cart_product_name',
     '#sku_attributes' => $sku_attributes,
     '#name' => $name,
     '#promotions' => $promotions,
     '#image' => $sku_image,
-    '#total_price' => alshaya_acm_price_format($item['quantity']['#default_value'] * $cart_item['price']),
+    '#total_price' => $total_price,
     '#item_code' => $sku_entity->getSku(),
   ];
 }

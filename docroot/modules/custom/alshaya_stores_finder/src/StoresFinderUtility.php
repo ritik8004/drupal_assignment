@@ -141,7 +141,7 @@ class StoresFinderUtility {
     });
 
     // Sort the stores first by distance and then by name.
-    alshaya_master_utility_usort($stores, 'distance', 'asc', 'name', 'asc');
+    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
     $config = \Drupal::config('alshaya_click_collect.settings');
     // Add sequence and proper delivery_time label and low stock text.

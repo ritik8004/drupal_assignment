@@ -310,6 +310,7 @@
     padding: 1em 1.5rem;
     font-size: 0.875rem;
     position: relative;
+    cursor: pointer;
 
     @include breakpoint($upto-desktop) {
       font-size: 0.75rem;
@@ -317,7 +318,7 @@
 
     @include icon(chevrondown, after) {
       position: absolute;
-      #{$right}: 0.75rem;
+      #{$right}: 1rem;
       font-size: 1.875rem;
       top: 50%;
       color: $black;
@@ -446,28 +447,32 @@
       display: inline-block;
       width: 60%;
 
+      html[lanng=ar] & {
+        width: 59%;
+      }
+
       @include breakpoint($upto-desktop) {
         width: 55%;
       }
     }
 
     .total--amount,
-    > .price {
+    .price-type__wrapper {
       display: inline-block;
-      width: 37%;
+      width: 38%;
 
       @include breakpoint($upto-desktop) {
-        width: 42%;
+        width: 43%;
       }
+    }
 
-      .price-wrapper {
-        width: 100%;
-        display: inline-block;
+    .price-wrapper {
+      width: 100%;
+      display: inline-block;
 
-        .price {
-          .price-amount {
-            float: $right;
-          }
+      .price {
+        .price-amount {
+          float: $right;
         }
       }
     }
@@ -847,16 +852,57 @@ body.alias--cart {
     font-size: 14px;
 
     table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
+      .price-type__wrapper {
+        position: relative;
+
+        .cart-promotions {
+          position: absolute;
+          #{$right}: 0;
+
+          .tooltip {
+            #{$left}: 0.625rem;
+            top: 1.5rem;
+            position: relative;
+
+            @include breakpoint($only-mobile) {
+              #{$left}: 1rem;
+            }
+
+            @include breakpoint($desktop) {
+              #{$left}: 13rem;
+              top: -0.3rem;
+            }
+          }
+        }
+      }
+
       td {
         color: $scarlet;
 
         &:nth-child(2) {
           background: $white-five;
+          padding-top: 0.5em !important;
+
+          @include breakpoint($only-mobile) {
+            padding-top: 1.4em !important;
+          }
         }
       }
 
       td:first-child {
         font-size: 12px;
+
+        @include breakpoint($mobile) {
+          padding-top: 0.1rem !important;
+        }
+
+        @include breakpoint($tablet) {
+          padding-top: 0.3rem !important;
+        }
+
+        @include breakpoint($desktop) {
+          padding-top: 0.5rem !important;
+        }
       }
     }
 
@@ -885,8 +931,12 @@ body.alias--cart {
     .cart-promotions {
       .tooltip--head::after {
         position: absolute;
-        #{$right}: -0.625rem;
+        #{$right}: -0.1rem;
         top: -0.0625rem;
+
+        @include breakpoint($only-tablet) {
+          #{$right}: -0.5rem;
+        }
 
         @include breakpoint($desktop) {
           #{$right}: -1.4rem;
@@ -894,7 +944,7 @@ body.alias--cart {
       }
 
       .tooltip {
-        #{$left}: 0.8rem;
+        left: -2rem;
         top: 1.5rem;
 
         @include breakpoint (($only-mobile) (orientation landscape)) {
@@ -907,13 +957,13 @@ body.alias--cart {
 
         @include breakpoint($desktop) {
           #{$left}: 10rem;
-          top: -1.2rem;
+          top: -0.2rem;
         }
 
         &::before {
           @include breakpoint($desktop) {
             #{$right}: 10.75rem;
-            top: 1.9em;
+            top: 0.5em;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
             border-#{$right}: 8px solid $cerulean-two;
@@ -923,7 +973,7 @@ body.alias--cart {
         &::after {
           @include breakpoint($desktop) {
             #{$right}: 10.6975rem;
-            top: 1.9em;
+            top: 0.5em;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
             border-#{$right}: 8px solid $alice-blue;
@@ -1173,14 +1223,37 @@ body.path--cart .c-content__region {
 }
 
 html[lang=ar] {
-  .alias--cart #table-cart-totals .cart-promotions .tooltip {
-    @include breakpoint (($only-mobile) (orientation portrait)) {
-      right: -0.7rem;
-      top: 1.6rem;
+  .alias--cart #table-cart-totals {
+    table tr td:last-child {
+      @include breakpoint($only-mobile) {
+        padding-left: 2.5rem;
+      }
     }
 
-    @include breakpoint (($only-mobile) (orientation landscape)) {
-      #{$left}: 7.8rem;
+    table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
+      .cart-promotions {
+        position: absolute;
+        left: -21px;
+        top: -2px;
+
+        @include breakpoint($tablet) {
+          left: -3px;
+        }
+
+        .tooltip {
+          right: 1rem;
+          top: 1.5rem;
+
+          @include breakpoint($tablet) {
+            right: 0.7rem;
+          }
+
+          @include breakpoint($desktop) {
+            right: 13rem;
+            top: -0.5rem;
+          }
+        }
+      }
     }
   }
 
@@ -1188,16 +1261,17 @@ html[lang=ar] {
     position: absolute;
 
     @include breakpoint($mobile) {
+      left: 0.9rem;
       top: -0.1rem;
-      left: 1rem;
     }
 
     @include breakpoint($tablet) {
-      left: -0.5rem;
+      left: -0.4rem;
     }
 
     @include breakpoint($desktop) {
-      left: 5.5rem;
+      left: 4rem;
+      top: 0;
     }
   }
 
@@ -1205,7 +1279,7 @@ html[lang=ar] {
     #{$left}: -4.9rem;
 
     @include breakpoint($desktop) {
-      right: 2.4rem;
+      right: 3.9rem;
     }
 
     @include breakpoint($only-mobile) {

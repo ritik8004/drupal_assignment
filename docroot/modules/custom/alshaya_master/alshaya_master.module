@@ -5,6 +5,7 @@
  * Alshaya master module file.
  */
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\block\Entity\Block;
@@ -426,4 +427,162 @@ function _alshaya_admin_site_information_submit($form, FormStateInterface $form_
  */
 function alshaya_admin_config_translation_info_alter(&$info) {
   $info['system.site_information_settings']['names'][] = 'alshaya_master.settings';
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_master_element_info_alter(array &$info) {
+  if (isset($info['mobile_number']['#process'])) {
+    $info['mobile_number']['#process'][] = '_alshaya_master_mobile_number_process';
+    $info['mobile_number']['#value_callback'] = '_alshaya_master_mobile_number_value_callback';
+    array_unshift($info['mobile_number']['#element_validate'], '_alshaya_master_mobile_number_validate');
+  }
+}
+
+/**
+ * Processor for the mobile number field to disable the country code.
+ */
+function _alshaya_master_mobile_number_process(array &$element, FormStateInterface $form_state) {
+  $default_site_country = _alshaya_custom_get_site_level_country_code();
+
+  // Set default country as per site.
+  $element['country-code']['#value'] = $default_site_country;
+  $options = $element['country-code']['#options'];
+  $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
+  $element['country-code']['#attributes']['class'][] = 'hidden-important';
+
+  // Remove space to avoid issues in RTL.
+  if (!empty($element['mobile']['#default_value'])) {
+    $element['mobile']['#default_value'] = str_replace(' ', '', $element['mobile']['#default_value']);
+  }
+
+  // Make mobile number required only for few forms.
+  $mobile_number_required_forms = [
+    'webform_submission_alshaya_contact_form',
+    'profile_address_book_add_form',
+    'profile_address_book_edit_form',
+    'profile_address_book_form',
+  ];
+
+  if (in_array($form_state->getBuildInfo()['form_id'], $mobile_number_required_forms)) {
+    $element['mobile']['#required'] = TRUE;
+  }
+
+  // Add input prefix library.
+  $element['#attached']['library'][] = 'alshaya_master/mobile_number';
+
+  // Country code.
+  $country_mobile_code = alshaya_master_get_country_mobile_code();
+  if ($country_mobile_code) {
+    $element['mobile']['#attributes']['mobile-prefix'] = $country_mobile_code;
+    $element['#attached']['drupalSettings']['alshaya_mobile_prefix'] = $country_mobile_code;
+  }
+
+  return $element;
+}
+
+/**
+ * Validate callback: To remove the country code prefix added in mobile field.
+ */
+function _alshaya_master_mobile_number_validate(array &$element, FormStateInterface $form_state) {
+  $tree_parents = $element['#parents'];
+  // Country code.
+  $country_mobile_code = alshaya_master_get_country_mobile_code();
+  // Get user input as validation function is using the input value to validate.
+  // @see \Drupal\mobile_number\Element\MobileNumber::mobileNumberValidate
+  $input = $form_state->getUserInput();
+  $pp = NestedArray::getValue($form_state->getUserInput(), $tree_parents);
+  // Remove country code from the value, as we are using a single input for
+  // country code and mobile number or local number.
+  if (!empty($pp['local_number'])) {
+    $pp['local_number'] = str_replace($country_mobile_code, '', $pp['local_number']);
+  }
+  $pp['mobile'] = str_replace($country_mobile_code, '', $pp['mobile']);
+  NestedArray::setValue($input, $tree_parents, $pp);
+  $form_state->setUserInput($input);
+}
+
+/**
+ * Value callback for the mobile number field to remove the prefix.
+ */
+function _alshaya_master_mobile_number_value_callback(&$element, $input, FormStateInterface $form_state) {
+  /** @var \Drupal\mobile_number\MobileNumberUtilInterface $util */
+  $util = \Drupal::service('mobile_number.util');
+
+  if ($input) {
+    $country = !empty($input['country-code']) ? $input['country-code'] : (count($element['#allowed_countries']) == 1 ? key($element['#allowed_countries']) : NULL);
+
+    // Remove the country code prefix added in mobile field.
+    $country_mobile_code = alshaya_master_get_country_mobile_code($country, $util);
+    $input['mobile'] = str_replace($country_mobile_code, '', $input['mobile']);
+
+    $mobile_number = $util->getMobileNumber($input['mobile'], $country);
+    $result = [
+      'value' => $mobile_number ? $util->getCallableNumber($mobile_number) : '',
+      'country' => $country,
+      'local_number' => $input['mobile'],
+      'tfa' => !empty($input['tfa']) ? 1 : 0,
+      'verified' => 0,
+      'verification_token' => !empty($input['verification_token']) ? $input['verification_token'] : NULL,
+      'verification_code' => !empty($input['verification_code']) ? $input['verification_code'] : NULL,
+    ];
+  }
+  else {
+    $result = !empty($element['#default_value']) ? $element['#default_value'] : [];
+  }
+
+  return $result;
+}
+
+/**
+ * Get country mobile code.
+ *
+ * @param null|string $country
+ *   (optional) The site country code.
+ * @param null|object $util
+ *   (optional) The mobile utility functions.
+ *
+ * @return string
+ *   Return country code.
+ */
+function alshaya_master_get_country_mobile_code($country = NULL, $util = NULL) {
+  if (empty($country)) {
+    $country = _alshaya_custom_get_site_level_country_code();
+  }
+
+  if (empty($util)) {
+    $util = \Drupal::service('mobile_number.util');
+  }
+
+  return '+' . $util->getCountryCode($country);
+}
+
+/**
+ * Helper function to convert date received from API to site timezone date.
+ *
+ * @param string $date
+ *   Date string received from API.
+ * @param string $format
+ *   Drupal date format to get the return string.
+ *
+ * @return mixed
+ *   Formated date in site's timezone.
+ */
+function alshaya_master_get_site_date_from_api_date($date, $format = '') {
+  // @TODO: We need confirmation from Magento that we will always have UTC.
+  // Get UTC timezone.
+  $tz_utc = new DateTimeZone('UTC');
+
+  // Get local site timezone.
+  $tz_local = new DateTimeZone(date_default_timezone_get());
+
+  // Get date object for date string.
+  $dt = new DateTime($date, $tz_utc);
+
+  // Convert the timezone.
+  $dt->setTimezone($tz_local);
+
+  // Return formated date in site's timezone.
+  return \Drupal::service('date.formatter')->format($dt->getTimestamp(), $format);
 }

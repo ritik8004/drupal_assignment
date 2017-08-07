@@ -576,6 +576,12 @@
         background-color: $white-four;
       }
 
+      &:hover li a .second-third .second .dark::after {
+        html[lang=ar] & {
+          background-color: $white-four;
+        }
+      }
+
       a {
         @include icon(chevron#{$right}, after) {
           font-size: 1.875rem;
@@ -585,8 +591,7 @@
           color: $black;
           padding: 2px;
           padding-#{$left}: 4px;
-          top: 50%;
-          transform: translateY(-50%);
+          top: 2rem;
           height: 35px;
           width: 35px;
 
@@ -868,6 +873,10 @@
       font-size: 1.25rem;
       letter-spacing: 0.312rem;
       line-height: 1.2;
+
+      html[lang=ar] & {
+        letter-spacing: 0;
+      }
     }
 
     .form-item--error-message {
@@ -1193,4 +1202,11 @@ html[lang="ar"] {
   html[lang=ar] & {
     font-family: $arial-nodir;
   }
+}
+
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
 }

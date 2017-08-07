@@ -39,20 +39,6 @@
           }
         }
       });
-      $('.other-stores-link').on('click', function () {
-        if ($(window).width() < 768) {
-          $('html,body').animate({
-            scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
-          }, 'slow');
-        }
-        else {
-          if ($('body').hasClass('header--fixed')) {
-            $('html,body').animate({
-              scrollTop: $('.content__title_wrapper').offset().top - normalStickyHeaderHeight
-            }, 'slow');
-          }
-        }
-      });
 
       // Scrolling the page to top if edit address is clicked.
       $('.address .address--edit a').on('click', function () {
@@ -63,6 +49,24 @@
 
       // Mobile grey block hiding over the image after 3secs.
       $('.mobilegallery .subtext').show().delay(3000).fadeOut();
+    }
+  };
+
+  Drupal.behaviors.pdpModal = {
+    attach: function (context, settings) {
+      function modalOverlay(button, className) {
+        $(button).click(function () {
+          $('body').removeClass(className);
+        });
+      }
+
+      $('.nodetype--acq_product .above-mobile-block, .path--cart .owl-item .above-mobile-block').click(function () {
+        $('body').addClass('pdp-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
+        });
+      });
     }
   };
 

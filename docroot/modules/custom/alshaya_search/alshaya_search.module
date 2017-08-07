@@ -159,11 +159,7 @@ function alshaya_search_ajax_render_alter(array &$data) {
  * Implements hook_entity_type_alter().
  */
 function alshaya_search_entity_type_alter(array &$entity_types) {
-  $entity_types['facets_facet']->setHandlerClass('form',
-    [
-      'edit' => 'Drupal\alshaya_search\Form\AlshayaSearchFacetForm',
-    ]
-  );
+  $entity_types['facets_facet']->setFormClass('edit', 'Drupal\alshaya_search\Form\AlshayaSearchFacetForm');
 }
 
 /**
@@ -187,6 +183,11 @@ function alshaya_search_block_view_alter(array &$build, BlockPluginInterface $bl
       $build['#attached']['drupalSettings']['alshaya_search_facets_display_textbox'] = [
         $block->getPluginId() => $display_textbox_item_count,
       ];
+    }
+
+    // Add the currency variable in JS.
+    if ($block->getConfiguration()['id'] == 'facet_block:final_price') {
+      $build['#attached']['drupalSettings']['alshaya_search_price_currency'] = \Drupal::config('acq_commerce.currency')->get('currency_code');
     }
   }
 }

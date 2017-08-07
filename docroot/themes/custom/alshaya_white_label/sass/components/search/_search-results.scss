@@ -208,14 +208,19 @@ header,
   li.ui-menu-item {
     display: inherit;
     padding: 10px 1rem 10px 7.5px;
+    border: 1px solid transparent;
 
     &:not(:last-child) {
-      border-bottom: 1px solid $white;
+      border-bottom-color: $white;
+    }
+
+    &.ui-state-focus,
+    &.ui-state-active {
+      margin: 0;
     }
 
     &:hover {
       background-color: $white-smoke-light;
-      border: 1px solid $white;
     }
 
     a {
@@ -301,20 +306,20 @@ ul.item-list__checkbox,
 
       &:hover {
         margin-top: 0;
-        margin-right: 0.1875rem !important;
-        margin-left: -0.1875rem !important;
+        margin-#{$right}: 0.1875rem !important;
+        margin-#{$left}: -0.1875rem !important;
         padding: 0.1875rem;
         border: 1px solid $brownish-grey;
       }
 
       &:first-child {
         &:hover {
-          margin-left: 0 !important;
+          margin-#{$left}: 0 !important;
         }
       }
 
       &:last-child {
-        margin-right: 0 !important;
+        margin-#{$right}: 0 !important;
       }
     }
 
@@ -371,4 +376,8 @@ ul.item-list__checkbox,
       }
     }
   }
+}
+
+.ui-helper-hidden-accessible {
+  @include u-image-replacement;
 }

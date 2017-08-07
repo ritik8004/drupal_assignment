@@ -39,6 +39,16 @@
   margin: auto;
   margin-bottom: 2.4rem;
 
+  .js-form-wrapper {
+    @include breakpoint($only-mobile) {
+      position: relative;
+    }
+
+    .size-guide-link {
+      padding-top: 1.2rem;
+    }
+  }
+
   @include breakpoint($tablet) {
     padding: 0 2.75rem;
     margin-#{$left}: 0;
@@ -117,6 +127,14 @@
   }
 
   .views-row {
+    @include breakpoint($only-tablet) {
+      .price {
+        max-width: 100% !important;
+      }
+
+      padding: 0 0.5rem;
+    }
+
     .use-ajax {
       outline: transparent;
     }
@@ -287,6 +305,12 @@
       }
     }
 
+    .select2-container {
+      @include select2-style(100%);
+
+      float: $left;
+    }
+
     .form-item-configurables-size {
       select {
         display: block !important;
@@ -333,24 +357,32 @@
   .special--price {
     display: inline-block;
   }
+
+  .has--special--price {
+    @include breakpoint($only-mobile) {
+      display: block;
+    }
+  }
 }
 
 .price--discount span,
+.special--price .price-amount,
+.special--price .price-currency,
 .special--price .price-wrapper {
-  color: $scarlet;
+  color: $special-price !important;
 }
 
 .price--discount {
-  margin-top: 9px;
-  font-size: 10px;
-  color: $scarlet;
+  margin-top: 0.5625rem;
+  font-size: 0.625rem;
+  color: $special-price;
 
   @include breakpoint($tablet) {
-    margin-top: 12px;
-    font-size: 11px;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
   }
 
   @include breakpoint($desktop) {
-    margin-top: 6px;
+    margin-top: 0.375rem;
   }
 }

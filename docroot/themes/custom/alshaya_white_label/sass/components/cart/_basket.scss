@@ -3,6 +3,13 @@
     .price-wrapper .price {
       max-width: 5rem !important;
     }
+
+    &.alias--cart-checkout-payment,
+    &.alias--cart-checkout-delivery {
+      .price-wrapper .price {
+        max-width: none !important;
+      }
+    }
   }
 
   tr[data-drupal-selector="edit-totals-discount"] td:first-child {
@@ -116,11 +123,20 @@
           }
         }
 
-        &.subtotal {
+        &.subtotal .price-currency.suffix {
+          @include breakpoint($only-tablet) {
+            position: relative;
+            left: 0;
+          }
+
           @include breakpoint($tablet) {
             .price-currency.suffix {
               float: left;
               padding: 0;
+            }
+
+            @include breakpoint($desktop) {
+              padding-right: 1.56rem;
             }
 
             span.price-amount {
@@ -205,7 +221,6 @@
 
       @include breakpoint($only-tablet) {
         line-height: 1.3;
-        margin-right: 0.75rem;
       }
 
       @include breakpoint($desktop) {
@@ -232,8 +247,8 @@
     }
 
     .item-code {
-      font-family: $alshaya-thin;
-      font-size: 0.75rem;
+      font-family: $arial;
+      font-size: 0.875rem;
     }
 
     .item--bundle {
@@ -268,6 +283,13 @@
 
       &.dark {
         @include clearfix;
+      }
+
+      .special--price,
+      .price--discount {
+        @include clearfix;
+
+        clear: both;
       }
     }
 
@@ -654,6 +676,10 @@
     padding-top: 2.7rem;
   }
 
+  .price-wrapper .price {
+    margin: 0 auto;
+  }
+
   & > h3 {
     color: $marine-blue;
     margin-bottom: 0.3rem;
@@ -666,18 +692,19 @@
 
     @include breakpoint($tablet) {
       font-size: 0.875rem;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0;
+      padding-bottom: 0;
       margin-#{$left}: 2.75rem;
     }
 
     @include breakpoint($desktop) {
       font-size: 1.125rem;
+      margin-bottom: 0.3rem;
+      padding-bottom: 0.56rem;
     }
   }
 
   .view-product-slider {
-    max-width: 45rem;
-
     @include breakpoint($desktop) {
       max-width: 77.25rem;
     }
@@ -688,6 +715,10 @@
       @include breakpoint($upto-desktop) {
         min-height: 10rem;
         object-fit: contain;
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: 8.875rem;
       }
     }
 
@@ -737,6 +768,10 @@
   margin-bottom: 0.875rem;
   letter-spacing: 0.0125rem;
 
+  html[lang=ar] & {
+    line-height: normal;
+  }
+
   @include breakpoint($tablet) {
     margin-top: -1em;
   }
@@ -778,15 +813,15 @@
   }
 
   @include icon(warning, after) {
-    background-size: 12px;
-    font-size: 28px;
+    background-size: 0.75rem;
+    font-size: 1.75rem;
     position: absolute;
-    left: 11px;
-    top: 24px;
+    #{$left}: 0.6875rem;
+    top: 1.5rem;
 
     @include breakpoint($tablet) {
-      left: 23px;
-      top: 10px;
+      #{$left}: 1.438rem;
+      top: 0.625rem;
     }
   }
 }
@@ -800,6 +835,10 @@
 
   @include breakpoint($only-tablet) {
     margin-top: 0.6875rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.5rem;
   }
 }
 
@@ -920,6 +959,10 @@ html[lang=ar] {
           @include breakpoint($only-mobile) {
             margin-top: -0.5rem;
           }
+
+          @include breakpoint($only-tablet) {
+            padding-top: 1.35rem;
+          }
         }
 
         td.name {
@@ -940,7 +983,7 @@ html[lang=ar] {
   }
 
   .edit-continue-shopping-mobile {
-    border: 1px solid $cobalt-blue !important;
+    border: 0 none !important;
     width: 10.8125rem;
     padding: 0.67rem !important;
     color: $cobalt-blue !important;
@@ -975,6 +1018,19 @@ html[lang=ar] {
     font-size: 0.75rem;
   }
 
+  .alias--cart #table-cart-totals td:first-child {
+    @include breakpoint($desktop) {
+      font-size: 0.875rem !important;
+      padding-left: 1.7rem;
+    }
+
+    span {
+      @include breakpoint($desktop) {
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+
   .path--cart .customer-cart-form .items {
     padding-right: 1.2rem;
 
@@ -990,12 +1046,6 @@ html[lang=ar] {
   .alias--cart {
     .field--name-field-skus .ladda-button[data-style=zoom-in] .ladda-spinner {
       left: 43%;
-
-      @include breakpoint($upto-desktop) {
-        left: 27%;
-        position: relative;
-        top: -0.25rem;
-      }
     }
   }
 
@@ -1007,6 +1057,39 @@ html[lang=ar] {
 }
 
 html[lang=ar] {
+  .path--cart .customer-cart-form .item-code {
+    font-family: $alshaya-thin;
+  }
+
+  #table-cart-items table tr td.subtotal .price-currency.suffix {
+    left: 0.5rem !important;
+  }
+
+  .alias--cart #table-cart-totals table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] td:nth-child(2) {
+    @include breakpoint($only-mobile) {
+      padding-top: 1.5rem !important;
+    }
+  }
+
+  .alias--cart #table-cart-totals .cart-promotions {
+    .tooltip {
+      right: 10rem;
+      top: -1.7rem;
+
+      @include breakpoint($only-tablet) {
+        right: -5.1rem;
+        top: 0.7rem;
+      }
+
+      &::before,
+      &::after {
+        @include breakpoint($desktop) {
+          top: 0.7em;
+        }
+      }
+    }
+  }
+
   #table-cart-totals,
   #edit-actions-top,
   #alshaya-newsletter-subscribe {
@@ -1036,6 +1119,11 @@ html[lang=ar] {
 
     @include breakpoint($desktop) {
       float: right !important;
+      padding-right: 0.56rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      line-height: 1;
     }
   }
 
@@ -1059,8 +1147,16 @@ html[lang=ar] {
     }
   }
 
-  table tr td.subtotal span.price-amount {
-    margin-left: 0.5rem;
+  table tr td.subtotal {
+    span.price-amount {
+      margin-left: 0.5rem;
+    }
+
+    .price-currency.suffix {
+      @include breakpoint($desktop) {
+        padding-right: 0 !important;
+      }
+    }
   }
 }
 
@@ -1085,5 +1181,45 @@ html[lang=ar] .path--cart h1.c-page-title::before {
   @include breakpoint($only-mobile) {
     width: 10rem;
     display: inline-block;
+  }
+}
+
+td.price {
+  @include breakpoint($tablet) {
+    .price-type__wrapper,
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      @include clearfix;
+    }
+
+    .price--discount {
+      float: right;
+
+      html[lang=ar] & span {
+        float: left;
+      }
+    }
+
+    .price-type__wrapper {
+      max-width: 130px;
+    }
+
+    .discount-value {
+      padding-left: 0.25rem;
+    }
+
+    .special--price,
+    .has--special--price {
+      .price {
+        .price-currency {
+          float: left !important;
+        }
+
+        .price-amount {
+          float: right !important;
+        }
+      }
+    }
   }
 }

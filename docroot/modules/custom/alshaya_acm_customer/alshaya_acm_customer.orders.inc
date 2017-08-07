@@ -169,7 +169,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $orderRow = [];
 
   $orderRow['orderId'] = $order['increment_id'];
-  $orderRow['orderDate'] = \Drupal::service('date.formatter')->format(strtotime($order['created_at']), 'order_date');
+  $orderRow['orderDate'] = alshaya_master_get_site_date_from_api_date($order['created_at'], 'order_date');
 
   // We will display the name of first order item.
   $item = reset($order['items']);
@@ -193,6 +193,9 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   // Calculate status of order based on status of items.
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
 
+  // Get the loyalty card number from order detail.
+  $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? $order['extension']['loyalty_card'] : '';
+
   return $orderRow;
 }
 
@@ -209,19 +212,24 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
+  /** @var \Drupal\alshaya_master\Decorator\AlshayaMasterMobileUtilDecorator $mobile_number_util */
+  $mobile_number_util = \Drupal::service('mobile_number.util');
+
   $orderDetails = [];
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $shipping_method_code = $checkoutOptionsManager->getCleanShippingMethodCode($order['shipping']['method']['carrier_code']);
   $shippingTerm = $checkoutOptionsManager->loadShippingMethod($shipping_method_code);
-  $orderDetails['delivery_method'] = $shippingTerm->getName();
+
   $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
 
-  $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['billing']['telephone']);
+  $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
   if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
-    $orderDetails['collection_by'] = $order['firstname'] . ' ' . $order['lastname'];
+    $orderDetails['type'] = 'cc';
+
+    $orderDetails['delivery_method'] = $shippingTerm->getName();
 
     $shipping_assignment = reset($order['extension']['shipping_assignments']);
     $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
@@ -242,7 +250,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     }
   }
   else {
-    $orderDetails['delivery_to'] = $order['shipping']['address']['firstname'] . ' ' . $order['shipping']['address']['lastname'];
+    $orderDetails['type'] = 'hd';
+
+    $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
+      '@shipping_method_name' => $shippingTerm->getName(),
+      '@shipping_method_description' => $shippingTerm->get('field_shipping_method_cart_desc')->getString(),
+    ]);
+
     $shipping_address = $order['shipping']['address'];
 
     // Loading address from address book if customer_address_id is available.
@@ -253,13 +267,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     }
 
     $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
-    $billing_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']);
-
-    $orderDetails['billing_same_as_shipping'] = 0;
-
-    if (serialize($shipping_address_array) == serialize($billing_address_array)) {
-      $orderDetails['billing_same_as_shipping'] = 1;
-    }
+    $shipping_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
 
     $delivery_address = [
       '#theme' => 'alshaya_address',
@@ -267,16 +275,20 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     ];
 
     $orderDetails['delivery_address'] = render($delivery_address);
-
-    $billing_address = [
-      '#theme' => 'alshaya_address',
-      '#address' => $billing_address_array,
-    ];
-
-    $orderDetails['billing_address'] = render($billing_address);
   }
 
-  $orderDetails['payment_method'] = $order['payment']['method_title'];
+  $billing_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']);
+  $billing_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
+
+  $billing_address = [
+    '#theme' => 'alshaya_address',
+    '#address' => $billing_address_array,
+  ];
+
+  $orderDetails['billing_address'] = render($billing_address);
+
+  $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code']);
+  $orderDetails['payment_method'] = $payment_method_term->getName();
 
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);

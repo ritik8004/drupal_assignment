@@ -12,7 +12,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\node\Entity\Node;
 use Drupal\acq_sku\Entity\SKU;
-use GuzzleHttp\Client;
 
 /**
  * Class AcqPromotionsManager.
@@ -113,6 +112,8 @@ class AcqPromotionsManager {
     $types = is_array($types) ? $types : [$types];
     $ids = [];
     $promotions = [];
+    $fetched_promotions = [];
+
     foreach ($types as $type) {
       $promotions = $this->apiWrapper->getPromotions($type);
 
@@ -136,7 +137,7 @@ class AcqPromotionsManager {
    * @param array $validIDs
    *   Valid Rule ID's from API.
    */
-  protected function unpublishPromotions($validIDs = []) {
+  protected function unpublishPromotions(array $validIDs = []) {
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
     $query->condition('field_acq_promotion_rule_id', $validIDs, 'NOT IN');
@@ -220,14 +221,14 @@ class AcqPromotionsManager {
    *
    * @param array $promotion
    *   Promotion response from Conductor.
-   * @param null $promotion_node
+   * @param \Drupal\node\Entity\Node $promotion_node
    *   Promotion node in case we need to update Promotion.
    *
    * @return \Drupal\Core\Entity\EntityInterface
    *   Promotion node.
    */
   public function syncPromotionWithMiddlewareResponse(array $promotion,
-                                                        $promotion_node = NULL) {
+                                                      Node $promotion_node = NULL) {
     if (!$promotion_node) {
       $promotion_node = $this->nodeStorage->create([
         'type' => 'acq_promotion',
@@ -360,10 +361,11 @@ class AcqPromotionsManager {
           $data['promotion'] = $promotion_node->id();
           $data['skus'] = $detach_promotion_skus;
           $promotion_detach_queue->createItem($data);
-          $output['detached_message'] = t('Skus @skus queued up to detach 
-          promotion rule: @rule_id', [
-             '@skus' => implode(',', $data['skus']),
-             '@rule_id' => $promotion['rule_id'],
+          $output['detached_message'] = t(
+            'Skus @skus queued up to detach promotion rule: @rule_id',
+            [
+              '@skus' => implode(',', $data['skus']),
+              '@rule_id' => $promotion['rule_id'],
             ]
           );
         }
@@ -381,8 +383,13 @@ class AcqPromotionsManager {
         foreach ($chunks as $chunk) {
           $data['skus'] = $chunk;
           $promotion_attach_queue->createItem($data);
-          $output['attached_message'] = t('Skus @skus queued up to attach promotion rule: @rule_id',
-            ['@skus' => implode(',', array_keys($fetched_promotion_sku_attach_data)), '@rule_id' => $promotion['rule_id']]);
+          $output['attached_message'] = t(
+            'Skus @skus queued up to attach promotion rule: @rule_id',
+            [
+              '@skus' => implode(',', array_keys($fetched_promotion_sku_attach_data)),
+              '@rule_id' => $promotion['rule_id'],
+            ]
+          );
         }
       }
     }

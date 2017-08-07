@@ -83,6 +83,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
 
       if (!empty($store)) {
+        if ($shipping_type == 'reserve_and_collect') {
+          $store['delivery_time'] = \Drupal::config('alshaya_click_collect.settings')->get('click_collect_rnc');
+        }
+
         $selected_store = [
           '#theme' => 'click_collect_selected_store',
           '#store' => $store,
@@ -252,6 +256,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
           'cart_id' => $cart->id(),
           'selected_store' => ($store_code) ? TRUE : FALSE,
           'selected_store_obj' => $store,
+          // Default site country to limit autocomplete result.
+          'country' => _alshaya_custom_get_site_level_country_code(),
         ],
       ],
       'library' => [
@@ -331,14 +337,9 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         return;
       }
 
-      $customer_cart = $api_wrapper->createCart($customer['customer_id']);
-
-      if (empty($customer_cart['customer_email'])) {
-        $customer_cart['customer_email'] = $values['cc_email'];
-      }
-
-      $cart->convertToCustomerCart($customer_cart);
-      \Drupal::service('acq_cart.cart_storage')->addCart($cart);
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $cart_storage->associateCart($customer['customer_id'], $values['cc_email']);
     }
 
     $extension = [];
@@ -355,6 +356,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     $address = $address_book_manager->getAddressStructureWithEmptyValues();
+
+    // Adding first and last name from custom info.
+    $address['firstname'] = $values['cc_firstname'];
+    $address['lastname'] = $values['cc_lastname'];
 
     $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
 

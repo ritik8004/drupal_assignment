@@ -321,8 +321,8 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       $cart->setShipping($update);
     }
 
-    $response = new AjaxResponse();
-    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString()));
+    $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'hide'));
+    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     return $response;
   }
 

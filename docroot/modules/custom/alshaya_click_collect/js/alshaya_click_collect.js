@@ -2,7 +2,12 @@
   'use strict';
 
   /* global google */
+
+  /**
+   * @namespace
+   */
   Drupal.click_collect = Drupal.click_collect || {};
+  Drupal.geolocation = Drupal.geolocation || {};
 
   /**
    * Click and collect constructor.
@@ -13,29 +18,74 @@
    *   The html element to which we need to attach autocomplete.
    * @param {Array} callbacks
    *   The callback functions to be called on place changed
+   * @param {Object} restriction
+   *   The component restrictions object.
    * @param {HTMLElement} $trigger
    *   The element on which the ajax call should trigger.
    */
-  Drupal.ClickCollect = function (field, callbacks, $trigger) {
+  Drupal.ClickCollect = function (field, callbacks, restriction, $trigger) {
     var click_collect = this;
 
     var intance = click_collect.googleAutocomplete(field);
+
+    // Set restriction for autocomplete.
+    if (!$.isEmptyObject(restriction)) {
+      intance.setComponentRestrictions(restriction);
+    }
+    else if (typeof drupalSettings.alshaya_click_collect !== 'undefined' && typeof drupalSettings.alshaya_click_collect.country !== 'undefined') {
+      intance.setComponentRestrictions({country: [drupalSettings.alshaya_click_collect.country]});
+    }
 
     intance.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
       var place = intance.getPlace();
 
-      click_collect.coords = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      };
+      click_collect.coords = {};
+      if (typeof place.geometry !== 'undefined') {
+        click_collect.coords = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        };
+      }
 
       if ($.isArray(callbacks)) {
         callbacks.forEach(function (callback) {
-          callback.call(this, click_collect.coords, $trigger);
+          callback.call(this, click_collect.coords, field, restriction, $trigger);
         });
       }
     });
+
+    // No result found.
+    var $noResultEle = $('<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>');
+
+    $(field).once('autocomplete-init').on('keyup', function (e) {
+      var keyCode = e.keyCode || e.which;
+      if (keyCode === 13) {
+        return false;
+      }
+
+      if ($(this).val().length > 0) {
+        setTimeout(function () {
+          var $container = $('.pac-container').last();
+          if ($('.pac-container').length === 2) {
+            $container = $('.pac-container').first();
+          }
+          else if ($('.pac-container').length <= 1) {
+            $container = $('.pac-container');
+          }
+
+          if ($container.find('.pac-item').length === 0) {
+            $container.siblings('.pac-container').remove();
+            $('.pac-container').html($noResultEle);
+            $('.pac-container').show();
+          }
+          else {
+            $noResultEle.get(0).remove();
+          }
+        }, 800);
+      }
+    });
+
   };
 
   // Initialize autocomplete for given field.

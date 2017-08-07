@@ -27,47 +27,49 @@
   Drupal.behaviors.alshayaFacets = {
     attach: function (context, settings) {
       var facetsDisplayTextbox = settings.alshaya_search_facets_display_textbox;
-      var facetPlugins = Object.keys(facetsDisplayTextbox);
-      $('.block-facets-ajax').each(function () {
-        var blockPluginId = $(this).attr('data-block-plugin-id');
-        if ($.inArray(blockPluginId, facetPlugins !== -1) &&
-          ($(this).find('li.facet-item').length >= facetsDisplayTextbox[blockPluginId]) &&
-          ($(this).find('.facets-search-input').length === 0)) {
-          // Prepend the text field before the checkboxes, if not exists.
-          $(this).find('ul').prepend('<input type="text" placeholder="'
-            + Drupal.t('Enter your filter name')
-            + '" class="facets-search-input">').on('keyup', function () {
-            var facetFilterKeyword = $(this).find('.facets-search-input').val().toLowerCase();
-            if (facetFilterKeyword) {
-              // Hide show more if above keyword has some data.
-              if (settings.facets.softLimit !== undefined) {
-                $(this).parent().find('.facets-soft-limit-link').hide();
-              }
-              $(this).find('li').each(function () {
-                // Hide all facet links.
-                $(this).hide();
-                if ($(this).find('.facet-item__value').html().toLowerCase().search(facetFilterKeyword) >= 0) {
-                  $(this).show();
+      if (facetsDisplayTextbox) {
+        var facetPlugins = Object.keys(facetsDisplayTextbox);
+        $('.block-facets-ajax').each(function () {
+          var blockPluginId = $(this).attr('data-block-plugin-id');
+          if ($.inArray(blockPluginId, facetPlugins !== -1) &&
+            ($(this).find('li.facet-item').length >= facetsDisplayTextbox[blockPluginId]) &&
+            ($(this).find('.facets-search-input').length === 0)) {
+            // Prepend the text field before the checkboxes, if not exists.
+            $(this).find('ul').prepend('<input type="text" placeholder="'
+              + Drupal.t('Enter your filter name')
+              + '" class="facets-search-input">').on('keyup', function () {
+              var facetFilterKeyword = $(this).find('.facets-search-input').val().toLowerCase();
+              if (facetFilterKeyword) {
+                // Hide show more if above keyword has some data.
+                if (settings.facets.softLimit !== undefined) {
+                  $(this).parent().find('.facets-soft-limit-link').hide();
                 }
-              });
-            }
-            else {
-              // Show all facet items.
-              $(this).find('li:hidden').show();
-              if (settings.facets.softLimit !== undefined) {
-                // If soft limit is rendered, show the link.
-                $(this).parent().find('.facets-soft-limit-link').show();
-                if (!$(this).parent().find('.facets-soft-limit-link').hasClass('open')) {
-                  // Show only soft limit items, if facets were collapsed.
-                  var facetName = $(this).attr('data-drupal-facet-id');
-                  var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
-                  $(this).find('li:gt(' + zeroBasedLimit + ')').hide();
+                $(this).find('li').each(function () {
+                  // Hide all facet links.
+                  $(this).hide();
+                  if ($(this).find('.facet-item__value').html().toLowerCase().search(facetFilterKeyword) >= 0) {
+                    $(this).show();
+                  }
+                });
+              }
+              else {
+                // Show all facet items.
+                $(this).find('li:hidden').show();
+                if (settings.facets.softLimit !== undefined) {
+                  // If soft limit is rendered, show the link.
+                  $(this).parent().find('.facets-soft-limit-link').show();
+                  if (!$(this).parent().find('.facets-soft-limit-link').hasClass('open')) {
+                    // Show only soft limit items, if facets were collapsed.
+                    var facetName = $(this).attr('data-drupal-facet-id');
+                    var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
+                    $(this).find('li:gt(' + zeroBasedLimit + ')').hide();
+                  }
                 }
               }
-            }
-          });
-        }
-      });
+            });
+          }
+        });
+      }
 
       // Poll the DOM to check if the show more/less link is avaialble, before placing it inside the ul.
       var i = setInterval(function () {
@@ -90,6 +92,21 @@
           });
         }
       }, 100);
+
+      // Change the title of facet when open.
+      var priceCurrency = settings.alshaya_search_price_currency;
+      if (priceCurrency) {
+        var initialTitle = $('#block-finalprice h3').html();
+        $('#block-finalprice > h3').on('click', function() {
+          if ($(this).hasClass('ui-state-active')) {
+            $('#block-finalprice h3').html(initialTitle + ' (' + priceCurrency + ')');
+          }
+          else {
+            $('#block-finalprice h3').html(initialTitle);
+          }
+        });
+      }
+
     }
   };
 

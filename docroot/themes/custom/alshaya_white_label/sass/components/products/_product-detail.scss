@@ -174,7 +174,7 @@
       @include select-wrapper(12.3125rem);
 
       padding: 0;
-      margin-top: 1.5em;
+      margin-top: 0.5em;
       position: relative;
       z-index: 3;
       width: 100%;
@@ -209,7 +209,7 @@
       @include select-bg(6.5625rem);
 
       padding: 0;
-      margin-top: 1.5em;
+      margin-top: 0.5em;
       width: 100%;
       min-height: 2.188rem;
 
@@ -242,8 +242,12 @@
     }
   }
 
-  #configurable_ajax h2.field--name-name {
-    @include u-visibility(none);
+  #configurable_ajax {
+    position: relative;
+
+    h2.field--name-name {
+      @include u-visibility(none);
+    }
   }
 
   .form-item.form-type-select.form-item-quantity {
@@ -251,22 +255,21 @@
 
     @include breakpoint($only-mobile) {
       float: $right;
-      top: -3px;
+      top: -7px;
       background-color: $whisper-dark;
     }
 
     @include breakpoint($only-tablet) {
       float: $right;
-      top: -3px;
+      top: -7px;
       background-color: $whisper-dark;
     }
   }
 
   .form-item-quantity {
-    @include select-wrapper(4.375rem);
-
+    position: relative;
     margin-bottom: 1.5rem;
-    margin-top: 2.1875rem;
+    margin-top: 1.45rem;
     float: $left;
 
     label {
@@ -279,10 +282,8 @@
       #{$left}: 0;
     }
 
-    select {
-      @include select-style(4.375rem);
-
-      background-color: $white-two !important;
+    .select2-container {
+      @include select2-style(4.375rem);
     }
   }
 }
@@ -784,7 +785,16 @@
     @include u-visibility(none);
   }
 
-  .pac-item {
+  .pac-not-found {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 30px;
+    text-align: left;
+  }
+
+  .pac-item,
+  .pac-not-found {
     padding: 0.125rem 0.3125rem;
     font-family: $arial;
 
@@ -794,6 +804,7 @@
   }
 
   .pac-item,
+  .pac-not-found,
   .pac-matched,
   .pac-item-query {
     font-size: 0.75rem !important;
@@ -828,7 +839,8 @@
           text-align: center;
           float: $left;
           margin-top: 2px;
-          line-height: 1.4;
+          line-height: 1.5;
+          font-size: 0.625rem;
         }
 
         &-info-wrap {
@@ -842,11 +854,15 @@
         }
 
         &-delivery-time {
-          padding-top: 12px;
+          padding-top: 0.75rem;
+          display: inline-block;
+          float: $left;
+          margin-#{$right}: 1.125rem;
 
           em {
             font-weight: bold;
             font-style: normal;
+            color: $black;
           }
         }
 
@@ -854,6 +870,14 @@
           p {
             margin: 0;
           }
+        }
+
+        &-low-stock {
+          font-size: 0.6875rem;
+          font-weight: bold;
+          color: $pumpkin-orange;
+          padding-top: 0.8125rem;
+          display: inline-block;
         }
       }
     }
@@ -1101,6 +1125,7 @@
             font-weight: bold;
             color: $pumpkin-orange;
             float: $right;
+            padding-#{$right}: 0.75rem;
           }
         }
       }
@@ -1150,11 +1175,17 @@
       height: 8rem;
     }
 
+    .sku-base-form > div,
     .sku-base-form > .js-form-wrapper {
       @include breakpoint($mobile) {
         @include u-visibility(inline-block);
 
         width: 65%;
+        margin-#{$right}: 2rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 1rem;
       }
 
       @include breakpoint($desktop) {
@@ -1243,7 +1274,7 @@
 
         @include breakpoint($desktop) {
           float: $right;
-          margin-top: 2.1875rem;
+          margin-top: 1.45rem;
         }
       }
     }
@@ -1286,6 +1317,7 @@
 
   .selected-text {
     font-weight: bold;
+    display: inline-block;
   }
 
   .select-buttons {
@@ -1302,7 +1334,10 @@
       span {
         @include u-visibility(block);
 
-        margin: 0.3125rem 8px 0.3125rem 0;
+        margin-top: 0.3125rem;
+        margin-bottom: 0.3125rem;
+        margin-#{$right}: 0.5rem;
+        margin-#{$left}: 0;
         border: 1px solid $black;
         text-align: center;
         padding: 0.75rem;
@@ -1327,21 +1362,37 @@
   }
 }
 
-.errors-container .error {
-  background: $cherry;
-  padding: 0.625rem;
-  color: $white-four;
-  position: relative;
+.errors-container {
+  margin-top: 0.5rem;
 
-  @include icon(warning, before) {
-    font-size: 1.4rem;
-    position: absolute;
-    top: 0.3125rem;
+  @include breakpoint($upto-desktop) {
+    width: 100% !important;
   }
 
-  ul {
-    margin: 0;
-    list-style: none;
+  @include breakpoint($only-mobile) {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .error {
+    background: $cherry;
+    padding: 0.625rem;
+    color: $white-four;
+    position: relative;
+    padding-#{$left}: 2.313rem;
+
+    @include icon(warning, before) {
+      font-size: 1.4rem;
+      position: absolute;
+      top: 0.3125rem;
+      #{$left}: 0;
+      padding-#{$left}: 0.5625rem;
+    }
+
+    ul {
+      margin: 0;
+      list-style: none;
+    }
   }
 }
 
@@ -1351,6 +1402,10 @@ article[gtm-sku-type="simple"] {
     .sku-base-form {
       .form-item-quantity {
         float: $left !important;
+
+        @include breakpoint($tablet) {
+          margin-top: 2.5rem;
+        }
       }
 
       button[type="submit"] {
@@ -1360,7 +1415,89 @@ article[gtm-sku-type="simple"] {
           height: 2.188rem;
           text-align: center;
         }
+
+        @include breakpoint($desktop) {
+          margin-top: 2.5rem !important;
+        }
       }
     }
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  .stock-checker {
+    font-family: $alshaya-thin;
+    padding: 0.625rem 0;
+    font-size: 0.75rem;
+
+    &::before {
+      content: " ";
+      width: 1.25rem;
+      height: 1.25rem;
+      background: url(../imgs/icons/MC-loader.svg) no-repeat;
+      background-size: contain;
+      display: inline-block;
+      vertical-align: middle;
+      margin-#{$right}: 0.3125rem;
+    }
+  }
+
+  .out-of-stock {
+    background-color: $cherry;
+    font-family: $alshaya-thin;
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 0.6rem 1.5rem;
+    color: $white;
+    font-size: 0.75rem;
+
+    @include breakpoint($desktop) {
+      display: inline-block;
+    }
+  }
+}
+
+.select2-container--open {
+  z-index: 999;
+}
+
+.sku-base-form {
+  .ajax-progress-throbber {
+    display: none !important;
+  }
+}
+
+.ui-dialog,
+.acq-content-product {
+  .form-item-configurables-size {
+    .select2-container {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+  }
+
+  .form-item-configurables-size {
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    .select2-container {
+      @include select2-style(100%);
+    }
+  }
+}
+
+.ui-dialog {
+  .field--name-field-skus .sku-base-form > .js-form-wrapper {
+    margin-#{$right}: 0;
+  }
+
+  .content__title_wrapper {
+    margin-bottom: 1rem;
   }
 }

@@ -22,6 +22,7 @@
 
   Drupal.pdp = Drupal.pdp || {};
   Drupal.geolocation = Drupal.geolocation || {};
+  Drupal.click_collect = Drupal.click_collect || {};
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
@@ -33,6 +34,18 @@
         });
       }
 
+      // Show/Hide subtitle for delivery options accordions.
+      $('.c-accordion-delivery-options').each(function () {
+        $(this).once('accordion-trigger').on('accordionbeforeactivate', function (event, ui) {
+          if (ui.newHeader.length > 0) {
+            $(event.target).find('h3 > .subtitle').slideUp();
+          }
+          else {
+            $(event.target).find('h3 > .subtitle').slideDown('slow');
+          }
+        });
+      });
+
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Get the permission track the user location.
         Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
@@ -40,10 +53,11 @@
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
         if ($(this).attr('state') === 'disabled') {
-          $('#pdp-stores-container.click-collect > h3')
-            .removeClass('ui-state-active ui-accordion-header-active')
-            .addClass('ui-state-disabled');
-          $('#pdp-stores-container.click-collect > .c-accordion_content').hide();
+          var accordionStatus = $('#pdp-stores-container.click-collect').accordion('option', 'active');
+          if (typeof accordionStatus === 'number' && accordionStatus === 0) {
+            $('#pdp-stores-container.click-collect').accordion('option', 'active', false);
+          }
+          $('#pdp-stores-container.c-accordion-delivery-options').accordion('option', 'disable', true);
         }
         else {
           // Get the permission track the user location.
@@ -56,7 +70,9 @@
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
           e.preventDefault();
-          $('.click-collect-form').find('.search-stores-button').click();
+          if (!$.isEmptyObject(asCoords)) {
+            $('.click-collect-form').find('.search-stores-button').click();
+          }
           return false;
         }
       });
@@ -69,6 +85,9 @@
               scrollTop: $('.click-collect-all-stores').offset().top
             }, 'slow');
           });
+        }
+        else {
+          $('.click-collect-all-stores').toggle('slow');
         }
       });
 
@@ -137,9 +156,11 @@
   };
 
   // Set the location coordinates, but don't render the stores.
-  Drupal.pdp.setStoreCoords = function (coords) {
+  Drupal.pdp.setStoreCoords = function (coords, field, restriction, $trigger) {
     asCoords = coords;
-    Drupal.pdp.storesDisplay(asCoords);
+    if (!$.isEmptyObject(asCoords)) {
+      Drupal.pdp.storesDisplay(asCoords);
+    }
   };
 
   Drupal.pdp.getProductInfo = function () {
@@ -199,12 +220,12 @@
   };
 
   // Make Ajax call to get stores and render html.
-  Drupal.pdp.storesDisplay = function (coords, $trigger) {
+  Drupal.pdp.storesDisplay = function (coords, field, restriction, $trigger) {
     if (coords) {
       asCoords = coords;
     }
 
-    if (asCoords) {
+    if (!$.isEmptyObject(asCoords)) {
       // Get the Product info.
       var productInfo = Drupal.pdp.getProductInfo();
       var sku = '';
@@ -275,13 +296,13 @@
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function () {
     var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   /**
@@ -328,21 +349,27 @@
    */
   Drupal.AjaxCommands.prototype.updatePDPClickCollect = function (ajax, response, status) {
     if (Drupal.pdp.validateCurrentProduct(response.data)) {
+      $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
+      var accordionStatus = $('#pdp-stores-container.click-collect').accordion('option', 'active');
       if (response.data.alshaya_acm.storeFinder) {
-        $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
-        $('#pdp-stores-container.click-collect > h3')
-          .removeClass('ui-state-disabled')
-          .addClass('ui-state-active ui-accordion-header-active');
-        $('#pdp-stores-container.click-collect > .c-accordion_content').show();
+        if ($('#pdp-stores-container.click-collect').accordion('option', 'disabled')) {
+          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', false);
+        }
 
+        if (!accordionStatus) {
+          $('#pdp-stores-container.click-collect').accordion('option', 'active', true);
+          $('#pdp-stores-container.click-collect > h3').trigger('click');
+        }
         Drupal.pdp.storesDisplay();
       }
       else {
-        $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
-        $('#pdp-stores-container.click-collect > h3')
-          .removeClass('ui-state-active ui-accordion-header-active')
-          .addClass('ui-state-disabled');
-        $('#pdp-stores-container.click-collect > .c-accordion_content').hide();
+        if (typeof accordionStatus === 'number' && accordionStatus === 0) {
+          $('#pdp-stores-container.click-collect').accordion('option', 'active', false);
+        }
+        if (!$('#pdp-stores-container.click-collect').accordion('option', 'disabled')) {
+          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
+        }
+
       }
     }
   };

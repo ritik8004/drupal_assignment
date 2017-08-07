@@ -83,7 +83,12 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
 
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
+
       if (!empty($store)) {
+        if ($shipping_type == 'reserve_and_collect') {
+          $store['delivery_time'] = \Drupal::config('alshaya_click_collect.settings')->get('click_collect_rnc');
+        }
+
         $selected_store = [
           '#theme' => 'click_collect_selected_store',
           '#store' => $store,
@@ -155,7 +160,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     ];
 
     $pane_form['selected_store']['elements']['mobile_help'] = [
-      '#markup' => '<div class="cc-help-text cc-mobile-help-text">' . $this->t("<p>Please provide the mobile number of the person collecting the order.</p>We'll send you a text message when the order is ready to collect") . '</div>',
+      '#markup' => '<div class="cc-help-text cc-mobile-help-text"><p>' . $this->t("Please provide the mobile number of the person collecting the order") . '</p>' . $this->t("We'll send you a text message when the order is ready to collect") . '</div>',
     ];
 
     // Here we have cc_ prefix to ensure validations work fine and don't
@@ -211,6 +216,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
           'cart_id' => $cart->id(),
           'selected_store' => ($store_code) ? TRUE : FALSE,
           'selected_store_obj' => $store,
+          // Default site country to limit autocomplete result.
+          'country' => _alshaya_custom_get_site_level_country_code(),
         ],
       ],
       'library' => [
@@ -273,6 +280,12 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     $address = $address_book_manager->getAddressStructureWithEmptyValues();
+
+    // Adding first and last name from custom info.
+    /** @var \Drupal\user\Entity\User $account */
+    $account = User::load(\Drupal::currentUser()->id());
+    $address['firstname'] = $account->get('field_first_name')->getString();
+    $address['lastname'] = $account->get('field_last_name')->getString();
 
     $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
 

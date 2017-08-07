@@ -84,7 +84,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
    * Implements \Drupal\block\BlockBase::build().
    */
   public function build() {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
     $order_data = $temp_store->get('order');
@@ -106,6 +106,16 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
 
     $order = $orders[$order_index];
 
+    // By default we assume loyalty is disabled.
+    $loyalty_enabled = FALSE;
+
+    // Check first if loyalty module is enabled.
+    if ($this->moduleHandler->moduleExists('alshaya_loyalty')) {
+      // Check again if loyalty is enabled in settings.
+      $loyalty_settings = alshaya_loyalty_get_validation_settings();
+      $loyalty_enabled = (bool) $loyalty_settings['enable_disable_loyalty'];
+    }
+
     $build = [];
 
     $account = $this->entityTypeManager->getStorage('user')->create([]);
@@ -114,12 +124,25 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $account->get('field_last_name')->setValue($order['lastname']);
 
     // Set the mobile number from last order details.
-    if (isset($order['shipping'], $order['shipping']['address'], $order['shipping']['address']['telephone'])) {
+    if (isset($order['billing'], $order['billing']['telephone'])) {
       $number = [
         'value' => $order['billing']['telephone'],
       ];
 
       $account->get('field_mobile_number')->setValue($number);
+    }
+
+    if ($loyalty_enabled) {
+      // Add the following block only if user has not entered loyalty card
+      // number in basket.
+      if (empty($order['extension']['loyalty_card'])) {
+        $block = Block::load('jointheclub');
+        $build['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+        $build['joinclub']['#weight'] = 100;
+      }
+      else {
+        $account->get('field_privilege_card_number')->setValue($order['extension']['loyalty_card']);
+      }
     }
 
     $form = $this->entityFormBuilder->getForm($account, 'register');
@@ -144,15 +167,6 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
     $form['actions']['submit']['#value'] = $this->t('save', [], ['context' => 'Checkout']);
 
     $build['form'] = $form;
-
-    // Add the following block only if alshaya_loyaty is enabled.
-    if ($this->moduleHandler->moduleExists('alshaya_loyalty')) {
-      // TODO: Add condition around this to check if promo card was entered by
-      // user in Basket. Also save that in user if it was entered.
-      $block = Block::load('jointheclub');
-      $build['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
-      $build['joinclub']['#weight'] = 100;
-    }
 
     return $build;
   }

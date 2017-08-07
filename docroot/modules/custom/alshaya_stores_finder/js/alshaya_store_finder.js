@@ -6,10 +6,21 @@
 (function ($, Drupal) {
   'use strict';
 
+  /* global google */
+
+  /**
+   * @namespace
+   */
+  Drupal.geolocation = Drupal.geolocation || {};
   Drupal.alshaya_stores_finder = Drupal.alshaya_stores_finder || {};
 
   Drupal.behaviors.storeFinder = {
     attach: function (context, settings) {
+
+      // Opening hours toggle.
+      $('[data-drupal-selector^="views-form-stores-finder-"]', context).on('click', '.hours--label', function () {
+        $(this).toggleClass('open');
+      });
 
       var storeFinderPageSelector = $('.view-id-stores_finder.view-display-id-page_1', context);
       if (storeFinderPageSelector.length > 0) {
@@ -97,36 +108,62 @@
       };
 
       function displayLocation(latitude, longitude) {
-        //var geocoder = new google.maps.Geocoder();
         if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
           Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
         }
+
+        var componentRestrictions = {};
+        if (typeof drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions !== 'undefined') {
+          componentRestrictions = drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions;
+        }
+
         var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
         var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+        var runscript = true;
         geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
-            if ($('.current-view').length) {
-              $('.current-view #edit-geolocation-geocoder-google-geocoding-api').val(results[1].formatted_address);
-              $('.current-view input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
-              $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+
+            // Check if the current location country and the restricted country are same.
+            if (!$.isEmptyObject(componentRestrictions) && componentRestrictions.country) {
+              $.each(results, function (index, result) {
+                var addressType = result.types[0];
+                if (addressType === 'country') {
+                  if (result.address_components[0].short_name !== componentRestrictions.country) {
+                    runscript = false;
+                    return false;
+                  }
+                }
+              });
             }
-            else {
-              $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-geocoding-api').val(results[1].formatted_address);
-              $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
-              $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+
+            if (runscript) {
+              if ($('.current-view').length) {
+                $('.current-view #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
+                $('.current-view input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+                $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+              }
+              else {
+                $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
+                $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+                $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+              }
             }
           }
 
           if ($('.current-view').length !== 0) {
-            setTimeout(function() {
-              $('.current-view form #edit-submit-stores-finder').trigger('click');
+            setTimeout(function () {
+              if (runscript) {
+                $('.current-view form #edit-submit-stores-finder').trigger('click');
+              }
               // Close the overlay.
               $('body').removeClass('modal-overlay--spinner');
             }, 500);
           }
           else {
-            setTimeout(function() {
-              $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+            setTimeout(function () {
+              if (runscript) {
+                $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+              }
               // Close the overlay.
               $('body').removeClass('modal-overlay--spinner');
             }, 500);
@@ -135,7 +172,7 @@
       }
 
       // Remove the store node title from breadcrumb.
-      $.fn.updateStoreFinderBreadcrumb = function(data) {
+      $.fn.updateStoreFinderBreadcrumb = function (data) {
         var breadcrumb = $('.block-system-breadcrumb-block').length;
         if (breadcrumb > 0) {
           var li_count = $('.block-system-breadcrumb-block ol li').length;
@@ -146,17 +183,18 @@
       };
 
       // Trigger click on autocomplete selection.
-      $('.block-views-exposed-filter-blockstores-finder-page-1 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
-          setTimeout(function() {
-            $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+      $('[class*="block-views-exposed-filter-blockstores-finder-page"]').each(function () {
+        var storeFinder = $(this);
+        // Add class to store finder exposed form.
+        // Adding class to hook_form_alter for store finder form is adding it to the
+        // wrapper div. So, adding it using js to apply css.
+        storeFinder.find('form').addClass('store-finder-exposed-form');
+        // Trigger form submit on selecting location in autocomplete.
+        storeFinder.find('.ui-autocomplete-input').on('autocompleteselect', function (event, ui) {
+          setTimeout(function () {
+            storeFinder.find('input[id^="edit-submit-stores-finder"]').trigger('click');
           }, 500);
-      });
-
-      // Trigger click on autocomplete selection.
-      $('.block-views-exposed-filter-blockstores-finder-page-3 .ui-autocomplete-input').on('autocompleteselect', function( event, ui ) {
-        setTimeout(function() {
-          $('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-submit-stores-finder').trigger('click');
-        }, 500);
+        });
       });
 
     }
@@ -164,8 +202,15 @@
 
   /**
    * Helper function to add client-side pagination.
+   *
+   * @param {HTMLElement} storeLocatorSelector
+   *   The store locator selector html string.
+   * @param {HTMLElement} loadMoreButtonSelector
+   *   The Load more button html string.
+   * @param {int} loadmoreItemLimit
+   *   Limit to load new items.
    */
-  Drupal.alshaya_stores_finder.paginateStores = function(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit) {
+  Drupal.alshaya_stores_finder.paginateStores = function (storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit) {
     var viewLocatorCount = $(storeLocatorSelector).length;
     if (viewLocatorCount > loadmoreItemLimit) {
       $(storeLocatorSelector).slice(loadmoreItemLimit, viewLocatorCount).hide();
@@ -184,5 +229,14 @@
       $(loadMoreButtonSelector).hide();
     }
   };
+
+  // Open Maps app depending on the device ios or Andriod.
+  function mapsApp(lat, lng) {
+    // If it is an iPhone..
+    if ((navigator.platform.indexOf('iPhone') !== -1)
+      || (navigator.platform.indexOf('iPod') !== -1)
+      || (navigator.platform.indexOf('iPad') !== -1)) {window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + lng + '&amp;ll=');}
+    else {window.open('geo:' + lat + ',' + lng + '');}
+  }
 
 })(jQuery, Drupal);

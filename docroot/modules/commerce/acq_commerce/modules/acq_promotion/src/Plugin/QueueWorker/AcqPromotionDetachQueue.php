@@ -3,7 +3,7 @@
 namespace Drupal\acq_promotion\Plugin\QueueWorker;
 
 use Drupal\acq_commerce\Conductor\ConductorException;
-use Drupal\acq_promotion\AlshayaPromotionQueueBase;
+use Drupal\acq_promotion\AcqPromotionQueueBase;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
@@ -14,7 +14,7 @@ use Drupal\acq_sku\Entity\SKU;
  *   title = @Translation("Acq Commerce Promotion detach queue"),
  * )
  */
-class AcqPromotionDetachQueue extends AlshayaPromotionQueueBase {
+class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
 
   /**
    * Works on a single queue item.

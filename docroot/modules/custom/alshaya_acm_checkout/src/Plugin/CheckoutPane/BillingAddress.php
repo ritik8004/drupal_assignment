@@ -170,23 +170,17 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       return;
     }
 
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
     $values = $form_state->getValue($pane_form['#parents']);
 
     if ($values['same_as_shipping'] != self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
-      $address_values = $values['address']['billing'];
+      $address_values = $values['address']['billing'] ?: [];
 
-      /** @var \Drupal\profile\Entity\Profile $profile */
-      $profile = \Drupal::entityTypeManager()->getStorage('profile')->create([
-        'type' => 'address_book',
-        'uid' => 0,
-        'field_address' => $address_values,
-      ]);
-
-      /* @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
-      if ($violations = $profile->validate()) {
-        foreach ($violations->getByFields(['field_address']) as $violation) {
-          $error_field = explode('.', $violation->getPropertyPath());
-          $form_state->setErrorByName('billing_address][address][shipping][' . $error_field[2], $violation->getMessage());
+      if ($violations = $address_book_manager->validateAddress($address_values)) {
+        foreach ($violations as $field => $message) {
+          $form_state->setErrorByName('billing_address][address][billing][' . $field, $message);
         }
       }
     }
@@ -205,44 +199,12 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     $shipping_address = (array) $cart->getShipping();
 
     if ($values['same_as_shipping'] == self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
-      // Loading address from address book if customer_address_id is available.
-      if (isset($shipping_address['customer_address_id'])) {
-        if ($entity = $address_book_manager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
-          $shipping_address = $address_book_manager->getAddressFromEntity($entity, FALSE);
-        }
-      }
-
-      $cart->setBilling(_alshaya_acm_checkout_clean_address($shipping_address));
+      alshaya_acm_checkout_set_shipping_into_billing($cart);
     }
     else {
       $address_values = $values['address']['billing'];
-
       $address = _alshaya_acm_checkout_clean_address($address_book_manager->getMagentoAddressFromAddressArray($address_values));
-
       $cart->setBilling($address);
-
-      // If shipping method is click and collect, we set billing address to
-      // shipping except the shipping phone.
-      if ($values['same_as_shipping'] == self::BILLING_ADDR_CASE_CLICK_COLLECT) {
-        $original_shipping_address = $shipping_address;
-        $shipping_address = $address;
-        $shipping_address['telephone'] = $original_shipping_address['telephone'];
-        $cart->setShipping($shipping_address);
-
-        // Because we are setting the shipping address here we have to set
-        // the shipping method again.
-        $extension = [];
-
-        $extension['store_code'] = $cart->getExtension('store_code');
-        $extension['click_and_collect_type'] = $cart->getExtension('click_and_collect_type');
-
-        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-        $term = $checkout_options_manager->getClickandColectShippingMethodTerm();
-
-        $cart = $this->getCart();
-        $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
-      }
     }
   }
 

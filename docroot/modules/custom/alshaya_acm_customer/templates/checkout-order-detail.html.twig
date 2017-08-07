@@ -34,10 +34,10 @@
           {% endtrans %}
         </div>
 
-        {% if account.privilege_card_number %}
+        {% if order.loyaltyCard %}
           <div>
             {% trans %}
-            <p>Your Privileges Card Number is: <strong class="dark--text">{{ account.privilege_card_number }}</strong></p>
+            <p>Your Privileges Card Number is: <strong class="dark--text">{{ order.loyaltyCard }}</strong></p>
             {% endtrans %}
           </div>
         {% endif %}
@@ -72,18 +72,25 @@
     <tbody>
       <tr class="order-details-row">
         <td class="order__user--info">
-          {% if order_details.collection_by %}
-            <div class="label font-small">{{ "Collection by"|t }}</div>
-            <div class="dark">{{ order_details.collection_by }}</div>
-          {% else %}
-            <div class="label font-small">{{ "Delivery to"|t }}</div>
-            <div class="dark">{{ order_details.delivery_to }}</div>
-          {% endif %}
+          {% if order_details.type == 'cc' %}
+            <div class="label font-small">{{ 'Collection Address'|t }}</div>
+            <div class="store-name-and-address">
+              <div class="store-name dark">{{ order_details.store_name }}</div>
+              <div class="store-address">{{ order_details.store_address|raw }}</div>
+              <div class="store-phone">{{ order_details.store_phone }}</div>
+              <div class="store-map-link">
+                <a href="{{ order_details.view_on_map_link }}" target="_blank">{{ 'View on map'|t }}</a>
+              </div>
+            </div>
 
-          <div class="contact">
-            <div class="label font-small">{{ "Contact number"|t }}</div>
-            <div class="dark">{{ order_details.contact_no }}</div>
-          </div>
+            <div class="contact">
+              <div class="label font-small">{{ "Collector contact no."|t }}</div>
+              <div class="dark">{{ order_details.contact_no }}</div>
+            </div>
+          {% else %}
+            <div class="label font-small">{{ "Delivery details"|t }}</div>
+            <div>{{ order_details.delivery_address }}</div>
+          {% endif %}
 
           <div class="mobile-only payment--details">
             <div class="label font-small">{{ "Payment method"|t }}</div>
@@ -91,39 +98,15 @@
           </div>
         </td>
         <td class="order__delivery-details">
-          {% if order_details.collection_by %}
-            <div class="label font-small">{{ 'Collection Address'|t }}</div>
-            <div class="dark store-name-and-address">
-              <div class="store-name">{{ order_details.store_name }}</div>
-              <div class="store-address">{{ order_details.store_address|raw }}</div>
-              <div class="store-phone">{{ order_details.store_phone }}</div>
-              <div class="store-map-link">
-                <a href="{{ order_details.view_on_map_link }}" target="_blank">{{ 'View on map'|t }}</a>
-              </div>
-            </div>
-          {% elseif order_details.billing_same_as_shipping %}
-            <div class="label font-small">{{ "Shipping & Billing Address"|t }}</div>
-            <div class="dark">{{ order_details.delivery_address }}</div>
-          {% else %}
-            <div class="label font-small">{{ "Delivery Address"|t }}</div>
-            <div class="dark">{{ order_details.delivery_address }}</div>
-          {% endif %}
-
-          <div class="mobile-only delivery--method">
-            <div class="label font-small">{{ "Delivery method"|t }}</div>
-            <div class="dark">{{ order_details.delivery_method }}</div>
-          </div>
-        </td>
-        <td class="desktop-only blend">
-          {% if order_details.collection_by %}
+          {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ 'Collection times'|t }}</div>
-            <div class="dark">
+            <div>
               <div class="store-open-hours">
                 <div class="hours--wrapper selector--hours">
                   <div class="open--hours">
                     {% for item in order_details.store_open_hours %}
                       <div>
-                        <span class="key-value-key">{{ item.key }}</span>
+                        <span class="key-value-key dark">{{ item.key }}</span>
                         <span class="key-value-value">{{ item.value }}</span>
                       </div>
                     {% endfor %}
@@ -131,19 +114,28 @@
                 </div>
               </div>
             </div>
-          {% elseif not order_details.billing_same_as_shipping %}
-            <div class="label font-small">{{ "Billing address"|t }}</div>
-            <div class="dark">{{ order_details.billing_address }}</div>
+          {% else %}
+            <div class="label font-small">{{ "Billing details"|t }}</div>
+            <div>{{ order_details.billing_address }}</div>
           {% endif %}
-        </td>
-        <td class="above-mobile blend">
-          <div class="label font-small">{{ "Payment method"|t }}</div>
-          <div class="dark">{{ order_details.payment_method }}</div>
 
-          <div class="above-mobile delivery--method">
+          <div class="mobile-only delivery--method">
             <div class="label font-small">{{ "Delivery method"|t }}</div>
             <div class="dark">{{ order_details.delivery_method }}</div>
           </div>
+        </td>
+        <td class="desktop-only">
+          {% if order_details.type == 'cc' %}
+            <div class="label font-small">{{ "Billing details"|t }}</div>
+            <div>{{ order_details.billing_address }}</div>
+          {% endif %}
+        </td>
+        <td class="above-mobile blend">
+          <div class="label payment-method font-small">{{ "Payment method"|t }}</div>
+          <div class="dark">{{ order_details.payment_method }}</div>
+
+          <div class="label delivery-method font-small">{{ "Delivery method"|t }}</div>
+          <div class="dark">{{ order_details.delivery_method }}</div>
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>

@@ -11,7 +11,9 @@
       <div class="delivery-option-title {{ options.standard_icon_class }}">
         {% if options.standard_title or options.standard_subtitle %}
           <strong>{{ options.standard_title }} </strong>
-          <span>{{ options.standard_subtitle }}</span>
+          {% if options.standard_subtitle %}
+            <span>({{ options.standard_subtitle }})</span>
+          {% endif %}
         {% endif %}
       </div>
 

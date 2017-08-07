@@ -78,11 +78,35 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('page-standard');
   }
 
-  if (\Drupal::routeMatch()->getRouteName() === "acq_customer.orders") {
+  if (\Drupal::routeMatch()->getRouteName() === "acq_customer.orders" || \Drupal::routeMatch()->getRouteName() === 'acq_cart.cart') {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
 
+  if (isset($variables['node'])) {
+    if ($variables['node']->bundle() === 'acq_product') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
+    }
+  }
+
   $variables['nojs_message'] = \Drupal::config('alshaya_master.settings')->get('js_disable_message');
+
+  $routmatch = \Drupal::routeMatch();
+  // Attach the plp search js library to PLP page.
+  if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routmatch->getParameter('taxonomy_term');
+    if ($term->bundle() == 'acq_product_category') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+    }
+  }
+
+  // Attach the plp search js library to Search page.
+  if ($routmatch->getRouteName() == 'view.search.page') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+  }
+
+  // Make site_name and site_logo available to all TWIG templates.
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['site_logo'] = theme_get_setting('logo.url');
 }
 
 /**
@@ -229,6 +253,12 @@ function alshaya_white_label_preprocess_node(&$variables) {
   elseif ($variables['node']->bundle() === 'acq_product') {
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
+  }
+  elseif ($variables['node']->bundle() === 'store') {
+    $current_route = \Drupal::routeMatch();
+    if ($current_route->getRouteName() == 'alshaya_stores_finder.store_detail') {
+      $variables['previous_page'] = $current_route->getParameter('type')?: 'glossary';
+    }
   }
 }
 
@@ -465,17 +495,27 @@ function alshaya_white_label_preprocess_user(&$variables) {
   $user = $variables['user'];
   if ($user) {
     $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
-    $variables['contact_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($user->get('field_mobile_number')->getValue()[0]['value']);
-    $privilege_card = $user->get('field_privilege_card_number') ? (!empty($user->get('field_privilege_card_number')->getValue()) ? $user->get('field_privilege_card_number')->getValue()[0]['value'] : '') : '';
-    $variables['privilege_card'] = $privilege_card ? alshaya_loyalty_format_card_number($privilege_card, TRUE) : '';
 
-    $module_handler = \Drupal::moduleHandler();
-    if ($module_handler->moduleExists('alshaya_loyalty')) {
+    // We always initialise the variable to get no notices.
+    $variables['contact_number'] = '';
+    $variables['privilege_card'] = '';
+
+    if ($mobile_number = $user->get('field_mobile_number')->getValue()) {
+      $variables['contact_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($mobile_number[0]['value']);
+    }
+
+    // Check if loyalty module is enabled.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
       // Get loyalty settings.
       $loyalty_settings = alshaya_loyalty_get_validation_settings();
-      // If site has loyalty 'off'.
-      if (!$loyalty_settings['enable_disable_loyalty']) {
-        $variables['privilege_card'] = '';
+
+      // Check if site has loyalty enabled in config.
+      if ($loyalty_settings['enable_disable_loyalty']) {
+
+        // Check if we have some value stored for the user.
+        if ($privilege_card = $user->get('field_privilege_card_number')->getValue()) {
+          $variables['privilege_card'] = alshaya_loyalty_format_card_number($privilege_card[0]['value'], TRUE);
+        }
       }
     }
   }

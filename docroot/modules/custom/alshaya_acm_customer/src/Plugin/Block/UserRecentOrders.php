@@ -156,7 +156,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
           if (!empty($order['items'])) {
             $order['item_names'] = [];
             $order['user_id'] = $uid;
-            $order['date'] = $this->dateFormatter->format(strtotime($order['created_at']), 'order_date');
+            $order['date'] = alshaya_master_get_site_date_from_api_date($order['created_at'], 'order_date');
             $order['id'] = $order['increment_id'];
 
             // Theme the order total grands with currency.

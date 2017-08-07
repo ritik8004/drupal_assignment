@@ -77,25 +77,26 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
 
-    foreach ($plugins as $plugin) {
-      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']);
-    }
-
     // Get available payment methods and compare to enabled payment method
     // plugins.
     $apiWrapper = $this->getApiWrapper();
     $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
     $payment_methods = array_intersect($payment_methods, array_keys($plugins));
 
-    // Get the methods allowed for selected delivery method.
-    $shipping_method = $cart->getShippingMethodAsString();
-    $allowed_methods = $checkout_options_manager->getAllowedPaymentMethodCodes($shipping_method);
-
-    // Update payment methods to show only those which are allowed for selected
-    // delivery method.
-    $payment_methods = array_intersect($payment_methods, $allowed_methods);
+    // Get the default plugin id.
+    if ($default_plugin_id = $checkout_options_manager->getDefaultPaymentCode()) {
+      // Add that as first one.
+      if ($default_plugin_index = array_search($default_plugin_id, $payment_methods)) {
+        unset($payment_methods[$default_plugin_index]);
+        array_unshift($payment_methods, $default_plugin_id);
+      }
+    }
 
     $selected_plugin_id = $cart->getPaymentMethod(FALSE);
+
+    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
+      $selected_plugin_id = $form_values['payment_options'];
+    }
 
     // Avoid warnings because of empty array from getPaymentMethod.
     if (is_array($selected_plugin_id) && empty($selected_plugin_id)) {
@@ -108,20 +109,9 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       $cart->setPaymentMethod(NULL, []);
     }
 
-    // Only one payment method available, load and return that methods plugin.
-    if (count($payment_methods) === 1) {
-      $plugin_id = reset($payment_methods);
-      $cart->setPaymentMethod($plugin_id);
-      $plugin = $this->getPlugin($plugin_id);
-      $pane_form += $plugin->buildPaneForm($pane_form, $form_state, $complete_form);
-      return $pane_form;
-    }
-    elseif (empty($selected_plugin_id)) {
-      $default_plugin_id = $checkout_options_manager->getDefaultPaymentCode();
-
-      if (in_array($default_plugin_id, $payment_methods)) {
-        $selected_plugin_id = $default_plugin_id;
-      }
+    // If there is no plugin selected, we select the default one.
+    if (empty($selected_plugin_id) && $default_plugin_id) {
+      $selected_plugin_id = reset($payment_methods);
     }
 
     // More than one payment method available, so build a form to let the user
@@ -134,13 +124,18 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         continue;
       }
 
-      $payment_term = $checkout_options_manager->loadPaymentMethod($plugin_id);
+      $payment_term = $checkout_options_manager->loadPaymentMethod($plugin_id, $plugins[$plugin_id]['label']);
+
+      $description = '';
+      if ($description_value = $payment_term->get('description')->getValue()) {
+        $description = $description_value[0]['value'];
+      }
 
       $method_name = '
         <div class="payment-method-name">
           <div class="method-title">' . $payment_term->getName() . '</div>
           <div class="method-side-info method-' . $plugin_id . '"></div>
-          <div class="method-description">' . $payment_term->get('description')->getValue()[0]['value'] . '</div>
+          <div class="method-description">' . $description . '</div>
         </div>
       ';
 
@@ -153,7 +148,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#options' => $payment_options,
       '#default_value' => $selected_plugin_id,
       '#ajax' => [
-        'wrapper' => 'payment_details',
+        'wrapper' => 'payment_details_wrapper',
         'callback' => [$this, 'rebuildPaymentDetails'],
       ],
       '#attributes' => [
@@ -161,18 +156,42 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       ],
     ];
 
+    $pane_form['payment_details_wrapper'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => ['payment_details_wrapper'],
+      ],
+    ];
+
+    foreach ($payment_options as $payment_plugin => $name) {
+      $pane_form['payment_details_wrapper']['payment_method_' . $payment_plugin] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => ['payment_method_' . $payment_plugin],
+        ],
+      ];
+
+      // To avoid issues in JS we always add the cybersource js library.
+      if ($payment_plugin == 'cybersource') {
+        $pane_form['payment_details_wrapper']['payment_method_' . $payment_plugin]['#attached']['library'][] = 'acq_cybersource/cybersource';
+      }
+
+      $title = '<div id="payment_method_title_' . $payment_plugin . '"';
+      $title .= $payment_plugin == $selected_plugin_id ? ' class="plugin-selected payment-plugin-wrapper-div" ' : ' class="payment-plugin-wrapper-div" ';
+      $title .= ' data-value="' . $payment_plugin . '" ';
+      $title .= '>';
+      $title .= $name;
+      $title .= '</div>';
+
+      $pane_form['payment_details_wrapper']['payment_method_' . $payment_plugin]['title'] = [
+        '#markup' => $title,
+      ];
+    }
+
     if ($selected_plugin_id) {
       $cart->setPaymentMethod($selected_plugin_id);
       $plugin = $this->getPlugin($selected_plugin_id);
-      $pane_form += $plugin->buildPaneForm($pane_form, $form_state, $complete_form);
-    }
-    else {
-      $pane_form['payment_details'] = [
-        '#type' => 'container',
-        '#attributes' => [
-          'id' => ['payment_details'],
-        ],
-      ];
+      $pane_form['payment_details_wrapper']['payment_method_' . $selected_plugin_id] += $plugin->buildPaneForm($pane_form['payment_details_wrapper']['payment_method_' . $selected_plugin_id], $form_state, $complete_form);
     }
 
     return $pane_form;
@@ -182,7 +201,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public static function rebuildPaymentDetails(array $pane_form, FormStateInterface $form_state) {
-    return $pane_form['acm_payment_methods']['payment_details'];
+    return $pane_form['acm_payment_methods']['payment_details_wrapper'];
   }
 
   /**
