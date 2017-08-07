@@ -15,23 +15,3 @@ index 16662b89..1f4dab81 100644
 +
    $variables['price'] = number_format($variables['price'], $config->get('decimal_points'));
  }
- 
-diff --git a/modules/acq_cart/src/Cart.php b/modules/acq_cart/src/Cart.php
-index 60269966..e5b9f4af 100644
---- a/modules/acq_cart/src/Cart.php
-+++ b/modules/acq_cart/src/Cart.php
-@@ -110,14 +110,6 @@ public function customerEmail() {
-    */
-   public function totals() {
-     if (isset($this->cart, $this->cart->totals)) {
--      // Remove the comma coming from Magento, we will add while formatting.
--      // Casting to float or using floatval stops at comma and doesn't return
--      // whole value.
--      // NumberFormatter.parse requires locale, we don't have expected value
--      // available anywhere in the system for now (kw_AR) so not using it.
--      foreach ($this->cart->totals as &$value) {
--        $value = str_replace(',', '', $value);
--      }
-       return $this->cart->totals;
-     }
-     return NULL;

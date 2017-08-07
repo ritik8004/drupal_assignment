@@ -110,6 +110,14 @@ class Cart implements CartInterface {
    */
   public function totals() {
     if (isset($this->cart, $this->cart->totals)) {
+      // Remove the comma coming from Magento, we will add while formatting.
+      // Casting to float or using floatval stops at comma and doesn't return
+      // whole value.
+      // NumberFormatter.parse requires locale, we don't have expected value
+      // available anywhere in the system for now (kw_AR) so not using it.
+      foreach ($this->cart->totals as &$value) {
+        $value = str_replace(',', '', $value);
+      }
       return $this->cart->totals;
     }
     return NULL;
