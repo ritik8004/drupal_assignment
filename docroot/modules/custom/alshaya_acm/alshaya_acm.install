@@ -5,11 +5,41 @@
  * Contains install, update, uninstall hooks for alshaya_acm module.
  */
 
+use Drupal\user\Entity\User;
+use Drupal\Core\Site\Settings;
+use Drupal\simple_oauth\Entity\Oauth2Client;
+
 /**
  * Implements hook_modules_installed().
  */
 function alshaya_acm_modules_installed($modules) {
   if (in_array('alshaya_acm', $modules)) {
+    // Create a user that will be used by ACM when pushing to Drupal.
+    $user = User::create();
+    $user->setPassword(Settings::get('alshaya_acm_user_password'));
+    $user->enforceIsNew();
+    $user->setEmail(Settings::get('alshaya_acm_user_email'));
+    $user->setUsername(Settings::get('alshaya_acm_user_username'));
+    $user->activate();
+    // TODO: Security.
+    $user->addRole('administrator');
+    $user->save();
+
+    // Configure Simple Oauth.
+    $config = \Drupal::configFactory()->getEditable('simple_oauth.settings');
+    $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
+    $config->set('private_key', Settings::get('alshaya_acm_soauth_private_key'));
+    $config->save();
+
+    // Add Simple Oauth client.
+    $client = Oauth2Client::create();
+    $client->set('label', 'Alshaya ACM');
+    $client->setDefaultUser($user);
+    $client->setSecret(Settings::get('alshaya_acm_soauth_client_secret'));
+    $client->set('roles', ['administrator']);
+    $client->set('uuid', Settings::get('alshaya_acm_soauth_client_uuid'));
+    $client->save();
+
     // Update category sync resource to allow basic_auth.
     $config = \Drupal::configFactory()->getEditable('rest.resource.acq_categorysync');
     $configuration = $config->get('configuration');
