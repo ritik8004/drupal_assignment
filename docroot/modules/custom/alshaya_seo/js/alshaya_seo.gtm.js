@@ -440,17 +440,25 @@
 
       /** Tracking internal promotion impressions. **/
       // Tracking menu level promotions
-      topNavLevelOneSelector.once('js-event').on('mouseenter', function() {
-        if ($(this).hasClass('has-child')) {
-          var topNavLevelTwo = $(this).children('ul.menu--two__list');
-          var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
-          var highlights = [];
+      topNavLevelOneSelector.once('js-event').on('mouseenter, mouseleave', function(event) {
+        var currentTime = new Date();
 
-          if ((topNavLevelThree.length > 0) && (topNavLevelThree.children('.highlights'))) {
-            highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
-          }
-          if (highlights.length > 0) {
-            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
+        if (event.type === 'mouseenter') {
+          mouseenterTime = currentTime.getTime();
+        }
+        else if (event.type === 'mouseleave') {
+          var mouseOverTime = currentTime.getTime() - mouseenterTime;
+          if ((mouseenterTime >= 2000) && ($(this).hasClass('has-child')) {
+            var topNavLevelTwo = $(this).children('ul.menu--two__list');
+            var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
+            var highlights = [];
+
+            if ((topNavLevelThree.length > 0) && (topNavLevelThree.children('.highlights'))) {
+              highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
+            }
+            if (highlights.length > 0) {
+              Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
+            }
           }
         }
 
