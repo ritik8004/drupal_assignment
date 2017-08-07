@@ -343,10 +343,9 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
                 if ($privilege_card_number) {
                   $privilegeOrder = TRUE;
                 }
-
+                $data_layer['privilegeOrder'] = $privilegeOrder;
                 $data_layer['ecommerce'] = [
                   'currencyCode' => $currency_code,
-                  'privilegeOrder' => $privilegeOrder,
                   'purchase' => [
                     'actionField' => $attributes['actionField'],
                     'products' => $attributes['products'],
@@ -366,10 +365,10 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           }
 
           if (!$confirmation_page) {
+            $data_layer['privilegeOrder'] = $privilegeOrder;
             $data_layer_cart = [
               'event' => 'checkout',
               'ecommerce' => [
-                'privilegeOrder' => $privilegeOrder,
                 'currencyCode' => $currency_code,
                 'checkout' => [
                   'actionField' => [
