@@ -1227,7 +1227,7 @@ header {
   }
 
   .account {
-    @include breakpoint(max-width 320px) {
+    @include breakpoint($only-mobile) {
       html[lang=ar] & {
         padding: 0.9rem 0;
         font-size: 0.8125rem;

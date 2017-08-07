@@ -135,21 +135,17 @@
        */
       function placeSearchCount() {
         var viewHeader = null;
-        var searchCount = null;
         var selector = null;
-        var filterSelector = null;
         if ($('body').hasClass('path--search')) {
           viewHeader = $('.c-search .view-search .view-header');
           selector = '.c-content__region .block-views-exposed-filter-blocksearch-page';
-          filterSelector = '.c-content__region .region__content .block-facets-summary-blockfilter-bar';
         }
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
           selector = '.c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-1';
-          filterSelector = '.c-content__region .region__content .block-facets-summary-blockfilter-bar-plp';
         }
         viewHeader.addClass('search-count');
-        searchCount = $('.c-content__region .search-count');
+        var searchCount = $('.c-content__region .search-count');
         // For mobile.
         if ($(window).width() < 768) {
           $('.block-page-title-block').addClass('mobile');
@@ -166,7 +162,7 @@
           searchCount.removeClass('only-mobile');
           if (viewHeader.length) {
             searchCount.remove();
-            viewHeader.insertBefore(filterSelector);
+            viewHeader.insertBefore(selector);
           }
           searchCount.addClass('tablet');
         }

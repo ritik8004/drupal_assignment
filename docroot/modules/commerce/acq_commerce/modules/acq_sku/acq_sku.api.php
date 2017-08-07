@@ -21,7 +21,7 @@
  * @param array $product
  *   Array containing details provided by API.
  */
-function hook_acq_sku_product_node_alter(Drupal\node\NodeInterface $node, array $product) {
+function hook_acq_sku_product_node_alter(NodeInterface $node, array $product) {
 
 }
 
