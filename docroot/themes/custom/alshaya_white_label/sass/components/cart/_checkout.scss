@@ -448,8 +448,14 @@
       display: inline-block;
       width: 60%;
 
-      html[lanng=ar] & {
-        width: 59%;
+      html[lang=ar] & {
+        @include breakpoint($desktop) {
+          width: 59%;
+        }
+
+        @include breakpoint($only-tablet) {
+          width: 54%;
+        }
       }
 
       @include breakpoint($upto-desktop) {
