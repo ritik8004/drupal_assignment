@@ -213,7 +213,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         $label = $steps[$previous_step_id]['previous_label'];
 
         if ($previous_step_id === 'delivery') {
-          $checkout_next_link_options['attributes']['class'] = 'payment-return-to-delivery';
+          $checkout_next_link_options['attributes']['class'][] = 'payment-return-to-delivery';
         }
 
         $checkout_next_link = Link::createFromRoute($label, 'acq_checkout.form', ['step' => $previous_step_id], $checkout_next_link_options)->toString();
