@@ -80,6 +80,11 @@
       });
 
       $('#change-address').once('bind-events').each(function () {
+        // We display the address boxes as is if we don't have any shipping method.
+        if ($('#shipping_methods_wrapper input:radio').length === 0) {
+          return;
+        }
+
         $('#add-address-button').hide();
         $('#edit-member-delivery-home-header-add-profile').hide();
         $('#address-book-address').slideUp();
