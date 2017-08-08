@@ -1018,6 +1018,9 @@ function alshaya_master_install() {
     'Collection Address' => [
       'ar' => 'عنوان التسليم',
     ],
+    'Your order will be delivered at the following address' => [
+      'ar' => 'سيتم توصيل طلبيتك على العنوان التالي',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
