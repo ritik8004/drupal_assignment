@@ -218,6 +218,7 @@
     font-size: 1.125rem;
     margin-#{$left}: 2.7rem;
     margin-bottom: 0.6rem;
+    padding-left: 0.5rem;
   }
 
   @include breakpoint($desktop) {
