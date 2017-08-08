@@ -214,7 +214,6 @@
 
       /** Sub-delivery option virtual page tracking. **/
       if (subDeliveryOptionSelector.text() !== '') {
-        Drupal.alshaya_seo_gtm_push_virtual_checkout_option();
         var checkout_subdl = '';
         for( var i=0; i<dataLayer.length; i++) {
           if (dataLayer[i].event === 'checkout') {
@@ -440,17 +439,26 @@
 
       /** Tracking internal promotion impressions. **/
       // Tracking menu level promotions
-      topNavLevelOneSelector.once('js-event').on('mouseenter', function() {
-        if ($(this).hasClass('has-child')) {
-          var topNavLevelTwo = $(this).children('ul.menu--two__list');
-          var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
-          var highlights = [];
+      topNavLevelOneSelector.once('js-event').on('mouseenter, mouseleave', function(event) {
+        var currentTime = new Date();
+        var mouseenterTime = currentTime.getTime();
 
-          if ((topNavLevelThree.length > 0) && (topNavLevelThree.children('.highlights'))) {
-            highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
-          }
-          if (highlights.length > 0) {
-            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
+        if (event.type === 'mouseenter') {
+          mouseenterTime = currentTime.getTime();
+        }
+        else if (event.type === 'mouseleave') {
+          var mouseOverTime = currentTime.getTime() - mouseenterTime;
+          if ((mouseOverTime >= 2000) && ($(this).hasClass('has-child'))) {
+            var topNavLevelTwo = $(this).children('ul.menu--two__list');
+            var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
+            var highlights = [];
+
+            if ((topNavLevelThree.length > 0) && (topNavLevelThree.children('.highlights'))) {
+              highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
+            }
+            if (highlights.length > 0) {
+              Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
+            }
           }
         }
 
@@ -644,7 +652,6 @@
       var promotion = {
         'id': fileName,
         'name': gtmPageType,
-        'creative': creative,
         'position': 'slot' + position
       };
 
@@ -711,19 +718,6 @@
           'products': [product]
         }
       }
-    };
-
-    dataLayer.push(data);
-  };
-
-  /**
-   * Helper function to push virtual checkout options.
-   */
-  Drupal.alshaya_seo_gtm_push_virtual_checkout_option = function() {
-    var data = {
-      'event':'VirtualPageview',
-      'virtualPageURL':'/virtualpv/checkout/subdelivery',
-      'virtualPageTitle' : 'Checkout Sub-Delivery'
     };
 
     dataLayer.push(data);
