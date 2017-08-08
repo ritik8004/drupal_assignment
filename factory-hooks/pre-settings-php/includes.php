@@ -64,23 +64,32 @@ switch ($env) {
 
     $config['acq_commerce.conductor']['debug'] = FALSE;
 
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.prod.acm.acquia.io/';
+  case '01dev':
+    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
+    $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    break;
 
+  case '01test':
+    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/';
+    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
+    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
     break;
 
-  case '01dev':
-  case '01test':
-    $settings['acq_commerce.conductor']['url'] = 'https://uat.dev.alshaya.acm.acquia.io/';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
-  break;
-
-  default:
-    $settings['acq_commerce.conductor']['url'] = 'https://pprod.dev.alshaya.acm.acquia.io/';
+  case '01uat':
+    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/';
+    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
+    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     break;
+
+  default:
+    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/';
+    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
+    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
+    $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
 }
 
 // Recaptcha settings.
