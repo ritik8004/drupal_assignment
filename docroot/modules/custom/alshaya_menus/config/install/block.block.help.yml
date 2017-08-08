@@ -7,7 +7,7 @@ dependencies:
     - system
   theme:
     - alshaya_white_label
-id: alshaya_help
+id: help
 theme: alshaya_white_label
 region: footer_primary
 weight: -16
