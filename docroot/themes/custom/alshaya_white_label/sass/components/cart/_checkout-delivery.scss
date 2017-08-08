@@ -811,6 +811,10 @@
             }
           }
 
+          @include breakpoint($desktop) {
+            margin-bottom: 0;
+          }
+
           @include breakpoint($tablet) {
             position: relative;
 
@@ -929,9 +933,9 @@
   margin-bottom: 1.5rem;
 
   @include breakpoint($desktop) {
-    margin-bottom: 3rem;
     max-width: 26.25rem;
     width: calc(50% - 1.5rem);
+    margin-bottom: 0 !important;
 
     &:nth-of-type(odd) {
       margin-#{$right}: 3rem;
