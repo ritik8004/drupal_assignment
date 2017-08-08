@@ -281,7 +281,7 @@
             var softLimitSettings = settings.facets.softLimit;
             var softItemsLimit = softLimitSettings[facet_id] - 1;
             $(this).find('ul li:gt(' + softItemsLimit + ')').hide();
-            softLink.insertAfter($(this).find('ul li:last-child'));
+            softLink.insertAfter($(this).find('ul'));
           });
         }
       }, 100);
@@ -292,7 +292,7 @@
           $('.region__content .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
             softLink.addClass('processed');
-            softLink.insertAfter($(this).find('ul li:last-child'));
+            softLink.insertAfter($(this).find('ul'));
           });
         }
       }, 100);

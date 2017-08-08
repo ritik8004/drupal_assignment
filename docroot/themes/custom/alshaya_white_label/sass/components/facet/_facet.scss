@@ -70,3 +70,14 @@
     color: $black;
   }
 }
+
+.c-facet__blocks {
+  .item-list__checkbox {
+    max-height: 180px;
+    overflow: auto;
+  }
+
+  .facets-soft-limit-link {
+    display: none;
+  }
+}
