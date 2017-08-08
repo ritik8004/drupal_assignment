@@ -2,10 +2,10 @@
 
 namespace Drupal\alshaya_main_menu;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\file\Entity\File;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -130,6 +130,10 @@ class ProductCategoryTree {
   public function getHighlightImage(TermInterface $term) {
     $highlight_images = [];
 
+    if ($highlight_image_cache = \Drupal::cache()->get('highlights_' . $term->id())) {
+      return $highlight_image_cache->data;
+    }
+
     if ($highlight_field = $term->get('field_main_menu_highlight')) {
 
       // If no data in paragraph referenced field.
@@ -157,7 +161,6 @@ class ProductCategoryTree {
           $image_link = $paragraph->get('field_highlight_link')->getValue();
           $renderable_image = $paragraph->get('field_highlight_image')->view('default');
           if (!empty($image)) {
-            $file = File::load($image[0]['target_id']);
             $url = Url::fromUri($image_link[0]['uri']);
             $highlight_images[] = [
               'image_link' => $url->toString(),
@@ -167,6 +170,8 @@ class ProductCategoryTree {
         }
       }
     }
+
+    \Drupal::cache()->set('highlights_' . $term->id(), $highlight_images, Cache::PERMANENT, ['taxonomy_term:' . $term->id()]);
 
     return $highlight_images;
   }
