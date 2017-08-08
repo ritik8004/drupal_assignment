@@ -214,7 +214,6 @@
 
       /** Sub-delivery option virtual page tracking. **/
       if (subDeliveryOptionSelector.text() !== '') {
-        Drupal.alshaya_seo_gtm_push_virtual_checkout_option();
         var checkout_subdl = '';
         for( var i=0; i<dataLayer.length; i++) {
           if (dataLayer[i].event === 'checkout') {
@@ -653,7 +652,6 @@
       var promotion = {
         'id': fileName,
         'name': gtmPageType,
-        'creative': creative,
         'position': 'slot' + position
       };
 
