@@ -207,9 +207,10 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
     // Create all payment plugins in taxonomy terms.
-    $payment_plugins = \Drupal::service('plugin.manager.acq_payment_method');
+    /** @var \Drupal\acq_payment\Annotation\ACQPaymentMethod $payment_plugins */
+    $payment_plugins = \Drupal::service('plugin.manager.acq_payment_method')->getDefinitions();
     foreach ($payment_plugins as $plugin) {
-      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']);
+      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']->render());
     }
 
   }
