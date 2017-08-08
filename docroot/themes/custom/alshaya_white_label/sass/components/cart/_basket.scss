@@ -457,9 +457,6 @@
 #details-privilege-card-wrapper {
   .privilege-card-wrapper {
     padding-left: 0;
-  }
-
-  .privilege-card-wrapper-title {
     border-bottom: 1px solid $white;
   }
 
@@ -470,6 +467,11 @@
       display: none;
     }
   }
+}
+
+.details-privilege-card-wrapper-inside {
+  border-top: 1px solid $white;
+  margin-bottom: 1.5625rem;
 }
 
 .card__header,
