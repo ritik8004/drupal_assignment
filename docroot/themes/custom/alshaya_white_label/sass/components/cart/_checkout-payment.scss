@@ -178,6 +178,10 @@
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-number {
     width: 12.5rem;
+
+    label {
+      width: 100%;
+    }
   }
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year,
@@ -194,6 +198,7 @@
 
     label {
       float: $left;
+      width: 100%;
     }
 
     &::after {
@@ -214,10 +219,6 @@
     width: 9.375rem;
     clear: both;
     margin-bottom: 1em;
-
-    html[lang=ar] & {
-      width: 12.5rem;
-    }
 
     .form-item--error-message {
       min-width: 10rem;
@@ -245,20 +246,6 @@
       width: 40%;
       top: 38%;
       #{$left}: 25%;
-    }
-
-    html[lang=ar] & {
-      @include breakpoint($tablet) {
-        width: 46%;
-        top: 40%;
-        #{$left}: 50%;
-      }
-
-      @include breakpoint($desktop) {
-        width: 40%;
-        top: 44%;
-        #{$left}: 30%;
-      }
     }
 
     &::before {

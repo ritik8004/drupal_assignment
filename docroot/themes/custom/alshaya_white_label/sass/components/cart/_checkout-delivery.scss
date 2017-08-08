@@ -721,7 +721,12 @@
         }
 
         &-description {
-          font-size: 12px;
+          font-size: 0.75rem;
+          color: $grey-ash;
+
+          @include breakpoint($upto-desktop) {
+            width: 80%;
+          }
         }
       }
     }
