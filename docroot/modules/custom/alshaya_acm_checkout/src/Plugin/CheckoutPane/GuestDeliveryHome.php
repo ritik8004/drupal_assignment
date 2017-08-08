@@ -145,7 +145,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $change_address_button = [
         '#type' => 'link',
-        '#title' => $this->t('Edit'),
+        '#title' => $this->t('Change'),
         '#url' => Url::fromRoute('<none>'),
         '#attributes' => [
           'id' => 'change-address',
