@@ -5,6 +5,8 @@
  * Install file.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_modules_installed().
  */
@@ -51,4 +53,15 @@ function alshaya_captcha_modules_installed($modules) {
 
   // Set Drupal user flood limit.
   $config_factory->getEditable('user.flood')->set('user_limit', 10)->save();
+
+  // Configure recaptcha settings.
+  $config = \Drupal::configFactory()->getEditable('recaptcha.settings');
+
+  $recaptcha_settings = Settings::get('recaptcha.settings');
+
+  foreach ($recaptcha_settings as $key => $value) {
+    $config->set($key, $value);
+  }
+
+  $config->save();
 }

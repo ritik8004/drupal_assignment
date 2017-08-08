@@ -187,11 +187,12 @@ class APIWrapper {
    *
    * @param int $cart_id
    *   ID of cart to associate.
-   * @param $customer_id
+   * @param int $customer_id
    *   ID of customer to associate with.
    *
    * @return bool
    *   A status of coupon being applied.
+   *
    * @throws \Exception
    */
   public function associateCart($cart_id, $customer_id) {
@@ -200,7 +201,7 @@ class APIWrapper {
     $doReq = function ($client, $opt) use ($endpoint, $customer_id, $cart_id) {
       $opt['json'] = [
         'customer_id' => $customer_id,
-        'cart_id' => $cart_id
+        'cart_id' => $cart_id,
       ];
       return ($client->post($endpoint, $opt));
     };
@@ -384,7 +385,7 @@ class APIWrapper {
   /**
    * Updates a customer.
    *
-   * @param array $customer
+   * @param array|object $customer
    *   Customer array to update (fully prepared array).
    * @param string $password
    *   Optional password.
@@ -726,7 +727,7 @@ class APIWrapper {
    *   E-Mail to subscribe.
    */
   public function subscribeNewsletter($email) {
-    $endpoint = $this->apiVersion . "/agent/newsletter/subscribe";
+    $endpoint = $this->apiVersion . '/agent/newsletter/subscribe';
 
     $doReq = function ($client, $opt) use ($endpoint, $email) {
       $opt['form_params']['email'] = $email;
@@ -761,7 +762,7 @@ class APIWrapper {
     $result = [];
 
     try {
-      $result = $this->tryAgentRequest($doReq, 'systemWatchdog', 'system');
+      $result = $this->tryAgentRequest($doReq, 'systemWatchdog');
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());
