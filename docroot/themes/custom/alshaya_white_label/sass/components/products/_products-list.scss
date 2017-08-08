@@ -69,6 +69,7 @@
               &.facet-item__value {
                 float: $left;
                 margin-#{$right}: 1px;
+                text-transform: lowercase;
               }
 
               &.facet-item__count {
