@@ -1,12 +1,12 @@
 alshaya_white_label.mobile:
   label: mobile
-  mediaQuery: '(min-width: 0em)'
+  mediaQuery: '(max-width: 480px)'
   weight: 0
   multipliers:
     - 1x
 alshaya_white_label.tablet:
   label: tablet
-  mediaQuery: 'all and (min-width: 768px)'
+  mediaQuery: 'all and (min-width: 481px)'
   weight: 1
   multipliers:
     - 1x
