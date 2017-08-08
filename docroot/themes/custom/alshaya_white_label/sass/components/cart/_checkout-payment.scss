@@ -52,10 +52,24 @@
   padding: 0 1em;
 }
 
+.checkout-delivery.checkout-payment .address_wrapper > .billing-address-title {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid $white;
+  font-size: 1rem;
+  font-family: $alshaya-bold;
+  font-weight: normal;
+  color: $marine-blue-two;
+
+  @include breakpoint($upto-desktop) {
+    font-size: 0.875rem;
+  }
+}
+
 #edit-billing-address {
   margin-top: 1rem;
 
   legend {
+    display: none;
     padding: 0 1rem;
   }
 
