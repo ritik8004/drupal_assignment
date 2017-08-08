@@ -569,6 +569,17 @@
       height: auto;
     }
   }
+
+  .cybersource-ajax-progress-throbber {
+    #{$left}: 0;
+
+    .cybersource-throbber {
+      #{$left}: 0;
+      #{$right}: 0;
+      padding-#{$left}: 0.625rem;
+      padding-#{$right}: 0.625rem;
+    }
+  }
 }
 
 #edit-acm-payment-methods-payment-options--wrapper {

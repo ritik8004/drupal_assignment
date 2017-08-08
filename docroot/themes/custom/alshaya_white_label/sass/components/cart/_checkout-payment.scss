@@ -218,6 +218,10 @@
     html[lang=ar] & {
       width: 12.5rem;
     }
+
+    .form-item--error-message {
+      min-width: 10rem;
+    }
   }
 
   .cc_cvv_help_text {
