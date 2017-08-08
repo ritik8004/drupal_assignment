@@ -80,7 +80,7 @@
   </div>
 
   <div class="address">
-    {{ delivery.address_label }} <a class="edit-delivery-address" id="checkout-edit-da" href="{{ delivery.url }}">{% trans %}Edit{% endtrans %}</a>
+    {{ delivery.address_label }} <a class="edit-delivery-address" id="checkout-edit-da" href="{{ delivery.url }}">{{ 'Edit'|t }}</a>
     <div class="delivery-address">{{ delivery.address|raw }}</div>
   </div>
   {% endif %}

@@ -177,8 +177,8 @@ function alshaya_master_install() {
     'enter card details' => [
       'ar' => 'الرجاء إدخال معلومات البطاقة',
     ],
-    '<p>By registering you agreed to our <a href="/terms">Terms and Conditions</a>.</p>' => [
-      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms">الشروط والأحكام</a></p>',
+    '<p>By registering you agreed to our <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms" class="final-tnc">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
@@ -629,7 +629,7 @@ function alshaya_master_install() {
     'Is the delivery address the same as your billing address?' => [
       'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
     ],
-    '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-t&c" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>' => [
+    '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>' => [
       'ar' => 'أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا',
     ],
     'Billing address' => [
