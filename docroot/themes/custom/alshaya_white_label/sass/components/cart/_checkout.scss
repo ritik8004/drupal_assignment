@@ -536,7 +536,7 @@ body.alias--cart {
 
 .alias--cart {
   @include breakpoint($only-mobile) {
-    #edit-actions {
+    .table-cart-totals #edit-actions {
       display: block;
       float: none;
       margin-#{$right}: 0;
