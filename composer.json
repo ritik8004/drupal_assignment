@@ -106,7 +106,7 @@
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
             },
             "drupal/metatag": {
-                "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/metatag-n2628934-17.patch"
+                "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-14.patch"
             },
             "drupal/acquia_connector": {
                 "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
