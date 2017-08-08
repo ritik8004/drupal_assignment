@@ -70,12 +70,7 @@
     var errorDiv = $('<div class="form-item--error-message" />');
     errorDiv.html(error);
 
-    if (element.is('input:checkbox')) {
-      element.parent().append(errorDiv);
-    }
-    else {
-      element.after(errorDiv);
-    }
+    element.parent().append(errorDiv);
 
     // Remove the loader, we will add it again.
     $('.cybersource-ajax-progress-throbber').remove();
