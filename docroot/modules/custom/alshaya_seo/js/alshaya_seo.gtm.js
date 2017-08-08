@@ -442,13 +442,14 @@
       // Tracking menu level promotions
       topNavLevelOneSelector.once('js-event').on('mouseenter, mouseleave', function(event) {
         var currentTime = new Date();
+        var mouseenterTime = currentTime.getTime();
 
         if (event.type === 'mouseenter') {
           mouseenterTime = currentTime.getTime();
         }
         else if (event.type === 'mouseleave') {
           var mouseOverTime = currentTime.getTime() - mouseenterTime;
-          if ((mouseenterTime >= 2000) && ($(this).hasClass('has-child'))) {
+          if ((mouseOverTime >= 2000) && ($(this).hasClass('has-child'))) {
             var topNavLevelTwo = $(this).children('ul.menu--two__list');
             var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
             var highlights = [];
