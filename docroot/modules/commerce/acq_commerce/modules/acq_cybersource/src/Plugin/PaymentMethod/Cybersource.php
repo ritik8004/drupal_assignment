@@ -50,7 +50,6 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
       '#title' => $this->t('Credit Card Number'),
       '#default_value' => '',
       '#required' => TRUE,
-      '#placeholder' => $this->t('1111 1111 1111 1111'),
       '#attributes' => [
         'class' => ['cybersource-credit-card-input', 'cybersource-input'],
       ],
@@ -62,7 +61,6 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
       '#title' => $this->t('Security code (CVV)'),
       '#default_value' => '',
       '#required' => TRUE,
-      '#placeholder' => $this->t('123'),
       '#attributes' => [
         'class' => ['cybersource-credit-card-cvv-input', 'cybersource-input'],
       ],
