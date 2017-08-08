@@ -73,6 +73,7 @@ class ProductCategoryTree {
     $terms = $this->entityTypeManager->getStorage('taxonomy_term')
       ->loadTree('acq_product_category', $parent_tid, $depth, TRUE);
     if ($terms) {
+      $alshaya_department_pages = alshaya_department_page_get_pages();
       foreach ($terms as $term) {
         // For language specific data.
         $term = $this->entityRepository->getTranslationFromContext($term);
@@ -103,7 +104,8 @@ class ProductCategoryTree {
         }
 
         // Check if there is a department page available for this term.
-        if ($nid = alshaya_department_page_page_exists($term->id())) {
+        if (isset($alshaya_department_pages[$term->id()])) {
+          $nid = $alshaya_department_pages[$term->id()];
           // Use the path of node instead of term path.
           $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])
             ->toString();

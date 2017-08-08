@@ -40,7 +40,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     // Get all parents of current term to show the heirarchy.
     $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term->id());
-
+    $alshaya_department_pages = alshaya_department_page_get_pages();
     /** @var \Drupal\taxonomy\Entity\Term $term */
     foreach (array_reverse($parents) as $term) {
 
@@ -48,7 +48,8 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       if (\Drupal::moduleHandler()->moduleExists('alshaya_department_page')) {
 
         // Check if current term has department page available.
-        if ($nid = alshaya_department_page_page_exists($term->id())) {
+        if (isset($alshaya_department_pages[$term->id()])) {
+          $nid = $alshaya_department_pages[$term->id()];
           // We use department page link instead of PLP link.
           $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
 
