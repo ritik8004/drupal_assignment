@@ -1021,6 +1021,12 @@ function alshaya_master_install() {
     'Your order will be delivered at the following address' => [
       'ar' => 'سيتم توصيل طلبيتك على العنوان التالي',
     ],
+    'Invalid Credit Card number' => [
+      'ar' => 'رقم البطاقة غير صحيح',
+    ],
+    'Invalid security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV غير صحيح',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
