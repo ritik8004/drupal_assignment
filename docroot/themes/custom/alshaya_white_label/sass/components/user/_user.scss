@@ -452,6 +452,12 @@
     text-align: center;
     color: $windows-blue;
   }
+
+  label.error {
+    position: absolute;
+    #{$left}: 0;
+    bottom: -1.25rem;
+  }
 }
 
 #block-youllbeableto,
