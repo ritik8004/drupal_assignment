@@ -207,11 +207,26 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
     // Create all payment plugins in taxonomy terms.
-    $payment_plugins = \Drupal::service('plugin.manager.acq_payment_method');
+    /** @var \Drupal\acq_payment\Annotation\ACQPaymentMethod $payment_plugins */
+    $payment_plugins = \Drupal::service('plugin.manager.acq_payment_method')->getDefinitions();
     foreach ($payment_plugins as $plugin) {
-      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']);
+      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']->render());
     }
 
+    // Add translations for specific payment methods by default.
+    // K-Net.
+    $knet = $checkout_options_manager->loadPaymentMethod('knet');
+    $knet->get('description')->setValue('Please proceed to K-Net payment gateway by clicking the "Place Order" button below.');
+    $knet->save();
+    $knet_ar = $knet->addTranslation('ar', []);
+    $knet_ar->setName('بطاقة ائتمان k-net');
+    $knet_ar->save();
+
+    // Cash on Delivery.
+    $cod = $checkout_options_manager->loadPaymentMethod('cashondelivery');
+    $cod_ar = $cod->addTranslation('ar', []);
+    $cod_ar->setName('نقداً عند التسليم');
+    $cod_ar->save();
   }
 
   $acq_checkout_settings = \Drupal::config('alshaya_acm_checkout.settings');
