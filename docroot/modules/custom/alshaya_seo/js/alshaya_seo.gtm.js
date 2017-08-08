@@ -448,7 +448,7 @@
         }
         else if (event.type === 'mouseleave') {
           var mouseOverTime = currentTime.getTime() - mouseenterTime;
-          if ((mouseenterTime >= 2000) && ($(this).hasClass('has-child')) {
+          if ((mouseenterTime >= 2000) && ($(this).hasClass('has-child'))) {
             var topNavLevelTwo = $(this).children('ul.menu--two__list');
             var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
             var highlights = [];
