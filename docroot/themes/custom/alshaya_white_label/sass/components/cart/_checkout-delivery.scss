@@ -569,6 +569,17 @@
       height: auto;
     }
   }
+
+  .cybersource-ajax-progress-throbber {
+    #{$left}: 0;
+
+    .cybersource-throbber {
+      #{$left}: 0;
+      #{$right}: 0;
+      padding-#{$left}: 0.625rem;
+      padding-#{$right}: 0.625rem;
+    }
+  }
 }
 
 #edit-acm-payment-methods-payment-options--wrapper {
@@ -710,7 +721,12 @@
         }
 
         &-description {
-          font-size: 12px;
+          font-size: 0.75rem;
+          color: $grey-ash;
+
+          @include breakpoint($upto-desktop) {
+            width: 80%;
+          }
         }
       }
     }
