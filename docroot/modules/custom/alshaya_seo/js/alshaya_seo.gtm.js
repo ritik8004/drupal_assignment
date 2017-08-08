@@ -724,19 +724,6 @@
   };
 
   /**
-   * Helper function to push virtual checkout options.
-   */
-  Drupal.alshaya_seo_gtm_push_virtual_checkout_option = function() {
-    var data = {
-      'event':'VirtualPageview',
-      'virtualPageURL':'/virtualpv/checkout/subdelivery',
-      'virtualPageTitle' : 'Checkout Sub-Delivery'
-    };
-
-    dataLayer.push(data);
-  };
-
-  /**
    * Helper function to push lead events.
    *
    * @param leadType
