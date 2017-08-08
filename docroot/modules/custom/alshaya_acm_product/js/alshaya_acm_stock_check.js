@@ -11,20 +11,24 @@
    */
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
+
       // Stock check on PLP,search & Promo pages.
       $('article[data-vmode="search_result"]', context).each(function(){
         var productId = $(this).attr('data-nid');
         var productStock = $(this).find('.out-of-stock');
-
-        $.ajax({
-          url: Drupal.url('stock-check-ajax/node/' + productId),
-          type: "GET",
-          contentType: "application/json;",
-          dataType: "json",
-          success: function (result) {
-            productStock.html(result.html);
-          }
-        });
+        var articleNode = $(this);
+        if (!articleNode.hasClass('stock-processed')) {
+          $.ajax({
+            url: Drupal.url('stock-check-ajax/node/' + productId),
+            type: "GET",
+            contentType: "application/json;",
+            dataType: "json",
+            success: function (result) {
+              productStock.html(result.html);
+              articleNode.addClass('stock-processed');
+            }
+          });
+        }
       });
 
       // Stock check on PDP main Product.
