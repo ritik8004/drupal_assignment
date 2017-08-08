@@ -46,14 +46,15 @@
           }
         });
       });
-      // Add a full screen throbber.
-      var throbberHTML = $('<div class="cybersource-ajax-progress cybersource-ajax-progress-throbber"><div class="cybersource-throbber"></div></div>');
-      $('.alias--cart-checkout-payment .page-standard.user-page.checkout-payment').once('bind-events').append(throbberHTML);
     }
   };
 
 
   Drupal.finishCybersourcePayment = function () {
+    // We hide credit card fields to avoid error message displays when we remove value.
+    $('.cybersource-credit-card-input').closest('.form-item').hide();
+    $('.cybersource-credit-card-cvv-input').closest('.form-item').hide();
+
     // We don't pass credit card info to drupal.
     $('.cybersource-credit-card-input').val('-');
     $('.cybersource-credit-card-cvv-input').val('-');
@@ -75,10 +76,17 @@
     else {
       element.after(errorDiv);
     }
+
+    // Remove the loader, we will add it again.
+    $('.cybersource-ajax-progress-throbber').remove();
   };
 
   Drupal.cybersourceShowGlobalError = function (error) {
     Drupal.cybersourceProcessed = false;
+
+    // Remove the loader, we will add it again.
+    $('.cybersource-ajax-progress-throbber').remove();
+
     $('.cybersource-input').parents('form').find('.cybersource-global-error').remove();
     $('.cybersource-input').parents('form').prepend(error);
   }
@@ -145,18 +153,21 @@ function cybersource_form_submit_handler(form) {
   // We also send all other form data here to allow other modules to process based on that.
   getTokenData += $('.cybersource-input').parents('form').find('input:not(.cybersource-input), select:not(.cybersource-input)').serialize();
 
+  // Remove the loader div to avoid duplicates.
+  $('.cybersource-ajax-progress-throbber').remove();
+
+  // Add the loader div.
+  $('body').append('<div class="cybersource-ajax-progress cybersource-ajax-progress-throbber"><div class="cybersource-throbber"></div></div>');
+
+  // Show the loader.
+  $('.cybersource-ajax-progress-throbber').show();
+
   $.ajax({
     type: 'POST',
     cache: false,
     url: Drupal.url('cybersource/get-token'),
     data: getTokenData,
     dataType: 'json',
-    beforeSend: function() {
-      $('.cybersource-ajax-progress-throbber').show();
-    },
-    complete: function() {
-      $('.cybersource-ajax-progress-throbber').hide();
-    },
     success: function (response) {
       if (response.errors) {
         for (var field in response.errors) {
