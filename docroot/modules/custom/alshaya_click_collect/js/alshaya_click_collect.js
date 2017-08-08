@@ -171,4 +171,8 @@ var location_autocomplete_no_result_checked = null;
     }
   };
 
+  $.fn.clickCollectScrollTop = function () {
+    window.scrollTo(0, 0);
+  };
+
 })(jQuery, Drupal);
