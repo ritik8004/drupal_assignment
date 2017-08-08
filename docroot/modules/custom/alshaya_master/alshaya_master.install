@@ -1027,6 +1027,9 @@ function alshaya_master_install() {
     'Invalid security code (CVV)' => [
       'ar' => 'الرقم السري للبطاقة CVV غير صحيح',
     ],
+    'Security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
