@@ -211,7 +211,7 @@
   }
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-cvv {
-    width: 6.3125rem;
+    width: 9.375rem;
     clear: both;
     margin-bottom: 1em;
 
@@ -232,15 +232,15 @@
     }
 
     @include breakpoint($tablet) {
-      width: 65%;
-      top: 40%;
-      #{$left}: 30%;
+      width: 49%;
+      top: 33.7%;
+      #{$left}: 49%;
     }
 
     @include breakpoint($desktop) {
       width: 40%;
-      top: 44%;
-      #{$left}: 24%;
+      top: 38%;
+      #{$left}: 25%;
     }
 
     html[lang=ar] & {
