@@ -447,6 +447,10 @@
       font-family: $alshaya-bold;
       font-weight: normal;
       color: $marine-blue;
+
+      &.disabled {
+        opacity: 0.4;
+      }
     }
   }
 
@@ -454,7 +458,12 @@
     &-delivery-options {
       border-bottom: 1px solid $white;
 
-      &.click-collect {
+      &.click-collect,
+      &.home-delivery {
+        .ui-state-disabled::after {
+          display: none;
+        }
+
         h3 {
           &.ui-state-disabled {
             color: $white;
@@ -555,10 +564,6 @@
 .click-collect {
   .c-accordion__title {
     border-top: none;
-  }
-
-  .ui-state-disabled::after {
-    display: none;
   }
 
   &-content {

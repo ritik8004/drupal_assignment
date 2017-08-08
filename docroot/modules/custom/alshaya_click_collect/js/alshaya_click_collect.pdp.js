@@ -360,7 +360,6 @@
 
         if (!accordionStatus) {
           $('#pdp-stores-container.click-collect').accordion('option', 'active', true);
-          $('#pdp-stores-container.click-collect > h3').trigger('click');
         }
         Drupal.pdp.storesDisplay();
       }
