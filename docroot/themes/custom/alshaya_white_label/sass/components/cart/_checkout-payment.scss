@@ -73,6 +73,10 @@
     padding: 0 1rem;
   }
 
+  .select2-container--open {
+    z-index: auto;
+  }
+
   .fieldset-wrapper {
     padding: 1rem;
     color: $grey-ash;
