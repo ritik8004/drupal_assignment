@@ -220,6 +220,10 @@
     clear: both;
     margin-bottom: 1em;
 
+    html[lang=ar] & {
+      width: 10rem;
+    }
+
     .form-item--error-message {
       min-width: 10rem;
     }
