@@ -528,6 +528,7 @@
         &-title {
           font-family: $arial;
           line-height: 1.5;
+          font-size: 0.75rem;
 
           @include icon(delivery, before);
 
@@ -539,12 +540,10 @@
           }
 
           strong {
-            font-size: 0.75rem;
             color: $black;
           }
 
           span {
-            font-size: 0.6875rem;
             color: $brownish-grey;
           }
         }
