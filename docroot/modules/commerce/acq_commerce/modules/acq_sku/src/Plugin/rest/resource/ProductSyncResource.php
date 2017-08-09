@@ -202,6 +202,7 @@ class ProductSyncResource extends ResourceBase {
       $sku->attributes = $this->formatProductAttributes($product['attributes']);
       $sku->media = serialize($product['extension']['media']);
       $sku->attribute_set = $product['attribute_set_label'];
+      $sku->product_id = $product['product_id'];
 
       // Update the fields based on the values from attributes.
       $this->updateFields('attributes', $sku, $product['attributes']);
