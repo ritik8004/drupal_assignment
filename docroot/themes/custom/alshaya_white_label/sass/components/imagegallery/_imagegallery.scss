@@ -42,6 +42,7 @@
   color: $white-two;
   background-color: $marine-blue;
   border-radius: 0;
+  outline: solid transparent;
 
   &::before {
     position: absolute;

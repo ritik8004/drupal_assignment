@@ -18,13 +18,6 @@
               slidesToShow: 3,
               vertical: false
             }
-          },
-          {
-            breakpoint: 767,
-            settings: {
-              slidesToShow: 1,
-              vertical: false
-            }
           }
         ]
       };
@@ -37,8 +30,6 @@
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
       var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)');
       if (items.length) {
         items.addClass('cloud-zoom-processed', context).once('bind-events').CloudZoom();
@@ -84,19 +75,11 @@
                   slidesToShow: 5,
                   vertical: false
                 }
-              },
-              {
-                breakpoint: 767,
-                settings: {
-                  slidesToShow: 1,
-                  vertical: false
-                }
               }
             ]
           };
 
           $('#product-image-gallery').slick(slickModalOptions);
-          var productGallery = '';
           $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
             var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
             productGallery.slick('unslick');
@@ -104,7 +87,6 @@
 
           // ZoomIn ZoomOut in Gallery view with a draggable container.
           if ($('#full-image-wrapper').length > 0) {
-
             var maskWidth = $('#full-image-wrapper').width();
             var maskHeight = $('#full-image-wrapper').height();
             var imgPos = $('#full-image').offset();
