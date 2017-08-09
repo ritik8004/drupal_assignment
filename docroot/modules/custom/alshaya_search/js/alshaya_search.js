@@ -21,6 +21,10 @@
         }
       };
 
+      // Convert search keyword to lowercase.
+      $('#edit-keywords').on('keyup', function() {
+        $(this).val($(this).val().toLowerCase());
+      });
     }
   };
 
