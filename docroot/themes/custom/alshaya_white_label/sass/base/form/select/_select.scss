@@ -107,9 +107,13 @@ select:focus::-ms-value {
   }
 }
 
-.select2-dropdown--below {
+.select2-dropdown {
   border-color: $white;
   margin-top: -1px;
+
+  .select2-search__field {
+    outline: none;
+  }
 
   ul.select2-results__options {
     li.select2-results__option {

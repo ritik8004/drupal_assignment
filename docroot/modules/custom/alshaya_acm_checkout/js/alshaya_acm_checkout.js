@@ -236,4 +236,18 @@
     $('#address-book-form-wrapper').slideDown();
   };
 
+  Drupal.behaviors.fixCheckoutSummaryBlock = {
+    attach: function (context, settings) {
+      var block = $("#block-checkoutsummaryblock");
+      block.on('scroll', function(e) {
+        if (this.scrollTop > 147) {
+          block.addClass('fix-block');
+        }
+        else {
+          block.removeClass('fix-block');
+        }
+      });
+    }
+  };
+
 })(jQuery, Drupal);
