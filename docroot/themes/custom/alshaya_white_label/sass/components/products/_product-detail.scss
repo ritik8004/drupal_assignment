@@ -434,6 +434,26 @@
   }
 }
 
+.product-out-of-stock {
+  .delivery-options-wrapper {
+    opacity: 0.4;
+    position: relative;
+
+    .product-out-of-stock-layer {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .c-accordion_content {
+      display: none !important;
+    }
+  }
+}
+
 .delivery-options-wrapper {
   .ui-accordion-header-active {
     .title-price {
