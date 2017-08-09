@@ -190,7 +190,8 @@ class CybersourceController implements ContainerInjectionInterface {
     $response = new Response();
     $script = '';
 
-    if (strtolower($post_data['decision']) == 'error') {
+    // Anything other then accept is an issue.
+    if (strtolower($post_data['decision']) != 'accept') {
       $this->logger->info('Error while processing payment using Cybersource: %message <br> %info', [
         '%message' => $post_data['message'],
         '%info' => print_r($post_data, TRUE),
