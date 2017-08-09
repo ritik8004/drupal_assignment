@@ -293,9 +293,11 @@ ul.item-list__checkbox,
 }
 
 .alshaya_search_slider {
-  width: 16.19rem;
+  // Need this in px for JS consistency for slider.
+  width: 263px;
   margin: 0 auto;
   position: relative;
+  margin-top: 0.625rem;
 
   .lSSlideWrapper {
     position: static;
@@ -303,23 +305,23 @@ ul.item-list__checkbox,
     li {
       margin-top: 0.1875rem;
       height: 4.25rem;
+      position: relative;
 
       &:hover {
-        margin-top: 0;
-        margin-#{$right}: 0.1875rem !important;
-        margin-#{$left}: -0.1875rem !important;
-        padding: 0.1875rem;
-        border: 1px solid $brownish-grey;
-      }
-
-      &:first-child {
-        &:hover {
-          margin-#{$left}: 0 !important;
+        &::after {
+          content: '';
+          top: -3px;
+          #{$left}: -3px;
+          #{$right}: -3px;
+          bottom: 5px;
+          position: absolute;
+          z-index: -1;
+          border: 1px solid $brownish-grey;
         }
       }
 
-      &:last-child {
-        margin-#{$right}: 0 !important;
+      &:first-child {
+        margin-#{$left}: 3px;
       }
     }
 
@@ -328,7 +330,7 @@ ul.item-list__checkbox,
       top: 2rem;
 
       &.lSNext {
-        #{$right}: -1.5rem;
+        #{$right}: -1.7rem;
 
         @include icon(chevron#{$right}, after) {
           font-size: 2.125rem;
@@ -337,7 +339,7 @@ ul.item-list__checkbox,
       }
 
       &.lSPrev {
-        #{$left}: -1.625rem;
+        #{$left}: -1.75rem;
 
         @include icon(chevron#{$left}, after) {
           font-size: 2.125rem;
@@ -363,12 +365,12 @@ ul.item-list__checkbox,
     li.clear-all-fake {
       list-style: none;
       display: inline-block;
-      border: 1px solid $marine-blue-two;
+      border: 1px solid $cerulean-two;
       float: $right;
       font-size: 12px;
       text-align: center;
       padding: 0.407rem 0.532rem;
-      font-family: alshaya-thin;
+      font-family: $alshaya-thin;
       text-transform: lowercase;
 
       span {
