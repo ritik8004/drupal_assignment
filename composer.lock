@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c3a6baf02d889b0005f20c628e34fcab",
+    "content-hash": "fc95614aff9dd94bec2c1f6928fc9cd8",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2564,7 +2564,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.7",
-                    "datestamp": "1497039842"
+                    "datestamp": "1490994483"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2577,20 +2577,12 @@
                     "homepage": "https://www.drupal.org/user/277818"
                 },
                 {
-                    "name": "elm45",
-                    "homepage": "https://www.drupal.org/user/805178"
-                },
-                {
                     "name": "grasmash",
                     "homepage": "https://www.drupal.org/user/455714"
                 },
                 {
                     "name": "jenter",
                     "homepage": "https://www.drupal.org/user/186584"
-                },
-                {
-                    "name": "littlekope0903",
-                    "homepage": "https://www.drupal.org/user/2867321"
                 },
                 {
                     "name": "sarahjean",
@@ -2707,7 +2699,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta5",
-                    "datestamp": "1496912342"
+                    "datestamp": "1494175684"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2810,7 +2802,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta8",
-                    "datestamp": "1497478742"
+                    "datestamp": "1476400139"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3014,6 +3006,7 @@
                     "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-1.patch",
                     "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                     "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
+                    "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/no_reliable_method-2752961-29.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-303.patch"
                 }
@@ -4999,7 +4992,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1496286243"
+                    "datestamp": "1485902197"
                 },
                 "patches_applied": {
                     "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2628934-14.patch"
@@ -5621,7 +5614,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha7",
-                    "datestamp": "1497287643"
+                    "datestamp": "1493902084"
                 },
                 "patches_applied": {
                     "Update access check for set-default profile": "https://www.drupal.org/files/issues/2885005-2.patch"
@@ -5910,7 +5903,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.14",
-                    "datestamp": "1496919842"
+                    "datestamp": "1493396643"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6167,7 +6160,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc3",
-                    "datestamp": "1497007742"
+                    "datestamp": "1495024986"
                 },
                 "patches_applied": {
                     "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--13.patch"
@@ -6517,7 +6510,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1498511042"
+                    "datestamp": "1471420739"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6567,7 +6560,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/simple_oauth-8.x-2.0-rc3.zip",
-                "reference": null,
+                "reference": "8.x-2.0-rc3",
                 "shasum": "a672216d3f3ceb13f7b2840cf466169d546f67e2"
             },
             "require": {
@@ -6716,7 +6709,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486729083"
+                    "datestamp": "1486726083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6730,10 +6723,6 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
-                },
-                {
-                    "name": "miteshmap",
-                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -13338,7 +13327,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork Maintainer"
+                    "role": "Fork maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
