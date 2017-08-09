@@ -314,11 +314,8 @@ class ClickCollectController extends ControllerBase {
       }
     }
     else {
-      $response->addCommand(new HtmlCommand('.click-collect-top-stores', '<span class="empty-store-list">' . t('Sorry, No store found for your location.') . '</span>'));
-      $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
-      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'show'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'hide'));
+      $no_result_html = '<span class="empty-store-list">' . t('Sorry, No store found for your location.') . '</span>';
+      $response->addCommand(new InvokeCommand(NULL, 'clickCollectPdpNoStoresFound', [$no_result_html]));
     }
 
     $settings['alshaya_click_collect']['pdp']['ajax_call'] = TRUE;

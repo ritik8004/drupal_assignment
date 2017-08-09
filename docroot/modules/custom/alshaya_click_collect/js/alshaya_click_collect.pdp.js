@@ -375,4 +375,18 @@
     }
   };
 
+  // Command to display error message and rebind autocomplete to main input.
+  $.fn.clickCollectPdpNoStoresFound = function (data) {
+    $('.click-collect-top-stores').html(data);
+    $('.click-collect-all-stores').html('');
+    $('.click-collect-form .available-store-text').hide();
+    $('.click-collect-form .change-location').hide();
+
+    // Bind the js again to main input.
+    var field = $('.click-collect-form').find('input[name="location"]')[0];
+    new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
+
+    $('.click-collect-form .store-finder-form-wrapper').show();
+  };
+
 })(jQuery, Drupal);
