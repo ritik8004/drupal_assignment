@@ -43,15 +43,16 @@
             dataType: "json",
             success: function (result) {
               $wrapper.html(result.html);
+
               // Add class to share this wrapper if product out of stock.
               if (result.max_quantity <= 0) {
                 var $article = $wrapper.closest('article[data-vmode="full"]');
                 $article.find('sharethis-wrapper').addClass('out-of-stock');
-                // @TODO: It would be better to use event dispatcher on stock check.
-                $article.find('.delivery-options-wrapper > h2.field__label').addClass('disabled');
-                $article.find('.click-collect').accordion('option', {active: false, disabled: true});
-                $article.find('.home-delivery').accordion('option', {active: false, disabled: true});
+
+                // Add out of stock class to article to allow styles to be added everywhere.
+                $article.addClass('product-out-of-stock');
               }
+
               Drupal.attachBehaviors($wrapper[0]);
               Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
             }

@@ -27,22 +27,4 @@
     }
   };
 
-  /**
-   * Toggle delivery options' visibility based on stock check.
-   */
-  Drupal.AjaxCommands.prototype.toggleDeliveryOptions = function (ajax, response, status) {
-    var output = response.data.alshaya_acm;
-    var $article = $('article[data-vmode="full"][data-nid="'+ output.nid +'"]');
-    if (output.delivery_opt) {
-      $article.find('.delivery-options-wrapper > h2.field__label').removeClass('disabled');
-      $article.find('.click-collect').accordion('option', {disabled: false});
-      $article.find('.home-delivery').accordion('option', {disabled: false});
-    }
-    else {
-      $article.find('.delivery-options-wrapper > h2.field__label').addClass('disabled');
-      $article.find('.click-collect').accordion('option', {active: false, disabled: true});
-      $article.find('.home-delivery').accordion('option', {active: false, disabled: true});
-    }
-  };
-
 })(jQuery, Drupal);
