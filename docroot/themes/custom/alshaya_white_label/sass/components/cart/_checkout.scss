@@ -594,6 +594,17 @@ body.alias--cart {
       }
     }
 
+    tbody tr {
+      &:hover {
+        background: rgba(247, 247, 247, 0.72);
+
+        .name .items a {
+          color: $cerulean-two;
+          text-decoration: underline;
+        }
+      }
+    }
+
     tr {
       border-bottom: 1px solid $white;
 
@@ -605,10 +616,6 @@ body.alias--cart {
             color: $black-two;
           }
         }
-      }
-
-      &:hover {
-        background: rgba(247, 247, 247, 0.72);
       }
 
       th {
@@ -1159,7 +1166,7 @@ body.alias--cart {
       background: $pumpkin-orange;
       color: $white-five;
       font-size: 0.75rem;
-      font-family: $arial;
+      font-family: $alshaya-bold;
       width: 10.81rem;
       height: 2.188rem;
       display: inline-block;

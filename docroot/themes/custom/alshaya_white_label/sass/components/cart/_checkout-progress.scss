@@ -163,7 +163,7 @@
         margin-#{$right}: 0.8rem;
         width: 1.5rem;
         height: 1.5rem;
-        line-height: 1.4rem;
+        line-height: 1.6;
       }
 
       @include breakpoint($only-mobile) {

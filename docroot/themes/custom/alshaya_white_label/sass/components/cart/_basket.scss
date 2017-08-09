@@ -860,7 +860,7 @@
 #table-cart-totals,
 #table-cart-items {
   .price-wrapper .price-amount {
-    float: $left;
+    float: right;
   }
 }
 
@@ -1065,6 +1065,7 @@ html[lang=ar] {
 
   #table-cart-items table tr td.subtotal .price-currency.suffix {
     left: 0.5rem !important;
+    float: left !important;
   }
 
   .alias--cart #table-cart-totals table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] td:nth-child(2) {
@@ -1196,10 +1197,26 @@ td.price {
     }
 
     .price--discount {
-      float: right;
+      display: inline-block;
+      width: 100%;
 
-      html[lang=ar] & span {
-        float: left;
+      .discount-value {
+        @include breakpoint($tablet) {
+          float: right;
+        }
+      }
+
+      html[lang=ar] & .discount-prefix {
+        @include breakpoint($tablet) {
+          font-size: 0.875rem;
+          position: relative;
+          left: 0.22rem;
+          float: left;
+        }
+
+        @include breakpoint($desktop) {
+          left: 0.5rem;
+        }
       }
     }
 
