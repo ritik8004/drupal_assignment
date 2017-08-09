@@ -1,1 +1,0 @@
-curl -X POST "https://agent.dev.acm.acquia.io/customer/me@nik4u.com" -F "password=Test@123"
