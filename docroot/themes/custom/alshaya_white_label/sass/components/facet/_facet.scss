@@ -13,7 +13,7 @@
     @extend %list-clear;
 
     @include breakpoint($desktop) {
-      padding-top: 1.25rem;
+      padding-top: 0.5625rem;
     }
 
     input[type="text"] {
