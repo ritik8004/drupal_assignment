@@ -377,7 +377,6 @@
 
   // Command to display error message and rebind autocomplete to main input.
   $.fn.clickCollectPdpNoStoresFound = function (data) {
-    console.log(data);
     $('.click-collect-top-stores').html(data);
     $('.click-collect-all-stores').html('');
     $('.click-collect-form .available-store-text').hide();
