@@ -219,8 +219,10 @@ function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
     $knet = $checkout_options_manager->loadPaymentMethod('knet');
     $knet->get('description')->setValue('Please proceed to K-Net payment gateway by clicking the "Place Order" button below.');
     $knet->save();
+
     $knet_ar = $knet->addTranslation('ar', []);
     $knet_ar->setName('بطاقة ائتمان k-net');
+    $knet_ar->get('description')->setValue('يرجى المتابعة إلى صفحة الدفع عن طريق K-Net  بواسطة الضغط على رابط "سجل الطلبية" أدناه');
     $knet_ar->save();
 
     // Cash on Delivery.
