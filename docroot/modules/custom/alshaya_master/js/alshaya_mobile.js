@@ -14,10 +14,20 @@ Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
   Drupal.behaviors.alshayaMobileNumber = {
     attach: function (context, settings) {
       $('[mobile-prefix]').once('bind-js').each(function () {
-        // Set the data prefix once.
-        $(this).data('prefix', $(this).attr('mobile-prefix'));
+        var element = $(this);
 
-        Drupal.alshayaMobileNumber.init($(this), $(this).val().toString().trim());
+        // Set the data prefix once.
+        element.data('prefix', element.attr('mobile-prefix'));
+
+        Drupal.alshayaMobileNumber.init(element, element.val().toString().trim());
+
+        element.numeric({
+          allowMinus   : false,
+          allowThouSep : false,
+          allowPlus : true,
+          allowDecSep: false
+        });
+
       });
     }
   };
