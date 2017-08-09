@@ -244,6 +244,8 @@
       vertical-align: middle;
       border: 1px solid $light-greyish;
       background: $white-five;
+      font-family: $alshaya-bold;
+      font-weight: normal;
 
       p {
         color: $grey-ash;
@@ -309,6 +311,12 @@
         h2,
         p {
           color: $light-greyish;
+        }
+      }
+
+      &.active--tab--head {
+        h2 {
+          color: $marine-blue-two;
         }
       }
     }
