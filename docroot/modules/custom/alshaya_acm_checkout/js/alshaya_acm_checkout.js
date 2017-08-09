@@ -238,9 +238,11 @@
 
   Drupal.behaviors.fixCheckoutSummaryBlock = {
     attach: function (context, settings) {
-      var block = $("#block-checkoutsummaryblock");
-      block.on('scroll', function(e) {
-        if (this.scrollTop > 147) {
+      var block = $('.block-checkout-summary-block');
+
+      $(window).once().on('scroll', function() {
+        console.log($('body').scrollTop());
+        if ($('body').scrollTop() > 122) {
           block.addClass('fix-block');
         }
         else {

@@ -74,13 +74,13 @@
       font-size: 0.875rem;
       position: relative;
       cursor: pointer;
+      line-height: 1.2;
+      text-transform: lowercase;
 
       &.active {
         border: 1px solid $marine-blue-two;
         font-weight: bold;
         color: $marine-blue-two;
-        font-size: 9px;
-        line-height: 1.7;
       }
 
       @include breakpoint($only-tablet) {
@@ -92,6 +92,11 @@
         padding-top: 1.063rem;
         width: 4.25rem;
         font-size: 0.625rem;
+
+        .safari & {
+          font-size: 9px;
+          line-height: 1.7;
+        }
       }
 
       @include breakpoint($only-mobile) {
@@ -310,6 +315,12 @@
             }
 
             .store-actions {
+              @include breakpoint($only-mobile) {
+                margin-#{$left}: -1px;
+                margin-#{$right}: -1px;
+                margin-#{$bottom}: -1px;
+              }
+
               .store-on-map {
                 display: none !important;
               }
@@ -402,6 +413,7 @@
 
             @include breakpoint($desktop) {
               font-size: 0.875rem;
+              width: 83%;
             }
 
             @include breakpoint($only-tablet) {
@@ -640,6 +652,7 @@
 
         .delivery--time--value {
           display: block;
+          width: 83%;
           margin-top: 0.3125rem;
         }
       }
@@ -918,10 +931,17 @@
 
         @include breakpoint($desktop) {
           font-size: 0.875rem;
+          width: 83%;
         }
       }
 
       .store-actions {
+        @include breakpoint($only-mobile) {
+          margin-#{$left}: -1px;
+          margin-#{$right}: -1px;
+          margin-#{$bottom}: -1px;
+        }
+
         .change-store {
           text-align: center;
           width: 10.13rem;
