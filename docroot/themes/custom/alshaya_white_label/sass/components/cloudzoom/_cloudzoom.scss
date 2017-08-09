@@ -20,12 +20,14 @@
   }
 
   #cloud-zoom-wrap {
+    text-align: center;
+
     @include breakpoint($only-tablet) {
       height: 25rem;
     }
 
     #wrap {
-      width: 100%;
+      display: inline-block !important;
       z-index: 4 !important;
 
       @include breakpoint($only-tablet) {
@@ -34,7 +36,8 @@
     }
 
     img {
-      width: 100%;
+      height: 100%;
+      width: auto;
     }
   }
 
@@ -42,7 +45,7 @@
     @include breakpoint($only-tablet) {
       width: 100%;
       float: none;
-      margin-#{$right}: none;
+      margin-#{$right}: 0;
       position: relative;
     }
 
@@ -146,12 +149,12 @@
   z-index: 99;
 
   @include if-rtl {
-    right: 103.2% !important;
+    right: 127.5% !important;
     left: auto !important;
   }
 
   @include if-ltr {
-    left: 103.2% !important;
+    left: 127.5% !important;
     right: auto !important;
   }
 
@@ -163,7 +166,7 @@
 }
 
 .cloudzoom .cloud-zoom-lens {
-  cursor: url(../imgs/assets/ic-zoom.svg) 100 100, auto !important;
+  cursor: url(../imgs/assets/ic-zoom.svg), auto !important;
 }
 
 .mobilegallery {
@@ -288,8 +291,9 @@
       border: 1px solid transparent;
 
       img {
-        width: 100%;
+        width: auto;
         height: 100%;
+        margin: 0 auto;
       }
     }
   }
@@ -302,7 +306,7 @@
     }
 
     .slick-slide {
-      margin-right: 0.5rem;
+      margin-#{$right}: 0.4375rem;
     }
   }
 }
@@ -353,9 +357,7 @@
       }
 
       &-current {
-        img {
-          border: 1px solid $black;
-        }
+        border: 1px solid $black;
       }
     }
 
@@ -363,11 +365,12 @@
       width: 5.625rem !important;
       height: 5.0625rem !important;
       margin: 0.3125rem 0;
+      padding: 2px;
 
       img {
-        padding: 0.125rem;
-        width: 100%;
-        height: auto;
+        width: auto;
+        height: 100%;
+        margin: 0 auto;
       }
     }
   }

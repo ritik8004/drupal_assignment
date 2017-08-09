@@ -12,10 +12,9 @@
 
 .cloudzoom .cloud-zoom-lens {
   width: 212px !important;
-  height: 227px !important;
+  height: 212px !important;
   background-color: rgba(253, 253, 253, 0.44) !important;
   border: 1px solid #fefefe;
-  margin: -1px !important;
 }
 .ui-dialog {
   z-index: 999;
