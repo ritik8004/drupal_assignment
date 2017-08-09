@@ -94,7 +94,13 @@
               }
             ]
           };
+
           $('#product-image-gallery').slick(slickModalOptions);
+          var productGallery = '';
+          $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
+            var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+            productGallery.slick('unslick');
+          });
 
           // ZoomIn ZoomOut in Gallery view with a draggable container.
           if ($('#full-image-wrapper').length > 0) {
@@ -156,7 +162,9 @@
             });
 
             // Swap the big image inside slider-2 when clicking on thumbnail.
-            $('#product-image-gallery li', context).on('click', function () {
+            $('#product-image-gallery li').on('click', function () {
+              img_scale = 1;
+
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
@@ -171,6 +179,15 @@
                 $('#full-image-wrapper iframe').remove();
                 $('#full-image-wrapper img').show();
               }
+
+              $('#product-image-gallery li a').on('click', function (e) {
+                e.preventDefault();
+                if ($(this).hasClass('imagegallery__thumbnails__image')) {
+                  $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+                  $(this).parent().addClass('slick-current');
+                }
+              });
+
               // Stop the browser from loading the image in a new tab.
               return false;
             });
@@ -179,10 +196,12 @@
       };
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
-      $('.acq-content-product .cloudzoom #cloud-zoom-wrap').on('click', function () {
+      $('.acq-content-product .cloudzoom #cloud-zoom-wrap', context).on('click', function () {
         myDialog.show();
         myDialog.showModal();
       });
+
+
 
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Handling videos inside sliders.
@@ -236,19 +255,6 @@
           $(this).parent().siblings('.slick-slide').removeClass('slick-current');
           $(this).parent().addClass('slick-current');
         }
-      });
-
-      $('#product-image-gallery li a', context).on('click', function (e) {
-        e.preventDefault();
-        if ($(this).hasClass('imagegallery__thumbnails__image')) {
-          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-          $(this).parent().addClass('slick-current');
-        }
-      });
-
-      // Preventing click on image.
-      $('#product-image-gallery a').on('click', 'touchstart', function (e) {
-        e.preventDefault();
       });
 
       // Preventing click on image.
