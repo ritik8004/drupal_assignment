@@ -286,8 +286,8 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $cart = $this->getCart();
 
-    // We are only looking to convert guest carts.
-    if (!($cart->customerId())) {
+    // We convert guest carts to customer cart or if user changes the email.
+    if (!($cart->customerId()) || $cart->customerEmail() != $email) {
       // Get the customer id of Magento from this email.
       /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
       $api_wrapper = \Drupal::service('acq_commerce.api');
