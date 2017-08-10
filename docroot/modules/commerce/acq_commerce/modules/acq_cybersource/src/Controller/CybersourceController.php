@@ -268,7 +268,6 @@ class CybersourceController implements ContainerInjectionInterface {
 
     $error = render($messages);
     $error = str_replace(["\r", "\n"], '', $error);
-    $error = addslashes($error);
 
     return '<div class="cybersource-global-error">' . $error . '</div>';
   }
