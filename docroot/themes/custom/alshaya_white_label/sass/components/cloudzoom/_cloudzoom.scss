@@ -56,38 +56,9 @@
       position: static;
     }
 
-    .slick-list {
-      #lightSlider {
-        li {
-          overflow: hidden;
-
-          @include breakpoint($only-tablet) {
-            padding: 1px;
-            line-height: 0;
-          }
-
-          @include breakpoint($desktop) {
-            padding: 3px;
-          }
-
-          &.active {
-            border: 1px solid;
-          }
-
-          img {
-            max-width: 100%;
-
-            @include breakpoint($only-tablet) {
-              width: 6.875rem;
-              height: 6.25rem;
-            }
-
-            @include breakpoint($desktop) {
-              width: 5.063rem;
-              height: 4.5rem;
-            }
-          }
-        }
+    #lightSlider {
+      .slick-list {
+        padding: 0 !important;
       }
     }
   }
@@ -257,6 +228,10 @@
     height: 6.25rem;
     margin: 0 auto;
     padding-#{$left}: 0;
+
+    .slick-list {
+      padding: 0 !important;
+    }
 
     .slick {
       &-arrow {
