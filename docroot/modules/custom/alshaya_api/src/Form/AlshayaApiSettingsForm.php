@@ -47,7 +47,7 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    $config = $this->config('alshaya_acm_product.settings');
+    $config = $this->config('alshaya_api.settings');
 
     $form['magento_host'] = [
       '#type' => 'textfield',
