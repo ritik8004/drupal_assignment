@@ -60,6 +60,38 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * API to create transaction entry for K-Net.
+   *
+   * @param string $order_id
+   *   Order increment id.
+   * @param string $transaction_id
+   *   K-Net transaction id.
+   *
+   * @return mixed
+   *   Response of API or NULL.
+   */
+  public function addKnetTransaction($order_id, $transaction_id) {
+    $endpoint = 'knet/transaction';
+
+    $data = [
+      'orderId' => $order_id,
+      'transactionId' => $transaction_id,
+    ];
+
+    try {
+      return $this->invokeApi($endpoint, $data, 'JSON');
+    }
+    catch (\Exception $e) {
+      $this->logger->critical('Error occurred while adding transaction for knet order: %info <br> %message', [
+        '%info' => print_r($data, TRUE),
+        '%message' => $e->getMessage(),
+      ]);
+    }
+
+    return NULL;
+  }
+
+  /**
    * Function to get all the stores from the API.
    *
    * @param string $langcode
@@ -121,7 +153,7 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
-    if (\Drupal::state()->get('store_development_mode', 0) || empty($lat) || empty($lon)) {
+    if (\Drupal::state()->get('store_development_mode', 0)) {
       $lat = 29;
       $lon = 48;
     }
@@ -159,6 +191,8 @@ class AlshayaApiWrapper {
     $url .= '/' . $this->config->get('magento_api_base');
     $url .= '/' . $endpoint;
 
+    $header = [];
+
     $curl = curl_init();
 
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -166,10 +200,7 @@ class AlshayaApiWrapper {
 
     if ($requires_token) {
       $token = $this->getToken();
-
-      curl_setopt($curl, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-      ]);
+      $header[] = 'Authorization: Bearer ' . $token;
     }
 
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
@@ -179,6 +210,18 @@ class AlshayaApiWrapper {
       curl_setopt($curl, CURLOPT_POST, TRUE);
       curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
     }
+    elseif ($method == 'JSON') {
+      $data_string = json_encode($data);
+
+      $header[] = 'Content-Type: application/json';
+      $header[] = 'Content-Length: ' . strlen($data_string);
+
+      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+      curl_setopt($curl, CURLOPT_POST, TRUE);
+      curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
+    }
+
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 
     $result = curl_exec($curl);
     curl_close($curl);

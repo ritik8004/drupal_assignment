@@ -149,11 +149,13 @@ class StoresFinderController extends ControllerBase {
    *
    * @param \Drupal\Core\Entity\EntityInterface $node
    *   Node object.
+   * @param string $type
+   *   Type from where user came.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   Ajax response.
    */
-  public function storeDetail(EntityInterface $node) {
+  public function storeDetail(EntityInterface $node, $type = 'glossary') {
     // Get the correct translated version of node.
     $node = $this->entityRepository->getTranslationFromContext($node);
     $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node);
@@ -167,6 +169,20 @@ class StoresFinderController extends ControllerBase {
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString();
     $store_finder_node_li = '<li><a href="' . $url . '">' . $node->getTitle() . '</a></li>';
     $response->addCommand(new AppendCommand('.block-system-breadcrumb-block ol', $store_finder_node_li));
+
+    return $response;
+  }
+
+  /**
+   * Route to load the glossary view by ajax.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response.
+   */
+  public function glossaryBack() {
+    $response = new AjaxResponse();
+    $glossary_view = views_embed_view('stores_finder', 'page_2');
+    $response->addCommand(new HtmlCommand('.view-display-id-page_2', $glossary_view));
 
     return $response;
   }

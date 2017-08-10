@@ -1236,6 +1236,19 @@ header {
     background: $white-five;
     text-align: center;
   }
+
+  .account {
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        padding: 0.9rem 0;
+        font-size: 0.8125rem;
+
+        &.active {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
 }
 
 // Tablet Specific menu width

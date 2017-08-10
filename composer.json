@@ -50,7 +50,10 @@
         "drupal/r4032login": "1.x-dev",
         "drupal/datalayer": "^1.0@beta",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
-        "drupal/views_block_filter_block": "1.x-dev"
+        "drupal/views_block_filter_block": "1.x-dev",
+        "mobiledetect/mobiledetectlib": "^2.8",
+        "acquia/http-hmac-php": "~3.1.0",
+        "drupal/simple_oauth": "^2.0@RC"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -148,8 +151,14 @@
             "drupal/profile" : {
                 "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
             },
+            "drupal/clientside_validation" : {
+                "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-4.patch"
+            },
             "drupal/redirect" : {
                 "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
+            },
+            "drupal/sharethis" : {
+                "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
             }
         },
         "installer-paths": {

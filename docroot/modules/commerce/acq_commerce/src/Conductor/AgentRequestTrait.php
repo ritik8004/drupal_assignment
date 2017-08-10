@@ -93,6 +93,7 @@ trait AgentRequestTrait {
 
     // Make Request.
     try {
+      /** @var \GuzzleHttp\Psr7\Response $result */
       $result = $doReq($client, $reqOpts);
     }
     catch (RequestException $e) {
@@ -106,13 +107,12 @@ trait AgentRequestTrait {
       $logger->error($mesg);
       throw new ConductorException($mesg, $e->getCode(), $e);
     }
-
-    $response = json_decode($result->getBody()->getContents(), TRUE);
+    $response = json_decode($result->getBody(), TRUE);
     if (($response === NULL) || (!isset($response['success']))) {
       $mesg = sprintf(
         '%s: Invalid / Unrecognized Conductor response: %s',
         $action,
-        $result->getBody()->getContents()
+        $result->getBody()
       );
 
       $logger->error($mesg);
@@ -123,7 +123,7 @@ trait AgentRequestTrait {
       $logger->info(sprintf(
         '%s: Conductor request unsuccessful: %s',
         $action,
-        $result->getBody()->getContents()
+        $result->getBody()
       ));
 
       throw new ConductorResultException($response);

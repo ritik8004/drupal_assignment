@@ -4,11 +4,11 @@ dependencies: {  }
 name: product_zoom_medium_606x504
 label: product.zoom.medium.606x504
 effects:
-  858d65c9-3fe4-47d6-b85f-2565e1a3f25d:
-    uuid: 858d65c9-3fe4-47d6-b85f-2565e1a3f25d
-    id: image_scale_and_crop
-    weight: 1
+  a3c7d6f9-526f-4abf-8cdb-9209c9b64d4e:
+    uuid: a3c7d6f9-526f-4abf-8cdb-9209c9b64d4e
+    id: image_scale
+    weight: 2
     data:
-      width: 606
+      width: null
       height: 504
-
+      upscale: false

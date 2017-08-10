@@ -1,12 +1,15 @@
 // Size Guide Link theme
 .size-guide-link {
-  float: $right;
+  position: absolute;
+  #{$right}: 0;
   padding-top: 0;
   font-size: 0.6875rem;
-  color: $cerulean;
+  color: $cerulean-two;
+  top: -0.25rem;
 
   @include breakpoint($desktop) {
-    padding-top: 0.625rem;
+    padding-top: 0.5rem;
+    top: -0.125rem;
   }
 
   .sell-sku & {
@@ -14,7 +17,35 @@
   }
 
   + .ajax-progress-throbber {
-    @include u-visibility(none);
+    position: absolute;
+    top: -0.5rem;
+    #{$right}: 31%;
+    display: block !important;
+
+    html[lang=ar] & {
+      #{$right}: 41%;
+    }
+
+    @include breakpoint($desktop) {
+      top: 0.125rem;
+      #{$right}: 18%;
+
+      html[lang=ar] & {
+        #{$right}: 28%;
+      }
+    }
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-position: $right center !important;
+      background-repeat: no-repeat !important;
+      background-size: 1.5rem;
+      padding: 0.5rem;
+    }
   }
 }
 
@@ -53,6 +84,7 @@
     background: $white-five;
     padding: 1.5em;
     overflow: hidden;
+    height: 100% !important;
 
     @include breakpoint($tablet) {
       height: 36rem !important;

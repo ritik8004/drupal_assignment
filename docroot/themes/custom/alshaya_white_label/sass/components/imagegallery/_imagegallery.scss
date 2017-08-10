@@ -41,7 +41,8 @@
   font-size: 1.875rem;
   color: $white-two;
   background-color: $marine-blue;
-  border-radius: none;
+  border-radius: 0;
+  outline: solid transparent;
 
   &::before {
     position: absolute;
@@ -79,6 +80,8 @@
     }
 
     & > .imagegallery__full {
+      text-align: center;
+
       @include breakpoint($tablet) {
         height: 30rem !important;
       }
@@ -91,8 +94,7 @@
       }
 
       .imagegallery__full__image {
-        width: 100%;
-        height: auto;
+        height: 100%;
       }
     }
   }

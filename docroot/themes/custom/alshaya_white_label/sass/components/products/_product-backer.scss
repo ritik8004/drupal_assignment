@@ -1,10 +1,12 @@
 .acq-content-product {
-  .sharethis-wrapper {
-    text-align: $left;
+  .gallery-wrapper {
+    @include breakpoint($only-tablet) {
+      padding-bottom: 2rem;
+    }
   }
 
   .special--price .price {
-    color: $scarlet;
+    color: $special-price;
   }
 
   .form-item-configurables-size .selected-text {
@@ -17,17 +19,24 @@
     }
   }
 
-  .size-guide-link {
-    @include breakpoint($tablet) {
-      margin-#{$right}: 6.5rem;
-
-      html[lang=ar] & {
-        margin-#{$right}: 5.5rem;
-      }
-    }
-  }
-
   .cloudzoom__thumbnails__image {
     outline: transparent;
+  }
+}
+
+article[gtm-sku-type="simple"] {
+  .acq-content-product-modal {
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        .form-item.form-type-select.form-item-quantity {
+          float: $left;
+        }
+
+        button.edit-add-to-cart {
+          float: $right;
+          margin-top: 1rem;
+        }
+      }
+    }
   }
 }

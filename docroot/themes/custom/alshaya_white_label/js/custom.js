@@ -39,20 +39,6 @@
           }
         }
       });
-      $('.other-stores-link').on('click', function () {
-        if ($(window).width() < 768) {
-          $('html,body').animate({
-            scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
-          }, 'slow');
-        }
-        else {
-          if ($('body').hasClass('header--fixed')) {
-            $('html,body').animate({
-              scrollTop: $('.content__title_wrapper').offset().top - normalStickyHeaderHeight
-            }, 'slow');
-          }
-        }
-      });
 
       // Scrolling the page to top if edit address is clicked.
       $('.address .address--edit a').on('click', function () {
@@ -74,7 +60,7 @@
         });
       }
 
-      $('.nodetype--acq_product .above-mobile-block, .path--cart .owl-item .above-mobile-block').click(function () {
+      $('.nodetype--acq_product .above-mobile-block, .path--cart .owl-item .above-mobile-block, .acq-content-product .cloudzoom #cloud-zoom-wrap').click(function () {
         $('body').addClass('pdp-modal-overlay');
 
         $(document).ajaxComplete(function () {

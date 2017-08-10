@@ -86,20 +86,22 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
     $plugin_manager = \Drupal::service('plugin.manager.acq_checkout_flow');
     $checkout_flow = $plugin_manager->createInstance($checkout_flow_plugin, []);
 
-    // Build the steps sent to the template.
-    $steps = [];
-    $visible_steps = $checkout_flow->getVisibleSteps();
-    $visible_step_ids = array_keys($visible_steps);
     $current_step_id = $checkout_flow->getStepId();
 
     if ($current_step_id == 'login') {
       return [];
     }
 
+    // Build the steps sent to the template.
+    $steps = [];
+    $visible_steps = $checkout_flow->getVisibleSteps();
+
+    // Login step not required for progress block.
+    unset($visible_steps['login']);
+
+    $visible_step_ids = array_keys($visible_steps);
+
     $current_step_index = array_search($current_step_id, $visible_step_ids);
-    if (\Drupal::currentUser()->isAnonymous()) {
-      $current_step_index--;
-    }
 
     // Get last step completed in the cart.
     $cart = $this->cartStorage->getCart();
@@ -130,7 +132,7 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
       }
       // Set the label to a link if this step has already been completed so that
       // the progress bar can be used as a sort of navigation.
-      if ($index <= $cart_step_index && $index !== $current_step_index) {
+      if ($current_step_id != 'confirmation' && $index <= $cart_step_index && $index !== $current_step_index) {
         $is_link = TRUE;
         $label = Link::createFromRoute($label, 'acq_checkout.form', [
           'step' => $step_id,

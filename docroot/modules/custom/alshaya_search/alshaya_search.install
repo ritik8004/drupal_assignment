@@ -61,8 +61,8 @@ function alshaya_search_modules_installed($modules) {
     ->getLanguageConfigOverride('ar', 'views.view.search');
   $search_view->set('display.default.display_options.exposed_form.options.exposed_sorts_label', 'رتب حسب');
   $search_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'التطابق تنازلي|التطابق
-الاسم تنازلي|الاسم من ي إلى أ
 الاسم تصاعدي|الاسم من أ إلى ي
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من أعلى إلى أدنى
 السعر تصاعدي|السعر من أدنى إلى أعلى');
   $search_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');

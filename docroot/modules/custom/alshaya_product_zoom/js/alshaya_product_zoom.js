@@ -11,18 +11,13 @@
         slidesToShow: 5,
         vertical: true,
         arrows: true,
+        focusOnSelect: false,
+        centerMode: true,
         responsive: [
           {
             breakpoint: 1025,
             settings: {
               slidesToShow: 3,
-              vertical: false
-            }
-          },
-          {
-            breakpoint: 767,
-            settings: {
-              slidesToShow: 1,
               vertical: false
             }
           }
@@ -37,8 +32,6 @@
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
       var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)');
       if (items.length) {
         items.addClass('cloud-zoom-processed', context).once('bind-events').CloudZoom();
@@ -73,10 +66,14 @@
         height: 768,
         dialogClass: 'dialog-product-image-gallery-container',
         open: function () {
+          var currentSlide = $('#lightSlider').slick('slickCurrentSlide');
           var slickModalOptions = {
             slidesToShow: 5,
             vertical: true,
             arrows: true,
+            centerMode: true,
+            focusOnSelect: false,
+            initialSlide: currentSlide,
             responsive: [
               {
                 breakpoint: 1025,
@@ -84,21 +81,26 @@
                   slidesToShow: 5,
                   vertical: false
                 }
-              },
-              {
-                breakpoint: 767,
-                settings: {
-                  slidesToShow: 1,
-                  vertical: false
-                }
               }
             ]
           };
+
           $('#product-image-gallery').slick(slickModalOptions);
+          var curSlide = $('#product-image-gallery').slick('slickCurrentSlide');
+          var defaultMainImage = $('#product-image-gallery li[data-slick-index="' + curSlide + '"]');
+          var bigImgUrl = defaultMainImage.children('a').attr('href');
+          $('#full-image-wrapper img').attr('src', bigImgUrl);
+          $('#full-image-wrapper img').css('transform', 'scale(1)');
+          $('#full-image-wrapper iframe').remove();
+          $('#full-image-wrapper img').show();
+
+          $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
+            var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+            productGallery.slick('unslick');
+          });
 
           // ZoomIn ZoomOut in Gallery view with a draggable container.
           if ($('#full-image-wrapper').length > 0) {
-
             var maskWidth = $('#full-image-wrapper').width();
             var maskHeight = $('#full-image-wrapper').height();
             var imgPos = $('#full-image').offset();
@@ -113,6 +115,7 @@
             var click = {x: 0, y: 0};
             $('#full-image').draggable({
               containment: [x1, y1, x2, y2],
+              revert: true,
               start: function(event) {
                 click.x = event.clientX;
                 click.y = event.clientY;
@@ -156,7 +159,8 @@
             });
 
             // Swap the big image inside slider-2 when clicking on thumbnail.
-            $('#product-image-gallery li', context).on('click', function () {
+            $('#product-image-gallery li').on('click', function () {
+              img_scale = 1;
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
@@ -174,15 +178,27 @@
               // Stop the browser from loading the image in a new tab.
               return false;
             });
+
+            $('#product-image-gallery li a').on('click', function (e) {
+              e.preventDefault();
+              var index = $(this).parent().attr('data-slick-index');
+              if ($('#product-image-gallery').slick('slickCurrentSlide') !== index) {
+                $('#product-image-gallery').slick('slickGoTo', index);
+              }
+              $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+              $(this).parent().addClass('slick-current');
+            });
           }
         }
       };
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
-      $('.acq-content-product .cloudzoom #cloud-zoom-wrap').on('click', function () {
+      $('.acq-content-product .cloudzoom #cloud-zoom-wrap', context).on('click', function () {
         myDialog.show();
         myDialog.showModal();
       });
+
+
 
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Handling videos inside sliders.
@@ -215,7 +231,7 @@
         }
       });
       // For Desktop slider, we add a iframe on click on the image.
-      $('#lightSlider li', context).on('click', function () {
+      $('#lightSlider li', context).on('click', function (e) {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var wrap = $('#cloud-zoom-wrap');
           // Get width & height of wrap.
@@ -232,22 +248,19 @@
 
       $('#lightSlider li a', context).on('click', function (e) {
         e.preventDefault();
-        if ($(this).hasClass('cloudzoom__thumbnails__image')) {
-          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-          $(this).parent().addClass('slick-current');
+        e.stopPropagation();
+        var index = $(this).parent().attr("data-slick-index");
+        if ($('#lightSlider').slick('slickCurrentSlide') !== index) {
+          $('#lightSlider').slick('slickGoTo', index);
         }
+        $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+        $(this).parent().addClass('slick-current');
       });
 
-      $('#product-image-gallery li a', context).on('click', function (e) {
-        e.preventDefault();
-        if ($(this).hasClass('imagegallery__thumbnails__image')) {
-          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-          $(this).parent().addClass('slick-current');
-        }
-      });
-
-      $('#product-image-gallery a').on('click', 'touchstart', function (e) {
-        e.preventDefault();
+      // Preventing click on image.
+      $('.acq-content-product-modal #cloud-zoom-wrap a').on('click', function (event) {
+        event.stopPropagation();
+        event.preventDefault();
       });
 
       $('.acq-content-product-modal #lightSlider li', context).on('click', function () {
@@ -273,12 +286,6 @@
         return false;
       });
 
-      $('#product-image-gallery li img', context).on('click', function () {
-        if ($(this).parent().hasClass('imagegallery__thumbnails__image')) {
-          $(this).parent().parent().siblings('.lslide').removeClass('active');
-          $(this).parent().parent().addClass('active');
-        }
-      });
       // For Desktop slider, we remove the iframe when we want to zoom another image.
       $('#lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
         var playerIframe = $('#yt-vi-container iframe');

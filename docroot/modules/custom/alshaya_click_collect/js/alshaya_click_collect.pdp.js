@@ -27,21 +27,23 @@
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
       if (typeof Drupal.geolocation.loadGoogle === 'function') {
-        // First load the library from google.
-        Drupal.geolocation.loadGoogle(function () {
-          var field = $('.click-collect-form').find('input[name="location"]')[0];
-          new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
+        $('.click-collect-form').once('autocomplete-init').each(function () {
+          // First load the library from google.
+          Drupal.geolocation.loadGoogle(function () {
+            var field = $('.click-collect-form').find('input[name="location"]')[0];
+            new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
+          });
         });
       }
 
       // Show/Hide subtitle for delivery options accordions.
       $('.c-accordion-delivery-options').each(function () {
-        $(this).once('accordion-trigger').on('accordionactivate', function (event, ui) {
+        $(this).once('accordion-trigger').on('accordionbeforeactivate', function (event, ui) {
           if (ui.newHeader.length > 0) {
-            $(event.target).find('h3 > .subtitle').hide();
+            $(event.target).find('h3 > .subtitle').slideUp();
           }
           else {
-            $(event.target).find('h3 > .subtitle').show();
+            $(event.target).find('h3 > .subtitle').slideDown('slow');
           }
         });
       });
@@ -70,7 +72,9 @@
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
           e.preventDefault();
-          $('.click-collect-form').find('.search-stores-button').click();
+          if (!$.isEmptyObject(asCoords)) {
+            $('.click-collect-form').find('.search-stores-button').click();
+          }
           return false;
         }
       });
@@ -83,6 +87,9 @@
               scrollTop: $('.click-collect-all-stores').offset().top
             }, 'slow');
           });
+        }
+        else {
+          $('.click-collect-all-stores').toggle('slow');
         }
       });
 
@@ -151,9 +158,11 @@
   };
 
   // Set the location coordinates, but don't render the stores.
-  Drupal.pdp.setStoreCoords = function (coords) {
+  Drupal.pdp.setStoreCoords = function (coords, field, restriction, $trigger) {
     asCoords = coords;
-    Drupal.pdp.storesDisplay(asCoords);
+    if (!$.isEmptyObject(asCoords)) {
+      Drupal.pdp.storesDisplay(asCoords);
+    }
   };
 
   Drupal.pdp.getProductInfo = function () {
@@ -213,12 +222,12 @@
   };
 
   // Make Ajax call to get stores and render html.
-  Drupal.pdp.storesDisplay = function (coords, $trigger) {
+  Drupal.pdp.storesDisplay = function (coords, field, restriction, $trigger) {
     if (coords) {
       asCoords = coords;
     }
 
-    if (asCoords) {
+    if (!$.isEmptyObject(asCoords)) {
       // Get the Product info.
       var productInfo = Drupal.pdp.getProductInfo();
       var sku = '';
@@ -289,13 +298,13 @@
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function () {
     var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   /**
@@ -351,7 +360,6 @@
 
         if (!accordionStatus) {
           $('#pdp-stores-container.click-collect').accordion('option', 'active', true);
-          $('#pdp-stores-container.click-collect > h3').trigger('click');
         }
         Drupal.pdp.storesDisplay();
       }
@@ -365,6 +373,20 @@
 
       }
     }
+  };
+
+  // Command to display error message and rebind autocomplete to main input.
+  $.fn.clickCollectPdpNoStoresFound = function (data) {
+    $('.click-collect-top-stores').html(data);
+    $('.click-collect-all-stores').html('');
+    $('.click-collect-form .available-store-text').hide();
+    $('.click-collect-form .change-location').hide();
+
+    // Bind the js again to main input.
+    var field = $('.click-collect-form').find('input[name="location"]')[0];
+    new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
+
+    $('.click-collect-form .store-finder-form-wrapper').show();
   };
 
 })(jQuery, Drupal);

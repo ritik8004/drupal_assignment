@@ -29,10 +29,10 @@
       {% endtrans %}
     </div>
 
-    {% if account.privilege_card_number %}
+    {% if order.loyaltyCard %}
       <div>
         {% trans %}
-          <p>Your Privileges Card Number is: <strong class="dark--text">{{ account.privilege_card_number }}</strong></p>
+          <p>Your Privileges Card Number is: <strong class="dark--text">{{ order.loyaltyCard }}</strong></p>
         {% endtrans %}
       </div>
     {% endif %}
@@ -52,7 +52,7 @@
 <table class="user__order--detail order--print">
   <tbody>
     <tr class="order-details-row">
-      <td>
+      <td class="order__user--info">
         {% if order_details.type == 'cc' %}
           <div class="label font-small">{{ 'Collection Address'|t }}</div>
           <div class="store-name-and-address">
@@ -78,7 +78,7 @@
           <div class="dark">{{ order_details.payment_method }}</div>
         </div>
       </td>
-      <td>
+      <td class="order__delivery-details">
         {% if order_details.type == 'cc' %}
           <div class="label font-small">{{ 'Collection times'|t }}</div>
           <div>
@@ -105,22 +105,20 @@
           <div class="dark">{{ order_details.delivery_method }}</div>
         </div>
       </td>
-      <td>
+      <td class="desktop-only">
         {% if order_details.type == 'cc' %}
           <div class="label font-small">{{ "Billing details"|t }}</div>
           <div>{{ order_details.billing_address }}</div>
         {% endif %}
       </td>
-      <td class="blend">
-        <div class="label">{{ "Payment method"|t }}</div>
+      <td class="above-mobile blend">
+        <div class="label payment-method font-small">{{ "Payment method"|t }}</div>
         <div class="dark">{{ order_details.payment_method }}</div>
 
-        <div class="delivery--method">
-          <div class="label">{{ "Delivery method"|t }}</div>
-          <div class="dark">{{ order_details.delivery_method }}</div>
-        </div>
+        <div class="label delivery-method font-small">{{ "Delivery method"|t }}</div>
+        <div class="dark">{{ order_details.delivery_method }}</div>
       </td>
-      <td class="empty--cell">&nbsp;</td>
+      <td class="above-mobile empty--cell">&nbsp;</td>
     </tr>
 
     <tr class="product--count">

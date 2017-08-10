@@ -21,6 +21,10 @@
         }
       };
 
+      // Convert search keyword to lowercase.
+      $('#edit-keywords').on('keyup', function() {
+        $(this).val($(this).val().toLowerCase());
+      });
     }
   };
 
@@ -77,7 +81,7 @@
           clearInterval(i);
           $('aside .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.insertAfter($(this).find('ul li:last-child'));
+            softLink.insertAfter($(this).find('ul'));
           });
         }
       }, 100);
@@ -88,7 +92,7 @@
           $('.region__content .region__sidebar-first .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
             softLink.addClass('processed');
-            softLink.insertAfter($(this).find('ul li:last-child'));
+            softLink.insertAfter($(this).find('ul'));
           });
         }
       }, 100);

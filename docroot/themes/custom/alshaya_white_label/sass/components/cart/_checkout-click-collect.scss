@@ -74,6 +74,8 @@
       font-size: 0.875rem;
       position: relative;
       cursor: pointer;
+      line-height: 1.2;
+      text-transform: lowercase;
 
       &.active {
         border: 1px solid $marine-blue-two;
@@ -90,6 +92,11 @@
         padding-top: 1.063rem;
         width: 4.25rem;
         font-size: 0.625rem;
+
+        .safari & {
+          font-size: 9px;
+          line-height: 1.7;
+        }
       }
 
       @include breakpoint($only-mobile) {
@@ -249,6 +256,7 @@
         list-style: none;
         padding: 0;
         margin-top: 0;
+        margin-bottom: 0;
 
         li {
           background-color: $white-five;
@@ -290,6 +298,10 @@
             padding-bottom: 0;
             margin-bottom: 1.563rem;
 
+            &:last-child {
+              margin-bottom: 0;
+            }
+
             .store-name-and-address,
             .store-open-hours,
             .store-delivery-time {
@@ -303,6 +315,12 @@
             }
 
             .store-actions {
+              @include breakpoint($only-mobile) {
+                margin-#{$left}: -1px;
+                margin-#{$right}: -1px;
+                margin-#{$bottom}: -1px;
+              }
+
               .store-on-map {
                 display: none !important;
               }
@@ -395,6 +413,7 @@
 
             @include breakpoint($desktop) {
               font-size: 0.875rem;
+              width: 83%;
             }
 
             @include breakpoint($only-tablet) {
@@ -455,6 +474,10 @@
                 font-size: 1.5rem;
                 line-height: 1;
                 display: inline-block;
+              }
+
+              @include breakpoint($only-tablet) {
+                margin-top: 2.313rem;
               }
 
               @include breakpoint($only-mobile) {
@@ -618,12 +641,18 @@
         color: $black;
         font-size: 0.875rem;
 
+        @include breakpoint($only-tablet) {
+          margin-top: 0.35rem;
+          font-size: 0.625rem;
+        }
+
         .label--delivery-time {
           font-weight: bold;
         }
 
         .delivery--time--value {
           display: block;
+          width: 83%;
           margin-top: 0.3125rem;
         }
       }
@@ -637,6 +666,7 @@
 
           @include breakpoint($desktop) {
             padding-bottom: 0;
+            padding-top: 0.95rem;
 
             @include icon(chevrondown, after) {
               color: $grey-ash;
@@ -648,6 +678,8 @@
             }
 
             &.open {
+              padding-bottom: 0.5rem;
+
               @include icon(chevronup, after) {
                 color: $grey-ash;
                 font-size: 1.938rem;
@@ -668,6 +700,10 @@
             color: $black;
             font-weight: bold;
             padding-bottom: 0;
+
+            &::after {
+              display: none;
+            }
           }
         }
 
@@ -749,6 +785,10 @@
   #selected-store-wrapper {
     @include breakpoint($desktop) {
       margin-top: 1.938rem;
+    }
+
+    @include breakpoint($tablet) {
+      padding-bottom: 2.6rem;
     }
 
     .selected-store-content {
@@ -891,10 +931,17 @@
 
         @include breakpoint($desktop) {
           font-size: 0.875rem;
+          width: 83%;
         }
       }
 
       .store-actions {
+        @include breakpoint($only-mobile) {
+          margin-#{$left}: -1px;
+          margin-#{$right}: -1px;
+          margin-#{$bottom}: -1px;
+        }
+
         .change-store {
           text-align: center;
           width: 10.13rem;
@@ -931,6 +978,10 @@
             font-size: 1.5rem;
             line-height: 1;
             display: inline-block;
+          }
+
+          @include breakpoint($only-tablet) {
+            margin-top: 2.313rem;
           }
 
           @include breakpoint($only-mobile) {
@@ -1160,4 +1211,11 @@
       }
     }
   }
+}
+
+.empty-store-list {
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  color: $scarlet;
 }

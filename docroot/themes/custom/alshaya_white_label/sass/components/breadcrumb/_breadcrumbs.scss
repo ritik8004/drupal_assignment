@@ -28,6 +28,10 @@
     a {
       font-weight: normal;
       color: $greyish;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     &::after {

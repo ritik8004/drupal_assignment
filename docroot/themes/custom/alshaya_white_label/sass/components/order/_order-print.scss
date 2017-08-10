@@ -131,9 +131,121 @@ body.path--confirmation.alias--confirmation-print {
 }
 
 .user__order--detail .order-item-row {
+  td:last-child {
+    display: none !important;
+  }
+
   td.above-mobile.blend {
     @include breakpoint($only-tablet) {
       width: 9rem;
     }
+  }
+}
+
+.alias--confirmation-print {
+  margin-top: 0;
+
+  .barcode--wrapper {
+    .inner--wrap {
+      @include breakpoint($mobile) {
+        width: 100%;
+      }
+
+      @include breakpoint($tablet) {
+        width: 69%;
+      }
+    }
+
+    .print--barcode {
+      @include breakpoint($mobile) {
+        width: 100%;
+      }
+
+      @include breakpoint($tablet) {
+        width: 30%;
+      }
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  .delivery-details {
+    @include breakpoint($upto-tablet) {
+      text-indent: -3.5rem;
+      padding-left: 4.5rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .user__order--detail {
+    @include breakpoint($upto-tablet) {
+      margin-bottom: 3.5rem;
+    }
+
+    .order-details-row {
+      .above-mobile.blend,
+      .desktop-only {
+        @include breakpoint($upto-tablet) {
+          display: none !important;
+        }
+      }
+
+      .mobile-only.delivery--method {
+        @include breakpoint($upto-tablet) {
+          margin-top: 1rem !important;
+        }
+      }
+    }
+
+    td {
+      @include breakpoint($only-mobile) {
+        width: 50%;
+        display: inline-block;
+      }
+    }
+
+    .empty--cell {
+      @include breakpoint($upto-tablet) {
+        display: none !important;
+      }
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row {
+    & td:first-child,
+    & td:nth-child(2) {
+      @include breakpoint($upto-tablet) {
+        display: none;
+      }
+    }
+
+    & td:nth-child(3) {
+      text-align: right;
+    }
+  }
+
+  .user__order--detail .total-row td:nth-child(3) {
+    padding-right: 1.3rem;
+  }
+}
+
+html[lang="ar"] {
+  .order__user--info {
+    @include breakpoint($tablet) {
+      width: 33%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 22%;
+    }
+  }
+
+  .user__order--detail .order-item-row .dark {
+    line-height: 1.4;
   }
 }

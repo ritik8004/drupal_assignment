@@ -87,8 +87,9 @@
 
 %modal-overlay,
 .modal-overlay {
-  position: relative;
+  position: fixed;
   height: initial;
+  width: 100%;
 
   &::before {
     content: '';
