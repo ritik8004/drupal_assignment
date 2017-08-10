@@ -119,6 +119,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // will rebuild the payment details and show the selected payment method
     // plugin form instead.
     $payment_options = [];
+    $payment_has_descriptions = [];
     foreach ($payment_methods as $plugin_id) {
       if (!isset($plugins[$plugin_id])) {
         continue;
@@ -130,6 +131,8 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       if ($description_value = $payment_term->get('description')->getValue()) {
         $description = $description_value[0]['value'];
       }
+
+      $payment_has_descriptions[$plugin_id] = (bool) $description;
 
       $method_name = '
         <div class="payment-method-name">
@@ -176,8 +179,19 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         $pane_form['payment_details_wrapper']['payment_method_' . $payment_plugin]['#attached']['library'][] = 'acq_cybersource/cybersource';
       }
 
+      $title_class = [];
+      $title_class[] = 'payment-plugin-wrapper-div';
+
+      if ($payment_has_descriptions[$payment_plugin]) {
+        $title_class[] = 'has-description';
+      }
+
+      if ($payment_plugin == $selected_plugin_id) {
+        $title_class[] = 'plugin-selected';
+      }
+
       $title = '<div id="payment_method_title_' . $payment_plugin . '"';
-      $title .= $payment_plugin == $selected_plugin_id ? ' class="plugin-selected payment-plugin-wrapper-div" ' : ' class="payment-plugin-wrapper-div" ';
+      $title .= ' class="' . implode(' ', $title_class) . '" ';
       $title .= ' data-value="' . $payment_plugin . '" ';
       $title .= '>';
       $title .= $name;
