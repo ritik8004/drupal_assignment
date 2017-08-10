@@ -253,6 +253,8 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     $full_address = $address_book_manager->getAddressFromEntity($entity);
+    unset($full_address['address_id']);
+    unset($full_address['customer_address_id']);
     return GuestDeliveryHome::generateShippingEstimates($full_address);
   }
 
