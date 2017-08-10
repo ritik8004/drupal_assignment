@@ -1,5 +1,5 @@
 (function ($, Drupal, debounce) {
-  "use strict";
+  'use strict';
 
   // Cached reference to $(window).
   var $window = $(window);
@@ -64,11 +64,11 @@
    *   During `unload` remove the scroll event binding.
    */
   Drupal.behaviors.views_infinite_scroll_automatic = {
-    attach : function(context, settings) {
-      $(context).find(automaticPagerSelector).once('infinite-scroll').each(function() {
+    attach: function (context, settings) {
+      $(context).find(automaticPagerSelector).once('infinite-scroll').each(function () {
         var $pager = $(this);
         $pager.addClass('visually-hidden');
-        $window.on(scrollEvent, debounce(function() {
+        $window.on(scrollEvent, debounce(function () {
           if (window.innerHeight + window.pageYOffset > $pager.offset().top - scrollThreshold) {
             $pager.find('[rel=next]').click();
             $window.off(scrollEvent);
