@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_click_collect\Plugin\geolocation\Geocoder;
+namespace Drupal\alshaya_stores_finder\Plugin\geolocation\Geocoder;
 
 use GuzzleHttp\Exception\RequestException;
 use Drupal\Component\Serialization\Json;
@@ -119,7 +119,7 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
     $render_array['geolocation_geocoder_google_places_api'] = array_merge_recursive($render_array['geolocation_geocoder_google_places_api'], [
       '#attached' => [
         'library' => [
-          0 => 'alshaya_click_collect/click-collect.geocoder.googleplacesapi',
+          0 => 'alshaya_stores_finder/places-api.geocoder.googleplacesapi',
         ],
       ],
     ]);
