@@ -33,7 +33,7 @@
           Drupal.geolocation.loadGoogle(function () {
             var field = $('.store-location-input')[0];
             // Create autocomplete object for places.
-            new Drupal.ClickCollect(field, [Drupal.checkoutClickCollect.storeListAll]);
+            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.checkoutClickCollect.storeListAll]);
           });
         });
       }

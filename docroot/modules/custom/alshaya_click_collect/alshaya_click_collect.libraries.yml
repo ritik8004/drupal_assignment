@@ -1,30 +1,11 @@
-click-and-collect:
-  js:
-    js/alshaya_click_collect.js: {}
-  dependencies:
-    - core/drupal.ajax
-    - core/underscore
-    - geolocation/geolocation.geocoder.googlegeocodingapi
-
 click-and-collect.checkout:
   js:
     js/alshaya_click_collect.checkout.js: {}
   dependencies:
-    - alshaya_click_collect/click-and-collect
+    - alshaya_stores_finder/places-api-autocomplete
 
 click-and-collect.pdp:
   js:
     js/alshaya_click_collect.pdp.js: {}
   dependencies:
-    - alshaya_click_collect/click-and-collect
-
-# Geolocation views filter geocoder function.
-click-collect.geocoder.googleplacesapi:
-  version: 8.x-1.x
-  js:
-    js/alshaya-click-collect-google-places-api-geocoder.js: {}
-  dependencies:
-    - geolocation/geolocation.geocoder
-    - alshaya_click_collect/click-and-collect
-
-
+    - alshaya_stores_finder/places-api-autocomplete
