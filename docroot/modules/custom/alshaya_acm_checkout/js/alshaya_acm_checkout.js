@@ -241,7 +241,6 @@
       var block = $('.block-checkout-summary-block');
 
       $(window).once().on('scroll', function() {
-        console.log($('body').scrollTop());
         if ($('body').scrollTop() > 122) {
           block.addClass('fix-block');
         }
