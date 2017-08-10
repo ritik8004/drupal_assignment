@@ -17,11 +17,13 @@ dependencies:
   - block
   - block_content
   - clientside_validation_jquery
+  - default_content
   - filter
   - inline_form_errors
   - mailsystem
   - mimemail
   - redirect
+  - rest
   - r4032login
   - sharethis
   - system
