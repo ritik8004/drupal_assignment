@@ -74,7 +74,6 @@
 
       @include breakpoint($desktop) {
         width: 5.625rem;
-        margin-#{$right}: 0.625rem;
         float: $left;
       }
     }
@@ -103,13 +102,13 @@
     @include breakpoint($tablet) {
       position: absolute;
       bottom: 9.375rem;
-      left: 44%;
+      #{$left}: 44%;
     }
 
     @include breakpoint($desktop) {
       position: absolute;
       bottom: 2.5rem;
-      left: 50%;
+      #{$left}: 50%;
     }
 
     .zoomout,
