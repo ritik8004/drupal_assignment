@@ -528,7 +528,7 @@ class AlshayaGtmManager {
     $attributes = [];
     $cart_delivery_method = $cart->getExtension('shipping_method');
     $isPrivilegeOrder = FALSE;
-    if (!empty($cart->getExtension('loyalty'))) {
+    if (!empty($cart->getExtension('loyalty_card'))) {
       $isPrivilegeOrder = TRUE;
     }
 

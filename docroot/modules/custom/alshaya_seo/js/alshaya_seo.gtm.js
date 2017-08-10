@@ -71,7 +71,7 @@
 
       if (isSearchPage) {
         var keyword = $('#edit-keywords').val();
-        var noOfResult = parseInt($('.view-header.search-count').text().replace(Drupal.t('items'), '').trim());
+        var noOfResult = parseInt($('.view-header').text().replace(Drupal.t('items'), '').trim());
 
         dataLayer.push({
           'event': 'internalSearch',
