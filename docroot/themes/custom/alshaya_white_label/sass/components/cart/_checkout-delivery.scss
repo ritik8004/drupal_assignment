@@ -118,6 +118,10 @@
         line-height: 2.8;
         margin-top: -2px;
 
+        @include breakpoint($only-tablet) {
+          padding: 1rem 1.375rem;
+        }
+
         @include breakpoint($desktop) {
           padding: 1.375rem;
         }
@@ -135,6 +139,10 @@
           float: $right;
           margin: 0;
           margin-#{$right}: 0.75em;
+
+          @include breakpoint($tablet) {
+            margin-#{$right}: 0;
+          }
 
           @include breakpoint($only-mobile) {
             float: none;
@@ -646,8 +654,22 @@
       &.plugin-selected {
         background-color: $white-four;
 
+        .method-description {
+          display: block;
+        }
+
+        &.has-description {
+          @include breakpoint($only-tablet) {
+            padding: 15px 1.375rem;
+          }
+
+          &::before {
+            top: 9px;
+          }
+        }
+
         .method-knet {
-          background: $white url('../imgs/cards/knet-active.png') no-repeat;
+          background: url('../imgs/cards/knet-active.png') no-repeat;
           background-size: 100%;
         }
 
@@ -683,7 +705,7 @@
       }
 
       @include breakpoint($tablet) {
-        padding: 1.5rem 1rem;
+        padding: 1.5rem 1.375rem;
       }
 
       width: 100%;
@@ -727,14 +749,14 @@
         }
 
         &-knet {
-          background: $white url('../imgs/cards/knet-inactive.png') no-repeat;
+          background: url('../imgs/cards/knet-inactive.png') no-repeat;
           background-size: 100%;
           position: absolute;
           #{$right}: 0.8rem;
           top: 54%;
 
           @include breakpoint($tablet) {
-            #{$right}: 1.8rem;
+            #{$right}: 18px;
           }
         }
 
@@ -745,6 +767,7 @@
         }
 
         &-description {
+          display: none;
           font-size: 0.75rem;
           color: $grey-ash;
 

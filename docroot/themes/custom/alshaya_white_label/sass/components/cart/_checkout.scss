@@ -281,8 +281,6 @@
 }
 
 .acq-cart-summary {
-  border: 2px solid $greyish;
-
   .caption {
     font-size: 0.875rem;
     border-bottom: 1px solid $white;
@@ -317,7 +315,7 @@
       font-size: 0.75rem;
     }
 
-    @include icon(chevrondown, after) {
+    @include icon(chevron#{$right}, after) {
       position: absolute;
       #{$right}: 1rem;
       font-size: 1.875rem;
@@ -329,7 +327,7 @@
 
   .active--accordion {
     .content-head {
-      @include icon(chevron#{$right}, after);
+      @include icon(chevronup, after);
     }
   }
 
