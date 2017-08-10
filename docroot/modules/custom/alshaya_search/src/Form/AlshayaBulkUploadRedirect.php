@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_master\Form;
+namespace Drupal\alshaya_search\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\file\Entity\File;

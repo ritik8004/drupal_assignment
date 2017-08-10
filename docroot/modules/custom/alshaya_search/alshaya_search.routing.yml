@@ -1,0 +1,8 @@
+alshaya_search.redirect_bulk_upload:
+  path: '/admin/config/search/redirect/redirect-bulk-add'
+  defaults:
+    _form: '\Drupal\alshaya_search\Form\AlshayaBulkUploadRedirect'
+    _title: 'Bulk add redirects'
+  requirements:
+    _permission: 'administer redirects'
+

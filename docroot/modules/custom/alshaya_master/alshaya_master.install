@@ -1203,8 +1203,10 @@ function alshaya_master_install() {
     $configFactory->set('option_extras.' . $option, 0);
   }
 
-  // Enable share this for Product CT.
-  $configFactory->set('node_types.acq_product', 'acq_product');
+  if (\Drupal::moduleHandler()->moduleExists('acq_sku')) {
+    // Enable share this for Product CT.
+    $configFactory->set('node_types.acq_product', 'acq_product');
+  }
 
   // Enable lazy load of JS to enhance performance (rendering time).
   $configFactory->set('late_load', 1);
