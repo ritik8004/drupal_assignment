@@ -609,4 +609,23 @@
       font-size: 0.75rem;
     }
   }
+
+  .form-item-guest-delivery-home-address-shipping-address-line2 {
+    input[type=text] ~ label {
+      font-size: 1rem !important;
+      color: $greyish !important;
+      position: absolute !important;
+      #{$left}: 0 !important;
+      top: -0.125rem !important;
+      transition: 0.2s ease all !important;
+    }
+
+    input[type=text]:focus ~ label {
+      top: -1.25em !important;
+      bottom: 0 !important;
+      #{$left}: 0 !important;
+      opacity: 1 !important;
+      font-size: 0.75rem !important;
+    }
+  }
 }
