@@ -97,7 +97,6 @@ select:focus::-ms-value {
       font-size: 1.75rem;
       top: 0;
       #{$left}: auto;
-      border-#{$left}: 1px solid $white-five;
       width: 2.1875rem;
       height: 2.1875rem;
       #{$right}: 0;
