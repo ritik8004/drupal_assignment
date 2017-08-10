@@ -165,4 +165,8 @@
     }
   };
 
+  $.fn.alshayaAttachSearchSlider = function () {
+    Drupal.attachBehaviors(context);
+  };
+
 })(jQuery);
