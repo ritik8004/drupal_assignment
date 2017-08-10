@@ -1,0 +1,1 @@
+### Please refer themes/contrib/cog/STARTERKIT/readme.md
