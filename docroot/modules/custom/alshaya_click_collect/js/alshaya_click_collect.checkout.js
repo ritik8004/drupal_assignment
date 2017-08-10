@@ -270,6 +270,8 @@
     var newLocation = new google.maps.LatLng(parseFloat(StoreObj.lat), parseFloat(StoreObj.lng));
     // Set the google map center.
     map.googleMap.setCenter(newLocation);
+    // Pan Google maps to accommodate the info window.
+    map.googleMap.panBy(0, -150);
   };
 
   // Display All the stores on map.
