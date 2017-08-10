@@ -170,7 +170,7 @@
   ],
   "body": [
     {
-      "value": "<p>longer promotional description copy set over two or three lines never but never four.<\/p>\r\n\r\n<a href=\"\">redeem now<\/a>\r\n",
+      "value": "<p>longer promotional description copy set over two or three lines never but never four.<\/p>\r\n\r\n<a class=\"register-redeem-now\" href=\"\">redeem now<\/a>\r\n",
       "format": "rich_text",
       "summary": "",
       "lang": "en"

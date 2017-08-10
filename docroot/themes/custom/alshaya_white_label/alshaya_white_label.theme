@@ -103,6 +103,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
   if ($routmatch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
   }
+
+  // Make site_name and site_logo available to all TWIG templates.
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['site_logo'] = theme_get_setting('logo.url');
 }
 
 /**
@@ -249,6 +253,12 @@ function alshaya_white_label_preprocess_node(&$variables) {
   elseif ($variables['node']->bundle() === 'acq_product') {
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
+  }
+  elseif ($variables['node']->bundle() === 'store') {
+    $current_route = \Drupal::routeMatch();
+    if ($current_route->getRouteName() == 'alshaya_stores_finder.store_detail') {
+      $variables['previous_page'] = $current_route->getParameter('type')?: 'glossary';
+    }
   }
 }
 

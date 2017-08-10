@@ -5,3 +5,4 @@ cart_notification_js:
   dependencies:
     - core/jquery
     - core/drupal
+    - alshaya_seo/gtm

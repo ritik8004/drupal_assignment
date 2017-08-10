@@ -79,11 +79,9 @@
     }
   }
 
-  .mobile-store-detail {
-    @include breakpoint($only-mobile) {
-      #views-exposed-form-stores-finder-page-1 {
-        display: none;
-      }
+  .list-view-link {
+    @include breakpoint($desktop) {
+      text-indent: -0.4rem;
     }
   }
 
@@ -230,8 +228,19 @@
     height: 25px;
     margin-#{$right}: 0.4rem;
 
+    @include breakpoint($tablet) {
+      html[lang=ar] & {
+        position: relative;
+        top: 0.4rem;
+      }
+    }
+
     @include breakpoint($desktop) {
       margin-#{$right}: 0.3875rem;
+
+      html[lang=ar] & {
+        top: 0.625rem;
+      }
     }
   }
 
@@ -293,7 +302,7 @@
     @include breakpoint($desktop) {
       padding-#{$left}: 3.4rem;
       padding-#{$right}: 0;
-      width: 36.8%;
+      width: 27.6%;
     }
   }
 
@@ -336,9 +345,9 @@
     display: none;
   }
 
-  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-  .form-item-geolocation-geocoder-google-geocoding-api {
-    [id^=edit-geolocation-geocoder-google-geocoding-api] {
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
+    [id^=edit-geolocation-geocoder-google-places-api] {
       background: none;
       border: 1px solid $greyish;
       border-#{$right}: 2.3125rem solid $white-five;
@@ -354,6 +363,7 @@
         padding-bottom: 0;
         line-height: 2.1875rem;
         height: 2.1875rem;
+        width: 100%;
       }
 
       &.ui-autocomplete-loading {
@@ -361,10 +371,11 @@
       }
 
       @include breakpoint($tablet) {
-        max-width: 23.125rem;
+        max-width: 26.125rem;
         border: 1px solid $white;
         border-#{$right}: 2.3125rem solid $white-five;
         height: 2.1875rem;
+        width: 100%;
       }
     }
 
@@ -436,8 +447,7 @@
             display: inline-block;
             color: $black;
             font-size: 1.875rem;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0.5rem;
             #{$right}: 0.4rem;
           }
         }
@@ -456,18 +466,17 @@
 
   .list-view-locator {
     font-size: 14px;
-    background: $white-four;
+    background: $white-five;
     padding: 1rem 0;
     padding-bottom: 0;
     margin-bottom: 1.625rem;
-    border: 1px solid transparent;
+    border: 1px solid $white;
     position: relative;
     cursor: pointer;
 
     &:hover,
     &.selected {
-      background-color: $white-five;
-      border: 1px solid $white;
+      background-color: $white-four;
     }
 
     .row-title {
@@ -497,12 +506,6 @@
     }
 
     .open--hours {
-      margin-top: 1rem;
-
-      @include breakpoint($tablet) {
-        margin-top: 0.9rem;
-      }
-
       div {
         margin-bottom: 0.0625rem;
       }
@@ -520,6 +523,11 @@
         @include breakpoint($tablet) {
           padding-#{$left}: 3.25rem;
         }
+      }
+
+      .hours--wrapper .open--hours {
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
       }
 
       .get--directions a,
@@ -584,8 +592,8 @@
       width: 47%;
       margin-#{$right}: 0.5%;
 
-      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-      .form-item-geolocation-geocoder-google-geocoding-api {
+      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+      .form-item-geolocation-geocoder-google-places-api {
         width: 48% !important;
       }
     }
@@ -685,7 +693,7 @@
 
     .list-view-link,
     .map-view-link {
-      width: 15%;
+      width: 17.5%;
     }
 
     .view-display-id-page_1 {
@@ -717,7 +725,6 @@
 
       @include breakpoint($desktop) {
         max-height: 51rem;
-        border-#{$right}: 1px solid $white;
         padding-#{$right}: 1%;
       }
 
@@ -728,8 +735,8 @@
     }
   }
 
-  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-  .form-item-geolocation-geocoder-google-geocoding-api {
+  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
     position: relative;
 
     @include breakpoint($tablet) {
@@ -745,10 +752,18 @@
   .label--location {
     @include breakpoint($tablet) {
       margin: 0.8rem 0;
+
+      html[lang=ar] & {
+        margin-top: 0.2rem;
+      }
     }
 
     @include breakpoint($desktop) {
       margin: 1.625rem 0;
+
+      html[lang=ar] & {
+        margin-top: 0.8rem;
+      }
     }
   }
 
@@ -805,13 +820,18 @@
   }
 
   .store-finder--wrapper {
-    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-geocoding-api,
-    .form-item-geolocation-geocoder-google-geocoding-api {
+    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+    .form-item-geolocation-geocoder-google-places-api {
       float: $right;
-      width: 63.2%;
 
       @include breakpoint($tablet) {
         padding-#{$right}: 0.5rem;
+        width: 63.2%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 72.4%;
+        padding-#{$left}: 1.375rem;
       }
 
       @include breakpoint($only-mobile) {
@@ -940,6 +960,10 @@
     }
   }
 
+  .list-view-locator {
+    background-color: $white-four;
+  }
+
   .hours--wrapper {
     .hours--label.open {
       @include icon(chevronup, after) {
@@ -972,13 +996,7 @@
       }
 
       &::after {
-        transform: translateY(-50%);
-      }
-    }
-
-    .open--hours {
-      @include breakpoint($only-mobile) {
-        margin-top: 0.9rem;
+        transform: none;
       }
     }
   }
@@ -1018,14 +1036,38 @@
     }
   }
 
+  .list-view-link,
+  .map-view-link {
+    @include breakpoint($desktop) {
+      width: 15%;
+    }
+  }
+
+  .get--directions div a {
+    &.device__tablet {
+      display: none;
+
+      @include breakpoint($only-tablet) {
+        display: block;
+      }
+    }
+
+    &.device__desktop {
+      display: none;
+
+      @include breakpoint($desktop) {
+        display: block;
+      }
+    }
+  }
+
   .hours--label {
     @include icon(chevron#{$right}, after) {
       position: absolute;
       display: inline-block;
       color: $cerulean-two;
       font-size: 1.875rem;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 0.5rem;
       #{$right}: 0.7rem;
       pointer-events: none;
 
@@ -1048,8 +1090,7 @@
 
   .get--directions div::after {
     background: url('../imgs/icons/ic-directions.svg');
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1rem;
     #{$right}: 1rem;
     width: 18px;
     height: 18px;
@@ -1137,6 +1178,7 @@
   .hours--label,
   .hours--label::after {
     color: $black;
+    top: 0;
   }
 
   .get--directions,
@@ -1144,8 +1186,14 @@
     max-width: 8.625rem;
   }
 
+  .hours--label {
+    @include icon(chevrondown, after);
+  }
+
   .hours--label.open {
     font-weight: bold;
+
+    @include icon(chevronup, after);
   }
 
   .view-on--map,
@@ -1156,18 +1204,23 @@
     padding-bottom: 0.4rem;
   }
 
+  .get--directions div::after {
+    top: 0.5rem;
+  }
+
   .hours--wrapper .hours--label,
   .hours--wrapper .open--hours,
   .view-on--map a,
   .get--directions a {
-    padding: 1rem;
+    padding: 0.5rem;
     padding-#{$left}: 0;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
   }
 
   .open--hours {
     line-height: 1.57;
     margin-top: 0;
+    padding-top: 0;
   }
 }
 

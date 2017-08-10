@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_knet\Controller;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_customer\OrdersManager;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -24,6 +25,13 @@ class KnetController extends ControllerBase {
   protected $apiWrapper;
 
   /**
+   * Alshaya API Wrapper object.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $alshayaApiWrapper;
+
+  /**
    * Array containing knet settings from config.
    *
    * @var array
@@ -41,7 +49,9 @@ class KnetController extends ControllerBase {
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
-   *   APIWrapper object.
+   *   API wrapper object.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api_wrapper
+   *   Alshaya API wrapper object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -49,8 +59,9 @@ class KnetController extends ControllerBase {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory object.
    */
-  public function __construct(APIWrapper $api_wrapper, ConfigFactoryInterface $config_factory, OrdersManager $orders_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(APIWrapper $api_wrapper, AlshayaApiWrapper $alshaya_api_wrapper, ConfigFactoryInterface $config_factory, OrdersManager $orders_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
+    $this->alshayaApiWrapper = $alshaya_api_wrapper;
     $this->knetSettings = $config_factory->get('alshaya_acm_knet.settings');
     $this->ordersManager = $orders_manager;
     $this->logger = $logger_factory->get('alshaya_acm_knet');
@@ -62,6 +73,7 @@ class KnetController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_commerce.api'),
+      $container->get('alshaya_api.api'),
       $container->get('config.factory'),
       $container->get('alshaya_acm_customer.orders_manager'),
       $container->get('logger.factory')
@@ -133,6 +145,12 @@ class KnetController extends ControllerBase {
       '@message' => $message,
     ]);
 
+    // Direct Magento API call to create transaction entry, we don't have it in
+    // conductor yet.
+    $this->alshayaApiWrapper->addKnetTransaction($data['order_id'], $data['transaction_id']);
+
+    // @TODO: Below API call is still kept here as status is not updated in
+    // previous call still.
     $this->apiWrapper->updateOrderStatus($data['tracking_id'], $this->knetSettings->get('payment_processed'), $message);
 
     // Delete the data from DB.

@@ -376,6 +376,9 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         $user = alshaya_acm_customer_create_drupal_user($customer);
       }
 
+      // Allow modules to act after user logs in.
+      \Drupal::moduleHandler()->invokeAll('alshaya_acm_customer_post_login', [$user, $customer]);
+
       return $user->id();
     }
   }

@@ -1,132 +1,259 @@
 areas:
-  - 'Salmiya'
-  - 'Al Salam'
-  - 'Al Shuhada'
-  - 'Bayan'
-  - 'Bidaa'
-  - 'Hateen'
-  - 'Hawalli'
-  - 'Jabriya'
-  - 'Maidan Hawalli'
-  - 'Mishref'
-  - 'Mubarak Al Abdullah'
-  - 'Rumaithiya'
-  - 'Salwa'
-  - 'Shaab'
-  - 'Zahraa'
-  - 'Abdullah Al-Salem'
-  - 'Adailiya'
-  - 'Al Daiya'
-  - 'Al Dasma'
-  - 'Al Doha'
-  - 'Al Faiha'
-  - 'Al Mansouriah'
-  - 'Al Qadisiya'
-  - 'Al Qibla'
-  - 'Al Shamiya'
-  - 'Al Shuwaikh'
-  - 'Al Yarmouk'
-  - 'Al-Nuzha'
-  - 'Bneid Al-Gar'
-  - 'Dasman'
-  - 'Garnata'
-  - 'Jaber Al-Ahmed'
-  - 'Kaifan'
-  - 'Khaldiya'
-  - 'Kuwait City'
-  - 'Mirqab'
-  - 'Nahda'
-  - 'Qairawan'
-  - 'Qurtuba'
-  - 'Rawdah'
-  - 'Salhia'
-  - 'Sawaber'
-  - 'Sharq'
-  - 'Shuwaikh Educational Area'
-  - 'Shuwaikh Industrial Area'
-  - 'Sulaibikhat'
-  - 'Surra'
-  - 'Wateya'
-  - 'Al Soor'
-  - 'Abbasiya'
-  - 'Abdullah Al Mubarak Al Sabah'
-  - 'Abraq Khaitan'
-  - 'Al Nahda'
-  - 'Al Rai'
-  - 'Andalus'
-  - 'Ardiya'
-  - 'Dajeej'
-  - 'Farwaniyah'
-  - 'Firdous'
-  - 'Hasawy'
-  - 'Ishbilia'
-  - 'Jleeb Al-Shuyoukh'
-  - 'Khaitan'
-  - 'Kuwait International Airport'
-  - 'New Khaitan'
-  - 'Omariyah'
-  - 'Rabiya'
-  - 'Rahab'
-  - 'Riggae'
-  - 'Sabah Al Naser'
-  - 'Sulaibia'
-  - 'Shadadiya'
-  - 'Abu Halifa'
-  - 'Al Ahmadi'
-  - 'Al Wafrah'
-  - 'Ali Sabah al salem'
-  - 'Egaila'
-  - 'Daher'
-  - 'Fahaheel'
-  - 'Fahad al Ahmad'
-  - 'Fintas'
-  - 'Hadiya'
-  - 'Jaber Al Ali'
-  - 'Mahboula'
-  - 'Mangaf'
-  - 'Riqqa'
-  - 'Shuaiba'
-  - 'Sabah al Ahmad'
-  - 'Subahiya'
-  - 'Umm Al Hayman'
-  - 'Al Zoor'
-  - 'Al Zoor'
-  - 'Bnaider'
-  - 'Abu Fatira'
-  - 'Al-Adan'
-  - 'Al-Qurain'
-  - 'Al-Qusour'
-  - 'Funaitees'
-  - 'Masayel'
-  - 'Messila'
-  - 'Mubarak Al-Kabeer'
-  - 'Sabah Al-Salem'
-  - 'Sabhan'
-  - 'Abu Al Hasani'
-  - 'Abu Husaneya'
-  - 'Abdelli'
-  - 'Al Auyon'
-  - 'Al Naseem'
-  - 'Al Qasr'
-  - 'Al Salmi'
-  - 'Amghara'
-  - 'Jaber Al Ahmad'
-  - 'Jahra'
-  - 'Kabd'
-  - 'Kazma'
-  - 'Mutla'
-  - 'Naeem'
-  - 'New Jahra'
-  - 'Old Jahra'
-  - 'Ouyoun'
-  - 'Qaisariya'
-  - 'Qayrawan'
-  - 'Saad Al-Abdallah'
-  - 'Sulaibiya Agriculture'
-  - 'Sulaibiya industrial'
-  - 'Sulaibiya Shabiya'
-  - 'Taima'
-  - 'Waha'
-  - 'Rawdatain'
-  - 'Um Al Aish'
-  - 'Subaiya'
+  Salmiya:
+    ar: السالمية
+  Al Salam:
+    ar: السلام
+  Al Shuhada:
+    ar: الشهداء
+  Bayan:
+    ar: بيان
+  Bidaa:
+    ar: البدع
+  Hateen:
+    ar: حطين
+  Hawalli:
+    ar: حولي
+  Jabriya:
+    ar: الجابرية
+  Maidan Hawalli:
+    ar: ميدان حولي
+  Mishref:
+    ar: مشرف
+  Mubarak Al Abdullah:
+    ar: مبارك العبد الله
+  Rumaithiya:
+    ar: الرميثية
+  Salwa:
+    ar: سلوى
+  Shaab:
+    ar: الشعب
+  Zahraa:
+    ar: الزهراء
+  Abdullah Al-Salem:
+    ar: عبد الله السالم
+  Adailiya:
+    ar: الضاحية
+  Al Daiya:
+    ar: الدعية
+  Al Dasma:
+    ar: الدسمة
+  Al Doha:
+    ar: الدوحة
+  Al Faiha:
+    ar: الفيحاء
+  Al Mansouriah:
+    ar: المنصورية
+  Al Qadisiya:
+    ar: القادسية
+  Al Qibla:
+    ar: القبلة
+  Al Shamiya:
+    ar: الشامية
+  Al Shuwaikh:
+    ar: الشويخ
+  Al Yarmouk:
+    ar: اليرموك
+  Al-Nuzha:
+    ar: النزهة
+  Bneid Al-Gar:
+    ar: بنيد القار
+  Dasman:
+    ar: الدسمة
+  Garnata:
+    ar: غرناطة
+  Jaber Al-Ahmed:
+    ar: جابر الأخمد
+  Kaifan:
+    ar: كيفان
+  Khaldiya:
+    ar: الخالدية
+  Kuwait City:
+    ar: مدينة الكويت
+  Mirqab:
+    ar: المرقاب
+  Nahda:
+    ar: النهضة
+  Qairawan:
+    ar: القيروان
+  Qurtuba:
+    ar: قرطبة
+  Rawdah:
+    ar: الروضة
+  Salhia:
+    ar: الصالحية
+  Sawaber:
+    ar: الصوابر
+  Sharq:
+    ar: شرق
+  Shuwaikh Educational Area:
+    ar: الشويخ المنطقة التعليمية
+  Shuwaikh Industrial Area:
+    ar: الشويخ المنطقة الصناعية
+  Sulaibikhat:
+    ar: الصليبيخات
+  Surra:
+    ar: السرة
+  Wateya:
+    ar: الوطية
+  Al Soor:
+    ar: السور
+  Abbasiya:
+    ar: العباسية
+  Abdullah Al Mubarak Al Sabah:
+    ar: عبد الله المبارك الصباح
+  Abraq Khaitan:
+    ar: أبرق خيطان
+  Al Nahda:
+    ar: النهضة
+  Al Rai:
+    ar: الري
+  Andalus:
+    ar: الأندلس
+  Ardiya:
+    ar: العارضية
+  Dajeej:
+    ar: الضجيج
+  Farwaniyah:
+    ar: الفروانية
+  Firdous:
+    ar: الفردوس
+  Hasawy:
+    ar: الحساوي
+  Ishbilia:
+    ar: اشبيلية
+  Jleeb Al-Shuyoukh:
+    ar: جليب الشيوخ
+  Khaitan:
+    ar: خيطان
+  Kuwait International Airport:
+    ar: مطار الكويت الدولي
+  New Khaitan:
+    ar: خيطان الجديدة
+  Omariyah:
+    ar: العمرية
+  Rabiya:
+    ar: الرابية
+  Rahab:
+    ar: الرحاب
+  Riggae:
+    ar: الرقعي
+  Sabah Al Naser:
+    ar: صباح الناصر
+  Sulaibia:
+    ar: الصليبية
+  Shadadiya:
+    ar: الشدادية
+  Abu Halifa:
+    ar: أبو حليفة
+  Al Ahmadi:
+    ar: الأحمدي
+  Al Wafrah:
+    ar: الوفرة
+  Ali Sabah al salem:
+    ar: علي صباح السالم
+  Egaila:
+    ar: العقيلة
+  Daher:
+    ar: الظهر
+  Fahaheel:
+    ar: الفحيحيل
+  Fahad al Ahmad:
+    ar: فهد الأحمد
+  Fintas:
+    ar: ط8
+  Hadiya:
+    ar: هدية
+  Jaber Al Ali:
+    ar: جابر العلي
+  Mahboula:
+    ar: المهبولة
+  Mangaf:
+    ar: المنقف
+  Riqqa:
+    ar: الرقة
+  Shuaiba:
+    ar: الشعيبة
+  Sabah al Ahmad:
+    ar: صباح الأحمد
+  Subahiya:
+    ar: الصباحية
+  Umm Al Hayman:
+    ar: أم الهيمان
+  Al Zoor:
+    ar: الزور
+  Bnaider:
+    ar: بنيدر
+  Abu Fatira:
+    ar: أبو فطيرة
+  Al-Adan:
+    ar: العدان
+  Al-Qurain:
+    ar: القرين
+  Al-Qusour:
+    ar: القصور
+  Funaitees:
+    ar: الفنيطيس
+  Masayel:
+    ar: المسيلة
+  Messila:
+    ar: المسيلة
+  Mubarak Al-Kabeer:
+    ar: مبارك الكبير
+  Sabah Al-Salem:
+    ar: صباح السالم
+  Sabhan:
+    ar: صبحان
+  Abu Al Hasani:
+    ar: أبو الحصاني
+  Abdelli:
+    ar: العبدلي
+  Al Auyon:
+    ar: العيون
+  Al Naseem:
+    ar: النسيم
+  Al Qasr:
+    ar: القصر
+  Al Salmi:
+    ar: السالمي
+  Amghara:
+    ar: أمغرة
+  Jaber Al Ahmad:
+    ar: جابر الأحمد
+  Jahra:
+    ar: الجهراء
+  Kabd:
+    ar: كبد
+  Kazma:
+    ar: كاظمة
+  Mutla:
+    ar: المطلاع
+  Naeem:
+    ar: النعيم
+  New Jahra:
+    ar: الجهراء الجديدة
+  Old Jahra:
+    ar: الجهراء القديمة
+  Ouyoun:
+    ar: العيون
+  Qaisariya:
+    ar: القيصرية
+  Qayrawan:
+    ar: القيروان
+  Saad Al-Abdallah:
+    ar: سعد العبدالله
+  Sulaibiya Agriculture:
+    ar: الصليبية الزراعية
+  Sulaibiya industrial:
+    ar: الصليبية الصناعية
+  Sulaibiya Shabiya:
+    ar: الصليبية الحرفية
+  Taima:
+    ar: تيماء
+  Waha:
+    ar: الواحة
+  Rawdatain:
+    ar: الروضتين
+  Um Al Aish:
+    ar: أم العيش
+  Subaiya:
+    ar: الصباحية

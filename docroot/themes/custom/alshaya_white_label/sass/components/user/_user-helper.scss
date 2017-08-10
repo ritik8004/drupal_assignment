@@ -228,10 +228,11 @@
 
       input {
         font-size: 0.75rem;
+        font-family: $alshaya-bold;
 
         @include breakpoint($only-tablet) {
+          font-size: 0.8125rem;
           padding: 0.625rem 1.7rem;
-          font-family: $alshaya-bold;
         }
 
         @include breakpoint($desktop) {
@@ -398,7 +399,6 @@
 
       p {
         margin-top: 0.875rem;
-        margin-#{$left}: 1.813rem;
         margin-bottom: 1.4rem;
         font-size: 0.75rem;
 

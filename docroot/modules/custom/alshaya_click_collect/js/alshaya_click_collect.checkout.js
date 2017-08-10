@@ -26,17 +26,20 @@
 
   Drupal.behaviors.checkoutClickCollect = {
     attach: function (context, settings) {
+
       if (typeof Drupal.geolocation.loadGoogle === 'function') {
-        // First load the library from google.
-        Drupal.geolocation.loadGoogle(function () {
-          var field = $('.store-location-input')[0];
-          // Create autocomplete object for places.
-          new Drupal.ClickCollect(field, [Drupal.checkoutClickCollect.storeListAll]);
+        $('[data-drupal-selector="store-finder-wrapper"]', context).once('autocomplete-init').each(function () {
+          // First load the library from google.
+          Drupal.geolocation.loadGoogle(function () {
+            var field = $('.store-location-input')[0];
+            // Create autocomplete object for places.
+            new Drupal.ClickCollect(field, [Drupal.checkoutClickCollect.storeListAll]);
+          });
         });
       }
 
       // Prevent submission of forms when pressing Enter key in a text input.
-      $('#store-finder-wrapper').once('prevent-enter').on('keypress', '.store-location-input', function (e) {
+      $('#store-finder-wrapper', context).once('prevent-enter').on('keypress', '.store-location-input', function (e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
           e.preventDefault();
@@ -267,6 +270,8 @@
     var newLocation = new google.maps.LatLng(parseFloat(StoreObj.lat), parseFloat(StoreObj.lng));
     // Set the google map center.
     map.googleMap.setCenter(newLocation);
+    // Pan Google maps to accommodate the info window.
+    map.googleMap.panBy(0, -150);
   };
 
   // Display All the stores on map.
@@ -325,7 +330,7 @@
   };
 
   // Make Ajax call to get stores list and render html.
-  Drupal.checkoutClickCollect.storeListAll = function (coords) {
+  Drupal.checkoutClickCollect.storeListAll = function (coords, field, restriction, $trigger) {
     if (typeof coords !== 'undefined') {
       ascoords = coords;
 

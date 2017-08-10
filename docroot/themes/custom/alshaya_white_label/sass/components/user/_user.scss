@@ -116,11 +116,12 @@
   }
 
   #block-jointheclub {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $white;
     margin-top: 1.5rem;
     padding-top: 0.5rem;
 
     @include breakpoint($tablet) {
+      border-top: 0;
       margin-top: 4.4rem;
       padding-top: 3.5rem;
       width: 20.625rem;
@@ -130,6 +131,7 @@
     }
 
     @include breakpoint($desktop) {
+      border-top: 1px solid $white;
       margin-#{$left}: -5.5em;
       padding-#{$left}: 5.5em;
       width: 30.25rem;
@@ -449,6 +451,12 @@
     width: 100%;
     text-align: center;
     color: $windows-blue;
+  }
+
+  label.error {
+    position: absolute;
+    #{$left}: 0;
+    bottom: -1.25rem;
   }
 }
 
@@ -1202,4 +1210,11 @@ html[lang="ar"] {
   html[lang=ar] & {
     font-family: $arial-nodir;
   }
+}
+
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
 }

@@ -110,6 +110,20 @@ body.ucbrowser {
       }
     }
   }
+
+  .page-standard.user-page.checkout-delivery {
+    #edit-delivery-tabs {
+      @include breakpoint($only-tablet) {
+        .tab {
+          width: 46.81%;
+        }
+
+        .tab-separator {
+          width: 6.2% !important;
+        }
+      }
+    }
+  }
 }
 
 #text-resize-control {
@@ -264,6 +278,12 @@ html[lang="ar"] {
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
+    }
+
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
+      label {
+        width: 103% !important;
+      }
     }
   }
 }

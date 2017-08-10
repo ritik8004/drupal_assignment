@@ -6,6 +6,7 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_cybersource\CybersourceAPIWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -55,6 +56,13 @@ class CybersourceController implements ContainerInjectionInterface {
   protected $config;
 
   /**
+   * Logger Channel object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs a new CybersourceController object.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -63,11 +71,14 @@ class CybersourceController implements ContainerInjectionInterface {
    *   API Wrapper object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger channel factory object.
    */
-  public function __construct(CartStorageInterface $cart_storage, CybersourceAPIWrapper $api_wrapper, ConfigFactoryInterface $config_factory) {
+  public function __construct(CartStorageInterface $cart_storage, CybersourceAPIWrapper $api_wrapper, ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
     $this->cartStorage = $cart_storage;
     $this->apiWrapper = $api_wrapper;
     $this->config = $config_factory->get('acq_cybersource.settings');
+    $this->logger = $logger_factory->get('acq_cybersource');
   }
 
   /**
@@ -77,7 +88,8 @@ class CybersourceController implements ContainerInjectionInterface {
     return new static(
       $container->get('acq_cart.cart_storage'),
       $container->get('acq_cybersource.api'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('logger.factory')
     );
   }
 
@@ -88,8 +100,11 @@ class CybersourceController implements ContainerInjectionInterface {
    *   Response object.
    */
   public function getToken() {
-    $type = \Drupal::request()->request->get('type');
-    $billing_address = \Drupal::request()->request->get('billing_address');
+    $response = new Response();
+    $response->headers->set('Content-Type', 'application/json');
+
+    $type = \Drupal::request()->request->get('card_type');
+    $form_data = \Drupal::request()->request->all();
 
     // Get the code from value provided by JS.
     $cc_type = isset(self::$ccTypeMap[$type]) ? self::$ccTypeMap[$type] : '';
@@ -112,28 +127,24 @@ class CybersourceController implements ContainerInjectionInterface {
     // Get the cart object.
     $cart = $this->cartStorage->getCart(FALSE);
 
+    // Allow all modules to validate and update cart data before doing getToken.
+    $errors = [];
+    \Drupal::moduleHandler()->alter('acq_cybersource_before_get_token_cart', $cart, $form_data, $errors);
+
+    if ($errors) {
+      $response->setContent(json_encode(['errors' => $errors]));
+      return $response;
+    }
+
     // Set the payment method.
     $cart->setPaymentMethod('cybersource');
-
-    // @TODO: Implement this properly - MMCPA-1876.
-    // Cybersource requires billing info to be available before it processes
-    // credit card. This info is set in the signed fields by Magento. To ensure
-    // we have the values set, we need to pass it to Magento before we start
-    // payment process.
-    if (!empty($billing_address['same_as_shipping']) && $billing_address['same_as_shipping'] == 1) {
-      $cart->setBilling($cart->getShipping());
-    }
-    else {
-      // @TODO: Validate the address data and set the fields as per Magento.
-    }
 
     // Update the cart.
     $this->cartStorage->updateCart(FALSE);
 
-    $response = new Response();
-    $response->headers->set('Content-Type', 'application/json');
+    try {
+      $token_info = $this->apiWrapper->cybersourceTokenRequest($cart_id, $cc_type);
 
-    if ($token_info = $this->apiWrapper->cybersourceTokenRequest($cart_id, $cc_type)) {
       // Do some cleaning.
       foreach ($token_info as &$info) {
         if (empty($info)) {
@@ -148,8 +159,15 @@ class CybersourceController implements ContainerInjectionInterface {
       $response_data['data'] = $token_info;
       $response->setContent(json_encode($response_data));
     }
-    else {
-      // @TODO: Handle error state.
+    catch (\Exception $e) {
+      $this->logger->info('Error while getting Cybersource token: %message <br> Cart id: %cart_id and Card type: %card_type', [
+        '%message' => $e->getMessage(),
+        '%cart_id' => $cart_id,
+        '%card_type' => $cc_type,
+      ]);
+
+      $response_data['errors']['global'] = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+      $response->setContent(json_encode($response_data));
     }
 
     return $response;
@@ -170,39 +188,88 @@ class CybersourceController implements ContainerInjectionInterface {
     }
 
     $response = new Response();
+    $script = '';
 
-    // Get the cart object.
-    $cart = $this->cartStorage->getCart(FALSE);
-
-    // Set the payment method.
-    $cart->setPaymentMethod('cybersource');
-
-    // Get update cart array, we will call the API here directly.
-    $cart_update = $cart->getCart();
-
-    // Set the token info into update cart object.
-    $cart_update->cybersource_token = $post_data;
-
-    // Call the API to pass the token info.
-    $updated_cart = $this->apiWrapper->updateCart($cart->id(), $cart_update);
-
-    // Check if we have the result set.
-    if ($updated_cart['cybersource_result']) {
-      // Update the cart in session.
-      $updated_cart['cart'] = (object) $updated_cart['cart'];
-      $updated_cart['cart']->cart_id = $cart->id();
-      $cart->updateCartObject($updated_cart['cart']);
-      $this->cartStorage->addCart($cart);
-
-      // Send the response to place order.
-      $response->setContent('<script type="text/javascript">window.parent.Drupal.finishCybersourcePayment();</script>');
+    // Anything other then accept is an issue.
+    if (strtolower($post_data['decision']) != 'accept') {
+      $this->logger->info('Error while processing payment using Cybersource: %message <br> %info', [
+        '%message' => $post_data['message'],
+        '%info' => print_r($post_data, TRUE),
+      ]);
+      // @TODO: Need to check how it is handled in Magento.
+      $error = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+      $script = "window.parent.Drupal.cybersourceShowGlobalError('" . $error . "')";
     }
     else {
-      // @TODO: Handle error here.
-      $response->setContent('');
+      // Get the cart object.
+      $cart = $this->cartStorage->getCart(FALSE);
+
+      // Set the payment method.
+      $cart->setPaymentMethod('cybersource');
+
+      // Get update cart array, we will call the API here directly.
+      $cart_update = $cart->getCart();
+
+      // Set the token info into update cart object.
+      $cart_update->cybersource_token = $post_data;
+
+      try {
+        // Call the API to pass the token info.
+        $updated_cart = $this->apiWrapper->updateCart($cart->id(), $cart_update);
+
+        // Check if we have the result set.
+        if ($updated_cart['cybersource_result']) {
+          // Update the cart in session.
+          $updated_cart['cart'] = (object) $updated_cart['cart'];
+          $updated_cart['cart']->cart_id = $cart->id();
+          $cart->updateCartObject($updated_cart['cart']);
+          $this->cartStorage->addCart($cart);
+
+          // Send the response to place order.
+          $script = 'window.parent.Drupal.finishCybersourcePayment();';
+        }
+        else {
+          throw new \Exception('Invalid response from Magento API while processing token.');
+        }
+      }
+      catch (\Exception $e) {
+        $this->logger->info('Error while processing Cybersource token: %message <br> %info <br> %response', [
+          '%message' => $e->getMessage(),
+          '%info' => print_r($post_data, TRUE),
+          '%response' => print_r($updated_cart, TRUE),
+        ]);
+
+        $error = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+        $script = "window.parent.Drupal.cybersourceShowGlobalError('" . $error . "')";
+      }
     }
 
+    $response->setContent('<script type="text/javascript">' . $script . '</script>');
+
     return $response;
+  }
+
+  /**
+   * Utility function to get rendered error message markup.
+   *
+   * @param string $error
+   *   Error message.
+   *
+   * @return string
+   *   Rendered drupal error message markup.
+   */
+  private function getGlobalErrorMarkup($error) {
+    drupal_set_message($error, 'error');
+
+    $messages = [
+      '#theme' => 'status_messages',
+      '#message_list' => drupal_get_messages(),
+    ];
+
+    $error = render($messages);
+    $error = str_replace(["\r", "\n"], '', $error);
+
+    return '<div class="cybersource-global-error">' . $error . '</div>';
   }
 
 }

@@ -404,6 +404,8 @@
 
         // Set the marker to center of the map on click.
         map.googleMap.setCenter(currentMarker.getPosition());
+        map.googleMap.setZoom(100);
+        map.googleMap.panBy(0, -150);
 
         currentInfoWindow.open(map.googleMap, currentMarker);
       });

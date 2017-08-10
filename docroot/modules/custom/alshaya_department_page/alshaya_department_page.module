@@ -20,11 +20,11 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
   // Get the current node and category for current department page.
   $node = $form_state->getFormObject()->getEntity();
   $category = $node->get('field_product_category')->getValue();
-
+  $alshaya_department_pages = alshaya_department_page_get_pages();
   foreach ($tids as $tid) {
     // Hide the term, if it's not the current node's category term.
     if (!empty($category[0]) && $tid != $category[0]['target_id']) {
-      if ($page_exists = alshaya_department_page_page_exists($tid)) {
+      if (isset($alshaya_department_pages[$tid])) {
         // Unset the value.
         unset($form['field_product_category']['widget']['#options'][$tid]);
       }
@@ -33,32 +33,23 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
 }
 
 /**
- * Helper function which checks for existance of a department page.
+ * Helper function to fetch list of department pages.
  *
- * @param int $tid
- *   tid of the Category.
- *
- * @return bool
- *   Returns FALSE if page not found, else returns the $node_id of the page.
+ * @return array
+ *   Nids of department pages keyed by term ids.
  */
-function alshaya_department_page_page_exists($tid) {
+function alshaya_department_page_get_pages() {
   static $department_pages;
 
   // We cache the nid-tid relationship for a single page request.
   if (empty($department_pages)) {
-    // Load all the department page - category relationships.
     $query = \Drupal::database()->select('node__field_product_category', 'nfpc');
     $query->addField('nfpc', 'field_product_category_target_id', 'tid');
     $query->addField('nfpc', 'entity_id', 'nid');
     $department_pages = $query->execute()->fetchAllKeyed();
   }
 
-  // Check if we have department page available for tid passed in args.
-  if (isset($department_pages[$tid])) {
-    return $department_pages[$tid];
-  }
-
-  return FALSE;
+  return $department_pages;
 }
 
 /**

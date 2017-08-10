@@ -28,6 +28,9 @@ libraries-override:
     css:
       theme:
         css/back_to_top.css: false
+  core/drupal.autocomplete:
+    js:
+      misc/autocomplete.js: js/autocomplete.js
   core/jquery.ui:
     css:
       component:

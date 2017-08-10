@@ -70,6 +70,7 @@ class ClickCollectController extends ControllerBase {
     $this->configFactory = $config_factory;
     $this->cartStorage = $cart_storage;
     $this->entityManager = $entity_manager;
+    $this->logger = $this->getLogger('alshaya_click_collect');
   }
 
   /**
@@ -103,27 +104,39 @@ class ClickCollectController extends ControllerBase {
     // Get the stores from Magento.
     /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
     $api_wrapper = \Drupal::service('alshaya_api.api');
-    $stores = $api_wrapper->getCartStores($cart_id, $lat, $lon);
 
-    $config = $this->configFactory->get('alshaya_click_collect.settings');
-    // Add missing information to store data.
-    array_walk($stores, function (&$store) use ($config) {
-      $store['rnc_available'] = (int) $store['rnc_available'];
-      $store['sts_available'] = (int) $store['sts_available'];
-
+    if ($stores = $api_wrapper->getCartStores($cart_id, $lat, $lon)) {
+      /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
       $store_utility = \Drupal::service('alshaya_stores_finder.utility');
-      $extra_data = $store_utility->getStoreExtraData($store);
 
-      if (!empty($extra_data)) {
-        $store = array_merge($store, $extra_data);
+      $config = $this->configFactory->get('alshaya_click_collect.settings');
 
-        if (!empty($store['rnc_available'])) {
-          $store['delivery_time'] = $config->get('click_collect_rnc');
+      foreach ($stores as $index => &$store) {
+        $store['rnc_available'] = (int) $store['rnc_available'];
+        $store['sts_available'] = (int) $store['sts_available'];
+
+        if ($extra_data = $store_utility->getStoreExtraData($store)) {
+          $store = array_merge($store, $extra_data);
+
+          if (!empty($store['rnc_available'])) {
+            $store['delivery_time'] = $config->get('click_collect_rnc');
+          }
+        }
+        else {
+          // We don't display the stores which are not in our system.
+          unset($stores[$index]);
+
+          // Log into Drupal for admins to check and take required action.
+          $this->logger->warning('Received a store in Cart Stores API response which is not yet available in Drupal. Store code: %store_code', [
+            '%store_code' => $store['code'],
+          ]);
         }
       }
-    });
 
-    return $stores;
+      return $stores;
+    }
+
+    return [];
   }
 
   /**
@@ -178,22 +191,19 @@ class ClickCollectController extends ControllerBase {
     // Get all the post data, which contains store information passed in ajax.
     $store = \Drupal::request()->request->all();
 
-    $output = t("There's no store selected.");
-    if (!empty($store)) {
-      $ship_type = '';
-      if (!empty($store['sts_available'])) {
-        $ship_type = 'ship_to_store';
-      }
-      elseif (!empty($store['rnc_available'])) {
-        $ship_type = 'reserve_and_collect';
-      }
-      $build['selected_store'] = [
-        '#theme' => 'click_collect_selected_store',
-        '#store' => $store,
-      ];
+    $response = new AjaxResponse();
+
+    if (empty($store)) {
+      return $response;
     }
 
-    $response = new AjaxResponse();
+    $ship_type = !empty($store['rnc_available']) ? 'reserve_and_collect' : 'ship_to_store';
+
+    $build['selected_store'] = [
+      '#theme' => 'click_collect_selected_store',
+      '#store' => $store,
+    ];
+
     $response->addCommand(new HtmlCommand('#selected-store-content', $build));
     $response->addCommand(new InvokeCommand('#selected-store-wrapper', 'show'));
     $response->addCommand(new InvokeCommand('#store-finder-wrapper', 'hide'));
@@ -201,6 +211,8 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(new InvokeCommand('#selected-store-wrapper input[name="shipping_type"]', 'val', [$ship_type]));
     $response->addCommand(new InvokeCommand('input[data-drupal-selector="edit-actions-ccnext"]', 'show'));
     $response->addCommand(new SettingsCommand(['alshaya_click_collect' => ['selected_store' => ['raw' => $store]]]));
+    $response->addCommand(new InvokeCommand(NULL, 'clickCollectScrollTop', []));
+
     return $response;
   }
 
@@ -302,11 +314,8 @@ class ClickCollectController extends ControllerBase {
       }
     }
     else {
-      $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
-      $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
-      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'show'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'hide'));
+      $no_result_html = '<span class="empty-store-list">' . t('Sorry, No store found for your location.') . '</span>';
+      $response->addCommand(new InvokeCommand(NULL, 'clickCollectPdpNoStoresFound', [$no_result_html]));
     }
 
     $settings['alshaya_click_collect']['pdp']['ajax_call'] = TRUE;
