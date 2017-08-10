@@ -11,6 +11,8 @@
         slidesToShow: 5,
         vertical: true,
         arrows: true,
+        focusOnSelect: false,
+        centerMode: true,
         responsive: [
           {
             breakpoint: 1025,
@@ -64,10 +66,14 @@
         height: 768,
         dialogClass: 'dialog-product-image-gallery-container',
         open: function () {
+          var currentSlide = $('#lightSlider').slick('slickCurrentSlide');
           var slickModalOptions = {
             slidesToShow: 5,
             vertical: true,
             arrows: true,
+            centerMode: true,
+            focusOnSelect: false,
+            initialSlide: currentSlide,
             responsive: [
               {
                 breakpoint: 1025,
@@ -80,6 +86,14 @@
           };
 
           $('#product-image-gallery').slick(slickModalOptions);
+          var curSlide = $('#product-image-gallery').slick('slickCurrentSlide');
+          var defaultMainImage = $('#product-image-gallery li[data-slick-index="' + curSlide + '"]');
+          var bigImgUrl = defaultMainImage.children('a').attr('href');
+          $('#full-image-wrapper img').attr('src', bigImgUrl);
+          $('#full-image-wrapper img').css('transform', 'scale(1)');
+          $('#full-image-wrapper iframe').remove();
+          $('#full-image-wrapper img').show();
+
           $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
             var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
             productGallery.slick('unslick');
@@ -101,6 +115,7 @@
             var click = {x: 0, y: 0};
             $('#full-image').draggable({
               containment: [x1, y1, x2, y2],
+              revert: true,
               start: function(event) {
                 click.x = event.clientX;
                 click.y = event.clientY;
@@ -146,7 +161,6 @@
             // Swap the big image inside slider-2 when clicking on thumbnail.
             $('#product-image-gallery li').on('click', function () {
               img_scale = 1;
-
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
@@ -161,17 +175,18 @@
                 $('#full-image-wrapper iframe').remove();
                 $('#full-image-wrapper img').show();
               }
-
-              $('#product-image-gallery li a').on('click', function (e) {
-                e.preventDefault();
-                if ($(this).hasClass('imagegallery__thumbnails__image')) {
-                  $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-                  $(this).parent().addClass('slick-current');
-                }
-              });
-
               // Stop the browser from loading the image in a new tab.
               return false;
+            });
+
+            $('#product-image-gallery li a').on('click', function (e) {
+              e.preventDefault();
+              var index = $(this).parent().attr('data-slick-index');
+              if ($('#product-image-gallery').slick('slickCurrentSlide') !== index) {
+                $('#product-image-gallery').slick('slickGoTo', index);
+              }
+              $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+              $(this).parent().addClass('slick-current');
             });
           }
         }
@@ -216,7 +231,7 @@
         }
       });
       // For Desktop slider, we add a iframe on click on the image.
-      $('#lightSlider li', context).on('click', function () {
+      $('#lightSlider li', context).on('click', function (e) {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var wrap = $('#cloud-zoom-wrap');
           // Get width & height of wrap.
@@ -233,10 +248,13 @@
 
       $('#lightSlider li a', context).on('click', function (e) {
         e.preventDefault();
-        if ($(this).hasClass('cloudzoom__thumbnails__image')) {
-          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-          $(this).parent().addClass('slick-current');
+        e.stopPropagation();
+        var index = $(this).parent().attr("data-slick-index");
+        if ($('#lightSlider').slick('slickCurrentSlide') !== index) {
+          $('#lightSlider').slick('slickGoTo', index);
         }
+        $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+        $(this).parent().addClass('slick-current');
       });
 
       // Preventing click on image.
@@ -268,12 +286,6 @@
         return false;
       });
 
-      $('#product-image-gallery li img', context).on('click', function () {
-        if ($(this).parent().hasClass('imagegallery__thumbnails__image')) {
-          $(this).parent().parent().siblings('.lslide').removeClass('active');
-          $(this).parent().parent().addClass('active');
-        }
-      });
       // For Desktop slider, we remove the iframe when we want to zoom another image.
       $('#lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
         var playerIframe = $('#yt-vi-container iframe');
