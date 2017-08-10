@@ -79,11 +79,12 @@
   Drupal.cybersourceShowGlobalError = function (error) {
     Drupal.cybersourceProcessed = false;
 
-    // Remove the loader, we will add it again.
-    $('.cybersource-ajax-progress-throbber').remove();
-
     $('.cybersource-input').parents('form').find('.cybersource-global-error').remove();
     $('.cybersource-input').parents('form').prepend(error);
+    window.scrollTo(0, 0);
+
+    // Remove the loader, we will add it again.
+    $('.cybersource-ajax-progress-throbber').remove();
   }
 
 })(jQuery, Drupal);
