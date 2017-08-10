@@ -47,8 +47,16 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     }
 
     $request = \Drupal::request();
-    $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
-    $breadcrumb->addLink(Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]));
+    $url_object = \Drupal::service('path.validator')->getUrlIfValid($request->getPathInfo());
+    $route_name = $url_object->getRouteName();
+
+    // Don't invoke when this service is requested from a non-PDP page
+    // explicitly.
+    if ($route_name === 'entity.node.canonical') {
+      $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+      $breadcrumb->addLink(Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]));
+    }
+
     // Cacheability data of the node.
     $breadcrumb->addCacheTags(['node:' . $node->id()]);
 

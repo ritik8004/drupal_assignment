@@ -10,9 +10,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Routing\RouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\user\PrivateTempStoreFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -44,14 +44,17 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:department_page' => 'department page',
+    'entity.user.canonical' => 'my account page',
     'system.404' => 'page not found',
-    'user.login' => 'login page',
+    'user.login' => 'user login page',
+    'alshaya_user.user_register_complete' => 'register complete page',
+    'user.register' => 'register page',
     'acq_cart.cart' => 'cart page',
-    'acq_checkout.form:login' => 'summary page',
-    'acq_checkout.form:click_collect' => 'click and collect page',
-    'acq_checkout.form:delivery' => 'delivery page',
-    'acq_checkout.form:payment' => 'payment page',
-    'acq_checkout.form:confirmation' => 'confirmation page',
+    'acq_checkout.form:login' => 'checkout login page',
+    'acq_checkout.form:click_collect' => 'checkout click and collect page',
+    'acq_checkout.form:delivery' => 'checkout delivery page',
+    'acq_checkout.form:payment' => 'checkout payment page',
+    'acq_checkout.form:confirmation' => 'checkout confirmation page',
     'view.stores_finder.page_2' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
   ];
@@ -546,31 +549,32 @@ class AlshayaGtmManager {
    *   Product node.
    *
    * @return array
-   *   Concatenated product categories.
+   *   Array of Product categories.
    *
+   * @throws \UnexpectedValueException
    * @throws \InvalidArgumentException
    */
   public function fetchProductCategories(Node $productNode) {
-    $categories = $productNode->get('field_category')->getValue();
-    $terms = [];
+    $route_name = $productNode->urlInfo()->getRouteName();
+    $route_parameters = $productNode->urlInfo()->getRouteParameters();
+    $route = \Drupal::service('router.route_provider')->getRouteByName($route_name);
+    $route_match = new RouteMatch($route_name, $route, ['node' => $productNode], $route_parameters);
+    $breadcrumb = \Drupal::service('alshaya_acm_product.breadcrumb')->build($route_match);
 
-    if (count($categories) > 1) {
-      foreach ($categories as $category) {
-        $term = Term::load($category['target_id']);
-        $terms[] = $term->getName();
+    $links = $breadcrumb->getLinks();
+
+    foreach ($links as $key => $link) {
+      if (($key + 1 === count($links)) ||
+        ($link->getUrl()->getRouteName() === "<front>")) {
+        continue;
       }
-    }
-    elseif (count($categories) === 1) {
-      // Load parent terms of the category & send them across to GTM too.
-      $category = array_shift($categories);
-      $category_parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($category['target_id']);
-      $category_parents = array_reverse($category_parents);
 
-      foreach ($category_parents as $category_parent) {
-        $terms[$category_parent->id()] = trim($category_parent->getName());
+      $route_parameters = $link->getUrl()->getRouteParameters();
+      if (isset($route_parameters['taxonomy_term'])) {
+        $terms[$route_parameters['taxonomy_term']] = $link->getText();
       }
-    }
 
+    }
     return $terms;
   }
 
@@ -585,7 +589,6 @@ class AlshayaGtmManager {
 
     $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
     $order_data = $temp_store->get('order');
-    $privilegeOrder = FALSE;
 
     // Throw access denied if nothing in session.
     if (empty($order_data) || empty($order_data['id'])) {
@@ -648,7 +651,7 @@ class AlshayaGtmManager {
     ];
 
     $generalInfo = [
-      'deliveryOption' => $shipping_method,
+      'deliveryOption' => $shipping_method->getName(),
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'])->getName(),
       'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
@@ -680,10 +683,10 @@ class AlshayaGtmManager {
     }
 
     if ($data_layer['userUid'] !== 0) {
-      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) > 1 ? 'repeat buyer' : 'first time buyer';
+      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) > 1 ? 'Repeat Customer' : 'New Customer';
     }
     else {
-      $customer_type = 'first time buyer';
+      $customer_type = 'New Customer';
     }
 
     $data_layer_attributes = [
@@ -691,7 +694,7 @@ class AlshayaGtmManager {
       'platformType' => $platform,
       'country' => 'Kuwait',
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
-      'userID' => $data_layer['userUid'],
+      'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
       'customerType' => $customer_type,
       'userName' => ($data_layer['userUid'] !== 0) ? $data_layer['userName'] : '',
@@ -742,13 +745,12 @@ class AlshayaGtmManager {
           'productName' => $node->getTitle(),
           'productBrand' => $sku_attributes['gtm-brand'],
           'productColor' => '',
-          'productSize' => $sku_attributes['gtm-dimension1'],
           'productPrice' => $sku_attributes['gtm-price'],
-          'productOldPrice' => $sku_entity->get('price')->getString(),
+          'productOldPrice' => $sku_entity->get('price')->getString() ?: '',
           'productPictureUrl' => $product_media_url,
           'productRating' => '',
           'productReviews' => '',
-          'productMagentoId' => $product_sku,
+          'magentoProductID' => $sku_entity->get('product_id')->getString(),
         ];
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
@@ -765,21 +767,34 @@ class AlshayaGtmManager {
         break;
 
       case 'cart page':
-      case 'summary page':
-      case 'delivery page':
-      case 'payment page':
+      case 'checkout login page':
+      case 'checkout delivery page':
+      case 'checkout payment page':
         $cart = $this->cartStorage->getCart();
-        $cart_totals = $cart->totals();
-        $cart_items = $cart->get('items');
-        $page_dl_attributes = [
-          'cartTotalValue' => (float) $cart_totals['grand'],
-          'cartItemsCount' => count($cart_items),
-          'cartItemsRR' => $this->formatCartRr($cart_items),
-          'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
-        ];
+        if ($cart) {
+          $cart_totals = $cart->totals();
+          $cart_items = $cart->get('items');
+          $productStyleCode = [];
+          $productSKU = [];
+
+          foreach ($cart_items as $item) {
+            $productStyleCode[] = $item['sku'];
+            $product_node = alshaya_acm_product_get_display_node($item['sku']);
+            $productSKU[] = $product_node->get('field_skus')->getString();
+          }
+
+          $page_dl_attributes = [
+            'productSKU' => $productSKU,
+            'productStyleCode' => $productStyleCode,
+            'cartTotalValue' => (float) $cart_totals['grand'],
+            'cartItemsCount' => count($cart_items),
+            'cartItemsRR' => $this->formatCartRr($cart_items),
+            'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
+          ];
+        }
         break;
 
-      case 'confirmation page':
+      case 'checkout confirmation page':
         $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
         $order_data = $temp_store->get('order');
 
@@ -804,10 +819,14 @@ class AlshayaGtmManager {
         if ($order_index === FALSE) {
           throw new NotFoundHttpException();
         }
+
         $order = $orders[$order_index];
         $orderItems = $order['items'];
         $dimension6 = '';
         $dimension7 = '';
+        $productSKU = [];
+        $productStyleCode = [];
+
         $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
 
         if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
@@ -820,7 +839,15 @@ class AlshayaGtmManager {
           }
         }
 
+        foreach ($orderItems as $orderItem) {
+          $productStyleCode[] = $orderItem['sku'];
+          $product_node = alshaya_acm_product_get_display_node($orderItem['sku']);
+          $productSKU[] = $product_node->get('field_skus')->getString();
+        }
+
         $page_dl_attributes = [
+          'productSKU' => $productSKU,
+          'productStyleCode' => $productStyleCode,
           'cartTotalValue' => (float) $order['totals']['grand'],
           'cartItemsCount' => count($orderItems),
           'cartItemsRR' => $this->formatCartRr($orderItems),
@@ -838,13 +865,15 @@ class AlshayaGtmManager {
    * Helper function to get department specific attributes from terms.
    */
   public function fetchDepartmentAttributes($terms) {
+    $term_ids = array_keys($terms);
+
     return [
       'departmentName' => implode('|', $terms),
-      'departmentId' => implode('|', array_keys($terms)),
-      'listingName' => implode(',', $terms),
-      'listingId' => implode(',', array_keys($terms)),
-      'majorCategory' => array_shift($terms),
-      'minorCategory' => array_shift($terms),
+      'departmentId' => current($term_ids),
+      'listingName' => end($terms),
+      'listingId' => end($term_ids),
+      'majorCategory' => array_shift($terms) ?: '',
+      'minorCategory' => array_shift($terms) ?: '',
       'subCategory' => array_shift($terms) ?: '',
     ];
   }
@@ -896,7 +925,7 @@ class AlshayaGtmManager {
 
       $cart_items_flock[] = [
         'id' => $item['sku'],
-        'price' => $item['price'],
+        'price' => (float) $item['price'],
         'count' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
         'title' => $item['name'],
         'image' => $sku_media_url,
