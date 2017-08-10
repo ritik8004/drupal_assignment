@@ -162,11 +162,10 @@
               .attr('rel'));
         }
       );
+
+      $.fn.alshayaAttachSearchSlider = function () {
+        Drupal.attachBehaviors(context);
+      };
     }
   };
-
-  $.fn.alshayaAttachSearchSlider = function () {
-    Drupal.attachBehaviors(context);
-  };
-
 })(jQuery);
