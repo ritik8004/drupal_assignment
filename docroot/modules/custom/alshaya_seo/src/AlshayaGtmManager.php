@@ -6,11 +6,13 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Routing\RouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Drupal\user\PrivateTempStoreFactory;
@@ -164,6 +166,20 @@ class AlshayaGtmManager {
   protected $languageManager;
 
   /**
+   * Cache data service.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * Database connection service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -186,6 +202,10 @@ class AlshayaGtmManager {
    *   Store Finder service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache data service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database connection service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -196,7 +216,9 @@ class AlshayaGtmManager {
                               EntityManager $entityManager,
                               CheckoutOptionsManager $checkoutOptionsManager,
                               StoresFinderUtility $storesFinderUtility,
-                              LanguageManagerInterface $languageManager) {
+                              LanguageManagerInterface $languageManager,
+                              CacheBackendInterface $cache,
+                              Connection $database) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -207,6 +229,8 @@ class AlshayaGtmManager {
     $this->checkoutOptionsManager = $checkoutOptionsManager;
     $this->storeFinder = $storesFinderUtility;
     $this->languageManager = $languageManager;
+    $this->cache = $cache;
+    $this->database = $database;
   }
 
   /**
@@ -545,37 +569,118 @@ class AlshayaGtmManager {
   /**
    * Helper function to fetch & concatenate product categories.
    *
-   * @param \Drupal\node\Entity\Node $productNode
+   * @param \Drupal\node\Entity\Node $product_node
    *   Product node.
    *
-   * @return array
+   * @return false|array
    *   Array of Product categories.
    *
    * @throws \UnexpectedValueException
    * @throws \InvalidArgumentException
    */
-  public function fetchProductCategories(Node $productNode) {
-    $route_name = $productNode->urlInfo()->getRouteName();
-    $route_parameters = $productNode->urlInfo()->getRouteParameters();
-    $route = \Drupal::service('router.route_provider')->getRouteByName($route_name);
-    $route_match = new RouteMatch($route_name, $route, ['node' => $productNode], $route_parameters);
-    $breadcrumb = \Drupal::service('alshaya_acm_product.breadcrumb')->build($route_match);
-
-    $links = $breadcrumb->getLinks();
-
-    foreach ($links as $key => $link) {
-      if (($key + 1 === count($links)) ||
-        ($link->getUrl()->getRouteName() === "<front>")) {
-        continue;
-      }
-
-      $route_parameters = $link->getUrl()->getRouteParameters();
-      if (isset($route_parameters['taxonomy_term'])) {
-        $terms[$route_parameters['taxonomy_term']] = $link->getText();
-      }
-
+  public function fetchProductCategories(Node $product_node) {
+    $terms = [];
+    if ($this->cache->get('alshaya_product_breadcrumb_terms_' . $product_node->id())) {
+      $terms = $this->cache->get('alshaya_product_breadcrumb_terms_' . $product_node->id());
+      return $terms->data;
     }
+
+    $product_term_list = $product_node->get('field_category')->getValue();
+
+    $inner_term = $this->termTreeGroup($product_term_list);
+    $taxonomy_parents = [];
+
+    if ($inner_term) {
+      $taxonomy_parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($inner_term);
+    }
+
+    foreach ($taxonomy_parents as $taxonomy_parent) {
+      $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+    }
+
+    $this->cache->set('alshaya_product_breadcrumb_terms_' . $product_node->id(), $terms, Cache::PERMANENT, ['node:' . $product_node->id()]);
+
     return $terms;
+  }
+
+  /**
+   * Get most inner term for the first group.
+   *
+   * @param array $terms
+   *   Terms array.
+   *
+   * @return int
+   *   Term id.
+   */
+  public function termTreeGroup(array $terms = []) {
+    if (!empty($terms)) {
+      $root_group = $this->getRootGroup($terms[0]['target_id']);
+      $root_group_terms = [];
+      foreach ($terms as $term) {
+        $root = $this->getRootGroup($term['target_id']);
+        if ($root == $root_group) {
+          $root_group_terms[] = $term['target_id'];
+        }
+      }
+
+      return $this->getInnerDepthTerm($root_group_terms);
+    }
+
+    return NULL;
+
+  }
+
+  /**
+   * Get the root level parent tid of a given term.
+   *
+   * @param int $tid
+   *   Term id.
+   *
+   * @return int
+   *   Root parent term id.
+   */
+  public function getRootGroup($tid) {
+    // Recursive call to get parent root parent tid.
+    while ($tid > 0) {
+      $query = $this->database->select('taxonomy_term_hierarchy', 'tth');
+      $query->fields('tth', ['parent']);
+      $query->condition('tth.tid', $tid);
+      $parent = $query->execute()->fetchField();
+      if ($parent == 0) {
+        return $tid;
+      }
+
+      $tid = $parent;
+    }
+  }
+
+  /**
+   * Get the most inner term term based on the depth.
+   *
+   * @param array $terms
+   *   Array of term ids.
+   *
+   * @return int
+   *   The term id.
+   */
+  public function getInnerDepthTerm(array $terms = []) {
+    $db = \Drupal::database();
+    $current_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $depths = $db->select('taxonomy_term_field_data', 'ttfd')
+      ->fields('ttfd', ['tid', 'depth_level'])
+      ->condition('ttfd.tid', $terms, 'IN')
+      ->condition('ttfd.langcode', $current_langcode)
+      ->execute()->fetchAllKeyed();
+
+    // Flip key/value.
+    $terms = array_flip($terms);
+    // Merge two array (overriding depth value).
+    $depths = array_replace($terms, $depths);
+    // Get all max values and get first one.
+    $max_depth = array_keys($depths, max($depths));
+    $most_inner_tid = $max_depth[0];
+
+    return $most_inner_tid;
   }
 
   /**
