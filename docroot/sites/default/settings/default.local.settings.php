@@ -8,12 +8,16 @@
 /**
  * Database configuration.
  */
+
+$hostname = $_SERVER['HTTP_HOST'];
+$hostname_parts = explode('.', $hostname);
+
 $databases = array(
   'default' =>
   array(
     'default' =>
     array(
-      'database' => 'drupal',
+      'database' => 'drupal_' . str_replace('-', '_', $hostname_parts[1]),
       'username' => 'drupal',
       'password' => 'drupal',
       'host' => 'localhost',
