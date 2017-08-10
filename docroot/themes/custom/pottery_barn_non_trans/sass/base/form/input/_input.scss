@@ -1,0 +1,91 @@
+// Normalize input fields.
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="submit"],
+input[type="tel"],
+textarea {
+  border-radius: 0;
+  -webkit-appearance: none;
+
+  &:focus {
+    position: relative;
+    z-index: 1;
+    outline: 0;
+  }
+}
+
+// Material design effect for input fields.
+.c-content,
+.c-footer-primary {
+  .c-input__bar {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  .c-input__bar::before,
+  .c-input__bar::after {
+    content: '';
+    height: 1px;
+    width: 0;
+    bottom: 0;
+    position: absolute;
+    background: $windows-blue;
+    transition: 0.5s ease all;
+    z-index: 3;
+  }
+
+  .c-input__bar::before {
+    left: 50%;
+  }
+
+  .c-input__bar::after {
+    right: 50%;
+  }
+
+  form:not(.alshaya-acm-customer-order-list-search, .alshaya-stores-available-stores, .store-finder-exposed-form) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid $grey-ash;
+      padding: 0;
+      color: $black;
+
+      &:focus {
+        outline: 0 !important;
+      }
+
+      &:not(.error):focus ~ .c-input__bar::before,
+      &:not(.error):focus ~ .c-input__bar::after {
+        width: 50%;
+      }
+    }
+  }
+
+  // Prevents browser from adding space below textarea.
+  textarea {
+    display: block;
+  }
+}
+
+// Prevents the browser password reveal for IE.
+input::-ms-clear,
+input::-ms-reveal {
+  display: none;
+}
+
+.profile-address-book-add-form,
+.profile-address-book-edit-form,
+.c-delivery-checkout .multistep-checkout {
+  .country-field-wrapper {
+    .country-name {
+      border-bottom: 1px solid $grey-ash;
+      padding-bottom: 0.5rem;
+    }
+  }
+}

@@ -49,7 +49,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     // Display login form:
     $pane_form['name'] = [
-      '#type' => 'textfield',
+      '#type' => 'email',
       '#title' => $this->t('Username'),
       '#size' => 15,
       '#maxlength' => UserInterface::USERNAME_MAX_LENGTH,
@@ -105,6 +105,13 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
     $values = $form_state->getValue($pane_form['#parents']);
     $mail = $values['name'];
     $pass = $values['pass'];
+
+    // If not valid email address.
+    if (!\Drupal::service('email.validator')->isValid($mail)) {
+      drupal_set_message($this->t('Username does not contain a valid email.'), 'error');
+      $form_state->setErrorByName('custom', $this->t('Username does not contain a valid email.'));
+      return;
+    }
 
     if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass, TRUE)) {
       /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */

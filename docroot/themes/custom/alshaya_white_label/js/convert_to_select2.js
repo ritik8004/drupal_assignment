@@ -8,9 +8,13 @@
 
   Drupal.behaviors.select2select = {
     attach: function (context, settings) {
-      $('.form-item-sort-bef-combine .form-select').select2();
+      $('.form-item-sort-bef-combine .form-select').select2({
+        minimumResultsForSearch: -1
+      });
 
-      $('.form-item-configurables-size .form-select').select2();
+      $('.form-item-configurables-size .form-select').select2({
+        minimumResultsForSearch: -1
+      });
 
       $('.select2-select').once('bind-events').each(function () {
         $(this).select2();

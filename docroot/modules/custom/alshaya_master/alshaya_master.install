@@ -177,8 +177,8 @@ function alshaya_master_install() {
     'enter card details' => [
       'ar' => 'الرجاء إدخال معلومات البطاقة',
     ],
-    '<p>By registering you agreed to our <a class="final-t&c" href="/terms">Terms and Conditions</a>.</p>' => [
-      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a class="final-t&c" href="/terms">الشروط والأحكام</a></p>',
+    '<p>By registering you agreed to our <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms" class="final-tnc">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
@@ -629,7 +629,7 @@ function alshaya_master_install() {
     'Is the delivery address the same as your billing address?' => [
       'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
     ],
-    '<p>I confirm that I have read and accept the <a href="#">Privacy Policy</a> and <a href="#">Terms &amp; Conditions</a> of purchase. Read our <a href="#">Return Policy</a></p>' => [
+    '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>' => [
       'ar' => 'أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا',
     ],
     'Billing address' => [
@@ -1002,6 +1002,33 @@ function alshaya_master_install() {
     ],
     'Collection Store' => [
       'ar' => 'محل الاستلام',
+    ],
+    'Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.' => [
+      'ar' => 'عفواً، لقد نفدت الكمية من بعض القطع في سلة تسوقك. يرجى إزالة القطع من سلة التسوق لإكمال عملية الشراء بأمان.',
+    ],
+    'No matches found for this area' => [
+      'ar' => 'لا توجد أي معلومات متطابقة لهذه المنطقة',
+    ],
+    'Your order will be available for pickup at the following store' => [
+      'ar' => 'طلبيتك ستكون جاهزة للاستلام في هذا المحل',
+    ],
+    'Collection times' => [
+      'ar' => 'أوقات التسليم',
+    ],
+    'Collection Address' => [
+      'ar' => 'عنوان التسليم',
+    ],
+    'Your order will be delivered at the following address' => [
+      'ar' => 'سيتم توصيل طلبيتك على العنوان التالي',
+    ],
+    'Invalid Credit Card number' => [
+      'ar' => 'رقم البطاقة غير صحيح',
+    ],
+    'Invalid security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV غير صحيح',
+    ],
+    'Security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV',
     ],
   ];
   alshaya_i18n_save_translations($strings);

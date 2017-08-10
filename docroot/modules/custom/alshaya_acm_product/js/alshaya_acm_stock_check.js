@@ -11,20 +11,24 @@
    */
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
+
       // Stock check on PLP,search & Promo pages.
       $('article[data-vmode="search_result"]', context).each(function(){
         var productId = $(this).attr('data-nid');
         var productStock = $(this).find('.out-of-stock');
-
-        $.ajax({
-          url: Drupal.url('stock-check-ajax/node/' + productId),
-          type: "GET",
-          contentType: "application/json;",
-          dataType: "json",
-          success: function (result) {
-            productStock.html(result.html);
-          }
-        });
+        var articleNode = $(this);
+        if (!articleNode.hasClass('stock-processed')) {
+          $.ajax({
+            url: Drupal.url('stock-check-ajax/node/' + productId),
+            type: "GET",
+            contentType: "application/json;",
+            dataType: "json",
+            success: function (result) {
+              productStock.html(result.html);
+              articleNode.addClass('stock-processed');
+            }
+          });
+        }
       });
 
       // Stock check on PDP main Product.
@@ -39,10 +43,16 @@
             dataType: "json",
             success: function (result) {
               $wrapper.html(result.html);
+
               // Add class to share this wrapper if product out of stock.
               if (result.max_quantity <= 0) {
-                $wrapper.closest('article[data-vmode="full"]').find('sharethis-wrapper').addClass('out-of-stock');
+                var $article = $wrapper.closest('article[data-vmode="full"]');
+                $article.find('sharethis-wrapper').addClass('out-of-stock');
+
+                // Add out of stock class to article to allow styles to be added everywhere.
+                $article.addClass('product-out-of-stock');
               }
+
               Drupal.attachBehaviors($wrapper[0]);
               Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
             }

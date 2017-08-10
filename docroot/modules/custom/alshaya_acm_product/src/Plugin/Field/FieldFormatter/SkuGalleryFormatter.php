@@ -186,12 +186,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
       $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
-      if (!alshaya_acm_is_product_in_stock($sku)) {
-        $elements[$delta]['#out_of_stock'] = [
-          '#markup' => '<span>' . $this->t('out of stock') . '</span>',
-        ];
-      }
-
       $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
     }
 

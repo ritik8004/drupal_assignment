@@ -279,6 +279,12 @@ html[lang="ar"] {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
     }
+
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
+      label {
+        width: 103% !important;
+      }
+    }
   }
 }
 

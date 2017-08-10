@@ -51,6 +51,10 @@ class CybersourceAPIWrapper extends APIWrapper {
     $doReq = function ($client, $opt) use ($endpoint, $cart_id, $card_type) {
       $opt['query']['cart_id'] = $cart_id;
       $opt['query']['card_type'] = $card_type;
+
+      // To allow hmac sign to be verified properly we need them in asc order.
+      ksort($opt['query']);
+
       return ($client->get($endpoint, $opt));
     };
 

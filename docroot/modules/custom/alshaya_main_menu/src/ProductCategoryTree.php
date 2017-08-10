@@ -2,10 +2,10 @@
 
 namespace Drupal\alshaya_main_menu;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\file\Entity\File;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -73,6 +73,7 @@ class ProductCategoryTree {
     $terms = $this->entityTypeManager->getStorage('taxonomy_term')
       ->loadTree('acq_product_category', $parent_tid, $depth, TRUE);
     if ($terms) {
+      $alshaya_department_pages = alshaya_department_page_get_pages();
       foreach ($terms as $term) {
         // For language specific data.
         $term = $this->entityRepository->getTranslationFromContext($term);
@@ -103,7 +104,8 @@ class ProductCategoryTree {
         }
 
         // Check if there is a department page available for this term.
-        if ($nid = alshaya_department_page_page_exists($term->id())) {
+        if (isset($alshaya_department_pages[$term->id()])) {
+          $nid = $alshaya_department_pages[$term->id()];
           // Use the path of node instead of term path.
           $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])
             ->toString();
@@ -127,6 +129,10 @@ class ProductCategoryTree {
    */
   public function getHighlightImage(TermInterface $term) {
     $highlight_images = [];
+
+    if ($highlight_image_cache = \Drupal::cache('alshaya')->get('highlights_' . $term->id())) {
+      return $highlight_image_cache->data;
+    }
 
     if ($highlight_field = $term->get('field_main_menu_highlight')) {
 
@@ -155,7 +161,6 @@ class ProductCategoryTree {
           $image_link = $paragraph->get('field_highlight_link')->getValue();
           $renderable_image = $paragraph->get('field_highlight_image')->view('default');
           if (!empty($image)) {
-            $file = File::load($image[0]['target_id']);
             $url = Url::fromUri($image_link[0]['uri']);
             $highlight_images[] = [
               'image_link' => $url->toString(),
@@ -165,6 +170,8 @@ class ProductCategoryTree {
         }
       }
     }
+
+    \Drupal::cache('alshaya')->set('highlights_' . $term->id(), $highlight_images, Cache::PERMANENT, ['taxonomy_term:' . $term->id()]);
 
     return $highlight_images;
   }

@@ -143,6 +143,10 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
         ];
       }
 
+      $pane_form['address']['billing_title'] = [
+        '#markup' => '<div class="title billing-address-title">' . $this->t('Billing address') . '</div>',
+      ];
+
       $pane_form['address']['billing'] = [
         '#type' => 'address',
         '#title' => '',

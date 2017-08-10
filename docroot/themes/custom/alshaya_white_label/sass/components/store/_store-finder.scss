@@ -228,8 +228,19 @@
     height: 25px;
     margin-#{$right}: 0.4rem;
 
+    @include breakpoint($tablet) {
+      html[lang=ar] & {
+        position: relative;
+        top: 0.4rem;
+      }
+    }
+
     @include breakpoint($desktop) {
       margin-#{$right}: 0.3875rem;
+
+      html[lang=ar] & {
+        top: 0.625rem;
+      }
     }
   }
 
@@ -291,7 +302,7 @@
     @include breakpoint($desktop) {
       padding-#{$left}: 3.4rem;
       padding-#{$right}: 0;
-      width: 36.8%;
+      width: 27.6%;
     }
   }
 
@@ -360,7 +371,7 @@
       }
 
       @include breakpoint($tablet) {
-        max-width: 23.125rem;
+        max-width: 26.125rem;
         border: 1px solid $white;
         border-#{$right}: 2.3125rem solid $white-five;
         height: 2.1875rem;
@@ -495,12 +506,6 @@
     }
 
     .open--hours {
-      margin-top: 1rem;
-
-      @include breakpoint($tablet) {
-        margin-top: 0.9rem;
-      }
-
       div {
         margin-bottom: 0.0625rem;
       }
@@ -518,6 +523,11 @@
         @include breakpoint($tablet) {
           padding-#{$left}: 3.25rem;
         }
+      }
+
+      .hours--wrapper .open--hours {
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
       }
 
       .get--directions a,
@@ -683,7 +693,7 @@
 
     .list-view-link,
     .map-view-link {
-      width: 15%;
+      width: 17.5%;
     }
 
     .view-display-id-page_1 {
@@ -742,10 +752,18 @@
   .label--location {
     @include breakpoint($tablet) {
       margin: 0.8rem 0;
+
+      html[lang=ar] & {
+        margin-top: 0.2rem;
+      }
     }
 
     @include breakpoint($desktop) {
       margin: 1.625rem 0;
+
+      html[lang=ar] & {
+        margin-top: 0.8rem;
+      }
     }
   }
 
@@ -805,10 +823,15 @@
     .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
     .form-item-geolocation-geocoder-google-places-api {
       float: $right;
-      width: 63.2%;
 
       @include breakpoint($tablet) {
         padding-#{$right}: 0.5rem;
+        width: 63.2%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 72.4%;
+        padding-#{$left}: 1.375rem;
       }
 
       @include breakpoint($only-mobile) {
@@ -976,12 +999,6 @@
         transform: none;
       }
     }
-
-    .open--hours {
-      @include breakpoint($only-mobile) {
-        margin-top: 0.9rem;
-      }
-    }
   }
 
   .hours--label.open {
@@ -1016,6 +1033,13 @@
       &::after {
         transform: rotate(90deg);
       }
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    @include breakpoint($desktop) {
+      width: 15%;
     }
   }
 

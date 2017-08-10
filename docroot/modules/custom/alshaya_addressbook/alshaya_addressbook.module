@@ -531,7 +531,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     if ($view_mode == 'teaser') {
       $variables['change_address'] = [
         '#type' => 'button',
-        '#value' => t('Edit'),
+        '#value' => t('Change'),
         '#attributes' => [
           'id' => 'change-address',
         ],

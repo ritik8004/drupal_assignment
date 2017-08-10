@@ -52,11 +52,29 @@
   padding: 0 1em;
 }
 
+.checkout-delivery.checkout-payment .address_wrapper > .billing-address-title {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid $white;
+  font-size: 1rem;
+  font-family: $alshaya-bold;
+  font-weight: normal;
+  color: $marine-blue-two;
+
+  @include breakpoint($upto-desktop) {
+    font-size: 0.875rem;
+  }
+}
+
 #edit-billing-address {
   margin-top: 1rem;
 
   legend {
+    display: none;
     padding: 0 1rem;
+  }
+
+  .select2-container--open {
+    z-index: auto;
   }
 
   .fieldset-wrapper {
@@ -178,6 +196,10 @@
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-number {
     width: 12.5rem;
+
+    label {
+      width: 100%;
+    }
   }
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year,
@@ -194,6 +216,7 @@
 
     label {
       float: $left;
+      width: 100%;
     }
 
     &::after {
@@ -211,12 +234,16 @@
   }
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-cvv {
-    width: 6.3125rem;
+    width: 9.375rem;
     clear: both;
     margin-bottom: 1em;
 
     html[lang=ar] & {
-      width: 12.5rem;
+      width: 12rem;
+    }
+
+    .form-item--error-message {
+      min-width: 10rem;
     }
   }
 
@@ -232,29 +259,15 @@
     }
 
     @include breakpoint($tablet) {
-      width: 65%;
-      top: 40%;
-      #{$left}: 30%;
+      width: 49%;
+      top: 33.7%;
+      #{$left}: 49%;
     }
 
     @include breakpoint($desktop) {
       width: 40%;
-      top: 44%;
-      #{$left}: 24%;
-    }
-
-    html[lang=ar] & {
-      @include breakpoint($tablet) {
-        width: 46%;
-        top: 40%;
-        #{$left}: 50%;
-      }
-
-      @include breakpoint($desktop) {
-        width: 40%;
-        top: 44%;
-        #{$left}: 30%;
-      }
+      top: 38%;
+      #{$left}: 25%;
     }
 
     &::before {
@@ -326,6 +339,116 @@
 
     & > label {
       position: static !important;
+    }
+  }
+}
+
+.cvv-help-text-wrapper {
+  @include breakpoint($only-mobile) {
+    display: block;
+    position: absolute;
+    top: 7.4rem;
+    #{$left}: 57%;
+  }
+
+  .mobile-tooltip-icon {
+    display: none;
+
+    @include breakpoint($only-mobile) {
+      display: block;
+      position: relative;
+    }
+
+    .tooltip-icon {
+      display: block;
+      width: 1.5rem;
+      height: 1.5rem;
+      cursor: pointer;
+      color: $cerulean-two;
+
+      @include icon(infomation, after) {
+        margin-#{$left}: 0.3rem;
+        display: inline-block;
+        vertical-align: middle;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+
+      &:hover {
+        + span.tooltip-content {
+          display: block;
+        }
+      }
+    }
+
+    span.tooltip-content {
+      display: none;
+      font-size: 0.625rem;
+      position: absolute;
+      z-index: 1;
+      padding: 0.5rem;
+      padding-#{$left}: 3.875rem;
+      top: 1.5rem;
+      #{$left}: -7.3rem;
+      color: $windows-blue;
+      background-color: $alice-blue;
+      border: 1px solid $cerulean-two;
+      border-radius: 2px;
+      width: 13.81rem;
+
+      &::before {
+        border-color: rgba(0, 132, 204, 0);
+        border-bottom-color: $cerulean-two;
+        border-width: 0.375rem;
+        border-bottom-width: 0.5rem;
+        margin-#{$left}: -0.375rem;
+        bottom: 100%;
+        border-style: solid;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        #{$right}: 5.3rem;
+
+        @extend %tooltip-before;
+      }
+
+      &::after {
+        border-color: rgba(240, 246, 252, 0);
+        border-bottom-color: $alice-blue;
+        border-width: 0.3125rem;
+        border-bottom-width: 0.375rem;
+        margin-#{$left}: -0.3125rem;
+        bottom: 100%;
+        border-style: solid;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        #{$right}: 5.33rem;
+
+        @extend %tooltip-after;
+      }
+
+      p {
+        margin: 0;
+
+        &::before {
+          content: "";
+          height: 2rem;
+          width: 3rem;
+          background: $white url(../imgs/cards/back-card.png) no-repeat;
+          background-size: 100%;
+          margin-#{$right}: 0.5rem;
+          position: absolute;
+          #{$left}: 0;
+          top: 0;
+          margin-#{$left}: 0.5rem;
+          margin-top: 0.5rem;
+        }
+      }
     }
   }
 }

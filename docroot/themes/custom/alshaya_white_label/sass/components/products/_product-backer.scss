@@ -1,4 +1,10 @@
 .acq-content-product {
+  .gallery-wrapper {
+    @include breakpoint($only-tablet) {
+      padding-bottom: 2rem;
+    }
+  }
+
   .special--price .price {
     color: $special-price;
   }

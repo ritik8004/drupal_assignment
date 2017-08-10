@@ -1,0 +1,97 @@
+%l-container--full {
+  @include container($desktop-wide);
+}
+
+%l-container--center {
+  @include container(65.35rem);
+}
+
+// One Column
+.l-column--one {
+  &.l-container {
+    @extend %l-container--center;
+  }
+}
+
+// Two Column
+.l-column--two {
+  &.l-container {
+    @extend %l-container--full;
+  }
+
+  .c-content__container {
+    padding: 0 0.5rem;
+
+    @include breakpoint($desktop) {
+      padding: 0 1.5rem;
+    }
+  }
+
+  .c-content__primary {
+    @include breakpoint($desktop) {
+      max-width: 735px;
+      width: 57.24%;
+      float: $left;
+    }
+  }
+
+  .c-content__secondary {
+    @include breakpoint($desktop) {
+      max-width: 26.25rem;
+      width: 32.71%;
+      float: $right;
+    }
+  }
+}
+
+// Two Column 1050
+.l-column--two-1050 {
+  @extend %l-container--center;
+
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  main {
+    @include breakpoint($tablet) {
+      width: 50%;
+      float: $left;
+    }
+  }
+
+  .c-sidebar-second {
+    font-size: 0.75em;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
+    @include breakpoint($tablet) {
+      border-#{$left}: 1px solid $white;
+    }
+
+    @include breakpoint($tablet) {
+      width: 50%;
+      float: $right;
+      padding-bottom: 3.125rem;
+
+      &__region {
+        max-width: 13.25rem;
+        margin: 0 auto;
+
+        @include breakpoint($tablet) {
+          max-width: 40.4em;
+          padding-#{$left}: 4em;
+          margin-right: 0;
+        }
+
+        @include breakpoint($desktop) {
+          padding-#{$left}: 7.3em;
+        }
+
+        > div {
+          max-width: 35.75em;
+        }
+      }
+    }
+  }
+}

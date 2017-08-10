@@ -28,6 +28,9 @@ libraries-override:
     css:
       theme:
         css/back_to_top.css: false
+  core/drupal.autocomplete:
+    js:
+      misc/autocomplete.js: js/autocomplete.js
   core/jquery.ui:
     css:
       component:
@@ -47,6 +50,8 @@ libraries-override:
   geolocation/geolocation.googlemapsapi:
     js:
       js/geolocation-google-maps-api.js: js/geolocation/alshaya_geolocation_google_maps_api.js
-
+  views-infinite-scroll/views-infinite-scroll:
+    js:
+      js/infinite-scroll.js : js/infinite-scroll.js
 ckeditor_stylesheets:
   - css/ckeditor.css
