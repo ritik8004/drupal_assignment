@@ -60,7 +60,7 @@
         });
       }
 
-      $('.nodetype--acq_product .above-mobile-block, .path--cart .owl-item .above-mobile-block').click(function () {
+      $('.nodetype--acq_product .above-mobile-block, .path--cart .owl-item .above-mobile-block, .acq-content-product .cloudzoom #cloud-zoom-wrap').click(function () {
         $('body').addClass('pdp-modal-overlay');
 
         $(document).ajaxComplete(function () {

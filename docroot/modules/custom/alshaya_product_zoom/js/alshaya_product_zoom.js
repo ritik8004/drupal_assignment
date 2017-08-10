@@ -11,6 +11,7 @@
         slidesToShow: 5,
         vertical: true,
         arrows: true,
+        focusOnSelect: false,
         centerMode: true,
         responsive: [
           {
@@ -71,6 +72,7 @@
             vertical: true,
             arrows: true,
             centerMode: true,
+            focusOnSelect: false,
             initialSlide: currentSlide,
             responsive: [
               {
@@ -284,7 +286,7 @@
         // Stop the browser from loading the image in a new tab.
         return false;
       });
-      
+
       // For Desktop slider, we remove the iframe when we want to zoom another image.
       $('#lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
         var playerIframe = $('#yt-vi-container iframe');
