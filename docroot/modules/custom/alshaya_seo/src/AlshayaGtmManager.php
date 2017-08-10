@@ -307,7 +307,7 @@ class AlshayaGtmManager {
     $attributes['gtm-name'] = trim($sku->label());
     $price = $sku->get('final_price')->getString() ? $sku->get('final_price')->getString() : 0.000;
     $attributes['gtm-price'] = (float) number_format((float) $price, 3, '.', '');
-    $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
+    $brand_tid = $sku->get('attr_product_brand')->getString();
     $attributes['gtm-product-sku'] = $sku->getSku();
 
     // Dimension1 & 2 correspond to size & color.
@@ -321,7 +321,16 @@ class AlshayaGtmManager {
 
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
-      $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
+      $brand_tid = $parent_sku->get('attr_product_brand')->getString();
+    }
+
+    if ($brand_tid) {
+      $brand = $this->entityManager->getStorage('taxonomy_term')->load($brand_tid);
+      $brand_name = $brand->label();
+      $attributes['gtm-brand'] = $brand_name;
+    }
+    else {
+      $attributes['gtm-brand'] = 'Mothercare Kuwait';
     }
 
     return $attributes;
@@ -547,7 +556,6 @@ class AlshayaGtmManager {
       // Fetch product for this sku to get the category.
       $productNode = alshaya_acm_product_get_display_node($skuId);
       // Get product media.
-      $first_sku = $productNode->get('field_skus')->first()->get('entity')->getValue();
       $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
       $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
@@ -562,6 +570,8 @@ class AlshayaGtmManager {
     }
 
     $attributes['privilegeOrder'] = $isPrivilegeOrder;
+    $shipping = $cart->getShipping();
+    $attributes['delivery_phone'] = property_exists($shipping, 'telephone') ? $shipping->telephone : '';
 
     return $attributes;
   }

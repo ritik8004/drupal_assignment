@@ -16,9 +16,9 @@
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]', context);
-      var cartCheckoutLoginSelector = $('body[gtm-container="summary page"]');
-      var cartCheckoutDeliverySelector = $('body[gtm-container="delivery page"]');
-      var cartCheckoutPaymentSelector = $('body[gtm-container="payment page"]');
+      var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
+      var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
+      var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container .js-webform-radios', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var couponCode = $('form.customer-cart-form', context).find('input#edit-coupon').val();
@@ -248,19 +248,6 @@
         }
       });
 
-      /** Sub-delivery option virtual page tracking. **/
-      if (subDeliveryOptionSelector.text() !== '') {
-        var checkout_subdl = '';
-        for( var i=0; i<dataLayer.length; i++) {
-          if (dataLayer[i].event === 'checkout') {
-            checkout_subdl = dataLayer[i];
-            break;
-          }
-        }
-        checkout_subdl.ecommerce.checkout.actionField.step = 3;
-        dataLayer.push(checkout_subdl);
-      }
-
       subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function() {
         // Push default selected sub-delivery option to GTM.
         if ($(this).find('input[checked="checked"]').length > 0) {
@@ -368,7 +355,8 @@
       });
 
       /** Tracking Home Delivery **/
-      if (cartCheckoutDeliverySelector.length !== 0) {
+      if ((cartCheckoutDeliverySelector.length !== 0) &&
+        (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
           Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
