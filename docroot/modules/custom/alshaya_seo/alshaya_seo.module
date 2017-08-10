@@ -6,8 +6,8 @@
  */
 
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
-use Drupal\alshaya_seo\AlshayaGtmManager;
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\acq_sku\Entity\SKU;
@@ -277,12 +277,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           if ($node->bundle() === 'acq_product') {
             $attributes = $gtm_manager->fetchProductGtmAttributes($node, 'full');
             $processed_attributes = $gtm_manager->processAttributesForPdp($attributes);
-            foreach ($data_layer as $key => $value) {
-              if (!in_array($key, AlshayaGtmManager::GTM_GLOBALS, TRUE)) {
-                unset($data_layer[$key]);
-              }
-            }
-
             $data_layer = array_merge($data_layer, $processed_attributes);
             $data_layer['pageType'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
           }
