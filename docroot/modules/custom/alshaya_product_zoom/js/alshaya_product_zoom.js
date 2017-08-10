@@ -88,7 +88,6 @@
           $('#product-image-gallery').slick(slickModalOptions);
           var curSlide = $('#product-image-gallery').slick('slickCurrentSlide');
           var defaultMainImage = $('#product-image-gallery li[data-slick-index="' + curSlide + '"]');
-          // console.log(defaultMainImage.children('a').attr('href'));
           var bigImgUrl = defaultMainImage.children('a').attr('href');
           $('#full-image-wrapper img').attr('src', bigImgUrl);
           $('#full-image-wrapper img').css('transform', 'scale(1)');
