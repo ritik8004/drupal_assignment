@@ -1391,6 +1391,7 @@
 
   @include breakpoint($upto-desktop) {
     width: 100% !important;
+    margin-#{$right}: 0 !important;
   }
 
   @include breakpoint($only-mobile) {
