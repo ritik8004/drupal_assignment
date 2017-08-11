@@ -38,3 +38,14 @@ services:
       - '@element_info'
       - '@theme.manager'
       - '@csrf_token'
+
+  cache.stock:
+    class: Drupal\Core\Cache\CacheInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [stock]
+
+  cache.backend.permanent_database:
+    class: Drupal\acq_sku\Cache\PermanentDatabaseBackendFactory
+    arguments: ['@database', '@cache_tags.invalidator.checksum']
