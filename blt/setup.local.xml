@@ -37,12 +37,70 @@
   </target>
 
   <target name="refresh:local"
-          description="Setup local dev environment."
-          depends="local:setup, local:reset-settings-file, sync:translations, sync:products, sync:promotions, sync:stores">
+          description="Setup local dev environment.">
+      <phingcall target="local:setup">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="local:reset-settings-file"/>
+      <phingcall target="sync:translations">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="sync:products">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="sync:promotions">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="sync:stores">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+  </target>
+
+  <target name="refresh:non-transac-local"
+          description="Setup local dev environment with non-transac profile.">
+      <phingcall target="local:setup">
+          <property name="drush.uri" value="https://local.non-transac.com" />
+          <property name="project.profile.name" value="alshaya_non_transac" />
+      </phingcall>
+      <phingcall target="local:reset-settings-file"/>
   </target>
 
   <target name="refresh:local:drupal"
-          description="Reinstall local dev environment."
-          depends="setup:composer:install, frontend:build, local:drupal:install, setup:toggle-modules, local:reset-settings-file, sync:translations, sync:products, sync:promotions, sync:stores">
+          description="Reinstall local dev environment.">
+      <phingcall target="setup:composer:install"/>
+      <phingcall target="frontend:build"/>
+      <phingcall target="local:drupal:install">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="setup:toggle-modules">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="local:reset-settings-file"/>
+      <phingcall target="sync:translations">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="sync:products">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="sync:promotions">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+      <phingcall target="sync:stores">
+          <property name="drush.uri" value="https://local.alshaya.com" />
+      </phingcall>
+  </target>
+
+  <target name="refresh:non-transac-local:drupal"
+          description="Reinstall local dev environment with non-transac profile.">
+      <phingcall target="setup:composer:install"/>
+      <phingcall target="frontend:build"/>
+      <phingcall target="local:drupal:install">
+          <property name="drush.uri" value="https://local.non-transac.com" />
+          <property name="project.profile.name" value="alshaya_non_transac" />
+      </phingcall>
+      <phingcall target="setup:toggle-modules">
+          <property name="drush.uri" value="https://local.non-transac.com" />
+      </phingcall>
+      <phingcall target="local:reset-settings-file"/>
   </target>
 </project>
