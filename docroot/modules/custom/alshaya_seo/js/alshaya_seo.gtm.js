@@ -453,12 +453,12 @@
 
           if (that.closest('.horizontal-crossell').length > 0) {
             subListName = listName + '-CS';
-            position = that.closest('.horizontal-crossell').find('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
           }
           else if (that.closest('.horizontal-upell').length > 0) {
             subListName = listName + '-US';
-            position = that.closest('.horizontal-upell').find('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
           }
+
+          position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
         });
       });
