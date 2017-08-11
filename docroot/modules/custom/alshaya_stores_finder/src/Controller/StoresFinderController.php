@@ -108,7 +108,8 @@ class StoresFinderController extends ControllerBase {
    */
   public function toggleView($view_type = 'list_view') {
     $response = new AjaxResponse();
-    $display = 'page_1';
+    // The store-finder glossary display.
+    $display = 'page_2';
     if ($view_type == 'map_view') {
       $display = 'page_3';
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'none']));
