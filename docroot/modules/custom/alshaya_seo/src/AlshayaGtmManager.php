@@ -327,7 +327,7 @@ class AlshayaGtmManager {
     if ($brand_tid) {
       $brand = $this->entityManager->getStorage('taxonomy_term')->loadByProperties([
         'tid' => $brand_tid,
-        'language' => 'en',
+        'langcode' => 'en',
       ]);
 
       $brand_name = $brand->label();
