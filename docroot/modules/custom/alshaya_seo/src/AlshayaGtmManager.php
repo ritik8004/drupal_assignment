@@ -325,7 +325,6 @@ class AlshayaGtmManager {
     }
 
     if ($brand_tid) {
-      $this->entityManager->getTranslationFromContext()
       $brand = $this->entityManager->getStorage('taxonomy_term')->loadByProperties([
         'tid' => $brand_tid,
         'language' => 'en',
