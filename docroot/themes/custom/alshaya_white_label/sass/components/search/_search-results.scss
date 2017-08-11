@@ -204,10 +204,12 @@ header,
   z-index: 99;
   background: $white-five;
   border: 1px solid $white;
+  border-top: 0;
+  text-align: $left;
 
   li.ui-menu-item {
     display: inherit;
-    padding: 10px 1rem 10px 7.5px;
+    padding: 7px;
     border: 1px solid transparent;
 
     &:not(:last-child) {
@@ -235,23 +237,17 @@ header,
     @include breakpoint($only-mobile) {
       z-index: 9999;
       position: fixed !important;
-      top: 8.125rem !important;
+      top: 9.6rem !important;
     }
   }
 }
 
 .search-api-autocomplete-suggestion {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
+  padding-#{$left}: 0.25rem;
 
-  @include breakpoint($only-tablet) {
-    font-size: 0.625rem;
-  }
-
-  @include breakpoint($only-mobile) {
-    padding-#{$left}: 0.625rem;
-    font-weight: 700;
-    font-size: 0.625rem;
-    padding-#{$left}: 0.25rem;
+  @include breakpoint($desktop) {
+    font-size: 0.75rem;
   }
 }
 
