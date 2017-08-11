@@ -719,6 +719,8 @@ class AlshayaGtmManager {
       }
     }
 
+    $privilege_order = isset($order['extension']['loyalty_card']) ? TRUE : FALSE;
+
     foreach ($orderItems as $key => $item) {
       $product = $this->fetchSkuAtttributes($item['sku']);
       $productNode = alshaya_acm_product_get_display_node($item['sku']);
@@ -754,6 +756,7 @@ class AlshayaGtmManager {
       'general' => $generalInfo,
       'products' => $products,
       'actionField' => $actionData,
+      'previlegeOrder' => $privilege_order,
     ];
   }
 
