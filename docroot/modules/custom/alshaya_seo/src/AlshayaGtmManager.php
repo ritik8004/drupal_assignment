@@ -329,9 +329,11 @@ class AlshayaGtmManager {
         'tid' => $brand_tid,
         'langcode' => 'en',
       ]);
-
-      $brand_name = $brand->label();
-      $attributes['gtm-brand'] = $brand_name;
+      if (count($brand)) {
+        $brand = array_shift($brand);
+        $brand_name = $brand->label();
+        $attributes['gtm-brand'] = $brand_name;
+      }
     }
     else {
       $attributes['gtm-brand'] = 'Mothercare Kuwait';
