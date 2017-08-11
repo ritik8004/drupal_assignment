@@ -934,6 +934,9 @@ function alshaya_master_install() {
     'Phone number in %field is required.' => [
       'ar' => 'يرجى إدخال رقم الجوال',
     ],
+    'Phone number in %field is required.' => [
+      'en' => '%field field is required.',
+    ],
     '1 hour' => [
       'ar' => 'ساعة واحدة',
     ],
@@ -1029,6 +1032,25 @@ function alshaya_master_install() {
     ],
     'Security code (CVV)' => [
       'ar' => 'الرقم السري للبطاقة CVV',
+    ],
+    'Home' => [
+      'ar' => 'الصفحة الرئيسية',
+      'context' => 'breadcrumb',
+    ],
+    'Collection' => [
+      'ar' => 'المجموعة',
+    ],
+    'Style Code: @value' => [
+      'ar' => '@value :رمز المنتج',
+    ],
+    'Season: @value' => [
+      'ar' => '@value :الموسم',
+    ],
+    'Product brand: @value' => [
+      'ar' => '@value :العلامة التجارية',
+    ],
+    'Color: @value' => [
+      'ar' => '@value :اللون',
     ],
   ];
   alshaya_i18n_save_translations($strings);
