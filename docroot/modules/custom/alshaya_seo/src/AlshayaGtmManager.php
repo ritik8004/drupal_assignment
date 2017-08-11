@@ -260,7 +260,7 @@ class AlshayaGtmManager {
     if ($current_route_name === 'entity.taxonomy_term.canonical') {
       $taxonomy_term = $this->currentRouteMatch->getParameter('taxonomy_term');
       if ($taxonomy_term->getVocabularyId() === 'acq_product_category') {
-        $taxonomy_parents = \Drupal::entityManager()->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id());
+        $taxonomy_parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id());
         $taxonomy_parents = array_reverse($taxonomy_parents);
 
         foreach ($taxonomy_parents as $taxonomy_parent) {
@@ -325,7 +325,12 @@ class AlshayaGtmManager {
     }
 
     if ($brand_tid) {
-      $brand = $this->entityManager->getStorage('taxonomy_term')->load($brand_tid);
+      $this->entityManager->getTranslationFromContext()
+      $brand = $this->entityManager->getStorage('taxonomy_term')->loadByProperties([
+        'tid' => $brand_tid,
+        'language' => 'en',
+      ]);
+
       $brand_name = $brand->label();
       $attributes['gtm-brand'] = $brand_name;
     }
