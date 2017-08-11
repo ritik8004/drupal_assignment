@@ -349,6 +349,10 @@
     position: absolute;
     top: 7.4rem;
     #{$left}: 57%;
+
+    html[lang=ar] & {
+      #{$left}: 64%;
+    }
   }
 
   .mobile-tooltip-icon {
@@ -409,7 +413,7 @@
         width: 0;
         position: absolute;
         pointer-events: none;
-        #{$right}: 5.3rem;
+        #{$right}: 5.25rem;
 
         @extend %tooltip-before;
       }
