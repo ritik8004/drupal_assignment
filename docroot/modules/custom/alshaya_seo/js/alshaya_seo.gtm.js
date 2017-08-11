@@ -570,10 +570,6 @@
       'metric1': product.attr('gtm-cart-value')
     };
 
-    if (product.attr('gtm-path-trace')) {
-      productData.dimension8 = product.attr('gtm-path-trace');
-    }
-
     return productData;
   };
 
