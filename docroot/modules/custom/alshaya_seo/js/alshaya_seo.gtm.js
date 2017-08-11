@@ -116,10 +116,12 @@
           leadType = 'confirmation';
         }
 
-        dataLayer.push({
-          'event' : 'leads',
-          'leadType': leadType
-        });
+        if (leadType) {
+          dataLayer.push({
+            'event' : 'leads',
+            'leadType': leadType
+          });
+        }
 
         var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
         if (pcRegistration !== undefined && pcRegistration !== '6362544') {
