@@ -25,8 +25,8 @@ use GuzzleHttp\HandlerStack;
  *   Store id.
  */
 function invoke_api($api, $method = 'GET', array $options = [], $store_id = 1) {
-  $env = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/v1/';
-  $env = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/v1/';
+  // $env = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/v1/';
+  // $env = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/v1/';
   $env = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/v1/';
 
   $endpoint = $env . $api;
