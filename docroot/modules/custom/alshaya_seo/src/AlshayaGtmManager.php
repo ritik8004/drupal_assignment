@@ -325,14 +325,15 @@ class AlshayaGtmManager {
     }
 
     if ($brand_tid) {
-      $this->entityManager->getTranslationFromContext()
       $brand = $this->entityManager->getStorage('taxonomy_term')->loadByProperties([
         'tid' => $brand_tid,
-        'language' => 'en',
+        'langcode' => 'en',
       ]);
-
-      $brand_name = $brand->label();
-      $attributes['gtm-brand'] = $brand_name;
+      if (count($brand)) {
+        $brand = array_shift($brand);
+        $brand_name = $brand->label();
+        $attributes['gtm-brand'] = $brand_name;
+      }
     }
     else {
       $attributes['gtm-brand'] = 'Mothercare Kuwait';
