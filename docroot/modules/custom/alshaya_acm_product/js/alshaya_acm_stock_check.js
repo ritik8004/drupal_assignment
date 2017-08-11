@@ -61,7 +61,7 @@
       });
 
       // Check stock for mobile & load add cart form if stock-check successful.
-      if ($(window).width() <= 768) {
+      if ($(window).width() < 768) {
         $('.horizontal-crossell.mobile-only-block article[data-vmode="teaser"], .horizontal-upell.mobile-only-block article[data-vmode="teaser"], #block-baskethorizontalproductrecommendation.horizontal-crossell article[data-vmode="teaser"], #block-baskethorizontalproductrecommendation.horizontal-upell article[data-vmode="teaser"]', context).find('article').once('js-event').each(function() {
           var that = $(this);
           if (!that.closest('article[data-vmode="teaser"]').hasClass('stock-check-processed')) {
