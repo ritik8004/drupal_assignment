@@ -840,8 +840,8 @@ class AlshayaGtmManager {
           'productName' => $node->getTitle(),
           'productBrand' => $sku_attributes['gtm-brand'],
           'productColor' => '',
-          'productPrice' => $sku_attributes['gtm-price'],
-          'productOldPrice' => $sku_entity->get('price')->getString() ?: '',
+          'productPrice' => (float) $sku_attributes['gtm-price'],
+          'productOldPrice' => (float) $sku_entity->get('price')->getString() ?: '',
           'productPictureUrl' => $product_media_url,
           'productRating' => '',
           'productReviews' => '',
@@ -1009,13 +1009,15 @@ class AlshayaGtmManager {
     $cart_items_flock = [];
 
     foreach ($items as $item) {
-      $sku_media = alshaya_acm_product_get_sku_media($item['sku'], TRUE);
+      $product_node = alshaya_acm_product_get_display_node($item['sku']);
+      // Get product media.
+      $sku_media = alshaya_acm_product_get_product_media($product_node->id(), TRUE) ?: '';
       if ($sku_media) {
         $sku_media_file = $sku_media['file'];
         $sku_media_url = file_create_url($sku_media_file->getFileUri());
       }
       else {
-        $sku_media_url = '';
+        $sku_media_url = 'image not available';
       }
 
       $cart_items_flock[] = [
