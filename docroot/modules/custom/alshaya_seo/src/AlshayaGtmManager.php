@@ -581,7 +581,7 @@ class AlshayaGtmManager {
     }
 
     foreach ($taxonomy_parents as $taxonomy_parent) {
-      $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+      $terms[$taxonomy_parent->id()] = trim($taxonomy_parent->getName());
     }
 
     $terms = array_reverse($terms);
