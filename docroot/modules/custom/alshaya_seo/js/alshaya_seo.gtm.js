@@ -70,14 +70,16 @@
       }
 
       if (isSearchPage) {
-        var keyword = $('#edit-keywords').val();
-        var noOfResult = parseInt($('.view-header').text().replace(Drupal.t('items'), '').trim());
+        var keyword = $('#edit-keywords', context).val();
+        var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
 
-        dataLayer.push({
-          'event': 'internalSearch',
-          'keyword': keyword,
-          'noOfResult': noOfResult
-        });
+        if (keyword !== undefined) {
+          dataLayer.push({
+            'event': 'internalSearch',
+            'keyword': keyword,
+            'noOfResult': noOfResult
+          });
+        }
       }
 
       if (isRegistrationSuccessPage) {
@@ -218,17 +220,24 @@
       }
       else if ($.inArray(gtmPageType, impressionPages) !== -1) {
         var count = 1;
-        productLinkSelector.each(function() {
-          var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-          impression.list = listName;
-          impression.position = count;
-          // Keep variant empty for impression pages. Populated only post add to cart action.
-          impression.variant = '';
-          impressions.push(impression);
-          count++;
-        });
+        if (productLinkSelector.length > 0) {
+          productLinkSelector.each(function() {
+            if (!$(this).hasClass('impression-processed')) {
+              $(this).addClass('impression-processed');
+              var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
+              impression.list = listName;
+              impression.position = count;
+              // Keep variant empty for impression pages. Populated only post add to cart action.
+              impression.variant = '';
+              impressions.push(impression);
+              count++;
+            }
+          });
 
-        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
+          if (impressions.length > 0) {
+            Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
+          }
+        }
       }
 
       /** Add to cart GTM **/
@@ -299,7 +308,7 @@
             'event': event,
             'ecommerce': {
               'currencyCode': currencyCode,
-              'add': {
+              'remove': {
                 'products': [
                   product
                 ]
@@ -334,7 +343,7 @@
             'event': 'removeFromCart',
             'ecommerce': {
               'currencyCode': currencyCode,
-              'add': {
+              'remove': {
                 'products': [
                   product
                 ]
