@@ -424,6 +424,23 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
     }
 
+    $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $site_default_langcode = 'ar';
+    $configurable_sizes = $form['ajax']['configurables']['size'];
+    if (\Drupal::languageManager()->getCurrentLanguage()->getId() !== $site_default_langcode) {
+      foreach ($configurable_sizes['#options'] as $key => $option) {
+        $default_language_option_val = \Drupal::database()->select('acq_sku__attr_size', 'asas')
+          ->fields('asas', ['attr_size_value'])
+          ->condition('asas.langcode', $site_default_langcode)
+          ->condition('entity_id', $key)
+          ->execute()->fetchField();
+
+        $options[$option] = $default_language_option_val;
+      }
+
+      $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
+    }
+
     foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
       if (is_array($configurable)) {
         $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
@@ -433,7 +450,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         unset($configurable['#ajax']['wrapper']);
 
         $configurable['#options_attributes'] = [];
-
         // Check if it is a dropdown, we disable the options for which we don't
         // have stock.
         if (isset($configurable['#options'])) {
