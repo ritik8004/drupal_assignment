@@ -425,7 +425,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     }
 
     $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
-    $site_default_langcode = 'ar';
     $configurable_sizes = $form['ajax']['configurables']['size'];
     if (\Drupal::languageManager()->getCurrentLanguage()->getId() !== $site_default_langcode) {
       foreach ($configurable_sizes['#options'] as $key => $option) {
