@@ -458,7 +458,7 @@
 
         var datalayer_product_modal = {
           'ecommerce': {
-            'currencyCode': 'KWD',
+            'currencyCode': currencyCode,
             'detail': {
               'products': [product]
             }
