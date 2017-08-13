@@ -453,6 +453,21 @@
         });
       });
 
+      if ($(context).find('article[data-vmode="modal"]').length === 1) {
+        var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
+
+        var datalayer_product_modal = {
+          'ecommerce': {
+            'currencyCode': currencyCode,
+            'detail': {
+              'products': [product]
+            }
+          }
+        };
+
+        dataLayer.push(datalayer_product_modal);
+      }
+
       /** Product click handler for Modals. **/
       // Add click link handler to fire 'productClick' event to GTM.
       $('a[href*="product-quick-view"]').each(function() {
