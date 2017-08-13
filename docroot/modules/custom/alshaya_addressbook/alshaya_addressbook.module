@@ -100,7 +100,9 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       '#default_value' => isset($element['organization']) ? $element['organization']['#default_value'] : '',
       '#title' => t('Email', [], ['context' => 'Address label']),
       '#description' => t("We'll send your order confirmation here."),
+      '#element_validate' => ['alshaya_valid_email_address'],
     ];
+    $element['#attached']['library'][] = 'alshaya_user/email_validator_override';
   }
   else {
     $element['organization']['#required'] = FALSE;
