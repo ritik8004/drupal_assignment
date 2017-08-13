@@ -246,9 +246,20 @@
   }
 }
 
+.c-footer-menu--help {
+  width: 30%;
+  margin-#{$left}: 5%;
+}
+
 .c-footer-menu--about .c-footer-menu {
   @include breakpoint($desktop) {
     min-width: 9.4rem;
+  }
+}
+
+#alshaya-newsletter-subscribe {
+  #edit-email {
+    padding-#{$right}: 33%;
   }
 }
 
@@ -456,7 +467,7 @@
 
   @include breakpoint($desktop) {
     float: $left;
-    margin-#{$left}: 0;
+    margin-#{$left}: 10%;
     width: 50%;
   }
 
