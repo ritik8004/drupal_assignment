@@ -335,7 +335,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           '#markup' => implode(', ', $promotions),
         ];
       }
-
     }
 
     $build['#attached']['library'][] = 'alshaya_acm_product/stock_check';

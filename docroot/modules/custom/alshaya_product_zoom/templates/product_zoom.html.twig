@@ -7,6 +7,11 @@
           <span class="hover-text">{{ 'Hover over image to zoom'|t }}</span><span class="mobile-hover-text">{{ 'Double tap image to zoom'|t }}</span>
         </a>
       </div>
+      {%  if labels|length > 0 %}
+        <div class="product-labels">
+          {{ labels }}
+        </div>
+      {% endif %}
       <div id="yt-vi-container" class= "cloudzoom__video"></div>
     </div>
     <div class="cloudzoom__thumbnails">
@@ -49,6 +54,11 @@
         {% endif %}
       {% endfor %}
     </ul>
+    {%  if labels|length > 0 %}
+      <div class="product-labels">
+        {{ labels }}
+      </div>
+    {% endif %}
     <div class="subtext"><p>{{ 'Tap to enlarge'|t }}</p><p>{{ 'Swipe to view more images'|t }}</p></div>
   </div>
   <div id="product-image-gallery-container" class="imagegallery" style="display: none;">
