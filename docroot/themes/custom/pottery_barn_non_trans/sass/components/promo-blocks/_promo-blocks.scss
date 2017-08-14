@@ -3,7 +3,6 @@
     text-align: center;
   }
 
-
   img {
     vertical-align: middle;
   }
@@ -43,7 +42,6 @@
     }
   }
 
-
   @include breakpoint($tablet) {
     width: 31.77%;
     width: calc(33.33% - 1rem);
@@ -54,11 +52,9 @@
     }
   }
 
-
   @include breakpoint($tablet (orientation portrait)) {
     width: 31%;
   }
-
 
   .field--name-field-link {
     color: $peacock-blue;
@@ -68,7 +64,6 @@
     @include breakpoint($tablet) {
       font-size: 0.9375rem;
     }
-
 
     @include breakpoint($desktop) {
       font-size: 1.375rem;
@@ -86,11 +81,9 @@
       padding-bottom: 0.5rem;
     }
 
-
     @include breakpoint($tablet) {
       font-size: 0.6875rem;
     }
-
 
     @include breakpoint($desktop) {
       font-size: 1rem;
@@ -113,7 +106,6 @@
     margin-bottom: 0.75rem;
   }
 
-
   @include breakpoint($tablet) {
     float: $left;
   }
@@ -125,18 +117,15 @@
     max-width: 18rem;
   }
 
-
   .c-promo-1-2__item {
     @include breakpoint($tablet) {
       float: $right;
     }
 
-
     &:first-child {
       @include breakpoint($only-mobile) {
         margin-bottom: 0.75rem;
       }
-
 
       @include breakpoint($tablet) {
         margin-bottom: 1.5rem;
@@ -200,7 +189,6 @@
   @include breakpoint($tablet) {
     width: calc(50% - 0.75rem);
   }
-
 
   &:first-child {
     float: $left;
@@ -306,7 +294,6 @@ a.selected {
       }
     }
 
-
     @include breakpoint($upto-tablet) {
       width: 100%;
       margin: 0 auto;
@@ -341,9 +328,6 @@ a.selected {
     border-bottom: 1px solid $white;
     color: $black-two;
     padding-bottom: 10px;
-
-    //margin-top: 10px;
- 
   }
 
   h3:not(.signup-form-title) {
@@ -478,7 +462,6 @@ a.selected {
   }
 }
 
-
 @include breakpoint($upto-tablet) {
   .signup-form {
     .form--signup-elements {
@@ -491,7 +474,6 @@ a.selected {
     }
   }
 }
-
 
 .ms-signup {
   margin-bottom: 20px;
@@ -776,7 +758,6 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
       width: 90%;
     }
   }
-
 
   @include breakpoint($upto-tablet) {
     .thanku-popup {
