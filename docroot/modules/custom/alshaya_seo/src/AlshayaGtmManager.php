@@ -548,7 +548,14 @@ class AlshayaGtmManager {
 
     $attributes['privilegeOrder'] = $isPrivilegeOrder;
     $shipping = $cart->getShipping();
-    $attributes['delivery_phone'] = property_exists($shipping, 'telephone') ? $shipping->telephone : '';
+
+    // @TODO: Check why we receive inconsistent feedback from conductor: Array on QA & Object on UAT."
+    if (is_object($shipping)) {
+      $attributes['delivery_phone'] = property_exists($shipping, 'telephone') ? $shipping->telephone : '';
+    }
+    elseif (is_array($shipping)) {
+      $attributes['delivery_phone'] = isset($shipping['telephone']) ? $shipping['telephone'] : '';
+    }
 
     return $attributes;
   }
