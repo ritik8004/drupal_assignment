@@ -79,7 +79,7 @@
       if (context === document) {
         // Toggle for Product description.
         $('.read-more-description-link').on('click', function () {
-          $('.c-pdp .description-wrapper').toggle('slow');
+          $('.c-pdp .description-wrapper').toggleClass('desc-open');
           if ($(window).width() < 768) {
             $('.c-pdp .short-description-wrapper').toggle('slow');
             if ($('.c-pdp .description-wrapper .show-less-link').length < 1) {
@@ -90,7 +90,7 @@
         });
 
         $('.close').on('click', function () {
-          $('.c-pdp .description-wrapper').toggle('slow');
+          $('.c-pdp .description-wrapper').toggleClass('desc-open');
         });
 
         $('.c-pdp .description-wrapper .field__content')
