@@ -77,8 +77,12 @@
       }
     }
 
+    .price-currency {
+      margin-right: 1.5625rem;
+    }
+
     .price-amount {
-      float: $right;
+      float: none;
     }
   }
 

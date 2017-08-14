@@ -645,6 +645,7 @@
   }
 
   #apply_coupon {
+    font-family: $alshaya-bold;
     display: inline-block;
     margin-bottom: 14px;
     padding: 9px 30px;
@@ -860,7 +861,7 @@
 #table-cart-totals,
 #table-cart-items {
   .price-wrapper .price-amount {
-    float: right;
+    float: none;
   }
 }
 
@@ -875,12 +876,13 @@
   }
 
   .price-amount {
-    float: $right !important;
+    float: none !important;
   }
 
   .price-currency {
     float: left !important;
     padding: 0;
+    margin-right: 1.5625rem;
   }
 }
 
@@ -1065,7 +1067,7 @@ html[lang=ar] {
 
   #table-cart-items table tr td.subtotal .price-currency.suffix {
     left: 0.5rem !important;
-    float: left !important;
+    float: none !important;
   }
 
   .alias--cart #table-cart-totals table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] td:nth-child(2) {
@@ -1152,7 +1154,8 @@ html[lang=ar] {
 
   table tr td.subtotal {
     span.price-amount {
-      margin-left: 0.5rem;
+      margin-left: 1.5625rem;
+      float: right;
     }
 
     .price-currency.suffix {
@@ -1200,9 +1203,13 @@ td.price {
       display: inline-block;
       width: 100%;
 
+      .discount-prefix {
+        margin-right: 1.5625rem;
+      }
+
       .discount-value {
         @include breakpoint($tablet) {
-          float: right;
+          float: none;
         }
       }
 
@@ -1236,9 +1243,18 @@ td.price {
         }
 
         .price-amount {
-          float: right !important;
+          float: none !important;
         }
       }
     }
   }
 }
+
+body .ladda-button {
+  border-radius: 0;
+}
+
+.messages.messages--status {
+  font-family: $alshaya-bold;
+}
+
