@@ -227,6 +227,10 @@ function mapsApp(lat, lng) {
   // If it is an iPhone..
   if ((navigator.platform.indexOf('iPhone') !== -1)
     || (navigator.platform.indexOf('iPod') !== -1)
-    || (navigator.platform.indexOf('iPad') !== -1)) {window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + lng + '&amp;ll=');}
-  else {window.open('geo:' + lat + ',' + lng + '');}
+    || (navigator.platform.indexOf('iPad') !== -1)) {
+    window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + lng + '&amp;ll=', '_self');
+  }
+  else {
+    window.open('geo:' + lat + ',' + lng + '', '_self');
+  }
 }
