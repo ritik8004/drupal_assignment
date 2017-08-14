@@ -3,18 +3,32 @@
  * Custom js file.
  */
 
-(function ($, Drupal) {
-  'use strict';
+ (function ($, Drupal) {
+   'use strict';
 
   // Home page email sign up form popup.
-  $('#contact,.email-signup').on('click', function (e) {
-    $('.messagepop').show();
-    e.preventDefault();
-  });
+   var SignupField = $('.form--signup-elements');
 
-  $('.close-popup').on('click', function () {
-    $('.messagepop').hide();
-    $('.messages--status').hide();
-  });
+   if (SignupField.hasClass('form-item--error')) {
+     $('.signup-popup').show();
+   }
+   else {
+     $('.signup-popup').hide();
+   }
 
-})(jQuery, Drupal);
+   $('#contact, .email-signup').on('click', function (e) {
+     $('.signup-popup').show();
+     e.preventDefault();
+   });
+
+   $('.c-footer__copy a').on('click', function (e) {
+     $('.privacy-popup').show();
+     e.preventDefault();
+   });
+
+   $('.close-popup').on('click', function () {
+     $('.signup-popup, .privacy-popup').hide();
+     $('.messages--status').hide();
+   });
+
+ })(jQuery, Drupal);
