@@ -1,0 +1,160 @@
+.c-content__slider {
+  text-align: center;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  @include breakpoint($tablet) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.c-slider-promo__items {
+  position: relative;
+}
+
+.c-slider-promo {
+  position: relative;
+
+  a {
+    @include u-overlay-content;
+    @include u-image-replacement;
+  }
+}
+
+.owl-prev,
+.owl-next,
+.slick-prev,
+.slick-next {
+  @include breakpoint($tablet) {
+    top: 45%;
+    top: calc(50% - 1.125rem);
+
+    // 50% - (2.25rem / 2)
+  }
+
+  @include breakpoint($only-mobile) {
+    top: 45%;
+    top: calc(50% - (4.75rem + 1.125rem));
+
+    // 50% - (4.375rem - (2.25rem / 2))
+  }
+
+  @include u-image-replacement;
+
+  cursor: pointer;
+  position: absolute;
+  background: none;
+  border: none;
+  z-index: 3;
+  padding: 0;
+
+  &::before {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 100%;
+    height: 2.25rem;
+    line-height: 2.25rem;
+    width: 2.25rem;
+    color: #000;
+    font-size: 2rem;
+    display: block;
+  }
+}
+
+.owl-prev,
+.slick-prev {
+  @include breakpoint($tablet) {
+    left: 1.65rem;
+  }
+
+  @include icon(chevronleft) {
+    padding-#{$right}: 0.1875rem;
+  }
+
+  left: 0.5rem;
+}
+
+.owl-next,
+.slick-next {
+  @include breakpoint($tablet) {
+    right: 1.65rem;
+  }
+
+  @include icon(chevronright) {
+    padding-#{$left}: 0.1875rem;
+  }
+
+  right: 0.5rem;
+}
+
+.owl-dots,
+.slick-dots {
+  .ie & {
+    /* IE 10 */
+    background: url("../imgs/assets/FFFFFF.png") repeat;
+  }
+
+  @include breakpoint($tablet) {
+    @include u-center--horizontally;
+
+    bottom: 0;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 0;
+  }
+
+  padding-#{$left}: 0;
+}
+
+.owl-dot,
+.slick-dots li {
+  @include breakpoint($tablet) {
+    color: $white-five;
+  }
+
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 100%;
+  color: $marine-blue-two;
+  border: 1px solid currentColor;
+  display: inline-block;
+  margin: 1em 0.75em;
+  padding-#{$left}: 0;
+
+  &.active,
+  &.slick-active {
+    background: currentColor;
+  }
+
+  button {
+    display: none;
+  }
+}
+
+// Video Banner
+.video_banner {
+  position: relative;
+  max-width: 1284px;
+
+  .video_banner_content {
+    position: absolute;
+    width: 30%;
+    bottom: 50px;
+    left: 25px;
+  }
+}
+
+@include breakpoint($upto-tablet) {
+  .video_banner .video_banner_content {
+    position: static;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .c-content__slider {
+    display: none;
+  }
+}
