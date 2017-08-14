@@ -370,7 +370,11 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     // Press the down arrow to select the first option.
     $driver->keyDown($xpath, 40);
     $driver->keyUp($xpath, 40);
+    $driver->keyDown($xpath, 40);
+    $driver->keyUp($xpath, 40);
     // Press the Enter key to confirm selection, copying the value into the field.
+    $driver->keyDown($xpath, 13);
+    $driver->keyUp($xpath, 13);
     $driver->keyDown($xpath, 13);
     $driver->keyUp($xpath, 13);
     // Wait for AJAX to finish.
