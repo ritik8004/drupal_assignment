@@ -412,7 +412,7 @@
   }
 
   .by--alphabet {
-    position: relative;
+    @include clearfix;
 
     @include breakpoint($tablet) {
       padding-bottom: 2rem;
@@ -421,6 +421,8 @@
     @include breakpoint($tablet) {
       padding-bottom: 3rem;
     }
+
+    position: relative;
 
     h3,
     .rows {
@@ -434,9 +436,10 @@
       font-weight: normal;
       color: $marine-blue;
       line-height: 1.6;
-      width: 1.563rem;
       margin: 0;
       text-transform: uppercase;
+      float: $left;
+      width: 10%;
 
       @include breakpoint($only-mobile) {
         display: none !important;
@@ -447,6 +450,12 @@
       font-size: 14px;
       line-height: 232%;
       margin-#{$left}: 1.7rem;
+
+      @include breakpoint($tablet) {
+        width: 88%;
+        margin: 0;
+        float: $right;
+      }
 
       @include breakpoint($only-mobile) {
         width: 100%;
@@ -520,6 +529,14 @@
         @include breakpoint($tablet) {
           padding: 0 3.25rem;
           padding-#{$right}: 2.5rem;
+        }
+      }
+
+      .field--name-field-store-phone {
+        html[lang=ar] & {
+          direction: ltr;
+          display: inline-block;
+          text-align: right;
         }
       }
     }
@@ -817,10 +834,11 @@
 
   .list-view-link,
   .map-view-link {
+    line-height: 1.4;
+
     @include breakpoint($tablet) {
       height: 2.9375rem;
       border: 1px solid transparent;
-      line-height: 1.7;
     }
 
     @include breakpoint($desktop) {
@@ -1128,6 +1146,10 @@
     #{$right}: 1rem;
     width: 18px;
     height: 18px;
+
+    html[lang=ar] & {
+      transform: scaleX(-1);
+    }
   }
 
   .open--hours {
