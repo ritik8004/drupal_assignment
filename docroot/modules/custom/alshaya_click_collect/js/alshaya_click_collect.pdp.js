@@ -36,18 +36,6 @@
         });
       }
 
-      // Show/Hide subtitle for delivery options accordions.
-      $('.c-accordion-delivery-options').each(function () {
-        $(this).once('accordion-trigger').on('accordionbeforeactivate', function (event, ui) {
-          if (ui.newHeader.length > 0) {
-            $(event.target).find('h3 > .subtitle').slideUp();
-          }
-          else {
-            $(event.target).find('h3 > .subtitle').slideDown('slow');
-          }
-        });
-      });
-
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Get the permission track the user location.
         Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);

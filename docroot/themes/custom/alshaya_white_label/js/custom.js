@@ -1,4 +1,4 @@
-/**
+  /**
  * @file
  * Custom js file.
  */
@@ -35,6 +35,11 @@
           if ($('body').hasClass('header--fixed')) {
             $('html,body').animate({
               scrollTop: $('.content__title_wrapper').offset().top - normalStickyHeaderHeight
+            }, 'slow');
+          }
+          else {
+            $('html,body').animate({
+              scrollTop: $('.content__title_wrapper').offset().top
             }, 'slow');
           }
         }

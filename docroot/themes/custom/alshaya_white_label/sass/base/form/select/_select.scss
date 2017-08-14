@@ -131,9 +131,14 @@ select:focus::-ms-value {
         background-color: $white-five;
       }
 
+      &[aria-disabled=true],
       &:hover {
         color: $grey-ash;
         background: $white-four;
+      }
+
+      &[aria-disabled=true] {
+        color: $greyish;
       }
     }
   }
