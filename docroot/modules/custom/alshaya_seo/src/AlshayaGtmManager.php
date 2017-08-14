@@ -305,6 +305,7 @@ class AlshayaGtmManager {
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
       $brand = $parent_sku->get('attr_product_brand')->getString();
+      $attributes['gtm-dimension2'] = $parent_sku->get('attr_product_collection')->getString();
     }
 
     $attributes['gtm-brand'] = $brand ?: 'Mothercare Kuwait';
@@ -547,7 +548,14 @@ class AlshayaGtmManager {
 
     $attributes['privilegeOrder'] = $isPrivilegeOrder;
     $shipping = $cart->getShipping();
-    $attributes['delivery_phone'] = isset($shipping['telephone']) ? $shipping['telephone'] : '';
+
+    // @TODO: Check why we receive inconsistent feedback from conductor: Array on QA & Object on UAT."
+    if (is_object($shipping)) {
+      $attributes['delivery_phone'] = property_exists($shipping, 'telephone') ? $shipping->telephone : '';
+    }
+    elseif (is_array($shipping)) {
+      $attributes['delivery_phone'] = isset($shipping['telephone']) ? $shipping['telephone'] : '';
+    }
 
     return $attributes;
   }
@@ -581,7 +589,7 @@ class AlshayaGtmManager {
     }
 
     foreach ($taxonomy_parents as $taxonomy_parent) {
-      $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+      $terms[$taxonomy_parent->id()] = trim($taxonomy_parent->getName());
     }
 
     $terms = array_reverse($terms);

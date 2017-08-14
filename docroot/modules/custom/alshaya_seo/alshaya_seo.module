@@ -365,7 +365,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           if (!$confirmation_page) {
             $data_layer['privilegeOrder'] = $privilegeOrder;
             $data_layer_cart = [
-              'event' => 'checkout',
               'ecommerce' => [
                 'currencyCode' => $currency_code,
                 'checkout' => [

@@ -127,6 +127,10 @@
       border-#{$left}: 0;
       z-index: 1;
 
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 1rem;
+      }
+
       @include breakpoint($tablet) {
         border: 1px solid $white;
         border-#{$left}: 0;
@@ -213,6 +217,18 @@
       display: inline-block;
       vertical-align: middle;
       margin-#{$right}: 0.6875rem;
+    }
+  }
+
+  .current-location {
+    @include breakpoint($only-tablet) {
+      #{$left}: 0;
+      padding-#{$left}: 2.125rem !important;
+
+      &::before {
+        position: absolute;
+        #{$left}: 0;
+      }
     }
   }
 
@@ -315,7 +331,10 @@
     &.active {
       border: 1px solid $marine-blue;
       color: $marine-blue;
-      font-family: $alshaya-bold;
+
+      @include breakpoint($only-tablet) {
+        font-family: $alshaya-thin;
+      }
     }
   }
 
@@ -681,6 +700,20 @@
     .label--location {
       max-width: 100%;
       float: $left;
+
+      html[lang=ar] & {
+        &::before {
+          transform: scaleX(-1);
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          width: 45%;
+        }
+
+        width: 49%;
+      }
     }
 
     .current-location {
@@ -787,6 +820,7 @@
     @include breakpoint($tablet) {
       height: 2.9375rem;
       border: 1px solid transparent;
+      line-height: 1.7;
     }
 
     @include breakpoint($desktop) {
