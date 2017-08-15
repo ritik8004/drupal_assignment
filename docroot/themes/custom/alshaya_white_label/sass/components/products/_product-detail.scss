@@ -116,7 +116,7 @@
     }
 
     .price {
-      font-size: 0.9375rem;
+      font-size: 1rem;
       color: $black;
       margin-bottom: 1rem;
     }
@@ -1381,16 +1381,16 @@
         margin-bottom: 0.3125rem;
         margin-#{$right}: 0.5rem;
         margin-#{$left}: 0;
-        border: 1px solid $black;
+        border: 1px solid $marine-blue;
         text-align: center;
         padding: 0.75rem;
-        font-size: 0.625rem;
-        color: $black;
+        font-size: 0.875rem;
+        color: $marine-blue;
 
         &.picked {
-          color: $white;
+          color: $white-five;
           font-weight: bold;
-          background: $black;
+          background: $marine-blue;
         }
       }
 
