@@ -150,8 +150,16 @@ class AcqPromotionsManager {
 
       // Detach promotion from all skus.
       $attached_skus = $this->getSkusForPromotion($node);
+
+      // Extract sku text from sku objects.
+      if (!empty($attached_skus)) {
+        foreach ($attached_skus as $attached_sku) {
+          $attached_promotion_skus[] = $attached_sku->getSku();
+        }
+      }
+
       if ($attached_skus) {
-        $data['skus'] = $attached_skus;
+        $data['skus'] = $attached_promotion_skus;
         $data['promotion'] = $node->id();
         $acq_promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
         $acq_promotion_detach_queue->createItem($data);
@@ -332,8 +340,11 @@ class AcqPromotionsManager {
         $fetched_promotion_skus[] = $product['product_sku'];
         $fetched_promotion_sku_attach_data[$product['product_sku']] = [
           'sku' => $product['product_sku'],
-          'final_price' => $product['final_price'],
         ];
+
+        if (isset($product['final_price'])) {
+          $fetched_promotion_sku_attach_data[$product['product_sku']]['final_price'] = $product['final_price'];
+        }
       }
 
       // Check if this promotion exists in Drupal.

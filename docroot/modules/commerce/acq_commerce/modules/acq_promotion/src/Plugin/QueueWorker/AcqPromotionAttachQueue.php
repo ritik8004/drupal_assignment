@@ -45,6 +45,7 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
     $promotion_nid = $data['promotion'];
     $promotion_attach_item = ['target_id' => $promotion_nid];
     $skus_not_found = [];
+    $attached_skus = [];
 
     foreach ($skus as $key => $sku) {
       $update_sku_flag = FALSE;
@@ -64,6 +65,7 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
         if ($update_sku_flag) {
           $sku_entity->save();
         }
+        $attached_skus[] = $sku['sku'];
       }
       else {
         $skus_not_found[] = $sku['sku'];
@@ -76,7 +78,7 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
     }
 
     $this->loggerFactory->get('acq_sku')->info('Attached Promotion:@promo to SKUs: @skus',
-      ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
+      ['@promo' => $promotion_nid, '@skus' => implode(',', $attached_skus)]);
   }
 
 }
