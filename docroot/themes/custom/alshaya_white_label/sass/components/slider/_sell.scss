@@ -66,10 +66,10 @@
       text-decoration: underline;
     }
 
-    @include breakpoint($desktop) {
-      padding-#{$left}: 1.5rem;
-      padding-#{$right}: 0.7rem;
-    }
+    //@include breakpoint($desktop) {
+    //  padding-#{$left}: 1.5rem;
+    //  padding-#{$right}: 0.7rem;
+    //}
   }
 
   .quantity.out-of-stock {
@@ -163,7 +163,7 @@
     }
 
     @include breakpoint($desktop) {
-      right: -3.2rem;
+      right: -2rem;
     }
   }
 
@@ -189,6 +189,10 @@
     @include breakpoint($tablet) {
       top: 21.7%;
     }
+
+    @include breakpoint($tablet) {
+      top: 25%;
+    }
   }
 }
 
@@ -208,7 +212,7 @@
 }
 
 .subtitle.crossell-title {
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-family: $alshaya-bold;
   font-weight: normal;
   text-align: $left;
@@ -258,10 +262,10 @@
       float: none;
       width: 100%;
       clear: both;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       text-transform: lowercase;
       color: $white-five;
-      background: $tomato;
+      background: $pumpkin-orange;
       border: none;
       padding: 0.656rem;
 
@@ -274,7 +278,7 @@
       display: block;
       position: absolute;
       top: -1.5625rem;
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
       padding: 0.3125rem 0;
       padding-#{$right}: 1.25rem;
       #{$left}: 0;

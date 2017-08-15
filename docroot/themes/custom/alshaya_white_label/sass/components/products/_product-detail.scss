@@ -298,26 +298,27 @@
 
   @include breakpoint($only-mobile) {
     padding: 1rem 0;
+    display: none;
   }
 
   .field {
     &__label {
-      font-size: 0.875rem;
-      font-family: $alshaya-bold;
-      font-weight: normal;
+      font-size: 1rem;
+      font-family: $arial;
+      font-weight: bold;
       color: $marine-blue;
       margin-top: 0;
     }
 
     &__content {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       line-height: 1.5;
     }
   }
 
   a {
     font-family: $arial;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
     color: $windows-blue;
@@ -329,17 +330,17 @@
   }
 
   .desc-label {
-    font-family: $alshaya-bold;
-    font-weight: normal;
+    font-family: $arial;
+    font-weight: bold;
     color: $marine-blue;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     margin-top: 0;
     margin-bottom: 0;
   }
 
   .show-less-link {
     font-family: $arial;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
     color: $windows-blue;
@@ -351,7 +352,7 @@
   .description-section,
   .address {
     border-top: 1px solid $white;
-    padding: 0.625rem 0;
+    padding: 0.75rem 0;
     line-height: 1.5;
 
     @include clearfix;
@@ -359,7 +360,7 @@
 
   .low-stock-indicator {
     font-family: $arial;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     color: $pumpkin-orange;
     float: $right;
@@ -423,21 +424,21 @@
 .short-description-wrapper {
   .field {
     &__label {
-      font-size: 0.875rem;
-      font-family: $alshaya-bold;
-      font-weight: normal;
+      font-size: 1rem;
+      font-family: $arial;
+      font-weight: bold;
       color: $marine-blue;
     }
 
     &__content {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       line-height: 1.5;
     }
   }
 
   .read-more-description-link {
     font-family: $arial;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
     color: $windows-blue;
@@ -474,9 +475,9 @@
 
   .field {
     &__label {
-      font-size: 0.875rem;
-      font-family: $alshaya-bold;
-      font-weight: normal;
+      font-size: 1rem;
+      font-family: $arial;
+      font-weight: bold;
       color: $marine-blue;
 
       &.disabled {
@@ -1278,15 +1279,14 @@
       }
 
       button[type="submit"] {
-        font-family: $arial;
-        font-weight: bold;
-        font-size: 0.75rem;
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
         background: $pumpkin-orange;
         border-radius: 0;
         color: $white-five;
         border: 0;
         text-transform: lowercase;
-        padding: 0.66rem 1.3701rem;
+        padding: 0.5rem 1.3701rem;
         margin-bottom: 1.5rem;
         display: inline-block;
 
@@ -1298,8 +1298,7 @@
           z-index: 4;
           margin: 0;
           #{$left}: 0;
-          height: 3rem;
-          font-size: 0.875rem;
+          height: 2.5rem;
 
           .ladda-label {
             html[lang="ar"] & {
@@ -1488,16 +1487,16 @@ article[gtm-sku-type="simple"] {
     }
   }
 
-  .out-of-stock {
+  span.out-of-stock {
     background-color: $cherry;
-    font-family: $alshaya-thin;
+    font-family: $alshaya-bold;
+    font-size: 0.75rem;
     display: block;
     vertical-align: middle;
     text-align: center;
     margin: 1rem 0;
     padding: 0.6rem 1.5rem;
     color: $white;
-    font-size: 0.75rem;
 
     @include breakpoint($only-mobile) {
       position: fixed;
@@ -1506,6 +1505,8 @@ article[gtm-sku-type="simple"] {
       #{$left}: 0;
       margin: 0;
       font-size: 0.875rem;
+      z-index: 6;
+      height: 3rem;
     }
 
     @include breakpoint($desktop) {
@@ -1564,4 +1565,30 @@ article[gtm-sku-type="simple"] {
   height: 3rem;
   width: 100%;
   #{$left}: 0;
+}
+
+.nodetype--acq_product {
+  @include breakpoint($upto-desktop) {
+    ul#select2-edit-configurables-size-results {
+      li.select2-results__option {
+        &:first-child {
+          display: none;
+        }
+
+        &:nth-child(2) {
+          border-top: 1px solid $white;
+        }
+      }
+    }
+  }
+}
+
+article.product-out-of-stock {
+  .basic-details-wrapper {
+    @include breakpoint($only-mobile) {
+      .field--name-field-skus {
+        height: 0;
+      }
+    }
+  }
 }

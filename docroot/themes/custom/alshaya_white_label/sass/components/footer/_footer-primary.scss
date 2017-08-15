@@ -247,8 +247,10 @@
 }
 
 .c-footer-menu--help {
-  width: 30%;
-  margin-#{$left}: 5%;
+  @include breakpoint($desktop) {
+    width: 30%;
+    margin-#{$left}: 5%;
+  }
 }
 
 .c-footer-menu--about .c-footer-menu {

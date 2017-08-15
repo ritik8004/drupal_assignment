@@ -81,7 +81,8 @@
         $('.read-more-description-link').on('click', function () {
           $('.c-pdp .description-wrapper').toggleClass('desc-open');
           if ($(window).width() < 768) {
-            $('.c-pdp .short-description-wrapper').toggle('slow');
+            $('.c-pdp .short-description-wrapper').toggle('appear');
+            $('.c-pdp .description-wrapper').toggle('appear');
             if ($('.c-pdp .description-wrapper .show-less-link').length < 1) {
               $('.c-pdp .description-wrapper .field__content')
                 .append('<div class="show-less-link">' + Drupal.t('Show less') + '</div>');
@@ -93,13 +94,16 @@
           $('.c-pdp .description-wrapper').toggleClass('desc-open');
         });
 
-        $('.c-pdp .description-wrapper .field__content')
-          .on('click', '.show-less-link', function () {
-            if ($(window).width() < 768) {
-              $('.c-pdp .short-description-wrapper').toggle('slow');
-              $('.c-pdp .description-wrapper').toggle('slow');
-            }
-          });
+        var mobileStickyHeaderHeight = $('.branding__menu').height();
+        $('.c-pdp .description-wrapper .field__content').on('click', '.show-less-link', function () {
+          if ($(window).width() < 768) {
+            $('.c-pdp .short-description-wrapper').toggle('appear');
+            $('.c-pdp .description-wrapper').toggle('appear');
+            $('html,body').animate({
+              scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
+            }, 'slow');
+          }
+        });
 
         moveContextualLink('.c-accordion');
 
