@@ -817,6 +817,14 @@
     }
   }
 
+  .current-location {
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        margin-top: 1.2rem;
+      }
+    }
+  }
+
   .current-location,
   .store-finder--wrapper,
   .list-view-link,
@@ -1235,11 +1243,6 @@
   .hours--label::after {
     color: $black;
     top: 0;
-  }
-
-  .get--directions,
-  .hours--label {
-    max-width: 8.625rem;
   }
 
   .hours--label {
