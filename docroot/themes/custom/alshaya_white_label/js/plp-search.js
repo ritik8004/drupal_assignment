@@ -103,7 +103,7 @@
           }
           else {
             // If we dont have one, create it, this is first time load.
-            $('<div class="filter-menu-label"><span class="label">filter</span><li class="clear-all-fake"><span>clear all</span></li></div>')
+            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="clear-all-fake"><span>' + Drupal.t('clear all') + '</span></li></div>')
               .insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
           }
 
