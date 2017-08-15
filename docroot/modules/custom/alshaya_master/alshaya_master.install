@@ -193,7 +193,7 @@ function alshaya_master_install() {
       'ar' => 'تواصل معنا',
     ],
     'get email offers and the latest news from @site_name' => [
-      'ar' => '@site_name احصل على أحدث العروض الحصرية عبر عنوان البريد الإكتروني',
+      'ar' => 'احصل على أحدث العروض الحصرية من @site_name عبر عنوان البريد الإكتروني',
     ],
     'submit' => [
       'ar' => 'إرسال',
@@ -837,6 +837,9 @@ function alshaya_master_install() {
     'Filter' => [
       'ar' => 'حدّد اختيارك',
     ],
+    'filter' => [
+      'ar' => 'حدّد اختيارك',
+    ],
     'Welcome, @name' => [
       'ar' => 'أهلاً بك, @name',
     ],
@@ -1054,6 +1057,15 @@ function alshaya_master_install() {
     ],
     'Size' => [
       'ar' => 'المقاس',
+    ],
+    'Sorry, we are unable to process your payment. Please contact our customer service team for assistance.' => [
+      'ar' => 'عذراً، لم نتمكن من متابعة تنفيذ طلبك. يرجى إعادة المحاولة او الاتصال بخدمة الزبائن للمساعدة.',
+    ],
+    'Your password has been changed.' => [
+      'ar' => 'تم تغيير كلمة السر بنجاح',
+    ],
+    'applied filters' => [
+      'ar' => 'الاختيارات المحددة',
     ],
   ];
   alshaya_i18n_save_translations($strings);
