@@ -65,11 +65,6 @@
     &:hover {
       text-decoration: underline;
     }
-
-    //@include breakpoint($desktop) {
-    //  padding-#{$left}: 1.5rem;
-    //  padding-#{$right}: 0.7rem;
-    //}
   }
 
   .quantity.out-of-stock {
