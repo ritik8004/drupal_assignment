@@ -619,4 +619,51 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     sleep($seconds);
   }
 
+  /**
+   * @When /^I click a pointer on the map on arabic site$/
+   */
+  public function iClickAPointerOnTheMapOnArabicSite() {
+    $this->getSession()
+      ->getPage()
+      ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(3) > img')
+      ->click();
+  }
+
+  /**
+   * @Then /^I should see title, address, Opening hours and Get directions link on the popup$/
+   */
+  public function iShouldSeeTitleAddressOpeningHoursAndGetDirectionsLinkOnThePopup() {
+    $page = $this->getSession()->getPage();
+    $title = $page->has('css', 'div.views-field.views-field-title > span.field-content');
+    if (!$title) {
+      throw new \Exception('Title is not displayed on the Map popup');
+    }
+    $address = $page->has('css', 'div.views-field.views-field-field-store-address > div.field-content > p');
+    if (!$address) {
+      throw new \Exception('Address is not displayed on the map popup');
+    }
+    $opening_hours = $page->has('css', 'div.hours--label');
+    if (!$opening_hours) {
+      throw new \Exception('Opening hours is not displayed on map popup');
+    }
+    $directions = $page->has('css', 'div.get--directions');
+    if (!$directions) {
+      throw new \Exception('Get directions link is not displayed on map popup');
+    }
+  }
+
+  /**
+   * @Then /^the number of stores displayed should match the pointer displayed on map$/
+   */
+  public function theNumberOfStoresDisplayedShouldMatchThePointerDisplayedOnMap() {
+    $page = $this->getSession()->getPage();
+    $all_pointers = $page->findAll('css', '.gmnoprint');
+    $actual_count = count($all_pointers);
+    $count = (string) $actual_count;
+    $actual_text = $page->find('css', '.view-header')->getText();
+    if (strpos($actual_text, $count) === FALSE) {
+      throw new \Exception('Count displayed for number of stores is incorrect on Map view');
+    }
+  }
+
 }
