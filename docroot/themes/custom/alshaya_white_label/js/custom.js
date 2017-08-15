@@ -58,6 +58,7 @@
       // This js is to remove the success message of newsletter subscription after 10 seconds.
       setTimeout(function () {
         $('.subscription-status .success').fadeOut();
+        $('#cart_notification').fadeOut();
       }, 10000);
     }
   };
