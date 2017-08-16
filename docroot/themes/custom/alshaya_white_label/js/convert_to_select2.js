@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  function applySelect() {
+  var applySelect = function () {
     if ($(window).width() > 1024) {
       $('.form-item-sort-bef-combine .form-select').select2({
         minimumResultsForSearch: -1
