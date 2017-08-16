@@ -500,8 +500,10 @@ function alshaya_white_label_preprocess_user(&$variables) {
     $variables['contact_number'] = '';
     $variables['privilege_card'] = '';
 
-    if ($mobile_number = $user->get('field_mobile_number')->getValue()) {
-      $variables['contact_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($mobile_number[0]['value']);
+    if (isset($user->field_mobile_number)) {
+      if ($mobile_number = $user->get('field_mobile_number')->getValue()) {
+        $variables['contact_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($mobile_number[0]['value']);
+      }
     }
 
     // Check if loyalty module is enabled.
