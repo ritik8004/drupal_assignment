@@ -4,15 +4,10 @@ core: 8.x
 package: Alshaya
 description: 'Master module for updating the core settings.'
 dependencies:
-  - alshaya_department_page
   - alshaya_permissions
-  - acq_cart
-  - acq_checkout
-  - alshaya_acm
   - alshaya_admin
   - alshaya_custom
   - alshaya_i18n
-  - alshaya_search
   - back_to_top
   - block
   - block_content
@@ -22,6 +17,7 @@ dependencies:
   - inline_form_errors
   - mailsystem
   - mimemail
+  - mobile_number
   - redirect
   - rest
   - r4032login
