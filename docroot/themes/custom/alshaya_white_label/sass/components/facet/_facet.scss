@@ -83,3 +83,25 @@
     display: none;
   }
 }
+
+html[lang=ar] {
+  .c-facet {
+    ul[data-drupal-facet-alias="skus_sku_reference_brand"] {
+      label {
+        float: right;
+        font-family: $arial-nodir;
+        margin-bottom: 0.625rem;
+
+        @include clearfix;
+
+        .facet-item__value {
+          float: right;
+        }
+
+        .facet-item__count {
+          float: left;
+        }
+      }
+    }
+  }
+}

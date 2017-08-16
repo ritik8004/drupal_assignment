@@ -291,17 +291,16 @@
         position: relative;
         padding-bottom: 3rem;
         margin-top: 2.1875rem;
-        width: 100%;
+        background: $white-five;
 
         .ajax-progress {
           display: none;
         }
       }
 
-      select {
+      select.form-select {
         @include select-style(12.375rem);
 
-        background-color: $whisper-dark;
         width: 100%;
       }
     }
@@ -330,11 +329,11 @@
       padding: 0;
       margin-bottom: 1.5rem;
       margin-top: 2.1875rem;
+      background: $white-five;
 
       select {
         @include select-style(4.375rem);
 
-        background-color: $whisper-dark;
         direction: $dir;
       }
     }
