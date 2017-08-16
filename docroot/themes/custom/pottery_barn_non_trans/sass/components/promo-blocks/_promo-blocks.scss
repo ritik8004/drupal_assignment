@@ -341,7 +341,7 @@ a.selected {
 
   ul {
     display: inline-block;
-    margin-#{$left}: 4%;
+    margin-#{$left}: 8%;
     margin-top: 0;
 
     li {
@@ -402,6 +402,7 @@ a.selected {
 
     .form--signup-elements {
       width: 47% !important;
+      margin-bottom: 30px;
 
       &:nth-child(even) {
         margin-#{$right}: 0;
@@ -431,6 +432,20 @@ a.selected {
       margin: 10px 0;
     }
   }
+
+  .form-signup-note {
+    width: 45%;
+    display: inline-block;
+    float: $right;
+    margin-top: 20px;
+  }
+
+  @include breakpoint($upto-desktop) {
+    .mailchimp-signup-form,
+    .form-signup-note {
+      width: 100%;
+    }
+  }
 }
 
 @include breakpoint($upto-desktop) {
@@ -457,7 +472,7 @@ a.selected {
     }
 
     ul {
-      margin-#{$left}: 0;
+      margin-#{$left}: 4%;
     }
   }
 }
