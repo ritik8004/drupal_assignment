@@ -113,7 +113,7 @@ apache_vhosts:
     documentroot: "{{ dashboard_install_dir }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
-  - servername: "local.non_transac.com"
+  - servername: "local.non-transac.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
