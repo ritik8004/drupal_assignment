@@ -30,7 +30,7 @@
         minimumResultsForSearch: -1
       });
     }
-  }
+  };
 
   Drupal.behaviors.select2select = {
     attach: function (context, settings) {
