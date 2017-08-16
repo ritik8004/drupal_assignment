@@ -76,6 +76,18 @@ index 572ce24e..b7e06fa3 100644
 +
 +  drush_print(dt('Deleted all cache for stock.'));
 +}
+diff --git a/modules/acq_sku/acq_sku.info.yml b/modules/acq_sku/acq_sku.info.yml
+index d4ce36a3..cb848a48 100644
+--- a/modules/acq_sku/acq_sku.info.yml
++++ b/modules/acq_sku/acq_sku.info.yml
+@@ -11,6 +11,7 @@ dependencies:
+   - node
+   - path
+   - panelizer
++  - pcb
+   - rest
+   - taxonomy
+   - workbench_moderation
 diff --git a/modules/acq_sku/acq_sku.module b/modules/acq_sku/acq_sku.module
 index 36ea08eb..7d58a55d 100644
 --- a/modules/acq_sku/acq_sku.module
@@ -83,15 +95,15 @@ index 36ea08eb..7d58a55d 100644
 @@ -130,7 +130,7 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
      // Cache id.
      $cid = acq_sku_get_stock_cache_id($sku_entity);
- 
+
 -    $cache = \Drupal::cache('data')->get($cid);
 +    $cache = \Drupal::cache('stock')->get($cid, 1);
- 
+
      // If information is cached.
      if (!$reset && !empty($cache)) {
 @@ -154,7 +154,7 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
          $expire = \Drupal::time()->getRequestTime() + $time;
- 
+
          // Set the stock in cache.
 -        \Drupal::cache('data')->set($cid, $stock, $expire);
 +        \Drupal::cache('stock')->set($cid, $stock, $expire);
@@ -99,93 +111,20 @@ index 36ea08eb..7d58a55d 100644
      }
    }
 diff --git a/modules/acq_sku/acq_sku.services.yml b/modules/acq_sku/acq_sku.services.yml
-index d7c79f53..fefa83c7 100644
+index d7c79f53..ef07f9dd 100644
 --- a/modules/acq_sku/acq_sku.services.yml
 +++ b/modules/acq_sku/acq_sku.services.yml
-@@ -38,3 +38,14 @@ services:
+@@ -38,3 +38,10 @@ services:
        - '@element_info'
        - '@theme.manager'
        - '@csrf_token'
 +
 +  cache.stock:
-+    class: Drupal\Core\Cache\CacheInterface
++    class: Drupal\Core\Cache\CacheBackendInterface
 +    tags:
-+      - { name: cache.bin }
++      - { name: cache.bin, default_backend: cache.backend.permanent_database }
 +    factory: cache_factory:get
 +    arguments: [stock]
-+
-+  cache.backend.permanent_database:
-+    class: Drupal\acq_sku\Cache\PermanentDatabaseBackendFactory
-+    arguments: ['@database', '@cache_tags.invalidator.checksum']
-diff --git a/modules/acq_sku/src/Cache/PermanentDatabaseBackend.php b/modules/acq_sku/src/Cache/PermanentDatabaseBackend.php
-new file mode 100644
-index 00000000..ee73c791
---- /dev/null
-+++ b/modules/acq_sku/src/Cache/PermanentDatabaseBackend.php
-@@ -0,0 +1,35 @@
-+<?php
-+
-+namespace Drupal\acq_sku\Cache;
-+
-+use Drupal\Core\Cache\DatabaseBackend;
-+
-+/**
-+ * Defines a permanent database cache implementation.
-+ *
-+ * This cache implementation can be used for data like stock which don't really
-+ * need to be cleared during normal cache rebuilds and need to be cleared . It uses the database to store
-+ * cached data. Each cache bin corresponds to a database table by the same name.
-+ *
-+ * @ingroup cache
-+ */
-+class PermanentDatabaseBackend extends DatabaseBackend {
-+
-+  /**
-+   * {@inheritdoc}
-+   */
-+  public function deleteAll() {
-+    // This cache doesn't need to be deleted when doing cache rebuild.
-+    // We do nothing here.
-+  }
-+
-+  /**
-+   * Deletes all cache items in a bin when explicitly called.
-+   *
-+   * @see \Drupal\Core\Cache\DatabaseBackend::deleteAll()
-+   */
-+  public function deleteAllPermanent() {
-+    parent::deleteAll();
-+  }
-+
-+}
-diff --git a/modules/acq_sku/src/Cache/PermanentDatabaseBackendFactory.php b/modules/acq_sku/src/Cache/PermanentDatabaseBackendFactory.php
-new file mode 100644
-index 00000000..aa72cdcb
---- /dev/null
-+++ b/modules/acq_sku/src/Cache/PermanentDatabaseBackendFactory.php
-@@ -0,0 +1,22 @@
-+<?php
-+
-+namespace Drupal\acq_sku\Cache;
-+
-+use Drupal\Core\Cache\DatabaseBackendFactory;
-+
-+class PermanentDatabaseBackendFactory extends DatabaseBackendFactory {
-+
-+  /**
-+   * Gets DatabaseBackend for the specified cache bin.
-+   *
-+   * @param $bin
-+   *   The cache bin for which the object is created.
-+   *
-+   * @return \Drupal\Core\Cache\DatabaseBackend
-+   *   The cache backend object for the specified cache bin.
-+   */
-+  public function get($bin) {
-+    return new PermanentDatabaseBackend($this->connection, $this->checksumProvider, $bin);
-+  }
-+
-+}
 diff --git a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
 index 94f68014..bc36a640 100644
 --- a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
