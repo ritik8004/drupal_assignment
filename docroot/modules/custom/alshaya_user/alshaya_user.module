@@ -136,6 +136,11 @@ function alshaya_user_form_user_pass_alter(&$form, FormStateInterface $form_stat
     '#markup' => '<div class="password--message">' . t('Please enter your email address.') . '</br>' . t('We will send you an email with a password reminder.') . '</div>',
     '#weight' => -10,
   ];
+
+  $form['name']['#element_validate'] = [
+    'alshaya_valid_email_address',
+  ];
+  $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 }
 
 /**
@@ -392,5 +397,31 @@ function alshaya_valid_email_address(&$element, FormStateInterface $form_state, 
   $form_state->setValueForElement($element, $value);
   if ($value !== '' && !preg_match('/^(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){255,})(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){65,}@)(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22))(?:\.(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-[a-z0-9]+)*\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-[a-z0-9]+)*)|(?:\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\]))$/iD', $value)) {
     $form_state->setError($element, t('The email address %mail is not valid.', ['%mail' => $value]));
+  }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function alshaya_user_mail_alter(&$message) {
+  if ($message['key'] == 'password_reset') {
+    $language_manager = \Drupal::service('language_manager');
+
+    // Get user preferred language.
+    $lang = $message['params']['account']->getPreferredLangcode();
+    $language = $language_manager->getLanguage($lang);
+
+    // Get original language.
+    $original_language = $language_manager->getConfigOverrideLanguage();
+    // Set language according to user preferred language.
+    $language_manager->setConfigOverrideLanguage($language);
+
+    // Get site name.
+    $sitename = \Drupal::config('system.site')->get('name');
+    // Reset the language to original language.
+    $language_manager->setConfigOverrideLanguage($original_language);
+
+    // Alter the header from information according to user preferred language.
+    $message['headers']['From'] = $sitename . ' <' . $message['from'] . '>';
   }
 }
