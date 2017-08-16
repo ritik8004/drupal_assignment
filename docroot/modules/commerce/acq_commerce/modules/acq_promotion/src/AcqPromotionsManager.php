@@ -111,7 +111,6 @@ class AcqPromotionsManager {
   public function syncPromotions($types = ['category', 'cart']) {
     $types = is_array($types) ? $types : [$types];
     $ids = [];
-    $promotions = [];
     $fetched_promotions = [];
 
     foreach ($types as $type) {
@@ -342,7 +341,7 @@ class AcqPromotionsManager {
           'sku' => $product['product_sku'],
         ];
 
-        if (isset($product['final_price'])) {
+        if (($promotion['type'] === 'category') && isset($product['final_price'])) {
           $fetched_promotion_sku_attach_data[$product['product_sku']]['final_price'] = $product['final_price'];
         }
       }

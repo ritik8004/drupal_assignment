@@ -2,6 +2,9 @@
 
 namespace Drupal\alshaya_acm_promotion;
 
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -38,6 +41,20 @@ class AlshayaPromotionsManager {
   protected $entityRepository;
 
   /**
+   * Sku Manager service.
+   *
+   * @var SkuManager
+   */
+  protected $skuManager;
+
+  /**
+   * Cache Backend service.
+   *
+   * @var CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * AlshayaPromotionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -48,12 +65,18 @@ class AlshayaPromotionsManager {
    *   The language manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The Entity repository service.
+   * @param SkuManager $skuManager
+   *   The sku Manager service.
+   * @param CacheBackendInterface $cache
+   *   Cache Backend service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, LoggerChannelFactoryInterface $logger, LanguageManager $languageManager, EntityRepositoryInterface $entityRepository) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, LoggerChannelFactoryInterface $logger, LanguageManager $languageManager, EntityRepositoryInterface $entityRepository, SkuManager $skuManager, CacheBackendInterface $cache) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->logger = $logger;
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
+    $this->skuManager = $skuManager;
+    $this->cache = $cache;
   }
 
   /**
@@ -103,6 +126,57 @@ class AlshayaPromotionsManager {
     }
 
     return $nodes;
+  }
+
+  /**
+   * Helper function to do a cheaper call to fetch skus for a promotion.
+   *
+   * @param Node $promotion
+   *   Promotion for which we need to fetch skus.
+   *
+   * @return array
+   *   List of skus related with a promotion.
+   */
+  public function getSkutextsForPromotion(Node $promotion) {
+    if ($skus_cache = $this->cache->get('promotinos_sku_' . $promotion->id())) {
+      $skus = $skus_cache->data;
+    }
+    else {
+      $query = \Drupal::database()->select('acq_sku__field_acq_sku_promotions', 'fasp');
+      $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
+      $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+      $query->condition('asfd.type', "configurable");
+      $query->fields('asfd', ['id', 'sku']);
+      $query->distinct();
+      $config_skus = $query->execute()->fetchAllKeyed(0, 1);
+
+
+      $query = \Drupal::database()->select('acq_sku__field_acq_sku_promotions', 'fasp');
+      $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
+      $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+      $query->condition('asfd.type', "simple");
+      $query->fields('asfd', ['id', 'sku']);
+      $query->distinct();
+      $simple_skus = $query->execute()->fetchAllKeyed(0, 1);
+
+      $sku_tree = $this->skuManager->getSkuTree();
+      $processed_sku_eids = [];
+
+      foreach ($simple_skus as $sku) {
+        if (isset($sku_tree[$sku])) {
+          $parent_sku = $sku_tree[$sku];
+          if (!in_array($parent_sku, $processed_sku_eids)) {
+            $processed_sku_eids[] = $this->skuManager->getSkuTextFromId($parent_sku);;
+          }
+        }
+      }
+
+      $skus = array_unique(array_merge($processed_sku_eids, $config_skus));
+
+      $this->cache->set('promotions_sku_' . $promotion->id(), $skus, Cache::PERMANENT, ['sku_list']);
+    }
+
+    return $skus;
   }
 
 }
