@@ -96,6 +96,3 @@ switch ($env) {
 // Recaptcha settings.
 $settings['recaptcha.settings']['site_key'] = '6Le93BsUAAAAAMOiJ5wrk4ICF0N-dLs6iM_eR4di';
 $settings['recaptcha.settings']['secret_key'] = '6Le93BsUAAAAABQ0RMy0TIFuKasg3uz8hqVl4c6n';
-
-// Use the permanent db cache bin for stock cache.
-$settings['cache']['bins']['stock'] = 'cache.backend.permanent_database';

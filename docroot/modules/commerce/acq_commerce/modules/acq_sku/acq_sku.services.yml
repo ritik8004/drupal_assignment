@@ -40,12 +40,8 @@ services:
       - '@csrf_token'
 
   cache.stock:
-    class: Drupal\Core\Cache\CacheInterface
+    class: Drupal\Core\Cache\CacheBackendInterface
     tags:
-      - { name: cache.bin }
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [stock]
-
-  cache.backend.permanent_database:
-    class: Drupal\acq_sku\Cache\PermanentDatabaseBackendFactory
-    arguments: ['@database', '@cache_tags.invalidator.checksum']

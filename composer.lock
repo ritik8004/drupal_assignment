@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc95614aff9dd94bec2c1f6928fc9cd8",
+    "content-hash": "8e9e1015133a811c003a8a5f992c2421",
     "packages": [
         {
             "name": "acquia/blt",
@@ -4539,6 +4539,10 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
+                    "name": "Dave Reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                },
+                {
                     "name": "Drupal Media Team",
                     "homepage": "https://www.drupal.org/user/3260690"
                 },
@@ -5587,6 +5591,55 @@
             "homepage": "https://www.drupal.org/project/pathauto",
             "support": {
                 "source": "http://cgit.drupalcode.org/pathauto"
+            }
+        },
+        {
+            "name": "drupal/pcb",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/pcb",
+                "reference": "8.x-1.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.0-beta1.zip",
+                "reference": "8.x-1.0-beta1",
+                "shasum": "d6c162943ffd9ef6e2a310ea0e3046b98a34dd54"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta1",
+                    "datestamp": "1502878143",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nikunj Kotecha (nikunjkotecha)",
+                    "homepage": "https://www.drupal.org/u/nikunjkotecha",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Permanent Cache Bin module adds support for cache bins which are not cleared during drush cr.",
+            "homepage": "https://drupal.org/project/pcb",
+            "support": {
+                "source": "https://cgit.drupalcode.org/pcb",
+                "issues": "https://drupal.org/project/issues/pcb"
             }
         },
         {
@@ -6709,7 +6762,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486726083"
+                    "datestamp": "1486729083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6723,6 +6776,10 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
+                },
+                {
+                    "name": "miteshmap",
+                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -13850,6 +13907,7 @@
         "drupal/search_api_solr_multilingual": 10,
         "drupal/views_block_filter_block": 20,
         "drupal/simple_oauth": 5,
+        "drupal/pcb": 10,
         "drupal/memcache": 20
     },
     "prefer-stable": true,
