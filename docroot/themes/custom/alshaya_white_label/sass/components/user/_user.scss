@@ -885,6 +885,10 @@
       html[lang=ar] & {
         letter-spacing: 0;
       }
+
+      &.error {
+        border-color: $red-error !important;
+      }
     }
 
     .form-item--error-message {
@@ -898,6 +902,10 @@
     .form-item-pass {
       margin-top: 2.563rem;
     }
+  }
+
+  #unmask_password {
+    top: 0.6875rem;
   }
 
   .form-actions {

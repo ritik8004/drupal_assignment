@@ -259,12 +259,24 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     ],
   ];
 
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+
+  $labels = [
+    '#theme' => 'product_labels',
+    '#labels' => $skuManager->getLabels($sku_entity, 'pdp'),
+    '#sku' => $sku_identifier,
+    '#mainsku' => $sku_identifier,
+    '#type' => 'pdp',
+  ];
+
   $build['gallery']['product_zoom'] = [
     '#theme' => 'product_zoom',
     '#mainImage' => $main_image,
     '#thumbnails' => $thumbnails,
     '#pager_flag' => $pager_flag,
     '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
+    '#labels' => $labels,
     '#attached' => [
       'library' => [
         'alshaya_product_zoom/product.cloud_zoom',

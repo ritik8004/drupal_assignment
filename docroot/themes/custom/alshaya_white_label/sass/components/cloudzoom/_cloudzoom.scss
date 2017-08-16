@@ -4,6 +4,21 @@
   max-width: 100%;
 
   .cloudzoom__herocontainer {
+    position: relative;
+
+    .product-labels {
+      position: absolute;
+      top: 0;
+      height: 5rem;
+      width: 5rem;
+      z-index: 4;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
     @include breakpoint($only-tablet) {
       width: 100%;
       float: none;

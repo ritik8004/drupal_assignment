@@ -30,7 +30,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb = new Breadcrumb();
 
     // Add the home page link. We need it always.
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
 
     // Get the current page's taxonomy term from route params.
     $term = $route_match->getParameter('taxonomy_term');

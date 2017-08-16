@@ -200,7 +200,8 @@ html[lang=ar] {
       }
 
       .price-currency {
-        float: left !important;
+        float: none !important;
+        margin-right: 1rem;
       }
     }
   }
@@ -249,7 +250,8 @@ html[lang=ar] {
 
       .price-currency {
         @include breakpoint($desktop) {
-          float: left !important;
+          float: none !important;
+          margin-right: 1.5625rem !important;
         }
       }
     }

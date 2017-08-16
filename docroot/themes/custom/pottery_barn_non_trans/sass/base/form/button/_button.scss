@@ -1,6 +1,6 @@
 %button-wide,
 .button-wide {
-  background-color: #ff6d22;
+  background-color: $black-two; // #ff6d22
   color: #fff;
   display: inline-block;
   font-size: 12px;
@@ -70,11 +70,11 @@
   }
 
   a {
-    color: $marine-blue-two;
+    color: $deep-red;
     display: block;
     font-size: 0.813rem;
     text-align: center;
-    border: 1px solid $marine-blue-two;
+    border: 1px solid $deep-red;
     padding: 0.563rem 4.12rem;
     font-family: $arial;
   }

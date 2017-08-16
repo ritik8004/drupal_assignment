@@ -127,6 +127,10 @@
       border-#{$left}: 0;
       z-index: 1;
 
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 1rem;
+      }
+
       @include breakpoint($tablet) {
         border: 1px solid $white;
         border-#{$left}: 0;
@@ -213,6 +217,18 @@
       display: inline-block;
       vertical-align: middle;
       margin-#{$right}: 0.6875rem;
+    }
+  }
+
+  .current-location {
+    @include breakpoint($only-tablet) {
+      #{$left}: 0;
+      padding-#{$left}: 2.125rem !important;
+
+      &::before {
+        position: absolute;
+        #{$left}: 0;
+      }
     }
   }
 
@@ -315,7 +331,10 @@
     &.active {
       border: 1px solid $marine-blue;
       color: $marine-blue;
-      font-family: $alshaya-bold;
+
+      @include breakpoint($only-tablet) {
+        font-family: $alshaya-thin;
+      }
     }
   }
 
@@ -393,7 +412,7 @@
   }
 
   .by--alphabet {
-    position: relative;
+    @include clearfix;
 
     @include breakpoint($tablet) {
       padding-bottom: 2rem;
@@ -402,6 +421,8 @@
     @include breakpoint($tablet) {
       padding-bottom: 3rem;
     }
+
+    position: relative;
 
     h3,
     .rows {
@@ -415,9 +436,10 @@
       font-weight: normal;
       color: $marine-blue;
       line-height: 1.6;
-      width: 1.563rem;
       margin: 0;
       text-transform: uppercase;
+      float: $left;
+      width: 10%;
 
       @include breakpoint($only-mobile) {
         display: none !important;
@@ -428,6 +450,12 @@
       font-size: 14px;
       line-height: 232%;
       margin-#{$left}: 1.7rem;
+
+      @include breakpoint($tablet) {
+        width: 88%;
+        margin: 0;
+        float: $right;
+      }
 
       @include breakpoint($only-mobile) {
         width: 100%;
@@ -501,6 +529,14 @@
         @include breakpoint($tablet) {
           padding: 0 3.25rem;
           padding-#{$right}: 2.5rem;
+        }
+      }
+
+      .field--name-field-store-phone {
+        html[lang=ar] & {
+          direction: ltr;
+          display: inline-block;
+          text-align: right;
         }
       }
     }
@@ -681,6 +717,20 @@
     .label--location {
       max-width: 100%;
       float: $left;
+
+      html[lang=ar] & {
+        &::before {
+          transform: scaleX(-1);
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          width: 45%;
+        }
+
+        width: 49%;
+      }
     }
 
     .current-location {
@@ -767,6 +817,14 @@
     }
   }
 
+  .current-location {
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        margin-top: 1.2rem;
+      }
+    }
+  }
+
   .current-location,
   .store-finder--wrapper,
   .list-view-link,
@@ -784,6 +842,8 @@
 
   .list-view-link,
   .map-view-link {
+    line-height: 1.4;
+
     @include breakpoint($tablet) {
       height: 2.9375rem;
       border: 1px solid transparent;
@@ -1094,6 +1154,10 @@
     #{$right}: 1rem;
     width: 18px;
     height: 18px;
+
+    html[lang=ar] & {
+      transform: scaleX(-1);
+    }
   }
 
   .open--hours {
@@ -1179,11 +1243,6 @@
   .hours--label::after {
     color: $black;
     top: 0;
-  }
-
-  .get--directions,
-  .hours--label {
-    max-width: 8.625rem;
   }
 
   .hours--label {

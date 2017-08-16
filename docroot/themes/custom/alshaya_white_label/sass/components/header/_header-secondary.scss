@@ -90,7 +90,7 @@
     }
 
     @include breakpoint($desktop) {
-      color: $greyish;
+      color: $marine-blue-two;
       display: block;
       padding-top: 0.075rem;
       padding-bottom: 0.075rem;
@@ -303,6 +303,10 @@
     top: 0;
     width: 100%;
   }
+
+  @include breakpoint($only-mobile) {
+    box-shadow: 0 0 0.125rem $greyish;
+  }
 }
 
 .mobile--overlay .branding__menu {
@@ -330,27 +334,31 @@
   @include breakpoint($desktop) {
     margin-top: 9.75rem;
   }
+
+  .branding__menu {
+    box-shadow: 0 0 0.125rem $greyish;
+  }
 }
 
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 5.875rem;
+    margin-top: 6.875rem;
 
     html[lang=ar] & {
-      margin-top: 5.9375rem;
+      margin-top: 6.9375rem;
     }
 
     &.logged-in.toolbar-vertical {
-      margin-top: 9.125rem;
+      margin-top: 10.125rem;
       padding-top: 0 !important;
 
       html[lang=ar] {
-        margin-top: 8.375rem;
+        margin-top: 9.375rem;
       }
     }
 
     &.logged-in.toolbar-vertical .branding__menu {
-      top: 39px;
+      top: 3.8125rem;
     }
   }
 
@@ -358,7 +366,7 @@ body {
     margin-top: 8.5625rem;
 
     html[lang=ar] & {
-      margin-top: 10.25rem;
+      margin-top: 9.25rem;
     }
 
     &.logged-in.toolbar-vertical {
