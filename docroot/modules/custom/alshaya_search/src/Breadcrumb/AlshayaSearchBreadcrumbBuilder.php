@@ -27,7 +27,7 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
 
     $breadcrumb->mergeCacheMaxAge(0);
     $breadcrumb->addCacheableDependency(['url.path']);

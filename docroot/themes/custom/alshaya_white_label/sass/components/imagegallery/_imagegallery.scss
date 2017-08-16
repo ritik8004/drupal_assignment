@@ -138,3 +138,18 @@
     }
   }
 }
+
+.mobilegallery {
+  #product-image-gallery-mobile {
+    li {
+      width: 100%;
+      height: 276px;
+      text-align: center;
+
+      img {
+        height: 100%;
+        width: auto;
+      }
+    }
+  }
+}

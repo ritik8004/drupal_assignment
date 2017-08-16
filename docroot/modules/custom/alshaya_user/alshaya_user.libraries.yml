@@ -1,0 +1,5 @@
+email_validator_override:
+  js:
+    js/email_validator_override.js: {}
+  dependencies:
+    - clientside_validation_jquery/jquery.validate

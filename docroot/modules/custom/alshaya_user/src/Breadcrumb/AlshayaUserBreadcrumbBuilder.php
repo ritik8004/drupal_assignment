@@ -26,7 +26,7 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     $user_id = \Drupal::currentUser()->id();
     $breadcrumb->addLink(Link::createFromRoute(t('My Account'), 'entity.user.canonical', ['user' => $user_id]));
     if ($route_match->getRouteName() != 'entity.user.canonical') {

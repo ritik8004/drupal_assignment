@@ -147,7 +147,8 @@ function alshaya_seo_preprocess_node(&$variables) {
   /** @var \Drupal\node\Entity\Node $entity */
   $entity = $variables['node'];
 
-  if ($entity->bundle() === 'acq_product') {
+  if (($entity->bundle() === 'acq_product') &&
+  (\Drupal::languageManager()->getCurrentLanguage()->getId() === $entity->language()->getId())) {
     /** @var \Drupal\alshaya_seo\AlshayaGtmManager $alshayaGtmManager */
     $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
     $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
@@ -289,7 +290,8 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
           $products = [];
           $privilegeOrder = $cart_item_attributes['privilegeOrder'];
-          unset($cart_item_attributes['privilegeOrder']);
+          $delivery_phone = $cart_item_attributes['delivery_phone'];
+          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['delivery_phone']);
 
           foreach ($cart_item_attributes as $key => $cart_item) {
             $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
@@ -305,6 +307,9 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
 
             case 'delivery':
               $step = 2;
+              if ($delivery_phone) {
+                $step = 3;
+              }
               break;
 
             case 'payment':
@@ -361,7 +366,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           if (!$confirmation_page) {
             $data_layer['privilegeOrder'] = $privilegeOrder;
             $data_layer_cart = [
-              'event' => 'checkout',
               'ecommerce' => [
                 'currencyCode' => $currency_code,
                 'checkout' => [

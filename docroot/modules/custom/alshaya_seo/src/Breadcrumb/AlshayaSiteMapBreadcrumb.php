@@ -24,7 +24,7 @@ class AlshayaSiteMapBreadcrumb implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     $breadcrumb->addLink(Link::createFromRoute(t('Site map'), 'alshaya_seo.sitemap'));
     $breadcrumb->addCacheableDependency(['url.path']);
     return $breadcrumb;

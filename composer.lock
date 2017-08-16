@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e9e1015133a811c003a8a5f992c2421",
+    "content-hash": "93b65f9061a15cf05867effa2afb5502",
     "packages": [
         {
             "name": "acquia/blt",
@@ -1794,7 +1794,7 @@
                     "homepage": "https://www.drupal.org/user/1"
                 },
                 {
-                    "name": "Gábor Hojtsy",
+                    "name": "G??bor Hojtsy",
                     "homepage": "https://www.drupal.org/user/4166"
                 },
                 {
@@ -1896,7 +1896,7 @@
                     "homepage": "https://www.drupal.org/user/78090"
                 },
                 {
-                    "name": "Rok Žlender",
+                    "name": "Rok ??lender",
                     "homepage": "https://www.drupal.org/user/61873"
                 },
                 {
@@ -1965,7 +1965,7 @@
                     "homepage": "https://www.drupal.org/user/78090"
                 },
                 {
-                    "name": "Rok Žlender",
+                    "name": "Rok ??lender",
                     "homepage": "https://www.drupal.org/user/61873"
                 },
                 {
@@ -2035,7 +2035,7 @@
                     "homepage": "https://www.drupal.org/user/78090"
                 },
                 {
-                    "name": "Rok Žlender",
+                    "name": "Rok ??lender",
                     "homepage": "https://www.drupal.org/user/61873"
                 },
                 {
@@ -2104,7 +2104,7 @@
                     "homepage": "https://www.drupal.org/user/78090"
                 },
                 {
-                    "name": "Rok Žlender",
+                    "name": "Rok ??lender",
                     "homepage": "https://www.drupal.org/user/61873"
                 },
                 {
@@ -3456,7 +3456,7 @@
                     "homepage": "https://www.drupal.org/user/139189"
                 },
                 {
-                    "name": "rötzi",
+                    "name": "r??tzi",
                     "homepage": "https://www.drupal.org/user/73064"
                 },
                 {
@@ -6110,7 +6110,11 @@
                 },
                 "drupal": {
                     "version": "8.x-1.1",
-                    "datestamp": "1494495709"
+                    "datestamp": "1498403342",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6213,10 +6217,15 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc3",
-                    "datestamp": "1495024986"
+                    "datestamp": "1497007742",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
                 },
                 "patches_applied": {
-                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--13.patch"
+                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--13.patch",
+                    "Allow case insensitive autocomplete": "https://www.drupal.org/files/issues/allow_case_insensitive_autocomplete-2890159-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6636,7 +6645,7 @@
             ],
             "authors": [
                 {
-                    "name": "Mateu Aguiló Bosch",
+                    "name": "Mateu Aguil?? Bosch",
                     "homepage": "https://www.drupal.org/user/550110",
                     "email": "mateu.aguilo.bosch@gmail.com"
                 },
@@ -7368,7 +7377,7 @@
                     "email": "marksonnabaum@gmail.com"
                 },
                 {
-                    "name": "Antoine Beaupré",
+                    "name": "Antoine Beaupr??",
                     "email": "anarcat@koumbit.org"
                 },
                 {
@@ -7376,7 +7385,7 @@
                     "email": "greg.1.anderson@greenknowe.org"
                 },
                 {
-                    "name": "Jonathan Araña Cruz",
+                    "name": "Jonathan Ara??a Cruz",
                     "email": "jonhattan@faita.net"
                 },
                 {
@@ -8234,7 +8243,7 @@
             ],
             "authors": [
                 {
-                    "name": "Luís Otávio Cobucci Oblonczyk",
+                    "name": "Lu??s Ot??vio Cobucci Oblonczyk",
                     "email": "lcobucci@gmail.com",
                     "role": "Developer"
                 }
@@ -8479,7 +8488,7 @@
                     "email": "donatj@gmail.com"
                 },
                 {
-                    "name": "Jonatan Männchen",
+                    "name": "Jonatan M??nnchen",
                     "email": "jonatan@maennchen.ch"
                 }
             ],
@@ -13325,7 +13334,7 @@
                     "homepage": "http://www.jeffgeerling.com"
                 },
                 {
-                    "name": "Oskar Schöldström",
+                    "name": "Oskar Sch??ldstr??m",
                     "homepage": "http://oxy.fi"
                 }
             ],
@@ -13435,7 +13444,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jens-André Koch",
+                    "name": "Jens-Andr?? Koch",
                     "email": "jakoch@web.de"
                 }
             ],
@@ -13479,7 +13488,7 @@
             "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
-                    "name": "Jesús Arnaiz",
+                    "name": "Jes??s Arnaiz",
                     "email": "j.arnaiz@gmail.com"
                 }
             ],
@@ -13720,7 +13729,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jean-François Simon",
+                    "name": "Jean-Fran??ois Simon",
                     "email": "jeanfrancois.simon@sensiolabs.com"
                 },
                 {

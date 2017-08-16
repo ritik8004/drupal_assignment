@@ -2,6 +2,9 @@ global_styles:
   css:
     theme:
       css/colors.css: {}
+  js:
+    js/menu.js: {}
+    js/custom.js: {}
 
 ltr_styles:
   css:

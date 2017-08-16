@@ -47,7 +47,7 @@
               // Add class to share this wrapper if product out of stock.
               if (result.max_quantity <= 0) {
                 var $article = $wrapper.closest('article[data-vmode="full"]');
-                $article.find('sharethis-wrapper').addClass('out-of-stock');
+                $article.find('.sharethis-wrapper').addClass('out-of-stock');
 
                 // Add out of stock class to article to allow styles to be added everywhere.
                 $article.addClass('product-out-of-stock');
@@ -61,10 +61,10 @@
       });
 
       // Check stock for mobile & load add cart form if stock-check successful.
-      if ($(window).width() <= 768) {
+      if ($(window).width() < 768) {
         $('.horizontal-crossell.mobile-only-block article[data-vmode="teaser"], .horizontal-upell.mobile-only-block article[data-vmode="teaser"], #block-baskethorizontalproductrecommendation.horizontal-crossell article[data-vmode="teaser"], #block-baskethorizontalproductrecommendation.horizontal-upell article[data-vmode="teaser"]', context).find('article').once('js-event').each(function() {
           var that = $(this);
-          if (!that.closest('article[data-vmode="teaser"').hasClass('stock-check-processed')) {
+          if (!that.closest('article[data-vmode="teaser"]').hasClass('stock-check-processed')) {
             var skuId = $(this).attr('data-skuid');
             if (skuId !== undefined) {
               var $wrapper = $(this);
