@@ -246,6 +246,12 @@ function alshaya_master_install() {
     'Find stores' => [
       'ar' => 'البحث عن المحلات',
     ],
+    'Find Store' => [
+      'ar' => 'البحث عن محلاتنا',
+    ],
+    'KWD' => [
+      'ar' => 'د٠ك٠',
+    ],
     'Map view' => [
       'ar' => 'عرض الخريطة',
     ],
@@ -1070,7 +1076,14 @@ function alshaya_master_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
-  $site_logo = 'themes/custom/alshaya_white_label/mothercare-logo-sm';
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Get current theme path.
+  $current_theme_path = $active_theme->getPath();
+  // Default Site logo path with default name.
+  $site_logo = $current_theme_path . '/site-logo';
 
   // Get config factory object.
   $config_factory = \Drupal::configFactory();
@@ -1092,9 +1105,8 @@ function alshaya_master_install() {
       ],
     ])
     ->save();
-
   // Save default logo for email.
-  $config_factory->getEditable('alshaya_master.theme.alshaya_white_label')
+  $config_factory->getEditable('alshaya_master.theme.' . $current_theme)
     ->set('email_logo_path', $site_logo . '.png')
     ->save();
 
