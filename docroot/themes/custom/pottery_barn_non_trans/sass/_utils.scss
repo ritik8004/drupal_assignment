@@ -87,9 +87,8 @@
 
 %modal-overlay,
 .modal-overlay {
-  position: fixed;
+  position: relative;
   height: initial;
-  width: 100%;
 
   &::before {
     content: '';
@@ -144,10 +143,26 @@
   }
 }
 
+.desktop-only-block {
+  display: none;
+
+  @include breakpoint($desktop) {
+    display: block;
+  }
+}
+
 .above-mobile-block {
   display: none;
 
   @include breakpoint($tablet) {
+    display: block;
+  }
+}
+
+.upto-tablet-block {
+  display: none;
+
+  @include breakpoint($upto-desktop) {
     display: block;
   }
 }

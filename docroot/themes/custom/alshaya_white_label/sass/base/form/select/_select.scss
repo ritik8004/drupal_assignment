@@ -70,7 +70,7 @@ select:focus::-ms-value {
   width: $select-width !important;
 
   .select2-selection {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     height: 2.1875rem;
     padding: 0.25rem 0.2rem;
     text-align: $left;
@@ -131,9 +131,14 @@ select:focus::-ms-value {
         background-color: $white-five;
       }
 
+      &[aria-disabled=true],
       &:hover {
         color: $grey-ash;
         background: $white-four;
+      }
+
+      &[aria-disabled=true] {
+        color: $greyish;
       }
     }
   }

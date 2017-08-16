@@ -477,8 +477,12 @@
       display: inline-block;
 
       .price {
+        .price-currency {
+          margin-right: 1.5625rem;
+        }
+
         .price-amount {
-          float: $right;
+          float: none;
         }
       }
     }
@@ -1087,7 +1091,7 @@ body.alias--cart {
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
     text-transform: lowercase;
-    font-family: $arial;
+    font-family: $alshaya-bold;
     font-size: 0.75rem;
 
     @include breakpoint($upto-tablet) {

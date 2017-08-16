@@ -38,6 +38,8 @@
 }
 
 .acq-content-product {
+  overflow: hidden;
+
   @include clearfix;
 
   @include breakpoint($tablet) {
@@ -114,7 +116,7 @@
     }
 
     .price {
-      font-size: 0.9375rem;
+      font-size: 1rem;
       color: $black;
       margin-bottom: 1rem;
     }
@@ -289,28 +291,34 @@
 }
 
 .description-wrapper {
+  &.desc-open {
+    #{$right}: 0;
+    transition: right 0.5s ease;
+  }
+
   @include breakpoint($only-mobile) {
     padding: 1rem 0;
+    display: none;
   }
 
   .field {
     &__label {
-      font-size: 0.875rem;
-      font-family: $alshaya-bold;
-      font-weight: normal;
+      font-size: 1rem;
+      font-family: $arial;
+      font-weight: bold;
       color: $marine-blue;
       margin-top: 0;
     }
 
     &__content {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       line-height: 1.5;
     }
   }
 
   a {
     font-family: $arial;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
     color: $windows-blue;
@@ -322,17 +330,17 @@
   }
 
   .desc-label {
-    font-family: $alshaya-bold;
-    font-weight: normal;
+    font-family: $arial;
+    font-weight: bold;
     color: $marine-blue;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     margin-top: 0;
     margin-bottom: 0;
   }
 
   .show-less-link {
     font-family: $arial;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
     color: $windows-blue;
@@ -344,7 +352,7 @@
   .description-section,
   .address {
     border-top: 1px solid $white;
-    padding: 0.625rem 0;
+    padding: 0.75rem 0;
     line-height: 1.5;
 
     @include clearfix;
@@ -352,7 +360,7 @@
 
   .low-stock-indicator {
     font-family: $arial;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     color: $pumpkin-orange;
     float: $right;
@@ -369,15 +377,17 @@
   .description-wrapper {
     position: absolute;
     top: 0;
-    #{$right}: 0;
+    #{$right}: -38%;
     height: 32.5rem;
     border: 1px solid $marine-blue;
     padding: 1.25rem;
+    padding-bottom: 0;
     background: $white-five;
     overflow: hidden;
     width: 35%;
     z-index: 4;
     margin: 0 1rem;
+    transition: right 0.5s ease;
 
     .close {
       @include icon(close);
@@ -391,12 +401,13 @@
       text-align: center;
       color: $white-two;
       background-color: $marine-blue;
+      cursor: pointer;
     }
 
     .field {
       &__content {
         overflow: scroll;
-        height: 430px;
+        height: 29.125rem;
       }
     }
   }
@@ -406,27 +417,28 @@
   .description-wrapper {
     width: 28%;
     margin: 0;
+    #{$right}: -28%;
   }
 }
 
 .short-description-wrapper {
   .field {
     &__label {
-      font-size: 0.875rem;
-      font-family: $alshaya-bold;
-      font-weight: normal;
+      font-size: 1rem;
+      font-family: $arial;
+      font-weight: bold;
       color: $marine-blue;
     }
 
     &__content {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       line-height: 1.5;
     }
   }
 
   .read-more-description-link {
     font-family: $arial;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
     color: $windows-blue;
@@ -463,9 +475,9 @@
 
   .field {
     &__label {
-      font-size: 0.875rem;
-      font-family: $alshaya-bold;
-      font-weight: normal;
+      font-size: 1rem;
+      font-family: $arial;
+      font-weight: bold;
       color: $marine-blue;
 
       &.disabled {
@@ -657,6 +669,7 @@
       text-align: center;
       padding: 0.5rem 0;
       border: none;
+      border-radius: 0;
     }
 
     .highlight {
@@ -705,13 +718,13 @@
     }
 
     button {
-      float: $right;
+      float: none;
       width: 6.563rem;
       height: 2.188rem;
       background-color: $cerulean-two;
       font-family: $alshaya-thin;
       appearance: none;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       color: $white-five;
       text-transform: lowercase;
       display: inline-block;
@@ -719,6 +732,7 @@
       text-align: center;
       padding: 0.5rem 0;
       border: none;
+      border-radius: 0;
     }
 
     .form-item-location label {
@@ -784,6 +798,7 @@
       color: $white-two;
       vertical-align: middle;
       border-radius: 0;
+      cursor: pointer;
 
       @include icon(close, after) {
         position: absolute;
@@ -1264,15 +1279,14 @@
       }
 
       button[type="submit"] {
-        font-family: $arial;
-        font-weight: bold;
-        font-size: 0.75rem;
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
         background: $pumpkin-orange;
         border-radius: 0;
         color: $white-five;
         border: 0;
         text-transform: lowercase;
-        padding: 0.66rem 1.3701rem;
+        padding: 0.5rem 1.3701rem;
         margin-bottom: 1.5rem;
         display: inline-block;
 
@@ -1284,7 +1298,7 @@
           z-index: 4;
           margin: 0;
           #{$left}: 0;
-          height: 2.188rem;
+          height: 2.5rem;
 
           .ladda-label {
             html[lang="ar"] & {
@@ -1301,7 +1315,7 @@
         }
 
         @include breakpoint($desktop) {
-          float: $right;
+          margin-#{$left}: 2rem;
           margin-top: 1.45rem;
         }
       }
@@ -1366,16 +1380,16 @@
         margin-bottom: 0.3125rem;
         margin-#{$right}: 0.5rem;
         margin-#{$left}: 0;
-        border: 1px solid $black;
+        border: 1px solid $marine-blue;
         text-align: center;
         padding: 0.75rem;
-        font-size: 0.625rem;
-        color: $black;
+        font-size: 0.875rem;
+        color: $marine-blue;
 
         &.picked {
-          color: $white;
+          color: $white-five;
           font-weight: bold;
-          background: $black;
+          background: $marine-blue;
         }
       }
 
@@ -1473,16 +1487,27 @@ article[gtm-sku-type="simple"] {
     }
   }
 
-  .out-of-stock {
+  span.out-of-stock {
     background-color: $cherry;
-    font-family: $alshaya-thin;
+    font-family: $alshaya-bold;
+    font-size: 0.75rem;
     display: block;
     vertical-align: middle;
     text-align: center;
     margin: 1rem 0;
     padding: 0.6rem 1.5rem;
     color: $white;
-    font-size: 0.75rem;
+
+    @include breakpoint($only-mobile) {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      #{$left}: 0;
+      margin: 0;
+      font-size: 0.875rem;
+      z-index: 6;
+      height: 3rem;
+    }
 
     @include breakpoint($desktop) {
       display: inline-block;
@@ -1529,5 +1554,41 @@ article[gtm-sku-type="simple"] {
 
   .content__title_wrapper {
     margin-bottom: 1rem;
+  }
+}
+
+.gradient-holder {
+  background: rgba(255, 255, 255, 1);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.4) 47%, rgba(255, 255, 255, 0.8) 100%);
+  position: absolute;
+  bottom: 0;
+  height: 3rem;
+  width: 100%;
+  #{$left}: 0;
+}
+
+.nodetype--acq_product {
+  @include breakpoint($upto-desktop) {
+    ul#select2-edit-configurables-size-results {
+      li.select2-results__option {
+        &:first-child {
+          display: none;
+        }
+
+        &:nth-child(2) {
+          border-top: 1px solid $white;
+        }
+      }
+    }
+  }
+}
+
+article.product-out-of-stock {
+  .basic-details-wrapper {
+    @include breakpoint($only-mobile) {
+      .field--name-field-skus {
+        height: 0;
+      }
+    }
   }
 }

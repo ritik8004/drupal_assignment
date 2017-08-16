@@ -47,7 +47,7 @@
               // Add class to share this wrapper if product out of stock.
               if (result.max_quantity <= 0) {
                 var $article = $wrapper.closest('article[data-vmode="full"]');
-                $article.find('sharethis-wrapper').addClass('out-of-stock');
+                $article.find('.sharethis-wrapper').addClass('out-of-stock');
 
                 // Add out of stock class to article to allow styles to be added everywhere.
                 $article.addClass('product-out-of-stock');
