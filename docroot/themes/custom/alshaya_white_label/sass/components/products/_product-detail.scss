@@ -201,7 +201,6 @@
       select.form-select {
         @include select-style(12.3125rem);
 
-        background-color: $whisper-dark;
         width: 100%;
       }
     }
@@ -282,6 +281,14 @@
       padding: 0.3125rem 0;
       padding-#{$right}: 1.25rem;
       #{$left}: 0;
+    }
+
+    @include select-wrapper(4.375rem);
+
+    background: $white-five;
+
+    select.form-select {
+      @include select-style(4.375rem);
     }
 
     .select2-container {
@@ -1528,6 +1535,13 @@ article[gtm-sku-type="simple"] {
 .ui-dialog,
 .acq-content-product {
   .form-item-configurables-size {
+    @include breakpoint($desktop) {
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+
     .select2-container {
       @include breakpoint($desktop) {
         display: none;
@@ -1536,11 +1550,6 @@ article[gtm-sku-type="simple"] {
   }
 
   .form-item-configurables-size {
-    &::before,
-    &::after {
-      display: none;
-    }
-
     .select2-container {
       @include select2-style(100%);
     }
