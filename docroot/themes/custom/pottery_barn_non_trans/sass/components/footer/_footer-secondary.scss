@@ -1,5 +1,5 @@
 .c-footer-secondary {
-  background: $white-four;
+  background: $white-five;
   font-size: 0.6875rem;
   position: relative;
   z-index: 4;
@@ -22,6 +22,10 @@
   @include breakpoint($tablet) {
     float: $left;
     width: 100%;
+  }
+
+  a {
+    color: $deep-red;
   }
 }
 
