@@ -1,8 +1,3 @@
-alshaya_search.redirect_bulk_upload:
-  route_name: alshaya_search.redirect_bulk_upload
-  base_route: redirect.list
-  title: 'Bulk add redirects'
-  weight: 51
 alshaya_search.term_search:
   route_name: view.term_search.page_1
   title: 'Search'
