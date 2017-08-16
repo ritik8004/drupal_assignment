@@ -151,6 +151,12 @@
   }
 }
 
+.cloud-zoom-lens {
+  @include breakpoint($only-tablet) {
+    @include u-visibility(none, true);
+  }
+}
+
 #product-image-gallery {
   .slick-list {
     padding: 0 !important;
@@ -158,7 +164,7 @@
 }
 
 .cloudzoom .cloud-zoom-lens {
-  cursor: url(../imgs/assets/ic-zoom.svg), auto !important;
+  cursor: zoom-in;
 }
 
 .mobilegallery {
