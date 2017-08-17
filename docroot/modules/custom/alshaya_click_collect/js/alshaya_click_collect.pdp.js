@@ -31,7 +31,7 @@
           // First load the library from google.
           Drupal.geolocation.loadGoogle(function () {
             var field = $('.click-collect-form').find('input[name="location"]')[0];
-            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords]);
+            new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
           });
         });
       }
@@ -174,7 +174,7 @@
 
   Drupal.pdp.changeLocationAutocomplete = function () {
     var field = $('.click-collect-form').find('input[name="store-location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay]);
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay]);
   };
 
   // Invoke display search store form if conditions matched.
@@ -286,13 +286,13 @@
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function () {
     var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.ClickCollect(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   /**
@@ -372,7 +372,7 @@
 
     // Bind the js again to main input.
     var field = $('.click-collect-form').find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords]);
+    new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
 
     $('.click-collect-form .store-finder-form-wrapper').show();
   };
