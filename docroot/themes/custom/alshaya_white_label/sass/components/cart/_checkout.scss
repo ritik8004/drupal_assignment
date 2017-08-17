@@ -421,6 +421,10 @@
   .totals {
     background: none;
     border-top: 1px solid $white;
+
+    html[lang=ar] & {
+      line-height: 1.5;
+    }
   }
 }
 
@@ -445,7 +449,7 @@
   .order-total {
     > span {
       display: inline-block;
-      width: 60%;
+      width: 57%;
 
       html[lang=ar] & {
         @include breakpoint($desktop) {
@@ -458,17 +462,17 @@
       }
 
       @include breakpoint($upto-desktop) {
-        width: 55%;
+        width: 50%;
       }
     }
 
     .total--amount,
     .price-type__wrapper {
       display: inline-block;
-      width: 38%;
+      width: 41%;
 
       @include breakpoint($upto-desktop) {
-        width: 43%;
+        width: 47%;
       }
     }
 
