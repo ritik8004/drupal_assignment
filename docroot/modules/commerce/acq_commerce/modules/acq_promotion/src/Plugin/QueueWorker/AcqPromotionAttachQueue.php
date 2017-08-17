@@ -57,8 +57,8 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
           $update_sku_flag = TRUE;
         }
 
-        if ((isset($sku['final_price'])) && ($sku->final_price->value !== $sku['final_price'])) {
-          $sku->final_price->value = $sku['final_price'];
+        if ((isset($sku['final_price'])) && ($sku_entitys->final_price->value !== $sku['final_price'])) {
+          $sku_entity->final_price->value = $sku['final_price'];
           $update_sku_flag = TRUE;
         }
 
