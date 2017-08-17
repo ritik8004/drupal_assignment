@@ -21,5 +21,6 @@ dependencies:
   - user
   - views
   - views_infinite_scroll
+  - alshaya_acm_promotion
 version: 8.x-1.0
 package: Alshaya

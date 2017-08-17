@@ -4,6 +4,8 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -55,18 +57,22 @@ class SkuManager {
    *   The entity repository service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service.
    */
   public function __construct(Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              CacheBackendInterface $cache) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
+    $this->cache = $cache;
   }
 
   /**
@@ -354,8 +360,11 @@ class SkuManager {
               ->getGeneratedLink();
           }
           else {
-            $description = $promotion_node->get('field_acq_promotion_description')
-              ->getString();
+            $description = '';
+            $description_item = $promotion_node->get('field_acq_promotion_description')->first();
+            if ($description_item) {
+              $description = $description_item->getValue();
+            }
             $promos[$promotion_node->id()] = [
               'text' => $promotion_text,
               'description' => $description,
@@ -526,6 +535,106 @@ class SkuManager {
     else {
       throw new \Exception(new FormattableMarkup('Failed to save labels image file "@file" for SKU id @sku_id.', $args));
     }
+  }
+
+  /**
+   * Helper function to fetch sku tree.
+   *
+   * @return array
+   *   Sku tree with keyed by configurable sku entity id.
+   */
+  public function getSkuTree() {
+    if ($sku_tree_cache = $this->cache->get('sku_tree') !== NULL) {
+      $sku_tree = $sku_tree_cache->data;
+      return $sku_tree;
+    }
+    else {
+      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
+      $query->fields('asfcs', []);
+      $results = $query->execute()->fetchAll();
+      $processed_skus = [];
+      $sku_tree = [];
+
+      foreach ($results as $result) {
+        if (!in_array($result->field_configured_skus_value, $processed_skus)) {
+          $sku_tree[$result->field_configured_skus_value] = $result->entity_id;
+          $processed_skus[] = $result->field_configured_skus_value;
+        }
+      }
+
+      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['sku_list']);
+    }
+
+    return $sku_tree;
+  }
+
+  /**
+   * Helper function to fetch sku text from entity_id.
+   *
+   * @param string $entity_id
+   *   Entity id for which sku text needs to be fetched.
+   *
+   * @return string
+   *   SKU text corresponding to entity_id.
+   */
+  public function getSkuTextFromId($entity_id) {
+    $sku_text = $this->connection->select('acq_sku_field_data', 'asfd')
+      ->fields('asfd', ['sku'])
+      ->condition('asfd.id', $entity_id)
+      ->range(0, 1)
+      ->execute()->fetchField();
+
+    return $sku_text;
+  }
+
+  /**
+   * Helper function to do a cheaper call to fetch skus for a promotion.
+   *
+   * @param \Drupal\node\Entity\Node $promotion
+   *   Promotion for which we need to fetch skus.
+   *
+   * @return array
+   *   List of skus related with a promotion.
+   */
+  public function getSkutextsForPromotion(Node $promotion) {
+    if ($skus_cache = $this->cache->get('promotinos_sku_' . $promotion->id())) {
+      $skus = $skus_cache->data;
+    }
+    else {
+      $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
+      $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
+      $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+      $query->condition('asfd.type', 'configurable');
+      $query->fields('asfd', ['id', 'sku']);
+      $query->distinct();
+      $config_skus = $query->execute()->fetchAllKeyed(0, 1);
+
+      $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
+      $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
+      $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+      $query->condition('asfd.type', 'simple');
+      $query->fields('asfd', ['id', 'sku']);
+      $query->distinct();
+      $simple_skus = $query->execute()->fetchAllKeyed(0, 1);
+
+      $sku_tree = $this->getSkuTree();
+      $processed_sku_eids = [];
+
+      foreach ($simple_skus as $sku) {
+        if (isset($sku_tree[$sku])) {
+          $parent_sku = $sku_tree[$sku];
+          if (!in_array($parent_sku, $processed_sku_eids)) {
+            $processed_sku_eids[] = $this->getSkuTextFromId($parent_sku);;
+          }
+        }
+      }
+
+      $skus = array_unique(array_merge($processed_sku_eids, $config_skus));
+
+      $this->cache->set('promotions_sku_' . $promotion->id(), $skus, Cache::PERMANENT, ['sku_list']);
+    }
+
+    return $skus;
   }
 
 }
