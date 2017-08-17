@@ -325,9 +325,14 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
       if ($promotion) {
         $promotion = \Drupal::service('entity.repository')->getTranslationFromContext($promotion, $langcode);
         if ($promotion) {
-          $promotion_title = $promotion->getTitle();
+          $promotion_description = '';
+          $promotion_description_item = $promotion->get('field_acq_promotion_description')->first();
+          if ($promotion_description_item) {
+            $promotion_description = $promotion_description_item->getValue();
+          }
+
           $promotion_label = $promotion->get('field_acq_promotion_label')->getString();
-          $promotions[$rule_id]['title'] = $promotion_title;
+          $promotions[$rule_id]['description'] = $promotion_description;
           $promotions[$rule_id]['label'] = $promotion_label;
         }
       }

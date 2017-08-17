@@ -39,21 +39,24 @@
 
 {% if promotions is not empty %}
   <div class="cart-promotions">
+      <div class="applied-discounts-title">{{ 'Discount applied' | t }} </div>
       <div class="tooltip-wrap">
         <div class="contains--tooltip">
           <div class="tooltip--head">
           </div>
           <div class="tooltip">
             {% for id, promotion in promotions %}
-              <div class="promotion-{{ id }}">
-                <div class="promotion-label">
-                  <strong>{{ promotion.title }}</strong>
+              {% if promotion.label and promotion.description %}
+                <div class="promotion-{{ id }}">
+                  <div class="promotion-label">
+                    <strong>{{ promotion.label }}</strong>
+                  </div>
+                  <div class="promotion-description">
+                    {{ promotion.description.value }}
+                  </div>
                 </div>
-                <div class="promotion-description">
-                  {{ promotion.label}}
-                </div>
-              </div>
-              <br>
+                <br>
+              {% endif %}
             {% endfor %}
           </div>
         </div>
