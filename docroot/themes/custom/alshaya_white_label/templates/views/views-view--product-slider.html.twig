@@ -32,7 +32,6 @@
 #}
 
 {{ attach_library('alshaya_white_label/sell') }}
-
 {%
 set classes = [
 'view',
@@ -64,8 +63,13 @@ dom_id ? 'js-view-dom-id-' ~ dom_id,
     </div>
   {% endif %}
 
-  {% if rows %}
+  {% set count_rows = rows[0]['#rows'] | length %}
+  {% if rows and count_rows > 3 %}
     <div class="owl-carousel">
+      {{ rows }}
+    </div>
+  {% elseif rows and count_rows <= 3 %}
+    <div class="no-carousel">
       {{ rows }}
     </div>
   {% elseif empty %}

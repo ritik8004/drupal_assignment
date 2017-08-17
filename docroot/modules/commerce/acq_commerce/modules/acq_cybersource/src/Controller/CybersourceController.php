@@ -190,13 +190,14 @@ class CybersourceController implements ContainerInjectionInterface {
     $response = new Response();
     $script = '';
 
-    if (strtolower($post_data['decision']) == 'error') {
+    // Anything other then accept is an issue.
+    if (strtolower($post_data['decision']) != 'accept') {
       $this->logger->info('Error while processing payment using Cybersource: %message <br> %info', [
         '%message' => $post_data['message'],
         '%info' => print_r($post_data, TRUE),
       ]);
       // @TODO: Need to check how it is handled in Magento.
-      $error = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+      $error = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.', [], ['langcode' => $post_data['req_locale']]));
       $script = "window.parent.Drupal.cybersourceShowGlobalError('" . $error . "')";
     }
     else {
@@ -238,7 +239,7 @@ class CybersourceController implements ContainerInjectionInterface {
           '%response' => print_r($updated_cart, TRUE),
         ]);
 
-        $error = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+        $error = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.', [], ['langcode' => $post_data['req_locale']]));
         $script = "window.parent.Drupal.cybersourceShowGlobalError('" . $error . "')";
       }
     }
@@ -267,7 +268,6 @@ class CybersourceController implements ContainerInjectionInterface {
 
     $error = render($messages);
     $error = str_replace(["\r", "\n"], '', $error);
-    $error = addslashes($error);
 
     return '<div class="cybersource-global-error">' . $error . '</div>';
   }

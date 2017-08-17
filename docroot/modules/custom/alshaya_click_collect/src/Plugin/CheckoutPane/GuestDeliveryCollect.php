@@ -231,7 +231,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
           'google_map_url' => $this->getGoogleMapsApiUrl(),
           'google_map_settings' => [
             'type' => static::$ROADMAP,
-            'zoom' => 10,
+            'zoom' => 11,
             'minZoom' => 0,
             'maxZoom' => 18,
             'rotateControl' => 0,
@@ -319,8 +319,8 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $cart = $this->getCart();
 
-    // We are only looking to convert guest carts.
-    if (!($cart->customerId())) {
+    // We convert guest carts to customer cart or if user changes the email.
+    if (!($cart->customerId()) || $cart->customerEmail() != $values['cc_email']) {
       // Get the customer id of Magento from this email.
       /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
       $api_wrapper = \Drupal::service('acq_commerce.api');

@@ -37,6 +37,11 @@
               scrollTop: $('.content__title_wrapper').offset().top - normalStickyHeaderHeight
             }, 'slow');
           }
+          else {
+            $('html,body').animate({
+              scrollTop: $('.content__title_wrapper').offset().top
+            }, 'slow');
+          }
         }
       });
 
@@ -49,6 +54,12 @@
 
       // Mobile grey block hiding over the image after 3secs.
       $('.mobilegallery .subtext').show().delay(3000).fadeOut();
+
+      // This js is to remove the success message of newsletter subscription after 10 seconds.
+      setTimeout(function () {
+        $('.subscription-status .success').fadeOut();
+        $('#cart_notification').fadeOut();
+      }, 10000);
     }
   };
 
@@ -60,8 +71,9 @@
         });
       }
 
-      $('.nodetype--acq_product .above-mobile-block, .path--cart .owl-item .above-mobile-block').click(function () {
+      $('.nodetype--acq_product .owl-item .above-mobile-block, .path--cart .owl-item .above-mobile-block, .acq-content-product .cloudzoom #cloud-zoom-wrap').click(function () {
         $('body').addClass('pdp-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
 
         $(document).ajaxComplete(function () {
           modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');

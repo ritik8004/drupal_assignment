@@ -70,6 +70,7 @@ class KeywordSearchBlock extends BlockBase implements ContainerFactoryPluginInte
     $form_state->set('rerender', NULL);
     $form = $this->formBuilder->buildForm('\Drupal\views\Form\ViewsExposedForm', $form_state);
     $form['#attached']['library'][] = 'alshaya_search/disable_keyword_ajax';
+    $form['keywords']['#attributes']['autocapitalize'] = 'none';
 
     // Unset sort widget & its submit handler since we this block
     // should return keyword search field.

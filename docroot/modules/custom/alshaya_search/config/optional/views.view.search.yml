@@ -63,7 +63,7 @@ display:
                 collapsible: false
                 collapsible_label: 'Sort options'
                 combine: true
-                combine_rewrite: "Relevance Desc|Relevance\nName Desc|Name Z to A\nName Asc|Name A to Z\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
+                combine_rewrite: "Relevance Desc|Relevance\nName Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
                 reset: false
                 reset_label: ''
                 is_secondary: false

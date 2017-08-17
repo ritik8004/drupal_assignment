@@ -51,6 +51,10 @@
 
 
   Drupal.finishCybersourcePayment = function () {
+    // We hide credit card fields to avoid error message displays when we remove value.
+    $('.cybersource-credit-card-input').closest('.form-item').hide();
+    $('.cybersource-credit-card-cvv-input').closest('.form-item').hide();
+
     // We don't pass credit card info to drupal.
     $('.cybersource-credit-card-input').val('-');
     $('.cybersource-credit-card-cvv-input').val('-');
@@ -66,18 +70,21 @@
     var errorDiv = $('<div class="form-item--error-message" />');
     errorDiv.html(error);
 
-    if (element.is('input:checkbox')) {
-      element.parent().append(errorDiv);
-    }
-    else {
-      element.after(errorDiv);
-    }
+    element.parent().append(errorDiv);
+
+    // Remove the loader, we will add it again.
+    $('.cybersource-ajax-progress-throbber').remove();
   };
 
   Drupal.cybersourceShowGlobalError = function (error) {
     Drupal.cybersourceProcessed = false;
+
     $('.cybersource-input').parents('form').find('.cybersource-global-error').remove();
     $('.cybersource-input').parents('form').prepend(error);
+    window.scrollTo(0, 0);
+
+    // Remove the loader, we will add it again.
+    $('.cybersource-ajax-progress-throbber').remove();
   }
 
 })(jQuery, Drupal);
@@ -142,6 +149,15 @@ function cybersource_form_submit_handler(form) {
   // We also send all other form data here to allow other modules to process based on that.
   getTokenData += $('.cybersource-input').parents('form').find('input:not(.cybersource-input), select:not(.cybersource-input)').serialize();
 
+  // Remove the loader div to avoid duplicates.
+  $('.cybersource-ajax-progress-throbber').remove();
+
+  // Add the loader div.
+  $('body').append('<div class="cybersource-ajax-progress cybersource-ajax-progress-throbber"><div class="cybersource-throbber"></div></div>');
+
+  // Show the loader.
+  $('.cybersource-ajax-progress-throbber').show();
+
   $.ajax({
     type: 'POST',
     cache: false,
@@ -163,7 +179,9 @@ function cybersource_form_submit_handler(form) {
       }
 
       // Add credit cart info.
-      response.data.card_number = $('.cybersource-credit-card-input').val().toString().trim();
+      response.data.card_number = $('.cybersource-credit-card-input').val().toString();
+      // Remove valid data per formatting but invalid for number.
+      response.data.card_number = response.data.card_number.replace(/\s|-/g, '');
       response.data.card_expiry_date = card_expiry_date;
       response.data.card_cvn = parseInt($('.cybersource-credit-card-cvv-input').val().toString().trim());
 

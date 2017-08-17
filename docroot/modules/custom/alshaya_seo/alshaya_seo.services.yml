@@ -12,6 +12,8 @@ services:
       - '@alshaya_acm_checkout.options_manager'
       - '@alshaya_stores_finder.utility'
       - '@language_manager'
+      - '@cache.alshaya'
+      - '@database'
   alshaya_seo.sitemap_breadcrumb:
     class: Drupal\alshaya_seo\Breadcrumb\AlshayaSiteMapBreadcrumb
     tags:

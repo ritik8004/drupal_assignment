@@ -1,0 +1,36 @@
+<div class="c-footer-primary">
+  <div class="ms-footer-primary">
+    <div class="l-container">
+      <div class="alshaya-club">
+       {{ page.footer_primary.alshayaclub }}
+       {{ page.footer_primary.alshayaclub.field_image }}
+     </div>
+     <div class="alshaya-mob-app-links">
+       {{ page.footer_primary.mobileapplinks }}
+     </div>
+
+   </div>
+ </div>
+ <div class="ms-footer-primary-two">
+  <div class="l-container">
+    <div class="upto-tablet-block signup-store-langswitcher">
+      <div class="plsfootermenu">
+        {{ page.footer_primary.plsfootermenu }}
+      </div>
+      <div class="language--switcher">
+        {{ page.footer_primary.pottery_barn_non_trans_languageswitcher_2 }}
+      </div>
+    </div>
+    <div class="our-brands-logo footer-primary--blocks">
+      {{ page.footer_primary.ourbrands }}
+    </div>
+    <div class="c-social-links footer--social-links footer-primary--blocks">
+      {{ page.footer_primary.plssociallinks }}
+    </div>
+    <div class="footer-primary--blocks footer--find-store desktop-only-block">
+      {{ page.footer_primary.findstore }}
+    </div>
+  </div>
+</div>
+{{ page.footer_primary|without('shopby', 'aboutbrand', 'help', 'pottery_barn_non_trans_languageswitcher_2', 'plssociallinks', 'alshayaclub', 'ourbrands', 'findstore', 'mobileapplinks', 'sign_up', 'plsalshayastoresfinder', 'plsfootermenu') }}
+</div>

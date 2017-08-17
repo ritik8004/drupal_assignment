@@ -101,6 +101,10 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       '#title' => t('Email', [], ['context' => 'Address label']),
       '#description' => t("We'll send your order confirmation here."),
     ];
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_user')) {
+      $element['organization']['#element_validate'] = ['alshaya_valid_email_address'];
+      $element['#attached']['library'][] = 'alshaya_user/email_validator_override';
+    }
   }
   else {
     $element['organization']['#required'] = FALSE;
@@ -531,7 +535,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     if ($view_mode == 'teaser') {
       $variables['change_address'] = [
         '#type' => 'button',
-        '#value' => t('Edit'),
+        '#value' => t('Change'),
         '#attributes' => [
           'id' => 'change-address',
         ],

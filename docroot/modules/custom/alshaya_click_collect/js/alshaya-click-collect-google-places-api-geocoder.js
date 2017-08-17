@@ -24,19 +24,22 @@
 
         // First load the library from google.
         Drupal.geolocation.loadGoogle(function () {
-          $('input.geolocation-geocoder-google-places-api', context).each(function () {
+          $('.geolocation-geocoder-google-places-api[type="text"]', context).once('bind-events').each(function () {
             var field = $(this).get(0);
             // Create autocomplete object for places.
             new Drupal.ClickCollect(field, [Drupal.alshayaClickCollectPlacesApi.storePlacesDetails], componentRestrictions, field);
-          }) // Handle input and keyup events.
-            .on('input', function () {
+
+            // Handle input event.
+            $(this).on('input', function () {
               var elementId = $(this).data('source-identifier');
               if ($("input[name='" + elementId + "-lat']").val() === '' || $("input[name='" + elementId + "-lng']").val() === '') {
                 $('.geolocation-geocoder-google-places-api-state[data-source-identifier="' + $(this).data('source-identifier') + '"]').val(0);
               }
               return false;
-            })
-            .on('keypress', function (e) {
+            });
+
+            // Handle keyup event.
+            $(this).on('keyup', function (e) {
               var keyCode = e.keyCode || e.which;
               if (keyCode === 13) {
                 e.preventDefault();
@@ -47,6 +50,7 @@
                 }
               }
             });
+          });
         });
       }
     }

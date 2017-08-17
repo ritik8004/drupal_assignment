@@ -200,7 +200,8 @@ html[lang=ar] {
       }
 
       .price-currency {
-        float: left !important;
+        float: none !important;
+        margin-right: 1rem;
       }
     }
   }
@@ -249,7 +250,8 @@ html[lang=ar] {
 
       .price-currency {
         @include breakpoint($desktop) {
-          float: left !important;
+          float: none !important;
+          margin-right: 1.5625rem !important;
         }
       }
     }
@@ -278,6 +280,12 @@ html[lang="ar"] {
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
+    }
+
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
+      label {
+        width: 103% !important;
+      }
     }
   }
 }

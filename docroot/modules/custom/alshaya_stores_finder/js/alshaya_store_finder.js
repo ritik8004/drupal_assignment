@@ -18,7 +18,7 @@
     attach: function (context, settings) {
 
       // Opening hours toggle.
-      $('[data-drupal-selector^="views-form-stores-finder-"]', context).on('click', '.hours--label', function () {
+      $('[data-drupal-selector^="views-form-stores-finder-"], .individual--store', context).once('opening-hrs-init').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
 
@@ -31,17 +31,14 @@
         Drupal.alshaya_stores_finder.paginateStores(storeLocatorSelector, loadMoreButtonSelector, loadmoreItemLimit);
       }
 
-      $('.set-center-location .views-field-field-store-address').on('click', function () {
-        // Get all elements having 'selected' class and then remove class.
-        var active_stores = $('.list-view-locator.selected');
-        if (active_stores.length > 0) {
-          active_stores.removeClass('selected');
-        }
-        // Add class to parent for making it active.
-        $(this).parents('.list-view-locator').addClass('selected');
+      $('.view-stores-finder .list-view-locator', context).once('marker-trigger').on('click', function () {
+        // Add class for making it active and remove 'selected' class from all siblings.
+        $(this)
+          .addClass('selected')
+          .siblings('.list-view-locator').removeClass('selected');
 
         // Id of the row.
-        var elementID = $(this).parents('.set-center-location').attr('id');
+        var elementID = $(this).find('.set-center-location').attr('id');
         Drupal.geolocation.loadGoogle(function () {
           var geolocationMap = {};
 
@@ -52,25 +49,19 @@
               }
             });
           }
-
           if (typeof geolocationMap.googleMap !== 'undefined') {
-            var newCenter = new google.maps.LatLng(
-              $('#' + elementID + ' .lat-lng .lat').html(),
-              $('#' + elementID + ' .lat-lng .lng').html()
-            );
+            var currentLat = parseFloat($('#' + elementID + ' .lat-lng .lat').html()).toFixed(6);
+            var currentLng = parseFloat($('#' + elementID + ' .lat-lng .lng').html()).toFixed(6);
+
+            var newCenter = new google.maps.LatLng(currentLat, currentLng);
             geolocationMap.googleMap.setCenter(newCenter);
 
             // Clicking the markup.
             var markers = geolocationMap.mapMarkers;
             var current_marker = {};
             for (var i = 0, len = markers.length; i < len; i++) {
-              var marker = markers[i];
-              var mapLat = marker.position.lat().toFixed(6);
-              var mapLng = marker.position.lng().toFixed(6);
-              var htmlLat = parseFloat($('#' + elementID + ' .lat-lng .lat').html()).toFixed(6);
-              var htmlLng = parseFloat($('#' + elementID + ' .lat-lng .lng').html()).toFixed(6);
               // If markup has same latitude and longitude that we clicked.
-              if (mapLat === htmlLat && mapLng === htmlLng) {
+              if (markers[i].position.lat().toFixed(6) === currentLat && markers[i].position.lng().toFixed(6) === currentLng) {
                 current_marker = markers[i];
                 break;
               }
@@ -79,11 +70,10 @@
             // Trigger marker click.
             google.maps.event.trigger(current_marker, 'click');
           }
-
         });
       });
 
-      $('.current-location').on('click', function () {
+      $('.current-location').once('location-init').on('click', function () {
         // Start overlay here.
         $('body').addClass('modal-overlay--spinner');
 
@@ -128,7 +118,7 @@
               $.each(results, function (index, result) {
                 var addressType = result.types[0];
                 if (addressType === 'country') {
-                  if (result.address_components[0].short_name !== componentRestrictions.country) {
+                  if (result.address_components[0].short_name.toLowerCase() !== componentRestrictions.country.toLowerCase()) {
                     runscript = false;
                     return false;
                   }
@@ -230,13 +220,17 @@
     }
   };
 
-  // Open Maps app depending on the device ios or Andriod.
-  function mapsApp(lat, lng) {
-    // If it is an iPhone..
-    if ((navigator.platform.indexOf('iPhone') !== -1)
-      || (navigator.platform.indexOf('iPod') !== -1)
-      || (navigator.platform.indexOf('iPad') !== -1)) {window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + lng + '&amp;ll=');}
-    else {window.open('geo:' + lat + ',' + lng + '');}
-  }
-
 })(jQuery, Drupal);
+
+// Open Maps app depending on the device ios or Andriod.
+function mapsApp(lat, lng) {
+  // If it is an iPhone..
+  if ((navigator.platform.indexOf('iPhone') !== -1)
+    || (navigator.platform.indexOf('iPod') !== -1)
+    || (navigator.platform.indexOf('iPad') !== -1)) {
+    window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + lng + '&amp;ll=', '_self');
+  }
+  else {
+    window.open('geo:' + lat + ',' + lng + '', '_self');
+  }
+}

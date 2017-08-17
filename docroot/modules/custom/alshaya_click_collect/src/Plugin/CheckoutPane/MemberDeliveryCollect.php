@@ -191,7 +191,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
           'google_map_url' => $this->getGoogleMapsApiUrl(),
           'google_map_settings' => [
             'type' => static::$ROADMAP,
-            'zoom' => 10,
+            'zoom' => 11,
             'minZoom' => 0,
             'maxZoom' => 18,
             'rotateControl' => 0,

@@ -283,7 +283,7 @@
 .acq-cart-summary {
   .caption {
     font-size: 0.875rem;
-    background: $white-three;
+    border-bottom: 1px solid $white;
     padding: 1rem 1.5rem;
 
     @include breakpoint($upto-desktop) {
@@ -306,7 +306,6 @@
 
   .content-head {
     width: 100%;
-    background: $white-four;
     padding: 1em 1.5rem;
     font-size: 0.875rem;
     position: relative;
@@ -316,7 +315,7 @@
       font-size: 0.75rem;
     }
 
-    @include icon(chevrondown, after) {
+    @include icon(chevron#{$right}, after) {
       position: absolute;
       #{$right}: 1rem;
       font-size: 1.875rem;
@@ -328,7 +327,7 @@
 
   .active--accordion {
     .content-head {
-      @include icon(chevron#{$right}, after);
+      @include icon(chevronup, after);
     }
   }
 
@@ -359,10 +358,6 @@
     display: inline-block;
     border-top: 1px solid $white;
     padding: 1.5rem;
-
-    &:last-child {
-      border-bottom: 1px solid $white;
-    }
   }
 
   .left {
@@ -422,6 +417,11 @@
       font-weight: normal;
     }
   }
+
+  .totals {
+    background: none;
+    border-top: 1px solid $white;
+  }
 }
 
 .totals {
@@ -447,8 +447,14 @@
       display: inline-block;
       width: 60%;
 
-      html[lanng=ar] & {
-        width: 59%;
+      html[lang=ar] & {
+        @include breakpoint($desktop) {
+          width: 59%;
+        }
+
+        @include breakpoint($only-tablet) {
+          width: 54%;
+        }
       }
 
       @include breakpoint($upto-desktop) {
@@ -471,8 +477,12 @@
       display: inline-block;
 
       .price {
+        .price-currency {
+          margin-right: 1.5625rem;
+        }
+
         .price-amount {
-          float: $right;
+          float: none;
         }
       }
     }
@@ -536,7 +546,7 @@ body.alias--cart {
 
 .alias--cart {
   @include breakpoint($only-mobile) {
-    #edit-actions {
+    .table-cart-totals #edit-actions {
       display: block;
       float: none;
       margin-#{$right}: 0;
@@ -586,6 +596,17 @@ body.alias--cart {
       }
     }
 
+    tbody tr {
+      &:hover {
+        background: rgba(247, 247, 247, 0.72);
+
+        .name .items a {
+          color: $cerulean-two;
+          text-decoration: underline;
+        }
+      }
+    }
+
     tr {
       border-bottom: 1px solid $white;
 
@@ -597,10 +618,6 @@ body.alias--cart {
             color: $black-two;
           }
         }
-      }
-
-      &:hover {
-        background: rgba(247, 247, 247, 0.72);
       }
 
       th {
@@ -1074,7 +1091,7 @@ body.alias--cart {
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
     text-transform: lowercase;
-    font-family: $arial;
+    font-family: $alshaya-bold;
     font-size: 0.75rem;
 
     @include breakpoint($upto-tablet) {
@@ -1151,7 +1168,7 @@ body.alias--cart {
       background: $pumpkin-orange;
       color: $white-five;
       font-size: 0.75rem;
-      font-family: $arial;
+      font-family: $alshaya-bold;
       width: 10.81rem;
       height: 2.188rem;
       display: inline-block;

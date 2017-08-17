@@ -177,8 +177,8 @@ function alshaya_master_install() {
     'enter card details' => [
       'ar' => 'الرجاء إدخال معلومات البطاقة',
     ],
-    '<p>By registering you agreed to our <a class="final-t&c" href="/terms">Terms and Conditions</a>.</p>' => [
-      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a class="final-t&c" href="/terms">الشروط والأحكام</a></p>',
+    '<p>By registering you agreed to our <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms" class="final-tnc">الشروط والأحكام</a></p>',
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
@@ -193,7 +193,7 @@ function alshaya_master_install() {
       'ar' => 'تواصل معنا',
     ],
     'get email offers and the latest news from @site_name' => [
-      'ar' => '@site_name احصل على أحدث العروض الحصرية عبر عنوان البريد الإكتروني',
+      'ar' => 'احصل على أحدث العروض الحصرية من @site_name عبر عنوان البريد الإكتروني',
     ],
     'submit' => [
       'ar' => 'إرسال',
@@ -245,6 +245,12 @@ function alshaya_master_install() {
     ],
     'Find stores' => [
       'ar' => 'البحث عن المحلات',
+    ],
+    'Find Store' => [
+      'ar' => 'البحث عن محلاتنا',
+    ],
+    'KWD' => [
+      'ar' => 'د٠ك٠',
     ],
     'Map view' => [
       'ar' => 'عرض الخريطة',
@@ -629,7 +635,7 @@ function alshaya_master_install() {
     'Is the delivery address the same as your billing address?' => [
       'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
     ],
-    '<p>I confirm that I have read and accept the <a href="#">Privacy Policy</a> and <a href="#">Terms &amp; Conditions</a> of purchase. Read our <a href="#">Return Policy</a></p>' => [
+    '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>' => [
       'ar' => 'أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا',
     ],
     'Billing address' => [
@@ -837,6 +843,9 @@ function alshaya_master_install() {
     'Filter' => [
       'ar' => 'حدّد اختيارك',
     ],
+    'filter' => [
+      'ar' => 'حدّد اختيارك',
+    ],
     'Welcome, @name' => [
       'ar' => 'أهلاً بك, @name',
     ],
@@ -934,6 +943,9 @@ function alshaya_master_install() {
     'Phone number in %field is required.' => [
       'ar' => 'يرجى إدخال رقم الجوال',
     ],
+    'Phone number in %field is required.' => [
+      'en' => '%field field is required.',
+    ],
     '1 hour' => [
       'ar' => 'ساعة واحدة',
     ],
@@ -1003,10 +1015,75 @@ function alshaya_master_install() {
     'Collection Store' => [
       'ar' => 'محل الاستلام',
     ],
+    'Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.' => [
+      'ar' => 'عفواً، لقد نفدت الكمية من بعض القطع في سلة تسوقك. يرجى إزالة القطع من سلة التسوق لإكمال عملية الشراء بأمان.',
+    ],
+    'No matches found for this area' => [
+      'ar' => 'لا توجد أي معلومات متطابقة لهذه المنطقة',
+    ],
+    'Your order will be available for pickup at the following store' => [
+      'ar' => 'طلبيتك ستكون جاهزة للاستلام في هذا المحل',
+    ],
+    'Collection times' => [
+      'ar' => 'أوقات التسليم',
+    ],
+    'Collection Address' => [
+      'ar' => 'عنوان التسليم',
+    ],
+    'Your order will be delivered at the following address' => [
+      'ar' => 'سيتم توصيل طلبيتك على العنوان التالي',
+    ],
+    'Invalid Credit Card number' => [
+      'ar' => 'رقم البطاقة غير صحيح',
+    ],
+    'Invalid security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV غير صحيح',
+    ],
+    'Security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV',
+    ],
+    'Home' => [
+      'ar' => 'الصفحة الرئيسية',
+      'context' => 'breadcrumb',
+    ],
+    'Collection' => [
+      'ar' => 'المجموعة',
+    ],
+    'Style Code: @value' => [
+      'ar' => '@value :رمز المنتج',
+    ],
+    'Season: @value' => [
+      'ar' => '@value :الموسم',
+    ],
+    'Product brand: @value' => [
+      'ar' => '@value :العلامة التجارية',
+    ],
+    'Color: @value' => [
+      'ar' => '@value :اللون',
+    ],
+    'Size' => [
+      'ar' => 'المقاس',
+    ],
+    'Sorry, we are unable to process your payment. Please contact our customer service team for assistance.' => [
+      'ar' => 'عذراً، لم نتمكن من متابعة تنفيذ طلبك. يرجى إعادة المحاولة او الاتصال بخدمة الزبائن للمساعدة.',
+    ],
+    'Your password has been changed.' => [
+      'ar' => 'تم تغيير كلمة السر بنجاح',
+    ],
+    'applied filters' => [
+      'ar' => 'الاختيارات المحددة',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
-  $site_logo = 'themes/custom/alshaya_white_label/mothercare-logo-sm';
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Get current theme path.
+  $current_theme_path = $active_theme->getPath();
+  // Default Site logo path with default name.
+  $site_logo = $current_theme_path . '/site-logo';
 
   // Get config factory object.
   $config_factory = \Drupal::configFactory();
@@ -1028,10 +1105,13 @@ function alshaya_master_install() {
       ],
     ])
     ->save();
-
   // Save default logo for email.
-  $config_factory->getEditable('alshaya_master.theme.alshaya_white_label')
+  $config_factory->getEditable('alshaya_master.theme.' . $current_theme . '.en')
     ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+  // Save arabic email logo.
+  $config_factory->getEditable('alshaya_master.theme.alshaya_white_label.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
 
   // Set /home page as site front page.
@@ -1139,8 +1219,10 @@ function alshaya_master_install() {
     $configFactory->set('option_extras.' . $option, 0);
   }
 
-  // Enable share this for Product CT.
-  $configFactory->set('node_types.acq_product', 'acq_product');
+  if (\Drupal::moduleHandler()->moduleExists('acq_sku')) {
+    // Enable share this for Product CT.
+    $configFactory->set('node_types.acq_product', 'acq_product');
+  }
 
   // Enable lazy load of JS to enhance performance (rendering time).
   $configFactory->set('late_load', 1);

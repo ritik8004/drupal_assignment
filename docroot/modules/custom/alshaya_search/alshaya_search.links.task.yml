@@ -1,0 +1,5 @@
+alshaya_search.term_search:
+  route_name: view.term_search.page_1
+  title: 'Search'
+  base_route: entity.taxonomy_vocabulary.overview_form
+  weight: 100

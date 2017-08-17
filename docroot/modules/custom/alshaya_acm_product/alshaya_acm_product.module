@@ -17,6 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Link;
@@ -334,7 +335,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           '#markup' => implode(', ', $promotions),
         ];
       }
-
     }
 
     $build['#attached']['library'][] = 'alshaya_acm_product/stock_check';
@@ -423,6 +423,22 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
     }
 
+    $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $configurable_sizes = $form['ajax']['configurables']['size'];
+    if (\Drupal::languageManager()->getCurrentLanguage()->getId() !== $site_default_langcode) {
+      foreach ($configurable_sizes['#options'] as $key => $option) {
+        $default_language_option_val = \Drupal::database()->select('acq_sku__attr_size', 'asas')
+          ->fields('asas', ['attr_size_value'])
+          ->condition('asas.langcode', $site_default_langcode)
+          ->condition('entity_id', $key)
+          ->execute()->fetchField();
+
+        $options[$option] = $default_language_option_val;
+      }
+
+      $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
+    }
+
     foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
       if (is_array($configurable)) {
         $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
@@ -432,7 +448,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         unset($configurable['#ajax']['wrapper']);
 
         $configurable['#options_attributes'] = [];
-
         // Check if it is a dropdown, we disable the options for which we don't
         // have stock.
         if (isset($configurable['#options'])) {
@@ -544,9 +559,18 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
     $response->addCommand(new HtmlCommand('.promotions', $promotion_links));
 
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
-      $config = \Drupal::config('alshaya_click_collect.settings');
+    // Update the article class to include out of stock class if not in stock.
+    // Remove the class if in stock.
+    $class_command = $quantity ? 'removeClass' : 'addClass';
+    $response->addCommand(new InvokeCommand('article[data-vmode="full"]', $class_command, ['product-out-of-stock']));
+
+    // React for click & collect if stock is available.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_click_collect') && $quantity) {
+      // Settings variable.
       $settings = ['alshaya_acm' => ['product_sku' => $sku->getSku()]];
+
+      $config = \Drupal::config('alshaya_click_collect.settings');
+
       if (!alshaya_acm_product_available_click_collect($tree_pointer->getSku())) {
         $settings['alshaya_acm']['storeFinder'] = FALSE;
         $settings['alshaya_acm']['subtitle_txt'] = $config->get('pdp_click_collect_unavailable');
@@ -555,8 +579,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
         $settings['alshaya_acm']['storeFinder'] = TRUE;
         $settings['alshaya_acm']['subtitle_txt'] = $config->get('pdp_click_collect_subtitle');
       }
-      $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
+
       $response->addCommand(new BaseCommand('updatePDPClickCollect', $settings));
+
+      $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
     }
 
     return $response;

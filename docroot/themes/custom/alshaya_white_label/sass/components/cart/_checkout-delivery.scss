@@ -118,6 +118,14 @@
         line-height: 2.8;
         margin-top: -2px;
 
+        @include breakpoint($only-tablet) {
+          padding: 1rem 1.375rem;
+        }
+
+        @include breakpoint($desktop) {
+          padding: 1.375rem;
+        }
+
         @include breakpoint($only-mobile) {
           text-align: center;
           line-height: 3.8;
@@ -131,6 +139,10 @@
           float: $right;
           margin: 0;
           margin-#{$right}: 0.75em;
+
+          @include breakpoint($tablet) {
+            margin-#{$right}: 0;
+          }
 
           @include breakpoint($only-mobile) {
             float: none;
@@ -244,9 +256,12 @@
       vertical-align: middle;
       border: 1px solid $light-greyish;
       background: $white-five;
+      font-family: $alshaya-bold;
+      font-weight: normal;
 
       p {
         color: $grey-ash;
+        font-family: $arial;
       }
 
       @include breakpoint($tablet) {
@@ -264,6 +279,16 @@
       @include breakpoint($desktop) {
         padding: 1.0625rem 0;
         width: 47.05%;
+
+        &.tab-home-delivery {
+          &:not(.active--tab--head) {
+            margin-#{$left}: -2px;
+          }
+        }
+
+        &.tab-click-collect {
+          margin-#{$left}: -1px;
+        }
       }
 
       @include breakpoint($only-tablet) {
@@ -309,6 +334,12 @@
         h2,
         p {
           color: $light-greyish;
+        }
+      }
+
+      &.active--tab--head {
+        h2 {
+          color: $marine-blue-two;
         }
       }
     }
@@ -400,6 +431,7 @@
       width: 100%;
       padding: 0.5rem 0;
       border-bottom: 1px solid $white;
+      font-size: 1rem;
     }
   }
 
@@ -569,6 +601,17 @@
       height: auto;
     }
   }
+
+  .cybersource-ajax-progress-throbber {
+    #{$left}: 0;
+
+    .cybersource-throbber {
+      #{$left}: 0;
+      #{$right}: 0;
+      padding-#{$left}: 0.625rem;
+      padding-#{$right}: 0.625rem;
+    }
+  }
 }
 
 #edit-acm-payment-methods-payment-options--wrapper {
@@ -611,8 +654,12 @@
       &.plugin-selected {
         background-color: $white-four;
 
+        .method-description {
+          display: block;
+        }
+
         .method-knet {
-          background: $white url('../imgs/cards/knet-active.png') no-repeat;
+          background: url('../imgs/cards/knet-active.png') no-repeat;
           background-size: 100%;
         }
 
@@ -622,6 +669,16 @@
 
         .method-title {
           font-weight: bold;
+        }
+      }
+
+      &.has-description.plugin-selected {
+        @include breakpoint($tablet) {
+          padding: 0.9375rem 1.375rem;
+        }
+
+        &::before {
+          top: 0.5625rem;
         }
       }
 
@@ -648,7 +705,7 @@
       }
 
       @include breakpoint($tablet) {
-        padding: 1.5rem 1rem;
+        padding: 1.5rem 1.375rem;
       }
 
       width: 100%;
@@ -692,14 +749,14 @@
         }
 
         &-knet {
-          background: $white url('../imgs/cards/knet-inactive.png') no-repeat;
+          background: url('../imgs/cards/knet-inactive.png') no-repeat;
           background-size: 100%;
           position: absolute;
           #{$right}: 0.8rem;
           top: 54%;
 
           @include breakpoint($tablet) {
-            #{$right}: 1.8rem;
+            #{$right}: 18px;
           }
         }
 
@@ -710,7 +767,13 @@
         }
 
         &-description {
-          font-size: 12px;
+          display: none;
+          font-size: 0.75rem;
+          color: $grey-ash;
+
+          @include breakpoint($upto-desktop) {
+            width: 80%;
+          }
         }
       }
     }
@@ -809,6 +872,10 @@
             @include breakpoint($only-mobile) {
               text-align: $left;
             }
+          }
+
+          @include breakpoint($desktop) {
+            margin-bottom: 0;
           }
 
           @include breakpoint($tablet) {
@@ -929,9 +996,9 @@
   margin-bottom: 1.5rem;
 
   @include breakpoint($desktop) {
-    margin-bottom: 3rem;
     max-width: 26.25rem;
     width: calc(50% - 1.5rem);
+    margin-bottom: 0 !important;
 
     &:nth-of-type(odd) {
       margin-#{$right}: 3rem;

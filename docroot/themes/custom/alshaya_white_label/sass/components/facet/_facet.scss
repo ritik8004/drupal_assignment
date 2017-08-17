@@ -13,7 +13,7 @@
     @extend %list-clear;
 
     @include breakpoint($desktop) {
-      padding-top: 1.25rem;
+      padding-top: 0.5625rem;
     }
 
     input[type="text"] {
@@ -33,7 +33,9 @@
 
   label {
     font-size: 0.875rem;
-    color: #666;
+    color: $grey-ash;
+    position: relative;
+    top: -1px;
   }
 
   .item-list {
@@ -68,5 +70,38 @@
 
   @include breakpoint($desktop) {
     color: $black;
+  }
+}
+
+.c-facet__blocks {
+  .item-list__checkbox {
+    max-height: 180px;
+    overflow: auto;
+  }
+
+  .facets-soft-limit-link {
+    display: none;
+  }
+}
+
+html[lang=ar] {
+  .c-facet {
+    ul[data-drupal-facet-alias="skus_sku_reference_brand"] {
+      label {
+        float: right;
+        font-family: $arial-nodir;
+        margin-bottom: 0.625rem;
+
+        @include clearfix;
+
+        .facet-item__value {
+          float: right;
+        }
+
+        .facet-item__count {
+          float: left;
+        }
+      }
+    }
   }
 }

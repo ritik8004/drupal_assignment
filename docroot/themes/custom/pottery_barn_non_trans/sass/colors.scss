@@ -1,0 +1,24 @@
+@import "config/**/*";
+
+/* ---------- Color Module Styles ----------- */
+
+body {
+  color: $brownish-grey;
+}
+
+a,
+.link {
+  color: $marine-blue-two;
+}
+
+a:hover,
+a:focus,
+.link:hover,
+.link:focus {
+  color: $marine-blue-two;
+}
+
+a:active,
+.link:active {
+  color: $marine-blue-two;
+}

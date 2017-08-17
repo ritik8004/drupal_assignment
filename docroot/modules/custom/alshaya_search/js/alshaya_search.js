@@ -20,7 +20,6 @@
           $('.search-count').html(header_result);
         }
       };
-
     }
   };
 
@@ -77,7 +76,7 @@
           clearInterval(i);
           $('aside .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.insertAfter($(this).find('ul li:last-child'));
+            softLink.insertAfter($(this).find('ul'));
           });
         }
       }, 100);
@@ -88,7 +87,7 @@
           $('.region__content .region__sidebar-first .block-facet--checkbox').each(function () {
             var softLink = $(this).find('a.facets-soft-limit-link');
             softLink.addClass('processed');
-            softLink.insertAfter($(this).find('ul li:last-child'));
+            softLink.insertAfter($(this).find('ul'));
           });
         }
       }, 100);
@@ -113,7 +112,7 @@
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
       // Convert the list to slider.
-      $('.search-lightSlider').once('alshayaSearchSlider').each(function () {
+      $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
         var gallery = $(this);
         $(this, context).lightSlider({
           vertical: false,
@@ -128,7 +127,7 @@
       });
 
       // Show/Hide the slider on Mouse hover.
-      $('.c-products__item').hover(
+      $('.c-products__item', context).hover(
         function () {
           if ($(window).width() > 1025) {
             $(this).find('.alshaya_search_slider').show();
@@ -140,7 +139,7 @@
       );
 
       // Change the image on Mouse hover.
-      $('.alshaya_search_slider img').hover(
+      $('.alshaya_search_slider img', context).hover(
         function () {
           $(this)
             .closest('.alshaya_search_gallery')
@@ -162,8 +161,6 @@
       $.fn.alshayaAttachSearchSlider = function () {
         Drupal.attachBehaviors(context);
       };
-
     }
   };
-
 })(jQuery);

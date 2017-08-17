@@ -82,7 +82,8 @@ function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInt
     ];
 
     if (isset($cc_form['payment_details'], $cc_form['payment_details']['cc_cvv'])) {
-      $cc_form['payment_details']['cc_cvv']['#suffix'] = '<div class="cc_cvv_help_text">' . t('This code is a three or four digit number printed on the front or back of the credit card') . '</div>';
+      $cc_cvv_help = t('This code is a three or four digit number printed on the front or back of the credit card');
+      $cc_form['payment_details']['cc_cvv']['#suffix'] = '<div class="cvv-help-text-wrapper"><div class="mobile-tooltip-icon"><span class="tooltip-icon"></span><span class="tooltip-content"><p>' . $cc_cvv_help . '</p></span></div><div class="cc_cvv_help_text">' . $cc_cvv_help . '</div></div>';
     }
   }
 }
@@ -193,8 +194,11 @@ function alshaya_acm_checkout_alshaya_transac_profile_installed(array $modules) 
       'CUSTOMER SERVICE' => [
         'ar' => 'خدمة العملاء',
       ],
-      '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from Sunday – Saturday from 9:30 am – 8:30 midnight (Kuwait Local Time, GMT +3)</span></p>' => [
-        'ar' => '<p>الكويت <span class="light">+965 XXX XX XX</span></p><p>المناطق الأخرى <span class="light">8 (800) XXX XX X</span></p><p><span class="light">مواعيد العمل: الأحد إلى السبت من الساعة 9:30 صباحًا حتى الساعة 8:30 منتصف الليل (حسب التوقيت المحلي للكويت، و3+ بتوقيت غرينتش)</span></p>',
+      '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from Sunday – Saturday from 9:30 am – 8:30 pm (Kuwait Local Time, GMT +3)</span></p>' => [
+        'ar' => '<p>الكويت <span class="light">+965 XXX XX XX</span></p><p>المناطق الأخرى <span class="light">8 (800) XXX XX X</span></p><p><span class="light">مواعيد العمل: الأحد إلى السبت من الساعة 9:30 صباحًا حتى الساعة 8:30 مساءً (حسب التوقيت المحلي للكويت، و3+ بتوقيت غرينتش)</span></p>',
+      ],
+      'Username does not contain a valid email.' => [
+        'ar' => 'اسم المستخدم لا يشمل عنوان بريد إلكتروني صحيح',
       ],
     ];
 
@@ -204,11 +208,30 @@ function alshaya_acm_checkout_alshaya_transac_profile_installed(array $modules) 
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
     // Create all payment plugins in taxonomy terms.
-    $payment_plugins = \Drupal::service('plugin.manager.acq_payment_method');
+    /** @var \Drupal\acq_payment\Annotation\ACQPaymentMethod $payment_plugins */
+    $payment_plugins = \Drupal::service('plugin.manager.acq_payment_method')->getDefinitions();
     foreach ($payment_plugins as $plugin) {
-      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']);
+      $checkout_options_manager->loadPaymentMethod($plugin['id'], $plugin['label']->render());
     }
 
+    // Add translations for specific payment methods by default.
+    // Cash on Delivery.
+    $cod = $checkout_options_manager->loadPaymentMethod('cashondelivery');
+    $cod_ar = $cod->addTranslation('ar', []);
+    $cod_ar->setName('نقداً عند التسليم');
+    $cod_ar->save();
+
+    // K-Net.
+    $knet = $checkout_options_manager->loadPaymentMethod('knet');
+    $knet->get('description')->setValue('Please proceed to K-Net payment gateway by clicking the "Place Order" button below.');
+    // Set K-Net to default during install.
+    $knet->get('field_payment_default')->setValue(1);
+    $knet->save();
+
+    $knet_ar = $knet->addTranslation('ar', []);
+    $knet_ar->setName('بطاقة ائتمان k-net');
+    $knet_ar->get('description')->setValue('يرجى المتابعة إلى صفحة الدفع عن طريق K-Net  بواسطة الضغط على رابط "سجل الطلبية" أدناه');
+    $knet_ar->save();
   }
 
   $acq_checkout_settings = \Drupal::config('alshaya_acm_checkout.settings');

@@ -191,17 +191,19 @@ class ClickCollectController extends ControllerBase {
     // Get all the post data, which contains store information passed in ajax.
     $store = \Drupal::request()->request->all();
 
-    $output = t("There's no store selected.");
-    if (!empty($store)) {
-      $ship_type = !empty($store['rnc_available']) ? 'reserve_and_collect' : 'ship_to_store';
+    $response = new AjaxResponse();
 
-      $build['selected_store'] = [
-        '#theme' => 'click_collect_selected_store',
-        '#store' => $store,
-      ];
+    if (empty($store)) {
+      return $response;
     }
 
-    $response = new AjaxResponse();
+    $ship_type = !empty($store['rnc_available']) ? 'reserve_and_collect' : 'ship_to_store';
+
+    $build['selected_store'] = [
+      '#theme' => 'click_collect_selected_store',
+      '#store' => $store,
+    ];
+
     $response->addCommand(new HtmlCommand('#selected-store-content', $build));
     $response->addCommand(new InvokeCommand('#selected-store-wrapper', 'show'));
     $response->addCommand(new InvokeCommand('#store-finder-wrapper', 'hide'));
@@ -209,6 +211,8 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(new InvokeCommand('#selected-store-wrapper input[name="shipping_type"]', 'val', [$ship_type]));
     $response->addCommand(new InvokeCommand('input[data-drupal-selector="edit-actions-ccnext"]', 'show'));
     $response->addCommand(new SettingsCommand(['alshaya_click_collect' => ['selected_store' => ['raw' => $store]]]));
+    $response->addCommand(new InvokeCommand(NULL, 'clickCollectScrollTop', []));
+
     return $response;
   }
 
@@ -310,11 +314,8 @@ class ClickCollectController extends ControllerBase {
       }
     }
     else {
-      $response->addCommand(new HtmlCommand('.click-collect-top-stores', ''));
-      $response->addCommand(new HtmlCommand('.click-collect-all-stores', ''));
-      $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'show'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
-      $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'hide'));
+      $no_result_html = '<span class="empty-store-list">' . t('Sorry, No store found for your location.') . '</span>';
+      $response->addCommand(new InvokeCommand(NULL, 'clickCollectPdpNoStoresFound', [$no_result_html]));
     }
 
     $settings['alshaya_click_collect']['pdp']['ajax_call'] = TRUE;

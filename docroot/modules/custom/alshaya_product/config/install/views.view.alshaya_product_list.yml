@@ -57,7 +57,7 @@ display:
                 collapsible: false
                 collapsible_label: 'Sort options'
                 combine: true
-                combine_rewrite: "Name Desc|Name Z to A\nName Asc|Name A to Z\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
+                combine_rewrite: "Name Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
                 reset: false
                 reset_label: ''
                 is_secondary: false
@@ -452,7 +452,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          order: DESC
+          order: ASC
           exposed: true
           expose:
             label: Name

@@ -376,6 +376,9 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         $user = alshaya_acm_customer_create_drupal_user($customer);
       }
 
+      // Allow modules to act after user logs in.
+      \Drupal::moduleHandler()->invokeAll('alshaya_acm_customer_post_login', [$user, $customer]);
+
       return $user->id();
     }
   }
@@ -581,6 +584,8 @@ function alshaya_acm_customer_change_pwd_form_update_password(array &$form, Form
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
   alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
   drupal_set_message(t('Your password has been changed.'));
+  // Redirect user to my account page.
+  $form_state->setRedirect('user.page');
 }
 
 /**

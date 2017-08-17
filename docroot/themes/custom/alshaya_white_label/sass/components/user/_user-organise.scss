@@ -133,13 +133,14 @@
     padding-top: 1.4rem;
 
     @include breakpoint($tablet) {
-      margin-top: 3.6rem;
+      margin-top: 2.6rem;
       padding-top: 3.6rem;
     }
 
     @include breakpoint($desktop) {
       margin-top: 4.2rem;
       padding-top: 4.2rem;
+      width: 31.625rem;
     }
 
     h3 {
