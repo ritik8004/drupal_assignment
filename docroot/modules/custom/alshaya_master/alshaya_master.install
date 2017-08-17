@@ -1106,8 +1106,12 @@ function alshaya_master_install() {
     ])
     ->save();
   // Save default logo for email.
-  $config_factory->getEditable('alshaya_master.theme.' . $current_theme)
+  $config_factory->getEditable('alshaya_master.theme.' . $current_theme . '.en')
     ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+  // Save arabic email logo.
+  $config_factory->getEditable('alshaya_master.theme.alshaya_white_label.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
 
   // Set /home page as site front page.
