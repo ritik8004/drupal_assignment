@@ -4,4 +4,7 @@
       <p class="promotion">{{ promotion | raw }}</p>
     {% endfor %}
   </div>
+  <div class="continue-shopping">
+    <a href="{{ path('<front>') }}">{{ 'continue shopping' | t }}</a>
+  </div>
 {% endif %}
