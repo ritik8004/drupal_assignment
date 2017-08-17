@@ -28,7 +28,7 @@
 
   <target name="sync:stores">
     <echo>Sync the stores</echo>
-    <drush command="alshaya-stores-finder-sync-stores" assume="yes" alias="${drush.alias}" passthru="false" />
+    <drush command="alshaya-api-sync-stores" assume="yes" alias="${drush.alias}" passthru="false" />
   </target>
 
   <target name="sync:promotions">
