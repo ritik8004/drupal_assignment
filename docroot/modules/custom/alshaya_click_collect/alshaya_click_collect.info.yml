@@ -7,5 +7,4 @@ dependencies:
   - alshaya_acm_checkout
   - alshaya_acm_product
   - alshaya_api
-  - alshaya_geolocation
   - mobile_number
