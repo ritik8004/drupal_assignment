@@ -57,7 +57,7 @@ class SkuManager {
    *   The entity repository service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger service.
-   * @param CacheBackendInterface $cache
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service.
    */
   public function __construct(Connection $connection,

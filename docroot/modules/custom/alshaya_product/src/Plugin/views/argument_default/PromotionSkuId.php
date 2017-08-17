@@ -38,7 +38,7 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
   /**
    * Alshaya Promotion manager service.
    *
-   * @var AlshayaPromotionsManager
+   * @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager
    */
   protected $promotionsManager;
 
@@ -55,7 +55,7 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
    *   Entity type manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route match.
-   * @param AlshayaPromotionsManager $promotionsManager
+   * @param \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotionsManager
    *   The acq promotion manager service.
    */
   public function __construct(array $configuration,

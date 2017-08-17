@@ -43,14 +43,14 @@ class AlshayaPromotionsManager {
   /**
    * Sku Manager service.
    *
-   * @var SkuManager
+   * @var \Drupal\alshaya_acm_product\SkuManager
    */
   protected $skuManager;
 
   /**
    * Cache Backend service.
    *
-   * @var CacheBackendInterface
+   * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $cache;
 
@@ -65,9 +65,9 @@ class AlshayaPromotionsManager {
    *   The language manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The Entity repository service.
-   * @param SkuManager $skuManager
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   The sku Manager service.
-   * @param CacheBackendInterface $cache
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager, LoggerChannelFactoryInterface $logger, LanguageManager $languageManager, EntityRepositoryInterface $entityRepository, SkuManager $skuManager, CacheBackendInterface $cache) {
@@ -131,7 +131,7 @@ class AlshayaPromotionsManager {
   /**
    * Helper function to do a cheaper call to fetch skus for a promotion.
    *
-   * @param Node $promotion
+   * @param \Drupal\node\Entity\Node $promotion
    *   Promotion for which we need to fetch skus.
    *
    * @return array
@@ -149,7 +149,6 @@ class AlshayaPromotionsManager {
       $query->fields('asfd', ['id', 'sku']);
       $query->distinct();
       $config_skus = $query->execute()->fetchAllKeyed(0, 1);
-
 
       $query = \Drupal::database()->select('acq_sku__field_acq_sku_promotions', 'fasp');
       $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
