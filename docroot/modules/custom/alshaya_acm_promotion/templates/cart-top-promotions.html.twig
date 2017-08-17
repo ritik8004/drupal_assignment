@@ -3,8 +3,8 @@
     {% for id, promotion in promotions %}
       <p class="promotion">{{ promotion | raw }}</p>
     {% endfor %}
-  </div>
-  <div class="continue-shopping">
-    <a href="{{ path('<front>') }}">{{ 'continue shopping' | t }}</a>
+    <div class="continue-shopping">
+      <a href="{{ path('<front>') }}">{{ 'continue shopping' | t }}</a>
+    </div>
   </div>
 {% endif %}
