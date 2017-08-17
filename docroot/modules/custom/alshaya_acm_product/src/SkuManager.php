@@ -360,8 +360,11 @@ class SkuManager {
               ->getGeneratedLink();
           }
           else {
-            $description = $promotion_node->get('field_acq_promotion_description')
-              ->getString();
+            $description = '';
+            $description_item = $promotion_node->get('field_acq_promotion_description')->first();
+            if ($description_item) {
+              $description = $description_item->getValue();
+            }
             $promos[$promotion_node->id()] = [
               'text' => $promotion_text,
               'description' => $description,
