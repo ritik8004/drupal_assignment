@@ -604,7 +604,7 @@ class SkuManager {
       $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
       $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
       $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
-      $query->condition('asfd.type', "configurable");
+      $query->condition('asfd.type', 'configurable');
       $query->fields('asfd', ['id', 'sku']);
       $query->distinct();
       $config_skus = $query->execute()->fetchAllKeyed(0, 1);
@@ -612,7 +612,7 @@ class SkuManager {
       $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
       $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
       $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
-      $query->condition('asfd.type', "simple");
+      $query->condition('asfd.type', 'simple');
       $query->fields('asfd', ['id', 'sku']);
       $query->distinct();
       $simple_skus = $query->execute()->fetchAllKeyed(0, 1);

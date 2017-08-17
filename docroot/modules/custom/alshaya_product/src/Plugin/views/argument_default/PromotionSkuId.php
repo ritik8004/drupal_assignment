@@ -55,7 +55,7 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
    *   Entity type manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route match.
-   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   The Sku Manager service.
    */
   public function __construct(array $configuration,
@@ -63,10 +63,10 @@ class PromotionSkuId extends ArgumentDefaultPluginBase implements CacheableDepen
                               $plugin_definition,
                               EntityTypeManagerInterface $entity_manager,
                               RouteMatchInterface $route_match,
-                              SkuManager $skuManager) {
+                              SkuManager $sku_manager) {
     $this->entityManager = $entity_manager;
     $this->routeMatch = $route_match;
-    $this->skuManager = $skuManager;
+    $this->skuManager = $sku_manager;
   }
 
   /**
