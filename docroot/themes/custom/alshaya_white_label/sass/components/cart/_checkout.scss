@@ -451,16 +451,6 @@
       display: inline-block;
       width: 57%;
 
-      html[lang=ar] & {
-        @include breakpoint($desktop) {
-          width: 59%;
-        }
-
-        @include breakpoint($only-tablet) {
-          width: 54%;
-        }
-      }
-
       @include breakpoint($upto-desktop) {
         width: 50%;
       }
