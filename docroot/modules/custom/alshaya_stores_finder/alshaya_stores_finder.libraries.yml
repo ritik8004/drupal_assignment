@@ -3,21 +3,3 @@ store_finder:
     js/alshaya_store_finder.js: {}
   dependencies:
     - core/jquery
-
-places-api-autocomplete:
-  js:
-    js/alshaya_google_places_api.js: {}
-  dependencies:
-    - core/drupal.ajax
-    - core/underscore
-    - geolocation/geolocation.geocoder.googlegeocodingapi
-
-
-# Geolocation views filter geocoder function.
-places-api.geocoder.googleplacesapi:
-  version: 8.x-1.x
-  js:
-    js/alshaya-google-places-autocomplete-api-views.js: {}
-  dependencies:
-    - geolocation/geolocation.geocoder
-    - alshaya_stores_finder/places-api-autocomplete

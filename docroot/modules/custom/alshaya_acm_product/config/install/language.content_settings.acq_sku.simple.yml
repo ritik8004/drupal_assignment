@@ -5,6 +5,7 @@ dependencies:
   config:
     - acq_sku.type.simple
   module:
+    - acq_sku
     - content_translation
 third_party_settings:
   content_translation:
