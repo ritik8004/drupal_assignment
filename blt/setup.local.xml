@@ -95,7 +95,7 @@
       <phingcall target="setup:composer:install"/>
       <phingcall target="frontend:build"/>
       <phingcall target="local:reset-local-settings"/>
-      <!--<phingcall target="local:drupal:install">
+      <phingcall target="local:drupal:install">
           <property name="drush.uri" value="https://local.alshaya.com" />
       </phingcall>
       <phingcall target="setup:toggle-modules">
@@ -113,7 +113,7 @@
       </phingcall>
       <phingcall target="sync:stores">
           <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>-->
+      </phingcall>
   </target>
 
   <target name="refresh:non-transac-local:drupal"
