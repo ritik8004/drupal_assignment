@@ -46,8 +46,8 @@ if ($env == 'local') {
   $soauth_key_dir = '/var/www/alshaya/box/';
 }
 else if ($env == 'travis') {
-  $soauth_key_dir = '/home/travis/.ssh/';
-  $soauth_key_name = 'tmate';
+  $soauth_key_dir = '/home/travis/build/acquia-pso/alshaya/private/';
+  $soauth_key_name = 'travis_acm';
 }
 else {
   $soauth_key_dir = '/home/alshaya/simple-oauth/' . $env . '/';
