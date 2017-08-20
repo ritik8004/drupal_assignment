@@ -5,16 +5,15 @@
 }
 
 .cloudzoom #cloud-zoom-big {
-  width: 300px !important;
+  width: 296px !important;
   height: 300px !important;
-  border: none;
 }
 
 .cloudzoom .cloud-zoom-lens {
   width: 212px !important;
   height: 212px !important;
   background-color: rgba(253, 253, 253, 0.44) !important;
-  border: 1px solid #fefefe;
+  border: 1px solid #ddd;
 }
 .ui-dialog {
   z-index: 999;
@@ -23,10 +22,6 @@
 .ui-dialog-title {
   display: none;
 }
-/*#product-image-gallery-container .lSSlideOuter {
-  float: left;
-  width: 25%;
-}*/
 
 #full-image-wrapper img {
   transition: transform 1s ease;

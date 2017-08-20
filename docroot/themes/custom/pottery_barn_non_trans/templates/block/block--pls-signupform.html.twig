@@ -33,9 +33,9 @@
   'block-' ~ plugin_id|clean_class,
   ]
   %}
-  {% set attributes = attributes.addClass('messagepop pop') %}
+  {% set attributes = attributes.addClass('popup-window signup-popup') %}
   <div{{ attributes.addClass(classes) }}>
-    <div class="pls-siginup-form signup-form">
+    <div class="pls-siginup-form signup-form popup-container">
     <div class="close-popup"></div>
       {{ title_prefix }}
       {% if label %}

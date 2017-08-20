@@ -520,7 +520,7 @@
   .select2-selection__rendered {
     font-family: $arial;
     line-height: 1.188rem !important;
-    color: $greyish;
+    color: $grey-ash;
     padding: 0.25rem !important;
   }
 }
@@ -582,6 +582,7 @@
 
   .country-name {
     font-size: 1rem;
+    color: $greyish;
   }
 
   .select2-container {
