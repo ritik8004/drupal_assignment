@@ -544,7 +544,7 @@ class SkuManager {
    *   Sku tree with keyed by configurable sku entity id.
    */
   public function getSkuTree() {
-    if (!empty($this->cache->get('sku_tree') !== NULL)) {
+    if (!empty($this->cache->get('sku_tree'))) {
       $sku_tree_cache = $this->cache->get('sku_tree');
       $sku_tree = $sku_tree_cache->data;
       return $sku_tree;
