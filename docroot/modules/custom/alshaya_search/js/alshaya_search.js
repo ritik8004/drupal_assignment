@@ -117,8 +117,7 @@
         $(this, context).lightSlider({
           vertical: false,
           item: 4,
-          slideMargin: 6,
-          autoWidth: true,
+          slideMargin: 5,
           onSliderLoad: function() {
             gallery.closest('.alshaya_search_slider').hide();
             gallery.css('height', '73px');
