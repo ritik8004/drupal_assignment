@@ -544,7 +544,8 @@ class SkuManager {
    *   Sku tree with keyed by configurable sku entity id.
    */
   public function getSkuTree() {
-    if ($sku_tree_cache = $this->cache->get('sku_tree') !== NULL) {
+    if (!empty($this->cache->get('sku_tree') !== NULL)) {
+      $sku_tree_cache = $this->cache->get('sku_tree');
       $sku_tree = $sku_tree_cache->data;
       return $sku_tree;
     }
@@ -597,7 +598,9 @@ class SkuManager {
    *   List of skus related with a promotion.
    */
   public function getSkutextsForPromotion(Node $promotion) {
-    if ($skus_cache = $this->cache->get('promotinos_sku_' . $promotion->id())) {
+    $cid = 'promotions_sku_' . $promotion->id();
+    if (!empty($this->cache->get($cid))) {
+      $skus_cache = $this->cache->get($cid);
       $skus = $skus_cache->data;
     }
     else {
@@ -631,7 +634,7 @@ class SkuManager {
 
       $skus = array_unique(array_merge($processed_sku_eids, $config_skus));
 
-      $this->cache->set('promotions_sku_' . $promotion->id(), $skus, Cache::PERMANENT, ['sku_list']);
+      $this->cache->set($cid, $skus, Cache::PERMANENT, ['sku_list']);
     }
 
     return $skus;
