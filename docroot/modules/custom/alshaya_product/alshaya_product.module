@@ -55,7 +55,7 @@ function alshaya_product_alshaya_i18n_onetime_translation_add() {
     ->getLanguageConfigOverride('ar', 'views.view.alshaya_product_list');
   $product_list_view->set('display.default.display_options.exposed_form.options.exposed_sorts_label', 'رتب حسب');
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'الاسم تصاعدي|الاسم من أ إلى ي
-  الاسم تنازلي|الاسم من ي إلى أ
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من أعلى إلى أدنى
 السعر تصاعدي|السعر من أدنى إلى أعلى');
   $product_list_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');
