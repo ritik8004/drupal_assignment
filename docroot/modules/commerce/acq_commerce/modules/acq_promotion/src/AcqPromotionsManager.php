@@ -373,13 +373,6 @@ class AcqPromotionsManager {
         // Get list of skus for which promotions should be detached.
         if (!empty($attached_promotion_skus)) {
           $detach_promotion_skus = array_diff($attached_promotion_skus, $fetched_promotion_skus);
-
-          // Clear away skus that are already attached to current promotion.
-          foreach ($fetched_promotion_sku_attach_data as $key => $promotion_sku_data) {
-            if (in_array($key, $attached_promotion_skus)) {
-              unset($fetched_promotion_sku_attach_data[$key]);
-            }
-          }
         }
 
         // Create a queue for removing promotions from skus.
