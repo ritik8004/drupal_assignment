@@ -9,3 +9,4 @@ services:
       - '@entity.repository'
       - '@queue'
       - '@config.factory'
+      - '@database'
