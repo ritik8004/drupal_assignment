@@ -58,8 +58,7 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
       $sku_entity->save();
     }
 
-    $sku_texts = array_keys($skus);
-    $sku_query_string = implode(',', $sku_texts);
+    $sku_query_string = implode(',', $skus);
 
     $endpoint = $this->apiVersion . '/ingest/product/sync?skus=' . $sku_query_string;
 
