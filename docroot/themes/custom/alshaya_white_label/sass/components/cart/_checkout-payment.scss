@@ -348,10 +348,10 @@
     display: block;
     position: absolute;
     top: 7.4rem;
-    #{$left}: 57%;
+    #{$left}: 11.5rem;
 
     html[lang=ar] & {
-      #{$left}: 64%;
+      #{$left}: 14rem;
     }
   }
 
