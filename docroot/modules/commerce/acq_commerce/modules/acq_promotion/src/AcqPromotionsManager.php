@@ -12,7 +12,6 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\node\Entity\Node;
-use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Class AcqPromotionsManager.
@@ -348,14 +347,16 @@ class AcqPromotionsManager {
       // Extract list of sku text attached with the promotion passed.
       $products = $promotion['products'];
       foreach ($products as $product) {
-        $fetched_promotion_skus[] = $product['product_sku'];
+        if (!in_array($product['product_sku'], array_keys($fetched_promotion_skus))) {
+          $fetched_promotion_skus[$product['product_sku']] = $product['product_sku'];
 
-        $fetched_promotion_sku_attach_data[$product['product_sku']] = [
-          'sku' => $product['product_sku'],
-        ];
+          $fetched_promotion_sku_attach_data[$product['product_sku']] = [
+            'sku' => $product['product_sku'],
+          ];
 
-        if (($promotion['promotion_type'] === 'category') && isset($product['final_price'])) {
-          $fetched_promotion_sku_attach_data[$product['product_sku']]['final_price'] = $product['final_price'];
+          if (($promotion['promotion_type'] === 'category') && isset($product['final_price'])) {
+            $fetched_promotion_sku_attach_data[$product['product_sku']]['final_price'] = $product['final_price'];
+          }
         }
       }
 
@@ -372,6 +373,13 @@ class AcqPromotionsManager {
         // Get list of skus for which promotions should be detached.
         if (!empty($attached_promotion_skus)) {
           $detach_promotion_skus = array_diff($attached_promotion_skus, $fetched_promotion_skus);
+
+          // Clear away skus that are already attached to current promotion.
+          foreach ($fetched_promotion_sku_attach_data as $key => $promotion_sku_data) {
+            if (in_array($key, $attached_promotion_skus)) {
+              unset($fetched_promotion_sku_attach_data[$key]);
+            }
+          }
         }
 
         // Create a queue for removing promotions from skus.
@@ -394,7 +402,7 @@ class AcqPromotionsManager {
       }
 
       // Attach promotions to skus.
-      if ($promotion_node && (!empty($fetched_promotion_skus))) {
+      if ($promotion_node && (!empty($fetched_promotion_sku_attach_data))) {
         $data['promotion'] = $promotion_node->id();
         $chunks = array_chunk($fetched_promotion_sku_attach_data, $acq_promotion_attach_batch_size);
         foreach ($chunks as $chunk) {
