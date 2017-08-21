@@ -27,6 +27,7 @@
       }
     }
 
+    .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
       overflow: hidden;
@@ -464,6 +465,15 @@
       padding: 0.5625rem 1.688rem;
       margin-top: 0.25rem;
       display: inline-block;
+    }
+
+    .promotions {
+      margin: 0.5rem 0;
+
+      .sku-promotion-link {
+        font-size: 0.75rem;
+        color: $cherry;
+      }
     }
   }
 
