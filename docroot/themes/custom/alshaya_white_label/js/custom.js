@@ -71,7 +71,16 @@
         });
       }
 
-      $('.nodetype--acq_product .owl-item .above-mobile-block, .path--cart .owl-item .above-mobile-block, .acq-content-product .cloudzoom #cloud-zoom-wrap').click(function () {
+      $('.nodetype--acq_product .owl-item .above-mobile-block, .path--cart .owl-item .above-mobile-block').click(function () {
+        $('body').addClass('pdp-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
+        });
+      });
+
+      $('.acq-content-product .cloudzoom #cloud-zoom-wrap', context).click(function () {
         $('body').addClass('pdp-modal-overlay');
         modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
 
