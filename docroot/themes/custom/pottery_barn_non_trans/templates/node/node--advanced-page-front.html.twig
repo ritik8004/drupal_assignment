@@ -13,6 +13,15 @@
       {{ node.field_css.value }}
     </style>
     <div class="c-content">
+
+      {% if content.field_video_banner %}
+      <div class="c-content__banner video_banner mobile-only-block">
+        <div class="video_banner_content">
+          {{ content.field_video_banner }}
+        </div>
+      </div>
+      {% endif %}
+
       {% if content.field_banner %}
       <div class="c-content__banner">
         {{ content.field_banner }}
@@ -26,7 +35,7 @@
       {% endif %}
 
       {% if content.field_video_banner %}
-      <div class="c-content__banner video_banner">
+      <div class="c-content__banner video_banner above-mobile-block">
         <div class="video_banner_content">
           {{ content.field_video_banner }}
         </div>
