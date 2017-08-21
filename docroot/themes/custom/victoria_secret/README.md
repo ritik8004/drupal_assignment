@@ -20,13 +20,6 @@
   ```
   $ npm install - gulp
   ```
-- Composer
-  ```
-  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  php composer-setup.php
-  php -r "unlink('composer-setup.php');"
-  mv composer.phar /usr/local/bin/composer
-  ```
 - Drupal Modules
   - Components
     - `composer require drupal/components`
@@ -37,13 +30,13 @@
 
 
 #### Setup sub-theme
-- Install victoria_secret
-  - `composer require drupal/victoria_secret`
-  - `drush dl victoria_secret`
-- Enable victoria_secret
-  - `drush en victoria_secret`
+- Install kashmir
+  - `composer require drupal/kashmir`
+  - `drush dl kashmir`
+- Enable kashmir
+  - `drush en kashmir`
 - Generate a sub-theme
-  - `drush victoria_secret sub_theme_name`
+  - `drush kashmir sub_theme_name`
 - Configure settings
   - Update settings in `gulp/_config.js` for Browsersync and Source for scripts and styles.
 

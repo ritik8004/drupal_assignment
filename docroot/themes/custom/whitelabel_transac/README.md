@@ -20,13 +20,7 @@
   ```
   $ npm install - gulp
   ```
-- Composer
-  ```
-  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  php composer-setup.php
-  php -r "unlink('composer-setup.php');"
-  mv composer.phar /usr/local/bin/composer
-  ```
+
 - Drupal Modules
   - Components
     - `composer require drupal/components`
@@ -37,13 +31,13 @@
 
 
 #### Setup sub-theme
-- Install whitelabel_transac
-  - `composer require drupal/whitelabel_transac`
-  - `drush dl whitelabel_transac`
-- Enable whitelabel_transac
-  - `drush en whitelabel_transac`
+- Install kashmir
+  - `composer require drupal/kashmir`
+  - `drush dl kashmir`
+- Enable kashmir
+  - `drush en kashmir`
 - Generate a sub-theme
-  - `drush whitelabel_transac sub_theme_name`
+  - `drush kashmir sub_theme_name`
 - Configure settings
   - Update settings in `gulp/_config.js` for Browsersync and Source for scripts and styles.
 

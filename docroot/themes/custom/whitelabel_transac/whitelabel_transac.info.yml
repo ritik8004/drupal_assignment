@@ -11,7 +11,6 @@ regions:
   footer: Footer
 
 libraries:
-  - whitelabel_transac/reset
   - whitelabel_transac/global
 
 component-libraries:
