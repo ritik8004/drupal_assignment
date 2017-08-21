@@ -357,6 +357,10 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
       '#markup' => '<div class="stock-checker">' . t('Checking stock...') . '</div>',
     ];
 
+    // This is to disable stock check on page load.
+    global $_alshaya_acm_product_no_stock_process;
+    $_alshaya_acm_product_no_stock_process = TRUE;
+
     unset($build['name']);
     unset($build['price']);
   }
@@ -408,6 +412,13 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  global $_alshaya_acm_product_no_stock_process;
+
+  // We are not going to show the form right now, we don't do any stock check.
+  if (isset($_alshaya_acm_product_no_stock_process) && $_alshaya_acm_product_no_stock_process) {
+    return;
+  }
+
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   // Get SKU id.
   $sku_entity = SKU::load($form['sku_id']['#value']);
