@@ -47,13 +47,20 @@ trait IngestRequestTrait {
    *   Action name for logging.
    * @param string $reskey
    *   Result data key (or NULL)
+   * @param array $skus
+   *   List of skus that need to be synced.
    *
    * @throws ConductorException
    */
-  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL) {
+  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL, $skus = []) {
 
     $client = $this->clientFactory->createClient();
     $reqOpts = [];
+
+    if (!empty($skus)) {
+      $reqOpts['query']['skus'] = implode(',', $skus);
+    }
+
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');
 
     if ($this->debug) {
