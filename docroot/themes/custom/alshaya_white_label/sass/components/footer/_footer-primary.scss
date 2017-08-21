@@ -44,46 +44,6 @@
       width: 28.3625%;
       margin-#{$right}: 0;
     }
-
-    .language--switcher.only-first-time {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: $marine-blue-two;
-
-      ul {
-        height: 2.188rem;
-
-        li {
-          padding: 0.375rem;
-
-          a {
-            color: $white-two;
-          }
-
-          &:first-child {
-            &::after {
-              color: $white-two;
-            }
-          }
-        }
-      }
-
-      .language-switcher-close {
-        width: 1.063rem;
-        height: 1.063rem;
-        display: block;
-        position: absolute;
-        #{$right}: 1.375rem;
-        top: -0.3125rem;
-
-        @include icon(close, after) {
-          position: absolute;
-          color: $white-two;
-          font-size: 2.688rem;
-        }
-      }
-    }
   }
 
   .footer--categories,
@@ -489,7 +449,71 @@
   }
 }
 
-.c-footer-primary .language-switcher-language-url {
+.c-footer-is-accordion {
+  .accordion--body {
+    display: none;
+    border-top: 1px solid $white;
+
+    @include breakpoint($tablet) {
+      border-top: 0;
+      display: block !important;
+    }
+  }
+}
+
+.footer--social {
+  clear: both;
+  overflow: hidden;
+
+  @include breakpoint($desktop) {
+    margin-#{$left}: 0;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-#{$left}: 0;
+    max-width: 21.94rem;
+  }
+
+  .c-social-links {
+    @include breakpoint($tablet) {
+      margin-top: 1.75rem;
+      padding-left: 0.12rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.6rem;
+      padding-#{$left}: 0;
+      margin-#{$left}: -0.1rem;
+    }
+  }
+}
+
+.language--switcher {
+  @include breakpoint($tablet) {
+    margin-top: 0.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 1.875rem;
+  }
+}
+
+.region__footer-primary {
+  @include breakpoint($tablet) {
+    // padding-left: 0.312rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    max-width: 21.94rem;
+  }
+}
+
+.c-footer-menu--category {
+  text-transform: lowercase;
+}
+
+.c-footer .language-switcher-language-url,
+.only-first-time .language-switcher-language-url {
   position: relative;
   clear: both;
 
@@ -586,65 +610,53 @@
   }
 }
 
-.c-footer-is-accordion {
-  .accordion--body {
-    display: none;
-    border-top: 1px solid $white;
+.language--switcher.only-first-time {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: $marine-blue-two;
+  z-index: 9;
 
-    @include breakpoint($tablet) {
-      border-top: 0;
-      display: block !important;
+  .links {
+    @include breakpoint($only-tablet) {
+      text-align: center;
     }
   }
-}
 
-.footer--social {
-  clear: both;
-  overflow: hidden;
+  ul {
+    height: 2.188rem;
 
-  @include breakpoint($desktop) {
-    margin-#{$left}: 0;
-  }
+    li {
+      padding: 0.375rem;
 
-  @include breakpoint($only-tablet) {
-    margin-#{$left}: 0;
-    max-width: 21.94rem;
-  }
+      a {
+        color: $white-two;
 
-  .c-social-links {
-    @include breakpoint($tablet) {
-      margin-top: 1.75rem;
-      padding-left: 0.12rem;
-    }
+        &.is-active {
+          color: $white-two;
+        }
+      }
 
-    @include breakpoint($desktop) {
-      margin-top: 2.6rem;
-      padding-#{$left}: 0;
-      margin-#{$left}: -0.1rem;
+      &:first-child {
+        &::after {
+          color: $white-two;
+        }
+      }
     }
   }
-}
 
-.language--switcher {
-  @include breakpoint($tablet) {
-    margin-top: 0.75rem;
+  .language-switcher-close {
+    width: 1.063rem;
+    height: 1.063rem;
+    display: block;
+    position: absolute;
+    #{$right}: 1.375rem;
+    top: -0.3125rem;
+
+    @include icon(close, after) {
+      position: absolute;
+      color: $white-two;
+      font-size: 2.688rem;
+    }
   }
-
-  @include breakpoint($desktop) {
-    margin-top: 1.875rem;
-  }
-}
-
-.region__footer-primary {
-  @include breakpoint($tablet) {
-    // padding-left: 0.312rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    max-width: 21.94rem;
-  }
-}
-
-.c-footer-menu--category {
-  text-transform: lowercase;
 }
