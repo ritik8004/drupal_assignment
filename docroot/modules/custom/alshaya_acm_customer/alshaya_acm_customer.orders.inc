@@ -236,11 +236,14 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
     /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
     $store_utility = \Drupal::service('alshaya_stores_finder.utility');
-    $store_node = $store_utility->getStoreFromCode($store_code);
-    $orderDetails['store_name'] = $store_node->label();
-    $orderDetails['store_address'] = $store_node->get('field_store_address')->getString();
-    $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
-    $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
+
+    // Getting store node object from store code.
+    if ($store_node = $store_utility->getTranslatedStoreFromCode($store_code)) {
+      $orderDetails['store_name'] = $store_node->label();
+      $orderDetails['store_address'] = $store_node->get('field_store_address')->getString();
+      $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
+      $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
+    }
 
     $orderDetails['view_on_map_link'] = '';
     if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
