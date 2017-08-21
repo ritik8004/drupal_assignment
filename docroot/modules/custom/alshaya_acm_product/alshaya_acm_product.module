@@ -352,6 +352,11 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
 
   // Show the price inside the SKU display when in full view mode.
   if ($build['#view_mode'] == 'full') {
+    // Show placeholder to allow adding form in AJAX.
+    $build['cart_form_placeholder'] = [
+      '#markup' => '<div class="stock-checker">' . t('Checking stock...') . '</div>',
+    ];
+
     unset($build['name']);
     unset($build['price']);
   }
