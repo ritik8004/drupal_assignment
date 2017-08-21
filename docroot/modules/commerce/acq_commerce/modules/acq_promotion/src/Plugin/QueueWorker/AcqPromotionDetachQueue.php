@@ -58,6 +58,7 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
       $sku_entity->save();
     }
 
+    $sku_texts = implode(',', $skus);
     $endpoint = $this->apiVersion . '/ingest/product/sync';
 
     $doReq = function ($client, $opt) use ($endpoint) {
@@ -65,13 +66,13 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
     };
 
     try {
-      $this->tryIngestRequest($doReq, 'productFullSync', 'products', $skus);
+      $this->tryIngestRequest($doReq, 'productFullSync', 'products', $sku_texts);
     }
     catch (ConductorException $e) {
     }
 
     $this->loggerFactory->get('acq_sku')->info('Detached Promotion:@promo from SKUs: @skus',
-      ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
+      ['@promo' => $promotion_nid, '@skus' => $sku_texts]);
   }
 
 }
