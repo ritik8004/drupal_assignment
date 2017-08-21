@@ -113,6 +113,13 @@ body.ucbrowser {
       }
     }
   }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+    &::after {
+      height: 34px;
+    }
+  }
 }
 
 #text-resize-control {
@@ -296,10 +303,6 @@ html[lang="ar"] {
 
     .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
     .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
-      &::after {
-        height: 34px;
-      }
-
       // Fix for direction attribute support for UC browser.
       // Select elements for size and quantity.
       select {
