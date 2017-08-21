@@ -32,7 +32,6 @@ function alshaya_final_common_install_task() {
       \Drupal::service('module_installer')->install(['shield']);
     }
     else {
-      print 'acquia_connector not exists.';
       \Drupal::service('module_installer')->install(['shield', 'acquia_connector']);
     }
 
