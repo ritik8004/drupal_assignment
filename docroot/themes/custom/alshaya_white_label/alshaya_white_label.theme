@@ -711,3 +711,15 @@ function alshaya_white_label_preprocess_form(&$variables) {
 function alshaya_white_label_preprocess_acq_sku(&$variables) {
   $variables['attributes']['data-skuid'] = $variables['sku_entity']->id();
 }
+
+/**
+ * Implements template_preprocess_page_title().
+ */
+function alshaya_white_label_preprocess_page_title(&$variables) {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+
+    if ($node->bundle() === 'acq_promotion') {
+      $variables['title'] = $node->get('field_acq_promotion_label')->getString();
+    }
+  }
+}
