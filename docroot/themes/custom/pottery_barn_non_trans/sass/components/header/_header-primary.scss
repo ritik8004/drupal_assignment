@@ -1335,7 +1335,7 @@ header {
 
   @include breakpoint($only-mobile) {
     max-width: 100%;
-    line-height: 32px;
+    line-height: 25px;
 
     html[lang=ar] & {
       max-width: 100%;
