@@ -70,4 +70,5 @@ function alshaya_transac_install() {
   if (isset($_ENV['AH_SITE_NAME']) && !\Drupal::moduleHandler()->moduleExists('acquia_search')) {
     \Drupal::service('module_installer')->install(['acquia_search']);
   }
+  print 'dealed with alshaya_search.';
 }
