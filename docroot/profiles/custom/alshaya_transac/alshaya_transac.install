@@ -56,14 +56,17 @@ function alshaya_transac_install() {
   \Drupal::moduleHandler()->invokeAll('alshaya_transac_profile_installed', [$modules]);
 
   $file = DRUPAL_ROOT . '/' . drupal_get_path('profile', 'alshaya') . "/alshaya.profile";
+  print 'check if alshaya.profile exists.';
   if (is_file($file)) {
     require_once $file;
 
+    print 'Included alshaya.profile file.';
     if (function_exists('alshaya_alshaya_transac_profile_installed')) {
       alshaya_alshaya_transac_profile_installed($modules);
     }
   }
 
+  print 'Check alshaya_search exists.';
   if (isset($_ENV['AH_SITE_NAME']) && !\Drupal::moduleHandler()->moduleExists('acquia_search')) {
     \Drupal::service('module_installer')->install(['acquia_search']);
   }
