@@ -25,7 +25,7 @@
 
       var mobileStickyHeaderHeight = $('.branding__menu').height();
       var normalStickyHeaderHeight = $('.branding__menu').height() + $('.header--wrapper').height();
-      $('.read-more-description-link').on('click', function () {
+      $('.read-more-description-link, .select-size-text .highlight').on('click', function () {
         if ($(window).width() < 768) {
           $('html,body').animate({
             scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
