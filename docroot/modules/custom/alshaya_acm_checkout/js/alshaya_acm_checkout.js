@@ -132,6 +132,9 @@
         $('#cancel-address-add-edit').on('click', function (event) {
           event.preventDefault();
 
+          // Update fieldset title to edit address.
+          $('.delivery-address-form-title').html(Drupal.t('add new address'));
+
           // Hide the form.
           $('#address-book-form-wrapper').slideUp();
         });
@@ -234,6 +237,18 @@
 
     // Show the form.
     $('#address-book-form-wrapper').slideDown();
+
+    // Update fieldset title to default value.
+    $('.delivery-address-form-title').html(Drupal.t('edit address'));
+  };
+
+  // Ajax command to show loader on checkout pages.
+  $.fn.showCheckoutLoader = function (data) {
+    // Add the loader div.
+    $('.page-standard').append('<div class="ajax-progress ajax-progress-throbber checkout-ajax-progress-throbber"><div class="throbber"></div></div>');
+
+    // Show the loader.
+    $('.checkout-ajax-progress-throbber').show();
   };
 
   Drupal.behaviors.fixCheckoutSummaryBlock = {
