@@ -49,17 +49,6 @@ body.edge {
   * UC Browser - Specific issues and hacks for them.
  */
 body.ucbrowser {
-  .owl-prev,
-  .owl-next {
-    @include breakpoint($mobile) {
-      top: 45% !important;
-    }
-
-    @include breakpoint($tablet) {
-      top: 47% !important;
-    }
-  }
-
   @include breakpoint($tablet) {
     #block-mobilenavigation {
       ul.menu {
@@ -122,6 +111,13 @@ body.ucbrowser {
           width: 6.2% !important;
         }
       }
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+    &::after {
+      height: 34px;
     }
   }
 }
@@ -288,12 +284,30 @@ html[lang="ar"] {
       }
     }
   }
+
+  @include breakpoint($upto-desktop) {
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+      label {
+        width: 103% !important;
+      }
+    }
+  }
 }
 
 html[lang="ar"] {
   .ucbrowser {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.55rem;
+    }
+
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+      // Fix for direction attribute support for UC browser.
+      // Select elements for size and quantity.
+      select {
+        padding-left: 40px !important;
+      }
     }
   }
 }
@@ -333,10 +347,16 @@ html[lang="en"] {
   }
 }
 
-.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
+body.path--cart.ucbrowser .ui-dialog,
+body.nodetype--acq_product.ucbrowser .ui-dialog,
+body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
   padding: 10rem 2rem !important;
 }
 
 #stcpDiv {
   display: none;
+}
+
+.ucbrowser .c-accordion__title::after {
+  top: 5px !important;
 }
