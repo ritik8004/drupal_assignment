@@ -64,5 +64,7 @@ function alshaya_transac_install() {
     }
   }
 
-  \Drupal::service('module_installer')->install(['acquia_search']);
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['acquia_search']);
+  }
 }
