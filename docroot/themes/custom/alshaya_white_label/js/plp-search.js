@@ -240,17 +240,17 @@
           $('.block-views-blockplp-promotional-banner-block-1')
             .addClass('promo-banner');
           $('.region__content').addClass('promo-banner');
-          // If promo node.
-          if ($('body').hasClass('nodetype--acq_promotion')) {
-            $('.block-views-blockplp-promotional-banner-block-1')
-              .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-2')
-              .addClass('promo-banner');
-          }
-          else {
-            $('.block-views-blockplp-promotional-banner-block-1')
-              .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1')
-              .addClass('promo-banner');
-          }
+          $('.block-views-blockplp-promotional-banner-block-1')
+            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1')
+            .addClass('promo-banner');
+        }
+        if (!$('.view-promotion-banner .field-content').is(':empty')) {
+          $('.block-views-blockpromotion-banner-block-1')
+            .addClass('promo-banner');
+          $('.region__content').addClass('promo-banner');
+          $('.block-views-blockpromotion-banner-block-1')
+            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-2')
+            .addClass('promo-banner');
         }
       }
 
