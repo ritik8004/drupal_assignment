@@ -235,22 +235,22 @@
             .css('border-bottom-width', '0');
         }
 
-        // Add class to promotional banner view block if it is not empty.
-        if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
-          $('.block-views-blockplp-promotional-banner-block-1')
-            .addClass('promo-banner');
-          $('.region__content').addClass('promo-banner');
-          $('.block-views-blockplp-promotional-banner-block-1')
-            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1')
-            .addClass('promo-banner');
+          // Add class to promotional banner view block if it is not empty.
+        if ($('body').hasClass('nodetype--acq_promotion')) {
+          if (!$('.view-promotion-banner .field-content').is(':empty')) {
+            var bannerBlock = $('.block-views-blockpromotion-banner-block-1');
+            bannerBlock.addClass('promo-banner');
+            $('.region__content').addClass('promo-banner');
+            bannerBlock.siblings('.block-views-exposed-filter-blockalshaya-product-list-block-2').addClass('promo-banner');
+          }
         }
-        if (!$('.view-promotion-banner .field-content').is(':empty')) {
-          $('.block-views-blockpromotion-banner-block-1')
-            .addClass('promo-banner');
-          $('.region__content').addClass('promo-banner');
-          $('.block-views-blockpromotion-banner-block-1')
-            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-2')
-            .addClass('promo-banner');
+        else {
+          if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
+            var bannerBlock = $('.block-views-blockplp-promotional-banner-block-1')
+            bannerBlock.addClass('promo-banner');
+            $('.region__content').addClass('promo-banner');
+            bannerBlock.siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1').addClass('promo-banner');
+          }
         }
       }
 

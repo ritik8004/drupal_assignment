@@ -13,7 +13,8 @@
   .region__content {
     position: relative;
 
-    .block-views-blockplp-promotional-banner-block-1.promo-banner {
+    .block-views-blockplp-promotional-banner-block-1.promo-banner,
+    .block-views-blockpromotion-banner-block-1.promo-banner {
       margin-bottom: 1.5rem;
 
       @include breakpoint($desktop) {
@@ -278,10 +279,10 @@
     }
 
     .promo-banner > .filter--mobile {
-      top: 21.76rem !important;
+      top: 213px !important;
 
       @include breakpoint($only-tablet) {
-        top: 16.44rem !important;
+        top: 161px !important;
       }
     }
 
