@@ -49,17 +49,6 @@ body.edge {
   * UC Browser - Specific issues and hacks for them.
  */
 body.ucbrowser {
-  .owl-prev,
-  .owl-next {
-    @include breakpoint($mobile) {
-      top: 45% !important;
-    }
-
-    @include breakpoint($tablet) {
-      top: 47% !important;
-    }
-  }
-
   @include breakpoint($tablet) {
     #block-mobilenavigation {
       ul.menu {
@@ -355,10 +344,16 @@ html[lang="en"] {
   }
 }
 
-.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
+body.path--cart.ucbrowser .ui-dialog,
+body.nodetype--acq_product.ucbrowser .ui-dialog,
+body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
   padding: 10rem 2rem !important;
 }
 
 #stcpDiv {
   display: none;
+}
+
+.ucbrowser .c-accordion__title::after {
+  top: 5px !important;
 }
