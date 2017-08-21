@@ -13,9 +13,8 @@ function alshaya_install() {
   $uri = "public://google_tag";
   file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
 
-  $modules = [];
-
   // TODO: List the modules common for transac and non-transac profiles.
+  $modules = [];
 
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', [$modules]);
 }
