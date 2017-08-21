@@ -644,7 +644,7 @@
 
     ul {
       float: $left;
-      margin: 15px 8%;
+      margin: 15px 2%;
       padding: 0;
 
       @include breakpoint($desktop) {
@@ -725,7 +725,7 @@
       }
 
       .field--type-image img {
-        margin-top: 0;
+        margin-top: 10px;
         position: static;
       }
     }
@@ -821,7 +821,7 @@ html[lang="ar"] .alshaya-mob-app-links img {
 }
 
 .alshaya-mob-app-links img {
-  margin: 10px 6%;
+  margin: 10px 3%;
 
   @include breakpoint($desktop) {
     &:first-child {
@@ -847,6 +847,17 @@ html[lang="ar"] .alshaya-mob-app-links img {
       width: 100%;
       text-align: center;
       padding-bottom: 0 !important;
+    }
+  }
+
+  .alshaya-mob-app-links {
+    p {
+      margin: 0;
+    }
+
+    img {
+      //margin-top: 0;
+      margin-bottom: 0;
     }
   }
 }

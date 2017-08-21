@@ -21,7 +21,7 @@
     e.preventDefault();
   });
 
-  $('.c-footer__copy a').on('click', function (e) {
+  $('.c-footer__copy a.popup-link').on('click', function (e) {
     $('.privacy-popup').show();
     e.preventDefault();
   });
