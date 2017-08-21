@@ -19,22 +19,3 @@ function alshaya_search_local_search_install() {
 
   $search_view->set('display', $search_view_display)->save();
 }
-
-/**
- * Implements hook_modules_installed().
- */
-function alshaya_search_local_search_modules_installed(array $modules) {
-  // @todo: Reemove this function once fixed the issue, as this module will
-  // not be installed on server.
-  if (!in_array('acquia_search', $modules)) {
-    return;
-  }
-
-  // Set new config for acquia search index.
-  $search_api_index = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_search_local_search') . '/config/optional/search_api.index.acquia_search_index.yml'));
-
-  \Drupal::configFactory()
-    ->getEditable('search_api.index.acquia_search_index')
-    ->setData($search_api_index)
-    ->save();
-}

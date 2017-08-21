@@ -27,7 +27,7 @@ function alshaya_final_common_install_task() {
   file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
 
   // Enable shield and acquia_connector where needed.
-  //if (isset($_ENV['AH_SITE_NAME'])) {
+  if (isset($_ENV['AH_SITE_NAME'])) {
   \Drupal::service('module_installer')->install(['shield', 'acquia_connector']);
 
   \Drupal::getContainer()->get('config.factory')
@@ -37,5 +37,5 @@ function alshaya_final_common_install_task() {
     ->set('pass', Settings::get('alshaya_custom_shield_default_pass'))
     ->set('print', '')
     ->save();
-  //}
+  }
 }
