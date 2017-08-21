@@ -60,7 +60,7 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
 
     $sku_query_string = implode(',', $skus);
 
-    $endpoint = $this->apiVersion . '/ingest/product/sync?skus=' . $sku_query_string;
+    $endpoint = $this->apiVersion . '/agent/product/sync?skus=' . $sku_query_string;
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return $client->post($endpoint, $opt);
