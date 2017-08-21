@@ -24,9 +24,6 @@ function alshaya_alshaya_non_transac_profile_installed($modules) {
 
 function alshaya_final_common_install_task() {
   print 'before google_tag directory.';
-  // Prerequisite for google_tag module.
-  $uri = "public://google_tag";
-  file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
 
   print 'comes here after google_tag created.';
 
