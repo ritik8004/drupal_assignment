@@ -730,23 +730,29 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   if ($is_free_item) {
     foreach ($cart_rules as $cart_rule) {
       $promotion = \Drupal::service('alshaya_acm_promotion.manager')->getPromotionByRuleId($cart_rule);
-      $promotion_action = $promotion->get('field_acq_promotion_action')->getString();
-      if (($promotion_action === 'buy_x_get_y_cheapest_free') &&
-        (!isset($promotions[$promotion->id()]))) {
-        $langcode = \Drupal::service('language_manager')->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
-        $promotion = \Drupal::service('entity.repository')->getTranslationFromContext($promotion, $langcode);
-        $promotion_text = $promotion->get('field_acq_promotion_label')->getString();
-        $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
-        $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
-        $description = $promotion->get('field_acq_promotion_description')->getString();
+      if ($promotion) {
+        $promotion_action = $promotion->get('field_acq_promotion_action')->getString();
+        if (($promotion_action === 'buy_x_get_y_cheapest_free') &&
+          (!isset($promotions[$promotion->id()]))) {
+          $langcode = \Drupal::service('language_manager')->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+          $promotion = \Drupal::service('entity.repository')->getTranslationFromContext($promotion, $langcode);
+          $description_value = '';
+          $promotion_text = $promotion->get('field_acq_promotion_label')->getString();
+          $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
+          $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
+          $description = $promotion->get('field_acq_promotion_description')->first();
+          if ($description) {
+            $description_value = $description->getValue();
+          }
 
-        $promotions[$promotion->id()] = [
-          'text' => $promotion_text,
-          'description' => $description,
-          'discount_type' => $discount_type,
-          'discount_value' => $discount_value,
-        ];
-        break;
+          $promotions[$promotion->id()] = [
+            'text' => $promotion_text,
+            'description' => $description_value,
+            'discount_type' => $discount_type,
+            'discount_value' => $discount_value,
+          ];
+          break;
+        }
       }
     }
   }
