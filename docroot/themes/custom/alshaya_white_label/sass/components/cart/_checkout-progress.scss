@@ -38,6 +38,7 @@
     vertical-align: top;
     min-height: 3.625rem;
     padding: 0.5rem 0;
+    cursor: default;
 
     @include breakpoint($tablet) {
       overflow: hidden;
@@ -203,6 +204,7 @@
 
     a {
       display: inline-block;
+      pointer-events: none;
 
       @include breakpoint($only-mobile) {
         display: inline;
