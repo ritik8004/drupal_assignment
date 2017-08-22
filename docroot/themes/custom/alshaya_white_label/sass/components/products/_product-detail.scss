@@ -64,7 +64,16 @@
 
   &__sidebar {
     @include breakpoint($only-mobile) {
-      padding: 0 0.5rem;
+      .mobile-content-wrapper {
+        padding: 0 0.5rem;
+      }
+
+      .mobile-related-wrapper {
+        position: relative;
+        z-index: 4;
+        background: $white-five;
+        padding: 0 0.5rem;
+      }
     }
 
     @include breakpoint($mobile) {
@@ -682,6 +691,7 @@
     .highlight {
       color: $windows-blue;
       font-weight: bold;
+      cursor: pointer;
     }
   }
 }

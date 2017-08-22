@@ -61,6 +61,7 @@ jQuery.fn.select2Option = function (options) {
       e.preventDefault();
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
+      $(this).closest('.sku-base-form').find('.error').remove();
       $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span');
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');

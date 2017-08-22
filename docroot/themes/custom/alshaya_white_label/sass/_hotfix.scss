@@ -214,6 +214,10 @@ html[lang=ar] {
     tr td.name div.items {
       width: 42%;
 
+      @include breakpoint($only-mobile) {
+        margin-right: -0.1875rem;
+      }
+
       @include breakpoint($only-tablet) {
         width: 50%;
       }
@@ -221,6 +225,12 @@ html[lang=ar] {
   }
 
   #table-cart-totals {
+    .edit-actions {
+      @include breakpoint($only-tablet) {
+        margin-left: -4.3rem;
+      }
+    }
+
     td:first-child {
       text-align: left;
     }
@@ -250,6 +260,14 @@ html[lang=ar] {
           margin-right: 1.5625rem !important;
         }
       }
+    }
+  }
+
+  #table-cart-items .price-wrapper .price-amount,
+  .price--discount .discount-value {
+    @include breakpoint($only-mobile) {
+      float: right;
+      margin-left: 0.5rem;
     }
   }
 }
