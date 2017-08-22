@@ -19,6 +19,8 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
 
   private $product;
 
+  private $address_count;
+
   /**
    * Every scenario gets its own context instance.
    *
@@ -666,4 +668,216 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     }
   }
 
+  /**
+   * @Then /^I should see the link "([^"]*)" in left bar$/
+   */
+  public function iShouldSeeTheLinkInLeftBar($arg1) {
+    $link = $this->getSession()
+      ->getPage()
+      ->find('css', '.my-account-nav')
+      ->hasLink($arg1);
+    if (!$link) {
+      throw new \Exception($arg1 . 'link is not visible on my account section');
+    }
+  }
+
+  /**
+   * @Then /^I should see at most "([^"]*)" recent orders listed$/
+   */
+  public function iShouldSeeAtMostThreeRecentOrdersListed($count) {
+    $page = $this->getSession()->getPage();
+    $all_rows = count($page->findAll('css', '.order-summary-row'));
+    if ($all_rows > $count) {
+      throw new \Exception('More than three orders displayed on my account page');
+    }
+    $all_orders = $page->findAll('css', '.order-transaction');
+    $number = [];
+    foreach ($all_orders as $order) {
+      $order_id = $order->find('css', '.dark')->getText();
+      $number[] = substr($order_id, 7);
+    }
+    if (!$this->is_array_ordered($number, ORDER_DSC)) {
+      throw new \Exception('Orders are not displayed in descending order');
+    }
+  }
+
+  /**
+   * @Given /^the order status should be visible for all products$/
+   */
+  public function theOrderStatusShouldBeVisibleForAllProducts() {
+    $page = $this->getSession()->getPage();
+    $all_rows = $page->findAll('css', '.order-summary-row');
+    foreach ($all_rows as $row) {
+      $status_button = $row->find('css', 'td.desktop-only > div')
+        ->getText();
+      $a = 'Processing';
+      $b = 'Cancelled';
+      $c = 'Confirmed';
+      $d = 'Dispatched';
+      if (!($status_button == $a or $status_button == $b or $status_button == $c or $status_button == $d)) {
+        throw new \Exception('Status for order is not displayed on My account page');
+      }
+    }
+
+  }
+
+  /**
+   * @Then /^I should see at most "([^"]*)" recent orders listed on orders tab$/
+   */
+  public function iShouldSeeAtMostRecentOrdersListedOnOrdersTab($arg1) {
+    $page = $this->getSession()->getPage();
+    $actual_count = count($page->findAll('css', '.order-item'));
+    if ($actual_count > $arg1) {
+      throw new \Exception('More than 10 orders are listed on Orders tab');
+    }
+    $all_orders = $page->findAll('css', '.first-second.wrapper > div.first');
+    $number = [];
+    foreach ($all_orders as $order) {
+      $order_id = $order->find('css', '.dark.order-id')->getText();
+      $number[] = substr($order_id, 7);
+    }
+    if (!$this->is_array_ordered($number, ORDER_DSC)) {
+      throw new \Exception('Orders are not displayed in descending order');
+    }
+  }
+
+  /**
+   * @Then /^I should see all "([^"]*)" orders$/
+   */
+  public function iShouldSeeAllOrders($arg1) {
+    $page = $this->getSession()->getPage();
+    $all_orders = $page->findAll('css', '.order-item');
+    foreach ($all_orders as $order) {
+      $title = $order->find('css', 'a div.second-third.wrapper > div.second > div.dark.order-name')
+        ->getText();
+      if ($title !== $arg1) {
+        throw new \Exception('Filter by name is not working on Orders tab in my account section');
+      }
+    }
+  }
+
+  /**
+   * @Given /^I should see all orders for "([^"]*)"$/
+   */
+  public function iShouldSeeAllOrdersFor($arg1) {
+    $page = $this->getSession()->getPage();
+    $all_orders = $page->findAll('css', '.order-item');
+    foreach ($all_orders as $order) {
+      $order_id = $order->find('css', '.dark.order-id')->getText();
+      $actual_order_id = substr($order_id, 0, 7);
+    }
+    if ($actual_order_id !== $arg1) {
+      throw new \Exception('Filter for Order ID is not working');
+    }
+  }
+
+  /**
+   * @When /^I select Cancelled from the status dropdown$/
+   */
+  public function iSelectCancelledFromTheStatusDropdown() {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.select2-selection__arrow')->click();
+    $page->find('css', 'ul.select2-results__options li:nth-child(2)')->click();
+  }
+
+  /**
+   * @When /^I select Dispatched from the status dropdown$/
+   */
+  public function iSelectDispatchedFromTheStatusDropdown() {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.select2-selection__arrow')->click();
+    $page->find('css', 'ul.select2-results__options li:nth-child(3)')->click();
+  }
+
+  /**
+   * @When /^I select Processing from the status dropdown$/
+   */
+  public function iSelectProcessingFromTheStatusDropdown() {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.select2-selection__arrow')->click();
+    $page->find('css', 'ul.select2-results__options li:nth-child(4)')->click();
+  }
+
+  /**
+   * @Then /^I should see all "([^"]*)" orders listed on orders tab$/
+   */
+  public function iShouldSeeAllOrdersListedOnOrdersTab($arg1) {
+    $page = $this->getSession()->getPage();
+    $all_statuses = $page->findAll('css', '.order-item');
+    foreach ($all_statuses as $status) {
+      $status_name = $status->find('css', '.second-third.wrapper div.third > div')
+        ->getText();
+    }
+    if ($status_name !== $arg1) {
+      throw new \Exception('Order list did not get sorted on' . $arg1);
+    }
+  }
+
+  /**
+   * @Then /^I get the total count of address blocks$/
+   */
+  public function iGetTheTotalCountOfAddressBlocks() {
+    $page = $this->getSession()->getPage();
+    $this->address_count = count($page->findAll('css', '.address'));
+  }
+
+  /**
+   * @Given /^the new address block should be displayed on address book$/
+   */
+  public function theNewAddressBlockShouldBeDisplayedOnAddressBook() {
+    $page = $this->getSession()->getPage();
+    $new_address_count = count($page->findAll('css', '.address'));
+    if ($this->address_count + 1 !== $new_address_count) {
+      throw new \Exception('Newly added address is not being displayed on address book');
+    }
+  }
+
+  /**
+   * @When /^I click Edit Address$/
+   */
+  public function iClickEditAddress() {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '#block-alshaya-white-label-content > div.views-element-container > div > div > div > div.views-row.clearfix.row-1 > div:nth-child(1) > div > span > div > div.address--options > div.address--edit.address--controls > a')
+      ->click();
+  }
+
+  /**
+   * @Then /^I should not see the delete button for primary address$/
+   */
+  public function iShouldNotSeeTheDeleteButtonForPrimaryAddress() {
+    $page = $this->getSession()->getPage();
+    $delete_button = $page->find('css', '.address.default .address--options')
+      ->hasLink('Delete');
+    if ($delete_button) {
+      throw new \Exception('Primary address is displaying Delete button');
+    }
+  }
+
+  /**
+   * @When /^I confirm deletion of address$/
+   */
+  public function iConfirmDeletionOfAddress() {
+    $page = $this->getSession()->getPage();
+    $button = $page->find('css', '.ui-dialog-buttonset.form-actions > button > span.ui-button-text')
+      ->click();
+  }
+
+  /**
+   * @Given /^the address block should be deleted from address book$/
+   */
+  public function theAddressBlockShouldBeDeletedFromAddressBook() {
+    $page = $this->getSession()->getPage();
+    $new_address_count = count($page->findAll('css', '.address'));
+    if ($this->address_count - 1 !== $new_address_count) {
+      throw new \Exception('Address did not get deleted from the address book');
+    }
+  }
+
+  /**
+   * @When /^I check the "([^"]*)" checkbox$/
+   */
+  public function iCheckTheCheckbox($option) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', $option)->click();
+  }
 }
