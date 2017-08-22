@@ -40,8 +40,13 @@
   .c-social-links--facebook {
     @include icon(facebook);
 
+    &::before {
+      color: $brownish-grey;
+    }
+
     &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-facebookselect.png") no-repeat center;
+      color: #003971;
+      background: none;
       background-size: 1.5rem;
     }
   }
@@ -50,11 +55,12 @@
     @include icon(instagram);
 
     &::before {
-      color: #d32f7e !important;
+      color: $brownish-grey !important;
     }
 
     &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-instagramselect.png") no-repeat center;
+      color: #d32f7e !important;
+      background: none;
       background-size: 1.5rem;
     }
   }
@@ -63,11 +69,12 @@
     @include icon(youtube);
 
     &::before {
-      color: #ce1312 !important;
+      color: $brownish-grey !important;
     }
 
     &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-youtubeselect.png") no-repeat center;
+      color: #ce1312 !important;
+      background: none;
       background-size: 1.5rem;
     }
   }
@@ -76,11 +83,11 @@
     @include icon(googleplus);
 
     &::before {
-      color: #dc4e41 !important;
+      color: $brownish-grey !important;
     }
 
     &:hover::before {
-      color: $marine-blue;
+      color: #dc4e41 !important;
     }
   }
 
@@ -88,11 +95,12 @@
     @include icon(twitter);
 
     &::before {
-      color: #55acee !important;
+      color: $brownish-grey !important;
     }
 
     &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-twitterselect.png") no-repeat center;
+      color: #55acee !important;
+      background: none;
       background-size: 1.5rem;
     }
   }
@@ -101,12 +109,25 @@
     @include icon(pinterest);
 
     &::before {
-      color: #bd071c !important;
+      color: $brownish-grey !important;
     }
 
     &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-pinterestselect.png") no-repeat center;
+      color: #bd071c !important;
+      background: none;
       background-size: 1.5rem;
+    }
+  }
+
+  .c-social-links--blog {
+    @include icon(blog);
+
+    &::before {
+      color: $brownish-grey !important;
+    }
+
+    &:hover::before {
+      color: $black !important;
     }
   }
 }

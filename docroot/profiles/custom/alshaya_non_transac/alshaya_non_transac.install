@@ -56,5 +56,18 @@ function alshaya_non_transac_install() {
     \Drupal::service('module_installer')->install([$module]);
   }
 
+  // Invoke a hook to let other modules know that profile installation is done.
   \Drupal::moduleHandler()->invokeAll('alshaya_non_transac_profile_installed', [$modules]);
+
+  // Previous hook invoke does not deal with profile. Custom implementation
+  // to invoke the hook in alshaya.profile.
+  $file = DRUPAL_ROOT . '/' . drupal_get_path('profile', 'alshaya') . "/alshaya.profile";
+  if (is_file($file)) {
+    require_once $file;
+
+    if (function_exists('alshaya_alshaya_non_transac_profile_installed')) {
+      alshaya_alshaya_non_transac_profile_installed($modules);
+    }
+  }
+
 }

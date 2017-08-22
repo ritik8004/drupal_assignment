@@ -100,6 +100,7 @@ class CheckoutController implements ContainerInjectionInterface {
     $cart->setShipping($update);
 
     $response = new AjaxResponse();
+    $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString()));
     return $response;
   }

@@ -147,7 +147,7 @@ class KnetController extends ControllerBase {
 
     // Direct Magento API call to create transaction entry, we don't have it in
     // conductor yet.
-    $this->alshayaApiWrapper->addKnetTransaction($data['order_id'], $data['transaction_id']);
+    $this->alshayaApiWrapper->addKnetTransaction($data['order_id'], $data['transaction_id'], $data['auth']);
 
     // @TODO: Below API call is still kept here as status is not updated in
     // previous call still.

@@ -913,6 +913,7 @@
 
   .pac-container {
     min-width: 0;
+    z-index: 3;
 
     div {
       html[lang=ar] & {

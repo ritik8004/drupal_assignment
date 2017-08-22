@@ -89,6 +89,8 @@
 
   .back-link,
   .mobile-only-back-to-glossary {
+    display: none;
+
     a {
       display: block;
       width: inherit;
@@ -182,7 +184,9 @@
   }
 
   .c-page-title {
+    text-transform: uppercase;
     font-weight: normal;
+    color: $brownish-grey;
   }
 
   .attachment-after {
@@ -210,7 +214,7 @@
     }
 
     &#edit-submit-stores-finder {
-      background: url('../imgs/icons/store-search.svg');
+      background: url("../imgs/icons/store-search.svg");
       border: none;
       background-repeat: no-repeat;
       text-indent: -9999px;
@@ -234,13 +238,13 @@
   }
 
   .current-location::before {
-    background: url('../imgs/icons/current.svg') no-repeat;
+    background: url("../imgs/icons/current.svg") no-repeat;
     width: 26px;
     height: 26px;
   }
 
   .label--location::before {
-    background: url('../imgs/icons/ic-search-store.svg') no-repeat;
+    background: url("../imgs/icons/ic-search-store.svg") no-repeat;
     width: 25px;
     height: 25px;
     margin-#{$right}: 0.4rem;
@@ -481,6 +485,10 @@
         padding: 0 3.25rem;
         color: $black;
       }
+
+      @include breakpoint($only-mobile) {
+        padding: 0 1.25rem;
+      }
     }
 
     .views-field-field-store-address {
@@ -493,6 +501,10 @@
         @include breakpoint($tablet) {
           padding: 0 3.25rem;
           padding-#{$right}: 2.5rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          padding: 0 1.25rem;
         }
       }
     }
@@ -520,6 +532,10 @@
 
         @include breakpoint($tablet) {
           padding-#{$left}: 3.25rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: 1.25rem;
         }
       }
 
@@ -619,7 +635,7 @@
       text-align: center;
       color: $white-five;
       border-radius: 50%;
-      padding-top: 2px;
+      padding-top: 0;
     }
 
     .c-page-title {
@@ -703,7 +719,7 @@
     .view-display-id-page_1 > .view-content {
       display: inline-block;
       max-height: 39rem;
-      overflow-y: scroll;
+      overflow-y: auto;
       vertical-align: top;
       max-width: 26.5%;
       margin-#{$right}: 1%;
@@ -861,7 +877,7 @@
       &::after {
         position: absolute;
         content: '';
-        background: url('../imgs/icons/store--down.svg');
+        background: url("../imgs/icons/store--down.svg");
         display: inline-block;
         width: 17px;
         height: 7px;
@@ -909,7 +925,7 @@
 .individual--store {
   .view-content {
     display: inline-block;
-    overflow-y: scroll;
+    overflow-y: auto;
     vertical-align: top;
     width: 26.5%;
     margin-#{$right}: 1%;
@@ -1042,7 +1058,7 @@
   }
 
   .get--directions div::after {
-    background: url('../imgs/icons/ic-directions.svg');
+    background: url("../imgs/icons/ic-directions.svg");
     top: 50%;
     transform: translateY(-50%);
     #{$right}: 1rem;
@@ -1147,4 +1163,12 @@
 .scroll-fix {
   overflow: hidden;
   white-space: nowrap;
+}
+
+.store-finder-exposed-form {
+  display: none;
+}
+
+.path--store-finder .c-content__region .views-exposed-form {
+  border-bottom: 0;
 }

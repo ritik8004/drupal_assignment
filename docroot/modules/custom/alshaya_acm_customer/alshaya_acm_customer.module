@@ -143,12 +143,17 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
 function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'user_login_form') {
     if (isset($form['name'], $form['name']['#element_validate'])) {
-      // Disable element validate for email, we will call lafter if required.
+      // Disable element validate for email, we will call later if required.
       $key = array_search('email_registration_user_login_validate', $form['name']['#element_validate']);
       if ($key !== FALSE) {
         unset($form['name']['#element_validate'][$key]);
       }
     }
+
+    // Modify the inline email validation pattern.
+    $form['name']['#element_validate'] = [
+      'alshaya_valid_email_address',
+    ];
 
     // Disable validateAuthentication here, we will call later if required.
     $key = array_search('::validateAuthentication', $form['#validate']);
@@ -158,6 +163,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
     array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
     $form['#validate'][] = 'alshaya_acm_customer_login_post_validate';
+    $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
   }
 
   if ($form_id == 'user_register_form') {

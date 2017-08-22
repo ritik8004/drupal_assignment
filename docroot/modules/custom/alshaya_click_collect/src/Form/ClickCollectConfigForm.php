@@ -87,7 +87,6 @@ class ClickCollectConfigForm extends ConfigFormBase {
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => $this->t('PDP: Click and Collect help text'),
-      '#required' => TRUE,
       '#default_value' => $config->get('pdp_click_collect_help_text.value'),
     ];
 

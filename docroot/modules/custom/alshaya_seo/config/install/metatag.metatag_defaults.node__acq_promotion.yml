@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: node__acq_promotion
+label: 'Content: Promotion'
+tags:
+  description: '[node:field_acq_promotion_description]'
+  title: '[node:field_acq_promotion_label] | [site:name]'

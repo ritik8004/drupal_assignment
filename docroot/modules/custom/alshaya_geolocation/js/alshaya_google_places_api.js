@@ -1,5 +1,5 @@
 // Global var for no result found html.
-var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>';
+var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No area found') + '</span><div>';
 
 // Global var for storing location autocomplete instance.
 var location_autocomplete_instance = null;
