@@ -425,6 +425,26 @@
     html[lang=ar] & {
       line-height: 1.5;
     }
+
+    .sub-total,
+    .order-total {
+      > span {
+        width: 54%;
+
+        @include breakpoint($upto-desktop) {
+          width: 50%;
+        }
+      }
+
+      .total--amount,
+      .price-type__wrapper {
+        width: 44%;
+
+        @include breakpoint($upto-desktop) {
+          width: 47%;
+        }
+      }
+    }
   }
 }
 
