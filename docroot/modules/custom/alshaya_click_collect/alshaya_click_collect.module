@@ -122,15 +122,3 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
     ];
   }
 }
-
-/**
- * Implements hook_geolocation_google_maps_parameters().
- */
-function alshaya_click_collect_geolocation_google_maps_parameters() {
-  return [
-    'libraries' => [
-      'places',
-    ],
-    'language' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
-  ];
-}
