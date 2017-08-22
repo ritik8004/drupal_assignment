@@ -83,6 +83,12 @@
         color: $marine-blue-two;
       }
 
+      @include breakpoint($desktop) {
+        .ie & {
+          vertical-align: middle;
+        }
+      }
+
       @include breakpoint($only-tablet) {
         vertical-align: bottom;
         display: table-cell;
