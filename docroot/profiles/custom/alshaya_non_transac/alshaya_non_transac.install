@@ -70,4 +70,9 @@ function alshaya_non_transac_install() {
     }
   }
 
+  // We probably don't have any module depending on acquia_connector which is
+  // required on ACSF environments.
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['acquia_connector']);
+  }
 }
