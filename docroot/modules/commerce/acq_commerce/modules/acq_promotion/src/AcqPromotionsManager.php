@@ -305,11 +305,11 @@ class AcqPromotionsManager {
     foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
       if ($langcode !== $site_default_langcode) {
         if ($promotion_node->hasTranslation($langcode)) {
-          $node_translation = $promotion_node->getTranslation($langcode);
+          $promotion_node->removeTranslation($langcode);
         }
-        else {
-          $node_translation = $promotion_node->addTranslation($langcode, $promotion_node->toArray());
-        }
+
+        $node_translation = $promotion_node->addTranslation($langcode, $promotion_node->toArray());
+
         $node_translation->get('field_acq_promotion_label')->setValue($promotion_label_languages[$langcode]);
         $node_translation->save();
       }
