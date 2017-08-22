@@ -472,6 +472,10 @@
 
       .price {
         .price-currency {
+          @include breakpoint($only-tablet) {
+            margin-right: 0.4rem;
+          }
+
           margin-right: 1.5625rem;
         }
 
@@ -592,7 +596,9 @@ body.alias--cart {
 
     tbody tr {
       &:hover {
-        background: rgba(247, 247, 247, 0.72);
+        @include breakpoint($tablet) {
+          background: rgba(247, 247, 247, 0.72);
+        }
 
         .name .items a {
           color: $cerulean-two;
@@ -1087,6 +1093,7 @@ body.alias--cart {
     text-transform: lowercase;
     font-family: $alshaya-bold;
     font-size: 0.75rem;
+    -webkit-font-smoothing: auto;
 
     @include breakpoint($upto-tablet) {
       display: block;
