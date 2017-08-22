@@ -10,8 +10,8 @@ regions:
   sidebar: Sidebar
   footer: Footer
 
-libraries:
-  - whitelabel/global
+# libraries:
+#  - whitelabel/global
 
 component-libraries:
   atoms:
