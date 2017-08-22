@@ -470,7 +470,7 @@
   }
 
   @include breakpoint($only-tablet) {
-    margin-#{$left}: 0;
+    margin-#{$left}: -0.3125rem;
     max-width: 21.94rem;
   }
 
