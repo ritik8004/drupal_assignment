@@ -251,20 +251,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
 
         $home_delivery_options = [];
-        $home_delivery_options['standard_icon_class'] = $home_delivery_config->get('options_standard_icon_class');
         $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
         $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
-        $home_delivery_options['standard_price_options_one_title'] = $home_delivery_config->get('options_standard_price_options_one_title');
-        $home_delivery_options['standard_price_options_one_price'] = $home_delivery_config->get('options_standard_price_options_one_price') ? alshaya_acm_price_format((float) $home_delivery_config->get('options_standard_price_options_one_price')) : t('FREE');
-        $home_delivery_options['standard_price_options_two_title'] = $home_delivery_config->get('options_standard_price_options_two_title');
-        $home_delivery_options['standard_price_options_two_price'] = $home_delivery_config->get('options_standard_price_options_two_price') ? alshaya_acm_price_format((float) $home_delivery_config->get('options_standard_price_options_two_price')) : t('FREE');
 
         // @TODO: Next day delivery not done for now.
         $build['home_delivery'] = [
           '#theme' => 'pdp_delivery_option',
           '#title' => $home_delivery_config->get('title'),
           '#subtitle' => $home_delivery_config->get('subtitle'),
-          '#title_price' => alshaya_acm_price_get_formatted_price((float) $home_delivery_config->get('price')),
           '#options' => $home_delivery_options,
         ];
       }
