@@ -127,6 +127,7 @@
           @include breakpoint($only-tablet) {
             position: relative;
             left: 0;
+            padding-right: 0.4rem;
           }
 
           @include breakpoint($tablet) {
@@ -870,7 +871,6 @@
     .price-amount {
       @include breakpoint($only-mobile) {
         position: relative;
-        #{$right}: 2.5rem;
       }
     }
   }
@@ -880,9 +880,13 @@
   }
 
   .price-currency {
+    @include breakpoint($only-tablet) {
+      margin-right: 0.4rem;
+    }
+
     float: left !important;
     padding: 0;
-    margin-right: 1.5625rem;
+    margin-right: 1.3625rem;
   }
 }
 
@@ -1154,7 +1158,7 @@ html[lang=ar] {
 
   table tr td.subtotal {
     span.price-amount {
-      margin-left: 1.5625rem;
+      margin-left: 0.4rem;
       float: right;
     }
 
@@ -1162,6 +1166,13 @@ html[lang=ar] {
       @include breakpoint($desktop) {
         padding-right: 0 !important;
       }
+    }
+  }
+
+  #table-cart-totals .price-currency {
+    @include breakpoint($only-tablet) {
+      float: none !important;
+      margin-right: 0.4rem;
     }
   }
 }
@@ -1204,6 +1215,10 @@ td.price {
       width: 100%;
 
       .discount-prefix {
+        @include breakpoint($only-tablet) {
+          margin-right: 0;
+        }
+
         margin-right: 1.5625rem;
       }
 
@@ -1219,6 +1234,7 @@ td.price {
           position: relative;
           left: 0.22rem;
           float: left;
+          margin-right: 0;
         }
 
         @include breakpoint($desktop) {
@@ -1240,6 +1256,10 @@ td.price {
       .price {
         .price-currency {
           float: left !important;
+
+          @include breakpoint($only-tablet) {
+            padding-right: 0.4rem;
+          }
         }
 
         .price-amount {

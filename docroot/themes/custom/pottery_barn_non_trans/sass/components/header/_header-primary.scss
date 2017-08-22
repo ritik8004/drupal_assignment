@@ -44,7 +44,7 @@
 
 /*
   SITE HEADER - BRANDING
-*/
+  */
 
 header {
   position: relative;
@@ -330,7 +330,7 @@ header {
 
 /*
   SITE MAIN MENU
-*/
+  */
 
 .c-menu-primary {
   .region__menu-primary {
@@ -370,7 +370,7 @@ header {
 
 /*
   SITE HEADER - MOBILE MENU
-*/
+  */
 
 .block-views-exposed-filter-blocksearch-page {
   form {
@@ -585,7 +585,7 @@ header {
 
 /*
   SITE HEADER - MAIN NAVIGATION
-*/
+  */
 .mobile--menu {
   font-size: 0;
   color: $black-two;
@@ -638,8 +638,6 @@ header {
       vertical-align: top;
       list-style: none;
       text-align: center;
-
-      //text-transform: lowercase;
       height: 2.6875rem;
 
       a.menu--one__link {
@@ -991,8 +989,6 @@ header {
     font-size: 12px;
     padding: 0;
 
-    //text-transform: lowercase;
-
     a {
       padding: 1rem 0;
       padding-bottom: 0.9375rem;
@@ -1339,7 +1335,7 @@ header {
 
   @include breakpoint($only-mobile) {
     max-width: 100%;
-    line-height: 32px;
+    line-height: 25px;
 
     html[lang=ar] & {
       max-width: 100%;
@@ -1490,19 +1486,23 @@ html {
 
       a {
         color: $white-five;
-        font-size: 12px;
-        font-family: "alshaya-thin";
+        font-size: 14px;
+        font-family: $alshaya-thin;
         padding: 5px 10px 8px;
         text-align: center;
         display: block;
         border-top: 3px solid transparent;
+        text-transform: none;
 
-        //text-transform: uppercase;
         &:hover,
         &.is-active {
           background-color: $white-five;
           color: $black-two;
-          border-top: 3px solid #333;
+          border-top: 3px solid $deep-red;
+
+          @include breakpoint($desktop) {
+            font-family: $alshaya-bold;
+          }
         }
       }
     }
@@ -1510,6 +1510,24 @@ html {
 }
 
 @include breakpoint($desktop) {
+  .menu--ms-menu,
+  .menu--pls-menu,
+  .menu--main {
+    .menu {
+      display: table;
+      width: 90%;
+
+      li {
+        width: 165px;
+        display: table-cell;
+
+        a {
+          width: 165px;
+        }
+      }
+    }
+  }
+
   .menu--mobile-navigation {
     display: none;
   }
@@ -1529,7 +1547,7 @@ html {
     display: block;
     position: absolute;
     #{$left}: 0;
-    top: 0;
+    top: -5px;
 
     ul {
       margin: 0;

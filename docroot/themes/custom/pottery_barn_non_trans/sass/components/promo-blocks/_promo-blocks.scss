@@ -187,7 +187,16 @@
   width: calc(50% - 0.375rem);
 
   @include breakpoint($tablet) {
-    width: calc(50% - 0.75rem);
+    &.field--name-field-1-row-2-col {
+      width: calc(50% - 0.75rem);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    &.field--name-field-1-row-2-col {
+      width: 100%;
+      margin-bottom: 24px;
+    }
   }
 
   &:first-child {
@@ -267,10 +276,12 @@ a.selected {
     width: 914px;
     margin: 5% auto;
     background: #fff;
-    padding: 20px 20px 65px;
+    padding: 20px;
     font-family: 'alshaya-thin';
     display: table;
     text-indent: 0 !important;
+
+    //height: 100%;
 
     .popup-title {
       margin-top: 5px;
@@ -278,10 +289,10 @@ a.selected {
       border-bottom: 1px solid $white;
       color: $black-two;
       padding-bottom: 10px;
+      margin-bottom: 10px;
     }
 
     .inner-container {
-      max-height: 300px;
       overflow-y: auto;
     }
 
@@ -297,6 +308,8 @@ a.selected {
     @include breakpoint($upto-tablet) {
       width: 100%;
       margin: 0 auto;
+      padding: 20px 20px 65px;
+      height: 100%;
 
       .inner-container {
         max-height: 100%;
@@ -310,13 +323,17 @@ a.selected {
     color: $black;
     margin: 10px 0 0;
   }
+
+  .inner-container {
+    max-height: 320px;
+    overflow-y: auto;
+    height: 100%;
+  }
 }
 
 .signup-form {
   position: relative;
   width: 914px;
-
-  //min-height: 438px;
   margin: 5% auto;
   background: #fff;
   padding: 20px 20px 65px;
@@ -328,6 +345,7 @@ a.selected {
     border-bottom: 1px solid $white;
     color: $black-two;
     padding-bottom: 10px;
+    margin-bottom: 10px;
   }
 
   h3:not(.signup-form-title) {
@@ -341,7 +359,7 @@ a.selected {
 
   ul {
     display: inline-block;
-    margin-#{$left}: 8%;
+    margin-#{$left}: 6%;
     margin-top: 0;
 
     li {
@@ -368,9 +386,9 @@ a.selected {
     padding: 10px;
     width: 120px;
     text-transform: lowercase;
-    margin: 10px auto 0;
     text-align: center;
     display: block;
+    float: $left;
   }
 
   br {
@@ -401,8 +419,7 @@ a.selected {
     }
 
     .form--signup-elements {
-      width: 47% !important;
-      margin-bottom: 30px;
+      width: 47%;
 
       &:nth-child(even) {
         margin-#{$right}: 0;
@@ -410,12 +427,18 @@ a.selected {
       }
     }
 
-    .field-email,
-    .field-mobile {
+    .field-email {
       width: 100% !important;
       clear: both;
       margin-#{$right}: 0;
       float: none !important;
+      margin-bottom: 10px !important;
+    }
+
+    .field-mobile {
+      margin-#{$right}: 0;
+      margin-bottom: 25px;
+      clear: both;
     }
 
     div.mce_inline_error {
@@ -427,17 +450,23 @@ a.selected {
       margin: 5px 0 !important;
     }
 
-    .form-submit {
+    div#mce-error-response {
+      color: $deep-red !important;
+      margin: 5px 0;
       float: $left;
-      margin: 10px 0;
+    }
+
+    div#mce-success-response {
+      float: $left;
+      margin: 5px 0;
+      color: $windows-blue;
     }
   }
 
   .form-signup-note {
     width: 45%;
-    display: inline-block;
     float: $right;
-    margin-top: 20px;
+    margin-top: 10px;
   }
 
   @include breakpoint($upto-desktop) {
@@ -458,11 +487,11 @@ a.selected {
       }
 
       &.field-email {
-        width: 99% !important;
+        width: 100% !important;
       }
 
       &.field-checkbox {
-        width: 100% !important;
+        width: 50% !important;
       }
     }
 
@@ -482,24 +511,21 @@ a.selected {
     .form--signup-elements {
       width: 100% !important;
       margin-#{$right}: 0;
-
-      &.field-email {
-        width: 100% !important;
-      }
     }
   }
 }
 
 .ms-signup {
-  margin-bottom: 20px;
+  margin: 20px 0;
+  width: 91px;
+  min-width: auto;
+  font-size: 14px;
+  padding: 8px;
 
   &:hover {
     color: $white-five;
   }
 }
-
-// form { padding-top: 10px;}
-// form input {outline:0; border: 0;}
 
 .signup-form input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 1000px white inset !important;
@@ -510,7 +536,7 @@ a.selected {
   position: relative;
   margin-top: 12px;
   width: 25%;
-  margin-right: 20px;
+  margin-#{$right}: 20px;
   float: $left;
 
   &.field-email,
@@ -518,25 +544,47 @@ a.selected {
     clear: both;
   }
 
+  & span.country-code-label {
+    position: absolute;
+    bottom: 9px;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  &.field-mobile {
+    input {
+      padding-left: 45px !important;
+    }
+  }
+
   &.form-item-country-code {
     pointer-events: none;
   }
 
-  &.field-email {
-    width: 52%;
+  p {
+    display: none;
   }
 
   &.field-checkbox {
     clear: both;
-    width: 50%;
+    width: 75% !important;
     font-family: $alshaya-thin;
+    margin: 10px 0;
 
     label {
       color: $brownish-grey !important;
-      text-overflow: intial;
+      overflow: initial !important;
+      font-size: 12px;
+      white-space: normal !important;
+      padding-#{$left}: 25px;
+      display: inline-block;
+      margin-top: 0 !important;
+      position: static !important;
 
       &::before {
         padding-#{$right}: 10px;
+        vertical-align: text-bottom;
+        margin-#{$left}: -25px;
       }
     }
 
@@ -560,6 +608,7 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
   color: $black-two;
   font-size: 16px;
   height: 40px;
+  background-color: transparent;
 }
 
 .signup-form .form--signup-elements label::after {
@@ -640,8 +689,6 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
   cursor: pointer;
   font-size: 12px;
   color: #adadad;
-
-  //font-family:arial;
   left: 0;
 }
 
@@ -655,12 +702,6 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
   border-bottom: 1px solid #adadad;
   border-radius: 0;
 }
-
-// .messagepop p, .messagepop.div {
-//   border-bottom: 1px solid #EFEFEF;
-//   margin: 8px 0;
-//   padding-bottom: 8px;
-// }
 
 .frontpage .c-content__container .field--name-body.field--type-text-with-summary h3 {
   font-size: 1.475rem;
@@ -783,5 +824,13 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
         float: $left;
       }
     }
+  }
+}
+
+.bannerText h1 {
+  text-transform: uppercase;
+
+  @include breakpoint($tablet) {
+    color: $white-five;
   }
 }

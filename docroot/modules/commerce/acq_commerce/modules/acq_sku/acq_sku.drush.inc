@@ -26,6 +26,10 @@ function acq_sku_drush_command() {
     'aliases'     => ['acsp'],
     'examples'    => [
       'drush acsp' => 'Run a full product synchronization of all available products.',
+      'drush acsp --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\'' => 'Synchronize sku data for the skus M-H3495 130 2  FW, M-H3496 130 004FW & M-H3496 130 005FW only.',
+    ],
+    'options'     => [
+      'skus' => 'SKUs to import (like query).',
     ],
   ];
 
@@ -54,7 +58,9 @@ function acq_sku_drush_command() {
 function drush_acq_sku_sync_commerce_products() {
   drush_print(dt('Synchronizing all commerce products, this usually takes some time...'));
   $container = \Drupal::getContainer();
-  $container->get('acq_commerce.ingest_api')->productFullSync();
+  $skus = drush_get_option('skus');
+
+  $container->get('acq_commerce.ingest_api')->productFullSync($skus);
 }
 
 /**

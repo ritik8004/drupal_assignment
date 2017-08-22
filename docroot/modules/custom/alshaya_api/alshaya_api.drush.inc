@@ -8,12 +8,12 @@
 /**
  * Implements hook_drush_command().
  */
-function alshaya_stores_finder_drush_command() {
+function alshaya_api_drush_command() {
   $commands = [];
 
-  $commands['alshaya-stores-finder-sync-stores'] = [
+  $commands['alshaya-api-sync-stores'] = [
     'description' => 'Imports all stores into Drupal using direct Magento API.',
-    'aliases'     => ['asfss'],
+    'aliases'     => ['aass'],
   ];
 
   return $commands;
@@ -22,12 +22,9 @@ function alshaya_stores_finder_drush_command() {
 /**
  * Implements drush categories sync command.
  */
-function drush_alshaya_stores_finder_sync_stores() {
+function drush_alshaya_api_sync_stores() {
   drush_print(dt('Synchronizing all stores, please wait...'));
-
-  \Drupal::service('alshaya_stores_finder.utility')->syncStores();
-
-  \Drupal::logger('acq_store_finder')->notice('Store sync completed.');
-
+  \Drupal::service('alshaya_api.api')->syncStores();
+  \Drupal::logger('alshaya_api')->notice('Store sync completed.');
   drush_print(dt('Done.'));
 }
