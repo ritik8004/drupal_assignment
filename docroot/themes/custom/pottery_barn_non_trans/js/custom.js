@@ -43,7 +43,7 @@
   };
 
   // Mobile Language Toggle
-  // Language Settings In Mobile View
+  // Language Settings In Mobile View.
   if ($(window).width() < 767) {
     setTimeout(function () {
       $('body').addClass('mobile-language-toggle-active');
