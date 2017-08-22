@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.storage.taxonomy_term.field_promotion_banner
-    - image.style.1284x424
+    - image.style.921x168
     - taxonomy.vocabulary.acq_product_category
   module:
     - image
@@ -110,7 +110,7 @@ display:
           click_sort_column: target_id
           type: image
           settings:
-            image_style: 1284x424
+            image_style: 921x168
             image_link: ''
           group_column: ''
           group_columns: {  }

@@ -34,7 +34,7 @@ class IngestAPIWrapper {
   /**
    * Performs full conductor sync.
    */
-  public function productFullSync() {
+  public function productFullSync($skus = '') {
     foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
       if (empty($store_id)) {
         continue;
@@ -54,7 +54,7 @@ class IngestAPIWrapper {
       };
 
       try {
-        $this->tryIngestRequest($doReq, 'productFullSync', 'products');
+        $this->tryIngestRequest($doReq, 'productFullSync', 'products', $skus);
       }
       catch (ConductorException $e) {
       }

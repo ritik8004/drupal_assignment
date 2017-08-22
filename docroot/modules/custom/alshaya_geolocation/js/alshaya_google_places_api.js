@@ -1,5 +1,5 @@
 // Global var for no result found html.
-var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No matches found for this area') + '</span><div>';
+var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No area found') + '</span><div>';
 
 // Global var for storing location autocomplete instance.
 var location_autocomplete_instance = null;
@@ -30,7 +30,7 @@ var location_autocomplete_no_result_checked = null;
    * @param {HTMLElement} $trigger
    *   The element on which the ajax call should trigger.
    */
-  Drupal.ClickCollect = function (field, callbacks, restriction, $trigger) {
+  Drupal.AlshayaPlacesAutocomplete = function (field, callbacks, restriction, $trigger) {
     var click_collect = this;
 
     try {
@@ -121,7 +121,7 @@ var location_autocomplete_no_result_checked = null;
   };
 
   // Initialize autocomplete for given field.
-  Drupal.ClickCollect.prototype.googleAutocomplete = function (field) {
+  Drupal.AlshayaPlacesAutocomplete.prototype.googleAutocomplete = function (field) {
     // Create the autocomplete object, restricting the search to geographical
     // location types.
     return new google.maps.places.Autocomplete(

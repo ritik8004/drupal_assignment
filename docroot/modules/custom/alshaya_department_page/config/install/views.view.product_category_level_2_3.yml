@@ -246,7 +246,7 @@ display:
           empty_zero: false
           hide_alter_empty: true
           view: product_category_level_3
-          display: default
+          display: block_1
           arguments: '{{ raw_fields.tid }}'
           plugin_id: view
       filters:

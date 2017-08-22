@@ -92,16 +92,19 @@ class AlshayaApiWrapper {
    *   Order increment id.
    * @param string $transaction_id
    *   K-Net transaction id.
+   * @param string $auth
+   *   K-Net auth.
    *
    * @return mixed
    *   Response of API or NULL.
    */
-  public function addKnetTransaction($order_id, $transaction_id) {
+  public function addKnetTransaction($order_id, $transaction_id, $auth) {
     $endpoint = 'knet/transaction';
 
     $data = [
       'orderId' => $order_id,
       'transactionId' => $transaction_id,
+      'authCode' => $auth,
     ];
 
     try {

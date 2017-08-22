@@ -32,15 +32,8 @@ class ProductHomeDeliverySettingsForm extends ConfigFormBase {
 
     $config->set('title', $form_state->getValue('title'));
     $config->set('subtitle', $form_state->getValue('subtitle'));
-    $config->set('title_price', $form_state->getValue('title_price'));
-    $config->set('options_standard_icon_class', $form_state->getValue('options_standard_title'));
     $config->set('options_standard_title', $form_state->getValue('options_standard_title'));
     $config->set('options_standard_subtitle', $form_state->getValue('options_standard_subtitle'));
-    $config->set('options_standard_price_options_one_title', $form_state->getValue('options_standard_price_options_one_title'));
-    $config->set('options_standard_price_options_one_price', $form_state->getValue('options_standard_price_options_one_price'));
-    $config->set('options_standard_price_options_two_title', $form_state->getValue('options_standard_price_options_two_title'));
-    $config->set('options_standard_price_options_two_price', $form_state->getValue('options_standard_price_options_two_price'));
-
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -68,22 +61,6 @@ class ProductHomeDeliverySettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('subtitle'),
     ];
 
-    $form['title_price'] = [
-      '#type' => 'textfield',
-      '#required' => FALSE,
-      '#title' => $this->t('Price displayed in title'),
-      '#description' => $this->t('Leave blank for free'),
-      '#default_value' => $config->get('title_price'),
-    ];
-
-    $form['options_standard_icon_class'] = [
-      '#type' => 'textfield',
-      '#required' => TRUE,
-      '#title' => $this->t('Icon class'),
-      '#description' => $this->t('This is not translatable'),
-      '#default_value' => $config->get('options_standard_icon_class'),
-    ];
-
     $form['options_standard_title'] = [
       '#type' => 'textfield',
       '#required' => TRUE,
@@ -96,36 +73,6 @@ class ProductHomeDeliverySettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#title' => $this->t('Standard option subtitle'),
       '#default_value' => $config->get('options_standard_subtitle'),
-    ];
-
-    $form['options_standard_price_options_one_title'] = [
-      '#type' => 'textfield',
-      '#required' => TRUE,
-      '#title' => $this->t('Standard option first line title'),
-      '#default_value' => $config->get('options_standard_price_options_one_title'),
-    ];
-
-    $form['options_standard_price_options_one_price'] = [
-      '#type' => 'textfield',
-      '#required' => FALSE,
-      '#title' => $this->t('Standard option first line price'),
-      '#description' => $this->t('Leave blank for free'),
-      '#default_value' => $config->get('options_standard_price_options_one_price'),
-    ];
-
-    $form['options_standard_price_options_two_title'] = [
-      '#type' => 'textfield',
-      '#required' => TRUE,
-      '#title' => $this->t('Standard option second line title'),
-      '#default_value' => $config->get('options_standard_price_options_two_title'),
-    ];
-
-    $form['options_standard_price_options_two_price'] = [
-      '#type' => 'textfield',
-      '#required' => FALSE,
-      '#title' => $this->t('Standard option second line price'),
-      '#description' => $this->t('Leave blank for free'),
-      '#default_value' => $config->get('options_standard_price_options_two_price'),
     ];
 
     return $form;

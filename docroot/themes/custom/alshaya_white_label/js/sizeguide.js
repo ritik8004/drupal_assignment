@@ -14,6 +14,16 @@
         select2OptionConvert();
       });
 
+      if ($(window).width() < 1025) {
+        $('.acq-content-product .form-item-configurables-size select').on('change', function () {
+          $(this).closest('.sku-base-form').find('.error').remove();
+        });
+
+        $('.acq-content-product-modal .form-item-configurables-size select').on('change', function () {
+          $(this).closest('.sku-base-form').find('.error').remove();
+        });
+      }
+
       // JS for converting select list for size to unformatted list on PDP pages.
       function select2OptionConvert() {
         if ($(window).width() > 1024) {

@@ -8,8 +8,6 @@
   {{ price_block }}
 </div>
 
-<div class="out-of-stock">{{ "Checking stock..." | t }}</div>
-
 {% if promotions %}
   <div class="promotions">
     {% for id, promotion in promotions %}
@@ -23,3 +21,5 @@
     {% endfor %}
   </div>
 {% endif %}
+
+<div class="out-of-stock">{{ "Checking stock..." | t }}</div>
