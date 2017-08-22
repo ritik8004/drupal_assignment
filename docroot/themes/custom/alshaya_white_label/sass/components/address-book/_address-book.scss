@@ -612,7 +612,7 @@
   }
 
   .form-item-guest-delivery-home-address-shipping-address-line2 {
-    input[type=text] ~ label {
+    input[type=text] ~ label:not(.active-label) {
       font-size: 1rem !important;
       color: $greyish !important;
       position: absolute !important;
