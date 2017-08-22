@@ -9,6 +9,10 @@
  * Implements hook_install().
  */
 function alshaya_transac_install() {
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['acquia_search']);
+  }
+
   $modules = [
     // Some must required contrib modules.
     'config_translation',
