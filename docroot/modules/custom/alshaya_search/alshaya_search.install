@@ -15,6 +15,7 @@ function alshaya_search_install() {
     \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
   }
   else {
+    \Drupal::service('module_installer')->install(['acquia_search']);
     \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
   }
 
