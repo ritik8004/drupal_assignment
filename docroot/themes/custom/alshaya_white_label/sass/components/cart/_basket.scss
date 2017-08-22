@@ -998,7 +998,7 @@ html[lang=ar] {
   }
 
   .alias--cart .c-page-title {
-    font-family: 'alshaya-arabic-thin';
+    font-family: $alshaya-arabic-thin-nodir, sans-serif;
     font-size: 1.3rem;
     margin-bottom: 0.75rem;
     margin-top: 2em;

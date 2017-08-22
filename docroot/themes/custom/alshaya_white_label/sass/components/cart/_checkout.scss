@@ -1299,16 +1299,14 @@ html[lang=ar] {
     position: absolute;
 
     @include breakpoint($mobile) {
-      left: 0.9rem;
       top: -0.1rem;
     }
 
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       left: -0.4rem;
     }
 
     @include breakpoint($desktop) {
-      left: 4rem;
       top: 0;
     }
   }
