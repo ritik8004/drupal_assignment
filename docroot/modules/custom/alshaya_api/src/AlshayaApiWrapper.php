@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_api;
 
+use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -26,11 +27,25 @@ class AlshayaApiWrapper {
   protected $token;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Language code.
    *
    * @var string
    */
   protected $langcode;
+
+  /**
+   * Store finder utility object.
+   *
+   * @var object
+   */
+  protected $storeUtility;
 
   /**
    * Constructs a new AlshayaApiWrapper object.
@@ -44,8 +59,19 @@ class AlshayaApiWrapper {
    */
   public function __construct(ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->config = $config_factory->get('alshaya_api.settings');
+    $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->logger = $logger_factory->get('alshaya_api');
+  }
+
+  /**
+   * Set store finder utility when available.
+   *
+   * @param \Drupal\alshaya_api\StoresFinderUtility $stores_utility
+   *   The store finder utility object.
+   */
+  public function setStoreFinderUtility(StoresFinderUtility $stores_utility) {
+    $this->storeUtility = $stores_utility;
   }
 
   /**
@@ -111,6 +137,70 @@ class AlshayaApiWrapper {
     $response = $this->invokeApi($endpoint, [], 'GET');
 
     $stores = json_decode($response, TRUE);
+
+    return $stores;
+  }
+
+  /**
+   * Function to sync all stores.
+   */
+  public function syncStores() {
+    // Do API call to get stores for each language.
+    foreach ($this->languageManager->getLanguages() as $langcode => $language) {
+      // Get all stores for particular language.
+      $stores = $this->getStores($langcode);
+
+      // Loop through all the stores and add/edit/translate the store node.
+      foreach ($stores['items'] as $store) {
+        $this->storeUtility->updateStore($store, $langcode);
+      }
+    }
+  }
+
+  /**
+   * Function to get stores for a product variant near the user's location.
+   *
+   * @param string $sku
+   *   Product SKU.
+   * @param float $lat
+   *   Latitude.
+   * @param float $lon
+   *   Longitude.
+   *
+   * @return array
+   *   Stores array.
+   */
+  public function getSkuStores($sku, $lat, $lon) {
+    $stores = $this->getProductStores($sku, $lat, $lon);
+
+    // Add missing information to store data.
+    array_walk($stores, function (&$store) use (&$index) {
+      $store['rnc_available'] = (int) $store['rnc_available'];
+      $store['sts_available'] = (int) $store['sts_available'];
+      $store['sequence'] = $index++;
+
+      if ($store_node = $this->storeUtility->getTranslatedStoreFromCode($store['code'])) {
+        $extra_data = $this->storeUtility->getStoreExtraData($store, $store_node);
+        $store = array_merge($store, $extra_data);
+      }
+    });
+
+    // Sort the stores first by distance and then by name.
+    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
+
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_click_collect')) {
+      $cc_config = \Drupal::config('alshaya_click_collect.settings');
+    }
+
+    // Add sequence and proper delivery_time label and low stock text.
+    foreach ($stores as $index => $store) {
+      $stores[$index]['sequence'] = $index + 1;
+
+      // Display configured value for rnc else sts delivery time.
+      $time = $store['rnc_available'] ? ($cc_config) ?: $cc_config->get('click_collect_rnc') : $store['sts_delivery_time_label'];
+      $stores[$index]['delivery_time'] = t('Collect from store in <em>@time</em>', ['@time' => $time]);
+      $stores[$index]['low_stock_text'] = $store['low_stock'] ? t('Low stock') : '';
+    }
 
     return $stores;
   }

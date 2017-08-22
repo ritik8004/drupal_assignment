@@ -5,3 +5,5 @@ services:
       - '@config.factory'
       - '@language_manager'
       - '@logger.factory'
+    calls:
+      - [setStoreFinderUtility, ['@?alshaya_stores_finder.utility']]
