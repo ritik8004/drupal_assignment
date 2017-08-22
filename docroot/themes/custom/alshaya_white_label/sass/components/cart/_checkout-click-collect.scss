@@ -77,6 +77,14 @@
       line-height: 1.2;
       text-transform: lowercase;
 
+      &:hover {
+        color: $marine-blue-two;
+
+        &::before {
+          color: $marine-blue-two;
+        }
+      }
+
       &.active {
         border: 1px solid $marine-blue-two;
         font-weight: bold;
