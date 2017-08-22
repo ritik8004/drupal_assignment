@@ -669,19 +669,6 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
   }
 
   /**
-   * @Then /^I should see the link "([^"]*)" in left bar$/
-   */
-  public function iShouldSeeTheLinkInLeftBar($arg1) {
-    $link = $this->getSession()
-      ->getPage()
-      ->find('css', '.my-account-nav')
-      ->hasLink($arg1);
-    if (!$link) {
-      throw new \Exception($arg1 . 'link is not visible on my account section');
-    }
-  }
-
-  /**
    * @Then /^I should see at most "([^"]*)" recent orders listed$/
    */
   public function iShouldSeeAtMostThreeRecentOrdersListed($count) {
@@ -879,5 +866,18 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
   public function iCheckTheCheckbox($option) {
     $page = $this->getSession()->getPage();
     $page->find('css', $option)->click();
+  }
+
+  /**
+   * @Then /^I should see the link "([^"]*)" in "([^"]*)" section$/
+   */
+  public function iShouldSeeTheLinkInSection($arg1, $arg2) {
+    $link = $this->getSession()
+      ->getPage()
+      ->find('css', $arg2)
+      ->hasLink($arg1);
+    if (!$link) {
+      throw new \Exception($arg1 . 'link is not visible on my account section');
+    }
   }
 }

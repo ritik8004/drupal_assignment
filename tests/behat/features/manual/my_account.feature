@@ -9,12 +9,12 @@ Feature: Test the My account section for authenticated user
     As an authenticated user
     I should be able to see all the sections
     after logging in
-    Then I should see the link "my account" in left bar
-    And I should see the link "orders" in left bar
-    Then I should see the link "contact details" in left bar
-    And I should see the link "address book" in left bar
-    Then I should see the link "communication preferences" in left bar
-    And I should see the link "change password" in left bar
+    Then I should see the link "my account" in ".my-account-nav" section
+    And I should see the link "orders" in ".my-account-nav" section
+    Then I should see the link "contact details" in ".my-account-nav" section
+    And I should see the link "address book" in ".my-account-nav" section
+    Then I should see the link "communication preferences" in ".my-account-nav" section
+    And I should see the link "change password" in ".my-account-nav" section
     Then the "my account" tab should be selected
     And I should see the link "View all orders"
 
