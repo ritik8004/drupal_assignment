@@ -258,7 +258,7 @@
       });
 
       // Preventing click on image.
-      $('.acq-content-product-modal #cloud-zoom-wrap a').on('click', function (event) {
+      $('.acq-content-product-modal #cloud-zoom-wrap a, .acq-content-product #cloud-zoom-wrap a').on('click', function (event) {
         event.stopPropagation();
         event.preventDefault();
       });
