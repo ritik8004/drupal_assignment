@@ -130,7 +130,7 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
     // Cache id.
     $cid = acq_sku_get_stock_cache_id($sku_entity);
 
-    $cache = \Drupal::cache('stock')->get($cid, 1);
+    $cache = \Drupal::cache('stock')->get($cid);
 
     // If information is cached.
     if (!$reset && !empty($cache)) {

@@ -48,6 +48,17 @@ function acq_sku_drush_command() {
     ],
   ];
 
+  $commands['get-stock-cache'] = [
+    'description' => 'Flush the stock cache.',
+    'aliases'     => ['acgsc'],
+    'arguments'     => [
+      'sku' => 'SKU to get stock of.',
+    ],
+    'examples'    => [
+      'drush acgsc SKU' => 'Get stock cache for particualar SKU in all languages',
+    ],
+  ];
+
   $commands['clean-stock-cache'] = [
     'description' => 'Flush the stock cache.',
     'aliases'     => ['accsc'],
@@ -199,6 +210,32 @@ function _acq_sku_clean_process(&$context) {
   $context['message'] = 'Processed ' . $context['sandbox']['progress'] . ' out of ' . $context['sandbox']['max'] . '.';
   if ($context['sandbox']['progress'] !== $context['sandbox']['max']) {
     $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
+  }
+}
+
+/**
+ * Implements drush get stock cache command.
+ */
+function drush_acq_sku_get_stock_cache($sku) {
+  if ($sku_entity = SKU::loadFromSku($sku)) {
+    // Clear stock cache for particular sku in all languages.
+    foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
+      $sku_entity_to_get_stock = $sku_entity->getTranslation($langcode);
+
+      // Get the stock cache id.
+      $stock_cid = acq_sku_get_stock_cache_id($sku_entity_to_get_stock);
+
+      // Get particular cache.
+      if ($cache = \Drupal::cache('stock')->get($stock_cid)) {
+        drush_print(dt('@langcode: !stock', [
+          '@langcode' => $langcode,
+          '!stock' => print_r($cache->data, TRUE),
+        ]));
+      }
+    }
+  }
+  else {
+    drush_print(dt('SKU not found.'));
   }
 }
 
