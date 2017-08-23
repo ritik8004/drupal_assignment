@@ -1011,7 +1011,8 @@
   &.inline-modal-wrapper {
     position: absolute;
     top: 0;
-    #{$right}: 0;
+    #{$right}: -100%;
+    transition: right 1s ease;
     height: 31.5rem;
     border: 1px solid $marine-blue;
     padding: 1rem 1.5rem;
@@ -1019,6 +1020,11 @@
     overflow: hidden;
     width: 100%;
     z-index: 99;
+
+    &.desc-open {
+      #{$right}: 0;
+      transition: right 0.5s ease;
+    }
 
     @include breakpoint($only-mobile) {
       display: block;
