@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_customer;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -67,6 +68,25 @@ class OrdersManager {
       // Invalidate the cache tag when order is placed to reflect on the
       // user's recent orders.
       Cache::invalidateTags(['user:' . \Drupal::currentUser()->id() . ':orders']);
+    }
+  }
+
+  /**
+   * Reset stock cache and Drupal cache of products in last order.
+   */
+  public function clearLastOrderRelatedProductsCache() {
+    $order = _alshaya_acm_checkout_get_last_order_from_session();
+
+    foreach ($order['items'] as $item) {
+      $sku_entity = SKU::loadFromSku($item['sku']);
+
+      foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
+        $sku_entity_to_reset_stock = $sku_entity->getTranslation($langcode);
+        acq_sku_get_sku_stock($sku_entity_to_reset_stock, TRUE);
+      }
+
+      // Clear product and forms related to sku.
+      Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
     }
   }
 

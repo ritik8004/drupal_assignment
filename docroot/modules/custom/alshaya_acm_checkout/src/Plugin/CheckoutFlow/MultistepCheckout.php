@@ -338,6 +338,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         /** @var \Drupal\alshaya_acm_customer\OrdersManager $orders_manager */
         $orders_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
         $orders_manager->clearOrderCache($email, $current_user_id);
+        $orders_manager->clearLastOrderRelatedProductsCache();
 
         // Create a new cart now.
         $this->cartStorage->createCart();
