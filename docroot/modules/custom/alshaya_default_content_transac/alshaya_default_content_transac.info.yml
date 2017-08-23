@@ -1,0 +1,10 @@
+name: 'Alshaya default content transac'
+type: module
+description: 'Default content to be created during install.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_default_content
+  - alshaya_acm
+  - alshaya_main_menu
+  - alshaya_seo

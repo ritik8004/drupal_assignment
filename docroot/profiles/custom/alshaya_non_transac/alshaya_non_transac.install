@@ -31,7 +31,7 @@ function alshaya_non_transac_install() {
     // 'alshaya_click_collect',
     'alshaya_config',
     'alshaya_contact',
-    // 'alshaya_default_content',
+    'alshaya_default_content',
     // 'alshaya_department_page',
     'alshaya_i18n',
     // 'alshaya_loyalty',
