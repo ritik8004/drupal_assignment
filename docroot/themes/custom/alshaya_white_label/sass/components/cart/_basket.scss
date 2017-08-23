@@ -36,7 +36,7 @@
         .sku-promotion-link {
           font-size: 12px !important;
           color: $scarlet !important;
-          width: auto !important;
+          width: 100% !important;
           padding-top: 1px;
 
           html[lang=ar] & {
@@ -48,11 +48,23 @@
           #{$right}: -20px;
           top: 0;
           position: absolute;
+
+          @include breakpoint($upto-desktop) {
+            display: none;
+          }
         }
 
         .tooltip {
-          #{$left}: 7.4rem;
           top: -0.9rem;
+          #{$left}: 7.4rem;
+
+          @include breakpoint($tablet) {
+            #{$left}: 10rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$left}: 14.4rem;
+          }
 
           p {
             margin: 0;
