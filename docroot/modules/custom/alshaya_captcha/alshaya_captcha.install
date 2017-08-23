@@ -58,9 +58,10 @@ function alshaya_captcha_modules_installed($modules) {
   $config = \Drupal::configFactory()->getEditable('recaptcha.settings');
 
   $recaptcha_settings = Settings::get('recaptcha.settings');
-
-  foreach ($recaptcha_settings as $key => $value) {
-    $config->set($key, $value);
+  if (!empty($recaptcha_settings)) {
+    foreach ($recaptcha_settings as $key => $value) {
+      $config->set($key, $value);
+    }
   }
 
   $config->save();

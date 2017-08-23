@@ -37,7 +37,7 @@ function alshaya_non_transac_install() {
     // 'alshaya_loyalty',
     // 'alshaya_main_menu',
     'alshaya_master',
-    // 'alshaya_menus',
+    'alshaya_menus',
     // 'alshaya_acm_cart_notification',
     // 'alshaya_newsletter',
     'alshaya_password_policy',
@@ -45,9 +45,8 @@ function alshaya_non_transac_install() {
     // 'alshaya_product',
     // @todo: Separate alshaya_seo for transac & non-transac.
     // 'alshaya_seo',
-    // @todo: Remove dependency of alshaya_click_collect.
     'alshaya_stores_finder',
-    // 'alshaya_user',
+    'alshaya_user',
     // 'alshaya_acm_knet',
     'alshaya_static_html',
   ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_menus\Plugin\Block;
+namespace Drupal\alshaya_acm_product_category\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
