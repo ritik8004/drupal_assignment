@@ -1,6 +1,6 @@
 %button-wide,
 .button-wide {
-  background-color: $black-two; // #ff6d22
+  background-color: $black-two;
   color: #fff;
   display: inline-block;
   font-size: 14px;
@@ -77,5 +77,52 @@
     border: 1px solid $deep-red;
     padding: 0.563rem 4.12rem;
     font-family: $arial;
+  }
+}
+
+@keyframes clickeffect {
+  from {
+    opacity: 0.7;
+    transform: scale(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+@-webkit-keyframes clickeffect {
+  from {
+    opacity: 0.7;
+    transform: scale(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+// Andriod Ripple effect 
+.button {
+  position: relative;
+  overflow: hidden;
+
+  &:focus {
+    outline: -webkit-focus-ring-color auto 0;
+  }
+
+  .effect {
+    margin: -100px;
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    pointer-events: none;
+    animation: clickeffect 1s ease;
+    -webkit-animation: clickeffect 1s ease;
   }
 }

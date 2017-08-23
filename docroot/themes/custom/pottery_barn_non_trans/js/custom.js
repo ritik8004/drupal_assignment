@@ -63,4 +63,40 @@
     }, 1000);
   });
 
+  $(document).on('mouseup', function (e) {
+    var popup = $('.popup-container');
+    if (!popup.is(e.target) && popup.has(e.target).length === 0) {
+      $('.popup-window').hide();
+    }
+  });
+
+  var button = document.querySelectorAll('.button');
+  for (var i = 0; i < button.length; i++) {
+    button[i].onmousedown = function (e) {
+      var x = (e.offsetX === '') ? e.layerX : e.offsetX;
+      var y = (e.offsetY === '') ? e.layerY : e.offsetY;
+      var effect = document.createElement('div');
+      effect.className = 'effect';
+      effect.style.top = y + 'px';
+      effect.style.left = x + 'px';
+      e.srcElement.appendChild(effect);
+      setTimeout(function () {
+        e.srcElement.removeChild(effect);
+      }, 1100);
+    };
+
+    button[i].onmouseover = function (e) {
+      var x = (e.offsetX === '') ? e.layerX : e.offsetX;
+      var y = (e.offsetY === '') ? e.layerY : e.offsetY;
+      var effect = document.createElement('div');
+      effect.className = 'effect';
+      effect.style.top = y + 'px';
+      effect.style.left = x + 'px';
+      e.srcElement.appendChild(effect);
+      setTimeout(function () {
+        e.srcElement.removeChild(effect);
+      }, 1100);
+    };
+  }
+
 })(jQuery, Drupal);
