@@ -1,5 +1,3 @@
-
-
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
@@ -1368,12 +1366,13 @@ header {
     font-size: 2rem;
     max-width: 10.0625rem;
 
-    @include breakpoint($tablet) {
-      max-width: none;
+    @include breakpoint($only-tablet) {
+      max-width: 13rem;
     }
 
     @include breakpoint($desktop) {
       height: 2.875rem;
+      max-width: 17.5625rem;
     }
   }
 }
