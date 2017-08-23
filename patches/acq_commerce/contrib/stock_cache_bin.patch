@@ -160,7 +160,7 @@ index b7e06fa3..8ba2ade5 100644
    ];
  
 +  $commands['get-stock-cache'] = [
-+    'description' => 'Flush the stock cache.',
++    'description' => 'Get stock cache for particualar SKU in all languages',
 +    'aliases'     => ['acgsc'],
 +    'arguments'     => [
 +      'sku' => 'SKU to get stock of.',

@@ -49,7 +49,7 @@ function acq_sku_drush_command() {
   ];
 
   $commands['get-stock-cache'] = [
-    'description' => 'Flush the stock cache.',
+    'description' => 'Get stock cache for particualar SKU in all languages',
     'aliases'     => ['acgsc'],
     'arguments'     => [
       'sku' => 'SKU to get stock of.',
