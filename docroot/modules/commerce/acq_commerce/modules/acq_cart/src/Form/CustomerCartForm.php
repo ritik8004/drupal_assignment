@@ -196,7 +196,7 @@ class CustomerCartForm extends FormBase {
     }
     else {
       // If we have success message available.
-      if (!is_null($this->successMessage)) {
+      if (!empty($this->successMessage)) {
         drupal_set_message($this->successMessage);
       }
       else {
