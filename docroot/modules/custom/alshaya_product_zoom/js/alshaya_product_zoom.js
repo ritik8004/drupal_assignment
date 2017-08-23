@@ -97,6 +97,7 @@
           $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
             var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
             productGallery.slick('unslick');
+            $('body').removeClass('pdp-modal-overlay');
           });
 
           // ZoomIn ZoomOut in Gallery view with a draggable container.
@@ -194,6 +195,7 @@
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
       $('.acq-content-product .cloudzoom #cloud-zoom-wrap', context).on('click', function () {
+        $('body').addClass('pdp-modal-overlay');
         myDialog.show();
         myDialog.showModal();
       });

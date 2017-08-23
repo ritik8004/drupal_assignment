@@ -69,7 +69,7 @@
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
         if ($(window).width() >= 768) {
-          $('.click-collect-all-stores').toggle('slow', function () {
+          $('.click-collect-all-stores').toggleClass('desc-open', function () {
             // Scroll
             $('html,body').animate({
               scrollTop: $('.click-collect-all-stores').offset().top
@@ -77,7 +77,7 @@
           });
         }
         else {
-          $('.click-collect-all-stores').toggle('slow');
+          $('.click-collect-all-stores').toggleClass('desc-open');
         }
       });
 
@@ -100,7 +100,13 @@
           return false;
         }
         else {
-          $('.click-collect-all-stores').toggle('slow');
+          $('.click-collect-all-stores').toggleClass('desc-open');
+        }
+      });
+
+      $(document).on('click', function (e) {
+        if ($(e.target).closest('.c-pdp .content__sidebar').length === 0 && $('.click-collect-all-stores').hasClass('desc-open')) {
+          $('.click-collect-all-stores').removeClass('desc-open');
         }
       });
 
