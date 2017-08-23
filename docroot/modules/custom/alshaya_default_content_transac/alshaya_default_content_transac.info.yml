@@ -5,6 +5,6 @@ package: 'Alshaya'
 core: 8.x
 dependencies:
   - alshaya_default_content
-  - alshaya_acm
+  - alshaya_acm_customer
   - alshaya_main_menu
   - alshaya_seo
