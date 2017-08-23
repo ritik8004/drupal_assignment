@@ -1491,14 +1491,14 @@ html {
         padding: 5px 10px 8px;
         text-align: center;
         display: block;
-        border-top: 3px solid transparent;
+        border-top: 2px solid transparent;
         text-transform: none;
 
         &:hover,
         &.is-active {
           background-color: $white-five;
           color: $black-two;
-          border-top: 3px solid $deep-red;
+          border-top: 2px solid $deep-red;
 
           @include breakpoint($desktop) {
             font-family: $alshaya-bold;
