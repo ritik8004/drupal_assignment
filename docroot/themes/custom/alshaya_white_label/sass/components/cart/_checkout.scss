@@ -315,7 +315,7 @@
       font-size: 0.75rem;
     }
 
-    @include icon(chevron#{$right}, after) {
+    @include icon(chevrondown, after) {
       position: absolute;
       #{$right}: 1rem;
       font-size: 1.875rem;
