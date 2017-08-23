@@ -191,9 +191,16 @@
         var tabs = $('#edit-login-tabs');
         tabs.parent().toggleClass('active');
 
-        // Show Guest Checkout as selected by default
-        tabs.find('.tab-new-customer').toggleClass('active');
-        tabs.next('#edit-checkout-guest').toggleClass('active');
+        // Show Guest Checkout as selected by default unless we have an login error
+        // in which case make the returning customers tab as active.
+        if ($('#edit-checkout-login').find('.messages.messages--error').length > 0) {
+          tabs.find('.tab-returning-customer').toggleClass('active');
+          tabs.next().next('#edit-checkout-login').toggleClass('active');
+        }
+        else {
+          tabs.find('.tab-new-customer').toggleClass('active');
+          tabs.next('#edit-checkout-guest').toggleClass('active');
+        }
 
         // Add click handler for the tabs.
         tabs.find('.tab').each(function () {
