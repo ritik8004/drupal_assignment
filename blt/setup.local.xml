@@ -12,23 +12,14 @@
     <chmod mode="0755" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
     <chmod mode="0755" file="${docroot}/sites/${multisite.name}/settings/" failonerror="false"/>
     <if>
-      <available file="${docroot}/sites/${multisite.name}/settings/default.local.settings.php"/>
-      <then>
-        <chmod mode="0644" file="${docroot}/sites/${multisite.name}/settings/default.local.settings.php" failonerror="false"/>
-      </then>
-    </if>
-    <if>
       <available file="${docroot}/sites/${multisite.name}/settings/local.settings.php"/>
       <then>
         <chmod mode="0644" file="${docroot}/sites/${multisite.name}/settings/local.settings.php" failonerror="false"/>
       </then>
     </if>
 
-    <echo>Generating ${docroot}/sites/${multisite.name}/settings/default.local.settings.php</echo>
-    <copy file="${docroot}/sites/default/settings/default.local.settings.php" tofile="${docroot}/sites/${multisite.name}/settings/default.local.settings.php" verbose="true"/>
-
     <echo>Generating ${docroot}/sites/${multisite.name}/settings/local.settings.php</echo>
-    <copy file="${docroot}/sites/${multisite.name}/settings/default.local.settings.php" tofile="${docroot}/sites/${multisite.name}/settings/local.settings.php"/>
+    <copy file="${docroot}/sites/default/settings/default.local.settings.php" tofile="${docroot}/sites/${multisite.name}/settings/local.settings.php" verbose="true"/>
   </target>
 
   <target name="sync:translations">
