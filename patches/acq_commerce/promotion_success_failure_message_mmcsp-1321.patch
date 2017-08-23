@@ -22,7 +22,7 @@ index 5a913d4..12b5459 100644
      else {
 -      drupal_set_message(t('Your cart has been updated.'));
 +      // If we have success message available.
-+      if (!is_null($this->successMessage)) {
++      if (!empty($this->successMessage)) {
 +        drupal_set_message($this->successMessage);
 +      }
 +      else {
