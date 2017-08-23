@@ -1303,7 +1303,7 @@ body .ladda-button {
 }
 
 .continue-shopping {
-  color: white;
+  color: $white-five;
   line-height: 0;
 
   @include breakpoint($only-mobile) {
@@ -1321,7 +1321,7 @@ body .ladda-button {
   }
 
   a {
-    color: white;
+    color: $white-five;
     font-size: 1rem;
     text-decoration: underline;
 
