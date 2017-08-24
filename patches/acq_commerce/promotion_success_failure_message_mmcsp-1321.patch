@@ -27,7 +27,7 @@ index 5a913d4..12b5459 100644
 +      }
 +      else {
 +        // Default show this message.
-+        drupal_set_message(t('Your cart has been updated.'));
++        drupal_set_message($this->t('Your cart has been updated.'));
 +      }
      }
    }

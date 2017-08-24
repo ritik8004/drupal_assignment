@@ -201,7 +201,7 @@ class CustomerCartForm extends FormBase {
       }
       else {
         // Default show this message.
-        drupal_set_message(t('Your cart has been updated.'));
+        drupal_set_message($this->t('Your cart has been updated.'));
       }
     }
   }
