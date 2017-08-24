@@ -1,0 +1,17 @@
+uuid: ebca8aaa-ae4b-42e6-a3ac-b4ec894f94c1
+langcode: en
+status: true
+dependencies:
+  config:
+    - acq_sku.type.simple
+  module:
+    - acq_sku
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: acq_sku.simple
+target_entity_type_id: acq_sku
+target_bundle: simple
+default_langcode: site_default
+language_alterable: true

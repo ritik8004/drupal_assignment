@@ -70,14 +70,18 @@ select:focus::-ms-value {
   width: $select-width !important;
 
   .select2-selection {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     height: 2.1875rem;
     padding: 0.25rem 0.2rem;
     text-align: $left;
     width: $select-width;
-    background: $white-two;
-    border: none;
+    border: 1px solid $white-two;
     border-radius: 0;
+    outline: none;
+
+    .select2-selection__rendered {
+      color: $grey-ash;
+    }
   }
 
   .select2-selection__arrow {
@@ -85,6 +89,7 @@ select:focus::-ms-value {
     #{$right}: 0;
     width: 2.1875rem;
     height: 2.1875rem;
+    background: $white-two;
 
     &::after {
       // IE10 needs this in px.
@@ -92,12 +97,49 @@ select:focus::-ms-value {
       font-size: 1.75rem;
       top: 0;
       #{$left}: auto;
-      border-#{$left}: 1px solid $white-five;
       width: 2.1875rem;
       height: 2.1875rem;
       #{$right}: 0;
       text-align: center;
       display: inline-block;
+    }
+  }
+}
+
+.select2-dropdown {
+  border-color: $white;
+  margin-top: -1px;
+
+  .select2-search__field {
+    outline: none;
+  }
+
+  ul.select2-results__options {
+    li.select2-results__option {
+      color: $grey-ash;
+      font-size: 0.875rem;
+      padding: 0.625rem;
+      border-bottom: 1px solid $white;
+      text-transform: lowercase;
+
+      &:first-child {
+        border-top: 1px solid $white;
+      }
+
+      &.select2-results__option--highlighted,
+      &[aria-selected=true] {
+        background-color: $white-five;
+      }
+
+      &[aria-disabled=true],
+      &:hover {
+        color: $grey-ash;
+        background: $white-four;
+      }
+
+      &[aria-disabled=true] {
+        color: $greyish;
+      }
     }
   }
 }

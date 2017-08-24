@@ -130,7 +130,7 @@ class ProductCategoryTree {
   public function getHighlightImage(TermInterface $term) {
     $highlight_images = [];
 
-    if ($highlight_image_cache = \Drupal::cache()->get('highlights_' . $term->id())) {
+    if ($highlight_image_cache = \Drupal::cache('alshaya')->get('highlights_' . $term->id())) {
       return $highlight_image_cache->data;
     }
 
@@ -171,7 +171,7 @@ class ProductCategoryTree {
       }
     }
 
-    \Drupal::cache()->set('highlights_' . $term->id(), $highlight_images, Cache::PERMANENT, ['taxonomy_term:' . $term->id()]);
+    \Drupal::cache('alshaya')->set('highlights_' . $term->id(), $highlight_images, Cache::PERMANENT, ['taxonomy_term:' . $term->id()]);
 
     return $highlight_images;
   }

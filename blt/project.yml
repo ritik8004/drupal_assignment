@@ -3,7 +3,7 @@ project:
   prefix: MMCPA
   human_name: Alshaya
   profile:
-    name: alshaya
+    name: alshaya_transac
   local:
     protocol: http
     hostname: 'local.${project.machine_name}.com'
@@ -29,8 +29,8 @@ target-hooks:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
   post-deploy-build:
-    dir: '${docroot}'
-    command: 'echo ''No post-deploy build configured.'''
+    dir: '${deploy.dir}'
+    command: 'sh ../blt/scripts/post-deploy-build.sh ${deploy.dir}'
   post-setup-build:
     dir: '${docroot}'
     command: 'echo ''No post-setup build configured.'''
@@ -52,16 +52,16 @@ modules:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
   uat:
-    enable: [acquia_connector, shield]
+    enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [devel, views_ui]
   qa:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
   pprod:
-    enable: [acquia_connector, shield]
+    enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [devel, views_ui]
   prod:
-    enable: [acquia_connector, shield]
+    enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [devel, views_ui]
 behat:
   launch-selenium: true

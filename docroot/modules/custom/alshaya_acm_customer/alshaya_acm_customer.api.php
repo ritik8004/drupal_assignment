@@ -23,5 +23,17 @@ function hook_alshaya_acm_customer_update_account_alter(\Drupal\user\Entity\User
 }
 
 /**
+ * Allow modules to act after user logs in.
+ *
+ * @param \Drupal\user\Entity\User $user
+ *   User object.
+ * @param array $customer
+ *   Customer data received from API.
+ */
+function hook_alshaya_acm_customer_post_login(\Drupal\user\Entity\User $user, array &$customer) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

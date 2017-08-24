@@ -44,6 +44,9 @@
         if ($('body').hasClass('path--search')) {
           mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar';
         }
+        else if ($('body').hasClass('nodetype--acq_promotion')) {
+          mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar-promotions';
+        }
         else {
           mobileFilterBarSelector = '.c-content__region .region__sidebar-first .block-facets-summary-blockfilter-bar-plp';
         }
@@ -88,6 +91,9 @@
         if ($('body').hasClass('path--search')) {
           filterBarSelector = '.region__content > .block-facets-summary-blockfilter-bar';
         }
+        else if ($('body').hasClass('nodetype--acq_promotion')) {
+          filterBarSelector = '.region__content > .block-facets-summary-blockfilter-bar-promotions';
+        }
         else {
           filterBarSelector = '.region__content > .block-facets-summary-blockfilter-bar-plp';
         }
@@ -103,7 +109,7 @@
           }
           else {
             // If we dont have one, create it, this is first time load.
-            $('<div class="filter-menu-label"><span class="label">filter</span><li class="clear-all-fake"><span>clear all</span></li></div>')
+            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="clear-all-fake"><span>' + Drupal.t('clear all') + '</span></li></div>')
               .insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
           }
 
@@ -139,6 +145,10 @@
         if ($('body').hasClass('path--search')) {
           viewHeader = $('.c-search .view-search .view-header');
           selector = '.c-content__region .block-views-exposed-filter-blocksearch-page';
+        }
+        else if ($('body').hasClass('nodetype--acq_promotion')) {
+          viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
+          selector = '.c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-2';
         }
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
@@ -186,6 +196,14 @@
             $('.region__content .block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper')
               .insertBefore('.view-filters.is-filter');
           }
+          else if ($('body').hasClass('nodetype--acq_promotion')) {
+            mainBlock.before(facetBlockWrapper);
+            var promoFilter = $('.c-plp #views-exposed-form-alshaya-product-list-block-2');
+            promoFilter.wrapAll('<div class="view-filters is-filter">');
+            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
+            $('.region__content .c-facet__blocks__wrapper')
+              .insertBefore('.view-filters.is-filter');
+          }
           else {
             mainBlock.before(facetBlockWrapper);
             var plpFilter = $('.c-plp #views-exposed-form-alshaya-product-list-block-1');
@@ -218,13 +236,22 @@
         }
 
         // Add class to promotional banner view block if it is not empty.
-        if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
-          $('.block-views-blockplp-promotional-banner-block-1')
-            .addClass('promo-banner');
-          $('.region__content').addClass('promo-banner');
-          $('.block-views-blockplp-promotional-banner-block-1')
-            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1')
-            .addClass('promo-banner');
+        var bannerBlock = '';
+        if ($('body').hasClass('nodetype--acq_promotion')) {
+          if (!$('.view-promotion-banner .field-content').is(':empty')) {
+            bannerBlock = $('.block-views-blockpromotion-banner-block-1');
+            bannerBlock.addClass('promo-banner');
+            $('.region__content').addClass('promo-banner');
+            bannerBlock.siblings('.block-views-exposed-filter-blockalshaya-product-list-block-2').addClass('promo-banner');
+          }
+        }
+        else {
+          if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
+            bannerBlock = $('.block-views-blockplp-promotional-banner-block-1');
+            bannerBlock.addClass('promo-banner');
+            $('.region__content').addClass('promo-banner');
+            bannerBlock.siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1').addClass('promo-banner');
+          }
         }
       }
 

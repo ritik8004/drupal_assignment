@@ -6,9 +6,11 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 
 /**
@@ -224,6 +226,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
     }
     else {
+      $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
       $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     }
 
@@ -278,7 +281,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     if ($user = user_load_by_mail($email)) {
-      $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $this->t('You already have an account, please login.'));
+      $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $this->t('You already have an account, @login_link.', [
+        '@login_link' => Link::createFromRoute('please login', 'acq_checkout.form', ['step' => 'login'])->toString(),
+      ]));
       return;
     }
 
@@ -286,8 +291,8 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $cart = $this->getCart();
 
-    // We are only looking to convert guest carts.
-    if (!($cart->customerId())) {
+    // We convert guest carts to customer cart or if user changes the email.
+    if (!($cart->customerId()) || $cart->customerEmail() != $email) {
       // Get the customer id of Magento from this email.
       /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
       $api_wrapper = \Drupal::service('acq_commerce.api');

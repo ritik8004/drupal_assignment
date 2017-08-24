@@ -132,6 +132,9 @@
         $('#cancel-address-add-edit').on('click', function (event) {
           event.preventDefault();
 
+          // Update fieldset title to edit address.
+          $('.delivery-address-form-title').html(Drupal.t('add new address'));
+
           // Hide the form.
           $('#address-book-form-wrapper').slideUp();
         });
@@ -188,9 +191,16 @@
         var tabs = $('#edit-login-tabs');
         tabs.parent().toggleClass('active');
 
-        // Show Guest Checkout as selected by default
-        tabs.find('.tab-new-customer').toggleClass('active');
-        tabs.next('#edit-checkout-guest').toggleClass('active');
+        // Show Guest Checkout as selected by default unless we have an login error
+        // in which case make the returning customers tab as active.
+        if ($('#edit-checkout-login').find('.messages.messages--error').length > 0) {
+          tabs.find('.tab-returning-customer').toggleClass('active');
+          tabs.next().next('#edit-checkout-login').toggleClass('active');
+        }
+        else {
+          tabs.find('.tab-new-customer').toggleClass('active');
+          tabs.next('#edit-checkout-guest').toggleClass('active');
+        }
 
         // Add click handler for the tabs.
         tabs.find('.tab').each(function () {
@@ -234,6 +244,33 @@
 
     // Show the form.
     $('#address-book-form-wrapper').slideDown();
+
+    // Update fieldset title to default value.
+    $('.delivery-address-form-title').html(Drupal.t('edit address'));
+  };
+
+  // Ajax command to show loader on checkout pages.
+  $.fn.showCheckoutLoader = function (data) {
+    // Add the loader div.
+    $('.page-standard').append('<div class="ajax-progress ajax-progress-throbber checkout-ajax-progress-throbber"><div class="throbber"></div></div>');
+
+    // Show the loader.
+    $('.checkout-ajax-progress-throbber').show();
+  };
+
+  Drupal.behaviors.fixCheckoutSummaryBlock = {
+    attach: function (context, settings) {
+      var block = $('.block-checkout-summary-block');
+
+      $(window).once().on('scroll', function() {
+        if ($('body').scrollTop() > 122) {
+          block.addClass('fix-block');
+        }
+        else {
+          block.removeClass('fix-block');
+        }
+      });
+    }
   };
 
 })(jQuery, Drupal);

@@ -108,7 +108,8 @@ class StoresFinderController extends ControllerBase {
    */
   public function toggleView($view_type = 'list_view') {
     $response = new AjaxResponse();
-    $display = 'page_1';
+    // The store-finder glossary display.
+    $display = 'page_2';
     if ($view_type == 'map_view') {
       $display = 'page_3';
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'none']));
@@ -121,7 +122,7 @@ class StoresFinderController extends ControllerBase {
       $response->addCommand(new InvokeCommand(NULL, 'updateStoreFinderBreadcrumb'));
 
       // Clear value from search field.
-      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-geolocation-geocoder-google-geocoding-api', 'val', ['']));
+      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-geolocation-geocoder-google-places-api', 'val', ['']));
     }
     else {
       $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
@@ -140,7 +141,7 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['mobile-store-detail']));
 
     // Clear value from search field.
-    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-geolocation-geocoder-google-geocoding-api', 'val', ['']));
+    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-geolocation-geocoder-google-places-api', 'val', ['']));
     return $response;
   }
 

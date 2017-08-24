@@ -130,7 +130,7 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
     // Cache id.
     $cid = acq_sku_get_stock_cache_id($sku_entity);
 
-    $cache = \Drupal::cache('data')->get($cid);
+    $cache = \Drupal::cache('stock')->get($cid);
 
     // If information is cached.
     if (!$reset && !empty($cache)) {
@@ -154,7 +154,7 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
         $expire = \Drupal::time()->getRequestTime() + $time;
 
         // Set the stock in cache.
-        \Drupal::cache('data')->set($cid, $stock, $expire);
+        \Drupal::cache('stock')->set($cid, $stock, $expire);
       }
     }
   }

@@ -1,0 +1,1033 @@
+.c-footer {
+  position: relative;
+  margin-top: 0.75rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 0.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 0.75rem;
+  }
+}
+
+.c-footer-primary {
+  border-top: 0;
+  padding-top: 1rem;
+  padding-bottom: 2.25rem;
+  position: relative;
+  background: $white-five;
+  -webkit-transform: translate3d(0, 0, 0);
+  z-index: 4;
+
+  @include breakpoint($tablet) {
+    padding: 0;
+
+    .l-container {
+      min-width: 45rem;
+      max-width: 64rem;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    padding-top: 0.75rem;
+  }
+
+  .primary--footer--right {
+    @include breakpoint($tablet) {
+      float: $right;
+    }
+
+    @include breakpoint($desktop) {
+      width: 28.3625%;
+      margin-#{$right}: 0;
+    }
+
+    .language--switcher.only-first-time {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: $marine-blue-two;
+
+      ul {
+        height: 2.188rem;
+
+        li {
+          padding: 0.375rem;
+
+          a {
+            color: $white-two;
+          }
+
+          &:first-child {
+            &::after {
+              color: $white-two;
+            }
+          }
+        }
+      }
+
+      .language-switcher-close {
+        width: 1.063rem;
+        height: 1.063rem;
+        display: block;
+        position: absolute;
+        #{$right}: 1.375rem;
+        top: -0.3125rem;
+
+        @include icon(close, after) {
+          position: absolute;
+          color: $white-two;
+          font-size: 2.688rem;
+        }
+      }
+    }
+  }
+
+  .footer--categories,
+  .footer--abouthelp {
+    @include breakpoint($tablet) {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    @include breakpoint($desktop) {
+      float: $left;
+      width: 50%;
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: 1.25rem;
+    }
+  }
+
+  .footer--menu {
+    @include breakpoint($only-mobile) {
+      margin: 0 0.5rem;
+    }
+
+    @include breakpoint($tablet) {
+      float: $left;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 0;
+      width: 69.2982%;
+    }
+  }
+
+  .l-container {
+    @include container(64.125rem);
+  }
+
+  &__region {
+    position: relative;
+    min-height: 16.25em;
+  }
+
+  .c-footer-primary__region {
+    min-height: 15.25em;
+  }
+}
+
+.c-footer-menu {
+  @extend %list-clear;
+
+  @include breakpoint($desktop) {
+    float: $left;
+    width: 50%;
+
+    &:last-child {
+      margin-#{$right}: 0;
+    }
+  }
+
+  a {
+    font-size: 0.875rem;
+    color: $black;
+    display: block;
+    padding: 0.875rem 0;
+    text-decoration: none;
+    text-transform: lowercase;
+    font-family: $alshaya-thin;
+
+    @include breakpoint($tablet) {
+      color: $brownish-grey;
+      line-height: 2.16;
+      padding: 0;
+    }
+
+    &:hover {
+      color: $cerulean-two;
+      text-decoration: underline;
+    }
+  }
+
+  .cols-6 & {
+    &:last-child {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 1rem;
+      }
+    }
+  }
+}
+
+.c-footer-menu--about,
+.c-footer-menu--help,
+.c-footer-menu--category {
+  h3 {
+    font-size: 0.875rem;
+    color: $marine-blue-two;
+    font-family: $alshaya-bold;
+    font-weight: normal;
+    cursor: pointer;
+    outline: none;
+
+    @include breakpoint($tablet) {
+      pointer-events: none;
+      margin-bottom: 0.28rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-bottom: 0.312rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: 0;
+      padding: 0.875rem 0;
+      position: relative;
+
+      @include icon(chevron#{$right}, after) {
+        position: absolute;
+        #{$right}: 0.33rem;
+        font-size: 1.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    width: 100%;
+    border-top: 1px solid $white;
+    margin: 0;
+    padding: 0;
+    text-align: $left;
+  }
+}
+
+.open--accordion {
+  .is-accordion {
+    @include breakpoint($only-mobile) {
+      @include icon(chevrondown, after);
+    }
+  }
+}
+
+.c-footer-menu__tab {
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+}
+
+.c-footer-menu--help,
+.c-footer-menu--about {
+  @include breakpoint($desktop) {
+    float: $left;
+    width: 50%;
+
+    .c-footer-menu {
+      width: 100%;
+    }
+  }
+}
+
+.c-footer-menu--about .c-footer-menu {
+  @include breakpoint($desktop) {
+    min-width: 9.4rem;
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  margin: 1em 0.5rem 2.9rem;
+
+  @include breakpoint($only-mobile) {
+    margin-top: 1.813rem;
+
+    .newsletter-block-label {
+      font-family: $alshaya-thin;
+      font-size: 0.875rem;
+      line-height: 1.4;
+      padding: 0 1rem;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    float: $left;
+    max-width: 20.98rem;
+    margin: 0;
+    display: inline-block;
+
+    .newsletter-block-label {
+      font-family: $alshaya-thin;
+      position: relative;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    min-width: 20.72rem;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 18.98rem;
+    margin-#{$left}: 0;
+    margin-#{$right}: 0;
+
+    .newsletter-block-label {
+      font-family: $arial;
+    }
+  }
+
+  h3 {
+    font-size: 14px;
+    font-family: $alshaya-bold;
+    color: $marine-blue-two;
+    text-transform: lowercase;
+    font-weight: normal;
+    margin-bottom: 0.75rem;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      margin-bottom: 0.625rem;
+    }
+  }
+
+  form {
+    position: relative;
+    max-width: 100%;
+  }
+
+  .form-item {
+    font-size: 0.875rem;
+    color: $brownish-grey;
+
+    @include breakpoint($tablet) {
+      max-width: 18.18rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
+    label {
+      line-height: 1.36;
+      display: inline-block;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      font-size: 0.812rem;
+
+      @include breakpoint($only-mobile) {
+        left: 0;
+      }
+
+      &#edit-email-error {
+        right: 0;
+        top: 100%;
+        color: $red-error;
+        padding: 0.3125rem 0;
+        z-index: 9;
+        font-size: 0.75rem;
+        background: $white-five;
+        margin-top: 0.1875rem;
+        text-align: $left;
+      }
+    }
+
+    input[type=email]::placeholder {
+      color: $greyish;
+    }
+  }
+
+  .form-email {
+    border-bottom: 1px solid $brownish-grey;
+    border-width: 0 0 1px;
+    margin-top: 2rem;
+    padding-#{$right}: 6.25rem;
+    width: 100%;
+    height: 2.2rem;
+    outline: transparent;
+    font-size: 13px;
+
+    @include breakpoint($tablet) {
+      margin-top: 1.7rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1.75rem;
+    }
+  }
+
+  .form-submit {
+    @extend %btn;
+
+    font-family: $alshaya-bold;
+    font-weight: normal;
+    background: $marine-blue-two;
+    position: absolute;
+    font-size: 0.75rem;
+    #{$right}: 0;
+    bottom: 0;
+    padding: 0.625rem 1.5rem;
+    border-radius: 0;
+    z-index: 2;
+
+    @include breakpoint($tablet) {
+      #{$right}: 2.55rem;
+      font-size: 0.8125rem;
+      border-top: -1px;
+    }
+
+    @include breakpoint($desktop) {
+      #{$right}: 0;
+    }
+
+    &:focus {
+      position: absolute;
+    }
+  }
+
+  #footer-newsletter-form-wrapper {
+    position: absolute;
+    width: 100%;
+
+    @include breakpoint($tablet) {
+      width: 18.19rem;
+      max-width: 18.18rem;
+    }
+  }
+
+  .inline-error ~ #footer-newsletter-form-wrapper {
+    margin-top: 1.2rem;
+  }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $marine-blue-two;
+  }
+
+  .subscription-status {
+    .success {
+      background: $tealish;
+      color: $white-four;
+      font-size: 0.75rem;
+      padding: 0.3125rem 0.875rem;
+      margin-top: 0.1875rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .error {
+      margin-top: 0.1875rem;
+      padding: 0.3125rem 0;
+      display: block;
+    }
+  }
+}
+
+.c-footer-menu--help {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 2.25em;
+    border-bottom: 1px solid $white;
+    max-width: 100%;
+  }
+
+  @include breakpoint($only-tablet) {
+    display: block;
+    margin-top: 1.5rem;
+  }
+}
+
+.c-footer-menu--about {
+  max-width: 100%;
+
+  @include breakpoint($desktop) {
+    float: $left;
+    margin-#{$left}: 0;
+    width: 50%;
+  }
+
+  @include breakpoint($only-tablet) {
+    vertical-align: top;
+  }
+}
+
+.newsletter-block-label {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-family: $arial;
+  text-transform: lowercase;
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+}
+
+.c-footer-primary .language-switcher-language-url {
+  position: relative;
+  clear: both;
+
+  ul {
+    @extend %list-clear;
+
+    padding: 0;
+    direction: ltr;
+    text-align: $left;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
+    li {
+      display: inline-block;
+      padding: 0 2px;
+
+      @include breakpoint($only-tablet) {
+        padding: 0;
+      }
+
+      &.en {
+        font-family: $alshaya-thin;
+      }
+
+      &:first-child {
+        position: relative;
+
+        a {
+          margin-#{$right}: 0.4375rem;
+          margin-#{$left}: 0.4375rem;
+          margin-top: 0;
+          margin-bottom: 0;
+
+          @include breakpoint($desktop) {
+            margin-#{$right}: 0.6875rem;
+          }
+        }
+
+        &::after {
+          content: "|";
+          position: absolute;
+          right: -2px;
+          left: auto;
+          color: $marine-blue-two;
+          font-size: 1rem;
+        }
+      }
+
+      a {
+        font-size: 0.875rem;
+        text-transform: lowercase;
+        color: $marine-blue-two;
+        margin: 0 0.4375rem;
+        text-decoration: underline;
+
+        @include breakpoint($upto-desktop) {
+          font-family: $alshaya-bold;
+        }
+
+        @include breakpoint($tablet) {
+          margin: 0 0.6875rem;
+        }
+
+        &.is-active {
+          color: $grey-ash;
+          font-weight: normal;
+          text-decoration: none;
+        }
+      }
+
+      &.ar a {
+        font-family: $alshaya-arabic-bold;
+      }
+
+      &.en a {
+        font-family: $alshaya-bold-nodir;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0.7rem;
+          margin-#{$right}: 0.7rem;
+        }
+      }
+
+      &.en.is-active a {
+        font-family: $alshaya-thin-nodir;
+      }
+
+      &.ar.is-active a {
+        font-family: $alshaya-arabic-thin;
+      }
+    }
+  }
+}
+
+.c-footer-is-accordion {
+  .accordion--body {
+    display: none;
+    border-top: 1px solid $white;
+
+    @include breakpoint($tablet) {
+      border-top: 0;
+      display: block !important;
+    }
+  }
+}
+
+.footer--social {
+  clear: both;
+  overflow: hidden;
+
+  @include breakpoint($desktop) {
+    margin-#{$left}: 0;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-#{$left}: 0;
+    max-width: 21.94rem;
+  }
+
+  .c-social-links {
+    @include breakpoint($tablet) {
+      margin-top: 1.75rem;
+      padding-left: 0.12rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.6rem;
+      padding-#{$left}: 0;
+      margin-#{$left}: -0.1rem;
+    }
+  }
+}
+
+.language--switcher {
+  @include breakpoint($tablet) {
+    margin-top: 0.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 1.875rem;
+  }
+}
+
+.region__footer-primary {
+  @include breakpoint($only-tablet) {
+    max-width: 21.94rem;
+  }
+}
+
+.c-footer-menu--category {
+  text-transform: lowercase;
+}
+
+// PLS Footer UI
+.ms-footer-primary {
+  background-color: $black-two;
+  height: 92px;
+
+  .alshaya-club {
+    color: $white-five;
+    font-family: "alshaya-thin";
+    width: 60%;
+    float: $left;
+    position: relative;
+
+    ul {
+      float: $left;
+      margin: 15px 2%;
+      padding: 0;
+
+      @include breakpoint($desktop - 1) {
+        margin-#{$right}: 12%;
+        margin-#{$left}: 6%;
+      }
+
+      li {
+        list-style: none;
+        font-size: 0.75rem;
+        margin: 5px 0;
+      }
+
+      span {
+        color: $white-five !important;
+        vertical-align: middle;
+      }
+
+      &#block-jointheclub {
+        margin: 5px 0 0 3%;
+      }
+    }
+
+    a {
+      color: $white-five;
+      font-size: 0.75rem;
+      text-decoration: underline;
+    }
+
+    h4 {
+      margin: 0;
+      font-size: 0.875rem;
+      color: $white-five;
+    }
+
+    .field--type-image img {
+      margin-top: -3px;
+      position: absolute;
+      #{$right}: 0;
+    }
+  }
+
+  .alshaya-mob-app-links {
+    width: 40%;
+    float: $left;
+    text-align: center;
+  }
+
+  @include breakpoint($upto-tablet) {
+    & {
+      height: auto;
+      padding: 20px;
+    }
+
+    .alshaya-club {
+      width: 100%;
+      float: none;
+    }
+
+    .c-footer__alshayaclub {
+      //display: -webkit-flex;
+      -webkit-flex-wrap: wrap;
+      display: flex;
+      flex-wrap: wrap;
+      text-align: center;
+
+      & > .field {
+        width: 100%;
+
+        ul {
+          margin: 10px 0 !important;
+          float: none;
+        }
+
+        &:first-child {
+          order: 1;
+        }
+      }
+
+      .field--type-image img {
+        margin-top: 10px;
+        position: static;
+      }
+    }
+
+    .alshaya-mob-app-links {
+      width: 100%;
+      margin: auto;
+    }
+  }
+}
+
+.ms-footer-primary-two {
+  background-color: $white-three;
+  margin-top: 2.456rem;
+  padding: 15px 0;
+
+  .footer-primary--blocks {
+    width: 30%;
+    float: $left;
+
+    &.footer--social-links {
+      width: 40%;
+      text-align: center;
+    }
+
+    h3 {
+      font-family: $alshaya-bold;
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      color: $black-two;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+
+    @include breakpoint($upto-desktop) {
+      width: 100%;
+      text-align: center;
+      margin: 10px 0 0;
+
+      &.footer--social-links {
+        width: 100%;
+      }
+    }
+  }
+
+  .footer--social-links,
+  .footer--find-store {
+    text-align: center;
+  }
+
+  .footer--find-store {
+    float: $right;
+
+    a {
+      text-transform: lowercase;
+
+      span {
+        font-size: 11px;
+        color: $scarlet;
+        text-decoration: underline;
+        margin-#{$left}: 5px;
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 2px;
+        text-transform: none;
+      }
+    }
+  }
+}
+
+.stores-finder::before {
+  content: "";
+  font-family: "alshaya-icons" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html[lang="ar"] .alshaya-mob-app-links img {
+  //margin: 10px 2%;
+
+  @include breakpoint($desktop) {
+    //margin: 10px 5%;
+  }
+}
+
+.alshaya-mob-app-links {
+  p {
+    margin: 0;
+  }
+
+  img {
+    margin: 25px 3%;
+
+    @include breakpoint($desktop) {
+      &:first-child {
+        margin-#{$right}: 13%;
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-tablet) {
+  .c-footer-primary {
+    padding-bottom: 0;
+  }
+
+  .ms-footer-primary-two {
+    margin: 0;
+    padding: 10px 0;
+
+    .footer--find-store {
+      display: none;
+    }
+
+    .footer-primary--blocks {
+      width: 100%;
+      text-align: center;
+      padding-bottom: 0 !important;
+    }
+  }
+
+  .alshaya-mob-app-links {
+    p {
+      margin: 0;
+    }
+
+    img {
+      //margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .signup-store-langswitcher {
+    & > div {
+      width: 100%;
+      text-align: center;
+      padding: 10px;
+      border-bottom: 1px solid $white;
+      margin: 0;
+
+      a.stores-finder {
+        width: 100%;
+
+        &::before {
+          margin-#{$right}: 10px;
+        }
+      }
+
+      &.plsfootermenu {
+        padding: 0;
+        border-bottom: 0;
+
+        .menu--pls-top-menu {
+          display: block;
+
+          & .menu li {
+            border-bottom: 1px solid $white;
+            padding: 11px 0;
+
+            a {
+              &:hover,
+              &.is-active {
+                background-color: transparent;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      text-align: center !important;
+
+      li {
+        list-style: none;
+      }
+    }
+
+    a {
+      color: $black-two !important;
+      font-size: 14px;
+
+      &:not(.stores-finder)::before {
+        content: ' ';
+        display: none;
+        margin-#{$right}: 5px;
+      }
+    }
+  }
+}
+
+.signup-store-langswitcher .plsfootermenu ul li {
+  @include breakpoint($only-mobile) {
+    &:first-child {
+      display: block;
+      padding-top: 0 !important;
+    }
+
+    &:nth-child(2) {
+      display: none;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    &:first-child {
+      display: none;
+    }
+
+    &:nth-child(2) {
+      display: block;
+      padding-top: 0 !important;
+    }
+  }
+}
+
+.mobile-language-toggle {
+  position: fixed;
+  bottom: -100px;
+  width: 100%;
+  z-index: 9;
+  text-align: center;
+  padding: 10px;
+  background: $black-two;
+  -webkit-transition: 2s ease-out;
+  -moz-transition: 2s ease-out;
+  -o-transition: 2s ease-out;
+  transition: 2s ease-out;
+
+  .close-lang-toggle {
+    color: $white;
+    font-size: 45px;
+    margin: 0 !important;
+    position: absolute;
+    top: -5px;
+    #{$right}: 0;
+
+    &::before {
+      content: "";
+      speak: none;
+      font-style: normal;
+      font-weight: normal;
+      text-transform: none;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      font-family: alshaya-icons;
+      font-variant: normal normal;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    direction: ltr;
+
+    li {
+      list-style: none;
+      display: inline-block;
+
+      &:first-child {
+        &::after {
+          color: $white;
+          content: '/';
+        }
+      }
+
+      a {
+        color: $white;
+        padding: 0 5px;
+        font-size: 14px;
+        text-decoration: underline;
+
+        &.is-active {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+body.mobile-language-toggle-active {
+  #backtotop.backtotop-nofooter {
+    bottom: 40px;
+  }
+
+  .c-footer-secondary {
+    padding-bottom: 40px;
+  }
+
+  .mobile-language-toggle {
+    bottom: 0;
+  }
+}

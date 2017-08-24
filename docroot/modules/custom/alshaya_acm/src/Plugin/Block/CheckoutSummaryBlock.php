@@ -146,16 +146,14 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
       $method = $checkout_options_manager->getCleanShippingMethodCode($method);
-
-      // URL to change delivery address or shipping method.
-      $options = ['absolute' => TRUE];
-      $delivery['url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
+      $method_query_code = 'hd';
 
       $term = $checkout_options_manager->loadShippingMethod($method);
 
       $method_code = $term->get('field_shipping_code')->getString();
 
       if ($method_code == $checkout_options_manager->getClickandColectShippingMethod()) {
+        $method_query_code = 'cc';
         if ($store_code = $cart->getExtension('store_code')) {
           // Not injected here to avoid module dependency.
           $store = \Drupal::service('alshaya_stores_finder.utility')->getTranslatedStoreFromCode($store_code);
@@ -218,6 +216,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           ]);
         }
       }
+
+      // URL to change delivery address or shipping method.
+      $options = ['absolute' => TRUE];
+      $delivery['change_url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
+      $edit_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options);
+      $edit_url->setRouteParameter('method', $method_query_code);
+      $delivery['edit_url'] = $edit_url->toString();
     }
 
     // Totals.

@@ -25,19 +25,20 @@
         {%  if  promotions is not empty %}
             <div class="sku-promotions">
               {% for id, promotion in promotions %}
-                <div class="tooltip-wrap">
-                  <div class="contains--tooltip">
-                    <div class="tooltip--head">
-                      <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
-                        {{ promotion.text }}
-                      </a>
-                    </div>
-                    <div class="tooltip">
-                      {{ promotion.description | raw }}
+                {% if promotion.description and promotion.text %}
+                  <div class="tooltip-wrap">
+                    <div class="contains--tooltip">
+                      <div class="tooltip--head">
+                        <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+                          {{ promotion.text }}
+                        </a>
+                      </div>
+                      <div class="tooltip">
+                        {{ promotion.description.value }}
+                      </div>
                     </div>
                   </div>
-                </div>
-
+                {% endif %}
               {% endfor %}
             </div>
         {% endif %}

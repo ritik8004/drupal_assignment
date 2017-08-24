@@ -6,17 +6,23 @@
 
     @include breakpoint($upto-tablet) {
       text-align: center;
-      padding-#{$left}: 0.5rem;
     }
   }
 
   li {
     display: inline-block;
-    margin-#{$right}: 0.5625rem;
 
     @include breakpoint($only-tablet) {
       margin-#{$right}: 0.95rem;
       max-width: 1.938rem;
+    }
+
+    &:not(:last-child) {
+      margin-#{$right}: 0.5625rem;
+
+      @include breakpoint($upto-tablet) {
+        margin-#{$right}: 2.25rem;
+      }
     }
   }
 

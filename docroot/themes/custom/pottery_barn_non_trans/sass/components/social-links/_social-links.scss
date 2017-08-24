@@ -1,0 +1,133 @@
+.c-social-links {
+  ul {
+    font-size: 0;
+
+    @extend %list-clear;
+
+    @include breakpoint($upto-tablet) {
+      text-align: center;
+      padding-#{$left}: 0.5rem;
+    }
+  }
+
+  li {
+    display: inline-block;
+    margin-#{$right}: 0.5625rem;
+
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: 0.95rem;
+      max-width: 1.938rem;
+    }
+  }
+
+  [class^="c-social-links--"] {
+    @include u-image-replacement;
+
+    display: block;
+
+    &::before {
+      font-size: 1.938rem;
+      color: $marine-blue-two;
+    }
+
+    &:hover::before {
+      color: transparent;
+      height: 31px;
+      width: 31px;
+    }
+  }
+
+  .c-social-links--facebook {
+    @include icon(facebook);
+
+    &::before {
+      color: $brownish-grey;
+    }
+
+    &:hover::before {
+      color: #003971;
+      background: none;
+      background-size: 1.5rem;
+    }
+  }
+
+  .c-social-links--instagram {
+    @include icon(instagram);
+
+    &::before {
+      color: $brownish-grey !important;
+    }
+
+    &:hover::before {
+      color: #d32f7e !important;
+      background: none;
+      background-size: 1.5rem;
+    }
+  }
+
+  .c-social-links--youtube {
+    @include icon(youtube);
+
+    &::before {
+      color: $brownish-grey !important;
+    }
+
+    &:hover::before {
+      color: #ce1312 !important;
+      background: none;
+      background-size: 1.5rem;
+    }
+  }
+
+  .c-social-links--google-plus {
+    @include icon(googleplus);
+
+    &::before {
+      color: $brownish-grey !important;
+    }
+
+    &:hover::before {
+      color: #dc4e41 !important;
+    }
+  }
+
+  .c-social-links--twitter {
+    @include icon(twitter);
+
+    &::before {
+      color: $brownish-grey !important;
+    }
+
+    &:hover::before {
+      color: #55acee !important;
+      background: none;
+      background-size: 1.5rem;
+    }
+  }
+
+  .c-social-links--pinterest {
+    @include icon(pinterest);
+
+    &::before {
+      color: $brownish-grey !important;
+    }
+
+    &:hover::before {
+      color: #bd071c !important;
+      background: none;
+      background-size: 1.5rem;
+    }
+  }
+
+  .c-social-links--blog {
+    @include icon(blog);
+
+    &::before {
+      color: $brownish-grey !important;
+    }
+
+    &:hover::before {
+      color: $black !important;
+    }
+  }
+}

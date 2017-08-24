@@ -1,0 +1,457 @@
+.c-menu-secondary {
+  @include breakpoint($only-tablet) {
+    max-width: 84.375%;
+  }
+
+  @include breakpoint($upto-desktop) {
+    background: #ddd;
+    display: none;
+    position: fixed;
+    width: 84.375%;
+    height: 100%;
+    z-index: 4;
+    top: 2.9rem;
+  }
+
+  @include breakpoint($desktop) {
+    text-align: $right;
+
+    .c-menu-secondary__region {
+      @include container(1284px);
+
+      margin: 0 auto;
+    }
+  }
+
+  background: #ddd;
+  text-transform: lowercase;
+
+  &.block--display {
+    z-index: 1000;
+  }
+
+  ul {
+    @extend %list-clear;
+  }
+
+  .menu--account {
+    li {
+      @include breakpoint($desktop) {
+        @at-root &:first-child {
+          .logged-out & {
+            @include u-visibility(none);
+          }
+        }
+      }
+    }
+  }
+
+  li {
+    @include breakpoint($upto-desktop) {
+      @include icon(chevron#{$right}, after) {
+        #{$right}: 0;
+        color: $marine-blue-two;
+        position: absolute;
+        margin-top: -2.0625rem;
+        font-size: 1.313rem;
+        cursor: pointer;
+        pointer-events: none;
+      }
+
+      &:last-child {
+        @include u-visibility(none);
+      }
+
+      border-bottom: 1px solid #ddd;
+      margin-left: 0.625rem;
+      margin-right: 0.625rem;
+      position: relative;
+    }
+
+    @include breakpoint($desktop) {
+      display: inline-block;
+      height: 1.5rem;
+    }
+  }
+
+  a {
+    font-family: $alshaya-thin;
+    text-transform: none;
+
+    @include breakpoint($upto-desktop) {
+      color: $brownish-grey;
+      display: block;
+      font-size: 0.75rem;
+      padding: 1rem 0;
+      padding-bottom: 0.9375rem;
+      padding-right: 0.25rem;
+      line-height: 1.4;
+    }
+
+    @include breakpoint($desktop) {
+      color: $brownish-grey;
+      display: block;
+      padding-top: 0.075rem;
+      padding-bottom: 0.075rem;
+      padding-#{$left}: 1.375rem;
+      padding-#{$right}: 1.438rem;
+      height: 1.5rem;
+      font-size: 0.6875rem;
+      vertical-align: middle;
+      border-#{$left}: 1px solid $white-five;
+    }
+
+    line-height: 1;
+
+    &:hover,
+    &.is-active {
+      color: $brownish-grey;
+      background: $white-five;
+    }
+
+    &::before,
+    &::after {
+      font-size: 1.1rem;
+
+      //font-size: 0.881rem;
+      padding-#{$right}: 0.5rem;
+      position: relative;
+      top: 0.125rem;
+    }
+  }
+
+  .menu--account,
+  .block-alshaya-stores-finder,
+  .block-language-blocklanguage-interface {
+    @include breakpoint($desktop) {
+      display: inline-block;
+      height: 1.5rem;
+    }
+  }
+
+  .block-alshaya-stores-finder,
+  .block-language-blocklanguage-interface {
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+  }
+
+  .menu--account {
+    @include breakpoint($desktop) {
+      .register-link,
+      li:first-child a {
+        @include icon(user);
+      }
+
+      li:last-child a {
+        @include icon(login);
+
+        @at-root .logged-in & {
+          @include icon(logout);
+        }
+      }
+    }
+  }
+
+  .stores-finder {
+    @include breakpoint($desktop) {
+      @include icon(mappin);
+    }
+  }
+
+  .block-language-blocklanguage-interface {
+    @include breakpoint($desktop) {
+      .ar a {
+        @include icon(language);
+
+        font-family: $alshaya-arabic-thin;
+      }
+
+      .en a {
+        @include icon(language, after);
+
+        font-family: $alshaya-thin;
+        text-transform: lowercase;
+      }
+    }
+
+    .is-active {
+      @include u-visibility(none);
+    }
+  }
+}
+
+.c-my-account-nav {
+  @include breakpoint($only-tablet) {
+    width: 84.375% !important;
+  }
+
+  display: none;
+
+  ul {
+    @extend %list-clear;
+  }
+
+  h3 {
+    color: $marine-blue-two;
+    font-size: 12px;
+    padding: 0.94rem 0;
+    margin: 0 0.625rem;
+    border-bottom: 1px solid $white;
+    text-transform: lowercase;
+    font-weight: normal;
+    font-family: $alshaya-bold;
+  }
+
+  position: fixed;
+  width: 84.375%;
+  top: 2.9rem;
+  background: $white-five;
+  height: 100%;
+  z-index: 1000;
+  padding: 0;
+
+  &.block.block-alshaya-my-account-links {
+    margin-top: 0;
+  }
+
+  a {
+    &::before {
+      margin: 0;
+    }
+  }
+
+  li {
+    display: block;
+    font-family: $alshaya-thin;
+    border-bottom: 1px solid $white;
+    padding: 0.94rem 0;
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
+    text-align: $left;
+    position: relative;
+
+    &:hover {
+      background: none;
+
+      a {
+        color: $brownish-grey;
+      }
+    }
+
+    @include icon(chevron#{$right}, after) {
+      color: $marine-blue-two;
+      font-size: 1.313rem;
+      cursor: pointer;
+      pointer-events: none;
+      position: absolute;
+      margin-top: -1.1625rem;
+      #{$right}: 0;
+    }
+
+    &.my-account {
+      display: none;
+    }
+  }
+}
+
+.contains-sublink .menu__link {
+  @include breakpoint($upto-desktop) {
+    pointer-events: none;
+  }
+}
+
+.menu--three__list-item {
+  .menu--three__link {
+    position: relative;
+
+    @include breakpoint($upto-desktop) {
+      @include icon(chevron#{$right}, after) {
+        position: absolute;
+        color: $marine-blue;
+        #{$right}: 0;
+        font-size: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  .contains-sublink .menu--three__link {
+    &::after {
+      @include breakpoint($upto-desktop) {
+        content: none;
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .branding__menu.navbar-fixed-top,
+  .branding__menu {
+    top: 24px !important;
+    box-shadow: none !important;
+    position: fixed !important;
+    width: 100%;
+    z-index: 999 !important;
+    background-color: $white-five;
+  }
+
+  .navbar-fixed-top.header--wrapper,
+  .header--wrapper {
+    position: fixed !important;
+    top: 0 !important;
+    width: 100%;
+    z-index: 999 !important;
+    background-color: $white-five;
+  }
+}
+
+.branding__menu {
+  position: relative;
+  z-index: 6;
+  background-color: $white-five;
+  min-height: 50px;
+
+  @include breakpoint($upto-desktop) {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+}
+
+.mobile--overlay .branding__menu {
+  z-index: 5;
+  background: transparent;
+
+  &.navbar-fixed-top,
+  .block-views-exposed-filter-blocksearch-page {
+    background: transparent;
+  }
+
+  &::before {
+    content: '';
+    background: rgba(133, 133, 133, 0.27);
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 6;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+body {
+  @include breakpoint($desktop) {
+    margin-top: 10.75rem;
+
+    &.frontpage {
+      margin-top: 9.75rem;
+    }
+  }
+}
+
+.header--fixed {
+  @include breakpoint($desktop) {
+    margin-top: 9.75rem;
+  }
+}
+
+body {
+  @include breakpoint($only-mobile) {
+    margin-top: 3.2rem;
+
+    html[lang=ar] & {
+      margin-top: 3.2rem;
+    }
+
+    &.logged-in.toolbar-vertical {
+      margin-top: 9.125rem;
+      padding-top: 0 !important;
+    }
+
+    &.logged-in.toolbar-vertical .branding__menu {
+      top: 39px;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 4rem;
+
+    html[lang=ar] & {
+      margin-top: 4rem;
+    }
+
+    &.logged-in.toolbar-vertical {
+      margin-top: 11rem;
+      padding-top: 0 !important;
+    }
+
+    &.logged-in.toolbar-vertical .branding__menu {
+      top: 39px;
+    }
+  }
+}
+
+.block-alshaya-main-menu .active--menu--links {
+  li.menu--one__list-item ul.menu--two__list {
+    @include breakpoint($desktop) {
+      display: block;
+      transition: all ease-in 0s;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-menu-secondary {
+    .region__menu-secondary,
+    ul {
+      font-size: 0;
+    }
+  }
+}
+
+//PLS Email Signup
+.email-signup {
+  &::before {
+    content: '';
+    background: url(../imgs/icons/ic-envelope-o.svg) bottom no-repeat;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background-size: contain;
+    margin-#{$right}: 10px;
+    opacity: 0.7;
+  }
+}
+
+.menu--pls-top-menu {
+  display: inline-block;
+
+  .menu li a {
+    &.email-signup.is-active {
+      background-color: transparent;
+      color: $brownish-grey;
+
+      &:hover {
+        background-color: $white-five;
+        color: $brownish-grey;
+      }
+    }
+
+    &:hover,
+    &.is-active {
+      background-color: $white-five;
+      color: $brownish-grey;
+    }
+  }
+}
+
+.menu--pls-top-menu .menu li:first-child {
+  display: none;
+}
+
+//Toolbar fix after admin logged in
+#toolbar-administration {
+  z-index: 1000;
+}

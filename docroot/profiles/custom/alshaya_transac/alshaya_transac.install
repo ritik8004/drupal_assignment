@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall hooks for the alshaya_transac subprofile.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_transac_install() {
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['acquia_search']);
+  }
+
+  $modules = [
+    // Some must required contrib modules.
+    'config_translation',
+    'content_translation',
+    'language',
+    'locale',
+
+    // Custom modules.
+    'alshaya_custom',
+    'alshaya_addressbook',
+    'alshaya_advanced_page',
+    'alshaya_acm',
+    'alshaya_acm_checkout',
+    'alshaya_acm_customer',
+    'alshaya_acm_product',
+    'alshaya_acm_promotion',
+    'alshaya_admin',
+    'alshaya_arabic',
+    'alshaya_captcha',
+    'alshaya_click_collect',
+    'alshaya_config',
+    'alshaya_contact',
+    'alshaya_default_content',
+    'alshaya_department_page',
+    'alshaya_i18n',
+    'alshaya_loyalty',
+    'alshaya_main_menu',
+    'alshaya_master',
+    'alshaya_menus',
+    'alshaya_acm_cart_notification',
+    'alshaya_newsletter',
+    'alshaya_permissions',
+    'alshaya_product',
+    'alshaya_seo',
+    'alshaya_stores_finder',
+    'alshaya_user',
+    'alshaya_acm_knet',
+    'alshaya_static_html',
+  ];
+
+  foreach ($modules as $module) {
+    \Drupal::service('module_installer')->install([$module]);
+  }
+
+  // Invoke a hook to let other modules know that profile installation is done.
+  \Drupal::moduleHandler()->invokeAll('alshaya_transac_profile_installed', [$modules]);
+
+  // Previous hook invoke does not deal with profile. Custom implementation
+  // to invoke the hook in alshaya.profile.
+  $file = DRUPAL_ROOT . '/' . drupal_get_path('profile', 'alshaya') . "/alshaya.profile";
+  if (is_file($file)) {
+    require_once $file;
+
+    if (function_exists('alshaya_alshaya_transac_profile_installed')) {
+      alshaya_alshaya_transac_profile_installed($modules);
+    }
+  }
+}

@@ -49,17 +49,6 @@ body.edge {
   * UC Browser - Specific issues and hacks for them.
  */
 body.ucbrowser {
-  .owl-prev,
-  .owl-next {
-    @include breakpoint($mobile) {
-      top: 45% !important;
-    }
-
-    @include breakpoint($tablet) {
-      top: 47% !important;
-    }
-  }
-
   @include breakpoint($tablet) {
     #block-mobilenavigation {
       ul.menu {
@@ -122,6 +111,13 @@ body.ucbrowser {
           width: 6.2% !important;
         }
       }
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+    &::after {
+      height: 34px;
     }
   }
 }
@@ -200,7 +196,8 @@ html[lang=ar] {
       }
 
       .price-currency {
-        float: left !important;
+        float: none !important;
+        margin-right: 1rem;
       }
     }
   }
@@ -217,13 +214,27 @@ html[lang=ar] {
     tr td.name div.items {
       width: 42%;
 
+      @include breakpoint($only-mobile) {
+        margin-right: -0.1875rem;
+      }
+
       @include breakpoint($only-tablet) {
-        width: 50%;
+        width: 53%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 57%;
       }
     }
   }
 
   #table-cart-totals {
+    .edit-actions {
+      @include breakpoint($only-tablet) {
+        margin-left: -3.6rem;
+      }
+    }
+
     td:first-child {
       text-align: left;
     }
@@ -245,20 +256,25 @@ html[lang=ar] {
       .price-amount {
         float: right !important;
         left: 0;
+        font-family: $arial-nodir;
       }
 
       .price-currency {
         @include breakpoint($desktop) {
-          float: left !important;
+          float: none !important;
+          margin-right: 1.5625rem !important;
         }
       }
     }
   }
-}
 
-.ie .address .address--options {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
+  #table-cart-items .price-wrapper .price-amount,
+  .price--discount .discount-value {
+    @include breakpoint($only-mobile) {
+      float: right;
+      margin-left: 0.5rem;
+    }
+  }
 }
 
 .ie .address .address--primary span::before,
@@ -286,12 +302,36 @@ html[lang="ar"] {
       }
     }
   }
+
+  @include breakpoint($upto-desktop) {
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+      label {
+        width: 103% !important;
+      }
+    }
+  }
 }
 
 html[lang="ar"] {
   .ucbrowser {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.55rem;
+    }
+
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+      // Fix for direction attribute support for UC browser.
+      // Select elements for size and quantity.
+      select {
+        padding-left: 40px !important;
+      }
+    }
+
+    #payment_details_wrapper > .form-wrapper .payment-plugin-wrapper-div .payment-method-name {
+      @include breakpoint($tablet) {
+        width: 91.5%;
+      }
     }
   }
 }
@@ -331,10 +371,16 @@ html[lang="en"] {
   }
 }
 
-.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
+body.path--cart.ucbrowser .ui-dialog,
+body.nodetype--acq_product.ucbrowser .ui-dialog,
+body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
   padding: 10rem 2rem !important;
 }
 
 #stcpDiv {
   display: none;
+}
+
+.ucbrowser .c-accordion__title::after {
+  top: 5px !important;
 }
