@@ -115,6 +115,14 @@
         line-height: 2.8;
         margin-top: -2px;
 
+        @include breakpoint($only-tablet) {
+          padding: 1rem 1.375rem;
+        }
+
+        @include breakpoint($desktop) {
+          padding: 1.375rem;
+        }
+
         @include breakpoint($only-mobile) {
           text-align: center;
           line-height: 3.8;
