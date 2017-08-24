@@ -57,18 +57,23 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
         $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
         if (!in_array($promotion_attach_item, $sku_promotions, TRUE)) {
           $sku_entity->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
+          $update_sku_flag = TRUE;
+        }
 
-          // Update SKU translations.
-          if (!empty($translation_languages)) {
-            drush_print_r($translation_languages);
-            foreach ($translation_languages as $langcode => $lang_obj) {
-              $sku_entity_translation = $sku_entity->getTranslation($langcode);
+        // Update SKU translations if arabic translation is added to a promotion
+        // post creation & import of that promo on Drupal.
+        if (!empty($translation_languages)) {
+          foreach ($translation_languages as $langcode => $lang_obj) {
+            $sku_entity_translation = $sku_entity->getTranslation($langcode);
+            $sku_promotions = $sku_entity_translation->get('field_acq_sku_promotions')->getValue();
+            if (!in_array($promotion_attach_item, $sku_promotions, TRUE)) {
               $sku_entity_translation->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
-              $sku_entity_translations[] = $sku_entity_translation;
+              $sku_entity_translations[$langcode] = $sku_entity_translation;
+              // Set an update translation flag per langcode & save sku entity
+              // translation if corresponding langcode flag is set.
+              $update_sku_translations_flag[$langcode] = TRUE;
             }
           }
-
-          $update_sku_flag = TRUE;
         }
 
         if ((isset($sku['final_price'])) && ($sku_entity->final_price->value !== $sku['final_price'])) {
@@ -76,8 +81,9 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
 
           // Update SKU final price.
           if (!empty($translation_languages)) {
-            foreach ($sku_entity_translations as $sku_entity_translation) {
+            foreach ($sku_entity_translations as $langcode => $sku_entity_translation) {
               $sku_entity_translation->final_price->value = $sku['final_price'];
+              $update_sku_translations_flag[$langcode] = TRUE;
             }
           }
           $update_sku_flag = TRUE;
@@ -85,8 +91,13 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
 
         if ($update_sku_flag) {
           $sku_entity->save();
-          if (!empty($sku_entity_translations)) {
-            foreach ($sku_entity_translations as $sku_entity_translation) {
+        }
+
+        // Process sku entity translations.s
+        if (!empty($sku_entity_translations)) {
+          foreach ($sku_entity_translations as $langcode => $sku_entity_translation) {
+            if (isset($update_sku_translations_flag[$langcode]) &&
+              ($update_sku_translations_flag[$langcode])) {
               $sku_entity_translation->save();
             }
           }

@@ -62,6 +62,7 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
 
       foreach ($translation_languages as $langcode => $language) {
         $sku_entity_translation = $sku_entity->getTranslation($langcode);
+        $sku_entity_translation->get('field_acq_sku_promotions')->setValue($sku_promotions);
         $sku_entity_translation->save();
       }
     }
