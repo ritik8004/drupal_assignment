@@ -627,8 +627,11 @@ class SkuManager {
         if (isset($sku_tree[$sku])) {
           $parent_sku = $sku_tree[$sku];
           if (!in_array($parent_sku, $processed_sku_eids)) {
-            $processed_sku_eids[] = $this->getSkuTextFromId($parent_sku);;
+            $processed_sku_eids[] = $this->getSkuTextFromId($parent_sku);
           }
+        }
+        else {
+          $processed_sku_eids[] = $sku;
         }
       }
 
