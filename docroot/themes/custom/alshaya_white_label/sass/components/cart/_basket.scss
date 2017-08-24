@@ -1214,6 +1214,18 @@ html[lang=ar] .path--cart h1.c-page-title::before {
 }
 
 td.price {
+  @include breakpoint($only-mobile) {
+    .has--special--price {
+      .price-amount {
+        text-decoration: line-through;
+      }
+
+      .price-currency {
+        text-decoration: line-through;
+      }
+    }
+  }
+
   @include breakpoint($tablet) {
     .price-type__wrapper,
     .has--special--price,
@@ -1290,3 +1302,31 @@ body .ladda-button {
   font-family: $alshaya-bold;
 }
 
+.continue-shopping {
+  color: $white-five;
+  line-height: 0;
+
+  @include breakpoint($only-mobile) {
+    padding-top: 1rem;
+  }
+
+  @include breakpoint($tablet) {
+    position: absolute;
+    top: 50%;
+    #{$right}: 2%;
+  }
+
+  @include breakpoint($desktop) {
+    #{$right}: 25%;
+  }
+
+  a {
+    color: $white-five;
+    font-size: 1rem;
+    text-decoration: underline;
+
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+    }
+  }
+}

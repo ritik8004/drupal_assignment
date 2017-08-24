@@ -121,11 +121,10 @@ class CheckoutOptionsManager {
       $term->get('field_shipping_code')->setValue($code);
       $term->get('field_shipping_carrier_code')->setValue($carrier_code);
       $term->get('field_shipping_method_code')->setValue($method_code);
-      $term->get('field_shipping_method_code')->setValue($method_code);
 
       $term->save();
 
-      $this->logger->critical('New shipping method created for code @code. Please save the description asap.', ['@code' => $code]);
+      $this->logger->critical('New shipping method created for code @code. Please confirm the values asap.', ['@code' => $code]);
     }
     else {
       if (count($result) > 1) {
@@ -140,6 +139,19 @@ class CheckoutOptionsManager {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
       if ($term->hasTranslation($langcode)) {
         $term = $term->getTranslation($langcode);
+      }
+      // If we don't have translation and values available, we create it.
+      elseif (!empty($name)) {
+        $term = $term->addTranslation($langcode, []);
+        $term->setName($name);
+        $term->get('field_shipping_method_cart_desc')->setValue($description);
+        $term->get('field_shipping_method_desc')->setValue($order_description);
+        $term->get('field_shipping_code')->setValue($code);
+        $term->get('field_shipping_carrier_code')->setValue($carrier_code);
+        $term->get('field_shipping_method_code')->setValue($method_code);
+        $term->save();
+
+        $this->logger->critical('Translation added for shipping method with code @code. Please confirm the values asap.', ['@code' => $code]);
       }
     }
 

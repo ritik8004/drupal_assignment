@@ -8,6 +8,7 @@ use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\geolocation\GoogleMapsDisplayTrait;
 
@@ -313,7 +314,9 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $values = $form_state->getValues($pane_form['#parents']);
 
     if ($user = user_load_by_mail($values['cc_email'])) {
-      $form_state->setErrorByName('cc_email', $this->t('You already have an account, please login.'));
+      $form_state->setErrorByName('cc_email', $this->t('You already have an account, @login_link.', [
+        '@login_link' => Link::createFromRoute('please login', 'acq_checkout.form', ['step' => 'login'])->toString(),
+      ]));
       return;
     }
 

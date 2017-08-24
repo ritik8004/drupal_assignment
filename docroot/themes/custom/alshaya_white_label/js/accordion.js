@@ -94,6 +94,12 @@
           $('.c-pdp .description-wrapper').toggleClass('desc-open');
         });
 
+        $(document).on('click', function (e) {
+          if ($(e.target).closest('.c-pdp .content__sidebar').length === 0 && $('.c-pdp .description-wrapper').hasClass('desc-open')) {
+            $('.c-pdp .description-wrapper').removeClass('desc-open');
+          }
+        });
+
         var mobileStickyHeaderHeight = $('.branding__menu').height();
         $('.c-pdp .description-wrapper .field__content').on('click', '.show-less-link', function () {
           if ($(window).width() < 768) {

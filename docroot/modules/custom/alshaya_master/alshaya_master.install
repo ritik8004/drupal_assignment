@@ -183,6 +183,9 @@ function alshaya_master_install() {
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
     ],
+    '@title is required.' => [
+      'ar' => ' Please enter your @title',
+    ],
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
     ],
@@ -318,7 +321,7 @@ function alshaya_master_install() {
     ],
     'The phone number %value provided for %field is not a valid mobile number for country %country.' => [
       'en' => 'The number provided %value is not a valid mobile number.',
-      'ar' => 'غير صحيح %value رقم الجوال',
+      'ar' => 'رقم الجوال %value غير صحيح',
     ],
     'Delivery to' => [
       'ar' => 'توصيل إلى',
@@ -994,8 +997,11 @@ function alshaya_master_install() {
     'Collect from store in <em>@time</em>' => [
       'ar' => 'استلم من المحل بعد <em>@time</em>',
     ],
-    'You already have an account, please login.' => [
-      'ar' => 'يبدو أن تم  تسجيل حسابك مسبقاً, يرجى تسجيل الدخول.',
+    'please login' => [
+      'ar' => 'يرجى تسجيل الدخول',
+    ],
+    'You already have an account, @login_link.' => [
+      'ar' => 'يبدو أن لديك حساب  مسبقاً في سجلاتنا ,@login_link.',
     ],
     'Earn one draw entry for every KD 5 spent online' => [
       'ar' => 'إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني',
@@ -1078,6 +1084,9 @@ function alshaya_master_install() {
     ],
     'Discount applied' => [
       'ar' => 'تم تفعيل الخصم',
+    ],
+    'Please enter a valid @title with no special characters.' => [
+      'ar' => 'يرجى إدخال @title صحيح دون عناصر خاصة',
     ],
   ];
   alshaya_i18n_save_translations($strings);

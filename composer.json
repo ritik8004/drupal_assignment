@@ -54,7 +54,10 @@
         "mobiledetect/mobiledetectlib": "^2.8",
         "acquia/http-hmac-php": "~3.1.0",
         "drupal/simple_oauth": "^2.0@RC",
-        "drupal/pcb": "^1.0@beta"
+        "drupal/pcb": "^1.0@beta",
+        "drupal/components": "^1.0",
+        "drupal/twig_tweak": "^1.8",
+        "drupal/kashmir": "^1.1"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
