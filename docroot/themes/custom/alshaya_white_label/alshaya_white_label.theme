@@ -265,6 +265,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $current_route = \Drupal::routeMatch();
     if ($current_route->getRouteName() == 'alshaya_stores_finder.store_detail') {
       $variables['previous_page'] = $current_route->getParameter('type')?: 'glossary';
+      $variables['#attached']['library'][] = 'alshaya_stores_finder/store_finder_preserve_history';
     }
   }
 }
