@@ -7,7 +7,6 @@
   'use strict';
 
   // Home page email sign up form popup.
-
   $('#contact, .email-signup').on('click', function (e) {
     $('.signup-popup').show();
     $('body').addClass('block-scroll');
