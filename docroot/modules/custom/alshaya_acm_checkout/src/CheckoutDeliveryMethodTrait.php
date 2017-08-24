@@ -64,24 +64,23 @@ trait CheckoutDeliveryMethodTrait {
 
       // We method is not allowed (someone trying to trick the system), redirect
       // to default or cart method.
-      if ($method && !in_array($method, $allowed_methods)) {
-        $redirect_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
+      if ($method) {
+        if (!in_array($method, $allowed_methods)) {
+          $redirect_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
 
-        if ($cart_method) {
-          $redirect_url->setRouteParameter('method', $cart_method);
+          if ($cart_method) {
+            $redirect_url->setRouteParameter('method', $cart_method);
+          }
+
+          throw new NeedsRedirectException($redirect_url->toString());
         }
-
-        throw new NeedsRedirectException($redirect_url->toString());
       }
-
-      if (empty($method) && $cart_method) {
-        $redirect_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
-        $redirect_url->setRouteParameter('method', $cart_method);
-        throw new NeedsRedirectException($redirect_url->toString());
+      // If there is method available in cart, we use it.
+      elseif (empty($method) && $cart_method) {
+        $method = $cart_method;
       }
-
-      if (empty($method)) {
-        // We use the first method from allowed methods as default.
+      // We use the first method from allowed methods as default.
+      else {
         $method = reset($allowed_methods);
       }
 
