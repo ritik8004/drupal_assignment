@@ -257,6 +257,10 @@ a.selected {
 }
 
 // Front page Sign up Form UI
+html[lang="ar"] .popup-window .popup-container {
+  transform: translate(50%, -50%);
+}
+
 .popup-window {
   background-color: rgba(51, 51, 51, 0.78);
   border: 1px solid #999;
@@ -274,14 +278,15 @@ a.selected {
   .popup-container {
     position: relative;
     width: 914px;
-    margin: 5% auto;
+    margin: 0;
     background: #fff;
     padding: 20px;
     font-family: 'alshaya-thin';
     display: table;
     text-indent: 0 !important;
-
-    //height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    #{$left}: 50%;
 
     .popup-title {
       margin-top: 5px;
@@ -294,11 +299,11 @@ a.selected {
 
     .inner-container {
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     @include breakpoint($upto-desktop) {
       width: 90%;
-      margin: 0 auto;
 
       .inner-container {
         max-height: 100%;
@@ -328,6 +333,25 @@ a.selected {
     max-height: 320px;
     overflow-y: auto;
     height: 100%;
+  }
+
+  @include breakpoint($upto-desktop) {
+    height: 100% !important;
+
+    .inner-container {
+      height: 100%;
+      padding-bottom: 45px;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    &.popup-container {
+      height: 554px;
+
+      .inner-container {
+        max-height: 90%;
+      }
+    }
   }
 }
 
@@ -425,6 +449,12 @@ a.selected {
         margin-#{$right}: 0;
         float: $right;
       }
+
+      @media (max-width: 375px) {
+        &.field-name {
+          width: 45% !important;
+        }
+      }
     }
 
     .field-email {
@@ -454,6 +484,10 @@ a.selected {
       color: $deep-red !important;
       margin: 5px 0;
       float: $left;
+
+      a {
+        display: none;
+      }
     }
 
     div#mce-success-response {
@@ -553,7 +587,7 @@ a.selected {
 
   &.field-mobile {
     input {
-      padding-left: 45px !important;
+      padding-#{$left}: 45px !important;
     }
   }
 
@@ -638,7 +672,7 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 12px;
-  width: 100%;
+  width: auto;
   text-align: $left;
   margin-top: -14px;
   line-height: normal;
@@ -833,4 +867,32 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
   @include breakpoint($tablet) {
     color: $white-five;
   }
+}
+
+// Loader bar
+
+body.block-scroll {
+  overflow: hidden !important;
+}
+
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: $deep-red;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 3px;
 }
