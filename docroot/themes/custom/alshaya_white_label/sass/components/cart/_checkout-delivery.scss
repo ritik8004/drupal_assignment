@@ -157,6 +157,12 @@
           font-weight: bold;
           color: $cerulean-two;
           font-size: 0.75rem;
+
+          &.back-to-basket {
+            @include breakpoint($desktop) {
+              padding: 0.625rem 0;
+            }
+          }
         }
       }
     }
@@ -535,17 +541,17 @@
     font-size: 0;
 
     .form-type-radio {
-      margin-top: 0 !important;
+      margin-top: 0;
 
       &:first-child {
-        margin-top: 1.875rem !important;
+        margin-top: 1.875rem;
 
         @include breakpoint($only-tablet) {
-          margin-top: 1.188rem !important;
+          margin-top: 1.188rem;
         }
 
         @include breakpoint($desktop) {
-          margin-top: 2.375rem !important;
+          margin-top: 1.438rem;
         }
       }
     }
@@ -725,6 +731,10 @@
 
           @include breakpoint($tablet) {
             width: 92.5%;
+
+            .ucbrowser & {
+              width: 92%;
+            }
           }
 
           @include breakpoint($desktop) {

@@ -219,7 +219,11 @@ html[lang=ar] {
       }
 
       @include breakpoint($only-tablet) {
-        width: 50%;
+        width: 53%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 57%;
       }
     }
   }
@@ -227,7 +231,7 @@ html[lang=ar] {
   #table-cart-totals {
     .edit-actions {
       @include breakpoint($only-tablet) {
-        margin-left: -4.3rem;
+        margin-left: -3.6rem;
       }
     }
 
@@ -252,6 +256,7 @@ html[lang=ar] {
       .price-amount {
         float: right !important;
         left: 0;
+        font-family: $arial-nodir;
       }
 
       .price-currency {
@@ -270,11 +275,6 @@ html[lang=ar] {
       margin-left: 0.5rem;
     }
   }
-}
-
-.ie .address .address--options {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
 }
 
 .ie .address .address--primary span::before,
@@ -325,6 +325,12 @@ html[lang="ar"] {
       // Select elements for size and quantity.
       select {
         padding-left: 40px !important;
+      }
+    }
+
+    #payment_details_wrapper > .form-wrapper .payment-plugin-wrapper-div .payment-method-name {
+      @include breakpoint($tablet) {
+        width: 91.5%;
       }
     }
   }

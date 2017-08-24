@@ -269,7 +269,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
-          '#markup' => implode(', ', $promotions),
+          '#markup' => implode('</br>', $promotions),
         ];
       }
     }
@@ -289,7 +289,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
-          '#markup' => implode(', ', $promotions),
+          '#markup' => implode('</br>', $promotions),
         ];
       }
 
@@ -326,7 +326,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
-          '#markup' => implode(', ', $promotions),
+          '#markup' => implode('</br>', $promotions),
         ];
       }
     }
@@ -549,7 +549,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $promotion_types = ['cart'];
     $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($tree_pointer, TRUE, $promotion_types);
     if (!empty($promotions)) {
-      $promotion_links = implode(', ', $promotions);
+      $promotion_links = implode('</br>', $promotions);
     }
     $response->addCommand(new HtmlCommand('.promotions', $promotion_links));
 

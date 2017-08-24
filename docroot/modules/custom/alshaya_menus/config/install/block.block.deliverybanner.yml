@@ -10,7 +10,7 @@ dependencies:
 id: deliverybanner
 theme: alshaya_white_label
 region: hero_content
-weight: -18
+weight: -35
 provider: null
 plugin: 'system_menu_block:delivery-banner'
 settings:
