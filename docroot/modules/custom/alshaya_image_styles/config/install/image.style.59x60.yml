@@ -4,10 +4,11 @@ dependencies: {  }
 name: 59x60
 label: 59x60
 effects:
-  ea45fb7f-f376-47fe-a2ea-e7cd8b8e0a6a:
-    uuid: ea45fb7f-f376-47fe-a2ea-e7cd8b8e0a6a
-    id: image_scale_and_crop
-    weight: 1
+  11785684-90f9-4597-b4f6-919be7b20970:
+    uuid: 11785684-90f9-4597-b4f6-919be7b20970
+    id: image_scale
+    weight: 2
     data:
-      width: 59
+      width: null
       height: 60
+      upscale: false

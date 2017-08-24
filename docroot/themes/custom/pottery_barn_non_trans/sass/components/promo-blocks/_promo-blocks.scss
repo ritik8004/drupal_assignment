@@ -1,0 +1,836 @@
+.c-promo__items {
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+
+  img {
+    vertical-align: middle;
+  }
+
+  .paragraph {
+    position: relative;
+  }
+
+  .field--type-link a {
+    @include u-image-replacement;
+    @include u-overlay-content;
+  }
+}
+
+.c-promo__item {
+  margin-bottom: 0.75rem;
+
+  @include breakpoint($tablet) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.c-promo-1-3__item {
+  float: $left;
+  line-height: 1;
+  text-align: center;
+
+  @include breakpoint($only-mobile) {
+    width: calc(50% - 0.375rem);
+
+    &:nth-child(2) {
+      float: $right;
+    }
+
+    &:nth-child(3) {
+      display: none;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    width: 31.77%;
+    width: calc(33.33% - 1rem);
+
+    &:nth-child(2) {
+      margin-left: 1.5rem;
+      margin-right: 1.5rem;
+    }
+  }
+
+  @include breakpoint($tablet (orientation portrait)) {
+    width: 31%;
+  }
+
+  .field--name-field-link {
+    color: $peacock-blue;
+    font-size: 0.75rem;
+    font-weight: bold;
+
+    @include breakpoint($tablet) {
+      font-size: 0.9375rem;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 1.375rem;
+      font-weight: normal;
+    }
+  }
+
+  .field--name-field-title {
+    font-size: 0.5625rem;
+    color: $brownish-grey;
+    text-transform: lowercase;
+    margin-top: 0.5rem;
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0.5rem;
+    }
+
+    @include breakpoint($tablet) {
+      font-size: 0.6875rem;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 1rem;
+    }
+  }
+}
+
+.c-promo-1-3__items--text {
+  .field--name-field-link {
+    margin-bottom: 0.25rem;
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0.5rem;
+    }
+  }
+}
+
+.c-promo-1-2--one {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 0.75rem;
+  }
+
+  @include breakpoint($tablet) {
+    float: $left;
+  }
+}
+
+.c-promo-1-2--two {
+  @include breakpoint($tablet) {
+    float: $right;
+    max-width: 18rem;
+  }
+
+  .c-promo-1-2__item {
+    @include breakpoint($tablet) {
+      float: $right;
+    }
+
+    &:first-child {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.75rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}
+
+.c-promo-1-2--one,
+.c-promo-1-2--two {
+  @include breakpoint($tablet) {
+    width: calc(50% - 0.75rem);
+    max-width: 31.3125rem;
+  }
+}
+
+.c-promo-1-1--small {
+  & > div:first-child {
+    float: $left;
+
+    @include breakpoint($tablet) {
+      max-width: 18.1875rem;
+      width: 31.527%;
+    }
+  }
+
+  & > div:last-child {
+    float: $right;
+
+    @include breakpoint($tablet) {
+      max-width: 37.875rem;
+      width: 65.65%;
+    }
+  }
+}
+
+.c-promo-1-1--large {
+  & > div:first-child {
+    float: $left;
+
+    @include breakpoint($tablet) {
+      max-width: 37.875rem;
+      width: 65.65%;
+    }
+  }
+
+  & > div:last-child {
+    float: $right;
+
+    @include breakpoint($tablet) {
+      max-width: 18.1875rem;
+      width: 31.527%;
+    }
+  }
+}
+
+.c-promo-1-1--eq__item {
+  max-width: 100%;
+  width: calc(50% - 0.375rem);
+
+  @include breakpoint($tablet) {
+    &.field--name-field-1-row-2-col {
+      width: calc(50% - 0.75rem);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    &.field--name-field-1-row-2-col {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+  }
+
+  &:first-child {
+    float: $left;
+  }
+
+  &:last-child {
+    float: $right;
+  }
+}
+
+.paragraph--type--promo-block-text {
+  text-align: center;
+
+  .field--name-field-link {
+    font-size: 1.475rem;
+    font-family: $alshaya-bold;
+
+    a {
+      font-family: $alshaya-thin;
+      text-transform: uppercase;
+      font-size: 16px;
+    }
+  }
+}
+
+// PB SCSS changes
+
+.close-popup {
+  position: absolute;
+  top: 0;
+  #{$right}: 0;
+  background-color: $white;
+  color: $brownish-grey;
+  font-size: 36px;
+  height: 35px;
+  line-height: 10px;
+  margin: 0 !important;
+  width: 35px;
+}
+
+.close-popup::before {
+  content: "";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  font-family: alshaya-icons;
+  font-variant: normal normal;
+}
+
+a.selected {
+  background-color: #1f75cc;
+  color: white;
+  z-index: 100;
+}
+
+// Front page Sign up Form UI
+.popup-window {
+  background-color: rgba(51, 51, 51, 0.78);
+  border: 1px solid #999;
+  cursor: default;
+  display: none;
+  position: fixed;
+  text-align: $left;
+  width: 100%;
+  z-index: 999;
+  padding: 25px 25px 20px;
+  height: 100%;
+  left: 0;
+  top: 0;
+
+  .popup-container {
+    position: relative;
+    width: 914px;
+    margin: 5% auto;
+    background: #fff;
+    padding: 20px;
+    font-family: 'alshaya-thin';
+    display: table;
+    text-indent: 0 !important;
+
+    //height: 100%;
+
+    .popup-title {
+      margin-top: 5px;
+      font-size: 24px;
+      border-bottom: 1px solid $white;
+      color: $black-two;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    .inner-container {
+      overflow-y: auto;
+    }
+
+    @include breakpoint($upto-desktop) {
+      width: 90%;
+      margin: 0 auto;
+
+      .inner-container {
+        max-height: 100%;
+      }
+    }
+
+    @include breakpoint($upto-tablet) {
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 20px 65px;
+      height: 100%;
+
+      .inner-container {
+        max-height: 100%;
+      }
+    }
+  }
+}
+
+.pls-privacy-popup {
+  h3 {
+    color: $black;
+    margin: 10px 0 0;
+  }
+
+  .inner-container {
+    max-height: 320px;
+    overflow-y: auto;
+    height: 100%;
+  }
+}
+
+.signup-form {
+  position: relative;
+  width: 914px;
+  margin: 5% auto;
+  background: #fff;
+  padding: 20px 20px 65px;
+  font-family: 'alshaya-thin';
+
+  .signup-form-title {
+    margin-top: 5px;
+    font-size: 24px;
+    border-bottom: 1px solid $white;
+    color: $black-two;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  h3:not(.signup-form-title) {
+    color: $black-two;
+    font-size: 14px;
+    margin-#{$left}: 5%;
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-top: 0;
+  }
+
+  ul {
+    display: inline-block;
+    margin-#{$left}: 6%;
+    margin-top: 0;
+
+    li {
+      list-style-type: disc;
+      font-size: 12px;
+      color: $black-two;
+      margin: 10px 0;
+
+      p {
+        color: $brownish-grey;
+      }
+    }
+  }
+
+  form {
+    margin: 10px 0;
+    display: table;
+  }
+
+  .form-submit {
+    background-color: $black-two;
+    border: 0;
+    color: $white-five;
+    padding: 10px;
+    width: 120px;
+    text-transform: lowercase;
+    text-align: center;
+    display: block;
+    float: $left;
+  }
+
+  br {
+    display: none;
+  }
+
+  label {
+    margin-top: 10px;
+  }
+
+  .form-actions {
+    position: absolute;
+    bottom: 20px;
+  }
+
+  // MailChimp Form SCSS
+
+  .mailchimp-signup-form {
+    width: 50%;
+    display: inline-block;
+
+    .clear {
+      clear: both;
+    }
+
+    form {
+      display: block;
+    }
+
+    .form--signup-elements {
+      width: 47%;
+
+      &:nth-child(even) {
+        margin-#{$right}: 0;
+        float: $right;
+      }
+    }
+
+    .field-email {
+      width: 100% !important;
+      clear: both;
+      margin-#{$right}: 0;
+      float: none !important;
+      margin-bottom: 10px !important;
+    }
+
+    .field-mobile {
+      margin-#{$right}: 0;
+      margin-bottom: 25px;
+      clear: both;
+    }
+
+    div.mce_inline_error {
+      background-color: transparent !important;
+      color: $deep-red !important;
+      font-size: 12px;
+      font-weight: lighter !important;
+      padding: 0 !important;
+      margin: 5px 0 !important;
+    }
+
+    div#mce-error-response {
+      color: $deep-red !important;
+      margin: 5px 0;
+      float: $left;
+    }
+
+    div#mce-success-response {
+      float: $left;
+      margin: 5px 0;
+      color: $windows-blue;
+    }
+  }
+
+  .form-signup-note {
+    width: 45%;
+    float: $right;
+    margin-top: 10px;
+  }
+
+  @include breakpoint($upto-desktop) {
+    .mailchimp-signup-form,
+    .form-signup-note {
+      width: 100%;
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .signup-form {
+    .form--signup-elements {
+      width: 48% !important;
+
+      &:nth-child(even) {
+        margin-#{$right}: 0;
+      }
+
+      &.field-email {
+        width: 100% !important;
+      }
+
+      &.field-checkbox {
+        width: 50% !important;
+      }
+    }
+
+    h3:not(.signup-form-title) {
+      display: block;
+      margin-#{$left}: 0;
+    }
+
+    ul {
+      margin-#{$left}: 4%;
+    }
+  }
+}
+
+@include breakpoint($upto-tablet) {
+  .signup-form {
+    .form--signup-elements {
+      width: 100% !important;
+      margin-#{$right}: 0;
+    }
+  }
+}
+
+.ms-signup {
+  margin: 20px 0;
+  width: 91px;
+  min-width: auto;
+  font-size: 14px;
+  padding: 8px;
+
+  &:hover {
+    color: $white-five;
+  }
+}
+
+.signup-form input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+
+.signup-form .form--signup-elements {
+  margin-bottom: 15px;
+  position: relative;
+  margin-top: 12px;
+  width: 25%;
+  margin-#{$right}: 20px;
+  float: $left;
+
+  &.field-email,
+  &.form-item-country-code {
+    clear: both;
+  }
+
+  & span.country-code-label {
+    position: absolute;
+    bottom: 9px;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  &.field-mobile {
+    input {
+      padding-left: 45px !important;
+    }
+  }
+
+  &.form-item-country-code {
+    pointer-events: none;
+  }
+
+  p {
+    display: none;
+  }
+
+  &.field-checkbox {
+    clear: both;
+    width: 75% !important;
+    font-family: $alshaya-thin;
+    margin: 10px 0;
+
+    label {
+      color: $brownish-grey !important;
+      overflow: initial !important;
+      font-size: 12px;
+      white-space: normal !important;
+      padding-#{$left}: 25px;
+      display: inline-block;
+      margin-top: 0 !important;
+      position: static !important;
+
+      &::before {
+        padding-#{$right}: 10px;
+        vertical-align: text-bottom;
+        margin-#{$left}: -25px;
+      }
+    }
+
+    p {
+      font-size: 12px;
+      padding-#{$left}: 25px;
+      margin-top: 2px;
+
+      strong {
+        color: $windows-blue;
+      }
+    }
+  }
+}
+
+html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
+  margin-top: 10px;
+}
+
+.signup-form .form--signup-elements input {
+  color: $black-two;
+  font-size: 16px;
+  height: 40px;
+  background-color: transparent;
+}
+
+.signup-form .form--signup-elements label::after {
+  content: ' ' !important;
+}
+
+.signup-form .form--signup-elements label:not(.error) span {
+  color: #adadad;
+  font-weight: normal;
+}
+
+.signup-form .form--signup-elements label:not(.error),
+.signup-form .form--signup-elements input {
+  -webkit-transition: all 200ms ease 0s;
+  -moz-transition: all 200ms ease 0s;
+  -o-transition: all 200ms ease 0s;
+  transition: all 200ms ease 0s;
+  touch-action: manipulation;
+}
+
+.signup-form .form--signup-elements label:not(.error) {
+  position: absolute;
+  top: 0;
+  #{$left}: 0;
+  cursor: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  width: 100%;
+  text-align: $left;
+  margin-top: -14px;
+  line-height: normal;
+  color: #adadad;
+  background-color: $white-five;
+}
+
+.signup-form .form--signup-elements input::-webkit-input-placeholder,
+.signup-form .form--signup-elements input:-moz-placeholder,
+.signup-form .form--signup-elements input::-moz-placeholder,
+.signup-form .form--signup-elements input:-ms-input-placeholder {
+  opacity: 0;
+  -webkit-transition: inherit;
+  -moz-transition: inherit;
+  -o-transition: inherit;
+  transition: inherit;
+  font-size: 12px;
+}
+
+.signup-form .form--signup-elements input:focus::-webkit-input-placeholder,
+.signup-form .form--signup-elements input:focus:-moz-placeholder,
+.signup-form .form--signup-elements input:focus::-moz-placeholder,
+.signup-form .form--signup-elements input:focus:-ms-input-placeholder {
+  opacity: 1;
+}
+
+.signup-form .form--signup-elements input:placeholder-shown ~ label:not(.error) {
+  font-size: 16px;
+  -webkit-transform: translate(0, 1.5rem);
+  -webkit-transform-origin: left bottom;
+  -moz-transform: translate(0, 1.5rem);
+  -moz-transform-origin: left bottom;
+  -ms-transform: translate(0, 1.5rem);
+  -ms-transform-origin: left bottom;
+  -o-transform: translate(0, 1.5rem);
+  -o-transform-origin: left bottom;
+  transform: translate(0, 1.5rem);
+  transform-origin: left bottom;
+}
+
+.signup-form .form--signup-elements input:not(:placeholder-shown) ~ label:not(.error),
+.signup-form .form--signup-elements input:focus ~ label:not(.error) {
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  cursor: pointer;
+  font-size: 12px;
+  color: #adadad;
+  left: 0;
+}
+
+.signup-form .form--signup-elements .form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 0;
+  font-size: 16px;
+  background-color: #fff;
+  border-bottom: 1px solid #adadad;
+  border-radius: 0;
+}
+
+.frontpage .c-content__container .field--name-body.field--type-text-with-summary h3 {
+  font-size: 1.475rem;
+  font-weight: normal;
+  margin: 0;
+  font-family: $alshaya-bold;
+}
+
+.frontpage .c-content__container .field--name-body.field--type-text-with-summary p {
+  margin: 5px 0;
+  font-family: $alshaya-thin;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.frontpage .c-content__container .paragraph--type--promo-block-text .field--name-field-title {
+  font-family: $alshaya-thin;
+  text-transform: uppercase;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+#ccode {
+  width: 45px;
+  float: $left;
+  margin-#{$right}: 10px;
+  margin-bottom: 20px;
+}
+
+#phone {
+  width: 75%;
+  float: $right;
+  margin-bottom: 20px;
+}
+
+.success-message-popup {
+  background-color: rgba(51, 51, 51, 0.78) !important;
+  border: 1px solid #999;
+  cursor: default;
+  position: fixed;
+  text-align: left;
+  width: 100%;
+  z-index: 999;
+  padding: 25px 25px 20px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  margin: 0;
+
+  &::before {
+    display: none;
+  }
+
+  .thanku-popup {
+    position: relative;
+    width: 914px;
+    margin: 5% auto;
+    background: #fff;
+    padding: 20px 20px 65px;
+    font-family: 'alshaya-thin';
+    display: table;
+    text-indent: 0 !important;
+
+    .signup-form-title {
+      margin-top: 5px;
+      font-size: 24px;
+      border-bottom: 1px solid $white;
+      color: $black-two;
+      padding-bottom: 10px;
+    }
+
+    h3:not(.signup-form-title) {
+      color: $black-two;
+      font-size: 14px;
+      display: inline-block;
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+
+    & > div {
+      width: 50%;
+      float: $left;
+    }
+
+    .msg-content h3 {
+      font-size: 20px;
+    }
+
+    .rhs-content {
+      ul {
+        display: inline-block;
+        margin-top: 0;
+
+        li {
+          list-style-type: disc;
+          font-size: 12px;
+          color: $black-two;
+          margin: 10px 0;
+
+          p {
+            color: $brownish-grey;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .thanku-popup {
+      width: 90%;
+    }
+  }
+
+  @include breakpoint($upto-tablet) {
+    .thanku-popup {
+      width: 100%;
+
+      & > div {
+        width: 100%;
+        float: $left;
+      }
+    }
+  }
+}
+
+.bannerText h1 {
+  text-transform: uppercase;
+
+  @include breakpoint($tablet) {
+    color: $white-five;
+  }
+}

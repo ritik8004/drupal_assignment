@@ -3,11 +3,11 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_acq_promotion_banner
+    - image.style.921x168
     - node.type.acq_promotion
-    - responsive_image.styles.921x168
   module:
+    - image
     - node
-    - responsive_image
     - user
 id: promotion_banner
 label: 'Promotion banner'
@@ -108,9 +108,9 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: responsive_image
+          type: image
           settings:
-            responsive_image_style: 921x168
+            image_style: 921x168
             image_link: ''
           group_column: ''
           group_columns: {  }

@@ -284,7 +284,6 @@
   .caption {
     font-size: 0.875rem;
     border-bottom: 1px solid $white;
-    border-top: 1px solid $white;
     padding: 1rem 1.5rem;
 
     @include breakpoint($upto-desktop) {
@@ -328,7 +327,7 @@
 
   .active--accordion {
     .content-head {
-      @include icon(chevron#{$right}, after);
+      @include icon(chevronup, after);
     }
   }
 
@@ -422,6 +421,30 @@
   .totals {
     background: none;
     border-top: 1px solid $white;
+
+    html[lang=ar] & {
+      line-height: 1.5;
+    }
+
+    .sub-total,
+    .order-total {
+      > span {
+        width: 54%;
+
+        @include breakpoint($upto-desktop) {
+          width: 50%;
+        }
+      }
+
+      .total--amount,
+      .price-type__wrapper {
+        width: 44%;
+
+        @include breakpoint($upto-desktop) {
+          width: 47%;
+        }
+      }
+    }
   }
 }
 
@@ -446,30 +469,20 @@
   .order-total {
     > span {
       display: inline-block;
-      width: 60%;
-
-      html[lang=ar] & {
-        @include breakpoint($desktop) {
-          width: 59%;
-        }
-
-        @include breakpoint($only-tablet) {
-          width: 54%;
-        }
-      }
+      width: 57%;
 
       @include breakpoint($upto-desktop) {
-        width: 55%;
+        width: 50%;
       }
     }
 
     .total--amount,
     .price-type__wrapper {
       display: inline-block;
-      width: 38%;
+      width: 41%;
 
       @include breakpoint($upto-desktop) {
-        width: 43%;
+        width: 47%;
       }
     }
 
@@ -478,8 +491,16 @@
       display: inline-block;
 
       .price {
+        .price-currency {
+          @include breakpoint($only-tablet) {
+            margin-right: 0.4rem;
+          }
+
+          margin-right: 1.5625rem;
+        }
+
         .price-amount {
-          float: $right;
+          float: none;
         }
       }
     }
@@ -593,6 +614,19 @@ body.alias--cart {
       }
     }
 
+    tbody tr {
+      &:hover {
+        @include breakpoint($tablet) {
+          background: rgba(247, 247, 247, 0.72);
+        }
+
+        .name .items a {
+          color: $cerulean-two;
+          text-decoration: underline;
+        }
+      }
+    }
+
     tr {
       border-bottom: 1px solid $white;
 
@@ -604,10 +638,6 @@ body.alias--cart {
             color: $black-two;
           }
         }
-      }
-
-      &:hover {
-        background: rgba(247, 247, 247, 0.72);
       }
 
       th {
@@ -1081,8 +1111,9 @@ body.alias--cart {
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
     text-transform: lowercase;
-    font-family: $arial;
+    font-family: $alshaya-bold;
     font-size: 0.75rem;
+    -webkit-font-smoothing: auto;
 
     @include breakpoint($upto-tablet) {
       display: block;
@@ -1158,7 +1189,7 @@ body.alias--cart {
       background: $pumpkin-orange;
       color: $white-five;
       font-size: 0.75rem;
-      font-family: $arial;
+      font-family: $alshaya-bold;
       width: 10.81rem;
       height: 2.188rem;
       display: inline-block;
@@ -1268,16 +1299,14 @@ html[lang=ar] {
     position: absolute;
 
     @include breakpoint($mobile) {
-      left: 0.9rem;
       top: -0.1rem;
     }
 
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       left: -0.4rem;
     }
 
     @include breakpoint($desktop) {
-      left: 4rem;
       top: 0;
     }
   }

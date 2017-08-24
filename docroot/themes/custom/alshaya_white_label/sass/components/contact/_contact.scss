@@ -282,6 +282,10 @@ html[lang=ar] {
     .form-type-email {
       input[type=email] {
         margin-top: 0.3125rem;
+
+        & ~ label {
+          background: transparent !important;
+        }
       }
     }
 

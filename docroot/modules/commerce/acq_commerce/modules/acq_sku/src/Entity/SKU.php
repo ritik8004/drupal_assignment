@@ -537,6 +537,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['product_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Product Id'))
+      ->setDescription(t('Commerce Backend Product Id.'))
+      ->setTranslatable(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     // Get all the fields added by other modules and add them as base fields.
     $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
 

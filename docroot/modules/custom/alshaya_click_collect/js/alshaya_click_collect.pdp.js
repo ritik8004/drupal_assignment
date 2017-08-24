@@ -36,18 +36,6 @@
         });
       }
 
-      // Show/Hide subtitle for delivery options accordions.
-      $('.c-accordion-delivery-options').each(function () {
-        $(this).once('accordion-trigger').on('accordionbeforeactivate', function (event, ui) {
-          if (ui.newHeader.length > 0) {
-            $(event.target).find('h3 > .subtitle').slideUp();
-          }
-          else {
-            $(event.target).find('h3 > .subtitle').slideDown('slow');
-          }
-        });
-      });
-
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Get the permission track the user location.
         Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
@@ -81,7 +69,7 @@
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
         if ($(window).width() >= 768) {
-          $('.click-collect-all-stores').toggle('slow', function () {
+          $('.click-collect-all-stores').toggleClass('desc-open', function () {
             // Scroll
             $('html,body').animate({
               scrollTop: $('.click-collect-all-stores').offset().top
@@ -89,7 +77,7 @@
           });
         }
         else {
-          $('.click-collect-all-stores').toggle('slow');
+          $('.click-collect-all-stores').toggleClass('desc-open');
         }
       });
 
@@ -112,7 +100,13 @@
           return false;
         }
         else {
-          $('.click-collect-all-stores').toggle('slow');
+          $('.click-collect-all-stores').toggleClass('desc-open');
+        }
+      });
+
+      $(document).on('click', function (e) {
+        if ($(e.target).closest('.c-pdp .content__sidebar').length === 0 && $('.click-collect-all-stores').hasClass('desc-open')) {
+          $('.click-collect-all-stores').removeClass('desc-open');
         }
       });
 
@@ -373,6 +367,20 @@
 
       }
     }
+  };
+
+  // Command to display error message and rebind autocomplete to main input.
+  $.fn.clickCollectPdpNoStoresFound = function (data) {
+    $('.click-collect-top-stores').html(data);
+    $('.click-collect-all-stores').html('');
+    $('.click-collect-form .available-store-text').hide();
+    $('.click-collect-form .change-location').hide();
+
+    // Bind the js again to main input.
+    var field = $('.click-collect-form').find('input[name="location"]')[0];
+    new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
+
+    $('.click-collect-form .store-finder-form-wrapper').show();
   };
 
 })(jQuery, Drupal);

@@ -137,7 +137,7 @@
     width: 100%;
 
     @include breakpoint($desktop) {
-      padding: 1.188rem 1.5rem;
+      padding: 1.25rem 1.5rem;
     }
 
     a {
@@ -489,14 +489,28 @@
 
 .address-book-address .form-type-select {
   .select2-selection {
-    border: none !important;
-    font-family: "alshaya-thin";
+    font-family: $alshaya-thin;
     font-size: 1rem;
     padding: 0.25rem 0.5rem;
     width: 100%;
-    border-radius: 0 !important;
-    background: $white !important;
+    border-radius: 0;
     height: 2.188rem !important;
+    border-color: $white-two;
+  }
+
+  .select2-selection__arrow {
+    &::after {
+      line-height: 35px;
+      font-size: 1.75rem;
+      top: -1px;
+      #{$left}: -13px;
+      width: 2.1875rem;
+      background: $white-two;
+      height: 2.1875rem;
+      #{$right}: 0;
+      text-align: center;
+      display: inline-block;
+    }
   }
 
   .select2-container {
@@ -506,7 +520,7 @@
   .select2-selection__rendered {
     font-family: $arial;
     line-height: 1.188rem !important;
-    color: $greyish;
+    color: $black;
     padding: 0.25rem !important;
   }
 }
@@ -568,6 +582,7 @@
 
   .country-name {
     font-size: 1rem;
+    color: $greyish;
   }
 
   .select2-container {
@@ -593,6 +608,25 @@
       #{$left}: 0;
       opacity: 1;
       font-size: 0.75rem;
+    }
+  }
+
+  .form-item-guest-delivery-home-address-shipping-address-line2 {
+    input[type=text] ~ label:not(.active-label) {
+      font-size: 1rem !important;
+      color: $greyish !important;
+      position: absolute !important;
+      #{$left}: 0 !important;
+      top: -0.125rem !important;
+      transition: 0.2s ease all !important;
+    }
+
+    input[type=text]:focus ~ label {
+      top: -1.25em !important;
+      bottom: 0 !important;
+      #{$left}: 0 !important;
+      opacity: 1 !important;
+      font-size: 0.75rem !important;
     }
   }
 }

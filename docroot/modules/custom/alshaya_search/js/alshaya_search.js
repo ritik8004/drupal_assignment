@@ -20,11 +20,6 @@
           $('.search-count').html(header_result);
         }
       };
-
-      // Convert search keyword to lowercase.
-      $('#edit-keywords').on('keyup', function() {
-        $(this).val($(this).val().toLowerCase());
-      });
     }
   };
 
@@ -117,13 +112,12 @@
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
       // Convert the list to slider.
-      $('.search-lightSlider').once('alshayaSearchSlider').each(function () {
+      $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
         var gallery = $(this);
         $(this, context).lightSlider({
           vertical: false,
           item: 4,
-          slideMargin: 6,
-          autoWidth: true,
+          slideMargin: 5,
           onSliderLoad: function() {
             gallery.closest('.alshaya_search_slider').hide();
             gallery.css('height', '73px');
@@ -132,7 +126,7 @@
       });
 
       // Show/Hide the slider on Mouse hover.
-      $('.c-products__item').hover(
+      $('.c-products__item', context).hover(
         function () {
           if ($(window).width() > 1025) {
             $(this).find('.alshaya_search_slider').show();
@@ -144,7 +138,7 @@
       );
 
       // Change the image on Mouse hover.
-      $('.alshaya_search_slider img').hover(
+      $('.alshaya_search_slider img', context).hover(
         function () {
           $(this)
             .closest('.alshaya_search_gallery')
@@ -166,8 +160,6 @@
       $.fn.alshayaAttachSearchSlider = function () {
         Drupal.attachBehaviors(context);
       };
-
     }
   };
-
 })(jQuery);

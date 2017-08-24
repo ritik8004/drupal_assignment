@@ -4,10 +4,11 @@ dependencies: {  }
 name: 291x288
 label: 291x288
 effects:
-  36489ecb-4873-4cd3-8e74-cb022d0422f5:
-    uuid: 36489ecb-4873-4cd3-8e74-cb022d0422f5
-    id: image_scale_and_crop
-    weight: 1
+  e5de9a31-cad0-4b2a-88e0-83336c88d87c:
+    uuid: e5de9a31-cad0-4b2a-88e0-83336c88d87c
+    id: image_scale
+    weight: 2
     data:
-      width: 291
+      width: null
       height: 288
+      upscale: false

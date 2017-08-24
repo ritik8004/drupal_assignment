@@ -71,3 +71,116 @@ To prepare your local env:
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
+
+### Local setup of Behat:
+* Start Behat installation on your local by following the steps below:
+  * Create a directory, say 'alshaya_behat'
+  * cd into the above directory - `cd alshaya_behat`
+  * Create a file composer.json and paste the contents below in it:
+  
+    `{
+    
+  "require-dev" : {
+  
+    "behat/behat" : "3.0.*",
+    
+    "behat/mink-goutte-driver" : "*",
+    
+    "behat/mink-browserkit-driver" : "*",
+    
+    "behat/mink-extension" : "2.*",
+    
+    "behat/mink-selenium2-driver" : "*",
+    
+    "behat/mink" : "*"
+    
+  },
+  
+  "config": {
+  
+    "bin-dir": "bin/"
+    
+  }
+  
+}`
+* Save the file and close it
+* If you don't have composer installed, Install composer by running the commands:
+  * `curl -sS https://getcomposer.org/installer | php`
+  * `php composer.phar install`
+* If you already have composer installed, then run the command as below:
+  `composer install`
+* Create behat.yml file
+* Paste the content below in the yml file:
+
+  `#behat.yml
+  
+  default:
+  
+    autoload:
+    
+      '': %paths.base%/features/bootstrap
+      
+    suites:
+    
+      default:
+      
+        contexts:
+        
+          - FeatureContext
+          
+          - Drupal\DrupalExtension\Context\MinkContext
+          
+          - Drupal\DrupalExtension\Context\MessageContext
+          
+        paths:
+        
+          - %paths.base%/features
+          
+    extensions:
+    
+      Behat\MinkExtension:
+      
+          browser_name: 'chrome'
+          
+          goutte:
+          
+            guzzle_parameters:
+            
+              verify: false
+              
+          javascript_session: selenium2
+          
+          selenium2:
+          
+            wd_host: http://127.0.0.1:4444/wd/hub
+            
+            capabilities: { "browser": "chrome", "version": "59.0.3071.115", 'chrome': {'switches':['--start-maximized']}}
+            
+          base_url: 'https://whitelabel2.test-alshaya.acsitefactory.com/'
+          
+          files_path: "%paths.base%/files"`
+          
+* Initialize Behat by running the command
+  `bin/behat --init`
+* Features and bootstrap directory should get created after initializing Behat
+* Download all the feature files from Alshaya git repository and place it under 'features' directory on your local Behat setup
+* Download the FeatureContext.php from Alshaya git repository and replace it with the local copy. You should be able locate the file under features -> bootstrap -> FeatureContext.php
+* Follow the steps below to change the environment on which you want to run tests on:
+  * Open behat.yml file
+  * Set parameter 'base_url' to the instance you want to run tests on
+  * Save the file
+* You are now good to start runnning Behat scripts on your machine
+* Below are various ways to run Behat feature files:
+  * To run all the feature files - `bin/behat features`
+  * To run a single feature file - `bin/behat features/filename.feature` (e.g. `bin/behat features/checkout.feature`)
+  * To run tagged scenarios - `bin/behat features --tags @tagname` (e.g. `bin/behat features --tags @checkout`)
+  
+### Some pre-requisites to run Behat tests
+  * Make sure the products mentioned in the feature file is available on the instance you wish you to execute tests. For e.g. if you wish to run 'checkout.feature' on your local, perform the steps mentioned below:
+  * Open checkout.feature file
+  * In the background section, check the line:
+    `Given I am on '/product-name'`
+  * Either make sure that the above product is available on the instance you wish to run tests or change the feature file to point to an available product
+  * If the product mentioned in the feature file is configurable, make sure the available size is selected too in the automated steps. For e.g. add the below two steps after navigating to product page
+   * `When I follow "2-3 Years"`
+   * `And I wait for AJAX to finish`

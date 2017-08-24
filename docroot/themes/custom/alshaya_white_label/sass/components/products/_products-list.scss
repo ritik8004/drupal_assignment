@@ -13,7 +13,8 @@
   .region__content {
     position: relative;
 
-    .block-views-blockplp-promotional-banner-block-1.promo-banner {
+    .block-views-blockplp-promotional-banner-block-1.promo-banner,
+    .block-views-blockpromotion-banner-block-1.promo-banner {
       margin-bottom: 1.5rem;
 
       @include breakpoint($desktop) {
@@ -27,6 +28,7 @@
       }
     }
 
+    .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
       overflow: hidden;
@@ -146,24 +148,28 @@
           padding: 0.9rem 1rem;
 
           .filter-menu-label {
-            margin-bottom: 0.82rem;
+            display: none;
 
-            @include u-visibility(inline-block);
+            @include breakpoint($only-mobile) {
+              margin-bottom: 0.82rem;
 
-            .label {
-              font-family: $alshaya-bold;
-              font-size: 0.817rem;
-              padding-#{$left}: 1.5rem;
-              color: $black;
-              float: $left;
-              margin-top: 7px;
-            }
+              @include u-visibility(inline-block);
 
-            @include icon(chevronleft, after) {
-              position: absolute;
-              #{$left}: 1.3%;
-              font-size: 2rem;
-              pointer-events: none;
+              .label {
+                font-family: $alshaya-bold;
+                font-size: 0.817rem;
+                padding-#{$left}: 1.5rem;
+                color: $black;
+                float: $left;
+                margin-top: 0.4375rem;
+              }
+
+              @include icon(chevron#{$left}, after) {
+                position: absolute;
+                #{$left}: 1.3%;
+                font-size: 2rem;
+                pointer-events: none;
+              }
             }
           }
 
@@ -212,6 +218,27 @@
           }
         }
       }
+
+      @include breakpoint($only-mobile) {
+        .c-facet__blocks__wrapper--mobile {
+          width: 38%;
+          width: calc(50% - 42px);
+
+          .c-facet__label {
+            width: 100%;
+          }
+        }
+
+        .view-filters.is-filter {
+          width: 49%;
+
+          .form-type-select,
+          .select2-container,
+          .select2-selection {
+            width: 100% !important;
+          }
+        }
+      }
     }
 
     &.promo-banner {
@@ -252,10 +279,10 @@
     }
 
     .promo-banner > .filter--mobile {
-      top: 21.76rem !important;
+      top: 213px !important;
 
       @include breakpoint($only-tablet) {
-        top: 16.44rem !important;
+        top: 161px !important;
       }
     }
 
@@ -295,7 +322,7 @@
       margin-top: 0.1875rem;
     }
 
-    width: 73%;
+    width: 65%;
     font-size: 1rem;
     font-weight: normal;
     text-transform: lowercase;
@@ -306,6 +333,14 @@
     p {
       margin-top: 0;
       margin-bottom: 0;
+
+      html[lang=ar] & {
+        line-height: 1.75;
+      }
+    }
+
+    a {
+      text-decoration: underline;
     }
   }
 
@@ -329,7 +364,7 @@
     float: $left;
     text-align: center;
     color: $black;
-    height: 19.5rem;
+    height: 20.5rem;
     margin-bottom: 4px;
     font-size: 0.9375rem;
     position: relative;
@@ -359,10 +394,11 @@
     }
 
     .field--name-name {
-      margin-top: 0.3125rem;
-      margin-bottom: 0.5625rem;
+      margin-top: 0.625rem;
+      margin-bottom: 0.625rem;
       font-family: $alshaya-thin;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
+      padding: 0 1.25rem;
 
       html[lang=ar] & {
         line-height: 1.5;
@@ -431,6 +467,16 @@
       margin-top: 0.25rem;
       display: inline-block;
     }
+
+    .promotions {
+      margin: 0.5rem 0;
+
+      .sku-promotion-link {
+        font-size: 0.75rem;
+        color: $cherry;
+        display: block;
+      }
+    }
   }
 
   .c-products__item__label {
@@ -476,25 +522,35 @@
     @include breakpoint($only-mobile) {
       width: 6.75rem;
       font-size: 0.75rem;
+
+      @include icon(chevrondown, after) {
+        #{$right}: -2.188rem;
+        height: 2.1875rem;
+        width: 2.1875rem;
+        background-color: $white-two;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        font-size: 2rem;
+      }
     }
 
     @include breakpoint($tablet) {
       width: 7.875rem;
+
+      @include icon(chevrondown, after) {
+        #{$right}: -2.188rem;
+        height: 2.1875rem;
+        width: 2.1875rem;
+        background-color: $white-two;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        font-size: 2rem;
+      }
     }
 
-    @include icon(chevrondown, after) {
-      #{$right}: -2.188rem;
-      height: 2.1875rem;
-      width: 2.1875rem;
-      background-color: $white-two;
-      position: absolute;
-      text-align: center;
-      top: 0;
-      font-size: 2rem;
-      border-#{$left}: 1px solid $white-five;
-    }
-
-    background: $white-two;
+    border: 1px solid $white-two;
     height: 2.1875rem;
     padding: 0.625rem;
     font-weight: normal;
@@ -502,11 +558,15 @@
 
     @include breakpoint($only-tablet) {
       padding-#{$left}: 1rem;
+      font-size: 0.75rem;
     }
 
     &.is-active {
       background: $white-five;
       position: relative;
+      border: none;
+
+      @include icon(chevronup, after);
 
       &::after {
         border-#{$left}: none;
@@ -610,6 +670,16 @@
       border-top: none;
     }
   }
+
+  .region__sidebar-first {
+    .block-facets-summary {
+      display: none;
+
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
+  }
 }
 
 .filter--mobile {
@@ -673,26 +743,13 @@
       }
     }
 
-    select {
-      @include breakpoint($tablet) {
-        background-color: $white-two;
-        z-index: 1;
-        padding: 0.625rem;
-        padding-left: 0.75rem;
+    @include breakpoint($upto-desktop) {
+      .form-type-select {
+        @include select-wrapper(9rem);
 
-        html[lang=ar] & {
-          padding-top: 0;
-          padding-bottom: 0;
-          line-height: 1.59;
+        select {
+          @include select-style(9rem);
         }
-      }
-
-      @include breakpoint($only-mobile) {
-        width: 133%;
-        background-color: $white-two;
-        z-index: 1;
-        padding: 0.625rem;
-        padding-left: 0.75rem;
       }
     }
   }

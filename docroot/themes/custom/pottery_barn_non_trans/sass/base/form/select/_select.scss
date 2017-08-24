@@ -1,0 +1,103 @@
+select::-ms-expand {
+  display: none;
+}
+
+select:focus::-ms-value {
+  background: transparent;
+  color: $black;
+}
+
+@mixin select-style($select-width) {
+  appearance: none;
+  border: 1px solid $white-two;
+  border-radius: 0;
+  background-color: $white-five;
+  padding: 0.5rem;
+  padding-#{$left}: 0.35rem;
+  padding-#{$right}: 1.5rem;
+  width: $select-width;
+  height: 2.1875rem;
+  font-size: 0.75rem;
+  outline: none;
+  direction: $dir;
+
+  @include breakpoint($tablet) {
+    background-color: transparent;
+    position: relative;
+    z-index: 3;
+  }
+}
+
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
+  @include icon(chevrondown, after) {
+    border-#{$left}: 1px solid $white-five;
+    font-size: 1.75rem;
+    line-height: 35px;
+    pointer-events: none;
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+    text-align: center;
+    background-color: $white-two;
+    width: 2.1875rem;
+    height: 35px;
+    height: 2.1875rem;
+
+    @include breakpoint($tablet) {
+      z-index: 3;
+    }
+  }
+}
+
+@mixin select-bg($select-width) {
+  &::before {
+    width: $select-width;
+    content: "";
+    background: $whisper-dark;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 2.1875rem;
+    z-index: 1;
+  }
+}
+
+@mixin select2-style($select-width) {
+  width: $select-width !important;
+
+  .select2-selection {
+    font-size: 0.75rem;
+    height: 2.1875rem;
+    padding: 0.25rem 0.2rem;
+    text-align: $left;
+    width: $select-width;
+    background: $white-two;
+    border: none;
+    border-radius: 0;
+  }
+
+  .select2-selection__arrow {
+    top: 0;
+    #{$right}: 0;
+    width: 2.1875rem;
+    height: 2.1875rem;
+
+    &::after {
+      // IE10 needs this in px.
+      line-height: 35px;
+      font-size: 1.75rem;
+      top: 0;
+      #{$left}: auto;
+      border-#{$left}: 1px solid $white-five;
+      width: 2.1875rem;
+      height: 2.1875rem;
+      #{$right}: 0;
+      text-align: center;
+      display: inline-block;
+    }
+  }
+}
