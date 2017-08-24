@@ -269,9 +269,21 @@
       font-family: $alshaya-bold;
       font-weight: normal;
 
+      h2 {
+        font-weight: normal;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+        }
+      }
+
       p {
         color: $grey-ash;
         font-family: $arial;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.75rem;
+        }
       }
 
       @include breakpoint($tablet) {
@@ -1155,4 +1167,15 @@ html[lang=ar] {
       }
     }
   }
+}
+
+// Showing label on mobile number field.
+.address-book-address .mobile-number-field .form-type-textfield label.visually-hidden {
+  position: absolute !important;
+  clip: unset;
+  overflow: visible;
+  height: auto;
+  width: auto;
+  word-wrap: normal;
+  top: -18px !important;
 }

@@ -18,7 +18,9 @@
         });
 
         $('.select2-select').once('bind-events').each(function () {
-          $(this).select2();
+          $(this).select2({
+            placeholder: Drupal.t('Select Area')
+          });
         });
 
         $('.alshaya-acm-customer-order-list-search .form-select').select2({
