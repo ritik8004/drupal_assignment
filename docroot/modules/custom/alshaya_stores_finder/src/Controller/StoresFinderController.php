@@ -182,6 +182,8 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new CssCommand('.map-view-link', ['display' => 'none']));
     $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1 .back-to-glossary', ['display' => 'block']));
 
+    $response->addCommand(new InvokeCommand(NULL, 'storeFinderDetailPageScrollTop'));
+
     return $response;
   }
 

@@ -172,6 +172,11 @@
         }
       };
 
+      // Scroll to top of the page on store-detail.
+      $.fn.storeFinderDetailPageScrollTop = function (data) {
+        window.scrollTo(0, 0);
+      };
+
       // Trigger click on autocomplete selection.
       $('[class*="block-views-exposed-filter-blockstores-finder-page"]').each(function () {
         var storeFinder = $(this);
