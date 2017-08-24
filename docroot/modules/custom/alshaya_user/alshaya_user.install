@@ -120,10 +120,10 @@ Thank you for registering with [site:name] and welcome.
 
 You have registered with the following e-mail address: [user:mail]
 
-You may now log in and verify your account by clicking this link or copying and pasting it to your browser:
-<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
+<b>Please verify your email address and activate your account by clicking the below link</b>
+<a href="[user:registrationpassword-url]" class="button">verify your email</a>
 
-We hope you enjoy shopping at [site:name].
+Or verify using this link: <a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
 
 If you have any questions, check our <a href="[site:url]">FAQs page</a> here or contact our Customer Service team.
 
