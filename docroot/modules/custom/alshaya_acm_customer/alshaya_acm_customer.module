@@ -107,7 +107,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
  */
 function alshaya_acm_customer_block_access(Block $block, $operation, AccountInterface $account) {
   // Not allow 'recent orders' block other than user/{uid} page.
-  if ($operation == 'view' && $block->id() == 'userrecentorders') {
+  if ($operation == 'view' && in_array($block->id(), ['userrecentorders', 'myaccountneedhelp'])) {
     $current_route = \Drupal::routeMatch()->getRouteName();
     return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
   }
