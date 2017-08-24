@@ -292,7 +292,13 @@ class AlshayaApiWrapper {
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
     if ($requires_token) {
-      $token = $this->getToken();
+      try {
+        $token = $this->getToken();
+      }
+      catch (\Exception $e) {
+        return [];
+      }
+
       $header[] = 'Authorization: Bearer ' . $token;
     }
 
@@ -346,6 +352,12 @@ class AlshayaApiWrapper {
       $data['password'] = $this->config->get('password');
 
       $token = $this->invokeApi($endpoint, $data, 'POST', FALSE);
+
+      $response = json_decode($token, TRUE);
+      if (is_array($response) && isset($response['message'])) {
+        $this->logger->critical('Unable to get token from magento');
+        throw new \Exception('Unable to get token from magento');
+      }
 
       $this->token = str_replace('"', '', $token);
 

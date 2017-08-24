@@ -64,7 +64,7 @@ $settings['alshaya_api.settings']['verify_ssl'] = 0;
 
 // TODO: Security.
 $settings['alshaya_api.settings']['username'] = 'acquiaapi';
-$settings['alshaya_api.settings']['password'] = 'gF2Fkndy8Erb';
+$settings['alshaya_api.settings']['password'] = 'password123';
 
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
