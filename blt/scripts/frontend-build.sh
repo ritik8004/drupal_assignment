@@ -5,7 +5,7 @@ set -e
 
 docrootDir="$1"
 
-declare -a themes=("whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_secret" "alshaya_white_label")
+declare -a themes=( "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_secret" "alshaya_white_label" )
 
 for i in "${themes[@]}"
 do
