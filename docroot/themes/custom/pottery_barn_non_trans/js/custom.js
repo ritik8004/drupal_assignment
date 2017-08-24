@@ -7,28 +7,23 @@
   'use strict';
 
   // Home page email sign up form popup.
-  var SignupField = $('.form--signup-elements');
-
-  if (SignupField.hasClass('form-item--error')) {
-    $('.signup-popup').show();
-  }
-  else {
-    $('.signup-popup').hide();
-  }
 
   $('#contact, .email-signup').on('click', function (e) {
     $('.signup-popup').show();
+    $('body').addClass('block-scroll');
     e.preventDefault();
   });
 
   $('.c-footer__copy a.popup-link').on('click', function (e) {
     $('.privacy-popup').show();
+    $('body').addClass('block-scroll');
     e.preventDefault();
   });
 
   $('.close-popup').on('click', function () {
     $('.signup-popup, .privacy-popup').hide();
     $('.messages--status').hide();
+    $('body').removeClass('block-scroll');
   });
 
   Drupal.behaviors.potteryBarnStoreFinder = {
@@ -67,6 +62,7 @@
     var popup = $('.popup-container');
     if (!popup.is(e.target) && popup.has(e.target).length === 0) {
       $('.popup-window').hide();
+      $('body').removeClass('block-scroll');
     }
   });
 

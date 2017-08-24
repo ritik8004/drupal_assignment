@@ -3,6 +3,7 @@ global_styles:
     theme:
       css/colors.css: {}
   js:
+    js/pace.min.js: {}
     js/menu.js: {}
     js/custom.js: {}
 

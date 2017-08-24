@@ -346,7 +346,7 @@ html[lang="ar"] .popup-window .popup-container {
 
   @include breakpoint($desktop) {
     &.popup-container {
-      max-height: 554px;
+      height: 554px;
 
       .inner-container {
         max-height: 90%;
@@ -871,6 +871,10 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
 
 // Loader bar
 
+body.block-scroll {
+  overflow: hidden !important;
+}
+
 .pace {
   -webkit-pointer-events: none;
   pointer-events: none;
@@ -884,7 +888,7 @@ html[lang="ar"] .signup-form .form--signup-elements.field-checkbox p {
 }
 
 .pace .pace-progress {
-  background: $black;
+  background: $deep-red;
   position: fixed;
   z-index: 2000;
   top: 0;
