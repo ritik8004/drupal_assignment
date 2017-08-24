@@ -412,3 +412,18 @@ function alshaya_user_mail_alter(&$message) {
     $message['headers']['From'] = $sitename . ' <' . $message['from'] . '>';
   }
 }
+
+/**
+ * Implements hook_link_alter().
+ */
+function alshaya_user_link_alter(&$variables) {
+  /** @var \Drupal\core\Url $url */
+  $url = $variables['url'];
+  if ($url->isExternal()) {
+    return;
+  }
+  elseif ($url->getRouteName() == 'user.logout') {
+    $path = \Drupal::service('path.current')->getPath();
+    $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path.alias_manager')->getAliasByPath($path);
+  }
+}

@@ -93,7 +93,7 @@ body {
   .inner--wrap {
     display: inline-block;
     vertical-align: middle;
-    width: 72%;
+    width: 60%;
 
     @include breakpoint($desktop) {
       width: 78%;
@@ -109,7 +109,7 @@ body {
   .print--barcode {
     display: inline-block;
     vertical-align: middle;
-    width: 25%;
+    width: 38%;
     text-align: $right;
 
     @include breakpoint($desktop) {

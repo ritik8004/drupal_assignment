@@ -24,6 +24,7 @@
     @include u-image-replacement;
 
     display: block;
+    cursor: pointer;
 
     &::before {
       font-size: 1.938rem;

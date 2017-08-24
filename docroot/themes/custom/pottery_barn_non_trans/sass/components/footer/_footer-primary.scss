@@ -527,7 +527,7 @@
 
       a {
         font-size: 0.875rem;
-        text-transform: lowercase;
+        text-transform: none;
         color: $marine-blue-two;
         margin: 0 0.4375rem;
         text-decoration: underline;
@@ -681,9 +681,15 @@
     }
 
     .field--type-image img {
-      margin-top: -3px;
+      margin-top: -15px;
       position: absolute;
-      #{$right}: 0;
+      #{$right}: -2%;
+      width: 224px;
+      height: 144px;
+
+      @media (min-width: 768px) and (max-width: 900px) {
+        #{$right}: -8%;
+      }
     }
   }
 
@@ -823,6 +829,10 @@ html[lang="ar"] .alshaya-mob-app-links img {
 .alshaya-mob-app-links {
   p {
     margin: 0;
+  }
+
+  a {
+    cursor: pointer;
   }
 
   img {
