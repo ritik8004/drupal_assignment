@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b628ba58604f0b7d669505511352b68",
+    "content-hash": "f1bb142b5dd5448f89517408378091a9",
     "packages": [
         {
             "name": "acquia/blt",
@@ -622,7 +622,7 @@
                 }
             ],
             "description": "Zone management library.",
-            "time": "2017-04-20 12:44:24"
+            "time": "2017-04-20T12:44:24+00:00"
         },
         {
             "name": "composer/installers",
@@ -2292,7 +2292,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-06-18 01:04:09"
+            "time": "2017-06-18T01:04:09+00:00"
         },
         {
             "name": "drupal/block_field",
@@ -2501,7 +2501,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2016-10-18 08:41:35"
+            "time": "2016-10-18T08:41:35+00:00"
         },
         {
             "name": "drupal/coder",
@@ -4275,7 +4275,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/google_tag"
             },
-            "time": "2017-05-08 17:36:45"
+            "time": "2017-05-08T17:36:45+00:00"
         },
         {
             "name": "drupal/inline_entity_form",
@@ -4533,7 +4533,7 @@
                 "issues": "http://drupal.org/project/issues/libraries",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-03-15 17:04:08"
+            "time": "2017-03-15T17:04:08+00:00"
         },
         {
             "name": "drupal/mailsystem",
@@ -4968,7 +4968,7 @@
                 "source": "http://cgit.drupalcode.org/memcache",
                 "issues": "https://www.drupal.org/project/issues/memcache"
             },
-            "time": "2017-04-12 19:23:14"
+            "time": "2017-04-12T19:23:14+00:00"
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -5170,7 +5170,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/mimemail"
             },
-            "time": "2017-03-12 09:43:32"
+            "time": "2017-03-12T09:43:32+00:00"
         },
         {
             "name": "drupal/mobile_number",
@@ -5916,7 +5916,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/r4032login"
             },
-            "time": "2017-02-08 04:20:19"
+            "time": "2017-02-08T04:20:19+00:00"
         },
         {
             "name": "drupal/recaptcha",
@@ -6440,7 +6440,7 @@
             "support": {
                 "issues": "http://drupal.org/"
             },
-            "time": "2017-03-02 15:34:04"
+            "time": "2017-03-02T15:34:04+00:00"
         },
         {
             "name": "drupal/seckit",
@@ -6541,7 +6541,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/security_review"
             },
-            "time": "2016-10-20 15:43:48"
+            "time": "2016-10-20T15:43:48+00:00"
         },
         {
             "name": "drupal/sharethis",
@@ -6801,7 +6801,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-04-13 16:28:42"
+            "time": "2017-04-13T16:28:42+00:00"
         },
         {
             "name": "drupal/taxonomy_access_fix",
@@ -6864,7 +6864,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1486729083"
+                    "datestamp": "1486726083"
                 },
                 "patches_applied": {
                     "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
@@ -6878,10 +6878,6 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
-                },
-                {
-                    "name": "miteshmap",
-                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -6889,7 +6885,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
             },
-            "time": "2017-02-10 12:17:57"
+            "time": "2017-02-10T12:17:57+00:00"
         },
         {
             "name": "drupal/token",
@@ -7160,7 +7156,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_block_filter_block"
             },
-            "time": "2017-05-25 11:05:23"
+            "time": "2017-05-25T11:05:23+00:00"
         },
         {
             "name": "drupal/views_field_view",

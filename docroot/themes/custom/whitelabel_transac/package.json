@@ -31,7 +31,10 @@
   },
   "scripts": {
     "postinstall": "rm -rf patternlab && composer create-project -n pattern-lab/edition-drupal-standard patternlab && php patternlab/core/console -c --set twigAutoescape=0 && php patternlab/core/console -c --set sourceDir=../components && rm -rf patternlab/source",
-    "install-tools": "npm install"
+    "install-tools": "npm install",
+    "build": "gulp",
+    "build:dev": "gulp build:dev",
+    "watch": "gulp watch"
   },
   "repository": {
     "type": "git",
