@@ -997,8 +997,11 @@ function alshaya_master_install() {
     'Collect from store in <em>@time</em>' => [
       'ar' => 'استلم من المحل بعد <em>@time</em>',
     ],
-    'You already have an account, please login.' => [
-      'ar' => 'يبدو أن تم  تسجيل حسابك مسبقاً, يرجى تسجيل الدخول.',
+    'please login' => [
+      'ar' => 'يرجى تسجيل الدخول',
+    ],
+    'You already have an account, @login_link.' => [
+      'ar' => 'يبدو أن لديك حساب  مسبقاً في سجلاتنا ,@login_link.',
     ],
     'Earn one draw entry for every KD 5 spent online' => [
       'ar' => 'إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني',
