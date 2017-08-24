@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # This file runs during the frontend setup.
 
 set -e
