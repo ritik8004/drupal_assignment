@@ -1515,10 +1515,11 @@ html {
   .menu--main {
     .menu {
       display: table;
+      table-layout: fixed;
       width: 90%;
 
       li {
-        width: 165px;
+        //width: 165px;
         display: table-cell;
 
         a {
@@ -1653,7 +1654,7 @@ html {
 
           &:hover,
           &.is-active {
-            border-top: 3px solid transparent;
+            border-top: 2px solid transparent;
           }
 
           &::after {
