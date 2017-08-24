@@ -131,7 +131,7 @@ $settings['file_private_path'] = $dir . '/files-private/' . $hostname_parts[1];
 /**
  * Public file path.
  */
-$settings['file_public_path'] = $dir . '/docroot/sites/g/files/' . $hostname_parts[1];
+$settings['file_public_path'] = 'sites/g/files/' . $hostname_parts[1];
 
 /**
  * Trusted host configuration.
