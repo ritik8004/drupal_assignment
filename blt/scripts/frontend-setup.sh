@@ -9,12 +9,9 @@ themes=( "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_se
 
 for i in "${themes[@]}"
 do
+  echo -en "travis_fold:start:FE-Setup-${i}\r"
   cd $docrootDir/themes/custom/$i
-  if [ ! -d "node_modules" ]; then
-    printf "Installing npm in $docrootDir/themes/custom/$i"
-    npm install
-  fi
-
-  printf "Installing frontend tools in $docrootDir/themes/custom/$i"
+  printf "Installing npm in $docrootDir/themes/custom/$i"
   npm run install-tools
+  echo -en "travis_fold:end:FE-Setup-${i}\r"
 done

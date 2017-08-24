@@ -29,9 +29,11 @@ cache:
   - "$HOME/.npm"
   - "$HOME/.nvm"
   - "vendor"
-  # Cache front end dependecies to dramatically improve build time.
-  # - "docroot/themes/custom/mytheme/node_modules"
-  # - "docroot/themes/custom/mytheme/bower_components"
+  - "docroot/themes/custom/whitelabel/node_modules"
+  - "docroot/themes/custom/whitelabel_transac/node_modules"
+  - "docroot/themes/custom/whitelabel_non_transac/node_modules"
+  - "docroot/themes/custom/alshaya_white_label/node_modules"
+  - "docroot/themes/custom/victoria_secret/node_modules"
 
 addons:
   ssh_known_hosts:
