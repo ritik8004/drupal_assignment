@@ -82,7 +82,8 @@ class OrdersManager {
 
       foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
         $sku_entity_to_reset_stock = $sku_entity->getTranslation($langcode);
-        acq_sku_get_sku_stock($sku_entity_to_reset_stock, TRUE);
+        $cid = acq_sku_get_stock_cache_id($sku_entity_to_reset_stock);
+        \Drupal::cache('stock')->invalidate($cid);
       }
 
       // Clear product and forms related to sku.
