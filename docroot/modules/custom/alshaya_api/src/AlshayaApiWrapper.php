@@ -265,7 +265,7 @@ class AlshayaApiWrapper {
 
       $response = json_decode($token, TRUE);
       if (is_array($response) && isset($response['message'])) {
-        $this->logger->critical(t('Unable to get token from magento'));
+        $this->logger->critical('Unable to get token from magento');
         throw new \Exception('Unable to get token from magento');
       }
 
