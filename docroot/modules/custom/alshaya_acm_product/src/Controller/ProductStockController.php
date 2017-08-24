@@ -113,7 +113,7 @@ class ProductStockController extends ControllerBase {
       $build['max_quantity'] = 0;
       $build['html'] = '<span class="out-of-stock">' . $this->t('out of stock')->render() . '</span>';
 
-      $response = CacheableJsonResponse($build, 200);
+      $response = new CacheableJsonResponse($build, 200);
       $response->addCacheableDependency($sku_entity);
       return $response;
     }
