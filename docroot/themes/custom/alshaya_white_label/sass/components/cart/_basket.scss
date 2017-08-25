@@ -1330,3 +1330,15 @@ body .ladda-button {
     }
   }
 }
+
+#block-baskethorizontalproductrecommendation {
+  .owl-item a.above-mobile-block:hover .c-products__item__label {
+    color: $cerulean-two;
+    text-decoration: underline;
+  }
+}
+
+.path--cart .messages.messages--status::before {
+  font-size: 1.9rem;
+  margin-top: -8px;
+}

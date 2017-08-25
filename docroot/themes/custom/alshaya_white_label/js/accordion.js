@@ -9,7 +9,6 @@
   Drupal.behaviors.privilegeCardAccordion = {
     attach: function (context, settings) {
       var applyCoupon = $('#apply_coupon');
-      applyCoupon.hide();
       if (context === document) {
         applyCoupon.prev().andSelf().wrapAll('<div class="card__content">');
       }
