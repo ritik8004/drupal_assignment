@@ -44,10 +44,7 @@ function drush_alshaya_acm_customer_customer_create($firstname, $lastname, $mail
     ];
 
     $customer = $api_wrapper->updateCustomer($customer, $password);
-
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-    $account = alshaya_acm_customer_create_drupal_user($customer);
-    drush_print_r($account->toArray());
+    drush_print_r($customer);
   }
   catch (\Exception $e) {
     drush_print(dt('Error: Could not create a new user account for the mail @mail.', [
