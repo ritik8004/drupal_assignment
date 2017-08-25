@@ -8,9 +8,11 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "أضف إلى سلة التسوق"
     And I wait for AJAX to finish
-    And I follow "عرض سلة التسوق"
+    When I press "أضف إلى سلة التسوق"
+    And I wait for AJAX to finish
+    And I go to "/ar/cart"
     And I wait for the page to load
-    When I press "إتمام عملية الشراء بأمان"
+    When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     And I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for the page to load
