@@ -20,6 +20,9 @@ function alshaya_master_install() {
       'en' => 'Sign out',
       'ar' => 'تسجيل الخروج',
     ],
+    'Sign out' => [
+      'ar' => 'تسجيل الخروج',
+    ],
     'Create new account' => [
       'en' => 'Create an account',
     ],
