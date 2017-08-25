@@ -501,30 +501,6 @@ function alshaya_loyalty_alshaya_acm_customer_update_account_alter(User $user, a
 }
 
 /**
- * Implements hook_alshaya_acm_customer_post_login().
- */
-function alshaya_loyalty_alshaya_acm_customer_post_login(User $user, array $customer) {
-  // Don't do anything if loyalty card is already available for customer.
-  if (isset($customer['extension'], $customer['extension']['loyalty_card_number'])) {
-    return;
-  }
-
-  /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-  $cart_storage = \Drupal::service('acq_cart.cart_storage');
-
-  // Copy loyalty from cart to customer if available in cart.
-  if ($cart = $cart_storage->getCart(FALSE)) {
-    if ($loyalty_card = $cart->getExtension('loyalty_card')) {
-      $user->get('field_privilege_card_number')->setValue($loyalty_card);
-      $user->save();
-
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-      alshaya_acm_customer_update_customer_data($user->getEmail());
-    }
-  }
-}
-
-/**
  * Implements hook_acq_commerce_update_customer_api_request_alter().
  */
 function alshaya_loyalty_acq_commerce_update_customer_api_request_alter(array &$request_options) {
