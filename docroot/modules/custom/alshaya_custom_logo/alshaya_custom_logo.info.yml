@@ -1,0 +1,8 @@
+name: 'Alshaya Custom logo'
+type: module
+description: 'Custom logo for Alshaya sites based on current menu'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - block
+  - menu_link_attributes
