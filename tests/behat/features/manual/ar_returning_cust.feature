@@ -1,4 +1,4 @@
-@javascript @checkout @arabic @manual
+@javascript @checkout @arabic @manual @mmcpa-1930
 Feature: Test various checkout scenarios as returning customer
 
   Background:
@@ -8,9 +8,11 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "أضف إلى سلة التسوق"
     And I wait for AJAX to finish
-    When I follow "عرض سلة التسوق"
+    When I press "أضف إلى سلة التسوق"
+    And I wait for AJAX to finish
+    When I go to "/ar/cart"
     And I wait for the page to load
-    When I press "إتمام عملية الشراء بأمان"
+    When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+2@axelerant.com"
     And I fill in "edit-checkout-login-pass" with "Alshaya123$"

@@ -12,9 +12,9 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I press "أضف إلى سلة التسوق"
     And I wait for AJAX to finish
-    When I follow "عرض سلة التسوق"
+    When I go to "/ar/cart"
     And I wait for the page to load
-    When I press "إتمام عملية الشراء بأمان"
+    When I press "إتمام الشراء بأمان"
     And I wait for the page to load
 
   @hd @cod
