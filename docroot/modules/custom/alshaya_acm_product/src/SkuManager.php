@@ -217,7 +217,7 @@ class SkuManager {
 
     if ($final_price !== $sku_cart_price['price']) {
       $sku_cart_price['final_price'] = number_format($final_price, 3);
-      $discount = number_format(($sku_cart_price['price'] - $final_price) * 100 / $sku_cart_price['price'], 2);
+      $discount = number_format(floor($sku_cart_price['price'] - $final_price) * 100 / $sku_cart_price['price'], 2);
       $sku_cart_price['discount']['prefix'] = t('Save');
       $sku_cart_price['discount']['value'] = t('@discount', ['@discount' => $discount . '%']);
     }
