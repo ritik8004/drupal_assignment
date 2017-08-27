@@ -160,18 +160,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['up_sell']['#weight'] = 10;
       }
 
-      // Get cross sell block for the product.
-      $items = $sku_entity->get('crosssell')->getValue();
-
-      if (!empty($items)) {
-        $cross_sell_skus = array_column($items, 'value');
-        $cross_sell_skus = array_slice($cross_sell_skus, 0, 12);
-        $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $cross_sell_skus));
-        // Weight will have no effect later once template is modified.
-        $build['cross_sell']['#weight'] = 11;
-      }
-
-      // Get cross sell block for the product.
+      // Get related block for the product.
       $items = $sku_entity->get('related')->getValue();
 
       if (!empty($items)) {
