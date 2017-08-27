@@ -630,10 +630,10 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
 }
 
 /**
- * Implements hook_alshaya_profile_installed().
+ * Implements hook_alshaya_profile_installed_final_task().
  */
-function alshaya_acm_customer_alshaya_profile_installed() {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_i18n')) {
+function alshaya_acm_customer_alshaya_profile_installed_final_task($profile, array $modules) {
+  if (in_array('alshaya_i18n', $modules)) {
     // Save some translations.
     $strings = [];
 

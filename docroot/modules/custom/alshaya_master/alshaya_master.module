@@ -378,9 +378,9 @@ function _alshaya_master_utility_usort_check_order($val1, $val2, $order) {
 }
 
 /**
- * Implements hook_alshaya_profile_installed().
+ * Implements hook_alshaya_profile_installed_final_task().
  */
-function alshaya_master_alshaya_profile_installed() {
+function alshaya_master_alshaya_profile_installed_final_task($profile, array $modules) {
   // Delete basic page content type.
   $node_type = NodeType::load('page');
   if ($node_type) {
