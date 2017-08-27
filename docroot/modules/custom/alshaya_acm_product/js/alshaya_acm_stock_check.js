@@ -70,8 +70,9 @@
 				$('.owl-item').each(function() {
 				  var currItem = $(this);
 				  var currParent = currItem.closest('.mobile-only-block');
-				  if (currParent.length !== 1) {
-						currParent = currItem.closest('#block-baskethorizontalproductrecommendation.horizontal-upell', '#block-baskethorizontalproductrecommendation.horizontal-crossell');
+				  // Handle owl carousel on Basket page.
+				  if (currParent.length === 0) {
+						currParent = currItem.closest('#block-baskethorizontalproductrecommendation.horizontal-crossell');
 					}
 
 				  currItem.swipe({
