@@ -1,0 +1,11 @@
+name: 'Alshaya Stores Migrate'
+type: module
+core: 8.x
+package: Alshaya
+description: 'Utility to migrate stores.'
+dependencies:
+  - migrate
+  - migrate_plus
+  - migrate_source_csv
+  - migrate_tools
+version: 8.x-1.0
