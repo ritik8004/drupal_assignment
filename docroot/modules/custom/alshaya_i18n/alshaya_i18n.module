@@ -58,6 +58,14 @@ function alshaya_i18n_save_translations($strings) {
 }
 
 /**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_i18n_alshaya_master_post_drupal_install() {
+  // Invoke a hook to allow all modules to add translations post install.
+  \Drupal::moduleHandler()->invokeAll('alshaya_i18n_onetime_translation_add');
+}
+
+/**
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_i18n_alshaya_i18n_onetime_translation_add() {

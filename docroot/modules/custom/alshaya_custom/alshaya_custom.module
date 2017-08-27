@@ -5,8 +5,6 @@
  * Module file.
  */
 
-use Drupal\Core\Site\Settings;
-
 /**
  * Utility function to get the site level country code.
  *
@@ -24,24 +22,4 @@ function _alshaya_custom_get_site_level_country_code() {
     }
   }
   return $default_site_country;
-}
-
-/**
- * Implements hook_alshaya_i18n_onetime_translation_add().
- */
-function alshaya_master_alshaya_i18n_onetime_translation_add() {
-  // Adding this code in different but custom hook we created for this purpose.
-  // We need to invoke following command only after Drupal install is finished.
-  // To avoid creating new drush command, reusing the hook invoked for trans-
-  // lation issue.
-  // Disable unwanted core views.
-  if ($views_to_disable = Settings::get('views_to_disable')) {
-    $view_storage = \Drupal::service('entity.manager')->getStorage('view');
-    foreach ($views_to_disable as $view_machine_name) {
-      // Disable the view.
-      if ($view = $view_storage->load($view_machine_name)) {
-        $view->disable()->save();
-      }
-    }
-  }
 }

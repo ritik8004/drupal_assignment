@@ -22,9 +22,9 @@
     <copy file="${docroot}/sites/default/settings/default.local.settings.php" tofile="${docroot}/sites/${multisite.name}/settings/local.settings.php" verbose="true"/>
   </target>
 
-  <target name="sync:translations">
-    <echo>Add translations from code post drush si.</echo>
-    <drush command="aiota" assume="yes" alias="${drush.alias}" passthru="false" />
+  <target name="local:post-install">
+    <echo>Allow all modules to run code once post drupal install.</echo>
+    <drush command="alshaya-post-drupal-install" assume="yes" alias="${drush.alias}" passthru="false" />
   </target>
 
   <target name="sync:products">
@@ -57,7 +57,7 @@
           <property name="drush.uri" value="https://local.alshaya.com" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
-      <phingcall target="sync:translations">
+      <phingcall target="local:post-install">
           <property name="drush.uri" value="https://local.alshaya.com" />
       </phingcall>
       <phingcall target="sync:products">
@@ -79,6 +79,9 @@
           <property name="project.profile.name" value="alshaya_non_transac" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
+      <phingcall target="local:post-install">
+          <property name="drush.uri" value="https://local.non-transac.com" />
+      </phingcall>
   </target>
 
   <target name="refresh:local:drupal"
@@ -93,7 +96,7 @@
           <property name="drush.uri" value="https://local.alshaya.com" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
-      <phingcall target="sync:translations">
+      <phingcall target="local:post-install">
           <property name="drush.uri" value="https://local.alshaya.com" />
       </phingcall>
       <phingcall target="sync:products">
@@ -120,5 +123,8 @@
           <property name="drush.uri" value="https://local.non-transac.com" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
+      <phingcall target="local:post-install">
+        <property name="drush.uri" value="https://local.non-transac.com" />
+      </phingcall>
   </target>
 </project>
