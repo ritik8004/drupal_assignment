@@ -14,6 +14,9 @@ function alshaya_master_drush_command() {
   $commands['alshaya-post-drupal-install'] = [
     'description' => 'Code to be executed only once post install.',
     'aliases' => ['apdi'],
+    'options' => [
+      'brand' => 'The brand to install.',
+    ],
   ];
 
   return $commands;
@@ -24,6 +27,29 @@ function alshaya_master_drush_command() {
  */
 function drush_alshaya_master_alshaya_post_drupal_install() {
   $post_install_status = \Drupal::state()->get('alshaya_master_post_drupal_install', 'not done');
+
+  // Determine which brand to install.
+  $brand = drush_get_option('brand', '');
+  if (!empty($brand)) {
+    if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('name'))) {
+      switch ($brand) {
+        case 'victoria_secret':
+          $module = 'alshaya_vs';
+          break;
+
+        default:
+          $brand = 'mothercare';
+          $module = 'alshaya_mc';
+      }
+
+      drush_print(dt('Configuring the site for @brand brand.', ['@brand' => $brand]));
+      \Drupal::service('module_installer')->install([$module]);
+      \Drupal::configFactory()->getEditable('alshaya.installed_brand')
+        ->set('name', $brand)
+        ->set('module', $module)
+        ->save();
+    }
+  }
 
   if ($post_install_status == 'not done') {
     drush_print(dt('Executing post install code, please wait...'));
