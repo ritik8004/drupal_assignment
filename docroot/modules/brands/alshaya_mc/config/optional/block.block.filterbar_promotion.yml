@@ -1,0 +1,29 @@
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets_summary.facets_summary.filter_bar
+  module:
+    - ctools
+    - facets_summary
+  theme:
+    - alshaya_white_label
+id: filterbar_promotion
+theme: alshaya_white_label
+region: content
+weight: -11
+provider: null
+plugin: 'facets_summary_block:filter_bar'
+settings:
+  id: 'facets_summary_block:filter_bar'
+  label: 'Filter Bar'
+  provider: facets_summary
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_promotion: acq_promotion
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.product_category_level_2_3
+  module:
+    - system
+    - views
+  theme:
+    - alshaya_white_label
+id: views_block__product_category_level_2_3_block_1
+theme: alshaya_white_label
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'views_block:product_category_level_2_3-block_1'
+settings:
+  id: 'views_block:product_category_level_2_3-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: true
+    context_mapping: {  }

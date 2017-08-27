@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_user
+    - user
+  theme:
+    - alshaya_white_label
+id: alshayamyaccountlinks_2
+theme: alshaya_white_label
+region: menu_primary
+weight: 0
+provider: null
+plugin: alshaya_my_account_links
+settings:
+  id: alshaya_my_account_links
+  label: 'Alshaya my account links'
+  provider: alshaya_user
+  label_display: visible
+visibility:
+  user_role:
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

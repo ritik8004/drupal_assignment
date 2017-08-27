@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_main_menu
+  theme:
+    - alshaya_white_label
+id: alshayamainmenu
+theme: alshaya_white_label
+region: pre_content
+weight: -20
+provider: null
+plugin: alshaya_main_menu
+settings:
+  id: alshaya_main_menu
+  label: 'Alshaya main menu'
+  provider: alshaya_main_menu
+  label_display: '0'
+visibility: {  }

@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - alshaya_white_label
+id: jointheclub
+theme: alshaya_white_label
+region: sidebar_second
+weight: -11
+provider: null
+plugin: join_the_club
+settings:
+  id: join_the_club
+  label: 'Join the club'
+  provider: alshaya_loyalty
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: "/user/register\r\n/user/login"
+    negate: false
+    context_mapping: {  }

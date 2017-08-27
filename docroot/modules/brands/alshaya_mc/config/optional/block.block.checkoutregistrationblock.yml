@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+    - user
+  theme:
+    - alshaya_white_label
+id: checkoutregistrationblock
+theme: alshaya_white_label
+region: content
+weight: 10
+provider: null
+plugin: checkout_register_block
+settings:
+  id: checkout_register_block
+  label: 'Checkout Registration Block'
+  provider: alshaya_acm_checkout
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: /cart/checkout/confirmation
+    negate: false
+    context_mapping: {  }
+  user_role:
+    id: user_role
+    roles:
+      anonymous: anonymous
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

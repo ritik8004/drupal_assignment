@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.about-brand
+  module:
+    - system
+  theme:
+    - alshaya_white_label
+id: aboutbrand
+theme: alshaya_white_label
+region: footer_primary
+weight: -17
+provider: null
+plugin: 'system_menu_block:about-brand'
+settings:
+  id: 'system_menu_block:about-brand'
+  label: 'about brand'
+  provider: system
+  label_display: visible
+  level: 1
+  depth: 0
+visibility: {  }

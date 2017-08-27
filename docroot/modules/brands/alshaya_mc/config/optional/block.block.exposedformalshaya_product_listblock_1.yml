@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.alshaya_product_list
+  module:
+    - ctools
+    - views
+  theme:
+    - alshaya_white_label
+id: exposedformalshaya_product_listblock_1
+theme: alshaya_white_label
+region: content
+weight: -16
+provider: null
+plugin: 'views_exposed_filter_block:alshaya_product_list-block_1'
+settings:
+  id: 'views_exposed_filter_block:alshaya_product_list-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+visibility:
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      acq_product_category: acq_product_category
+    negate: false
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'

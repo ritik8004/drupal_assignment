@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets_summary.facets_summary.filter_bar
+  module:
+    - facets_summary
+    - system
+  theme:
+    - alshaya_white_label
+id: filterbar
+theme: alshaya_white_label
+region: content
+weight: -22
+provider: null
+plugin: 'facets_summary_block:filter_bar'
+settings:
+  id: 'facets_summary_block:filter_bar'
+  label: 'Filter Bar'
+  provider: facets_summary
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: /search
+    negate: false
+    context_mapping: {  }

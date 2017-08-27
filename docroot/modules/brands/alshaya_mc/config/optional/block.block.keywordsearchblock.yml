@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_search
+  theme:
+    - alshaya_white_label
+id: keywordsearchblock
+theme: alshaya_white_label
+region: header
+weight: -31
+provider: null
+plugin: keyword_search_block
+settings:
+  id: keyword_search_block
+  label: 'Keyword search block'
+  provider: alshaya_search
+  label_display: '0'
+visibility: {  }

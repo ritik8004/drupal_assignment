@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:ae5d8d43-345e-49f7-a9fb-6d77a1752a0e'
+  module:
+    - block_content
+    - system
+    - user
+  theme:
+    - alshaya_white_label
+id: myaccountneedhelp
+theme: alshaya_white_label
+region: content
+weight: -15
+provider: null
+plugin: 'block_content:ae5d8d43-345e-49f7-a9fb-6d77a1752a0e'
+settings:
+  id: 'block_content:ae5d8d43-345e-49f7-a9fb-6d77a1752a0e'
+  label: 'My Account - Need Help'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: '/user/*'
+    negate: false
+    context_mapping: {  }
+  user_role:
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

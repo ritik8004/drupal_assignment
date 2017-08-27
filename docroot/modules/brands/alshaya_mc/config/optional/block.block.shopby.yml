@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_product_category
+  theme:
+    - alshaya_white_label
+id: shopby
+theme: alshaya_white_label
+region: footer_primary
+weight: -25
+provider: null
+plugin: alshaya_shop_by_block
+settings:
+  id: alshaya_shop_by_block
+  label: 'Shop by'
+  provider: alshaya_acm_product_category
+  label_display: visible
+  level: 1
+  vocabulary: acq_product_category
+visibility: {  }

@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:434e5b69-4571-4bbb-b889-161a5aba7668'
+  module:
+    - block_content
+    - system
+  theme:
+    - alshaya_white_label
+id: onlineexclusiveheadingovertwolinesneverthree
+theme: alshaya_white_label
+region: sidebar_second
+weight: -12
+provider: null
+plugin: 'block_content:434e5b69-4571-4bbb-b889-161a5aba7668'
+settings:
+  id: 'block_content:434e5b69-4571-4bbb-b889-161a5aba7668'
+  label: 'online exclusive heading over two lines never three'
+  provider: block_content
+  label_display: visible
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: "/user/register\r\n/user/login"
+    negate: false
+    context_mapping: {  }
