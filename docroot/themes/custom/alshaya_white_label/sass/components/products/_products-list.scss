@@ -380,17 +380,17 @@
     }
 
     @include breakpoint($tablet) {
-      height: 24rem;
-    }
-
-    @include breakpoint($tablet) {
       width: 31.59%;
       max-width: 291px;
-      height: 30rem;
+      height: 25rem;
 
       &:nth-child(3n+2) {
         margin: 0 2.6%;
       }
+    }
+
+    @include breakpoint($desktop) {
+      height: 30rem;
     }
 
     .field--name-name {

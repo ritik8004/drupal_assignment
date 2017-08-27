@@ -83,6 +83,9 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     $form['account']['pass']['#title'] = t('Password');
     $form['account']['pass']['#type'] = 'password';
     $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
+
+    // Add password validation attribute.
+    $form['account']['pass']['#attributes']['passvalidate'] = 'passvalidate';
   }
 }
 
@@ -192,6 +195,10 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   $form['#validate'][] = '_password_policy_user_profile_form_validate';
   $form['#validate'][] = 'alshaya_user_change_password_validate';
   $form['#submit'][] = '_password_policy_user_profile_form_submit';
+
+  // Add password validation attribute.
+  $form['account']['pass']['#attributes']['passvalidate'] = 'passvalidate';
+  $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 }
 
 /**

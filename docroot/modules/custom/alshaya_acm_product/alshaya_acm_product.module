@@ -160,18 +160,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['up_sell']['#weight'] = 10;
       }
 
-      // Get cross sell block for the product.
-      $items = $sku_entity->get('crosssell')->getValue();
-
-      if (!empty($items)) {
-        $cross_sell_skus = array_column($items, 'value');
-        $cross_sell_skus = array_slice($cross_sell_skus, 0, 12);
-        $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $cross_sell_skus));
-        // Weight will have no effect later once template is modified.
-        $build['cross_sell']['#weight'] = 11;
-      }
-
-      // Get cross sell block for the product.
+      // Get related block for the product.
       $items = $sku_entity->get('related')->getValue();
 
       if (!empty($items)) {
@@ -408,14 +397,18 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   global $_alshaya_acm_product_no_stock_process;
 
-  // We are not going to show the form right now, we don't do any stock check.
-  if (isset($_alshaya_acm_product_no_stock_process) && $_alshaya_acm_product_no_stock_process) {
-    return;
-  }
-
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   // Get SKU id.
   $sku_entity = SKU::load($form['sku_id']['#value']);
+
+  // For simple products, we just return from here. For configurable products,
+  // we check inside loop.
+  if ($sku_entity->getType() == 'simple') {
+    // We are not going to show the form right now, we don't do any stock check.
+    if (isset($_alshaya_acm_product_no_stock_process) && $_alshaya_acm_product_no_stock_process) {
+      return;
+    }
+  }
 
   $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
   $form['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
@@ -463,6 +456,12 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         if (isset($configurable['#options'])) {
           foreach ($configurable['#options'] as $key => $value) {
             $sku = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), [$configurable_key => $key]);
+
+            // We are not going to show the form right now, we don't do any
+            // stock check.
+            if (isset($_alshaya_acm_product_no_stock_process) && $_alshaya_acm_product_no_stock_process) {
+              return;
+            }
 
             // This is very limited, it supports only 1 configurable attribute.
             if ($sku instanceof SKU) {
