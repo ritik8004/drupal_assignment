@@ -7,12 +7,10 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManager;
-use Drupal\Core\Link;
 use Drupal\Core\Menu\MenuLinkTree;
 use Drupal\Core\Path\AliasStorage;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -121,26 +119,6 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    // Get the theme.
-    $theme = $form_state->get('block_theme');
-
-    // Get permissions.
-    $url_system_theme_settings = new Url('system.theme_settings');
-    $url_system_theme_settings_theme = new Url('system.theme_settings_theme', ['theme' => $theme]);
-
-    if ($url_system_theme_settings->access() && $url_system_theme_settings_theme->access()) {
-      // Provide links to the Appearance Settings and Theme Settings pages
-      // if the user has access to administer themes.
-      $site_logo_description = $this->t('Defined on the <a href=":appearance">Appearance Settings</a> or <a href=":theme">Theme Settings</a> page.', [
-        ':appearance' => $url_system_theme_settings->toString(),
-        ':theme' => $url_system_theme_settings_theme->toString(),
-      ]);
-    }
-    else {
-      // Explain that the user does not have access to the Appearance and Theme
-      // Settings pages.
-      $site_logo_description = $this->t('Defined on the Appearance or Theme Settings page. You do not have the appropriate permissions to change the site logo.');
-    }
 
     $form['block_logo'] = [
       '#type' => 'fieldset',
@@ -150,7 +128,7 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $form['block_logo']['use_site_logo'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Site logo'),
-      '#description' => $site_logo_description,
+      '#description' => $this->t('Use the logo of current theme.'),
       '#default_value' => $this->configuration['use_site_logo'],
     ];
     $form['block_logo']['use_menu_item_logo'] = [
@@ -159,7 +137,6 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
       '#description' => $this->t('Check if you want to change site logo based on menu items.'),
       '#default_value' => $this->configuration['use_site_logo'],
     ];
-
     $form['block_logo']['menu_option'] = [
       '#type' => 'select',
       '#title' => $this->t('Menu to use for logo'),
@@ -174,11 +151,10 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
         ],
       ],
     ];
-
     $form['block_logo']['logo_fallback'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Logo fallback'),
-      '#description' => $site_logo_description,
+      '#description' => $this->t("Use the default logo, if menu doesn't have specific logo exists."),
       '#default_value' => $this->configuration['use_site_logo'],
     ];
     return $form;
@@ -212,14 +188,14 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
     // If use menu item logo is true.
     if ($this->configuration['use_menu_item_logo']) {
       // Get the attributes of current menu.
-      $current_logo = $this->getCurrentMenuAttributes();
+      $attr = $this->getCurrentMenuAttributes();
       // Set the attributes to site_logo, that can be altered at theme level.
-      $build['site_logo']['#attributes'] = ['data-logo-class' => $current_logo['class']];
+      $build['site_logo']['#attributes'] = ['data-logo-class' => $attr['class']];
       // Get the link for the logo.
       $build['target_link'] = [
         '#type' => 'link',
-        '#title' => $current_logo['title'],
-        '#url' => $current_logo['link'],
+        '#title' => $attr['title'],
+        '#url' => $attr['link'],
       ];
     }
 
