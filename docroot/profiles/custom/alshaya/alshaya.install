@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Implements hook_install().
