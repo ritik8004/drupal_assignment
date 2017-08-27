@@ -8,7 +8,7 @@ then
 fi
 
 
-while getopts "e:s:p:idah" OPTION; do
+while getopts "e:s:p:idtah" OPTION; do
         case $OPTION in
 
                 e)
@@ -30,6 +30,10 @@ while getopts "e:s:p:idah" OPTION; do
                 d)
                         
                         clearProducts="yes"
+                        ;;
+                t)
+                        
+                        transacSetup="yes"
                         ;;
                 a)
                         
@@ -74,12 +78,17 @@ then
 	drush $envn -l $site user-add-role "administrator" --name=siteadmin;
 	drush $envn -l $site user-create webmaster --mail="user3+webmaster@example.com" --password=AlShAyAU1webmaster;
 	drush $envn -l $site user-add-role "webmaster" --name=webmaster;
-	drush $envn -l $site pm-uninstall shield -y;
-	drush $envn -l $site en basic_auth -y;
-	drush $envn -l $site sqlq "update users_field_data set name='admin' where name='Site Factory admin'";
-	drush $envn -l $site upwd "admin" --password="AlShAyAU1";
 	drush $envn -l $site cr;
 fi
+
+if [ "$transacSetup" = "yes" ]
+then
+    drush $envn -l $site pm-uninstall shield -y;
+    drush $envn -l $site en basic_auth -y;
+    drush $envn -l $site sqlq "update users_field_data set name='admin' where name='Site Factory admin'";
+    drush $envn -l $site upwd "admin" --password="AlShAyAU1";
+fi
+
 
 if [ "$clearProducts" = "yes" ]
 then
