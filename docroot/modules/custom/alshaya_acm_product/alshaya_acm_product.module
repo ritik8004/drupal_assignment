@@ -412,7 +412,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // Get SKU id.
   $sku_entity = SKU::load($form['sku_id']['#value']);
 
-  // For simple products, we just return from here. For onfigurable products,
+  // For simple products, we just return from here. For configurable products,
   // we check inside loop.
   if ($sku_entity->getType() == 'simple') {
     // We are not going to show the form right now, we don't do any stock check.
