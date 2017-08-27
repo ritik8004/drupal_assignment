@@ -45,7 +45,6 @@ function alshaya_install() {
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
 }
 
-
 /**
  * Implements hook_alshaya_transac_profile_installed().
  *
