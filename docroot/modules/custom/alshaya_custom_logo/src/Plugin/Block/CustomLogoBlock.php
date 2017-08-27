@@ -162,10 +162,10 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
     $form['block_logo']['menu_option'] = [
       '#type' => 'select',
-      '#title' => t('Menu to use for logo'),
+      '#title' => $this->t('Menu to use for logo'),
       '#default_value' => $this->configuration['menu_option'],
       '#options' => menu_ui_get_menus(),
-      '#description' => t('Select the menu to use to change the logo.'),
+      '#description' => $this->t('Select the menu to use to change the logo.'),
       '#states' => [
         'invisible' => [
           ':input[name="settings[block_logo][use_menu_item_logo]"]' => [
