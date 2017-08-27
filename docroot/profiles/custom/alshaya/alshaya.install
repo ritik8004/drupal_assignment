@@ -28,9 +28,6 @@ function alshaya_install() {
   }
 
   if (isset($_ENV['AH_SITE_NAME'])) {
-    // Enable acquia_connector on ACSF environments.
-    \Drupal::service('module_installer')->install(['acquia_connector']);
-
     // Enable shield on ACSF environments.
     \Drupal::service('module_installer')->install(['shield']);
 

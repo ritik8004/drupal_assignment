@@ -61,6 +61,12 @@ function alshaya_non_transac_install() {
   // Invoke a hook to let other modules know that profile installation is done.
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['non_transac', $modules]);
 
+  // We probably don't have any module depending on acquia_connector which is
+  // required on ACSF environments.
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['acquia_connector']);
+  }
+
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_non_transac', $modules);
 }
