@@ -44,12 +44,6 @@ function alshaya_install() {
   }
 
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
-
-  // Delete basic page content type, we don't need this in Alshaya.
-  $node_type = NodeType::load('page');
-  if ($node_type) {
-    $node_type->delete();
-  }
 }
 
 /**
@@ -76,4 +70,10 @@ function alshaya_final_common_install_task($profile) {
   }
 
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed_final_task', [$profile, $_alshaya_modules_installed]);
+
+  // Delete basic page content type, we don't need this in Alshaya.
+  $node_type = NodeType::load('page');
+  if ($node_type) {
+    $node_type->delete();
+  }
 }
