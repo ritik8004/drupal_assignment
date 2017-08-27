@@ -196,13 +196,8 @@ class CustomerCartForm extends FormBase {
     }
     else {
       // If we have success message available.
-      if (!empty($this->successMessage)) {
-        drupal_set_message($this->successMessage);
-      }
-      else {
-        // Default show this message.
-        drupal_set_message($this->t('Your cart has been updated.'));
-      }
+      $msg = !empty($this->successMessage) ? $this->successMessage : $this->t('Your cart has been updated.');
+      drupal_set_message($msg);
     }
   }
 
@@ -216,7 +211,9 @@ class CustomerCartForm extends FormBase {
     try {
       $cart = $this->cartStorage->updateCart();
       $response_message = $cart->get('response_message');
-      // We will have type of message like error or success.
+      // We will have type of message like error or success. key '0' contains
+      // the response message string while key '1' contains the response
+      // message context/type like success or coupon.
       if (!empty($response_message[1])) {
         // If its success.
         if ($response_message[1] == 'success') {
@@ -227,7 +224,7 @@ class CustomerCartForm extends FormBase {
           $form_state->setErrorByName('coupon', $response_message[0]);
           $form_state->setRebuild(TRUE);
 
-          // Reset the cart.
+          // Remove the coupon and update the cart.
           $this->cart->setCoupon('');
           $this->updateCart($form_state);
         }
