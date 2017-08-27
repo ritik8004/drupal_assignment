@@ -10,6 +10,6 @@
  */
 function alshaya_vs_install() {
   // Enable and set victoria_secret as default theme.
-  \Drupal::service('theme_installer')->install(['victoria_secret'], TRUE);
-  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'victoria_secret')->save(TRUE);
+  \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('victoria_secret');
 }
