@@ -1,5 +1,6 @@
 .c-content__slider {
   text-align: center;
+  margin-bottom: 20px;
 
   img {
     width: 100%;
@@ -138,6 +139,7 @@
 .video_banner {
   position: relative;
   max-width: 1284px;
+  padding: 0;
 
   .video_banner_content {
     position: absolute;
@@ -151,10 +153,10 @@
   .video_banner .video_banner_content {
     position: static;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 25px;
   }
 
   .c-content__slider {
-    display: none;
+    //display: none;
   }
 }
