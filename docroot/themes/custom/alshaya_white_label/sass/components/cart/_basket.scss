@@ -1172,6 +1172,14 @@ html[lang=ar] {
     span.price-amount {
       margin-left: 0.4rem;
       float: right;
+
+      @include breakpoint($tablet) {
+        margin-left: 0.2rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-left: 0.9rem;
+      }
     }
 
     .price-currency.suffix {
@@ -1329,4 +1337,16 @@ body .ladda-button {
       font-size: 0.75rem;
     }
   }
+}
+
+#block-baskethorizontalproductrecommendation {
+  .owl-item a.above-mobile-block:hover .c-products__item__label {
+    color: $cerulean-two;
+    text-decoration: underline;
+  }
+}
+
+.path--cart .messages.messages--status::before {
+  font-size: 1.9rem;
+  margin-top: -8px;
 }

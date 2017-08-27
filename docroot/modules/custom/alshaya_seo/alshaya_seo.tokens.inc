@@ -52,6 +52,9 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
   else {
     $langcode = LanguageInterface::LANGCODE_DEFAULT;
   }
+
+  $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
   $replacements = [];
 
   if ($type == 'site') {
@@ -61,9 +64,14 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     if (isset($tokens['locale:alternate'])) {
       // Get all languages available for the site.
       $languages = \Drupal::languageManager()->getLanguages();
+
       // If there are languages available.
       if (!empty($languages)) {
         $alternates = [];
+
+        // Remove the current language.
+        unset($languages[$current_langcode]);
+
         // If we still have some data in language array.
         if (!empty($languages)) {
           // Prepare the alternate locale data.
@@ -71,6 +79,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
             $alternates[] = AlshayaI18nLanguages::getLocale($lang);
           }
         }
+
         $replacements[$tokens['locale:alternate']] = implode(',', $alternates);
       }
     }
@@ -89,6 +98,10 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
         $alternates = [];
 
         foreach ($translations as $lang => $language) {
+          if ($lang == $current_langcode) {
+            continue;
+          }
+
           $alternates[] = AlshayaI18nLanguages::getLocale($lang);
         }
 

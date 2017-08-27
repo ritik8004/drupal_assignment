@@ -20,6 +20,9 @@ function alshaya_master_install() {
       'en' => 'Sign out',
       'ar' => 'تسجيل الخروج',
     ],
+    'Sign out' => [
+      'ar' => 'تسجيل الخروج',
+    ],
     'Create new account' => [
       'en' => 'Create an account',
     ],
@@ -182,10 +185,9 @@ function alshaya_master_install() {
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
+      'en' => 'Please enter your @title.',
     ],
-    '@title is required.' => [
-      'ar' => ' Please enter your @title',
-    ],
+
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
     ],
@@ -505,6 +507,7 @@ function alshaya_master_install() {
     ],
     '@name field is required.' => [
       'ar' => 'يرجى إدخال @name',
+      'en' => 'Please enter your @name.',
     ],
     'Order Total <span>(Before Delivery)</span>' => [
       'ar' => 'المبلغ الإجمالي للطلبية <span>(قبل التوصيل)</span>',
@@ -945,9 +948,7 @@ function alshaya_master_install() {
     ],
     'Phone number in %field is required.' => [
       'ar' => 'يرجى إدخال رقم الجوال',
-    ],
-    'Phone number in %field is required.' => [
-      'en' => '%field field is required.',
+      'en' => 'Please enter your %field.',
     ],
     '1 hour' => [
       'ar' => 'ساعة واحدة',
