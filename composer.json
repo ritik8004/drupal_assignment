@@ -57,7 +57,10 @@
         "drupal/pcb": "^1.0@beta",
         "drupal/components": "^1.0",
         "drupal/twig_tweak": "^1.8",
-        "drupal/kashmir": "^1.1"
+        "drupal/kashmir": "^1.1",
+        "drupal/migrate_plus": "^2.0",
+        "drupal/migrate_source_csv": "^2.0",
+        "drupal/migrate_tools": "^2.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
