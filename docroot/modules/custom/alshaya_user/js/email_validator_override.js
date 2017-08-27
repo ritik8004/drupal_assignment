@@ -19,6 +19,6 @@
   $.validator.addMethod("passvalidate", function(value, element ) {
     // Password must have a number (including arabic), a special character, must allow characters from english as well
     // as arabic language and minimum 7 characters.
-    return this.optional(element) || /(?=(.*[\۰۱۲۳٤٥٦٧۸۹|0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[\u0600-\u06FF|a-zA-Z])(?=(.*)).{7,}/.test(value);
+    return this.optional(element) || /(?=(.*[\۰۱۲۳٤٥٦٧۸۹|0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?!.*[\s])(?=.*[\u0600-\u06FF|a-zA-Z])(?=(.*)).{7,}/.test(value);
   });
 })(jQuery, Drupal);
