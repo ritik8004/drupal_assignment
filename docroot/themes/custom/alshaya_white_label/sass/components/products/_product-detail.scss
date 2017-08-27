@@ -88,7 +88,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 28%;
+      width: 30%;
       float: $right;
       margin: 0;
     }
@@ -107,7 +107,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 28%;
+      width: 30%;
       float: $right;
       margin: 0;
     }
@@ -442,9 +442,9 @@
 
 @include breakpoint($desktop) {
   .description-wrapper {
-    width: 28%;
+    width: 30%;
     margin: 0;
-    #{$right}: -28%;
+    #{$right}: -30%;
   }
 }
 
