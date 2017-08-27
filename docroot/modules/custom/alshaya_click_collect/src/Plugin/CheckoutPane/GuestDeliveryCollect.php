@@ -315,7 +315,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     if ($user = user_load_by_mail($values['cc_email'])) {
       $form_state->setErrorByName('cc_email', $this->t('You already have an account, @login_link.', [
-        '@login_link' => Link::createFromRoute('please login', 'acq_checkout.form', ['step' => 'login'])->toString(),
+        '@login_link' => Link::createFromRoute($this->t('please login'), 'acq_checkout.form', ['step' => 'login'])->toString(),
       ]));
       return;
     }
