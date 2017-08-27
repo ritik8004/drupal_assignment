@@ -30,6 +30,9 @@ function alshaya_user_install() {
       'en' => 'user',
       'ar' => 'زبون',
     ],
+    'The password does not satisfy the password policies.' => [
+      'ar' => 'كلمة السر لا تحتوي على العناصر المطلوبة',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
