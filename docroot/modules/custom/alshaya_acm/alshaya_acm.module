@@ -381,11 +381,15 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $cart_total['actions'] = $form['actions'];
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $cart_total));
 
-  // // Update page title.
+  // Update page title.
   $cartStorage = \Drupal::service('acq_cart.cart_storage');
   $cart = $cartStorage->getCart();
   $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $cart->getCartItemsCount()])));
 
+  // Update mini cart Block.
+  $mini_cart_block_entity = \Drupal::entityTypeManager()->getStorage('block')->load('cartminiblock');
+  $mini_cart_block_view = \Drupal::entityTypeManager()->getViewBuilder('block')->view($mini_cart_block_entity);
+  $response->addCommand(new ReplaceCommand('div[data-block-plugin-id="cart_mini_block"]', $mini_cart_block_view));
   return $response;
 }
 
