@@ -749,6 +749,8 @@
 
         select {
           @include select-style(9rem);
+
+          width: 100%;
         }
       }
     }

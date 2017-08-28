@@ -18,8 +18,11 @@
     attach: function (context, settings) {
 
       // Opening hours toggle.
-      $('[data-drupal-selector^="views-form-stores-finder-"], .individual--store', context).once('opening-hrs-init').on('click', '.hours--label', function () {
-        $(this).toggleClass('open');
+      var hoursLabels = $('[data-drupal-selector^="views-form-stores-finder-"] .hours--label, .individual--store .hours--label', context);
+      hoursLabels.once('opening-hrs-init').each(function () {
+        $(this).on('click', function () {
+          $(this).toggleClass('open');
+        });
       });
 
       var storeFinderPageSelector = $('.view-id-stores_finder.view-display-id-page_1', context);
