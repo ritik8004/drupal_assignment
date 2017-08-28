@@ -288,12 +288,13 @@
 
       // Toggle the filter menu when click on the label.
       $('.filter-menu-label .label').once().on('click', function () {
-        $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
-          .toggleClass('show-overlay');
-        $('body').toggleClass('filter-open-no-scroll');
         $('.c-facet__blocks__wrapper .c-facet__label').parent().siblings('.view-filters').toggleClass('low-zindex');
         $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
         $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
+        $('body').toggleClass('filter-open-no-scroll');
+        $('.show-overlay').each(function () {
+          $(this).removeClass('show-overlay');
+        });
       });
 
       $('.c-facet').each(function () {
@@ -305,10 +306,7 @@
       // Close the filter menu when a facet is selected/unselected.
       $('.filter--mobile li.facet-item').once().on('click', function () {
         var facetBlocks = $(this).closest('.c-facet__blocks');
-        $('body').toggleClass('filter-open-no-scroll');
         facetBlocks.siblings('.c-facet__label').toggleClass('is-active');
-        $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
-          .toggleClass('show-overlay');
       });
 
       // Click event for fake clear all link on mobile filter.
