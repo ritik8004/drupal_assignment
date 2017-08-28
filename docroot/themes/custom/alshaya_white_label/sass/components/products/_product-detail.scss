@@ -1623,3 +1623,22 @@ article.product-out-of-stock {
     }
   }
 }
+
+.apply-fake {
+  list-style: none;
+  display: inline;
+}
+
+.fake-apply-button {
+  font-family: $alshaya-bold;
+  display: inline-block;
+  margin-bottom: 0.875rem;
+  padding: 0.3625rem 1.875rem 0.4625rem;
+  background: $pumpkin-orange;
+  color: $white-five;
+  cursor: pointer;
+  margin-#{$left}: 1.5rem;
+  font-size: 0.75rem;
+  border: 0;
+}
+
