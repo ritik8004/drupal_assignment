@@ -40,7 +40,7 @@
       }
 
       function applyRtl(ocObject, options) {
-        if (isRTL()) {
+        if (isRTL() && $(window).width() < 1025 ) {
           ocObject.attr('dir', 'rtl');
           ocObject.slick(
               $.extend({}, options, {rtl: true})
@@ -60,6 +60,7 @@
       // Slider - 3 For Mobile - Image Gallery.
       $('#product-image-gallery-mobile', context).lightSlider({
         item: 1,
+        rtl: true,
         onAfterSlide: function (el) {
           el.children('iframe').remove();
         }
