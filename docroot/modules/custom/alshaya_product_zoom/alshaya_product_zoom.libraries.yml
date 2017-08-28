@@ -33,3 +33,4 @@ product.cloud_zoom:
     - core/jquery.ui.draggable
     - alshaya_product_zoom/cloud_zoom
     - alshaya_white_label/slick
+    - alshaya_white_label/utils

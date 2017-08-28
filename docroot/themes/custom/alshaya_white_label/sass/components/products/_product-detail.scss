@@ -88,7 +88,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 28%;
+      width: 30%;
       float: $right;
       margin: 0;
     }
@@ -107,7 +107,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 28%;
+      width: 30%;
       float: $right;
       margin: 0;
     }
@@ -320,7 +320,7 @@
 .description-wrapper {
   &.desc-open {
     #{$right}: 0;
-    transition: right 0.5s ease;
+    transition: #{$right} 0.5s ease;
   }
 
   @include breakpoint($only-mobile) {
@@ -414,7 +414,7 @@
     width: 35%;
     z-index: 4;
     margin: 0 1rem;
-    transition: right 0.5s ease;
+    transition: #{$right} 0.5s ease;
 
     .close {
       @include icon(close);
@@ -442,9 +442,9 @@
 
 @include breakpoint($desktop) {
   .description-wrapper {
-    width: 28%;
+    width: 30%;
     margin: 0;
-    #{$right}: -28%;
+    #{$right}: -30%;
   }
 }
 
@@ -1013,7 +1013,7 @@
     position: absolute;
     top: 0;
     #{$right}: -100%;
-    transition: right 1s ease;
+    transition: #{$right} 1s ease;
     height: 31.5rem;
     border: 1px solid $marine-blue;
     padding: 1rem 1.5rem;
@@ -1024,7 +1024,7 @@
 
     &.desc-open {
       #{$right}: 0;
-      transition: right 0.5s ease;
+      transition: #{$right} 0.5s ease;
     }
 
     @include breakpoint($only-mobile) {
@@ -1317,6 +1317,7 @@
         padding: 0.5rem 1.3701rem;
         margin-bottom: 1.5rem;
         display: inline-block;
+        height: 2.1875rem;
 
         @include breakpoint($only-mobile) {
           float: none;
