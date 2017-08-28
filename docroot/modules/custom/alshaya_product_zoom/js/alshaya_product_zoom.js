@@ -40,7 +40,7 @@
       }
 
       function applyRtl(ocObject, options) {
-        if (isRTL() && $(window).width() < 1025 ) {
+        if (isRTL() && $(window).width() < 1025) {
           ocObject.attr('dir', 'rtl');
           ocObject.slick(
               $.extend({}, options, {rtl: true})
