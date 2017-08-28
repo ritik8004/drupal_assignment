@@ -4,8 +4,10 @@ dependencies:
   config:
     - search_api.index.product
   module:
+    - alshaya_product
     - better_exposed_filters
     - search_api
+    - user
     - views_infinite_scroll
 id: alshaya_product_list
 label: 'Alshaya product list'
@@ -23,8 +25,9 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: tag
         options: {  }
@@ -527,6 +530,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - user.permissions
       tags: {  }
   block_1:
     display_plugin: block
@@ -549,6 +553,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - user.permissions
       tags: {  }
   block_2:
     display_plugin: block
@@ -604,4 +609,5 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - user.permissions
       tags: {  }
