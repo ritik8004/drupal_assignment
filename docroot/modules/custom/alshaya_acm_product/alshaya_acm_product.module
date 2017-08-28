@@ -554,7 +554,11 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
     $selector = '.configurable-wrapper-' . $sku_identifier;
-    $response->addCommand(new ReplaceCommand($selector, $dynamic_parts));
+
+    // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
+    $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);
+    $data['selector'] = $selector;
+    $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
 
     $selector = '.quantity-' . $sku_identifier;
     $response->addCommand(new ReplaceCommand($selector, $form['quantity']));
