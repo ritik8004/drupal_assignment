@@ -65,17 +65,11 @@
     {% endif %}
   </header>
 
-  {% if page.pre_content %}
-    <div class="pre__content">
-      {{ page.pre_content }}
+  {% if page.admin_content %}
+    <div class="admin-content__region">
+      {{ page.admin_content }}
     </div>
   {% endif %}
-
-  {{ page.breadcrumb }}
-
-  {{ page.highlighted }}
-
-  {{ page.help }}
 
   <main role="main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
