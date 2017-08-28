@@ -619,8 +619,8 @@
 
   label {
     position: relative;
-    top: -3.4rem;
-    font-size: 0.75rem;
+    top: -1.4rem;
+    font-size: 1rem;
     color: $greyish;
     font-family: $arial;
 
@@ -650,6 +650,11 @@
 
     &:focus {
       border-color: $windows-blue;
+
+      & ~ label {
+        top: -3.2rem;
+        font-size: 0.75rem;
+      }
     }
 
     &.error {
@@ -1139,7 +1144,7 @@ html[lang=ar] {
     }
 
     @include breakpoint($desktop) {
-      float: right !important;
+      float: left !important;
       padding-right: 0.56rem;
     }
 
