@@ -199,7 +199,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   // Show loyalty information if enabled.
   if ($loyalty_settings['enable_disable_loyalty']) {
     // Get the loyalty card number from order detail.
-    $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? $order['extension']['loyalty_card'] : '';
+    $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? alshaya_loyalty_format_card_number($order['extension']['loyalty_card'], TRUE) : '';
   }
 
   return $orderRow;
