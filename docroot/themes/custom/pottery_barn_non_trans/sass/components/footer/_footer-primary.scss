@@ -1002,6 +1002,7 @@ html[lang="ar"] .alshaya-mob-app-links img {
     margin: 0;
     padding: 0;
     direction: ltr;
+    text-align: center !important;
 
     li {
       list-style: none;
@@ -1009,16 +1010,17 @@ html[lang="ar"] .alshaya-mob-app-links img {
 
       &:first-child {
         &::after {
-          color: $white;
+          color: $white !important;
           content: '/';
         }
       }
 
       a {
-        color: $white;
+        color: $white !important;
         padding: 0 5px;
-        font-size: 14px;
+        font-size: 14px !important;
         text-decoration: underline;
+        text-transform: none !important;
 
         &.is-active {
           text-decoration: none;
