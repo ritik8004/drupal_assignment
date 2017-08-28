@@ -47,10 +47,20 @@ function alshaya_i18n_save_translations($strings) {
           if (!empty($context)) {
             $params += ['context' => $context];
           }
-          $target = \Drupal::service('locale.storage')->createTranslation($params);
-          $target->setPlurals([$translation])
-            ->setCustomized()
-            ->save();
+
+          try {
+            $target = \Drupal::service('locale.storage')->createTranslation($params);
+            $target->setPlurals([$translation])
+              ->setCustomized()
+              ->save();
+          }
+          catch (\Exception $e) {
+            \Drupal::logger('alshaya_i18n')
+              ->critical('Error occurred while saving @string in @langcode', [
+                '@string' => $translation,
+                '@langcode' => $langcode,
+              ]);
+          }
         }
       }
     }
