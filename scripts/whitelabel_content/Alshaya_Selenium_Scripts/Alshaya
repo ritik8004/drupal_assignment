@@ -932,8 +932,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>selectWindow</td>
-	<td>null</td>
+	<td>open</td>
+	<td>en/admin/config/services/geolocation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[starts-with(@id,&quot;edit-google-map-api-key&quot;)]</td>
+	<td>AIzaSyCx3OwGGlm7KqnrbZQIQ3FQLJgWKb3p5LI</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-actions-submit</td>
 	<td></td>
 </tr>
 </tbody></table>

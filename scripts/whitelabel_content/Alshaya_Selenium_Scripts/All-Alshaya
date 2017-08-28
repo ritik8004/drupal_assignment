@@ -8,8 +8,9 @@
 <body>
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
-<tr><td><a href="../Alshaya">Alshaya</a></td></tr>
 <tr><td><a href="Arabic">Arabic</a></td></tr>
+<tr><td><a href="Alshaya">Alshaya</a></td></tr>
+<tr><td><a href="uat">uat</a></td></tr>
 </tbody></table>
 </body>
 </html>
