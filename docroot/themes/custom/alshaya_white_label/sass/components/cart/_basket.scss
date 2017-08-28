@@ -287,6 +287,19 @@
       .dark + div {
         font-family: $arial;
       }
+
+      .price-amount,
+      .price-currency,
+      .discount-prefix,
+      .discount-value {
+        font-weight: normal;
+      }
+
+      .discount-value {
+        @include breakpoint($only-mobile) {
+          margin-left: 0.8rem;
+        }
+      }
     }
 
     .mobile-only {
