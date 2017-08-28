@@ -18,12 +18,16 @@ function alshaya_i18n_save_translations($strings) {
     // First create the translation source entry.
     $source_param = [
       'source' => $source,
+      'version' => \Drupal::VERSION,
     ];
     // If context is available.
     if (!empty($context)) {
       $source_param += ['context' => $context];
     }
-    \Drupal::service('locale.storage')->createString($source_param)->save();
+
+    if (!\Drupal::service('locale.storage')->findString($source_param)) {
+      \Drupal::service('locale.storage')->createString($source_param)->save();
+    }
 
     // Loop through all translations and save them.
     foreach ($translations as $langcode => $translation) {
