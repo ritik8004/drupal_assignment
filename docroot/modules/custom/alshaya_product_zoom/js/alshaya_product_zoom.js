@@ -3,21 +3,10 @@
  * Product Zoom Gallery.
  */
 
+/* global isRTL */
+
 (function ($) {
   'use strict';
-
-  function isRTL() {
-    'use strict';
-    var html = $('html');
-    var dir = html.attr('dir');
-    if (typeof dir === 'undefined' || dir === 'ltr') {
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
-
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
       var slickOptions = {
