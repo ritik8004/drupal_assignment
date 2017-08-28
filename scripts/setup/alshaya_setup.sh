@@ -12,31 +12,24 @@ while getopts "e:s:p:idtah" OPTION; do
         case $OPTION in
 
                 e)
-                        
                         envn=$OPTARG
                         ;;
                 s)
-                        
                         site="$OPTARG-alshaya.acsitefactory.com"
                         ;;
                 p)
-                        
                         loadsku=$OPTARG
                         ;;
                 i)
-                        
                         initialSetup="yes"
                         ;;
                 d)
-                        
                         clearProducts="yes"
                         ;;
                 t)
-                        
                         transacSetup="yes"
                         ;;
                 a)
-                        
                         loadProducts="yes"
                         ;;  
 
@@ -105,8 +98,8 @@ then
 
 	if [ "$loadsku" != "" ]
 	then
-		echo "loading product skus"
-		drush $envn -l $site sync-commerce-products --skus=$loadsku
+	   echo "loading product skus"
+	   drush $envn -l $site sync-commerce-products --skus="$loadsku"
 	fi
 	echo "loading all products"
 	drush $envn -l $site sync-commerce-products;
