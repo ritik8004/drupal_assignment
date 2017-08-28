@@ -86,6 +86,7 @@
 
 html[lang=ar] {
   .c-facet {
+    ul[data-drupal-facet-alias="brand"],
     ul[data-drupal-facet-alias="skus_sku_reference_brand"] {
       label {
         float: right;
