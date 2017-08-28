@@ -5,6 +5,9 @@
  * Provides Drush commands for alshaya_master.
  */
 
+use Drupal\lightning_core\ConfigHelper;
+use Drupal\locale\Locale;
+
 /**
  * Implements hook_drush_command().
  */
@@ -43,11 +46,24 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
       }
 
       drush_print(dt('Configuring the site for @brand brand.', ['@brand' => $brand]));
+
+      // Install the module.
       \Drupal::service('module_installer')->install([$module]);
+
+      // Update config with installed brand and module names.
       \Drupal::configFactory()->getEditable('alshaya.installed_brand')
         ->set('name', $brand)
         ->set('module', $module)
         ->save();
+
+      // Get langcodes for all languages.
+      $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
+
+      // Get all config names avaiable in current module.
+      $names = ConfigHelper::forModule($module)->optional()->listAll();
+
+      // Update config translations from string translations.
+      Locale::config()->updateConfigTranslations($names, $langcodes);
     }
   }
 
