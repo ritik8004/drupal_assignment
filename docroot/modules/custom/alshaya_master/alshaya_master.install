@@ -989,6 +989,9 @@ function alshaya_master_install() {
     'Available at three stores near' => [
       'ar' => 'متوفر في 3 محلات بالقرب من ',
     ],
+    'Available at 3 stores near' => [
+      'ar' => 'متوفر في 3 محلات بالقرب من ',
+    ],
     'Tap to enlarge' => [
       'ar' => 'اضغط للتكبير',
     ],

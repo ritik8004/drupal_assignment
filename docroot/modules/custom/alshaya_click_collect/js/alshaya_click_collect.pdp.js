@@ -378,7 +378,7 @@
 
     // Bind the js again to main input.
     var field = $('.click-collect-form').find('input[name="location"]')[0];
-    new Drupal.ClickCollect(field, [Drupal.pdp.setStoreCoords]);
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords]);
 
     $('.click-collect-form .store-finder-form-wrapper').show();
   };
