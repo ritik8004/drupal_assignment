@@ -273,6 +273,13 @@ html[lang=ar] {
     @include breakpoint($only-mobile) {
       float: right;
       margin-left: 0.5rem;
+      min-width: 3rem;
+    }
+  }
+
+  #table-cart-items .price-wrapper .price-amount {
+    @include breakpoint($only-mobile) {
+      min-width: 3rem;
     }
   }
 }
