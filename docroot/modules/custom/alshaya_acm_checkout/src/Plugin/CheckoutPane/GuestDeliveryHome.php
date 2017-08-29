@@ -70,7 +70,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $address = (array) $cart->getShipping();
     $default_shipping = '';
 
-    if ($this->getCartSelectedDeliveryMethod() != 'hd') {
+    if ($this->getCartSelectedDeliveryMethod() == 'cc') {
       $address = [];
     }
 
