@@ -1,6 +1,10 @@
 .page-standard.user-page.checkout-delivery {
   margin: 1.2rem auto;
 
+  .country-name {
+    color: #999 !important;
+  }
+
   &.l-two--sf {
     @include breakpoint($upto-tablet) {
       max-width: 19rem;
