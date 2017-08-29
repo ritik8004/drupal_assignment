@@ -236,7 +236,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $totals['tax'] = (float) $cart_totals['tax'] > 0 ? alshaya_acm_price_format($cart_totals['tax']) : NULL;
 
     // Discount.
-    $totals['discount'] = (float) $cart_totals['discount'] > 0 ? alshaya_acm_price_format($cart_totals['discount']) : NULL;
+    $totals['discount'] = (float) ($cart_totals['discount']) !== 0 ? alshaya_acm_price_format($cart_totals['discount']) : NULL;
 
     // Shipping.
     $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;
