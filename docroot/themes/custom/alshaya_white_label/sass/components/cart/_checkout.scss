@@ -315,7 +315,7 @@
       font-size: 0.75rem;
     }
 
-    @include icon(chevron#{$right}, after) {
+    @include icon(chevrondown, after) {
       position: absolute;
       #{$right}: 1rem;
       font-size: 1.875rem;
@@ -424,6 +424,26 @@
 
     html[lang=ar] & {
       line-height: 1.5;
+    }
+
+    .sub-total,
+    .order-total {
+      > span {
+        width: 54%;
+
+        @include breakpoint($upto-desktop) {
+          width: 50%;
+        }
+      }
+
+      .total--amount,
+      .price-type__wrapper {
+        width: 44%;
+
+        @include breakpoint($upto-desktop) {
+          width: 47%;
+        }
+      }
     }
   }
 }
@@ -1279,16 +1299,14 @@ html[lang=ar] {
     position: absolute;
 
     @include breakpoint($mobile) {
-      left: 0.9rem;
       top: -0.1rem;
     }
 
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       left: -0.4rem;
     }
 
     @include breakpoint($desktop) {
-      left: 4rem;
       top: 0;
     }
   }

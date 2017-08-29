@@ -37,11 +37,24 @@ alshaya_acm_product.size_guide_modal:
     _title: 'Size guide'
   requirements:
     _permission: 'access content'
-alshaya_acm_produt.stock_check_ajax:
+
+alshaya_acm_product.stock_check_ajax:
   path: '/stock-check-ajax/{entity_type}/{entity}'
   defaults:
     _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::checkStock'
-    _title: 'Cart'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      entity:
+        type: entity:{entity_type}
+
+alshaya_acm_product.get_cart_form:
+  path: '/get-cart-form/{entity_type}/{entity}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::getCartForm'
+    _title: ''
   requirements:
     _permission: 'access content'
   options:

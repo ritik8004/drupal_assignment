@@ -1,0 +1,16 @@
+name: 'Alshaya ACM Product Category'
+type: module
+description: 'All custom code around products categories.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm
+  - alshaya_acm_product
+  - alshaya_api
+  - alshaya_department_page
+  - alshaya_main_menu
+  - alshaya_product_zoom
+  - content_translation
+  - form_options_attributes
+  - metatag
+  - views

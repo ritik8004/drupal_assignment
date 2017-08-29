@@ -13,7 +13,7 @@
     attach: function (context, settings) {
       // If we find the gallery in add cart form ajax response, we update the main gallery.
       if ($('.field--name-field-skus #product-zoom-container').size() > 0) {
-        $('.field--name-field-skus #product-zoom-container').each(function() {
+        $('.field--name-field-skus #product-zoom-container').each(function () {
           if ($(this).closest('td.sell-sku').length === 0) {
             // Execute the attach function of alshaya_product_zoom again.
             Drupal.behaviors.alshaya_product_zoom.attach($(this), settings);
@@ -24,6 +24,15 @@
           }
         });
       }
+    }
+  };
+
+  $.fn.replaceDynamicParts = function (data) {
+    if (data.replaceWith === '') {
+      // Do nothing
+    }
+    else {
+      $(data.selector).replaceWith(data.replaceWith);
     }
   };
 

@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Context\Context;
+use Behat\Mink\Exception\ElementNotFoundException;
 
 /**
  * FeatureContext class defines custom step definitions for Behat.
@@ -354,9 +355,10 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page = $session->getPage();
     $element = $page->findField($field);
     if (!$element) {
-      throw new ElementNotFoundException($session, NULL, 'named', $field);
+      throw new \ElementNotFoundException($session, NULL, 'named', $field);
     }
     $page->fillField($field, $prefix);
+    $this->iWaitSeconds(3);
     $xpath = $element->getXpath();
     $driver = $session->getDriver();
     $prefix = str_replace('\\"', '"', $prefix);
@@ -368,26 +370,17 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $driver->keyDown($xpath, $last_char);
     $driver->keyUp($xpath, $last_char);
     // Wait for AJAX to finish.
-    $this->getSession()->wait(500, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    $this->getSession()
+      ->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
     // Press the down arrow to select the first option.
-    $driver->keyDown($xpath, 40);
-    $driver->keyUp($xpath, 40);
     $driver->keyDown($xpath, 40);
     $driver->keyUp($xpath, 40);
     // Press the Enter key to confirm selection, copying the value into the field.
     $driver->keyDown($xpath, 13);
     $driver->keyUp($xpath, 13);
-    $driver->keyDown($xpath, 13);
-    $driver->keyUp($xpath, 13);
     // Wait for AJAX to finish.
-    $this->getSession()->wait(500, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
-    $all_results = $page->findById('click-and-collect-list-view');
-    if ($all_results == NULL) {
-      $message = $page->hasContent('Sorry, No store found for your location.');
-      if (!$message) {
-        throw new \Exception('No stores message is not displayed');
-      }
-    }
+    $this->getSession()
+      ->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
   }
 
   /**
@@ -888,5 +881,95 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page = $this->getSession()->getPage();
     $page->find('css', '.select2-selection__arrow')->click();
     $page->find('css', 'ul.select2-results__options li:nth-child(1)')->click();
+  }
+  
+  /**
+   * @Given /^I should be able to see the header for checkout$/
+   */
+  public function iShouldBeAbleToSeeTheHeaderForCheckout() {
+    $page = $this->getSession()->getPage();
+    $logo = $page->has('css', '.logo') and $page->hasLink('Home');
+    if (!$logo) {
+      throw new \Exception('Logo is not displayed on secure checkout page');
+    }
+    $text = $page->find('css', '.secure__checkout--label')->getText();
+    if ($text !== 'Secure Checkout') {
+      throw new \Exception('Text Secure Checkout is not displayed');
+    }
+    $lock = $page->has('css', '.icon-ic_login');
+    if (!$lock) {
+      throw new \Exception('Lock icon is not displayed secure checkout page');
+    }
+  }
+
+  /**
+   * @Then /^I should see store name and location for all the listed stores$/
+   */
+  public function iShouldSeeStoreNameAndLocationForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $name_address = $store->has('css', 'div.store-name-and-address');
+      if (!$name_address) {
+        throw new \Exception('Name and address not displayed for a store');
+      }
+    }
+  }
+
+  /**
+   * @Given /^I should see opening hours for all the listed stores$/
+   */
+  public function iShouldSeeOpeningHoursForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $text = $store->find('css', 'div.hours--label')->getText();
+      if ($text !== 'Opening Hours') {
+        throw new \Exception('Opening hours not found on CC Stores listing page');
+      }
+    }
+  }
+
+  /**
+   * @Then /^I should see collect in store info for all the listed stores$/
+   */
+  public function iShouldSeeCollectInStoreInfoForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $delivery_time = $store->has('css', 'div.store-delivery-time span.delivery--time--value');
+      $value = "'Collect in store from'.$delivery_time";
+      if (!$value) {
+        throw new \Exception('Delivery time is not displayed on CC Store listing page');
+      }
+    }
+  }
+
+  /**
+   * @Given /^I should see select this store for all the listed stores$/
+   */
+  public function iShouldSeeSelectThisStoreForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $select_store = $store->hasLink('select this store');
+      if (!$select_store) {
+        throw new \Exception('Select this store button is missing on CC store listing page');
+      }
+    }
+  }
+
+  /**
+   * @Then /^I should see view on map button for all the listed stores$/
+   */
+  public function iShouldSeeViewOnMapButtonForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $select_store = $store->hasLink('View on map');
+      if (!$select_store) {
+        throw new \Exception('View on map link is missing on CC store listing page');
+      }
+    }
   }
 }

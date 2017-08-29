@@ -217,7 +217,7 @@ class SkuManager {
 
     if ($final_price !== $sku_cart_price['price']) {
       $sku_cart_price['final_price'] = number_format($final_price, 3);
-      $discount = number_format(($sku_cart_price['price'] - $final_price) * 100 / $sku_cart_price['price'], 2);
+      $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
       $sku_cart_price['discount']['prefix'] = t('Save');
       $sku_cart_price['discount']['value'] = t('@discount', ['@discount' => $discount . '%']);
     }
@@ -627,8 +627,11 @@ class SkuManager {
         if (isset($sku_tree[$sku])) {
           $parent_sku = $sku_tree[$sku];
           if (!in_array($parent_sku, $processed_sku_eids)) {
-            $processed_sku_eids[] = $this->getSkuTextFromId($parent_sku);;
+            $processed_sku_eids[] = $this->getSkuTextFromId($parent_sku);
           }
+        }
+        else {
+          $processed_sku_eids[] = $sku;
         }
       }
 

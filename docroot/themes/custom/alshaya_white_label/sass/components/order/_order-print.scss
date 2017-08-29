@@ -93,7 +93,11 @@ body {
   .inner--wrap {
     display: inline-block;
     vertical-align: middle;
-    width: 78%;
+    width: 60%;
+
+    @include breakpoint($desktop) {
+      width: 78%;
+    }
   }
 
   p {
@@ -105,8 +109,12 @@ body {
   .print--barcode {
     display: inline-block;
     vertical-align: middle;
-    width: 20%;
+    width: 38%;
     text-align: $right;
+
+    @include breakpoint($desktop) {
+      width: 20%;
+    }
 
     .value {
       color: $grey-ash;

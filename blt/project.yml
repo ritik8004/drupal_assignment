@@ -1,6 +1,6 @@
 project:
   machine_name: alshaya
-  prefix: MMCPA
+  prefix: (MMCPA|ACR2)
   human_name: Alshaya
   profile:
     name: alshaya_transac
@@ -20,17 +20,17 @@ drush:
   default_alias: '${drush.aliases.local}'
 target-hooks:
   frontend-setup:
-    dir: '${docroot}/themes/custom/alshaya_white_label'
-    command: 'npm run install-tools'
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash frontend-setup.sh ${docroot}'
   frontend-build:
-    dir: '${docroot}/themes/custom/alshaya_white_label'
-    command: 'npm run build'
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash frontend-build.sh ${docroot}'
   pre-config-import:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
   post-deploy-build:
-    dir: '${docroot}'
-    command: 'echo ''No post-deploy build configured.'''
+    dir: '${deploy.dir}'
+    command: 'sh ../blt/scripts/post-deploy-build.sh ${deploy.dir}'
   post-setup-build:
     dir: '${docroot}'
     command: 'echo ''No post-setup build configured.'''
@@ -41,9 +41,9 @@ import: '${repo.root}/blt/setup.local.xml'
 modules:
   local:
     enable: [dblog, devel, seckit, views_ui]
-    uninstall: [acsf, acquia_connector, shield, alshaya_captcha]
+    uninstall: [acsf, acquia_connector, shield]
   ci:
-    enable: {  }
+    enable: [alshaya_mc]
     uninstall: [acquia_connector, shield]
   dev:
     enable: [acquia_connector, shield]

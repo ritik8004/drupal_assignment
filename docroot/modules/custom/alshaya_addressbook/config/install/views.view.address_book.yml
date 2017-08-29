@@ -5,6 +5,7 @@ dependencies:
     - profile.type.address_book
   module:
     - profile
+    - user
 id: address_book
 label: 'Address Book'
 module: views
@@ -21,8 +22,9 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: tag
         options: {  }
@@ -306,6 +308,7 @@ display:
       contexts:
         - 'languages:language_interface'
         - url
+        - user.permissions
       tags:
         - 'config:core.entity_view_display.profile.address_book.default'
   address_book:
@@ -502,5 +505,6 @@ display:
         - 'languages:language_interface'
         - url
         - user
+        - user.permissions
       tags:
         - 'config:core.entity_view_display.profile.address_book.default'

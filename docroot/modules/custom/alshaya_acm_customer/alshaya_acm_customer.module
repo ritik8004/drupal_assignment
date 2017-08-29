@@ -107,7 +107,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
  */
 function alshaya_acm_customer_block_access(Block $block, $operation, AccountInterface $account) {
   // Not allow 'recent orders' block other than user/{uid} page.
-  if ($operation == 'view' && $block->id() == 'userrecentorders') {
+  if ($operation == 'view' && in_array($block->id(), ['userrecentorders', 'myaccountneedhelp'])) {
     $current_route = \Drupal::routeMatch()->getRouteName();
     return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
   }
@@ -143,12 +143,17 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
 function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'user_login_form') {
     if (isset($form['name'], $form['name']['#element_validate'])) {
-      // Disable element validate for email, we will call lafter if required.
+      // Disable element validate for email, we will call later if required.
       $key = array_search('email_registration_user_login_validate', $form['name']['#element_validate']);
       if ($key !== FALSE) {
         unset($form['name']['#element_validate'][$key]);
       }
     }
+
+    // Modify the inline email validation pattern.
+    $form['name']['#element_validate'] = [
+      'alshaya_valid_email_address',
+    ];
 
     // Disable validateAuthentication here, we will call later if required.
     $key = array_search('::validateAuthentication', $form['#validate']);
@@ -158,6 +163,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
     array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
     $form['#validate'][] = 'alshaya_acm_customer_login_post_validate';
+    $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
   }
 
   if ($form_id == 'user_register_form') {
@@ -348,15 +354,8 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         else {
           // Check first if we have a cart in session.
           if ($cart = $cart_storage->getCart(FALSE)) {
-            // Check if current cart is not associated to another user.
-            if ($cart->customerEmail() && $cart->customerEmail() != $mail) {
-              // It is associated to someone else. We clear the cart in session.
-              $cart_storage->clearCart();
-            }
-            else {
-              // Cart is not assigned or assigned to same customer.
-              $cart_storage->associateCart($customer['customer_id'], $customer['email']);
-            }
+            // Associate the cart to returning customer.
+            $cart_storage->associateCart($customer['customer_id'], $customer['email']);
           }
         }
       }
@@ -375,9 +374,6 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         /** @var \Drupal\user\Entity\User $user */
         $user = alshaya_acm_customer_create_drupal_user($customer);
       }
-
-      // Allow modules to act after user logs in.
-      \Drupal::moduleHandler()->invokeAll('alshaya_acm_customer_post_login', [$user, $customer]);
 
       return $user->id();
     }

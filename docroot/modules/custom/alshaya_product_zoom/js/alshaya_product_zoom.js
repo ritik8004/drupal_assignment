@@ -3,6 +3,8 @@
  * Product Zoom Gallery.
  */
 
+/* global isRTL */
+
 (function ($) {
   'use strict';
   Drupal.behaviors.alshaya_product_zoom = {
@@ -37,12 +39,28 @@
         items.addClass('cloud-zoom-processed', context).once('bind-events').CloudZoom();
       }
 
-      $('#lightSlider', context).slick(slickOptions);
-      $('#drupal-modal #lightSlider', context).slick(slickOptions);
+      function applyRtl(ocObject, options) {
+        if (isRTL() && $(window).width() < 1025) {
+          ocObject.attr('dir', 'rtl');
+          ocObject.slick(
+              $.extend({}, options, {rtl: true})
+          );
+        }
+        else {
+          ocObject.slick(options);
+        }
+      }
+
+      var lightslider = $('#lightSlider', context);
+      var modallightslider = $('#drupal-modal #lightSlider', context);
+      applyRtl(lightslider, slickOptions);
+      applyRtl(modallightslider, slickOptions);
+
 
       // Slider - 3 For Mobile - Image Gallery.
       $('#product-image-gallery-mobile', context).lightSlider({
         item: 1,
+        rtl: true,
         onAfterSlide: function (el) {
           el.children('iframe').remove();
         }
@@ -85,7 +103,9 @@
             ]
           };
 
-          $('#product-image-gallery').slick(slickModalOptions);
+          var gallery = $('#product-image-gallery');
+          applyRtl(gallery, slickModalOptions);
+
           var curSlide = $('#product-image-gallery').slick('slickCurrentSlide');
           var defaultMainImage = $('#product-image-gallery li[data-slick-index="' + curSlide + '"]');
           var bigImgUrl = defaultMainImage.children('a').attr('href');
@@ -97,6 +117,7 @@
           $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
             var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
             productGallery.slick('unslick');
+            $('body').removeClass('pdp-modal-overlay');
           });
 
           // ZoomIn ZoomOut in Gallery view with a draggable container.
@@ -194,6 +215,7 @@
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
       $('.acq-content-product .cloudzoom #cloud-zoom-wrap', context).on('click', function () {
+        $('body').addClass('pdp-modal-overlay');
         myDialog.show();
         myDialog.showModal();
       });
@@ -258,7 +280,7 @@
       });
 
       // Preventing click on image.
-      $('.acq-content-product-modal #cloud-zoom-wrap a').on('click', function (event) {
+      $('.acq-content-product-modal #cloud-zoom-wrap a, .acq-content-product #cloud-zoom-wrap a').on('click', function (event) {
         event.stopPropagation();
         event.preventDefault();
       });

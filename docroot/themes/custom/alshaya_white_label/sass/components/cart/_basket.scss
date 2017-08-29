@@ -36,7 +36,7 @@
         .sku-promotion-link {
           font-size: 12px !important;
           color: $scarlet !important;
-          width: auto !important;
+          width: 100% !important;
           padding-top: 1px;
 
           html[lang=ar] & {
@@ -48,11 +48,23 @@
           #{$right}: -20px;
           top: 0;
           position: absolute;
+
+          @include breakpoint($upto-desktop) {
+            display: none;
+          }
         }
 
         .tooltip {
-          #{$left}: 7.4rem;
           top: -0.9rem;
+          #{$left}: 7.4rem;
+
+          @include breakpoint($tablet) {
+            #{$left}: 10rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$left}: 14.4rem;
+          }
 
           p {
             margin: 0;
@@ -275,6 +287,19 @@
       .dark + div {
         font-family: $arial;
       }
+
+      .price-amount,
+      .price-currency,
+      .discount-prefix,
+      .discount-value {
+        font-weight: normal;
+      }
+
+      .discount-value {
+        @include breakpoint($only-mobile) {
+          margin-left: 0.8rem;
+        }
+      }
     }
 
     .mobile-only {
@@ -447,14 +472,6 @@
   }
 }
 
-.alias--cart {
-  &.path--cart .site-brand-home a {
-    width: auto;
-    display: block;
-    margin-#{$left}: auto;
-  }
-}
-
 #details-privilege-card-wrapper {
   .privilege-card-wrapper {
     padding-left: 0;
@@ -607,8 +624,8 @@
 
   label {
     position: relative;
-    top: -3.4rem;
-    font-size: 0.75rem;
+    top: -1.4rem;
+    font-size: 1rem;
     color: $greyish;
     font-family: $arial;
 
@@ -638,6 +655,11 @@
 
     &:focus {
       border-color: $windows-blue;
+
+      & ~ label {
+        top: -3.2rem;
+        font-size: 0.75rem;
+      }
     }
 
     &.error {
@@ -998,7 +1020,7 @@ html[lang=ar] {
   }
 
   .alias--cart .c-page-title {
-    font-family: 'alshaya-arabic-thin';
+    font-family: $alshaya-arabic-thin-nodir, sans-serif;
     font-size: 1.3rem;
     margin-bottom: 0.75rem;
     margin-top: 2em;
@@ -1021,8 +1043,7 @@ html[lang=ar] {
   .promo-continue-shopping-wrapper summary,
   .alias--cart #table-cart-totals td:first-child,
   #block-basketpromotionmessage p,
-  .alias--cart #table-cart-items tr th,
-  .ladda-label {
+  .alias--cart #table-cart-items tr th {
     font-size: 0.75rem;
   }
 
@@ -1127,7 +1148,7 @@ html[lang=ar] {
     }
 
     @include breakpoint($desktop) {
-      float: right !important;
+      float: left !important;
       padding-right: 0.56rem;
     }
 
@@ -1160,6 +1181,14 @@ html[lang=ar] {
     span.price-amount {
       margin-left: 0.4rem;
       float: right;
+
+      @include breakpoint($tablet) {
+        margin-left: 0.2rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-left: 0.9rem;
+      }
     }
 
     .price-currency.suffix {
@@ -1202,6 +1231,18 @@ html[lang=ar] .path--cart h1.c-page-title::before {
 }
 
 td.price {
+  @include breakpoint($only-mobile) {
+    .has--special--price {
+      .price-amount {
+        text-decoration: line-through;
+      }
+
+      .price-currency {
+        text-decoration: line-through;
+      }
+    }
+  }
+
   @include breakpoint($tablet) {
     .price-type__wrapper,
     .has--special--price,
@@ -1278,3 +1319,43 @@ body .ladda-button {
   font-family: $alshaya-bold;
 }
 
+.continue-shopping {
+  color: $white-five;
+  line-height: 0;
+
+  @include breakpoint($only-mobile) {
+    padding-top: 1rem;
+  }
+
+  @include breakpoint($tablet) {
+    position: absolute;
+    top: 50%;
+    #{$right}: 2%;
+  }
+
+  @include breakpoint($desktop) {
+    #{$right}: 25%;
+  }
+
+  a {
+    color: $white-five;
+    font-size: 1rem;
+    text-decoration: underline;
+
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+#block-baskethorizontalproductrecommendation {
+  .owl-item a.above-mobile-block:hover .c-products__item__label {
+    color: $cerulean-two;
+    text-decoration: underline;
+  }
+}
+
+.path--cart .messages.messages--status::before {
+  font-size: 1.9rem;
+  margin-top: -8px;
+}

@@ -381,11 +381,15 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $cart_total['actions'] = $form['actions'];
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $cart_total));
 
-  // // Update page title.
+  // Update page title.
   $cartStorage = \Drupal::service('acq_cart.cart_storage');
   $cart = $cartStorage->getCart();
   $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $cart->getCartItemsCount()])));
 
+  // Update mini cart Block with correct price & quantity.
+  $mini_cart_block_entity = \Drupal::entityTypeManager()->getStorage('block')->load('cartminiblock');
+  $mini_cart_block_view = \Drupal::entityTypeManager()->getViewBuilder('block')->view($mini_cart_block_entity);
+  $response->addCommand(new ReplaceCommand('div[data-block-plugin-id="cart_mini_block"]', $mini_cart_block_view));
   return $response;
 }
 
@@ -730,23 +734,29 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   if ($is_free_item) {
     foreach ($cart_rules as $cart_rule) {
       $promotion = \Drupal::service('alshaya_acm_promotion.manager')->getPromotionByRuleId($cart_rule);
-      $promotion_action = $promotion->get('field_acq_promotion_action')->getString();
-      if (($promotion_action === 'buy_x_get_y_cheapest_free') &&
-        (!isset($promotions[$promotion->id()]))) {
-        $langcode = \Drupal::service('language_manager')->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
-        $promotion = \Drupal::service('entity.repository')->getTranslationFromContext($promotion, $langcode);
-        $promotion_text = $promotion->get('field_acq_promotion_label')->getString();
-        $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
-        $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
-        $description = $promotion->get('field_acq_promotion_description')->getString();
+      if ($promotion) {
+        $promotion_action = $promotion->get('field_acq_promotion_action')->getString();
+        if (($promotion_action === 'buy_x_get_y_cheapest_free') &&
+          (!isset($promotions[$promotion->id()]))) {
+          $langcode = \Drupal::service('language_manager')->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+          $promotion = \Drupal::service('entity.repository')->getTranslationFromContext($promotion, $langcode);
+          $description_value = '';
+          $promotion_text = $promotion->get('field_acq_promotion_label')->getString();
+          $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
+          $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
+          $description = $promotion->get('field_acq_promotion_description')->first();
+          if ($description) {
+            $description_value = $description->getValue();
+          }
 
-        $promotions[$promotion->id()] = [
-          'text' => $promotion_text,
-          'description' => $description,
-          'discount_type' => $discount_type,
-          'discount_value' => $discount_value,
-        ];
-        break;
+          $promotions[$promotion->id()] = [
+            'text' => $promotion_text,
+            'description' => $description_value,
+            'discount_type' => $discount_type,
+            'discount_value' => $discount_value,
+          ];
+          break;
+        }
       }
     }
   }

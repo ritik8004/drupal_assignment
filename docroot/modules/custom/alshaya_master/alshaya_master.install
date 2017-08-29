@@ -20,6 +20,9 @@ function alshaya_master_install() {
       'en' => 'Sign out',
       'ar' => 'تسجيل الخروج',
     ],
+    'Sign out' => [
+      'ar' => 'تسجيل الخروج',
+    ],
     'Create new account' => [
       'en' => 'Create an account',
     ],
@@ -182,7 +185,9 @@ function alshaya_master_install() {
     ],
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
+      'en' => 'Please enter your @title.',
     ],
+
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
     ],
@@ -318,7 +323,7 @@ function alshaya_master_install() {
     ],
     'The phone number %value provided for %field is not a valid mobile number for country %country.' => [
       'en' => 'The number provided %value is not a valid mobile number.',
-      'ar' => 'غير صحيح %value رقم الجوال',
+      'ar' => 'رقم الجوال %value غير صحيح',
     ],
     'Delivery to' => [
       'ar' => 'توصيل إلى',
@@ -356,8 +361,8 @@ function alshaya_master_install() {
     'Please agree to the Terms and Conditions.' => [
       'ar' => 'يرجى الموافقة على الشروط والأحكام',
     ],
-    '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four passwords were not allowed.</li></ul>' => [
-      'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li><li>لم يتم قبول المحاولات الأربعة السابقة</li></ul>',
+    '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li></ul>' => [
+      'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li></ul>',
     ],
     '<p>You\'re almost done.</p><p>We\'ve sent a verification email to <a href="mailto:[email]">[email]</a>.</p><p>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</p><p>It is also your final step in the sign up process.</p>' => [
       'ar' => '<p>أنت على وشك آلإنتهاء!</p><p>لقد تم إرسال رسالة تحقق إلكترونية إلى&nbsp;<a href="mailto:[email]">[email]</a></p><p>عند ضغطك على رابط عنوان البريد الإلكتروني، يتيح لنا معرفة أن البريد الإلكتروني صالح الفعالية و لك</p><p>كما أن هذه تعتبر آخر خطوة في عملية التسجيل</p>',
@@ -502,6 +507,7 @@ function alshaya_master_install() {
     ],
     '@name field is required.' => [
       'ar' => 'يرجى إدخال @name',
+      'en' => 'Please enter your @name.',
     ],
     'Order Total <span>(Before Delivery)</span>' => [
       'ar' => 'المبلغ الإجمالي للطلبية <span>(قبل التوصيل)</span>',
@@ -678,7 +684,7 @@ function alshaya_master_install() {
       'ar' => 'أعلى الصفحة',
     ],
     'The password does not satisfy the password policies.' => [
-      'ar' => 'كلمة السر غير مطابقة لسياسات كلمة السر',
+      'ar' => 'كلمة السر لا تحتوي على العناصر المطلوبة',
     ],
     '%name is not recognized as a username or an email address.' => [
       'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
@@ -942,9 +948,7 @@ function alshaya_master_install() {
     ],
     'Phone number in %field is required.' => [
       'ar' => 'يرجى إدخال رقم الجوال',
-    ],
-    'Phone number in %field is required.' => [
-      'en' => '%field field is required.',
+      'en' => 'Please enter your %field.',
     ],
     '1 hour' => [
       'ar' => 'ساعة واحدة',
@@ -985,6 +989,9 @@ function alshaya_master_install() {
     'Available at three stores near' => [
       'ar' => 'متوفر في 3 محلات بالقرب من ',
     ],
+    'Available at 3 stores near' => [
+      'ar' => 'متوفر في 3 محلات بالقرب من ',
+    ],
     'Tap to enlarge' => [
       'ar' => 'اضغط للتكبير',
     ],
@@ -994,8 +1001,11 @@ function alshaya_master_install() {
     'Collect from store in <em>@time</em>' => [
       'ar' => 'استلم من المحل بعد <em>@time</em>',
     ],
-    'You already have an account, please login.' => [
-      'ar' => 'يبدو أن تم  تسجيل حسابك مسبقاً, يرجى تسجيل الدخول.',
+    'please login' => [
+      'ar' => 'يرجى تسجيل الدخول',
+    ],
+    'You already have an account, @login_link.' => [
+      'ar' => 'يبدو أن لديك حساب  مسبقاً في سجلاتنا، @login_link.',
     ],
     'Earn one draw entry for every KD 5 spent online' => [
       'ar' => 'إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني',
@@ -1079,46 +1089,17 @@ function alshaya_master_install() {
     'Discount applied' => [
       'ar' => 'تم تفعيل الخصم',
     ],
+    'Please enter a valid @title with no special characters.' => [
+      'ar' => 'يرجى إدخال @title صحيح دون عناصر خاصة',
+    ],
+    'edit address' => [
+      'ar' => 'تعديل العنوان',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
-  // Get current active theme.
-  $active_theme = \Drupal::theme()->getActiveTheme();
-  // Get current theme name.
-  $current_theme = $active_theme->getName();
-  // Get current theme path.
-  $current_theme_path = $active_theme->getPath();
-  // Default Site logo path with default name.
-  $site_logo = $current_theme_path . '/site-logo';
-
   // Get config factory object.
   $config_factory = \Drupal::configFactory();
-  // Save default site logo.
-  $config_factory
-    ->getEditable('alshaya_white_label.settings')
-    ->setData([
-      'logo' => [
-        'path' => $site_logo . '.svg',
-      ],
-    ])
-    ->save();
-  // Save arabic site logo.
-  \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'alshaya_white_label.settings')
-    ->setData([
-      'logo' => [
-        'path' => $site_logo . '-ar.svg',
-      ],
-    ])
-    ->save();
-  // Save default logo for email.
-  $config_factory->getEditable('alshaya_master.theme.' . $current_theme . '.en')
-    ->set('email_logo_path', $site_logo . '.png')
-    ->save();
-  // Save arabic email logo.
-  $config_factory->getEditable('alshaya_master.theme.alshaya_white_label.ar')
-    ->set('email_logo_path', $site_logo . '-ar.png')
-    ->save();
 
   // Set /home page as site front page.
   $site_config = $config_factory->getEditable('system.site')->get();
@@ -1150,25 +1131,6 @@ function alshaya_master_install() {
   \Drupal::configFactory()->getEditable('editor.editor.rich_text')
     ->set('settings.toolbar.rows.0', $editor_config)
     ->set('settings.plugins.stylescombo.styles', "p.normal|Normal\r\nh1.title|Heading\r\nh1.title--arabic| Heading Arabic\r\nh2.subhead|Sub Heading\r\np.arabic|Arabic Text")
-    ->save();
-
-  // Set the Status Messages block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_messages')
-    ->set('region', 'hero_content')
-    ->set('weight', -14)
-    ->save();
-
-  // Set page title to exclude on Frontpage.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_page_title')
-    ->set('visibility', [
-      'request_path' => [
-        'id' => 'request_path',
-        'pages' => '<front>',
-        'negate' => 'true',
-        'context_mapping' => [],
-      ],
-    ])
-    ->set('weight', '-28')
     ->save();
 
   // Settings override of 'back_to_top'.
@@ -1252,20 +1214,6 @@ function alshaya_master_install() {
   // Change needs review label to 'Pending review'.
   \Drupal::configFactory()->getEditable('workbench_moderation.moderation_state.needs_review')
     ->set('label', 'Pending review')
-    ->save();
-
-  // Set breadcrumbs block to show only on Search page.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_breadcrumbs')
-    ->set('visibility', [
-      'request_path' => [
-        'id' => 'request_path',
-        'pages' => "/search\r\n/node/*\r\n/taxonomy/term/*\r\n/cart\r\n/store-finder\r\n/store-finder/list\r\n/store-finder/map\r\n/user/*\r\n/contact\r\n/sitemap",
-        'negate' => FALSE,
-        'context_mapping' => [],
-      ],
-    ])
-    ->set('region', 'breadcrumb')
-    ->set('weight', '-26')
     ->save();
 
   // Set the access-denied page to '/user'.

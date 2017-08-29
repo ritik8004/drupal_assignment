@@ -217,7 +217,7 @@ class Configurable extends SKUPluginBase {
       catch (\Exception $e) {
         // Clear stock cache.
         $stock_cid = acq_sku_get_stock_cache_id($tree_pointer);
-        \Drupal::cache('data')->invalidate($stock_cid);
+        \Drupal::cache('stock')->invalidate($stock_cid);
 
         // Clear product and forms related to sku.
         Cache::invalidateTags(['acq_sku:' . $tree_pointer->id()]);

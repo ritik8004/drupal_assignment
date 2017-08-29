@@ -5,8 +5,6 @@
  * Module file for alshaya_user.
  */
 
-use Drupal\block\Entity\Block;
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
@@ -85,6 +83,9 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     $form['account']['pass']['#title'] = t('Password');
     $form['account']['pass']['#type'] = 'password';
     $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
+
+    // Add password validation attribute.
+    $form['account']['pass']['#attributes']['passvalidate'] = 'passvalidate';
   }
 }
 
@@ -166,17 +167,6 @@ function alshaya_user_preprocess_menu(&$variables) {
 }
 
 /**
- * Implements hook_block_access().
- */
-function alshaya_user_block_access(Block $block, $operation, AccountInterface $account) {
-  // Not allow 'my account- need help' block other than user/{uid} page.
-  if ($operation == 'view' && $block->id() == 'myaccountneedhelp') {
-    $current_route = \Drupal::routeMatch()->getRouteName();
-    return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
-  }
-}
-
-/**
  * Implements hook_block_build_alter().
  */
 function alshaya_user_block_build_alter(array &$build, BlockPluginInterface $block) {
@@ -205,6 +195,10 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   $form['#validate'][] = '_password_policy_user_profile_form_validate';
   $form['#validate'][] = 'alshaya_user_change_password_validate';
   $form['#submit'][] = '_password_policy_user_profile_form_submit';
+
+  // Add password validation attribute.
+  $form['account']['pass']['#attributes']['passvalidate'] = 'passvalidate';
+  $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 }
 
 /**
@@ -298,12 +292,14 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
   $signup_mail->set('register_withpassword.subject', 'على موقع [site:name] [user:field_first_name:value] تفاصيل حساب');
   $signup_mail->set('register_withpassword.body', '<h1>،[user:field_first_name:value] مرحباً</h1>
 
-أهلاً بك في موقع [site:name] .و شكراً على الانضمام إلينا
+.أهلاً بك في موقع [site:name] و شكراً على الانضمام إلينا
 
 [user:mail] :لقد قمت بالتسجيل عن طريق عنوان البريد الإلكتروني
 
-:يمكنك الآن تسجيل الدخول وتقوم بتعديل وتحديث بياناتك الشخصية في أي وقت بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
-<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
+<b>الرجاء الضغط على رابط “التحقق من بريدك الإلكتروني” ليتم تأكيد بريدك آلإلكتروني و تفعيل حسابك</b>
+<a href="[user:registrationpassword-url]" class="button">التحقق من بريدك الإلكتروني</a>
+
+<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a> :أو تحقق عبر الضغط على الرابط التالي
 
 .إذا كان لديك أي سؤال، يرجى الاطلاع على <a href="[site:url]">صفحة الأسئلة المتكررة</a>  أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن
 
@@ -423,5 +419,20 @@ function alshaya_user_mail_alter(&$message) {
 
     // Alter the header from information according to user preferred language.
     $message['headers']['From'] = $sitename . ' <' . $message['from'] . '>';
+  }
+}
+
+/**
+ * Implements hook_link_alter().
+ */
+function alshaya_user_link_alter(&$variables) {
+  /** @var \Drupal\core\Url $url */
+  $url = $variables['url'];
+  if ($url->isExternal()) {
+    return;
+  }
+  elseif ($url->getRouteName() == 'user.logout') {
+    $path = \Drupal::service('path.current')->getPath();
+    $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path.alias_manager')->getAliasByPath($path);
   }
 }
