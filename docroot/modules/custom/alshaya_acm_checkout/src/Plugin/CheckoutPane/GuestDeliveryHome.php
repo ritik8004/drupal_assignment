@@ -70,6 +70,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $address = (array) $cart->getShipping();
     $default_shipping = '';
 
+    if ($this->getCartSelectedDeliveryMethod() != 'hd') {
+      $address = [];
+    }
+
     if (empty($address['country_id'])) {
       $address_default_value = [
         'country_code' => _alshaya_custom_get_site_level_country_code(),

@@ -22,6 +22,13 @@ trait CheckoutDeliveryMethodTrait {
   protected static $deliveryMethodSelected;
 
   /**
+   * Selected delivery method in cart.
+   *
+   * @var string
+   */
+  protected static $deliveryMethodSelectedCart;
+
+  /**
    * Function to check if parameter in query is available of not.
    *
    * @return bool
@@ -62,6 +69,8 @@ trait CheckoutDeliveryMethodTrait {
         }
       }
 
+      self::$deliveryMethodSelectedCart = $cart_method;
+
       // We method is not allowed (someone trying to trick the system), redirect
       // to default or cart method.
       if ($method) {
@@ -88,6 +97,16 @@ trait CheckoutDeliveryMethodTrait {
     }
 
     return self::$deliveryMethodSelected;
+  }
+
+  /**
+   * Function to get selected delivery method code in cart.
+   *
+   * @return string
+   *   Selected delivery method's code from cart.
+   */
+  public function getCartSelectedDeliveryMethod() {
+    return self::$deliveryMethodSelectedCart;
   }
 
   /**
