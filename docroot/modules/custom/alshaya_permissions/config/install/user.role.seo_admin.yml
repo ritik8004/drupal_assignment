@@ -24,3 +24,5 @@ permissions:
   - 'edit any store content'
   - 'edit terms in acq_product_category'
   - 'view the administration theme'
+  - 'administer redirects'
+  - 'administer redirect settings'

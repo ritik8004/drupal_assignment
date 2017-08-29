@@ -38,23 +38,30 @@
 
   // Mobile Language Toggle
   // Language Settings In Mobile View.
-  if ($(window).width() < 767) {
-    setTimeout(function () {
+  var hide = localStorage.getItem('hide');
+
+  if ($(window).width() <= 1024) {
+    var ReachedBottom = $(window).scrollTop() + $(window).height() > $(document).height() - 100;
+
+    if (hide === 'true' || ReachedBottom === true) {
+      $('body').removeClass('mobile-language-toggle-active');
+      localStorage.setItem('hide', 'true');
+    }
+    else {
       $('body').addClass('mobile-language-toggle-active');
-    }, 1000);
+    }
 
     $(window).scroll(function () {
-      if ($(window).scrollTop() + $(window).height() > $(document)
-          .height() - 100) {
+      if ($(window).scrollTop() + $(window).height() > $(document).height() - 100 === true && $('body').hasClass('mobile-language-toggle-active')) {
         $('body').removeClass('mobile-language-toggle-active');
+        localStorage.setItem('hide', 'true');
       }
     });
   }
 
   $('.close-lang-toggle').click(function () {
-    setTimeout(function () {
-      $('body').removeClass('mobile-language-toggle-active');
-    }, 1000);
+    $('body').removeClass('mobile-language-toggle-active');
+    localStorage.setItem('hide', 'true');
   });
 
   $(document).on('mouseup', function (e) {
