@@ -70,6 +70,16 @@ $settings['alshaya_api.settings']['password'] = 'password123';
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
 $config['acq_commerce.conductor']['debug'] = TRUE;
 
+// Disable unwanted core views.
+$settings['views_to_disable'] = [
+  'frontpage',
+  'profiles',
+  'content_recent',
+  'taxonomy_term',
+  'who_s_new',
+  'who_s_online',
+];
+
 switch ($env) {
   case 'local':
   case 'travis':
