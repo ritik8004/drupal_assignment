@@ -153,6 +153,10 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
         // Calculate the timestamp when we want the cache to expire.
         $expire = \Drupal::time()->getRequestTime() + $time;
 
+        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
+
+        $expire = max($expire, $max_cache_lifetime);
+
         // Set the stock in cache.
         \Drupal::cache('stock')->set($cid, $stock, $expire);
       }
