@@ -1,33 +1,23 @@
-From f596790f00db33430ab4a877daabb36430b6deca Mon Sep 17 00:00:00 2001
-From: piyuesh23 <piyuesh23@qed42.com>
-Date: Tue, 29 Aug 2017 15:29:59 +0300
-Subject: [PATCH] MMCPA-2204: Setting max cache lifetime for sku stocks +
- adding the same in config form.
-
----
- .../acq_commerce/modules/acq_sku/acq_sku.module    |  4 +++
- .../modules/acq_sku/acq_sku.routing.yml            |  8 +++++
- .../acq_sku/config/install/acq_sku.settings.yml    |  1 +
- .../modules/acq_sku/src/Form/SKUSettingsForm.php   | 38 +++++++++++++++++++---
- 4 files changed, 47 insertions(+), 4 deletions(-)
-
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.module b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.module
-index f1f6b2812768..4d9578a04bd0 100644
+index f1f6b2812..05b5fb81f 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.module
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.module
-@@ -153,6 +153,10 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
+@@ -149,9 +149,12 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
+       // If cache multiplier is zero we don't cache the stock.
+       if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
+         $time = $stock['quantity'] ? $stock['quantity'] * $cache_multiplier : $cache_multiplier;
++        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_expire');
+
          // Calculate the timestamp when we want the cache to expire.
-         $expire = \Drupal::time()->getRequestTime() + $time;
- 
-+        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
-+
-+        $expire = max($expire, $max_cache_lifetime);
-+
+-        $expire = \Drupal::time()->getRequestTime() + $time;
++        $current_timestamp = \Drupal::time()->getRequestTime();
++        $stock_cache_lifetime = max($time, $max_cache_lifetime);
++        $expire = $stock_cache_lifetime + $current_timestamp;
+
          // Set the stock in cache.
          \Drupal::cache('stock')->set($cid, $stock, $expire);
-       }
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.routing.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.routing.yml
-index 2047911d8ad0..d20c55d166a2 100644
+index 2047911d8..d20c55d16 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.routing.yml
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.routing.yml
 @@ -60,3 +60,11 @@ acq_sku.sync:
@@ -44,25 +34,25 @@ index 2047911d8ad0..d20c55d166a2 100644
 +    _permission: 'access commerce administration pages'
 \ No newline at end of file
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/acq_sku.settings.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/acq_sku.settings.yml
-index b67a4972e882..b1a4acd8fbc5 100644
+index b67a4972e..907559bee 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/acq_sku.settings.yml
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/config/install/acq_sku.settings.yml
 @@ -1 +1,2 @@
  stock_cache_multiplier: 600
-+stock_cache_max_lifetime: 7200
++stock_cache_max_expire: 7200
 \ No newline at end of file
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Form/SKUSettingsForm.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Form/SKUSettingsForm.php
-index d781bdea07dd..7f7072e18f26 100644
+index d781bdea0..4f966db97 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Form/SKUSettingsForm.php
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Form/SKUSettingsForm.php
 @@ -2,7 +2,7 @@
- 
+
  namespace Drupal\acq_sku\Form;
- 
+
 -use Drupal\Core\Form\FormBase;
 +use Drupal\Core\Form\ConfigFormBase;
  use Drupal\Core\Form\FormStateInterface;
- 
+
  /**
 @@ -12,7 +12,18 @@
   *
@@ -81,7 +71,7 @@ index d781bdea07dd..7f7072e18f26 100644
 +  protected function getEditableConfigNames() {
 +    return ['acq_sku.settings'];
 +  }
- 
+
    /**
     * Returns a unique string identifying the form.
 @@ -33,7 +44,10 @@ public function getFormId() {
@@ -91,10 +81,10 @@ index d781bdea07dd..7f7072e18f26 100644
 -    // Empty implementation of the abstract submit class.
 +    $sku_settings = $this->config('acq_sku.settings');
 +    $sku_settings->set('stock_cache_multiplier', $form_state->getValue('stock_cache_multiplier'));
-+    $sku_settings->set('stock_cache_max_lifetime', $form_state->getValue('stock_cache_max_lifetime'));
++    $sku_settings->set('stock_cache_max_expire', $form_state->getValue('stock_cache_max_expire'));
 +    $sku_settings->save();
    }
- 
+
    /**
 @@ -48,7 +62,23 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
     *   Form definition array.
@@ -107,20 +97,16 @@ index d781bdea07dd..7f7072e18f26 100644
 +    $form['stock_cache_multiplier'] = [
 +      '#type' => 'textfield',
 +      '#title' => $this->t('Stock Cache Multiplier'),
-+      '#description' => $this->t("Multiplier used while generating the cache expiration for SKU's stock"),
++      '#description' => $this->t("Multiplier used while generating the cache expiration for SKU's stock. e.g., cache_expire = stock_quantity * stock_cache_multiplier"),
 +      '#default_value' => $sku_settings->get('stock_cache_multiplier'),
 +    ];
 +
-+    $form['stock_cache_max_lifetime'] = [
++    $form['stock_cache_max_expire'] = [
 +      '#type' => 'textfield',
 +      '#title' => $this->t('Stock Cache Max Lifetime'),
-+      '#description' => $this->t("Max lifetime for the SKU's cache"),
-+      '#default_value' => $sku_settings->get('stock_cache_max_lifetime'),
++      '#description' => $this->t("Maximum lifetime for the stock cache in seconds."),
++      '#default_value' => $sku_settings->get('stock_cache_max_expire'),
 +    ];
 +
      return $form;
    }
- 
--- 
-2.10.1
-
