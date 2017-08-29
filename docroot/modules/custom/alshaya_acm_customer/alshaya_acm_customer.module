@@ -354,15 +354,8 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         else {
           // Check first if we have a cart in session.
           if ($cart = $cart_storage->getCart(FALSE)) {
-            // Check if current cart is not associated to another user.
-            if ($cart->customerEmail() && $cart->customerEmail() != $mail) {
-              // It is associated to someone else. We clear the cart in session.
-              $cart_storage->clearCart();
-            }
-            else {
-              // Cart is not assigned or assigned to same customer.
-              $cart_storage->associateCart($customer['customer_id'], $customer['email']);
-            }
+            // Associate the cart to returning customer.
+            $cart_storage->associateCart($customer['customer_id'], $customer['email']);
           }
         }
       }
