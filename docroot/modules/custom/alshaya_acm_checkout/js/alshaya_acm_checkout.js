@@ -39,6 +39,7 @@
               case 'diners_club_international':
                 $('.card-type-diners-club').addClass('active');
                 break;
+
               case 'visa':
               case 'mastercard':
               default:
@@ -137,6 +138,9 @@
 
           // Hide the form.
           $('#address-book-form-wrapper').slideUp();
+
+          // Display the hidden address which was being edited.
+          $('#edit-member-delivery-home-addresses').slideDown();
         });
       });
 
@@ -187,7 +191,7 @@
       });
 
       // Toggle the checkout guest login/returning customers sections on mobile.
-      if ($('#edit-login-tabs').is(":visible")) {
+      if ($('#edit-login-tabs').is(':visible')) {
         var tabs = $('#edit-login-tabs');
         tabs.parent().toggleClass('active');
 
@@ -262,7 +266,7 @@
     attach: function (context, settings) {
       var block = $('.block-checkout-summary-block');
 
-      $(window).once().on('scroll', function() {
+      $(window).once().on('scroll', function () {
         if ($('body').scrollTop() > 122) {
           block.addClass('fix-block');
         }
