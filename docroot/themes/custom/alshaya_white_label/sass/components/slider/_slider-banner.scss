@@ -9,6 +9,31 @@
   @include breakpoint($tablet) {
     margin-bottom: 1.5rem;
   }
+
+  .slick-slider {
+    overflow: hidden;
+
+    .slick-list {
+      width: 47.5rem;
+      #{$left}: calc((100vw - 47.5rem) / 2);
+
+      @include breakpoint($tablet) {
+        width: 71.875rem;
+        #{$left}: calc((100vw - 71.875rem) / 2);
+      }
+
+      .ucbrowser & {
+        @include breakpoint(orientation portrait) {
+          #{$left}: -25%;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        width: 120rem;
+        #{$left}: calc((100vw - 120rem) / 2);
+      }
+    }
+  }
 }
 
 .c-slider-promo__items {
@@ -28,14 +53,12 @@
 .owl-next,
 .slick-prev,
 .slick-next {
-  @include breakpoint($tablet) {
-    top: 45%;
-    top: calc(50% - 1.125rem); // 50% - (2.25rem / 2)
-  }
+  top: 45% !important;
+  top: calc(50% - 2.25rem) !important;
 
-  @include breakpoint($only-mobile) {
-    top: 45%;
-    top: calc(50% - (4.75rem + 1.125rem)); // 50% - (4.375rem - (2.25rem / 2))
+  @include breakpoint($tablet) {
+    top: 45% !important;
+    top: calc(50% - 1.125rem) !important;
   }
 
   @include u-image-replacement;
