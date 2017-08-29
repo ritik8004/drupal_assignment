@@ -141,9 +141,9 @@
 
   .video_banner_content {
     position: absolute;
-    width: 305px;
-    bottom: 50px;
-    height: 146px;
+    width: 19rem;
+    bottom: 3.15rem;
+    height: 9.19rem;
     z-index: 2;
 
     .video-embed-field-responsive-video iframe {
@@ -152,7 +152,7 @@
   }
 
   @include breakpoint($desktop) {
-    max-width: 1026px;
+    max-width: 64.15rem;
   }
 
   @media (max-width: 768px) {
@@ -161,7 +161,7 @@
     .video_banner_content {
       position: static;
       width: 100%;
-      margin-bottom: 25px;
+      margin-bottom: 1.65rem;
       height: 100%;
     }
 
