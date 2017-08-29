@@ -1243,7 +1243,9 @@
     }
 
     @include breakpoint($only-mobile) {
-      height: 8rem;
+      .basic-details-wrapper & {
+        height: 8rem;
+      }
     }
 
     .sku-base-form > div,
@@ -1320,21 +1322,23 @@
         height: 2.1875rem;
 
         @include breakpoint($only-mobile) {
-          float: none;
-          position: fixed;
-          bottom: 0;
-          width: 100%;
-          z-index: 4;
-          margin: 0;
-          #{$left}: 0;
-          height: 2.5rem;
+          .basic-details-wrapper & {
+            float: none;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 4;
+            margin: 0;
+            #{$left}: 0;
+            height: 2.5rem;
 
-          .ladda-label {
-            html[lang="ar"] & {
-              margin-top: 0;
-              position: absolute;
-              top: 1rem;
-              left: 33%;
+            .ladda-label {
+              html[lang="ar"] & {
+                margin-top: 0;
+                position: absolute;
+                top: 1rem;
+                left: 33%;
+              }
             }
           }
         }
