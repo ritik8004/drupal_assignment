@@ -1343,3 +1343,31 @@ html[lang=ar] .alias--cart #table-cart-items tr th {
     font-size: 0.875rem;
   }
 }
+
+html[lang=ar] .alias--cart {
+  #table-cart-items {
+    .delivery-option {
+      .home-delivery.tooltip--head {
+        & ~ .tooltip {
+          display: none;
+
+          @include breakpoint($desktop) {
+            display: block;
+            right: 2.75rem;
+          }
+        }
+      }
+
+      .click-collect.tooltip--head {
+        & ~ .tooltip {
+          display: none;
+
+          @include breakpoint($desktop) {
+            display: block;
+            right: -0.25rem;
+          }
+        }
+      }
+    }
+  }
+}
