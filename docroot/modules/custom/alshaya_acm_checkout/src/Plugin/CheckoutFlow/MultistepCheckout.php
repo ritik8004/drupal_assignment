@@ -98,9 +98,21 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   protected function processStepId($requested_step_id) {
     $cart = $this->cartStorage->getCart(FALSE);
 
+    // We need to show confirmation step even after cart is cleared.
+    if (empty($cart) && $requested_step_id == 'confirmation') {
+      $step_id = $requested_step_id;
+
+      $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+      $order_data = $temp_store->get('order');
+
+      if (!empty($order_data) && !empty($order_data['id'])) {
+        return $step_id;
+      }
+    }
+
     // Redirect user to basket page if there are no items in cart and user is
     // trying to checkout.
-    if ($requested_step_id != 'confirmation' && (empty($cart) || !$cart->items())) {
+    if (empty($cart) || !$cart->items()) {
       $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
       $response->send();
     }
@@ -142,16 +154,6 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     // delivery.
     if ($step_id == 'delivery' && (empty($current_step_id) || $current_step_id == 'login')) {
       return $step_id;
-    }
-
-    // We need to show confirmation step even after cart is cleared.
-    if ($step_id == 'confirmation') {
-      $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
-      $order_data = $temp_store->get('order');
-
-      if (!empty($order_data) && !empty($order_data['id'])) {
-        return $step_id;
-      }
     }
 
     // If user is on a certain step in their cart, check that the step being
@@ -340,8 +342,8 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         $orders_manager->clearOrderCache($email, $current_user_id);
         $orders_manager->clearLastOrderRelatedProductsCache();
 
-        // Create a new cart now.
-        $this->cartStorage->createCart();
+        // Clear the cart in session.
+        $this->cartStorage->clearCart();
       }
     }
   }

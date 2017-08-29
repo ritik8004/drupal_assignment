@@ -104,8 +104,14 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
     $current_step_index = array_search($current_step_id, $visible_step_ids);
 
     // Get last step completed in the cart.
-    $cart = $this->cartStorage->getCart();
-    $cart_step_id = $cart->getCheckoutStep();
+    if ($cart = $this->cartStorage->getCart(FALSE)) {
+      $cart_step_id = $cart->getCheckoutStep();
+    }
+    else {
+      // Confirmation is the only step where we won't have cart.
+      $cart_step_id = 'confirmation';
+    }
+
     $cart_step_index = array_search($cart_step_id, $visible_step_ids);
 
     $index = 0;
