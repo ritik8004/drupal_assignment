@@ -1,2 +1,2 @@
 stock_cache_multiplier: 600
-stock_cache_max_lifetime: 7200
+stock_cache_max_expire: 7200
