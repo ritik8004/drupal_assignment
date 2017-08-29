@@ -32,15 +32,11 @@
   @include breakpoint($tablet) {
     top: 45%;
     top: calc(50% - 1.125rem);
-
-    // 50% - (2.25rem / 2)
   }
 
   @include breakpoint($only-mobile) {
     top: 45%;
     top: calc(50% - (4.75rem + 1.125rem));
-
-    // 50% - (4.375rem - (2.25rem / 2))
   }
 
   @include u-image-replacement;
@@ -136,9 +132,11 @@
 }
 
 // Video Banner
-.video_banner {
+.banner-container {
   position: relative;
-  max-width: 1284px;
+}
+
+.video_banner {
   padding: 0;
 
   .video_banner_content {
