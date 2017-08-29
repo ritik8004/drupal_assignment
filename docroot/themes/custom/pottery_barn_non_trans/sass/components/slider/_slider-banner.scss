@@ -143,20 +143,32 @@
 
   .video_banner_content {
     position: absolute;
-    width: 30%;
-    bottom: 50px;
-    left: 25px;
-  }
-}
+    width: 19rem;
+    bottom: 3.15rem;
+    height: 9.19rem;
+    z-index: 2;
 
-@include breakpoint($upto-tablet) {
-  .video_banner .video_banner_content {
-    position: static;
-    width: 100%;
-    margin-bottom: 25px;
+    .video-embed-field-responsive-video iframe {
+      position: static;
+    }
   }
 
-  .c-content__slider {
-    //display: none;
+  @include breakpoint($desktop) {
+    max-width: 64.15rem;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+
+    .video_banner_content {
+      position: static;
+      width: 100%;
+      margin-bottom: 1.65rem;
+      height: 100%;
+    }
+
+    .video-embed-field-responsive-video iframe {
+      position: absolute !important;
+    }
   }
 }
