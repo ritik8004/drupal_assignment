@@ -39,6 +39,14 @@ services:
       - '@theme.manager'
       - '@csrf_token'
 
+  acq_sku.linked_sku:
+      class: Drupal\acq_sku\AcqSkuLinkedSku
+      arguments:
+        - '@acq_commerce.api'
+        - '@cache.default'
+        - '@language_manager'
+        - '@logger.factory'
+
   cache.stock:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:

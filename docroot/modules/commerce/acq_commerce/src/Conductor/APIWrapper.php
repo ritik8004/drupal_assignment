@@ -771,4 +771,39 @@ class APIWrapper {
     return $result;
   }
 
+  /**
+   * Get linked skus for a given sku by linked type.
+   *
+   * @param string $sku
+   *   The sku id.
+   * @param string $type
+   *   Linked type. Like - related/cross_sell/upsell.
+   *
+   * @return array|mixed
+   *   All linked skus of given type.
+   *
+   * @throws \Exception
+   */
+  public function getLinkedskus($sku, $type = LINKED_SKU_TYPE_ALL) {
+    $endpoint = $this->apiVersion . "/products/$sku/links_rule/$type";
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $result = [];
+
+    // In case of 'all', we don't filter.
+    $type = $type == LINKED_SKU_TYPE_ALL ? NULL : $type;
+
+    try {
+      $result = $this->tryAgentRequest($doReq, $type);
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $result;
+  }
+
 }
