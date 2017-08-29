@@ -148,13 +148,12 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
 
       // If cache multiplier is zero we don't cache the stock.
       if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
-        $time = $stock['quantity'] ? $stock['quantity'] * $cache_multiplier : $cache_multiplier;
-        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_expire');
+        $default_cache_lifetime = $stock['quantity'] ? $stock['quantity'] * $cache_multiplier : $cache_multiplier;
+        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
 
         // Calculate the timestamp when we want the cache to expire.
-        $current_timestamp = \Drupal::time()->getRequestTime();
-        $stock_cache_lifetime = max($time, $max_cache_lifetime);
-        $expire = $stock_cache_lifetime + $current_timestamp;
+        $stock_cache_lifetime = max($default_cache_lifetime, $max_cache_lifetime);
+        $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
 
         // Set the stock in cache.
         \Drupal::cache('stock')->set($cid, $stock, $expire);
