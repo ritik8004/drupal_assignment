@@ -1631,18 +1631,51 @@ article.product-out-of-stock {
 .apply-fake {
   list-style: none;
   display: inline;
+  float: $right;
 }
 
 .fake-apply-button {
   font-family: $alshaya-bold;
   display: inline-block;
   margin-bottom: 0.875rem;
-  padding: 0.3625rem 1.875rem 0.4625rem;
+  padding: 0.3625rem 1.875rem 0.5625rem;
   background: $pumpkin-orange;
   color: $white-five;
   cursor: pointer;
-  margin-#{$left}: 1.5rem;
+  margin-#{$left}: 1rem;
   font-size: 0.75rem;
   border: 0;
 }
 
+.filter-menu-label {
+  .fake-apply-button.inactive,
+  .clear-all-fake.inactive {
+    border: 1px solid $whisper-dark !important;
+    text-align: center;
+    padding: 0;
+    background: none;
+    width: 4.7rem;
+    min-height: 1.9375rem;
+    max-height: 1.9375rem;
+    font-size: 0.75rem !important;
+    font-family: $alshaya-thin !important;
+    margin-right: 0;
+    margin-left: 1rem;
+    color: $whisper-dark !important;
+
+    span {
+      color: $whisper-dark !important;
+    }
+  }
+}
+
+html[lang=ar] {
+  .fake-apply-button {
+    padding: 0.1rem 1rem 0.2rem;
+    margin-right: 1rem;
+
+    &.inactive {
+      margin-left: 0;
+    }
+  }
+}
