@@ -3,6 +3,8 @@
  * Product Zoom Gallery.
  */
 
+/* global isRTL */
+
 (function ($) {
   'use strict';
   Drupal.behaviors.alshaya_product_zoom = {
@@ -37,12 +39,28 @@
         items.addClass('cloud-zoom-processed', context).once('bind-events').CloudZoom();
       }
 
-      $('#lightSlider', context).slick(slickOptions);
-      $('#drupal-modal #lightSlider', context).slick(slickOptions);
+      function applyRtl(ocObject, options) {
+        if (isRTL() && $(window).width() < 1025) {
+          ocObject.attr('dir', 'rtl');
+          ocObject.slick(
+              $.extend({}, options, {rtl: true})
+          );
+        }
+        else {
+          ocObject.slick(options);
+        }
+      }
+
+      var lightslider = $('#lightSlider', context);
+      var modallightslider = $('#drupal-modal #lightSlider', context);
+      applyRtl(lightslider, slickOptions);
+      applyRtl(modallightslider, slickOptions);
+
 
       // Slider - 3 For Mobile - Image Gallery.
       $('#product-image-gallery-mobile', context).lightSlider({
         item: 1,
+        rtl: true,
         onAfterSlide: function (el) {
           el.children('iframe').remove();
         }
@@ -85,7 +103,9 @@
             ]
           };
 
-          $('#product-image-gallery').slick(slickModalOptions);
+          var gallery = $('#product-image-gallery');
+          applyRtl(gallery, slickModalOptions);
+
           var curSlide = $('#product-image-gallery').slick('slickCurrentSlide');
           var defaultMainImage = $('#product-image-gallery li[data-slick-index="' + curSlide + '"]');
           var bigImgUrl = defaultMainImage.children('a').attr('href');

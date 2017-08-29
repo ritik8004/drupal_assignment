@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_vs.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_vs_install() {
+  // Enable and set victoria_secret as default theme.
+  \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('victoria_secret');
+}

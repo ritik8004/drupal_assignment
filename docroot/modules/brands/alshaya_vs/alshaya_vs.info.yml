@@ -1,0 +1,8 @@
+name: 'Alshaya Victoria Secret'
+type: module
+description: 'The dedicated module for Victoria Secret brand.'
+package: Alshaya
+core: 8.x
+
+themes:
+  - victoria_secret

@@ -91,6 +91,8 @@ class CheckoutOptionsManager {
       return;
     }
 
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
     // Clean the code every-time.
     $code = $this->getCleanShippingMethodCode($code);
 
@@ -108,6 +110,7 @@ class CheckoutOptionsManager {
       $term = $this->termStorage->create([
         'vid' => 'shipping_method',
         'name' => $name,
+        'langcode' => $langcode,
       ]);
 
       // Following will be used as default, it will be available for
@@ -136,7 +139,6 @@ class CheckoutOptionsManager {
       /** @var \Drupal\taxonomy\Entity\Term $term */
       $term = $this->termStorage->load($tid);
 
-      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
       if ($term->hasTranslation($langcode)) {
         $term = $term->getTranslation($langcode);
       }

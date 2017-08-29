@@ -19,3 +19,4 @@ stock_check:
     - alshaya_master/ladda
     - alshaya_acm_product/product_view
     - alshaya_acm_cart_notification/cart_notification_js
+    - alshaya_white_label/jquery_mobile_touch_swipe

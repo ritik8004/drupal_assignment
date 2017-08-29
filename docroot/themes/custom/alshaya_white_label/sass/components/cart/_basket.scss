@@ -287,6 +287,19 @@
       .dark + div {
         font-family: $arial;
       }
+
+      .price-amount,
+      .price-currency,
+      .discount-prefix,
+      .discount-value {
+        font-weight: normal;
+      }
+
+      .discount-value {
+        @include breakpoint($only-mobile) {
+          margin-left: 0.8rem;
+        }
+      }
     }
 
     .mobile-only {
@@ -459,14 +472,6 @@
   }
 }
 
-.alias--cart {
-  &.path--cart .site-brand-home a {
-    width: auto;
-    display: block;
-    margin-#{$left}: auto;
-  }
-}
-
 #details-privilege-card-wrapper {
   .privilege-card-wrapper {
     padding-left: 0;
@@ -619,8 +624,8 @@
 
   label {
     position: relative;
-    top: -3.4rem;
-    font-size: 0.75rem;
+    top: -1.4rem;
+    font-size: 1rem;
     color: $greyish;
     font-family: $arial;
 
@@ -650,6 +655,11 @@
 
     &:focus {
       border-color: $windows-blue;
+
+      & ~ label {
+        top: -3.2rem;
+        font-size: 0.75rem;
+      }
     }
 
     &.error {
@@ -1033,8 +1043,7 @@ html[lang=ar] {
   .promo-continue-shopping-wrapper summary,
   .alias--cart #table-cart-totals td:first-child,
   #block-basketpromotionmessage p,
-  .alias--cart #table-cart-items tr th,
-  .ladda-label {
+  .alias--cart #table-cart-items tr th {
     font-size: 0.75rem;
   }
 
@@ -1139,7 +1148,7 @@ html[lang=ar] {
     }
 
     @include breakpoint($desktop) {
-      float: right !important;
+      float: left !important;
       padding-right: 0.56rem;
     }
 

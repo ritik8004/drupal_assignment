@@ -5,12 +5,13 @@
  * Alshaya master module file.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Site\Settings;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -591,4 +592,20 @@ function alshaya_master_get_site_date_from_api_date($date, $format = '') {
 
   // Return formated date in site's timezone.
   return \Drupal::service('date.formatter')->format($dt->getTimestamp(), $format);
+}
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_master_alshaya_master_post_drupal_install() {
+  // Disable unwanted core views.
+  if ($views_to_disable = Settings::get('views_to_disable')) {
+    $view_storage = \Drupal::service('entity.manager')->getStorage('view');
+    foreach ($views_to_disable as $view_machine_name) {
+      // Disable the view.
+      if ($view = $view_storage->load($view_machine_name)) {
+        $view->disable()->save();
+      }
+    }
+  }
 }

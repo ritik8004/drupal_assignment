@@ -135,12 +135,12 @@
   z-index: 99;
 
   @include if-rtl {
-    right: 127.5% !important;
+    right: 122.5% !important;
     left: auto !important;
   }
 
   @include if-ltr {
-    left: 127.5% !important;
+    left: 122.5% !important;
     right: auto !important;
   }
 

@@ -139,9 +139,9 @@ function alshaya_stores_finder_block_build_alter(array &$build, BlockPluginInter
 }
 
 /**
- * Implements hook_alshaya_i18n_onetime_translation_add().
+ * Implements hook_alshaya_master_post_drupal_install().
  */
-function alshaya_stores_finder_alshaya_i18n_onetime_translation_add() {
+function alshaya_stores_finder_alshaya_master_post_drupal_install() {
   $area_list = \Drupal::config('area_list.kw')->get('areas');
   // If area available.
   if ($area_list) {
