@@ -8,7 +8,7 @@ then
 fi
 
 
-while getopts "e:s:p:idtah" OPTION; do
+while getopts "e:s:p:b:idtah" OPTION; do
         case $OPTION in
 
                 e)
@@ -16,6 +16,9 @@ while getopts "e:s:p:idtah" OPTION; do
                         ;;
                 s)
                         site="$OPTARG-alshaya.acsitefactory.com"
+                        ;;
+                b)
+                        brandName="$OPTARG"
                         ;;
                 p)
                         loadsku=$OPTARG
@@ -65,7 +68,8 @@ drush $envn -l $site status;
 if [ "$initialSetup" = "yes" ]
 then
 	echo "inital setup"
-    drush $envn -l $site aiota;
+    # drush $envn -l $site aiota;
+    drush $envn -l $site apdi --brand="$brandName"
 	drush $envn -l $site upwd "Site factory admin" --password="AlShAyAU1@123" 
 	drush $envn -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin;
 	drush $envn -l $site user-add-role "administrator" --name=siteadmin;
@@ -95,6 +99,8 @@ then
 	drush $envn -l $site sync-commerce-cats;
 	drush $envn -l $site alshaya-api-sync-stores;
 	drush $envn -l $site acspm;
+    drush $envn -l $site queue-run acq_promotion_attach_queue;
+    drush $envn -l $site queue-run acq_promotion_detach_queue;
 
 	if [ "$loadsku" != "" ]
 	then
