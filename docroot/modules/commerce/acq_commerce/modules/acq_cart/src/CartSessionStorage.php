@@ -126,6 +126,15 @@ class CartSessionStorage implements CartStorageInterface {
   /**
    * {@inheritdoc}
    */
+  public function clearShippingMethodSession() {
+    $cart = $this->getCart(FALSE);
+    $cart->clearShippingMethod();
+    $this->addCart($cart);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCart($create_new = TRUE) {
     $cart = $this->session->get(self::STORAGE_KEY);
 
