@@ -230,6 +230,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
     }
     else {
+      // Clear the shipping method info now to ensure we set it properly again.
+      \Drupal::service('acq_cart.cart_storage')->clearShippingMethodSession();
+
       $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
       $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     }
