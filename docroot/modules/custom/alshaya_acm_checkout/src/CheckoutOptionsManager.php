@@ -404,10 +404,11 @@ class CheckoutOptionsManager {
    *   Cleaned code.
    */
   public function getCleanShippingMethodCode($code) {
-    // @TODO: Currently what we get back in orders is first 32 characters
+    // @TODO: Currently what we get back in orders is first 120 characters
     // and concatenated by underscore.
+    // Check MMCPA-2197 for more details.
     $code = str_replace(',', '_', $code);
-    $code = substr($code, 0, 32);
+    $code = substr($code, 0, 120);
     return $code;
   }
 
