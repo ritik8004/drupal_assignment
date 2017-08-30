@@ -56,4 +56,9 @@ function alshaya_mc_install() {
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
     ->set('region', -1)
     ->save();
+
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
 }
