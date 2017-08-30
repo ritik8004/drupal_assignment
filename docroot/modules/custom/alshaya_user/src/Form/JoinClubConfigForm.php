@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_loyalty\Form;
+namespace Drupal\alshaya_user\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,21 +14,21 @@ class JoinClubConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'alshaya_loyalty_join_club';
+    return 'alshaya_user_join_club';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_loyalty.join_club'];
+    return ['alshaya_user.join_club'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_loyalty.join_club');
+    $config = $this->config('alshaya_user.join_club');
 
     $image = $form_state->getValue('image');
     $image = $image ? reset($image) : '';
@@ -47,7 +47,7 @@ class JoinClubConfigForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    $config = $this->config('alshaya_loyalty.join_club');
+    $config = $this->config('alshaya_user.join_club');
 
     $form['image'] = [
       '#type' => 'managed_file',

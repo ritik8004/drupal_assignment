@@ -30,6 +30,12 @@ function alshaya_user_install() {
       'en' => 'user',
       'ar' => 'زبون',
     ],
+    'Join the club' => [
+      'ar' => 'نادي الامتيازات',
+    ],
+    "<p><span class=\"icon-win\">&nbsp;</span>Win exciting prizes</p>\r\n\r\n<p><span class=\"icon-reward\">&nbsp;</span>Unlock exclusive rewards</p>\r\n\r\n<p><span class=\"icon-heart\">&nbsp;</span>Be the first to know</p>\r\n\r\n<p><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></p>\r\n" => [
+      'ar' => "<p><span class=\"icon-win\">&nbsp;</span>اربح جوائز مدهشة</p>\r\n\r\n<p><span class=\"icon-reward\">&nbsp;</span>احصل على مكافآت حصرية</p>\r\n\r\n<p><span class=\"icon-heart\">&nbsp;</span>كُن أول من يعلم</p>\r\n\r\n<p><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a></p>\r\n",
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
