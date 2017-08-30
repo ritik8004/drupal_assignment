@@ -21,6 +21,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 
@@ -570,7 +571,24 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
     $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);
+
+    // Get the data from BubbleMetaData.
+    $bubbleable_metadata = BubbleableMetadata::createFromRenderArray($dynamic_parts);
+
+    // Retrieve the attachments from the $data.
+    $attachments = $bubbleable_metadata->getAttachments();
+
+    // Generate the settings to be sent back with the ajax response.
+    $settings = '';
+    if (!empty($attachments['drupalSettings'])) {
+      $settings .= '<script type="text/javascript">jQuery.extend(drupalSettings, ';
+      $settings .= Json::encode($attachments['drupalSettings']);
+      $settings .= ');</script>';
+    }
+
     $data['selector'] = $selector;
+    $data['replaceWith'] .= $settings;
+
     $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
 
     $selector = '.quantity-' . $sku_identifier;
