@@ -9,9 +9,10 @@
  * Implements hook_install().
  */
 function alshaya_vs_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_vs', 'inc', 'alshaya_vs.content');
   // Enable and set victoria_secret as default theme.
   \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
   \Drupal::service('theme_handler')->setDefault('victoria_secret');
-  // Create default copyright block content.
-  alshaya_vs_create_copyright_block_content();
+  // Create default content for the site.
+  alshaya_vs_create_default_content();
 }

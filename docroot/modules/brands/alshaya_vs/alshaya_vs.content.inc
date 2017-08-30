@@ -2,10 +2,18 @@
 
 /**
  * @file
- * Module file.
+ * File to create default content for victoria's secret.
  */
 
 use \Drupal\block_content\Entity\BlockContent;
+
+/**
+ * Create default copyright block content.
+ */
+function alshaya_vs_create_default_content() {
+  // Create copyright block.
+  alshaya_vs_create_copyright_block_content();
+}
 
 /**
  * Create default copyright block content.
