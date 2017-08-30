@@ -47,20 +47,25 @@
     @include u-overlay-content;
     @include u-image-replacement;
   }
+
+  .owl-prev,
+  .owl-next,
+  .slick-prev,
+  .slick-next {
+    top: 45% !important;
+    top: calc(50% - 2.25rem) !important;
+
+    @include breakpoint($tablet) {
+      top: 45% !important;
+      top: calc(50% - 1.125rem) !important;
+    }
+  }
 }
 
 .owl-prev,
 .owl-next,
 .slick-prev,
 .slick-next {
-  top: 45% !important;
-  top: calc(50% - 2.25rem) !important;
-
-  @include breakpoint($tablet) {
-    top: 45% !important;
-    top: calc(50% - 1.125rem) !important;
-  }
-
   @include u-image-replacement;
 
   cursor: pointer;
