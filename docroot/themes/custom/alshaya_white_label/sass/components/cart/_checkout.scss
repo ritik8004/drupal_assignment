@@ -1344,27 +1344,27 @@ html[lang=ar] .alias--cart #table-cart-items tr th {
   }
 }
 
-html[lang=ar] .alias--cart {
-  #table-cart-items {
-    .delivery-option {
-      .home-delivery.tooltip--head {
-        & ~ .tooltip {
-          display: none;
+html[lang=ar] {
+  header .block-cart-mini-block .quantity {
+    font-family: $arial-nodir;
+  }
 
-          @include breakpoint($desktop) {
-            display: block;
-            right: 2.75rem;
+  .alias--cart {
+    #table-cart-items {
+      .delivery-option {
+        .home-delivery.tooltip--head {
+          & ~ .tooltip {
+            @include breakpoint($desktop) {
+              right: 2.75rem;
+            }
           }
         }
-      }
 
-      .click-collect.tooltip--head {
-        & ~ .tooltip {
-          display: none;
-
-          @include breakpoint($desktop) {
-            display: block;
-            right: -0.25rem;
+        .click-collect.tooltip--head {
+          & ~ .tooltip {
+            @include breakpoint($desktop) {
+              right: -0.25rem;
+            }
           }
         }
       }
