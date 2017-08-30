@@ -12,7 +12,7 @@ index f1f6b2812..a53054555 100644
 
          // Calculate the timestamp when we want the cache to expire.
 -        $expire = \Drupal::time()->getRequestTime() + $time;
-+        $stock_cache_lifetime = max($default_cache_lifetime, $max_cache_lifetime);
++        $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
 +        $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
 
          // Set the stock in cache.
