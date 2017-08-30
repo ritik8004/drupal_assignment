@@ -18,7 +18,10 @@ module.exports = {
     }
   },
   scripts: {
-    source: 'js/**/*.js',
+    source: [
+      'js/**/*.js',
+      'components/_patterns/**/*.js'
+    ],
     destination: 'dist/js/'
   },
   svg: {
@@ -68,7 +71,7 @@ module.exports = {
     ]
   },
   browserSync: {
-    proxy: null,
+    proxy: 'https://local.non-transac.com',
     open: true,
     xip: false,
     logConnections: false
