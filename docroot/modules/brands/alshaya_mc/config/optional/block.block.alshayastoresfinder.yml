@@ -16,4 +16,5 @@ settings:
   label: 'Alshaya stores finder'
   provider: alshaya_stores_finder
   label_display: '0'
+  link_title: 'Find Store'
 visibility: {  }
