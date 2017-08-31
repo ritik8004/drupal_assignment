@@ -7,10 +7,10 @@ dependencies:
     - system
   theme:
     - victoria_secret
-id: main_navigation_level2
+id: vs_main_navigation_level2
 theme: victoria_secret
 region: header
-weight: 0
+weight: -3
 provider: null
 plugin: 'system_menu_block:main'
 settings:
