@@ -5,10 +5,10 @@ dependencies:
     - alshaya_custom_logo
   theme:
     - victoria_secret
-id: customsitelogo
+id: vs_custom_site_logo
 theme: victoria_secret
-region: menu_secondary
-weight: 0
+region: header
+weight: -4
 provider: null
 plugin: custom_logo_block
 settings:

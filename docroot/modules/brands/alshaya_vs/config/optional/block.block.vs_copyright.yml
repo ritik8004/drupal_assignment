@@ -7,7 +7,7 @@ dependencies:
     - block_content
   theme:
     - victoria_secret
-id: copyright
+id: vs_copyright
 theme: victoria_secret
 region: footer_secondary
 weight: null

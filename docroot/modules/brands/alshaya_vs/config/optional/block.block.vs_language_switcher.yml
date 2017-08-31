@@ -5,10 +5,10 @@ dependencies:
     - language
   theme:
     - victoria_secret
-id: languageswitcher
+id: vs_language_switcher
 theme: victoria_secret
-region: menu_primary
-weight: 0
+region: header_secondary
+weight: -3
 provider: null
 plugin: 'language_block:language_interface'
 settings:

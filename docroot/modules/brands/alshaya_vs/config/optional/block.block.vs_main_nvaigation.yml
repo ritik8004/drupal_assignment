@@ -2,22 +2,22 @@ langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.social-links
+    - system.menu.main
   module:
     - system
   theme:
     - victoria_secret
-id: sociallinks
+id: vs_main_nvaigation
 theme: victoria_secret
-region: footer_primary
-weight: -15
+region: header_primary
+weight: -5
 provider: null
-plugin: 'system_menu_block:social-links'
+plugin: 'system_menu_block:main'
 settings:
-  id: 'system_menu_block:social-links'
-  label: 'Social links'
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
   provider: system
   label_display: '0'
   level: 1
-  depth: 0
+  depth: 1
 visibility: {  }

@@ -5,16 +5,16 @@ dependencies:
     - alshaya_stores_finder
   theme:
     - victoria_secret
-id: alshayastoresfinder_footer
+id: vs_alshaya_stores_finder_header
 theme: victoria_secret
-region: footer_primary
-weight: 0
+region: header_secondary
+weight: -4
 provider: null
 plugin: alshaya_stores_finder
 settings:
   id: alshaya_stores_finder
-  label: 'Find your nearest store'
+  label: 'Alshaya stores finder header'
   provider: alshaya_stores_finder
-  label_display: visible
-  link_title: 'Find Store'
+  label_display: '0'
+  link_title: 'Find a store'
 visibility: {  }

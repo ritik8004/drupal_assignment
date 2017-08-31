@@ -5,7 +5,7 @@ dependencies:
     - alshaya_user
   theme:
     - victoria_secret
-id: jointheclub
+id: vs_join_the_club
 theme: victoria_secret
 region: footer
 weight: 0
