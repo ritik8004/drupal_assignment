@@ -39,6 +39,7 @@
               case 'diners_club_international':
                 $('.card-type-diners-club').addClass('active');
                 break;
+
               case 'visa':
               case 'mastercard':
               default:
@@ -116,11 +117,15 @@
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-given-name"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-family-name"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]').val('');
-          $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-locality"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val('');
+
+          // Select value.
+          $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val('');
+          // Trigger chance of select to ensure js dropdown shows proper value.
+          $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').trigger('change');
 
           // Reset Mobile number prefix js.
           Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'));
@@ -137,6 +142,9 @@
 
           // Hide the form.
           $('#address-book-form-wrapper').slideUp();
+
+          // Display the hidden address which was being edited.
+          $('#edit-member-delivery-home-addresses').slideDown();
         });
       });
 
@@ -187,7 +195,7 @@
       });
 
       // Toggle the checkout guest login/returning customers sections on mobile.
-      if ($('#edit-login-tabs').is(":visible")) {
+      if ($('#edit-login-tabs').is(':visible')) {
         var tabs = $('#edit-login-tabs');
         tabs.parent().toggleClass('active');
 
@@ -231,13 +239,19 @@
   $.fn.editDeliveryAddress = function (data) {
     // Set values in form.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-address-id"]').val(data.id);
+
+    // Input values.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-given-name"]').val(data.given_name);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-family-name"]').val(data.family_name);
-    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val(data.administrative_area);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-locality"]').val(data.locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val(data.address_line1);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val(data.dependent_locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val(data.address_line2);
+
+    // Select value.
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val(data.administrative_area);
+    // Trigger chance of select to ensure js dropdown shows proper value.
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').trigger('change');
 
     // Init Mobile number prefix js.
     Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'), data.mobile);
@@ -262,7 +276,7 @@
     attach: function (context, settings) {
       var block = $('.block-checkout-summary-block');
 
-      $(window).once().on('scroll', function() {
+      $(window).once().on('scroll', function () {
         if ($('body').scrollTop() > 122) {
           block.addClass('fix-block');
         }

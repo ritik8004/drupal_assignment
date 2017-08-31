@@ -300,6 +300,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['payment_method'] = $payment_method_term->getName();
 
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
+  $orderDetails['discount'] = alshaya_acm_price_format($order['totals']['discount']);
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   return $orderDetails;

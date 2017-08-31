@@ -226,6 +226,7 @@
 
           .c-facet__label {
             width: 100%;
+            border: 1px solid $white-two;
           }
         }
 
@@ -570,6 +571,10 @@
 
       &::after {
         border-#{$left}: none;
+
+        @include breakpoint($only-mobile) {
+          top: -1px;
+        }
       }
     }
   }
@@ -610,6 +615,10 @@
         color: $black;
         float: $left;
         margin-top: 7px;
+
+        @include breakpoint($only-mobile) {
+          min-width: 6rem;
+        }
       }
 
       @include icon(chevronleft, after) {
