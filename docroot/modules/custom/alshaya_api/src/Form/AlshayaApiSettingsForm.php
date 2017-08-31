@@ -90,9 +90,8 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
     ];
 
     $form['password'] = [
-      '#type' => 'textfield',
+      '#type' => 'password',
       '#title' => $this->t('Password'),
-      '#default_value' => $config->get('password'),
     ];
 
     return $form;

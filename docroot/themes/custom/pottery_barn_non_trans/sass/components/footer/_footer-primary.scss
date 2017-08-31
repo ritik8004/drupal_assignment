@@ -644,7 +644,7 @@
 
     ul {
       float: $left;
-      margin: 15px 2%;
+      margin: 1.229rem 2%;
       padding: 0;
 
       @include breakpoint($desktop - 1) {
@@ -664,7 +664,7 @@
       }
 
       &#block-jointheclub {
-        margin: 5px 0 0 3%;
+        margin: 0.5714rem 0 0 3%;
       }
     }
 
@@ -790,6 +790,7 @@
 
     a {
       text-transform: lowercase;
+      color: $brownish-grey;
 
       span {
         font-size: 11px;
