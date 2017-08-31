@@ -61,4 +61,7 @@ function alshaya_mc_install() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
     ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
     ->save();
+    
+  // Create copyright block content.
+  alshaya_mc_create_copyright_block();
 }
