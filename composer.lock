@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5664d99d915de7f94c85734cc2917581",
+    "content-hash": "69646647c3f49f94825d80b74f39ad0d",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2479,7 +2479,7 @@
                     ]
                 },
                 "patches_applied": {
-                    "Allow custom submit handler in jquery validate": "https://www.drupal.org/files/issues/2898885-4.patch",
+                    "Allow custom submit handler in jquery validate": "https://www.drupal.org/files/issues/2898885-6.patch",
                     "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-4-allow-library-to-be-installed-outside-module.patch"
                 }
             },
