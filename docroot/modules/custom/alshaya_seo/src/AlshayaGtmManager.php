@@ -15,10 +15,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
-use Drupal\user\PrivateTempStoreFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Mobile_Detect;
 
 /**
@@ -117,13 +114,6 @@ class AlshayaGtmManager {
   protected $cartStorage;
 
   /**
-   * The private temp store service.
-   *
-   * @var \Drupal\user\PrivateTempStoreFactory
-   */
-  protected $privateTempStore;
-
-  /**
    * The current user service.
    *
    * @var \Drupal\Core\Session\AccountProxyInterface
@@ -187,8 +177,6 @@ class AlshayaGtmManager {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config Factory service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
-   *   Cart Storage service.
-   * @param \Drupal\user\PrivateTempStoreFactory $privateTempStore
    *   Private temp store service.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   Current User service.
@@ -210,7 +198,6 @@ class AlshayaGtmManager {
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
-                              PrivateTempStoreFactory $privateTempStore,
                               AccountProxyInterface $currentUser,
                               RequestStack $requestStack,
                               EntityManager $entityManager,
@@ -222,7 +209,6 @@ class AlshayaGtmManager {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
-    $this->privateTempStore = $privateTempStore;
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
     $this->entityManager = $entityManager;
@@ -878,32 +864,13 @@ class AlshayaGtmManager {
         break;
 
       case 'checkout confirmation page':
-        $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
-        $order_data = $temp_store->get('order');
+        $order = _alshaya_acm_checkout_get_last_order_from_session();
 
-        // Throw access denied if nothing in session.
-        if (empty($order_data) || empty($order_data['id'])) {
-          throw new AccessDeniedHttpException();
+        // Validations will be handled in other code.
+        if (empty($order)) {
+          return $page_dl_attributes;
         }
 
-        $order_id = (int) str_replace('"', '', $order_data['id']);
-
-        if ($this->currentUser->isAnonymous()) {
-          $email = $temp_store->get('email');
-        }
-        else {
-          $email = $this->currentUser->getEmail();
-        }
-
-        $orders = alshaya_acm_customer_get_user_orders($email);
-
-        $order_index = array_search($order_id, array_column($orders, 'order_id'), TRUE);
-
-        if ($order_index === FALSE) {
-          throw new NotFoundHttpException();
-        }
-
-        $order = $orders[$order_index];
         $orderItems = $order['items'];
         $dimension6 = '';
         $dimension7 = '';
