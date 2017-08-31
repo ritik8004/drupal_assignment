@@ -7,6 +7,12 @@ dependencies:
   - color
   - features
   - syslog
+  - config_translation
+  - content_translation
+  - language
+  - locale
+  - twig_tweak
+  - components
 
 themes:
   - bartik
