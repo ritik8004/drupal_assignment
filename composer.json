@@ -57,7 +57,8 @@
         "drupal/pcb": "^1.0@beta",
         "drupal/components": "^1.0",
         "drupal/twig_tweak": "^1.8",
-        "drupal/kashmir": "^1.1"
+        "drupal/kashmir": "^1.1",
+        "jquery-validation/jquery-validation": "~1.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -70,13 +71,14 @@
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
-        "jqueryvalidate": {
+        "jquery-validation": {
             "type": "package",
             "package": {
-                "name": "jqueryvalidate",
-                "version": "1.15.0",
+                "name": "jquery-validation/jquery-validation",
+                "version": "1.17.0",
+                "type": "drupal-library",
                 "dist": {
-                    "url": "https://jqueryvalidation.org/files/jquery-validation-1.15.0.zip",
+                    "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
                     "type": "zip"
                 }
             }
@@ -157,7 +159,8 @@
                 "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
             },
             "drupal/clientside_validation" : {
-                "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-4.patch"
+                "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-4.patch",
+                "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-4-allow-library-to-be-installed-outside-module.patch"
             },
             "drupal/redirect" : {
                 "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
@@ -187,9 +190,6 @@
             ],
             "docroot/themes/custom/{$name}": [
                 "type:drupal-custom-theme"
-            ],
-            "docroot/libraries": [
-                "type:drupal-library"
             ],
             "drush/contrib/{$name}": [
                 "type:drupal-drush"
