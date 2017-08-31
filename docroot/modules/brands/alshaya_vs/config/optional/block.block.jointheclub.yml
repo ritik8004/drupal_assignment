@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_user
+  theme:
+    - victoria_secret
+id: jointheclub
+theme: victoria_secret
+region: footer
+weight: 0
+provider: null
+plugin: join_the_club
+settings:
+  id: join_the_club
+  label: 'Join the club'
+  provider: alshaya_loyalty
+  label_display: visible
+visibility: {  }
