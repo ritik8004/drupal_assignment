@@ -31,13 +31,16 @@
  * - page.header: Items for the header region.
  * - page.primary_menu: Items for the primary menu region.
  * - page.secondary_menu: Items for the secondary menu region.
- * - page.highlighted: Items for the highlighted content region.
- * - page.help: Dynamic help text, mostly for admin pages.
+ * - page.primary_header: Items for the primary header region.
+ * - page.secondary_header: Items for the secondary header region.
+ * - page.admin_content: Items for the admin content region.
  * - page.content: The main content of the current page.
  * - page.sidebar_first: Items for the first sidebar.
  * - page.sidebar_second: Items for the second sidebar.
  * - page.footer: Items for the footer region.
  * - page.breadcrumb: Items for the breadcrumb region.
+ * - page.footer_primary: Items for the primary footer region.
+ * - page.footer_secondary: Items for the secondary footer region.
  *
  * @see template_preprocess_page()
  * @see html.html.twig
@@ -46,15 +49,15 @@
 <div class="layout-container">
 
   <header role="banner">
-    {% if page.menu_secondary %}
-      <div class="secondary__menu">
-        {{ page.menu_secondary }}
+    {% if page.header_primary %}
+      <div class="primary__header">
+        {{ page.header_primary }}
       </div>
     {% endif %}
 
-    {% if page.menu_primary %}
-      <div class="primary__menu">
-        {{ page.menu_primary }}
+    {% if page.header_secondary %}
+      <div class="secondary__header">
+        {{ page.header_secondary }}
       </div>
     {% endif %}
 
