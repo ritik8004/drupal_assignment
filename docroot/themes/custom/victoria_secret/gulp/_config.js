@@ -5,7 +5,10 @@ module.exports = {
       'sass/**/*.scss',
       'components/**/*.scss'
     ],
-    directionalSource: 'sass/**/*.ltr.scss',
+    directionalSource: [
+      'sass/**/*.ltr.scss',
+      'components/**/*.ltr.scss'
+    ],
     destination: 'dist/css/',
     options: {
       outputStyle: 'expanded',
