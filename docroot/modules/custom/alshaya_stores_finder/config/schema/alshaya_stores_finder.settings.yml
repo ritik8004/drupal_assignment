@@ -14,3 +14,11 @@ alshaya_stores_finder.settings:
     search_proximity_radius:
       type: integer
       label: 'Store finder proximity radius'
+
+block.settings.alshaya_stores_finder:
+  type: block_settings
+  label: 'Alshaya stores finder'
+  mapping:
+    link_title:
+      type: label
+      label: 'Link title'
