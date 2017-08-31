@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_stores_finder
+  theme:
+    - victoria_secret
+id: alshayastoresfinder_footer
+theme: victoria_secret
+region: footer_primary
+weight: 0
+provider: null
+plugin: alshaya_stores_finder
+settings:
+  id: alshaya_stores_finder
+  label: 'Find your nearest store'
+  provider: alshaya_stores_finder
+  label_display: visible
+  link_title: 'Find Store'
+visibility: {  }

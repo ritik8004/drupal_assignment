@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_stores_finder
+  theme:
+    - victoria_secret
+id: alshayastoresfinder_header
+theme: victoria_secret
+region: menu_primary
+weight: 0
+provider: null
+plugin: alshaya_stores_finder
+settings:
+  id: alshaya_stores_finder
+  label: 'Alshaya stores finder header'
+  provider: alshaya_stores_finder
+  label_display: '0'
+  link_title: 'Find a store'
+visibility: {  }
