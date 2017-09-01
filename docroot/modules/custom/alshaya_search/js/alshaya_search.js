@@ -3,6 +3,10 @@
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
       $('#edit-sort-bef-combine option[value="search_api_relevance ASC"]').remove();
+      // Hide the sort drop down, if no results.
+      if ($('.view-id-search .view-empty').length !== 0) {
+        $('#views-exposed-form-search-page .form-item-sort-bef-combine').hide();
+      }
       // Do not allow search form submit on empty search text.
       $('form[data-bef-auto-submit-full-form]', context).submit(function (e) {
         var $keyword = $(this).find('input[name="keywords"]');
