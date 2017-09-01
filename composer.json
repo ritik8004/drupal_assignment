@@ -58,7 +58,6 @@
         "drupal/components": "^1.0",
         "drupal/twig_tweak": "^1.8",
         "drupal/kashmir": "^1.1",
-        "jquery-validation/jquery-validation": "~1.0",
         "jqueryvalidate/jqueryvalidate": "~1.0"
     },
     "require-dev": {
@@ -73,18 +72,6 @@
             "url": "https://packages.drupal.org/8"
         },
         "jqueryvalidate": {
-            "type": "package",
-            "package": {
-                "name": "jqueryvalidate",
-                "version": "1.15.0",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        "jqueryvalidate-proper": {
             "type": "package",
             "package": {
                 "name": "jqueryvalidate/jqueryvalidate",
