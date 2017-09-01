@@ -58,7 +58,8 @@
         "drupal/components": "^1.0",
         "drupal/twig_tweak": "^1.8",
         "drupal/kashmir": "^1.1",
-        "jquery-validation/jquery-validation": "~1.0"
+        "jquery-validation/jquery-validation": "~1.0",
+        "jqueryvalidate/jqueryvalidate": "~1.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -71,10 +72,22 @@
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
-        "jquery-validation": {
+        "jqueryvalidate": {
             "type": "package",
             "package": {
-                "name": "jquery-validation/jquery-validation",
+                "name": "jqueryvalidate",
+                "version": "1.15.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        "jqueryvalidate-proper": {
+            "type": "package",
+            "package": {
+                "name": "jqueryvalidate/jqueryvalidate",
                 "version": "1.17.0",
                 "type": "drupal-library",
                 "dist": {
@@ -159,8 +172,9 @@
                 "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
             },
             "drupal/clientside_validation" : {
-                "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-6.patch",
-                "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-4-allow-library-to-be-installed-outside-module.patch"
+                "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-9.patch",
+                "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-11-allow-library-to-be-installed-outside-module.patch",
+                "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
             },
             "drupal/redirect" : {
                 "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
