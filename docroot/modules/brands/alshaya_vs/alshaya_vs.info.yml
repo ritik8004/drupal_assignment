@@ -4,6 +4,6 @@ description: 'The dedicated module for Victoria Secret brand.'
 package: Alshaya
 core: 8.x
 dependencies:
-  - alshaya_custom_logo
+  - alshaya_block
 themes:
   - victoria_secret

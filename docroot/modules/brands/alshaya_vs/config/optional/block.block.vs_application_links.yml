@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - alshaya_custom_blocks
+    - alshaya_block
   theme:
     - victoria_secret
 id: vs_application_links
@@ -14,7 +14,7 @@ plugin: alshaya_application_links
 settings:
   id: alshaya_application_links
   label: 'Application Links'
-  provider: alshaya_custom_blocks
+  provider: alshaya_block
   label_display: '0'
   app_android_link: ''
   app_apple_link: ''

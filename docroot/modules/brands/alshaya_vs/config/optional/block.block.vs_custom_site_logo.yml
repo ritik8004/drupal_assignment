@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - alshaya_custom_logo
+    - alshaya_block
   theme:
     - victoria_secret
 id: vs_custom_site_logo
@@ -14,7 +14,7 @@ plugin: custom_logo_block
 settings:
   id: custom_logo_block
   label: 'Custom Site Logo'
-  provider: alshaya_custom_logo
+  provider: alshaya_block
   label_display: '0'
   use_site_logo: 1
   use_menu_item_logo: 1

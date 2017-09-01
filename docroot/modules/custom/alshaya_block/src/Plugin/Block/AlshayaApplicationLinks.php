@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_custom_blocks\Plugin\Block;
+namespace Drupal\alshaya_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
