@@ -176,7 +176,6 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
    */
   public function build() {
     $build = [];
-    $site_config = $this->configFactory->get('system.site');
 
     $build['site_logo'] = [
       '#theme' => 'image',
@@ -208,7 +207,7 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
   protected function getCurrentMenuAttributes() {
     // Get current language code.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
+    // @todo: Make the menu name "main" dynamic.
     // Get the main menu tree to get the current active path.
     $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters('main');
     $parameters->setTopLevelOnly();
@@ -244,14 +243,16 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['custom-logo']);
+    // todo: Make the menu name `.main` dynamic.
+    return Cache::mergeTags(parent::getCacheTags(), ['config:system.menu.main']);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+    // todo: Make the menu name `:main` dynamic.
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route.menu_active_trails:main']);
   }
 
 }
