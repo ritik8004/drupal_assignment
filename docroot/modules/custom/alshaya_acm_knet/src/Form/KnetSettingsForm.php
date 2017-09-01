@@ -35,6 +35,8 @@ class KnetSettingsForm extends ConfigFormBase {
       ->set('payment_pending', $form_state->getValue('payment_pending'))
       ->set('payment_processed', $form_state->getValue('payment_processed'))
       ->set('payment_failed', $form_state->getValue('payment_failed'))
+      ->set('knet_language_code', $form_state->getValue('knet_language_code'))
+      ->set('knet_currency_code', $form_state->getValue('knet_currency_code'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -93,6 +95,22 @@ class KnetSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Payment failed'),
       '#required' => TRUE,
       '#default_value' => $config->get('payment_failed'),
+    ];
+
+    $form['knet_language_code'] = [
+      '#type' => 'textfield',
+      '#description' => $this->t('Language code to be used for K-Net.'),
+      '#title' => $this->t('K-Net Language code'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('knet_language_code'),
+    ];
+
+    $form['knet_currency_code'] = [
+      '#type' => 'textfield',
+      '#description' => $this->t('Currency code to be used for K-Net.'),
+      '#title' => $this->t('K-Net Currency code'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('knet_currency_code'),
     ];
 
     return parent::buildForm($form, $form_state);
