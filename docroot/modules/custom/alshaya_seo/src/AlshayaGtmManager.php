@@ -853,7 +853,7 @@ class AlshayaGtmManager {
       case 'checkout login page':
       case 'checkout delivery page':
       case 'checkout payment page':
-        $cart = $this->cartStorage->getCart();
+        $cart = $this->cartStorage->getCart(FALSE);
         if ($cart) {
           $cart_totals = $cart->totals();
           $cart_items = $cart->get('items');
