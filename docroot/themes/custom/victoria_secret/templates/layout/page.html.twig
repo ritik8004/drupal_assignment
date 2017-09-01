@@ -49,20 +49,22 @@
 <div class="layout-container">
 
   <header role="banner">
-    {% if page.header_primary %}
-      <div class="primary__header">
-        {{ page.header_primary }}
-      </div>
-    {% endif %}
+    <div class="top__header">
+      {% if page.header_primary %}
+        <div class="primary__header">
+          {{ page.header_primary }}
+        </div>
+      {% endif %}
 
-    {% if page.header_secondary %}
-      <div class="secondary__header">
-        {{ page.header_secondary }}
-      </div>
-    {% endif %}
+      {% if page.header_secondary %}
+        <div class="secondary__header">
+          {{ page.header_secondary }}
+        </div>
+      {% endif %}
+    </div>
 
     {% if page.header %}
-      <div class="primary__header">
+      <div class="page__header">
         {{ page.header }}
       </div>
     {% endif %}

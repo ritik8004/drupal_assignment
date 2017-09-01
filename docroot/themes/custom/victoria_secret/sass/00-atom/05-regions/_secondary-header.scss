@@ -1,0 +1,13 @@
+.secondary__header {
+  display: none;
+  width: 40%;
+  font-size: 0;
+  vertical-align: top;
+  text-align: direction(right);
+  background: $black;
+  padding-#{direction(right)}: 36px;
+
+  @include breakpoint($desk) {
+    display: inline-block;
+  }
+}

@@ -1,0 +1,21 @@
+@import '../../../../sass/config/**/*.scss';
+
+.header-store {
+  background-color: $black;
+  color: $white;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  padding: 1rem 0.875rem;
+  text-align: center;
+  display: none;
+
+  @include breakpoint($desk) {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  a {
+    color: $white;
+    text-decoration: none;
+  }
+}
