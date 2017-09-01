@@ -88,7 +88,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     // Add privilege card number fields to cart form.
     case 'customer_cart_form':
       // Get the current cart.
-      $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+      $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
 
       // Get current cart items.
       $cart_items = $cart ? $cart->items() : NULL;
@@ -296,10 +296,10 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
   $default_value = NULL;
 
   /** @var \Drupal\acq_cart\Cart $cart */
-  $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+  $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
 
-  if ($loyalty_in_cart = $cart->getExtension('loyalty_card')) {
-    $default_value = $loyalty_in_cart;
+  if (!empty($cart) && $cart->getExtension('loyalty_card')) {
+    $default_value = $cart->getExtension('loyalty_card');
   }
   elseif (isset($form['field_privilege_card_number'], $form['field_privilege_card_number']['widget']) && !empty($form['field_privilege_card_number']['widget'][0]['value']['#default_value'])) {
     $default_value = $form['field_privilege_card_number']['widget'][0]['value']['#default_value'];
