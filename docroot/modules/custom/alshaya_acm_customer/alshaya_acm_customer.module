@@ -630,31 +630,30 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
 }
 
 /**
- * Implements hook_alshaya_profile_installed_final_task().
+ * Implements hook_alshaya_i18n_onetime_translation_add().
  */
-function alshaya_acm_customer_alshaya_profile_installed_final_task($profile, array $modules) {
-  if (in_array('alshaya_i18n', $modules)) {
-    // Save some translations.
-    $strings = [];
+function alshaya_acm_customer_alshaya_i18n_onetime_translation_add() {
+  print 'adding translations in acm_customer';
+  // Save some translations.
+  $strings = [];
 
-    $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
-      'en' => 'Unrecognized email address or password.',
-    ];
+  $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
+    'en' => 'Unrecognized email address or password.',
+  ];
 
-    $strings['Collector contact no.'] = [
-      'ar' => 'رقم اتصال المستلم',
-    ];
+  $strings['Collector contact no.'] = [
+    'ar' => 'رقم اتصال المستلم',
+  ];
 
-    $strings['Delivery details'] = [
-      'ar' => 'تفاصيل التوصيل',
-    ];
+  $strings['Delivery details'] = [
+    'ar' => 'تفاصيل التوصيل',
+  ];
 
-    $strings['Billing details'] = [
-      'ar' => 'معلومات تحرير الفاتورة',
-    ];
+  $strings['Billing details'] = [
+    'ar' => 'معلومات تحرير الفاتورة',
+  ];
 
-    alshaya_i18n_save_translations($strings);
-  }
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
