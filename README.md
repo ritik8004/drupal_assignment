@@ -126,7 +126,9 @@ Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt 
             wd_host: http://127.0.0.1:4444/wd/hub
             capabilities: { "browser": "chrome", "version": "59.0.3071.115", 'chrome': {'switches':['--start-maximized']}}
           base_url: 'https://whitelabel2.test-alshaya.acsitefactory.com/'
-          files_path: "%paths.base%/files"`
+          files_path: "%paths.base%/files"
+      Drupal\DrupalExtension:
+        blackbox: ~`
           
 * Initialize Behat by running the command
   `bin/behat --init`
