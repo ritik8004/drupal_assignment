@@ -167,7 +167,7 @@
 
       /** Track store finder clicks. **/
       if (isStoreFinderPage) {
-        var searchTextBox = storeFinderFormSelector.find('input#edit-geolocation-geocoder-google-places-api');
+        var searchTextBox = storeFinderFormSelector.find('input[data-drupal-selector="edit-geolocation-geocoder-google-places-api"]');
         var keyword = searchTextBox.val();
         if (keyword !== '') {
           var resultCount = $('[data-drupal-selector^="views-form-stores-finder-page-1"]', context).find('.list-view-locator').length;
@@ -756,7 +756,7 @@
         'currencyCode': currencyCode,
         'click': {
           'actionField': {
-            'list': listName,
+            'list': listName
           },
           'products': [product]
         }
@@ -794,9 +794,9 @@
   Drupal.alshaya_seo_gtm_push_store_finder_search = function(keyword, location, resultCount) {
     dataLayer.push({
       'event': 'findStore',
-      'location': location,
-      'keyword': keyword,
-      'noOfResult': resultCount
+      'fsLocation': location,
+      'fsKeyword': keyword,
+      'fsNoOfResult': resultCount
     });
   };
 

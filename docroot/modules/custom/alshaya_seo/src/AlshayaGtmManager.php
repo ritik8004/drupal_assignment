@@ -15,6 +15,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
 use Drupal\user\PrivateTempStoreFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -56,9 +57,15 @@ class AlshayaGtmManager {
     'acq_checkout.form:click_collect' => 'checkout click and collect page',
     'acq_checkout.form:delivery' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
-    'acq_checkout.form:confirmation' => 'checkout confirmation page',
+    'acq_checkout.form:confirmation' => 'purchase confirmation page',
     'view.stores_finder.page_2' => 'store finder',
+    'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
+    'user.pass' => 'user password page',
+    'change_pwd_page.change_password_form' => 'user change password page',
+    'user.page' => 'user page',
+    'user.reset' => 'user reset page',
+    'user.reset.form' => 'user reset page',
   ];
 
   /**
@@ -593,7 +600,7 @@ class AlshayaGtmManager {
       $terms[$taxonomy_parent->id()] = trim($taxonomy_parent->getName());
     }
 
-    $terms = array_reverse($terms);
+    $terms = array_reverse($terms, TRUE);
     $this->cache->set('alshaya_product_breadcrumb_terms_' . $product_node->id(), $terms, Cache::PERMANENT, ['node:' . $product_node->id()]);
 
     return $terms;
@@ -753,6 +760,8 @@ class AlshayaGtmManager {
    */
   public function fetchGeneralPageAttributes($data_layer) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $current_user = User::load(\Drupal::currentUser()->id());
+
     // Detect platform from headers.
     $request_headers = $this->requestStack->getCurrentRequest()->headers->all();
     $request_ua = $this->requestStack->getCurrentRequest()->headers->get('HTTP_USER_AGENT');
@@ -780,7 +789,7 @@ class AlshayaGtmManager {
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
       'customerType' => $customer_type,
-      'userName' => ($data_layer['userUid'] !== 0) ? $data_layer['userName'] : '',
+      'userName' => ($data_layer['userUid'] !== 0) ? $current_user->field_first_name->value . ' ' . $current_user->field_last_name->value : '',
       'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
     ];
 
@@ -822,8 +831,8 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = [
-          'productStyleCode' => $product_sku,
-          'productSku' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
+          'productStyleCode' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
+          'productSKU' => $product_sku,
           'stockStatus' => $stock_status,
           'productName' => $node->getTitle(),
           'productBrand' => $sku_attributes['gtm-brand'],
@@ -877,7 +886,7 @@ class AlshayaGtmManager {
         }
         break;
 
-      case 'checkout confirmation page':
+      case 'purchase confirmation page':
         $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
         $order_data = $temp_store->get('order');
 
@@ -976,7 +985,7 @@ class AlshayaGtmManager {
     foreach ($items as $item) {
       $cart_items_rr[] = [
         'id' => $item['sku'],
-        'price' => $item['price'],
+        'price' => (float) $item['price'],
         'qnt' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
       ];
     }
