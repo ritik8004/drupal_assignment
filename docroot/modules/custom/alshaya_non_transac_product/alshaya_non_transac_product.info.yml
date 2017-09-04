@@ -1,0 +1,8 @@
+name: 'Alshaya non transac product'
+type: module
+description: 'Alshaya non transac product content types.'
+package: 'Alshaya'
+core: 8.x
+version: 8.x-1.0
+dependencies:
+  - system
