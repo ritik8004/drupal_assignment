@@ -189,6 +189,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     // Processed vocabulary data.
     $data = $this->productCateoryTree->getCategoryTree();
     $this->termData = $data;
+    // Add department page node type cache tag.
+    // This is custom cache tag and cleared in hook_presave in department
+    // module.
+    $this->cacheTags[] = 'node_type:department_page';
+
+    // Discard cache for the block once a term gets updated.
+    $this->cacheTags[] = 'taxonomy_term_list';
 
     return Cache::mergeTags(
       parent::getCacheTags(),
@@ -200,10 +207,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    // Add department page node type cache tag.
-    // This is custom cache tag and cleared in hook_presave in department
-    // module.
-    $this->cacheTags[] = 'node_type:department_page';
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 

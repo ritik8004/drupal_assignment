@@ -611,7 +611,8 @@
     }
   }
 
-  .form-item-guest-delivery-home-address-shipping-address-line2 {
+  .form-item-guest-delivery-home-address-shipping-address-line2,
+  .form-item-billing-address-address-billing-address-line2 {
     input[type=text] ~ label:not(.active-label) {
       font-size: 1rem !important;
       color: $greyish !important;

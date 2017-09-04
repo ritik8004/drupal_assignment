@@ -875,6 +875,15 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
   }
 
   /**
+   * @When /^I select a value from Area dropdown$/
+   */
+  public function iSelectAValueFromTheAreaDropdown() {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.select2-selection__arrow')->click();
+    $page->find('css', 'ul.select2-results__options li:nth-child(1)')->click();
+  }
+  
+  /**
    * @Given /^I should be able to see the header for checkout$/
    */
   public function iShouldBeAbleToSeeTheHeaderForCheckout() {
