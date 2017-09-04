@@ -31,8 +31,8 @@ class ProductSettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_acm_product.settings');
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
-    $config->set('non_buyable_message', $form_state->getValue('non_buyable_message'));
-    $config->set('non_buyable_help_text', $form_state->getValue('non_buyable_help_text'));
+    $config->set('not_buyable_message', $form_state->getValue('not_buyable_message'));
+    $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('size_guide_link', $form_state->getValue('size_guide_link'));
     $config->set('size_guide_modal_content', $form_state->getValue('size_guide_modal_content'));
     $config->save();
@@ -64,18 +64,18 @@ class ProductSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('brand_logo_extension'),
     ];
 
-    $form['non_buyable_message'] = [
+    $form['not_buyable_message'] = [
       '#type' => 'text_format',
       '#format' => 'rich_text',
-      '#title' => $this->t('Non-buyable product message'),
-      '#default_value' => $config->get('non_buyable_message.value'),
+      '#title' => $this->t('Not-buyable product message'),
+      '#default_value' => $config->get('not_buyable_message.value'),
     ];
 
-    $form['non_buyable_help_text'] = [
+    $form['not_buyable_help_text'] = [
       '#type' => 'text_format',
       '#format' => 'rich_text',
-      '#title' => $this->t('Non-buyable product help text'),
-      '#default_value' => $config->get('non_buyable_help_text.value'),
+      '#title' => $this->t('Not-buyable product help text'),
+      '#default_value' => $config->get('not_buyable_help_text.value'),
     ];
 
     $form['size_guide_link'] = [

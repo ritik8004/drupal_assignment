@@ -8,12 +8,12 @@ alshaya_acm_product.settings:
     brand_logo_extension:
       type: string
       label: 'File extension for Brand Logo'
-    non_buyable_message:
+    not_buyable_message:
       type: text_format
-      label: 'Non-buyable product message'
-    non_buyable_help_text:
+      label: 'Not-buyable product message'
+    not_buyable_help_text:
       type: text_format
-      label: 'Non-buyable product help text'
+      label: 'Not-buyable product help text'
     size_guide_link:
       type: integer
       label: 'Enable Size Guide link'

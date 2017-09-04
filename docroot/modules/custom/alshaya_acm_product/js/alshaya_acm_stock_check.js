@@ -31,10 +31,10 @@
       });
 
       // Stock check on PDP main Product.
-      $('article[data-vmode="full"]', context).find('.basic-details-wrapper article').once('js-event').each(function () {
-        var skuId = $(this).attr('data-skuid');
+      $('article[data-vmode="full"]', context).find('.basic-details-wrapper article .stock-checker').once('js-event').each(function () {
+        var $wrapper = $(this).closest('article');
+        var skuId = $wrapper.attr('data-skuid');
         if (typeof skuId !== 'undefined') {
-          var $wrapper = $(this);
           $.ajax({
             url: Drupal.url('get-cart-form/acq_sku/' + skuId),
             type: 'GET',
