@@ -266,6 +266,16 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
   try {
     $current_route = $gtm_manager->getGtmContainer();
     $general_dl_attributes = $gtm_manager->fetchGeneralPageAttributes($data_layer);
+
+    // Preserve attributes before overriding the datalayer attributes.
+    if (isset($data_layer['deliveryCity'])) {
+      $general_dl_attributes['deliveryCity'] = $data_layer['deliveryCity'];
+    }
+
+    if (isset($data_layer['deliveryArea'])) {
+      $general_dl_attributes['deliveryArea'] = $data_layer['deliveryArea'];
+    }
+
     $data_layer = $general_dl_attributes;
 
     $page_type = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());

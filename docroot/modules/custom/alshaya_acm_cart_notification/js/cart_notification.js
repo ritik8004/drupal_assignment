@@ -97,7 +97,7 @@
             if (product.dimension5 !== 'simple') {
               var currentLangCode = drupalSettings.path.currentLanguage;
               if (currentLangCode !== 'en') {
-                var productSizeTranslations = drupalSettings.alshaya_product_size_config;
+                // var productSizeTranslations = drupalSettings.alshaya_product_size_config;
                 size = drupalSettings.alshaya_product_size_config[size];
               }
               product.dimension1 = size;

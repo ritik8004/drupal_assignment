@@ -106,6 +106,8 @@ class AlshayaGtmManager {
     'dimension5' => 'gtm-sku-type',
     'dimension6' => 'gtm-dimension6',
     'dimension7' => 'gtm-dimension7',
+    'dimension8' => 'gtm-dimension8',
+    'metric7' => 'gtm-metric7',
     'metric1' => '',
   ];
 
@@ -293,12 +295,26 @@ class AlshayaGtmManager {
 
     $attributes = [];
     $product_node = alshaya_acm_product_get_display_node($sku);
+    $original_price = (float) $sku->get('price')->getString();
+    $final_price = (float) $sku->get('final_price')->getString();
+
+    $product_type = 'Regular Product';
+    if (($final_price != 0) &&
+      ($original_price !== $final_price) &&
+      ($final_price < $original_price)) {
+      $product_type = 'Discounted Product';
+      $discount_amount = $original_price - $final_price;
+    }
 
     $attributes['gtm-name'] = trim($sku->label());
     $price = $sku->get('final_price')->getString() ? $sku->get('final_price')->getString() : 0.000;
     $attributes['gtm-price'] = (float) number_format((float) $price, 3, '.', '');
     $brand = $sku->get('attr_product_brand')->getString();
     $attributes['gtm-product-sku'] = $sku->getSku();
+    $attributes['gtm-dimension8'] = $product_type;
+    if ($discount_amount) {
+      $attributes['gtm-metric7'] = $discount_amount;
+    }
 
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
@@ -703,8 +719,8 @@ class AlshayaGtmManager {
     $dimension6 = '';
     $dimension7 = '';
     $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
-
-    if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+    $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
+    if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
       $shipping_assignment = reset($order['extension']['shipping_assignments']);
       $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
       $store = $this->storeFinder->getStoreFromCode($store_code);
@@ -883,6 +899,24 @@ class AlshayaGtmManager {
             'cartItemsRR' => $this->formatCartRr($cart_items),
             'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
           ];
+
+          $shipping = $cart->getShipping();
+
+          if ((is_array($shipping) &&
+            (isset($shipping['extension']['address_block_segment'])))) {
+            $page_dl_attributes['deliveryCity'] = $shipping['extension']['address_block_segment'];
+          }
+
+          if ((is_array($shipping)) &&
+            (isset($shipping['extension']['address_governate_segment']))) {
+            $page_dl_attributes['deliveryArea'] = $shipping['extension']['address_governate_segment'];
+          }
+
+          if ($cart->getExtension('shipping_method')) {
+            $shippingTerm = $this->checkoutOptionsManager->loadShippingMethod($cart->getExtension('shipping_method'));
+            $page_dl_attributes['deliveryType'] = $shippingTerm->getName();
+          }
+
         }
         break;
 
@@ -920,8 +954,8 @@ class AlshayaGtmManager {
         $productStyleCode = [];
 
         $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
-
-        if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+        $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
+        if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
           $store = $this->storeFinder->getStoreFromCode($store_code);
