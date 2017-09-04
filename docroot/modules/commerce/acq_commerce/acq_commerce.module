@@ -18,7 +18,7 @@ const LINKED_SKU_TYPE_UPSELL = 'upsell';
 /**
  * For the cross_sell.
  */
-const LINKED_SKU_TYPE_CROSSSELL = 'cross_sell';
+const LINKED_SKU_TYPE_CROSSSELL = 'crosssell';
 
 /**
  * For the related.

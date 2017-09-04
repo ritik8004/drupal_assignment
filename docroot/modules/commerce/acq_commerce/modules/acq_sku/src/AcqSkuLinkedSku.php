@@ -63,7 +63,7 @@ class AcqSkuLinkedSku {
    * @param SKU $sku
    *   The sku entity.
    * @param string $type
-   *   The linked type. Like - related/cross_sell/upsell.
+   *   The linked type. Like - related/crosssell/upsell.
    *
    * @return array
    *   All linked skus of given type.

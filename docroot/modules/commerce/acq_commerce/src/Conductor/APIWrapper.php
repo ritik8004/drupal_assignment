@@ -777,7 +777,7 @@ class APIWrapper {
    * @param string $sku
    *   The sku id.
    * @param string $type
-   *   Linked type. Like - related/cross_sell/upsell.
+   *   Linked type. Like - related/crosssell/upsell.
    *
    * @return array|mixed
    *   All linked skus of given type.
@@ -785,7 +785,7 @@ class APIWrapper {
    * @throws \Exception
    */
   public function getLinkedskus($sku, $type = LINKED_SKU_TYPE_ALL) {
-    $endpoint = $this->apiVersion . "/products/$sku/links_rule/$type";
+    $endpoint = $this->apiVersion . "/product/$sku/related/$type";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
