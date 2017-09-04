@@ -105,7 +105,7 @@ class KnetController extends ControllerBase {
       $container->get('config.factory'),
       $container->get('alshaya_acm_customer.orders_manager'),
       $container->get('acq_cart.cart_storage'),
-      $container->get('checkout_helper'),
+      $container->get('alshaya_acm_checkout.checkout_helper'),
       $container->get('logger.factory')
     );
   }
@@ -214,9 +214,9 @@ class KnetController extends ControllerBase {
    * Page callback for error state.
    */
   public function error($quote_id) {
-    $order = _alshaya_acm_checkout_get_last_order_from_session();
+    $cart = $this->cartStorage->getCart(FALSE);
 
-    if ($order['order_id'] != $quote_id) {
+    if ($cart->id() != $quote_id) {
       return new AccessDeniedHttpException();
     }
 
@@ -233,7 +233,7 @@ class KnetController extends ControllerBase {
     ]);
 
     // @TODO: Confirm message.
-    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.'));
+    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.'), 'error');
 
     return $this->redirect('acq_checkout.form', ['step' => 'payment']);
   }
@@ -263,7 +263,7 @@ class KnetController extends ControllerBase {
     \Drupal::state()->delete($state_key);
 
     // @TODO: Confirm message.
-    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.'));
+    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.'), 'error');
 
     return $this->redirect('acq_checkout.form', ['step' => 'payment']);
   }
