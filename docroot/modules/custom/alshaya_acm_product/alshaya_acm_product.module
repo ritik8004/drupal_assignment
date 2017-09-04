@@ -354,10 +354,6 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
       '#markup' => '<div class="stock-checker">' . t('Checking stock...') . '</div>',
     ];
 
-    // This is to disable stock check on page load.
-    global $_alshaya_acm_product_no_stock_process;
-    $_alshaya_acm_product_no_stock_process = TRUE;
-
     unset($build['name']);
     unset($build['price']);
   }
@@ -409,7 +405,13 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-  global $_alshaya_acm_product_no_stock_process;
+  $process_stock = TRUE;
+
+  // We don't process stock while PDP is loaded.
+  // We display form via separate controller or in POST.
+  if (\Drupal::request()->getMethod() == 'GET' && \Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
+    $process_stock = FALSE;
+  }
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   // Get SKU id.
@@ -419,7 +421,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // we check inside loop.
   if ($sku_entity->getType() == 'simple') {
     // We are not going to show the form right now, we don't do any stock check.
-    if (isset($_alshaya_acm_product_no_stock_process) && $_alshaya_acm_product_no_stock_process) {
+    if (!$process_stock) {
       return;
     }
   }
@@ -464,18 +466,19 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
         unset($configurable['#ajax']['wrapper']);
 
+        // We are not going to show the form right now, we don't do any
+        // stock check for variant SKUs.
+        if (!$process_stock) {
+          continue;
+        }
+
         $configurable['#options_attributes'] = [];
+
         // Check if it is a dropdown, we disable the options for which we don't
         // have stock.
         if (isset($configurable['#options'])) {
           foreach ($configurable['#options'] as $key => $value) {
             $sku = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), [$configurable_key => $key]);
-
-            // We are not going to show the form right now, we don't do any
-            // stock check.
-            if (isset($_alshaya_acm_product_no_stock_process) && $_alshaya_acm_product_no_stock_process) {
-              return;
-            }
 
             // This is very limited, it supports only 1 configurable attribute.
             if ($sku instanceof SKU) {
