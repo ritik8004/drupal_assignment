@@ -104,11 +104,11 @@
       }
 
       // Check stock for modal & load add cart form if stock-check successful.
-      $('article[data-vmode="modal"]').find('.basic-details-wrapper article').once('js-event').each(function () {
-        var skuId = $(this).attr('data-skuid');
+      $('article[data-vmode="modal"]').find('.basic-details-wrapper article .stock-checker').once('js-event').each(function () {
+        var $wrapper = $(this).closest('article');
+        var skuId = $wrapper.attr('data-skuid');
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
-          var $wrapper = $(this);
           $.ajax({
             url: Drupal.url('get-cart-form/acq_sku/' + skuId),
             type: 'GET',
