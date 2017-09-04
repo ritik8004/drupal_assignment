@@ -1,13 +1,17 @@
+uuid: 531a91d9-28e3-4f28-b449-88f5d4e15ff8
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: L03RKnuzcfh2REelaOP1icVWmAedqemaD3M_xqamkxQ
 name: 1026x288
 label: 1026x288
 effects:
-  5f3b591b-3908-4433-a329-31a0f103551b:
-    uuid: 5f3b591b-3908-4433-a329-31a0f103551b
-    id: image_scale_and_crop
-    weight: 1
+  fac9ad0b-f257-46e7-82b3-8390d6999f0c:
+    uuid: fac9ad0b-f257-46e7-82b3-8390d6999f0c
+    id: image_scale
+    weight: 2
     data:
       width: 1026
-      height: 288
+      height: null
+      upscale: false
