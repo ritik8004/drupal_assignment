@@ -419,7 +419,7 @@
         if (preselectedMethod.length === 1) {
           var preselectedMethodLabel = Drupal.t(preselectedMethod.siblings('label').find('.method-title').text());
           if (drupalSettings.path.currentLanguage === 'ar') {
-            preselectedMethodLabel = Drupal.alshaya_seo_translate_arabic_to_english(preselectedMethodLabel);
+            preselectedMethodLabel = drupalSettings.alshaya_payment_options_translations[preselectedMethodLabel];
           }
           Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
         }
