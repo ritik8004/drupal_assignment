@@ -66,7 +66,6 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
     else {
       drush_print(dt('Brand module @brand_module does not exists.', ['@brand_module' => $brand_module]));
     }
-
   }
 
   if ($post_install_status == 'not done') {
