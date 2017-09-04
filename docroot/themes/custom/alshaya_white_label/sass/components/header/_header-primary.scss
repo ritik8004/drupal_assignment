@@ -320,7 +320,6 @@ header {
 
   @include breakpoint($only-tablet) {
     #mini-cart-wrapper {
-      min-width: 8.625rem;
       float: $right;
       margin-top: -7px;
 
