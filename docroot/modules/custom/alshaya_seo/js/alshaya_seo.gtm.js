@@ -417,7 +417,7 @@
       if ((cartCheckoutPaymentSelector.length !== 0) && ($('fieldset[gtm-type="cart-checkout-payment"]', context).length > 0)) {
         var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
         if (preselectedMethod.length === 1) {
-          var preselectedMethodLabel = Drupal.t(preselectedMethod.siblings('label').find('.method-title').text());
+          var preselectedMethodLabel = preselectedMethod.siblings('label').find('.method-title').text();
           if (drupalSettings.path.currentLanguage === 'ar') {
             preselectedMethodLabel = drupalSettings.alshaya_payment_options_translations[preselectedMethodLabel];
           }
@@ -782,11 +782,5 @@
       'fsNoOfResult': resultCount
     });
   };
-
-  Drupal.alshaya_seo_translate_arabic_to_english = function (string) {
-    var strings = Object.values(drupalTranslations.strings);
-    var ar_en_translations = Object.values(strings[0]);
-    return ar_en_translations[string];
-  }
 
 })(jQuery, Drupal, dataLayer);
