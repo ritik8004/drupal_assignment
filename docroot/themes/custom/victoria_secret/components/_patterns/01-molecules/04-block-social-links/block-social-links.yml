@@ -1,0 +1,7 @@
+label: 'Connect with us'
+content:
+  include():
+    pattern: 'molecules-social-links'
+attributes:
+  Attribute():
+    class: 'social-links'

@@ -1,0 +1,16 @@
+@import '../../../../sass/config/**/*.scss';
+
+.social-link {
+  background-color: $black;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: $white;
+  padding-top: 1.25rem;
+  padding-bottom: 2.5rem;
+
+  h2 {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+}
