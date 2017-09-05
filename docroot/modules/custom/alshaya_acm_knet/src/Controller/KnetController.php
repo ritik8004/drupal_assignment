@@ -223,7 +223,7 @@ class KnetController extends ControllerBase {
       return new AccessDeniedHttpException();
     }
 
-    $message = $this->t('Something went wrong, we dont have proper error message.');
+    $message = $this->t('User either cancelled or transaction declined.');
 
     $message .= PHP_EOL . $this->t('Debug info:') . PHP_EOL;
     foreach ($_GET as $key => $value) {
@@ -231,7 +231,7 @@ class KnetController extends ControllerBase {
     }
 
     $this->logger->error('KNET payment failed for @quote_id: @message', [
-      '@order_id' => $quote_id,
+      '@quote_id' => $quote_id,
       '@message' => $message,
     ]);
 

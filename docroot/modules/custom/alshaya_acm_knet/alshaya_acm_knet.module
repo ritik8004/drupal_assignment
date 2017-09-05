@@ -64,8 +64,9 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
   // Get results.
   if ($pipe->performPaymentInitialization()) {
     // @TODO: Inform Magento about this info.
-    \Drupal::logger('alshaya_acm_knet')->info('Payment id for order id @order_id is @payment_id', [
+    \Drupal::logger('alshaya_acm_knet')->info('Payment info for quote id @quote_id is @payment_id. Reserved order id is @order_id.', [
       '@order_id' => $order_id,
+      '@quote_id' => $cart->id(),
       '@payment_id' => $pipe->getPaymentId(),
     ]);
 
