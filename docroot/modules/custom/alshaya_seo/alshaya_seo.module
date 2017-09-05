@@ -266,6 +266,16 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
   try {
     $current_route = $gtm_manager->getGtmContainer();
     $general_dl_attributes = $gtm_manager->fetchGeneralPageAttributes($data_layer);
+
+    // Preserve attributes before overriding the datalayer attributes.
+    if (isset($data_layer['deliveryCity'])) {
+      $general_dl_attributes['deliveryCity'] = $data_layer['deliveryCity'];
+    }
+
+    if (isset($data_layer['deliveryArea'])) {
+      $general_dl_attributes['deliveryArea'] = $data_layer['deliveryArea'];
+    }
+
     $data_layer = $general_dl_attributes;
 
     $page_type = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
@@ -514,7 +524,19 @@ function alshaya_seo_entity_presave(EntityInterface $entity) {
   try {
     if ($entity->getEntityTypeId() === 'user' &&
       $entity->get('field_subscribe_newsletter')->getString()) {
-      user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
+      $original_entity = $entity->original;
+
+      // Check if the user updated his subscription status from 0 to 1.
+      if (($original_entity) &&
+        ($original_entity->get('field_subscribe_newsletter')->getString() !== "1") &&
+        ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
+        user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
+      }
+      // Handle registrations with subscrition checked.
+      elseif (($original_entity === NULL) &&
+        ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
+        user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
+      }
     }
   }
   catch (Exception $e) {
