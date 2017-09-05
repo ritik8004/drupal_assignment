@@ -456,7 +456,7 @@
         dataLayer.push(datalayer_product_modal);
       }
 
-      /** Product click handler for Modals. **/q
+      /** Product click handler for Modals. **/
       // Add click link handler to fire 'productClick' event to GTM.
       $('a[href*="product-quick-view"]').each(function () {
         $(this).once('js-event').on('click', function (e) {
