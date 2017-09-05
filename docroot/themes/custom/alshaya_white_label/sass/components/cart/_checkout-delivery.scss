@@ -1116,6 +1116,12 @@
       a p {
         color: $grey-ash;
       }
+
+      &.active--tab--head {
+        h2 {
+          color: $cerulean-two !important;
+        }
+      }
     }
 
     #edit-guest-delivery-collect,
