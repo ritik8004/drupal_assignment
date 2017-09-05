@@ -205,27 +205,28 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#weight' => -98,
   ];
 
-  if (empty($out_of_stock_message)) {
-    // Change checkout button text to 'Checkout Securely'.
-    $form['actions']['checkout']['#value'] = t('checkout securely');
-    $form['actions']['checkout']['#suffix'] = '</div>';
-    $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
-    // We need to change the markup for submit button.
-    // @see alshaya_white_label_theme_suggestions_input_alter().
-    $form['actions']['checkout']['#attributes']['data-twig-suggestion'] = 'secure-checkout';
-    $form['actions']['checkout']['#attributes']['class'][] = 'bottom-edit-checkout';
+  // Change checkout button text to 'Checkout Securely'.
+  $form['actions']['checkout']['#value'] = t('checkout securely');
+  $form['actions']['checkout']['#suffix'] = '</div>';
+  $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
+  // We need to change the markup for submit button.
+  // @see alshaya_white_label_theme_suggestions_input_alter().
+  $form['actions']['checkout']['#attributes']['data-twig-suggestion'] = 'secure-checkout';
+  $form['actions']['checkout']['#attributes']['class'][] = 'bottom-edit-checkout';
 
-    // Added link markup.
-    $form['actions_top']['checkout_top'] = [
-      '#markup' => '<a class="checkout-top-button top-edit-checkout" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
-    ];
-  }
-  else {
-    $form['actions']['checkout']['#access'] = FALSE;
-  }
+  // Added link markup.
+  $form['actions_top']['checkout_top'] = [
+    '#markup' => '<a class="checkout-top-button top-edit-checkout" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
+  ];
 
-  // Out of stock error message.
   if (!empty($out_of_stock_message)) {
+    $form['actions']['checkout']['#attributes']['disabled'] = 'disabled';
+
+    $form['actions_top']['checkout_top'] = [
+      '#markup' => '<a class="checkout-top-button top-edit-checkout disabled" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
+    ];
+
+    // Out of stock error message.
     $form['form_level_error_wrapper']['out_of_stock']['#markup'] = '<div id="out-of-stock-message">' . $out_of_stock_message . '</div>';
   }
 
