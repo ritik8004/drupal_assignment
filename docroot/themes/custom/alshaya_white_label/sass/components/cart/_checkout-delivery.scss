@@ -1167,14 +1167,8 @@ html[lang=ar] {
 }
 
 // Showing label on mobile number field.
-.address-book-address .mobile-number-field .form-type-textfield label.visually-hidden {
-  position: absolute !important;
-  clip: unset;
-  overflow: visible;
-  height: auto;
-  width: auto;
-  word-wrap: normal;
-  top: -1.125rem !important;
+.address-book-address .mobile-number-field & > label {
+  position: static !important;
 }
 
 .alias--cart-checkout-delivery,
