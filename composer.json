@@ -58,7 +58,8 @@
         "drupal/components": "^1.0",
         "drupal/twig_tweak": "^1.8",
         "drupal/kashmir": "^1.1",
-        "jqueryvalidate/jqueryvalidate": "~1.0"
+        "jqueryvalidate/jqueryvalidate": "~1.0",
+        "drupal/viewsreference": "^1.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
