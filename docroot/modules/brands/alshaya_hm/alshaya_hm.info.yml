@@ -1,0 +1,8 @@
+name: 'Alshaya HnM'
+type: module
+description: 'The dedicated module for HnM brand.'
+package: Alshaya
+core: 8.x
+
+themes:
+  - alshaya_white_label
