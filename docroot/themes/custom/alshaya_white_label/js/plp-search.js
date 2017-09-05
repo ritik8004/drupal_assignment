@@ -102,13 +102,35 @@
           // Enable & disable apply filter button on mobile.
           $(document).ajaxComplete(function () {
             var facetBlocks = $('.c-facet__blocks__wrapper--mobile .c-facet__blocks');
+            var clearAllMobileButton = $('.c-facet__blocks__wrapper--mobile .clear-all');
+            var clearAllFake = $('.clear-all-fake');
+            if (clearAllMobileButton.length !== 0) {
+              clearAllFake.removeClass('inactive');
+              if (!clearAllFake.hasClass('active')) {
+                clearAllFake.addClass('active');
+              }
+            }
+            else if (clearAllMobileButton.length === 0) {
+              if (!clearAllFake.hasClass('inactive')) {
+                clearAllFake.addClass('inactive');
+              }
+            }
+
             if (facetBlocks.length !== 0) {
               var selectedFiterCount = facetBlocks.find('input:checked').length;
+              var fakeApplyButton = $('.fake-apply-button');
               if (selectedFiterCount > 0) {
-                $('.fake-apply-button').removeAttr('disabled');
+                fakeApplyButton.removeClass('inactive');
+                fakeApplyButton.removeAttr('disabled');
+                if (!fakeApplyButton.hasClass('active')) {
+                  fakeApplyButton.addClass('active');
+                }
               }
               else {
-                $('.fake-apply-button').attr('disabled', 'disabled');
+                fakeApplyButton.attr('disabled', 'disabled');
+                if (!fakeApplyButton.hasClass('inactive')) {
+                  fakeApplyButton.addClass('inactive');
+                }
               }
             }
           });
@@ -123,7 +145,7 @@
           }
           else {
             // If we dont have one, create it, this is first time load.
-            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="apply-fake"><input type="button" class="fake-apply-button" disabled value="' + Drupal.t('apply') + '"></li><li class="clear-all-fake"><span>' + Drupal.t('clear all') + '</span></li></div>')
+            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="apply-fake"><input type="button" class="fake-apply-button inactive" disabled value="' + Drupal.t('apply') + '"></li><li class="clear-all-fake inactive"><span>' + Drupal.t('clear all') + '</span></li></div>')
               .insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
 
             $('.fake-apply-button').click(function () {

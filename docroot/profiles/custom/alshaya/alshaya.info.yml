@@ -5,9 +5,15 @@ core: '8.x'
 dependencies:
   - acsf
   - color
+  - config_translation
+  - content_translation
+  - components
   - dynamic_page_cache
   - features
+  - language
+  - locale
   - syslog
+  - twig_tweak
 
 themes:
   - bartik

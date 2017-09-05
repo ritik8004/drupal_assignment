@@ -25,7 +25,7 @@
   <target name="local:post-install">
     <echo>Allow all modules to run code once post drupal install.</echo>
     <drush command="alshaya-post-drupal-install" assume="yes" alias="${drush.alias}" passthru="false">
-        <option name="brand">${drush.brand}</option>
+        <option name="brand_module">${drush.brand_module}</option>
     </drush>
   </target>
 
@@ -61,7 +61,7 @@
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
           <property name="drush.uri" value="https://local.alshaya.com" />
-          <property name="drush.brand" value="mothercare" />
+          <property name="drush.brand_module" value="alshaya_mc" />
       </phingcall>
       <phingcall target="sync:products">
           <property name="drush.uri" value="https://local.alshaya.com" />
@@ -84,7 +84,7 @@
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
           <property name="drush.uri" value="https://local.non-transac.com" />
-          <property name="drush.brand" value="victoria_secret" />
+          <property name="drush.brand_module" value="alshaya_vs" />
       </phingcall>
   </target>
 
@@ -102,7 +102,7 @@
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
           <property name="drush.uri" value="https://local.alshaya.com" />
-          <property name="drush.brand" value="mothercare" />
+          <property name="drush.brand_module" value="alshaya_mc" />
       </phingcall>
       <phingcall target="sync:products">
           <property name="drush.uri" value="https://local.alshaya.com" />
@@ -130,7 +130,7 @@
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
         <property name="drush.uri" value="https://local.non-transac.com" />
-        <property name="drush.brand" value="victoria_secret" />
+        <property name="drush.brand_module" value="alshaya_vs" />
       </phingcall>
   </target>
 </project>

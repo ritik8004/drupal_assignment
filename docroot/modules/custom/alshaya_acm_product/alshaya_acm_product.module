@@ -21,6 +21,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 
@@ -180,17 +181,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       $build['item_code']['#markup'] = $sku;
 
-      $build['short_description']['#markup'] = '';
-      if ($body = $entity->get('body')->getValue()) {
-        $build['short_description']['#markup'] = $body[0]['value'];
-      }
-
       $at_glance['label'] = t('At a glance');
       $at_glance['value'] = $sku_entity->get('attr_at_glance')->getString();
 
       $description['label'] = t('Features and benefits');
-      $description['value'] = $build['short_description']['#markup'];
+
+      $description['value'] = '';
+
+      if ($body = $entity->get('body')->getValue()) {
+        $description['value'] = $body[0]['value'];
+      }
+
+      $description['value'] .= '<div class="bullet-points-wrapper">';
       $description['value'] .= $sku_entity->get('attr_bullet_points')->getString();
+      $description['value'] .= '</div>';
 
       $specifications['label'] = t('Specifications');
       $specifications['value'] = [
@@ -292,6 +296,16 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         '#mainsku' => $sku_identifier,
         '#type' => 'plp',
       ];
+
+      $promotion_types = ['cart'];
+
+      // Get promotions for the product.
+      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
+      if (!empty($promotions)) {
+        $build['promotions'] = [
+          '#markup' => implode('</br>', $promotions),
+        ];
+      }
     }
     elseif ($view_mode == 'modal') {
       alshaya_acm_product_get_gallery($build, $sku_entity);
@@ -339,10 +353,6 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
     $build['cart_form_placeholder'] = [
       '#markup' => '<div class="stock-checker">' . t('Checking stock...') . '</div>',
     ];
-
-    // This is to disable stock check on page load.
-    global $_alshaya_acm_product_no_stock_process;
-    $_alshaya_acm_product_no_stock_process = TRUE;
 
     unset($build['name']);
     unset($build['price']);
@@ -395,7 +405,13 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-  global $_alshaya_acm_product_no_stock_process;
+  $process_stock = TRUE;
+
+  // We don't process stock while PDP is loaded.
+  // We display form via separate controller or in POST.
+  if (\Drupal::request()->getMethod() == 'GET' && \Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
+    $process_stock = FALSE;
+  }
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   // Get SKU id.
@@ -405,7 +421,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // we check inside loop.
   if ($sku_entity->getType() == 'simple') {
     // We are not going to show the form right now, we don't do any stock check.
-    if (isset($_alshaya_acm_product_no_stock_process) && $_alshaya_acm_product_no_stock_process) {
+    if (!$process_stock) {
       return;
     }
   }
@@ -450,18 +466,19 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
         unset($configurable['#ajax']['wrapper']);
 
+        // We are not going to show the form right now, we don't do any
+        // stock check for variant SKUs.
+        if (!$process_stock) {
+          continue;
+        }
+
         $configurable['#options_attributes'] = [];
+
         // Check if it is a dropdown, we disable the options for which we don't
         // have stock.
         if (isset($configurable['#options'])) {
           foreach ($configurable['#options'] as $key => $value) {
             $sku = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), [$configurable_key => $key]);
-
-            // We are not going to show the form right now, we don't do any
-            // stock check.
-            if (isset($_alshaya_acm_product_no_stock_process) && $_alshaya_acm_product_no_stock_process) {
-              return;
-            }
 
             // This is very limited, it supports only 1 configurable attribute.
             if ($sku instanceof SKU) {
@@ -557,7 +574,24 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
     $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);
+
+    // Get the data from BubbleMetaData.
+    $bubbleable_metadata = BubbleableMetadata::createFromRenderArray($dynamic_parts);
+
+    // Retrieve the attachments from the $data.
+    $attachments = $bubbleable_metadata->getAttachments();
+
+    // Generate the settings to be sent back with the ajax response.
+    $settings = '';
+    if (!empty($attachments['drupalSettings'])) {
+      $settings .= '<script type="text/javascript">jQuery.extend(drupalSettings, ';
+      $settings .= Json::encode($attachments['drupalSettings']);
+      $settings .= ');</script>';
+    }
+
     $data['selector'] = $selector;
+    $data['replaceWith'] .= $settings;
+
     $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
 
     $selector = '.quantity-' . $sku_identifier;

@@ -1113,7 +1113,6 @@ body.alias--cart {
     text-transform: lowercase;
     font-family: $alshaya-bold;
     font-size: 0.75rem;
-    -webkit-font-smoothing: auto;
 
     @include breakpoint($upto-tablet) {
       display: block;
@@ -1341,5 +1340,34 @@ html[lang=ar] .alias--cart #table-cart-items tr th {
 
   @include breakpoint($desktop) {
     font-size: 0.875rem;
+  }
+}
+
+html[lang=ar] {
+  header .block-cart-mini-block .price-amount,
+  header .block-cart-mini-block .quantity {
+    font-family: $arial-nodir;
+  }
+
+  .alias--cart {
+    #table-cart-items {
+      .delivery-option {
+        .home-delivery.tooltip--head {
+          & ~ .tooltip {
+            @include breakpoint($desktop) {
+              right: 2.75rem;
+            }
+          }
+        }
+
+        .click-collect.tooltip--head {
+          & ~ .tooltip {
+            @include breakpoint($desktop) {
+              right: -0.25rem;
+            }
+          }
+        }
+      }
+    }
   }
 }

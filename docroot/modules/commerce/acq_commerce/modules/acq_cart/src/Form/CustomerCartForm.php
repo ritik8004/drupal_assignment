@@ -66,7 +66,12 @@ class CustomerCartForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $cart = $this->cartStorage->getCart();
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      return $form;
+    }
+
     $items = NULL;
 
     if ($cart) {

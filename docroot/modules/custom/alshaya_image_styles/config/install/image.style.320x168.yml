@@ -4,10 +4,11 @@ dependencies: {  }
 name: 320x168
 label: 320x168
 effects:
-  76fb313f-deff-4d0c-a181-0f238f3c3796:
-    uuid: 76fb313f-deff-4d0c-a181-0f238f3c3796
-    id: image_scale_and_crop
-    weight: 1
+  935c2af3-51e1-4dc0-9ee7-830ec82cc152:
+    uuid: 935c2af3-51e1-4dc0-9ee7-830ec82cc152
+    id: image_scale
+    weight: 2
     data:
-      width: 320
-      height: 168
+      width: 760
+      height: null
+      upscale: false

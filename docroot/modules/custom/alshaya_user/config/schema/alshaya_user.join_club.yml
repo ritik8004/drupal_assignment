@@ -1,0 +1,10 @@
+alshaya_user.join_club:
+  type: config_object
+  label: 'Join the club content'
+  mapping:
+    join_club_description:
+      type: text_format
+      label: 'Join the club description'
+    langcode:
+      type: string
+      label: 'Language code'

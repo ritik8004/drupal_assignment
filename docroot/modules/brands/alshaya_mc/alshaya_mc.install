@@ -9,6 +9,8 @@
  * Implements hook_install().
  */
 function alshaya_mc_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_mc', 'inc', 'alshaya_mc.content');
+
   // Enable and set alshaya_white_label as default theme.
   \Drupal::service('theme_handler')->install(['alshaya_white_label'], TRUE);
   \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
@@ -56,4 +58,12 @@ function alshaya_mc_install() {
   \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
     ->set('region', -1)
     ->save();
+
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Create default content for mothercare.
+  alshaya_mc_create_default_content();
 }

@@ -14,33 +14,27 @@
     </style>
     <div class="c-content">
 
-      {% if content.field_video_banner %}
-      <div class="c-content__banner video_banner mobile-only-block">
-        <div class="video_banner_content">
-          {{ content.field_video_banner }}
-        </div>
-      </div>
-      {% endif %}
-
       {% if content.field_banner %}
       <div class="c-content__banner">
         {{ content.field_banner }}
       </div>
       {% endif %}
 
-      {% if content.field_slider %}
-      <div class="c-content__slider">
-        {{ content.field_slider }}
-      </div>
-      {% endif %}
-
-      {% if content.field_video_banner %}
-      <div class="c-content__banner video_banner above-mobile-block">
-        <div class="video_banner_content">
-          {{ content.field_video_banner }}
+      <div class="banner-container">
+        {% if content.field_video_banner %}
+        <div class="c-content__banner video_banner c-content__container">
+          <div class="video_banner_content">
+            {{ content.field_video_banner }}
+          </div>
         </div>
+        {% endif %}
+
+        {% if content.field_slider %}
+        <div class="c-content__slider">
+          {{ content.field_slider }}
+        </div>
+        {% endif %}
       </div>
-      {% endif %}
 
       <div class="c-content__container clearfix">
         {{ content.field_block }}

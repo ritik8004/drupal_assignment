@@ -23,7 +23,7 @@
         <span class="delivery--time--value">{{ store.delivery_time }}</span>
       </div>
       <div class="view-on--map">
-        <a href="http://maps.google.com/?q={{ store.lat }},{{ store.lng }}" target='_blank'>
+        <a onclick="mapsApp({{ store.lat }}, {{ store.lng }})" target='_blank'>
           {% trans %}
           View on map
           {% endtrans %}

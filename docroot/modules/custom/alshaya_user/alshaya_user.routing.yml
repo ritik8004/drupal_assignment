@@ -22,3 +22,11 @@ alshaya_user.user_communication_preference:
   requirements:
     _entity_access: 'user.update'
     user: \d+
+
+alshaya_user.join_club_form:
+  path: '/admin/config/people/join-club'
+  defaults:
+    _form: '\Drupal\alshaya_user\Form\JoinClubConfigForm'
+    _title: 'Join Club content'
+  requirements:
+    _permission: 'access administration pages'

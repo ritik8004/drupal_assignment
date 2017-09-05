@@ -507,53 +507,54 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchCartItemAttributes() {
+    $attributes = [];
+
     // Include product utility file to use helper functions.
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-    $cart = $this->cartStorage->getCart();
-    $cartItems = $cart->get('items');
-    $attributes = [];
-    $cart_delivery_method = $cart->getExtension('shipping_method');
-    $isPrivilegeOrder = FALSE;
-    if (!empty($cart->getExtension('loyalty_card'))) {
-      $isPrivilegeOrder = TRUE;
-    }
 
-    if (($cart->getCheckoutStep() === 'payment') && ($cart_delivery_method === 'click_and_collect_click_and_collect')) {
-      $store_code = $cart->getExtension('store_code');
-      $store = $this->storeFinder->getStoreFromCode($store_code);
-      if ($store) {
-        $dimension6 = $store->label();
-        $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+    if ($cart = $this->cartStorage->getCart(FALSE)) {
+      $cartItems = $cart->get('items');
+      $cart_delivery_method = $cart->getExtension('shipping_method');
+
+      if (($cart->getCheckoutStep() === 'payment')
+        && $cart_delivery_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+
+        // Get store code from cart extension.
+        $store_code = $cart->getExtension('store_code');
+
+        // We should always have store but a sanity check.
+        if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
+          $dimension6 = $store->label();
+          $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+        }
       }
-    }
 
-    foreach ($cartItems as $cartItem) {
-      $skuId = $cartItem['sku'];
-      $attributes[$skuId] = $this->fetchSkuAtttributes($skuId);
-      // Fetch product for this sku to get the category.
-      $productNode = alshaya_acm_product_get_display_node($skuId);
-      // Get product media.
-      $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
-      $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
-      $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
-      $attributes[$skuId]['quantity'] = $cartItem['qty'];
-      $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
-      $attributes[$skuId]['gtm-dimension6'] = '';
-      $attributes[$skuId]['gtm-dimension7'] = '';
-      if ($cart_delivery_method === 'click_and_collect_click_and_collect') {
-        $attributes[$skuId]['gtm-dimension6'] = $dimension6;
-        $attributes[$skuId]['gtm-dimension7'] = $dimension7;
+      foreach ($cartItems as $cartItem) {
+        $skuId = $cartItem['sku'];
+        $attributes[$skuId] = $this->fetchSkuAtttributes($skuId);
+
+        // Fetch product for this sku to get the category.
+        $productNode = alshaya_acm_product_get_display_node($skuId);
+
+        // Get product media.
+        $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
+        $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
+        $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
+        $attributes[$skuId]['quantity'] = $cartItem['qty'];
+        $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
+
+        $attributes[$skuId]['gtm-dimension6'] = '';
+        $attributes[$skuId]['gtm-dimension7'] = '';
+
+        if ($cart_delivery_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+          $attributes[$skuId]['gtm-dimension6'] = $dimension6;
+          $attributes[$skuId]['gtm-dimension7'] = $dimension7;
+        }
       }
-    }
 
-    $attributes['privilegeOrder'] = $isPrivilegeOrder;
-    $shipping = $cart->getShipping();
+      $attributes['privilegeOrder'] = !empty($cart->getExtension('loyalty_card'));
 
-    // @TODO: Check why we receive inconsistent feedback from conductor: Array on QA & Object on UAT."
-    if (is_object($shipping)) {
-      $attributes['delivery_phone'] = property_exists($shipping, 'telephone') ? $shipping->telephone : '';
-    }
-    elseif (is_array($shipping)) {
+      $shipping = (array) $cart->getShipping();
       $attributes['delivery_phone'] = isset($shipping['telephone']) ? $shipping['telephone'] : '';
     }
 
@@ -681,37 +682,16 @@ class AlshayaGtmManager {
   /**
    * Helper function to fetch order attributes.
    *
+   * @params array $order
+   *   Order array.
+   *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
    * @throws \InvalidArgumentException
    */
-  public function fetchCompletedOrderAttributes() {
+  public function fetchCompletedOrderAttributes(array $order) {
+    $orders = alshaya_acm_customer_get_user_orders($order['email']);
 
-    $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
-    $order_data = $temp_store->get('order');
-
-    // Throw access denied if nothing in session.
-    if (empty($order_data) || empty($order_data['id'])) {
-      throw new AccessDeniedHttpException();
-    }
-
-    $order_id = (int) str_replace('"', '', $order_data['id']);
-
-    if ($this->currentUser->isAnonymous()) {
-      $email = $temp_store->get('email');
-    }
-    else {
-      $email = $this->currentUser->getEmail();
-    }
-
-    $orders = alshaya_acm_customer_get_user_orders($email);
-
-    $order_index = array_search($order_id, array_column($orders, 'order_id'), TRUE);
-
-    if ($order_index === FALSE) {
-      throw new NotFoundHttpException();
-    }
-    $order = $orders[$order_index];
     $orderItems = $order['items'];
     $dimension6 = '';
     $dimension7 = '';
@@ -873,7 +853,7 @@ class AlshayaGtmManager {
       case 'checkout login page':
       case 'checkout delivery page':
       case 'checkout payment page':
-        $cart = $this->cartStorage->getCart();
+        $cart = $this->cartStorage->getCart(FALSE);
         if ($cart) {
           $cart_totals = $cart->totals();
           $cart_items = $cart->get('items');

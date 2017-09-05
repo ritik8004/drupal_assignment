@@ -63,7 +63,7 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
     $view_skus = [];
 
     // Get current cart skus.
-    if ($cart = $this->cartStorage->getCart()) {
+    if ($cart = $this->cartStorage->getCart(FALSE)) {
       $skus = [];
       $items = $cart->items();
 
