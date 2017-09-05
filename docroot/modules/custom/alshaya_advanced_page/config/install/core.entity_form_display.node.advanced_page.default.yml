@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.advanced_page.field_promo_blocks
     - field.field.node.advanced_page.field_related_info
     - field.field.node.advanced_page.field_slider
+    - field.field.node.advanced_page.field_views
     - node.type.advanced_page
   module:
     - block_field
@@ -22,11 +23,23 @@ dependencies:
     - workbench_moderation
 third_party_settings:
   field_group:
+    group_views_reference:
+      children:
+        - field_views
+      parent_name: ''
+      weight: 13
+      label: 'Views Reference'
+      format_type: details
+      format_settings:
+        open: false
+        required_fields: true
+        classes: ''
+        id: ''
     group_banner_full_width:
       children:
         - field_banner
       parent_name: ''
-      weight: 10
+      weight: 9
       label: 'Banner full width'
       format_type: details
       format_settings:
@@ -75,7 +88,7 @@ third_party_settings:
       children:
         - field_promo_blocks
       parent_name: ''
-      weight: 109
+      weight: 14
       label: 'Promo blocks'
       format_type: details
       format_settings:
@@ -117,7 +130,7 @@ content:
     third_party_settings: {  }
     region: content
   field_block:
-    weight: 112
+    weight: 17
     settings:
       plugin_id: ''
       settings: {  }
@@ -126,7 +139,7 @@ content:
     region: content
   field_delivery_banner:
     type: entity_reference_paragraphs
-    weight: 111
+    weight: 16
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -137,7 +150,7 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 110
+    weight: 15
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
@@ -190,6 +203,18 @@ content:
       default_paragraph_type: ''
     third_party_settings: {  }
     region: content
+  field_views:
+    type: entity_reference_paragraphs
+    weight: 113
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
   langcode:
     type: language_select
     weight: 1
@@ -227,6 +252,8 @@ content:
   translation:
     weight: 10
     region: content
+    settings: {  }
+    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
     weight: 2
