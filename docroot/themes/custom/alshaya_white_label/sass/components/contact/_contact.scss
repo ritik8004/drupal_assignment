@@ -238,6 +238,13 @@
   legend {
     color: $marine-blue-two;
   }
+
+  .mobile-number-field {
+    @include breakpoint($desktop) {
+      display: block;
+      clear: both;
+    }
+  }
 }
 
 .c-user-edit .user-form {
