@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: Brand
+vid: product_brand
+description: 'Product''s brand'
+hierarchy: 0
+weight: 0

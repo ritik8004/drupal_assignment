@@ -33,6 +33,7 @@ function alshaya_non_transac_install() {
     // 'alshaya_main_menu',
     'alshaya_master',
     'alshaya_menus',
+    'alshaya_non_transac_product',
     // 'alshaya_acm_cart_notification',
     // 'alshaya_newsletter',
     'alshaya_password_policy',
