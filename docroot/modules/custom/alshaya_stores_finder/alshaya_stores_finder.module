@@ -7,7 +7,6 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Block\BlockPluginInterface;
 
@@ -135,38 +134,6 @@ function alshaya_stores_finder_block_build_alter(array &$build, BlockPluginInter
   ];
   if (in_array($block->getPluginId(), $store_finder_search_blocks)) {
     $build['#cache']['tags'][] = 'store-finder-cache-tag';
-  }
-}
-
-/**
- * Implements hook_alshaya_master_post_drupal_install().
- */
-function alshaya_stores_finder_alshaya_master_post_drupal_install() {
-  $area_list = \Drupal::config('area_list.kw')->get('areas');
-  // If area available.
-  if ($area_list) {
-    // Vocabulary id.
-    $vid = 'area_list';
-    foreach ($area_list as $area_source => $area) {
-      try {
-        // Create term for each area.
-        $term = Term::create([
-          'name' => $area_source,
-          'vid' => $vid,
-        ]);
-        // Add translation if available.
-        if (isset($area['ar']) && !empty($area['ar'])) {
-          $term->addTranslation('ar', [
-            'name' => $area['ar'],
-          ]);
-        }
-        $term->save();
-      }
-      catch (\Exception $e) {
-        // Log error if any.
-        \Drupal::logger('alshaya_stores_finder')->error($e->getMessage());
-      }
-    }
   }
 }
 
