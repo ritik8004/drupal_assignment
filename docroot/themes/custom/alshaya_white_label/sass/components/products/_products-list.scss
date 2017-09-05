@@ -760,6 +760,23 @@
           @include select-style(9rem);
 
           width: 100%;
+
+          html[lang=ar] & {
+            @include breakpoint($only-mobile) {
+              padding-left: 60px;
+            }
+
+            @include breakpoint($only-tablet) {
+              padding-left: 35px;
+            }
+
+            @include breakpoint($upto-desktop) {
+              padding-top: 0;
+              padding-bottom: 0;
+              line-height: 32px;
+              height: 35px;
+            }
+          }
         }
       }
     }
