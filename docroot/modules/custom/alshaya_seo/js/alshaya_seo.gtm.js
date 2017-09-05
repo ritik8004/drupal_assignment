@@ -192,6 +192,10 @@
       /** Impressions tracking on listing pages with Products. **/
       if ((gtmPageType === 'product detail page') || (gtmPageType === 'cart page')) {
         var count_pdp_items = 1;
+        if (!drupalSettings.hasOwnProperty('impressions_position')) {
+					drupalSettings.impressions_position = [];
+        }
+
         productLinkSelector.each(function () {
           // Fetch attributes for this product.
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
@@ -200,20 +204,21 @@
 
           var pdpListName = '';
           var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
+          if (!$(this).closest('.owl-item').hasClass('cloned') && !upSellCrossSellSelector.hasClass('mobile-only-block')) {
+						// Check whether the product is in US or CS region & update list accordingly.
+						if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
+							pdpListName = listName + '-CS';
+						}
+						else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
+							pdpListName = listName + '-US';
+						}
 
-          // Check whether the product is in US or CS region & update list accordingly.
-          if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
-            pdpListName = listName + '-CS';
+						impression.list = pdpListName;
+						impression.position = count_pdp_items;
+						impressions.push(impression);
+						drupalSettings.impressions_position[$(this).attr('data-nid') + '-' + pdpListName] = count_pdp_items;
+						count_pdp_items++;
           }
-          else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
-            pdpListName = listName + '-US';
-          }
-
-          impression.list = pdpListName;
-          impression.position = count_pdp_items;
-          impressions.push(impression);
-
-          count_pdp_items++;
         });
 
         Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
@@ -465,7 +470,8 @@
             subListName = listName + '-US';
           }
 
-          position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
+          // position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
+          position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
         });
       });
