@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_acm_knet\Controller;
 
+use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -32,6 +34,13 @@ class KnetController extends ControllerBase {
   protected $alshayaApiWrapper;
 
   /**
+   * Drupal\acq_cart\CartStorageInterface definition.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartStorage;
+
+  /**
    * Array containing knet settings from config.
    *
    * @var array
@@ -46,6 +55,13 @@ class KnetController extends ControllerBase {
   protected $ordersManager;
 
   /**
+   * Checkout Helper service object.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutHelper
+   */
+  protected $checkoutHelper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
@@ -56,14 +72,26 @@ class KnetController extends ControllerBase {
    *   The factory for configuration objects.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders Manager object.
+   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
+   *   The cart session.
+   * @param \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper
+   *   The cart session.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory object.
    */
-  public function __construct(APIWrapper $api_wrapper, AlshayaApiWrapper $alshaya_api_wrapper, ConfigFactoryInterface $config_factory, OrdersManager $orders_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(APIWrapper $api_wrapper,
+                              AlshayaApiWrapper $alshaya_api_wrapper,
+                              ConfigFactoryInterface $config_factory,
+                              OrdersManager $orders_manager,
+                              CartStorageInterface $cart_storage,
+                              CheckoutHelper $checkout_helper,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->alshayaApiWrapper = $alshaya_api_wrapper;
     $this->knetSettings = $config_factory->get('alshaya_acm_knet.settings');
     $this->ordersManager = $orders_manager;
+    $this->cartStorage = $cart_storage;
+    $this->checkoutHelper = $checkout_helper;
     $this->logger = $logger_factory->get('alshaya_acm_knet');
   }
 
@@ -76,6 +104,8 @@ class KnetController extends ControllerBase {
       $container->get('alshaya_api.api'),
       $container->get('config.factory'),
       $container->get('alshaya_acm_customer.orders_manager'),
+      $container->get('acq_cart.cart_storage'),
+      $container->get('alshaya_acm_checkout.checkout_helper'),
       $container->get('logger.factory')
     );
   }
@@ -93,28 +123,46 @@ class KnetController extends ControllerBase {
     $response['tracking_id'] = $_POST['trackid'];
     $response['user_id'] = $_POST['udf1'];
     $response['customer_id'] = $_POST['udf2'];
-    $response['order_id'] = $_POST['udf3'];
+    $response['quote_id'] = $_POST['udf3'];
     $response['email'] = $_POST['udf4'];
 
-    $state_key = md5($response['order_id']);
+    // Get the cart using API to validate.
+    $cart = $this->apiWrapper->getCart($response['quote_id']);
+
+    if (empty($cart)) {
+      $this->logger->error('Invalid KNET response call found.<br>@message', [
+        '@message' => json_encode($response),
+      ]);
+
+      exit;
+    }
+
+    $state_key = md5($response['quote_id']);
     \Drupal::state()->set($state_key, $response);
+
+    // On local/dev we don't use https for response url.
+    // But for sure we want to use httpd on success url.
+    $url_options = [
+      'https' => TRUE,
+      'absolute' => TRUE,
+    ];
 
     $result_url = 'REDIRECT=';
 
     if ($response['result'] == 'CAPTURED') {
-      $result_url .= Url::fromRoute('alshaya_acm_knet.success', ['state_key' => $state_key], ['absolute' => TRUE])->toString();
+      $result_url .= Url::fromRoute('alshaya_acm_knet.success', ['state_key' => $state_key], $url_options)->toString();
 
-      $this->logger->info('KNET update for @order_id: @result_url @message', [
-        '@order_id' => $response['order_id'],
+      $this->logger->info('KNET update for @quote_id: @result_url @message', [
+        '@quote_id' => $response['order_id'],
         '@result_url' => $result_url,
         '@message' => json_encode($response),
       ]);
     }
     else {
-      $result_url .= Url::fromRoute('alshaya_acm_knet.error', ['state_key' => $state_key], ['absolute' => TRUE])->toString();
+      $result_url .= Url::fromRoute('alshaya_acm_knet.error', ['state_key' => $state_key], $url_options)->toString();
 
-      $this->logger->error('KNET update for @order_id: @result_url @message', [
-        '@order_id' => $response['order_id'],
+      $this->logger->error('KNET update for @quote_id: @result_url @message', [
+        '@quote_id' => $response['quote_id'],
         '@result_url' => $result_url,
         '@message' => json_encode($response),
       ]);
@@ -134,29 +182,33 @@ class KnetController extends ControllerBase {
       throw new AccessDeniedHttpException();
     }
 
-    $message = '';
+    // Place order now.
+    $cart = $this->cartStorage->getCart(FALSE);
 
-    foreach ($data as $key => $value) {
-      $message .= $key . ': ' . $value . PHP_EOL;
+    if (empty($cart) || $cart->id() != $data['quote_id']) {
+      throw new AccessDeniedHttpException();
     }
 
-    $this->logger->info('KNET payment complete for @order_id: @message', [
-      '@order_id' => $data['order_id'],
-      '@message' => $message,
+    $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
+      '@quote_id' => $data['quote_id'],
+      '@message' => json_encode($data),
     ]);
 
-    // Direct Magento API call to create transaction entry, we don't have it in
-    // conductor yet.
-    $this->alshayaApiWrapper->addKnetTransaction($data['order_id'], $data['transaction_id'], $data['auth']);
+    try {
+      // Push the additional data to cart.
+      $cart->setPaymentMethod('knet', $data);
+      $updated_cart = $this->cartStorage->updateCart();
 
-    // @TODO: Below API call is still kept here as status is not updated in
-    // previous call still.
-    $this->apiWrapper->updateOrderStatus($data['tracking_id'], $this->knetSettings->get('payment_processed'), $message);
+      // Place the order now.
+      $this->checkoutHelper->placeOrder($updated_cart);
 
-    // Delete the data from DB.
-    \Drupal::state()->delete($state_key);
-
-    $this->ordersManager->clearOrderCache($data['email'], $data['user_id']);
+      // Delete the data from DB (state).
+      \Drupal::state()->delete($state_key);
+    }
+    catch (\Exception $e) {
+      drupal_set_message($e->getMessage(), 'error');
+      return $this->redirect('acq_checkout.form', ['step' => 'payment']);
+    }
 
     return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
   }
@@ -164,30 +216,29 @@ class KnetController extends ControllerBase {
   /**
    * Page callback for error state.
    */
-  public function error($order_id) {
-    $order = _alshaya_acm_checkout_get_last_order_from_session();
+  public function error($quote_id) {
+    $cart = $this->cartStorage->getCart(FALSE);
 
-    if ($order['order_id'] != $order_id) {
+    if ($cart->id() != $quote_id) {
       return new AccessDeniedHttpException();
     }
 
-    $message = $this->t('Something went wrong, we dont have proper error message.');
+    $message = $this->t('User either cancelled or transaction declined.');
 
     $message .= PHP_EOL . $this->t('Debug info:') . PHP_EOL;
     foreach ($_GET as $key => $value) {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 
-    $this->logger->error('KNET payment failed for @order_id: @message', [
-      '@order_id' => $order_id,
+    $this->logger->error('KNET payment failed for @quote_id: @message', [
+      '@quote_id' => $quote_id,
       '@message' => $message,
     ]);
 
-    $this->apiWrapper->updateOrderStatus($order_id, $this->knetSettings->get('payment_failed'), $message);
+    // @TODO: Confirm message.
+    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.'), 'error');
 
-    $this->ordersManager->clearOrderCache(\Drupal::currentUser()->getEmail(), \Drupal::currentUser()->id());
-
-    return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
+    return $this->redirect('acq_checkout.form', ['step' => 'payment']);
   }
 
   /**
@@ -206,17 +257,18 @@ class KnetController extends ControllerBase {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 
-    $this->logger->error('KNET payment failed for @order_id: @message', [
-      '@order_id' => $data['order_id'],
+    $this->logger->error('KNET payment failed for @quote_id: @message', [
+      '@quote_id' => $data['quote_id'],
       '@message' => $message,
     ]);
-
-    $this->apiWrapper->updateOrderStatus($data['tracking_id'], $this->knetSettings->get('payment_failed'), $message);
 
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
 
-    return $this->redirect('acq_checkout.form', ['step' => 'confirmation']);
+    // @TODO: Confirm message.
+    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.'), 'error');
+
+    return $this->redirect('acq_checkout.form', ['step' => 'payment']);
   }
 
 }
