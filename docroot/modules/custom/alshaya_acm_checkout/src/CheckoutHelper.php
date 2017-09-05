@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_checkout;
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_customer\OrdersManager;
@@ -73,11 +74,12 @@ class CheckoutHelper {
   /**
    * Helper function to place order and do activities after it.
    *
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   Cart object.
+   *
    * @throws \Exception
    */
-  public function placeOrder() {
-    $cart = $this->cartStorage->getCart(FALSE);
-
+  public function placeOrder(CartInterface $cart) {
     if (empty($cart)) {
       throw new \Exception('Cannot place order for empty cart');
     }

@@ -126,12 +126,10 @@ class KnetController extends ControllerBase {
     $response['quote_id'] = $_POST['udf3'];
     $response['email'] = $_POST['udf4'];
 
-    // First try to set the cart in session.
-    $this->cartStorage->restoreCart($response['quote_id']);
+    // Get the cart using API to validate.
+    $cart = $this->apiWrapper->getCart($response['quote_id']);
 
-    // Now get the cart.
-    $cart = $this->cartStorage->getCart(FALSE);
-    if (empty($cart) || $cart->id() != $response['quote_id']) {
+    if (empty($cart)) {
       $this->logger->error('Invalid KNET response call found.<br>@message', [
         '@message' => json_encode($response),
       ]);
@@ -142,13 +140,17 @@ class KnetController extends ControllerBase {
     $state_key = md5($response['quote_id']);
     \Drupal::state()->set($state_key, $response);
 
+    // On local/dev we don't use https for response url.
+    // But for sure we want to use httpd on success url.
+    $url_options = [
+      'https' => TRUE,
+      'absolute' => TRUE,
+    ];
+
     $result_url = 'REDIRECT=';
 
     if ($response['result'] == 'CAPTURED') {
-      $cart->setPaymentMethodData($response);
-      $this->cartStorage->pushCart();
-
-      $result_url .= Url::fromRoute('alshaya_acm_knet.success', ['state_key' => $state_key], ['absolute' => TRUE])->toString();
+      $result_url .= Url::fromRoute('alshaya_acm_knet.success', ['state_key' => $state_key], $url_options)->toString();
 
       $this->logger->info('KNET update for @quote_id: @result_url @message', [
         '@quote_id' => $response['order_id'],
@@ -157,7 +159,7 @@ class KnetController extends ControllerBase {
       ]);
     }
     else {
-      $result_url .= Url::fromRoute('alshaya_acm_knet.error', ['state_key' => $state_key], ['absolute' => TRUE])->toString();
+      $result_url .= Url::fromRoute('alshaya_acm_knet.error', ['state_key' => $state_key], $url_options)->toString();
 
       $this->logger->error('KNET update for @quote_id: @result_url @message', [
         '@quote_id' => $response['quote_id'],
@@ -192,15 +194,16 @@ class KnetController extends ControllerBase {
       '@message' => json_encode($data),
     ]);
 
-    // We have already pushed additional data in response call, we just place
-    // order now.
-    $this->apiWrapper->placeOrder($cart->id());
-
-    // Delete the data from DB (state).
-    \Drupal::state()->delete($state_key);
-
     try {
-      $this->checkoutHelper->placeOrder();
+      // Push the additional data to cart.
+      $cart->setPaymentMethod('knet', $data);
+      $updated_cart = $this->cartStorage->updateCart();
+
+      // Place the order now.
+      $this->checkoutHelper->placeOrder($updated_cart);
+
+      // Delete the data from DB (state).
+      \Drupal::state()->delete($state_key);
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');

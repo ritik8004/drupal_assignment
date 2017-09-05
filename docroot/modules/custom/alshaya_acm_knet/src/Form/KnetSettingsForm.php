@@ -32,9 +32,6 @@ class KnetSettingsForm extends ConfigFormBase {
       ->set('resource_path', $form_state->getValue('resource_path'))
       ->set('use_secure_response_url', $form_state->getValue('use_secure_response_url'))
       ->set('alias', $form_state->getValue('alias'))
-      ->set('payment_pending', $form_state->getValue('payment_pending'))
-      ->set('payment_processed', $form_state->getValue('payment_processed'))
-      ->set('payment_failed', $form_state->getValue('payment_failed'))
       ->set('knet_language_code', $form_state->getValue('knet_language_code'))
       ->set('knet_currency_code', $form_state->getValue('knet_currency_code'))
       ->save();
@@ -71,30 +68,6 @@ class KnetSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Alias'),
       '#required' => TRUE,
       '#default_value' => $config->get('alias'),
-    ];
-
-    $form['payment_pending'] = [
-      '#type' => 'textfield',
-      '#description' => $this->t('Order status to check if payment processing is required/pending.'),
-      '#title' => $this->t('Payment pending'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('payment_pending'),
-    ];
-
-    $form['payment_processed'] = [
-      '#type' => 'textfield',
-      '#description' => $this->t('Order status to set when payment succeeds.'),
-      '#title' => $this->t('Payment processed'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('payment_processed'),
-    ];
-
-    $form['payment_failed'] = [
-      '#type' => 'textfield',
-      '#description' => $this->t('Order status to set when payment fails.'),
-      '#title' => $this->t('Payment failed'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('payment_failed'),
     ];
 
     $form['knet_language_code'] = [
