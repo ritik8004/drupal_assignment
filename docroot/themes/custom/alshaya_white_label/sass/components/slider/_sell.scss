@@ -134,6 +134,18 @@
     .use-ajax {
       outline: transparent;
     }
+
+    .promotions {
+      margin-top: 0.25rem;
+
+      a {
+        font-size: 0.75rem;
+        color: $cherry;
+        display: inline-block;
+        margin-#{$left}: 0.125rem;
+        margin-#{$right}: 0.125rem;
+      }
+    }
   }
 
   .price-wrapper {
