@@ -18,7 +18,7 @@ function alshaya_master_drush_command() {
     'description' => 'Code to be executed only once post install.',
     'aliases' => ['apdi'],
     'options' => [
-      'brand' => 'The brand to install.',
+      'brand_module' => 'The brand module to install.',
     ],
   ];
 
@@ -32,38 +32,39 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
   $post_install_status = \Drupal::state()->get('alshaya_master_post_drupal_install', 'not done');
 
   // Determine which brand to install.
-  $brand = drush_get_option('brand', '');
-  if (!empty($brand)) {
-    if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('name'))) {
-      switch ($brand) {
-        case 'victoria_secret':
-          $module = 'alshaya_vs';
-          break;
+  $brand_module = drush_get_option('brand_module', '');
+  if (!empty($brand_module)) {
+    if (module_load_install($brand_module)) {
+      if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
+        drush_print(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
 
-        default:
-          $brand = 'mothercare';
-          $module = 'alshaya_mc';
+        // Install the module.
+        \Drupal::service('module_installer')->install([$brand_module]);
+
+        // Update config with installed brand and module names.
+        \Drupal::configFactory()->getEditable('alshaya.installed_brand')
+          ->set('module', $brand_module)
+          ->save();
+
+        // Get langcodes for all languages.
+        $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
+
+        // Get all config names avaiable in current module.
+        $names = ConfigHelper::forModule($brand_module)->optional()->listAll();
+
+        // Update config translations from string translations.
+        Locale::config()->updateConfigTranslations($names, $langcodes);
       }
-
-      drush_print(dt('Configuring the site for @brand brand.', ['@brand' => $brand]));
-
-      // Install the module.
-      \Drupal::service('module_installer')->install([$module]);
-
-      // Update config with installed brand and module names.
-      \Drupal::configFactory()->getEditable('alshaya.installed_brand')
-        ->set('name', $brand)
-        ->set('module', $module)
-        ->save();
-
-      // Get langcodes for all languages.
-      $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
-
-      // Get all config names avaiable in current module.
-      $names = ConfigHelper::forModule($module)->optional()->listAll();
-
-      // Update config translations from string translations.
-      Locale::config()->updateConfigTranslations($names, $langcodes);
+      else {
+        drush_print(dt("Brand module @brand_module can't be enabled because the site is already configured with @existing_brand_module.",
+          [
+            '@brand_module' => $brand_module,
+            '@existing_brand_module' => \Drupal::configFactory()->get('alshaya.installed_brand')->get('module'),
+          ]));
+      }
+    }
+    else {
+      drush_print(dt('Brand module @brand_module does not exists.', ['@brand_module' => $brand_module]));
     }
   }
 
