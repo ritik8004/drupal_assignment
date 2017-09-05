@@ -1,6 +1,9 @@
+uuid: 30a2f174-28ad-49ff-a480-16c785beca25
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: SRxYgPgkeG8iHK2b_mHMzHczI6Rh7NZJOKE91hAZo9w
 name: 304x132
 label: 304x132
 effects:
@@ -9,6 +12,6 @@ effects:
     id: image_scale
     weight: 1
     data:
-      width: 304
-      height: 132
+      width: 501
+      height: 600
       upscale: false

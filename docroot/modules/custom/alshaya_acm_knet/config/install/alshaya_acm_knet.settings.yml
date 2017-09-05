@@ -1,9 +1,6 @@
 resource_path: ''
 use_secure_response_url: 1
 alias: 'alshaya'
-payment_processed: 'accepted'
-payment_pending: 'pending_payment'
-payment_failed: 'settlement_failed'
 knet_language_code: 'ENG'
 knet_currency_code: ''
 langcode: en

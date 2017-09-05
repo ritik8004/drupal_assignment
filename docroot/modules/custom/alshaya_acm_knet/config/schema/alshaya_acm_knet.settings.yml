@@ -11,15 +11,6 @@ alshaya_acm_knet.settings:
     alias:
       type: string
       label: 'Alias'
-    payment_processed:
-      type: string
-      label: 'Payment processed'
-    payment_pending:
-      type: string
-      label: 'Payment pending'
-    payment_failed:
-      type: string
-      label: 'Payment failed'
     knet_language_code:
       type: label
       label: 'K-Net Language code'

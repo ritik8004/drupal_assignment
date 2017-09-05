@@ -299,14 +299,12 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
       if ($next_step_id == 'confirmation') {
         try {
-          $cart = $this->cartStorage->getCart();
-
           // Invoke hook to allow other modules to process before order is
           // finally placed.
           \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);
 
           // Place an order.
-          \Drupal::service('alshaya_acm_checkout.checkout_helper')->placeOrder();
+          \Drupal::service('alshaya_acm_checkout.checkout_helper')->placeOrder($cart);
         }
         catch (\Exception $e) {
           drupal_set_message($e->getMessage(), 'error');

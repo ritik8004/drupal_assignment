@@ -88,7 +88,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
     // Add privilege card number fields to cart form.
     case 'customer_cart_form':
       // Get the current cart.
-      $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+      $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
 
       // Get current cart items.
       $cart_items = $cart ? $cart->items() : NULL;
@@ -123,6 +123,9 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
       // @TODO: type tel?
       $form['field_privilege_card_number']['widget'][0]['value']['#type'] = 'tel';
       _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
+
+      // Disable field_subscribe_newsletter.
+      $form['field_subscribe_newsletter']['#access'] = FALSE;
 
       break;
   }

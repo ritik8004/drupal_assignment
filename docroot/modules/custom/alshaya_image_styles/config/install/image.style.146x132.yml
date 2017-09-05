@@ -1,6 +1,9 @@
+uuid: 79769652-9575-4e53-8eb8-c256af0a6ee7
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: HgcU1julRO8_p4XnU_Ha8sAsJt4LC0uLubWOaV_oPCc
 name: 146x132
 label: 146x132
 effects:
@@ -9,5 +12,5 @@ effects:
     id: image_scale_and_crop
     weight: 1
     data:
-      width: 146
-      height: 132
+      width: 326
+      height: 288
