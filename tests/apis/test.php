@@ -52,5 +52,5 @@ function invoke_api($api, $method = 'GET', array $options = [], $store_id = 1) {
     $result = $client->get($endpoint, $options);
   }
 
-  echo $result->getBody();
+  print_r(json_decode($result->getBody()));
 }
