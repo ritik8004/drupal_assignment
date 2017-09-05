@@ -356,7 +356,7 @@ function alshaya_addressbook_alshaya_master_post_drupal_install() {
       }
       catch (\Exception $e) {
         // Log error if any.
-        \Drupal::logger('alshaya_stores_finder')->error($e->getMessage());
+        \Drupal::logger('alshaya_addressbook')->error($e->getMessage());
       }
     }
   }
