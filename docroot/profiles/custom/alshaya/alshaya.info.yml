@@ -5,6 +5,7 @@ core: '8.x'
 dependencies:
   - acsf
   - color
+  - dynamic_page_cache
   - features
   - syslog
 

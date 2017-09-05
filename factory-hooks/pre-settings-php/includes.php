@@ -130,9 +130,6 @@ switch ($env) {
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
-
-    // Specify the modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dynamic_page_cache';
     break;
 
   default:
@@ -140,9 +137,6 @@ switch ($env) {
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
-
-    // Specify the modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dynamic_page_cache';
 }
 
 // Recaptcha settings.
