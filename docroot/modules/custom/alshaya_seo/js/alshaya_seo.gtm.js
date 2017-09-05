@@ -48,7 +48,7 @@
       }
 
       // If we are on checkout page -- Click & collect method.
-      if (document.location.search === "?method=cc") {
+      if (document.location.search === '?method=cc') {
         isCCPage = true;
       }
 
@@ -75,9 +75,9 @@
 
         if ((noOfResult === 0) || (isNaN(noOfResult))) {
           dataLayer.push({
-            'event': 'internalSearch',
-            'keyword': keyword,
-            'noOfResult': 0
+            event: 'internalSearch',
+            keyword: keyword,
+            noOfResult: 0
           });
         }
       }
@@ -89,21 +89,21 @@
       // Fire sign-in success event on successful sign-in.
       if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
         dataLayer.push({
-          'event' : 'User Login & Register',
-          'signinType' : 'sign-in success'
+          event: 'User Login & Register',
+          signinType: 'sign-in success'
         });
 
-        $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {'path': '/'});
+        $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
       }
 
       // Fire logout success event on successful sign-in.
       if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
         dataLayer.push({
-          'event' : 'User Login & Register',
-          'signinType' : 'logout success'
+          event: 'User Login & Register',
+          signinType: 'logout success'
         });
 
-        $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {'path': '/'});
+        $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
       }
 
       // Fire lead tracking on registration success/ user update.
@@ -120,31 +120,31 @@
 
         if (leadType) {
           dataLayer.push({
-            'event' : 'leads',
-            'leadType': leadType
+            event: 'leads',
+            leadType: leadType
           });
         }
 
         var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
         if (pcRegistration !== undefined && pcRegistration !== '6362544') {
           dataLayer.push({
-            'event': 'pcMember',
-            'pcType': 'pc club member'
+            event: 'pcMember',
+            pcType: 'pc club member'
           });
         }
 
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {'path': '/'});
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_lead', {'path': '/'});
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pagename', {'path': '/'});
-        $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {'path': '/'});
+        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
+        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_lead', {path: '/'});
+        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pagename', {path: '/'});
+        $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
       }
       else if ($.cookie('Drupal.visitor.alshaya_gtm_update_user_lead') !== undefined) {
         dataLayer.push({
-          'event' : 'leads',
-          'leadType' : 'my account'
+          event: 'leads',
+          leadType: 'my account'
         });
 
-        $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {'path': '/'});
+        $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
       }
 
       /** Track coupon code application. **/
@@ -159,9 +159,9 @@
         }
 
         dataLayer.push({
-          'event': 'promoCode',
-          'couponCode': couponCode,
-          'couponStatus': status
+          event: 'promoCode',
+          couponCode: couponCode,
+          couponStatus: status
         });
       }
 
@@ -193,7 +193,7 @@
       if ((gtmPageType === 'product detail page') || (gtmPageType === 'cart page')) {
         var count_pdp_items = 1;
         if (!drupalSettings.hasOwnProperty('impressions_position')) {
-					drupalSettings.impressions_position = [];
+          drupalSettings.impressions_position = [];
         }
 
         productLinkSelector.each(function () {
@@ -205,19 +205,19 @@
           var pdpListName = '';
           var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
           if (!$(this).closest('.owl-item').hasClass('cloned') && !upSellCrossSellSelector.hasClass('mobile-only-block')) {
-						// Check whether the product is in US or CS region & update list accordingly.
-						if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
-							pdpListName = listName + '-CS';
-						}
-						else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
-							pdpListName = listName + '-US';
-						}
+            // Check whether the product is in US or CS region & update list accordingly.
+            if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
+              pdpListName = listName + '-CS';
+            }
+            else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
+              pdpListName = listName + '-US';
+            }
 
-						impression.list = pdpListName;
-						impression.position = count_pdp_items;
-						impressions.push(impression);
-						drupalSettings.impressions_position[$(this).attr('data-nid') + '-' + pdpListName] = count_pdp_items;
-						count_pdp_items++;
+            impression.list = pdpListName;
+            impression.position = count_pdp_items;
+            impressions.push(impression);
+            drupalSettings.impressions_position[$(this).attr('data-nid') + '-' + pdpListName] = count_pdp_items;
+            count_pdp_items++;
           }
         });
 
@@ -248,7 +248,7 @@
       /** Add to cart GTM .**/
       // Trigger GTM push event on AJAX completion of add to cart button.
       $(document).once('js-event').ajaxComplete(function (event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) &&  (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
+        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) && (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
           var responseJSON = xhr.responseJSON;
           var responseMessage = '';
           $.each(responseJSON, function (key, obj) {
@@ -258,7 +258,7 @@
             }
           });
 
-          if (responseMessage === "success") {
+          if (responseMessage === 'success') {
             Drupal.alshaya_seo_gtm_push_lead_type('footer');
           }
         }
@@ -310,11 +310,11 @@
           }
 
           var data = {
-            'event': event,
-            'ecommerce': {
-              'currencyCode': currencyCode,
-              'remove': {
-                'products': [
+            event: event,
+            ecommerce: {
+              currencyCode: currencyCode,
+              remove: {
+                products: [
                   product
                 ]
               }
@@ -345,11 +345,11 @@
           product.metric1 = -1 * product.quantity * product.price;
 
           var data = {
-            'event': 'removeFromCart',
-            'ecommerce': {
-              'currencyCode': currencyCode,
-              'remove': {
-                'products': [
+            event: 'removeFromCart',
+            ecommerce: {
+              currencyCode: currencyCode,
+              remove: {
+                products: [
                   product
                 ]
               }
@@ -400,9 +400,9 @@
       if (isCCPage) {
         if ($('#store-finder-wrapper', context).length > 0) {
           dataLayer.push({
-            'event':'VirtualPageview',
-            'virtualPageURL':'/virtualpv/click-and-collect/step1/click-and-collect-view',
-            'virtualPageTitle' : 'C&C Step 1 – Click and Collect View'
+            event: 'VirtualPageview',
+            virtualPageURL: '/virtualpv/click-and-collect/step1/click-and-collect-view',
+            virtualPageTitle: 'C&C Step 1 – Click and Collect View'
           });
 
           Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
@@ -410,9 +410,9 @@
 
         $('.store-actions a.select-store', context).once('js-event').click(function () {
           dataLayer.push({
-            'event':'VirtualPageview',
-            'virtualPageURL':' /virtualpv/click-and-collect/step2/select-store',
-            'virtualPageTitle' : 'C&C Step 2 – Select Store'
+            event: 'VirtualPageview',
+            virtualPageURL: ' /virtualpv/click-and-collect/step2/select-store',
+            virtualPageTitle: 'C&C Step 2 – Select Store'
           });
         });
       }
@@ -445,10 +445,10 @@
         var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
 
         var datalayer_product_modal = {
-          'ecommerce': {
-            'currencyCode': currencyCode,
-            'detail': {
-              'products': [product]
+          ecommerce: {
+            currencyCode: currencyCode,
+            detail: {
+              products: [product]
             }
           }
         };
@@ -456,7 +456,7 @@
         dataLayer.push(datalayer_product_modal);
       }
 
-      /** Product click handler for Modals. **/
+      /** Product click handler for Modals. **/q
       // Add click link handler to fire 'productClick' event to GTM.
       $('a[href*="product-quick-view"]').each(function () {
         $(this).once('js-event').on('click', function (e) {
@@ -514,8 +514,9 @@
           Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
         });
       });
+
       /** Tracking clicks on fitler & sort options. **/
-      if (listName === "PLP" || listName === "Search Results Page") {
+      if (listName === 'PLP' || listName === 'Search Results Page') {
         var section = listName;
         if (listName === 'PLP') {
           section = $('h1.c-page-title').text().toLowerCase();
@@ -529,9 +530,9 @@
             var filterValue = facetTitle + ':' + selectedVal;
 
             var data = {
-              'event' : 'filter',
-              'section' : section,
-              'filterValue': filterValue
+              event: 'filter',
+              section: section,
+              filterValue: filterValue
             };
 
             dataLayer.push(data);
@@ -542,9 +543,9 @@
         $('select[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
           var sortValue = $(this).find('option:selected').text();
           var data = {
-            'event' : 'sort',
-            'section' : section,
-            'sortValue': sortValue
+            event: 'sort',
+            section: section,
+            sortValue: sortValue
           };
 
           dataLayer.push(data);
@@ -567,19 +568,19 @@
     }
 
     var productData = {
-      'name': product.attr('gtm-name'),
-      'id': product.attr('gtm-main-sku'),
-      'price': parseFloat(product.attr('gtm-price')),
-      'brand': product.attr('gtm-brand'),
-      'category': product.attr('gtm-category'),
-      'variant': product.attr('gtm-product-sku'),
-      'position': 1,
-      'dimension1': '',
-      'dimension2': product.attr('gtm-dimension2'),
-      'dimension3': product.attr('gtm-dimension3'),
-      'dimension4': mediaCount,
-      'dimension5': product.attr('gtm-sku-type'),
-      'metric1': product.attr('gtm-cart-value')
+      name: product.attr('gtm-name'),
+      id: product.attr('gtm-main-sku'),
+      price: parseFloat(product.attr('gtm-price')),
+      brand: product.attr('gtm-brand'),
+      category: product.attr('gtm-category'),
+      variant: product.attr('gtm-product-sku'),
+      position: 1,
+      dimension1: '',
+      dimension2: product.attr('gtm-dimension2'),
+      dimension3: product.attr('gtm-dimension3'),
+      dimension4: mediaCount,
+      dimension5: product.attr('gtm-sku-type'),
+      metric1: product.attr('gtm-cart-value')
     };
 
     return productData;
@@ -592,12 +593,12 @@
    */
   Drupal.alshaya_seo_gtm_push_customer_type = function (customerType) {
     var data = {
-      'event': 'checkoutOption',
-      'ecommerce': {
-        'checkout_option': {
-          'actionField': {
-            'step': 1,
-            'option': customerType
+      event: 'checkoutOption',
+      ecommerce: {
+        checkout_option: {
+          actionField: {
+            step: 1,
+            option: customerType
           }
         }
       }
@@ -614,12 +615,12 @@
    */
   Drupal.alshaya_seo_gtm_push_checkout_option = function (optionLabel, step) {
     var data = {
-      'event': 'checkoutOption',
-      'ecommerce': {
-        'checkout_option': {
-          'actionField': {
-            'step':step,
-            'option': optionLabel
+      event: 'checkoutOption',
+      ecommerce: {
+        checkout_option: {
+          actionField: {
+            step: step,
+            option: optionLabel
           }
         }
       }
@@ -637,10 +638,10 @@
   Drupal.alshaya_seo_gtm_push_impressions = function (currencyCode, impressions) {
     if (impressions.length > 0) {
       var data = {
-        'event': 'productImpression',
-        'ecommerce': {
-          'currencyCode': currencyCode,
-          'impressions': impressions
+        event: 'productImpression',
+        ecommerce: {
+          currencyCode: currencyCode,
+          impressions: impressions
         }
       };
 
@@ -682,9 +683,9 @@
       var position = parseInt(key) + 1;
 
       var promotion = {
-        'id': fileName,
-        'name': gtmPageType,
-        'position': 'slot' + position
+        id: fileName,
+        name: gtmPageType,
+        position: 'slot' + position
       };
 
       if (event === 'click') {
@@ -702,19 +703,19 @@
     });
 
     var data = {
-      'ecommerce': {
-        'promoView': {
-          'promotions': promotions
+      ecommerce: {
+        promoView: {
+          promotions: promotions
         }
       }
     };
 
     if (event === 'promotionClick') {
       data = {
-        'event': event,
-        'ecommerce': {
-          'promoClick': {
-            'promotions': promotions
+        event: event,
+        ecommerce: {
+          promoClick: {
+            promotions: promotions
           }
         }
       };
@@ -740,14 +741,14 @@
     }
 
     var data = {
-      'event': 'productClick',
-      'ecommerce': {
-        'currencyCode': currencyCode,
-        'click': {
-          'actionField': {
-            'list': listName
+      event: 'productClick',
+      ecommerce: {
+        currencyCode: currencyCode,
+        click: {
+          actionField: {
+            list: listName
           },
-          'products': [product]
+          products: [product]
         }
       }
     };
@@ -761,7 +762,7 @@
    * @param leadType
    */
   Drupal.alshaya_seo_gtm_push_lead_type = function (leadType) {
-    dataLayer.push({'event' : 'leads', 'leadType' : leadType});
+    dataLayer.push({event: 'leads', leadType: leadType});
   };
 
   /**
@@ -770,7 +771,7 @@
    * @param signinType
    */
   Drupal.alshaya_seo_gtm_push_signin_type = function (signinType) {
-    dataLayer.push({'event' : 'User Login & Register', 'signinType' : signinType});
+    dataLayer.push({event: 'User Login & Register', signinType: signinType});
   };
 
   /**
@@ -782,10 +783,10 @@
    */
   Drupal.alshaya_seo_gtm_push_store_finder_search = function (keyword, location, resultCount) {
     dataLayer.push({
-      'event': 'findStore',
-      'fsLocation': location,
-      'fsKeyword': keyword,
-      'fsNoOfResult': resultCount
+      event: 'findStore',
+      fsLocation: location,
+      fsKeyword: keyword,
+      fsNoOfResult: resultCount
     });
   };
 
