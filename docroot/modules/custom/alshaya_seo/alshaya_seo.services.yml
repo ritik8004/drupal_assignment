@@ -5,7 +5,6 @@ services:
       - '@current_route_match'
       - '@config.factory'
       - '@acq_cart.cart_storage'
-      - '@user.private_tempstore'
       - '@current_user'
       - '@request_stack'
       - '@entity.manager'

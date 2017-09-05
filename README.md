@@ -63,7 +63,7 @@ To prepare your local env:
   * `composer install`
   * `composer blt-alias`
   * `blt vm`
-  * `blt refresh:local`
+  * `blt refresh:local` or `blt refresh:non-transac-local`
   * `drush @alshaya.local uli`
 * Load commerce content (already included in refresh:local and refresh:local:drupal):
   * `drush @alshaya.local alshaya-acm-offline-categories-sync`
@@ -71,6 +71,26 @@ To prepare your local env:
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
+
+### Create a new site
+
+Currently, 2 distinct installation profiles exist in the code base. `transac`
+installation profile will enable all the modules required for an a site with
+commercial features and integration with Conductor/Magento. `non_transac`
+profile is a light/static site without any commercial feature.`
+
+* Create a new theme for your site. See `docroot/themes/custom/README.md` for
+more information on how to create a custom theme.
+* Create a custom module in `docroot/modules/brands`. This module goal is to
+enable the appropriate theme, place the blocks in the theme's regions and
+install the specific configuration. See existing brand modules for example.
+* Run the appropriate `blt refresh:*` commands depending on the required
+installation profile.
+
+/!\ Currently, the blt commands are hardcoded to install the Mothercare or
+Victoria Secret sites. While the blt commands don't accept brand argument,
+please edit the `blt/setup.local.xml` file to change the brand name. Don't
+commit that change.
 
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:

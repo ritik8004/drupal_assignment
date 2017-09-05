@@ -400,7 +400,7 @@
   .desktop-only {
     display: none;
 
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet) {
       display: table-cell;
     }
   }
