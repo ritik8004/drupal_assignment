@@ -1196,6 +1196,13 @@ body.alias--cart {
       padding: 0 1.125rem;
       max-height: 2.188rem;
       line-height: 2.7;
+
+      &.disabled {
+        &:hover {
+          cursor: default;
+          background-color: $ladda-disabled;
+        }
+      }
     }
   }
 }
