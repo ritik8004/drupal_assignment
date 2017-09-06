@@ -8,6 +8,7 @@ dependencies:
   - config_translation
   - content_translation
   - components
+  - dynamic_page_cache
   - features
   - language
   - locale
@@ -21,6 +22,8 @@ themes:
 base profile:
   name: lightning
   excluded_dependencies:
+    - dblog
     - lightning_layout
     - lightning_search
     - lightning_landing_page
+    - views_ui

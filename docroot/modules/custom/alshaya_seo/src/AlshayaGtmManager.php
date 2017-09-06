@@ -15,10 +15,8 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
-use Drupal\user\PrivateTempStoreFactory;
+use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Mobile_Detect;
 
 /**
@@ -56,9 +54,15 @@ class AlshayaGtmManager {
     'acq_checkout.form:click_collect' => 'checkout click and collect page',
     'acq_checkout.form:delivery' => 'checkout delivery page',
     'acq_checkout.form:payment' => 'checkout payment page',
-    'acq_checkout.form:confirmation' => 'checkout confirmation page',
+    'acq_checkout.form:confirmation' => 'purchase confirmation page',
     'view.stores_finder.page_2' => 'store finder',
+    'view.stores_finder.page_1' => 'store finder',
     'entity.webform.canonical:alshaya_contact' => 'contact us',
+    'user.pass' => 'user password page',
+    'change_pwd_page.change_password_form' => 'user change password page',
+    'user.page' => 'user page',
+    'user.reset' => 'user reset page',
+    'user.reset.form' => 'user reset page',
   ];
 
   /**
@@ -99,6 +103,8 @@ class AlshayaGtmManager {
     'dimension5' => 'gtm-sku-type',
     'dimension6' => 'gtm-dimension6',
     'dimension7' => 'gtm-dimension7',
+    'dimension8' => 'gtm-dimension8',
+    'metric7' => 'gtm-metric7',
     'metric1' => '',
   ];
 
@@ -115,13 +121,6 @@ class AlshayaGtmManager {
    * @var \Drupal\acq_cart\CartStorageInterface
    */
   protected $cartStorage;
-
-  /**
-   * The private temp store service.
-   *
-   * @var \Drupal\user\PrivateTempStoreFactory
-   */
-  protected $privateTempStore;
 
   /**
    * The current user service.
@@ -187,8 +186,6 @@ class AlshayaGtmManager {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config Factory service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
-   *   Cart Storage service.
-   * @param \Drupal\user\PrivateTempStoreFactory $privateTempStore
    *   Private temp store service.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   Current User service.
@@ -210,7 +207,6 @@ class AlshayaGtmManager {
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
-                              PrivateTempStoreFactory $privateTempStore,
                               AccountProxyInterface $currentUser,
                               RequestStack $requestStack,
                               EntityManager $entityManager,
@@ -222,7 +218,6 @@ class AlshayaGtmManager {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
-    $this->privateTempStore = $privateTempStore;
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
     $this->entityManager = $entityManager;
@@ -286,12 +281,26 @@ class AlshayaGtmManager {
 
     $attributes = [];
     $product_node = alshaya_acm_product_get_display_node($sku);
+    $original_price = (float) $sku->get('price')->getString();
+    $final_price = (float) $sku->get('final_price')->getString();
+
+    $product_type = 'Regular Product';
+    if (($final_price != 0) &&
+      ($original_price !== $final_price) &&
+      ($final_price < $original_price)) {
+      $product_type = 'Discounted Product';
+      $discount_amount = $original_price - $final_price;
+    }
 
     $attributes['gtm-name'] = trim($sku->label());
     $price = $sku->get('final_price')->getString() ? $sku->get('final_price')->getString() : 0.000;
     $attributes['gtm-price'] = (float) number_format((float) $price, 3, '.', '');
     $brand = $sku->get('attr_product_brand')->getString();
     $attributes['gtm-product-sku'] = $sku->getSku();
+    $attributes['gtm-dimension8'] = $product_type;
+    if ($discount_amount) {
+      $attributes['gtm-metric7'] = $discount_amount;
+    }
 
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
@@ -593,7 +602,7 @@ class AlshayaGtmManager {
       $terms[$taxonomy_parent->id()] = trim($taxonomy_parent->getName());
     }
 
-    $terms = array_reverse($terms);
+    $terms = array_reverse($terms, TRUE);
     $this->cache->set('alshaya_product_breadcrumb_terms_' . $product_node->id(), $terms, Cache::PERMANENT, ['node:' . $product_node->id()]);
 
     return $terms;
@@ -696,8 +705,8 @@ class AlshayaGtmManager {
     $dimension6 = '';
     $dimension7 = '';
     $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
-
-    if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+    $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
+    if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
       $shipping_assignment = reset($order['extension']['shipping_assignments']);
       $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
       $store = $this->storeFinder->getStoreFromCode($store_code);
@@ -753,6 +762,8 @@ class AlshayaGtmManager {
    */
   public function fetchGeneralPageAttributes($data_layer) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $current_user = User::load(\Drupal::currentUser()->id());
+
     // Detect platform from headers.
     $request_headers = $this->requestStack->getCurrentRequest()->headers->all();
     $request_ua = $this->requestStack->getCurrentRequest()->headers->get('HTTP_USER_AGENT');
@@ -780,7 +791,7 @@ class AlshayaGtmManager {
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
       'customerType' => $customer_type,
-      'userName' => ($data_layer['userUid'] !== 0) ? $data_layer['userName'] : '',
+      'userName' => ($data_layer['userUid'] !== 0) ? $current_user->field_first_name->value . ' ' . $current_user->field_last_name->value : '',
       'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
     ];
 
@@ -822,8 +833,8 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = [
-          'productStyleCode' => $product_sku,
-          'productSku' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
+          'productStyleCode' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
+          'productSKU' => $product_sku,
           'stockStatus' => $stock_status,
           'productName' => $node->getTitle(),
           'productBrand' => $sku_attributes['gtm-brand'],
@@ -874,36 +885,35 @@ class AlshayaGtmManager {
             'cartItemsRR' => $this->formatCartRr($cart_items),
             'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
           ];
+
+          $shipping = $cart->getShipping();
+
+          if ((is_array($shipping) &&
+            (isset($shipping['extension']['address_block_segment'])))) {
+            $page_dl_attributes['deliveryCity'] = $shipping['extension']['address_block_segment'];
+          }
+
+          if ((is_array($shipping)) &&
+            (isset($shipping['extension']['address_governate_segment']))) {
+            $page_dl_attributes['deliveryArea'] = $shipping['extension']['address_governate_segment'];
+          }
+
+          if ($cart->getExtension('shipping_method')) {
+            $shippingTerm = $this->checkoutOptionsManager->loadShippingMethod($cart->getExtension('shipping_method'));
+            $page_dl_attributes['deliveryType'] = $shippingTerm->getName();
+          }
+
         }
         break;
 
-      case 'checkout confirmation page':
-        $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
-        $order_data = $temp_store->get('order');
+      case 'purchase confirmation page':
+        $order = _alshaya_acm_checkout_get_last_order_from_session();
 
-        // Throw access denied if nothing in session.
-        if (empty($order_data) || empty($order_data['id'])) {
-          throw new AccessDeniedHttpException();
+        // Validations will be handled in other code.
+        if (empty($order)) {
+          return $page_dl_attributes;
         }
 
-        $order_id = (int) str_replace('"', '', $order_data['id']);
-
-        if ($this->currentUser->isAnonymous()) {
-          $email = $temp_store->get('email');
-        }
-        else {
-          $email = $this->currentUser->getEmail();
-        }
-
-        $orders = alshaya_acm_customer_get_user_orders($email);
-
-        $order_index = array_search($order_id, array_column($orders, 'order_id'), TRUE);
-
-        if ($order_index === FALSE) {
-          throw new NotFoundHttpException();
-        }
-
-        $order = $orders[$order_index];
         $orderItems = $order['items'];
         $dimension6 = '';
         $dimension7 = '';
@@ -911,8 +921,8 @@ class AlshayaGtmManager {
         $productStyleCode = [];
 
         $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
-
-        if ($shipping_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+        $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
+        if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
           $store = $this->storeFinder->getStoreFromCode($store_code);
@@ -976,7 +986,7 @@ class AlshayaGtmManager {
     foreach ($items as $item) {
       $cart_items_rr[] = [
         'id' => $item['sku'],
-        'price' => $item['price'],
+        'price' => (float) $item['price'],
         'qnt' => isset($item['qty']) ? $item['qty'] : $item['ordered'],
       ];
     }
