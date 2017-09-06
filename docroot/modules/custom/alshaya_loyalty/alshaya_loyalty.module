@@ -360,13 +360,6 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
 }
 
 /**
- * Ajax callback: to validate for privilege card number.
- */
-function alshaya_loyalty_privilege_card_validation_ajax_callback(&$form, FormStateInterface $form_state) {
-  return $form['privilege_card_wrapper'];
-}
-
-/**
  * After build callback: for Privilege card number wrapper.
  *
  * Keep open the wrapper when privilege card number value for one of the field
