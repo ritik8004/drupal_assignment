@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Main file of Menu Link Attributes module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_modal_form_menu_link_content_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $attributes = \Drupal::config('menu_link_attributes.config')->get('attributes') ?: [];
+  $menu_link = $form_state->getFormObject()->getEntity();
+  $menu_link_options = $menu_link->link->first()->options ?: [];
+  $menu_link_attributes = isset($menu_link_options['attributes']) ? $menu_link_options['attributes'] : [];
+
+  $form['modal'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Open in modal?'),
+    '#description' => t('Open this link as modal window.'),
+    '#default_value' => '',
+  ];
+
+  $form['actions']['submit']['#submit'][] = 'alshaya_modal_menu_link_content_form_submit';
+}
+
+/**
+ * Submit handler for the menu form alter.
+ */
+function alshaya_modal_menu_link_content_form_submit($form, FormStateInterface $form_state) {
+  $menu_link = $form_state->getFormObject()->getEntity();
+  $options = ['attributes' => $form_state->getValue('attributes')];
+  $menu_link_options = $menu_link->link->first()->options;
+
+  $menu_link->link->first()->options = array_merge($menu_link_options, $options);
+  $menu_link->save();
+}
