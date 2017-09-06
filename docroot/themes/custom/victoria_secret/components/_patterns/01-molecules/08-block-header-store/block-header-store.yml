@@ -1,4 +1,4 @@
 content: '<a href="/en/store-finder" class="stores-finder">Find Store</a>'
 attributes:
   Attribute():
-    class: 'header-store'
+    class: 'block-store'

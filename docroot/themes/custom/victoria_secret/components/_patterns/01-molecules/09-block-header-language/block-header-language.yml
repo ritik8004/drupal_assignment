@@ -4,4 +4,4 @@ content:
     pattern: 'molecules-language-switcher'
 attributes:
   Attribute():
-    class: 'header-language-switcher'
+    class: 'header-language__switcher'

@@ -1,7 +1,7 @@
 attributes:
   Attribute():
     class:
-    - 'logo-navigation'
+    - 'menu-logo-navigation'
 items:
 - title: 'Victoria Secret'
   url: '/'

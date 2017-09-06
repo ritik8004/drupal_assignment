@@ -1,4 +1,4 @@
 content: '© Copyright Mothercare UK Limited 2017'
 attributes:
   Attribute():
-    class: 'copyright'
+    class: 'block-copyright'

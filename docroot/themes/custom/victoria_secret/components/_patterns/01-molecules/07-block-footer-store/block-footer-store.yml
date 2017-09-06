@@ -2,4 +2,4 @@ label: 'Find your nearest store'
 content: '<a href="/en/store-finder" class="stores-finder">Find Store</a>'
 attributes:
   Attribute():
-    class: 'footer-store'
+    class: 'block-store--description'

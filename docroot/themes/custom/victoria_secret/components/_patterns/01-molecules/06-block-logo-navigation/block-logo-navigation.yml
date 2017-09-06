@@ -4,4 +4,4 @@ content:
     pattern: 'molecules-menu-logo-navigation'
 attributes:
   Attribute():
-    class: 'menu__logo-navigation'
+    class: 'block-logo-navigation'
