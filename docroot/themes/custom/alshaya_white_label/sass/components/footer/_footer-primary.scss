@@ -121,6 +121,10 @@
       padding: 0;
     }
 
+    @include breakpoint($desktop) {
+      display: inline;
+    }
+
     &:hover {
       color: $cerulean-two;
       text-decoration: underline;
