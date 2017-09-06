@@ -84,7 +84,14 @@
         height: 768,
         dialogClass: 'dialog-product-image-gallery-container',
         open: function () {
-          var currentSlide = $('#lightSlider').slick('slickCurrentSlide');
+          var currentSlide;
+          if ($('#lightSlider').hasClass('pager-yes')) {
+            currentSlide = $('#lightSlider').slick('slickCurrentSlide');
+          }
+          else {
+            currentSlide = $('#lightSlider .slick-current').attr('data-slick-index');
+          }
+
           var slickModalOptions = {
             slidesToShow: 5,
             vertical: true,
@@ -106,8 +113,14 @@
           var gallery = $('#product-image-gallery');
           applyRtl(gallery, slickModalOptions);
 
+          if ($('#product-image-gallery').hasClass('pager-no')) {
+            $('#product-image-gallery li[data-slick-index="' + currentSlide + '"]').addClass('slick-current', function () {
+              $(this).siblings().removeClass('slick-current')
+            });
+          }
+
           var curSlide = $('#product-image-gallery').slick('slickCurrentSlide');
-          var defaultMainImage = $('#product-image-gallery li[data-slick-index="' + curSlide + '"]');
+          var defaultMainImage = $('#product-image-gallery li[data-slick-index="' + currentSlide + '"]');
           var bigImgUrl = defaultMainImage.children('a').attr('href');
           $('#full-image-wrapper img').attr('src', bigImgUrl);
           $('#full-image-wrapper img').css('transform', 'scale(1)');
@@ -156,6 +169,9 @@
             // Zoom in and Zoom out buttons.
             var image = $('#full-image-wrapper img');
             var img_scale = 1;
+            $('.zoomin').removeClass('disabled');
+            $('.zoomout').removeClass('disabled');
+
             $('.zoomin').on('click', function () {
               if(img_scale < 1.75) {
                 img_scale = img_scale + 0.25;
@@ -182,6 +198,9 @@
             // Swap the big image inside slider-2 when clicking on thumbnail.
             $('#product-image-gallery li').on('click', function () {
               img_scale = 1;
+              $('.zoomin').removeClass('disabled');
+              $('.zoomout').removeClass('disabled');
+
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
@@ -214,7 +233,7 @@
       };
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
-      $('.acq-content-product .cloudzoom #cloud-zoom-wrap', context).on('click', function () {
+      $('.acq-content-product .cloudzoom #cloud-zoom-wrap').on('click', function () {
         $('body').addClass('pdp-modal-overlay');
         myDialog.show();
         myDialog.showModal();
@@ -224,7 +243,7 @@
 
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Handling videos inside sliders.
-      // Swapping the conatiners or Inserting video iframes inside containers on click of video thumbnails.
+      // Swapping the containers or Inserting video iframes inside containers on click of video thumbnails.
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       // Fetch Vimeo thumbnail via a GET call. Vimeo doesnot give thumbnails via URL like YT.
@@ -268,7 +287,7 @@
         }
       });
 
-      $('#lightSlider li a', context).on('click', function (e) {
+      $('.acq-content-product #lightSlider li a', context).on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
         var index = $(this).parent().attr("data-slick-index");
@@ -279,13 +298,24 @@
         $(this).parent().addClass('slick-current');
       });
 
-      // Preventing click on image.
-      $('.acq-content-product-modal #cloud-zoom-wrap a, .acq-content-product #cloud-zoom-wrap a').on('click', function (event) {
-        event.stopPropagation();
-        event.preventDefault();
+      $('.acq-content-product-modal #lightSlider li a', context).on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var index = $(this).parent().attr("data-slick-index");
+        if ($('.acq-content-product-modal #lightSlider').slick('slickCurrentSlide') !== index) {
+          $('.acq-content-product-modal #lightSlider').slick('slickGoTo', index);
+        }
+        $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+        $(this).parent().addClass('slick-current');
+        var bigImage = $(this).attr('href');
+        // Put the big image in our main container.
+        $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
+        $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
+        $('.acq-content-product-modal #cloud-zoom-wrap iframe').remove();
+        $('.acq-content-product-modal #cloud-zoom-wrap img').show();
       });
 
-      $('.acq-content-product-modal #lightSlider li', context).on('click', function () {
+      $('.acq-content-product-modal #lightSlider li').on('click', function () {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var wrap = $('.acq-content-product-modal #cloud-zoom-wrap');
           // Get width & height of wrap.
@@ -295,14 +325,6 @@
           $('.acq-content-product-modal #yt-vi-container iframe').remove();
           appendVideoIframe($('.acq-content-product-modal #yt-vi-container'), URL, width, height);
           $('#cloud-zoom-wrap').hide();
-        }
-        else {
-          var bigImage = $(this).children('a').attr('href');
-          // Put the big image in our main container.
-          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
-          $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
-          $('.acq-content-product-modal #cloud-zoom-wrap iframe').remove();
-          $('.acq-content-product-modal #cloud-zoom-wrap img').show();
         }
         // Stop the browser from loading the image in a new tab.
         return false;
@@ -316,6 +338,12 @@
           playerIframe.remove();
           $('#cloud-zoom-wrap').show();
         }
+      });
+
+      // Preventing click on image.
+      $('.acq-content-product-modal #cloud-zoom-wrap a, .acq-content-product #cloud-zoom-wrap a').on('click', function (event) {
+        event.stopPropagation();
+        event.preventDefault();
       });
 
       // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
