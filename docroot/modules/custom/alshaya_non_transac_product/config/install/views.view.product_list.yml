@@ -11,6 +11,7 @@ dependencies:
     - node
     - taxonomy
     - user
+    - views_infinite_scroll
 id: product_list
 label: 'Product List'
 module: views
@@ -52,13 +53,16 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       pager:
-        type: mini
+        type: infinite_scroll
         options:
           items_per_page: 12
           offset: 0
           id: 0
-          query_type: POST
           total_pages: null
+          query_type: POST
+          tags:
+            previous: ‹‹
+            next: ››
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -67,9 +71,9 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          tags:
-            previous: ‹‹
-            next: ››
+          views_infinite_scroll:
+            button_text: 'Load More'
+            automatically_load_content: false
       style:
         type: default
       row:
@@ -283,6 +287,7 @@ display:
           entity_field: name
           plugin_id: string
       display_extenders: {  }
+      use_ajax: true
     cache_metadata:
       max-age: -1
       contexts:
@@ -300,10 +305,10 @@ display:
     position: 2
     display_options:
       display_extenders: {  }
+      rendering_language: '***LANGUAGE_language_interface***'
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
@@ -379,10 +384,10 @@ display:
           admin_label: 'field_product_category: Taxonomy term'
           required: false
           plugin_id: standard
+      rendering_language: '***LANGUAGE_language_interface***'
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
@@ -458,10 +463,10 @@ display:
           entity_type: taxonomy_term
           entity_field: name
           plugin_id: string
+      rendering_language: '***LANGUAGE_language_interface***'
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
