@@ -20,6 +20,7 @@ dependencies:
   - text
   - user
   - views
+  - viewsreference
   - workbench_moderation
 version: 8.x-1.0
 package: Alshaya
