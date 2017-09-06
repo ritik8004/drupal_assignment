@@ -3,7 +3,12 @@
 .block-copyright {
   color: $brownish-grey;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   padding-top: 1px;
   padding-bottom: 1px;
+
+  p {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+  }
 }
