@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.teaser
+    - core.entity_view_mode.node.search_result
     - node.type.product
     - taxonomy.vocabulary.product_brand
     - taxonomy.vocabulary.product_category
@@ -75,7 +75,8 @@ display:
       row:
         type: 'entity:node'
         options:
-          view_mode: teaser
+          relationship: none
+          view_mode: search_result
       fields:
         title:
           id: title
