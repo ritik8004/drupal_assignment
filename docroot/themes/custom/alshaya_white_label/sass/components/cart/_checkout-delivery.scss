@@ -413,6 +413,11 @@
 
       @include breakpoint($desktop) {
         width: 6.2%;
+
+        html[lang=ar] & {
+          width: 6.1%;
+          margin-left: 1px;
+        }
       }
     }
 
