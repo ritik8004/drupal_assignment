@@ -19,12 +19,12 @@ use GuzzleHttp\HandlerStack;
  *   API endpoint except the host and base path.
  * @param string $method
  *   Method.
- * @param array $options
- *   Options array.
+ * @param array $data
+ *   Data array.
  * @param int $store_id
  *   Store id.
  */
-function invoke_api($api, $method = 'GET', array $options = [], $store_id = 1) {
+function invoke_api($api, $method = 'GET', array $data = [], $store_id = 1) {
   // $env = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/v1/';
   // $env = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/v1/';
   $env = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/v1/';
@@ -43,12 +43,25 @@ function invoke_api($api, $method = 'GET', array $options = [], $store_id = 1) {
     'handler' => $stack,
   ]);
 
+  $options = [];
   $options['query']['store_id'] = $store_id;
 
   if ($method == 'POST') {
+    $options['form_params'] = $data;
+    $result = $client->post($endpoint, $options);
+  }
+  elseif ($method == 'JSON') {
+    $options['json'] = $data;
     $result = $client->post($endpoint, $options);
   }
   else {
+    if (is_array($data)) {
+      $options['query'] += $data;
+    }
+
+    // To allow hmac sign to be verified properly we need them in asc order.
+    ksort($options['query']);
+
     $result = $client->get($endpoint, $options);
   }
 
