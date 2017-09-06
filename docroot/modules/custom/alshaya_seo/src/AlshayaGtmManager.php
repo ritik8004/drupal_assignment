@@ -892,16 +892,14 @@ class AlshayaGtmManager {
             $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
           }
 
-          if ((is_array($shipping) &&
-            (isset($shipping['extension']['address_block_segment']))) &&
-            ($shipping_method_name && !($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()))) {
-            $page_dl_attributes['deliveryCity'] = $shipping['extension']['address_block_segment'];
-          }
-
           if ((is_array($shipping)) &&
-            (isset($shipping['extension']['address_governate_segment'])) &&
             ($shipping_method_name && !($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()))) {
-            $page_dl_attributes['deliveryArea'] = $shipping['extension']['address_governate_segment'];
+            if (isset($shipping['extension']['address_governate_segment'])) {
+              $page_dl_attributes['deliveryArea'] = $shipping['extension']['address_governate_segment'];
+            }
+            if (isset($shipping['extension']['address_block_segment'])) {
+              $page_dl_attributes['deliveryCity'] = $shipping['extension']['address_block_segment'];
+            }
           }
 
           if ($cart->getExtension('shipping_method')) {
