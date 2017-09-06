@@ -9,11 +9,11 @@ items:
     attributes:
       Attribute():
         class:
-        - 'social-links__facebook'
+        - 'icon-facebook'
 - title: 'Instagram'
   url: 'http://instagram.com'
   link:
     attributes:
       Attribute():
         class:
-        - 'social-links__instagram'
+        - 'icon-instagram'

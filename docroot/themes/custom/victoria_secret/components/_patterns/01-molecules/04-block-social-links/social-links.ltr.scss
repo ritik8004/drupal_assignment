@@ -9,22 +9,14 @@
   }
 
   a {
-    color: $white;
-    display: block;
-    font-size: 0;
-    margin: 0 0.125rem;
-    text-decoration: none;
+    @include u-hidden-visually;
 
-    &::after {
+    &::before {
       font-size: 2rem;
-    }
-
-    &.social-links__facebook {
-      @include icon(facebook, after);
-    }
-
-    &.social-links__instagram {
-      @include icon(instagram, after);
+      display: block;
+      color: $white;
+      margin: 0 0.125rem;
+      text-decoration: none;
     }
   }
 }
