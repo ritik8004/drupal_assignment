@@ -69,11 +69,11 @@
       margin-#{$right}: 1rem;
       float: $left;
       position: static;
-    }
 
-    #lightSlider {
-      .slick-list {
-        padding: 0 !important;
+      #lightSlider {
+        .slick-list {
+          padding: 0 !important;
+        }
       }
     }
   }

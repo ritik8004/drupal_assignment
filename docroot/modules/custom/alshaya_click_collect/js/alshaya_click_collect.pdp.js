@@ -78,6 +78,9 @@
         }
         else {
           $('.click-collect-all-stores').toggleClass('desc-open');
+          $('#pdp-stores-container').accordion({
+            active: false
+          });
         }
       });
 
