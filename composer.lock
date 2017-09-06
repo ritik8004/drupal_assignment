@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "69646647c3f49f94825d80b74f39ad0d",
+    "content-hash": "5406f5b367ce1a42be29d2f387d2ce98",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2457,12 +2457,10 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/clientside_validation",
-                "reference": "f573d87376628e8b5d99ca1b014ad4c8730f42c8"
+                "reference": "18b8aca905b3288d469105689494a3a601f7ceb7"
             },
             "require": {
-                "composer/installers": "^1.0.20",
-                "drupal/core": "~8.0",
-                "jqueryvalidate": "1.15.0"
+                "drupal/core": "~8.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -2470,17 +2468,17 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc3+3-dev",
-                    "datestamp": "1476780325"
-                },
-                "installer-paths": {
-                    "clientside_validation_jquery/js/lib": [
-                        "type:drupal-library"
-                    ]
+                    "version": "8.x-1.0-rc3+4-dev",
+                    "datestamp": "1504288744",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
                 },
                 "patches_applied": {
-                    "Allow custom submit handler in jquery validate": "https://www.drupal.org/files/issues/2898885-6.patch",
-                    "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-4-allow-library-to-be-installed-outside-module.patch"
+                    "Allow custom submit handler in jquery validate": "https://www.drupal.org/files/issues/2898885-9.patch",
+                    "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-11-allow-library-to-be-installed-outside-module.patch",
+                    "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2495,6 +2493,10 @@
                 {
                     "name": "attiks",
                     "homepage": "https://www.drupal.org/user/105002"
+                },
+                {
+                    "name": "nikunjkotecha",
+                    "homepage": "https://www.drupal.org/user/694082"
                 }
             ],
             "description": "This module adds clientside validation",
@@ -2502,7 +2504,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2016-10-18 08:41:35"
+            "time": "2017-09-01 18:16:38"
         },
         {
             "name": "drupal/coder",
@@ -8320,7 +8322,7 @@
             "time": "2015-04-20T18:58:01+00:00"
         },
         {
-            "name": "jquery-validation/jquery-validation",
+            "name": "jqueryvalidate/jqueryvalidate",
             "version": "1.17.0",
             "dist": {
                 "type": "zip",
@@ -8329,17 +8331,6 @@
                 "shasum": null
             },
             "type": "drupal-library"
-        },
-        {
-            "name": "jqueryvalidate",
-            "version": "1.15.0",
-            "dist": {
-                "type": "zip",
-                "url": "https://jqueryvalidation.org/files/jquery-validation-1.15.0.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library"
         },
         {
             "name": "lcobucci/jwt",
@@ -13638,6 +13629,28 @@
             ],
             "description": "Behat 3 JUnit xml formatter",
             "time": "2016-01-26T17:05:07+00:00"
+        },
+        {
+            "name": "jquery-validation/jquery-validation",
+            "version": "1.17.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "drupal-library"
+        },
+        {
+            "name": "jqueryvalidate",
+            "version": "1.15.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         },
         {
             "name": "se/selenium-server-standalone",

@@ -8,6 +8,14 @@
 use Drupal\block_content\Entity\BlockContent;
 
 /**
+ * Create default content for mothercare.
+ */
+function alshaya_mc_create_default_content() {
+  // Create copyright block content.
+  alshaya_mc_create_copyright_block();
+}
+
+/**
  * Create copyright block content for mothercare.
  */
 function alshaya_mc_create_copyright_block() {
