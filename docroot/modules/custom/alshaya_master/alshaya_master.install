@@ -364,6 +364,9 @@ function alshaya_master_install() {
     '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li></ul>' => [
       'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li></ul>',
     ],
+    '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four passwords were not allowed.</li></ul>' => [
+      'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li><li>لم يتم قبول المحاولات الأربعة السابقة</li></ul>',
+    ],
     '<p>You\'re almost done.</p><p>We\'ve sent a verification email to <a href="mailto:[email]">[email]</a>.</p><p>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</p><p>It is also your final step in the sign up process.</p>' => [
       'ar' => '<p>أنت على وشك آلإنتهاء!</p><p>لقد تم إرسال رسالة تحقق إلكترونية إلى&nbsp;<a href="mailto:[email]">[email]</a></p><p>عند ضغطك على رابط عنوان البريد الإلكتروني، يتيح لنا معرفة أن البريد الإلكتروني صالح الفعالية و لك</p><p>كما أن هذه تعتبر آخر خطوة في عملية التسجيل</p>',
     ],
