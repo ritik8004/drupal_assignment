@@ -1,6 +1,6 @@
 @import '../../../../sass/config/**/*.scss';
 
-.block-store--description__drupal {
+.block-find-store-heading--drupal {
   position: absolute;
   top: 1.7rem;
   #{direction(right)}: 4%;
@@ -11,7 +11,7 @@
   }
 }
 
-.block-store--description {
+.block-find-store-heading {
   background-color: $black;
   color: $white;
   font-size: 0.875rem;

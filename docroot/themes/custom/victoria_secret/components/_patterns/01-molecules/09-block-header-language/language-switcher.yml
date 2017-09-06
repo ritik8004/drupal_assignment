@@ -1,7 +1,7 @@
 attributes:
   Attribute():
     class:
-    - 'language__menu'
+    - 'menu-language-switcher--desktop'
 links:
 - item:
   attributes:

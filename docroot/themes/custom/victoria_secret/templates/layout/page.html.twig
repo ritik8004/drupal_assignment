@@ -49,29 +49,29 @@
 <div class="layout-container">
 
   <header role="banner">
-    <div class="top__header">
+    <div class="region-top-header">
       {% if page.header_primary %}
-        <div class="primary__header">
+        <div class="region-primary-header">
           {{ page.header_primary }}
         </div>
       {% endif %}
 
       {% if page.header_secondary %}
-        <div class="secondary__header">
+        <div class="region-secondary-header">
           {{ page.header_secondary }}
         </div>
       {% endif %}
     </div>
 
     {% if page.header %}
-      <div class="page__header">
+      <div class="region-page-header">
         {{ page.header }}
       </div>
     {% endif %}
   </header>
 
   {% if page.admin_content %}
-    <div class="admin-content__region">
+    <div class="region-admin-content">
       {{ page.admin_content }}
     </div>
   {% endif %}
@@ -99,20 +99,20 @@
 
   <footer role="contentinfo">
     {% if page.footer %}
-      <div class="footer__top">
+      <div class="region-footer-top">
         {{ page.footer }}
       </div>
     {% endif %}
 
     {% if page.footer_primary %}
-      <div class="footer__primary">
+      <div class="region-footer-primary">
         {{ page.footer_primary }}
       </div>
     {% endif %}
 
 
     {% if page.footer_secondary %}
-      <div class="footer__secondary">
+      <div class="region-footer-secondary">
         {{ page.footer_secondary }}
       </div>
     {% endif %}
