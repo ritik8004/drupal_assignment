@@ -54,7 +54,7 @@
         }
 
         label {
-          top: -1.1375rem;
+          top: -1.375rem;
           font-size: 0.75rem;
 
           &.error {
@@ -1181,6 +1181,7 @@ html[lang=ar] {
 // Showing label on mobile number field.
 .address-book-address .mobile-number-field & > label {
   position: static !important;
+  line-height: 3;
 }
 
 .alias--cart-checkout-delivery,
