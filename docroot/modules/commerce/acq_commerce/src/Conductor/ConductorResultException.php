@@ -47,6 +47,12 @@ class ConductorResultException extends ConductorException {
         $response = json_decode($responseString, TRUE);
         if (is_array($response) && isset($response['message'])) {
           $mesg = $response['message'];
+
+          if (isset($response['parameters'])) {
+            foreach ($response['parameters'] as $name => $value) {
+              $mesg = str_replace("%$name", $value, $mesg);
+            }
+          }
         }
       }
 

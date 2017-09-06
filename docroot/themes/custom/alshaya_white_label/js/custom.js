@@ -25,21 +25,26 @@
 
       var mobileStickyHeaderHeight = $('.branding__menu').height();
 
+      function stopScrollEvents($el) {
+        $($el).bind('scroll mousedown DOMMouseScroll mousewheel keyup', function () {
+          $($el).stop();
+        });
+      }
+
+      function unBindScrollEvents($el) {
+        $($el).unbind('scroll mousedown DOMMouseScroll mousewheel keyup');
+      }
+
       $('.select-size-text .highlight', context).once('toselectsize').each(function () {
         $(this).click(function () {
-          $('html, body').bind('scroll mousedown DOMMouseScroll mousewheel keyup', function () {
-            $('html, body').stop();
-          });
+          stopScrollEvents('html, body');
+
           if ($(window).width() < 768) {
-            $('html,body').animate({scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight}, 1200, 'easeOutQuart', function () {
-              $('html, body').unbind('scroll mousedown DOMMouseScroll mousewheel keyup');
-            });
+            $('html,body').animate({scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
             return false;
           }
           else {
-            $('html,body').animate({scrollTop: 0}, 1200, 'easeOutQuart', function () {
-              $('html, body').unbind('scroll mousedown DOMMouseScroll mousewheel keyup');
-            });
+            $('html,body').animate({scrollTop: 0}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
             return false;
           }
         });
@@ -47,19 +52,14 @@
 
       $('.read-more-description-link', context).once('toselectsize').each(function () {
         $(this).click(function () {
-          $('html, body').bind('scroll mousedown DOMMouseScroll mousewheel keyup', function () {
-            $('html, body').stop();
-          });
+          stopScrollEvents('html, body');
+
           if ($(window).width() < 768) {
-            $('html,body').animate({scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight}, 1200, 'easeOutQuart', function () {
-              $('html, body').unbind('scroll mousedown DOMMouseScroll mousewheel keyup');
-            });
+            $('html,body').animate({scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
             return false;
           }
           else {
-            $('html,body').animate({scrollTop: 0}, 1200, 'easeOutQuart', function () {
-              $('html, body').unbind('scroll mousedown DOMMouseScroll mousewheel keyup');
-            });
+            $('html,body').animate({scrollTop: 0}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
             return false;
           }
         });

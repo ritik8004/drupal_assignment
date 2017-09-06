@@ -413,6 +413,11 @@
 
       @include breakpoint($desktop) {
         width: 6.2%;
+
+        html[lang=ar] & {
+          width: 6.1%;
+          margin-left: 1px;
+        }
       }
     }
 
@@ -888,7 +893,8 @@
             margin-top: 0;
             width: 100%;
             text-transform: lowercase;
-            color: $marine-blue-two;
+            color: $cerulean-two;
+            font-size: 0.75rem;
             display: block;
             padding: 0.5rem 0;
 
@@ -1116,6 +1122,12 @@
       a p {
         color: $grey-ash;
       }
+
+      &.active--tab--head {
+        h2 {
+          color: $cerulean-two !important;
+        }
+      }
     }
 
     #edit-guest-delivery-collect,
@@ -1167,14 +1179,8 @@ html[lang=ar] {
 }
 
 // Showing label on mobile number field.
-.address-book-address .mobile-number-field .form-type-textfield label.visually-hidden {
-  position: absolute !important;
-  clip: unset;
-  overflow: visible;
-  height: auto;
-  width: auto;
-  word-wrap: normal;
-  top: -1.125rem !important;
+.address-book-address .mobile-number-field & > label {
+  position: static !important;
 }
 
 .alias--cart-checkout-delivery,
