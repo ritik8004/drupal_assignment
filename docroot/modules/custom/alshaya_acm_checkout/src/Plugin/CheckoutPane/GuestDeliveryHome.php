@@ -167,6 +167,14 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         '#change_address' => render($change_address_button),
       ];
 
+      // Expose selected delivery address to GTM.
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_seo')) {
+        datalayer_add([
+          'deliveryArea' => $drupal_address['administrative_area'],
+          'deliveryCity' => $drupal_address['locality'],
+        ]);
+      }
+
       $selected_address = '<div id="selected-address-wrapper">' . render($selected_address_build) . '</div>';
     }
 
