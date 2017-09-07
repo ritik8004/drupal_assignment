@@ -95,6 +95,8 @@
   &.messages--status {
     background: $tealish;
     color: $white-five;
+    border: none;
+    border-radius: 0;
 
     @include icon(checkshape);
   }
