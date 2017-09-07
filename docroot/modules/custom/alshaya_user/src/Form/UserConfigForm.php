@@ -32,6 +32,7 @@ class UserConfigForm extends ConfigFormBase {
     $config->set('terms_conditions', $form_state->getValue('terms_conditions'));
     $config->set('user_register_complete', $form_state->getValue('user_register_complete'));
     $config->set('password_tooltip', $form_state->getValue('password_tooltip'));
+    $config->set('password_tooltip_change_pwd', $form_state->getValue('password_tooltip_change_pwd'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -68,6 +69,14 @@ class UserConfigForm extends ConfigFormBase {
       '#title' => $this->t('Password tooltip'),
       '#required' => TRUE,
       '#default_value' => $config->get('password_tooltip.value'),
+    ];
+
+    $form['password_tooltip_change_pwd'] = [
+      '#type' => 'text_format',
+      '#format' => 'rich_text',
+      '#title' => $this->t('Password tooltip for Change Password'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('password_tooltip_change_pwd.value'),
     ];
 
     return $form;

@@ -14,6 +14,6 @@ $api = 'agent/newsletter/subscribe';
 $method = 'POST';
 
 $data = [];
-$data['form_params']['email'] = $mail;
+$data['email'] = $mail;
 
 invoke_api($api, $method, $data);

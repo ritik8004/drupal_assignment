@@ -7,7 +7,7 @@
 
 $cart_id = isset($argv, $argv[1]) ? $argv[1] : 11704;
 
-$address = [
+$json = [
   'firstname' => 'Nikunj',
   'lastname' => 'Kotecha',
   'telephone' => '+96567701234',
@@ -22,11 +22,8 @@ $address = [
   'city' => '&#8203;',
 ];
 
-$opt = [];
-$opt['json'] = $address;
-
 require_once __DIR__ . '/../test.php';
 
 $api = 'agent/cart/' . $cart_id . '/estimate';
 
-invoke_api($api, 'POST', $opt);
+invoke_api($api, 'JSON', $opt);

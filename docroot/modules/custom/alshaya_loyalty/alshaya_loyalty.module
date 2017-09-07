@@ -450,7 +450,9 @@ function alshaya_loyalty_preprocess_user(&$variables) {
   $card = $user->get('field_privilege_card_number')->getString();
   if (empty($card)) {
     $block = Block::load('jointheclub');
-    $variables['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+    if (!empty($block)) {
+      $variables['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+    }
   }
 }
 

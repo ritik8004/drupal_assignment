@@ -38,11 +38,6 @@
       }
 
       .views-row {
-        float: $left;
-        text-align: center;
-        color: $black;
-        height: 19.5rem;
-
         @include breakpoint($only-mobile) {
           &:nth-child(2n) {
             float: $right;
@@ -50,20 +45,6 @@
 
           &:nth-child(2n + 1) {
             clear: both;
-          }
-        }
-
-        @include breakpoint($tablet) {
-          height: 24rem;
-        }
-
-        @include breakpoint($tablet) {
-          width: 31.59%;
-          max-width: 291px;
-          height: 30rem;
-
-          &:nth-child(3n+2) {
-            margin: 0 2.6%;
           }
         }
 

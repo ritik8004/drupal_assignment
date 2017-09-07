@@ -82,7 +82,7 @@
                   setTimeout(function () {
                     var activeitem = currParent.find('.owl-item.active');
                     Drupal.loadTeaserCartForm(activeitem);
-                  }, '200');
+                  }, '1000');
                   break;
               }
             }

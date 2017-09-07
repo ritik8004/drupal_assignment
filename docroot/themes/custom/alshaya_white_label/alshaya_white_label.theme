@@ -598,13 +598,16 @@ function alshaya_white_label_preprocess_views_view_unformatted__store_list(&$var
  */
 function alshaya_white_label_preprocess_input(&$variables) {
   $element = $variables['element'];
-  if (isset($element['#attributes']['data-twig-suggestion'])) {
-    if ($element['#attributes']['data-twig-suggestion'] == 'userregisterformpassword') {
-      // Get password tooltip content from config.
+  if (isset($element['#attributes']['data-twig-suggestion']) && $element['#attributes']['data-twig-suggestion'] == 'userregisterformpassword') {
+    // Get password tooltip content from config.
+    $tooltip = \Drupal::config('alshaya_user.settings')
+      ->get('password_tooltip.value');
+    // Get a different tooltip for change password page.
+    if (\Drupal::routeMatch()->getRouteName() == 'change_pwd_page.change_password_form') {
       $tooltip = \Drupal::config('alshaya_user.settings')
-        ->get('password_tooltip.value');
-      $variables['password_tooltip'] = $tooltip;
+        ->get('password_tooltip_change_pwd.value');
     }
+    $variables['password_tooltip'] = $tooltip;
   }
 }
 

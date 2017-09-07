@@ -61,6 +61,11 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
     // Change submit button text.
     $form['actions']['submit']['#value'] = t('Create');
   }
+
+  // First name and last name will not accept some special characters.
+  $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+  $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 }
 
@@ -86,6 +91,10 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
 
     // Add password validation attribute.
     $form['account']['pass']['#attributes']['passvalidate'] = 'passvalidate';
+
+    // First name and last name will not accept some special characters.
+    $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+    $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
   }
 }
 
@@ -418,7 +427,14 @@ function alshaya_user_mail_alter(&$message) {
     $language_manager->setConfigOverrideLanguage($original_language);
 
     // Alter the header from information according to user preferred language.
-    $message['headers']['From'] = $sitename . ' <' . $message['from'] . '>';
+    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8', 'Q') . ' <' . $message['from'] . '>';
+    $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
+  }
+
+  if ($message['key'] === 'register') {
+    $sitename = \Drupal::config('system.site')->get('name');
+    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8', 'Q') . ' <' . $message['from'] . '>';
+    $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
   }
 }
 
@@ -431,7 +447,7 @@ function alshaya_user_link_alter(&$variables) {
   if ($url->isExternal()) {
     return;
   }
-  elseif ($url->getRouteName() == 'user.logout') {
+  elseif ($url->isRouted() && $url->getRouteName() == 'user.logout') {
     $path = \Drupal::service('path.current')->getPath();
     $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path.alias_manager')->getAliasByPath($path);
   }

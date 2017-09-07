@@ -471,11 +471,15 @@
 
     .promotions {
       margin: 0.5rem 0;
+      font-size: 0.75rem;
+      color: $grey-ash;
 
       .sku-promotion-link {
         font-size: 0.75rem;
         color: $cherry;
-        display: block;
+        display: inline-block;
+        margin-#{$left}: 0.125rem;
+        margin-#{$right}: 0.125rem;
       }
     }
   }
@@ -760,6 +764,23 @@
           @include select-style(9rem);
 
           width: 100%;
+
+          html[lang=ar] & {
+            @include breakpoint($only-mobile) {
+              padding-left: 60px;
+            }
+
+            @include breakpoint($only-tablet) {
+              padding-left: 35px;
+            }
+
+            @include breakpoint($upto-desktop) {
+              padding-top: 0;
+              padding-bottom: 0;
+              line-height: 32px;
+              height: 35px;
+            }
+          }
         }
       }
     }

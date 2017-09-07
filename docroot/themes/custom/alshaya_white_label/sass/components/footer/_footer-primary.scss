@@ -121,6 +121,10 @@
       padding: 0;
     }
 
+    @include breakpoint($desktop) {
+      display: inline;
+    }
+
     &:hover {
       color: $cerulean-two;
       text-decoration: underline;
@@ -161,7 +165,7 @@
       padding: 0.875rem 0;
       position: relative;
 
-      @include icon(chevron#{$right}, after) {
+      @include icon(chevrondown, after) {
         position: absolute;
         #{$right}: 0.33rem;
         font-size: 1.875rem;
@@ -183,7 +187,7 @@
 .open--accordion {
   .is-accordion {
     @include breakpoint($only-mobile) {
-      @include icon(chevrondown, after);
+      @include icon(chevronup, after);
     }
   }
 }

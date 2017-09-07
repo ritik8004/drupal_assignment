@@ -1113,7 +1113,6 @@ body.alias--cart {
     text-transform: lowercase;
     font-family: $alshaya-bold;
     font-size: 0.75rem;
-    -webkit-font-smoothing: auto;
 
     @include breakpoint($upto-tablet) {
       display: block;
@@ -1197,6 +1196,13 @@ body.alias--cart {
       padding: 0 1.125rem;
       max-height: 2.188rem;
       line-height: 2.7;
+
+      &.disabled {
+        &:hover {
+          cursor: default;
+          background-color: $ladda-disabled;
+        }
+      }
     }
   }
 }
