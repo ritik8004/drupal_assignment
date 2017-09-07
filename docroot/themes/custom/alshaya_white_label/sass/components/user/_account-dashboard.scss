@@ -171,4 +171,8 @@
 
 .mobile-number-field > label {
   display: none;
+
+  .c-delivery-checkout & {
+    display: block;
+  }
 }
