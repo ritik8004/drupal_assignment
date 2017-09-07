@@ -5,6 +5,7 @@ namespace Drupal\acq_sku;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -23,6 +24,13 @@ class AcqSkuLinkedSku {
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $cache;
+
+  /**
+   * The config factory object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
   /**
    * The language manager.
@@ -45,14 +53,17 @@ class AcqSkuLinkedSku {
    *   The conductor api wrapper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache bin object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger factory.
    */
-  public function __construct(APIWrapper $api_wrapper, CacheBackendInterface $cache, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(APIWrapper $api_wrapper, CacheBackendInterface $cache, ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->cache = $cache;
+    $this->configFactory = $config_factory;
     $this->loggerFactory = $logger_factory;
     $this->languageManager = $language_manager;
   }
@@ -71,7 +82,6 @@ class AcqSkuLinkedSku {
   public function getLinkedSKus(SKU $sku, $type = LINKED_SKU_TYPE_ALL) {
     $linked_skus = [];
 
-    // @Todo: Check if caching needs to be done per language.
     // Cache key is like - 'acq_sku:linked_skus:123'.
     $cache_key = 'acq_sku:linked_skus:' . $sku->id();
 
@@ -105,7 +115,8 @@ class AcqSkuLinkedSku {
       }
 
       // Set the cache.
-      $this->cache->set($cache_key, $linked_skus);
+      $cache_lifetime = $this->configFactory->get('acq_sku.settings')->get('linked_skus_cache_max_lifetime');
+      $this->cache->set($cache_key, $linked_skus, $cache_lifetime);
 
       // Return the data.
       return $type != LINKED_SKU_TYPE_ALL ? $linked_skus[$type] : $linked_skus;

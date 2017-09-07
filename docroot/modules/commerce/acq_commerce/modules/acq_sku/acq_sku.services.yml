@@ -44,6 +44,7 @@ services:
       arguments:
         - '@acq_commerce.api'
         - '@cache.default'
+        - '@config.factory'
         - '@language_manager'
         - '@logger.factory'
 

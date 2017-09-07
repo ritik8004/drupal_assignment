@@ -74,6 +74,9 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
 
     $view_skus = [];
 
+    // Cross sell skus from the related rule.
+    $cross_sell_rule_skus = [];
+
     // Get current cart skus.
     if ($cart = $this->cartStorage->getCart(FALSE)) {
       $skus = [];
@@ -91,15 +94,27 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
       if (!empty($skus)) {
         foreach ($skus as $sku) {
           if ($sku_entity = SKU::loadFromSku($sku)) {
-            // Get crosssell skus.
-            $view_skus += $this->linkedSkus->getLinkedSKus($sku_entity, 'crosssell');
+            $cross_sell_rule_skus += $this->linkedSkus->getLinkedSKus($sku_entity, 'crosssell');
+            $cross_sell_manual_skus = $sku_entity->getCrossSell();
+            foreach ($cross_sell_manual_skus as $cross_sell_sku) {
+              $view_skus[] = $cross_sell_sku['value'];
+            }
           }
         }
       }
     }
 
     if (!empty($view_skus)) {
-      return views_embed_view('product_slider', 'block_product_slider', implode(',', $view_skus));
+      // Get all cross sell SKU.
+      $view_skus = array_diff($view_skus, $skus);
+    }
+
+    // Merging the manual cross sell skus from product and cross sell skus from
+    // the related rule.
+    $view_skus += $cross_sell_rule_skus;
+
+    if (!empty($view_skus)) {
+      return views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($view_skus)));
     }
 
     return [];
