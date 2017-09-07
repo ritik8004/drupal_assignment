@@ -21,8 +21,8 @@
       });
 
       // Display ajax loader for checkout button when privilege card number validation ajax triggers.
-      var priv_card = $('input[name="privilege_card_number"]');
-      var priv_card2 = $('input[name="privilege_card_number2"]');
+      var priv_card = $('input[name="privilege_card_number"]', context);
+      var priv_card2 = $('input[name="privilege_card_number2"]', context);
 
       priv_card.on('keypress', validate_privilege_card);
       priv_card.on('keyup', validate_privilege_card);
@@ -33,6 +33,15 @@
       priv_card2.on('keyup', validate_privilege_card);
       priv_card2.on('input', validate_privilege_card);
       priv_card2.on('paste', validate_privilege_card);
+
+      // Show second privilege card number field on change of first field.
+      if (context === document) {
+        $('#details-privilege-card-wrapper .form-item-privilege-card-number2').hide();
+      }
+
+      priv_card.on('change input keypress', function () {
+        priv_card2.parent().show();
+      });
 
       $('.checkout-top-button').attr('data-style', 'zoom-in');
       $('#secure-checkout-button > .form-submit').attr('data-style', 'zoom-in');
