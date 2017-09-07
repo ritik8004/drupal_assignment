@@ -150,9 +150,11 @@ class AlshayaApiWrapper {
       // Get all stores for particular language.
       $stores = $this->getStores($langcode);
 
-      // Loop through all the stores and add/edit/translate the store node.
-      foreach ($stores['items'] as $store) {
-        $this->storeUtility->updateStore($store, $langcode);
+      if (!empty($stores['items'])) {
+        // Loop through all the stores and add/edit/translate the store node.
+        foreach ($stores['items'] as $store) {
+          $this->storeUtility->updateStore($store, $langcode);
+        }
       }
     }
   }

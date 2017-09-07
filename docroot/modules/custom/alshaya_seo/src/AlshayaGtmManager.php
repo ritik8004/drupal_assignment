@@ -561,7 +561,7 @@ class AlshayaGtmManager {
         }
       }
 
-      $attributes['privilegeOrder'] = !empty($cart->getExtension('loyalty_card'));
+      $attributes['privilegeOrder'] = !empty($cart->getExtension('loyalty_card')) ? 'order with privilege club' : 'order without privilege club';
 
       $shipping = (array) $cart->getShipping();
       $attributes['delivery_phone'] = isset($shipping['telephone']) ? $shipping['telephone'] : '';
@@ -886,16 +886,20 @@ class AlshayaGtmManager {
             'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
           ];
 
-          $shipping = $cart->getShipping();
-
-          if ((is_array($shipping) &&
-            (isset($shipping['extension']['address_block_segment'])))) {
-            $page_dl_attributes['deliveryCity'] = $shipping['extension']['address_block_segment'];
+          $shipping = $cart->getExtension('shipping_method');
+          if ($shipping) {
+            $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($shipping);
+            $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
           }
 
           if ((is_array($shipping)) &&
-            (isset($shipping['extension']['address_governate_segment']))) {
-            $page_dl_attributes['deliveryArea'] = $shipping['extension']['address_governate_segment'];
+            ($shipping_method_name && !($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()))) {
+            if (isset($shipping['extension']['address_governate_segment'])) {
+              $page_dl_attributes['deliveryArea'] = $shipping['extension']['address_governate_segment'];
+            }
+            if (isset($shipping['extension']['address_block_segment'])) {
+              $page_dl_attributes['deliveryCity'] = $shipping['extension']['address_block_segment'];
+            }
           }
 
           if ($cart->getExtension('shipping_method')) {
