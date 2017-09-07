@@ -57,23 +57,6 @@
   }
 }
 
-.user-page.checkout {
-  .form-type-select {
-    @include form-selector-wrap;
-
-    &::after {
-      #{$right}: -1px;
-      top: -9px;
-      background: $white-five;
-      border-radius: 0;
-    }
-
-    .form-select {
-      @include form-selector(1.56rem);
-    }
-  }
-}
-
 .block-checkout-summary-block {
   &.fix-block {
     @include breakpoint($tablet) {
