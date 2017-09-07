@@ -362,7 +362,7 @@
   }
 }
 
-.has--special--price {
+.has--special--price span {
   text-decoration: line-through;
 }
 
@@ -387,7 +387,7 @@
 }
 
 .price--discount {
-  margin-top: 0.5625rem;
+  margin-top: 0;
   font-size: 0.625rem;
   color: $special-price;
 

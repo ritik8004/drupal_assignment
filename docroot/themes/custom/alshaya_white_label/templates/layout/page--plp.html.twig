@@ -106,12 +106,6 @@
         {% if title or messages or tabs or action_links %}
           <div class="c-content__header">
 
-            {% if page.highlighted %}
-              <div class="c-content__highlighted">
-                {{ page.highlighted }}
-              </div>
-            {% endif %}
-
             {{ title_prefix }}
 
             {% if title %}
@@ -134,6 +128,12 @@
 
           </div>
           <!-- /#content-header -->
+        {% endif %}
+
+        {% if page.highlighted %}
+          <div class="c-content__highlighted">
+            {{ page.highlighted }}
+          </div>
         {% endif %}
 
         <div class="c-content">
