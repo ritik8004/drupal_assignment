@@ -150,19 +150,21 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     }
     elseif ($view_mode == 'full') {
 
-      // Get up sell block for the product.
-      $items = $sku_entity->get('upsell')->getValue();
+      /* @var \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus */
+      $linked_skus = \Drupal::service('acq_sku.linked_sku');
 
-      if (!empty($items)) {
-        $up_sell_skus = array_column($items, 'value');
-        $up_sell_skus = array_slice($up_sell_skus, 0, 12);
+      // Get up sell block for the product.
+      $upsell_sku_items = $linked_skus->getLinkedSKus($sku_entity, 'upsell');
+
+      if (!empty($upsell_sku_items)) {
+        $up_sell_skus = array_slice($upsell_sku_items, 0, 12);
         $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $up_sell_skus));
         // Weight will have no effect later once template is modified.
         $build['up_sell']['#weight'] = 10;
       }
 
       // Get related block for the product.
-      $related_sku_items = \Drupal::service('acq_sku.linked_sku')->getLinkedSKus($sku_entity, 'related');
+      $related_sku_items = $linked_skus->getLinkedSKus($sku_entity, 'related');
 
       if (!empty($related_sku_items)) {
         $related_skus = array_slice($related_sku_items, 0, 12);
