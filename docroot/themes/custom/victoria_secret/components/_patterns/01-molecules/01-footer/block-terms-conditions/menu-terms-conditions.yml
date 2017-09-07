@@ -1,0 +1,19 @@
+attributes:
+  Attribute():
+    class:
+    - 'menu-terms-conditions'
+items:
+- title: 'Privacy'
+  url: '/'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - ''
+- title: 'Terms & conditions'
+  url: '/'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - ''
