@@ -429,6 +429,12 @@ function alshaya_user_mail_alter(&$message) {
     // Alter the header from information according to user preferred language.
     $message['headers']['From'] = $sitename . ' <' . $message['from'] . '>';
   }
+
+  if ($message['key'] === 'register') {
+    $sitename = \Drupal::config('system.site')->get('name');
+    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8', 'Q') . ' <' . $message['from'] . '>';
+    $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
+  }
 }
 
 /**
