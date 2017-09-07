@@ -111,7 +111,7 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
 
     // Merging the manual cross sell skus from product and cross sell skus from
     // the related rule.
-    $view_skus += $cross_sell_rule_skus;
+    $view_skus = array_merge($view_skus, $cross_sell_rule_skus);
 
     if (!empty($view_skus)) {
       return views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($view_skus)));
