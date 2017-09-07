@@ -135,10 +135,14 @@ class AcqPromotionsManager {
       }
     }
 
-    $this->processPromotions($fetched_promotions);
+    if (!empty($fetched_promotions)) {
+      $this->processPromotions($fetched_promotions);
+    }
 
     // Unpublish promotions, which are not part of API response.
-    $this->unpublishPromotions($ids);
+    if (!empty($ids)) {
+      $this->unpublishPromotions($ids);
+    }
   }
 
   /**
