@@ -162,11 +162,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       // Get related block for the product.
-      $items = $sku_entity->get('related')->getValue();
+      $related_sku_items = \Drupal::service('acq_sku.linked_sku')->getLinkedSKus($sku_entity, 'related');
 
-      if (!empty($items)) {
-        $related_skus = array_column($items, 'value');
-        $related_skus = array_slice($related_skus, 0, 12);
+      if (!empty($related_sku_items)) {
+        $related_skus = array_slice($related_sku_items, 0, 12);
         $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $related_skus));
         // Weight will have no effect later once template is modified.
         $build['related']['#weight'] = 11;

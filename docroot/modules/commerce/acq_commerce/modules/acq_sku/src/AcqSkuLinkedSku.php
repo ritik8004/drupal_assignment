@@ -82,7 +82,7 @@ class AcqSkuLinkedSku {
     if ($cache) {
       // If only for specific type like cross_sell/upsell/related
       if (isset($cache->data[$type])) {
-        return [$type => $cache->data[$type]];
+        return $cache->data[$type];
       }
       elseif ($type == LINKED_SKU_TYPE_ALL && isset($cache->data[LINKED_SKU_TYPE_RELATED]) && isset($cache->data[LINKED_SKU_TYPE_CROSSSELL]) && isset($cache->data[LINKED_SKU_TYPE_UPSELL])) {
         // Returning everything in case of 'all' and all keys set.
@@ -100,9 +100,15 @@ class AcqSkuLinkedSku {
         $cache->data[$type] = $linked_skus[$type];
         $linked_skus = $cache->data;
       }
+      elseif ($type != LINKED_SKU_TYPE_ALL && !$cache) {
+        $linked_skus = [$type => $linked_skus[$type]];
+      }
 
       // Set the cache.
       $this->cache->set($cache_key, $linked_skus);
+
+      // Return the data.
+      return $type != LINKED_SKU_TYPE_ALL ? $linked_skus[$type] : $linked_skus;
     }
     catch (\Exception $e) {
       // If something bad happens, log the error.

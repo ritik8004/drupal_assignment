@@ -785,7 +785,7 @@ class APIWrapper {
    * @throws \Exception
    */
   public function getLinkedskus($sku, $type = LINKED_SKU_TYPE_ALL) {
-    $endpoint = $this->apiVersion . "/product/$sku/related/$type";
+    $endpoint = $this->apiVersion . "/agent/product/$sku/related/$type";
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return ($client->get($endpoint, $opt));
@@ -793,11 +793,8 @@ class APIWrapper {
 
     $result = [];
 
-    // In case of 'all', we don't filter.
-    $type = $type == LINKED_SKU_TYPE_ALL ? NULL : $type;
-
     try {
-      $result = $this->tryAgentRequest($doReq, $type);
+      $result = $this->tryAgentRequest($doReq, 'linkedSkus', 'related');
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());
