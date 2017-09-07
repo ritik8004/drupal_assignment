@@ -1,0 +1,4 @@
+content: '<a href="/en">Email sign up</a>'
+attributes:
+  Attribute():
+    class: 'block-sign-up-desktop'

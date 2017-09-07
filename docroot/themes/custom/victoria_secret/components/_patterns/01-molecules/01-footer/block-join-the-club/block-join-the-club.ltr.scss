@@ -1,0 +1,131 @@
+@import '../../../../../sass/config/**/*.scss';
+
+.block-join-the-club {
+  @include u-clearfix;
+
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+
+  @include breakpoint($upto-palm) {
+    text-align: center;
+  }
+
+  @include breakpoint($lap) {
+    max-width: 29.125rem;
+    padding-#{direction(left)}: 2.875rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 39.375rem;
+    padding-#{direction(left)}: 2.375rem;
+  }
+}
+
+.block-join-the-club__image-wrapper {
+  @include breakpoint($above-palm) {
+    float: direction(right);
+  }
+
+  @include breakpoint($desk) {
+    max-width: 13.75rem;
+    margin-#{direction(left)}: -1.875rem;
+  }
+}
+
+.block-join-the-club__title-wrapper {
+  @include breakpoint($upto-lap) {
+    margin-bottom: 0.75rem;
+  }
+
+  @include breakpoint($lap) {
+    padding-top: 1.125rem;
+  }
+
+  @include breakpoint($desk) {
+    float: direction(left);
+    padding-#{direction(right)}: 2.625rem;
+    max-width: 11.625rem;
+    border-#{direction(right)}: 1px solid $greyish-lighter;
+    margin-top: 2.2rem;
+  }
+}
+
+.block-join-the-club__title {
+  font-family: $open-sans;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+
+  @include breakpoint($upto-palm) {
+    color: $dark-sand;
+  }
+}
+
+.block-join-the-club__title-link {
+  display: none;
+  font-size: 0.75rem;
+
+  @include breakpoint($desk) {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    display: block;
+  }
+
+  a {
+    color: $black-smoke;
+    font-weight: bold;
+  }
+}
+
+.block-join-the-club__list {
+  color: $black-smoke;
+
+  @include breakpoint($upto-palm) {
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  @include breakpoint($above-palm) {
+    font-family: $open-sans;
+    font-size: 0.75rem;
+  }
+
+  @include breakpoint($desk) {
+    float: direction(left);
+    padding-#{direction(left)}: 2.625rem;
+    max-width: 18.5rem;
+    margin-top: 1.2rem;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  span {
+    font-size: 1.125rem;
+
+    &::before {
+      position: relative;
+      top: 2px;
+
+      @include breakpoint($above-palm) {
+        color: $dark-sand;
+      }
+    }
+  }
+}
+
+.block-join-the-club__list-link {
+  color: $black-smoke;
+  font-weight: bold;
+
+  @include breakpoint($lap) {
+    font-weight: normal;
+  }
+
+  @include breakpoint($desk) {
+    display: none;
+  }
+}

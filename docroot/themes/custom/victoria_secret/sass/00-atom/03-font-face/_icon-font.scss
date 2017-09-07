@@ -1,0 +1,17 @@
+[class^="icon-"],
+[class*=" icon-"] {
+  &::before {
+    @include iconbase;
+  }
+}
+
+@each $icon, $unicode in $icons {
+  %icon-#{$icon},
+  .icon-#{$icon} {
+    @include iconbase;
+
+    &::before {
+      content: $unicode;
+    }
+  }
+}

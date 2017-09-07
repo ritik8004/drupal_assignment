@@ -1,4 +1,4 @@
-@import '../../../../sass/config/**/*.scss';
+@import '../../../../../sass/config/**/*.scss';
 
 .menu-logo-navigation {
   margin: 0;
@@ -14,9 +14,10 @@
   }
 
   a {
+    @include u-hidden-visually;
+
     display: block;
-    font-size: 0;
-    padding: 0.72rem 1.66rem;
+    padding: 0.72rem 1.6rem;
 
     @include breakpoint($lap) {
       padding: 0.47rem 1.5rem;
@@ -39,31 +40,31 @@
 
     &.brand-victoria-secret {
       &::after {
-        background: url("../../../../../images/icons/svg/vsecret.svg") no-repeat center;
+        background: url("../../../../../../images/icons/svg/vsecret.svg") no-repeat center;
         background-size: contain;
       }
 
       &.is-active::after {
-        background: url("../../../../../images/icons/svg/vsecret-active.svg") no-repeat center;
+        background: url("../../../../../../images/icons/svg/vsecret-active.svg") no-repeat center;
         background-size: contain;
       }
     }
 
     &.brand-pink {
       &::after {
-        background: url("../../../../../images/icons/svg/pink.svg") no-repeat center;
+        background: url("../../../../../../images/icons/svg/pink.svg") no-repeat center;
         background-size: contain;
       }
     }
 
     &.brand-victoria-sport {
       &::after {
-        background: url("../../../../../images/icons/svg/vsport.svg") no-repeat center;
+        background: url("../../../../../../images/icons/svg/vsport.svg") no-repeat center;
         background-size: contain;
       }
 
       &.is-active::after {
-        background: url("../../../../../images/icons/svg/vsport-active.svg") no-repeat center;
+        background: url("../../../../../../images/icons/svg/vsport-active.svg") no-repeat center;
         background-size: contain;
       }
     }
