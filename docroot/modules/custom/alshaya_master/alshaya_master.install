@@ -1098,6 +1098,24 @@ function alshaya_master_install() {
     'edit address' => [
       'ar' => 'تعديل العنوان',
     ],
+    'facebook' => [
+      'ar' => 'فيس بوك',
+    ],
+    'instagram' => [
+      'ar' => 'الانستقرام',
+    ],
+    'youtube' => [
+      'ar' => 'youtube',
+    ],
+    'google' => [
+      'ar' => 'جوجل',
+    ],
+    'twitter' => [
+      'ar' => 'تغريد',
+    ],
+    'pinterest' => [
+      'ar' => 'pinterest',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

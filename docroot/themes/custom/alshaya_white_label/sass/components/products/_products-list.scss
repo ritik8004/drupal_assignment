@@ -528,7 +528,7 @@
       width: 6.75rem;
       font-size: 0.75rem;
 
-      @include icon(chevrondown, after) {
+      @include icon(chevron#{$right}, after) {
         #{$right}: -2.188rem;
         height: 2.1875rem;
         width: 2.1875rem;
