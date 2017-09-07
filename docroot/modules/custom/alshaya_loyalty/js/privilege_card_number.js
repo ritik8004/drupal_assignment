@@ -137,7 +137,7 @@
       var loyalty_card_prefix = loyalty_card_number.toString().substr(0, alshaya_loyalty_validator_settings.value_start_with.length);
       if (loyalty_card_prefix !== alshaya_loyalty_validator_settings.value_start_with) {
         $.validator.messages.loyalty_card_validate = message;
-              return false;
+        return false;
       }
 
       // Validate credit card number.
