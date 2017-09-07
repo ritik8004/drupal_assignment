@@ -1,0 +1,21 @@
+@import '../../../../../sass/config/**/*.scss';
+
+.site__logo {
+  text-align: center;
+  padding: 1.7rem 0;
+
+  @include breakpoint($desk) {
+    padding: 2.2rem 0;
+    padding-bottom: 1.4rem;
+  }
+
+  @include breakpoint($thumb) {
+    display: none;
+  }
+
+  img {
+    @include breakpoint($lap) {
+      max-width: 20.75rem;
+    }
+  }
+}
