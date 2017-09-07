@@ -1456,6 +1456,10 @@
   .selected-text {
     font-weight: bold;
     display: inline-block;
+
+    html[lang=ar] .safari & {
+      font-weight: normal;
+    }
   }
 
   .select-buttons {
@@ -1486,6 +1490,10 @@
           color: $white-five;
           font-weight: bold;
           background: $marine-blue;
+
+          html[lang=ar] .safari & {
+            font-weight: normal;
+          }
         }
       }
 
