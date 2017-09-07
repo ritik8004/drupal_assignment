@@ -488,7 +488,7 @@
 
   .select2-selection__arrow {
     top: 0;
-    right: 0;
+    #{$right}: 0;
     width: 2.1875rem;
     height: 2.1875rem;
   }
