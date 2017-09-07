@@ -1385,6 +1385,7 @@
         margin-bottom: 1.5rem;
         display: inline-block;
         height: 2.1875rem;
+        line-height: 1;
 
         @include breakpoint($only-mobile) {
           .basic-details-wrapper & {
@@ -1593,6 +1594,12 @@ article[gtm-sku-type="simple"] {
     }
   }
 
+  @include breakpoint($only-mobile) {
+    article.stock-check-processed {
+      min-height: 5rem;
+    }
+  }
+
   span.out-of-stock {
     background-color: $cherry;
     font-family: $alshaya-bold;
@@ -1613,6 +1620,7 @@ article[gtm-sku-type="simple"] {
       font-size: 0.875rem;
       z-index: 6;
       height: 3rem;
+      line-height: 2;
     }
 
     @include breakpoint($desktop) {
