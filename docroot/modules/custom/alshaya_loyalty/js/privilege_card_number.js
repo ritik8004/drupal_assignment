@@ -172,11 +172,11 @@
      *
   * @returns {boolean}
      */
-  Drupal.validate_credit_card_number = function (loyalty_card_number) {
+  Drupal.validate_credit_card_number = function (credit_card_number) {
     // Set the string length and parity.
-    var number_length = loyalty_card_number.length;
+    var number_length = credit_card_number.length;
     var parity = number_length % 2;
-    var loyalty_card_digits = loyalty_card_number.toString().split('');
+    var loyalty_card_digits = credit_card_number.toString().split('');
 
     // Loop through each digit and do the maths.
     var total = 0;
