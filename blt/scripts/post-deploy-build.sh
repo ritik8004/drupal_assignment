@@ -15,5 +15,8 @@ themes=( "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_se
 
 for i in "${themes[@]}"
 do
-  sed -i '' '/dist/d' $deployDir/docroot/themes/custom/$i/.gitignore
+  if [ -f $deployDir/docroot/themes/custom/$i/.gitignore ]
+  then
+    sed -i '' '/dist/d' $deployDir/docroot/themes/custom/$i/.gitignore
+  fi
 done
