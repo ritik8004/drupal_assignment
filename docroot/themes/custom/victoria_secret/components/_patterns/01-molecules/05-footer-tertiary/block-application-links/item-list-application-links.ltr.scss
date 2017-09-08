@@ -1,0 +1,44 @@
+@import '../../../../../sass/config/**/*.scss';
+
+.item-list-application-links {
+  padding-#{direction(left)}: 0;
+
+  @include breakpoint($upto-palm) {
+    text-align: center;
+  }
+
+  li {
+    list-style: none;
+
+    @include breakpoint($above-palm) {
+      display: inline-block;
+    }
+
+    &:first-child {
+      @include breakpoint($desk) {
+        border-#{direction(right)}: 1px solid $greyish-lighter;
+      }
+
+      @include breakpoint($upto-lap) {
+        margin-bottom: 1rem;
+      }
+    }
+
+    a {
+      @include u-hidden-visually;
+
+      width: 8.4375rem;
+      height: 2.8125rem;
+      margin: 0 1rem;
+      display: inline-block;
+    }
+  }
+}
+
+.item-list-application-links__link--android {
+  background: url("../../../../../../images/logos/play-store.svg") no-repeat center;
+}
+
+.item-list-application-links__link--apple {
+  background: url("../../../../../../images/logos/app-store.svg") no-repeat center;
+}

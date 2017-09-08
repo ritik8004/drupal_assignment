@@ -1,0 +1,11 @@
+@import '../../../../../sass/config/**/*.scss';
+
+.block-application-links {
+  @include breakpoint($above-palm) {
+    max-width: 16.0625rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 26.25rem;
+  }
+}

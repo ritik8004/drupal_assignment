@@ -74,6 +74,11 @@ class AlshayaApplicationLinks extends BlockBase {
         '#type' => 'link',
         '#title' => $this->t('Android Application'),
         '#url' => Url::fromUri($this->configuration['app_android_link']),
+        '#attributes' => [
+          'class' => [
+            'item-list-application-links__link--android',
+          ],
+        ],
       ];
     }
 
@@ -83,6 +88,11 @@ class AlshayaApplicationLinks extends BlockBase {
         '#type' => 'link',
         '#title' => $this->t('Apple Application'),
         '#url' => Url::fromUri($this->configuration['app_apple_link']),
+        '#attributes' => [
+          'class' => [
+            'item-list-application-links__link--apple',
+          ],
+        ],
       ];
     }
 
