@@ -119,7 +119,7 @@ class KnetController extends ControllerBase {
     $response['result'] = $_POST['result'];
     $response['post_date'] = $_POST['postdate'];
     $response['transaction_id'] = $_POST['tranid'];
-    $response['auth'] = $_POST['auth'];
+    $response['auth_code'] = $_POST['auth'];
     $response['ref'] = $_POST['ref'];
     $response['tracking_id'] = $_POST['trackid'];
     $response['user_id'] = $_POST['udf1'];
