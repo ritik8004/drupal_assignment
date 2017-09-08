@@ -294,3 +294,25 @@ function whitelabel_preprocess_views_view_unformatted__store_list(&$variables) {
 function whitelabel_preprocess_page_title(&$variables) {
   $variables['title_attributes']['class'] = 'page--title';
 }
+
+/**
+ * Implements hook_theme_preprocess_form_element().
+ */
+function victoria_secret_preprocess_form_element(array &$variables) {
+  $element = $variables['element'];
+  if ($element['#type'] == 'checkbox') {
+    $variables['is_checkbox'] = TRUE;
+  }
+  else {
+    $variables['is_checkbox'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function victoria_secret_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'user_login_form' || $form_id == 'user_register_form') {
+    $form['actions']['submit']['#attributes']['class'][] = 'button-form__submit';
+  }
+}
