@@ -143,6 +143,7 @@ switch ($env) {
 if ($env !== 'local') {
   $settings['memcache']['extension'] = 'Memcached';
   $settings['cache']['default'] = 'cache.backend.memcache';
+  $settings['additional_modules'][] = 'memcache';
 }
 
 // Recaptcha settings.
