@@ -376,7 +376,7 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
       // Get store finder link.
       $find_store_url = Url::fromUserInput('/store-finder')->toString();
       $not_buyable_help_text = new FormattableMarkup($settings->get('not_buyable_help_text.value'), [
-        ':find_store' => $find_store_url
+        ':find_store' => $find_store_url,
       ]);
 
       $build['not_buyable_help_text'] = [
