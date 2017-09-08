@@ -132,7 +132,7 @@
 
     if (loyalty_card_number) {
       // Pass if no value was entered.
-      if (loyalty_card_number === parseInt(alshaya_loyalty_validator_settings.value_start_with)) {
+      if (parseInt(loyalty_card_number) === parseInt(alshaya_loyalty_validator_settings.value_start_with)) {
         return true;
       }
 
