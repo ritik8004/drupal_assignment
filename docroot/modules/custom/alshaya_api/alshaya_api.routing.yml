@@ -4,4 +4,4 @@ alshaya_api.api_settings_form:
     _form: '\Drupal\alshaya_api\Form\AlshayaApiSettingsForm'
     _title: 'Magento API Settings'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'access commerce administration pages'
