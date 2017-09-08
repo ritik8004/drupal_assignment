@@ -1,11 +1,20 @@
 @import '../../../../../sass/config/**/*.scss';
 
 .block-application-links {
+  padding-bottom: 1.5rem;
+
   @include breakpoint($above-palm) {
-    max-width: 16.0625rem;
+    float: direction(left);
+    padding-top: 1.5rem;
+  }
+
+  @include breakpoint($lap) {
+    width: 35.416%;
   }
 
   @include breakpoint($desk) {
-    max-width: 26.25rem;
+    width: 40.533%;
+    padding-#{direction(left)}: 3.883%;
+    margin-top: 2.25rem;
   }
 }

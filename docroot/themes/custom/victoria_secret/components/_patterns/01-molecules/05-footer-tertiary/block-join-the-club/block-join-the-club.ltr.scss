@@ -10,8 +10,12 @@
     text-align: center;
   }
 
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
   @include breakpoint($lap) {
-    width: 64.722%;
+    width: 64.583%;
   }
 
   @include breakpoint($desk) {
@@ -34,18 +38,18 @@
 }
 
 .block-join-the-club__title-wrapper {
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
   @include breakpoint($upto-lap) {
     margin-bottom: 0.75rem;
   }
 
   @include breakpoint($lap) {
-    padding-top: 1.125rem;
+    margin-top: 1.125rem;
     width: 54.721%;
     padding-#{direction(left)}: 6.388%;
-  }
-
-  @include breakpoint($from-lap) {
-    float: direction(left);
   }
 
   @include breakpoint($desk) {
@@ -53,7 +57,7 @@
     width: 39.591%;
     text-align: direction(right);
     border-#{direction(right)}: 1px solid $greyish-lighter;
-    margin-top: 2.2rem;
+    margin-top: 3.5rem;
   }
 }
 
@@ -96,15 +100,12 @@
   @include breakpoint($above-palm) {
     font-family: $open-sans;
     font-size: 0.75rem;
+    float: direction(left);
   }
 
   @include breakpoint($lap) {
     width: 54.721%;
     padding-#{direction(left)}: 6.388%;
-  }
-
-  @include breakpoint($from-lap) {
-    float: direction(left);
   }
 
   @include breakpoint($desk) {
