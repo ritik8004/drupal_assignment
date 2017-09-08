@@ -167,7 +167,17 @@ display:
             label: ''
           granularity: second
       title: 'Product List'
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          content: '@total items'
+          plugin_id: result
       footer: {  }
       empty: {  }
       relationships:
@@ -301,11 +311,12 @@ display:
   block_brand_and_category:
     display_plugin: block
     id: block_brand_and_category
-    display_title: Block
+    display_title: 'Brand & Category'
     position: 2
     display_options:
       display_extenders: {  }
       rendering_language: '***LANGUAGE_language_interface***'
+      display_description: ''
     cache_metadata:
       max-age: -1
       contexts:
@@ -318,7 +329,7 @@ display:
   block_category:
     display_plugin: block
     id: block_category
-    display_title: Block
+    display_title: Category
     position: 2
     display_options:
       display_extenders: {  }
@@ -385,6 +396,7 @@ display:
           required: false
           plugin_id: standard
       rendering_language: '***LANGUAGE_language_interface***'
+      display_description: ''
     cache_metadata:
       max-age: -1
       contexts:
@@ -397,7 +409,7 @@ display:
   block_label:
     display_plugin: block
     id: block_label
-    display_title: Block
+    display_title: Label
     position: 2
     display_options:
       display_extenders: {  }
@@ -464,6 +476,7 @@ display:
           entity_field: name
           plugin_id: string
       rendering_language: '***LANGUAGE_language_interface***'
+      display_description: ''
     cache_metadata:
       max-age: -1
       contexts:
