@@ -57,7 +57,6 @@ select:focus::-ms-value {
   &::before {
     width: $select-width;
     content: "";
-    background: $whisper-dark;
     position: absolute;
     top: 0;
     bottom: 0;

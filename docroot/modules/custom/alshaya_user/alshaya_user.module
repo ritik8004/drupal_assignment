@@ -433,7 +433,7 @@ function alshaya_user_mail_alter(&$message) {
 
   if ($message['key'] === 'register') {
     $sitename = \Drupal::config('system.site')->get('name');
-    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8', 'Q') . ' <' . $message['from'] . '>';
+    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8') . ' <' . $message['from'] . '>';
     $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
   }
 }

@@ -23,7 +23,7 @@
       margin-top: 1.9rem;
     }
 
-    .price-wrapper .price {
+    .price-type__wrapper {
       @include breakpoint($only-mobile) {
         margin-top: 1rem;
       }
@@ -221,7 +221,7 @@
       font-family: $arial;
 
       @include breakpoint($tablet) {
-        padding-right: 0;
+        padding-right: 0.4rem;
       }
 
       @include breakpoint($desktop) {
@@ -280,7 +280,7 @@
         padding-top: 0.125rem;
       }
 
-      div {
+      > div {
         margin-bottom: 0.187rem;
       }
 
@@ -1091,7 +1091,7 @@ html[lang=ar] {
     font-family: $alshaya-thin;
   }
 
-  #table-cart-items table tr td.subtotal .price-currency.suffix {
+  #table-cart-items table tr td .price-currency.suffix {
     left: 0.5rem !important;
     float: none !important;
   }

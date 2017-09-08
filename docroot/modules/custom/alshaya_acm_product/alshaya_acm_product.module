@@ -151,24 +151,37 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     }
     elseif ($view_mode == 'full') {
 
-      // Get up sell block for the product.
-      $items = $sku_entity->get('upsell')->getValue();
+      /* @var \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus */
+      $linked_skus = \Drupal::service('acq_sku.linked_sku');
 
-      if (!empty($items)) {
-        $up_sell_skus = array_column($items, 'value');
-        $up_sell_skus = array_slice($up_sell_skus, 0, 12);
-        $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $up_sell_skus));
+      $up_sell_skus = [];
+      // Get up sell items from the product.
+      $upsell_manuel_items = $sku_entity->get('upsell')->getValue();
+      if (!empty($upsell_manuel_items)) {
+        $up_sell_skus = array_column($upsell_manuel_items, 'value');
+      }
+      // Merge upsell items from product and from the rule.
+      $up_sell_skus = array_merge($up_sell_skus, $linked_skus->getLinkedSKus($sku_entity, 'upsell'));
+
+      if (!empty($up_sell_skus)) {
+        $upsell_items = array_slice($up_sell_skus, 0, 12);
+        $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($upsell_items)));
         // Weight will have no effect later once template is modified.
         $build['up_sell']['#weight'] = 10;
       }
 
-      // Get related block for the product.
-      $items = $sku_entity->get('related')->getValue();
+      $related_skus = [];
+      // Get related items from the product.
+      $related_manual_items = $sku_entity->get('related')->getValue();
+      if (!empty($related_manual_items)) {
+        $related_skus = array_column($related_manual_items, 'value');
+      }
+      // Merge related items from product and from the rule.
+      $related_skus = array_merge($related_skus, $linked_skus->getLinkedSKus($sku_entity, 'related'));
 
-      if (!empty($items)) {
-        $related_skus = array_column($items, 'value');
-        $related_skus = array_slice($related_skus, 0, 12);
-        $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $related_skus));
+      if (!empty($related_skus)) {
+        $related_items = array_slice($related_skus, 0, 12);
+        $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($related_items)));
         // Weight will have no effect later once template is modified.
         $build['related']['#weight'] = 11;
       }
