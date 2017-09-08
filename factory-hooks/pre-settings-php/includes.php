@@ -14,13 +14,14 @@ $env = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $env = $_ENV['AH_SITE_ENVIRONMENT'];
 }
-elseif (isset($_SERVER['TRAVIS_JOB_ID'])) {
+else if (isset($_SERVER['TRAVIS_JOB_ID'])) {
   $env = 'travis';
 }
 
 // Configure your hash salt here.
 // TODO: Security.
-// $settings['hash_salt'] = '';.
+// $settings['hash_salt'] = '';
+
 // Shield.
 // TODO: Security.
 $settings['alshaya_custom_shield_default_user'] = 'alshaya_shield';
@@ -46,7 +47,7 @@ $soauth_key_name = 'alshaya_acm';
 if ($env == 'local') {
   $soauth_key_dir = '/var/www/alshaya/box/';
 }
-elseif ($env == 'travis') {
+else if ($env == 'travis') {
   $soauth_key_dir = '/home/travis/build/acquia-pso/alshaya/private/';
   $soauth_key_name = 'travis_acm';
 }
@@ -138,12 +139,6 @@ switch ($env) {
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
-}
-
-if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
-  $settings['memcache']['extension'] = 'Memcached';
-  $settings['cache']['default'] = 'cache.backend.memcache';
-  $settings['additional_modules'][] = 'memcache';
 }
 
 // Recaptcha settings.
