@@ -81,11 +81,12 @@ input::-ms-reveal {
 
 .profile-address-book-add-form,
 .profile-address-book-edit-form,
-.c-delivery-checkout .multistep-checkout {
+.c-delivery-checkout .multistep-checkout,
+.checkout-payment .multistep-checkout {
   .country-field-wrapper {
     .country-name {
       border-bottom: 1px solid $grey-ash;
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.25rem;
     }
   }
 }
