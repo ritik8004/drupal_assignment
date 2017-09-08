@@ -119,7 +119,7 @@ class KnetController extends ControllerBase {
     $response['result'] = $_POST['result'];
     $response['post_date'] = $_POST['postdate'];
     $response['transaction_id'] = $_POST['tranid'];
-    $response['auth'] = $_POST['auth'];
+    $response['auth_code'] = $_POST['auth'];
     $response['ref'] = $_POST['ref'];
     $response['tracking_id'] = $_POST['trackid'];
     $response['user_id'] = $_POST['udf1'];
@@ -172,7 +172,7 @@ class KnetController extends ControllerBase {
       ]);
     }
     else {
-      $result_url .= Url::fromRoute('alshaya_acm_knet.internal_error', ['state_key' => $state_key], $url_options)->toString();
+      $result_url .= Url::fromRoute('alshaya_acm_knet.failed', ['state_key' => $state_key], $url_options)->toString();
 
       $this->logger->error('KNET update for @quote_id: @result_url @message', [
         '@quote_id' => $response['quote_id'],
@@ -205,7 +205,7 @@ class KnetController extends ControllerBase {
     // Additional check to ensure nobody copies the state key in url and loads
     // success page instead of error.
     if ($data['result'] !== 'CAPTURED') {
-      return $this->internalError($state_key);
+      return $this->failed($state_key);
     }
 
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
@@ -239,7 +239,7 @@ class KnetController extends ControllerBase {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if ($cart->id() != $quote_id) {
-      return new AccessDeniedHttpException();
+      throw new AccessDeniedHttpException();
     }
 
     $message = $this->t('User either cancelled or response url returned error.');
@@ -261,13 +261,13 @@ class KnetController extends ControllerBase {
   }
 
   /**
-   * Page callback for internal error state.
+   * Page callback for failed state.
    */
-  public function internalError($state_key) {
+  public function failed($state_key) {
     $data = \Drupal::state()->get($state_key);
 
     if (empty($data)) {
-      return new AccessDeniedHttpException();
+      throw new AccessDeniedHttpException();
     }
 
     $message = '';

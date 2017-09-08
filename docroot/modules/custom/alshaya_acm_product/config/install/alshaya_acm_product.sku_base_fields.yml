@@ -139,3 +139,13 @@ fields:
     configurable: 0
     visible_view: 0
     visible_form: 0
+
+  is_buyable:
+    parent: 'attributes'
+    label: 'Is Buyable'
+    description: 'Flag to check if product is available for purchase or not.'
+    cardinality: 1
+    type: 'string'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1

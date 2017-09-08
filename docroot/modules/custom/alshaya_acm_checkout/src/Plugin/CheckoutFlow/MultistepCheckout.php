@@ -299,6 +299,12 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
       if ($next_step_id == 'confirmation') {
         try {
+          // User has pressed "place order" button.
+          // Set the attempted payment flag and push to Magento.
+          $cart->setExtension('attempted_payment', 1);
+          $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
+          $cart->setCheckoutStep($next_step_id);
+
           // Invoke hook to allow other modules to process before order is
           // finally placed.
           \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);
