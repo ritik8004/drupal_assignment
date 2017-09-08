@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.advanced_page.field_views
     - node.type.advanced_page
   module:
-    - block_field
     - field_group
     - metatag
     - paragraphs
@@ -97,6 +96,18 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
+    group_block_reference:
+      children:
+        - field_block
+      parent_name: ''
+      weight: 10
+      label: 'Block Reference'
+      format_type: details
+      format_settings:
+        open: false
+        required_fields: true
+        classes: ''
+        id: ''
 id: node.advanced_page.default
 targetEntityType: node
 bundle: advanced_page
@@ -130,12 +141,16 @@ content:
     third_party_settings: {  }
     region: content
   field_block:
-    weight: 17
+    type: entity_reference_paragraphs
+    weight: 112
     settings:
-      plugin_id: ''
-      settings: {  }
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
     third_party_settings: {  }
-    type: block_field_default
     region: content
   field_delivery_banner:
     type: entity_reference_paragraphs

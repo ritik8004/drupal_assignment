@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.advanced_page.field_views
     - node.type.advanced_page
   module:
-    - block_field
     - entity_reference_revisions
     - metatag
     - panelizer
@@ -48,11 +47,13 @@ content:
     third_party_settings: {  }
     region: content
   field_block:
-    weight: 7
-    label: hidden
-    settings: {  }
+    type: entity_reference_revisions_entity_view
+    weight: 12
+    label: above
+    settings:
+      view_mode: default
+      link: ''
     third_party_settings: {  }
-    type: block_field
     region: content
   field_delivery_banner:
     type: entity_reference_revisions_entity_view

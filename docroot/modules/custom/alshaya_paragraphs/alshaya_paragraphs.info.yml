@@ -5,6 +5,7 @@ description: 'All the paragraphs and its fields and field settings.'
 dependencies:
   - alshaya_image_styles
   - block
+  - block_field
   - content_translation
   - entity_reference_revisions
   - field
