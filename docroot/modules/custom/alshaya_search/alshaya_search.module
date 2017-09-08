@@ -10,6 +10,8 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+use Solarium\Core\Query\QueryInterface;
+use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 
 /**
  * Implements hook_views_pre_render().
@@ -190,4 +192,12 @@ function alshaya_search_block_view_alter(array &$build, BlockPluginInterface $bl
       $build['#attached']['drupalSettings']['alshaya_search_price_currency'] = \Drupal::config('acq_commerce.currency')->get('currency_code');
     }
   }
+}
+
+/**
+ * Implements hook_search_api_solr_query_alter().
+ */
+function alshaya_search_search_api_solr_query_alter(QueryInterface $solarium_query, SearchApiQueryInterface $query) {
+  $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $solarium_query->addParam('fq', 'ss_search_api_language:"' . $current_langcode . '"');
 }
