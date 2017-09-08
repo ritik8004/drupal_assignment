@@ -96,17 +96,15 @@ class ConductorSettingsForm extends ConfigFormBase {
     ];
 
     $form['security']['hmac_id'] = [
-      '#type' => 'textfield',
+      '#type' => 'password',
       '#title' => $this->t('HMAC Key ID'),
       '#required' => TRUE,
-      '#default_value' => $config->get('hmac_id'),
     ];
 
     $form['security']['hmac_secret'] = [
-      '#type' => 'textfield',
+      '#type' => 'password',
       '#title' => $this->t('HMAC Key Secret'),
       '#required' => TRUE,
-      '#default_value' => $config->get('hmac_secret'),
     ];
 
     $form['page_size'] = [
