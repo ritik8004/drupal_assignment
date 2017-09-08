@@ -140,7 +140,7 @@ switch ($env) {
     $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
 }
 
-if ($env !== 'local') {
+if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $settings['memcache']['extension'] = 'Memcached';
   $settings['cache']['default'] = 'cache.backend.memcache';
   $settings['additional_modules'][] = 'memcache';
