@@ -403,7 +403,7 @@
     position: absolute;
     top: 0;
     #{$right}: -38%;
-    height: 32.5rem;
+    height: 31.5rem;
     border: 1px solid $marine-blue;
     padding: 1.25rem;
     padding-bottom: 0;
@@ -518,7 +518,7 @@
     display: none;
 
     @include breakpoint($tablet) {
-      display: block;
+      display: inline-block;
     }
   }
 
@@ -1424,7 +1424,7 @@
   .field--name {
     &-field-skus {
       @include breakpoint($only-mobile) {
-        height: 6.5rem;
+        min-height: 6.5rem;
       }
     }
   }
@@ -1432,7 +1432,7 @@
 
 .acq-sku-configurable-64__sku-base-form.sku-base-form {
   @include breakpoint($only-mobile) {
-    height: 8rem;
+    min-height: 8rem;
     overflow: hidden;
   }
 }
@@ -1755,6 +1755,26 @@ html[lang=ar] {
 
     &.inactive {
       margin-left: 0;
+    }
+  }
+}
+
+//Theming of non buyable products
+.not-buyable {
+  &-message {
+    font-weight: bold;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: $marine-blue;
+  }
+
+  &-help-text {
+    font-size: 0.75rem;
+    line-height: 1.5;
+
+    a {
+      font-weight: bold;
+      color: $cerulean-two;
     }
   }
 }
