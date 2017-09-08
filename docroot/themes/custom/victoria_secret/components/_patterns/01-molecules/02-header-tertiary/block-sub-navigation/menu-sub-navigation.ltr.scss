@@ -5,7 +5,7 @@
   padding-#{direction(left)}: 0;
   text-transform: uppercase;
 
-  @include breakpoint($thumb) {
+  @include breakpoint($upto-palm) {
     margin-top: 0.4375rem;
   }
 

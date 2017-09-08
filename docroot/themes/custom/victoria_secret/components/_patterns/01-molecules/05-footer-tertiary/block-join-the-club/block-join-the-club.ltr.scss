@@ -10,14 +10,16 @@
     text-align: center;
   }
 
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
   @include breakpoint($lap) {
-    max-width: 29.125rem;
-    padding-#{direction(left)}: 2.875rem;
+    width: 64.583%;
   }
 
   @include breakpoint($desk) {
-    max-width: 39.375rem;
-    padding-#{direction(left)}: 2.375rem;
+    width: 59.466%;
   }
 }
 
@@ -26,27 +28,36 @@
     float: direction(right);
   }
 
+  @include breakpoint($lap) {
+    width: 45.06%;
+  }
+
   @include breakpoint($desk) {
-    max-width: 13.75rem;
-    margin-#{direction(left)}: -1.875rem;
+    width: 28.571%;
   }
 }
 
 .block-join-the-club__title-wrapper {
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
   @include breakpoint($upto-lap) {
     margin-bottom: 0.75rem;
   }
 
   @include breakpoint($lap) {
-    padding-top: 1.125rem;
+    margin-top: 1.125rem;
+    width: 54.721%;
+    padding-#{direction(left)}: 6.388%;
   }
 
   @include breakpoint($desk) {
-    float: direction(left);
-    padding-#{direction(right)}: 2.625rem;
-    max-width: 11.625rem;
+    padding-#{direction(right)}: 5.714%;
+    width: 39.591%;
+    text-align: direction(right);
     border-#{direction(right)}: 1px solid $greyish-lighter;
-    margin-top: 2.2rem;
+    margin-top: 3.5rem;
   }
 }
 
@@ -89,12 +100,17 @@
   @include breakpoint($above-palm) {
     font-family: $open-sans;
     font-size: 0.75rem;
+    float: direction(left);
+  }
+
+  @include breakpoint($lap) {
+    width: 54.721%;
+    padding-#{direction(left)}: 6.388%;
   }
 
   @include breakpoint($desk) {
-    float: direction(left);
-    padding-#{direction(left)}: 2.625rem;
-    max-width: 18.5rem;
+    padding-#{direction(left)}: 5.714%;
+    width: 31.836%;
     margin-top: 1.2rem;
   }
 

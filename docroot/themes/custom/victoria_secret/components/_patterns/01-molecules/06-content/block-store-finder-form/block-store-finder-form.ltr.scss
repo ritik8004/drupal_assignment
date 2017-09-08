@@ -6,13 +6,13 @@
   border-top: 1px solid $gainsboro;
   border-bottom: 1px solid $gainsboro;
 
+  @include breakpoint($above-palm) {
+    margin: auto;
+  }
+
   @include breakpoint($upto-lap) {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
-  }
-
-  @include breakpoint($from-lap) {
-    margin: auto;
   }
 
   @include breakpoint($desk) {
@@ -55,13 +55,13 @@
     margin-bottom: 1rem;
   }
 
-  @include breakpoint($lap) {
-    width: 17.3611%;
-  }
-
-  @include breakpoint($from-lap) {
+  @include breakpoint($above-palm) {
     float: direction(left);
     text-align: center;
+  }
+
+  @include breakpoint($lap) {
+    width: 17.3611%;
   }
 
   @include breakpoint($desk) {
@@ -85,13 +85,13 @@
 }
 
 .block-store-finder-form__form__wrapper {
-  @include breakpoint($lap) {
-    width: 46.66%;
-  }
-
-  @include breakpoint($from-lap) {
+  @include breakpoint($above-palm) {
     float: direction(left);
     text-align: center;
+  }
+
+  @include breakpoint($lap) {
+    width: 46.66%;
   }
 
   @include breakpoint($desk) {
@@ -107,13 +107,13 @@
     display: none;
   }
 
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
   @include breakpoint($lap) {
     font-size: 0.75rem;
     width: 47.9166%;
-  }
-
-  @include breakpoint($from-lap) {
-    float: direction(left);
   }
 
   @include breakpoint($desk) {
@@ -121,7 +121,7 @@
   }
 
   &::before {
-    @include breakpoint($from-lap) {
+    @include breakpoint($above-palm) {
       font-size: 2rem;
       position: absolute;
       #{direction(left)}: 0.625rem;
@@ -139,13 +139,13 @@
     margin-bottom: 0.5rem;
   }
 
-  @include breakpoint($lap) {
-    width: 52.083%;
-  }
-
-  @include breakpoint($from-lap) {
+  @include breakpoint($above-palm) {
     float: direction(left);
     height: 100%;
+  }
+
+  @include breakpoint($lap) {
+    width: 52.083%;
   }
 
   @include breakpoint($desk) {
@@ -171,7 +171,7 @@
     padding: 0.625rem 1.125rem;
   }
 
-  @include breakpoint($from-lap) {
+  @include breakpoint($above-palm) {
     display: block;
     height: 100%;
     border-color: $gainsboro;
@@ -190,7 +190,7 @@
       font-size: 0.875rem;
     }
 
-    @include breakpoint($from-lap) {
+    @include breakpoint($above-palm) {
       font-size: 0.75rem;
     }
   }
@@ -211,7 +211,7 @@
     color: $brownish-grey;
   }
 
-  @include breakpoint($from-lap) {
+  @include breakpoint($above-palm) {
     display: none;
   }
 }
@@ -235,11 +235,7 @@
     display: none;
   }
 
-  @include breakpoint($lap) {
-    width: 17.77%;
-  }
-
-  @include breakpoint($from-lap) {
+  @include breakpoint($above-palm) {
     text-align: center;
     float: direction(left);
     color: $cerulean;
@@ -247,6 +243,10 @@
     display: block;
     position: relative;
     padding-#{direction(left)}: 1.875rem;
+  }
+
+  @include breakpoint($lap) {
+    width: 17.77%;
   }
 
   @include breakpoint($desk) {
@@ -257,7 +257,7 @@
     font-size: 2rem;
     position: absolute;
 
-    @include breakpoint($from-lap) {
+    @include breakpoint($above-palm) {
       left: 0.75rem;
       top: 50%;
       transform: translateY(-50%);
