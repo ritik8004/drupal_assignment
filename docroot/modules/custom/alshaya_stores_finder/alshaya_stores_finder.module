@@ -53,6 +53,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'list-view-link',
+            'block-store-finder-form__list-view',
+            'icon-list',
             $active_class,
           ],
         ],
@@ -66,23 +68,25 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'map-view-link',
+            'block-store-finder-form__map-view',
+            'icon-map',
           ],
         ],
         '#weight' => 8,
       ];
       $form['current_location'] = [
-        '#markup' => '<a href="javascript:;" class="current-location">' . t('Near me') . '</a>',
+        '#markup' => '<a href="javascript:;" class="current-location block-store-finder-form__current-location"><span class="icon-current-location"></span>' . t('Near me') . '</a>',
         '#weight' => 1,
         '#access' => (bool) $store_finder_search_config,
       ];
 
       $form['prefix_wrapper'] = [
-        '#markup' => '<div class="store-finder--wrapper">',
+        '#markup' => '<div class="store-finder--wrapper block-store-finder-form__form__wrapper">',
         '#weight' => 2,
       ];
 
       $form['store_near_me'] = [
-        '#markup' => '<div class="label--location">' . t('Find stores near') . '</div><div class="input--wrapper">',
+        '#markup' => '<div class="label--location block-store-finder-form__form__label icon-search">' . t('Find stores near') . '</div><div class="input--wrapper block-store-finder-form__input__wrapper">',
         '#weight' => 3,
         '#access' => (bool) $store_finder_search_config,
       ];
@@ -97,10 +101,16 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       // Adding placeholder to the input field.
       $form['geolocation_geocoder_google_places_api']['#placeholder'] = t('e.g. Salmiya');
       $form['geolocation_geocoder_google_places_api']['#access'] = (bool) $store_finder_search_config;
+      $form['geolocation_geocoder_google_places_api']['#attributes']['class'][] = 'block-store-finder-form__input__text';
       $form['actions']['#access'] = (bool) $store_finder_search_config;
       $form['actions']['#weight'] = 5;
+      $form['actions']['#attributes']['class'] = [
+        'block-store-finder-form__input__submit__wrapper',
+        'icon-search',
+      ];
+      $form['actions']['submit']['#attributes']['class'][] = 'block-store-finder-form__input__submit';
       unset($form['geolocation_geocoder_google_places_api']['#description']);
-      $form['field_latitude_longitude_proximity']['#attributes']['class'][] = 'hidden';
+      $form['field_latitude_longitude_proximity']['#attributes']['class'][] = 'hidden is-hidden';
       $form['field_latitude_longitude_proximity']['#default_value'] = $store_finder_config->get('search_proximity_radius');
       $form['field_latitude_longitude_proximity']['#value'] = $store_finder_config->get('search_proximity_radius');
     }
