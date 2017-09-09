@@ -56,6 +56,11 @@ function alshaya_transac_install() {
     $_alshaya_modules_installed[] = $module;
   }
 
+  // We enable pcb_memcache during profile install on all env except travis.
+  if (!getenv('TRAVIS')) {
+    \Drupal::service('module_installer')->install(['pcb_memcache']);
+  }
+
   // Invoke a hook to let other modules know that profile installation is done.
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_transac', $modules]);
 
