@@ -42,6 +42,9 @@ function alshaya_search_acquia_search_install() {
         'sasm_domain' => 'generic',
         'autocorrect_spell' => TRUE,
         'autocorrect_suggest_words' => TRUE,
+        'suggest_suffix' => TRUE,
+        'suggest_corrections' => FALSE,
+        'suggest_words' => FALSE,
       ],
     ])
     ->save();
