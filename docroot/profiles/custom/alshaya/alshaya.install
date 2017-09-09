@@ -40,11 +40,6 @@ function alshaya_install() {
       ->save();
   }
 
-  // We enable memcache during profile install on all env except travis.
-  if (!getenv('TRAVIS')) {
-    \Drupal::service('module_installer')->install(['memcache']);
-  }
-
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
 }
 
