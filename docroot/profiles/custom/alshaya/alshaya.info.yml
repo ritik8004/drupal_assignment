@@ -12,7 +12,6 @@ dependencies:
   - features
   - language
   - locale
-  - memcache
   - syslog
   - twig_tweak
 

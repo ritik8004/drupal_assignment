@@ -7,7 +7,6 @@ dependencies:
   - acsf
   - color
   - features
-  - pcb_memcache
   - syslog
 
 themes:
