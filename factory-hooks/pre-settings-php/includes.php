@@ -14,7 +14,7 @@ $env = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $env = $_ENV['AH_SITE_ENVIRONMENT'];
 }
-else if (isset($_SERVER['TRAVIS_JOB_ID'])) {
+elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
@@ -47,7 +47,7 @@ $soauth_key_name = 'alshaya_acm';
 if ($env == 'local') {
   $soauth_key_dir = '/var/www/alshaya/box/';
 }
-else if ($env == 'travis') {
+elseif ($env == 'travis') {
   $soauth_key_dir = '/home/travis/build/acquia-pso/alshaya/private/';
   $soauth_key_name = 'travis_acm';
 }

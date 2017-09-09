@@ -53,6 +53,7 @@ installed_extras:
   - selenium
   - solr
   - xdebug
+  - memcached
 
 # Use PHP 5.6.
 php_version: "5.6"
