@@ -69,7 +69,7 @@ if [ "$initialSetup" = "yes" ]
 then
 	echo "inital setup"
     # drush $envn -l $site aiota;
-    drush $envn -l $site apdi --brand="$brandName"
+    drush $envn -l $site apdi --brand_module="$brandName"
 	drush $envn -l $site upwd "Site factory admin" --password="AlShAyAU1@123" 
 	drush $envn -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin;
 	drush $envn -l $site user-add-role "administrator" --name=siteadmin;
