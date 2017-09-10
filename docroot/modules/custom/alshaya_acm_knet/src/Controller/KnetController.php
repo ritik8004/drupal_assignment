@@ -13,7 +13,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class CheckoutSettingsForm.
@@ -127,8 +126,6 @@ class KnetController extends ControllerBase {
     $response['quote_id'] = $_POST['udf3'];
     $response['email'] = $_POST['udf4'];
 
-    $state_key = $_POST['udf5'];
-
     // Get the cart using API to validate.
     $cart = $this->apiWrapper->getCart($response['quote_id']);
 
@@ -140,17 +137,7 @@ class KnetController extends ControllerBase {
       exit;
     }
 
-    $state_data = \Drupal::state()->get($state_key);
-
-    // Check if we have data in state available and it matches data in POST.
-    if (empty($state_data)
-      || $state_data['cart_id'] != $response['quote_id']
-      || $state_data['order_id'] != $response['tracking_id']
-      || $state_data['payment_id'] != $response['payment_id']
-    ) {
-      throw new NotFoundHttpException();
-    }
-
+    $state_key = md5($response['quote_id']);
     \Drupal::state()->set($state_key, $response);
 
     // On local/dev we don't use https for response url.
@@ -172,7 +159,7 @@ class KnetController extends ControllerBase {
       ]);
     }
     else {
-      $result_url .= Url::fromRoute('alshaya_acm_knet.internal_error', ['state_key' => $state_key], $url_options)->toString();
+      $result_url .= Url::fromRoute('alshaya_acm_knet.error', ['state_key' => $state_key], $url_options)->toString();
 
       $this->logger->error('KNET update for @quote_id: @result_url @message', [
         '@quote_id' => $response['quote_id'],
@@ -200,12 +187,6 @@ class KnetController extends ControllerBase {
 
     if (empty($cart) || $cart->id() != $data['quote_id']) {
       throw new AccessDeniedHttpException();
-    }
-
-    // Additional check to ensure nobody copies the state key in url and loads
-    // success page instead of error.
-    if ($data['result'] !== 'CAPTURED') {
-      return $this->internalError($state_key);
     }
 
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
@@ -242,7 +223,7 @@ class KnetController extends ControllerBase {
       return new AccessDeniedHttpException();
     }
 
-    $message = $this->t('User either cancelled or response url returned error.');
+    $message = $this->t('User either cancelled or transaction declined.');
 
     $message .= PHP_EOL . $this->t('Debug info:') . PHP_EOL;
     foreach ($_GET as $key => $value) {
