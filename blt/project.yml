@@ -51,6 +51,9 @@ modules:
   test:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
+  prod:
+    enable: [acquia_connector, shield, dynamic_page_cache]
+    uninstall: [devel, views_ui]
   uat:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [devel, views_ui]
@@ -58,9 +61,6 @@ modules:
     enable: [acquia_connector, shield]
     uninstall: [devel, views_ui]
   pprod:
-    enable: [acquia_connector, shield, dynamic_page_cache]
-    uninstall: [devel, views_ui]
-  prod:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [devel, views_ui]
 behat:
@@ -74,3 +74,4 @@ multisite:
     - g
 cm:
   strategy: features
+
