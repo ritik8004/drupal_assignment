@@ -37,8 +37,6 @@ $settings['alshaya_acm_user_password'] = 'AlShAyA_AcM';
 $knet_resource_dir = $env == 'local' ? '/home/vagrant/knet-resource/' : '/home/alshaya/knet-resource/' . $env . '/mckw/';
 $settings['alshaya_acm_knet.settings']['resource_path'] = $knet_resource_dir;
 $settings['alshaya_acm_knet.settings']['use_secure_response_url'] = 0;
-// KWD is 414.
-$settings['alshaya_acm_knet.settings']['knet_currency_code'] = '414';
 
 // Simple Oauth.
 // TODO: Security.
