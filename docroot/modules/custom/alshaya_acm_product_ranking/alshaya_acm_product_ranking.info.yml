@@ -1,0 +1,5 @@
+name: 'Alshaya ACM Product Ranking'
+type: module
+description: 'Contains custom code related to product ranking.'
+package: 'Alshaya'
+core: 8.x
