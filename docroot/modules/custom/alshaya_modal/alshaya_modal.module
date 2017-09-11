@@ -40,8 +40,11 @@ function alshaya_modal_menu_link_content_form_submit($form, FormStateInterface $
  * Implements hook_preprocess_menu().
  */
 function alshaya_modal_preprocess_menu(&$variables) {
-  alshaya_modal_set_attributes($variables['items']);
+  if ($variables['menu_name'] == 'main') {
+    alshaya_modal_set_attributes($variables['items']);
+  }
   $variables['#attached']['library'][] = 'core/drupal.dialog.ajax';
+
 }
 
 /**
@@ -56,8 +59,10 @@ function alshaya_modal_set_attributes(array &$items) {
 
     if ($url_modal) {
       $url_attributes = $item['url']->getOption('attributes') ?: [];
+      if (!is_array($url_attributes['class'])) {
+        $url_attributes['class'] = explode(' ', $url_attributes['class']);
+      }
       $url_attributes['class'][] = 'use-ajax';
-
       $item['url']->setOption('attributes', $url_attributes);
     }
 
