@@ -65,6 +65,14 @@
         }, 10000);
       };
 
+      $.fn.cartGenericScroll = function (selector) {
+        if ($(window).width() < 768 && $('body').find(selector).length !== 0) {
+          $('html,body').animate({
+            scrollTop: $(selector).offset().top - $('.branding__menu').height() - 100
+          }, 'slow');
+        }
+      };
+
       $.fn.stopSpinner = function (data) {
         l.ladda('stop');
         if (data.message === 'success') {
