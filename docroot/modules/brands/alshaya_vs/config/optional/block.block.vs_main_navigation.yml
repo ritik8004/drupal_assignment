@@ -7,7 +7,7 @@ dependencies:
     - system
   theme:
     - victoria_secret
-id: vs_main_nvaigation
+id: vs_main_navigation
 theme: victoria_secret
 region: header_primary
 weight: -5
