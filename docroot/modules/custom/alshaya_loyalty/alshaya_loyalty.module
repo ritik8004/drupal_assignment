@@ -358,6 +358,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     ],
     '#limit_validation_errors' => [['privilege_card_number'], ['privilege_card_number2']],
     '#suffix' => '</div>',
+    '#default_current_value' => $default_value,
   ];
 
   _alshaya_loyalty_form_attachements($form, $form_state, $settings);
@@ -388,12 +389,30 @@ function alshaya_loyalty_privilege_card_wrapper_after_build($element, FormStateI
 /**
  * Compare two field values.
  */
-function _alshaya_loyalty_compare_field_values(&$form, FormStateInterface $form_state, &$complete_form) {
-  $card1 = $form_state->getValue('privilege_card_number');
-  $card2 = $form_state->getValue('privilege_card_number2');
+function _alshaya_loyalty_compare_field_values(&$element, FormStateInterface $form_state, &$form) {
+  $card1 = _alshaya_loyalty_clean_card_number($form_state->getValue('privilege_card_number'));
+  $card2 = _alshaya_loyalty_clean_card_number($form_state->getValue('privilege_card_number2'));
 
-  if (!empty($card1) && ($card1 != $card2)) {
-    $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
+  $validation = alshaya_loyalty_get_validation_settings();
+
+  // Empty the value if it is the same as prefix.
+  if ($card1 == _alshaya_loyalty_clean_card_number($validation['value_start_with'])) {
+    $card1 = '';
+  }
+
+  // Empty the value if it is the same as prefix.
+  if ($card2 == _alshaya_loyalty_clean_card_number($validation['value_start_with'])) {
+    $card2 = '';
+  }
+
+  if (!empty($card1)) {
+    // First check if value is not the same as default value.
+    if ($card1 == $element['#default_current_value']) {
+      // User is not trying to change, we don't do any further validation.
+    }
+    elseif ($card1 != $card2) {
+      $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
+    }
   }
 }
 
