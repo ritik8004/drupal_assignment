@@ -126,13 +126,13 @@
     background: $white-five;
 
     td {
-      padding: 0.625rem 1.375rem 0.5625rem;
+      padding: 0.625rem 1.375rem;
     }
   }
 
   .discount-row {
     td {
-      padding: 0.625rem 1.375rem 1rem;
+      padding: 0.625rem 1.375rem;
     }
   }
 
@@ -541,18 +541,12 @@
 
   .user__order--detail {
     tr.delivery-charge-row.collapse-row td {
-      padding: 0.1rem 1.375rem 0.9625rem;
-    }
-
-    .sub-total-row {
-      td {
-        padding-top: 1rem;
-      }
+      padding: 0.625rem 1.375rem;
     }
 
     .delivery-charge-row {
       td {
-        padding: 0.1rem 1.375rem 0.9625rem;
+        padding: 0.625rem 1.375rem;
       }
     }
 
