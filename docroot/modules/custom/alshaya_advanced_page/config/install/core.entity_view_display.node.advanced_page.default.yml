@@ -49,7 +49,7 @@ content:
   field_block:
     type: entity_reference_revisions_entity_view
     weight: 12
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
@@ -66,7 +66,7 @@ content:
     region: content
   field_meta_tags:
     weight: 10
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     type: metatag_empty_formatter
