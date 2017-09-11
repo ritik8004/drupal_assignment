@@ -21,8 +21,8 @@
       });
 
       // Display ajax loader for checkout button when privilege card number validation ajax triggers.
-      var priv_card = $('input[name="privilege_card_number"]');
-      var priv_card2 = $('input[name="privilege_card_number2"]');
+      var priv_card = $('input[name="privilege_card_number"]', context);
+      var priv_card2 = $('input[name="privilege_card_number2"]', context);
 
       priv_card.on('keypress', validate_privilege_card);
       priv_card.on('keyup', validate_privilege_card);
@@ -34,8 +34,17 @@
       priv_card2.on('input', validate_privilege_card);
       priv_card2.on('paste', validate_privilege_card);
 
-      $('.checkout-top-button').attr( 'data-style', 'zoom-in');
-      $('#secure-checkout-button > .form-submit').attr( 'data-style', 'zoom-in');
+      // Show second privilege card number field on change of first field.
+      if (context === document) {
+        $('#details-privilege-card-wrapper .form-item-privilege-card-number2').hide();
+      }
+
+      priv_card.on('change input keypress', function () {
+        priv_card2.parent().show();
+      });
+
+      $('.checkout-top-button').attr('data-style', 'zoom-in');
+      $('#secure-checkout-button > .form-submit').attr('data-style', 'zoom-in');
       var l2 = $('#secure-checkout-button > .form-submit').ladda();
       var l = $('.checkout-top-button').ladda();
 
@@ -92,12 +101,109 @@
           });
         };
 
-        $.fn.cartladdastop = function(element) {
-          if(element.name == 'privilege_card_number2') {
+        $.fn.cartladdastop = function (element) {
+          if (element.name == 'privilege_card_number2') {
             $.ladda('stopAll');
           }
+        };
+      }
+
+      // Add jquery validations for privilege card number.
+      $('#edit-privilege-card-number').rules('add', {
+        loyalty_card_validate: true
+      });
+
+      // Add validation for card number confirmation.
+      $('#edit-privilege-card-number2').rules('add', {
+        equalTo: '#edit-privilege-card-number',
+        messages: {
+          equalTo: Drupal.t('Specified Privilege card numbers do not match.')
+        }
+      });
+
+    }
+  };
+
+  // Custom validator for loyalty card.
+  $.validator.addMethod('loyalty_card_validate', function (value, element, options) {
+    var loyalty_card_number = Drupal.alshayaLoyaltyCleanCardNumber(value);
+    var alshaya_loyalty_validator_settings = drupalSettings.alshaya_loyalty.card_validate;
+    var message = Drupal.t('@number is not a valid privilege card number.', {'@number': value});
+
+    if (loyalty_card_number) {
+      // Pass if no value was entered.
+      if (parseInt(loyalty_card_number) === parseInt(alshaya_loyalty_validator_settings.value_start_with)) {
+        return true;
+      }
+
+      // Fail if length doesn't match the set validation length.
+      if (loyalty_card_number.length !== alshaya_loyalty_validator_settings.length) {
+        $.validator.messages.loyalty_card_validate = message;
+        return false;
+      }
+
+      // Check prefix matches.
+      var loyalty_card_prefix = loyalty_card_number.toString().substr(0, alshaya_loyalty_validator_settings.value_start_with.length);
+      if (loyalty_card_prefix !== alshaya_loyalty_validator_settings.value_start_with) {
+        $.validator.messages.loyalty_card_validate = message;
+        return false;
+      }
+
+      // Validate credit card number.
+      if (!Drupal.validateCreditCardNumber(loyalty_card_number)) {
+        $.validator.messages.loyalty_card_validate = message;
+        return false;
+      }
+
+      $.validator.messages.loyalty_card_validate = '';
+      return true;
+    }
+    else {
+      $.validator.messages.loyalty_card_validate = message;
+      return false;
+    }
+  }, '');
+
+  /**
+   * Helper function to remove '-' from card number.
+   *
+     * @param loyalty_card_number
+     */
+  Drupal.alshayaLoyaltyCleanCardNumber = function (loyalty_card_number) {
+    return loyalty_card_number.replace(/-/g, '');
+  };
+
+  /**
+   * Helper function to validate credit card numbers.
+   *   (Taken from WebformCreditCardNumber::validCreditCardNumber())
+   *
+     * @param loyalty_card_number
+     *
+  * @returns {boolean}
+     */
+  Drupal.validateCreditCardNumber = function (credit_card_number) {
+    // Set the string length and parity.
+    var number_length = credit_card_number.length;
+    var parity = number_length % 2;
+    var loyalty_card_digits = credit_card_number.toString().split('');
+
+    // Loop through each digit and do the maths.
+    var total = 0;
+    for (var i = 0; i < number_length; i++) {
+      var digit = parseInt(loyalty_card_digits[i]);
+      // Multiply alternate digits by two.
+      if ((i % 2) === parity) {
+        digit *= 2;
+        // If the sum is two digits, add them together (in effect).
+        if (digit > 9) {
+          digit -= 9;
         }
       }
+      // Total up the digits.
+      total += digit;
     }
+
+    // If the total mod 10 equals 0, the number is valid.
+    return ((total % 10) === 0);
   };
 })(jQuery, Drupal);

@@ -10,15 +10,9 @@ dependencies:
     - node.type.static_html
   module:
     - metatag
-    - panelizer
     - text
     - user
-third_party_settings:
-  panelizer:
-    enable: false
-    custom: false
-    allow: false
-    default: default
+third_party_settings: { }
 id: node.static_html.default
 targetEntityType: node
 bundle: static_html

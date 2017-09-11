@@ -401,6 +401,13 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
   $build = [];
 
+  $config = \Drupal::config('alshaya_acm_customer.orders_config');
+  $order_status_failed = explode(',', $config->get('order_status_failed'));
+
+  if (in_array($order['status'], $order_status_failed)) {
+    $build['#order_error'] = t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.');
+  }
+
   $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
   $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
   $build['#products'] = $products;

@@ -69,11 +69,14 @@ var location_autocomplete_no_result_checked = null;
       }
 
       click_collect.coords = {};
-      if (typeof place.geometry !== 'undefined') {
-        click_collect.coords = {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        };
+
+      if (typeof place !== 'undefined') {
+        if (typeof place.geometry !== 'undefined') {
+          click_collect.coords = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
+          };
+        }
       }
 
       if ($.isArray(callbacks)) {

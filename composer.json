@@ -137,7 +137,8 @@
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
                 "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-1.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
-                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch"
+                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
+                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch"
             },
             "drupal/password_policy": {
                 "Error message is not translatable": "https://www.drupal.org/files/issues/password_policy_error_translate-2878784-2.patch"
@@ -161,7 +162,7 @@
             },
             "drupal/clientside_validation" : {
                 "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-9.patch",
-                "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-11-allow-library-to-be-installed-outside-module.patch",
+                "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
                 "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
             },
             "drupal/redirect" : {
