@@ -10,7 +10,6 @@ dependencies:
   - menu_ui
   - node
   - path
-  - panelizer
   - pcb
   - rest
   - taxonomy
