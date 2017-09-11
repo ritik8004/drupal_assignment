@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d7dfb611dba0dc710481d7604dd56c6",
+    "content-hash": "a5eb129b3b418707f98cef4de4a3ea5b",
     "packages": [
         {
             "name": "acquia/blt",
@@ -622,7 +622,7 @@
                 }
             ],
             "description": "Zone management library.",
-            "time": "2017-04-20 12:44:24"
+            "time": "2017-04-20T12:44:24+00:00"
         },
         {
             "name": "composer/installers",
@@ -2292,7 +2292,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-06-18 01:04:09"
+            "time": "2017-06-18T01:04:09+00:00"
         },
         {
             "name": "drupal/block_field",
@@ -2477,7 +2477,7 @@
                 },
                 "patches_applied": {
                     "Allow custom submit handler in jquery validate": "https://www.drupal.org/files/issues/2898885-9.patch",
-                    "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-11-allow-library-to-be-installed-outside-module.patch",
+                    "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
                     "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
                 }
             },
@@ -2504,7 +2504,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2017-09-01 18:16:38"
+            "time": "2017-09-01T18:16:38+00:00"
         },
         {
             "name": "drupal/coder",
@@ -4279,7 +4279,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/google_tag"
             },
-            "time": "2017-05-08 17:36:45"
+            "time": "2017-05-08T17:36:45+00:00"
         },
         {
             "name": "drupal/inline_entity_form",
@@ -4537,7 +4537,7 @@
                 "issues": "http://drupal.org/project/issues/libraries",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-03-15 17:04:08"
+            "time": "2017-03-15T17:04:08+00:00"
         },
         {
             "name": "drupal/mailsystem",
@@ -4968,7 +4968,7 @@
                 "source": "http://cgit.drupalcode.org/memcache",
                 "issues": "https://www.drupal.org/project/issues/memcache"
             },
-            "time": "2017-04-12 19:23:14"
+            "time": "2017-04-12T19:23:14+00:00"
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -5170,7 +5170,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/mimemail"
             },
-            "time": "2017-03-12 09:43:32"
+            "time": "2017-03-12T09:43:32+00:00"
         },
         {
             "name": "drupal/mobile_number",
@@ -5923,7 +5923,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/r4032login"
             },
-            "time": "2017-02-08 04:20:19"
+            "time": "2017-02-08T04:20:19+00:00"
         },
         {
             "name": "drupal/recaptcha",
@@ -6447,7 +6447,7 @@
             "support": {
                 "issues": "http://drupal.org/"
             },
-            "time": "2017-03-02 15:34:04"
+            "time": "2017-03-02T15:34:04+00:00"
         },
         {
             "name": "drupal/seckit",
@@ -6548,7 +6548,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/security_review"
             },
-            "time": "2016-10-20 15:43:48"
+            "time": "2016-10-20T15:43:48+00:00"
         },
         {
             "name": "drupal/sharethis",
@@ -6800,7 +6800,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-04-13 16:28:42"
+            "time": "2017-04-13T16:28:42+00:00"
         },
         {
             "name": "drupal/taxonomy_access_fix",
@@ -6884,7 +6884,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
             },
-            "time": "2017-02-10 12:17:57"
+            "time": "2017-02-10T12:17:57+00:00"
         },
         {
             "name": "drupal/token",
@@ -7155,7 +7155,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_block_filter_block"
             },
-            "time": "2017-05-25 11:05:23"
+            "time": "2017-05-25T11:05:23+00:00"
         },
         {
             "name": "drupal/views_field_view",
