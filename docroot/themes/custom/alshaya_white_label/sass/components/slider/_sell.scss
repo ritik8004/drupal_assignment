@@ -362,7 +362,7 @@
   }
 }
 
-.has--special--price {
+.has--special--price span {
   text-decoration: line-through;
 }
 
@@ -387,13 +387,17 @@
 }
 
 .price--discount {
-  margin-top: 0.5625rem;
+  margin-top: 0;
   font-size: 0.625rem;
   color: $special-price;
 
   @include breakpoint($tablet) {
     margin-top: 0.75rem;
     font-size: 0.75rem;
+
+    td.price & {
+      margin-top: 0.245rem;
+    }
   }
 
   @include breakpoint($desktop) {

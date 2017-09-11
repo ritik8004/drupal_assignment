@@ -401,6 +401,10 @@
     .product-name {
       margin-bottom: 5px;
       font-weight: 700;
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
     }
 
     .product-total {
@@ -410,6 +414,10 @@
     .product-qty {
       color: $greyish;
       margin-bottom: 3px;
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
     }
 
     .sku-attributes {
@@ -907,7 +915,7 @@ body.alias--cart {
 
             @include breakpoint($desktop) {
               #{$left}: 13rem;
-              top: -0.3rem;
+              top: -1.3rem;
             }
           }
         }
@@ -969,7 +977,7 @@ body.alias--cart {
       .tooltip--head::after {
         position: absolute;
         #{$right}: -0.1rem;
-        top: -0.0625rem;
+        top: -1.0625rem;
 
         @include breakpoint($only-tablet) {
           #{$right}: -0.5rem;

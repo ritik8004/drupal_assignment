@@ -23,7 +23,7 @@
       margin-top: 1.9rem;
     }
 
-    .price-wrapper .price {
+    .price-type__wrapper {
       @include breakpoint($only-mobile) {
         margin-top: 1rem;
       }
@@ -221,7 +221,7 @@
       font-family: $arial;
 
       @include breakpoint($tablet) {
-        padding-right: 0;
+        padding-right: 0.4rem;
       }
 
       @include breakpoint($desktop) {
@@ -280,7 +280,7 @@
         padding-top: 0.125rem;
       }
 
-      div {
+      > div {
         margin-bottom: 0.187rem;
       }
 
@@ -1091,7 +1091,7 @@ html[lang=ar] {
     font-family: $alshaya-thin;
   }
 
-  #table-cart-items table tr td.subtotal .price-currency.suffix {
+  #table-cart-items table tr td .price-currency.suffix {
     left: 0.5rem !important;
     float: none !important;
   }
@@ -1359,4 +1359,53 @@ body .ladda-button {
 .path--cart .messages.messages--status::before {
   font-size: 1.9rem;
   margin-top: -8px;
+}
+
+html[lang=ar] {
+  .customer-cart-form {
+    td.name,
+    td.price {
+      .price-wrapper {
+        .price-amount {
+          min-width: 33% !important;
+          display: inline-block;
+
+          @include breakpoint($only-tablet) {
+            min-width: 46% !important;
+          }
+        }
+      }
+
+      .price--discount {
+        .discount-prefix {
+          float: none !important;
+          font-family: $alshaya-thin;
+          font-size: 0.875rem;
+
+          @include breakpoint($only-tablet) {
+            font-size: 0.75rem !important;
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.625rem;
+          }
+        }
+
+        .discount-value {
+          float: right;
+          min-width: 47%;
+
+          @include breakpoint($only-tablet) {
+            font-size: 0.75rem;
+            min-width: 66%;
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.625rem;
+            min-width: 35% !important;
+          }
+        }
+      }
+    }
+  }
 }

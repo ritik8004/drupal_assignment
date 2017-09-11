@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\block\Entity\Block;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
@@ -150,24 +151,37 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     }
     elseif ($view_mode == 'full') {
 
-      // Get up sell block for the product.
-      $items = $sku_entity->get('upsell')->getValue();
+      /* @var \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus */
+      $linked_skus = \Drupal::service('acq_sku.linked_sku');
 
-      if (!empty($items)) {
-        $up_sell_skus = array_column($items, 'value');
-        $up_sell_skus = array_slice($up_sell_skus, 0, 12);
-        $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $up_sell_skus));
+      $up_sell_skus = [];
+      // Get up sell items from the product.
+      $upsell_manuel_items = $sku_entity->get('upsell')->getValue();
+      if (!empty($upsell_manuel_items)) {
+        $up_sell_skus = array_column($upsell_manuel_items, 'value');
+      }
+      // Merge upsell items from product and from the rule.
+      $up_sell_skus = array_merge($up_sell_skus, $linked_skus->getLinkedSKus($sku_entity, 'upsell'));
+
+      if (!empty($up_sell_skus)) {
+        $upsell_items = array_slice($up_sell_skus, 0, 12);
+        $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($upsell_items)));
         // Weight will have no effect later once template is modified.
         $build['up_sell']['#weight'] = 10;
       }
 
-      // Get related block for the product.
-      $items = $sku_entity->get('related')->getValue();
+      $related_skus = [];
+      // Get related items from the product.
+      $related_manual_items = $sku_entity->get('related')->getValue();
+      if (!empty($related_manual_items)) {
+        $related_skus = array_column($related_manual_items, 'value');
+      }
+      // Merge related items from product and from the rule.
+      $related_skus = array_merge($related_skus, $linked_skus->getLinkedSKus($sku_entity, 'related'));
 
-      if (!empty($items)) {
-        $related_skus = array_column($items, 'value');
-        $related_skus = array_slice($related_skus, 0, 12);
-        $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $related_skus));
+      if (!empty($related_skus)) {
+        $related_items = array_slice($related_skus, 0, 12);
+        $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($related_items)));
         // Weight will have no effect later once template is modified.
         $build['related']['#weight'] = 11;
       }
@@ -347,12 +361,34 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
     $build['#no_add_to_cart'] = TRUE;
   }
 
-  // Show the price inside the SKU display when in full view mode.
+  // Show the placeholder to load add to cart form in full view mode.
   if ($build['#view_mode'] == 'full') {
-    // Show placeholder to allow adding form in AJAX.
-    $build['cart_form_placeholder'] = [
-      '#markup' => '<div class="stock-checker">' . t('Checking stock...') . '</div>',
-    ];
+    // We don't display form and placeholder if not buyable.
+    if (!alshaya_acm_product_is_buyable($entity)) {
+      $build['#no_add_to_cart'] = TRUE;
+
+      // Display the non-buyable message and help text.
+      $settings = \Drupal::config('alshaya_acm_product.settings');
+      $build['not_buyable_message'] = [
+        '#markup' => '<div class="not-buyable-message">' . $settings->get('not_buyable_message.value') . '</div>',
+      ];
+
+      // Get store finder link.
+      $find_store_url = Url::fromUserInput('/store-finder')->toString();
+      $not_buyable_help_text = new FormattableMarkup($settings->get('not_buyable_help_text.value'), [
+        ':find_store' => $find_store_url,
+      ]);
+
+      $build['not_buyable_help_text'] = [
+        '#markup' => '<div class="not-buyable-help-text">' . $not_buyable_help_text . '</div>',
+      ];
+    }
+    else {
+      // Show placeholder to allow adding form in AJAX.
+      $build['cart_form_placeholder'] = [
+        '#markup' => '<div class="stock-checker">' . t('Checking stock...') . '</div>',
+      ];
+    }
 
     unset($build['name']);
     unset($build['price']);
@@ -675,4 +711,18 @@ function _alshaya_acm_product_get_size_guide_link() {
   }
 
   return '';
+}
+
+/**
+ * Wrapper function to check if SKU is buyable.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU entity object.
+ *
+ * @return bool
+ *   SKU is buyable or not.
+ */
+function alshaya_acm_product_is_buyable(SKU $sku_entity) {
+  // For now we have only one condition, we may have more in future.
+  return (bool) $sku_entity->get('attr_is_buyable')->getString();
 }

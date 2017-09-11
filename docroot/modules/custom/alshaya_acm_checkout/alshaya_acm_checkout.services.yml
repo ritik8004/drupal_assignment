@@ -6,6 +6,3 @@ services:
   alshaya_acm_checkout.options_manager:
     class: Drupal\alshaya_acm_checkout\CheckoutOptionsManager
     arguments: [ '@entity_type.manager', '@config.factory', '@acq_commerce.api', '@acq_cart.cart_storage', '@logger.factory' ]
-  alshaya_acm_checkout.checkout_helper:
-    class: Drupal\alshaya_acm_checkout\CheckoutHelper
-    arguments: [ '@user.private_tempstore', '@acq_commerce.api', '@acq_cart.cart_storage', '@alshaya_acm_customer.orders_manager', '@logger.factory' ]
