@@ -23,6 +23,7 @@ function alshaya_transac_install() {
     'alshaya_acm_customer',
     'alshaya_acm_product',
     'alshaya_acm_product_category',
+    'alshaya_acm_product_ranking',
     'alshaya_acm_promotion',
     'alshaya_admin',
     'alshaya_arabic',
