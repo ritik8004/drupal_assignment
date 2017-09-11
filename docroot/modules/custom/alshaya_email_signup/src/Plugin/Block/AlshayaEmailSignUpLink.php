@@ -24,12 +24,14 @@ class AlshayaEmailSignUpLink extends BlockBase {
       '#type' => 'link',
       '#title' => $this->t('Email sign up'),
       '#url' => Url::fromRoute('<front>'),
-      '#attributes' => [
-        'class' => ['use-ajax'],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => json_encode([
-          'width' => 700,
-        ]),
+      '#options' => [
+        'attributes' => [
+          'class' => ['use-ajax'],
+          'data-dialog-type' => 'modal',
+          'data-dialog-options' => json_encode([
+            'width' => 700,
+          ]),
+        ],
       ],
     ];
   }
