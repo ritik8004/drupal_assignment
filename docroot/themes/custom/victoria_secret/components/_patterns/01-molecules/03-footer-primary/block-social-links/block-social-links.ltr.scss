@@ -1,6 +1,6 @@
 @import '../../../../../sass/config/**/*.scss';
 
-.social-link {
+.block-social-link {
   background-color: $black;
   text-align: center;
   text-transform: uppercase;
@@ -13,13 +13,14 @@
     padding-top: 0.6rem;
     padding-bottom: 2.5rem;
   }
+}
 
-  h2 {
-    font-size: 0.875rem;
-    margin-bottom: 1.5rem;
+.block-social-link__title {
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
 
-    @include breakpoint($desk) {
-      margin-bottom: 0.5rem;
-    }
+  @include breakpoint($desk) {
+    margin-bottom: 0.5rem;
   }
 }
