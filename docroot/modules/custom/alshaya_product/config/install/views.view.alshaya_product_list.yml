@@ -540,7 +540,8 @@ display:
     display_options:
       display_extenders: {  }
       cache:
-        type: none
+        type: tag
+        options: {  }
       defaults:
         cache: false
       exposed_block: true
@@ -598,7 +599,8 @@ display:
         cache: false
       display_description: ''
       cache:
-        type: none
+        type: tag
+        options: {  }
       exposed_block: true
     cache_metadata:
       max-age: -1
