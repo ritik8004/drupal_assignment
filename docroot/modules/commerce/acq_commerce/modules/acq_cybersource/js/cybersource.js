@@ -17,6 +17,12 @@
       $('.cybersource-credit-card-input').once('bind-events').each(function () {
         var form = $('.cybersource-credit-card-input').closest('form');
 
+        // Remove the name attributes to ensure it is not posted to server even by mistake.
+        $('.cybersource-credit-card-input').data('name', $('.cybersource-credit-card-input').attr('name'));
+        $('.cybersource-credit-card-input').removeAttr('name');
+        $('.cybersource-credit-card-cvv-input').data('name', $('.cybersource-credit-card-cvv-input').attr('name'));
+        $('.cybersource-credit-card-cvv-input').removeAttr('name');
+
         if (form.data('submit-handler') !== 'cybersource_form_submit_handler') {
           try {
             // Update the validate settings to use custom submit handler.
@@ -58,6 +64,10 @@
     // We don't pass credit card info to drupal.
     $('.cybersource-credit-card-input').val('-');
     $('.cybersource-credit-card-cvv-input').val('-');
+
+    // Add the name attribute again to ensure server side validation doesn't break.
+    $('.cybersource-credit-card-input').attr('name', $('.cybersource-credit-card-input').data('name'));
+    $('.cybersource-credit-card-cvv-input').attr('name', $('.cybersource-credit-card-cvv-input').data('name'));
 
     // Update the JS to ensure we don't submit to cybersource again.
     Drupal.cybersourceProcessed = true;
