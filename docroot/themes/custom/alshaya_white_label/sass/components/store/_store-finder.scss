@@ -125,7 +125,7 @@
     }
 
     @include breakpoint($only-mobile) {
-      display: none;
+      display: none !important;
     }
   }
 
