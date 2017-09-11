@@ -126,7 +126,7 @@
 
   // Custom validator for loyalty card.
   $.validator.addMethod('loyalty_card_validate', function (value, element, options) {
-    var loyalty_card_number = Drupal.alshaya_loyalty_clean_card_number(value);
+    var loyalty_card_number = Drupal.alshayaLoyaltyCleanCardNumber(value);
     var alshaya_loyalty_validator_settings = drupalSettings.alshaya_loyalty.card_validate;
     var message = Drupal.t('@number is not a valid privilege card number.', {'@number': value});
 
@@ -150,7 +150,7 @@
       }
 
       // Validate credit card number.
-      if (!Drupal.validate_credit_card_number(loyalty_card_number)) {
+      if (!Drupal.validateCreditCardNumber(loyalty_card_number)) {
         $.validator.messages.loyalty_card_validate = message;
         return false;
       }
@@ -169,7 +169,7 @@
    *
      * @param loyalty_card_number
      */
-  Drupal.alshaya_loyalty_clean_card_number = function (loyalty_card_number) {
+  Drupal.alshayaLoyaltyCleanCardNumber = function (loyalty_card_number) {
     return loyalty_card_number.replace(/-/g, '');
   };
 
@@ -181,7 +181,7 @@
      *
   * @returns {boolean}
      */
-  Drupal.validate_credit_card_number = function (credit_card_number) {
+  Drupal.validateCreditCardNumber = function (credit_card_number) {
     // Set the string length and parity.
     var number_length = credit_card_number.length;
     var parity = number_length % 2;
