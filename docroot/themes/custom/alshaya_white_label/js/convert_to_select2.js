@@ -23,6 +23,10 @@
           });
         });
 
+        $('#payment_details .form-select').select2({
+          minimumResultsForSearch: -1
+        });
+
         $('.alshaya-acm-customer-order-list-search .form-select').select2({
           minimumResultsForSearch: -1,
           dropdownCssClass: 'order-list-select'
