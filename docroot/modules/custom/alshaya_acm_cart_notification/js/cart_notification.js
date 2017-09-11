@@ -58,7 +58,11 @@
           scrollTop: $('.header--wrapper').offset().top
         }, 'slow');
           $('body').addClass('notification--on');
-        $('#cart_notification').addClass('has--notification')
+        $('#cart_notification').addClass('has--notification');
+
+        setTimeout(function () {
+          $('#cart_notification').fadeOut();
+        }, 10000);
       };
 
       $.fn.stopSpinner = function (data) {
