@@ -628,7 +628,6 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_acm_customer_alshaya_i18n_onetime_translation_add() {
-  print 'adding translations in acm_customer';
   // Save some translations.
   $strings = [];
 

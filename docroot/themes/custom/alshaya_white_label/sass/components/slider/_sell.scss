@@ -362,8 +362,11 @@
   }
 }
 
-.has--special--price span {
-  text-decoration: line-through;
+.has--special--price {
+  .price-amount,
+  .price-currency {
+    text-decoration: line-through;
+  }
 }
 
 .node--view-mode-search-result {
@@ -394,6 +397,10 @@
   @include breakpoint($tablet) {
     margin-top: 0.75rem;
     font-size: 0.75rem;
+
+    td.price & {
+      margin-top: 0.245rem;
+    }
   }
 
   @include breakpoint($desktop) {
