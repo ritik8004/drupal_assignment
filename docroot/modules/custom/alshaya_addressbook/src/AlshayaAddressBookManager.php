@@ -118,6 +118,10 @@ class AlshayaAddressBookManager {
    *   Commerce Address ID or false.
    */
   public function pushUserAddressToApi(Profile $entity) {
+    // Last discussion in MMCPA-2042.
+    // We always set the address last added or edited as primary.
+    $entity->setDefault(TRUE);
+
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
     $account = User::load($entity->getOwnerId());
 
