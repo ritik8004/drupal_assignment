@@ -450,13 +450,6 @@
   }
 }
 
-.c-address-book .profile-form {
-  input {
-    margin-top: 0.35rem;
-    padding-bottom: 0.25rem;
-  }
-}
-
 .address-book-address .form-type-select {
   @include select-wrapper(100%);
 
@@ -585,7 +578,9 @@
   }
 
   .form-item-guest-delivery-home-address-shipping-address-line2,
-  .form-item-billing-address-address-billing-address-line2 {
+  .form-item-billing-address-address-billing-address-line2,
+  .form-item-field-address-0-address-address-line2,
+  .form-item-member-delivery-home-address-form-form-address-line2 {
     input[type=text] ~ label:not(.active-label) {
       font-size: 1rem !important;
       color: $greyish !important;
@@ -607,6 +602,20 @@
   .mobile-number-field {
     @include breakpoint($mobile) {
       margin-top: 0 !important;
+    }
+  }
+
+  .form-item.form-type-select {
+    padding-bottom: 1rem;
+    margin-top: 2.75rem !important;
+
+    label {
+      top: -1.375rem;
+      font-size: 0.75rem;
+
+      &.error {
+        top: 2rem;
+      }
     }
   }
 }

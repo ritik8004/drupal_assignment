@@ -135,6 +135,8 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       $current_language_id = \Drupal::languageManager()->getCurrentLanguage()->getId();
       $default_language_id = \Drupal::languageManager()->getDefaultLanguage()->getId();
 
+      $payment_translations = [];
+
       if ($current_language_id !== $default_language_id) {
         if ($payment_term->hasTranslation($default_language_id)) {
           $default_language_payment_term = $payment_term->getTranslation($default_language_id);
@@ -154,7 +156,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       $payment_options[$plugin_id] = $method_name;
     }
 
-    if ($payment_translations) {
+    if (isset($payment_translations)) {
       $pane_form['#attached']['drupalSettings']['alshaya_payment_options_translations'] = $payment_translations;
     }
 

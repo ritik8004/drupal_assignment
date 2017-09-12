@@ -56,7 +56,7 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
     ];
 
     $pane_form['payment_details']['cc_cvv'] = [
-      '#type' => 'textfield',
+      '#type' => 'password',
       '#maxlength' => 4,
       '#title' => $this->t('Security code (CVV)'),
       '#default_value' => '',
