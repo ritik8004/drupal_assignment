@@ -70,6 +70,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
   }
 
   $add_privilege_fields = FALSE;
+  $privilege_card = NULL;
 
   switch ($form_id) {
     case 'field_storage_config_edit_form':
@@ -97,6 +98,15 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
       if (!empty($cart_items)) {
         $add_privilege_fields = TRUE;
 
+        if ($cart->getExtension('loyalty_card')) {
+          $privilege_card = $cart->getExtension('loyalty_card');
+        }
+        // @TODO: What if user really doesn't want to use loyalty card?
+        elseif (\Drupal::currentUser()->isAuthenticated()) {
+          $user = User::load(\Drupal::currentUser()->id());
+          $privilege_card = $user->get('field_privilege_card_number')->getString();
+        }
+
         // Save the value of privilege card to user and in cart.
         array_unshift($form['#validate'], 'alshaya_loyalty_save_privilege_card_number');
       }
@@ -122,8 +132,13 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
       // Disable original privilege card number.
       $form['field_privilege_card_number']['#access'] = FALSE;
 
+      if (isset($form['field_privilege_card_number']['widget']) && !empty($form['field_privilege_card_number']['widget'][0]['value']['#default_value'])) {
+        $privilege_card = $form['field_privilege_card_number']['widget'][0]['value']['#default_value'];
+      }
+
       // Add custom privilege card fields.
       $add_privilege_fields = TRUE;
+
       // Allow loyalty only if its enabled.
       // @TODO: type tel?
       $form['field_privilege_card_number']['widget'][0]['value']['#type'] = 'tel';
@@ -134,7 +149,7 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
 
   // Add privilege card number fields to the form.
   if ($add_privilege_fields) {
-    alshaya_loyalty_add_privilege_card_fields($form, $form_state);
+    alshaya_loyalty_add_privilege_card_fields($form, $form_state, $privilege_card);
   }
 }
 
@@ -295,25 +310,8 @@ function alshaya_loyalty_check_valid_apc_number(&$value) {
 /**
  * Add privilege card fields to the form.
  */
-function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $form_state) {
+function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $form_state, $default_value = NULL) {
   $settings = alshaya_loyalty_get_validation_settings();
-
-  $default_value = NULL;
-
-  /** @var \Drupal\acq_cart\Cart $cart */
-  $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
-
-  if (!empty($cart) && $cart->getExtension('loyalty_card')) {
-    $default_value = $cart->getExtension('loyalty_card');
-  }
-  elseif (isset($form['field_privilege_card_number'], $form['field_privilege_card_number']['widget']) && !empty($form['field_privilege_card_number']['widget'][0]['value']['#default_value'])) {
-    $default_value = $form['field_privilege_card_number']['widget'][0]['value']['#default_value'];
-  }
-  // @TODO: What if user really doesn't want to use loyalty card?
-  elseif (\Drupal::currentUser()->isAuthenticated()) {
-    $user = User::load(\Drupal::currentUser()->id());
-    $default_value = $user->get('field_privilege_card_number')->getString();
-  }
 
   $form['privilege_card_wrapper'] = [
     '#type' => '#markup',
