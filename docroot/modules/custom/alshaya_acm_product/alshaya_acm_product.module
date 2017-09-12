@@ -253,21 +253,24 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       // Initialise home delivery variable.
       $build['home_delivery'] = [];
 
-      // Check if home delivery is available for this product.
-      if (alshaya_acm_product_available_home_delivery($sku)) {
-        $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
+      // Display delivery options only if product is buyable.
+      if (alshaya_acm_product_is_buyable($sku_entity)) {
+        // Check if home delivery is available for this product.
+        if (alshaya_acm_product_available_home_delivery($sku)) {
+          $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
 
-        $home_delivery_options = [];
-        $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
-        $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
+          $home_delivery_options = [];
+          $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
+          $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
 
-        // @TODO: Next day delivery not done for now.
-        $build['home_delivery'] = [
-          '#theme' => 'pdp_delivery_option',
-          '#title' => $home_delivery_config->get('title'),
-          '#subtitle' => $home_delivery_config->get('subtitle'),
-          '#options' => $home_delivery_options,
-        ];
+          // @TODO: Next day delivery not done for now.
+          $build['home_delivery'] = [
+            '#theme' => 'pdp_delivery_option',
+            '#title' => $home_delivery_config->get('title'),
+            '#subtitle' => $home_delivery_config->get('subtitle'),
+            '#options' => $home_delivery_options,
+          ];
+        }
       }
 
       $promotion_types = ['cart'];
