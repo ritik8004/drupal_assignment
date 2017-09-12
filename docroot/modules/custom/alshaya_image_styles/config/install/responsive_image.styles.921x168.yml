@@ -25,5 +25,5 @@ image_style_mappings:
     multiplier: 1x
     image_mapping_type: image_style
     image_mapping: 304x132
-breakpoint_id: whitelabel
+breakpoint_group: whitelabel
 fallback_image_style: 921x168
