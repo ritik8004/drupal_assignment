@@ -154,7 +154,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       $payment_options[$plugin_id] = $method_name;
     }
 
-    if ($payment_translations) {
+    if (isset($payment_translations)) {
       $pane_form['#attached']['drupalSettings']['alshaya_payment_options_translations'] = $payment_translations;
     }
 
