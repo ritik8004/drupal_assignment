@@ -1,0 +1,7 @@
+name: 'Alshaya Modal'
+type: module
+description: 'Alshaya open menu items in modal and generic modal implementation.'
+package: 'Alshaya'
+core: 8.x
+version: 8.x-1.0
+
