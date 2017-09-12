@@ -73,11 +73,25 @@
       display: block;
     }
 
-    .form-item-privilege-card-number2,
-    .form-item-privilege-card-number {
-      label {
+    .form-item-privilege-card-number2 {
+      label:not(.error) {
         top: -3.2rem;
         font-size: 0.75rem;
+      }
+
+      margin-top: 0.25rem;
+    }
+
+    .form-item-privilege-card-number {
+      label:not(.error) {
+        position: absolute;
+        top: 0.875rem;
+        font-size: 0.75rem;
+        #{$left}: 1.5rem;
+      }
+
+      input.error {
+        margin-bottom: 1.75rem;
       }
     }
 
@@ -85,6 +99,10 @@
     #edit-privilege-card-number-error {
       top: 4rem;
       #{$left}: 1.5rem;
+
+      @include breakpoint($tablet) {
+        width: 113%;
+      }
     }
   }
 }
