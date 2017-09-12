@@ -14,7 +14,7 @@ $env = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $env = $_ENV['AH_SITE_ENVIRONMENT'];
 }
-else if (isset($_SERVER['TRAVIS_JOB_ID'])) {
+elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
@@ -37,8 +37,6 @@ $settings['alshaya_acm_user_password'] = 'AlShAyA_AcM';
 $knet_resource_dir = $env == 'local' ? '/home/vagrant/knet-resource/' : '/home/alshaya/knet-resource/' . $env . '/mckw/';
 $settings['alshaya_acm_knet.settings']['resource_path'] = $knet_resource_dir;
 $settings['alshaya_acm_knet.settings']['use_secure_response_url'] = 0;
-// KWD is 414.
-$settings['alshaya_acm_knet.settings']['knet_currency_code'] = '414';
 
 // Simple Oauth.
 // TODO: Security.
@@ -47,7 +45,7 @@ $soauth_key_name = 'alshaya_acm';
 if ($env == 'local') {
   $soauth_key_dir = '/var/www/alshaya/box/';
 }
-else if ($env == 'travis') {
+elseif ($env == 'travis') {
   $soauth_key_dir = '/home/travis/build/acquia-pso/alshaya/private/';
   $soauth_key_name = 'travis_acm';
 }

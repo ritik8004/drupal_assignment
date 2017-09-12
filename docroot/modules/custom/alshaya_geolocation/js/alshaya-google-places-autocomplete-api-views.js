@@ -70,10 +70,7 @@
     $("input[name='" + elementId + "-lng']").val(lng);
 
     $('.geolocation-geocoder-google-places-api-state[data-source-identifier="' + elementId + '"]').val(stateValue);
-
-    if (!$.isEmptyObject(coords)) {
-      $(field).parents('form').find('input[type="submit"]').click();
-    }
+    $(field).parents('form').find('input[type="submit"]').click();
   };
 
 })(jQuery, Drupal);
