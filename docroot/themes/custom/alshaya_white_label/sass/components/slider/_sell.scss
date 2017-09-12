@@ -362,8 +362,11 @@
   }
 }
 
-.has--special--price span {
-  text-decoration: line-through;
+.has--special--price {
+  .price-amount,
+  .price-currency {
+    text-decoration: line-through;
+  }
 }
 
 .node--view-mode-search-result {
