@@ -1,4 +1,4 @@
-label: 'Connect with us'
+label: 'connect with us'
 content:
   include():
     pattern: 'molecules-menu-social-links'

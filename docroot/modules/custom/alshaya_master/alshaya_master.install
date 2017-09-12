@@ -254,6 +254,12 @@ function alshaya_master_install() {
     'Find Store' => [
       'ar' => 'البحث عن محلاتنا',
     ],
+    'find your nearest store' => [
+      'ar' => 'اختر محلاً للتعرف على التفاصيل',
+    ],
+    'email sign up' => [
+      'ar' => 'تسجيل مستخدم جديد',
+    ],
     'KWD' => [
       'ar' => 'د٠ك٠',
     ],

@@ -13,7 +13,7 @@ provider: null
 plugin: alshaya_stores_finder
 settings:
   id: alshaya_stores_finder
-  label: 'Find your nearest store'
+  label: 'find your nearest store'
   provider: alshaya_stores_finder
   label_display: visible
   link_title: 'Find Store'

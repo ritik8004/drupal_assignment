@@ -1,4 +1,4 @@
-label: 'Find your nearest store'
+label: 'find your nearest store'
 content: '<a href="/en/store-finder">Find Store</a>'
 attributes:
   Attribute():
