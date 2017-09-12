@@ -65,6 +65,16 @@
           $(serverErrorWrapper).empty();
         }
       });
+
+      // Add active-label for basket promo code field label.
+      $('.promo-continue-shopping-wrapper .form-item-coupon input').focusout(function () {
+        if ($.trim($(this).val()).length !== 0) {
+          $(this).parent().find('label').last().addClass('active-label');
+        }
+        else {
+          $(this).parent().find('label').last().removeClass('active-label');
+        }
+      });
     }
   };
 
