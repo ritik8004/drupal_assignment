@@ -1,0 +1,61 @@
+@import '../../../../../sass/config/**/*.scss';
+
+.view-store-finder--list {
+  @include breakpoint($above-palm) {
+    padding-top: 1.625rem;
+    padding-bottom: 1.625rem;
+  }
+
+  header {
+    color: $black-smoke;
+    margin-bottom: 1.5rem;
+
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+
+    @include breakpoint($lap) {
+      font-weight: bold;
+    }
+  }
+}
+
+.view-store-finder--list__columns {
+  @include u-clearfix;
+
+  @include breakpoint($upto-palm) {
+    margin-bottom: 6.875rem;
+  }
+
+  @include breakpoint($lap) {
+    margin-bottom: 2.625rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 7.5rem;
+  }
+}
+
+.view-store-finder--list__column--1,
+.view-store-finder--list__column--2 {
+  @include breakpoint($above-palm) {
+    width: 50%;
+    float: direction(left);
+  }
+}
+
+.view-store-finder--list__column--1 {
+  @include breakpoint($above-palm) {
+    border-#{direction(right)}: 1px solid $greyish-alto;
+  }
+}
+
+.view-store-finder--list__column--2 {
+  @include breakpoint($above-palm) {
+    padding-#{direction(left)}: 2.875rem;
+  }
+}
+
+.views-view__attachment-after {
+  display: none;
+}

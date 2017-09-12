@@ -119,12 +119,17 @@
   @include breakpoint($desk) {
     width: 37.161%;
   }
+}
+
+.block-store-finder-form__form__label__wrapper {
+  position: relative;
+  display: inline;
 
   &::before {
     @include breakpoint($above-palm) {
       font-size: 2rem;
       position: absolute;
-      #{direction(left)}: 0.625rem;
+      #{direction(left)}: -2.375rem;
       color: $brownish-grey;
       top: 50%;
       transform: translateY(-50%);

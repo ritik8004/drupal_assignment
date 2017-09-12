@@ -1,0 +1,11 @@
+.region-content {
+  @include breakpoint($upto-palm) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  @include breakpoint($above-palm) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
