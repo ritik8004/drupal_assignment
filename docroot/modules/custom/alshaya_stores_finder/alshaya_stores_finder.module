@@ -75,6 +75,9 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'map-view-link',
+            'list-view-link',
+            'block-store-finder-form__list-view',
+            'icon-map',
             $hidden_class_map_list,
           ],
         ],
