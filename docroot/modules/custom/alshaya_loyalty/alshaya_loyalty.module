@@ -129,9 +129,6 @@ function alshaya_loyalty_form_alter(&$form, FormStateInterface $form_state, $for
       $form['field_privilege_card_number']['widget'][0]['value']['#type'] = 'tel';
       _alshaya_loyalty_field_privilege_card_number_element_validate($form, $form_state);
 
-      // Disable field_subscribe_newsletter.
-      $form['field_subscribe_newsletter']['#access'] = FALSE;
-
       break;
   }
 
