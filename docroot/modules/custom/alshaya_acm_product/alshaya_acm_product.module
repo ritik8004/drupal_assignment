@@ -121,6 +121,14 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
       }
     }
   }
+
+  // Update composition field.
+  $composition = json_decode($sku->get('attr_composition')
+    ->getString(), TRUE);
+  if (!empty($composition)) {
+    $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
+      ->transformCompositionArrayToList($composition));
+  }
 }
 
 /**

@@ -643,4 +643,48 @@ class SkuManager {
     return $skus;
   }
 
+  /**
+   * Function to format composition field content.
+   *
+   * @param array $array
+   *   Array of composition field data.
+   * @param bool $list
+   *   Boolean value to generate or not generate list.
+   *
+   * @return string
+   *   UL / LI HTML list.
+   */
+  public function transformCompositionArrayToList(array $array, $list = TRUE) {
+    $out = '';
+    $materials = [];
+
+    if ($list) {
+      $out = "<ul>";
+    }
+
+    foreach ($array as $key => $elem) {
+      if (!is_array($elem)) {
+        $materials[] = "$key $elem%";
+      }
+      else {
+        // Eliminate "materials" from the list.
+        if ($key == 'materials') {
+          $out .= $this->transformCompositionArrayToList($elem, FALSE);
+        }
+        else {
+          $out .= "<li>$key: " . $this->transformCompositionArrayToList($elem, FALSE) . "</li>";
+        }
+      }
+    }
+
+    if ($list) {
+      $out .= "</ul>";
+    }
+    elseif (!empty($materials)) {
+      $out = implode('; ', $materials);
+    }
+
+    return $out;
+  }
+
 }
