@@ -19,6 +19,7 @@ dependencies:
 themes:
   - bartik
   - seven
+  - whitelabel
 
 base profile:
   name: lightning
