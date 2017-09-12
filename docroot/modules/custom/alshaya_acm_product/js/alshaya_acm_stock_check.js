@@ -81,8 +81,8 @@
                 switch (phase) {
                   case 'end':
                     setTimeout(function () {
-                      var activeitem = currParent.find('.owl-item.active');
-                      Drupal.loadTeaserCartForm(activeitem);
+                      var activeItem = currParent.find('.owl-item.active');
+                      Drupal.loadTeaserCartForm(activeItem);
                     }, '1000');
                     break;
                 }
