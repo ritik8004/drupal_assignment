@@ -86,7 +86,7 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       ];
 
       $form['store_near_me'] = [
-        '#markup' => '<div class="label--location block-store-finder-form__form__label icon-search">' . t('Find stores near') . '</div><div class="input--wrapper block-store-finder-form__input__wrapper">',
+        '#markup' => '<div class="label--location block-store-finder-form__form__label"><div class="block-store-finder-form__form__label__wrapper icon-search">' . t('Find stores near') . '</div></div><div class="input--wrapper block-store-finder-form__input__wrapper">',
         '#weight' => 3,
         '#access' => (bool) $store_finder_search_config,
       ];
