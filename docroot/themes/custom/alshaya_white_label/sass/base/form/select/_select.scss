@@ -90,6 +90,10 @@ select:focus::-ms-value {
     height: 2.1875rem;
     background: $white-two;
 
+    body.ie & {
+      z-index: 9;
+    }
+
     &::after {
       // IE10 needs this in px.
       line-height: 35px;

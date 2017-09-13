@@ -309,8 +309,13 @@
       @include select-style(4.375rem);
     }
 
+    // styling quantity
     .select2-container {
       @include select2-style(4.375rem);
+
+      .select2-selection__arrow {
+        z-index: 3;
+      }
     }
   }
 }

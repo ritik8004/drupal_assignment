@@ -365,7 +365,7 @@
     float: $left;
     text-align: center;
     color: $black;
-    height: 20.5rem;
+    height: 23.25rem;
     margin-bottom: 4px;
     font-size: 0.9375rem;
     position: relative;
@@ -746,6 +746,10 @@
 
     .select2-container {
       @include select2-style(11.625rem);
+
+      html[lang=ar] & {
+        @include select2-style(13.625rem);
+      }
 
       @include breakpoint($upto-desktop) {
         width: 9rem !important;

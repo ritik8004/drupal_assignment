@@ -298,7 +298,7 @@ class AlshayaGtmManager {
     $brand = $sku->get('attr_product_brand')->getString();
     $attributes['gtm-product-sku'] = $sku->getSku();
     $attributes['gtm-dimension8'] = $product_type;
-    if ($discount_amount) {
+    if (isset($discount_amount)) {
       $attributes['gtm-metric7'] = $discount_amount;
     }
 

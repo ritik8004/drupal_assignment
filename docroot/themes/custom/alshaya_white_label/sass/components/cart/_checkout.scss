@@ -423,6 +423,7 @@
     .sku-attributes {
       color: $greyish;
       font-weight: normal;
+      margin-top: 0.3125rem;
     }
   }
 
@@ -582,7 +583,7 @@ body.alias--cart {
   h1 {
     font-size: 1.125rem;
     font-weight: normal;
-    color: $cobalt-blue;
+    color: $marine-blue-two;
     border-bottom: 1px solid $white;
     margin-bottom: 0.75rem;
     padding-bottom: 0.625rem;
@@ -854,7 +855,7 @@ body.alias--cart {
       }
 
       a {
-        width: 68%;
+        width: 100%;
         font-size: 12px;
         font-weight: bold;
         color: $cerulean-two;
@@ -866,6 +867,10 @@ body.alias--cart {
 
       .form-type-select {
         @include select-wrapper(4.375rem);
+
+        @include breakpoint($desktop) {
+          @include select2-style(4.375rem);
+        }
 
         .ajax-progress-throbber {
           position: absolute;
