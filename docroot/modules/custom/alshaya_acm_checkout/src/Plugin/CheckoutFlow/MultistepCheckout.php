@@ -101,10 +101,9 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     if (empty($cart) && $requested_step_id == 'confirmation') {
       $step_id = $requested_step_id;
 
-      $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
-      $order_data = $temp_store->get('order');
+      $session = \Drupal::request()->getSession();
 
-      if (!empty($order_data) && !empty($order_data['id'])) {
+      if (!empty($session->get('last_order_id'))) {
         return $step_id;
       }
     }

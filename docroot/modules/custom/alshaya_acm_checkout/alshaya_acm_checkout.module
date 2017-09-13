@@ -301,19 +301,16 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
 function _alshaya_acm_checkout_get_last_order_from_session() {
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
-  $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
-  $order_data = $temp_store->get('order');
+  $session = \Drupal::request()->getSession();
+  $order_id = $session->get('last_order_id');
 
   // Throw access denied if nothing in session.
-  if (empty($order_data) || empty($order_data['id'])) {
+  if (empty($order_id)) {
     throw new AccessDeniedHttpException();
   }
 
-  // @TODO: Remove the fix when we get the full order details.
-  $order_id = str_replace('"', '', $order_data['id']);
-
   if (\Drupal::currentUser()->isAnonymous()) {
-    $email = $temp_store->get('email');
+    $email = $session->get('email_order_' . $order_id);
   }
   else {
     $email = \Drupal::currentUser()->getEmail();

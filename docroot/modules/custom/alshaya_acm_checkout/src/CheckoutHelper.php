@@ -8,7 +8,6 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\user\Entity\User;
-use Drupal\user\PrivateTempStoreFactory;
 
 /**
  * Class CheckoutHelper.
@@ -16,13 +15,6 @@ use Drupal\user\PrivateTempStoreFactory;
  * @package Drupal\alshaya_acm_checkout
  */
 class CheckoutHelper {
-
-  /**
-   * The private temp store service.
-   *
-   * @var \Drupal\user\PrivateTempStoreFactory
-   */
-  protected $privateTempStore;
 
   /**
    * API Wrapper object.
@@ -48,8 +40,6 @@ class CheckoutHelper {
   /**
    * CheckoutOptionsManager constructor.
    *
-   * @param \Drupal\user\PrivateTempStoreFactory $private_temp_store
-   *   Private temp store service.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   ApiWrapper object.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -59,12 +49,10 @@ class CheckoutHelper {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(PrivateTempStoreFactory $private_temp_store,
-                              APIWrapper $api_wrapper,
+  public function __construct(APIWrapper $api_wrapper,
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
                               LoggerChannelFactoryInterface $logger_factory) {
-    $this->privateTempStore = $private_temp_store;
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
@@ -87,17 +75,19 @@ class CheckoutHelper {
     // Place an order.
     $response = $this->apiWrapper->placeOrder($cart->id());
 
-    // Store the order details from response in tempstore.
-    $temp_store = $this->privateTempStore->get('alshaya_acm_checkout');
-    $temp_store->set('order', $response['order']);
+    // @TODO: Remove the fix when we get the full order details.
+    $order_id = str_replace('"', '', $response['order']['id']);
+
+    $session = \Drupal::request()->getSession();
+    $session->set('last_order_id', $order_id);
 
     $current_user_id = 0;
 
     // Clear orders list cache if user is logged in.
     if (\Drupal::currentUser()->isAnonymous()) {
-      // Store the email address of customer in tempstore.
+      // Store the email address of customer in session.
       $email = $cart->customerEmail();
-      $temp_store->set('email', $email);
+      $session->set('email_order_' . $order_id, $email);
     }
     else {
       $email = \Drupal::currentUser()->getEmail();
@@ -112,6 +102,8 @@ class CheckoutHelper {
         $account->save();
       }
     }
+
+    $session->save();
 
     $this->ordersManager->clearOrderCache($email, $current_user_id);
     $this->ordersManager->clearLastOrderRelatedProductsCache();
