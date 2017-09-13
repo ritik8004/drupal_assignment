@@ -34,7 +34,8 @@
       display: block;
     }
 
-    &.is-active {
+    &.is-active,
+    &:hover {
       background-color: $white;
     }
 
@@ -44,7 +45,8 @@
         background-size: contain;
       }
 
-      &.is-active::after {
+      &.is-active::after,
+      &:hover::after {
         background: url("../../../../../../images/icons/svg/vsecret-active.svg") no-repeat center;
         background-size: contain;
       }
@@ -63,7 +65,8 @@
         background-size: contain;
       }
 
-      &.is-active::after {
+      &.is-active::after,
+      &:hover::after {
         background: url("../../../../../../images/icons/svg/vsport-active.svg") no-repeat center;
         background-size: contain;
       }
