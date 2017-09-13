@@ -8,6 +8,8 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
     - paragraphs.paragraphs_type.1_row_3_col
     - paragraphs.paragraphs_type.1_row_3_col_text
+    - paragraphs.paragraphs_type.block_reference
+    - paragraphs.paragraphs_type.views_reference
   module:
     - entity_reference_revisions
 id: node.advanced_page.field_promo_blocks
@@ -28,6 +30,8 @@ settings:
       1_row_1_col: 1_row_1_col
       1_row_3_col: 1_row_3_col
       1_row_3_col_text: 1_row_3_col_text
+      block_reference: block_reference
+      views_reference: views_reference
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         enabled: true
@@ -71,7 +75,16 @@ settings:
       main_menu_highlight:
         weight: 27
         enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 25
+        enabled: false
       promo_block_text:
         weight: 29
         enabled: false
+      block_reference:
+        enabled: true
+        weight: 30
+      views_reference:
+        enabled: true
+        weight: 34
 field_type: entity_reference_revisions
