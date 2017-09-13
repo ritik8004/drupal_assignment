@@ -72,6 +72,9 @@ settings:
       1_row_3_col_dept:
         weight: 24
         enabled: false
+      main_menu_highlight:
+        weight: 27
+        enabled: false
       1_row_3_col_delivery_banner:
         weight: 25
         enabled: false
