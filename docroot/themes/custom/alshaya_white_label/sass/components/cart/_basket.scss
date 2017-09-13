@@ -1384,7 +1384,7 @@ html[lang=ar] {
         .discount-prefix {
           float: none !important;
           font-family: $alshaya-thin;
-          font-size: 0.875rem;
+          font-size: 0.75rem;
 
           @include breakpoint($only-tablet) {
             font-size: 0.75rem !important;
