@@ -16,9 +16,11 @@
     .slick-list {
       width: 47.5rem;
       #{$left}: calc((100vw - 47.5rem) / 2);
+      min-height: 10.5rem;
 
       @include breakpoint($tablet) {
         width: 71.875rem;
+        min-height: 15.875rem;
         #{$left}: calc((100vw - 71.875rem) / 2);
       }
 
@@ -30,17 +32,18 @@
 
       @include breakpoint($desktop) {
         width: 120rem;
+        min-height: 26.5rem;
         #{$left}: calc((100vw - 120rem) / 2);
       }
     }
   }
 }
 
-.c-slider-promo__items {
-  position: relative;
+.messages__wrapper {
+  display: none;
 }
 
-.c-slider-promo {
+.c-slider-promo__items {
   position: relative;
 
   a {
