@@ -24,7 +24,6 @@ themes:
 base profile:
   name: lightning
   excluded_dependencies:
-    - dblog
     - lightning_landing_page
     - lightning_layout
     - lightning_media_instagram
