@@ -67,7 +67,8 @@
       });
 
       // Add active-label for basket promo code field label.
-      $('.promo-continue-shopping-wrapper .form-item-coupon input').focusout(function () {
+      var promocodeselector = $('.promo-continue-shopping-wrapper .form-item-coupon input');
+      promocodeselector.focusout(function () {
         if ($.trim($(this).val()).length !== 0) {
           $(this).parent().find('label').last().addClass('active-label');
         }
@@ -75,6 +76,12 @@
           $(this).parent().find('label').last().removeClass('active-label');
         }
       });
+      if ($.trim(promocodeselector.val()).length !== 0) {
+        $(promocodeselector).parent().find('label').last().addClass('active-label');
+      }
+      else {
+        $(promocodeselector).parent().find('label').last().removeClass('active-label');
+      }
     }
   };
 
