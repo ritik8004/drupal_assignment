@@ -972,4 +972,26 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       }
     }
   }
+
+  /**
+   * @Then /^I should see the price doubled for the product$/
+   */
+  public function iShouldSeeThePriceDoubledForTheProduct() {
+    $page = $this->getSession()->getPage();
+    $original_price = $page->find('css', '.subtotal.blend.dark .price-amount')
+      ->getText();
+    $original_price = floatval($original_price);
+    $expected_price = floatval($original_price) * 2;
+    if ($expected_price == FALSE) {
+      throw new \Exception('Price did not get updated after adding the quantity');
+    }
+  }
+
+  /**
+   * @When /^I hover over tooltip "([^"]*)"$/
+   */
+  public function iHoverOverTooltip($arg1) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', $arg1)->mouseOver();
+  }
 }
