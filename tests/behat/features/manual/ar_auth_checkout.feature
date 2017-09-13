@@ -6,11 +6,17 @@ Feature: As an authenticated user
   Background:
     Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I am on "/stronglax"
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
     And I wait for the page to load
-    When I follow "عربية"
+    When I click the label for "#ui-id-2 > p.title"
+    And I fill in "edit-privilege-card-number" with "000135844"
+    And I fill in "edit-privilege-card-number2" with "000135844"
+    And I press "Save"
+    When I wait for the page to load
+    Then I should see "The changes have been saved."
+    Given I am on a simple product page
     And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -34,7 +40,7 @@ Feature: As an authenticated user
     When I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @hd @knet
   Scenario: As an authenticated user
@@ -56,12 +62,12 @@ Feature: As an authenticated user
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     When I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
-    When I press "Submit"
-    And I press "Confirm"
+    And I press "إرسال"
+    And I press "تأكيد العملية"
     And I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @hd @cs
   Scenario: As an authenticated user
@@ -83,7 +89,7 @@ Feature: As an authenticated user
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @cc @knet
   Scenario: As an authenticated user
@@ -116,12 +122,12 @@ Feature: As an authenticated user
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
-    And I press "Submit"
-    And I press "Confirm"
+    And I press "إرسال"
+    And I press "تأكيد العملية"
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @cc @cs
   Scenario: As an authenticated user
@@ -154,4 +160,4 @@ Feature: As an authenticated user
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
