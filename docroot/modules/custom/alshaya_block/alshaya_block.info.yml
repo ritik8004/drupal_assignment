@@ -4,5 +4,6 @@ description: 'Contains custom bloks like: custom logo block, application links b
 package: 'Alshaya'
 core: 8.x
 dependencies:
+  - alshaya_i18n
   - block
   - menu_link_attributes
