@@ -1,4 +1,4 @@
-@javascript @checkout @mmcpa-1930 @manual
+@javascript @checkout @english @mmcpa-1930 @manual
 Feature: As an authenticated user
   I should be able to checkout
   using various payment options
@@ -6,60 +6,77 @@ Feature: As an authenticated user
   Background:
     Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    And I am on "/stronglax"
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
     And I wait for the page to load
-    And I press "Add to basket"
+    When I click the label for "#ui-id-2 > p.title"
+    And I fill in "edit-privilege-card-number" with "000135844"
+    And I fill in "edit-privilege-card-number2" with "000135844"
+    And I press "Save"
+    When I wait for the page to load
+    Then I should see "The changes have been saved."
+    When I am on a simple product page
+    And I wait for the page to load
+    When I press "Add to basket"
     And I wait for AJAX to finish
-    And I go to "/cart"
+    When I go to "/cart"
     And I wait for the page to load
-    And I press "checkout securely"
+    When I press "checkout securely"
     And I wait for the page to load
 
   @hd @cod
   Scenario: As an authenticated user
   I should be able to checkout using Home delivery
   and pay by Cash-on-delivery
-  When I press "proceed to payment"
-  And I wait for the page to load
-  When I select a payment option "payment_method_title_cashondelivery"
-  And I wait for AJAX to finish
-  And I accept terms and conditions
-  When I press "place order"
-  And I wait for the page to load
-  Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    When I follow "Home delivery"
+    And I wait for AJAX to finish
+    When I follow "deliver to this address"
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    And I press "place order"
+    And I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
 
   @hd @knet
   Scenario: As an authenticated user
     I should be able to checkout using Home delivery
     and pay by KNET
-    When I follow "deliver to this address"
-    And I wait for AJAX to finish
-    When I press "proceed to payment"
-    And I wait for the page to load
-    When I select a payment option "payment_method_title_knet"
-    And I wait for AJAX to finish
-    And I accept terms and conditions
-    And I wait for the page to load
-    When I press "place order"
-    And I wait for the page to load
-    And I select "ABK" from "bank"
-    And I fill in "cardN" with "8888880000000001"
-    And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
-    And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
-    And I fill in "Ecom_Payment_Pin_id" with "1234"
-    And I press "Submit"
-    And I press "Confirm"
-    And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+      When I follow "Home delivery"
+      And I wait for AJAX to finish
+      And I follow "deliver to this address"
+      And I wait for AJAX to finish
+      And I press "proceed to payment"
+      And I wait for the page to load
+      When I select a payment option "payment_method_title_knet"
+      And I wait for AJAX to finish
+      And I accept terms and conditions
+      And I wait for the page to load
+      And I press "place order"
+      And I wait for the page to load
+      And I select "Knet Test Card [KNET1]" from "bank"
+      And I fill in "cardN" with "0000000001"
+      And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
+      And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
+      And I fill in "Ecom_Payment_Pin_id" with "1234"
+      And I press "Submit"
+      And I press "Confirm"
+      And I wait for the page to load
+      Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
 
   @cc @knet
   Scenario: As an authenticated user
   I should be able to use click and collect option
   and pay by KNET
-    When I follow "Click & Collect"
+    And I follow "Click & Collect"
     And I wait for the page to load
-    When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
+    And I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
+    And I wait 5 seconds
     And I follow "select this store"
     And I wait 10 seconds
     And I select an element having class ".cc-action"
@@ -71,11 +88,11 @@ Feature: As an authenticated user
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
-    When I accept terms and conditions
+    And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    And I select "ABK" from "bank"
-    And I fill in "cardN" with "8888880000000001"
+    And I select "Knet Test Card [KNET1]" from "bank"
+    And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
@@ -83,11 +100,12 @@ Feature: As an authenticated user
     And I press "Confirm"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
 
   @hd @cs
   Scenario: As an authenticated user
-  I should be able to checkout on HD
-  using Cybersource payment method
+    I should be able to checkout on HD
+    using Cybersource payment method
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I follow "deliver to this address"
@@ -105,12 +123,12 @@ Feature: As an authenticated user
     And I press "place order"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
 
   @cc @cs
   Scenario: As an authenticated user
-  I should be able to checekout on Click and Collect
-  using Cybersource payment method
+    I should be able to checekout on Click and Collect
+    using Cybersource payment method
     When I follow "Click & Collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
@@ -135,4 +153,4 @@ Feature: As an authenticated user
     And I press "place order"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"

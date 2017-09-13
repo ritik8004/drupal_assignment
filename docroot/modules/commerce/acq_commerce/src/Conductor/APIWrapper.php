@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -174,6 +175,7 @@ class APIWrapper {
 
     try {
       $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
+      Cache::invalidateTags(['mini_cart_' . $cart_id]);
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());

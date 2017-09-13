@@ -747,6 +747,10 @@
     .select2-container {
       @include select2-style(11.625rem);
 
+      html[lang=ar] & {
+        @include select2-style(13.625rem);
+      }
+
       @include breakpoint($upto-desktop) {
         width: 9rem !important;
 

@@ -1,18 +1,18 @@
-@javascript @mmcpa-1930 @checkout @manual
+@javascript @checkout @english @mmcpa-1930 @manual
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on "/stronglax"
+    Given I am on a configurable product
     And I wait for the page to load
-    And I press "Add to basket"
+    When I press "Add to basket"
     And I wait for AJAX to finish
-    And I go to "/cart"
+    Then I go to "/cart"
     And I wait for the page to load
-    And I press "checkout securely"
+    When I press "checkout securely"
     And I wait for the page to load
-    And I fill in "edit-checkout-login-name" with "shweta+2@axelerant.com"
+    Then I fill in "edit-checkout-login-name" with "shweta+2@axelerant.com"
     And I fill in "edit-checkout-login-pass" with "Alshaya123$"
-    And I press "sign in"
+    When I press "sign in"
     And I wait for the page to load
 
   @hd @cod
@@ -21,7 +21,7 @@ Feature: Test various checkout scenarios as returning customer
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I follow "deliver to this address"
-    And I wait for the page to load
+    And I wait for AJAX to finish
     Then I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
@@ -30,7 +30,7 @@ Feature: Test various checkout scenarios as returning customer
     When I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
 
   @hd @knet
   Scenario: As a returning customer
@@ -56,7 +56,7 @@ Feature: Test various checkout scenarios as returning customer
     When I press "Confirm"
     And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
 
 
   @cc @knet
@@ -90,11 +90,11 @@ Feature: Test various checkout scenarios as returning customer
     And I press "Confirm"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
 
   @hd @cs
   Scenario: As a returning customer
-  I should be able to checkout using HD - Cybersource
+    I should be able to checkout using HD - Cybersource
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I follow "deliver to this address"
@@ -110,7 +110,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "place order"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
 
   @cc @cs
   Scenario: As a returning customer
@@ -136,6 +136,6 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
     When I press "place order"
-    When I wait 10 seconds
+    When I wait 15 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
