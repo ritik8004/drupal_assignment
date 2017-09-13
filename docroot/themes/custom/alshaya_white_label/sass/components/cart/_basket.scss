@@ -764,6 +764,16 @@
       }
     }
 
+    .owl-carousel .owl-item {
+      .labels-container {
+        @include breakpoint($upto-desktop) {
+          img {
+            min-height: auto;
+          }
+        }
+      }
+    }
+
     .c-products__item__label {
       @include breakpoint($desktop) {
         margin-bottom: 0.875rem;
