@@ -221,20 +221,6 @@ class KnetController extends ControllerBase {
       // Place the order now.
       $this->checkoutHelper->placeOrder($updated_cart);
 
-      try {
-        // @TODO: This is temporary fix till Magento part of creating
-        // transaction during place order is not done.
-        // Direct Magento API call to create transaction entry.
-        $this->alshayaApiWrapper->addKnetTransaction($data['tracking_id'], $data['transaction_id'], $data['auth_code']);
-      }
-      catch (\Exception $e) {
-        // We just log error and continue normal flow, no time for testing.
-        $this->logger->error('KNET error while creating transaction for @order_id: @message', [
-          '@order_id' => $data['tracking_id'],
-          '@message' => $e->getMessage(),
-        ]);
-      }
-
       // Delete the data from DB (state).
       \Drupal::state()->delete($state_key);
     }
