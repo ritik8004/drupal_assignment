@@ -43,11 +43,8 @@
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
         if ($(this).attr('state') === 'disabled') {
-          var accordionStatus = $('#pdp-stores-container.click-collect').accordion('option', 'active');
-          if (typeof accordionStatus === 'number' && accordionStatus === 0) {
-            $('#pdp-stores-container.click-collect').accordion('option', 'active', false);
-          }
-          $('#pdp-stores-container.c-accordion-delivery-options').accordion('option', 'disable', true);
+          $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
+          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
         }
         else {
           // Get the permission track the user location.
@@ -69,18 +66,19 @@
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
         if ($(window).width() >= 768) {
+          $('.click-collect-all-stores.inline-modal-wrapper').append('<div class="gradient-holder"></div>');
           $('.click-collect-all-stores').toggleClass('desc-open', function () {
             // Scroll
             $('html,body').animate({
               scrollTop: $('.click-collect-all-stores').offset().top
             }, 'slow');
+            $('#pdp-stores-container').accordion({
+              active: false
+            });
           });
         }
         else {
-          $('.click-collect-all-stores').toggleClass('desc-open');
-          $('#pdp-stores-container').accordion({
-            active: false
-          });
+          $('.click-collect-all-stores').toggle('slow');
         }
       });
 
@@ -349,25 +347,16 @@
   Drupal.AjaxCommands.prototype.updatePDPClickCollect = function (ajax, response, status) {
     if (Drupal.pdp.validateCurrentProduct(response.data)) {
       $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
-      var accordionStatus = $('#pdp-stores-container.click-collect').accordion('option', 'active');
-      if (response.data.alshaya_acm.storeFinder) {
-        if ($('#pdp-stores-container.click-collect').accordion('option', 'disabled')) {
-          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', false);
-        }
 
-        if (!accordionStatus) {
-          $('#pdp-stores-container.click-collect').accordion('option', 'active', true);
-        }
+      if (response.data.alshaya_acm.storeFinder) {
+        $('#pdp-stores-container.click-collect').accordion('option', 'disabled', false);
+        $('#pdp-stores-container.click-collect .c-accordion_content').removeClass('hidden-important');
+
         Drupal.pdp.storesDisplay();
       }
       else {
-        if (typeof accordionStatus === 'number' && accordionStatus === 0) {
-          $('#pdp-stores-container.click-collect').accordion('option', 'active', false);
-        }
-        if (!$('#pdp-stores-container.click-collect').accordion('option', 'disabled')) {
-          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
-        }
-
+        $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
+        $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
       }
     }
   };

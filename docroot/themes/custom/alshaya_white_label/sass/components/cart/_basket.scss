@@ -26,6 +26,10 @@
     .price-type__wrapper {
       @include breakpoint($only-mobile) {
         margin-top: 1rem;
+
+        html[lang=ar] & {
+          line-height: 1.5;
+        }
       }
     }
 
@@ -628,6 +632,7 @@
     font-size: 1rem;
     color: $greyish;
     font-family: $arial;
+    transition: 0.2s ease all;
 
     &.error {
       bottom: 7px;
@@ -635,7 +640,15 @@
       top: auto;
       left: 0;
       color: $cherry;
-      font-size: 0.81rem;
+      font-size: 0.75rem;
+    }
+
+    &.active-label:not(.error) {
+      top: -2.938rem;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 1;
+      font-size: 0.75rem;
     }
   }
 
@@ -646,7 +659,7 @@
     color: $black;
     text-shadow: none;
     width: 100%;
-    margin-top: 2.3rem;
+    margin-top: 1.9rem;
     vertical-align: bottom;
     outline: none;
     padding-bottom: 0.5rem !important;
@@ -657,7 +670,10 @@
       border-color: $windows-blue;
 
       & ~ label {
-        top: -3.2rem;
+        top: -2.938rem;
+        bottom: 0;
+        #{$left}: 0;
+        opacity: 1;
         font-size: 0.75rem;
       }
     }
@@ -1011,13 +1027,6 @@ html[lang=ar] {
         }
       }
     }
-  }
-
-  .edit-continue-shopping-mobile {
-    border: 0 none !important;
-    width: 10.8125rem;
-    padding: 0.67rem !important;
-    color: $cobalt-blue !important;
   }
 
   .alias--cart .c-page-title {
@@ -1380,7 +1389,7 @@ html[lang=ar] {
         .discount-prefix {
           float: none !important;
           font-family: $alshaya-thin;
-          font-size: 0.875rem;
+          font-size: 0.75rem;
 
           @include breakpoint($only-tablet) {
             font-size: 0.75rem !important;

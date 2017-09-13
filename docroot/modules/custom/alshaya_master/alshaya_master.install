@@ -1102,19 +1102,31 @@ function alshaya_master_install() {
       'ar' => 'فيس بوك',
     ],
     'instagram' => [
-      'ar' => 'الانستقرام',
+      'ar' => 'انستغرام',
     ],
     'youtube' => [
-      'ar' => 'youtube',
+      'ar' => 'يوتوب',
     ],
     'google' => [
       'ar' => 'جوجل',
     ],
     'twitter' => [
-      'ar' => 'تغريد',
+      'ar' => 'تويتر',
     ],
     'pinterest' => [
-      'ar' => 'pinterest',
+      'ar' => 'بينتريست',
+    ],
+    '<p>Unfortunately, we do not yet offer furniture items for purchase online. But we will be happy to tell you more about this product and how you can buy it.</p>' => [
+      'ar' => '<p>لسوء الحظ لا يتوفر حالياً على الموقع منتجات الأثاث المنزلي. ولكن يسعدنا أن نخبرك بالمزيد من المعلومات عن المنتجات وعن طريقة شرائها.</p>',
+    ],
+    '<p>Please visit a <a href=":find_store">Mothercare store</a> or contact customer services for support on 182-12-12.</p>' => [
+      'ar' => '<p>يرجى زيارة <a href=":find_store"> محل مذركير</a>، أو الاتصال بمركز خدمة الزبائن للحصول على الدعم المطلوب على الرقم 182-12-12</p>',
+    ],
+    'List of all Mothercare Stores' => [
+      'ar' => 'جميع محلات مذركير',
+    ],
+    '<p>Your Privileges Card Number is: <strong class="dark--text">@order.loyaltyCard</strong></p>' => [
+      'ar' => '<p> رقم بطاقة نادي الامتيازات: <strong class="dark--text">@order.loyaltyCard</strong></p>',
     ],
   ];
   alshaya_i18n_save_translations($strings);

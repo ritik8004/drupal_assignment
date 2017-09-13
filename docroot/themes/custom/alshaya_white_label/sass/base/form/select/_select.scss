@@ -83,12 +83,19 @@ select:focus::-ms-value {
     }
   }
 
+  html[lang=ar] & {
+    .select2-selection--single .select2-selection__rendered {
+      width: 94%;
+    }
+  }
+
   .select2-selection__arrow {
     top: 0;
     #{$right}: 0;
     width: 2.1875rem;
     height: 2.1875rem;
     background: $white-two;
+    z-index: 9;
 
     &::after {
       // IE10 needs this in px.
