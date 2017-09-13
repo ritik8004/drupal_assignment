@@ -1,14 +1,10 @@
-@javascript @checkout @arabic @manual @mmcpa-1930
+@javascript @checkout @arabic @mmcpa-1930 @manual
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on "/stronglax"
-    And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
-    And I wait for AJAX to finish
-    When I press "أضف إلى سلة التسوق"
+    Given I am on a simple product page
+    When I wait for the page to load
+    When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -33,7 +29,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @hd @knet
   Scenario:  As a returning customer
@@ -53,12 +49,12 @@ Feature: Test various checkout scenarios as returning customer
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
-    And I press "Submit"
-    And I press "Confirm"
+    And I press "إرسال"
+    And I press "تأكيد العملية"
     And I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @hd @cs
   Scenario: As a returning customer
@@ -77,14 +73,14 @@ Feature: Test various checkout scenarios as returning customer
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @cc @knet
   Scenario: As a returning customer
   I should be able to place an order for Click and Collect - KNET
     Given I follow "اختر واستلم"
     And I wait for the page to load
-    When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
+    When I select the first autocomplete option for "shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
     When I wait 5 seconds
     When I follow "اختر هذا المحل"
@@ -109,19 +105,19 @@ Feature: Test various checkout scenarios as returning customer
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
-    And I press "Submit"
-    And I press "Confirm"
+    And I press "إرسال"
+    And I press "تأكيد العملية"
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @cc @cs
   Scenario: As a returning customer
   I should be able to place an order for Click and Collect - Cybersource
     Given I follow "اختر واستلم"
     And I wait for the page to load
-    When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
+    When I select the first autocomplete option for "shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
     When I wait 5 seconds
     When I follow "اختر هذا المحل"
@@ -146,4 +142,4 @@ Feature: Test various checkout scenarios as returning customer
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
