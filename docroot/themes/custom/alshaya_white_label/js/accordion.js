@@ -184,12 +184,12 @@
        * Toggles the Order confirmation table.
        */
       if ($('.multistep-checkout .user__order--detail').length) {
-        $('.collapse-row').slideUp();
+        $('.collapse-row').fadeOut();
         $('.product--count').on('click', function () {
           $('#edit-confirmation-continue-shopping')
             .toggleClass('expanded-table');
           $(this).toggleClass('expanded-row');
-          $(this).nextAll('.collapse-row').slideToggle();
+          $(this).nextAll('.collapse-row').fadeToggle('slow');
         });
       }
 

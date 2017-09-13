@@ -972,4 +972,145 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       }
     }
   }
+
+  /**
+   * @Given /^I am on a simple product page$/
+   */
+  public function iAmOnASimpleProductPage() {
+    $this->visitPath('/click-lock-9oz-insulated-straw-cup-1-pack-assortment');
+  }
+
+  /**
+   * @Given /^I am on a configurable product$/
+   */
+  public function iAmOnAConfigurableProduct() {
+    $this->visitPath('/bodysuits-2-pack');
+    $this->iWaitForThePageToLoad();
+    $this->getSession()->getPage()->clickLink('0-3 Months');
+    $this->getSession()
+      ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+  }
+
+  /**
+   * @Then /^I should see the link for simple product$/
+   */
+  public function iShouldSeeTheLinkForSimpleProduct() {
+    $page = $this->getSession()->getPage();
+    $this->simple_product = '6  Pack Grippy Dots';
+    $link = $page->hasLink($this->simple_product);
+    if (!$link) {
+      throw new \Exception('Link for simple product not found');
+    }
+  }
+
+  /**
+   * @Given /^I should see the link for configurable product$/
+   */
+  public function iShouldSeeTheLinkForConfigurableProduct() {
+    $page = $this->getSession()->getPage();
+    $this->config_product = 'Bodysuits - 2 Pack';
+    $link = $page->hasLink($this->config_product);
+    if (!$link) {
+      throw new \Exception('Link for configurable product not found');
+    }
+  }
+
+  /**
+   * @Given /^I should not see the link for simple product$/
+   */
+  public function iShouldNotSeeTheLinkForSimpleProduct() {
+    $page = $this->getSession()->getPage();
+    $this->simple_product = '6  Pack Grippy Dots';
+    $link = $page->hasLink($this->simple_product);
+    if ($link) {
+      throw new \Exception('Link for simple product is being displayed');
+    }
+  }
+
+  /**
+   * @Given /^I should not see the link for configurable product$/
+   */
+  public function iShouldNotSeeTheLinkForConfigurableProduct() {
+    $page = $this->getSession()->getPage();
+    $this->config_product = 'Bodysuits - 2 Pack';
+    $link = $page->hasLink($this->config_product);
+    if ($link) {
+      throw new \Exception('Link for configurable product is being displayed');
+    }
+  }
+
+  /**
+   * @Then /^I should see the link for simple product in Arabic$/
+   */
+  public function iShouldSeeTheLinkForSimpleProductInArabic() {
+    $page = $this->getSession()->getPage();
+    $this->simple_product = 'انت انتانتانت';
+    $link = $page->hasLink($this->simple_product);
+    if (!$link) {
+      throw new \Exception('Link for simple product not found');
+    }
+  }
+
+  /**
+   * @Given /^I should see the link for configurable product in Arabic$/
+   */
+  public function iShouldSeeTheLinkForConfigurableProductInArabic() {
+    $page = $this->getSession()->getPage();
+    $this->config_product = 'لباس عادي - عبوة من قطعتين';
+    $link = $page->hasLink($this->config_product);
+    if (!$link) {
+      throw new \Exception('Link for configurable product not found');
+    }
+  }
+
+  /**
+   * @Then /^I should see the Order Summary block$/
+   */
+  public function iShouldSeeTheOrderSummaryBlock() {
+    $page = $this->getSession()->getPage();
+    $block = $page->find('css', '#block-checkoutsummaryblock');
+    if ($block == NULL) {
+      throw new \Exception('Order Summary block not displayed on Order Summary block');
+    }
+    $title = $block->find('css', 'div > div.caption > span');
+    if ($title == NULL) {
+      throw new \Exception('Text Order Summary not displayed on Order Summary');
+    }
+    $items = $block->find('css', 'div > div.content > div.content-head');
+    if ($items == NULL) {
+      throw new \Exception('Items in your basket text is missing on Order Summary block');
+    }
+    $page->find('css', '.content-head')->click();
+    $product_name = $block->find('css', 'div > div.content.active--accordion > div.content-items > ul > li > div.right > span.product-name > div > div > div > a');
+    if ($product_name == NULL) {
+      throw new \Exception('Product name is not displayed in Order Summary block');
+    }
+    $quantity = $block->find('css', 'div > div.content.active--accordion > div.content-items > ul > li > div.right > span.product-qty > span');
+    if ($quantity == NULL) {
+      throw new \Exception('Quantity is not displayed on Order Summary block');
+    }
+    $price = $block->find('css', 'div > div.content.active--accordion > div.content-items > ul > li > div.right > div > div > span > div.price');
+    if ($price == NULL) {
+      throw new \Exception('Price is not displayed on Order Summary block');
+    }
+    $sub_total = $block->find('css', 'div > div.totals > div.sub-total > span');
+    if ($sub_total == NULL) {
+      throw new \Exception('Sub total is not displayed on Order Summary block');
+    }
+    $order_total = $block->find('css', 'div > div.totals > div.order-total > span');
+    if ($order_total == NULL) {
+      throw new \Exception('Order total is not displayed on Order Summary block');
+    }
+  }
+
+  /**
+   * @Given /^I should see the Customer Service block$/
+   */
+  public function iShouldSeeTheCustomerServiceBlock() {
+    $page = $this->getSession()->getPage();
+    $customer_service = $page->find('css', '#block-customerservice');
+    if ($customer_service == NULL) {
+      throw new \Exception('Customer service block is not being displayed');
+    }
+  }
 }

@@ -1,9 +1,9 @@
-@javascript @checkout @mmcpa-1930 @manual
+@javascript @checkout @english @mmcpa-1930 @manual
 Feature: Test Checkout feature
   Background:
-    Given I am on "/stronglax"
+    Given I am on a simple product page
     And I wait for the page to load
-    And I press "Add to basket"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     And I go to "/cart"
     And I wait for the page to load
@@ -41,7 +41,7 @@ Feature: Test Checkout feature
 
   @hd @knet
   Scenario: As a Guest,
-  I should be able to checkout using KNET
+    I should be able to checkout using KNET
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
@@ -113,8 +113,8 @@ Feature: Test Checkout feature
 
   @knet
   Scenario: As a Guest
-  I should be directed to basket page on cancelling a KNET transaction
-  and User should be able to place order again
+    I should be directed to basket page on cancelling a KNET transaction
+    and User should be able to place order again
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
@@ -137,11 +137,8 @@ Feature: Test Checkout feature
     And I press "Cancel"
     And I wait for the page to load
     Then the url should match "/cart"
-    And I should see the link "Stronglax"
-    And I should see "18.000" in the cart area
-    And I should see "KWD" in the cart area
-    And I should not see "out-of-stock"
-    And I press "checkout securely"
+    And I should see the link for configurable product
+    When I press "checkout securely"
     And I wait for the page to load
     And I follow "checkout as guest"
     And I wait for the page to load
@@ -176,13 +173,10 @@ Feature: Test Checkout feature
 
   @hd @knet
   Scenario: As a Guest
-  I should be able to checkout using HD - KNET
-  after adding both configurable and non-configurable product to the basket
-    When I go to "/grey-navy-and-yellow-jersey-shorts-3-pack"
+    I should be able to checkout using HD - KNET
+    after adding both configurable and non-configurable product to the basket
+    When I am on a configurable product
     And I wait for the page to load
-    When I follow "9-12 Months"
-    And I wait for AJAX to finish
-    And I select "10" quantity
     When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
@@ -223,11 +217,8 @@ Feature: Test Checkout feature
   Scenario: As a Guest
   I should be able to checkout using Click and Collect - KNET
   after adding both configurable and non-configurable product to the basket
-    When I go to "/grey-navy-and-yellow-jersey-shorts-3-pack"
+    When I am on a configurable product
     And I wait for the page to load
-    When I follow "2-3 Years"
-    And I wait for AJAX to finish
-    And I select "2" quantity
     When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
@@ -274,9 +265,9 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-  I should be able to view the number of results displayed
-  Buttons to toggle between list and Map view
-  and link to navigate to the basket
+    I should be able to view the number of results displayed
+    Buttons to toggle between list and Map view
+    and link to navigate to the basket
     And I should be able to see the header for checkout
     And I follow "Click & Collect"
     And I wait for AJAX to finish
@@ -290,8 +281,8 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-  I should be able to see the two tabs
-  on Click and Collect
+    I should be able to see the two tabs
+    on Click and Collect
     When I follow "Click & Collect"
     And I wait for the page to load
     Then I should see the link "List view"
@@ -300,8 +291,8 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-  I should be able to see various options
-  for each Store on Click & Collect
+    I should be able to see various options
+    for each Store on Click & Collect
     When I follow "Click & Collect"
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     When I wait for AJAX to finish
@@ -314,8 +305,8 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-  I should be navigated to basket page
-  On clicking 'back to basket' from checkout CC page
+    I should be navigated to basket page
+    On clicking 'back to basket' from checkout CC page
     When I follow "Click & Collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -327,9 +318,9 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-  I should be able to see the store timings
-  on clicking the Opening hours link and
-  link should toggle
+    I should be able to see the store timings
+    on clicking the Opening hours link and
+    link should toggle
     When I follow "Click & Collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -347,8 +338,8 @@ Feature: Test Checkout feature
 
   @hd @cs
   Scenario: As a Guest
-  I should be able to checkout on HD
-  using Cybersource payment method
+    I should be able to checkout on HD
+    using Cybersource payment method
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
     When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
@@ -404,3 +395,17 @@ Feature: Test Checkout feature
     And I press "place order"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+
+  @hd
+  Scenario: As a Guest user
+  I should be able to see order summary, back to basket option
+  and the customer service block
+    When I follow "Home delivery"
+    And I wait for the page to load
+    Then I should see "Standard delivery for purchases over KD 250"
+    Then I should see the Order Summary block
+    And I should see the Customer Service block
+    When I follow "Edit"
+    And I wait for the page to load
+    Then the url should match "/cart"
+    And I should see the button "checkout securely"

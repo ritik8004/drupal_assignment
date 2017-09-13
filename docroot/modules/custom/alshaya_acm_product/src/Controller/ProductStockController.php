@@ -62,6 +62,7 @@ class ProductStockController extends ControllerBase {
 
     $response = new CacheableJsonResponse($build, 200);
     $response->addCacheableDependency($sku_entity);
+    $response->addcacheabledependency(['url.path']);
 
     return $response;
   }

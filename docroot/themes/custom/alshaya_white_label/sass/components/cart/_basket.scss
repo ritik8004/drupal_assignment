@@ -764,6 +764,16 @@
       }
     }
 
+    .owl-carousel .owl-item {
+      .labels-container {
+        @include breakpoint($upto-desktop) {
+          img {
+            min-height: auto;
+          }
+        }
+      }
+    }
+
     .c-products__item__label {
       @include breakpoint($desktop) {
         margin-bottom: 0.875rem;
@@ -1389,7 +1399,7 @@ html[lang=ar] {
         .discount-prefix {
           float: none !important;
           font-family: $alshaya-thin;
-          font-size: 0.875rem;
+          font-size: 0.75rem;
 
           @include breakpoint($only-tablet) {
             font-size: 0.75rem !important;
