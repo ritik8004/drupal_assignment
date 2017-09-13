@@ -5,7 +5,6 @@
  * Contains install hooks for acq_sku.
  */
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\Entity\Node;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 
