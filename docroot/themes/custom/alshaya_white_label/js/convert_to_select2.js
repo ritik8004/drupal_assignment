@@ -23,6 +23,10 @@
           });
         });
 
+        $('#table-cart-items .form-select').select2({
+          minimumResultsForSearch: -1
+        });
+
         $('#payment_details .form-select').select2({
           minimumResultsForSearch: -1
         });

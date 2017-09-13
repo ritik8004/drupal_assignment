@@ -868,6 +868,10 @@ body.alias--cart {
       .form-type-select {
         @include select-wrapper(4.375rem);
 
+        @include breakpoint($desktop) {
+          @include select2-style(4.375rem);
+        }
+
         .ajax-progress-throbber {
           position: absolute;
           top: 0.4375rem;
