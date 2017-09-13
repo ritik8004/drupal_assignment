@@ -66,18 +66,19 @@
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
         if ($(window).width() >= 768) {
+          $('.click-collect-all-stores.inline-modal-wrapper').append('<div class="gradient-holder"></div>');
           $('.click-collect-all-stores').toggleClass('desc-open', function () {
             // Scroll
             $('html,body').animate({
               scrollTop: $('.click-collect-all-stores').offset().top
             }, 'slow');
+            $('#pdp-stores-container').accordion({
+              active: false
+            });
           });
         }
         else {
-          $('.click-collect-all-stores').toggleClass('desc-open');
-          $('#pdp-stores-container').accordion({
-            active: false
-          });
+          $('.click-collect-all-stores').toggle('slow');
         }
       });
 
