@@ -1,14 +1,1 @@
-@mixin u-clearfix() {
-  &::after {
-    content: "";
-    display: block;
-    clear: both;
-  }
-}
-
-@mixin u-hidden-visually() {
-  border: 0;
-  font: 0/0 a;
-  text-shadow: none;
-  color: transparent;
-}
+// Define theme utils here.
