@@ -17,16 +17,16 @@ libraries:
 libraries-override:
   geolocation/geolocation.commonmap:
     js:
-      js/geolocation-common-map.js: js/geolocation/alshaya_geolocation_common_map.js
+      js/geolocation-common-map.js: components/dist/js/geolocation/alshaya_geolocation_common_map.js
   geolocation/geolocation.formatter.googlemap:
     js:
-      js/geolocation-formatter-googlemap.js: js/geolocation/alshaya_geolocation_formatter_googlemap.js
+      js/geolocation-formatter-googlemap.js: components/dist/js/geolocation/alshaya_geolocation_formatter_googlemap.js
   geolocation/geolocation.googlemapsapi:
     js:
-      js/geolocation-google-maps-api.js: js/geolocation/alshaya_geolocation_google_maps_api.js
+      js/geolocation-google-maps-api.js: components/dist/js/geolocation/alshaya_geolocation_google_maps_api.js
   views-infinite-scroll/views-infinite-scroll:
     js:
-      js/infinite-scroll.js : js/infinite-scroll.js
+      js/infinite-scroll.js : components/dist/js/infinite-scroll.js
 
 component-libraries:
   atoms:
