@@ -132,7 +132,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
-    $term_data = $this->termData;
+    $term_data = $this->productCateoryTree->getCategoryTree();
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
@@ -186,9 +186,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    // Processed vocabulary data.
-    $data = $this->productCateoryTree->getCategoryTree();
-    $this->termData = $data;
     // Add department page node type cache tag.
     // This is custom cache tag and cleared in hook_presave in department
     // module.
