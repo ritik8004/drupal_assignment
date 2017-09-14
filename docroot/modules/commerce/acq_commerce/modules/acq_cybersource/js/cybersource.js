@@ -19,7 +19,7 @@
         var wrapper = $('.cybersource-credit-card-input').closest('#payment_details');
 
         // Remove the name attributes to ensure it is not posted to server even by mistake.
-        $(wrapper).find('input:text, input:password').each(function () {
+        $(wrapper).find('input:text, input:password, select').each(function () {
           $(this).data('name', $(this).attr('name'));
           $(this).removeAttr('name');
         });
@@ -62,7 +62,7 @@
     $(wrapper).hide();
 
     // We don't pass credit card info to drupal.
-    $(wrapper).find('input:text, input:password').each(function () {
+    $(wrapper).find('input:text, input:password, select').each(function () {
       $(this).val('-');
 
       // Add the name attribute again to ensure server side validation doesn't break.
