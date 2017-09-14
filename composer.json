@@ -161,7 +161,6 @@
                 "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
             },
             "drupal/clientside_validation" : {
-                "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-9.patch",
                 "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
                 "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
             },
