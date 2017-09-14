@@ -99,17 +99,23 @@
 
       // Change the title of facet when open.
       var priceCurrency = settings.alshaya_search_price_currency;
+      var $finalPriceBlock = $('#block-finalprice');
       if (priceCurrency) {
-        var initialTitle = $('#block-finalprice h3').html();
-        $('#block-finalprice > h3').on('click', function() {
+        var initialTitle = $finalPriceBlock.find('h3').html();
+        $finalPriceBlock.find('h3').on('click', function() {
           if ($(this).hasClass('ui-state-active')) {
-            $('#block-finalprice h3').html(initialTitle + ' (' + priceCurrency + ')');
+            $finalPriceBlock.find('h3').html(initialTitle + ' (' + priceCurrency + ')');
           }
           else {
-            $('#block-finalprice h3').html(initialTitle);
+            $finalPriceBlock.find('h3').html(initialTitle);
           }
         });
       }
+
+      // Price facets to respect Soft Limit.
+      var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
+      var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
+      $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
 
     }
   };
