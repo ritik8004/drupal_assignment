@@ -1113,7 +1113,13 @@
           height: auto;
 
           li {
-            &:first-child {
+            &:first-child,
+            &:nth-child(2),
+            &:nth-child(3) {
+              display: none;
+            }
+
+            &:nth-child(4) {
               border-top: none;
             }
 
