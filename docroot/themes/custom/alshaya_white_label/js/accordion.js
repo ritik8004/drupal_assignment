@@ -118,7 +118,7 @@
         });
 
         $(document).on('click', function (e) {
-          if ($(e.target).closest('.c-pdp .content__sidebar .short-description-wrapper').length === 0 || $(e.target).closest('.c-pdp .content__sidebar .description-wrapper').length === 0 && $('.c-pdp .description-wrapper').hasClass('desc-open')) {
+          if ($(e.target).closest('.c-pdp .content__sidebar .short-description-wrapper').length === 0 && $(e.target).closest('.c-pdp .content__sidebar .description-wrapper').length === 0 && $('.c-pdp .description-wrapper').hasClass('desc-open')) {
             $('.c-pdp .description-wrapper').removeClass('desc-open');
           }
         });
