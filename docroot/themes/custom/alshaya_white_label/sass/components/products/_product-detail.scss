@@ -277,13 +277,11 @@
     @include breakpoint($only-mobile) {
       float: $right;
       top: -7px;
-      background-color: $whisper-dark;
     }
 
     @include breakpoint($only-tablet) {
       float: $right;
       top: -7px;
-      background-color: $whisper-dark;
     }
   }
 
@@ -311,8 +309,13 @@
       @include select-style(4.375rem);
     }
 
+    // styling quantity
     .select2-container {
       @include select2-style(4.375rem);
+
+      .select2-selection__arrow {
+        z-index: 3;
+      }
     }
   }
 }
@@ -405,7 +408,7 @@
     position: absolute;
     top: 0;
     #{$right}: -38%;
-    height: 32.5rem;
+    height: 33.75rem;
     border: 1px solid $marine-blue;
     padding: 1.25rem;
     padding-bottom: 0;
@@ -434,7 +437,7 @@
     .field {
       &__content {
         overflow: scroll;
-        height: 29.125rem;
+        height: 30.125rem;
       }
     }
   }
@@ -520,7 +523,7 @@
     display: none;
 
     @include breakpoint($tablet) {
-      display: block;
+      display: inline-block;
     }
   }
 
@@ -1075,32 +1078,29 @@
 
 .click-collect-all-stores {
   &.inline-modal-wrapper {
-    position: absolute;
-    top: 0;
-    #{$right}: -100%;
-    transition: #{$right} 1s ease;
-    height: 31.5rem;
-    border: 1px solid $marine-blue;
-    padding: 1rem 1.5rem;
-    background: $white-five;
-    overflow: hidden;
-    width: 100%;
-    z-index: 99;
+    display: none;
 
-    &.desc-open {
-      #{$right}: 0;
-      transition: #{$right} 0.5s ease;
+    @include breakpoint($tablet) {
+      display: block;
+      position: absolute;
+      top: 0;
+      #{$right}: -100%;
+      transition: #{$right} 1s ease;
+      height: 33.75rem;
+      border: 1px solid $marine-blue;
+      padding: 1rem 1.5rem 0;
+      background: $white-five;
+      overflow: hidden;
+      width: 100%;
+      z-index: 99;
+
+      &.desc-open {
+        #{$right}: 0;
+        transition: #{$right} 0.5s ease;
+      }
     }
 
     @include breakpoint($only-mobile) {
-      display: block;
-      position: relative;
-      border: none;
-      z-index: 0;
-      padding: 0;
-      overflow: visible;
-      height: auto;
-
       .close-inline-modal,
       .all-stores-info,
       .available_store {
@@ -1200,7 +1200,7 @@
     ul {
       padding-#{$left}: 0;
       margin: 0;
-      height: 21.56rem;
+      height: 25.5rem;
       overflow-y: scroll;
       clear: both;
 
@@ -1385,6 +1385,7 @@
         margin-bottom: 1.5rem;
         display: inline-block;
         height: 2.1875rem;
+        line-height: 1;
 
         @include breakpoint($only-mobile) {
           .basic-details-wrapper & {
@@ -1425,7 +1426,7 @@
   .field--name {
     &-field-skus {
       @include breakpoint($only-mobile) {
-        height: 6.5rem;
+        min-height: 6.5rem;
       }
     }
   }
@@ -1433,7 +1434,7 @@
 
 .acq-sku-configurable-64__sku-base-form.sku-base-form {
   @include breakpoint($only-mobile) {
-    height: 8rem;
+    min-height: 8rem;
     overflow: hidden;
   }
 }
@@ -1593,6 +1594,12 @@ article[gtm-sku-type="simple"] {
     }
   }
 
+  @include breakpoint($only-mobile) {
+    article.stock-check-processed {
+      min-height: 5rem;
+    }
+  }
+
   span.out-of-stock {
     background-color: $cherry;
     font-family: $alshaya-bold;
@@ -1613,6 +1620,7 @@ article[gtm-sku-type="simple"] {
       font-size: 0.875rem;
       z-index: 6;
       height: 3rem;
+      line-height: 2;
     }
 
     @include breakpoint($desktop) {
@@ -1673,6 +1681,10 @@ article[gtm-sku-type="simple"] {
   height: 3rem;
   width: 100%;
   #{$left}: 0;
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
 }
 
 .nodetype--acq_product {
@@ -1749,6 +1761,26 @@ html[lang=ar] {
 
     &.inactive {
       margin-left: 0;
+    }
+  }
+}
+
+//Theming of non buyable products
+.not-buyable {
+  &-message {
+    font-weight: bold;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: $marine-blue;
+  }
+
+  &-help-text {
+    font-size: 0.75rem;
+    line-height: 1.5;
+
+    a {
+      font-weight: bold;
+      color: $cerulean-two;
     }
   }
 }

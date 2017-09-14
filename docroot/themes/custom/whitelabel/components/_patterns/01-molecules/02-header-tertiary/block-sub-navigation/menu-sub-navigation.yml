@@ -1,0 +1,19 @@
+attributes:
+  Attribute():
+    class:
+    - 'navigation__sub-menu'
+items:
+- title: 'Lingerie'
+  url: '/'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - 'is-active'
+- title: 'Beauty'
+  url: '/'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - ''

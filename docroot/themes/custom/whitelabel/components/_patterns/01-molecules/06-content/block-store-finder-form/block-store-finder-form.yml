@@ -1,0 +1,23 @@
+content: '<form>
+            <a href=";" class="block-store-finder-form__current-location"><span class="icon-current-location"></span>Near me</a>
+            <div class="store-finder--wrapper block-store-finder-form__form__wrapper">
+              <div class="block-store-finder-form__form__label">
+                <div class="block-store-finder-form__form__label__wrapper icon-search">
+                  Find stores near
+                </div>
+              </div>
+              <div class="block-store-finder-form__input__wrapper">
+                <div class="js-form-item form-item js-form-type-textfield form-item-geolocation-geocoder-google-places-api js-form-item-geolocation-geocoder-google-places-api form-no-label">
+                  <input class="block-store-finder-form__input__text" placeholder="e.g. Salmiya">
+                </div>
+                <div class="block-store-finder-form__input__submit__wrapper icon-search">
+                  <input class="block-store-finder-form__input__submit" type="submit" value="Apply">
+                </div>
+              </div>
+            </div>
+            <a href="/en/view-toggle/list_view" class="block-store-finder-form__list-view icon-list active">List view</a>
+            <a href="/en/view-toggle/map_view" class="block-store-finder-form__map-view icon-map">Map view</a>
+          </form>'
+attributes:
+  Attribute():
+    class: 'block-store-finder-form'

@@ -452,6 +452,14 @@ function _alshaya_master_mobile_number_process(array &$element, FormStateInterfa
     $element['mobile']['#default_value'] = str_replace(' ', '', $element['mobile']['#default_value']);
   }
 
+  // Add maxlength from config.
+  // This config doesn't contain any form as length of mobile number is not
+  // expected to change except for changing country. Changing country is a major
+  // change and also means new install so it can be set in specific country
+  // specific module install.
+  $mobile_number_settings = \Drupal::config('alshaya_master.mobile_number_settings');
+  $element['mobile']['#maxlength'] = $mobile_number_settings->get('maxlength');
+
   // Make mobile number required only for few forms.
   $mobile_number_required_forms = [
     'webform_submission_alshaya_contact_form',

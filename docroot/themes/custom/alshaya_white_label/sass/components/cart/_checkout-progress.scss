@@ -52,14 +52,23 @@
     @include breakpoint($desktop) {
       margin-#{$right}: 0;
       width: 39.7%;
+      line-height: 1.8;
+
+      &.-complete {
+        line-height: 1.1;
+      }
     }
 
     @include breakpoint($only-tablet) {
       &:not(.-has-link) {
         .safari &,
         .ucbrowser & {
-          line-height: 2;
+          line-height: 1.8;
         }
+      }
+
+      &.-complete {
+        line-height: 1.8;
       }
     }
 

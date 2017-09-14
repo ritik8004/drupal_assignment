@@ -1,0 +1,7 @@
+label: ''
+content:
+  include():
+    pattern: 'molecules-menu-sub-navigation'
+attributes:
+  Attribute():
+    class: 'block-sub-navigation'

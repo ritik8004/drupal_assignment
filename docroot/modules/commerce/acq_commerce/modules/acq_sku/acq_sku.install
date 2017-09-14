@@ -31,4 +31,16 @@ function acq_sku_install() {
     'menu_name' => 'main',
     'weight' => 0,
   ])->save();
+
+  // Add index for first 30 character of SKU on acq_sku_field_data table.
+  \Drupal::database()->schema()->addIndex('acq_sku_field_data', 'acq_sku_field_sku', [['sku', 64]], [
+    'fields' => [
+      'sku' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+      ],
+    ],
+  ]);
 }
+

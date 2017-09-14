@@ -93,7 +93,7 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
     }
     else {
       // Default image.
-      $image_path = drupal_get_path('module', 'alshaya_user') . '/images/alshaya-priv-card.jpg';
+      $image_path = drupal_get_path('module', 'alshaya_user') . '/images/alshaya-priv-card.png';
     }
 
     $build['image'] = [
@@ -101,6 +101,8 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
       '#uri' => $image_path,
       '#title' => $this->label(),
       '#alt' => $this->label(),
+      '#prefix' => '<div class="block-join-the-club__image-wrapper">',
+      '#suffix' => '</div>',
     ];
 
     $build['description']['#markup'] = $join_club_content->get('join_club_description.value');

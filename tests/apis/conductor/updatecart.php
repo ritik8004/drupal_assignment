@@ -7,7 +7,9 @@
  * Usage: php -f tests/apis/conductor/getcart.php 123.
  */
 
-$cart_id = isset($argv, $argv[1]) ? $argv[1] : 11704;
+$cart_id = isset($argv, $argv[1]) ? $argv[1] : 6112;
+
+$sku = isset($argv, $argv[2]) ? $argv[2] : 'M-HB141  61 140';
 
 require_once __DIR__ . '/../test.php';
 
@@ -17,7 +19,7 @@ $options = [];
 
 $data = [
   'items' => [
-    ['sku' => 'E0110', 'qty' => 1],
+    ['sku' => $sku, 'qty' => 1],
   ],
 ];
 

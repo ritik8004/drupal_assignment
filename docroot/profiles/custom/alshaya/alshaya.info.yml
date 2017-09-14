@@ -12,18 +12,23 @@ dependencies:
   - features
   - language
   - locale
+  - memcache
   - syslog
   - twig_tweak
 
 themes:
   - bartik
   - seven
+  - whitelabel
 
 base profile:
   name: lightning
   excluded_dependencies:
     - dblog
-    - lightning_layout
-    - lightning_search
     - lightning_landing_page
+    - lightning_layout
+    - lightning_media_instagram
+    - lightning_media_twitter
+    - lightning_media_video
+    - lightning_search
     - views_ui

@@ -58,13 +58,24 @@
 
 
       // Slider - 3 For Mobile - Image Gallery.
-      $('#product-image-gallery-mobile', context).lightSlider({
-        item: 1,
-        rtl: true,
-        onAfterSlide: function (el) {
-          el.children('iframe').remove();
-        }
-      });
+      if (isRTL() && $(window).width() < 768) {
+        $('#product-image-gallery-mobile', context).attr('dir', 'rtl');
+        $('#product-image-gallery-mobile', context).lightSlider({
+          item: 1,
+          rtl: true,
+          onAfterSlide: function (el) {
+            el.children('iframe').remove();
+          }
+        });
+      }
+      else {
+        $('#product-image-gallery-mobile', context).lightSlider({
+          item: 1,
+          onAfterSlide: function (el) {
+            el.children('iframe').remove();
+          }
+        });
+      }
 
       // Show mobile slider only on mobile resolution.
       toggleProductImageGallery();

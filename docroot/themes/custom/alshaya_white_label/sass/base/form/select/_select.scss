@@ -57,7 +57,6 @@ select:focus::-ms-value {
   &::before {
     width: $select-width;
     content: "";
-    background: $whisper-dark;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -90,6 +89,10 @@ select:focus::-ms-value {
     width: 2.1875rem;
     height: 2.1875rem;
     background: $white-two;
+
+    body.ie & {
+      z-index: 9;
+    }
 
     &::after {
       // IE10 needs this in px.
