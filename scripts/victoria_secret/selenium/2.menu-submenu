@@ -1,134 +1,19 @@
-    <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="https://victoria.dev2-alshaya.acsitefactory.com/" />
-<title>Menu/submenu </title>
+<link rel="selenium.base" href="https://victoria1.dev2-alshaya.acsitefactory.com/en" />
+<title>new-menu-submenu</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Menu/submenu </td></tr>
+<tr><td rowspan="1" colspan="3">new-menu-submenu</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/en/user/21</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=toolbar-link-system-admin_structure</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='block-seven-content']/ul/li[6]/a/span</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=(//button[@type='button'])[11]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//a[contains(text(),'Add link')])[7]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-title-0-value</td>
-	<td>Victoria's Secret</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-link-0-uri</td>
-	<td>&lt;Front&gt;</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-weight-0-value</td>
-	<td>-50</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=edit-submit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-link-0-uri</td>
-	<td>front</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=edit-submit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-link-0-uri</td>
-	<td>/front</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=edit-submit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-link-0-uri</td>
-	<td>&lt;front&gt;</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=edit-submit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=toolbar-link-system-admin_structure</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='block-seven-content']/ul/li[6]/a/span</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=(//button[@type='button'])[11]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//a[contains(text(),'Add link')])[7]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-title-0-value</td>
-	<td>Victoria's Secret</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-link-0-uri</td>
-	<td>&lt;front&gt;</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-weight-0-value</td>
-	<td>-51</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-weight-0-value</td>
-	<td>-52</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=edit-submit</td>
+	<td>https://victoria3.dev2-alshaya.acsitefactory.com/en</td>
 	<td></td>
 </tr>
 <tr>
@@ -147,19 +32,54 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Add link</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>id=edit-title-0-value</td>
-	<td>LINGERIE</td>
+	<td>Victoria's Secret</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
-	<td>LINGERIE (26)</td>
+	<td>/home</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=summary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-attributes-class</td>
+	<td>brand-victoria-secret</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-weight-0-value</td>
+	<td>-50</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Add link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-title-0-value</td>
+	<td>Lingerie</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-link-0-uri</td>
+	<td>/lingerie</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -172,7 +92,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Add link</td>
 	<td></td>
 </tr>
@@ -182,14 +102,9 @@
 	<td>Beauty</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>id=ui-id-2</td>
-	<td></td>
-</tr>
-<tr>
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
-	<td>Pink (6)</td>
+	<td>/beauty</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -202,7 +117,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Add link</td>
 	<td></td>
 </tr>
@@ -212,14 +127,19 @@
 	<td>Pink</td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>id=edit-link-0-uri</td>
+	<td>/pink</td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>id=ui-id-2</td>
+	<td>css=summary</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=edit-link-0-uri</td>
-	<td>Pink (6)</td>
+	<td>id=edit-attributes-class</td>
+	<td>brand-pink</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -232,7 +152,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=Add link</td>
 	<td></td>
 </tr>
@@ -242,14 +162,9 @@
 	<td>New Arrivals</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>id=ui-id-10</td>
-	<td></td>
-</tr>
-<tr>
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
-	<td>New arrivals (16)</td>
+	<td>/pink/newarrivals</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -274,7 +189,17 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
-	<td>Victoria Sport (11)</td>
+	<td>/vs-sport</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=summary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-attributes-class</td>
+	<td>brand-victoria-sport</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -299,7 +224,7 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
-	<td>New arrivals (21)</td>
+	<td>/vs-sport/new-arrivals</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -311,7 +236,6 @@
 	<td>id=edit-submit</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
