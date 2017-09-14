@@ -11,7 +11,7 @@ use Drupal\Core\Url;
  *
  * @Block(
  *   id = "alshaya_email_signup_link",
- *   admin_label = @Translation("Email signup Link")
+ *   admin_label = @Translation("email signup link")
  * )
  */
 class AlshayaEmailSignUpLink extends BlockBase {
@@ -22,14 +22,16 @@ class AlshayaEmailSignUpLink extends BlockBase {
   public function build() {
     return [
       '#type' => 'link',
-      '#title' => $this->t('Email sign up'),
+      '#title' => $this->t('email sign up'),
       '#url' => Url::fromRoute('<front>'),
-      '#attributes' => [
-        'class' => ['use-ajax'],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => json_encode([
-          'width' => 700,
-        ]),
+      '#options' => [
+        'attributes' => [
+          'class' => ['use-ajax'],
+          'data-dialog-type' => 'modal',
+          'data-dialog-options' => json_encode([
+            'width' => 700,
+          ]),
+        ],
       ],
     ];
   }

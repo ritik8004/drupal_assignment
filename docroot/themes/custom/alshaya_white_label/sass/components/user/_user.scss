@@ -895,6 +895,17 @@
     .form-item-pass {
       margin-top: 2.563rem;
     }
+
+    .form-item-current-pass,
+    .form-item-pass {
+      @include breakpoint($only-tablet) {
+        > label {
+          html[lang=ar] & {
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 
   #unmask_password {

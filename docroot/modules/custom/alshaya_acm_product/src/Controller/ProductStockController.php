@@ -45,7 +45,13 @@ class ProductStockController extends ControllerBase {
 
     $build = [];
 
-    if ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
+    // @TODO: We should avoid this AJAX call as well.
+    if (!alshaya_acm_product_is_buyable($sku_entity)) {
+      // @TODO: This is to avoid adding out of stock classes. Needs refactoring.
+      $build['max_quantity'] = 100;
+      $build['html'] = '';
+    }
+    elseif ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
       $build['html'] = '';
     }
@@ -56,6 +62,7 @@ class ProductStockController extends ControllerBase {
 
     $response = new CacheableJsonResponse($build, 200);
     $response->addCacheableDependency($sku_entity);
+    $response->addcacheabledependency(['url.path']);
 
     return $response;
   }

@@ -5,6 +5,8 @@
  * Functions to support theming in the whitelabel theme.
  */
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_library_info_alter().
  */
@@ -13,7 +15,7 @@ function whitelabel_library_info_alter(&$libraries, $extension) {
   $language = $language_manager->getCurrentLanguage();
   $direction = $language->getDirection();
 
-  if ($extension === 'whitelabel' && $direction === 'rtl') {
+  if ($extension === 'victoria_secret' && $direction === 'rtl') {
     foreach ($libraries as $library_name => $library_value) {
       if (!empty($library_value['css'])) {
         foreach ($library_value['css'] as $css_type => $css_files) {
@@ -27,5 +29,196 @@ function whitelabel_library_info_alter(&$libraries, $extension) {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function whitelabel_preprocess_block(&$variables) {
+  switch ($variables['base_plugin_id']) {
+    case 'custom_logo_block':
+      $variables['site_logo'] = '';
+      if ($variables['content']['site_logo']['#access']) {
+        $variables['site_link'] = $variables['content']['target_link']['#url'];
+        $variables['site_logo_title'] = $variables['content']['target_link']['#title'];
+      }
+      break;
+
+    case 'custom_logo_block':
+      $variables['site_logo'] = '';
+      if ($variables['content']['site_logo']['#access']) {
+        $variables['site_link'] = $variables['content']['target_link']['#url'];
+        $variables['site_logo_title'] = $variables['content']['target_link']['#title'];
+      }
+      break;
+
+    case 'system_menu_block':
+      if ($variables['elements']['#id'] == 'vs_main_navigation_level2') {
+        $variables['content']['#attributes']['class'][] = 'navigation__sub-menu';
+        $variables['content']['#attached']['library'][] = 'whitelabel/menu-sub-navigation';
+      }
+      elseif ($variables['elements']['#id'] == 'vs_main_navigation') {
+        $variables['content']['#attributes']['class'][] = 'menu-logo-navigation';
+        $variables['content']['#attached']['library'][] = 'whitelabel/menu-logo-navigation';
+      }
+  }
+}
+
+/**
+ * Implements hook_preprocess_link().
+ */
+function whitelabel_preprocess_links__language_block(&$variables) {
+  $language_manager = \Drupal::service('language_manager');
+  $language = $language_manager->getCurrentLanguage();
+  $language_id = $language->getId();
+
+  foreach ($variables['links'] as $link => $link_data) {
+    if ($link === $language_id) {
+      $variables['links'][$link]['attributes']['class'][] = 'is-hidden';
+    }
+    else {
+      $variables['links'][$link]['attributes']['class'][] = 'is-active';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function whitelabel_preprocess_page(&$variables) {
+  $route = \Drupal::routeMatch();
+  $route_name = $route->getRouteName();
+
+  switch ($route_name) {
+    case 'alshaya_master.home':
+      $variables['attributes']['class'][] = 'page-home';
+      break;
+
+    case 'view.stores_finder.page_2':
+      $variables['attributes']['class'][] = 'page-store-finder';
+      break;
+  }
+
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $node_bundle = $node->bundle();
+    $variables['attributes']['class'][] = str_replace('_', '-', 'node-' . $node_bundle);
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function whitelabel_preprocess_node(&$variables) {
+  $node_bundle = $variables['node']->bundle();
+  switch ($node_bundle) {
+    case 'advanced_page':
+      $variables['content']['field_promo_blocks']['#attributes']['class'][] = 'field-promo-block';
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_block_alter().
+ */
+function whitelabel_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  switch ($variables['elements']['#base_plugin_id']) {
+    // Copyright block.
+    case 'block_content':
+      if ($variables['elements']['#plugin_id'] == 'block_content:6126accb-c99e-4c53-b8fe-5e97be281d53') {
+        $suggestions[] = 'block__alshaya_copyright';
+      }
+      break;
+
+    case 'alshaya_stores_finder':
+      $block_region = Block::load($variables['elements']['#id'])->getRegion();
+      if (strpos($block_region, 'header') !== FALSE) {
+        $suggestions[] = 'block__alshaya_stores_finder_header';
+      }
+      elseif (strpos($block_region, 'footer') !== FALSE) {
+        $suggestions[] = 'block__alshaya_stores_finder_footer';
+      }
+      break;
+
+    case 'language_block':
+      $suggestions[] = 'block__alshaya_language_block';
+      break;
+
+    case 'join_the_club':
+      $suggestions[] = 'block__alshaya_join_the_club';
+      break;
+
+    case 'alshaya_application_links':
+      $suggestions[] = 'block__alshaya_application_links';
+      break;
+
+    case 'custom_logo_block':
+      $suggestions[] = 'block__alshaya_brand_logo_block';
+      break;
+
+    case 'views_exposed_filter_block':
+      $plugin_id = $variables['elements']['#plugin_id'];
+      if ($plugin_id == 'views_exposed_filter_block:stores_finder-page_1') {
+        $suggestions[] = 'block__alshaya_store_finder_form_1';
+        break;
+      }
+      elseif ($plugin_id == 'views_exposed_filter_block:stores_finder-page_3') {
+        $suggestions[] = 'block__alshaya_store_finder_form_3';
+        break;
+      }
+
+    case 'system_menu_block':
+      $plugin_id = $variables['elements']['#plugin_id'];
+      $label = $variables['elements']['#configuration']['label'];
+
+      if ($plugin_id == 'system_menu_block:social-links') {
+        $suggestions[] = 'block__alshaya_social_links';
+        break;
+      }
+      elseif ($plugin_id == 'system_menu_block:footer') {
+        $suggestions[] = 'block__alshaya_footer_links';
+        break;
+      }
+      elseif ($plugin_id == 'system_menu_block:main' && strpos($label, 'Main navigation') !== FALSE) {
+        $level = $variables['elements']['#configuration']['level'];
+        if ($level == 1) {
+          $suggestions[] = 'block__alshaya_main_menu_1';
+          break;
+        }
+        elseif ($level == 2) {
+          $suggestions[] = 'block__alshaya_main_menu_2';
+          break;
+        }
+      }
+  }
+
+  return $suggestions;
+}
+
+/**
+ * Implements hook_theme_suggestions_views_view_alter().
+ */
+function whitelabel_theme_suggestions_views_view_alter(array &$suggestions, array $variables) {
+  $view_id = $variables['view']->id();
+  switch ($view_id) {
+    case 'stores_finder':
+      if ($variables['view']->current_display == 'page_2') {
+        $suggestions[] = 'views_view__store_finder_glossary';
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_views_view_alter().
+ */
+function whitelabel_theme_suggestions_views_view_unformatted_alter(array &$suggestions, array $variables) {
+  $view_id = $variables['view']->id();
+  switch ($view_id) {
+    case 'stores_finder':
+      if ($variables['view']->current_display == 'page_2') {
+        $suggestions[] = 'views_view_unformatted__store_finder_glossary';
+      }
+      break;
   }
 }

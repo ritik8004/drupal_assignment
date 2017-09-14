@@ -31,10 +31,10 @@
       });
 
       // Stock check on PDP main Product.
-      $('article[data-vmode="full"]', context).find('.basic-details-wrapper article').once('js-event').each(function () {
-        var skuId = $(this).attr('data-skuid');
+      $('article[data-vmode="full"]', context).find('.basic-details-wrapper article .stock-checker').once('js-event').each(function () {
+        var $wrapper = $(this).closest('article');
+        var skuId = $wrapper.attr('data-skuid');
         if (typeof skuId !== 'undefined') {
-          var $wrapper = $(this);
           $.ajax({
             url: Drupal.url('get-cart-form/acq_sku/' + skuId),
             type: 'GET',
@@ -60,55 +60,57 @@
 
       // Check stock for mobile & load add cart form if stock-check successful.
       if ($(window).width() < 768) {
-        // Load cart form only for active carousel items on page load on PDP & Basket.
-        $('.owl-item.active').each(function () {
-          var activeItem = $(this);
-          Drupal.loadTeaserCartForm(activeItem);
-        });
-
-        // Load cart form for active item post swipe on PDP & Basket.
-        $('.owl-item').each(function () {
-				  var currItem = $(this);
-				  var currParent = currItem.closest('.mobile-only-block');
-				  // Handle owl carousel on Basket page.
-				  if (currParent.length === 0) {
-            currParent = currItem.closest('#block-baskethorizontalproductrecommendation.horizontal-crossell');
-          }
-
-				  currItem.swipe({
-            swipeStatus: function (event, phase, direction, distance, fingerCount) {
-              switch (phase) {
-                case 'end':
-                  setTimeout(function () {
-                    var activeitem = currParent.find('.owl-item.active');
-                    Drupal.loadTeaserCartForm(activeitem);
-                  }, '1000');
-                  break;
-              }
-            }
+        $(window).load(function () {
+          // Load cart form only for active carousel items on page load on PDP & Basket.
+          $('.owl-item.active').each(function () {
+            var activeItem = $(this);
+            Drupal.loadTeaserCartForm(activeItem);
           });
-        });
 
-        // Load cart form for items which are not in the carousel on PDP & Basket.
-        $('.horizontal-crossell.mobile-only-block, .horizontal-upell.mobile-only-block, #block-baskethorizontalproductrecommendation.horizontal-crossell, #block-baskethorizontalproductrecommendation.horizontal-upell', context).each(function () {
-          var viewRowCount = $(this).find('.views-row').length;
-          if ((viewRowCount > 0) && (viewRowCount <= 3)) {
-            $(this).find('.views-row').each(function () {
-              var mobileItem = $(this).find('.mobile--only--sell');
-              if (mobileItem.length !== 0) {
-                Drupal.loadTeaserCartForm($(this));
+          // Load cart form for active item post swipe on PDP & Basket.
+          $('.owl-item').each(function () {
+            var currItem = $(this);
+            var currParent = currItem.closest('.mobile-only-block');
+            // Handle owl carousel on Basket page.
+            if (currParent.length === 0) {
+              currParent = currItem.closest('#block-baskethorizontalproductrecommendation.horizontal-crossell');
+            }
+
+            currItem.swipe({
+              swipeStatus: function (event, phase, direction, distance, fingerCount) {
+                switch (phase) {
+                  case 'end':
+                    setTimeout(function () {
+                      var activeItem = currParent.find('.owl-item.active');
+                      Drupal.loadTeaserCartForm(activeItem);
+                    }, '1000');
+                    break;
+                }
               }
             });
-          }
+          });
+
+          // Load cart form for items which are not in the carousel on PDP & Basket.
+          $('.horizontal-crossell.mobile-only-block, .horizontal-upell.mobile-only-block, #block-baskethorizontalproductrecommendation.horizontal-crossell, #block-baskethorizontalproductrecommendation.horizontal-upell', context).each(function () {
+            var viewRowCount = $(this).find('.views-row').length;
+            if ((viewRowCount > 0) && (viewRowCount <= 3)) {
+              $(this).find('.views-row').each(function () {
+                var mobileItem = $(this).find('.mobile--only--sell');
+                if (mobileItem.length !== 0) {
+                  Drupal.loadTeaserCartForm($(this));
+                }
+              });
+            }
+          });
         });
       }
 
       // Check stock for modal & load add cart form if stock-check successful.
-      $('article[data-vmode="modal"]').find('.basic-details-wrapper article').once('js-event').each(function () {
-        var skuId = $(this).attr('data-skuid');
+      $('article[data-vmode="modal"]').find('.basic-details-wrapper article .stock-checker').once('js-event').each(function () {
+        var $wrapper = $(this).closest('article');
+        var skuId = $wrapper.attr('data-skuid');
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
-          var $wrapper = $(this);
           $.ajax({
             url: Drupal.url('get-cart-form/acq_sku/' + skuId),
             type: 'GET',

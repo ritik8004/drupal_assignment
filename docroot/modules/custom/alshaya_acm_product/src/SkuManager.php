@@ -412,59 +412,56 @@ class SkuManager {
         return [];
       }
 
+      $image_key = $type . '_image';
+      $image_fid_key = $type . '_image_fid';
+      $text_key = $type . '_image_text';
+      $position_key = $type . '_position';
+
       foreach ($labels_data as &$data) {
         $row = [];
 
-        if ($type == 'pdp') {
-          if (empty($data['pdp_image_fid'])) {
-            try {
-              // Prepare the File object when we access it the first time.
-              $data['pdp_image_fid'] = $this->downloadLabelsImage($sku_entity, $data, 'pdp_image');
-              $update_sku = TRUE;
-            }
-            catch (\Exception $e) {
-              $this->logger->error($e->getMessage());
-              continue;
-            }
-          }
-
-          $image_file = File::load($data['pdp_image_fid']);
-
-          $image = [
-            '#theme' => 'image',
-            '#uri' => $image_file->getFileUri(),
-            '#title' => $data['pdp_image_text'],
-            '#alt' => $data['pdp_image_text'],
-          ];
-
-          $row['image'] = render($image);
-          $row['position'] = $data['pdp_position'];
+        // Check if label is available for desired type.
+        if (empty($data[$image_key])) {
+          continue;
         }
-        else {
-          if (empty($data['plp_image_fid'])) {
-            try {
-              // Prepare the File object when we access it the first time.
-              $data['plp_image_fid'] = $this->downloadLabelsImage($sku_entity, $data, 'plp_image');
-              $update_sku = TRUE;
-            }
-            catch (\Exception $e) {
-              \Drupal::logger('alshaya_acm_product')->error($e->getMessage());
-              continue;
-            }
+
+        // Check if label is currently active.
+        $from = strtotime($data['from']);
+        $to = strtotime($data['to']);
+
+        // First check if we have date filter.
+        if ($from > 0 && $to > 0) {
+          $now = REQUEST_TIME;
+
+          // Now, check if current date lies between from and to dates.
+          if ($from > $now || $to < $now) {
+            continue;
           }
-
-          $image_file = File::load($data['plp_image_fid']);
-
-          $image = [
-            '#theme' => 'image',
-            '#uri' => $image_file->getFileUri(),
-            '#title' => $data['plp_image_text'],
-            '#alt' => $data['plp_image_text'],
-          ];
-
-          $row['image'] = render($image);
-          $row['position'] = $data['plp_position'];
         }
+
+        if (empty($data[$image_fid_key])) {
+          try {
+            // Prepare the File object when we access it the first time.
+            $data[$image_fid_key] = $this->downloadLabelsImage($sku_entity, $data, $image_key);
+            $update_sku = TRUE;
+          }
+          catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            continue;
+          }
+        }
+
+        $image_file = File::load($data[$image_fid_key]);
+
+        $image = [
+          '#theme' => 'image',
+          '#uri' => $image_file->getFileUri(),
+          '#title' => $data[$text_key],
+          '#alt' => $data[$text_key],
+        ];
+
+        $row['image'] = render($image);
+        $row['position'] = $data[$position_key];
 
         $static_labels_cache[$sku][$type][] = $row;
 
@@ -498,6 +495,10 @@ class SkuManager {
    *   File id.
    */
   protected function downloadLabelsImage(SKU $sku_entity, array $data, $file_key) {
+    if (empty($data[$file_key])) {
+      throw new \Exception('Image not available.');
+    }
+
     // Preparing args for all info/error messages.
     $args = ['@file' => $data[$file_key], '@sku_id' => $sku_entity->id()];
 

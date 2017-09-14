@@ -16,6 +16,13 @@
       // Bind this only once after every ajax call.
       $('.cybersource-credit-card-input').once('bind-events').each(function () {
         var form = $('.cybersource-credit-card-input').closest('form');
+        var wrapper = $('.cybersource-credit-card-input').closest('#payment_details');
+
+        // Remove the name attributes to ensure it is not posted to server even by mistake.
+        $(wrapper).find('input:text').each(function () {
+          $(this).data('name', $(this).attr('name'));
+          $(this).removeAttr('name');
+        });
 
         if (form.data('submit-handler') !== 'cybersource_form_submit_handler') {
           try {
@@ -51,13 +58,23 @@
 
 
   Drupal.finishCybersourcePayment = function () {
+    var wrapper = $('.cybersource-credit-card-input').closest('#payment_details');
+
     // We hide credit card fields to avoid error message displays when we remove value.
-    $('.cybersource-credit-card-input').closest('.form-item').hide();
-    $('.cybersource-credit-card-cvv-input').closest('.form-item').hide();
+    $(wrapper).hide();
 
     // We don't pass credit card info to drupal.
-    $('.cybersource-credit-card-input').val('-');
-    $('.cybersource-credit-card-cvv-input').val('-');
+    $(wrapper).find('input:text').each(function () {
+      $(this).val('-');
+
+      // Add the name attribute again to ensure server side validation doesn't break.
+      $(this).attr('name', $(this).data('name'));
+    });
+
+    // Reset expiry year and month dropdowns.
+    $(wrapper).find('select').each(function () {
+      $(this).val($(this).find('option:first').val());
+    });
 
     // Update the JS to ensure we don't submit to cybersource again.
     Drupal.cybersourceProcessed = true;

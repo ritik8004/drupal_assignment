@@ -1,0 +1,19 @@
+attributes:
+  Attribute():
+    class:
+    - 'social-links__menu'
+items:
+- title: 'Facebook'
+  url: 'http://facebook.com'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - 'icon-facebook'
+- title: 'Instagram'
+  url: 'http://instagram.com'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - 'icon-instagram'
