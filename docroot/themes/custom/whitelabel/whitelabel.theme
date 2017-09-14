@@ -45,6 +45,14 @@ function whitelabel_preprocess_block(&$variables) {
       }
       break;
 
+    case 'custom_logo_block':
+      $variables['site_logo'] = '';
+      if ($variables['content']['site_logo']['#access']) {
+        $variables['site_link'] = $variables['content']['target_link']['#url'];
+        $variables['site_logo_title'] = $variables['content']['target_link']['#title'];
+      }
+      break;
+
     case 'system_menu_block':
       if ($variables['elements']['#id'] == 'vs_main_navigation_level2') {
         $variables['content']['#attributes']['class'][] = 'navigation__sub-menu';
