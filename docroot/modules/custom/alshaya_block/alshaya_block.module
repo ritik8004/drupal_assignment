@@ -5,6 +5,7 @@
  * Module file for alshaya_block.
  */
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 
@@ -52,4 +53,19 @@ function alshaya_block_existing_block_content_name($id) {
     return TRUE;
   }
   return FALSE;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block templates.
+ */
+function alshaya_block_preprocess_block(&$variables) {
+  switch ($variables['base_plugin_id']) {
+    case 'block_content':
+      $block_content = $variables['content']['#block_content'];
+      $machine_name = $block_content->get('machine_name')->value;
+      $cssclass = 'block-content--' . strtolower($machine_name);
+      $variables['attributes']['class'][] = Html::cleanCssIdentifier($cssclass);
+      $variables['attributes']['class'][] = 'block-type-block-content';
+      break;
+  }
 }
