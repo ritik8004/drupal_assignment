@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Set module weight higher to load this module after 'menu_link_attributes'.
+ */
+function alshaya_modal_install() {
+  module_set_weight('alshaya_modal', 20);
+}

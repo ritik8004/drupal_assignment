@@ -106,6 +106,29 @@
     }
   }
 
+  .back-to-glossary {
+    font-size: 0.75rem;
+    color: $cerulean-two;
+    font-family: $arial;
+    width: 30%;
+    display: block;
+    text-align: center;
+    float: $right;
+    margin: 0.8rem 0;
+
+    &.hidden {
+      display: none;
+    }
+
+    @include breakpoint($desktop) {
+      margin: 1.625rem 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none !important;
+    }
+  }
+
   @include breakpoint($tablet) {
     .mobile-only-back-to-glossary,
     .view-on--map {
@@ -137,7 +160,6 @@
       }
 
       @include breakpoint($desktop) {
-        #{$right}: 1.5%;
         top: 1.1rem;
       }
     }

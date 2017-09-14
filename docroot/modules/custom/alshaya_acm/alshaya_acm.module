@@ -794,7 +794,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   ];
   if (!empty($item_cart_price['discount'])) {
     $total_price['#discount'] = $item_cart_price['discount'];
-    $total_price['#final_price'] = $item_cart_price['final_price'] * $item['quantity']['#default_value'];
+    $total_price['#final_price'] = number_format($item_cart_price['final_price'] * $item['quantity']['#default_value'], 3);
   }
 
   return [

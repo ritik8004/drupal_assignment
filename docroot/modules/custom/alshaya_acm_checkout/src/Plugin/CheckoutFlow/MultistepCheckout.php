@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\Url;
+use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -298,18 +299,51 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       ]);
 
       if ($next_step_id == 'confirmation') {
-        try {
-          // Invoke hook to allow other modules to process before order is
-          // finally placed.
-          \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);
+        $cart = $this->cartStorage->getCart();
+        $cart_id = $this->cartStorage->getCartId();
 
+        try {
           // Place an order.
-          \Drupal::service('alshaya_acm_checkout.checkout_helper')->placeOrder($cart);
+          $response = $this->apiWrapper->placeOrder($cart_id);
         }
         catch (\Exception $e) {
           drupal_set_message($e->getMessage(), 'error');
           $this->redirectToStep('payment');
         }
+
+        // Store the order details from response in tempstore.
+        $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
+        $temp_store->set('order', $response['order']);
+
+        $current_user_id = 0;
+
+        // Clear orders list cache if user is logged in.
+        if (\Drupal::currentUser()->isAnonymous()) {
+          // Store the email address of customer in tempstore.
+          $email = $cart->customerEmail();
+          $temp_store->set('email', $email);
+        }
+        else {
+          $email = \Drupal::currentUser()->getEmail();
+          $current_user_id = \Drupal::currentUser()->id();
+
+          // Update user's mobile number if empty.
+          $account = User::load($current_user_id);
+
+          if (empty($account->get('field_mobile_number')->getString())) {
+            $billing = (array) $cart->getBilling();
+            $account->get('field_mobile_number')->setValue($billing['telephone']);
+            $account->save();
+          }
+        }
+
+        /** @var \Drupal\alshaya_acm_customer\OrdersManager $orders_manager */
+        $orders_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+        $orders_manager->clearOrderCache($email, $current_user_id);
+        $orders_manager->clearLastOrderRelatedProductsCache();
+
+        // Clear the cart in session.
+        $this->cartStorage->clearCart();
       }
     }
   }

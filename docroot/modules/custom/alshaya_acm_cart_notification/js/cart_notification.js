@@ -58,7 +58,11 @@
           scrollTop: $('.header--wrapper').offset().top
         }, 'slow');
           $('body').addClass('notification--on');
-        $('#cart_notification').addClass('has--notification')
+        $('#cart_notification').addClass('has--notification');
+
+        setTimeout(function () {
+          $('#cart_notification').fadeOut();
+        }, 10000);
       };
 
       $.fn.stopSpinner = function (data) {
@@ -97,7 +101,6 @@
             if (product.dimension5 !== 'simple') {
               var currentLangCode = drupalSettings.path.currentLanguage;
               if (currentLangCode !== 'en') {
-                var productSizeTranslations = drupalSettings.alshaya_product_size_config;
                 size = drupalSettings.alshaya_product_size_config[size];
               }
               product.dimension1 = size;

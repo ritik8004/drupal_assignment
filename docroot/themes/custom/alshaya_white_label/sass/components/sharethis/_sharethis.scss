@@ -13,7 +13,7 @@
       #{$left}: 0;
       width: 100%;
       height: 5rem;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.5);
     }
   }
 
@@ -28,6 +28,15 @@
     background-size: contain;
     margin: 10px 20px 10px 0;
 
+    &::before {
+      font-size: 1.938rem;
+      color: $marine-blue-two;
+    }
+
+    &:hover::before {
+      color: transparent;
+    }
+
     @include if-rtl {
       margin: 10px 0 10px 20px;
     }
@@ -35,50 +44,51 @@
     &:last-child {
       margin: 10px 0;
     }
-
-    &:hover {
-      cursor: pointer;
-      color: $cherry;
-    }
   }
 
   .st_facebook_custom {
-    background-image: url(../imgs/social-icons/pdp/ic-facebook.png);
+    @include icon(facebook);
 
-    &:hover {
-      background-image: url('../imgs/social-icons/pdp/ic-facebookselect.png');
+    &:hover::before {
+      cursor: pointer;
+      background: url("../imgs/social-icons/pdp/ic-facebookselect.png") no-repeat center;
+      background-size: 1.5rem;
     }
   }
 
   .st_twitter_custom {
-    background-image: url(../imgs/social-icons/pdp/ic-twitter.png);
+    @include icon(twitter);
 
-    &:hover {
-      background-image: url('../imgs/social-icons/pdp/ic-twitterselect.png');
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-twitterselect.png") no-repeat center;
+      background-size: 1.5rem;
     }
   }
 
   .st_pinterest_custom {
-    background-image: url(../imgs/social-icons/pdp/ic-pinterest.png);
+    @include icon(pinterest);
 
-    &:hover {
-      background-image: url('../imgs/social-icons/pdp/ic-pinterestselect.png');
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-pinterestselect.png") no-repeat center;
+      background-size: 1.5rem;
     }
   }
 
   .st_instagram_custom {
-    background-image: url(../imgs/social-icons/pdp/ic-instagram.png);
+    @include icon(instagram);
 
-    &:hover {
-      background-image: url('../imgs/social-icons/pdp/ic-instagramselect.png');
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-instagramselect.png") no-repeat center;
+      background-size: 1.5rem;
     }
   }
 
   .st_youtube_custom {
-    background-image: url(../imgs/social-icons/pdp/ic-youtube.png);
+    @include icon(youtube);
 
-    &:hover {
-      background-image: url('../imgs/social-icons/pdp/ic-youtubeselect.png');
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-youtubeselect.png") no-repeat center;
+      background-size: 1.5rem;
     }
   }
 }

@@ -47,6 +47,7 @@ class SKUSettingsForm extends ConfigFormBase {
     $sku_settings = $this->config('acq_sku.settings');
     $sku_settings->set('stock_cache_multiplier', $form_state->getValue('stock_cache_multiplier'));
     $sku_settings->set('stock_cache_max_lifetime', $form_state->getValue('stock_cache_max_lifetime'));
+    $sku_settings->set('linked_skus_cache_max_lifetime', $form_state->getValue('linked_skus_cache_max_lifetime'));
     $sku_settings->save();
   }
 
@@ -77,6 +78,13 @@ class SKUSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Stock Cache Max Lifetime'),
       '#description' => $this->t("Maximum lifetime for the stock cache in seconds."),
       '#default_value' => $sku_settings->get('stock_cache_max_lifetime'),
+    ];
+
+    $form['linked_skus_cache_max_lifetime'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Linked SKUs Cache Max Lifetime'),
+      '#description' => $this->t("Maximum lifetime for linked skus in seconds."),
+      '#default_value' => $sku_settings->get('linked_skus_cache_max_lifetime'),
     ];
 
     return $form;

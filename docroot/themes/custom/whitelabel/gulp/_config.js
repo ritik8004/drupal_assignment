@@ -2,14 +2,14 @@ module.exports = {
   rtl: true,
   styles: {
     source: [
-      'sass/**/*.scss',
+      // 'sass/**/*.scss',
       'components/**/*.scss'
     ],
     directionalSource: [
       'sass/**/*.ltr.scss',
       'components/**/*.ltr.scss'
     ],
-    destination: 'dist/css/',
+    destination: 'components/dist/css/',
     options: {
       outputStyle: 'expanded',
       includePaths: [
@@ -74,7 +74,7 @@ module.exports = {
     ]
   },
   browserSync: {
-    proxy: null,
+    proxy: 'https://local.non-transac.com',
     open: true,
     xip: false,
     logConnections: false

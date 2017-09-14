@@ -186,8 +186,6 @@
     max-width: 11.625rem;
 
     @include breakpoint($upto-desktop) {
-      max-width: 10rem;
-      min-height: 10rem;
       object-fit: cover;
     }
   }
@@ -365,7 +363,10 @@
 }
 
 .has--special--price {
-  text-decoration: line-through;
+  .price-amount,
+  .price-currency {
+    text-decoration: line-through;
+  }
 }
 
 .node--view-mode-search-result {
@@ -385,17 +386,21 @@
 .special--price .price-amount,
 .special--price .price-currency,
 .special--price .price-wrapper {
-  color: $special-price !important;
+  color: $scarlet !important;
 }
 
 .price--discount {
-  margin-top: 0.5625rem;
+  margin-top: 0;
   font-size: 0.625rem;
-  color: $special-price;
+  color: $scarlet;
 
   @include breakpoint($tablet) {
     margin-top: 0.75rem;
     font-size: 0.75rem;
+
+    td.price & {
+      margin-top: 0.245rem;
+    }
   }
 
   @include breakpoint($desktop) {

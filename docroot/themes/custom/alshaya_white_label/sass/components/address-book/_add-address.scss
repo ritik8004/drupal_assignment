@@ -58,13 +58,13 @@
       padding-bottom: 1.5rem;
 
       @include breakpoint($tablet) {
-        margin-top: 0.5rem;
-        padding-bottom: 2rem;
+        margin-top: 1.5rem;
+        padding-bottom: 1.5rem;
       }
 
       @include breakpoint($desktop) {
-        margin-top: 1rem;
-        padding-bottom: 2rem;
+        margin-top: 1.5rem;
+        padding-bottom: 1.5rem;
       }
     }
 

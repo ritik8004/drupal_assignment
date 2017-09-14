@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "eb74ff020544eb202c4512a88a581d3d",
+    "content-hash": "4c83fc4ae258088e9e1b0b676c13242c",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2477,7 +2477,7 @@
                 },
                 "patches_applied": {
                     "Allow custom submit handler in jquery validate": "https://www.drupal.org/files/issues/2898885-9.patch",
-                    "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-11-allow-library-to-be-installed-outside-module.patch",
+                    "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
                     "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
                 }
             },
@@ -3060,6 +3060,8 @@
                     "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-1.patch",
                     "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                     "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
+                    "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
+                    "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/no_reliable_method-2752961-29.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-303.patch"
@@ -5691,20 +5693,23 @@
         },
         {
             "name": "drupal/pcb",
-            "version": "1.0.0-beta1",
+            "version": "1.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/pcb",
-                "reference": "8.x-1.0-beta1"
+                "reference": "8.x-1.0-rc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.0-beta1.zip",
-                "reference": "8.x-1.0-beta1",
-                "shasum": "d6c162943ffd9ef6e2a310ea0e3046b98a34dd54"
+                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.0-rc1.zip",
+                "reference": "8.x-1.0-rc1",
+                "shasum": "d410e0d504f60d18c69be42fc06522cebbef267c"
             },
             "require": {
                 "drupal/core": "~8.0"
+            },
+            "require-dev": {
+                "drupal/memcache": "*"
             },
             "type": "drupal-module",
             "extra": {
@@ -5712,8 +5717,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta1",
-                    "datestamp": "1502878143",
+                    "version": "8.x-1.0-rc1",
+                    "datestamp": "1504939744",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -5729,6 +5734,10 @@
                     "name": "Nikunj Kotecha (nikunjkotecha)",
                     "homepage": "https://www.drupal.org/u/nikunjkotecha",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "piyuesh23",
+                    "homepage": "https://www.drupal.org/user/1116218"
                 }
             ],
             "description": "Permanent Cache Bin module adds support for cache bins which are not cleared during drush cr.",

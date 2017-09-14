@@ -13,14 +13,8 @@ dependencies:
     - field.field.node.acq_promotion.field_acq_promotion_type
     - node.type.acq_promotion
   module:
-    - panelizer
     - user
-third_party_settings:
-  panelizer:
-    enable: false
-    custom: false
-    allow: false
-    default: default
+third_party_settings: { }
 id: node.acq_promotion.default
 targetEntityType: node
 bundle: acq_promotion

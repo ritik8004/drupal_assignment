@@ -43,6 +43,21 @@
           });
         }
       });
+      $('.path--user #details-privilege-card-wrapper').each(function () {
+        if (context === document) {
+          var error = $(this).find('.form-item--error-message');
+          var active = false;
+          if (error.length > 0) {
+            active = 0;
+          }
+
+          $(this).accordion({
+            header: '.privilege-card-wrapper-title',
+            collapsible: true,
+            active: active
+          });
+        }
+      });
     }
   };
 
@@ -169,12 +184,12 @@
        * Toggles the Order confirmation table.
        */
       if ($('.multistep-checkout .user__order--detail').length) {
-        $('.collapse-row').slideUp();
+        $('.collapse-row').fadeOut();
         $('.product--count').on('click', function () {
           $('#edit-confirmation-continue-shopping')
             .toggleClass('expanded-table');
           $(this).toggleClass('expanded-row');
-          $(this).nextAll('.collapse-row').slideToggle();
+          $(this).nextAll('.collapse-row').fadeToggle('slow');
         });
       }
 
