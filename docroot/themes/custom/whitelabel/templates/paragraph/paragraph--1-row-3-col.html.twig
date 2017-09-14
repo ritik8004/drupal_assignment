@@ -38,7 +38,8 @@
  * @ingroup themeable
  */
 #}
-{% include "@molecules/_paragraph.twig"  with
+{{ attach_library("victoria_secret/paragraph-promo-one-row-three-columns")}}
+{% include "@molecules/06-content/paragraph-promo-one-row-three-col/promo-one-row-three-col.twig"  with
   {
     paragraph: paragraph,
     content: content,
