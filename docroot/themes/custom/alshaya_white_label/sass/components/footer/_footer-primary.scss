@@ -226,6 +226,10 @@
 #alshaya-newsletter-subscribe {
   #edit-email {
     padding-#{$right}: 33%;
+
+    html[lang=ar] & {
+      padding-#{$right}: 37.5%;
+    }
   }
 }
 
