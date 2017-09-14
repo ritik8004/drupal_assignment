@@ -1,0 +1,17 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-store-link {
+  background-color: $black;
+  color: $white;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  padding: 1rem 0.625rem;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+
+  a {
+    color: $white;
+    text-decoration: none;
+  }
+}

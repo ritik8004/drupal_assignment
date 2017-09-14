@@ -1,0 +1,16 @@
+{% extends "@molecules/_views-view.twig" %}
+
+{% block rows %}
+  {% if rows %}
+    <div class="view-store-finder--list__columns">
+      {% set batchLength = (rows|length / 2)|round(0, 'ceil') %}
+      {% for col in rows|batch(batchLength) %}
+        <div class="view-store-finder--list__column--{{ loop.index }}">
+          {% for row in col %}
+            {{ row }}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

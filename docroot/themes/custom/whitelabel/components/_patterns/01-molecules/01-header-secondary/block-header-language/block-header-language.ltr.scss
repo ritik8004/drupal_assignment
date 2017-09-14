@@ -1,0 +1,8 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-language-switcher--desktop {
+  background-color: $black;
+  color: $white;
+  display: inline-block;
+  vertical-align: middle;
+}
