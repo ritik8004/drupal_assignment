@@ -42,11 +42,11 @@ $alshaya-bold-nodir: 'Mothercare';
 $alshaya-thin: 'MothercareThin';
 $alshaya-thin-nodir: 'MothercareThin';
 
-$alshaya-arabic-bold: 'Cairo-bold';
-$alshaya-arabic-bold-nodir: 'Cairo-bold';
+$alshaya-arabic-bold: 'Cairo-bold', 'Mothercare';
+$alshaya-arabic-bold-nodir: 'Cairo-bold', 'Mothercare';
 
-$alshaya-arabic-thin: 'Cairo-300';
-$alshaya-arabic-thin-nodir: 'Cairo-300';
+$alshaya-arabic-thin: 'Cairo-300', 'MothercareThin';
+$alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin';
 
 $alshaya-icons: 'alshaya-icons';
 $arial: 'arialmt', arial, sans-serif;
