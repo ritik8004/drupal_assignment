@@ -21,7 +21,6 @@
           $.ajax({
             url: Drupal.url('stock-check-ajax/node/' + productId),
             type: 'GET',
-            cache: false,
             dataType: 'json',
             success: function (result) {
               productStock.html(result.html);
@@ -39,7 +38,6 @@
           $.ajax({
             url: Drupal.url('get-cart-form/acq_sku/' + skuId),
             type: 'GET',
-            cache: false,
             dataType: 'json',
             success: function (result) {
               $wrapper.html(result.html);
@@ -116,7 +114,6 @@
           $.ajax({
             url: Drupal.url('get-cart-form/acq_sku/' + skuId),
             type: 'GET',
-            cache: false,
             dataType: 'json',
             success: function (result) {
               $wrapper.html(result.html);
@@ -217,7 +214,6 @@
         $.ajax({
           url: Drupal.url('get-cart-form/acq_sku/' + skuId),
           type: 'GET',
-          cache: false,
           dataType: 'json',
           success: function (result) {
             $wrapper.html(result.html);

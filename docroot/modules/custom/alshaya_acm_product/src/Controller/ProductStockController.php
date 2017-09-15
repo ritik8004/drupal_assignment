@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Controller;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheableJsonResponse;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormBuilderInterface;
@@ -62,7 +63,16 @@ class ProductStockController extends ControllerBase {
 
     $response = new CacheableJsonResponse($build, 200);
     $response->addCacheableDependency($sku_entity);
-    $response->addcacheabledependency(['url.path']);
+
+    // Adding cacheability metadata, so whenever, cache invalidates, this
+    // url's cached response also gets invalidate.
+    $cacheMeta = new CacheableMetadata();
+    // Adding cache tags.
+    $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
+    // Adding max-age.
+    $max_age = _alshaya_acm_get_stock_expiration_time($build['max_quantity']);
+    $cacheMeta->setCacheMaxAge($max_age);
+    $response->addCacheableDependency($cacheMeta);
 
     return $response;
   }
@@ -122,6 +132,17 @@ class ProductStockController extends ControllerBase {
 
       $response = new CacheableJsonResponse($build, 200);
       $response->addCacheableDependency($sku_entity);
+
+      // Adding cacheability metadata, so whenever, cache invalidates, this
+      // url's cached response also gets invalidate.
+      $cacheMeta = new CacheableMetadata();
+      // Adding cache tags.
+      $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
+      // Adding max-age.
+      $max_age = _alshaya_acm_get_stock_expiration_time($build['max_quantity']);
+      $cacheMeta->setCacheMaxAge($max_age);
+      $response->addCacheableDependency($cacheMeta);
+
       return $response;
     }
   }
