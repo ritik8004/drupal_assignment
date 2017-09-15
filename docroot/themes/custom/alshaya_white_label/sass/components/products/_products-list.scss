@@ -571,7 +571,11 @@
       position: relative;
       border: none;
 
-      @include icon(chevronup, after);
+      @include icon(chevron#{$right}, after);
+
+      @include breakpoint($tablet) {
+        @include icon(chevronup, after);
+      }
 
       &::after {
         border-#{$left}: none;
