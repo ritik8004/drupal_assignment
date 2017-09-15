@@ -444,12 +444,11 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-  $process_stock = TRUE;
+  $process_stock = FALSE;
 
-  // We don't process stock while PDP is loaded.
-  // We display form via separate controller or in POST.
-  if (\Drupal::request()->getMethod() == 'GET' && \Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
-    $process_stock = FALSE;
+  // We process stock only when loaded from our custom controller.
+  if (\Drupal::routeMatch()->getRouteName() == 'alshaya_acm_product.get_cart_form') {
+    $process_stock = TRUE;
   }
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
