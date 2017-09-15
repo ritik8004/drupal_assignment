@@ -52,7 +52,7 @@
               }
 
               Drupal.attachBehaviors($wrapper[0]);
-              Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
+              Drupal.reAttachAddCartAndConfigSizeAjax($wrapper[0]);
             }
           });
         }
@@ -123,7 +123,7 @@
               }
               $wrapper.closest('article[data-vmode="modal"]').addClass(stockCheckProcessed);
               Drupal.attachBehaviors($wrapper[0]);
-              Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
+              Drupal.reAttachAddCartAndConfigSizeAjax($wrapper[0]);
             }
           });
         }
@@ -144,6 +144,7 @@
 	 * @param element
 	 */
   Drupal.reAttachAddCartAndConfigSizeAjax = function (element) {
+    var postUrl = $(element).find('form').attr('action') + '?ajax_form=1';
     var editCartElementSettings = {
       callback: 'alshaya_acm_cart_notification_form_submit',
       dialogType: 'ajax',
@@ -155,7 +156,7 @@
         _triggering_element_name: 'op',
         _triggering_element_value: Drupal.t('add to cart')
       },
-      url: document.location.pathname + '?ajax_form=1',
+      url: postUrl,
       wrapper: 'cart_notification'
     };
 
@@ -171,12 +172,12 @@
       submit: {
         _triggering_element_name: 'configurables[size]'
       },
-      url: document.location.pathname + '?ajax_form=1'
+      url: postUrl
     };
 
     // Re-attach Ajax to add-to-cart buttons, since there are duplicate ids on the page, Drupal will attach
     // AJAX only with the first button it finds.
-    $('.edit-add-to-cart').each(function () {
+    $(element).find('.edit-add-to-cart').each(function () {
       var is_mobile_only_sell = $(this).closest('.mobile--only--sell');
       var is_modal_product = $(this).closest('#drupal-modal');
       var sku_id = $(this).siblings('input[name="sku_id"]').val();
@@ -219,7 +220,7 @@
             $wrapper.html(result.html);
             skuArticle.addClass('stock-check-processed');
             Drupal.attachBehaviors($wrapper[0]);
-            Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
+            Drupal.reAttachAddCartAndConfigSizeAjax($wrapper[0]);
           }
         });
       }
