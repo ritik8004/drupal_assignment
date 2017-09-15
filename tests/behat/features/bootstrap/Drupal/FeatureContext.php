@@ -1135,4 +1135,20 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       throw new \Exception('Customer service block is not being displayed');
     }
   }
+
+  /**
+   * @When /^I fill in an element having class "([^"]*)" with "([^"]*)"$/
+   */
+  public function iFillInAnElementHavingClassWith($class, $value) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', $class)->setValue($value);
+  }
+
+  /**
+   * @When /^I select "([^"]*)" from dropdown "([^"]*)"$/
+   */
+  public function iSelectFromDropdown($value, $class) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', $class)->selectOption($value);
+  }
 }
