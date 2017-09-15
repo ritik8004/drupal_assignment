@@ -731,25 +731,22 @@ function alshaya_acm_product_is_buyable(SKU $sku_entity) {
 }
 
 /**
- * Wrapper function to get the stock cache expiration time.
+ * Wrapper function to get the cached expiration time for the SKU.
  *
- * @param int $stock_quantity
- *   The quantity of sku in stock.
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU entity object.
  *
  * @return int
- *   Expiration time.
+ *   Cache expiration time.
  */
-function _alshaya_acm_get_stock_expiration_time($stock_quantity = 0) {
-  // If quantity is zero or cache multiplier is zero we don't cache the stock.
-  if ($stock_quantity != 0 && $cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
-    $default_cache_lifetime = $stock_quantity ? $stock_quantity * $cache_multiplier : $cache_multiplier;
-    $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
-
-    // Calculate the timestamp when we want the cache to expire.
-    $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
-    $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
-
-    return (int) $expire;
+function _alshaya_acm_get_stock_expiration_time(SKU $sku_entity) {
+  $stock_cid = acq_sku_get_stock_cache_id($sku_entity);
+  // If 'stock' bin is available.
+  if ($stock_cache_backend = \Drupal::cache('stock')) {
+    // If cached data is available.
+    if ($cache = $stock_cache_backend->get($stock_cid)) {
+      return (int) $cache->expire;
+    }
   }
 
   return (int) 0;
