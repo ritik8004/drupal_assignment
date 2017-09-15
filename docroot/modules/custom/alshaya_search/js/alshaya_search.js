@@ -97,26 +97,47 @@
         }
       }, 100);
 
-      // Change the title of facet when open.
-      var priceCurrency = settings.alshaya_search_price_currency;
-      var $finalPriceBlock = $('#block-finalprice');
-      if (priceCurrency) {
-        var initialTitle = $finalPriceBlock.find('h3').html();
-        $finalPriceBlock.find('h3').on('click', function() {
-          if ($(this).hasClass('ui-state-active')) {
-            $finalPriceBlock.find('h3').html(initialTitle + ' (' + priceCurrency + ')');
-          }
-          else {
-            $finalPriceBlock.find('h3').html(initialTitle);
-          }
-        });
+      // Only execute if views is not empty.
+      if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
+        // Change the title of facet when open.
+        var priceCurrency = settings.alshaya_search_price_currency;
+        var $finalPriceBlock = $('#block-finalprice');
+        if (priceCurrency) {
+          var initialTitle = $finalPriceBlock.find('h3').html();
+          $finalPriceBlock.find('h3').on('click', function() {
+            if ($(this).hasClass('ui-state-active')) {
+              $finalPriceBlock.find('h3').html(initialTitle + ' (' + priceCurrency + ')');
+            }
+            else {
+              $finalPriceBlock.find('h3').html(initialTitle);
+            }
+          });
+        }
+
+        // Price facets to respect Soft Limit.
+        var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
+        var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
+        $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
       }
 
-      // Price facets to respect Soft Limit.
-      var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
-      var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
-      $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
+      $('.ui-autocomplete').on("touchend",function(e) {
+        if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+          e.stopPropagation();
+          e.preventDefault();
+          if (e.handled !== true) {
+            if ($(e.target).hasClass('.autocomplete-suggestion-user-input')) {
+              var $userInput = $(e.currentTarget);
+            }
+            else {
+              var $userInput = $(e.currentTarget).find('.autocomplete-suggestion-user-input');
+            }
+            var input = $userInput.html() + $userInput.siblings('.autocomplete-suggestion-suggestion-suffix').html();
+            $('#edit-keywords').val(input);
+            $('#views-exposed-form-search-page').submit();
+          }
+        }
 
+      });
     }
   };
 
