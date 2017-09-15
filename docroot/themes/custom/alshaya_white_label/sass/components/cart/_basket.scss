@@ -233,18 +233,6 @@
       }
     }
 
-    .price-currency.suffix {
-      line-height: 1.2;
-
-      @include breakpoint($only-tablet) {
-        line-height: 1.3;
-      }
-
-      @include breakpoint($desktop) {
-        line-height: 1.2;
-      }
-    }
-
     .image {
       display: inline-block;
       width: 44%;
