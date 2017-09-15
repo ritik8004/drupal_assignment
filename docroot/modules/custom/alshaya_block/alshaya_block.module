@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_block.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\EntityTypeInterface;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function alshaya_block_entity_base_field_info(EntityTypeInterface $entity_type) {
+  if ($entity_type->id() == 'block_content') {
+    $fields['machine_name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Machine name'))
+      ->setDescription(t('Machine name of the block'))
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 255)
+      ->addConstraint('UniqueField', [])
+      ->setDisplayOptions('form', [
+        'type' => 'machine_name',
+        'weight' => -4,
+        'settings' => [
+          'source' => [
+            'info',
+            'widget',
+            0,
+            'value',
+          ],
+          'exists' => 'alshaya_block_existing_block_content_name',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
+    return $fields;
+  }
+}
+
+/**
+ * Check the given machine name already exists or not.
+ *
+ * @param string $id
+ *   The machine name.
+ *
+ * @return bool
+ *   Return true if machine_name exists else false.
+ */
+function alshaya_block_existing_block_content_name($id) {
+  if (\Drupal::entityTypeManager()->getStorage('block_content')->getQuery()->condition('machine_name', $id)->range(0, 1)->count()->execute()) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block templates.
+ */
+function alshaya_block_preprocess_block(&$variables) {
+  switch ($variables['base_plugin_id']) {
+    case 'block_content':
+      $block_content = $variables['content']['#block_content'];
+      $machine_name = $block_content->get('machine_name')->value;
+      $cssclass = 'block-content--' . strtolower($machine_name);
+      $variables['attributes']['class'][] = Html::cleanCssIdentifier($cssclass);
+      $variables['attributes']['class'][] = 'block-type-block-content';
+      break;
+  }
+}
