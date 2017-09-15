@@ -12,3 +12,10 @@
   text-shadow: none;
   color: transparent;
 }
+
+@mixin u-center--horizontally() {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 0;
+}
