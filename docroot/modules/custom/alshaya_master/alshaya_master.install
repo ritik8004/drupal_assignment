@@ -389,11 +389,14 @@ function alshaya_master_install() {
     'Show more' => [
       'ar' => 'عرض المزيد',
     ],
+    'show more' => [
+      'ar' => 'عرض المزيد',
+    ],
     'Show less' => [
       'ar' => 'عرض أقل',
     ],
-    'show more' => [
-      'ar' => 'عرض المزيد',
+    'show less' => [
+      'ar' => 'عرض أقل',
     ],
     'sign up' => [
       'ar' => 'سجل الآن',

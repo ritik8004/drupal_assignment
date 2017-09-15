@@ -146,7 +146,7 @@
   }
 
   @include breakpoint($desktop) {
-    width: 56%;
-    margin-#{$right}: 9.7rem;
+    width: 67%;
+    margin-#{$right}: 3rem;
   }
 }

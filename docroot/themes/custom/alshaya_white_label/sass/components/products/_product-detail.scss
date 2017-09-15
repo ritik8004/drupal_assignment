@@ -1113,7 +1113,13 @@
           height: auto;
 
           li {
-            &:first-child {
+            &:first-child,
+            &:nth-child(2),
+            &:nth-child(3) {
+              display: none;
+            }
+
+            &:nth-child(4) {
               border-top: none;
             }
 
@@ -1725,7 +1731,7 @@ article.product-out-of-stock {
   margin-bottom: 0.875rem;
   padding: 0.3625rem 1.875rem 0.5625rem;
   background: $pumpkin-orange;
-  color: $white-five;
+  color: $white-four !important;
   cursor: pointer;
   margin-#{$left}: 1rem;
   font-size: 0.75rem;

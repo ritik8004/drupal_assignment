@@ -1,8 +1,8 @@
-@javascript @checkout @arabic @mmcpa-1930 @manual
+@javascript @checkout @arabic @ar_checkout @mmcpa-1930 @manual
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on a simple product page
+    Given I am on a configurable product
     When I wait for the page to load
     When I press "add to basket"
     And I wait for AJAX to finish
@@ -65,9 +65,9 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     When I press "سجل الطلبية"
     When I wait 10 seconds
@@ -126,9 +126,9 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I fill in "edit-billing-address-address-billing-given-name" with "شويتا"
     And I fill in "edit-billing-address-address-billing-family-name" with "شارما"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"

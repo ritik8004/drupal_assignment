@@ -571,7 +571,11 @@
       position: relative;
       border: none;
 
-      @include icon(chevronup, after);
+      @include icon(chevron#{$right}, after);
+
+      @include breakpoint($tablet) {
+        @include icon(chevronup, after);
+      }
 
       &::after {
         border-#{$left}: none;
@@ -733,7 +737,7 @@
 
   &.view-filters {
     label {
-      @include breakpoint($upto-desktop) {
+      @include breakpoint($only-tablet) {
         display: none;
       }
 
@@ -786,6 +790,22 @@
             }
           }
         }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .form-type-select label {
+        display: block;
+        position: absolute;
+        top: 1.125rem;
+        #{$left}: 0.125rem !important;
+        background: $white-five;
+        width: 83%;
+        pointer-events: none;
+        height: 2rem;
+        vertical-align: middle;
+        padding: 0.5rem 0;
+        padding-#{$left}: 0.5625rem;
       }
     }
   }

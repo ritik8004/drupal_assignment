@@ -1,4 +1,4 @@
-@javascript @checkout @english @mmcpa-1930 @manual
+@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
 Feature: Test various checkout scenarios as returning customer
 
   Background:
@@ -22,6 +22,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I follow "deliver to this address"
     And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
     Then I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
@@ -38,6 +40,8 @@ Feature: Test various checkout scenarios as returning customer
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I follow "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
     Then I press "proceed to payment"
     And I wait for the page to load
@@ -99,13 +103,15 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I follow "deliver to this address"
     And I wait for the page to load
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
     And I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     And I press "place order"
     When I wait 10 seconds
@@ -126,9 +132,9 @@ Feature: Test various checkout scenarios as returning customer
     When I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "Block A"

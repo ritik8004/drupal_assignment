@@ -1,4 +1,4 @@
-@javascript @checkout @english @mmcpa-1930 @manual
+@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
 Feature: As an authenticated user
   I should be able to checkout
   using various payment options
@@ -6,15 +6,7 @@ Feature: As an authenticated user
   Background:
     Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
-    And I wait for the page to load
-    When I click the label for "#ui-id-2 > p.title"
-    And I fill in "edit-privilege-card-number" with "000135844"
-    And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "Save"
-    When I wait for the page to load
-    Then I should see "The changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -30,6 +22,8 @@ Feature: As an authenticated user
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I follow "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
     And I press "proceed to payment"
     And I wait for the page to load
@@ -48,6 +42,8 @@ Feature: As an authenticated user
       When I follow "Home delivery"
       And I wait for AJAX to finish
       And I follow "deliver to this address"
+      And I wait for AJAX to finish
+      When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
       And I wait for AJAX to finish
       And I press "proceed to payment"
       And I wait for the page to load
@@ -110,15 +106,15 @@ Feature: As an authenticated user
     And I wait for AJAX to finish
     When I follow "deliver to this address"
     And I wait for AJAX to finish
-    When I follow "Home delivery"
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
     And I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     And I press "place order"
     When I wait 10 seconds
@@ -140,9 +136,9 @@ Feature: As an authenticated user
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"

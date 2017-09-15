@@ -414,7 +414,7 @@ function alshaya_user_mail_alter(&$message) {
     $language_manager->setConfigOverrideLanguage($original_language);
 
     // Alter the header from information according to user preferred language.
-    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8', 'Q') . ' <' . $message['from'] . '>';
+    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8') . ' <' . $message['from'] . '>';
     $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
   }
 

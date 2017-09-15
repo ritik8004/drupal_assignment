@@ -122,6 +122,7 @@
 
     @include breakpoint($desktop) {
       margin: 1.625rem 0;
+      font-size: 0.875rem;
     }
 
     @include breakpoint($only-mobile) {
