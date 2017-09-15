@@ -70,7 +70,8 @@ class ProductStockController extends ControllerBase {
     // Adding cache tags.
     $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
     // Adding max-age.
-    $max_age = _alshaya_acm_get_stock_expiration_time($sku_entity);
+    $expiration_time = _alshaya_acm_get_stock_expiration_time($sku_entity);
+    $max_age = $expiration_time - \Drupal::time()->getRequestTime();
     $cacheMeta->setCacheMaxAge($max_age);
     $response->addCacheableDependency($cacheMeta);
 
@@ -139,7 +140,8 @@ class ProductStockController extends ControllerBase {
       // Adding cache tags.
       $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
       // Adding max-age.
-      $max_age = _alshaya_acm_get_stock_expiration_time($sku_entity);
+      $expiration_time = _alshaya_acm_get_stock_expiration_time($sku_entity);
+      $max_age = $expiration_time - \Drupal::time()->getRequestTime();
       $cacheMeta->setCacheMaxAge($max_age);
       $response->addCacheableDependency($cacheMeta);
 
