@@ -26,7 +26,6 @@ base profile:
   name: lightning
   excluded_dependencies:
     - dblog
-    - diff
     - help
     - history
     - lightning_landing_page
