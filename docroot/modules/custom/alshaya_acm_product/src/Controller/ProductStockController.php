@@ -62,6 +62,7 @@ class ProductStockController extends ControllerBase {
 
     $response = new CacheableJsonResponse($build, 200);
     $response->addCacheableDependency($sku_entity);
+    $response->addcacheabledependency(['url.path']);
 
     // Adding cacheability metadata, so whenever, cache invalidates, this
     // url's cached response also gets invalidate.
@@ -132,6 +133,7 @@ class ProductStockController extends ControllerBase {
 
       $response = new CacheableJsonResponse($build, 200);
       $response->addCacheableDependency($sku_entity);
+      $response->addcacheabledependency(['url.path']);
 
       // Adding cacheability metadata, so whenever, cache invalidates, this
       // url's cached response also gets invalidate.
