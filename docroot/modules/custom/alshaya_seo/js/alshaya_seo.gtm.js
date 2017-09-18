@@ -252,7 +252,7 @@
           var responseJSON = xhr.responseJSON;
           var responseMessage = '';
           $.each(responseJSON, function (key, obj) {
-            if (obj.method === 'stopNewsletterSpinner') {
+            if (obj.method === 'newsletterHandleResponse') {
               responseMessage = obj.args[0].message;
               return false;
             }
