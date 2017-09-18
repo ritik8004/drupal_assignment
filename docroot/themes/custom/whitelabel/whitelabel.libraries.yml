@@ -189,3 +189,9 @@ slick:
     node_modules/slick-carousel/slick/slick.min.js: {}
   dependencies:
     - core/jquery
+
+node-individual-store:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/00-node-individual-store/individual-store.ltr.css: {}
