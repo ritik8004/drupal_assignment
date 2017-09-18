@@ -16,6 +16,9 @@ function alshaya_acm_product_ranking_drush_command() {
   $commands['ranking-sync'] = [
     'description' => 'Drush command to sync product ranking based on category.',
     'aliases' => ['aaprs'],
+    'arguments'   => [
+      'ranking_type' => 'Name of the ranking type.',
+    ],
   ];
 
   return $commands;
@@ -24,7 +27,7 @@ function alshaya_acm_product_ranking_drush_command() {
 /**
  * Sync product rankings based on category.
  */
-function drush_alshaya_acm_product_ranking_ranking_sync() {
+function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type) {
   drush_print(dt('Product ranking sync in progress...'));
   // Get root category configuration.
   $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
@@ -39,15 +42,14 @@ function drush_alshaya_acm_product_ranking_ranking_sync() {
       continue;
     }
 
-    // Find the magento commerce id from the term.
+    // Find the magento commerce id from the term. Skip if not found.
     $commerce_id = Term::load($term->tid)->get('field_commerce_id')->value;
     if (!$commerce_id) {
-      drush_print(dt("Skipped: Ranking sync skipped for $term->name (tid: $term->tid), as commerce id not found in Drupal."));
       continue;
     }
 
     // Get product ranking for this category from Magento.
-    $response = \Drupal::service('alshaya_api.api')->invokeApi("categories/$commerce_id/products", [], 'GET');
+    $response = \Drupal::service('alshaya_api.api')->invokeApi("categories/6/products", [], 'GET');
     $response = json_decode($response, TRUE);
 
     // Skip sync if error is found in the response for a particular category.
@@ -62,32 +64,38 @@ function drush_alshaya_acm_product_ranking_ranking_sync() {
     // Delete existing records of rankings for this category.
     $database->delete('alshaya_acm_product_ranking')
       ->condition('tid', $term->tid)
+      ->condition('ranking_type', $ranking_type)
       ->execute();
 
+    $skus = array_column($response, 'sku');
+    if (empty($skus)) {
+      continue;
+    }
+
+    // Get all product nids from skus.
+    $query = $database->select('node__field_skus', 'n');
+    $query->fields('n', ['field_skus_value', 'entity_id']);
+    $query->condition('n.bundle', 'acq_product');
+    $query->condition('n.field_skus_value', $skus, 'IN');
+    $nids = $query->execute()->fetchAllKeyed();
+    // Skip if not product found for any sku.
+    if (empty($nids)) {
+      continue;
+    }
+
     foreach ($response as $product_rank) {
-      // Get product nid from sku.
-      $query = \Drupal::entityQuery('node');
-      $query->condition('type', 'acq_product');
-      $query->condition('field_skus', $product_rank['sku']);
-      $query->range(0, 1);
-      $result = $query->execute();
-
-      // Skip product if sku not found.
-      if (empty($result)) {
-        continue;
+      if (isset($nids[$product_rank['sku']])) {
+        // Insert new ranking data for the product.
+        $fields = [
+          'nid' => $nids[$product_rank['sku']],
+          'tid' => $term->tid,
+          'rank' => $product_rank['position'],
+          'ranking_type' => $ranking_type,
+        ];
+        $database->insert('alshaya_acm_product_ranking')
+          ->fields($fields)
+          ->execute();
       }
-
-      // Insert new ranking data for the product.
-      $nid = reset($result);
-      $fields = [
-        'nid' => $nid,
-        'tid' => $term->tid,
-        'rank' => $product_rank['position'],
-        'ranking_type' => 'best_seller',
-      ];
-      $database->insert('alshaya_acm_product_ranking')
-        ->fields($fields)
-        ->execute();
     }
   }
 
