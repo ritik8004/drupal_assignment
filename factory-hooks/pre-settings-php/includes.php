@@ -87,6 +87,7 @@ switch ($env) {
   case 'local':
     // Specify the modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
+    $settings['additional_modules'][] = 'diff';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'features_ui';
 
