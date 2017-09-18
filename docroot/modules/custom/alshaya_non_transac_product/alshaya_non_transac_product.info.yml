@@ -5,6 +5,7 @@ package: Alshaya
 core: 8.x
 version: 8.x-1.0
 dependencies:
+  - alshaya_image_styles
   - content_translation
   - entity_browser
   - field
@@ -19,4 +20,6 @@ dependencies:
   - taxonomy
   - text
   - user
+  - views
+  - views_infinite_scroll
   - workbench_moderation
