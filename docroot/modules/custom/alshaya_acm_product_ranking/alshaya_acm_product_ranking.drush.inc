@@ -27,6 +27,7 @@ function alshaya_acm_product_ranking_drush_command() {
 /**
  * Sync product rankings based on category.
  */
+
 function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type) {
   drush_print(dt('Product ranking sync in progress...'));
   // Get root category configuration.
@@ -49,7 +50,7 @@ function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type) {
     }
 
     // Get product ranking for this category from Magento.
-    $response = \Drupal::service('alshaya_api.api')->invokeApi("categories/6/products", [], 'GET');
+    $response = \Drupal::service('alshaya_api.api')->invokeApi("categories/$commerce_id/products", [], 'GET');
     $response = json_decode($response, TRUE);
 
     // Skip sync if error is found in the response for a particular category.
@@ -67,6 +68,7 @@ function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type) {
       ->condition('ranking_type', $ranking_type)
       ->execute();
 
+    // Get all skus from the response.
     $skus = array_column($response, 'sku');
     if (empty($skus)) {
       continue;
