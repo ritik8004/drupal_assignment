@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.147x204
+    - image.style.231x326
+    - image.style.286x404
+  theme:
+    - whitelabel
+id: 286x404
+label: 286x404
+image_style_mappings:
+  -
+    breakpoint_id: whitelabel.desk
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: 286x404
+  -
+    breakpoint_id: whitelabel.lap
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: 231x326
+  -
+    breakpoint_id: whitelabel.palm
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: 147x204
+breakpoint_group: whitelabel
+fallback_image_style: 147x204
