@@ -171,3 +171,21 @@ field-promo-block:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
+
+field-slider:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-slider/field-slider.ltr.css: {}
+  js:
+    components/js/field-slider.js: {}
+  dependencies:
+    - whitelabel/slick
+
+slick:
+  css:
+    theme:
+      node_modules/slick-carousel/slick/slick.css: {}
+  js:
+    node_modules/slick-carousel/slick/slick.min.js: {}
+  dependencies:
+    - core/jquery
