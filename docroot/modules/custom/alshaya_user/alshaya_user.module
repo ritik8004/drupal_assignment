@@ -279,6 +279,14 @@ function alshaya_user_acq_commerce_update_customer_api_request_alter(array &$req
 }
 
 /**
+ * Implements hook_entity_type_alter().
+ */
+function alshaya_user_entity_type_alter(array &$entity_types) {
+  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  $entity_types['user']->setFormClass('default', 'Drupal\alshaya_user\Form\AlshayaUserProfileForm');
+}
+
+/**
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_user_alshaya_i18n_onetime_translation_add() {
