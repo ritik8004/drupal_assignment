@@ -27,7 +27,6 @@ function alshaya_acm_product_ranking_drush_command() {
 /**
  * Sync product rankings based on category.
  */
-
 function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type) {
   drush_print(dt('Product ranking sync in progress...'));
   // Get root category configuration.
