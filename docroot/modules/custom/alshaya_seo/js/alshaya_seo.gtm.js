@@ -705,7 +705,7 @@
     });
 
     var data = {
-      event: 'promotions',
+      event: 'promotionImpression',
       ecommerce: {
         promoView: {
           promotions: promotions
