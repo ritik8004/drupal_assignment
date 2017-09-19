@@ -25,15 +25,6 @@ use Drupal\file\FileInterface;
  *   Array of media files.
  */
 function alshaya_acm_product_get_product_media($productId, $first_image_only = FALSE) {
-  static $product_media = [];
-
-  if (isset($product_media[$productId])) {
-    return $product_media[$productId];
-  }
-
-  // Initialising static cache with NULL.
-  $product_media[$productId] = NULL;
-
   // Load product from id.
   $product = Node::load($productId);
 
@@ -45,10 +36,10 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
       ->getValue();
 
     // Get the processed media data for the SKU.
-    $product_media[$productId] = alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
+    return alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
   }
 
-  return $product_media[$productId];
+  return NULL;
 }
 
 /**
