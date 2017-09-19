@@ -49,7 +49,7 @@ class MiniCartManager {
       // Use the template to render the HTML.
       $output['#quantity'] = $cart->getCartItemsCount();
       $output['#total'] = render($total);
-      $output['cart_id'] = $cart->id();
+      $output['#cart_id'] = $cart->id();
     }
 
     $output['#prefix'] = '<div id="mini-cart-wrapper">';

@@ -62,10 +62,10 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
     $mini_cart['#cache']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
 
     // Set cache metadata if cart_id is set.
-    if (isset($mini_cart['cart_id'])) {
-      $cart_id = $mini_cart['cart_id'];
+    if (isset($mini_cart['#cart_id'])) {
+      $cart_id = $mini_cart['#cart_id'];
       $mini_cart['#cache']['tags'][] = 'mini_cart_' . $cart_id;
-      unset($mini_cart['cart_id']);
+      unset($mini_cart['#cart_id']);
     }
 
     return $mini_cart;
