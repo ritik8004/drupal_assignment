@@ -236,6 +236,9 @@ function alshaya_master_install() {
     'Delivery Address' => [
       'ar' => 'عنوان التوصيل',
     ],
+    'delivery address' => [
+      'ar' => 'عنوان التوصيل',
+    ],
     'Primary address' => [
       'ar' => 'عنوان التوصيل الأساسي',
     ],
@@ -951,9 +954,6 @@ function alshaya_master_install() {
     ],
     'select delivery options' => [
       'ar' => 'اختر خيارات التوصيل',
-    ],
-    'delivery address' => [
-      'ar' => 'عنوان التوصيل',
     ],
     'Phone number in %field is required.' => [
       'ar' => 'يرجى إدخال رقم الجوال',
