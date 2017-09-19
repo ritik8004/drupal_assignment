@@ -6,7 +6,7 @@
     "prefer-stable": true,
     "require": {
         "acquia/blt": "8.8.7",
-        "acquia/lightning": "2.0.3",
+        "acquia/lightning": "^2.0.3",
         "drupal/address": "^1.0-rc4",
         "drupal/acsf": "^1.33.0",
         "drupal/key_value_field": "^1.0-beta1",
