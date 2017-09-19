@@ -6767,7 +6767,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/security_review"
             },
-            "time": "2016-10-20 15:43:48"
+            "time": "2016-10-20T15:43:48+00:00"
         },
         {
             "name": "drupal/sharethis",
