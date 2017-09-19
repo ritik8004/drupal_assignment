@@ -105,6 +105,9 @@ function alshaya_master_install() {
     'Contact Details' => [
       'ar' => 'تفاصيل الاتصال',
     ],
+    'Contact details changes have been saved.' => [
+      'ar' => 'تم حفظ ببيانات الاتصال',
+    ],
     'address book' => [
       'ar' => 'سجل العناوين ',
     ],
