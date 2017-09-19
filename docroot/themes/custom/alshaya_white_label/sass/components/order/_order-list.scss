@@ -208,6 +208,10 @@
   border-collapse: separate;
   border-spacing: 0;
 
+  .order-summary-row:hover td {
+    background: $white-three;
+  }
+
   @include breakpoint($desktop) {
     table-layout: fixed;
     height: 5.9rem;
