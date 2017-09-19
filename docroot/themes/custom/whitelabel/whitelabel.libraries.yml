@@ -195,3 +195,9 @@ node-individual-store:
   css:
     theme:
       components/dist/css/_patterns/02-organisms/00-node-individual-store/individual-store.ltr.css: {}
+
+field-store-open-hours:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-store-open-hours/field-store-open-hours.ltr.css: {}
