@@ -32,9 +32,8 @@ class KnetSettingsForm extends ConfigFormBase {
       ->set('resource_path', $form_state->getValue('resource_path'))
       ->set('use_secure_response_url', $form_state->getValue('use_secure_response_url'))
       ->set('alias', $form_state->getValue('alias'))
-      ->set('payment_pending', $form_state->getValue('payment_pending'))
-      ->set('payment_processed', $form_state->getValue('payment_processed'))
-      ->set('payment_failed', $form_state->getValue('payment_failed'))
+      ->set('knet_language_code', $form_state->getValue('knet_language_code'))
+      ->set('knet_currency_code', $form_state->getValue('knet_currency_code'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -71,28 +70,20 @@ class KnetSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('alias'),
     ];
 
-    $form['payment_pending'] = [
+    $form['knet_language_code'] = [
       '#type' => 'textfield',
-      '#description' => $this->t('Order status to check if payment processing is required/pending.'),
-      '#title' => $this->t('Payment pending'),
+      '#description' => $this->t('Language code to be used for K-Net.'),
+      '#title' => $this->t('K-Net Language code'),
       '#required' => TRUE,
-      '#default_value' => $config->get('payment_pending'),
+      '#default_value' => $config->get('knet_language_code'),
     ];
 
-    $form['payment_processed'] = [
+    $form['knet_currency_code'] = [
       '#type' => 'textfield',
-      '#description' => $this->t('Order status to set when payment succeeds.'),
-      '#title' => $this->t('Payment processed'),
+      '#description' => $this->t('Currency code to be used for K-Net.'),
+      '#title' => $this->t('K-Net Currency code'),
       '#required' => TRUE,
-      '#default_value' => $config->get('payment_processed'),
-    ];
-
-    $form['payment_failed'] = [
-      '#type' => 'textfield',
-      '#description' => $this->t('Order status to set when payment fails.'),
-      '#title' => $this->t('Payment failed'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('payment_failed'),
+      '#default_value' => $config->get('knet_currency_code'),
     ];
 
     return parent::buildForm($form, $form_state);
