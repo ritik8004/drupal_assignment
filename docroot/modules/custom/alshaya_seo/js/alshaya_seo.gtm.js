@@ -39,7 +39,8 @@
         'search result page',
         'product listing page',
         'product detail page',
-        'department page'
+        'department page',
+        'cart page'
       ];
 
       // If we receive an empty page type, set page type as not defined.
