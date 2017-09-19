@@ -10,17 +10,9 @@
       }
       // Do not allow search form submit on empty search text.
       $('form[data-bef-auto-submit-full-form]', context).submit(function (e) {
-        var keyword = $(this).find('input[name="keywords"]').val();
-        if (typeof keyword == 'undefined' || $.trim(keyword) === '') {
+        var $keyword = $(this).find('input[name="keywords"]');
+        if (typeof $keyword.val() == 'undefined' || $.trim($keyword.val()) === '') {
           e.preventDefault();
-        }
-        else {
-          // Detect arabic language, and redirect accordingly.
-          var arLang = /[^\0600–\06FF]+/;
-          if (arLang.test(keyword) && drupalSettings.path.currentLanguage == 'en') {
-            e.preventDefault();
-            window.location.href = Drupal.url.toAbsolute('ar/search') + '?keywords=' + keyword;
-          }
         }
       });
 
