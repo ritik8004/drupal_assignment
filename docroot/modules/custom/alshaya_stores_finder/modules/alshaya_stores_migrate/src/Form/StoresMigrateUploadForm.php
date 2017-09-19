@@ -4,6 +4,8 @@ namespace Drupal\alshaya_stores_migrate\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\migrate\MigrateExecutable;
+use Drupal\migrate\MigrateMessage;
 
 /**
  * Class StoresMigrateUploadForm.
@@ -30,7 +32,7 @@ class StoresMigrateUploadForm extends FormBase {
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Upload'),
+      '#value' => $this->t('Import stores'),
       '#button_type' => 'primary',
     ];
     $form['#theme'] = 'system_config_form';
@@ -59,7 +61,26 @@ class StoresMigrateUploadForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    file_unmanaged_copy($form_state->getValue('upload')->getFileUri(), 'public://import/stores/', FILE_EXISTS_REPLACE);
+    $filepath = $form_state->getValue('upload')->getFileUri();
+
+    $migrate_plus_migration_store_config = \Drupal::service('config.factory')->getEditable('migrate_plus.migration.store');
+
+    // Store the initial migrate configuration.
+    $initial_filepath = $migrate_plus_migration_store_config->get('source.path');
+
+    // Configure the migrate source path with the uploaded filepath.
+    $migrate_plus_migration_store_config->set('source.path', $filepath);
+    $migrate_plus_migration_store_config->save();
+
+    $migration = \Drupal::service('plugin.manager.migration')->createInstance('store');
+    $executable = new MigrateExecutable($migration, new MigrateMessage());
+    $executable->import();
+
+    // Restore the initial migrate configuration.
+    $migrate_plus_migration_store_config->set('source.path', $initial_filepath);
+    $migrate_plus_migration_store_config->save();
+
+    drupal_set_message(t('Stores have been imported.'), 'status');
   }
 
 }
