@@ -531,8 +531,7 @@ class AlshayaGtmManager {
       $cartItems = $cart->get('items');
       $cart_delivery_method = $cart->getExtension('shipping_method');
 
-      if (($cart->getCheckoutStep() === 'payment')
-        && $cart_delivery_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+      if ($cart_delivery_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
 
         // Get store code from cart extension.
         $store_code = $cart->getExtension('store_code');
