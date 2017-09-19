@@ -284,8 +284,7 @@ class KnetController extends ControllerBase {
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
 
-    // @TODO: Confirm message.
-    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.'), 'error');
+    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'), 'error');
 
     return $this->redirect('acq_checkout.form', ['step' => 'payment']);
   }
