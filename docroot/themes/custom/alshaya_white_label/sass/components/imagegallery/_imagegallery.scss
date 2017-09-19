@@ -55,6 +55,21 @@
   }
 }
 
+#product-image-gallery {
+  &.pager-no {
+    .slick-track {
+      transform: initial !important;
+    }
+  }
+}
+
+#lightSlider {
+  @include breakpoint($only-tablet) {
+    padding-#{$left}: 3rem;
+    padding-#{$right}: 3rem;
+  }
+}
+
 #product-image-gallery-container {
   @include breakpoint($tablet) {
     height: 40.5rem !important;
@@ -121,6 +136,7 @@
       margin: 0 0.625rem;
       background-color: $white;
       padding: 0.625rem;
+      height: 0;
 
       &.disabled {
         background-color: $light-ash;

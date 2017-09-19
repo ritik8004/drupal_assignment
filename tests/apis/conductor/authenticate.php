@@ -15,6 +15,6 @@ $api = 'agent/customer/' . $mail;
 $method = 'POST';
 
 $data = [];
-$data['form_params']['password'] = $pass;
+$data['password'] = $pass;
 
 invoke_api($api, $method, $data);

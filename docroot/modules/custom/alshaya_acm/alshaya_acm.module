@@ -205,27 +205,28 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     '#weight' => -98,
   ];
 
-  if (empty($out_of_stock_message)) {
-    // Change checkout button text to 'Checkout Securely'.
-    $form['actions']['checkout']['#value'] = t('checkout securely');
-    $form['actions']['checkout']['#suffix'] = '</div>';
-    $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
-    // We need to change the markup for submit button.
-    // @see alshaya_white_label_theme_suggestions_input_alter().
-    $form['actions']['checkout']['#attributes']['data-twig-suggestion'] = 'secure-checkout';
-    $form['actions']['checkout']['#attributes']['class'][] = 'bottom-edit-checkout';
+  // Change checkout button text to 'Checkout Securely'.
+  $form['actions']['checkout']['#value'] = t('checkout securely');
+  $form['actions']['checkout']['#suffix'] = '</div>';
+  $form['actions']['checkout']['#prefix'] = '<div id="secure-checkout-button">';
+  // We need to change the markup for submit button.
+  // @see alshaya_white_label_theme_suggestions_input_alter().
+  $form['actions']['checkout']['#attributes']['data-twig-suggestion'] = 'secure-checkout';
+  $form['actions']['checkout']['#attributes']['class'][] = 'bottom-edit-checkout';
 
-    // Added link markup.
-    $form['actions_top']['checkout_top'] = [
-      '#markup' => '<a class="checkout-top-button top-edit-checkout" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
-    ];
-  }
-  else {
-    $form['actions']['checkout']['#access'] = FALSE;
-  }
+  // Added link markup.
+  $form['actions_top']['checkout_top'] = [
+    '#markup' => '<a class="checkout-top-button top-edit-checkout" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
+  ];
 
-  // Out of stock error message.
   if (!empty($out_of_stock_message)) {
+    $form['actions']['checkout']['#attributes']['disabled'] = 'disabled';
+
+    $form['actions_top']['checkout_top'] = [
+      '#markup' => '<a class="checkout-top-button top-edit-checkout disabled" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
+    ];
+
+    // Out of stock error message.
     $form['form_level_error_wrapper']['out_of_stock']['#markup'] = '<div id="out-of-stock-message">' . $out_of_stock_message . '</div>';
   }
 
@@ -381,11 +382,15 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $cart_total['actions'] = $form['actions'];
   $response->addCommand(new ReplaceCommand('#table-cart-totals', $cart_total));
 
-  // // Update page title.
+  // Update page title.
   $cartStorage = \Drupal::service('acq_cart.cart_storage');
   $cart = $cartStorage->getCart();
   $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $cart->getCartItemsCount()])));
 
+  // Update mini cart Block with correct price & quantity.
+  $mini_cart_block_entity = \Drupal::entityTypeManager()->getStorage('block')->load('cartminiblock');
+  $mini_cart_block_view = \Drupal::entityTypeManager()->getViewBuilder('block')->view($mini_cart_block_entity);
+  $response->addCommand(new ReplaceCommand('div[data-block-plugin-id="cart_mini_block"]', $mini_cart_block_view));
   return $response;
 }
 
@@ -661,7 +666,7 @@ function alshaya_acm_is_product_in_stock(SKU $sku_entity, $recheck = FALSE, $res
 }
 
 /**
- * Implements hook_alshaya_onetime_translation_add().
+ * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   // Translate currency code in config.
@@ -789,7 +794,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   ];
   if (!empty($item_cart_price['discount'])) {
     $total_price['#discount'] = $item_cart_price['discount'];
-    $total_price['#final_price'] = $item_cart_price['final_price'] * $item['quantity']['#default_value'];
+    $total_price['#final_price'] = number_format($item_cart_price['final_price'] * $item['quantity']['#default_value'], 3);
   }
 
   return [

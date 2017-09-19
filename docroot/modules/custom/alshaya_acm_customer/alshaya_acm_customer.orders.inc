@@ -193,8 +193,14 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   // Calculate status of order based on status of items.
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
 
-  // Get the loyalty card number from order detail.
-  $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? $order['extension']['loyalty_card'] : '';
+  // Get loyalty settings.
+  $loyalty_settings = alshaya_loyalty_get_validation_settings();
+
+  // Show loyalty information if enabled.
+  if ($loyalty_settings['enable_disable_loyalty']) {
+    // Get the loyalty card number from order detail.
+    $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? alshaya_loyalty_format_card_number($order['extension']['loyalty_card'], TRUE) : '';
+  }
 
   return $orderRow;
 }
@@ -294,6 +300,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['payment_method'] = $payment_method_term->getName();
 
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
+  $orderDetails['discount'] = alshaya_acm_price_format($order['totals']['discount']);
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   return $orderDetails;

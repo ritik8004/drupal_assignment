@@ -5,12 +5,14 @@
  * Contains form alter for sku base form.
  */
 
+use Drupal\acq_cart\Form\CustomerCartForm;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
@@ -140,8 +142,15 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
 
   if ($output['#theme'] == 'add_to_cart_error') {
     $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id . ':visible', $html));
+    $response->addCommand(new InvokeCommand(NULL, 'cartGenericScroll', ['.error-container-' . $sku_css_id]));
   }
   else {
+    // Update mini cart Block.
+    $cart_storage = \Drupal::service('acq_cart.cart_storage');
+    $customer_cart_form_class = new CustomerCartForm($cart_storage);
+    $customer_cart_form = \Drupal::formBuilder()->getForm($customer_cart_form_class);
+    $response->addCommand(new ReplaceCommand('.customer-cart-form', $customer_cart_form));
+
     $mini_cart_html = \Drupal::service('acq_cart.mini_cart')->getMiniCart();
 
     $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));

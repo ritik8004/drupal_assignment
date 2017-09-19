@@ -33,7 +33,7 @@ module.exports = function (gulp, config, bs) {
       .pipe(utils.onDev(sourcemaps.write()))
       .pipe(gulp.dest(config.styles.destination))
 
-      .pipe(gulp.src(config.styles.directionalSource))
+      .pipe(gulp.src(config.styles.directionalSource, { passthrough: true }))
       .pipe(utils.onDev(sourcemaps.init()))
       .pipe(sassGlob())
       .pipe(sassVariables(config.styles.variables))

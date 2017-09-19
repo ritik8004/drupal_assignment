@@ -127,7 +127,7 @@
     input:visited ~ label:last-of-type,
     input:not(:focus):valid ~ label:not(.error),
     input:not(:active):valid ~ label:not(.error) {
-      top: -1.25em;
+      top: -1.375rem;
       bottom: 0;
       #{$left}: 0;
       opacity: 1;
@@ -238,6 +238,13 @@
   legend {
     color: $marine-blue-two;
   }
+
+  .mobile-number-field {
+    @include breakpoint($desktop) {
+      display: block;
+      clear: both;
+    }
+  }
 }
 
 .c-user-edit .user-form {
@@ -301,7 +308,8 @@ html[lang=ar] {
 .path--user .c-address-book {
   .address-book-address {
     .country-field-wrapper {
-      height: 5rem;
+      height: 3rem;
+      line-height: 1.43;
     }
   }
 }

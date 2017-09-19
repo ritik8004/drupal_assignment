@@ -9,10 +9,6 @@
  * Implements hook_install().
  */
 function alshaya_custom_install() {
-  // Enable and set alshaya_white_label as default theme.
-  \Drupal::service('theme_installer')->install(['alshaya_white_label'], TRUE);
-  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'alshaya_white_label')->save(TRUE);
-
   // Set default country to KW.
   \Drupal::configFactory()->getEditable('system.date')->set('country.default', 'KW')->save();
 
@@ -40,11 +36,11 @@ function alshaya_custom_install() {
     ],
   ])->save();
 
-  // Set the page cache for 5 minutes.
+  // Set the page cache for 30 minutes.
   \Drupal::configFactory()->getEditable('system.performance')
     ->set('cache', [
       'page' => [
-        'max_age' => 300,
+        'max_age' => 1800,
       ],
     ])
     ->save();
@@ -58,34 +54,12 @@ function alshaya_custom_modules_installed($modules) {
     return;
   }
 
-  // Unset the Block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_powered')
-    ->set('region', '-1')
-    ->save();
-
-  // Set the block configuration settings for system branding block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_branding')
-    ->set('settings.use_site_slogan', FALSE)
-    ->set('weight', '-32')
-    ->save();
-
   // Set visitor user registration.
   \Drupal::configFactory()->getEditable('user.settings')->set('register', 'visitors')->save();
 
   // Set email verification to false to make password field visible on
   // registration.
   \Drupal::configFactory()->getEditable('user.settings')->set('verify_mail', FALSE)->save();
-
-  // Set the 'header' region for user menu.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_account_menu')
-    ->set('region', 'menu_secondary')
-    ->set('weight', -32)
-    ->save();
-
-  // Set the Main Navigation Block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
-    ->set('region', -1)
-    ->save();
 
   // Disable the default '/taxonomy/term/tid' view.
   $term_view = \Drupal::entityTypeManager()->getStorage('view')->load('taxonomy_term');

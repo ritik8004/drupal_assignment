@@ -14,12 +14,6 @@ function alshaya_transac_install() {
   }
 
   $modules = [
-    // Some must required contrib modules.
-    'config_translation',
-    'content_translation',
-    'language',
-    'locale',
-
     // Custom modules.
     'alshaya_custom',
     'alshaya_addressbook',
@@ -55,21 +49,16 @@ function alshaya_transac_install() {
     'alshaya_static_html',
   ];
 
+  global $_alshaya_modules_installed;
+
   foreach ($modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
+    $_alshaya_modules_installed[] = $module;
   }
 
   // Invoke a hook to let other modules know that profile installation is done.
-  \Drupal::moduleHandler()->invokeAll('alshaya_transac_profile_installed', [$modules]);
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_transac', $modules]);
 
-  // Previous hook invoke does not deal with profile. Custom implementation
-  // to invoke the hook in alshaya.profile.
-  $file = DRUPAL_ROOT . '/' . drupal_get_path('profile', 'alshaya') . "/alshaya.profile";
-  if (is_file($file)) {
-    require_once $file;
-
-    if (function_exists('alshaya_alshaya_transac_profile_installed')) {
-      alshaya_alshaya_transac_profile_installed($modules);
-    }
-  }
+  // Invoke the function in profile to inform sub profile is installed.
+  alshaya_sub_profile_installed('alshaya_transac', $modules);
 }

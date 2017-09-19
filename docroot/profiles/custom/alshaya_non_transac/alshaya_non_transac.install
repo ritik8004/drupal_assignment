@@ -10,12 +10,6 @@
  */
 function alshaya_non_transac_install() {
   $modules = [
-    // Some must required contrib modules.
-    'config_translation',
-    'content_translation',
-    'language',
-    'locale',
-
     // Custom modules.
     'alshaya_custom',
     // 'alshaya_addressbook',
@@ -33,11 +27,13 @@ function alshaya_non_transac_install() {
     'alshaya_contact',
     'alshaya_default_content',
     // 'alshaya_department_page',
+    'alshaya_email_signup',
     'alshaya_i18n',
     // 'alshaya_loyalty',
     // 'alshaya_main_menu',
     'alshaya_master',
     'alshaya_menus',
+    'alshaya_non_transac_product',
     // 'alshaya_acm_cart_notification',
     // 'alshaya_newsletter',
     'alshaya_password_policy',
@@ -51,27 +47,22 @@ function alshaya_non_transac_install() {
     'alshaya_static_html',
   ];
 
+  global $_alshaya_modules_installed;
+
   foreach ($modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
+    $_alshaya_modules_installed[] = $module;
   }
 
   // Invoke a hook to let other modules know that profile installation is done.
-  \Drupal::moduleHandler()->invokeAll('alshaya_non_transac_profile_installed', [$modules]);
-
-  // Previous hook invoke does not deal with profile. Custom implementation
-  // to invoke the hook in alshaya.profile.
-  $file = DRUPAL_ROOT . '/' . drupal_get_path('profile', 'alshaya') . "/alshaya.profile";
-  if (is_file($file)) {
-    require_once $file;
-
-    if (function_exists('alshaya_alshaya_non_transac_profile_installed')) {
-      alshaya_alshaya_non_transac_profile_installed($modules);
-    }
-  }
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_non_transac', $modules]);
 
   // We probably don't have any module depending on acquia_connector which is
   // required on ACSF environments.
   if (isset($_ENV['AH_SITE_NAME'])) {
     \Drupal::service('module_installer')->install(['acquia_connector']);
   }
+
+  // Invoke the function in profile to inform sub profile is installed.
+  alshaya_sub_profile_installed('alshaya_non_transac', $modules);
 }

@@ -33,5 +33,5 @@ backend_config:
   autocorrect_spell: true
   autocorrect_suggest_words: true
   suggest_suffix: true
-  suggest_corrections: true
+  suggest_corrections: false
   suggest_words: false

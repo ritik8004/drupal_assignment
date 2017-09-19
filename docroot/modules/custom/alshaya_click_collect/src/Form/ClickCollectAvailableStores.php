@@ -51,6 +51,12 @@ class ClickCollectAvailableStores extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    // We don't add token for this form, it will never be user specific.
+    $form['#token'] = FALSE;
+
+    // We set the action to empty string, it will always use AJAX anyways.
+    $form['#action'] = '';
+
     // Hidden latitude field.
     $form['latitude'] = [
       '#type' => 'hidden',

@@ -174,17 +174,29 @@
     <tr class="sub-total-row">
       <td>&nbsp;</td>
       <td>&nbsp;</td>
-      <td>{{ "Sub total"|t }}</td>
+      <td class="right--align">{{ "Sub total"|t }}</td>
       <td class="blend">
         {{ order_details.sub_total }}
       </td>
       <td class="empty--cell">&nbsp;</td>
     </tr>
 
+		{% if order_details.discount is not empty %}
+      <tr class="sub-total-row">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td class="right--align">{{ "Discount"|t }}</td>
+        <td class="blend">
+					{{ order_details.discount }}
+        </td>
+        <td class="empty--cell">&nbsp;</td>
+      </tr>
+		{% endif %}
+
     <tr class="delivery-charge-row">
       <td>&nbsp;</td>
       <td>&nbsp;</td>
-      <td>{{ "Delivery charge"|t }}</td>
+      <td class="right--align">{{ "Delivery charge"|t }}</td>
       <td class="blend">
         {{ order_details.delivery_charge }}
       </td>
@@ -194,7 +206,7 @@
     <tr class="total-row">
       <td>&nbsp;</td>
       <td>&nbsp;</td>
-      <td>
+      <td class="right--align">
         <div class="dark upcase">{{ "Order Total"|t }}</div>
       </td>
       <td class="warm--white">

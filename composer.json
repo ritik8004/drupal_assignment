@@ -60,7 +60,10 @@
         "drupal/kashmir": "^1.1",
         "drupal/migrate_plus": "^2.0",
         "drupal/migrate_source_csv": "^2.0",
-        "drupal/migrate_tools": "^2.0"
+        "drupal/migrate_tools": "^2.0",
+        "jqueryvalidate/jqueryvalidate": "~1.0",
+        "drupal/viewsreference": "^1.0",
+        "drupal/machine_name_widget": "^1.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -76,10 +79,11 @@
         "jqueryvalidate": {
             "type": "package",
             "package": {
-                "name": "jqueryvalidate",
-                "version": "1.15.0",
+                "name": "jqueryvalidate/jqueryvalidate",
+                "version": "1.17.0",
+                "type": "drupal-library",
                 "dist": {
-                    "url": "https://jqueryvalidation.org/files/jquery-validation-1.15.0.zip",
+                    "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
                     "type": "zip"
                 }
             }
@@ -137,7 +141,9 @@
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
                 "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-1.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
-                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch"
+                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
+                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
+                "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch"
             },
             "drupal/password_policy": {
                 "Error message is not translatable": "https://www.drupal.org/files/issues/password_policy_error_translate-2878784-2.patch"
@@ -160,7 +166,8 @@
                 "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
             },
             "drupal/clientside_validation" : {
-                "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-4.patch"
+                "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
+                "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
             },
             "drupal/redirect" : {
                 "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
@@ -190,9 +197,6 @@
             ],
             "docroot/themes/custom/{$name}": [
                 "type:drupal-custom-theme"
-            ],
-            "docroot/libraries": [
-                "type:drupal-library"
             ],
             "drush/contrib/{$name}": [
                 "type:drupal-drush"

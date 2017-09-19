@@ -7,7 +7,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,7 +44,13 @@ class ProductStockController extends ControllerBase {
 
     $build = [];
 
-    if ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
+    // @TODO: We should avoid this AJAX call as well.
+    if (!alshaya_acm_product_is_buyable($sku_entity)) {
+      // @TODO: This is to avoid adding out of stock classes. Needs refactoring.
+      $build['max_quantity'] = 100;
+      $build['html'] = '';
+    }
+    elseif ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
       $build['html'] = '';
     }
@@ -56,6 +61,7 @@ class ProductStockController extends ControllerBase {
 
     $response = new CacheableJsonResponse($build, 200);
     $response->addCacheableDependency($sku_entity);
+    $response->addcacheabledependency(['url.path']);
 
     return $response;
   }
@@ -138,22 +144,6 @@ class ProductStockController extends ControllerBase {
     $form['add_to_cart'] = \Drupal::service('acq_sku.form_builder')->getForm($plugin, $sku_entity);
     $form['add_to_cart']['#weight'] = 50;
 
-    // We need to set the ajax url for the add_cart & config_sizes
-    // explicitly to the product node they belong to for AJAX to apply
-    // correctly.
-    $product_node = alshaya_acm_product_get_display_node($sku_entity);
-
-    /** @var \Drupal\Core\Url $product_node_url */
-    $product_node_url = $product_node->toUrl();
-    $product_node_url->setOption('query', ['ajax_form' => 1]);
-    $product_node_ajax_url = $product_node_url->toString();
-
-    $form['add_to_cart']['add_to_cart']['#attached']['drupalSettings']['ajax']['edit-add-to-cart']['url'] = $product_node_ajax_url;
-    $form['add_to_cart']['ajax']['configurables']['size']['#attached']['drupalSettings']['ajax']['edit-configurables-size']['url'] = $product_node_ajax_url;
-    $form['add_to_cart']['add_to_cart']['#attached']['drupalSettings']['ajaxTrustedUrl'][] = $product_node_ajax_url;
-    $form['add_to_cart']['ajax']['configurables']['size']['#attached']['drupalSettings']['ajaxTrustedUrl'][] = $product_node_ajax_url;
-
-    $form['add_to_cart']['add_to_cart']['#ajax']['options']['query'][FormBuilderInterface::AJAX_FORM_REQUEST] = TRUE;
     return $form;
   }
 

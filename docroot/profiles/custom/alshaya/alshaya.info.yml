@@ -4,17 +4,32 @@ version: 8.x-dev
 core: '8.x'
 dependencies:
   - acsf
+  - alshaya_security
   - color
+  - config_translation
+  - content_translation
+  - components
+  - dynamic_page_cache
   - features
+  - language
+  - locale
+  - memcache
   - syslog
+  - twig_tweak
 
 themes:
   - bartik
   - seven
+  - whitelabel
 
 base profile:
   name: lightning
   excluded_dependencies:
-    - lightning_layout
-    - lightning_search
+    - dblog
     - lightning_landing_page
+    - lightning_layout
+    - lightning_media_instagram
+    - lightning_media_twitter
+    - lightning_media_video
+    - lightning_search
+    - views_ui

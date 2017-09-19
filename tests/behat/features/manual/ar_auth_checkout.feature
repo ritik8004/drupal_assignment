@@ -1,4 +1,4 @@
-@javascript @checkout @arabic @manual @mmcpa-1930
+@javascript @checkout @arabic @manual @ar_checkout @mmcpa-1930
 Feature: As an authenticated user
   I should be able to checkout
   using various payment options on Arabic site
@@ -6,15 +6,13 @@ Feature: As an authenticated user
   Background:
     Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I am on "/stronglax"
+    Given I am on a configurable product
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "add to basket"
     And I wait for AJAX to finish
-    When I follow "عرض سلة التسوق"
+    When I go to "/ar/cart"
     And I wait for the page to load
-    When I press "إتمام عملية الشراء بأمان"
+    When I press "إتمام الشراء بأمان"
     And I wait for the page to load
 
   @hd @cod
@@ -34,7 +32,7 @@ Feature: As an authenticated user
     When I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @hd @knet
   Scenario: As an authenticated user
@@ -56,12 +54,12 @@ Feature: As an authenticated user
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     When I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
-    When I press "Submit"
-    And I press "Confirm"
+    And I press "إرسال"
+    And I press "تأكيد العملية"
     And I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @hd @cs
   Scenario: As an authenticated user
@@ -75,15 +73,15 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @cc @knet
   Scenario: As an authenticated user
@@ -116,12 +114,12 @@ Feature: As an authenticated user
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
-    And I press "Submit"
-    And I press "Confirm"
+    And I press "إرسال"
+    And I press "تأكيد العملية"
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @cc @cs
   Scenario: As an authenticated user
@@ -138,9 +136,9 @@ Feature: As an authenticated user
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I fill in "edit-billing-address-address-billing-given-name" with "شويتا"
     And I fill in "edit-billing-address-address-billing-family-name" with "شارما"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
@@ -154,4 +152,4 @@ Feature: As an authenticated user
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching "Your Privileges Card Number is: 6362544000135844"
+    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"

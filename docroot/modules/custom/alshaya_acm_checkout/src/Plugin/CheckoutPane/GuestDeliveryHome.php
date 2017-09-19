@@ -70,6 +70,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $address = (array) $cart->getShipping();
     $default_shipping = '';
 
+    if ($this->getCartSelectedDeliveryMethod() == 'cc') {
+      $address = [];
+    }
+
     if (empty($address['country_id'])) {
       $address_default_value = [
         'country_code' => _alshaya_custom_get_site_level_country_code(),
@@ -163,6 +167,14 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         '#change_address' => render($change_address_button),
       ];
 
+      // Expose selected delivery address to GTM.
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_seo')) {
+        datalayer_add([
+          'deliveryArea' => $drupal_address['administrative_area'],
+          'deliveryCity' => $drupal_address['locality'],
+        ]);
+      }
+
       $selected_address = '<div id="selected-address-wrapper">' . render($selected_address_build) . '</div>';
     }
 
@@ -226,6 +238,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
     }
     else {
+      // Clear the shipping method info now to ensure we set it properly again.
+      \Drupal::service('acq_cart.cart_storage')->clearShippingMethodSession();
+
       $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
       $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     }
@@ -282,7 +297,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     if ($user = user_load_by_mail($email)) {
       $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $this->t('You already have an account, @login_link.', [
-        '@login_link' => Link::createFromRoute('please login', 'acq_checkout.form', ['step' => 'login'])->toString(),
+        '@login_link' => Link::createFromRoute($this->t('please login'), 'acq_checkout.form', ['step' => 'login'])->toString(),
       ]));
       return;
     }

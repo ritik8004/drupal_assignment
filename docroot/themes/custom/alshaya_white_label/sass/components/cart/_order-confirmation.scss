@@ -78,11 +78,57 @@
     }
 
     .price-currency {
-      margin-right: 1.5625rem;
+      margin-#{$right}: 1.5625rem;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 0.5625rem;
+      }
     }
 
     .price-amount {
       float: none;
+    }
+
+    .discount-row {
+      td {
+        background: $white-five;
+
+        &:nth-child(4) {
+          background: $white-smoke-light;
+        }
+      }
+    }
+
+    .discount-row,
+    .sub-total-row {
+      & .right--align {
+        padding-#{$right}: 2.6rem !important;
+      }
+    }
+
+    tr.order-details-row:first-child {
+      .order__user--info,
+      .order__delivery-details {
+        @include breakpoint($tablet) {
+          min-width: 12rem;
+        }
+
+        @include breakpoint($desktop) {
+          min-width: 15rem;
+        }
+      }
+
+      .desktop-only {
+        @include breakpoint($desktop) {
+          width: 0 !important;
+        }
+      }
+
+      .above-mobile.blend {
+        @include breakpoint($desktop) {
+          min-width: 10rem;
+        }
+      }
     }
   }
 

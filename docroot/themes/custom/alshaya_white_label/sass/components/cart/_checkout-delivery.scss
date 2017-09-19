@@ -1,6 +1,10 @@
 .page-standard.user-page.checkout-delivery {
   margin: 1.2rem auto;
 
+  .country-name {
+    color: #999 !important;
+  }
+
   &.l-two--sf {
     @include breakpoint($upto-tablet) {
       max-width: 19rem;
@@ -15,13 +19,6 @@
     @include breakpoint($only-mobile) {
       padding-left: 1em;
       font-size: 1.115rem;
-
-      @include icon(chevronleft, before) {
-        position: absolute;
-        left: -0.6875rem;
-        top: 0;
-        font-size: 1.563rem;
-      }
     }
   }
 
@@ -50,14 +47,10 @@
 
       .form-item.form-type-select {
         padding-bottom: 1rem;
-        margin-top: 2.5rem !important;
-
-        &::after {
-          content: none;
-        }
+        margin-top: 2.75rem !important;
 
         label {
-          top: -1.1375rem;
+          top: -1.375rem;
           font-size: 0.75rem;
 
           &.error {
@@ -416,6 +409,11 @@
 
       @include breakpoint($desktop) {
         width: 6.2%;
+
+        html[lang=ar] & {
+          width: 6.1%;
+          margin-left: 1px;
+        }
       }
     }
 
@@ -891,7 +889,8 @@
             margin-top: 0;
             width: 100%;
             text-transform: lowercase;
-            color: $marine-blue-two;
+            color: $cerulean-two;
+            font-size: 0.75rem;
             display: block;
             padding: 0.5rem 0;
 
@@ -1119,10 +1118,18 @@
       a p {
         color: $grey-ash;
       }
+
+      &.active--tab--head {
+        h2 {
+          color: $cerulean-two !important;
+        }
+      }
     }
 
-    #edit-guest-delivery-collect,
     #edit-guest-delivery-home,
+    #edit-member-delivery-home,
+    #edit-guest-delivery-collect,
+    #edit-member-delivery-collect,
     #edit-actions {
       display: none !important;
     }
@@ -1170,12 +1177,40 @@ html[lang=ar] {
 }
 
 // Showing label on mobile number field.
-.address-book-address .mobile-number-field .form-type-textfield label.visually-hidden {
-  position: absolute !important;
-  clip: unset;
-  overflow: visible;
-  height: auto;
-  width: auto;
-  word-wrap: normal;
-  top: -1.125rem !important;
+.address-book-address .mobile-number-field {
+  > label {
+    position: static !important;
+    line-height: 2.2;
+  }
+
+  .form-type-textfield input[type=text] {
+    padding-bottom: 0.25rem !important;
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-payment {
+  h1 {
+    z-index: -1;
+  }
+
+  .back-link {
+    display: none;
+    z-index: 1;
+
+    @include breakpoint($only-mobile) {
+      display: block;
+      position: absolute;
+      width: 1.063rem;
+      height: 1.375rem;
+
+      @include icon(chevronleft, before) {
+        position: absolute;
+        #{$left}: -0.6875rem;
+        top: 0;
+        color: $black;
+        font-size: 1.563rem;
+      }
+    }
+  }
 }

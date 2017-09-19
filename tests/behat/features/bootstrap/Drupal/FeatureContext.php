@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Context\Context;
+use Behat\Mink\Exception\ElementNotFoundException;
 
 /**
  * FeatureContext class defines custom step definitions for Behat.
@@ -354,9 +355,10 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page = $session->getPage();
     $element = $page->findField($field);
     if (!$element) {
-      throw new ElementNotFoundException($session, NULL, 'named', $field);
+      throw new \ElementNotFoundException($session, NULL, 'named', $field);
     }
     $page->fillField($field, $prefix);
+    $this->iWaitSeconds(3);
     $xpath = $element->getXpath();
     $driver = $session->getDriver();
     $prefix = str_replace('\\"', '"', $prefix);
@@ -368,26 +370,17 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $driver->keyDown($xpath, $last_char);
     $driver->keyUp($xpath, $last_char);
     // Wait for AJAX to finish.
-    $this->getSession()->wait(500, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    $this->getSession()
+      ->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
     // Press the down arrow to select the first option.
-    $driver->keyDown($xpath, 40);
-    $driver->keyUp($xpath, 40);
     $driver->keyDown($xpath, 40);
     $driver->keyUp($xpath, 40);
     // Press the Enter key to confirm selection, copying the value into the field.
     $driver->keyDown($xpath, 13);
     $driver->keyUp($xpath, 13);
-    $driver->keyDown($xpath, 13);
-    $driver->keyUp($xpath, 13);
     // Wait for AJAX to finish.
-    $this->getSession()->wait(500, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
-    $all_results = $page->findById('click-and-collect-list-view');
-    if ($all_results == NULL) {
-      $message = $page->hasContent('Sorry, No store found for your location.');
-      if (!$message) {
-        throw new \Exception('No stores message is not displayed');
-      }
-    }
+    $this->getSession()
+      ->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
   }
 
   /**
@@ -879,5 +872,283 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     if (!$link) {
       throw new \Exception($arg1 . 'link is not visible on my account section');
     }
+  }
+
+  /**
+   * @When /^I select a value from Area dropdown$/
+   */
+  public function iSelectAValueFromTheAreaDropdown() {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.select2-selection__arrow')->click();
+    $page->find('css', 'ul.select2-results__options li:nth-child(1)')->click();
+  }
+  
+  /**
+   * @Given /^I should be able to see the header for checkout$/
+   */
+  public function iShouldBeAbleToSeeTheHeaderForCheckout() {
+    $page = $this->getSession()->getPage();
+    $logo = $page->has('css', '.logo') and $page->hasLink('Home');
+    if (!$logo) {
+      throw new \Exception('Logo is not displayed on secure checkout page');
+    }
+    $text = $page->find('css', '.secure__checkout--label')->getText();
+    if ($text !== 'Secure Checkout') {
+      throw new \Exception('Text Secure Checkout is not displayed');
+    }
+    $lock = $page->has('css', '.icon-ic_login');
+    if (!$lock) {
+      throw new \Exception('Lock icon is not displayed secure checkout page');
+    }
+  }
+
+  /**
+   * @Then /^I should see store name and location for all the listed stores$/
+   */
+  public function iShouldSeeStoreNameAndLocationForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $name_address = $store->has('css', 'div.store-name-and-address');
+      if (!$name_address) {
+        throw new \Exception('Name and address not displayed for a store');
+      }
+    }
+  }
+
+  /**
+   * @Given /^I should see opening hours for all the listed stores$/
+   */
+  public function iShouldSeeOpeningHoursForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $text = $store->find('css', 'div.hours--label')->getText();
+      if ($text !== 'Opening Hours') {
+        throw new \Exception('Opening hours not found on CC Stores listing page');
+      }
+    }
+  }
+
+  /**
+   * @Then /^I should see collect in store info for all the listed stores$/
+   */
+  public function iShouldSeeCollectInStoreInfoForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $delivery_time = $store->has('css', 'div.store-delivery-time span.delivery--time--value');
+      $value = "'Collect in store from'.$delivery_time";
+      if (!$value) {
+        throw new \Exception('Delivery time is not displayed on CC Store listing page');
+      }
+    }
+  }
+
+  /**
+   * @Given /^I should see select this store for all the listed stores$/
+   */
+  public function iShouldSeeSelectThisStoreForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $select_store = $store->hasLink('select this store');
+      if (!$select_store) {
+        throw new \Exception('Select this store button is missing on CC store listing page');
+      }
+    }
+  }
+
+  /**
+   * @Then /^I should see view on map button for all the listed stores$/
+   */
+  public function iShouldSeeViewOnMapButtonForAllTheListedStores() {
+    $page = $this->getSession()->getPage();
+    $all_stores = $page->findAll('css', 'li.select-store');
+    foreach ($all_stores as $store) {
+      $select_store = $store->hasLink('View on map');
+      if (!$select_store) {
+        throw new \Exception('View on map link is missing on CC store listing page');
+      }
+    }
+  }
+
+  /**
+   * @Then /^I should see the price doubled for the product$/
+   */
+  public function iShouldSeeThePriceDoubledForTheProduct() {
+    $page = $this->getSession()->getPage();
+    $original_price = $page->find('css', '.subtotal.blend.dark .price-amount')
+      ->getText();
+    $original_price = floatval($original_price);
+    $expected_price = floatval($original_price) * 2;
+    if ($expected_price == FALSE) {
+      throw new \Exception('Price did not get updated after adding the quantity');
+    }
+  }
+  
+  /**
+   * @Given /^I am on a simple product page$/
+   */
+  public function iAmOnASimpleProductPage() {
+    $this->visitPath('/click-lock-9oz-insulated-straw-cup-1-pack-assortment');
+  }
+
+  /**
+   * @Given /^I am on a configurable product$/
+   */
+  public function iAmOnAConfigurableProduct() {
+    $this->visitPath('/bodysuits-2-pack');
+    $this->iWaitForThePageToLoad();
+    $this->getSession()->getPage()->clickLink('0-3 Months');
+    $this->getSession()
+      ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+  }
+
+  /**
+   * @Then /^I should see the link for simple product$/
+   */
+  public function iShouldSeeTheLinkForSimpleProduct() {
+    $page = $this->getSession()->getPage();
+    $this->simple_product = '6  Pack Grippy Dots';
+    $link = $page->hasLink($this->simple_product);
+    if (!$link) {
+      throw new \Exception('Link for simple product not found');
+    }
+  }
+
+  /**
+   * @Given /^I should see the link for configurable product$/
+   */
+  public function iShouldSeeTheLinkForConfigurableProduct() {
+    $page = $this->getSession()->getPage();
+    $this->config_product = 'Bodysuits - 2 Pack';
+    $link = $page->hasLink($this->config_product);
+    if (!$link) {
+      throw new \Exception('Link for configurable product not found');
+    }
+  }
+
+  /**
+   * @Given /^I should not see the link for simple product$/
+   */
+  public function iShouldNotSeeTheLinkForSimpleProduct() {
+    $page = $this->getSession()->getPage();
+    $this->simple_product = '6  Pack Grippy Dots';
+    $link = $page->hasLink($this->simple_product);
+    if ($link) {
+      throw new \Exception('Link for simple product is being displayed');
+    }
+  }
+
+  /**
+   * @Given /^I should not see the link for configurable product$/
+   */
+  public function iShouldNotSeeTheLinkForConfigurableProduct() {
+    $page = $this->getSession()->getPage();
+    $this->config_product = 'Bodysuits - 2 Pack';
+    $link = $page->hasLink($this->config_product);
+    if ($link) {
+      throw new \Exception('Link for configurable product is being displayed');
+    }
+  }
+
+  /**
+   * @When /^I hover over tooltip "([^"]*)"$/
+   */
+  public function iHoverOverTooltip($arg1) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', $arg1)->mouseOver();
+  }
+  
+  /**
+   * @Then /^I should see the link for simple product in Arabic$/
+   */
+  public function iShouldSeeTheLinkForSimpleProductInArabic() {
+    $page = $this->getSession()->getPage();
+    $this->simple_product = 'انت انتانتانت';
+    $link = $page->hasLink($this->simple_product);
+    if (!$link) {
+      throw new \Exception('Link for simple product not found');
+    }
+  }
+
+  /**
+   * @Given /^I should see the link for configurable product in Arabic$/
+   */
+  public function iShouldSeeTheLinkForConfigurableProductInArabic() {
+    $page = $this->getSession()->getPage();
+    $this->config_product = 'لباس عادي - عبوة من قطعتين';
+    $link = $page->hasLink($this->config_product);
+    if (!$link) {
+      throw new \Exception('Link for configurable product not found');
+    }
+  }
+
+  /**
+   * @Then /^I should see the Order Summary block$/
+   */
+  public function iShouldSeeTheOrderSummaryBlock() {
+    $page = $this->getSession()->getPage();
+    $block = $page->find('css', '#block-checkoutsummaryblock');
+    if ($block == NULL) {
+      throw new \Exception('Order Summary block not displayed on Order Summary block');
+    }
+    $title = $block->find('css', 'div > div.caption > span');
+    if ($title == NULL) {
+      throw new \Exception('Text Order Summary not displayed on Order Summary');
+    }
+    $items = $block->find('css', 'div > div.content > div.content-head');
+    if ($items == NULL) {
+      throw new \Exception('Items in your basket text is missing on Order Summary block');
+    }
+    $page->find('css', '.content-head')->click();
+    $product_name = $block->find('css', 'div > div.content.active--accordion > div.content-items > ul > li > div.right > span.product-name > div > div > div > a');
+    if ($product_name == NULL) {
+      throw new \Exception('Product name is not displayed in Order Summary block');
+    }
+    $quantity = $block->find('css', 'div > div.content.active--accordion > div.content-items > ul > li > div.right > span.product-qty > span');
+    if ($quantity == NULL) {
+      throw new \Exception('Quantity is not displayed on Order Summary block');
+    }
+    $price = $block->find('css', 'div > div.content.active--accordion > div.content-items > ul > li > div.right > div > div > span > div.price');
+    if ($price == NULL) {
+      throw new \Exception('Price is not displayed on Order Summary block');
+    }
+    $sub_total = $block->find('css', 'div > div.totals > div.sub-total > span');
+    if ($sub_total == NULL) {
+      throw new \Exception('Sub total is not displayed on Order Summary block');
+    }
+    $order_total = $block->find('css', 'div > div.totals > div.order-total > span');
+    if ($order_total == NULL) {
+      throw new \Exception('Order total is not displayed on Order Summary block');
+    }
+  }
+
+  /**
+   * @Given /^I should see the Customer Service block$/
+   */
+  public function iShouldSeeTheCustomerServiceBlock() {
+    $page = $this->getSession()->getPage();
+    $customer_service = $page->find('css', '#block-customerservice');
+    if ($customer_service == NULL) {
+      throw new \Exception('Customer service block is not being displayed');
+    }
+  }
+
+  /**
+   * @When /^I fill in an element having class "([^"]*)" with "([^"]*)"$/
+   */
+  public function iFillInAnElementHavingClassWith($class, $value) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', $class)->setValue($value);
+  }
+
+  /**
+   * @When /^I select "([^"]*)" from dropdown "([^"]*)"$/
+   */
+  public function iSelectFromDropdown($value, $class) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', $class)->selectOption($value);
   }
 }

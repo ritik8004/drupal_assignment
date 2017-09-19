@@ -9,6 +9,8 @@ themes=( "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_se
 
 for i in "${themes[@]}"
 do
+  echo -en "travis_fold:start:FE-Build-${i}\r"
   cd $docrootDir/themes/custom/$i
   npm run build
+  echo -en "travis_fold:end:FE-Build-${i}\r"
 done

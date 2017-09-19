@@ -1,0 +1,23 @@
+.region-content-center {
+  @include breakpoint($upto-palm) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  @include breakpoint($above-palm) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @include breakpoint($lap) {
+    width: 45rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 77.25rem;
+
+    .page-home & {
+      max-width: 64.125rem;
+    }
+  }
+}

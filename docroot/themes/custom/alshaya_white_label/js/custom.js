@@ -24,25 +24,45 @@
       }
 
       var mobileStickyHeaderHeight = $('.branding__menu').height();
-      var normalStickyHeaderHeight = $('.branding__menu').height() + $('.header--wrapper').height();
-      $('.read-more-description-link, .select-size-text .highlight').on('click', function () {
-        if ($(window).width() < 768) {
-          $('html,body').animate({
-            scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
-          }, 'slow');
-        }
-        else {
-          if ($('body').hasClass('header--fixed')) {
-            $('html,body').animate({
-              scrollTop: $('.content__title_wrapper').offset().top - normalStickyHeaderHeight
-            }, 'slow');
+
+      function stopScrollEvents($el) {
+        $($el).bind('scroll mousedown DOMMouseScroll mousewheel keyup', function () {
+          $($el).stop();
+        });
+      }
+
+      function unBindScrollEvents($el) {
+        $($el).unbind('scroll mousedown DOMMouseScroll mousewheel keyup');
+      }
+
+      $('.select-size-text .highlight', context).once('toselectsize').each(function () {
+        $(this).click(function () {
+          stopScrollEvents('html, body');
+
+          if ($(window).width() < 768) {
+            $('html,body').animate({scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
+            return false;
           }
           else {
-            $('html,body').animate({
-              scrollTop: $('.content__title_wrapper').offset().top
-            }, 'slow');
+            $('html,body').animate({scrollTop: 0}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
+            return false;
           }
-        }
+        });
+      });
+
+      $('.read-more-description-link', context).once('toselectsize').each(function () {
+        $(this).click(function () {
+          stopScrollEvents('html, body');
+
+          if ($(window).width() < 768) {
+            $('html,body').animate({scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
+            return false;
+          }
+          else {
+            $('html,body').animate({scrollTop: 0}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
+            return false;
+          }
+        });
       });
 
       // Scrolling the page to top if edit address is clicked.
@@ -58,7 +78,6 @@
       // This js is to remove the success message of newsletter subscription after 10 seconds.
       setTimeout(function () {
         $('.subscription-status .success').fadeOut();
-        $('#cart_notification').fadeOut();
       }, 10000);
     }
   };

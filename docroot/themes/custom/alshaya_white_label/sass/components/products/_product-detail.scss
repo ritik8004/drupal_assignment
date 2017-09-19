@@ -88,7 +88,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 28%;
+      width: 30%;
       float: $right;
       margin: 0;
     }
@@ -107,7 +107,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 28%;
+      width: 30%;
       float: $right;
       margin: 0;
     }
@@ -150,8 +150,8 @@
       margin-bottom: 1rem;
 
       a {
-        font-size: 1rem;
-        color: $special-price;
+        font-size: 0.9375rem;
+        color: $scarlet;
         text-decoration: underline;
         display: inline-block;
         margin-bottom: 0.5rem;
@@ -277,13 +277,11 @@
     @include breakpoint($only-mobile) {
       float: $right;
       top: -7px;
-      background-color: $whisper-dark;
     }
 
     @include breakpoint($only-tablet) {
       float: $right;
       top: -7px;
-      background-color: $whisper-dark;
     }
   }
 
@@ -311,8 +309,13 @@
       @include select-style(4.375rem);
     }
 
+    // styling quantity
     .select2-container {
       @include select2-style(4.375rem);
+
+      .select2-selection__arrow {
+        z-index: 3;
+      }
     }
   }
 }
@@ -320,7 +323,7 @@
 .description-wrapper {
   &.desc-open {
     #{$right}: 0;
-    transition: right 0.5s ease;
+    transition: #{$right} 0.5s ease;
   }
 
   @include breakpoint($only-mobile) {
@@ -405,7 +408,7 @@
     position: absolute;
     top: 0;
     #{$right}: -38%;
-    height: 32.5rem;
+    height: 33.75rem;
     border: 1px solid $marine-blue;
     padding: 1.25rem;
     padding-bottom: 0;
@@ -414,7 +417,7 @@
     width: 35%;
     z-index: 4;
     margin: 0 1rem;
-    transition: right 0.5s ease;
+    transition: #{$right} 0.5s ease;
 
     .close {
       @include icon(close);
@@ -434,7 +437,7 @@
     .field {
       &__content {
         overflow: scroll;
-        height: 29.125rem;
+        height: 30.125rem;
       }
     }
   }
@@ -442,9 +445,9 @@
 
 @include breakpoint($desktop) {
   .description-wrapper {
-    width: 28%;
+    width: 30%;
     margin: 0;
-    #{$right}: -28%;
+    #{$right}: -31%;
   }
 }
 
@@ -460,7 +463,54 @@
     &__content {
       font-size: 0.875rem;
       line-height: 1.5;
+
+      .desc-wrapper {
+        display: none;
+
+        &:first-child {
+          display: block;
+
+          .bullet-points-wrapper {
+            display: none;
+          }
+
+          .desc-label {
+            display: none;
+          }
+        }
+
+        .desc-label {
+          font-family: $arial;
+          font-weight: bold;
+          color: $marine-blue;
+          font-size: 0.875rem;
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+      }
     }
+
+    &-wrapper {
+      &.show-detail {
+        .desc-wrapper {
+          &:first-child {
+            .bullet-points-wrapper {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .show-less-link {
+    font-family: $arial;
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.83;
+    color: $windows-blue;
+    text-transform: lowercase;
+    cursor: pointer;
   }
 
   .read-more-description-link {
@@ -470,6 +520,24 @@
     line-height: 1.83;
     color: $windows-blue;
     cursor: pointer;
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: inline-block;
+    }
+  }
+
+  .read-more-description-link-mobile {
+    font-family: $arial;
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.83;
+    color: $windows-blue;
+    cursor: pointer;
+
+    @include breakpoint($tablet) {
+      display: none;
+    }
   }
 }
 
@@ -557,7 +625,7 @@
 
         font-family: $arial;
         font-size: 0.6875rem;
-        color: $greyish;
+        color: $brownish-grey;
         line-height: 1;
       }
 
@@ -578,7 +646,7 @@
           font-family: $arial;
           font-size: 0.6875rem;
           line-height: 1.64;
-          color: $greyish;
+          color: $brownish-grey;
 
           ul {
             li {
@@ -599,6 +667,7 @@
           font-size: 0.75rem;
           padding-bottom: 0.5rem;
           padding-top: 0.75rem;
+          color: $black-two;
 
           strong {
             color: $black;
@@ -1009,32 +1078,29 @@
 
 .click-collect-all-stores {
   &.inline-modal-wrapper {
-    position: absolute;
-    top: 0;
-    #{$right}: -100%;
-    transition: right 1s ease;
-    height: 31.5rem;
-    border: 1px solid $marine-blue;
-    padding: 1rem 1.5rem;
-    background: $white-five;
-    overflow: hidden;
-    width: 100%;
-    z-index: 99;
+    display: none;
 
-    &.desc-open {
-      #{$right}: 0;
-      transition: right 0.5s ease;
+    @include breakpoint($tablet) {
+      display: block;
+      position: absolute;
+      top: 0;
+      #{$right}: -100%;
+      transition: #{$right} 1s ease;
+      height: 33.75rem;
+      border: 1px solid $marine-blue;
+      padding: 1rem 1.5rem 0;
+      background: $white-five;
+      overflow: hidden;
+      width: 100%;
+      z-index: 99;
+
+      &.desc-open {
+        #{$right}: 0;
+        transition: #{$right} 0.5s ease;
+      }
     }
 
     @include breakpoint($only-mobile) {
-      display: block;
-      position: relative;
-      border: none;
-      z-index: 0;
-      padding: 0;
-      overflow: visible;
-      height: auto;
-
       .close-inline-modal,
       .all-stores-info,
       .available_store {
@@ -1047,7 +1113,13 @@
           height: auto;
 
           li {
-            &:first-child {
+            &:first-child,
+            &:nth-child(2),
+            &:nth-child(3) {
+              display: none;
+            }
+
+            &:nth-child(4) {
               border-top: none;
             }
 
@@ -1064,7 +1136,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 29%;
+      width: 30%;
     }
 
     .close-inline-modal {
@@ -1134,7 +1206,7 @@
     ul {
       padding-#{$left}: 0;
       margin: 0;
-      height: 21.56rem;
+      height: 25.5rem;
       overflow-y: scroll;
       clear: both;
 
@@ -1242,7 +1314,9 @@
     }
 
     @include breakpoint($only-mobile) {
-      height: 8rem;
+      .basic-details-wrapper & {
+        height: 8rem;
+      }
     }
 
     .sku-base-form > div,
@@ -1316,23 +1390,27 @@
         padding: 0.5rem 1.3701rem;
         margin-bottom: 1.5rem;
         display: inline-block;
+        height: 2.1875rem;
+        line-height: 1;
 
         @include breakpoint($only-mobile) {
-          float: none;
-          position: fixed;
-          bottom: 0;
-          width: 100%;
-          z-index: 4;
-          margin: 0;
-          #{$left}: 0;
-          height: 2.5rem;
+          .basic-details-wrapper & {
+            float: none;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 4;
+            margin: 0;
+            #{$left}: 0;
+            height: 2.5rem;
 
-          .ladda-label {
-            html[lang="ar"] & {
-              margin-top: 0;
-              position: absolute;
-              top: 1rem;
-              left: 33%;
+            .ladda-label {
+              html[lang="ar"] & {
+                margin-top: 0;
+                position: absolute;
+                top: 1rem;
+                left: 33%;
+              }
             }
           }
         }
@@ -1354,7 +1432,7 @@
   .field--name {
     &-field-skus {
       @include breakpoint($only-mobile) {
-        height: 6.5rem;
+        min-height: 6.5rem;
       }
     }
   }
@@ -1362,7 +1440,7 @@
 
 .acq-sku-configurable-64__sku-base-form.sku-base-form {
   @include breakpoint($only-mobile) {
-    height: 8rem;
+    min-height: 8rem;
     overflow: hidden;
   }
 }
@@ -1387,6 +1465,10 @@
   .selected-text {
     font-weight: bold;
     display: inline-block;
+
+    html[lang=ar] .safari & {
+      font-weight: normal;
+    }
   }
 
   .select-buttons {
@@ -1417,6 +1499,10 @@
           color: $white-five;
           font-weight: bold;
           background: $marine-blue;
+
+          html[lang=ar] .safari & {
+            font-weight: normal;
+          }
         }
       }
 
@@ -1514,6 +1600,12 @@ article[gtm-sku-type="simple"] {
     }
   }
 
+  @include breakpoint($only-mobile) {
+    article.stock-check-processed {
+      min-height: 5rem;
+    }
+  }
+
   span.out-of-stock {
     background-color: $cherry;
     font-family: $alshaya-bold;
@@ -1534,6 +1626,7 @@ article[gtm-sku-type="simple"] {
       font-size: 0.875rem;
       z-index: 6;
       height: 3rem;
+      line-height: 2;
     }
 
     @include breakpoint($desktop) {
@@ -1594,6 +1687,10 @@ article[gtm-sku-type="simple"] {
   height: 3rem;
   width: 100%;
   #{$left}: 0;
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
 }
 
 .nodetype--acq_product {
@@ -1618,6 +1715,78 @@ article.product-out-of-stock {
       .field--name-field-skus {
         height: 0;
       }
+    }
+  }
+}
+
+.apply-fake {
+  list-style: none;
+  display: inline;
+  float: $right;
+}
+
+.fake-apply-button {
+  font-family: $alshaya-bold;
+  display: inline-block;
+  margin-bottom: 0.875rem;
+  padding: 0.3625rem 1.875rem 0.5625rem;
+  background: $pumpkin-orange;
+  color: $white-four !important;
+  cursor: pointer;
+  margin-#{$left}: 1rem;
+  font-size: 0.75rem;
+  border: 0;
+}
+
+.filter-menu-label {
+  .fake-apply-button.inactive,
+  .clear-all-fake.inactive {
+    border: 1px solid $whisper-dark !important;
+    text-align: center;
+    padding: 0;
+    background: none;
+    width: 4.7rem;
+    min-height: 1.9375rem;
+    max-height: 1.9375rem;
+    font-size: 0.75rem !important;
+    font-family: $alshaya-thin !important;
+    margin-right: 0;
+    margin-left: 1rem;
+    color: $whisper-dark !important;
+
+    span {
+      color: $whisper-dark !important;
+    }
+  }
+}
+
+html[lang=ar] {
+  .fake-apply-button {
+    padding: 0.1rem 1rem 0.2rem;
+    margin-right: 1rem;
+
+    &.inactive {
+      margin-left: 0;
+    }
+  }
+}
+
+//Theming of non buyable products
+.not-buyable {
+  &-message {
+    font-weight: bold;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: $marine-blue;
+  }
+
+  &-help-text {
+    font-size: 0.75rem;
+    line-height: 1.5;
+
+    a {
+      font-weight: bold;
+      color: $cerulean-two;
     }
   }
 }

@@ -6,6 +6,7 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -315,7 +316,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     if ($user = user_load_by_mail($values['cc_email'])) {
       $form_state->setErrorByName('cc_email', $this->t('You already have an account, @login_link.', [
-        '@login_link' => Link::createFromRoute('please login', 'acq_checkout.form', ['step' => 'login'])->toString(),
+        '@login_link' => Link::createFromRoute($this->t('please login'), 'acq_checkout.form', ['step' => 'login'])->toString(),
       ]));
       return;
     }
@@ -392,6 +393,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     }
 
     $response = new AjaxResponse();
+    $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString()));
     return $response;
   }

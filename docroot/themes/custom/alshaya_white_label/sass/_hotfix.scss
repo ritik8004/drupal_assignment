@@ -273,6 +273,13 @@ html[lang=ar] {
     @include breakpoint($only-mobile) {
       float: right;
       margin-left: 0.5rem;
+      min-width: 4.2rem;
+    }
+  }
+
+  #table-cart-items .price-wrapper .price-amount {
+    @include breakpoint($only-mobile) {
+      min-width: auto;
     }
   }
 }
@@ -383,4 +390,16 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
 
 .ucbrowser .c-accordion__title::after {
   top: 5px !important;
+}
+
+.ucbrowser .user__address--column {
+  width: 90%;
+}
+
+.select2-container {
+  .select2-selection__arrow {
+    .ie & {
+      z-index: 9 !important;
+    }
+  }
 }

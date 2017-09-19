@@ -354,15 +354,8 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         else {
           // Check first if we have a cart in session.
           if ($cart = $cart_storage->getCart(FALSE)) {
-            // Check if current cart is not associated to another user.
-            if ($cart->customerEmail() && $cart->customerEmail() != $mail) {
-              // It is associated to someone else. We clear the cart in session.
-              $cart_storage->clearCart();
-            }
-            else {
-              // Cart is not assigned or assigned to same customer.
-              $cart_storage->associateCart($customer['customer_id'], $customer['email']);
-            }
+            // Associate the cart to returning customer.
+            $cart_storage->associateCart($customer['customer_id'], $customer['email']);
           }
         }
       }
@@ -577,18 +570,20 @@ function alshaya_acm_customer_change_pwd_form_update_password(array &$form, Form
   // For all users except just authenticated, we store password only in Drupal.
   if (!alshaya_acm_customer_is_customer($user)) {
     call_user_func_array($form_state->prepareCallback('::submitForm'), [&$form, &$form_state]);
-    return;
+  }
+  else {
+    // Get password from user's input.
+    $pass = trim($form_state->getValue('pass'));
+
+    // Update customer data with new password.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+    alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
+    drupal_set_message(t('Your password has been changed.'));
   }
 
-  // Get password from user's input.
-  $pass = trim($form_state->getValue('pass'));
-
-  // Update customer data with new password.
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-  alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
-  drupal_set_message(t('Your password has been changed.'));
-  // Redirect user to my account page.
-  $form_state->setRedirect('user.page');
+  // Sign out user, and redirect to login page.
+  user_logout();
+  $form_state->setRedirect('user.login');
 }
 
 /**
@@ -630,31 +625,29 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
 }
 
 /**
- * Implements hook_alshaya_profile_installed().
+ * Implements hook_alshaya_i18n_onetime_translation_add().
  */
-function alshaya_acm_customer_alshaya_profile_installed() {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_i18n')) {
-    // Save some translations.
-    $strings = [];
+function alshaya_acm_customer_alshaya_i18n_onetime_translation_add() {
+  // Save some translations.
+  $strings = [];
 
-    $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
-      'en' => 'Unrecognized email address or password.',
-    ];
+  $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
+    'en' => 'Unrecognized email address or password.',
+  ];
 
-    $strings['Collector contact no.'] = [
-      'ar' => 'رقم اتصال المستلم',
-    ];
+  $strings['Collector contact no.'] = [
+    'ar' => 'رقم اتصال المستلم',
+  ];
 
-    $strings['Delivery details'] = [
-      'ar' => 'تفاصيل التوصيل',
-    ];
+  $strings['Delivery details'] = [
+    'ar' => 'تفاصيل التوصيل',
+  ];
 
-    $strings['Billing details'] = [
-      'ar' => 'معلومات تحرير الفاتورة',
-    ];
+  $strings['Billing details'] = [
+    'ar' => 'معلومات تحرير الفاتورة',
+  ];
 
-    alshaya_i18n_save_translations($strings);
-  }
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

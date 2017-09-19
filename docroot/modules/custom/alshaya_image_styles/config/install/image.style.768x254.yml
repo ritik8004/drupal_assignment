@@ -4,10 +4,11 @@ dependencies: {  }
 name: 768x254
 label: 768x254
 effects:
-  ec61beea-ad98-41c8-9f9e-475333c95ca4:
-    uuid: ec61beea-ad98-41c8-9f9e-475333c95ca4
-    id: image_scale_and_crop
-    weight: 1
+  9d590514-5e44-413a-b3fb-219be8f6ff5f:
+    uuid: 9d590514-5e44-413a-b3fb-219be8f6ff5f
+    id: image_scale
+    weight: 2
     data:
-      width: 768
-      height: 254
+      width: 1150
+      height: null
+      upscale: false

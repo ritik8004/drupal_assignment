@@ -63,7 +63,7 @@ To prepare your local env:
   * `composer install`
   * `composer blt-alias`
   * `blt vm`
-  * `blt refresh:local`
+  * `blt refresh:local` or `blt refresh:non-transac-local`
   * `drush @alshaya.local uli`
 * Load commerce content (already included in refresh:local and refresh:local:drupal):
   * `drush @alshaya.local alshaya-acm-offline-categories-sync`
@@ -72,6 +72,26 @@ To prepare your local env:
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
 
+### Create a new site
+
+Currently, 2 distinct installation profiles exist in the code base. `transac`
+installation profile will enable all the modules required for an a site with
+commercial features and integration with Conductor/Magento. `non_transac`
+profile is a light/static site without any commercial feature.`
+
+* Create a new theme for your site. See `docroot/themes/custom/README.md` for
+more information on how to create a custom theme.
+* Create a custom module in `docroot/modules/brands`. This module goal is to
+enable the appropriate theme, place the blocks in the theme's regions and
+install the specific configuration. See existing brand modules for example.
+* Run the appropriate `blt refresh:*` commands depending on the required
+installation profile.
+
+/!\ Currently, the blt commands are hardcoded to install the Mothercare or
+Victoria Secret sites. While the blt commands don't accept brand argument,
+please edit the `blt/setup.local.xml` file to change the brand name. Don't
+commit that change.
+
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:
   * Create a directory, say 'alshaya_behat'
@@ -79,29 +99,19 @@ Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt 
   * Create a file composer.json and paste the contents below in it:
   
     `{
-    
-  "require-dev" : {
-  
+    "require-dev" : {
     "behat/behat" : "3.0.*",
-    
     "behat/mink-goutte-driver" : "*",
-    
     "behat/mink-browserkit-driver" : "*",
-    
     "behat/mink-extension" : "2.*",
-    
     "behat/mink-selenium2-driver" : "*",
-    
-    "behat/mink" : "*"
-    
-  },
-  
+    "behat/mink" : "*",
+    "drupal/drupal-extension" : "~3.0",
+    "drupal/drupal-driver": "1.1.*"
+    },
   "config": {
-  
-    "bin-dir": "bin/"
-    
+  "bin-dir": "bin/"  
   }
-  
 }`
 * Save the file and close it
 * If you don't have composer installed, Install composer by running the commands:
@@ -113,52 +123,32 @@ Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt 
 * Paste the content below in the yml file:
 
   `#behat.yml
-  
   default:
-  
     autoload:
-    
       '': %paths.base%/features/bootstrap
-      
     suites:
-    
       default:
-      
         contexts:
-        
           - FeatureContext
-          
           - Drupal\DrupalExtension\Context\MinkContext
-          
           - Drupal\DrupalExtension\Context\MessageContext
-          
+          - Drupal\DrupalExtension\Context\DrupalContext 
         paths:
-        
           - %paths.base%/features
-          
     extensions:
-    
       Behat\MinkExtension:
-      
           browser_name: 'chrome'
-          
           goutte:
-          
             guzzle_parameters:
-            
               verify: false
-              
           javascript_session: selenium2
-          
           selenium2:
-          
             wd_host: http://127.0.0.1:4444/wd/hub
-            
             capabilities: { "browser": "chrome", "version": "59.0.3071.115", 'chrome': {'switches':['--start-maximized']}}
-            
           base_url: 'https://whitelabel2.test-alshaya.acsitefactory.com/'
-          
-          files_path: "%paths.base%/files"`
+          files_path: "%paths.base%/files"
+      Drupal\DrupalExtension:
+        blackbox: ~`
           
 * Initialize Behat by running the command
   `bin/behat --init`
@@ -169,6 +159,11 @@ Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt 
   * Open behat.yml file
   * Set parameter 'base_url' to the instance you want to run tests on
   * Save the file
+* Install JDK on your machine.
+* Download the latest Selenium standalone server from http://www.seleniumhq.org/download/
+* Download the latest chrome driver from https://sites.google.com/a/chromium.org/chromedriver/downloads
+* Run the selenium server on your machine by using the following command:
+  `java -Dwebdriver.chrome.driver=/path/to/chromedriver  -jar selenium-server-standalone-*.jar` (type the selenium server version you downloaded in place of *)
 * You are now good to start runnning Behat scripts on your machine
 * Below are various ways to run Behat feature files:
   * To run all the feature files - `bin/behat features`

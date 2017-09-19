@@ -62,7 +62,7 @@
 
         var countFilters = $(mobileFilterBarSelector + ' ul li').length;
         if (countFilters === 0 && $.trim($(mobileFilterBarSelector)
-            .html()).length === 0) {
+          .html()).length === 0) {
           $(mobileFilterBarSelector)
             .once()
             .append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
@@ -99,6 +99,42 @@
         }
 
         if ($(window).width() < 768) {
+          // Enable & disable apply filter button on mobile.
+          $(document).ajaxComplete(function () {
+            var facetBlocks = $('.c-facet__blocks__wrapper--mobile .c-facet__blocks');
+            var clearAllMobileButton = $('.c-facet__blocks__wrapper--mobile .clear-all');
+            var clearAllFake = $('.clear-all-fake');
+            if (clearAllMobileButton.length !== 0) {
+              clearAllFake.removeClass('inactive');
+              if (!clearAllFake.hasClass('active')) {
+                clearAllFake.addClass('active');
+              }
+            }
+            else if (clearAllMobileButton.length === 0) {
+              if (!clearAllFake.hasClass('inactive')) {
+                clearAllFake.addClass('inactive');
+              }
+            }
+
+            if (facetBlocks.length !== 0) {
+              var selectedFiterCount = facetBlocks.find('input:checked').length;
+              var fakeApplyButton = $('.fake-apply-button');
+              if (selectedFiterCount > 0) {
+                fakeApplyButton.removeClass('inactive');
+                fakeApplyButton.removeAttr('disabled');
+                if (!fakeApplyButton.hasClass('active')) {
+                  fakeApplyButton.addClass('active');
+                }
+              }
+              else {
+                fakeApplyButton.attr('disabled', 'disabled');
+                if (!fakeApplyButton.hasClass('inactive')) {
+                  fakeApplyButton.addClass('inactive');
+                }
+              }
+            }
+          });
+
           // Facet Block selector.
           var facetBlocks = $('.c-facet__blocks__wrapper .c-facet__blocks');
 
@@ -109,8 +145,16 @@
           }
           else {
             // If we dont have one, create it, this is first time load.
-            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="clear-all-fake"><span>' + Drupal.t('clear all') + '</span></li></div>')
+            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="apply-fake"><input type="button" class="fake-apply-button inactive" disabled value="' + Drupal.t('apply') + '"></li><li class="clear-all-fake inactive"><span>' + Drupal.t('clear all') + '</span></li></div>')
               .insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
+
+            $('.fake-apply-button').click(function () {
+              $('body').toggleClass('filter-open-no-scroll');
+              $('.c-facet__blocks__wrapper--mobile .c-facet__blocks').hide();
+              $('.show-overlay').each(function () {
+                $(this).removeClass('show-overlay');
+              });
+            });
           }
 
           if ($(mobileFilterBarSelector).length) {
@@ -266,12 +310,13 @@
 
       // Toggle the filter menu when click on the label.
       $('.filter-menu-label .label').once().on('click', function () {
-        $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
-          .toggleClass('show-overlay');
-        $('body').toggleClass('filter-open-no-scroll');
         $('.c-facet__blocks__wrapper .c-facet__label').parent().siblings('.view-filters').toggleClass('low-zindex');
         $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
         $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
+        $('body').toggleClass('filter-open-no-scroll');
+        $('.show-overlay').each(function () {
+          $(this).removeClass('show-overlay');
+        });
       });
 
       $('.c-facet').each(function () {
@@ -283,11 +328,7 @@
       // Close the filter menu when a facet is selected/unselected.
       $('.filter--mobile li.facet-item').once().on('click', function () {
         var facetBlocks = $(this).closest('.c-facet__blocks');
-        facetBlocks.toggle();
-        $('body').toggleClass('filter-open-no-scroll');
         facetBlocks.siblings('.c-facet__label').toggleClass('is-active');
-        $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
-          .toggleClass('show-overlay');
       });
 
       // Click event for fake clear all link on mobile filter.

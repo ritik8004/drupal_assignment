@@ -38,11 +38,6 @@
       }
 
       .views-row {
-        float: $left;
-        text-align: center;
-        color: $black;
-        height: 19.5rem;
-
         @include breakpoint($only-mobile) {
           &:nth-child(2n) {
             float: $right;
@@ -50,20 +45,6 @@
 
           &:nth-child(2n + 1) {
             clear: both;
-          }
-        }
-
-        @include breakpoint($tablet) {
-          height: 24rem;
-        }
-
-        @include breakpoint($tablet) {
-          width: 31.59%;
-          max-width: 291px;
-          height: 30rem;
-
-          &:nth-child(3n+2) {
-            margin: 0 2.6%;
           }
         }
 
@@ -159,7 +140,7 @@
 
 .facets-soft-limit-link {
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.1rem;
 }
 
 header,
@@ -335,18 +316,18 @@ ul.item-list__checkbox,
       top: 2rem;
 
       &.lSNext {
-        #{$right}: -1.7rem;
+        right: -1.7rem;
 
-        @include icon(chevron#{$right}, after) {
+        @include icon(chevronright, after) {
           font-size: 2.125rem;
           color: $black;
         }
       }
 
       &.lSPrev {
-        #{$left}: -1.75rem;
+        left: -1.75rem;
 
-        @include icon(chevron#{$left}, after) {
+        @include icon(chevronleft, after) {
           font-size: 2.125rem;
           color: $black;
         }

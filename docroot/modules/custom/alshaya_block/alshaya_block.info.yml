@@ -1,0 +1,10 @@
+name: 'Alshaya Custom blocks'
+type: module
+description: 'Contains custom bloks like: custom logo block, application links block etc..'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_i18n
+  - block
+  - machine_name_widget
+  - menu_link_attributes

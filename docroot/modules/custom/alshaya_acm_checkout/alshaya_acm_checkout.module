@@ -185,9 +185,9 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
 }
 
 /**
- * Implements hook_alshaya_profile_installed().
+ * Implements hook_alshaya_profile_installed_final_task().
  */
-function alshaya_acm_checkout_alshaya_transac_profile_installed(array $modules) {
+function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, array $modules) {
   if (in_array('alshaya_i18n', $modules)) {
     // Array of language translation strings.
     $strings = [

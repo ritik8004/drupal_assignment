@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_vs.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_vs_install() {
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'find your nearest store' => [
+      'ar' => 'اختر محلاً للتعرف على التفاصيل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_vs', 'inc', 'alshaya_vs.content');
+  // Enable and set victoria_secret as default theme.
+  \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('victoria_secret');
+
+  // Translate store finder footer block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder_footer')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Create default content for the site.
+  alshaya_vs_create_default_content();
+}

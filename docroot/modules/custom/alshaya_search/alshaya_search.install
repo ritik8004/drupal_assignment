@@ -34,16 +34,6 @@ function alshaya_search_install() {
     ->getEntity('facets_summary', 'filter_bar')
     ->save();
 
-  ConfigHelper::forModule('alshaya_search')
-    ->optional()
-    ->getEntity('block', 'filterbar')
-    ->save();
-
-  ConfigHelper::forModule('alshaya_search')
-    ->optional()
-    ->getEntity('block', 'exposedformsearchpage_3')
-    ->save();
-
   // Allow anonymous and authenticated users to use autocomplete.
   user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
   user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);

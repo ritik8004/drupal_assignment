@@ -142,6 +142,12 @@ class StoresFinderController extends ControllerBase {
 
     // Clear value from search field.
     $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-geolocation-geocoder-google-places-api', 'val', ['']));
+
+    // Hide the 'back to glossar' link and show list/map view link.
+    $response->addCommand(new CssCommand('.list-view-link', ['display' => 'block']));
+    $response->addCommand(new CssCommand('.map-view-link', ['display' => 'block']));
+    $response->addCommand(new CssCommand('.back-to-glossary', ['display' => 'none']));
+
     return $response;
   }
 
@@ -170,6 +176,13 @@ class StoresFinderController extends ControllerBase {
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString();
     $store_finder_node_li = '<li><a href="' . $url . '">' . $node->getTitle() . '</a></li>';
     $response->addCommand(new AppendCommand('.block-system-breadcrumb-block ol', $store_finder_node_li));
+
+    // Hide the list/map view link and show the glossary link.
+    $response->addCommand(new CssCommand('.list-view-link', ['display' => 'none']));
+    $response->addCommand(new CssCommand('.map-view-link', ['display' => 'none']));
+    $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1 .back-to-glossary', ['display' => 'block']));
+
+    $response->addCommand(new InvokeCommand(NULL, 'storeFinderDetailPageScrollTop'));
 
     return $response;
   }

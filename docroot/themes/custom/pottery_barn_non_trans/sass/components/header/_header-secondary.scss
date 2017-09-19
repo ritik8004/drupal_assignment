@@ -346,7 +346,11 @@ body {
     margin-top: 10.75rem;
 
     &.frontpage {
-      margin-top: 9.75rem;
+      margin-top: 10.65rem;
+    }
+
+    html[lang=ar] &.frontpage {
+      margin-top: 10.25rem;
     }
   }
 }

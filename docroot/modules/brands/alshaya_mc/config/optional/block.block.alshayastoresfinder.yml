@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_stores_finder
+  theme:
+    - alshaya_white_label
+id: alshayastoresfinder
+theme: alshaya_white_label
+region: menu_secondary
+weight: -31
+provider: null
+plugin: alshaya_stores_finder
+settings:
+  id: alshaya_stores_finder
+  label: 'Alshaya stores finder'
+  provider: alshaya_stores_finder
+  label_display: '0'
+  link_title: 'Find Store'
+visibility: {  }

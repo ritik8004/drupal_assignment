@@ -14,7 +14,7 @@ $env = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $env = $_ENV['AH_SITE_ENVIRONMENT'];
 }
-else if (isset($_SERVER['TRAVIS_JOB_ID'])) {
+elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
@@ -45,7 +45,7 @@ $soauth_key_name = 'alshaya_acm';
 if ($env == 'local') {
   $soauth_key_dir = '/var/www/alshaya/box/';
 }
-else if ($env == 'travis') {
+elseif ($env == 'travis') {
   $soauth_key_dir = '/home/travis/build/acquia-pso/alshaya/private/';
   $soauth_key_name = 'travis_acm';
 }
@@ -70,8 +70,26 @@ $settings['alshaya_api.settings']['password'] = 'password123';
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
 $config['acq_commerce.conductor']['debug'] = TRUE;
 
+// Disable unwanted core views.
+$settings['views_to_disable'] = [
+  'frontpage',
+  'profiles',
+  'content_recent',
+  'taxonomy_term',
+  'who_s_new',
+  'who_s_online',
+];
+
+// Specify the modules to be enabled/uninstalled - just initialised here.
+$settings['additional_modules'] = [];
+
 switch ($env) {
   case 'local':
+    // Specify the modules to be enabled on this env.
+    $settings['additional_modules'][] = 'dblog';
+    $settings['additional_modules'][] = 'views_ui';
+    $settings['additional_modules'][] = 'features_ui';
+
   case 'travis':
     // Disable stock check in local.
     global $_alshaya_acm_disable_stock_check;
@@ -79,11 +97,21 @@ switch ($env) {
 
     $config['acq_commerce.conductor']['debug'] = FALSE;
 
+    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
+    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
+    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
+    $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    break;
+
   case '01dev':
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
+
+    // Specify the modules to be enabled on this env.
+    $settings['additional_modules'][] = 'dblog';
+    $settings['additional_modules'][] = 'views_ui';
     break;
 
   case '01test':
@@ -91,6 +119,10 @@ switch ($env) {
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+
+    // Specify the modules to be enabled on this env.
+    $settings['additional_modules'][] = 'dblog';
+    $settings['additional_modules'][] = 'views_ui';
     break;
 
   case '01uat':

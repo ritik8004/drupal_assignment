@@ -1,16 +1,14 @@
-@javascript @checkout @arabic @manual @mmcpa-1930
+@javascript @checkout @arabic @ar_checkout @mmcpa-1930 @manual
 Feature: Test various checkout scenarios for Arabic site
 
   Background:
-    Given I am on "/stronglax"
+    Given I am on a configurable product
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "add to basket"
     And I wait for AJAX to finish
-    And I follow "عرض سلة التسوق"
+    And I go to "/ar/cart"
     And I wait for the page to load
-    When I press "إتمام عملية الشراء بأمان"
+    When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     And I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for the page to load
@@ -61,13 +59,13 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    When I select "Knet Test Card [KNET1]" from "bank"
+    And I select "Knet Test Card [KNET1]" from "bank"
     And I fill in "cardN" with "0000000001"
-    When I select "8" from "Ecom_Payment_Card_ExpDate_Month"
+    And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
-    When I fill in "Ecom_Payment_Pin_id" with "1234"
-    Then I press "Submit"
-    Then I press "Confirm"
+    And I fill in "Ecom_Payment_Pin_id" with "1234"
+    And I press "إرسال"
+    And I press "تأكيد العملية"
     And I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
 
@@ -77,7 +75,7 @@ Feature: Test various checkout scenarios for Arabic site
   and pay by KNET
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
-    When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
+    When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
     When I wait 5 seconds
     When I follow "اختر هذا المحل"
@@ -101,13 +99,13 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    When I select "Knet Test Card [KNET1]" from "bank"
+    And I select "Knet Test Card [KNET1]" from "bank"
     And I fill in "cardN" with "0000000001"
-    Then I select "8" from "Ecom_Payment_Card_ExpDate_Month"
+    And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
-    When I fill in "Ecom_Payment_Pin" with "1234"
-    And I press "Submit"
-    When I press "Confirm"
+    And I fill in "Ecom_Payment_Pin" with "1234"
+    And I press "إرسال"
+    And I press "تأكيد العملية"
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
 
@@ -134,10 +132,9 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    When I press "Cancel"
+    When I press "الغاء"
     And I wait for the page to load
-    And I should see the button "إتمام عملية الشراء بأمان"
-    Then the url should match "/ar/cart"
+    Then I should see "عذراً، لم نتمكن من متابعة تنفيذ طلبك. يرجى إعادة المحاولة او الاتصال بخدمة الزبائن للمساعدة."
 
   @cc
   Scenario: As a Guest
@@ -145,13 +142,13 @@ Feature: Test various checkout scenarios for Arabic site
   On clicking 'back to basket' from checkout CC page
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
-    When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
+    When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
     When I wait 5 seconds
     When I follow "العودة إلى حقيبة التسوق"
     And I wait for the page to load
     Then the url should match "/ar/cart"
-    And I should see the button "إتمام عملية الشراء بأمان"
+    And I should see the button "إتمام الشراء بأمان"
 
   @cc
   Scenario: As a Guest
@@ -160,7 +157,7 @@ Feature: Test various checkout scenarios for Arabic site
   and link to navigate to the basket
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
-    When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
+    When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then I should see the number of stores displayed
@@ -189,9 +186,9 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     When I press "سجل الطلبية"
     When I wait 10 seconds
@@ -203,7 +200,7 @@ Feature: Test various checkout scenarios for Arabic site
     and Cybersource payment option on Arabic site
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
-    When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
+    When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
     When I wait 5 seconds
     When I follow "اختر هذا المحل"
@@ -216,9 +213,9 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I fill in "edit-billing-address-address-billing-given-name" with "شويتا"
     And I fill in "edit-billing-address-address-billing-family-name" with "شارما"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"

@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 286x404
+label: 286x404
+effects:
+  3c40f25e-8da7-4fac-8f86-63614656bdf6:
+    uuid: 3c40f25e-8da7-4fac-8f86-63614656bdf6
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 286
+      height: 404

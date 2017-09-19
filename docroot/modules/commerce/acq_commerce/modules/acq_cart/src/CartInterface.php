@@ -153,6 +153,11 @@ interface CartInterface {
   public function getShippingMethodAsString();
 
   /**
+   * Clears the shipping method info in cart.
+   */
+  public function clearShippingMethod();
+
+  /**
    * Gets the shipping method.
    *
    * @param string $carrier

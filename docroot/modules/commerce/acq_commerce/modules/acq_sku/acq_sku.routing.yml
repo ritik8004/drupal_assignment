@@ -60,3 +60,11 @@ acq_sku.sync:
     _title: 'Synchronize Product / Category Data'
   requirements:
     _permission: 'access commerce administration pages'
+
+acq_sku.settings:
+  path: '/admin/commerce/sku/settings'
+  defaults:
+    _form: '\Drupal\acq_sku\Form\SKUSettingsForm'
+    _title: 'SKU Settings Form'
+  requirements:
+    _permission: 'access commerce administration pages'

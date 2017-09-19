@@ -18,8 +18,11 @@
     attach: function (context, settings) {
 
       // Opening hours toggle.
-      $('[data-drupal-selector^="views-form-stores-finder-"], .individual--store', context).once('opening-hrs-init').on('click', '.hours--label', function () {
-        $(this).toggleClass('open');
+      var hoursLabels = $('[data-drupal-selector^="views-form-stores-finder-"] .hours--label, .individual--store .hours--label', context);
+      hoursLabels.once('opening-hrs-init').each(function () {
+        $(this).on('click', function () {
+          $(this).toggleClass('open');
+        });
       });
 
       var storeFinderPageSelector = $('.view-id-stores_finder.view-display-id-page_1', context);
@@ -172,6 +175,11 @@
         }
       };
 
+      // Scroll to top of the page on store-detail.
+      $.fn.storeFinderDetailPageScrollTop = function (data) {
+        window.scrollTo(0, 0);
+      };
+
       // Trigger click on autocomplete selection.
       $('[class*="block-views-exposed-filter-blockstores-finder-page"]').each(function () {
         var storeFinder = $(this);
@@ -206,13 +214,21 @@
       $(storeLocatorSelector).slice(loadmoreItemLimit, viewLocatorCount).hide();
 
       $(loadMoreButtonSelector).on('click', function (e) {
+        var itemListContainerSelector = $('.view-id-stores_finder.view-display-id-page_1 .view-content');
+        var itemListSelector = $('.view-id-stores_finder.view-display-id-page_1 .view-content .views-form form');
+        var itemListBeforeHeight = itemListSelector.height();
         e.preventDefault();
         var hiddenStoreSelector = $(storeLocatorSelector + ':hidden');
-        hiddenStoreSelector.slice(0, loadmoreItemLimit).slideDown('slow', function () {
+        hiddenStoreSelector.slice(0, loadmoreItemLimit).show(function () {
           if ($(storeLocatorSelector + ':hidden').length === 0) {
             $(loadMoreButtonSelector).fadeOut('slow');
           }
         });
+        // On tablet and desktop scroll the page to the top along with the list.
+        if ($(window).width() >= 1025) {
+          $.fn.storeFinderDetailPageScrollTop();
+          itemListContainerSelector.stop().animate({scrollTop:itemListBeforeHeight + 25}, 1200, 'swing');
+        }
       });
     }
     else {

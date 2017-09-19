@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ * Provides Drush commands for alshaya_master.
+ */
+
+use Drupal\lightning_core\ConfigHelper;
+use Drupal\locale\Locale;
+
+/**
+ * Implements hook_drush_command().
+ */
+function alshaya_master_drush_command() {
+  $commands = [];
+
+  $commands['alshaya-post-drupal-install'] = [
+    'description' => 'Code to be executed only once post install.',
+    'aliases' => ['apdi'],
+    'options' => [
+      'brand_module' => 'The brand module to install.',
+    ],
+  ];
+
+  return $commands;
+}
+
+/**
+ * Implements drush command alshaya-post-drupal-install.
+ */
+function drush_alshaya_master_alshaya_post_drupal_install() {
+  $post_install_status = \Drupal::state()->get('alshaya_master_post_drupal_install', 'not done');
+
+  // Determine which brand to install.
+  $brand_module = drush_get_option('brand_module', '');
+  if (!empty($brand_module)) {
+    if (module_load_install($brand_module)) {
+      if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
+        drush_print(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
+
+        // Install the module.
+        \Drupal::service('module_installer')->install([$brand_module]);
+
+        // Update config with installed brand and module names.
+        \Drupal::configFactory()->getEditable('alshaya.installed_brand')
+          ->set('module', $brand_module)
+          ->save();
+
+        // Get langcodes for all languages.
+        $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
+
+        // Get all config names avaiable in current module.
+        $names = ConfigHelper::forModule($brand_module)->optional()->listAll();
+
+        // Update config translations from string translations.
+        Locale::config()->updateConfigTranslations($names, $langcodes);
+      }
+      else {
+        drush_print(dt("Brand module @brand_module can't be enabled because the site is already configured with @existing_brand_module.",
+          [
+            '@brand_module' => $brand_module,
+            '@existing_brand_module' => \Drupal::configFactory()->get('alshaya.installed_brand')->get('module'),
+          ]));
+      }
+    }
+    else {
+      drush_print(dt('Brand module @brand_module does not exists.', ['@brand_module' => $brand_module]));
+    }
+  }
+
+  if ($post_install_status == 'not done') {
+    drush_print(dt('Executing post install code, please wait...'));
+
+    // Invoke a hook to allow all modules to run code once post install.
+    \Drupal::moduleHandler()->invokeAll('alshaya_master_post_drupal_install');
+
+    // Set the state variable to done to avoid redoing it.
+    \Drupal::state()->set('alshaya_master_post_drupal_install', 'done');
+
+    drush_print(dt('Done.'));
+  }
+  else {
+    drush_print(dt('Post install code executed already, not doing again.'));
+  }
+}

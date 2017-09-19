@@ -3,6 +3,11 @@
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
       $('#edit-sort-bef-combine option[value="search_api_relevance ASC"]').remove();
+      // Hide the sort drop down and filters text, if no results.
+      if ($('.view-id-search .view-empty').length !== 0) {
+        $('#views-exposed-form-search-page .form-item-sort-bef-combine').hide();
+        $('.c-sidebar-first__region .c-facet__blocks__wrapper .c-facet__label').remove();
+      }
       // Do not allow search form submit on empty search text.
       $('form[data-bef-auto-submit-full-form]', context).submit(function (e) {
         var $keyword = $(this).find('input[name="keywords"]');
@@ -92,20 +97,47 @@
         }
       }, 100);
 
-      // Change the title of facet when open.
-      var priceCurrency = settings.alshaya_search_price_currency;
-      if (priceCurrency) {
-        var initialTitle = $('#block-finalprice h3').html();
-        $('#block-finalprice > h3').on('click', function() {
-          if ($(this).hasClass('ui-state-active')) {
-            $('#block-finalprice h3').html(initialTitle + ' (' + priceCurrency + ')');
-          }
-          else {
-            $('#block-finalprice h3').html(initialTitle);
-          }
-        });
+      // Only execute if views is not empty.
+      if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
+        // Change the title of facet when open.
+        var priceCurrency = settings.alshaya_search_price_currency;
+        var $finalPriceBlock = $('#block-finalprice');
+        if (priceCurrency) {
+          var initialTitle = $finalPriceBlock.find('h3').html();
+          $finalPriceBlock.find('h3').on('click', function() {
+            if ($(this).hasClass('ui-state-active')) {
+              $finalPriceBlock.find('h3').html(initialTitle + ' (' + priceCurrency + ')');
+            }
+            else {
+              $finalPriceBlock.find('h3').html(initialTitle);
+            }
+          });
+        }
+
+        // Price facets to respect Soft Limit.
+        var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
+        var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
+        $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
       }
 
+      $('.ui-autocomplete').on("touchend",function(e) {
+        if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+          e.stopPropagation();
+          e.preventDefault();
+          if (e.handled !== true) {
+            if ($(e.target).hasClass('.autocomplete-suggestion-user-input')) {
+              var $userInput = $(e.currentTarget);
+            }
+            else {
+              var $userInput = $(e.currentTarget).find('.autocomplete-suggestion-user-input');
+            }
+            var input = $userInput.html() + $userInput.siblings('.autocomplete-suggestion-suggestion-suffix').html();
+            $('#edit-keywords').val(input);
+            $('#views-exposed-form-search-page').submit();
+          }
+        }
+
+      });
     }
   };
 

@@ -50,47 +50,10 @@
   }
 }
 
-.path--cart {
-  .site-brand-home {
-    a {
-      width: 50.5%;
-      margin-#{$left}: 0.25em;
-
-      @include breakpoint($tablet) {
-        width: 26%;
-        margin-#{$left}: 0.8em;
-      }
-
-      @include breakpoint($desktop) {
-        width: 100%;
-        max-width: 1284px;
-        margin: 0 auto;
-      }
-    }
-  }
-}
-
 .path--cart .user-page {
   h1 {
     position: relative;
     top: 0;
-  }
-}
-
-.user-page.checkout {
-  .form-type-select {
-    @include form-selector-wrap;
-
-    &::after {
-      #{$right}: -1px;
-      top: -9px;
-      background: $white-five;
-      border-radius: 0;
-    }
-
-    .form-select {
-      @include form-selector(1.56rem);
-    }
   }
 }
 
@@ -296,6 +259,7 @@
       font-family: $alshaya-bold;
       font-weight: normal;
       color: $black;
+      line-height: 1.5;
     }
 
     html[lang=ar] & {

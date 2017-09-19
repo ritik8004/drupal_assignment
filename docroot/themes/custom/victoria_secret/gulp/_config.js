@@ -5,7 +5,10 @@ module.exports = {
       'sass/**/*.scss',
       'components/**/*.scss'
     ],
-    directionalSource: 'sass/**/*.ltr.scss',
+    directionalSource: [
+      'sass/**/*.ltr.scss',
+      'components/**/*.ltr.scss'
+    ],
     destination: 'dist/css/',
     options: {
       outputStyle: 'expanded',
@@ -18,7 +21,10 @@ module.exports = {
     }
   },
   scripts: {
-    source: 'js/**/*.js',
+    source: [
+      'js/**/*.js',
+      'components/_patterns/**/*.js'
+    ],
     destination: 'dist/js/'
   },
   svg: {
@@ -68,7 +74,7 @@ module.exports = {
     ]
   },
   browserSync: {
-    proxy: null,
+    proxy: 'https://local.non-transac.com',
     open: true,
     xip: false,
     logConnections: false
