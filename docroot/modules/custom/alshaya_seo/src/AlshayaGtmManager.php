@@ -275,6 +275,8 @@ class AlshayaGtmManager {
   public function fetchSkuAtttributes($skuId) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
+
+    // We always use en for tracking.
     if ($sku->hasTranslation('en')) {
       $sku = $sku->getTranslation('en');
     }
@@ -285,22 +287,10 @@ class AlshayaGtmManager {
     $final_price = (float) $sku->get('final_price')->getString();
 
     $product_type = 'Regular Product';
-    if (($final_price != 0) &&
-      ($original_price !== $final_price) &&
-      ($final_price < $original_price)) {
-      $product_type = 'Discounted Product';
-      $discount_amount = $original_price - $final_price;
-    }
 
     $attributes['gtm-name'] = trim($sku->label());
-    $price = $sku->get('final_price')->getString() ? $sku->get('final_price')->getString() : 0.000;
-    $attributes['gtm-price'] = (float) number_format((float) $price, 3, '.', '');
-    $brand = $sku->get('attr_product_brand')->getString();
     $attributes['gtm-product-sku'] = $sku->getSku();
-    $attributes['gtm-dimension8'] = $product_type;
-    if (isset($discount_amount)) {
-      $attributes['gtm-metric7'] = $discount_amount;
-    }
+    $attributes['gtm-sku-type'] = $sku->bundle();
 
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
@@ -308,16 +298,32 @@ class AlshayaGtmManager {
     $attributes['gtm-dimension2'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
     $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available';
-    $attributes['gtm-stock'] = '';
-    $attributes['gtm-sku-type'] = $sku->bundle();
 
-    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
-      $attributes['gtm-sku-type'] = $parent_sku->bundle();
-      $brand = $parent_sku->get('attr_product_brand')->getString();
-      $attributes['gtm-dimension2'] = $parent_sku->get('attr_product_collection')->getString();
+    $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
+
+    $attributes['gtm-price'] = (float) number_format((float) $final_price, 3, '.', '');
+
+    $attributes['gtm-metric7'] = 0;
+
+    if ($final_price
+      && ($original_price !== $final_price)
+      && ($final_price < $original_price)) {
+
+      $product_type = 'Discounted Product';
+      $attributes['gtm-metric7'] = (float) $original_price - $final_price;
     }
 
-    $attributes['gtm-brand'] = $brand ?: 'Mothercare Kuwait';
+    $attributes['gtm-dimension8'] = $product_type;
+
+    // @TODO: This is supposed to stay blank here?
+    $attributes['gtm-stock'] = '';
+
+    // Override values from parent if parent sku available.
+    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
+      $attributes['gtm-sku-type'] = $parent_sku->bundle();
+      $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: $attributes['gtm-brand'];
+      $attributes['gtm-dimension2'] = $parent_sku->get('attr_product_collection')->getString();
+    }
 
     return $attributes;
   }
@@ -937,9 +943,9 @@ class AlshayaGtmManager {
         }
 
         foreach ($orderItems as $orderItem) {
-          $productStyleCode[] = $orderItem['sku'];
+          $productSKU[] = $orderItem['sku'];
           $product_node = alshaya_acm_product_get_display_node($orderItem['sku']);
-          $productSKU[] = $product_node->get('field_skus')->getString();
+          $productStyleCode[] = $product_node->get('field_skus')->getString();
         }
 
         $page_dl_attributes = [
