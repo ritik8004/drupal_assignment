@@ -14,4 +14,5 @@ dependencies:
   - token
   - datalayer
   - alshaya_stores_finder
+  - metatag_verification
 version: 8.x-1.0
