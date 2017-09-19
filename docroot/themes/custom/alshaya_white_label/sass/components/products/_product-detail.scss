@@ -1617,20 +1617,31 @@ article[gtm-sku-type="simple"] {
     padding: 0.6rem 1.5rem;
     color: $white;
 
-    @include breakpoint($only-mobile) {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      #{$left}: 0;
-      margin: 0;
-      font-size: 0.875rem;
-      z-index: 6;
-      height: 3rem;
-      line-height: 2;
-    }
-
     @include breakpoint($desktop) {
       display: inline-block;
+    }
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  .basic-details-wrapper {
+    span.out-of-stock {
+      @include breakpoint($only-mobile) {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        #{$left}: 0;
+        margin: 0;
+        font-size: 0.875rem;
+        z-index: 6;
+        height: 3rem;
+        line-height: 2;
+      }
+
+      @include breakpoint($desktop) {
+        display: inline-block;
+      }
     }
   }
 }
