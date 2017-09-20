@@ -426,10 +426,6 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $this->getSession()->getPage()->fillField('edit-name', $arg1);
     $this->getSession()->getPage()->fillField('edit-pass', $arg2);
     $this->getSession()->getPage()->pressButton('sign in');
-    $username = $this->getSession()->getPage()->find('css', 'h3.my-account-title')->getText();
-    if ($username == NULL) {
-      throw new \Exception('Authenticated user could not login. Please check the credentials entered.');
-    }
   }
 
   /**
@@ -535,7 +531,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     if ($sort_order == ORDER_ASC) {
       // Check for ascending order.
       while ($total_elements > 1) {
-        if ($array[$i] < $array[$i + 1]) {
+        if (strtolower($array[$i]) <= strtolower($array[$i + 1])) {
           $i++;
           $total_elements--;
         }
@@ -547,7 +543,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     elseif ($sort_order == ORDER_DSC) {
       // Check for descending order.
       while ($total_elements > 1) {
-        if ($array[$i] > $array[$i + 1]) {
+        if (strtolower($array[$i]) >= strtolower($array[$i + 1])) {
           $i++;
           $total_elements--;
         }
