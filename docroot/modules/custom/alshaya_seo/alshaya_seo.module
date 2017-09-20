@@ -325,9 +325,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
 
             case 'delivery':
               $step = 2;
-              if ($delivery_phone) {
-                $step = 3;
-              }
               break;
 
             case 'payment':
