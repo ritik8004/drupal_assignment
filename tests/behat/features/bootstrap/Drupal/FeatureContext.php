@@ -1151,4 +1151,15 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page = $this->getSession()->getPage();
     $page->find('css', $class)->selectOption($value);
   }
+
+  /**
+   * @Then /^I should see value "([^"]*)" for element "([^"]*)"$/
+   */
+  public function iShouldSeeValueForElement($value, $element) {
+    $page = $this->getSession()->getPage();
+    $actual_text = $page->find('css', $element)->getValue();
+    if ($actual_text !== $value) {
+      throw new \Exception($value . ' was not found');
+    }
+  }
 }

@@ -36,13 +36,9 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
       ->getValue();
 
     // Get the processed media data for the SKU.
-    $media = alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
-
-    // We return all media items.
-    return $media;
+    return alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
   }
 
-  // We didn't find any media files, returning null.
   return NULL;
 }
 
@@ -58,7 +54,8 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
  *   Array of media files.
  */
 function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
-  $media = [];
+  static $media = [];
+  static $thumbnail_media = [];
 
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
@@ -66,11 +63,21 @@ function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
     return [];
   }
 
+  $langcode = $sku_entity->language()->getId();
+
   if ($first_image_only) {
-    return $sku_entity->getThumbnail();
+    if (!isset($thumbnail_media[$sku_entity->id()], $thumbnail_media[$sku_entity->id()][$langcode])) {
+      $thumbnail_media[$sku_entity->id()][$langcode] = $sku_entity->getThumbnail();
+    }
+
+    return $thumbnail_media[$sku_entity->id()][$langcode];
   }
 
-  return $sku_entity->getMedia();
+  if (!isset($media[$sku_entity->id()], $media[$sku_entity->id()][$langcode])) {
+    $media[$sku_entity->id()][$langcode] = $sku_entity->getMedia();
+  }
+
+  return $media[$sku_entity->id()][$langcode];
 }
 
 /**
@@ -103,7 +110,7 @@ function alshaya_acm_product_get_sku_image(array $media, $image_style = '', $rel
 }
 
 /**
- * Utility function to return media files for a SKU.
+ * Utility function to return configurable values for a SKU.
  *
  * @param mixed $sku
  *   SKU text or full entity object.

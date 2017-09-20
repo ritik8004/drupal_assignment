@@ -127,6 +127,8 @@ function acq_sku_get_stock_cache_id(SKU $sku_entity) {
  * @throws \Exception
  */
 function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
+  $stock = NULL;
+
   try {
     // Cache id.
     $cid = acq_sku_get_stock_cache_id($sku_entity);
