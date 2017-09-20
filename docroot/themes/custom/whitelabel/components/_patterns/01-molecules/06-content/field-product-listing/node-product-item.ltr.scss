@@ -1,0 +1,38 @@
+@import '../../../../sass/config/**/*.scss';
+
+.view-product-list__title {
+  color: $medium-pink;
+  font-weight: bold;
+}
+
+.view-product-item__meta {
+  color: $brownish-grey;
+  min-height: 3rem;
+  letter-spacing: 1px;
+
+  @include breakpoint($upto-palm) {
+    font-size: 0.75rem;
+    margin-top: 0.375rem;
+    line-height: 1.166;
+  }
+
+  @include breakpoint($above-palm) {
+    font-size: 1rem;
+    line-height: 1.375;
+  }
+
+  @include breakpoint($lap) {
+    margin-top: 1rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-top: 1.625rem;
+  }
+
+  div {
+    display: inline;
+    text-transform: uppercase;
+    color: $medium-pink;
+    font-weight: bold;
+  }
+}
