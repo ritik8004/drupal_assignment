@@ -528,18 +528,32 @@ class AlshayaGtmManager {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     if ($cart = $this->cartStorage->getCart(FALSE)) {
+      $dimension6 = '';
+      $dimension7 = '';
+
       $cartItems = $cart->get('items');
-      $cart_delivery_method = $cart->getExtension('shipping_method');
 
-      if ($cart_delivery_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+      $address = (array) $cart->getShipping();
 
-        // Get store code from cart extension.
-        $store_code = $cart->getExtension('store_code');
+      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
+        // For CC we always use step 2.
+        $attributes['step'] = 2;
+      }
+      elseif (isset($address['extension'], $address['extension']['address_area_segment'])) {
+        // For HD we use step 3 if we have address saved.
+        $attributes['step'] = 3;
+      }
 
-        // We should always have store but a sanity check.
-        if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
-          $dimension6 = $store->label();
-          $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+      if ($cart_delivery_method = $cart->getShippingMethodAsString()) {
+        if ($cart_delivery_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+          // Get store code from cart extension.
+          $store_code = $cart->getExtension('store_code');
+
+          // We should always have store but a sanity check.
+          if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
+            $dimension6 = $store->label();
+            $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+          }
         }
       }
 
@@ -556,14 +570,8 @@ class AlshayaGtmManager {
         $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
         $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
-
-        $attributes[$skuId]['gtm-dimension6'] = '';
-        $attributes[$skuId]['gtm-dimension7'] = '';
-
-        if ($cart_delivery_method === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
-          $attributes[$skuId]['gtm-dimension6'] = $dimension6;
-          $attributes[$skuId]['gtm-dimension7'] = $dimension7;
-        }
+        $attributes[$skuId]['gtm-dimension6'] = $dimension6;
+        $attributes[$skuId]['gtm-dimension7'] = $dimension7;
       }
 
       $attributes['privilegeOrder'] = !empty($cart->getExtension('loyalty_card')) ? 'order with privilege club' : 'order without privilege club';
