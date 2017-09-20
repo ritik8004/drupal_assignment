@@ -100,7 +100,7 @@ switch ($env) {
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://dev-tqspiwq-zbrr3sobrsb3o.eu.magentosite.cloud';
+    $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
     break;
 
   case '01dev':
@@ -140,14 +140,14 @@ switch ($env) {
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://dev-tqspiwq-zbrr3sobrsb3o.eu.magentosite.cloud';
+    $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
     break;
 
   default:
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://dev-tqspiwq-zbrr3sobrsb3o.eu.magentosite.cloud';
+    $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
 }
 
 // Recaptcha settings.
