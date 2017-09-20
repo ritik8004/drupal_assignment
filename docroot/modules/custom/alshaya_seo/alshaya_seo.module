@@ -307,9 +307,9 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
 
           $products = [];
-          $privilegeOrder = $cart_item_attributes['privilegeOrder'];
-          $delivery_phone = $cart_item_attributes['delivery_phone'];
-          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['delivery_phone']);
+          $data_layer['privilegeOrder'] = $cart_item_attributes['privilegeOrder'];
+          $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'];
+          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['privilegesCardNumber']);
 
           foreach ($cart_item_attributes as $key => $cart_item) {
             $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
@@ -325,9 +325,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
 
             case 'delivery':
               $step = 2;
-              if ($delivery_phone) {
-                $step = 3;
-              }
               break;
 
             case 'payment':
@@ -335,7 +332,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
               break;
           }
 
-          $data_layer['privilegeOrder'] = $privilegeOrder;
           $data_layer_cart = [
             'ecommerce' => [
               'currencyCode' => $currency_code,

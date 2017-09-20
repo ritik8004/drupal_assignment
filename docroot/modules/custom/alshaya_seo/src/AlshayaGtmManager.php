@@ -567,9 +567,7 @@ class AlshayaGtmManager {
       }
 
       $attributes['privilegeOrder'] = !empty($cart->getExtension('loyalty_card')) ? 'order with privilege club' : 'order without privilege club';
-
-      $shipping = (array) $cart->getShipping();
-      $attributes['delivery_phone'] = isset($shipping['telephone']) ? $shipping['telephone'] : '';
+      $attributes['privilegesCardNumber'] = $cart->getExtension('loyalty_card');
     }
 
     return $attributes;
@@ -707,15 +705,24 @@ class AlshayaGtmManager {
     $orders = alshaya_acm_customer_get_user_orders($order['email']);
 
     $orderItems = $order['items'];
+
     $dimension6 = '';
     $dimension7 = '';
+
     $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
+
+    $deliveryOption = 'Home Delivery';
+    $deliveryType = $shipping_method->getName();
+
     $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
     if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
       $shipping_assignment = reset($order['extension']['shipping_assignments']);
+
+      $deliveryOption = 'Click and Collect';
+      $deliveryType = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
+
       $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
-      $store = $this->storeFinder->getStoreFromCode($store_code);
-      if ($store) {
+      if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
         $dimension6 = $store->label();
         $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
       }
@@ -747,11 +754,13 @@ class AlshayaGtmManager {
     ];
 
     $generalInfo = [
-      'deliveryOption' => $shipping_method->getName(),
-      'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'])->getName(),
+      'deliveryOption' => $deliveryOption,
+      'deliveryType' => $deliveryType,
+      'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
       'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
+      'privilegesCardNumber' => $order['extension']['loyalty_card'],
     ];
 
     return [
@@ -838,8 +847,8 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = [
-          'productStyleCode' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
-          'productSKU' => $product_sku,
+          'productSKU' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
+          'productStyleCode' => $product_sku,
           'stockStatus' => $stock_status,
           'productName' => $node->getTitle(),
           'productBrand' => $sku_attributes['gtm-brand'],
@@ -877,9 +886,9 @@ class AlshayaGtmManager {
           $productSKU = [];
 
           foreach ($cart_items as $item) {
-            $productStyleCode[] = $item['sku'];
+            $productSKU[] = $item['sku'];
             $product_node = alshaya_acm_product_get_display_node($item['sku']);
-            $productSKU[] = $product_node->get('field_skus')->getString();
+            $productStyleCode[] = $product_node->get('field_skus')->getString();
           }
 
           $page_dl_attributes = [
@@ -891,27 +900,29 @@ class AlshayaGtmManager {
             'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
           ];
 
-          $shipping = $cart->getExtension('shipping_method');
-          if ($shipping) {
+          if ($shipping = $cart->getShippingMethodAsString()) {
             $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($shipping);
-            $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
-          }
 
-          if ((is_array($shipping)) &&
-            ($shipping_method_name && !($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()))) {
+            $page_dl_attributes['deliveryOption'] = 'Home Delivery';
+            $page_dl_attributes['deliveryType'] = $shipping_method->getName();
+
+            $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
+
+            // Check if selected shipping method is click and collect.
+            if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+              $page_dl_attributes['deliveryOption'] = 'Click and Collect';
+              $page_dl_attributes['deliveryType'] = $cart->getExtension('click_and_collect_type');
+
+              if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
+                $page_dl_attributes['storeLocation'] = $store->label();
+                $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+              }
+            }
+
             if (isset($shipping['extension']['address_governate_segment'])) {
               $page_dl_attributes['deliveryArea'] = $shipping['extension']['address_governate_segment'];
             }
-            if (isset($shipping['extension']['address_block_segment'])) {
-              $page_dl_attributes['deliveryCity'] = $shipping['extension']['address_block_segment'];
-            }
           }
-
-          if ($cart->getExtension('shipping_method')) {
-            $shippingTerm = $this->checkoutOptionsManager->loadShippingMethod($cart->getExtension('shipping_method'));
-            $page_dl_attributes['deliveryType'] = $shippingTerm->getName();
-          }
-
         }
         break;
 
@@ -934,8 +945,7 @@ class AlshayaGtmManager {
         if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
-          $store = $this->storeFinder->getStoreFromCode($store_code);
-          if ($store) {
+          if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
             $dimension6 = $store->label();
             $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
           }

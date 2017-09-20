@@ -6,6 +6,8 @@
 (function ($, Drupal, dataLayer) {
   'use strict';
 
+  var mouseenterTime = 0;
+
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       // Global variables & selectors.
@@ -14,6 +16,7 @@
       var currencyCode = body.attr('gtm-currency');
       var gtmPageType = body.attr('gtm-container');
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+      var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]', context);
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
@@ -40,7 +43,6 @@
         'product listing page',
         'product detail page',
         'department page',
-        'cart page'
       ];
 
       // If we receive an empty page type, set page type as not defined.
@@ -213,6 +215,9 @@
             else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
               pdpListName = listName + '-US';
             }
+            else if (upSellCrossSellSelector.hasClass('horizontal-related')) {
+              pdpListName = listName + '-RELATED';
+            }
 
             impression.list = pdpListName;
             impression.position = count_pdp_items;
@@ -225,7 +230,8 @@
         Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
       }
       else if ($.inArray(gtmPageType, impressionPages) !== -1) {
-        var count = 1;
+        var count = productLinkProcessedSelector.length + 1;
+
         if (productLinkSelector.length > 0) {
           productLinkSelector.each(function () {
             if (!$(this).hasClass('impression-processed')) {
@@ -263,20 +269,6 @@
             Drupal.alshaya_seo_gtm_push_lead_type('footer');
           }
         }
-      });
-
-      subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function () {
-        // Push default selected sub-delivery option to GTM.
-        if ($(this).find('input[checked="checked"]').length > 0) {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        }
-
-        // Attach change event listener to shipping method radio buttons.
-        $(this).change(function () {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        });
       });
 
       /** Quantity update in cart. **/
@@ -363,12 +355,12 @@
 
       /** Tracking New customers .**/
       cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('New Customer');
+        Drupal.alshaya_seo_gtm_push_customer_type('checkout as guest');
       });
 
       /** Tracking Returning customers .**/
       cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('Returning Customers');
+        Drupal.alshaya_seo_gtm_push_customer_type('registered customer');
       });
 
       /** Tracking Home Delivery .**/
@@ -378,24 +370,21 @@
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
           Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
         }
-        // Fire checkout option event when user switches delivery option.
-        cartCheckoutDeliverySelector.find('[data-drupal-selector="edit-delivery-tabs"] .tab').once('js-event').each(function () {
-          $(this).on('click', function () {
-            var gtmType = $(this).attr('gtm-type');
-            var deliveryType = '';
-            if (gtmType !== undefined) {
-              if (gtmType === 'checkout-home-delivery') {
-                deliveryType = 'Home Delivery';
-              }
-              else if (gtmType === 'checkout-click-collect') {
-                deliveryType = 'Click & Collect';
-              }
-
-              Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
-            }
-          });
-        });
       }
+
+      subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function () {
+        // Push default selected sub-delivery option to GTM.
+        if ($(this).find('input[checked="checked"]').length > 0) {
+          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+        }
+
+        // Attach change event listener to shipping method radio buttons.
+        $(this).change(function () {
+          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+        });
+      });
 
       /** GTM virtual page tracking for click & collect journey. **/
       if (isCCPage) {
@@ -477,28 +466,28 @@
         });
       });
 
+
+      var highlightsPosition = 1;
+      topNavLevelOneSelector.once('set-positions').find('.highlights [gtm-type="gtm-highlights"]').each(function () {
+        $(this).data('position', highlightsPosition);
+        highlightsPosition++;
+      });
+
       /** Tracking internal promotion impressions. **/
       // Tracking menu level promotions.
-      var currentTime = new Date();
-      var mouseenterTime = currentTime.getTime();
+      topNavLevelOneSelector.each(function () {
+        $(this).once('js-event').mouseenter(function () {
+          mouseenterTime = (new Date()).getTime();
+        }).mouseleave(function () {
+          var mouseOverTime = (new Date()).getTime() - mouseenterTime;
+          if ((mouseOverTime >= 2000) && ($(this).hasClass('has-child'))) {
+            var highlights = $(this).find('.highlights [gtm-type="gtm-highlights"]');
 
-      topNavLevelOneSelector.once('js-event').mouseenter(function () {
-        mouseenterTime = currentTime.getTime();
-      }).mouseleave(function () {
-        currentTime = new Date();
-        var mouseOverTime = currentTime.getTime() - mouseenterTime;
-        if ((mouseOverTime >= 2000) && ($(this).hasClass('has-child'))) {
-          var topNavLevelTwo = $(this).children('ul.menu--two__list');
-          var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
-          var highlights = [];
-
-          if ((topNavLevelThree.length > 0) && (topNavLevelThree.children('.highlights'))) {
-            highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
+            if (highlights.length > 0) {
+              Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
+            }
           }
-          if (highlights.length > 0) {
-            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
-          }
-        }
+        });
       });
 
       $('[gtm-type="gtm-highlights"]').once('js-event').on('click', function () {
@@ -582,7 +571,7 @@
       dimension4: mediaCount,
       dimension5: product.attr('gtm-sku-type'),
       dimension8: product.attr('gtm-dimension8'),
-      metric7: product.attr('gtm-metric7'),
+      metric7: parseFloat(product.attr('gtm-metric7')),
       metric1: product.attr('gtm-cart-value')
     };
 
@@ -663,12 +652,20 @@
     var promotions = [];
 
     highlights.each(function (key, highlight) {
+      var position = 1;
       var creative = '';
+
       if (gtmPageType === 'Top Navigation') {
         creative = Drupal.url($(highlight).find('.field--name-field-highlight-image img').attr('src'));
+        position = $(highlight).data('position');
       }
       else {
+        if ($(highlight).parent().find('a').length === 0) {
+          return;
+        }
+
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
+        position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
       }
 
       var creativeParts = creative.split('/');
@@ -683,50 +680,42 @@
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }
 
-      var position = parseInt(key) + 1;
-
       var promotion = {
         id: fileName,
         name: gtmPageType,
         position: 'slot' + position
       };
 
-      if (event === 'click') {
-        if (gtmPageType !== 'Top Navigation') {
-          position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
-          promotion.position = 'slot' + position;
-        }
-        else {
-          position = parseInt($(highlight).closest('highlights').find('[gtm-type="gtm-highlights"]').index($(highlight))) + 1;
-          promotion.position = 'slot' + position;
-        }
-      }
-
       promotions.push(promotion);
     });
 
-    var data = {
-      event: 'promotionImpression',
-      ecommerce: {
-        promoView: {
-          promotions: promotions
-        }
-      }
-    };
+    if (promotions.length > 0) {
+      if (event === 'promotionClick') {
+        // We don't want to trigger impressions again after click.
+        mouseenterTime = (new Date()).getTime() + 1000000000;
 
-    if (event === 'promotionClick') {
-      data = {
-        event: event,
-        ecommerce: {
-          promoClick: {
-            promotions: promotions
+        var data = {
+          event: event,
+          ecommerce: {
+            promoClick: {
+              promotions: promotions
+            }
           }
-        }
-      };
+        };
+      }
+      else {
+        var data = {
+          event: 'promotionImpression',
+          ecommerce: {
+            promoView: {
+              promotions: promotions
+            }
+          }
+        };
+      }
 
+      dataLayer.push(data);
     }
-
-    dataLayer.push(data);
   };
 
   /**
