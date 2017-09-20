@@ -12,12 +12,12 @@ function alshaya_acm_drush_command() {
   $commands = [];
 
   $commands['alshaya-acm-offline-categories-sync'] = [
-    'description' => 'Imports commerce product categories from the codebase.',
+    'description' => 'Imports commerce product categories from the local files.',
     'aliases'     => ['aaocs'],
   ];
 
   $commands['alshaya-acm-offline-products-sync'] = [
-    'description' => 'Imports commerce products from the codebase.',
+    'description' => 'Imports commerce products from the local files.',
     'aliases'     => ['aaops'],
     'options'     => [
       'limit' => 'Number of products to sync.',
@@ -32,15 +32,34 @@ function alshaya_acm_drush_command() {
  * Implements drush categories sync command.
  */
 function drush_alshaya_acm_offline_categories_sync() {
-  drush_print(dt('Synchronizing all commerce categories, please wait...'));
+  $brand_module = \Drupal::configFactory()->get('alshaya.installed_brand')->get('module');
+
+  // Check if the site is configured for a specific brand.
+  if (empty($brand_module)) {
+    drush_print(dt('The site is not configured for a specific brand yet.'));
+    return;
+  }
+
+  $path = drupal_get_path('module', $brand_module);
+
+  // Check if the directory containing the data files exists.
+  if (!file_exists($path . '/data/')) {
+    drush_print(dt('The directory @directory does not exist. Please create and upload appropriate data files.', ['@directory' => $path . '/data/']));
+    return;
+  }
+
   $container = \Drupal::getContainer();
+  foreach (\Drupal::languageManager()->getLanguages() as $langcode => $language) {
+    // We check if the data file exists for this language.
+    if (!file_exists($path . '/data/categories_' . $langcode . '.data')) {
+      continue;
+    }
 
-  $languages = \Drupal::languageManager()->getLanguages();
-  foreach ($languages as $langcode => $language) {
-    drush_print(dt('Dealing with @langcode ...', ['@langcode' => $langcode]));
-    module_load_include('data', 'alshaya_acm', 'includes/categories_' . $langcode);
+    drush_print(dt('Synchronizing @language product categories from @filename', ['@language' => strtolower($language->getName()), '@filename' => $path . '/data/categories_' . $langcode . '.data']));
+
+    // Import the categories from the data file.
     global $_alshaya_acm_categories;
-
+    module_load_include('data', $brand_module, 'data/categories_' . $langcode);
     $container->get('acq_sku.category_manager')->synchronizeTreeOffline('acq_product_category', $_alshaya_acm_categories);
   }
   drush_print(dt('Done.'));
@@ -50,21 +69,41 @@ function drush_alshaya_acm_offline_categories_sync() {
  * Implements drush products sync command.
  */
 function drush_alshaya_acm_offline_products_sync() {
-  drush_print(dt('Synchronizing all commerce products, please wait...'));
+  $brand_module = \Drupal::configFactory()->get('alshaya.installed_brand')->get('module');
+
+  // Check if the site is configured for a specific brand.
+  if (empty($brand_module)) {
+    drush_print(dt('The site is not configured for a specific brand yet.'));
+    return;
+  }
+
+  $path = drupal_get_path('module', $brand_module);
+
+  // Check if the directory containing the data files exists.
+  if (!file_exists($path . '/data/')) {
+    drush_print(dt('The directory @directory does not exist. Please create and upload appropriate data files.', ['@directory' => $path . '/data/']));
+    return;
+  }
+
   $container = \Drupal::getContainer();
+
+  // Get the REST endpoint information to POST products.
   $resource_storage = $container->get('entity_type.manager')->getStorage('rest_resource_config');
   $resource_config = $resource_storage->load('acq_productsync');
   $resource = $resource_config->getResourcePlugin();
 
-  global $_alshaya_acm_products;
+  // Get the options from the drush command.
   $query = drush_get_option('skus', '');
   $limit = (int) drush_get_option('limit', 0);
 
-  $languages = \Drupal::languageManager()->getLanguages();
-  foreach ($languages as $langcode => $language) {
-    drush_print(dt('Dealing with @langcode ...', ['@langcode' => $langcode]));
+  global $_alshaya_acm_products;
+  foreach (\Drupal::languageManager()->getLanguages() as $langcode => $language) {
+    // We check if the data file exists for this language.
+    if (!file_exists($path . '/data/products_' . $langcode . '.data')) {
+      continue;
+    }
 
-    module_load_include('data', 'alshaya_acm', 'includes/products_' . $langcode);
+    module_load_include('data', $brand_module, 'data/products_' . $langcode);
 
     // Check if we need to import only specific SKUs.
     if ($query) {
@@ -73,16 +112,32 @@ function drush_alshaya_acm_offline_products_sync() {
       });
     }
 
+    // Check if we need to import a limited set of products.
     if ($limit) {
       $_alshaya_acm_products = array_slice($_alshaya_acm_products, 0, $limit);
     }
 
+    if (empty($_alshaya_acm_products)) {
+      drush_print(dt('No @language products in @filename', ['@language' => strtolower($language->getName()), '@filename' => $path . '/data/products_' . $langcode . '.data']));
+      continue;
+    }
+
+    // Prepare chunks of products to avoid memory issue.
     $product_chunks = array_chunk($_alshaya_acm_products, 250, TRUE);
 
     // Save memory by unsetting global var.
     $_alshaya_acm_products = [];
 
-    foreach ($product_chunks as $products) {
+    foreach ($product_chunks as $i => $products) {
+      drush_print(dt('Synchronizing chunk @i of @total of @language products from @filename',
+        [
+          '@i' => $i + 1,
+          '@total' => count($product_chunks),
+          '@language' => strtolower($language->getName()),
+          '@filename' => $path . '/data/products_' . $langcode . '.data',
+        ]
+      ));
+
       // Reset static caches to release memory.
       drupal_static_reset();
 
