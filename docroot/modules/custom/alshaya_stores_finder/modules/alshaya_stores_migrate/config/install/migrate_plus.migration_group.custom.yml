@@ -1,0 +1,8 @@
+id: custom
+label: Custom migrations
+description: Custom data migrations.
+source_type: CSV files
+dependencies:
+  enforced:
+    module:
+      - alshaya_stores_migrate
