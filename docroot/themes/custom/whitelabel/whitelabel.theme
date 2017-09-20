@@ -113,7 +113,7 @@ function whitelabel_preprocess_node(&$variables) {
   $node_bundle = $variables['node']->bundle();
   switch ($node_bundle) {
     case 'advanced_page':
-      $variables['content']['field_promo_blocks']['#attributes']['class'][] = 'field-promo-block region-content-center';
+      $variables['content']['field_promo_blocks']['#attributes']['class'][] = 'field-promo-block';
       break;
   }
 }

@@ -1,5 +1,13 @@
 @import '../../../../sass/config/**/*.scss';
 
+.field__slider {
+  margin-bottom: 0.5rem;
+
+  @include breakpoint($above-palm) {
+    margin-bottom: 1.5rem;
+  }
+}
+
 .field-slider-items-wrapper {
   position: relative;
 }
@@ -79,25 +87,40 @@
 
 /* Slider dots */
 .slick-dots {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0);
-  bottom: 0;
-  padding-#{direction(left)}: 0.1875rem;
+  margin: 0.5rem 0 0;
+  text-align: center;
+  padding: 0;
+
+  @include breakpoint($above-palm) {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 0;
+    padding-#{direction(left)}: 0.1875rem;
+  }
 
   li {
     width: 0.625rem;
     height: 0.625rem;
     border-radius: 100%;
-    color: $white;
-    border: 1px solid $white;
+    color: $marine-blue-two;
+    border: 1px solid $marine-blue-two;
     display: inline-block;
     margin: 1em 0.75em;
     padding-#{direction(left)}: 0;
 
+    @include breakpoint($above-palm) {
+      color: $white;
+      border: 1px solid $white;
+    }
+
     &.active,
     &.slick-active {
-      background: $white;
+      background: $marine-blue-two;
+
+      @include breakpoint($above-palm) {
+        background: $white;
+      }
     }
 
     button {

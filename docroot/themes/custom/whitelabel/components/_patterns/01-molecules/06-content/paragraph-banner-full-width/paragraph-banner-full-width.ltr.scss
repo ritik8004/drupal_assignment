@@ -1,0 +1,13 @@
+@import '../../../../sass/config/**/*.scss';
+
+.paragraph-t-banner-full-width {
+  margin-bottom: 0.5rem;
+
+  @include breakpoint($above-palm) {
+    margin-bottom: 1.5rem;
+  }
+
+  img {
+    vertical-align: middle;
+  }
+}
