@@ -540,7 +540,7 @@ display:
     display_options:
       display_extenders: {  }
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       defaults:
         cache: false
@@ -599,7 +599,7 @@ display:
         cache: false
       display_description: ''
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       exposed_block: true
     cache_metadata:

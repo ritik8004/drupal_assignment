@@ -4,12 +4,14 @@
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
       $(window).on('click', function() {
-        // check if element is Visible
-        var length = $('#cart_notification').html().length;
-        if (length > 0) {
-          $('#cart_notification').empty();
-          $('body').removeClass('notification--on');
-          $('#cart_notification').removeClass('has--notification')
+        if ($('#cart_notification').length) {
+          // check if element is Visible
+          var length = $('#cart_notification').html().length;
+          if (length > 0) {
+            $('#cart_notification').empty();
+            $('body').removeClass('notification--on');
+            $('#cart_notification').removeClass('has--notification')
+          }
         }
       });
 

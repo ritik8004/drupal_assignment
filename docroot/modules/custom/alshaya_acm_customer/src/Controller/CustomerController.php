@@ -230,28 +230,7 @@ class CustomerController extends ControllerBase {
   public function orderPrintLast() {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
-    $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
-    $order_data = $temp_store->get('order');
-    $email = $temp_store->get('email');
-
-    // Throw access denied if nothing in session.
-    if (empty($order_data) || empty($order_data['id']) || empty($email)) {
-      throw new AccessDeniedHttpException();
-    }
-
-    // @TODO: Remove the fix when we get the full order details.
-    $order_id = str_replace('"', '', $order_data['id']);
-
-    // Get the orders to display for current user.
-    $orders = alshaya_acm_customer_get_user_orders($email);
-
-    $order_index = array_search($order_id, array_column($orders, 'order_id'));
-
-    if ($order_index === FALSE) {
-      throw new NotFoundHttpException();
-    }
-
-    $order = $orders[$order_index];
+    $order = _alshaya_acm_checkout_get_last_order_from_session();
 
     $build = alshaya_acm_customer_build_order_detail($order);
 

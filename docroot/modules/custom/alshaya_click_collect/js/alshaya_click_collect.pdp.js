@@ -67,6 +67,10 @@
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
         if ($(window).width() >= 768) {
           $('.click-collect-all-stores.inline-modal-wrapper').append('<div class="gradient-holder"></div>');
+          // Close read more description window if open.
+          if ($('.c-pdp .description-wrapper').hasClass('desc-open')) {
+            $('.c-pdp .description-wrapper').toggleClass('desc-open');
+          }
           $('.click-collect-all-stores').toggleClass('desc-open', function () {
             // Scroll
             $('html,body').animate({
