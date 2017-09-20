@@ -220,6 +220,10 @@ function whitelabel_theme_suggestions_views_view_unformatted_alter(array &$sugge
         $suggestions[] = 'views_view_unformatted__store_finder_glossary';
       }
       break;
+
+    case 'product_list':
+      $suggestions[] = 'views_view_unformatted__product_list';
+      break;
   }
 }
 

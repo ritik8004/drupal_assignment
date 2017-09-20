@@ -181,6 +181,21 @@ field-slider:
   dependencies:
     - whitelabel/slick
 
+field-product-listing:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/field-product-listing.ltr.css: {}
+
+views-unformatted-product-list:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/views-unformatted-product-list.ltr.css: {}
+
+node-product-item:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/node-product-item.ltr.css: {}
+
 slick:
   css:
     theme:
