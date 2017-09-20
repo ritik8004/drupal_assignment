@@ -659,7 +659,7 @@
     }
 
     &:first-child {
-      border-top: 2px solid $white;
+      border-top: 2px solid $greyish;
 
       @include breakpoint($only-mobile) {
         border-top-width: 1px;
