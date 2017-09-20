@@ -7,6 +7,7 @@
   'use strict';
 
   var mouseenterTime = 0;
+  var gtm_execute_onetime_events = true;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
@@ -169,7 +170,7 @@
       }
 
       /** Track store finder clicks. **/
-      if (isStoreFinderPage) {
+      if (isStoreFinderPage && gtm_execute_onetime_events) {
         var searchTextBox = storeFinderFormSelector.find('input[data-drupal-selector="edit-geolocation-geocoder-google-places-api"]');
         var keyword = searchTextBox.val();
         if (keyword !== '') {
@@ -184,7 +185,7 @@
         }
       }
 
-      if (isCCPage) {
+      if (isCCPage && gtm_execute_onetime_events) {
         if ($('li.select-store', context).length > 0) {
           var keyword = $('input#edit-store-location').val();
           var resultCount = $('li.select-store', context).length;
@@ -255,6 +256,7 @@
       /** Add to cart GTM .**/
       // Trigger GTM push event on AJAX completion of add to cart button.
       $(document).once('js-event').ajaxComplete(function (event, xhr, settings) {
+        gtm_execute_onetime_events = true;
         if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) && (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
           var responseJSON = xhr.responseJSON;
           var responseMessage = '';
@@ -541,6 +543,8 @@
           dataLayer.push(data);
         });
       }
+
+      gtm_execute_onetime_events = false;
     }
   };
 
