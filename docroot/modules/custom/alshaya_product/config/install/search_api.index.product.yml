@@ -138,6 +138,11 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  nid:
+    label: ID
+    datasource_id: 'entity:node'
+    property_path: nid
+    type: integer
 datasource_settings:
   'entity:node':
     bundles:

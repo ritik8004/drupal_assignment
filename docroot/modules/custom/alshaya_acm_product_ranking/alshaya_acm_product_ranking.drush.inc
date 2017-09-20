@@ -19,6 +19,10 @@ function alshaya_acm_product_ranking_drush_command() {
     'arguments'   => [
       'ranking_type' => 'Name of the ranking type.',
     ],
+    'examples' => [
+      'drush aaprs' => 'Sync product ranking based on category, by default "best_seller".',
+      'drush aaprs myargument' => 'Sync product ranking based on category, by "myargument".',
+    ],
   ];
 
   return $commands;
@@ -27,7 +31,7 @@ function alshaya_acm_product_ranking_drush_command() {
 /**
  * Sync product rankings based on category.
  */
-function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type) {
+function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type = 'best_seller') {
   drush_print(dt('Product ranking sync in progress...'));
   // Get root category configuration.
   $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
@@ -51,6 +55,9 @@ function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type) {
     // Get product ranking for this category from Magento.
     $response = \Drupal::service('alshaya_api.api')->invokeApi("categories/$commerce_id/products", [], 'GET');
     $response = json_decode($response, TRUE);
+    if (!is_array($response)) {
+      continue;
+    }
 
     // Skip sync if error is found in the response for a particular category.
     if (is_array($response) && isset($response['message'])) {
@@ -84,19 +91,25 @@ function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type) {
       continue;
     }
 
+    $is_data_available = FALSE;
+    $query = $database->insert('alshaya_acm_product_ranking')
+      ->fields(['nid', 'tid', 'rank', 'ranking_type']);
     foreach ($response as $product_rank) {
       if (isset($nids[$product_rank['sku']])) {
         // Insert new ranking data for the product.
-        $fields = [
+        $record = [
           'nid' => $nids[$product_rank['sku']],
           'tid' => $term->tid,
           'rank' => $product_rank['position'],
           'ranking_type' => $ranking_type,
         ];
-        $database->insert('alshaya_acm_product_ranking')
-          ->fields($fields)
-          ->execute();
+        $is_data_available = TRUE;
+        $query->values($record);
       }
+    }
+
+    if ($is_data_available) {
+      $query->execute();
     }
   }
 

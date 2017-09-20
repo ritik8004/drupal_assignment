@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Module file for Alshaya ACM Product Ranking.
+ */
+
+use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\search_api\Query\QueryInterface;
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function alshaya_acm_product_ranking_views_data_alter(array &$data) {
+  // Custom sort plugin for nid (used as best seller sort).
+  $data['search_api_index_product']['nid']['sort']['id'] = 'alshaya_product_rank_sort';
+}
+
+/**
+ * Implements hook_search_api_db_query_alter().
+ */
+function alshaya_acm_product_ranking_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
+  if ($query->hasTag('views_alshaya_product_list')) {
+    // If sort is available, skip custom query sort.
+    if (!empty($query->getSorts())) {
+      return;
+    }
+
+    // If no sort is there, always use best seller.
+    $tid = NULL;
+    $conditions = $query->getConditionGroup()->getConditions();
+    foreach ($conditions as $condition) {
+      if ($condition) {
+        $query_conditions = $condition->getConditions();
+        if ($query_conditions[0]->getField() == 'tid') {
+          $tid = $query_conditions[0]->getValue();
+          // First tid in the array is always the current tid.
+          $tid = is_array($tid) ? $tid[0] : $tid;
+          break;
+        }
+      }
+    }
+
+    if ($tid) {
+      $order = 'ASC';
+      $db_query->leftJoin('alshaya_acm_product_ranking', 'alshaya_acm_product_ranking', "(t.nid = alshaya_acm_product_ranking.nid and alshaya_acm_product_ranking.tid = :tid)", [':tid' => $tid]);
+      $db_query->addField('alshaya_acm_product_ranking', 'rank');
+      $db_query->orderBy('alshaya_acm_product_ranking.rank', $order);
+    }
+  }
+}
