@@ -42,7 +42,7 @@ Feature: Test basket page
     and remove products from the basket
     When I go to "/cart"
     And I wait for the page to load
-    When I select "2" from "cart[M-H6402 213 062][quantity]"
+    When I select 2 from dropdown
     And I wait for AJAX to finish
     Then I should see the price doubled for the product
     When I follow "Remove"

@@ -1177,4 +1177,13 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     }
     return FALSE;
   }
+
+  /**
+   * @When /^I select (\d+) from dropdown$/
+   */
+  public function iSelectFromDropdown1($arg1) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.select2-selection__arrow')->click();
+    $page->find('css', 'ul.select2-results__options li:nth-child(2)')->click();
+  }
 }
