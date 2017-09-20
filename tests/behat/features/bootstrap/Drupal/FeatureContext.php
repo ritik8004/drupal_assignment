@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Context\Context;
+use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Exception\ElementNotFoundException;
 
 /**
@@ -1006,8 +1007,8 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function iShouldSeeTheLinkForSimpleProduct() {
     $page = $this->getSession()->getPage();
-    $this->simple_product = '6  Pack Grippy Dots';
-    $link = $page->hasLink($this->simple_product);
+    $this->simple_product = 'Stronglax';
+    $link = $page->findLink($this->simple_product);
     if (!$link) {
       throw new \Exception('Link for simple product not found');
     }
@@ -1018,7 +1019,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function iShouldSeeTheLinkForConfigurableProduct() {
     $page = $this->getSession()->getPage();
-    $this->config_product = 'Bodysuits - 2 Pack';
+    $this->config_product = 'Grey, Navy and Yellow Jersey Shorts - 3 Pack';
     $link = $page->hasLink($this->config_product);
     if (!$link) {
       throw new \Exception('Link for configurable product not found');
@@ -1029,24 +1030,54 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    * @Given /^I should not see the link for simple product$/
    */
   public function iShouldNotSeeTheLinkForSimpleProduct() {
-    $page = $this->getSession()->getPage();
-    $this->simple_product = '6  Pack Grippy Dots';
-    $link = $page->hasLink($this->simple_product);
-    if ($link) {
-      throw new \Exception('Link for simple product is being displayed');
+    $element = $this->getSession()->getPage();
+    $this->simple_product = 'Stronglax';
+    $result = $element->findLink($this->simple_product);
+
+    try {
+      if ($result && $result->isVisible()) {
+        throw new \Exception(sprintf("The link '%s' was visually visible on the page %s and was not supposed to be", $this->simple_product, $this->getSession()
+          ->getCurrentUrl()));
+      }
     }
+    catch (UnsupportedDriverActionException $e) {
+      // We catch the UnsupportedDriverActionException exception in case
+      // this step is not being performed by a driver that supports javascript.
+      // All other exceptions are valid.
+    }
+
+    if (!$result) {
+      throw new \Exception(sprintf("The link '%s' was not loaded on the page %s at all", $this->simple_product, $this->getSession()
+        ->getCurrentUrl()));
+    }
+
   }
 
   /**
    * @Given /^I should not see the link for configurable product$/
    */
   public function iShouldNotSeeTheLinkForConfigurableProduct() {
-    $page = $this->getSession()->getPage();
-    $this->config_product = 'Bodysuits - 2 Pack';
-    $link = $page->hasLink($this->config_product);
-    if ($link) {
-      throw new \Exception('Link for configurable product is being displayed');
+    $element = $this->getSession()->getPage();
+    $this->simple_product = 'Ton-Fax';
+    $result = $element->findLink($this->config_product);
+
+    try {
+      if ($result && $result->isVisible()) {
+        throw new \Exception(sprintf("The link '%s' was visually visible on the page %s and was not supposed to be", $this->config_product, $this->getSession()
+          ->getCurrentUrl()));
+      }
     }
+    catch (UnsupportedDriverActionException $e) {
+      // We catch the UnsupportedDriverActionException exception in case
+      // this step is not being performed by a driver that supports javascript.
+      // All other exceptions are valid.
+    }
+
+    if (!$result) {
+      throw new \Exception(sprintf("The link '%s' was not loaded on the page %s at all", $this->config_product, $this->getSession()
+        ->getCurrentUrl()));
+    }
+
   }
 
   /**
