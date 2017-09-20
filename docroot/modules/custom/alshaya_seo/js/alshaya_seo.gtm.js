@@ -41,7 +41,6 @@
         'product listing page',
         'product detail page',
         'department page',
-        'cart page'
       ];
 
       // If we receive an empty page type, set page type as not defined.
@@ -213,6 +212,9 @@
             }
             else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
               pdpListName = listName + '-US';
+            }
+            else if (upSellCrossSellSelector.hasClass('horizontal-related')) {
+              pdpListName = listName + '-RELATED';
             }
 
             impression.list = pdpListName;
