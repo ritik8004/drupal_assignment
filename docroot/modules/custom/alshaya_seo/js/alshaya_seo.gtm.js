@@ -271,20 +271,6 @@
         }
       });
 
-      subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function () {
-        // Push default selected sub-delivery option to GTM.
-        if ($(this).find('input[checked="checked"]').length > 0) {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        }
-
-        // Attach change event listener to shipping method radio buttons.
-        $(this).change(function () {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        });
-      });
-
       /** Quantity update in cart. **/
       // Trigger removeFromCart & addToCart events based on the quantity update on cart page.
       $('select[gtm-type="gtm-quantity"]').focus(function () {
@@ -369,12 +355,12 @@
 
       /** Tracking New customers .**/
       cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('New Customer');
+        Drupal.alshaya_seo_gtm_push_customer_type('checkout as guest');
       });
 
       /** Tracking Returning customers .**/
       cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('Returning Customers');
+        Drupal.alshaya_seo_gtm_push_customer_type('registered customer');
       });
 
       /** Tracking Home Delivery .**/
@@ -384,24 +370,21 @@
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
           Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
         }
-        // Fire checkout option event when user switches delivery option.
-        cartCheckoutDeliverySelector.find('[data-drupal-selector="edit-delivery-tabs"] .tab').once('js-event').each(function () {
-          $(this).on('click', function () {
-            var gtmType = $(this).attr('gtm-type');
-            var deliveryType = '';
-            if (gtmType !== undefined) {
-              if (gtmType === 'checkout-home-delivery') {
-                deliveryType = 'Home Delivery';
-              }
-              else if (gtmType === 'checkout-click-collect') {
-                deliveryType = 'Click & Collect';
-              }
-
-              Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
-            }
-          });
-        });
       }
+
+      subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function () {
+        // Push default selected sub-delivery option to GTM.
+        if ($(this).find('input[checked="checked"]').length > 0) {
+          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+        }
+
+        // Attach change event listener to shipping method radio buttons.
+        $(this).change(function () {
+          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+        });
+      });
 
       /** GTM virtual page tracking for click & collect journey. **/
       if (isCCPage) {

@@ -308,7 +308,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
 
           $products = [];
           $privilegeOrder = $cart_item_attributes['privilegeOrder'];
-          $delivery_phone = $cart_item_attributes['delivery_phone'];
           unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['delivery_phone']);
 
           foreach ($cart_item_attributes as $key => $cart_item) {

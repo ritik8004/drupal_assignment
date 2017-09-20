@@ -226,11 +226,13 @@ class CheckoutOptionsManager {
    *   Payment method code.
    * @param string $name
    *   Default available name.
+   * @param bool $current_language
+   *   Return the term in current language or default.
    *
    * @return \Drupal\taxonomy\Entity\Term
    *   Full loaded term object.
    */
-  public function loadPaymentMethod($code, $name = '') {
+  public function loadPaymentMethod($code, $name = '', $current_language = TRUE) {
     $query = $this->termStorage->getQuery();
     $query->condition('vid', 'payment_method');
     $query->condition('field_payment_code', $code);
@@ -267,9 +269,11 @@ class CheckoutOptionsManager {
       /** @var \Drupal\taxonomy\Entity\Term $term */
       $term = $this->termStorage->load($tid);
 
-      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      if ($term->hasTranslation($langcode)) {
-        $term = $term->getTranslation($langcode);
+      if ($current_language) {
+        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        if ($term->hasTranslation($langcode)) {
+          $term = $term->getTranslation($langcode);
+        }
       }
     }
 
