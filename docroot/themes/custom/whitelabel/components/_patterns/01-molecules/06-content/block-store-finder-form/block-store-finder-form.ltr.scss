@@ -5,9 +5,11 @@
 
   border-top: 1px solid $gainsboro;
   border-bottom: 1px solid $gainsboro;
+  margin-bottom: 1.5rem;
 
   @include breakpoint($above-palm) {
     margin: auto;
+    margin-bottom: 1.5rem;
   }
 
   @include breakpoint($upto-lap) {
@@ -232,6 +234,22 @@
   background: none;
 }
 
+.back-to-glossary {
+  @include breakpoint($upto-palm) {
+    display: none;
+  }
+
+  width: 29%;
+  display: block;
+  float: #{direction(left)};
+  text-align: center;
+  text-decoration: none;
+
+  &.hidden {
+    display: none;
+  }
+}
+
 .block-store-finder-form__list-view,
 .block-store-finder-form__map-view {
   border: 1px solid transparent;
@@ -269,9 +287,20 @@
     }
   }
 
+  &.active,
   &:hover {
     color: $medium-pink;
     border-color: $medium-pink;
+  }
+
+  &.hidden {
+    display: none;
+  }
+
+  &.map-view-link {
+    @include breakpoint($above-palm) {
+      margin-#{direction(left)}: -1px;
+    }
   }
 }
 
