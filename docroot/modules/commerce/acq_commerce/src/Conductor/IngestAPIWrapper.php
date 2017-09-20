@@ -47,14 +47,20 @@ class IngestAPIWrapper {
         fclose($fp);
       }
 
-      $endpoint = $this->apiVersion . '/ingest/product/sync?store_id=' . $store_id;
+      $endpoint = $this->apiVersion . '/ingest/product/sync';
 
-      $doReq = function ($client, $opt) use ($endpoint) {
+      $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus) {
+        if (!empty($skus)) {
+          $opt['query']['skus'] = $skus;
+        }
+
+        $opt['query']['store_id'] = $store_id;
+
         return $client->post($endpoint, $opt);
       };
 
       try {
-        $this->tryIngestRequest($doReq, 'productFullSync', 'products', $skus);
+        $this->tryIngestRequest($doReq, 'productFullSync', 'products');
       }
       catch (ConductorException $e) {
       }

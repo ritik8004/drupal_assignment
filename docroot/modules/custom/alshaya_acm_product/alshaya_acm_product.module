@@ -728,3 +728,25 @@ function alshaya_acm_product_is_buyable(SKU $sku_entity) {
   // For now we have only one condition, we may have more in future.
   return (bool) $sku_entity->get('attr_is_buyable')->getString();
 }
+
+/**
+ * Wrapper function to get the cached expiration time for the SKU.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU entity object.
+ *
+ * @return int
+ *   Cache expiration time.
+ */
+function _alshaya_acm_get_stock_expiration_time(SKU $sku_entity) {
+  $stock_cid = acq_sku_get_stock_cache_id($sku_entity);
+  // If 'stock' bin is available.
+  if ($stock_cache_backend = \Drupal::cache('stock')) {
+    // If cached data is available.
+    if ($cache = $stock_cache_backend->get($stock_cid)) {
+      return (int) $cache->expire;
+    }
+  }
+
+  return (int) 0;
+}

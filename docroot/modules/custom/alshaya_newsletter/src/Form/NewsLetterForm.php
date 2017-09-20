@@ -7,7 +7,6 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 
 /**
@@ -111,11 +110,11 @@ class NewsLetterForm extends FormBase {
         $data['message'] = 'failure';
       }
 
-      $html = '<div class="subscription-status">' . $message . '</div>';
+      $data['html'] = '<div class="subscription-status">' . $message . '</div>';
     }
     else {
       $data['message'] = 'failure';
-      $html = '<div class="subscription-status"><span class="message error">' . $this->t('Please enter an email address') . '</span></div>';
+      $data['html'] = '<div class="subscription-status"><span class="message error">' . $this->t('Please enter an email address') . '</span></div>';
     }
 
     // Get the interval we want to show the message for on our ladda button.
@@ -124,8 +123,7 @@ class NewsLetterForm extends FormBase {
 
     // Prepare the ajax Response.
     $response = new AjaxResponse();
-    $response->addCommand(new HtmlCommand('#footer-newsletter-form-wrapper', $html));
-    $response->addCommand(new InvokeCommand(NULL, 'stopNewsletterSpinner', [$data]));
+    $response->addCommand(new InvokeCommand(NULL, 'newsletterHandleResponse', [$data]));
     return $response;
   }
 

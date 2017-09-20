@@ -259,6 +259,13 @@ function alshaya_seo_theme($existing, $type, $theme, $path) {
  * Implements hook_datalayer_alter().
  */
 function alshaya_seo_datalayer_alter(&$data_layer) {
+  $currentUser = \Drupal::currentUser();
+
+  // Disable SEO modifications for non-customer users (admins).
+  if ($currentUser->isAuthenticated() && !alshaya_acm_customer_is_customer($currentUser)) {
+    return;
+  }
+
   /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtm_manager */
   $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
   $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];

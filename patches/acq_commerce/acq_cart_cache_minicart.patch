@@ -6,7 +6,7 @@ index 7a53a0e6e..e330701f4 100644
        // Use the template to render the HTML.
        $output['#quantity'] = $cart->getCartItemsCount();
        $output['#total'] = render($total);
-+      $output['cart_id'] = $cart->id();
++      $output['#cart_id'] = $cart->id();
      }
  
      $output['#prefix'] = '<div id="mini-cart-wrapper">';
@@ -79,10 +79,10 @@ index 871612058..43089fdf0 100644
 +    $mini_cart['#cache']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
 +
 +    // Set cache metadata if cart_id is set.
-+    if (isset($mini_cart['cart_id'])) {
-+      $cart_id = $mini_cart['cart_id'];
++    if (isset($mini_cart['#cart_id'])) {
++      $cart_id = $mini_cart['#cart_id'];
 +      $mini_cart['#cache']['tags'][] = 'mini_cart_' . $cart_id;
-+      unset($mini_cart['cart_id']);
++      unset($mini_cart['#cart_id']);
 +    }
  
 -    return $output;

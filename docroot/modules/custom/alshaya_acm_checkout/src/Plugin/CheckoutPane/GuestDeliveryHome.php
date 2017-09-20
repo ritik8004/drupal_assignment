@@ -63,7 +63,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
     $pane_form['guest_delivery_home']['title'] = [
-      '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
+      '#markup' => '<div class="title">' . $this->t('delivery address') . '</div>',
     ];
 
     $cart = $this->getCart();
