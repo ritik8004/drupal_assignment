@@ -838,8 +838,8 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = [
-          'productStyleCode' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
-          'productSKU' => $product_sku,
+          'productSKU' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
+          'productStyleCode' => $product_sku,
           'stockStatus' => $stock_status,
           'productName' => $node->getTitle(),
           'productBrand' => $sku_attributes['gtm-brand'],
@@ -877,9 +877,9 @@ class AlshayaGtmManager {
           $productSKU = [];
 
           foreach ($cart_items as $item) {
-            $productStyleCode[] = $item['sku'];
+            $productSKU[] = $item['sku'];
             $product_node = alshaya_acm_product_get_display_node($item['sku']);
-            $productSKU[] = $product_node->get('field_skus')->getString();
+            $productStyleCode[] = $product_node->get('field_skus')->getString();
           }
 
           $page_dl_attributes = [
