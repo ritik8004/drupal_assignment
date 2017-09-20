@@ -166,6 +166,12 @@ paragraph-promo-one-row-three-columns:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/paragraph-promo-one-row-three-col/promo-one-row-three-col.ltr.css: {}
 
+paragraph-banner-full-width:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-banner-full-width/paragraph-banner-full-width.ltr.css: {}
+
 field-promo-block:
   version: VERSION
   css:

@@ -93,6 +93,10 @@
       if (context === document) {
         // Toggle for Product description.
         $('.read-more-description-link').on('click', function () {
+          // Close click and collect all stores wrapper if open.
+          if ($('.click-collect-all-stores').hasClass('desc-open')) {
+            $('.click-collect-all-stores').toggleClass('desc-open');
+          }
           $('.c-pdp .description-wrapper').toggleClass('desc-open');
         });
         var mobileStickyHeaderHeight = $('.branding__menu').height();

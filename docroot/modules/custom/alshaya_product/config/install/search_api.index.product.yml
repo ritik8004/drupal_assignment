@@ -45,16 +45,6 @@ field_settings:
         - field.storage.node.field_category
       module:
         - taxonomy
-  name:
-    label: 'Category » Taxonomy term » Name'
-    datasource_id: 'entity:node'
-    property_path: 'field_category:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_category
-      module:
-        - taxonomy
   vid_1:
     label: 'Category » Taxonomy term » Vocabulary'
     datasource_id: 'entity:node'
