@@ -14,6 +14,7 @@
       var currencyCode = body.attr('gtm-currency');
       var gtmPageType = body.attr('gtm-container');
       var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+      var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
       var listName = body.attr('gtm-list-name');
       var removeCartSelector = $('a[gtm-type="gtm-remove-cart"]', context);
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
@@ -225,7 +226,8 @@
         Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
       }
       else if ($.inArray(gtmPageType, impressionPages) !== -1) {
-        var count = 1;
+        var count = productLinkProcessedSelector.length + 1;
+
         if (productLinkSelector.length > 0) {
           productLinkSelector.each(function () {
             if (!$(this).hasClass('impression-processed')) {
