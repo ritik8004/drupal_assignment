@@ -5,10 +5,13 @@
     padding-top: 1.625rem;
     padding-bottom: 1.625rem;
   }
+}
 
+.view-stores-finder {
   header {
     color: $black-smoke;
-    margin-bottom: 1.5rem;
+    margin-bottom: 3rem;
+    margin-top: 1.5rem;
 
     @include breakpoint($upto-palm) {
       display: none;
@@ -58,4 +61,19 @@
 
 .views-view__attachment-after {
   display: none;
+}
+
+.geolocation-common-map-container,
+.geolocation-google-map {
+  @include breakpoint($above-palm) {
+    min-height: 39rem;
+  }
+
+  @include breakpoint($lap) {
+    max-height: 39rem;
+  }
+
+  @include breakpoint($desk) {
+    min-height: 51rem;
+  }
 }

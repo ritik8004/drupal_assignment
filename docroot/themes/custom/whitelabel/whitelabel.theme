@@ -222,3 +222,12 @@ function whitelabel_theme_suggestions_views_view_unformatted_alter(array &$sugge
       break;
   }
 }
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function whitelabel_preprocess_field__node__field_store_open_hours__store(&$variables) {
+  if ($lat_lng = $variables['element']['#object']->get('field_latitude_longitude')) {
+    $variables['lat_lng'] = $lat_lng[0];
+  }
+}
