@@ -567,6 +567,7 @@ class AlshayaGtmManager {
       }
 
       $attributes['privilegeOrder'] = !empty($cart->getExtension('loyalty_card')) ? 'order with privilege club' : 'order without privilege club';
+      $attributes['privilegesCardNumber'] = $cart->getExtension('loyalty_card');
     }
 
     return $attributes;
@@ -759,6 +760,7 @@ class AlshayaGtmManager {
       'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
+      'privilegesCardNumber' => $order['extension']['loyalty_card'],
     ];
 
     return [
