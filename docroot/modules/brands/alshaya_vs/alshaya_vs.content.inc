@@ -15,6 +15,8 @@ function alshaya_vs_create_default_content() {
   alshaya_vs_create_copyright_block_content();
   // Create email sign up cta block.
   alshaya_vs_create_email_signup_cta_block_content();
+  // Create email sign up cta block.
+  alshaya_vs_create_email_signup_form_incentive_text_block_content();
 }
 
 /**
@@ -67,6 +69,44 @@ function alshaya_vs_create_email_signup_cta_block_content() {
     'info' => 'إبقى دائماً على معرفة',
     'body' => [
       'value' => "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/signup\">تسجيل مستخدم جديد</a></p>",
+      'format' => 'rich_text',
+    ]
+  ]);
+  $ar_block_content->save();
+}
+
+/**
+ * Create default copyright block content.
+ */
+function alshaya_vs_create_email_signup_form_incentive_text_block_content() {
+// Create email signup form incentive text block content.
+  $block_content = BlockContent::create([
+    'uuid' => '19207aad-0e43-4d3a-96d7-c74141f75bb1',
+    'info' => 'Sign up to get the latest from Victoria Secret, like:',
+    'machine_name' => 'email_sign_up_content',
+    'body' => [
+      'value' => "<ul>
+                    <li><p>Exclusive offers &amp; deals.</p></li>
+                    <li><p>New product alerts.</p></li>
+                    <li><p>Store events &amp; openings in your area.</p></li>
+                    <li><p>News &amp; offers from Pottery Barn and its sister brands</p></li>
+                  </ul>",
+      'format' => 'rich_text',
+    ],
+    'type' => 'basic',
+    'langcode' => 'en',
+  ]);
+  $block_content->save();
+  // Create email signup form incentive block translation.
+  $ar_block_content = $block_content->addTranslation('ar', [
+    'info' => 'Sign up to get the latest from Victoria Secret, like:',
+    'body' => [
+      'value' => "<ul>
+                    <li><p>Exclusive offers &amp; deals.</p></li>
+                    <li><p>New product alerts.</p></li>
+                    <li><p>Store events &amp; openings in your area.</p></li>
+                    <li><p>News &amp; offers from Pottery Barn and its sister brands</p></li>
+                  </ul>",
       'format' => 'rich_text',
     ]
   ]);
