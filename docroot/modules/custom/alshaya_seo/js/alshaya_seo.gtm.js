@@ -582,7 +582,7 @@
       dimension4: mediaCount,
       dimension5: product.attr('gtm-sku-type'),
       dimension8: product.attr('gtm-dimension8'),
-      metric7: product.attr('gtm-metric7'),
+      metric7: parseFloat(product.attr('gtm-metric7')),
       metric1: product.attr('gtm-cart-value')
     };
 
