@@ -49,7 +49,7 @@ function alshaya_vs_create_copyright_block_content() {
  * Create default copyright block content.
  */
 function alshaya_vs_create_email_signup_cta_block_content() {
-  // Create copyright block content.
+  // Create email signup cta block content.
   $block_content = BlockContent::create([
     'uuid' => '54b4369d-fb82-4f9f-9034-fc869dda1007',
     'info' => 'Stay in the know',
@@ -62,7 +62,7 @@ function alshaya_vs_create_email_signup_cta_block_content() {
     'langcode' => 'en',
   ]);
   $block_content->save();
-  // Create copyright block translation.
+  // Create email signup cta block translation.
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'إبقى دائماً على معرفة',
     'body' => [
