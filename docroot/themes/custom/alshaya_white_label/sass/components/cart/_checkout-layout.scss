@@ -70,9 +70,11 @@
     }
 
     &.contain {
-      position: absolute;
-      bottom: 1rem;
-      top: auto;
+      @include breakpoint($tablet) {
+        position: absolute;
+        bottom: 1rem;
+        top: auto;
+      }
     }
   }
 }
