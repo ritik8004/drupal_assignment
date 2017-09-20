@@ -1,0 +1,46 @@
+@import '../../../../sass/config/**/*.scss';
+
+.field-product-listing {
+  @include breakpoint($upto-lap) {
+    margin-bottom: 3rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 74.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3.25rem;
+    padding-top: 1.5rem;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  .viewsreference--view-title {
+    float: direction(left);
+    text-transform: uppercase;
+    color: $brownish-grey;
+
+    @include breakpoint($above-palm) {
+      font-size: 1.5rem;
+    }
+  }
+
+  header {
+    float: direction(right);
+    color: $brownish-grey;
+  }
+
+  .views-infinite-scroll-content-wrapper {
+    clear: both;
+
+    @include breakpoint($upto-palm) {
+      padding-top: 0.875rem;
+    }
+
+    @include breakpoint($above-palm) {
+      padding-top: 1.5rem;
+    }
+  }
+}

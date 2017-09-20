@@ -1,7 +1,7 @@
-@javascript @checkout @english @mmcpa-1930 @manual
+@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
 Feature: Test Checkout feature
   Background:
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -30,6 +30,8 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
     And I press "deliver to this address"
     And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
     And I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
@@ -52,6 +54,8 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
     And I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
     And I press "proceed to payment"
     And I wait for the page to load
@@ -113,8 +117,7 @@ Feature: Test Checkout feature
 
   @knet
   Scenario: As a Guest
-    I should be directed to basket page on cancelling a KNET transaction
-    and User should be able to place order again
+    I should be displayed a valid message on cancelling a KNET transaction
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
@@ -125,6 +128,8 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
     And I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
     And I press "proceed to payment"
     And I wait for the page to load
@@ -136,40 +141,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "Cancel"
     And I wait for the page to load
-    Then the url should match "/cart"
-    And I should see the link for configurable product
-    When I press "checkout securely"
-    And I wait for the page to load
-    And I follow "checkout as guest"
-    And I wait for the page to load
-    And I should be able to see the header for checkout
-    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    And I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
-    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
-    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
-    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
-    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
-    And I press "deliver to this address"
-    And I wait for AJAX to finish
-    And I press "proceed to payment"
-    And I wait for the page to load
-    When I select a payment option "payment_method_title_knet"
-    And I wait for AJAX to finish
-    And I accept terms and conditions
-    And I wait for the page to load
-    And I press "place order"
-    And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
-    And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
-    And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
-    And I fill in "Ecom_Payment_Pin" with "1234"
-    And I press "Submit"
-    And I press "Confirm"
-    And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance."
 
   @hd @knet
   Scenario: As a Guest
@@ -194,6 +166,8 @@ Feature: Test Checkout feature
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
     When I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
     When I press "proceed to payment"
     And I wait for the page to load
@@ -350,13 +324,15 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
     When I press "deliver to this address"
     And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
     When I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
     And I press "place order"
     When I wait 10 seconds
@@ -381,9 +357,9 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
-    When I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]" with "4111111111111111"
-    And I fill in "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_cvv]" with "123"
-    When I select "2020" from "acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_exp_year]"
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I fill in "edit-billing-address-address-billing-given-name" with "Shweta"
     And I fill in "edit-billing-address-address-billing-family-name" with "Sharma"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"

@@ -27,7 +27,6 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $complete_form['#attributes']['data-submit-handler'] = 'cybersource_form_submit_handler';
     $pane_form['payment_details'] = [
       '#type' => 'container',
       '#attributes' => [

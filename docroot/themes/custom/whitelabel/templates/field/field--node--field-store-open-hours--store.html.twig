@@ -1,0 +1,14 @@
+{{ attach_library("whitelabel/field-store-open-hours") }}
+{% include "@molecules/06-content/field-store-open-hours/field-store-open-hours.twig" with
+  {
+    label: label,
+    item: item,
+    items: items,
+    attributes: attributes,
+    title_attributes: title_attributes,
+    content: content,
+    lat_lng: lat_lng,
+    lat: lat,
+    lng: lng
+  }
+%}

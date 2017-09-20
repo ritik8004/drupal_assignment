@@ -1,0 +1,105 @@
+@import '../../../sass/config/**/*.scss';
+
+//Individual store theming
+.individual--store {
+  margin-bottom: 6.875rem;
+  overflow: hidden;
+
+  .individual--store--detail {
+    width: 26.5%;
+    margin-#{direction(right)}: 1%;
+    float: direction(left);
+    background-color: $grey-smoke;
+
+    @include breakpoint($desk) {
+      padding-#{direction(right)}t: 1%;
+    }
+
+    @include breakpoint($lap) {
+      width: 35.8%;
+      margin-#{direction(right)}: 2.7%;
+    }
+
+    @include breakpoint($upto-palm) {
+      border-#{direction(right)}: 0;
+      margin-#{direction(right)}: 0;
+      padding-#{direction(right)}: 0;
+      float: none;
+      max-width: 100%;
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+.back-link,
+.mobile-only-back-to-glossary {
+  a {
+    display: block;
+    width: inherit;
+    overflow: hidden;
+    font-size: 0.5rem;
+    height: 0;
+
+    @include icon(chevron#{direction(left)}, after) {
+      position: absolute;
+      display: inline-block;
+      color: $medium-pink;
+      font-size: 1.875rem;
+      top: 0.125rem;
+      padding: 0.5rem;
+      #{direction(left)}: 0.125rem;
+    }
+  }
+}
+
+.list-view-locator {
+  font-size: 0.875rem;
+  padding: 1rem 0;
+  padding-bottom: 0;
+  border-top: 1px solid $gainsboro;
+  border-bottom: 1px solid $gainsboro;
+  color: $brownish-grey;
+  position: relative;
+  cursor: pointer;
+
+  .row-title {
+    font-weight: bold;
+    display: block;
+    color: $brownish-grey;
+    padding: 0 3.5rem;
+
+    @include breakpoint($lap) {
+      padding: 0 3.25rem;
+      color: $black;
+    }
+  }
+
+  .views-field-field-store-address {
+    border-bottom: 1px solid $gainsboro;
+    padding-bottom: 1.5rem;
+
+    .field-content {
+      padding: 0 3.5rem;
+
+      @include breakpoint($lap) {
+        padding: 0 3.25rem;
+        padding#{direction(right)}: 2.5rem;
+      }
+    }
+  }
+}
+
+.map--store {
+  float: direction(left);
+  width: 61.5%;
+  vertical-align: top;
+
+  @include breakpoint($desk) {
+    width: 72.5%;
+  }
+
+  @include breakpoint($upto-palm) {
+    display: none;
+  }
+}

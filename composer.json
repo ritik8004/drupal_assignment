@@ -58,8 +58,12 @@
         "drupal/components": "^1.0",
         "drupal/twig_tweak": "^1.8",
         "drupal/kashmir": "^1.1",
+        "drupal/migrate_plus": "^2.0",
+        "drupal/migrate_source_csv": "^2.0",
+        "drupal/migrate_tools": "^2.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
-        "drupal/viewsreference": "^1.0"
+        "drupal/viewsreference": "^1.0",
+        "drupal/machine_name_widget": "^1.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -162,7 +166,6 @@
                 "Update access check for set-default profile" : "https://www.drupal.org/files/issues/2885005-2.patch"
             },
             "drupal/clientside_validation" : {
-                "Allow custom submit handler in jquery validate" : "https://www.drupal.org/files/issues/2898885-9.patch",
                 "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
                 "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
             },

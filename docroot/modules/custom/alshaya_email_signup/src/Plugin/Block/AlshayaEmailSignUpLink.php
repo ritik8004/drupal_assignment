@@ -23,7 +23,7 @@ class AlshayaEmailSignUpLink extends BlockBase {
     return [
       '#type' => 'link',
       '#title' => $this->t('email sign up'),
-      '#url' => Url::fromRoute('<front>'),
+      '#url' => Url::fromUri('internal:/email-sign-up'),
       '#options' => [
         'attributes' => [
           'class' => ['use-ajax'],

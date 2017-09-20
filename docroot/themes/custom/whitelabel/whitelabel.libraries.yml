@@ -171,3 +171,48 @@ field-promo-block:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
+
+field-slider:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-slider/field-slider.ltr.css: {}
+  js:
+    components/js/field-slider.js: {}
+  dependencies:
+    - whitelabel/slick
+
+field-product-listing:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/field-product-listing.ltr.css: {}
+
+views-unformatted-product-list:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/views-unformatted-product-list.ltr.css: {}
+
+node-product-item:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/node-product-item.ltr.css: {}
+
+slick:
+  css:
+    theme:
+      node_modules/slick-carousel/slick/slick.css: {}
+  js:
+    node_modules/slick-carousel/slick/slick.min.js: {}
+  dependencies:
+    - core/jquery
+
+node-individual-store:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/00-node-individual-store/individual-store.ltr.css: {}
+
+field-store-open-hours:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-store-open-hours/field-store-open-hours.ltr.css: {}

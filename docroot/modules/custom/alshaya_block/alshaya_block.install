@@ -17,4 +17,11 @@ function alshaya_block_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
+  // Install machine_name field for block_content.
+  /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager */
+  $field_manager = \Drupal::service('entity_field.manager');
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $workbench_moderation_definition = $field_manager->getFieldStorageDefinitions('block_content')['machine_name'];
+  $entity_definition_update_manager->installFieldStorageDefinition('machine_name', 'block_content', 'alshaya_block', $workbench_moderation_definition);
 }
