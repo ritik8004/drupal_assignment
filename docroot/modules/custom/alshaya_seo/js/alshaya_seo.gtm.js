@@ -6,6 +6,8 @@
 (function ($, Drupal, dataLayer) {
   'use strict';
 
+  var mouseenterTime = 0;
+
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       // Global variables & selectors.
@@ -481,28 +483,28 @@
         });
       });
 
+
+      var highlightsPosition = 1;
+      topNavLevelOneSelector.once('set-positions').find('.highlights [gtm-type="gtm-highlights"]').each(function () {
+        $(this).data('position', highlightsPosition);
+        highlightsPosition++;
+      });
+
       /** Tracking internal promotion impressions. **/
       // Tracking menu level promotions.
-      var currentTime = new Date();
-      var mouseenterTime = currentTime.getTime();
+      topNavLevelOneSelector.each(function () {
+        $(this).once('js-event').mouseenter(function () {
+          mouseenterTime = (new Date()).getTime();
+        }).mouseleave(function () {
+          var mouseOverTime = (new Date()).getTime() - mouseenterTime;
+          if ((mouseOverTime >= 2000) && ($(this).hasClass('has-child'))) {
+            var highlights = $(this).find('.highlights [gtm-type="gtm-highlights"]');
 
-      topNavLevelOneSelector.once('js-event').mouseenter(function () {
-        mouseenterTime = currentTime.getTime();
-      }).mouseleave(function () {
-        currentTime = new Date();
-        var mouseOverTime = currentTime.getTime() - mouseenterTime;
-        if ((mouseOverTime >= 2000) && ($(this).hasClass('has-child'))) {
-          var topNavLevelTwo = $(this).children('ul.menu--two__list');
-          var topNavLevelThree = topNavLevelTwo.children('li.has-child').children('ul.menu--three__list');
-          var highlights = [];
-
-          if ((topNavLevelThree.length > 0) && (topNavLevelThree.children('.highlights'))) {
-            highlights = topNavLevelThree.children('.highlights').find('[gtm-type="gtm-highlights"]');
+            if (highlights.length > 0) {
+              Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
+            }
           }
-          if (highlights.length > 0) {
-            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
-          }
-        }
+        });
       });
 
       $('[gtm-type="gtm-highlights"]').once('js-event').on('click', function () {
@@ -667,12 +669,20 @@
     var promotions = [];
 
     highlights.each(function (key, highlight) {
+      var position = 1;
       var creative = '';
+
       if (gtmPageType === 'Top Navigation') {
         creative = Drupal.url($(highlight).find('.field--name-field-highlight-image img').attr('src'));
+        position = $(highlight).data('position');
       }
       else {
+        if ($(highlight).parent().find('a').length === 0) {
+          return;
+        }
+
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
+        position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
       }
 
       var creativeParts = creative.split('/');
@@ -687,50 +697,42 @@
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }
 
-      var position = parseInt(key) + 1;
-
       var promotion = {
         id: fileName,
         name: gtmPageType,
         position: 'slot' + position
       };
 
-      if (event === 'click') {
-        if (gtmPageType !== 'Top Navigation') {
-          position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
-          promotion.position = 'slot' + position;
-        }
-        else {
-          position = parseInt($(highlight).closest('highlights').find('[gtm-type="gtm-highlights"]').index($(highlight))) + 1;
-          promotion.position = 'slot' + position;
-        }
-      }
-
       promotions.push(promotion);
     });
 
-    var data = {
-      event: 'promotionImpression',
-      ecommerce: {
-        promoView: {
-          promotions: promotions
-        }
-      }
-    };
+    if (promotions.length > 0) {
+      if (event === 'promotionClick') {
+        // We don't want to trigger impressions again after click.
+        mouseenterTime = (new Date()).getTime() + 1000000000;
 
-    if (event === 'promotionClick') {
-      data = {
-        event: event,
-        ecommerce: {
-          promoClick: {
-            promotions: promotions
+        var data = {
+          event: event,
+          ecommerce: {
+            promoClick: {
+              promotions: promotions
+            }
           }
-        }
-      };
+        };
+      }
+      else {
+        var data = {
+          event: 'promotionImpression',
+          ecommerce: {
+            promoView: {
+              promotions: promotions
+            }
+          }
+        };
+      }
 
+      dataLayer.push(data);
     }
-
-    dataLayer.push(data);
   };
 
   /**
