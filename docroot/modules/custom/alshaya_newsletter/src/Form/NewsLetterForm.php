@@ -54,6 +54,12 @@ class NewsLetterForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $site_name = $this->config('system.site')->get('name');
 
+    // We don't add token for this form, it will never be user specific.
+    $form['#token'] = FALSE;
+
+    // We set the action to empty string, it will always use AJAX anyways.
+    $form['#action'] = '';
+
     $form['email'] = [
       '#title' => $this->t('Email address'),
       '#title_display' => 'invisible',

@@ -113,7 +113,7 @@ function whitelabel_preprocess_node(&$variables) {
   $node_bundle = $variables['node']->bundle();
   switch ($node_bundle) {
     case 'advanced_page':
-      $variables['content']['field_promo_blocks']['#attributes']['class'][] = 'field-promo-block';
+      $variables['content']['field_promo_blocks']['#attributes']['class'][] = 'field-promo-block region-content-center';
       break;
   }
 }
@@ -220,5 +220,18 @@ function whitelabel_theme_suggestions_views_view_unformatted_alter(array &$sugge
         $suggestions[] = 'views_view_unformatted__store_finder_glossary';
       }
       break;
+
+    case 'product_list':
+      $suggestions[] = 'views_view_unformatted__product_list';
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function whitelabel_preprocess_field__node__field_store_open_hours__store(&$variables) {
+  if ($lat_lng = $variables['element']['#object']->get('field_latitude_longitude')) {
+    $variables['lat_lng'] = $lat_lng[0];
   }
 }

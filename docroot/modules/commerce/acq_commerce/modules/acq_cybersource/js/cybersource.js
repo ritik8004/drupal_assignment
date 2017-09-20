@@ -19,25 +19,23 @@
         var wrapper = $('.cybersource-credit-card-input').closest('#payment_details');
 
         // Remove the name attributes to ensure it is not posted to server even by mistake.
-        $(wrapper).find('input:text').each(function () {
+        $(wrapper).find('input:text, input:password, select').each(function () {
           $(this).data('name', $(this).attr('name'));
           $(this).removeAttr('name');
         });
 
-        if (form.data('submit-handler') !== 'cybersource_form_submit_handler') {
+        $(form).once('bind-client-side').each(function () {
           try {
             // Update the validate settings to use custom submit handler.
-            form.data('submit-handler', 'cybersource_form_submit_handler');
-
-            // We try to update the submit handler here.
-            Drupal.cvValidatorObjects[form.attr('id')].settings['submitHandler'] = cybersource_form_submit_handler;
+            var validator = $(form).validate();
+            validator.settings.submitHandler = cybersource_form_submit_handler;
           }
           catch (e) {
             // If any error comes we reload the page.
             // JS is very critical for cybersource to work.
             window.location.reload();
           }
-        }
+        });
 
         $(this).validateCreditCard(function (result) {
           // Reset the card type every-time.
@@ -64,7 +62,7 @@
     $(wrapper).hide();
 
     // We don't pass credit card info to drupal.
-    $(wrapper).find('input:text').each(function () {
+    $(wrapper).find('input:text, input:password, select').each(function () {
       $(this).val('-');
 
       // Add the name attribute again to ensure server side validation doesn't break.
