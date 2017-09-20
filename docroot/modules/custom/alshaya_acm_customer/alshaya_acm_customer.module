@@ -192,11 +192,32 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
     $form['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
   }
 
-  if ($form_id == 'user_form' && \Drupal::currentUser()->isAuthenticated()) {
-    // Always hide customer_id field for none-admin users.
-    $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
+  if ($form_id == 'user_form') {
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      // We don't want to show subscribe to newsletter field to logged in users.
+      if (!empty($form['field_subscribe_newsletter'])) {
+        $form['field_subscribe_newsletter']['#access'] = FALSE;
+      }
 
-    $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
+      // We don't allow changing email address for customer.
+      if (alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
+        $form['account']['mail']['#disabled'] = TRUE;
+        // Access false, if only authenticated.
+        $form['account']['current_pass']['#access'] = FALSE;
+      }
+
+      // Always hide customer_id field for none-admin users.
+      $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
+      $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
+    }
+    else {
+      // Add markup for terms and conditions.
+      if (!empty($form['field_subscribe_newsletter'])) {
+        $form['field_subscribe_newsletter']['widget']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
+      }
+      // Change submit button text.
+      $form['actions']['submit']['#value'] = t('Create');
+    }
   }
 
   if ($form_id == 'change_pwd_form') {
