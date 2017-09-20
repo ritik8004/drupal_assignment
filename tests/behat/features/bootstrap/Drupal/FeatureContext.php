@@ -1162,4 +1162,19 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       throw new \Exception($value . ' was not found');
     }
   }
+
+  /**
+   * @Given /^I check the "([^"]*)" radio button with "([^"]*)" value$/
+   */
+  public function iCheckTheRadioButtonWithValue($element, $value) {
+    foreach ($this->getSession()
+      ->getPage()
+      ->findAll('css', 'input[type="radio"][name="' . $element . '"]') as $radio) {
+      if ($radio->getAttribute('value') == $value) {
+        $radio->click();
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
 }
