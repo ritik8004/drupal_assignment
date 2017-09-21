@@ -68,20 +68,6 @@ class AlshayaApplicationLinks extends BlockBase {
   public function build() {
     $apps = [];
 
-    // Add the android application.
-    if ($this->configuration['app_android_link']) {
-      $apps[] = [
-        '#type' => 'link',
-        '#title' => $this->t('Android Application'),
-        '#url' => Url::fromUri($this->configuration['app_android_link']),
-        '#attributes' => [
-          'class' => [
-            'item-list-application-links__link--android',
-          ],
-        ],
-      ];
-    }
-
     // Add the apple application.
     if ($this->configuration['app_apple_link']) {
       $apps[] = [
@@ -91,6 +77,20 @@ class AlshayaApplicationLinks extends BlockBase {
         '#attributes' => [
           'class' => [
             'item-list-application-links__link--apple',
+          ],
+        ],
+      ];
+    }
+
+    // Add the android application.
+    if ($this->configuration['app_android_link']) {
+      $apps[] = [
+        '#type' => 'link',
+        '#title' => $this->t('Android Application'),
+        '#url' => Url::fromUri($this->configuration['app_android_link']),
+        '#attributes' => [
+          'class' => [
+            'item-list-application-links__link--android',
           ],
         ],
       ];
