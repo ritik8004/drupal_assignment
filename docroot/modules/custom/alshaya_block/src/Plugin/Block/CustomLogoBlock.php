@@ -11,6 +11,7 @@ use Drupal\Core\Menu\MenuLinkTree;
 use Drupal\Core\Path\AliasStorage;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -184,6 +185,13 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
       '#access' => $this->configuration['use_site_logo'],
     ];
 
+    // Default link to front page.
+    $build['target_link'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Home'),
+      '#url' => Url::fromRoute('<front>')->setAbsolute()->toString(),
+    ];
+
     // If use menu item logo is true.
     if ($this->configuration['use_menu_item_logo']) {
       // Get the attributes of current menu.
@@ -191,11 +199,13 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
       // Set the attributes to site_logo, that can be altered at theme level.
       $build['site_logo']['#attributes'] = ['data-logo-class' => $attr['class']];
       // Get the link for the logo.
-      $build['target_link'] = [
-        '#type' => 'link',
-        '#title' => $attr['title'],
-        '#url' => $attr['link'],
-      ];
+      if (!empty($attr['title'])) {
+        $build['target_link']['#title'] = $attr['title'];
+      }
+
+      if (!empty($attr['link'])) {
+        $build['target_link']['#url'] = $attr['link'];
+      }
     }
 
     return $build;
