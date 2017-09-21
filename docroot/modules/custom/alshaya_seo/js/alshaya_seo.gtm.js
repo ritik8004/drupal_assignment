@@ -131,15 +131,6 @@
           });
         }
 
-        var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
-        if (pcRegistration !== undefined && pcRegistration !== '6362544') {
-          dataLayer.push({
-            event: 'pcMember',
-            pcType: 'pc club member'
-          });
-        }
-
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
         $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_lead', {path: '/'});
         $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pagename', {path: '/'});
         $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
@@ -152,6 +143,17 @@
 
         $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
       }
+
+      var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
+
+      if (pcRegistration !== undefined && pcRegistration !== '6362544') {
+        dataLayer.push({
+          event: 'pcMember',
+          pcType: 'pc club member'
+        });
+      }
+
+      $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
 
       /** Track coupon code application. **/
       if (couponCode) {

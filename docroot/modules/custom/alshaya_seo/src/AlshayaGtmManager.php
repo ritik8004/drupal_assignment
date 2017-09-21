@@ -761,6 +761,12 @@ class AlshayaGtmManager {
       'coupon' => $order['coupon'],
     ];
 
+    $loyalty_card = '';
+
+    if (isset($order['extension'], $order['extension']['loyalty_card'])) {
+      $loyalty_card = $order['extension']['loyalty_card'];
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
@@ -768,7 +774,7 @@ class AlshayaGtmManager {
       'discountAmount' => (float) $order['totals']['discount'],
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
-      'privilegesCardNumber' => $order['extension']['loyalty_card'],
+      'privilegesCardNumber' => $loyalty_card,
     ];
 
     return [
