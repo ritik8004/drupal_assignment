@@ -74,16 +74,18 @@
       }
 
       if (isSearchPage) {
-        var keyword = $('#edit-keywords', context).val();
-        var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
+        $('.c-header #edit-keywords').once('internalsearch').each(function () {
+          var keyword = $(this).val();
+          var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
 
-        if ((noOfResult === 0) || (isNaN(noOfResult))) {
-          dataLayer.push({
-            event: 'internalSearch',
-            keyword: keyword,
-            noOfResult: 0
-          });
-        }
+          if ((noOfResult === 0) || (isNaN(noOfResult))) {
+            dataLayer.push({
+              event: 'internalSearch',
+              searchKeyword: keyword,
+              noOfResult: 0
+            });
+          }
+        });
       }
 
       if (isRegistrationSuccessPage) {
@@ -129,15 +131,6 @@
           });
         }
 
-        var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
-        if (pcRegistration !== undefined && pcRegistration !== '6362544') {
-          dataLayer.push({
-            event: 'pcMember',
-            pcType: 'pc club member'
-          });
-        }
-
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
         $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_lead', {path: '/'});
         $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pagename', {path: '/'});
         $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
@@ -150,6 +143,17 @@
 
         $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
       }
+
+      var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
+
+      if (pcRegistration !== undefined && pcRegistration !== '6362544') {
+        dataLayer.push({
+          event: 'pcMember',
+          pcType: 'pc club member'
+        });
+      }
+
+      $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
 
       /** Track coupon code application. **/
       if (couponCode) {
@@ -436,7 +440,8 @@
       if ($(context).find('article[data-vmode="modal"]').length === 1) {
         var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
 
-        var datalayer_product_modal = {
+        var data = {
+          event: 'productDetailView',
           ecommerce: {
             currencyCode: currencyCode,
             detail: {
@@ -445,7 +450,7 @@
           }
         };
 
-        dataLayer.push(datalayer_product_modal);
+        dataLayer.push(data);
       }
 
       /** Product click handler for Modals. **/

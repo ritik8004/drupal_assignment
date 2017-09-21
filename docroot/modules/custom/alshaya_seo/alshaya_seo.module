@@ -310,7 +310,7 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           $data_layer['privilegeOrder'] = $cart_item_attributes['privilegeOrder'];
           $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'];
           $step = isset($cart_item_attributes['step']) ? $cart_item_attributes['step'] : NULL;
-          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['privilegesCardNumber']);
+          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
 
           foreach ($cart_item_attributes as $key => $cart_item) {
             $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
@@ -552,23 +552,28 @@ function alshaya_seo_entity_presave(EntityInterface $entity) {
  * Implements hook_entity_insert().
  */
 function alshaya_seo_entity_insert(EntityInterface $entity) {
-  try {
-    if ($entity->getEntityTypeId() === 'user' &&
-      $entity->get('field_subscribe_newsletter')->getString()
-    ) {
-      $path_info = \Drupal::request()->getPathInfo();
+  if ($entity->getEntityTypeId() === 'user') {
+    $path_info = \Drupal::request()->getPathInfo();
 
-      user_cookie_save(['alshaya_gtm_create_user_lead' => $entity->id()]);
-      user_cookie_save(['alshaya_gtm_create_user_pagename' => $path_info]);
+    try {
+      if ($entity->get('field_subscribe_newsletter')->getString()) {
+        user_cookie_save(['alshaya_gtm_create_user_lead' => $entity->id()]);
+        user_cookie_save(['alshaya_gtm_create_user_pagename' => $path_info]);
+      }
+    }
+    catch (Exception $e) {
+      \Drupal::logger('alshaya_seo')->warning('Field subscribe newsletter not found.');
+    }
 
+    try {
       if ($entity->get('field_privilege_card_number')->getString()) {
         user_cookie_save([
           'alshaya_gtm_create_user_pc' => $entity->get('field_privilege_card_number')->getString(),
         ]);
       }
     }
-  }
-  catch (Exception $e) {
-    \Drupal::logger('alshaya_seo')->critical('Field subscribe newsletter not found.');
+    catch (Exception $e) {
+      // Do nothing, loyalty might by off.
+    }
   }
 }
