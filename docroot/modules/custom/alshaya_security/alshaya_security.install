@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_security module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_security_install() {
+  // Configure defaults for autologout.
+  $config_factory = \Drupal::configFactory()->getEditable('autologout.settings');
+  $config_factory->set('timeout', 1200);
+  $config_factory->set('max_timeout', 1200);
+  $config_factory->set('no_dialog', TRUE);
+  $config_factory->set('enforce_admin', TRUE);
+  $config_factory->save();
+}
