@@ -172,6 +172,13 @@ paragraph-banner-full-width:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/paragraph-banner-full-width/paragraph-banner-full-width.ltr.css: {}
 
+paragraph-banner:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-banner/paragraph-banner.ltr.css: {}
+
+
 field-promo-block:
   version: VERSION
   css:
