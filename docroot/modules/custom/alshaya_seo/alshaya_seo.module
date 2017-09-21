@@ -310,7 +310,7 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           $data_layer['privilegeOrder'] = $cart_item_attributes['privilegeOrder'];
           $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'];
           $step = isset($cart_item_attributes['step']) ? $cart_item_attributes['step'] : NULL;
-          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['privilegesCardNumber']);
+          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
 
           foreach ($cart_item_attributes as $key => $cart_item) {
             $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);

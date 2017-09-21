@@ -436,7 +436,8 @@
       if ($(context).find('article[data-vmode="modal"]').length === 1) {
         var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
 
-        var datalayer_product_modal = {
+        var data = {
+          event: 'productDetailView',
           ecommerce: {
             currencyCode: currencyCode,
             detail: {
@@ -445,7 +446,7 @@
           }
         };
 
-        dataLayer.push(datalayer_product_modal);
+        dataLayer.push(data);
       }
 
       /** Product click handler for Modals. **/
