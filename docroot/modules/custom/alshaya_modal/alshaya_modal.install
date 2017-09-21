@@ -6,10 +6,10 @@
  */
 
 /**
- * Implements hook_install().
- *
- * Set module weight higher to load this module after 'menu_link_attributes'.
+ * Implements hook_modules_installed().
  */
-function alshaya_modal_install() {
-  module_set_weight('alshaya_modal', 20);
+function alshaya_modal_modules_installed(array $modules) {
+  if (in_array('alshaya_modal', $modules)) {
+    module_set_weight('alshaya_modal', 100);
+  }
 }
