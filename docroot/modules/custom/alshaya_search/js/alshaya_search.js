@@ -1,5 +1,11 @@
+var alshayaSearchActiveFacet = null;
+var alshayaSearchShowMoreOpen = 0;
+var alshayaSearchActiveFacetTimer = null;
+var alshayaSearchActiveFacetAfterAjaxTimer = null;
+
 (function ($) {
   'use strict';
+
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
       $('#edit-sort-bef-combine option[value="search_api_relevance ASC"]').remove();
@@ -15,21 +21,78 @@
           e.preventDefault();
         }
       });
-
-      // Ajax command to update search result header count.
-      $.fn.alshayaSearchHeaderUpdate = function (data) {
-        // If search page.
-        if ($('.view-id-search').length !== 0) {
-          // Update the header result count.
-          var header_result = $('.view-id-search .view-header').html();
-          $('.search-count').html(header_result);
-        }
-      };
     }
+  };
+
+  // Ajax command to update search result header count.
+  $.fn.alshayaSearchHeaderUpdate = function (data) {
+    // If search page.
+    if ($('.view-id-search').length !== 0) {
+      // Update the header result count.
+      var header_result = $('.view-id-search .view-header').html();
+      $('.search-count').html(header_result);
+    }
+  };
+
+  Drupal.alshayaSearchActiveFacetObserver = function () {
+    alshayaSearchActiveFacet = null;
+    alshayaSearchShowMoreOpen = 0;
+
+    if ($('.facet-active').length) {
+      alshayaSearchActiveFacet = $('.facet-active').attr('data-block-plugin-id');
+      alshayaSearchShowMoreOpen = $('.facet-active .facets-soft-limit-link.open').length;
+    }
+
+    Drupal.alshayaSearchBindObserverEvents();
+  };
+
+  Drupal.alshayaSearchActiveFacetResetAfterAjax = function () {
+    if (alshayaSearchActiveFacet) {
+      var facetBlock = $('[data-block-plugin-id="' + alshayaSearchActiveFacet + '"]:visible');
+      facetBlock.addClass('facet-active');
+      facetBlock.find('.c-accordion__title').addClass('ui-state-active');
+      facetBlock.find('.facets-soft-limit-link').css('display', 'inline-block');
+
+      if (alshayaSearchShowMoreOpen) {
+        facetBlock.find('li').show();
+        facetBlock.find('.facets-soft-limit-link').addClass('open').text(Drupal.t('Show less'));
+      }
+    }
+
+    Drupal.alshayaSearchBindObserverEvents();
+  };
+
+  Drupal.alshayaSearchBindObserverEvents = function () {
+    $('.c-facet__blocks').on('click', function () {
+      if (alshayaSearchActiveFacetTimer) {
+        clearTimeout(alshayaSearchActiveFacetTimer);
+        alshayaSearchActiveFacetTimer = null;
+      }
+
+      alshayaSearchActiveFacetTimer = setTimeout(Drupal.alshayaSearchActiveFacetObserver, 100);
+    });
   };
 
   Drupal.behaviors.alshayaFacets = {
     attach: function (context, settings) {
+      Drupal.alshayaSearchBindObserverEvents();
+
+      $.fn.replaceFacets = function(data) {
+        if (data.replaceWith === '') {
+          $(data.selector).html('');
+        }
+        else {
+          $(data.selector).replaceWith(data.replaceWith);
+
+          if (alshayaSearchActiveFacetAfterAjaxTimer) {
+            clearTimeout(alshayaSearchActiveFacetAfterAjaxTimer);
+            alshayaSearchActiveFacetAfterAjaxTimer = null;
+          }
+
+          alshayaSearchActiveFacetAfterAjaxTimer = setTimeout(Drupal.alshayaSearchActiveFacetResetAfterAjax, 100);
+        }
+      };
+
       var facetsDisplayTextbox = settings.alshaya_search_facets_display_textbox;
       if (facetsDisplayTextbox) {
         var facetPlugins = Object.keys(facetsDisplayTextbox);
@@ -46,7 +109,7 @@
               if (facetFilterKeyword) {
                 // Hide show more if above keyword has some data.
                 if (settings.facets.softLimit !== undefined) {
-                  $(this).parent().find('.facets-soft-limit-link').hide();
+                  // $(this).parent().find('.facets-soft-limit-link').hide();
                 }
                 $(this).find('li').each(function () {
                   // Hide all facet links.
@@ -74,28 +137,6 @@
           }
         });
       }
-
-      // Poll the DOM to check if the show more/less link is avaialble, before placing it inside the ul.
-      var i = setInterval(function () {
-        if ($('.c-search aside .block-facet--checkbox a.facets-soft-limit-link').length) {
-          clearInterval(i);
-          $('aside .block-facet--checkbox').each(function () {
-            var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.insertAfter($(this).find('ul'));
-          });
-        }
-      }, 100);
-
-      var j = setInterval(function () {
-        if ($('.c-search .region__content .region__sidebar-first .block-facet--checkbox a.facets-soft-limit-link').length) {
-          clearInterval(j);
-          $('.region__content .region__sidebar-first .block-facet--checkbox').each(function () {
-            var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.addClass('processed');
-            softLink.insertAfter($(this).find('ul'));
-          });
-        }
-      }, 100);
 
       // Only execute if views is not empty.
       if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
