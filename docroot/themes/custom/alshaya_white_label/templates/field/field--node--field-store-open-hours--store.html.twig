@@ -2,7 +2,7 @@
   {% if multiple %}
     <div class="hours--wrapper selector--hours">
       <div{{ attributes }}>
-        <div class="hours--label">{{ 'Opening Hours'|t }}</div>
+        <div class="hours--label" onclick='jQuery(this).toggleClass("open");'>{{ 'Opening Hours'|t }}</div>
         <div class="open--hours">
           {% for item in items %}
             <div{{ item.attributes }}>{{ item.content }}</div>
@@ -21,7 +21,7 @@
     {% if multiple %}
     <div class="hours--wrapper selector--hours">
       {% endif %}
-      <div class="hours--label">{{ 'Opening Hours'|t }}</div>
+      <div class="hours--label" onclick='jQuery(this).toggleClass("open");'>{{ 'Opening Hours'|t }}</div>
       <div class="open--hours">
         {% for item in items %}
           <div{{ item.attributes }}>{{ item.content }}</div>
