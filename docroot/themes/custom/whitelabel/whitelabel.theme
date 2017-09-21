@@ -128,6 +128,10 @@ function whitelabel_theme_suggestions_block_alter(array &$suggestions, array $va
       if ($variables['elements']['#plugin_id'] == 'block_content:6126accb-c99e-4c53-b8fe-5e97be281d53') {
         $suggestions[] = 'block__alshaya_copyright';
       }
+
+      elseif ($variables['elements']['#plugin_id'] == 'block_content:54b4369d-fb82-4f9f-9034-fc869dda1007') {
+        $suggestions[] = 'block__alshaya_stay_in_the_know';
+      }
       break;
 
     case 'alshaya_stores_finder':

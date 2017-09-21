@@ -57,7 +57,7 @@ function alshaya_vs_create_email_signup_cta_block_content() {
     'info' => 'Stay in the know',
     'machine_name' => 'stay_in_the_know',
     'body' => [
-      'value' => "<p>Get the inside scoop on exclusive offers, new product alrts &amp; Middle Eastern Store events.</p>\r\n<p><a href=\"/signup\">Sign up</a></p>",
+      'value' => "<p>Get the inside scoop on exclusive offers, new product alerts &amp; Middle Eastern Store events.</p>\r\n<p><a href=\"/signup\">Sign up</a></p>",
       'format' => 'rich_text',
     ],
     'type' => 'basic',
