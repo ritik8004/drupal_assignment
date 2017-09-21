@@ -107,10 +107,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
               + '" class="facets-search-input">').on('keyup', function () {
               var facetFilterKeyword = $(this).find('.facets-search-input').val().toLowerCase();
               if (facetFilterKeyword) {
-                // Hide show more if above keyword has some data.
-                if (settings.facets.softLimit !== undefined) {
-                  // $(this).parent().find('.facets-soft-limit-link').hide();
-                }
                 $(this).find('li').each(function () {
                   // Hide all facet links.
                   $(this).hide();
