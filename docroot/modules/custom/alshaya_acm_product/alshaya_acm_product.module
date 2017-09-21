@@ -158,6 +158,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       ];
     }
     elseif ($view_mode == 'full') {
+      $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
 
       /* @var \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus */
       $linked_skus = \Drupal::service('acq_sku.linked_sku');
@@ -172,7 +173,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $up_sell_skus = array_merge($up_sell_skus, $linked_skus->getLinkedSKus($sku_entity, 'upsell'));
 
       if (!empty($up_sell_skus)) {
-        $upsell_items = array_slice($up_sell_skus, 0, 12);
+        $upsell_items = array_slice($up_sell_skus, 0, $related_items_size);
         $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($upsell_items)));
         // Weight will have no effect later once template is modified.
         $build['up_sell']['#weight'] = 10;
@@ -188,7 +189,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $related_skus = array_merge($related_skus, $linked_skus->getLinkedSKus($sku_entity, 'related'));
 
       if (!empty($related_skus)) {
-        $related_items = array_slice($related_skus, 0, 12);
+        $related_items = array_slice($related_skus, 0, $related_items_size);
         $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($related_items)));
         // Weight will have no effect later once template is modified.
         $build['related']['#weight'] = 11;

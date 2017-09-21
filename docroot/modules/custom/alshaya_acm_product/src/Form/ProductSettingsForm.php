@@ -29,6 +29,7 @@ class ProductSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product.settings');
+    $config->set('related_items_size', $form_state->getValue('related_items_size'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
     $config->set('not_buyable_message', $form_state->getValue('not_buyable_message'));
@@ -47,6 +48,14 @@ class ProductSettingsForm extends ConfigFormBase {
     $form = parent::buildForm($form, $form_state);
 
     $config = $this->config('alshaya_acm_product.settings');
+
+    $form['related_items_size'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Number of related items to show'),
+      '#description' => $this->t('Number of related items to show in Up sell / Cross sell / Related products blocks.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('related_items_size'),
+    ];
 
     $form['brand_logo_base_path'] = [
       '#type' => 'textfield',

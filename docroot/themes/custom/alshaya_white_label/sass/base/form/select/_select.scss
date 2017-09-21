@@ -107,6 +107,7 @@ select:focus::-ms-value {
       #{$right}: 0;
       text-align: center;
       display: inline-block;
+      background: $white-two;
     }
   }
 }

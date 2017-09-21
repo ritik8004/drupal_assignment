@@ -7,14 +7,12 @@
   @include breakpoint($above-palm) {
     margin-left: auto;
     margin-right: auto;
-  }
-
-  @include breakpoint($lap) {
-    width: 45rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   @include breakpoint($desk) {
-    max-width: 77.25rem;
+    max-width: 80.25rem;
   }
 }
 

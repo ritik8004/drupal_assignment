@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Context\Context;
+use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Exception\ElementNotFoundException;
 
 /**
@@ -426,10 +427,6 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $this->getSession()->getPage()->fillField('edit-name', $arg1);
     $this->getSession()->getPage()->fillField('edit-pass', $arg2);
     $this->getSession()->getPage()->pressButton('sign in');
-    $username = $this->getSession()->getPage()->find('css', 'h3.my-account-title')->getText();
-    if ($username == NULL) {
-      throw new \Exception('Authenticated user could not login. Please check the credentials entered.');
-    }
   }
 
   /**
@@ -535,7 +532,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     if ($sort_order == ORDER_ASC) {
       // Check for ascending order.
       while ($total_elements > 1) {
-        if ($array[$i] < $array[$i + 1]) {
+        if (strtolower($array[$i]) <= strtolower($array[$i + 1])) {
           $i++;
           $total_elements--;
         }
@@ -547,7 +544,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     elseif ($sort_order == ORDER_DSC) {
       // Check for descending order.
       while ($total_elements > 1) {
-        if ($array[$i] > $array[$i + 1]) {
+        if (strtolower($array[$i]) >= strtolower($array[$i + 1])) {
           $i++;
           $total_elements--;
         }
@@ -1010,8 +1007,8 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function iShouldSeeTheLinkForSimpleProduct() {
     $page = $this->getSession()->getPage();
-    $this->simple_product = '6  Pack Grippy Dots';
-    $link = $page->hasLink($this->simple_product);
+    $this->simple_product = 'Stronglax';
+    $link = $page->findLink($this->simple_product);
     if (!$link) {
       throw new \Exception('Link for simple product not found');
     }
@@ -1022,7 +1019,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function iShouldSeeTheLinkForConfigurableProduct() {
     $page = $this->getSession()->getPage();
-    $this->config_product = 'Bodysuits - 2 Pack';
+    $this->config_product = 'Grey, Navy and Yellow Jersey Shorts - 3 Pack';
     $link = $page->hasLink($this->config_product);
     if (!$link) {
       throw new \Exception('Link for configurable product not found');
@@ -1033,24 +1030,54 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    * @Given /^I should not see the link for simple product$/
    */
   public function iShouldNotSeeTheLinkForSimpleProduct() {
-    $page = $this->getSession()->getPage();
-    $this->simple_product = '6  Pack Grippy Dots';
-    $link = $page->hasLink($this->simple_product);
-    if ($link) {
-      throw new \Exception('Link for simple product is being displayed');
+    $element = $this->getSession()->getPage();
+    $this->simple_product = 'Stronglax';
+    $result = $element->findLink($this->simple_product);
+
+    try {
+      if ($result && $result->isVisible()) {
+        throw new \Exception(sprintf("The link '%s' was visually visible on the page %s and was not supposed to be", $this->simple_product, $this->getSession()
+          ->getCurrentUrl()));
+      }
     }
+    catch (UnsupportedDriverActionException $e) {
+      // We catch the UnsupportedDriverActionException exception in case
+      // this step is not being performed by a driver that supports javascript.
+      // All other exceptions are valid.
+    }
+
+    if (!$result) {
+      throw new \Exception(sprintf("The link '%s' was not loaded on the page %s at all", $this->simple_product, $this->getSession()
+        ->getCurrentUrl()));
+    }
+
   }
 
   /**
    * @Given /^I should not see the link for configurable product$/
    */
   public function iShouldNotSeeTheLinkForConfigurableProduct() {
-    $page = $this->getSession()->getPage();
-    $this->config_product = 'Bodysuits - 2 Pack';
-    $link = $page->hasLink($this->config_product);
-    if ($link) {
-      throw new \Exception('Link for configurable product is being displayed');
+    $element = $this->getSession()->getPage();
+    $this->simple_product = 'Ton-Fax';
+    $result = $element->findLink($this->config_product);
+
+    try {
+      if ($result && $result->isVisible()) {
+        throw new \Exception(sprintf("The link '%s' was visually visible on the page %s and was not supposed to be", $this->config_product, $this->getSession()
+          ->getCurrentUrl()));
+      }
     }
+    catch (UnsupportedDriverActionException $e) {
+      // We catch the UnsupportedDriverActionException exception in case
+      // this step is not being performed by a driver that supports javascript.
+      // All other exceptions are valid.
+    }
+
+    if (!$result) {
+      throw new \Exception(sprintf("The link '%s' was not loaded on the page %s at all", $this->config_product, $this->getSession()
+        ->getCurrentUrl()));
+    }
+
   }
 
   /**
@@ -1162,4 +1189,44 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       throw new \Exception($value . ' was not found');
     }
   }
+
+  /**
+   * @Given /^I check the "([^"]*)" radio button with "([^"]*)" value$/
+   */
+  public function iCheckTheRadioButtonWithValue($element, $value) {
+    foreach ($this->getSession()
+      ->getPage()
+      ->findAll('css', 'input[type="radio"][name="' . $element . '"]') as $radio) {
+      if ($radio->getAttribute('value') == $value) {
+        $radio->click();
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * @When /^I select (\d+) from dropdown$/
+   */
+  public function iSelectFromDropdown1($arg1) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.select2-selection__arrow')->click();
+    $page->find('css', 'ul.select2-results__options li:nth-child(2)')->click();
+  }
+
+  /**
+   * @Then /^the breadcrumb "([^"]*)" should be displayed$/
+   */
+  public function theBreadcrumbShouldBeDisplayed($breadcrumb) {
+    $page = $this->getSession()->getPage();
+    $breadcrumb_elements = $page->findAll('css', '#block-alshaya-white-label-breadcrumbs > nav > ol > li');
+    foreach ($breadcrumb_elements as $element) {
+      $actual_breadcrumb[] = $element->find('css', 'a')->getText();
+    }
+    $actual_breadcrumb_result = implode(' > ', $actual_breadcrumb);
+    if ($breadcrumb !== $actual_breadcrumb_result) {
+      throw new \Exception('Incorrect breadcrumb displayed');
+    }
+  }
+
 }

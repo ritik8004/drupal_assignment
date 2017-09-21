@@ -17,14 +17,6 @@
   Drupal.behaviors.storeFinder = {
     attach: function (context, settings) {
 
-      // Opening hours toggle.
-      var hoursLabels = $('[data-drupal-selector^="views-form-stores-finder-"] .hours--label, .individual--store .hours--label', context);
-      hoursLabels.once('opening-hrs-init').each(function () {
-        $(this).on('click', function () {
-          $(this).toggleClass('open');
-        });
-      });
-
       var storeFinderPageSelector = $('.view-id-stores_finder.view-display-id-page_1', context);
       if (storeFinderPageSelector.length > 0) {
         var loadmoreItemLimit = settings.stores_finder.load_more_item_limit;
