@@ -8,9 +8,9 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
 
   Scenario:
-    As an authenticated user
-    I should be able to see all the sections
-    after logging in
+  As an authenticated user
+  I should be able to see all the sections
+  after logging in
     Then I should see the link "حسابي" in ".my-account-nav" section
     And I should see the link "الطلبيات" in ".my-account-nav" section
     Then I should see the link "تفاصيل الاتصال" in ".my-account-nav" section
@@ -57,10 +57,12 @@ Feature: Test the My account section for authenticated user
   if I don't have a privilege account
     When I follow "تعديل معلومات الحساب"
     And I wait for the page to load
-    When I fill in "edit-field-privilege-card-number-0-value" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I click the label for "#ui-id-2 > p.title"
+    When I fill in "edit-privilege-card-number" with ""
     And I press "حفظ"
     And I wait for the page to load
-    Then I should see "تم حفظ التغييرات."
+    Then I should see "تم حفظ ببيانات الاتصال"
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
     And I wait for the page to load
     Then I should see "نادي الامتيازات"
@@ -72,17 +74,19 @@ Feature: Test the My account section for authenticated user
 
   Scenario: As an authenticated user
   account details section should display Privilege card number
-  along with Email address and Contact number
+  along with Email address
     When I follow "تعديل معلومات الحساب"
     And I wait for the page to load
-    When I fill in "edit-field-privilege-card-number-0-value" with "000135844"
+    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I click the label for "#ui-id-2 > p.title"
+    When I fill in "edit-privilege-card-number" with "000135844"
+    When I fill in "edit-privilege-card-number2" with "000135844"
     And I press "حفظ"
     And I wait for the page to load
-    Then I should see "تم حفظ التغييرات."
+    Then I should see "تم حفظ ببيانات الاتصال"
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
     And I wait for the page to load
     Then I should see "shweta+2@axelerant.com"
-    And I should see "+965 - 9700 - 4455"
     Then I should see "6362 - 5440 - 0013 - 5844"
     And I should not see "اربح جوائز مدهشة"
     Then I should not see "احصل على مكافآت حصرية"
@@ -95,10 +99,12 @@ Feature: Test the My account section for authenticated user
   by ID, name, SKU in combination with the Status of the order
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-    When I fill in "edit-search" with "Arb. انت"
+    When I fill in "edit-search" with "شورت من قماش الجورسيه با…"
+#    When I fill in "edit-search" with "Horse Photographic تي- ش…"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
-    Then I should see all "Arb. انت" orders
+    Then I should see all "شورت من قماش الجورسيه با…" orders
+#    Then I should see all "Horse Photographic تي- ش…" orders
     When I fill in "edit-search" with "MCKWRCE"
     And I wait 2 seconds
     When I click the label for "#edit-submit-orders"
@@ -111,13 +117,13 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I select Cancelled from the status dropdown
     And I wait for the page to load
-    Then I should see all "المعالجة" orders listed on orders tab
+    Then I should see all "اعادة" orders listed on orders tab
     When I select Dispatched from the status dropdown
     And I wait for the page to load
-    Then I should see all "تم الإلغاء" orders listed on orders tab
+    Then I should see all "اعادة ايجاد" orders listed on orders tab
     When I select Processing from the status dropdown
     And I wait for the page to load
-    Then I should see all "قيد التوصيل " orders listed on orders tab
+    Then I should see all "المعالجة" orders listed on orders tab
 
   Scenario: As an authenticated user
   I should be able to update my contact details
@@ -125,9 +131,10 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I fill in "edit-field-first-name-0-value" with "علية"
     When I fill in "edit-field-last-name-0-value" with "خان"
-    When I fill in "edit-field-mobile-number-0-mobile" with "55774438"
+    When I fill in "edit-field-mobile-number-0-mobile" with ""
     And I press "حفظ"
     And I wait for the page to load
+    Then I should see "تم حفظ ببيانات الاتصال"
     Then I should see "علية"
     And I should see "خان"
     And I should not see "Shweta"
@@ -210,7 +217,6 @@ Feature: Test the My account section for authenticated user
     Then I should see "تفضيلات التواصل"
     And I should see "يرجى اختيار وسيلة التواصل المناسبة "
     When I check the ".form-item-communication-preference-email > label" checkbox
-    When I check the ".form-item-communication-preference-mobile > label" checkbox
     And I press "حفظ"
     When I wait for the page to load
     Then I should see "تم حفظ تفضيلات الاتصال بنجاح."
@@ -229,7 +235,7 @@ Feature: Test the My account section for authenticated user
     Then I should see text matching "يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل"
     Then I should see text matching "يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل"
     Then I should see text matching "يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات"
-    Then I should see text matching "لم يتم قبول المحاولات الأربعة السابقة"
+    Then I should see text matching "كلمات السر الأربع السابقة غير مسموح بها"
     When I press "تغيير كلمة السر"
     Then I should see "يرجى إدخال كلمة السر الحالية"
     And I should see "يرجى إدخال كلمة السر الجديدة"

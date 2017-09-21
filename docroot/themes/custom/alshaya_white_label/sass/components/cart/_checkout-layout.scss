@@ -68,6 +68,14 @@
     @include breakpoint($desktop) {
       width: 18.19rem;
     }
+
+    &.contain {
+      @include breakpoint($tablet) {
+        position: absolute;
+        bottom: 1rem;
+        top: auto;
+      }
+    }
   }
 }
 
