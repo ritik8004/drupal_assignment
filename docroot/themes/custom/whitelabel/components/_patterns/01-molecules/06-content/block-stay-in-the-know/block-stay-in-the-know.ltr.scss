@@ -9,21 +9,21 @@
   @include breakpoint($above-palm) {
     padding: 1.5rem;
   }
+}
 
-  .field__wrapper {
+.stay-in-the-know--description {
+  line-height: 1.5;
+
+  @include breakpoint($above-palm) {
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  @include breakpoint($desk) {
     line-height: 1.5;
-
-    @include breakpoint($above-palm) {
-      line-height: 1.4;
-      text-transform: uppercase;
-    }
-
-    @include breakpoint($desk) {
-      line-height: 1.5;
-      font-size: 0.75rem;
-      max-width: 29.625rem;
-      margin: auto;
-    }
+    font-size: 0.75rem;
+    max-width: 29.625rem;
+    margin: auto;
   }
 
   a {
