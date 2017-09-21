@@ -89,7 +89,7 @@ function alshaya_vs_create_email_signup_form_incentive_text_block_content() {
                     <li><p>Exclusive offers &amp; deals.</p></li>
                     <li><p>New product alerts.</p></li>
                     <li><p>Store events &amp; openings in your area.</p></li>
-                    <li><p>News &amp; offers from Pottery Barn and its sister brands</p></li>
+                    <li><p>News &amp; offers from victoria's secret and its sister brands</p></li>
                   </ul>",
       'format' => 'rich_text',
     ],
@@ -105,7 +105,7 @@ function alshaya_vs_create_email_signup_form_incentive_text_block_content() {
                     <li><p>Exclusive offers &amp; deals.</p></li>
                     <li><p>New product alerts.</p></li>
                     <li><p>Store events &amp; openings in your area.</p></li>
-                    <li><p>News &amp; offers from Pottery Barn and its sister brands</p></li>
+                    <li><p>News &amp; offers from victoria's secret and its sister brands</p></li>
                   </ul>",
       'format' => 'rich_text',
     ]
