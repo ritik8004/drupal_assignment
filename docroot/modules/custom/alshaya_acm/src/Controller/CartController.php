@@ -3,7 +3,11 @@
 namespace Drupal\alshaya_acm\Controller;
 
 use Drupal\Core\Access\CsrfTokenGenerator;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -61,7 +65,7 @@ class CartController extends ControllerBase {
   /**
    * Handler for cart/remove/{sku}.
    */
-  public function cartRemoveSku($sku, $token) {
+  public function cartRemoveSku($sku, $token, $js) {
     if (!empty($sku)) {
       $token_value = $this->cart->id() . '/' . $sku;
       if (!$this->csrfTokenGenerator->validate($token, $token_value)) {
@@ -79,13 +83,26 @@ class CartController extends ControllerBase {
 
       // Remove the item from cart.
       $this->cart->removeItemFromCart($sku);
+
       // Update cart, after the item has been removed.
       $this->cartStorage->updateCart();
 
       drupal_set_message($this->t('The product has been removed from your cart.'), 'status');
+
+      if ($js === 'ajax') {
+        $response = new AjaxResponse();
+        $response->addCommand(new InvokeCommand(NULL, 'removeCartItem', [$sku]));
+        return $response;
+      }
     }
     else {
       drupal_set_message($this->t('Oops, something went wrong.'), 'error');
+
+      if ($js === 'ajax') {
+        $response = new AjaxResponse();
+        $response->addCommand(new RedirectCommand(Url::fromRoute('acq_cart.cart')->toString()));
+        return $response;
+      }
     }
 
     return $this->redirect('acq_cart.cart');
