@@ -1524,6 +1524,10 @@
 .errors-container {
   margin-top: 0.5rem;
 
+  @include breakpoint($only-tablet) {
+    margin-bottom: 0.7rem;
+  }
+
   @include breakpoint($upto-desktop) {
     width: 100% !important;
     margin-#{$right}: 0 !important;

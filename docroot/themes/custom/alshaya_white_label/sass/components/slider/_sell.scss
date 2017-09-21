@@ -1,4 +1,5 @@
 .horizontal-upell,
+.horizontal-related,
 .horizontal-crossell {
   .view-product-slider {
     text-align: center;
@@ -210,6 +211,7 @@
   }
 }
 
+.horizontal-related,
 .horizontal-crossell,
 .horizontal-upell {
   @include breakpoint($tablet) {

@@ -23,28 +23,35 @@
             </li>
         {% endfor %}
         </div>
-          {#Highlight image start#}
-          <div class="highlights">
-            {% if level2.highlight_image is not empty %}
-              <div class="title">{{ 'highlights' | t }}</div>
-              {% for highlight_image in level2.highlight_image %}
-                <div class="highlighted" gtm-type="gtm-highlights">
-                  <a href="{{ highlight_image.image_link }}">{{ highlight_image.img }}</a>
-                </div>
-              {% endfor %}
-            {% elseif data.highlight_image is not empty %}
-              <div class="title">{{ 'highlights' | t }}</div>
-              {% for highlight_image in data.highlight_image %}
-                <div class="highlighted" gtm-type="gtm-highlights">
-                  <a href="{{ highlight_image.image_link }}">{{ highlight_image.img }}</a>
-                </div>
-              {% endfor %}
-            {% endif %}
-          </div>
-          {#Highlight image end#}
-
       </ul>
       {% endif %}
+
+      {#Highlight image start#}
+      <div class="highlights">
+        {% if level2.highlight_image is not empty %}
+          <div class="title">{{ 'highlights' | t }}</div>
+          {% for highlight_image in level2.highlight_image %}
+            <div class="highlighted" gtm-type="gtm-highlights">
+              <a href="{{ highlight_image.image_link }}">{{ highlight_image.img }}</a>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      {#Highlight image end#}
     </li>
   {% endfor %}
+
+  {#Highlight image start#}
+  <div class="highlights">
+    {% if data.highlight_image is not empty %}
+      <div class="title">{{ 'highlights' | t }}</div>
+      {% for highlight_image in data.highlight_image %}
+        <div class="highlighted" gtm-type="gtm-highlights">
+          <a href="{{ highlight_image.image_link }}">{{ highlight_image.img }}</a>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  {#Highlight image end#}
 </ul>
+
