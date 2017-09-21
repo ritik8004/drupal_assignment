@@ -2,15 +2,15 @@
 
 /**
  * @file
- * Installation and update functions for Alshaya ACM Product Ranking.
+ * Installation and update functions for Alshaya ACM Product Position.
  */
 
 /**
  * Implements hook_schema().
  */
-function alshaya_acm_product_ranking_schema() {
-  $schema['alshaya_acm_product_ranking'] = [
-    'description' => 'Stores product rankings.',
+function alshaya_acm_product_position_schema() {
+  $schema['alshaya_acm_product_position'] = [
+    'description' => 'Stores product position.',
     'fields' => [
       'nid' => [
         'type' => 'int',
@@ -22,22 +22,22 @@ function alshaya_acm_product_ranking_schema() {
         'not null' => TRUE,
         'description' => 'Product category tid.',
       ],
-      'rank' => [
+      'position' => [
         'type' => 'int',
         'not null' => TRUE,
-        'description' => 'Product rank.',
+        'description' => 'Product position.',
       ],
-      'ranking_type' => [
+      'position_type' => [
         'type' => 'varchar',
         'length' => 32,
         'not null' => TRUE,
-        'description' => 'Type of ranking',
+        'description' => 'Type of position',
       ],
     ],
     'indexes' => [
-      'indexing' => ['nid', 'tid', 'ranking_type'],
+      'indexing' => ['nid', 'tid', 'position_type'],
     ],
-    'primary key' => ['nid', 'tid', 'ranking_type'],
+    'primary key' => ['nid', 'tid', 'position_type'],
   ];
   return $schema;
 }

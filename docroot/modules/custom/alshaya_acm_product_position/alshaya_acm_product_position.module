@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Module file for Alshaya ACM Product Ranking.
+ * Module file for Alshaya ACM Product Position.
  */
 
 use Drupal\Core\Database\Query\SelectInterface;
@@ -11,15 +11,15 @@ use Drupal\search_api\Query\QueryInterface;
 /**
  * Implements hook_views_data_alter().
  */
-function alshaya_acm_product_ranking_views_data_alter(array &$data) {
+function alshaya_acm_product_position_views_data_alter(array &$data) {
   // Custom sort plugin for nid (used as best seller sort).
-  $data['search_api_index_product']['nid']['sort']['id'] = 'alshaya_product_rank_sort';
+  $data['search_api_index_product']['nid']['sort']['id'] = 'alshaya_product_position_sort';
 }
 
 /**
  * Implements hook_search_api_db_query_alter().
  */
-function alshaya_acm_product_ranking_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
+function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
   if ($query->hasTag('views_alshaya_product_list')) {
     // If sort is available, skip custom query sort.
     if (!empty($query->getSorts())) {
@@ -43,11 +43,11 @@ function alshaya_acm_product_ranking_search_api_db_query_alter(SelectInterface &
 
     if ($tid) {
       $order = QueryInterface::SORT_ASC;
-      $ranking_type = 'best_seller';
-      $db_query->leftJoin('alshaya_acm_product_ranking', 'alshaya_acm_product_ranking', "(t.nid = alshaya_acm_product_ranking.nid AND alshaya_acm_product_ranking.tid = :tid AND alshaya_acm_product_ranking.ranking_type = :ranking_type)", [':tid' => $tid, ':ranking_type' => $ranking_type]);
-      // If no ranking found for product, set the default ranking.
-      $db_query->addExpression('IFNULL(alshaya_acm_product_ranking.rank, 99999999)', 'norank');
-      $db_query->orderBy('norank', $order);
+      $position_type = 'best_seller';
+      $db_query->leftJoin('alshaya_acm_product_position', 'alshaya_acm_product_position', "(t.nid = alshaya_acm_product_position.nid AND alshaya_acm_product_position.tid = :tid AND alshaya_acm_product_position.position_type = :position_type)", [':tid' => $tid, ':position_type' => $position_type]);
+      // If no position found for product, set the default position.
+      $db_query->addExpression('IFNULL(alshaya_acm_product_position.position, 99999999)', 'no_position');
+      $db_query->orderBy('no_position', $order);
     }
   }
 }

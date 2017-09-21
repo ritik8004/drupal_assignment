@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides drush commands related to Product ranking.
+ * Provides drush commands related to Product position.
  */
 
 use Drupal\taxonomy\Entity\Term;
@@ -10,18 +10,18 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_drush_command().
  */
-function alshaya_acm_product_ranking_drush_command() {
+function alshaya_acm_product_position_drush_command() {
   $commands = [];
 
-  $commands['ranking-sync'] = [
-    'description' => 'Drush command to sync product ranking based on category.',
-    'aliases' => ['aaprs'],
+  $commands['position-sync'] = [
+    'description' => 'Drush command to sync product position based on category.',
+    'aliases' => ['aapps'],
     'arguments'   => [
-      'ranking_type' => 'Name of the ranking type.',
+      'position_type' => 'Name of the position type.',
     ],
     'examples' => [
-      'drush aaprs' => 'Sync product ranking based on category, by default "best_seller".',
-      'drush aaprs myargument' => 'Sync product ranking based on category, by "myargument".',
+      'drush aaprs' => 'Sync product position based on category, by default "best_seller".',
+      'drush aaprs myargument' => 'Sync product position based on category, by "myargument".',
     ],
   ];
 
@@ -29,10 +29,10 @@ function alshaya_acm_product_ranking_drush_command() {
 }
 
 /**
- * Sync product rankings based on category.
+ * Sync product position based on category.
  */
-function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type = 'best_seller') {
-  drush_print(dt('Product ranking sync in progress...'));
+function drush_alshaya_acm_product_position_position_sync($position_type = 'best_seller') {
+  drush_print(dt('Product position sync in progress...'));
   // Get root category configuration.
   $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
 
@@ -52,7 +52,7 @@ function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type = 'best_se
       continue;
     }
 
-    // Get product ranking for this category from Magento.
+    // Get product position for this category from Magento.
     $response = \Drupal::service('alshaya_api.api')->invokeApi("categories/$commerce_id/products", [], 'GET');
     $response = json_decode($response, TRUE);
     if (!is_array($response)) {
@@ -61,17 +61,17 @@ function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type = 'best_se
 
     // Skip sync if error is found in the response for a particular category.
     if (is_array($response) && isset($response['message'])) {
-      drush_print(dt("Error in ranking sync for $term->name (tid: $term->tid). Response: " . $response['message']));
+      drush_print(dt("Error in position sync for $term->name (tid: $term->tid). Response: " . $response['message']));
       continue;
     }
 
-    // Start product ranking sync for this category.
-    drush_print(dt("Product ranking sync for $term->name (tid: $term->tid) in progress..."));
+    // Start product position sync for this category.
+    drush_print(dt("Product position sync for $term->name (tid: $term->tid) in progress..."));
 
-    // Delete existing records of rankings for this category.
-    $database->delete('alshaya_acm_product_ranking')
+    // Delete existing records of position for this category.
+    $database->delete('alshaya_acm_product_position')
       ->condition('tid', $term->tid)
-      ->condition('ranking_type', $ranking_type)
+      ->condition('position_type', $position_type)
       ->execute();
 
     // Get all skus from the response.
@@ -92,16 +92,16 @@ function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type = 'best_se
     }
 
     $is_data_available = FALSE;
-    $query = $database->insert('alshaya_acm_product_ranking')
-      ->fields(['nid', 'tid', 'rank', 'ranking_type']);
-    foreach ($response as $product_rank) {
-      if (isset($nids[$product_rank['sku']])) {
-        // Insert new ranking data for the product.
+    $query = $database->insert('alshaya_acm_product_position')
+      ->fields(['nid', 'tid', 'position', 'position_type']);
+    foreach ($response as $product_position) {
+      if (isset($nids[$product_position['sku']])) {
+        // Insert new position data for the product.
         $record = [
-          'nid' => $nids[$product_rank['sku']],
+          'nid' => $nids[$product_position['sku']],
           'tid' => $term->tid,
-          'rank' => $product_rank['position'],
-          'ranking_type' => $ranking_type,
+          'position' => $product_position['position'],
+          'position_type' => $position_type,
         ];
         $is_data_available = TRUE;
         $query->values($record);
@@ -113,5 +113,5 @@ function drush_alshaya_acm_product_ranking_ranking_sync($ranking_type = 'best_se
     }
   }
 
-  drush_print(dt('Product ranking sync completed!'));
+  drush_print(dt('Product position sync completed!'));
 }

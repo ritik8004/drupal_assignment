@@ -1,15 +1,15 @@
 <?php
 
-namespace Drupal\alshaya_acm_product_ranking\Plugin\views\sort;
+namespace Drupal\alshaya_acm_product_position\Plugin\views\sort;
 
 use Drupal\search_api\Plugin\views\sort\SearchApiSort;
 
 /**
- * Sort handler for product by rank.
+ * Sort handler for product by position.
  *
- * @ViewsSort("alshaya_product_rank_sort")
+ * @ViewsSort("alshaya_product_position_sort")
  */
-class AlshayaProductRankSort extends SearchApiSort {
+class AlshayaProductPositionSort extends SearchApiSort {
 
   /**
    * {@inheritdoc}
@@ -23,7 +23,7 @@ class AlshayaProductRankSort extends SearchApiSort {
     }
 
     // Not doing anything here. Not setting any sort as we are adding sort query
-    // in alshaya_acm_product_ranking_search_api_db_query_alter().
+    // in alshaya_acm_product_position_search_api_db_query_alter().
   }
 
 }

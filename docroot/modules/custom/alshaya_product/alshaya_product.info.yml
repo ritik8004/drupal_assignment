@@ -3,7 +3,7 @@ type: module
 core: 8.x
 dependencies:
   - acq_sku
-  - alshaya_acm_product_ranking
+  - alshaya_acm_product_position
   - alshaya_acm_promotion
   - alshaya_image_styles
   - alshaya_search
