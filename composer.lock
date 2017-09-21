@@ -7292,7 +7292,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/simple_sitemap",
-                "reference": "74ef1b109777e025573fa41935b823b5fa0f97f6"
+                "reference": "a26345459dd68bb182319252548bf8bc36ca570a"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -7303,8 +7303,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.9+17-dev",
-                    "datestamp": "1505915044",
+                    "version": "8.x-2.9+14-dev",
+                    "datestamp": "1503777545",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -7335,7 +7335,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-09-20 13:58:43"
+            "time": "2017-08-28 13:57:41"
         },
         {
             "name": "drupal/taxonomy_access_fix",
