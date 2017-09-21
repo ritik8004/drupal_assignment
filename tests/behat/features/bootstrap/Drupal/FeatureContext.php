@@ -1213,4 +1213,20 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page->find('css', '.select2-selection__arrow')->click();
     $page->find('css', 'ul.select2-results__options li:nth-child(2)')->click();
   }
+
+  /**
+   * @Then /^the breadcrumb "([^"]*)" should be displayed$/
+   */
+  public function theBreadcrumbShouldBeDisplayed($breadcrumb) {
+    $page = $this->getSession()->getPage();
+    $breadcrumb_elements = $page->findAll('css', '#block-alshaya-white-label-breadcrumbs > nav > ol > li');
+    foreach ($breadcrumb_elements as $element) {
+      $actual_breadcrumb[] = $element->find('css', 'a')->getText();
+    }
+    $actual_breadcrumb_result = implode(' > ', $actual_breadcrumb);
+    if ($breadcrumb !== $actual_breadcrumb_result) {
+      throw new \Exception('Incorrect breadcrumb displayed');
+    }
+  }
+
 }
