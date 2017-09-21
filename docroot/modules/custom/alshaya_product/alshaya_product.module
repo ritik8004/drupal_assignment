@@ -77,3 +77,13 @@ function alshaya_product_sharethis_attributes_alter(&$attributes) {
     $attributes['title'] = ucfirst($attributes['displayText']);
   }
 }
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_product_views_pre_render(ViewExecutable $view) {
+  if ($view->id() == 'alshaya_product_list') {
+    // Add library to PLP page.
+    $view->element['#attached']['library'][] = 'alshaya_product/alshaya_product';
+  }
+}

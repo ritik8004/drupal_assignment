@@ -42,10 +42,12 @@ function alshaya_acm_product_ranking_search_api_db_query_alter(SelectInterface &
     }
 
     if ($tid) {
-      $order = 'ASC';
-      $db_query->leftJoin('alshaya_acm_product_ranking', 'alshaya_acm_product_ranking', "(t.nid = alshaya_acm_product_ranking.nid and alshaya_acm_product_ranking.tid = :tid)", [':tid' => $tid]);
-      $db_query->addField('alshaya_acm_product_ranking', 'rank');
-      $db_query->orderBy('alshaya_acm_product_ranking.rank', $order);
+      $order = QueryInterface::SORT_ASC;
+      $ranking_type = 'best_seller';
+      $db_query->leftJoin('alshaya_acm_product_ranking', 'alshaya_acm_product_ranking', "(t.nid = alshaya_acm_product_ranking.nid AND alshaya_acm_product_ranking.tid = :tid AND alshaya_acm_product_ranking.ranking_type = :ranking_type)", [':tid' => $tid, ':ranking_type' => $ranking_type]);
+      // If no ranking found for product, set the default ranking.
+      $db_query->addExpression('IFNULL(alshaya_acm_product_ranking.rank, 99999999)', 'norank');
+      $db_query->orderBy('norank', $order);
     }
   }
 }
