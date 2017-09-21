@@ -3,7 +3,7 @@
     margin-top: 0.75em;
 
     @include breakpoint($tablet) {
-      border: 2px solid $white;
+      border: 2px solid $greyish;
     }
 
     fieldset {
