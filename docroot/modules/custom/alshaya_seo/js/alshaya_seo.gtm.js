@@ -74,16 +74,18 @@
       }
 
       if (isSearchPage) {
-        var keyword = $('#edit-keywords', context).val();
-        var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
+        $('.c-header #edit-keywords').once('internalsearch').each(function () {
+          var keyword = $(this).val();
+          var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
 
-        if ((noOfResult === 0) || (isNaN(noOfResult))) {
-          dataLayer.push({
-            event: 'internalSearch',
-            keyword: keyword,
-            noOfResult: 0
-          });
-        }
+          if ((noOfResult === 0) || (isNaN(noOfResult))) {
+            dataLayer.push({
+              event: 'internalSearch',
+              searchKeyword: keyword,
+              noOfResult: 0
+            });
+          }
+        });
       }
 
       if (isRegistrationSuccessPage) {
