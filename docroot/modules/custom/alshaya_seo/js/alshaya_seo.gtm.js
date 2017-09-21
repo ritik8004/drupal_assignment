@@ -92,68 +92,71 @@
         Drupal.alshaya_seo_gtm_push_signin_type('registration success');
       }
 
-      // Fire sign-in success event on successful sign-in.
-      if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
-        dataLayer.push({
-          event: 'User Login & Register',
-          signinType: 'sign-in success'
-        });
+      // Cookie based events, only to be processed once on page load.
+      $(document).once('gtm-onetime').each(function () {
+        // Fire sign-in success event on successful sign-in.
+        if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
+          dataLayer.push({
+            event: 'User Login & Register',
+            signinType: 'sign-in success'
+          });
 
-        $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
-      }
-
-      // Fire logout success event on successful sign-in.
-      if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
-        dataLayer.push({
-          event: 'User Login & Register',
-          signinType: 'logout success'
-        });
-
-        $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
-      }
-
-      // Fire lead tracking on registration success/ user update.
-      if ($.cookie('Drupal.visitor.alshaya_gtm_create_user_lead') !== undefined &&
-        $.cookie('Drupal.visitor.alshaya_gtm_create_user_pagename') !== undefined) {
-        var leadOriginPath = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pagename');
-
-        if (leadOriginPath === Drupal.url('user/register')) {
-          leadType = 'registration';
-        }
-        else if (leadOriginPath === Drupal.url('cart/checkout/confirmation')) {
-          leadType = 'confirmation';
+          $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
         }
 
-        if (leadType) {
+        // Fire logout success event on successful sign-in.
+        if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
+          dataLayer.push({
+            event: 'User Login & Register',
+            signinType: 'logout success'
+          });
+
+          $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
+        }
+
+        // Fire lead tracking on registration success/ user update.
+        if ($.cookie('Drupal.visitor.alshaya_gtm_create_user_lead') !== undefined &&
+          $.cookie('Drupal.visitor.alshaya_gtm_create_user_pagename') !== undefined) {
+          var leadOriginPath = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pagename');
+
+          if (leadOriginPath === Drupal.url('user/register')) {
+            leadType = 'registration';
+          }
+          else if (leadOriginPath === Drupal.url('cart/checkout/confirmation')) {
+            leadType = 'confirmation';
+          }
+
+          if (leadType) {
+            dataLayer.push({
+              event: 'leads',
+              leadType: leadType
+            });
+          }
+
+          $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_lead', {path: '/'});
+          $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pagename', {path: '/'});
+          $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
+        }
+        else if ($.cookie('Drupal.visitor.alshaya_gtm_update_user_lead') !== undefined) {
           dataLayer.push({
             event: 'leads',
-            leadType: leadType
+            leadType: 'my account'
+          });
+
+          $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
+        }
+
+        var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
+
+        if (pcRegistration !== undefined && pcRegistration !== '6362544') {
+          dataLayer.push({
+            event: 'pcMember',
+            pcType: 'pc club member'
           });
         }
 
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_lead', {path: '/'});
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pagename', {path: '/'});
-        $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
-      }
-      else if ($.cookie('Drupal.visitor.alshaya_gtm_update_user_lead') !== undefined) {
-        dataLayer.push({
-          event: 'leads',
-          leadType: 'my account'
-        });
-
-        $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
-      }
-
-      var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
-
-      if (pcRegistration !== undefined && pcRegistration !== '6362544') {
-        dataLayer.push({
-          event: 'pcMember',
-          pcType: 'pc club member'
-        });
-      }
-
-      $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
+        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
+      });
 
       /** Track coupon code application. **/
       if (couponCode) {
