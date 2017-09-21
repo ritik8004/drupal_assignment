@@ -4,6 +4,8 @@ namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class ProductController.
@@ -20,10 +22,17 @@ class ProductController extends ControllerBase {
   /**
    * Page callback for the modal.
    */
-  public function modalView(EntityInterface $node) {
-    $view_builder = \Drupal::entityTypeManager()->getViewBuilder($node->getEntityTypeId());
-    $build = $view_builder->view($node, 'modal');
-    return $build;
+  public function modalView(EntityInterface $node, $js) {
+    if ($js === 'ajax') {
+      $view_builder = \Drupal::entityTypeManager()->getViewBuilder($node->getEntityTypeId());
+      $build = $view_builder->view($node, 'modal');
+      return $build;
+    }
+
+    $response = new RedirectResponse(Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString());
+    $response->send();
+    exit;
+
   }
 
   /**
