@@ -1,21 +1,35 @@
 @import '../../../sass/config/**/*.scss';
 
 .view--store-list {
-  margin-bottom: 6.875rem;
   overflow: hidden;
+
+  @include breakpoint($upto-palm) {
+    margin-bottom: 6.875rem;
+  }
+
+  @include breakpoint($lap) {
+    margin-bottom: 2.625rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 7.5rem;
+  }
 
   .view-header {
     margin-bottom: 1.5rem;
   }
 }
 
-.list--store--detail {
+.list-store--detail {
   width: 26.5%;
-  max-height: 51rem;
   padding-#{direction(right)}: 1%;
   overflow-y: scroll;
   margin-#{direction(right)}: 1%;
   float: direction(left);
+
+  @include breakpoint($above-palm) {
+    max-height: 51rem;
+  }
 
   @include breakpoint($desk) {
     padding-#{direction(right)}t: 1%;
@@ -36,7 +50,7 @@
     height: auto;
   }
 
-  .list-view-locator {
+  .list-view--locator {
     margin-bottom: 1.4rem;
     background-color: $white;
 
@@ -47,7 +61,7 @@
   }
 }
 
-.list-view-locator {
+.list-view--locator {
   font-size: 0.875rem;
   padding: 1rem 0;
   padding-bottom: 0;
@@ -85,7 +99,7 @@
   }
 }
 
-.map--store {
+.store--map {
   float: direction(left);
   width: 61.5%;
   vertical-align: top;
