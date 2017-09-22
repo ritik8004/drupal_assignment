@@ -14,6 +14,12 @@ alshaya_stores_finder.settings:
     search_proximity_radius:
       type: integer
       label: 'Store finder proximity radius'
+    use_default:
+      type: boolean
+      label: 'Use default maker'
+    marker_path:
+      type: string
+      label: 'Store finder marker path'
 
 block.settings.alshaya_stores_finder:
   type: block_settings

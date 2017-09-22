@@ -57,17 +57,98 @@ class StoresFinderConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('search_proximity_radius'),
     ];
 
+    $form['marker'] = [
+      '#type' => 'details',
+      '#title' => t('Map Marker'),
+      '#open' => TRUE,
+    ];
+
+    $form['marker']['use_default'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Use the marker supplied by the module.'),
+      '#default_value' => $config->get('use_default'),
+      '#tree' => FALSE,
+    ];
+
+    $form['marker']['settings'] = [
+      '#type' => 'container',
+      '#states' => [
+        // Hide the logo settings when using the default logo.
+        'invisible' => [
+          'input[name="use_default"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['marker']['settings']['marker_path'] = [
+      '#type' => 'textfield',
+      '#title' => t('Path to custom marker'),
+      '#default_value' => $config->get('marker_path'),
+    ];
+
+    $form['marker']['settings']['marker_upload'] = [
+      '#type' => 'file',
+      '#title' => t('Upload marker image'),
+      '#maxlength' => 40,
+      '#description' => t("If you don't have direct file access to the server, use this field to upload your marker."),
+    ];
+
     return $form;
   }
 
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    if (\Drupal::moduleHandler()->moduleExists('file')) {
+      // Handle email logo file upload and validation.
+      // Handle file uploads.
+      $validators = ['file_validate_extensions' => ['png gif jpg jpeg apng svg']];
+
+      // Check for a new uploaded logo.
+      $file = file_save_upload('marker_upload', $validators, FALSE, 0);
+      if (isset($file)) {
+        // File upload was attempted.
+        if ($file) {
+          // Put the temporary file in form_values so we can save it on submit.
+          $form_state->setValue('marker_upload', $file);
+        }
+        else {
+          // File upload failed.
+          $form_state->setErrorByName('marker_upload', t('The logo could not be uploaded.'));
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+
+    // When intending to use the default logo, unset the logo_path.
+    if ($form_state->getValue('use_default')) {
+      $form_state->unsetValue('marker_path');
+      $marker_path = drupal_get_path('module', 'alshaya_stores_finder') . '/images/google-map-marker.svg';
+    }
+    else {
+      $marker_upload = $form_state->getValue('marker_upload');
+
+      if (!empty($marker_upload)) {
+        $filename = file_unmanaged_copy($marker_upload->getFileUri());
+        $marker_path = $filename;
+      }
+
+      if (!empty($marker_path) && empty($marker_upload)) {
+        $marker_path = alshaya_master_validate_path($marker_path);
+      }
+    }
+
     $config = $this->config('alshaya_stores_finder.settings');
     $config->set('enable_disable_store_finder_search', $form_state->getValue('enable_disable_store_finder_search'));
     $config->set('load_more_item_limit', $form_state->getValue('load_more_item_limit'));
     $config->set('search_proximity_radius', $form_state->getValue('search_proximity_radius'));
+    $config->set('marker_path', file_url_transform_relative(file_create_url($marker_path)));
     $config->save();
 
     // Invalidate the cache tag.

@@ -367,11 +367,13 @@
     map.mapMarkers = map.mapMarkers || [];
     skipInfoWindow = skipInfoWindow || false;
 
-    if (typeof map.settings.google_map_settings.marker_icon_path === 'string') {
+    console.log(drupalSettings.alshaya_stores_finder.map.marker_icon_path);
+
+    if (typeof drupalSettings.alshaya_stores_finder.map.marker_icon_path === 'string') {
       if (typeof markerSettings.icon === 'undefined') {
         // Add the marker icon.
         markerSettings.icon = {
-          url: map.settings.google_map_settings.marker_icon_path,
+          url: drupalSettings.alshaya_stores_finder.map.marker_icon_path,
           labelOrigin: new google.maps.Point(15, 15),
           scaledSize: new google.maps.Size(31, 48)
         };
