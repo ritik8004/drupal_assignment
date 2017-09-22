@@ -6,10 +6,32 @@
 .get--directions a {
   border-bottom: 1px solid $gainsboro;
   padding: 1rem;
-  padding-#{direction(left)}: 3.5rem;
+  padding-#{direction(left)}: 3.3rem;
 
   @include breakpoint($lap) {
     padding-#{direction(left)}: 3.25rem;
+  }
+}
+
+.geolocation-common-map-container {
+  .hours--wrapper {
+    display: none;
+  }
+
+  .views-field-title {
+    margin-bottom: 0.1875rem;
+    font-weight: bold;
+  }
+
+  .get--directions a {
+    color: $medium-pink;
+    padding-#{direction(left)}: 0;
+    border-bottom: 0;
+
+    &::after {
+      content: '';
+      background: url('../../../../../../images/icons/svg/icon-direction-pink.svg') no-repeat;
+    }
   }
 }
 
@@ -29,7 +51,7 @@
     display: inline-block;
     position: absolute;
     top: 1rem;
-    #{direction(right)}: 1.8rem;
+    #{direction(right)}: 0.8rem;
     width: 1.125rem;
     height: 1.125rem;
   }
@@ -49,11 +71,11 @@
     color: $medium-pink;
     position: relative;
 
-    @include icon(chevronup, after) {
+    @include icon(chevron#{direction(right)}, after) {
       position: absolute;
       font-size: 2rem;
       line-height: 2rem;
-      #{direction(right)}: 1.25rem;
+      #{direction(right)}: 0.3rem;
       top: 0.5rem;
     }
 
@@ -83,7 +105,7 @@
       font-size: 1.8rem;
       line-height: 1;
       top: 0.7rem;
-      #{direction(right)}: 1.4rem;
+      #{direction(right)}: 0.8rem;
     }
   }
 }

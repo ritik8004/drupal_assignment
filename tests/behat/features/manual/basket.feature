@@ -12,8 +12,8 @@ Feature: Test basket page
     And I wait for AJAX to finish
 
   Scenario:  As a Guest
-    I should be able to see the products added to basket
-    and the header and footer
+  I should be able to see the products added to basket
+  and the header and footer
     When I go to "/cart"
     And I wait for the page to load
     Then I should see the link for simple product
@@ -38,11 +38,11 @@ Feature: Test basket page
     Then the url should match "/en"
 
   Scenario: As a Guest
-    I should be able to add more quantity
-    and remove products from the basket
+  I should be able to add more quantity
+  and remove products from the basket
     When I go to "/cart"
     And I wait for the page to load
-    When I select "2" from "cart[M-H6402 213 062][quantity]"
+    When I select 2 from dropdown
     And I wait for AJAX to finish
     Then I should see the price doubled for the product
     When I follow "Remove"
@@ -51,8 +51,8 @@ Feature: Test basket page
     And I should not see the link for simple product
 
   Scenario: As a Guest
-    I should be able to see tooltips
-    for both Home Deliver and Click and Collect
+  I should be able to see tooltips
+  for both Home Deliver and Click and Collect
     When I go to "/cart"
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
@@ -63,7 +63,7 @@ Feature: Test basket page
     Then I should see "Collect the order in store from 2-3 days"
 
   Scenario: As a Guest
-    I should be warned about privelege card number mismatch
+  I should be warned about privelege card number mismatch
     When I go to "/cart"
     And I wait for the page to load
     When I click the label for "#details-privilege-card-wrapper > div"

@@ -2,10 +2,21 @@
 
 //Individual store theming
 .individual--store {
-  margin-bottom: 6.875rem;
   overflow: hidden;
 
-  .individual--store--detail {
+  @include breakpoint($upto-palm) {
+    margin-bottom: 6.875rem;
+  }
+
+  @include breakpoint($lap) {
+    margin-bottom: 2.625rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 7.5rem;
+  }
+
+  .individual-store--detail {
     width: 26.5%;
     margin-#{direction(right)}: 1%;
     float: direction(left);
@@ -32,8 +43,7 @@
   }
 }
 
-.back-link,
-.mobile-only-back-to-glossary {
+.back-link {
   a {
     display: block;
     width: inherit;
@@ -53,7 +63,7 @@
   }
 }
 
-.list-view-locator {
+.list-view--locator {
   font-size: 0.875rem;
   padding: 1rem 0;
   padding-bottom: 0;
@@ -75,7 +85,7 @@
     }
   }
 
-  .views-field-field-store-address {
+  .field-store--address {
     border-bottom: 1px solid $gainsboro;
     padding-bottom: 1.5rem;
 
@@ -90,7 +100,7 @@
   }
 }
 
-.map--store {
+.store--map {
   float: direction(left);
   width: 61.5%;
   vertical-align: top;

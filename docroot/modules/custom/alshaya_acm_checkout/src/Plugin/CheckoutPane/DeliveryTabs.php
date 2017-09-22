@@ -52,6 +52,7 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
     $complete_form['actions']['back_to_basket'] = [
       '#type' => 'link',
       '#title' => $this->t('Back to basket'),
+      '#weight' => 99,
       '#url' => Url::fromRoute('acq_cart.cart'),
       '#attributes' => [
         'class' => ['back-to-basket'],

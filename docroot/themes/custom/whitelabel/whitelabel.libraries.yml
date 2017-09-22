@@ -222,3 +222,15 @@ field-store-open-hours:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/field-store-open-hours/field-store-open-hours.ltr.css: {}
+
+view-store-finder-list:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/01-view-store-finder-list/views-store-finder-list.ltr.css: {}
+
+view-store-list-locator:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/01-view-store-finder-list/views-store-list-locator.ltr.css: {}
