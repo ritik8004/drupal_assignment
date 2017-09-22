@@ -35,7 +35,7 @@
 
     try {
       if (location_autocomplete_instance_clone !== null) {
-        location_autocomplete_instance.unbindAll();
+        location_autocomplete_instance_clone.unbindAll();
         google.maps.event.clearInstanceListeners(field);
         $(".pac-container").remove();
         location_autocomplete_instance = null;
@@ -45,7 +45,7 @@
     }
 
     var location_autocomplete_instance = places_autocomplete.googleAutocomplete(field);
-    location_autocomplete_instance_clone = location_autocomplete_instance;
+    location_autocomplete_instance_clone = Object.create(location_autocomplete_instance);
 
     // Set restriction for autocomplete.
     if (!$.isEmptyObject(restriction)) {
@@ -106,6 +106,19 @@
         var place = location_autocomplete_instance.getPlace();
 
         if (typeof place === 'undefined' || typeof place.geometry === 'undefined') {
+          var total = $('.pac-container').length;
+
+          if (total > 1) {
+            $('.pac-container').each(function (i) {
+              if ($(this).css("width") == '0px') {
+                $(this).remove();
+              }
+              else if (i+1 >= total) {
+                $(this).find('.pac-item').remove();
+              }
+            });
+          }
+
           location_autocomplete_no_result_checked = setTimeout(function () {
             if ($('.pac-container').find('.pac-item').length <= 0) {
               $('.pac-container').html(noResultHtml);
