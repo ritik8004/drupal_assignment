@@ -211,7 +211,7 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
   if (!empty($element_value)) {
     // Validate number against validation settings.
     if (!alshaya_loyalty_check_valid_apc_number($element_value)) {
-      $form_state->setErrorByName($field, t("@number is not a valid privilege card number.", ['@number' => alshaya_loyalty_format_card_number($element_value)]));
+      $form_state->setErrorByName($field, t("@number is not a valid PRIVILEGES CLUB card number.", ['@number' => alshaya_loyalty_format_card_number($element_value)]));
     }
   }
 }
@@ -317,13 +317,13 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#type' => '#markup',
     '#weight' => 3,
     '#after_build' => ['alshaya_loyalty_privilege_card_wrapper_after_build'],
-    '#prefix' => '<div id="details-privilege-card-wrapper"><div class="card__header">' . t('Enter a privilege card number') . '</div>',
+    '#prefix' => '<div id="details-privilege-card-wrapper">',
     '#suffix' => '</div>',
   ];
 
   $form['privilege_card_wrapper']['privilege_card_number'] = [
     '#type' => 'tel',
-    '#title' => t('Privilege Card Number'),
+    '#title' => t('PRIVILEGES CLUB card number'),
     '#maxlength' => $settings['max_length'],
     '#element_validate' => [
       '_alshaya_loyalty_validate_field_value',
@@ -341,7 +341,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
 
   $form['privilege_card_wrapper']['privilege_card_number2'] = [
     '#type' => 'tel',
-    '#title' => t('Re-enter Privilege Card Number'),
+    '#title' => t('Re-enter PRIVILEGES CLUB card number'),
     '#maxlength' => $settings['max_length'],
     '#states' => [
       'required' => [
@@ -406,7 +406,7 @@ function _alshaya_loyalty_compare_field_values(&$element, FormStateInterface $fo
       // User is not trying to change, we don't do any further validation.
     }
     elseif ($card1 != $card2) {
-      $form_state->setErrorByName('privilege_card_number2', t("Specified Privilege card numbers do not match."));
+      $form_state->setErrorByName('privilege_card_number2', t("Specified PRIVILEGES CLUB card numbers do not match."));
     }
   }
 }

@@ -60,8 +60,8 @@ class LoyaltyConfigForm extends ConfigFormBase {
     ];
     $form['loyalty_configuration']['privilege_card_earn_text'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Privilege card earn text'),
-      '#description' => $this->t('Privilege card earn text'),
+      '#title' => $this->t('PRIVILEGES CLUB card earn text'),
+      '#description' => $this->t('PRIVILEGES CLUB card earn text'),
       '#default_value' => $config->get('privilege_card_earn_text') ? $config->get('privilege_card_earn_text') : '',
     ];
 
