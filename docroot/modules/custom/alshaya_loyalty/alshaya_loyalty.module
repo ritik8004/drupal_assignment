@@ -317,7 +317,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#type' => '#markup',
     '#weight' => 3,
     '#after_build' => ['alshaya_loyalty_privilege_card_wrapper_after_build'],
-    '#prefix' => '<div id="details-privilege-card-wrapper">',
+    '#prefix' => '<div id="details-privilege-card-wrapper"><div class="card__header">' . t('Enter PRIVILEGES CLUB card number') . '</div>',
     '#suffix' => '</div>',
   ];
 
