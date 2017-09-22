@@ -21,13 +21,13 @@
       <div{{ row.attributes.addClass(row_classes) }}>
         {{ row.content }}
       </div>
-    </div>
 
-    {% if row.lat_long is not empty %}
-      <div class="lat-lng">
-        <div class="lat">{{ row.lat_long.lat }}</div>
-        <div class="lng">{{ row.lat_long.lng }}</div>
-      </div>
-    {% endif %}
+      {% if row.lat_long is not empty %}
+        <div class="lat-lng">
+          <div class="lat">{{ row.lat_long.lat }}</div>
+          <div class="lng">{{ row.lat_long.lng }}</div>
+        </div>
+      {% endif %}
+    </div>
   </div>
 {% endfor %}
