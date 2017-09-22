@@ -11,7 +11,7 @@ dependencies:
 id: vs_exposedformstores_finderpage_1
 theme: victoria_secret
 region: content
-weight: -15
+weight: -6
 provider: null
 plugin: 'views_exposed_filter_block:stores_finder-page_1'
 settings:
