@@ -28,7 +28,7 @@ function alshaya_vs_install() {
   \Drupal::service('theme_handler')->setDefault('victoria_secret');
 
   $join_the_club_config = \Drupal::configFactory()->getEditable('alshaya_user.join_club');
-  $join_the_club_config->set('join_club_description', $join_the_club_body);
+  $join_the_club_config->set('join_club_description.value', $join_the_club_body);
   $join_the_club_config->save();
 
   // Translate store finder footer block's link title.
