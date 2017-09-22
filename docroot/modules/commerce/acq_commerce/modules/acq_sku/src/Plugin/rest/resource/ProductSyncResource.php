@@ -254,9 +254,10 @@ class ProductSyncResource extends ResourceBase {
       else {
         try {
           // Un-publish if node available.
-          $node = $plugin->getDisplayNode($sku, FALSE, FALSE);
-          $node->setPublished(FALSE);
-          $node->save();
+          if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
+            $node->setPublished(FALSE);
+            $node->save();
+          }
         }
         catch (\Exception $e) {
           // Do nothing, we may not have the node available in system.
