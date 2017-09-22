@@ -367,7 +367,6 @@
     map.mapMarkers = map.mapMarkers || [];
     skipInfoWindow = skipInfoWindow || false;
 
-
     var marker_icon_path = null;
 
     if (typeof drupalSettings.alshaya_stores_finder !== 'undefined' && drupalSettings.alshaya_stores_finder.map !== 'undefined') {
