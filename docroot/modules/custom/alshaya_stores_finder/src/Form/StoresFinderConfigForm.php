@@ -114,8 +114,12 @@ class StoresFinderConfigForm extends ConfigFormBase {
         }
         else {
           // File upload failed.
-          $form_state->setErrorByName('marker_upload', t('The logo could not be uploaded.'));
+          $form_state->setErrorByName('marker_upload', t('The marker icon could not be uploaded.'));
         }
+      }
+      elseif (!$form_state->getValue('use_default') && empty($form_state->getValue('marker_path'))) {
+        // No files uploaded and marker path is empty.
+        $form_state->setErrorByName('marker_upload', t('Please upload marker icon.'));
       }
     }
   }
