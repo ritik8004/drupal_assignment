@@ -234,3 +234,9 @@ view-store-list-locator:
   css:
     theme:
       components/dist/css/_patterns/02-organisms/01-view-store-finder-list/views-store-list-locator.ltr.css: {}
+
+block-stay-in-the-know:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-stay-in-the-know/block-stay-in-the-know.ltr.css: {}
