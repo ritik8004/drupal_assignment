@@ -23,13 +23,22 @@ class AlshayaAddressBookController extends ProfileController {
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
    *   The route match.
+   * @param string $token
+   *   CSRF Token.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   A redirect back to the currency listing.
    */
-  public function setDefault(RouteMatchInterface $routeMatch) {
+  public function setDefaultAddress(RouteMatchInterface $routeMatch, $token) {
     /* @var \Drupal\profile\Entity\Profile $profile */
     $profile = $routeMatch->getParameter('profile');
+
+    /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
+    $csrf_token_generator = \Drupal::service('csrf_token');
+
+    if (!$csrf_token_generator->validate($token, 'profile-' . $profile->id())) {
+      throw new AccessDeniedHttpException();
+    }
 
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
