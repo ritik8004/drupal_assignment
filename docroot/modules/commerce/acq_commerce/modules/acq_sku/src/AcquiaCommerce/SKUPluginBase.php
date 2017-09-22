@@ -187,7 +187,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
         return $node->addTranslation($sku->language()->getId());
       }
 
-      throw new \Exception(new FormattableMarkup('Node translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $sku->language()->getId()]), 404);
+      throw new \Exception(new FormattableMarkup('Node translation not found of @sku for @langcode', ['@sku' => $sku->id(), '@langcode' => $sku->language()->getId()]), 404);
     }
 
     return $node;
