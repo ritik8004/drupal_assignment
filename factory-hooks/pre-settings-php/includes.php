@@ -72,6 +72,9 @@ $settings['alshaya_api.settings']['password'] = 'password123';
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
 $config['acq_commerce.conductor']['debug'] = TRUE;
 
+// Set page size to sync products to 30.
+$settings['acq_commerce.conductor']['product_page_size'] = 30;
+
 // Disable unwanted core views.
 $settings['views_to_disable'] = [
   'frontpage',
