@@ -206,6 +206,9 @@ function alshaya_master_install() {
     'submit' => [
       'ar' => 'إرسال',
     ],
+    'Submit' => [
+      'ar' => 'إرسال',
+    ],
     'search item or keyword' => [
       'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
     ],
