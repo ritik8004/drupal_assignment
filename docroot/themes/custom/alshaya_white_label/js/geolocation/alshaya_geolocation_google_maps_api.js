@@ -367,13 +367,22 @@
     map.mapMarkers = map.mapMarkers || [];
     skipInfoWindow = skipInfoWindow || false;
 
-    console.log(drupalSettings.alshaya_stores_finder.map.marker_icon_path);
 
-    if (typeof drupalSettings.alshaya_stores_finder.map.marker_icon_path === 'string') {
+    var marker_icon_path = null;
+
+    if (typeof drupalSettings.alshaya_stores_finder !== 'undefined' && drupalSettings.alshaya_stores_finder.map !== 'undefined') {
+      marker_icon_path = drupalSettings.alshaya_stores_finder.map.marker_icon_path;
+    }
+
+    if (typeof marker_icon_path === 'undefined' || marker_icon_path == null || marker_icon_path.length === 0) {
+      marker_icon_path = map.settings.google_map_settings.marker_icon_path;
+    }
+
+    if (typeof marker_icon_path === 'string') {
       if (typeof markerSettings.icon === 'undefined') {
         // Add the marker icon.
         markerSettings.icon = {
-          url: drupalSettings.alshaya_stores_finder.map.marker_icon_path,
+          url: marker_icon_path,
           labelOrigin: new google.maps.Point(15, 15),
           scaledSize: new google.maps.Size(31, 48)
         };
