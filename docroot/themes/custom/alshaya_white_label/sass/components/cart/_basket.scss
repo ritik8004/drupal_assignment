@@ -204,6 +204,29 @@
       }
     }
 
+    .quantity .ajax-progress-throbber {
+      position: absolute;
+      #{$left}: 40%;
+
+      .message {
+        display: none;
+      }
+
+      .throbber {
+        background-image: url(../imgs/icons/MC-loader.svg) !important;
+        background-position: $right center !important;
+        background-repeat: no-repeat !important;
+        background-size: 1.5rem;
+        padding-left: 0.625rem;
+        padding-right: 0.625rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        bottom: -2rem;
+        #{$left}: 40%;
+      }
+    }
+
     @include breakpoint($tablet) {
       .delivery-options-mobile {
         @include u-visibility(none);

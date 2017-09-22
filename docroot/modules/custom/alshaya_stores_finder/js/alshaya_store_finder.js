@@ -128,9 +128,9 @@
                 $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
               }
               else {
-                $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
-                $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
-                $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+                $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
+                $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+                $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
               }
             }
           }
@@ -147,7 +147,7 @@
           else {
             setTimeout(function () {
               if (runscript) {
-                $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+                $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form #edit-submit-stores-finder').trigger('click');
               }
               // Close the overlay.
               $('body').removeClass('modal-overlay--spinner');
@@ -173,7 +173,7 @@
       };
 
       // Trigger click on autocomplete selection.
-      $('[class*="block-views-exposed-filter-blockstores-finder-page"]').each(function () {
+      $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"]').each(function () {
         var storeFinder = $(this);
         // Add class to store finder exposed form.
         // Adding class to hook_form_alter for store finder form is adding it to the

@@ -29,26 +29,6 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $form['account']['name']['#description'] = '';
   $form['account']['pass']['#description'] = '';
 
-  if (\Drupal::currentUser()->isAuthenticated()) {
-    // We don't want to show subscribe to newsletter field to logged in users.
-    $form['field_subscribe_newsletter']['#access'] = FALSE;
-
-    // We don't allow changing email address for customer.
-    if (alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
-      $form['account']['mail']['#disabled'] = TRUE;
-
-      // Access false, if only authenticated.
-      $form['account']['current_pass']['#access'] = FALSE;
-    }
-  }
-  else {
-    // Add markup for terms and conditions.
-    $form['field_subscribe_newsletter']['widget']['#suffix'] = \Drupal::config('alshaya_user.settings')
-      ->get('terms_conditions.value');
-    // Change submit button text.
-    $form['actions']['submit']['#value'] = t('Create');
-  }
-
   // First name and last name will not accept some special characters.
   $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
   $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
