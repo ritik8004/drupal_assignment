@@ -1,10 +1,3 @@
-// Global var for no result found html.
-var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No area found') + '</span><div>';
-
-// Global var for storing location autocomplete instance.
-var location_autocomplete_instance = null;
-var location_autocomplete_no_result_checked = null;
-
 (function ($, Drupal) {
   'use strict';
 
@@ -15,6 +8,13 @@ var location_autocomplete_no_result_checked = null;
    */
   Drupal.click_collect = Drupal.click_collect || {};
   Drupal.geolocation = Drupal.geolocation || {};
+
+  // Global var for no result found html.
+  var noResultHtml = '<div class="pac-not-found"><span>' + Drupal.t('No area found') + '</span><div>';
+
+  // Global var for storing location autocomplete instance.
+  var location_autocomplete_instance_clone = null;
+  var location_autocomplete_no_result_checked = null;
 
   /**
    * Click and collect constructor.
@@ -31,10 +31,10 @@ var location_autocomplete_no_result_checked = null;
    *   The element on which the ajax call should trigger.
    */
   Drupal.AlshayaPlacesAutocomplete = function (field, callbacks, restriction, $trigger) {
-    var click_collect = this;
+    var places_autocomplete = this;
 
     try {
-      if (location_autocomplete_instance !== null) {
+      if (location_autocomplete_instance_clone !== null) {
         location_autocomplete_instance.unbindAll();
         google.maps.event.clearInstanceListeners(field);
         $(".pac-container").remove();
@@ -44,7 +44,8 @@ var location_autocomplete_no_result_checked = null;
     catch (e) {
     }
 
-    location_autocomplete_instance = click_collect.googleAutocomplete(field);
+    var location_autocomplete_instance = places_autocomplete.googleAutocomplete(field);
+    location_autocomplete_instance_clone = location_autocomplete_instance;
 
     // Set restriction for autocomplete.
     if (!$.isEmptyObject(restriction)) {
@@ -68,11 +69,11 @@ var location_autocomplete_no_result_checked = null;
       catch (e) {
       }
 
-      click_collect.coords = {};
+      places_autocomplete.coords = {};
 
       if (typeof place !== 'undefined') {
         if (typeof place.geometry !== 'undefined') {
-          click_collect.coords = {
+          places_autocomplete.coords = {
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng()
           };
@@ -81,7 +82,7 @@ var location_autocomplete_no_result_checked = null;
 
       if ($.isArray(callbacks)) {
         callbacks.forEach(function (callback) {
-          callback.call(this, click_collect.coords, field, restriction, $trigger);
+          callback.call(this, places_autocomplete.coords, field, restriction, $trigger);
         });
       }
     });
