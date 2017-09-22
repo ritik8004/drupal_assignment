@@ -379,7 +379,7 @@ class CheckoutOptionsManager {
     try {
       if ($shipping_methods = $this->loadShippingEstimates($address)) {
         foreach ($shipping_methods as $code => $data) {
-          // We don't display click and collect delivery method for home delivery.
+          // We don't display click and collect method for home delivery.
           if ($code == $this->getClickandColectShippingMethod()) {
             continue;
           }
@@ -388,8 +388,7 @@ class CheckoutOptionsManager {
             <div class="shipping-method-name">
               <div class="shipping-method-title">' . $data['term']->getName() . '</div>
               <div class="shipping-method-price">' . $data['price'] . '</div>
-              <div class="shipping-method-description">' . $data['term']->get('field_shipping_method_cart_desc')
-                ->getString() . '</div>
+              <div class="shipping-method-description">' . $data['term']->get('field_shipping_method_cart_desc')->getString() . '</div>
             </div>
           ';
 
