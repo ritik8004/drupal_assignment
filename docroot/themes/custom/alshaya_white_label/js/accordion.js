@@ -203,6 +203,7 @@
   Drupal.alshayaAccordion = function (element) {
     $(element).siblings().slideToggle('slow');
     $(element).toggleClass('ui-state-active');
+    $(element).parent().toggleClass('facet-active');
   };
 
 })(jQuery, Drupal);
