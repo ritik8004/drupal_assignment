@@ -318,8 +318,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 function alshaya_acm_customer_get_available_user_order_status(UserInterface $user) {
   $all_status = [];
 
-  // Get all the orders for the user.
-  $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
+  try {
+    // Get all the orders for the user.
+    $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
+  }
+  catch (\Exception $e) {
+    return [];
+  }
 
   // Loop through all the orders to get status of each.
   foreach ($orders as $order) {

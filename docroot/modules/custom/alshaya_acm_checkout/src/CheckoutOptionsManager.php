@@ -376,22 +376,30 @@ class CheckoutOptionsManager {
   public function getHomeDeliveryShippingEstimates($address) {
     $shipping_method_options = [];
 
-    if ($shipping_methods = $this->loadShippingEstimates($address)) {
-      foreach ($shipping_methods as $code => $data) {
-        // We don't display click and collect delivery method for home delivery.
-        if ($code == $this->getClickandColectShippingMethod()) {
-          continue;
+    try {
+      if ($shipping_methods = $this->loadShippingEstimates($address)) {
+        foreach ($shipping_methods as $code => $data) {
+          // We don't display click and collect delivery method for home delivery.
+          if ($code == $this->getClickandColectShippingMethod()) {
+            continue;
+          }
+
+          $method_name = '
+            <div class="shipping-method-name">
+              <div class="shipping-method-title">' . $data['term']->getName() . '</div>
+              <div class="shipping-method-price">' . $data['price'] . '</div>
+              <div class="shipping-method-description">' . $data['term']->get('field_shipping_method_cart_desc')
+                ->getString() . '</div>
+            </div>
+          ';
+
+          $shipping_method_options[$code] = $method_name;
         }
-
-        $method_name = '
-          <div class="shipping-method-name">
-            <div class="shipping-method-title">' . $data['term']->getName() . '</div>
-            <div class="shipping-method-price">' . $data['price'] . '</div>
-            <div class="shipping-method-description">' . $data['term']->get('field_shipping_method_cart_desc')->getString() . '</div>
-          </div>
-        ';
-
-        $shipping_method_options[$code] = $method_name;
+      }
+    }
+    catch (\Exception $e) {
+      if ($e->getCode() == 500) {
+        drupal_set_message($e->getMessage(), 'error');
       }
     }
 

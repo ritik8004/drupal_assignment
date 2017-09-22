@@ -126,7 +126,7 @@ function acq_commerce_get_store_id_from_langcode($langcode) {
 /**
  * Helper function to get language code from store id.
  *
- * @param $store_id
+ * @param string $store_id
  *   Store id to convert to language code.
  *
  * @return string|null
@@ -141,4 +141,17 @@ function acq_commerce_get_langcode_from_store_id($store_id) {
   }
 
   return !empty($mapping[$store_id]) ? $mapping[$store_id] : NULL;
+}
+
+/**
+ * Function to return global error message to be used when API is down.
+ *
+ * Not adding this to config or creating form, this can be updated using
+ * translation interface.
+ *
+ * @return string
+ *   Error message string.
+ */
+function acq_commerce_api_down_global_error_message() {
+  return t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.')->render();
 }

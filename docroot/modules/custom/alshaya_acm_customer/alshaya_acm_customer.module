@@ -189,6 +189,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id == 'user_communication_preference') {
+    $form['#validate'][] = 'alshaya_acm_customer_form_validate_api_works';
     $form['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
   }
 
@@ -209,6 +210,8 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
       // Always hide customer_id field for none-admin users.
       $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
       $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
+
+      $form['#validate'][] = 'alshaya_acm_customer_form_validate_api_works';
     }
     else {
       // Add markup for terms and conditions.
@@ -237,6 +240,28 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
   if ($form_id == 'user_pass') {
     array_unshift($form['#validate'], 'alshaya_acm_customer_user_pass_validate');
+  }
+}
+
+/**
+ * Common validate callback to check API works before saving data.
+ */
+function alshaya_acm_customer_form_validate_api_works($form, FormStateInterface $form_state) {
+  if ($form_state->getErrors()) {
+    return;
+  }
+
+  try {
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('acq_commerce.api');
+    $api_wrapper->systemWatchdog();
+  }
+  catch (\Exception $e) {
+    if ($e->getCode() == 500) {
+      drupal_set_message($e->getMessage(), 'error');
+      $form_state->setErrorByName('form_token', $e->getMessage());
+      return;
+    }
   }
 }
 
@@ -318,13 +343,21 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
   // Do check against Magento only if user is unknown or just authenticated.
   if ($do_api_check) {
-    if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass)) {
-      $form_state->set('uid', $uid);
-      return;
+    try {
+      if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass)) {
+        $form_state->set('uid', $uid);
+        return;
+      }
+      else {
+        $form_state->setErrorByName('name', t('Unrecognized email address or password.'));
+        return;
+      }
     }
-    else {
-      $form_state->setErrorByName('name', t('Unrecognized email address or password.'));
-      return;
+    catch (\Exception $e) {
+      if ($e->getCode() == 500) {
+        $form_state->setErrorByName('name', $e->getMessage());
+        return;
+      }
     }
   }
 
@@ -400,7 +433,10 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
     }
   }
   catch (\Exception $e) {
-    // Do nothing, could be admin user.
+    // Do nothing except for 500, could be admin user.
+    if ($e->getCode() == 500) {
+      throw $e;
+    }
   }
 
   return NULL;
@@ -470,7 +506,11 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
     }
   }
   catch (\Exception $e) {
-    // Do nothing, we will do other validations after this try/catch.
+    // Do nothing except for 500, we will do other validations after try/catch.
+    if ($e->getCode() == 500) {
+      $form_state->setErrorByName('custom', $e->getMessage());
+      drupal_set_message($e->getMessage(), 'error');
+    }
   }
 
   // Process default validation if no errors found.
@@ -567,7 +607,10 @@ function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, Fo
     }
   }
   catch (\Exception $e) {
-    // Do nothing, we will set the error message below.
+    // Do nothing except for 500, we will set the error message below.
+    if ($e->getCode() == 500) {
+      $form_state->setErrorByName('current_pass', $e->getMessage());
+    }
   }
 
   $form_state->setErrorByName('current_pass', t('The current password you provided is incorrect.'));
@@ -641,7 +684,10 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
     }
   }
   catch (\Exception $e) {
-    // Do nothing, let default validation function handle the error messages.
+    // Do nothing except 500, let default validation handle the error messages.
+    if ($e->getCode() == 500) {
+      $form_state->setErrorByName('name', $e->getMessage());
+    }
   }
 }
 

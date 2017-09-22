@@ -1,0 +1,166 @@
+diff --git a/acq_commerce.module b/acq_commerce.module
+index 21cc93227..e6ccf0ab5 100644
+--- a/acq_commerce.module
++++ b/acq_commerce.module
+@@ -126,7 +126,7 @@ function acq_commerce_get_store_id_from_langcode($langcode) {
+ /**
+  * Helper function to get language code from store id.
+  *
+- * @param $store_id
++ * @param string $store_id
+  *   Store id to convert to language code.
+  *
+  * @return string|null
+@@ -142,3 +142,16 @@ function acq_commerce_get_langcode_from_store_id($store_id) {
+ 
+   return !empty($mapping[$store_id]) ? $mapping[$store_id] : NULL;
+ }
++
++/**
++ * Function to return global error message to be used when API is down.
++ *
++ * Not adding this to config or creating form, this can be updated using
++ * translation interface.
++ *
++ * @return string
++ *   Error message string.
++ */
++function acq_commerce_api_down_global_error_message() {
++  return t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.')->render();
++}
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index fac22e05a..4b35d4caf 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -203,7 +203,10 @@ public function updateCart($create_new = TRUE) {
+         $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
+       }
+       catch (\Exception $e) {
+-        $this->restoreCart($cart_id);
++        if ($e->getCode() != 500) {
++          $this->restoreCart($cart_id);
++        }
++
+         throw $e;
+       }
+ 
+diff --git a/modules/acq_cart/src/Form/CustomerCartForm.php b/modules/acq_cart/src/Form/CustomerCartForm.php
+index d556e7e34..4fa7b9c19 100644
+--- a/modules/acq_cart/src/Form/CustomerCartForm.php
++++ b/modules/acq_cart/src/Form/CustomerCartForm.php
+@@ -236,6 +236,12 @@ private function updateCart(FormStateInterface $form_state) {
+       }
+     }
+     catch (\Exception $e) {
++      if ($e->getCode() == 500) {
++        drupal_set_message($e->getMessage(), 'error');
++        $form_state->setErrorByName('custom', $e->getMessage());
++        $form_state->setRebuild(TRUE);
++      }
++
+       // Dispatch event so action can be taken.
+       $dispatcher = \Drupal::service('event_dispatcher');
+       $event = new UpdateCartErrorEvent($e);
+diff --git a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
+index bc36a640e..3616d9fb5 100644
+--- a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
++++ b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
+@@ -175,6 +175,17 @@ public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
+ 
+     if ($tree_pointer instanceof SKU) {
+       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
++
++      if (empty($cart)) {
++        $e = new \Exception(acq_commerce_api_down_global_error_message(), 500);
++
++        // Dispatch event so action can be taken.
++        $dispatcher = \Drupal::service('event_dispatcher');
++        $event = new AddToCartErrorEvent($e);
++        $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
++        return;
++      }
++
+       $options = [];
+       $label_parts = [];
+       $configurables_form = $form['ajax']['configurables'];
+diff --git a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Simple.php b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Simple.php
+index 7bbb7bb6e..c98b38a03 100644
+--- a/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Simple.php
++++ b/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Simple.php
+@@ -53,6 +53,17 @@ public function addToCartForm(array $form, FormStateInterface $form_state, SKU $
+    */
+   public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
+     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
++
++    if (empty($cart)) {
++      $e = new \Exception(acq_commerce_api_down_global_error_message(), 500);
++
++      // Dispatch event so action can be taken.
++      $dispatcher = \Drupal::service('event_dispatcher');
++      $event = new AddToCartErrorEvent($e);
++      $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
++      return;
++    }
++
+     $sku_entity = SKU::load($form_state->getValue('sku_id'));
+     $sku = $sku_entity->getSku();
+     $quantity = $form_state->getValue('quantity');
+diff --git a/src/Conductor/AgentRequestTrait.php b/src/Conductor/AgentRequestTrait.php
+index 3228b9aa3..f55088c5f 100644
+--- a/src/Conductor/AgentRequestTrait.php
++++ b/src/Conductor/AgentRequestTrait.php
+@@ -2,6 +2,8 @@
+ 
+ namespace Drupal\acq_commerce\Conductor;
+ 
++use Acquia\Hmac\Exception\MalformedResponseException;
++use GuzzleHttp\Exception\ConnectException;
+ use GuzzleHttp\TransferStats;
+ use GuzzleHttp\Exception\RequestException;
+ 
+@@ -96,6 +98,30 @@ function (TransferStats $stats) use ($logger, $action) {
+       /** @var \GuzzleHttp\Psr7\Response $result */
+       $result = $doReq($client, $reqOpts);
+     }
++    catch (ConnectException $e) {
++      $mesg = sprintf(
++        '%s: ConnectException during request: (%d) - %s',
++        $action,
++        $e->getCode(),
++        $e->getMessage()
++      );
++
++      $logger->error($mesg);
++
++      throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
++    }
++    catch (MalformedResponseException $e) {
++      $mesg = sprintf(
++        '%s: MalformedResponseException during request: (%d) - %s',
++        $action,
++        $e->getCode(),
++        $e->getMessage()
++      );
++
++      $logger->error($mesg);
++
++      throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
++    }
+     catch (RequestException $e) {
+       $mesg = sprintf(
+         '%s: Exception during request: (%d) - %s',
+@@ -105,8 +131,14 @@ function (TransferStats $stats) use ($logger, $action) {
+       );
+ 
+       $logger->error($mesg);
++
++      if ($e->getCode() == 404) {
++        throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
++      }
++
+       throw new ConductorException($mesg, $e->getCode(), $e);
+     }
++
+     $response = json_decode($result->getBody(), TRUE);
+     if (($response === NULL) || (!isset($response['success']))) {
+       $mesg = sprintf(

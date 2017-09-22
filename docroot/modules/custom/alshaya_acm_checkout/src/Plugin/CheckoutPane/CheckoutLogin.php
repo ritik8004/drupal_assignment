@@ -113,26 +113,33 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
       return;
     }
 
-    if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass, TRUE)) {
-      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-      $cart_storage = \Drupal::service('acq_cart.cart_storage');
-      $cart_storage->getCart()->setCheckoutStep('delivery');
+    try {
+      if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass, TRUE)) {
+        /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+        $cart_storage = \Drupal::service('acq_cart.cart_storage');
+        $cart_storage->getCart()->setCheckoutStep('delivery');
 
-      $form_state->setRedirect('acq_checkout.form', ['step' => 'delivery']);
+        $form_state->setRedirect('acq_checkout.form', ['step' => 'delivery']);
 
-      $account = User::load($uid);
+        $account = User::load($uid);
 
-      if ($account->isActive()) {
-        user_login_finalize($account);
+        if ($account->isActive()) {
+          user_login_finalize($account);
+        }
+        else {
+          drupal_set_message($this->t('Your account has not been activated or is blocked.'), 'error');
+          $form_state->setErrorByName('custom', $this->t('Your account has not been activated or is blocked.'));
+        }
       }
       else {
-        drupal_set_message($this->t('Your account has not been activated or is blocked.'), 'error');
-        $form_state->setErrorByName('custom', $this->t('Your account has not been activated or is blocked.'));
+        drupal_set_message($this->t('Unrecognized email address or password.'), 'error');
+        $form_state->setErrorByName('custom', $this->t('Unrecognized email address or password.'));
       }
     }
-    else {
-      drupal_set_message($this->t('Unrecognized email address or password.'), 'error');
-      $form_state->setErrorByName('custom', $this->t('Unrecognized email address or password.'));
+    catch (\Exception $e) {
+      if ($e->getCode() == 500) {
+        $form_state->setErrorByName('custom', $e->getMessage());
+      }
     }
   }
 

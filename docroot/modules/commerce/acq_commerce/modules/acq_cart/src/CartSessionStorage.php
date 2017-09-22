@@ -203,7 +203,10 @@ class CartSessionStorage implements CartStorageInterface {
         $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
       }
       catch (\Exception $e) {
-        $this->restoreCart($cart_id);
+        if ($e->getCode() != 500) {
+          $this->restoreCart($cart_id);
+        }
+
         throw $e;
       }
 

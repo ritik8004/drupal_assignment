@@ -77,11 +77,18 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
 
-    // Get available payment methods and compare to enabled payment method
-    // plugins.
-    $apiWrapper = $this->getApiWrapper();
-    $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
-    $payment_methods = array_intersect($payment_methods, array_keys($plugins));
+    try {
+      // Get available payment methods and compare to enabled payment method
+      // plugins.
+      $apiWrapper = $this->getApiWrapper();
+      $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
+      $payment_methods = array_intersect($payment_methods, array_keys($plugins));
+    }
+    catch (\Exception $e) {
+      drupal_set_message($e->getMessage(), 'error');
+      $form_state->setErrorByName('custom', $e->getMessage());
+      return $pane_form;
+    }
 
     // Get the default plugin id.
     if ($default_plugin_id = $checkout_options_manager->getDefaultPaymentCode()) {

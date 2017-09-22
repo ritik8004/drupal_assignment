@@ -175,6 +175,17 @@ class Configurable extends SKUPluginBase {
 
     if ($tree_pointer instanceof SKU) {
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+
+      if (empty($cart)) {
+        $e = new \Exception(acq_commerce_api_down_global_error_message(), 500);
+
+        // Dispatch event so action can be taken.
+        $dispatcher = \Drupal::service('event_dispatcher');
+        $event = new AddToCartErrorEvent($e);
+        $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
+        return;
+      }
+
       $options = [];
       $label_parts = [];
       $configurables_form = $form['ajax']['configurables'];

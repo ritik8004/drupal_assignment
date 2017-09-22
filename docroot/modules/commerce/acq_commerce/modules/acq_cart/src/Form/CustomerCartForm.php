@@ -236,6 +236,12 @@ class CustomerCartForm extends FormBase {
       }
     }
     catch (\Exception $e) {
+      if ($e->getCode() == 500) {
+        drupal_set_message($e->getMessage(), 'error');
+        $form_state->setErrorByName('custom', $e->getMessage());
+        $form_state->setRebuild(TRUE);
+      }
+
       // Dispatch event so action can be taken.
       $dispatcher = \Drupal::service('event_dispatcher');
       $event = new UpdateCartErrorEvent($e);

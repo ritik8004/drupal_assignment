@@ -106,7 +106,13 @@ class NewsLetterForm extends FormBase {
         }
       }
       catch (\Exception $e) {
-        $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
+        if ($e->getCode() == 500) {
+          $message = '<span class="message error">' . $e->getMessage() . '</span>';
+        }
+        else {
+          $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
+        }
+
         $data['message'] = 'failure';
       }
 

@@ -53,6 +53,17 @@ class Simple extends SKUPluginBase {
    */
   public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
     $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+
+    if (empty($cart)) {
+      $e = new \Exception(acq_commerce_api_down_global_error_message(), 500);
+
+      // Dispatch event so action can be taken.
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $event = new AddToCartErrorEvent($e);
+      $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
+      return;
+    }
+
     $sku_entity = SKU::load($form_state->getValue('sku_id'));
     $sku = $sku_entity->getSku();
     $quantity = $form_state->getValue('quantity');

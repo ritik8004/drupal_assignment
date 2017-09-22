@@ -2,6 +2,8 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Acquia\Hmac\Exception\MalformedResponseException;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\RequestException;
 
@@ -96,6 +98,30 @@ trait AgentRequestTrait {
       /** @var \GuzzleHttp\Psr7\Response $result */
       $result = $doReq($client, $reqOpts);
     }
+    catch (ConnectException $e) {
+      $mesg = sprintf(
+        '%s: ConnectException during request: (%d) - %s',
+        $action,
+        $e->getCode(),
+        $e->getMessage()
+      );
+
+      $logger->error($mesg);
+
+      throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
+    }
+    catch (MalformedResponseException $e) {
+      $mesg = sprintf(
+        '%s: MalformedResponseException during request: (%d) - %s',
+        $action,
+        $e->getCode(),
+        $e->getMessage()
+      );
+
+      $logger->error($mesg);
+
+      throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
+    }
     catch (RequestException $e) {
       $mesg = sprintf(
         '%s: Exception during request: (%d) - %s',
@@ -105,8 +131,14 @@ trait AgentRequestTrait {
       );
 
       $logger->error($mesg);
+
+      if ($e->getCode() == 404) {
+        throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
+      }
+
       throw new ConductorException($mesg, $e->getCode(), $e);
     }
+
     $response = json_decode($result->getBody(), TRUE);
     if (($response === NULL) || (!isset($response['success']))) {
       $mesg = sprintf(
