@@ -105,4 +105,38 @@ class AlshayaPromotionsManager {
     return $nodes;
   }
 
+  /**
+   * Helper function to promoton SubType.
+   *
+   * @param array $promotion
+   *   The promotion array.
+   *
+   * @return string
+   *   String containing the type of promotion.
+   */
+  public function getSubType(array $promotion) {
+    if (empty($promotion)) {
+      return '';
+    }
+
+    if (
+      (!isset($promotion['product_discounts']) || empty($promotion['product_discounts'])) &&
+      (!isset($promotion['action_condition']['conditions']) || empty($promotion['action_condition']['conditions'])) &&
+      (isset($promotion['condition']['conditions'][0]['attribute_name']) && $promotion['condition']['conditions'][0]['attribute_name'] == 'base_subtotal')
+    ) {
+      if (!$promotion['apply_to_shipping']) {
+        if ($promotion['simple_action'] == 'by_percent') {
+          return 'fixed_percentage_discount_order';
+        }
+        elseif ($promotion['simple_action'] == 'cart_fixed') {
+          return 'fixed_amount_discount_order';
+        }
+      }
+      elseif (isset($promotion['simple_free_shipping']) && $promotion['simple_free_shipping'] == 2) {
+        return 'free_shipping_order';
+      }
+    }
+    return 'other';
+  }
+
 }
