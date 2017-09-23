@@ -1,0 +1,37 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.acq_promotion.field_acq_promotion_action
+    - field.field.node.acq_promotion.field_acq_promotion_banner
+    - field.field.node.acq_promotion.field_acq_promotion_data
+    - field.field.node.acq_promotion.field_acq_promotion_description
+    - field.field.node.acq_promotion.field_acq_promotion_disc_type
+    - field.field.node.acq_promotion.field_acq_promotion_discount
+    - field.field.node.acq_promotion.field_acq_promotion_label
+    - field.field.node.acq_promotion.field_acq_promotion_rule_id
+    - field.field.node.acq_promotion.field_acq_promotion_type
+    - field.field.node.acq_promotion.field_alshaya_promotion_subtype
+    - node.type.acq_promotion
+  module:
+    - user
+third_party_settings: { }
+id: node.acq_promotion.default
+targetEntityType: node
+bundle: acq_promotion
+mode: default
+content: {  }
+hidden:
+  field_acq_promotion_action: true
+  field_acq_promotion_banner: true
+  field_acq_promotion_data: true
+  field_acq_promotion_description: true
+  field_acq_promotion_disc_type: true
+  field_acq_promotion_discount: true
+  field_acq_promotion_label: true
+  field_acq_promotion_rule_id: true
+  field_acq_promotion_type: true
+  field_alshaya_promotion_subtype: true
+  langcode: true
+  links: true
+  sharethis: true

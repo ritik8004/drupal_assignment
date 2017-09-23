@@ -5,3 +5,58 @@
  * @file
  * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
  */
+
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_promotion_install() {
+  // Update the content type.
+  $configs = [
+    'core.entity_form_display.node.acq_promotion.default',
+    'core.entity_view_display.node.acq_promotion.default',
+  ];
+  alshaya_acm_promotion_update_configs($configs, 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_acm_promotion_update_8301() {
+  // Add the new field "Subtype".
+  $configs = [
+    'field.storage.node.field_alshaya_promotion_subtype',
+    'field.field.node.acq_promotion.field_alshaya_promotion_subtype',
+  ];
+  alshaya_acm_promotion_update_configs($configs);
+
+  // Update the content type.
+  $configs = [
+    'core.entity_form_display.node.acq_promotion.default',
+    'core.entity_view_display.node.acq_promotion.default',
+  ];
+  alshaya_acm_promotion_update_configs($configs, 'optional');
+}
+
+/**
+ * Helper function to add field subtype, and update Content type promotion.
+ *
+ * @param array $configs
+ *   The name of configs to import.
+ * @param string $path
+ *   Path where configs reside. Defaults to install.
+ */
+function alshaya_acm_promotion_update_configs(array $configs, $path = 'install') {
+  if (empty($configs)) {
+    return;
+  }
+
+  foreach ($configs as $config) {
+    $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_acm_promotion') . '/config/' . $path . '/' . $config . '.yml'));
+    \Drupal::configFactory()
+      ->getEditable($config)
+      ->setData($config_yaml)
+      ->save();
+  }
+}
