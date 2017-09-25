@@ -12,7 +12,7 @@ regions:
 
 libraries:
   - whitelabel/reset
-  # - whitelabel/global
+  - whitelabel/global
 
 component-libraries:
   atoms:
