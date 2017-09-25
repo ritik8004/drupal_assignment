@@ -51,7 +51,7 @@ function alshaya_vs_install() {
     $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
     // Enable share this for non transac Product CT.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_non_transac_product')) {
-      $configFactory->set('node_types.alshaya_non_transac_product', 'alshaya_non_transac_product');
+      $configFactory->set('node_types.product', 'product');
     }
     $configFactory->save();
   }
