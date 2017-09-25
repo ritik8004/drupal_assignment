@@ -4,15 +4,15 @@
   {% endif %}
   {% if description_display == 'before' and description_content %}
     <div{{ description_attributes }}>
-      <span class="input-textual__description">
+      <span class="input--textual__description">
         {{ description_content }}
       </span>
     </div>
   {% endif %}
 
   {% if not is_checkbox %}
-    <div class="input-textual__container">
-      <div class="input__inner-container">
+    <div class="input--textual__container">
+      <div class="input--inner__container">
         {{ children }}
         <div class="input__line"></div>
         {% if label_display in ['before', 'invisible'] %}
@@ -30,8 +30,8 @@
       {{ label }}
     {% endif %}
   {% else %}
-    <div class="input-checkbox__container">
-      <div class="input__inner-container">
+    <div class="input--checkbox__container">
+      <div class="input--inner__container">
         {{ children }}
         {% if label_display in ['before', 'invisible'] %}
           <span class="input__label">
@@ -49,7 +49,7 @@
     </div>
   {% endif %}
 
-  <div class="input-textual__container--errors">
+  <div class="input--textual__container--errors">
     {% if errors %}
       <div class="form-item--error-message">
         {{ errors }}
@@ -58,7 +58,7 @@
   </div>
   {% if description_display in ['after', 'invisible'] and description_content %}
     <div{{ description_attributes.addClass(description_classes) }}>
-      <span class="input-textual__description">
+      <span class="input--textual__description">
         {{ description_content }}
       </span>
     </div>

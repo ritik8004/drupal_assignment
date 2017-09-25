@@ -313,6 +313,6 @@ function victoria_secret_preprocess_form_element(array &$variables) {
  */
 function victoria_secret_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_login_form' || $form_id == 'user_register_form') {
-    $form['actions']['submit']['#attributes']['class'][] = 'button-form__submit';
+    $form['actions']['submit']['#attributes']['class'][] = 'button--form-submit';
   }
 }
