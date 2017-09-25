@@ -6,5 +6,5 @@ core: 8.x
 dependencies:
   - alshaya_i18n
   - block
-  - machine_name_widget
+  - block_content_machine_name
   - menu_link_attributes
