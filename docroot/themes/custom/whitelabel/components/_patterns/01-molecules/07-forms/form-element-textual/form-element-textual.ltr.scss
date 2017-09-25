@@ -1,6 +1,6 @@
 @import '../../../../sass/config/**/*.scss';
 
-.input-textual__container {
+.input--textual__container {
   input {
     border: none;
     border-radius: 0;
@@ -54,12 +54,12 @@
   margin-bottom: 1.25rem;
 }
 
-.input-textual__container,
-.input__inner-container {
+.input--textual__container,
+.input--inner__container {
   position: relative;
 }
 
-.input-textual__container {
+.input--textual__container {
   margin-bottom: 2.375rem;
 }
 
@@ -112,6 +112,6 @@ input:focus ~ .input__label label {
   pointer-events: none;
 }
 
-.input-textual__description {
+.input--textual__description {
   display: none;
 }
