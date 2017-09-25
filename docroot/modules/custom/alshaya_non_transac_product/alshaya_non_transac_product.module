@@ -15,9 +15,8 @@ function alshaya_non_transac_product_node_view_alter(array &$build, EntityInterf
   if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
     $sharethis_manager = \Drupal::service('sharethis.manager');
     $sharethis_settings = \Drupal::config('sharethis.settings');
-    $view_mode = $display->getMode();
-    // Don't display if the user is currently searching, or in the RSS feed.
-    switch ($view_mode) {
+    // Display sharethis for search result.
+    switch ($build['#view_mode']) {
       case 'search_result':
         // First get all of the options for the sharethis widget from the
         // database:
