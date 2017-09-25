@@ -61,12 +61,19 @@ function drush_alshaya_acm_product_position_position_sync($position_type = 'best
 
     // Skip sync if error is found in the response for a particular category.
     if (is_array($response) && isset($response['message'])) {
-      drush_print(dt("Error in position sync for $term->name (tid: $term->tid). Response: " . $response['message']));
+      drush_print(dt("Error in position sync for @name (tid: @tid). Response: @message", [
+        '@name' => $term->name,
+        '@tid' => $term->tid,
+        '@message' => $response['message'],
+      ]));
       continue;
     }
 
     // Start product position sync for this category.
-    drush_print(dt("Product position sync for $term->name (tid: $term->tid) in progress..."));
+    drush_print(dt("Product position sync for @name (tid: @tid) in progress...", [
+      '@name' => $term->name,
+      '@tid' => $term->tid,
+    ]));
 
     // Delete existing records of position for this category.
     $database->delete('alshaya_acm_product_position')
