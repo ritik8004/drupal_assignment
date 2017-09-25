@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Installation and update functions for Alshaya ACM Product Position.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function alshaya_acm_product_position_schema() {
+  $schema['alshaya_acm_product_position'] = [
+    'description' => 'Stores product position.',
+    'fields' => [
+      'nid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Product nid.',
+      ],
+      'tid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Product category tid.',
+      ],
+      'position' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Product position.',
+      ],
+      'position_type' => [
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'description' => 'Type of position',
+      ],
+    ],
+    'indexes' => [
+      'indexing' => ['nid', 'tid', 'position_type'],
+    ],
+    'primary key' => ['nid', 'tid', 'position_type'],
+  ];
+  return $schema;
+}
