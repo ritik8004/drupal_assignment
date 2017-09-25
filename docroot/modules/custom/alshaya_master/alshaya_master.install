@@ -25,6 +25,7 @@ function alshaya_master_install() {
     ],
     'Create new account' => [
       'en' => 'Create an account',
+      'ar' => 'انشاء حساب جديد',
     ],
     'E-mail' => [
       'en' => 'Email address',
