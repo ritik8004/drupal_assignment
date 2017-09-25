@@ -65,5 +65,4 @@ function alshaya_transac_install() {
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_transac', $modules);
-
 }
