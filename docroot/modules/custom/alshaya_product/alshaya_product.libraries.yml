@@ -1,0 +1,5 @@
+alshaya_product:
+  js:
+    js/alshaya_product.js: {}
+  dependencies:
+    - core/jquery
