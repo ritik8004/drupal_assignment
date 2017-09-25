@@ -317,7 +317,7 @@ function alshaya_loyalty_add_privilege_card_fields(&$form, FormStateInterface $f
     '#type' => '#markup',
     '#weight' => 3,
     '#after_build' => ['alshaya_loyalty_privilege_card_wrapper_after_build'],
-    '#prefix' => '<div id="details-privilege-card-wrapper">',
+    '#prefix' => '<div id="details-privilege-card-wrapper"><div class="card__header">' . t('Enter PRIVILEGES CLUB card number') . '</div>',
     '#suffix' => '</div>',
   ];
 
@@ -494,17 +494,6 @@ function alshaya_loyalty_alshaya_acm_customer_update_account_alter(User $user, a
   // Update privilege card number if available in customer data.
   if (isset($customer['extension'], $customer['extension']['loyalty_card_number'])) {
     $user->get('field_privilege_card_number')->setValue($customer['extension']['loyalty_card_number']);
-
-    /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-    $cart_storage = \Drupal::service('acq_cart.cart_storage');
-
-    // Copy loyalty from customer to cart if not available in cart.
-    if ($cart = $cart_storage->getCart(FALSE)) {
-      if (empty($cart->getExtension('loyalty_card'))) {
-        $cart->setExtension('loyalty_card', $customer['extension']['loyalty_card_number']);
-        $cart_storage->updateCart();
-      }
-    }
   }
 }
 

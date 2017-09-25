@@ -1,0 +1,61 @@
+@import '../../../../sass/config/**/*.scss';
+
+.paragraph-t-1-row-1st-col-2-row-2nd-col {
+  @include u-clearfix;
+
+  .field__wrapper {
+    @include breakpoint($upto-palm) {
+      margin-top: 0.75rem;
+    }
+  }
+
+  & > .field__wrapper {
+    @include breakpoint($above-palm) {
+      float: direction(left);
+    }
+
+    @include breakpoint($lap) {
+      width: 48.33%;
+    }
+
+    @include breakpoint($desk) {
+      width: 48.83%;
+    }
+
+    &:first-child {
+      @include breakpoint($lap) {
+        margin-#{right}: 1.666%;
+      }
+
+      @include breakpoint($desk) {
+        margin-#{right}: 1.169%;
+      }
+    }
+
+    &:last-child {
+      @include breakpoint($lap) {
+        margin-#{left}: 1.666%;
+      }
+
+      @include breakpoint($desk) {
+        margin-#{left}: 1.169%;
+      }
+    }
+  }
+
+  .field__item {
+    @include breakpoint($upto-palm) {
+      margin-bottom: 0.75rem;
+    }
+
+    &:first-child {
+      @include breakpoint($lap) {
+        margin-bottom: 1.125rem;
+      }
+
+      @include breakpoint($desk) {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}

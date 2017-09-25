@@ -1,0 +1,4 @@
+content: '© Victoria Secret. All Rights Reserved'
+attributes:
+  Attribute():
+    class: 'block-copyright'

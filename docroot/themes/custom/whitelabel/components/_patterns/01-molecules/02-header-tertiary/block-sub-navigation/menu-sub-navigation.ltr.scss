@@ -1,0 +1,45 @@
+@import '../../../../sass/config/**/*.scss';
+
+.navigation__sub-menu {
+  margin: 0;
+  padding-#{direction(left)}: 0;
+  text-transform: uppercase;
+
+  @include breakpoint($upto-palm) {
+    margin-top: 0.4375rem;
+  }
+
+  li {
+    display: inline-block;
+  }
+
+  a {
+    color: $brownish-grey;
+    display: block;
+    font-size: 0.875rem;
+    margin-#{direction(right)}: 0.2rem;
+    text-decoration: none;
+    padding: 0.7rem 1.2rem;
+    letter-spacing: 2px;
+    border-bottom: 2px solid transparent;
+
+    @include breakpoint($lap) {
+      margin-#{direction(right)}: 0.5rem;
+      padding: 0.625rem 1rem;
+    }
+
+    &:hover,
+    &.is-active {
+      border-color: $medium-pink;
+    }
+  }
+}
+
+.page-store-finder,
+.page-home {
+  .navigation__sub-menu {
+    @include breakpoint($above-palm) {
+      border-bottom: 1px solid $greyish-light;
+    }
+  }
+}

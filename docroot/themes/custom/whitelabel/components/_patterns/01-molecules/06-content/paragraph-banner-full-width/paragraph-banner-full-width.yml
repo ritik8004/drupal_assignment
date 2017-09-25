@@ -1,0 +1,15 @@
+content: '<div data-quickedit-entity-id="paragraph/9" class="paragraph-t-banner-full-width paragraph-vm-default" data-quickedit-entity-instance-id="0">
+            <div data-quickedit-field-id="paragraph/9/field_banner/en/default" class="field__wrapper">    <picture>
+              <!--[if IE 9]><video style="display: none;"><![endif]-->
+                <source srcset="/sites/g/files/non-transac/styles/1284x424/public/1920-x-424-heros-com-site-01%403x_1_0.jpg?itok=jFO7HoVy 1x" media="all and (min-width: 64.0625rem)" type="image/jpeg">
+                <source srcset="/sites/g/files/non-transac/styles/768x254/public/1920-x-424-heros-com-site-01%403x_1_0.jpg?itok=7Jp1O-er 1x" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/jpeg">
+                <source srcset="/sites/g/files/non-transac/styles/320x168/public/1920-x-424-heros-com-site-01%403x_1_0.jpg?itok=fqImx_Oe 1x" media="all and (max-width: 47.9375rem)" type="image/jpeg">
+              <!--[if IE 9]></video><![endif]-->
+              <img src="/sites/g/files/non-transac/styles/320x168/public/1920-x-424-heros-com-site-01%403x_1_0.jpg?itok=fqImx_Oe" alt="k" typeof="foaf:Image">
+              </picture>
+            </div>
+          </div>'
+attributes:
+  Attribute():
+    class:
+    - 'region-content'

@@ -1,0 +1,4 @@
+alshaya_stores_migrate.upload:
+  route_name: alshaya_stores_migrate.upload
+  title: 'Migrate stores'
+  base_route: alshaya_stores_migrate.upload

@@ -25,6 +25,7 @@ function alshaya_master_install() {
     ],
     'Create new account' => [
       'en' => 'Create an account',
+      'ar' => 'انشاء حساب جديد',
     ],
     'E-mail' => [
       'en' => 'Email address',
@@ -477,6 +478,9 @@ function alshaya_master_install() {
     ],
     'Add a promo code' => [
       'ar' => 'هل لديك رمز عرض ؟',
+    ],
+    'Enter PRIVILEGES CLUB card number' => [
+      'ar' => 'أدخل رقم بطاقة نادي الامتيازات',
     ],
     'Have a PRIVILEGES CLUB card?' => [
       'ar' => 'هل لديك بطاقة نادي الامتيازات؟',

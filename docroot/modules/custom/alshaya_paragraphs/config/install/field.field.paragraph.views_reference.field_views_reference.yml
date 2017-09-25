@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_views_reference
+    - paragraphs.paragraphs_type.views_reference
+  module:
+    - viewsreference
+id: paragraph.views_reference.field_views_reference
+field_name: field_views_reference
+entity_type: paragraph
+bundle: views_reference
+label: 'views reference'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  plugin_types:
+    block: block
+  preselect_views: {  }
+  handler: 'default:view'
+  handler_settings: {  }
+field_type: viewsreference

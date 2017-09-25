@@ -1,0 +1,15 @@
+content: '<div data-quickedit-entity-id="paragraph/10" class="paragraph-t-banner paragraph-vm-1026x288" data-quickedit-entity-instance-id="0">
+            <div data-quickedit-field-id="paragraph/10/field_banner/en/1026x288" class="field__wrapper">    <picture>
+                <!--[if IE 9]><video style="display: none;"><![endif]-->
+                  <source srcset="/sites/g/files/non-transac/styles/1284x424/public/1920-x-424-heros-com-site-01%403x_1_1.jpg?itok=rHd-Dgbf 1x" media="all and (min-width: 64.0625rem)" type="image/jpeg">
+                  <source srcset="/sites/g/files/non-transac/styles/768x254/public/1920-x-424-heros-com-site-01%403x_1_1.jpg?itok=TNRQFDyg 1x" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/jpeg">
+                  <source srcset="/sites/g/files/non-transac/styles/320x168/public/1920-x-424-heros-com-site-01%403x_1_1.jpg?itok=zGYRMNMn 1x" media="all and (max-width: 47.9375rem)" type="image/jpeg">
+                <!--[if IE 9]></video><![endif]-->
+              <img src="/sites/g/files/non-transac/styles/320x168/public/1920-x-424-heros-com-site-01%403x_1_1.jpg?itok=zGYRMNMn" alt="s" typeof="foaf:Image">
+              </picture>
+            </div>
+          </div>'
+attributes:
+  Attribute():
+    class:
+    - 'region-content'

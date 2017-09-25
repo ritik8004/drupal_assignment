@@ -1,0 +1,31 @@
+label: 'Join the Club'
+content: '<div class="block-join-the-club__image-wrapper">
+            <img class="block-join-the-club__image" src="/modules/custom/alshaya_user/images/alshaya-priv-card.png" alt="Join the club" title="Join the club" typeof="foaf:Image">
+          </div>
+          <div class="block-join-the-club__title-wrapper">
+              <h2 class="block-join-the-club__title">Join the club</h2>
+              <p class="block-join-the-club__title-link">
+                <a class="final-pc-learn-more" href="http://hyperurl.co/PRIVILEGES" target="_blank">Learn more</a>
+              </p>
+          </div>
+          <div class="block-join-the-club__list">
+            <p>
+              <span class="icon-prize"></span>
+              Win exciting prizes
+            </p>
+            <p>
+              <span class="icon-rewards"></span>
+              Unlock exclusive rewards
+            </p>
+            <p>
+              <span class="icon-newsletter"></span>
+              Be the first to know
+            </p>
+            <a class="block-join-the-club__list-link" href="http://hyperurl.co/PRIVILEGES" target="_blank">Learn more</a>
+          </div>'
+attributes:
+  Attribute():
+    class: 'block-join-the-club'
+title_attributes:
+  Attribute():
+    class: 'is-hidden'
