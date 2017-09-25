@@ -1,0 +1,5 @@
+dependencies:
+  config:
+    - field.field.node.acq_promotion.field_alshaya_promotion_subtype
+hidden:
+  field_alshaya_promotion_subtype: true
