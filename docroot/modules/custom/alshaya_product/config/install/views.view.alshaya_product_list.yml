@@ -382,7 +382,7 @@ display:
           group_type: group
           admin_label: ''
           operator: '='
-          value: true
+          value: '1'
           group: 1
           exposed: false
           expose:
@@ -554,12 +554,12 @@ display:
           field: nid
           relationship: none
           group_type: group
-          admin_label: 'Best Seller'
+          admin_label: Position
           order: ASC
           exposed: true
           expose:
-            label: 'Best Seller'
-          plugin_id: alshaya_product_rank_sort
+            label: Position
+          plugin_id: alshaya_product_position_sort
         name_1:
           id: name_1
           table: search_api_index_product
