@@ -89,7 +89,7 @@
 <tr>
 	<td>select</td>
 	<td>id=edit-field-product-label</td>
-	<td>Hot</td>
+	<td>NEW</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -189,7 +189,7 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title-0-value</td>
-	<td>NEW! Lace High-neck Babydoll</td>
+	<td>Lace High-neck Babydoll</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -229,7 +229,7 @@
 <tr>
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-entity-name-0-value&quot;)]</td>
-	<td>NEW! Lace High-neck Babydoll</td>
+	<td>Lace High-neck Babydoll</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -244,7 +244,7 @@
 <tr>
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-field-product-image-current&quot;)]</td>
-	<td>NEW! Lace High-neck Babydoll</td>
+	<td>Lace High-neck Babydoll</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -274,7 +274,7 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title-0-value</td>
-	<td>NEW! Crushed Velvet Thong Panty</td>
+	<td>Crushed Velvet Thong Panty</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -314,7 +314,8 @@
 <tr>
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-entity-name-0-value&quot;)]</td>
-	<td>NEW! Crushed Velvet Thong Panty</td>
+	<td>Crushed Velvet Thong Panty</td>
+	<td>Crushed Velvet Thong Panty</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -329,7 +330,7 @@
 <tr>
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-field-product-image-current&quot;)]</td>
-	<td>NEW! Crushed Velvet Thong Panty</td>
+	<td>Crushed Velvet Thong Panty</td>
 </tr>
 <tr>
 	<td>select</td>
