@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_paragraphs.
+ */
+
+/**
+ * Implements hook_update_n().
+ */
+function alshaya_paragraphs_update_8301() {
+
+  $configs = [
+    'paragraphs.paragraphs_type.image_title_subtitle',
+    'field.field.paragraph.image_title_subtitle.field_banner',
+    'field.field.paragraph.image_title_subtitle.field_sub_title',
+    'field.field.paragraph.image_title_subtitle.field_title',
+    'core.entity_form_display.paragraph.image_title_subtitle.default',
+    'core.entity_view_display.paragraph.image_title_subtitle.default',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+  ];
+
+  foreach ($configs as $config) {
+    $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_paragraphs') . '/config/install/' . $config . '.yml'));
+    \Drupal::configFactory()
+      ->getEditable($config)
+      ->setData($config_yaml)
+      ->save();
+  }
+}
