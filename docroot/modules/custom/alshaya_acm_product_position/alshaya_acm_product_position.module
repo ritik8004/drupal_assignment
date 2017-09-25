@@ -43,7 +43,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
 
     if ($tid) {
       $order = QueryInterface::SORT_ASC;
-      $position_type = 'best_seller';
+      $position_type = 'position';
       $db_query->leftJoin('alshaya_acm_product_position', 'alshaya_acm_product_position', "(t.nid = alshaya_acm_product_position.nid AND alshaya_acm_product_position.tid = :tid AND alshaya_acm_product_position.position_type = :position_type)", [':tid' => $tid, ':position_type' => $position_type]);
       // If no position found for product, set the default position.
       $db_query->addExpression('IFNULL(alshaya_acm_product_position.position, 99999999)', 'no_position');
