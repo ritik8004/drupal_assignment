@@ -16,6 +16,7 @@
 
   @include breakpoint($lap) {
     width: 64.583%;
+    padding-#{direction(left)}: 6%;
   }
 
   @include breakpoint($desk) {
@@ -43,7 +44,7 @@
   }
 
   @include breakpoint($upto-lap) {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.4rem;
   }
 
   @include breakpoint($lap) {
@@ -53,11 +54,11 @@
   }
 
   @include breakpoint($desk) {
-    padding-#{direction(right)}: 5.714%;
-    width: 39.591%;
+    padding-#{direction(right)}: 6.714%;
+    width: 41.591%;
     text-align: direction(right);
     border-#{direction(right)}: 1px solid $greyish-lighter;
-    margin-top: 3.5rem;
+    margin-top: 1.9rem;
   }
 }
 
@@ -80,6 +81,7 @@
   @include breakpoint($desk) {
     margin-top: 0.5rem;
     margin-bottom: 0;
+    margin-#{direction(right)}: 2.1875rem;
     display: block;
   }
 
@@ -109,14 +111,22 @@
   }
 
   @include breakpoint($desk) {
-    padding-#{direction(left)}: 5.714%;
-    width: 31.836%;
+    padding-#{direction(left)}: 4.714%;
+    width: 29.836%;
     margin-top: 1.2rem;
   }
 
   p {
     margin-top: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
+
+    @include breakpoint($lap) {
+      margin-bottom: 0.5rem;
+    }
+
+    @include breakpoint($desk) {
+      margin-bottom: 0;
+    }
   }
 
   span {
@@ -139,6 +149,8 @@
 
   @include breakpoint($lap) {
     font-weight: normal;
+    padding-top: 0.375rem;
+    display: block;
   }
 
   @include breakpoint($desk) {
