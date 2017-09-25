@@ -18,7 +18,7 @@
       });
     }
 
-    var inputsWithLabel = $('.input-textual__container input');
+    var inputsWithLabel = $('.input--textual__container input');
     inputsWithLabel.each(function (_, el) {
       checkIfEmpty(el);
       checkBlur(el);
