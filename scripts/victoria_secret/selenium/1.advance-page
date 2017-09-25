@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/en/admin/content</td>
+	<td>https://victoria1.dev2-alshaya.acsitefactory.com/en/admin/content</td>
 	<td></td>
 </tr>
 <tr>
@@ -256,7 +256,6 @@
 	<td>id=edit-submit</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

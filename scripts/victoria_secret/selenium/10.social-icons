@@ -3,17 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="https://victoria1.dev2-alshaya.acsitefactory.com/en" />
-<title>footer-menus</title>
+<link rel="selenium.base" href="https://victoria1.qa2-alshaya.acsitefactory.com/en/" />
+<title>social-icons</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">footer-menus</td></tr>
+<tr><td rowspan="1" colspan="3">social-icons</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>https://victoria1.dev2-alshaya.acsitefactory.com/en/admin/structure/menu/manage/footer</td>
+	<td>/en</td>
 	<td></td>
 </tr>
 <tr>
@@ -28,7 +28,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>xpath=(//a[contains(text(),'Edit menu')])[4]</td>
+	<td>xpath=(//a[contains(text(),'Edit menu')])[8]</td>
 	<td></td>
 </tr>
 <tr>
@@ -39,12 +39,22 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title-0-value</td>
-	<td>Privacy</td>
+	<td>Facebook</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
-	<td>&lt;front&gt;</td>
+	<td>http://www.facebook.com</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=summary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-attributes-class</td>
+	<td>icon-facebook</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -59,16 +69,31 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title-0-value</td>
-	<td>Terms &amp; Conditions</td>
+	<td>Instagram</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
-	<td>&lt;front&gt;</td>
+	<td>http://www/instagram.com</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=summary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-attributes-class</td>
+	<td>icon-instagram</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>id=edit-submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Back to site</td>
 	<td></td>
 </tr>
 </tbody></table>
