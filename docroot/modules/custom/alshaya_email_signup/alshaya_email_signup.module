@@ -12,6 +12,6 @@ use Drupal\Core\Form\FormStateInterface;
  */
 function alshaya_email_signup_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'webform_submission_alshaya_email_signup_form') {
-    $form['exclusive_deals']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
+    $form['elements']['exclusive_deals']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
   }
 }
