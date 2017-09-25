@@ -247,3 +247,19 @@ block-stay-in-the-know:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/block-stay-in-the-know/block-stay-in-the-know.ltr.css: {}
+
+form-element-textual:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/07-forms/form-element-textual/form-element-textual.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/07-forms/form-element-textual/form-element-textual.js: {}
+
+form-input-password:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/07-forms/input-password/input-password.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/07-forms/input-password/input-password.js: {}
