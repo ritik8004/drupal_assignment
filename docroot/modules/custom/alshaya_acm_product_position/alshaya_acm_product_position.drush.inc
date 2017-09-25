@@ -20,7 +20,7 @@ function alshaya_acm_product_position_drush_command() {
       'position_type' => 'Name of the position type.',
     ],
     'examples' => [
-      'drush aaprs' => 'Sync product position based on category, by default "best_seller".',
+      'drush aaprs' => 'Sync product position based on category, by default "position".',
       'drush aaprs myargument' => 'Sync product position based on category, by "myargument".',
     ],
   ];
@@ -31,7 +31,7 @@ function alshaya_acm_product_position_drush_command() {
 /**
  * Sync product position based on category.
  */
-function drush_alshaya_acm_product_position_position_sync($position_type = 'best_seller') {
+function drush_alshaya_acm_product_position_position_sync($position_type = 'position') {
   drush_print(dt('Product position sync in progress...'));
   // Get root category configuration.
   $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
