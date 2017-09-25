@@ -4,6 +4,7 @@ dependencies:
   config:
     - search_api.index.product
   module:
+    - alshaya_acm_product_position
     - alshaya_product
     - better_exposed_filters
     - search_api
@@ -60,7 +61,7 @@ display:
                 collapsible: false
                 collapsible_label: 'Sort options'
                 combine: true
-                combine_rewrite: "Name Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
+                combine_rewrite: "Position Asc| Position\nName Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
                 reset: false
                 reset_label: ''
                 is_secondary: false
@@ -381,7 +382,7 @@ display:
           group_type: group
           admin_label: ''
           operator: '='
-          value: true
+          value: '1'
           group: 1
           exposed: false
           expose:
@@ -544,7 +545,45 @@ display:
         options: {  }
       defaults:
         cache: false
+        sorts: false
       exposed_block: true
+      sorts:
+        nid:
+          id: nid
+          table: search_api_index_product
+          field: nid
+          relationship: none
+          group_type: group
+          admin_label: Position
+          order: ASC
+          exposed: true
+          expose:
+            label: Position
+          plugin_id: alshaya_product_position_sort
+        name_1:
+          id: name_1
+          table: search_api_index_product
+          field: name_1
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: true
+          expose:
+            label: Name
+          plugin_id: search_api
+        final_price:
+          id: final_price
+          table: search_api_index_product
+          field: final_price
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: true
+          expose:
+            label: Price
+          plugin_id: search_api
     cache_metadata:
       max-age: -1
       contexts:

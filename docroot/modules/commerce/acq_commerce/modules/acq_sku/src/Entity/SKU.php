@@ -116,6 +116,18 @@ class SKU extends ContentEntityBase implements SKUInterface {
       // second array index and why all media come in first array index.
       $media_data = reset($media_data_full);
 
+      // Sort media data by position.
+      usort($media_data, function ($a, $b) {
+        $position1 = (int) $a['position'];
+        $position2 = (int) $b['position'];
+
+        if ($position1 == $position2) {
+          return 0;
+        }
+
+        return ($position1 < $position2) ? -1 : 1;
+      });
+
       foreach ($media_data as &$data) {
         if ($data['media_type'] == 'image') {
           if (empty($data['fid'])) {
@@ -137,7 +149,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           }
         }
 
-        $this->mediaData[$data['position']] = $data;
+        $this->mediaData[] = $data;
       }
 
       if ($update_sku) {
@@ -148,9 +160,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $this->save();
       }
     }
-
-    // Sort them by position again to ensure it works everytime.
-    ksort($this->mediaData);
 
     return $this->mediaData;
   }

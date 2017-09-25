@@ -233,6 +233,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
   if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
+    $cc_config = \Drupal::config('alshaya_click_collect.settings');
+
     $orderDetails['type'] = 'cc';
 
     $orderDetails['delivery_method'] = $shippingTerm->getName();
@@ -240,8 +242,12 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $shipping_assignment = reset($order['extension']['shipping_assignments']);
     $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
 
+    $cc_type = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
+
     /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
     $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+
+    $orderDetails['view_on_map_link'] = '';
 
     // Getting store node object from store code.
     if ($store_node = $store_utility->getTranslatedStoreFromCode($store_code)) {
@@ -249,13 +255,19 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['store_address'] = $store_node->get('field_store_address')->getString();
       $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
       $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
-    }
 
-    $orderDetails['view_on_map_link'] = '';
-    if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
-      $lat = $lat_lng[0]['lat'];
-      $lng = $lat_lng[0]['lng'];
-      $orderDetails['view_on_map_link'] = 'http://maps.google.com/?q=' . $lat . ',' . $lng;
+      if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
+        $lat = $lat_lng[0]['lat'];
+        $lng = $lat_lng[0]['lng'];
+        $orderDetails['view_on_map_link'] = 'http://maps.google.com/?q=' . $lat . ',' . $lng;
+      }
+
+      $cc_text = ($cc_type == 'reserve_and_collect') ? $cc_config->get('click_collect_rnc') : $store_node->get('field_store_sts_label')->getString();
+
+      $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
+        '@shipping_method_name' => $shippingTerm->getName(),
+        '@shipping_method_description' => $cc_text,
+      ]);
     }
   }
   else {

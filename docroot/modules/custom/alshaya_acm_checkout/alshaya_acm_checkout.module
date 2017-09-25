@@ -299,6 +299,12 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
  *   Order array if found.
  */
 function _alshaya_acm_checkout_get_last_order_from_session() {
+  static $order;
+
+  if (!empty($order)) {
+    return $order;
+  }
+
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
   $session = \Drupal::request()->getSession();
@@ -329,7 +335,9 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
     throw new NotFoundHttpException();
   }
 
-  return $orders[$order_index];
+  $order = $orders[$order_index];
+
+  return $order;
 }
 
 /**

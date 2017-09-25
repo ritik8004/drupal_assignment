@@ -34,6 +34,7 @@
 
         // Id of the row.
         var elementID = $(this).find('.set-center-location').attr('id');
+        var store_counter = $(this).find('.store-row--counter').text();
         Drupal.geolocation.loadGoogle(function () {
           var geolocationMap = {};
 
@@ -44,6 +45,7 @@
               }
             });
           }
+
           if (typeof geolocationMap.googleMap !== 'undefined') {
             var currentLat = parseFloat($('#' + elementID + ' .lat-lng .lat').html()).toFixed(6);
             var currentLng = parseFloat($('#' + elementID + ' .lat-lng .lng').html()).toFixed(6);
@@ -53,10 +55,13 @@
 
             // Clicking the markup.
             var markers = geolocationMap.mapMarkers;
+
             var current_marker = {};
             for (var i = 0, len = markers.length; i < len; i++) {
               // If markup has same latitude and longitude that we clicked.
-              if (markers[i].position.lat().toFixed(6) === currentLat && markers[i].position.lng().toFixed(6) === currentLng) {
+              var matchposition = (markers[i].position.lat().toFixed(6) === currentLat && markers[i].position.lng().toFixed(6) === currentLng);
+              var matchlabel = (store_counter == markers[i].label);
+              if (matchposition || matchlabel) {
                 current_marker = markers[i];
                 break;
               }
