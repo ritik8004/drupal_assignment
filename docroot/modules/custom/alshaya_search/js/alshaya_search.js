@@ -183,15 +183,29 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       // Convert the list to slider.
       $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
         var gallery = $(this);
-        $(this, context).lightSlider({
-          vertical: false,
-          item: 4,
-          slideMargin: 5,
-          onSliderLoad: function() {
-            gallery.closest('.alshaya_search_slider').hide();
-            gallery.css('height', '73px');
-          }
-        });
+        if (isRTL()) {
+          $(this, context).lightSlider({
+            vertical: false,
+            item: 4,
+            rtl: true,
+            slideMargin: 5,
+            onSliderLoad: function() {
+              gallery.closest('.alshaya_search_slider').hide();
+              gallery.css('height', '73px');
+            }
+          });
+        }
+        else {
+          $(this, context).lightSlider({
+            vertical: false,
+            item: 4,
+            slideMargin: 5,
+            onSliderLoad: function() {
+              gallery.closest('.alshaya_search_slider').hide();
+              gallery.css('height', '73px');
+            }
+          });
+        }
       });
 
       // Show/Hide the slider on Mouse hover.
