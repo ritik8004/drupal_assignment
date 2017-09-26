@@ -2,7 +2,7 @@
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on a configurable product
+    Given I am on a simple product page
     When I wait for the page to load
     When I press "add to basket"
     And I wait for AJAX to finish
@@ -29,7 +29,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
 
   @hd @knet
   Scenario:  As a returning customer
@@ -54,7 +54,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
 
   @hd @cs
   Scenario: As a returning customer
@@ -73,7 +73,7 @@ Feature: Test various checkout scenarios as returning customer
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
 
   @cc @knet
   Scenario: As a returning customer
@@ -110,7 +110,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
 
   @cc @cs
   Scenario: As a returning customer
@@ -142,4 +142,4 @@ Feature: Test various checkout scenarios as returning customer
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"

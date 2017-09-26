@@ -141,6 +141,11 @@ class ProductSyncResource extends ResourceBase {
     foreach ($products as $product) {
       $langcode = acq_commerce_get_langcode_from_store_id($product['store_id']);
 
+      // Magento might have stores that what we don't support.
+      if (empty($langcode)) {
+        continue;
+      }
+
       if ($debug && !empty($debug_dir)) {
         // Export product data into file.
         if (!isset($fps) || !isset($fps[$langcode])) {
