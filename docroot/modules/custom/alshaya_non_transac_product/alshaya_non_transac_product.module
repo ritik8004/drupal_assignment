@@ -18,41 +18,37 @@ function alshaya_non_transac_product_node_view_alter(array &$build, EntityInterf
     $sharethis_manager = \Drupal::service('sharethis.manager');
     $sharethis_settings = \Drupal::config('sharethis.settings');
     // Display sharethis for search result.
-    switch ($build['#view_mode']) {
-      case 'search_result':
-        // First get all of the options for the sharethis widget from the
-        // database:
-        $data_options = $sharethis_manager->getOptions();
+    if ($build['#view_mode'] == 'search_result') {
+      // First get all of the options for the sharethis widget from the
+      // database:
+      $data_options = $sharethis_manager->getOptions();
 
-        // Get the full path to insert into the Share Buttons.
-        $path = $node->toUrl()->setAbsolute()->toString();
-        $title = $node->getTitle();
-        // Check where we want to display the ShareThis widget.
-        switch ($sharethis_settings->get('location')) {
-          case 'content':
-            $enabled_types = $data_options['node_types'];
-            if (isset($enabled_types[$node->bundle()]) && $enabled_types[$node->bundle()] === $node->bundle() && $display->getcomponent('sharethis')) {
-              $st_js = $sharethis_manager->sharethisIncludeJs();
-              $content = $sharethis_manager->renderSpans($data_options, $title, $path);
-              $build['sharethis'] = [
-                '#theme' => 'sharethis_block',
-                '#content' => $content,
-                '#attached' => [
-                  'library' => [
-                    'sharethis/sharethispickerexternalbuttonsws',
-                    'sharethis/sharethispickerexternalbuttons',
-                    'sharethis/sharethis',
-                  ],
-                  'drupalSettings' => [
-                    'sharethis' => $st_js,
-                  ],
-                ],
-                '#weight' => $sharethis_settings->get('weight'),
-              ];
-            }
-            break;
+      // Get the full path to insert into the Share Buttons.
+      $path = $node->toUrl()->setAbsolute()->toString();
+      $title = $node->getTitle();
+      // Check where we want to display the ShareThis widget.
+      if ($sharethis_settings->get('location') == 'content') {
+        $enabled_types = $data_options['node_types'];
+        if (isset($enabled_types['product']) && $enabled_types['product'] === $node->bundle() && $display->getcomponent('sharethis')) {
+          $st_js = $sharethis_manager->sharethisIncludeJs();
+          $content = $sharethis_manager->renderSpans($data_options, $title, $path);
+          $build['sharethis'] = [
+            '#theme' => 'sharethis_block',
+            '#content' => $content,
+            '#attached' => [
+              'library' => [
+                'sharethis/sharethispickerexternalbuttonsws',
+                'sharethis/sharethispickerexternalbuttons',
+                'sharethis/sharethis',
+              ],
+              'drupalSettings' => [
+                'sharethis' => $st_js,
+              ],
+            ],
+            '#weight' => $sharethis_settings->get('weight'),
+          ];
         }
-        break;
+      }
     }
   }
 }
