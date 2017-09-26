@@ -24,7 +24,13 @@ jQuery.fn.select2Option = function (options) {
         var liHtml = $('<li></li>');
         if (selectIndex === 0) {
           liHtml.hide();
-          labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+          var defaultTitle = $(this).parent().attr('data-default-title');
+          if (typeof defaultTitle !== typeof undefined && defaultTitle !== false) {
+            labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+          }
+          else {
+            labeltext = '<h4 class="list-title"><span>' +  $(this).text()  + ' : <span></h4>';
+          }
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
           liHtml.addClass('disabled');
