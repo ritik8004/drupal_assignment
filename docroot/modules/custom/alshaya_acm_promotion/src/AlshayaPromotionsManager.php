@@ -17,6 +17,26 @@ use Drupal\node\Entity\Node;
 class AlshayaPromotionsManager {
 
   /**
+   * Denotes the fixed_percentage_discount_order promotion subtype.
+   */
+  const SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER = 'fixed_percentage_discount_order';
+
+  /**
+   * Denotes the fixed_amount_discount_order promotion subtype.
+   */
+  const SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER = 'fixed_amount_discount_order';
+
+  /**
+   * Denotes the free_shipping_order promotion subtype.
+   */
+  const SUBTYPE_FREE_SHIPPING_ORDER = 'free_shipping_order';
+
+  /**
+   * Denotes other promotion subtype.
+   */
+  const SUBTYPE_OTHER = 'other';
+
+  /**
    * Entity Manager service.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
@@ -103,6 +123,40 @@ class AlshayaPromotionsManager {
     }
 
     return $nodes;
+  }
+
+  /**
+   * Helper function to fetch promotion SubType.
+   *
+   * @param array $promotion
+   *   The promotion array.
+   *
+   * @return string
+   *   String containing the type of promotion.
+   */
+  public function getSubType(array $promotion) {
+    if (empty($promotion)) {
+      return '';
+    }
+
+    if (
+      (!isset($promotion['product_discounts']) || empty($promotion['product_discounts'])) &&
+      (!isset($promotion['action_condition']['conditions']) || empty($promotion['action_condition']['conditions'])) &&
+      (isset($promotion['condition']['conditions'][0]['attribute_name']) && $promotion['condition']['conditions'][0]['attribute_name'] == 'base_subtotal')
+    ) {
+      if (!$promotion['apply_to_shipping']) {
+        if ($promotion['simple_action'] == 'by_percent') {
+          return self::SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER;
+        }
+        elseif ($promotion['simple_action'] == 'cart_fixed') {
+          return self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER;
+        }
+      }
+      elseif (isset($promotion['simple_free_shipping']) && $promotion['simple_free_shipping'] == 2) {
+        return self::SUBTYPE_FREE_SHIPPING_ORDER;
+      }
+    }
+    return self::SUBTYPE_OTHER;
   }
 
 }
