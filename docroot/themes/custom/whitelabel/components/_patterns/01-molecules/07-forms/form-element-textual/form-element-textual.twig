@@ -11,10 +11,13 @@
   {% endif %}
 
   {% if not is_checkbox %}
-    <div class="input--textual__container">
-      <div class="input--inner__container">
+
+    <div class="{{ is_default_form ? "input__container" : "input--textual__container" }}">
+      <div class="input__inner-container">
         {{ children }}
-        <div class="input__line"></div>
+        {% if not is_default_form %}
+          <div class="input__line"></div>
+        {% endif %}
         {% if label_display in ['before', 'invisible'] %}
           <span class="input__label">
             {{ label }}
