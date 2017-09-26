@@ -63,8 +63,9 @@
         "drupal/migrate_tools": "^2.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "drupal/viewsreference": "^1.0",
-        "drupal/machine_name_widget": "^1.0",
-        "drupal/autologout": "^1.0"
+        "drupal/autologout": "^1.0",
+        "drupal/block_content_machine_name": "^1.0",
+        "drupal/menu_link_modal": "^1.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
