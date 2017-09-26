@@ -1,0 +1,7 @@
+rows:
+- content:
+    include():
+      pattern: 'molecules-node-product-item'
+  attributes:
+    Attribute():
+      class: 'view-product-list__item'
