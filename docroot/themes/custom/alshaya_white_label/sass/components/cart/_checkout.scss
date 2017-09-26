@@ -438,7 +438,7 @@
     .sub-total,
     .order-total {
       > span {
-        width: 54%;
+        width: 51%;
 
         @include breakpoint($upto-desktop) {
           width: 50%;
@@ -447,7 +447,7 @@
 
       .total--amount,
       .price-type__wrapper {
-        width: 44%;
+        width: 47%;
 
         @include breakpoint($upto-desktop) {
           width: 47%;
