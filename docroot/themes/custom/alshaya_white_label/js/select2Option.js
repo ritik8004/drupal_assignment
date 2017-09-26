@@ -29,7 +29,7 @@ jQuery.fn.select2Option = function (options) {
             labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
           }
           else {
-            labeltext = '<h4 class="list-title"><span>' +  $(this).text()  + ' : <span></h4>';
+            labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
           }
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
