@@ -28,6 +28,11 @@ libraries-override:
     js:
       js/infinite-scroll.js : components/dist/js/infinite-scroll.js
 
+  core/jquery.ui:
+    css:
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+
 component-libraries:
   atoms:
     paths:
@@ -45,5 +50,3 @@ component-libraries:
     paths:
       - components/_patterns/04-pages
 
-stylesheets-remove:
-  - core/assets/vendor/jquery.ui/themes/base/theme.css
