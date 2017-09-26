@@ -25,9 +25,17 @@ function alshaya_vs_install() {
   alshaya_i18n_save_translations($strings);
 
   \Drupal::moduleHandler()->loadInclude('alshaya_vs', 'inc', 'alshaya_vs.content');
+
   // Enable and set victoria_secret as default theme.
   \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
   \Drupal::service('theme_handler')->setDefault('victoria_secret');
+
+  // Force the copy of blocks placement from whitelabel_non_transac.
+  alshaya_block_copy_placement('victoria_secret', 'whitelabel_non_transac');
+
+  // Disable some default blocks provided by whitelabel_non_transac that we
+  // don't want on victoria_secret.
+  alshaya_block_delete_blocks(['victoria_secret_branding']);
 
   // Set default marker image for stores finder.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
