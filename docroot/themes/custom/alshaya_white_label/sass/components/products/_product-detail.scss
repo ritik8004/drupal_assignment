@@ -1406,6 +1406,12 @@
         line-height: 1;
 
         @include breakpoint($only-mobile) {
+          &.hide-button {
+            display: none;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
           .basic-details-wrapper & {
             float: none;
             position: fixed;
