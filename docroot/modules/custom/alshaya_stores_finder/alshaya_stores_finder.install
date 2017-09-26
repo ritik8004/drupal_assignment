@@ -11,7 +11,7 @@
 function alshaya_stores_finder_install() {
   // Set default google map api key.
   $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
-  $config->set('google_map_api_key', 'AIzaSyCb0Tia8JkZRYZMgEeAAlOsuJDnHoWUhh0');
+  $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
   $config->save();
 
   // Set default marker icon settings.
@@ -44,4 +44,15 @@ function alshaya_stores_finder_set_default_marker_icon() {
  */
 function alshaya_stores_finder_update_8001() {
   alshaya_stores_finder_set_default_marker_icon();
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Update the Google Map API Key.
+ */
+function alshaya_stores_finder_update_8002() {
+  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
+  $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
+  $config->save();
 }

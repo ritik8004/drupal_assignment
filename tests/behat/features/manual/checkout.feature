@@ -1,7 +1,7 @@
 @javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
 Feature: Test Checkout feature
   Background:
-    Given I am on a configurable product
+    Given I am on a simple product page
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -40,10 +40,11 @@ Feature: Test Checkout feature
     And I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    And I should see text matching "Your order number is "
 
   @hd @knet
   Scenario: As a Guest,
-    I should be able to checkout using KNET
+  I should be able to checkout using KNET
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
@@ -74,6 +75,7 @@ Feature: Test Checkout feature
     And I press "Confirm"
     And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma"
+    And I should see text matching "Your order number is "
 
   @cc @knet
   Scenario: As a Guest
@@ -114,10 +116,11 @@ Feature: Test Checkout feature
     And I press "Confirm"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    And I should see text matching "Your order number is "
 
   @knet
   Scenario: As a Guest
-    I should be displayed a valid message on cancelling a KNET transaction
+  I should be displayed a valid message on cancelling a KNET transaction
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
@@ -141,12 +144,13 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "Cancel"
     And I wait for the page to load
-    Then I should see text matching "Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance."
+    Then I should see text matching "Sorry, we are unable to process your payment. Please contact our customer service team for assistance."
+    And I should not see "Your order number is "
 
   @hd @knet
   Scenario: As a Guest
-    I should be able to checkout using HD - KNET
-    after adding both configurable and non-configurable product to the basket
+  I should be able to checkout using HD - KNET
+  after adding both configurable and non-configurable product to the basket
     When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
@@ -186,6 +190,7 @@ Feature: Test Checkout feature
     And I press "Confirm"
     And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma"
+    And I should see text matching "Your order number is "
 
   @cc @knet
   Scenario: As a Guest
@@ -235,13 +240,14 @@ Feature: Test Checkout feature
     And I press "Confirm"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    And I should see text matching "Your order number is "
 
 
   @cc
   Scenario: As a Guest
-    I should be able to view the number of results displayed
-    Buttons to toggle between list and Map view
-    and link to navigate to the basket
+  I should be able to view the number of results displayed
+  Buttons to toggle between list and Map view
+  and link to navigate to the basket
     And I should be able to see the header for checkout
     And I follow "Click & Collect"
     And I wait for AJAX to finish
@@ -255,8 +261,8 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-    I should be able to see the two tabs
-    on Click and Collect
+  I should be able to see the two tabs
+  on Click and Collect
     When I follow "Click & Collect"
     And I wait for the page to load
     Then I should see the link "List view"
@@ -265,8 +271,8 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-    I should be able to see various options
-    for each Store on Click & Collect
+  I should be able to see various options
+  for each Store on Click & Collect
     When I follow "Click & Collect"
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     When I wait for AJAX to finish
@@ -279,8 +285,8 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-    I should be navigated to basket page
-    On clicking 'back to basket' from checkout CC page
+  I should be navigated to basket page
+  On clicking 'back to basket' from checkout CC page
     When I follow "Click & Collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -292,9 +298,9 @@ Feature: Test Checkout feature
 
   @cc
   Scenario: As a Guest
-    I should be able to see the store timings
-    on clicking the Opening hours link and
-    link should toggle
+  I should be able to see the store timings
+  on clicking the Opening hours link and
+  link should toggle
     When I follow "Click & Collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -312,8 +318,8 @@ Feature: Test Checkout feature
 
   @hd @cs
   Scenario: As a Guest
-    I should be able to checkout on HD
-    using Cybersource payment method
+  I should be able to checkout on HD
+  using Cybersource payment method
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
     When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
@@ -337,6 +343,7 @@ Feature: Test Checkout feature
     And I press "place order"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    And I should see text matching "Your order number is "
 
   @cc @cs
   Scenario:  As a Guest
@@ -371,6 +378,7 @@ Feature: Test Checkout feature
     And I press "place order"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    And I should see text matching "Your order number is "
 
   @hd
   Scenario: As a Guest user
@@ -385,3 +393,93 @@ Feature: Test Checkout feature
     And I wait for the page to load
     Then the url should match "/cart"
     And I should see the button "checkout securely"
+
+  @knet
+  Scenario: As a Guest user
+  I should be prompted with validation message on entering incorrect KNET details
+  and I should be able to proceed with the transaction on entering correct details
+    When I follow "Home delivery"
+    And I wait for the page to load
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    And I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
+    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
+    And I press "deliver to this address"
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_knet"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    And I wait for the page to load
+    And I press "place order"
+    And I wait for the page to load
+    And I select "Knet Test Card [KNET1]" from "bank"
+    And I fill in "cardN" with "000000001"
+    And I select "1" from "Ecom_Payment_Card_ExpDate_Month"
+    And I select "2017" from "Ecom_Payment_Card_ExpDate_Year"
+    And I fill in "Ecom_Payment_Pin_id" with "1234"
+    And I press "Submit"
+    When I wait 5 seconds
+    Then I should see "Invalid data - Please check your"
+    And I should see "Card-Number(16 digits) & Pin(4 digits)"
+
+  @cc @cs
+  Scenario: As a Guest user
+  I should be able to search for a store on Map view
+  select it and complete the checkout journey
+    When I follow "Click & Collect"
+    And I wait for the page to load
+    When I follow "Map view"
+    Then the "Map view" tab should be selected
+    When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
+    And I wait for AJAX to finish
+    And I wait 10 seconds
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
+    And I wait for AJAX to finish
+    And I wait for the page to load
+    When I fill in "edit-cc-firstname" with "Shweta"
+    And I fill in "edit-cc-lastname" with "Sharma"
+    When I fill in "edit-cc-email" with "shweta@axelerant.com"
+    And I fill in "edit-cc-mobile-number-mobile" with "97004455"
+    And I select an element having class ".cc-action"
+    And I wait for AJAX to finish
+    When I select a payment option "payment_method_title_cybersource"
+    And I wait for AJAX to finish
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
+    When I fill in "edit-billing-address-address-billing-given-name" with "Shweta"
+    And I fill in "edit-billing-address-address-billing-family-name" with "Sharma"
+    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
+    And I fill in "edit-billing-address-address-billing-locality" with "Block A"
+    And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
+    And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
+    And I accept terms and conditions
+    And I press "place order"
+    When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+
+  @cc
+  Scenario: As a Guest user
+  whenever I click 'back to basket' link on Map view
+  I should be redirected to the basket page
+    When I follow "Click & Collect"
+    And I wait for the page to load
+    When I follow "Map view"
+    Then the "Map view" tab should be selected
+    When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
+    And I wait for AJAX to finish
+    And I wait 10 seconds
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
+    And I wait 2 seconds
+    Then I should see "Monday"
+    And I should see "Sunday"
+    When I follow "Back to basket"
+    Then I should see the button "checkout securely"
+    And the url should match "/cart"

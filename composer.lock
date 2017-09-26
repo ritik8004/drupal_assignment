@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "609cc56a2dc92abd347bb6bd9e04ca82",
+    "content-hash": "03b1f40349e5f25559a194a2a4e0718c",
     "packages": [
         {
             "name": "acquia/blt",
@@ -641,7 +641,7 @@
                 }
             ],
             "description": "Zone management library.",
-            "time": "2017-04-20T12:44:24+00:00"
+            "time": "2017-04-20 12:44:24"
         },
         {
             "name": "composer/installers",
@@ -2446,7 +2446,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-06-18T01:04:09+00:00"
+            "time": "2017-06-18 01:04:09"
         },
         {
             "name": "drupal/block_content_machine_name",
@@ -2707,7 +2707,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2017-09-01T18:16:38+00:00"
+            "time": "2017-09-01 18:16:38"
         },
         {
             "name": "drupal/coder",
@@ -3265,6 +3265,7 @@
                     "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
                     "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                     "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch",
+                    "Database lock backend should normalize the lock name": "https://www.drupal.org/files/issues/2872276-10.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/2752961-90.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-360.patch",
@@ -4496,7 +4497,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/google_tag"
             },
-            "time": "2017-05-08T17:36:45+00:00"
+            "time": "2017-05-08 17:36:45"
         },
         {
             "name": "drupal/inline_entity_form",
@@ -4761,7 +4762,7 @@
                 "issues": "http://drupal.org/project/issues/libraries",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-03-15T17:04:08+00:00"
+            "time": "2017-03-15 17:04:08"
         },
         {
             "name": "drupal/machine_name_widget",
@@ -5247,7 +5248,7 @@
                 "source": "http://cgit.drupalcode.org/memcache",
                 "issues": "https://www.drupal.org/project/issues/memcache"
             },
-            "time": "2017-04-12T19:23:14+00:00"
+            "time": "2017-04-12 19:23:14"
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -5677,7 +5678,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/mimemail"
             },
-            "time": "2017-03-12T09:43:32+00:00"
+            "time": "2017-03-12 09:43:32"
         },
         {
             "name": "drupal/mobile_number",
@@ -6507,7 +6508,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/r4032login"
             },
-            "time": "2017-02-08T04:20:19+00:00"
+            "time": "2017-02-08 04:20:19"
         },
         {
             "name": "drupal/recaptcha",
@@ -7167,7 +7168,7 @@
             "support": {
                 "issues": "http://drupal.org/"
             },
-            "time": "2017-03-02T15:34:04+00:00"
+            "time": "2017-03-02 15:34:04"
         },
         {
             "name": "drupal/seckit",
@@ -7268,7 +7269,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/security_review"
             },
-            "time": "2016-10-20T15:43:48+00:00"
+            "time": "2016-10-20 15:43:48"
         },
         {
             "name": "drupal/sharethis",
@@ -7524,7 +7525,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-08-28T13:57:41+00:00"
+            "time": "2017-08-28 13:57:41"
         },
         {
             "name": "drupal/taxonomy_access_fix",
@@ -7608,7 +7609,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
             },
-            "time": "2017-02-10T12:17:57+00:00"
+            "time": "2017-02-10 12:17:57"
         },
         {
             "name": "drupal/token",
@@ -7879,7 +7880,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_block_filter_block"
             },
-            "time": "2017-05-25T11:05:23+00:00"
+            "time": "2017-05-25 11:05:23"
         },
         {
             "name": "drupal/views_field_view",
