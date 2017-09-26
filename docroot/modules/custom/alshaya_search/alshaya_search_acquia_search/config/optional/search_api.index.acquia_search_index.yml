@@ -114,6 +114,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  created:
+    label: 'Authored on'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
 datasource_settings:
   'entity:node':
     bundles:
