@@ -2,27 +2,29 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.paragraph.326x288
     - field.field.paragraph.image_title_subtitle.field_banner
     - field.field.paragraph.image_title_subtitle.field_link
     - field.field.paragraph.image_title_subtitle.field_sub_title
     - field.field.paragraph.image_title_subtitle.field_title
     - paragraphs.paragraphs_type.image_title_subtitle
+    - responsive_image.styles.326x288
   module:
-    - image
     - link
-id: paragraph.image_title_subtitle.default
+    - responsive_image
+id: paragraph.image_title_subtitle.326x288
 targetEntityType: paragraph
 bundle: image_title_subtitle
-mode: default
+mode: 326x288
 content:
   field_banner:
     weight: 0
     label: hidden
     settings:
-      image_style: ''
+      responsive_image_style: 326x288
       image_link: ''
     third_party_settings: {  }
-    type: image
+    type: responsive_image
     region: content
   field_link:
     weight: 3

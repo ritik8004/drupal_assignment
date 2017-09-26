@@ -7,6 +7,8 @@
 
 /**
  * Implements hook_update_n().
+ *
+ * Create Image+title+subtitle paragraph type.
  */
 function alshaya_paragraphs_update_8301() {
 
@@ -15,8 +17,10 @@ function alshaya_paragraphs_update_8301() {
     'field.field.paragraph.image_title_subtitle.field_banner',
     'field.field.paragraph.image_title_subtitle.field_sub_title',
     'field.field.paragraph.image_title_subtitle.field_title',
+    'field.field.paragraph.image_title_subtitle.field_link',
     'core.entity_form_display.paragraph.image_title_subtitle.default',
     'core.entity_view_display.paragraph.image_title_subtitle.default',
+    'core.entity_view_display.paragraph.image_title_subtitle.326x288',
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
   ];
 
