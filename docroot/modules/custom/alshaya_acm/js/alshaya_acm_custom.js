@@ -24,17 +24,23 @@
           $('[data-drupal-selector="edit-checkout"]').trigger('click');
         });
       });
-
-      $.fn.updateOutOfStockDom = function (message) {
-        if ($('#out-of-stock-message').length) {
-          $('#out-of-stock-message').html(message);
-        }
-        else {
-          var error_div = '<div id="out-of-stock-message">' + message + '</div>';
-          $('#table-cart-items').before(error_div);
-        }
-      };
-
     }
   };
+
+  $.fn.updateOutOfStockDom = function (message) {
+    if ($('#out-of-stock-message').length) {
+      $('#out-of-stock-message').html(message);
+    }
+    else {
+      var error_div = '<div id="out-of-stock-message">' + message + '</div>';
+      $('#table-cart-items').before(error_div);
+    }
+  };
+
+  $.fn.removeCartItem = function (sku) {
+    var removedItem = $('#edit-cart [gtm-product-sku="' + sku + '"]');
+    removedItem.trigger('cart-item-removed');
+    window.location.reload();
+  }
+
 })(jQuery);

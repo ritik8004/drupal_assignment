@@ -242,7 +242,7 @@ display:
           case: none
           path_case: none
           transform_dash: false
-          break_phrase: true
+          break_phrase: false
           add_table: false
           require_value: false
           entity_type: taxonomy_term
@@ -376,7 +376,7 @@ display:
           case: none
           path_case: none
           transform_dash: false
-          break_phrase: true
+          break_phrase: false
           add_table: false
           require_value: false
           entity_type: taxonomy_term
@@ -469,7 +469,7 @@ display:
           case: none
           path_case: none
           transform_dash: false
-          break_phrase: true
+          break_phrase: false
           add_table: false
           require_value: false
           entity_type: taxonomy_term

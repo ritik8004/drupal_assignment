@@ -1,0 +1,117 @@
+<?php
+
+/**
+ * @file
+ * Module file for Alshaya ACM Product Position.
+ */
+
+use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\Views\ViewExecutable;
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function alshaya_acm_product_position_views_data_alter(array &$data) {
+  // Custom sort plugin for nid which is actually used for sort per position.
+  $data['search_api_index_product']['nid']['sort']['id'] = 'alshaya_product_position_sort';
+}
+
+/**
+ * Implements hook_search_api_db_query_alter().
+ */
+function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
+  if ($query->hasTag('views_alshaya_product_list')) {
+    // If sort is available, skip custom query sort.
+    if (!empty($query->getSorts())) {
+      return;
+    }
+
+    // If no sort, use position sort by default.
+    $tid = NULL;
+    $conditions = $query->getConditionGroup()->getConditions();
+    foreach ($conditions as $condition) {
+      if ($condition) {
+        $query_conditions = $condition->getConditions();
+        if ($query_conditions[0]->getField() == 'tid') {
+          $tid = $query_conditions[0]->getValue();
+          // First tid in the array is always the current tid.
+          $tid = is_array($tid) ? $tid[0] : $tid;
+          break;
+        }
+      }
+    }
+
+    if ($tid) {
+      $order = QueryInterface::SORT_ASC;
+      $position_type = 'position';
+      $db_query->leftJoin('alshaya_acm_product_position', 'alshaya_acm_product_position', "(t.nid = alshaya_acm_product_position.nid AND alshaya_acm_product_position.tid = :tid AND alshaya_acm_product_position.position_type = :position_type)", [':tid' => $tid, ':position_type' => $position_type]);
+      // If no position found for product, set the default position.
+      $db_query->addExpression('IFNULL(alshaya_acm_product_position.position, 99999999)', 'no_position');
+      $db_query->orderBy('no_position', $order);
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_execute().
+ */
+function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
+  if ($view->id() != 'alshaya_product_list') {
+    return;
+  }
+
+  $filters = $view->getExposedInput();
+  if (empty($filters['sort_bef_combine'])) {
+    // Get sorts.
+    if (!empty($sorts = array_keys($view->sort))) {
+      $enabled_sorts = _alshaya_acm_product_position_get_config();
+      if ($enabled_sorts) {
+        $default_sort = FALSE;
+        foreach ($sorts as $sort) {
+          if ($enabled_sorts[$sort]) {
+            $default_sort = $sort . ' ASC';
+            break;
+          }
+        }
+
+        if ($default_sort) {
+          $filters['sort_bef_combine'] = $default_sort;
+        }
+        $view->setExposedInput($filters);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
+    // Best seller descending option removed.
+    unset($form['sort_bef_combine']['#options']['nid DESC']);
+
+    // Disable sort options if not enabled.
+    $enabled_sorts = _alshaya_acm_product_position_get_config();
+    if (!$enabled_sorts) {
+      $form['#access'] = FALSE;
+    }
+    else {
+      foreach ($enabled_sorts as $key => $sort) {
+        if (!$sort) {
+          unset($form['sort_bef_combine']['#options']["$key ASC"]);
+          unset($form['sort_bef_combine']['#options']["$key DESC"]);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Function to get sort options config.
+ */
+function _alshaya_acm_product_position_get_config() {
+  return \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
+}

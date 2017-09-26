@@ -45,6 +45,12 @@
   a {
     @include u-overlay-content;
     @include u-image-replacement;
+
+    display: none;
+  }
+
+  .slick-active a {
+    display: block;
   }
 
   .owl-prev,

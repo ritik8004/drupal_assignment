@@ -7,3 +7,4 @@ dependencies:
   - acq_promotion
   - alshaya_acm
   - alshaya_product
+  - alshaya_config

@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_alshaya_promotion_subtype
+field_name: field_alshaya_promotion_subtype
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: free_shipping_order
+      label: 'Free shipping with an order over X KD'
+    -
+      value: fixed_percentage_discount_order
+      label: 'Fixed percentage discount with an order over X KD'
+    -
+      value: fixed_amount_discount_order
+      label: 'Fixed amount discount with an order over X KD'
+    -
+      value: other
+      label: Other
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

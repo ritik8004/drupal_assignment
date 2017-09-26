@@ -57,7 +57,6 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
     $account['mail'] = $order['email'];
 
     if (\Drupal::currentUser()->isAnonymous()) {
-      // @TODO: Get privilege card number once integration done.
       $print_link = Url::fromRoute('alshaya_acm_customer.print_last_order');
     }
     else {

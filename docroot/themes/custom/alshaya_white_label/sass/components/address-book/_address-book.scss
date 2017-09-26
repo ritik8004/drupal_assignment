@@ -484,6 +484,13 @@
     #{$right}: 0;
     width: 2.1875rem;
     height: 2.1875rem;
+    background: $white-two;
+
+    &::after {
+      font-size: 1.7rem;
+      top: 12%;
+      #{$left}: 11%;
+    }
   }
 
   .select2-container {
@@ -503,8 +510,8 @@
     @include icon(chevrondown, after) {
       font-size: 1.5rem;
       position: absolute;
-      top: 15%;
-      left: 20%;
+      top: 9%;
+      #{$left}: 10%;
     }
 
     b {

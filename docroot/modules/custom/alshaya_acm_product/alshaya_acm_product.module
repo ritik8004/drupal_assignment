@@ -158,6 +158,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       ];
     }
     elseif ($view_mode == 'full') {
+      $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
 
       /* @var \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus */
       $linked_skus = \Drupal::service('acq_sku.linked_sku');
@@ -172,7 +173,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $up_sell_skus = array_merge($up_sell_skus, $linked_skus->getLinkedSKus($sku_entity, 'upsell'));
 
       if (!empty($up_sell_skus)) {
-        $upsell_items = array_slice($up_sell_skus, 0, 12);
+        $upsell_items = array_slice($up_sell_skus, 0, $related_items_size);
         $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($upsell_items)));
         // Weight will have no effect later once template is modified.
         $build['up_sell']['#weight'] = 10;
@@ -188,7 +189,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $related_skus = array_merge($related_skus, $linked_skus->getLinkedSKus($sku_entity, 'related'));
 
       if (!empty($related_skus)) {
-        $related_items = array_slice($related_skus, 0, 12);
+        $related_items = array_slice($related_skus, 0, $related_items_size);
         $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($related_items)));
         // Weight will have no effect later once template is modified.
         $build['related']['#weight'] = 11;
@@ -620,6 +621,12 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
     $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);
+    $data['selector'] = $selector;
+
+    $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
+
+    $quantity_selector = '.quantity-' . $sku_identifier;
+    $response->addCommand(new ReplaceCommand($quantity_selector, $form['quantity']));
 
     // Get the data from BubbleMetaData.
     $bubbleable_metadata = BubbleableMetadata::createFromRenderArray($dynamic_parts);
@@ -627,21 +634,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // Retrieve the attachments from the $data.
     $attachments = $bubbleable_metadata->getAttachments();
 
-    // Generate the settings to be sent back with the ajax response.
-    $settings = '';
-    if (!empty($attachments['drupalSettings'])) {
-      $settings .= '<script type="text/javascript">jQuery.extend(drupalSettings, ';
-      $settings .= Json::encode($attachments['drupalSettings']);
-      $settings .= ');</script>';
-    }
-
-    $data['selector'] = $selector;
-    $data['replaceWith'] .= $settings;
-
-    $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
-
-    $selector = '.quantity-' . $sku_identifier;
-    $response->addCommand(new ReplaceCommand($selector, $form['quantity']));
+    // Send the updated settings in ajax response.
+    $response->addCommand(new SettingsCommand($attachments['drupalSettings'], TRUE));
 
     // Update the promotions for the product.
     $promotion_links = '';

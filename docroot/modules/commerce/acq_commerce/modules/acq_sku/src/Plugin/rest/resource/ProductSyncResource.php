@@ -252,11 +252,16 @@ class ProductSyncResource extends ResourceBase {
         $node->save();
       }
       else {
-        if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
-          $node->setPublished(FALSE);
-          $node->save;
+        try {
+          // Un-publish if node available.
+          if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
+            $node->setPublished(FALSE);
+            $node->save();
+          }
         }
-
+        catch (\Exception $e) {
+          // Do nothing, we may not have the node available in system.
+        }
       }
     }
 

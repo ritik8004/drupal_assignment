@@ -6,9 +6,9 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
 
   Scenario:
-    As an authenticated user
-    I should be able to see all the sections
-    after logging in
+  As an authenticated user
+  I should be able to see all the sections
+  after logging in
     Then I should see the link "my account" in ".my-account-nav" section
     And I should see the link "orders" in ".my-account-nav" section
     Then I should see the link "contact details" in ".my-account-nav" section
@@ -19,9 +19,9 @@ Feature: Test the My account section for authenticated user
     And I should see the link "View all orders"
 
   Scenario:
-    As an authenticated user
-    I should be able to see my most recent three orders
-    on my account section
+  As an authenticated user
+  I should be able to see my most recent three orders
+  on my account section
     Then I should see at most "3" recent orders listed
     And the order status should be visible for all products
 
@@ -45,9 +45,9 @@ Feature: Test the My account section for authenticated user
       |Delivery Information             |Contact us|/contact|
 
   Scenario:
-    As an authenticated user
-    I should be able to view all my orders
-    from my account page
+  As an authenticated user
+  I should be able to view all my orders
+  from my account page
     When I follow "View all orders"
     And I wait for the page to load
     Then the "orders" tab should be selected
@@ -59,14 +59,16 @@ Feature: Test the My account section for authenticated user
     Then I should see the link "Delivery Information"
 
   Scenario: As an authenticated user
-    I should be prompted to join the privilege club
-    if I don't have a privilege account
+  I should be prompted to join the privilege club
+  if I don't have a privilege account
     When I follow "edit account details"
     And I wait for the page to load
-    When I fill in "edit-field-privilege-card-number-0-value" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I click the label for "#ui-id-2 > p.title"
+    When I fill in "edit-privilege-card-number" with ""
     And I press "Save"
     And I wait for the page to load
-    Then I should see "The changes have been saved."
+    Then I should see "Contact details changes have been saved."
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
     And I wait for the page to load
     Then I should see "Join the club"
@@ -77,14 +79,17 @@ Feature: Test the My account section for authenticated user
     And I should not see "Privilege card number"
 
   Scenario: As an authenticated user
-    account details section should display Privilege card number
-    along with Email address and Contact number
+  account details section should display Privilege card number
+  along with Email address and Contact number
     When I follow "edit account details"
     And I wait for the page to load
-    When I fill in "edit-field-privilege-card-number-0-value" with "000135844"
+    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I click the label for "#ui-id-2 > p.title"
+    When I fill in "edit-privilege-card-number" with "000135844"
+    And I fill in "edit-privilege-card-number2" with "000135844"
     And I press "Save"
     And I wait for the page to load
-    Then I should see "The changes have been saved."
+    Then I should see "Contact details changes have been saved."
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
     And I wait for the page to load
     Then I should see "shweta+2@axelerant.com"
@@ -97,26 +102,28 @@ Feature: Test the My account section for authenticated user
     Then I should not see the link "Learn more"
 
   Scenario: As an authenticated user
-    I should be able to see most recent 10 orders
-    listed on Orders tab
+  I should be able to see most recent 10 orders
+  listed on Orders tab
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
     And the order status should be visible for all products
     When I press "show more"
     And I wait for AJAX to finish
-    Then I should see at most "20" recent orders listed
+    Then I should see at most "20" recent orders listed on orders tab
 
   Scenario: As an authenticated user
-    I should be able to filter the listed orders
-    by ID, name, SKU in combination with the Status of the order
+  I should be able to filter the listed orders
+  by ID, name, SKU in combination with the Status of the order
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
     When I fill in "edit-search" with "stronglax"
+#    When I fill in "edit-search" with "Horse Photographic"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
     Then I should see all "Stronglax" orders
+#    Then I should see all "Horse Photographic T-Shi…" orders
     When I fill in "edit-search" with "MCKWRCE"
     And I wait 2 seconds
     When I click the label for "#edit-submit-orders"
@@ -125,7 +132,7 @@ Feature: Test the My account section for authenticated user
     And I should see all orders for "MCKWRCE"
 
   Scenario: As an authenticated user
-    I should be able to filter on all cancelled, dispatched and processing orders
+  I should be able to filter on all cancelled, dispatched and processing orders
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
     When I select Cancelled from the status dropdown
@@ -143,22 +150,19 @@ Feature: Test the My account section for authenticated user
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
     And I wait for the page to load
     When I fill in "edit-field-first-name-0-value" with "Aadya"
-    When I fill in "edit-field-last-name-0-value" with "Iyengar"
-    When I fill in "edit-field-mobile-number-0-mobile" with "55774438"
+    When I fill in "edit-field-last-name-0-value" with "Sharma"
+    When I fill in "edit-field-mobile-number-0-mobile" with ""
     And I press "Save"
     And I wait for the page to load
     Then I should see "Aadya"
-    And I should see "Iyengar"
     And I should not see "Shweta"
-    And I should not see "Sharma"
     Then I fill in "edit-field-first-name-0-value" with "Shweta"
     And I fill in "edit-field-last-name-0-value" with "Sharma"
-    Then I fill in "edit-field-mobile-number-0-mobile" with "97004455"
     And I press "Save"
-    
+
   Scenario: As an authenticated user
-    I should be able to add a new address
-    to my address book
+  I should be able to add a new address
+  to my address book
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
     Then I get the total count of address blocks
@@ -179,7 +183,7 @@ Feature: Test the My account section for authenticated user
     And the new address block should be displayed on address book
 
   Scenario: As an authenticated user
-    I should be able to perform Cancel action on add/edit address pages
+  I should be able to perform Cancel action on add/edit address pages
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
     When I follow "Add new Address"
@@ -194,19 +198,20 @@ Feature: Test the My account section for authenticated user
     Then I should not see the text "First Name"
 
   Scenario: As an authenticated user
-    I should be able to edit an address
+  I should be able to edit an address
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
     When I click Edit Address
     And I wait for AJAX to finish
+    When I select "Abbasiya" from "field_address[0][address][administrative_area]"
     When I fill in "field_address[0][address][address_line2]" with "2"
     And I press "Save"
     When I wait for the page to load
     Then I should see "Address is updated successfully."
 
   Scenario: As an authenticated user
-    I should not be able to delete my primary address
-    but I should be able to delete any other address
+  I should not be able to delete my primary address
+  but I should be able to delete any other address
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
     Then I should not see the delete button for primary address
@@ -223,19 +228,18 @@ Feature: Test the My account section for authenticated user
     And the address block should be deleted from address book
 
   Scenario: As an authenticated user
-    I should be able to set my communication preferences
+  I should be able to set my communication preferences
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
     And I wait for the page to load
     Then I should see "Communication preferences"
     And I should see "Select your preferred communication channel"
     When I check the ".form-item-communication-preference-email > label" checkbox
-    When I check the ".form-item-communication-preference-mobile > label" checkbox
     And I press "Save"
     When I wait for the page to load
     Then I should see "Your communication preference saved successfully."
 
   Scenario: As an authenticated user
-    I should see the options to change my password
+  I should see the options to change my password
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"
     And I wait for the page to load
     Then I should see "Change Password"
@@ -250,5 +254,5 @@ Feature: Test the My account section for authenticated user
     Then I should see text matching "Spaces are not allowed in your password."
     Then I should see text matching "The previous four passwords were not allowed."
     When I press "change password"
-    Then I should see "current password is required."
-    And I should see "new password is required."
+    Then I should see "Please enter your current password."
+    And I should see "Please enter your new password."

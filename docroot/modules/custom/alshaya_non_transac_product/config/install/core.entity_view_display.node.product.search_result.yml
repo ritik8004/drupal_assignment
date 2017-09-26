@@ -35,18 +35,22 @@ content:
     type: responsive_image
     region: content
   field_product_label:
-    weight: 1
+    weight: 2
     label: hidden
     settings:
       link: false
     third_party_settings: {  }
     type: entity_reference_label
     region: content
+  sharethis:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   body: true
   field_product_brand: true
   field_product_category: true
   langcode: true
   links: true
-  sharethis: true
   workbench_moderation_control: true

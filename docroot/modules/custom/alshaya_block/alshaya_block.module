@@ -69,3 +69,16 @@ function alshaya_block_preprocess_block(&$variables) {
       break;
   }
 }
+
+/**
+ * Implements hook_theme_suggestions_block_alter().
+ */
+function alshaya_block_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  switch ($variables['elements']['#base_plugin_id']) {
+    case 'block_content':
+      $block_content = $variables['elements']['content']['#block_content'];
+      $machine_name = $block_content->get('machine_name')->value;
+      $suggestions[] = 'block__block_content__' . $machine_name;
+      break;
+  }
+}

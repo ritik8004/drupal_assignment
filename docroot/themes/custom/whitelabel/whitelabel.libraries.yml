@@ -172,6 +172,13 @@ paragraph-banner-full-width:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/paragraph-banner-full-width/paragraph-banner-full-width.ltr.css: {}
 
+paragraph-banner:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-banner/paragraph-banner.ltr.css: {}
+
+
 field-promo-block:
   version: VERSION
   css:
@@ -222,3 +229,37 @@ field-store-open-hours:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/field-store-open-hours/field-store-open-hours.ltr.css: {}
+
+view-store-finder-list:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/01-view-store-finder-list/views-store-finder-list.ltr.css: {}
+
+view-store-list-locator:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/01-view-store-finder-list/views-store-list-locator.ltr.css: {}
+
+block-stay-in-the-know:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-stay-in-the-know/block-stay-in-the-know.ltr.css: {}
+
+form-element-textual:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/07-forms/form-element-textual/form-element-textual.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/07-forms/form-element-textual/form-element-textual.js: {}
+
+form-input-password:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/07-forms/input-password/input-password.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/07-forms/input-password/input-password.js: {}

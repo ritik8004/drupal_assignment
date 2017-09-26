@@ -1,0 +1,93 @@
+rows:
+- row:
+  counter: '1'
+  title: 'Abdullah Al Mubarak Co-op.'
+  content: '<div class="views-row">
+            <div class="views-field views-field-field-store-address">
+              <div class="field-content">
+                Abu Halifa Area<br>
+                Kuwait (Mezzanine Floor)
+              </div>
+            </div>
+
+            <div class="views-field views-field-field-store-open-hours">
+              <div class="field-content">
+                <div class="hours--wrapper selector--hours">
+                  <div data-quickedit-field-id="node/3/field_store_open_hours/en/default">
+                    <div class="hours--label">Opening Hours</div>
+                      <div class="open--hours">
+                        <div><span class="key-value-key">Sunday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Monday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Tuesday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Wednesday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Thursday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Friday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Saturday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                    </div>
+                  </div>
+                </div>
+
+              <div class="view-on--map">
+                <a onclick="mapsApp(29.233919, 47.8979498)">
+                  View on map
+                </a>
+              </div>
+              <div class="get--directions">
+                <div>
+                  <a class="device__desktop" href="https://www.google.com/maps/dir/Current+Location/29.233919,47.8979498" target="_blank">
+                    Get directions
+                  </a>
+                  <a class="device__tablet" onclick="mapsApp(29.233919, 47.8979498)">
+                    Get directions
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>'
+- row:
+  counter: '2'
+  title: 'Bayan Co-op.'
+  content: '<div class="views-row">
+            <div class="views-field views-field-field-store-address">
+              <div class="field-content">
+                Bayan<br>
+                Kuwait Bayan (Mezzanine Floor)
+              </div>
+            </div>
+
+            <div class="views-field views-field-field-store-open-hours">
+              <div class="field-content">
+                <div class="hours--wrapper selector--hours">
+                  <div data-quickedit-field-id="node/3/field_store_open_hours/en/default">
+                    <div class="hours--label">Opening Hours</div>
+                      <div class="open--hours">
+                        <div><span class="key-value-key">Sunday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Monday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Tuesday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Wednesday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Thursday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Friday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                        <div><span class="key-value-key">Saturday</span><span class="key-value-value">10:00AM-10:00PM</span></div>
+                    </div>
+                  </div>
+                </div>
+
+              <div class="view-on--map">
+                <a onclick="mapsApp(29.233919, 47.8979498)">
+                  View on map
+                </a>
+              </div>
+              <div class="get--directions">
+                <div>
+                  <a class="device__desktop" href="https://www.google.com/maps/dir/Current+Location/29.233919,47.8979498" target="_blank">
+                    Get directions
+                  </a>
+                  <a class="device__tablet" onclick="mapsApp(29.233919, 47.8979498)">
+                    Get directions
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>'

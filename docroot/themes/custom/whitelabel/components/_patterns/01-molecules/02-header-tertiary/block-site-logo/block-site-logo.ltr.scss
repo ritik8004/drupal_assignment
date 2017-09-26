@@ -9,7 +9,7 @@
     padding-bottom: 1.4rem;
   }
 
-  @include breakpoint($palm) {
+  @include breakpoint($upto-palm) {
     display: none;
   }
 

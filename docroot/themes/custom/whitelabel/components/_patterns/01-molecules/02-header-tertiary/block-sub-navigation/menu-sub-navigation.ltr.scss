@@ -34,3 +34,12 @@
     }
   }
 }
+
+.page-store-finder,
+.page-home {
+  .navigation__sub-menu {
+    @include breakpoint($above-palm) {
+      border-bottom: 1px solid $greyish-light;
+    }
+  }
+}

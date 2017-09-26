@@ -351,6 +351,12 @@
             $(this).find('ul li:gt(' + softItemsLimit + ')').hide();
             softLink.insertAfter($(this).find('ul'));
           });
+
+          // Function defined in mobile and called here.
+          // Don't want to refactor a lot to fix during UAT stage.
+          if (typeof Drupal.alshayaSearchActiveFacetResetAfterAjax !== 'undefined') {
+            Drupal.alshayaSearchActiveFacetResetAfterAjax();
+          }
         }
       }, 100);
 
@@ -362,6 +368,12 @@
             softLink.addClass('processed');
             softLink.insertAfter($(this).find('ul'));
           });
+
+          // Function defined in mobile and called here.
+          // Don't want to refactor a lot to fix during UAT stage.
+          if (typeof Drupal.alshayaSearchActiveFacetResetAfterAjax !== 'undefined') {
+            Drupal.alshayaSearchActiveFacetResetAfterAjax();
+          }
         }
       }, 100);
     }

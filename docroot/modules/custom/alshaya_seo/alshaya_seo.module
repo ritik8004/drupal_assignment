@@ -276,7 +276,7 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
 
     // Preserve attributes before overriding the datalayer attributes.
     if (isset($data_layer['deliveryCity'])) {
-      $general_dl_attributes['deliveryCity'] = $data_layer['deliveryCity'];
+      unset($data_layer['deliveryCity']);
     }
 
     if (isset($data_layer['deliveryArea'])) {
@@ -307,9 +307,10 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
 
           $products = [];
-          $privilegeOrder = $cart_item_attributes['privilegeOrder'];
-          $delivery_phone = $cart_item_attributes['delivery_phone'];
-          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['delivery_phone']);
+          $data_layer['privilegeOrder'] = $cart_item_attributes['privilegeOrder'];
+          $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'];
+          $step = isset($cart_item_attributes['step']) ? $cart_item_attributes['step'] : NULL;
+          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
 
           foreach ($cart_item_attributes as $key => $cart_item) {
             $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
@@ -324,10 +325,7 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
               break;
 
             case 'delivery':
-              $step = 2;
-              if ($delivery_phone) {
-                $step = 3;
-              }
+              $step = !empty($step) ? $step : 2;
               break;
 
             case 'payment':
@@ -335,7 +333,6 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
               break;
           }
 
-          $data_layer['privilegeOrder'] = $privilegeOrder;
           $data_layer_cart = [
             'ecommerce' => [
               'currencyCode' => $currency_code,
@@ -555,23 +552,28 @@ function alshaya_seo_entity_presave(EntityInterface $entity) {
  * Implements hook_entity_insert().
  */
 function alshaya_seo_entity_insert(EntityInterface $entity) {
-  try {
-    if ($entity->getEntityTypeId() === 'user' &&
-      $entity->get('field_subscribe_newsletter')->getString()
-    ) {
-      $path_info = \Drupal::request()->getPathInfo();
+  if ($entity->getEntityTypeId() === 'user') {
+    $path_info = \Drupal::request()->getPathInfo();
 
-      user_cookie_save(['alshaya_gtm_create_user_lead' => $entity->id()]);
-      user_cookie_save(['alshaya_gtm_create_user_pagename' => $path_info]);
+    try {
+      if ($entity->get('field_subscribe_newsletter')->getString()) {
+        user_cookie_save(['alshaya_gtm_create_user_lead' => $entity->id()]);
+        user_cookie_save(['alshaya_gtm_create_user_pagename' => $path_info]);
+      }
+    }
+    catch (Exception $e) {
+      \Drupal::logger('alshaya_seo')->warning('Field subscribe newsletter not found.');
+    }
 
+    try {
       if ($entity->get('field_privilege_card_number')->getString()) {
         user_cookie_save([
           'alshaya_gtm_create_user_pc' => $entity->get('field_privilege_card_number')->getString(),
         ]);
       }
     }
-  }
-  catch (Exception $e) {
-    \Drupal::logger('alshaya_seo')->critical('Field subscribe newsletter not found.');
+    catch (Exception $e) {
+      // Do nothing, loyalty might by off.
+    }
   }
 }

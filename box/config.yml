@@ -31,7 +31,9 @@ drupal_db_name: drupal_alshaya
 
 # Set this to 'false' if you don't need to install drupal (using the drupal_*
 # settings below), but instead copy down a database (e.g. using drush sql-sync).
-install_site: false
+drupal_build_makefile: false
+drupal_build_composer: false
+drupal_build_composer_project: false
 drupal_install_site: false
 
 # Drupal VM automatically creates a drush alias file in your ~/.drush folder if
@@ -54,6 +56,8 @@ installed_extras:
   - solr
   - xdebug
   - memcached
+  - xhprof
+  - tideways
 
 # Use PHP 5.6.
 php_version: "5.6"

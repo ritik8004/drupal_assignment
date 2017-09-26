@@ -974,6 +974,12 @@
           min-width: 10.13rem;
           background: $white-five;
 
+          &:hover {
+            background-color: $pumpkin-orange;
+            color: $white-five;
+            border-color: $pumpkin-orange;
+          }
+
           @include breakpoint($only-mobile) {
             min-width: 0;
             width: 2%;

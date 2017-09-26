@@ -1,0 +1,5 @@
+name: 'Alshaya ACM Product Position'
+type: module
+description: 'Contains custom code related to product position.'
+package: 'Alshaya'
+core: 8.x

@@ -117,7 +117,7 @@
       $('#edit-privilege-card-number2').rules('add', {
         equalTo: '#edit-privilege-card-number',
         messages: {
-          equalTo: Drupal.t('Specified Privilege card numbers do not match.')
+          equalTo: Drupal.t('Specified PRIVILEGES CLUB card numbers do not match.')
         }
       });
 
@@ -128,7 +128,7 @@
   $.validator.addMethod('loyalty_card_validate', function (value, element, options) {
     var loyalty_card_number = Drupal.alshayaLoyaltyCleanCardNumber(value);
     var alshaya_loyalty_validator_settings = drupalSettings.alshaya_loyalty.card_validate;
-    var message = Drupal.t('@number is not a valid privilege card number.', {'@number': value});
+    var message = Drupal.t('@number is not a valid PRIVILEGES CLUB card number.', {'@number': value});
 
     if (loyalty_card_number) {
       // Pass if no value was entered.

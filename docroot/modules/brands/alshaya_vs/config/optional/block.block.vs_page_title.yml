@@ -8,7 +8,7 @@ dependencies:
 id: vs_page_title
 theme: victoria_secret
 region: content
-weight: -7
+weight: -8
 provider: null
 plugin: page_title_block
 settings:

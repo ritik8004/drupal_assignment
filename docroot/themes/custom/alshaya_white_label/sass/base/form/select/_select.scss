@@ -34,7 +34,6 @@ select:focus::-ms-value {
   position: relative;
 
   @include icon(chevrondown, after) {
-    border-#{$left}: 1px solid $white-five;
     font-size: 1.75rem;
     line-height: 35px;
     pointer-events: none;
@@ -107,6 +106,7 @@ select:focus::-ms-value {
       #{$right}: 0;
       text-align: center;
       display: inline-block;
+      background: $white-two;
     }
   }
 }

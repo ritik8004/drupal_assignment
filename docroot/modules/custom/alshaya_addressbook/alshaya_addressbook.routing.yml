@@ -26,3 +26,14 @@ alshaya_addressbook.edit_address_ajax:
   requirements:
     _entity_access: 'profile.update'
     js: 'nojs|ajax'
+
+alshaya_addressbook.profile.set_default:
+  path: '/addressbook/{profile}/set-default/{token}'
+  defaults:
+    _controller: '\Drupal\alshaya_addressbook\Controller\AlshayaAddressBookController::setDefaultAddress'
+  options:
+    parameters:
+      profile:
+        type: entity:profile
+  requirements:
+    _entity_access: 'profile.update'

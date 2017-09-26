@@ -1,7 +1,7 @@
 name: 'Alshaya Loyalty'
 type: module
 core: 8.x
-description: 'Adds privilege card number fields, settings and validations.'
+description: 'Adds PRIVILEGES CLUB card number fields, settings and validations.'
 dependencies:
   - alshaya_user
   - alshaya_master
