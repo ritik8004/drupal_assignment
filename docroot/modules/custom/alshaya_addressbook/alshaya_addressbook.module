@@ -530,6 +530,8 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
   if (isset($telephone[0]) && !empty($telephone[0]['value'])) {
     $variables['contact_no'] = $telephone[0]['value'];
   }
+  /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
+  $csrf_token_generator = \Drupal::service('csrf_token');
 
   if (isset($values[0])) {
     // If name is available.
@@ -656,12 +658,19 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
         ];
       }
       else {
-        $set_default_url = $profile->toUrl('set-default', [
+        $set_default_params = [
+          'profile' => $profile->id(),
+          'token' => $csrf_token_generator->get('profile-' . $profile->id()),
+        ];
+
+        $set_default_options = [
           'language' => $current_language,
           'query' => [
             'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
           ],
-        ]);
+        ];
+
+        $set_default_url = Url::fromRoute('alshaya_addressbook.profile.set_default', $set_default_params, $set_default_options);
 
         $variables['set_default_operation'] = [
           '#type' => 'link',

@@ -1,0 +1,13 @@
+attributes:
+  Attribute():
+    class:
+    - 'block-stay-in-the-know'
+title_attributes:
+  Attribute():
+    class:
+    - 'stay-in-the-know--title'
+label: 'Stay in the know'
+content: '<div class="field__wrapper">
+          <p>Get the inside scoop on exclusive offers, new product alrts &amp; Middle Eastern Store events.</p>
+          <p><a href="/signup">Sign up</a></p>
+        </div>'

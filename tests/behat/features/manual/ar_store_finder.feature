@@ -51,8 +51,8 @@ Feature: Test Store finder on Arabic site
   Scenario: As a Guest user,
   I should be able to search for nearby stores
     Given the "عرض القائمة" tab should be selected
-    When I select the first autocomplete option for "shuwaikh" on the "edit-geolocation-geocoder-google-places-api" field
-    And I wait for AJAX to finish
+    When I select the first autocomplete option for "shuwaikh " on the "edit-geolocation-geocoder-google-places-api" field
+    And I wait for the page to load
     And I wait 5 seconds
     Then the number of stores displayed should match the count displayed on the page
 
@@ -97,7 +97,8 @@ Feature: Test Store finder on Arabic site
   on Map view
     When I follow "عرض الخريطة"
     And I wait for AJAX to finish
-    When I select the first autocomplete option for "shuwaikh" on the "edit-geolocation-geocoder-google-places-api" field
+    And I wait 5 seconds
+    When I select the first autocomplete option for "shuwaikh " on the "edit-geolocation-geocoder-google-places-api" field
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the number of stores displayed should match the pointer displayed on map

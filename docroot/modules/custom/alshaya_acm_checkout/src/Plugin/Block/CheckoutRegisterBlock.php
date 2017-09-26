@@ -114,6 +114,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
       $account->get('field_mobile_number')->setValue($number);
     }
 
+    $loyalty_card = '';
     if ($loyalty_enabled) {
       // Add the following block only if user has not entered loyalty card
       // number in basket.
@@ -123,7 +124,8 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
         $build['joinclub']['#weight'] = 100;
       }
       else {
-        $account->get('field_privilege_card_number')->setValue($order['extension']['loyalty_card']);
+        $loyalty_card = $order['extension']['loyalty_card'];
+        $account->get('field_privilege_card_number')->setValue($loyalty_card);
       }
     }
 
@@ -144,7 +146,12 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
 
     $form['field_first_name']['#access'] = FALSE;
     $form['field_last_name']['#access'] = FALSE;
-    $form['privilege_card_wrapper']['#access'] = FALSE;
+
+    if (isset($form['privilege_card_wrapper'])) {
+      $form['privilege_card_wrapper']['#prefix'] = '<div id="details-privilege-card-wrapper" class="hidden-important">';
+      $form['privilege_card_wrapper']['privilege_card_number']['#value'] = $loyalty_card;
+      $form['privilege_card_wrapper']['privilege_card_number2']['#value'] = $loyalty_card;
+    }
 
     $form['actions']['submit']['#value'] = $this->t('save', [], ['context' => 'Checkout']);
 

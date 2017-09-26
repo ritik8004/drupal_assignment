@@ -45,9 +45,15 @@
           ocObject.slick(
               $.extend({}, options, {rtl: true})
           );
+          if (context !== document) {
+            ocObject.slick('resize');
+          }
         }
         else {
           ocObject.slick(options);
+          if (context !== document) {
+            ocObject.slick('resize');
+          }
         }
       }
 

@@ -25,6 +25,7 @@ function alshaya_master_install() {
     ],
     'Create new account' => [
       'en' => 'Create an account',
+      'ar' => 'انشاء حساب جديد',
     ],
     'E-mail' => [
       'en' => 'Email address',
@@ -60,19 +61,10 @@ function alshaya_master_install() {
     'Last name' => [
       'ar' => 'اسم العائلة',
     ],
-    'Privilege card number (Optional)' => [
-      'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
-    ],
-    'Privilege Card Number (optional)' => [
-      'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
-    ],
-    'Privilege Card Number' => [
+    'PRIVILEGES CLUB card number' => [
       'ar' => 'رقم بطاقة نادي الامتيازات',
     ],
-    'Privilege card number' => [
-      'ar' => 'رقم بطاقة نادي الامتيازات',
-    ],
-    'Privilege card number (optional)' => [
+    'PRIVILEGES CLUB card number (optional)' => [
       'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
     ],
     'you’ll be able to' => [
@@ -94,6 +86,9 @@ function alshaya_master_install() {
       'ar' => 'أدخل بريدك الإلكتروني',
     ],
     'my account' => [
+      'ar' => 'حسابي',
+    ],
+    'My account' => [
       'ar' => 'حسابي',
     ],
     'orders' => [
@@ -194,7 +189,7 @@ function alshaya_master_install() {
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
     ],
-    '@number is not a valid privilege card number.' => [
+    '@number is not a valid PRIVILEGES CLUB card number.' => [
       'ar' => 'رقم بطاقة نادي الامتيازات @number غير صحيح',
     ],
     'connect with us' => [
@@ -204,6 +199,9 @@ function alshaya_master_install() {
       'ar' => 'احصل على أحدث العروض الحصرية من @site_name عبر عنوان البريد الإكتروني',
     ],
     'submit' => [
+      'ar' => 'إرسال',
+    ],
+    'Submit' => [
       'ar' => 'إرسال',
     ],
     'search item or keyword' => [
@@ -481,8 +479,14 @@ function alshaya_master_install() {
     'Add a promo code' => [
       'ar' => 'هل لديك رمز عرض ؟',
     ],
-    'Enter a privilege card number' => [
+    'Enter PRIVILEGES CLUB card number' => [
       'ar' => 'أدخل رقم بطاقة نادي الامتيازات',
+    ],
+    'Have a PRIVILEGES CLUB card?' => [
+      'ar' => 'هل لديك بطاقة نادي الامتيازات؟',
+    ],
+    'Enter card number' => [
+      'ar' => 'الرجاء إدخال رقم البطاقة',
     ],
     'Promotion code' => [
       'ar' => 'رمز العرض',
@@ -490,7 +494,7 @@ function alshaya_master_install() {
     'apply' => [
       'ar' => 'تطبيق',
     ],
-    'Re-enter Privilege Card Number' => [
+    'Re-enter PRIVILEGES CLUB card number' => [
       'ar' => 'يرجى إدخال رقم بطاقة نادي الامتيازات مرةً أخرى',
     ],
     'Your cart has been updated.' => [
@@ -843,7 +847,7 @@ function alshaya_master_install() {
     'Specifications' => [
       'ar' => 'المواصفات',
     ],
-    'Specified Privilege card numbers do not match.' => [
+    'Specified PRIVILEGES CLUB card numbers do not match.' => [
       'ar' => 'أرقام نادي الامتيازات التي أدخلتها غير متطابقة.',
     ],
     'logged in as @name' => [
@@ -1131,7 +1135,7 @@ function alshaya_master_install() {
     'List of all Mothercare Stores' => [
       'ar' => 'جميع محلات مذركير',
     ],
-    '<p>Your Privileges Card Number is: <strong class="dark--text">@order.loyaltyCard</strong></p>' => [
+    '<p>Your PRIVILEGES CLUB card number is: <strong class="dark--text">@order.loyaltyCard</strong></p>' => [
       'ar' => '<p> رقم بطاقة نادي الامتيازات: <strong class="dark--text">@order.loyaltyCard</strong></p>',
     ],
   ];

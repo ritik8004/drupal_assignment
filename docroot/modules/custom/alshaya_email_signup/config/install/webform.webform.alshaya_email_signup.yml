@@ -9,7 +9,7 @@ id: alshaya_email_signup
 title: 'Email sign up'
 description: 'Email sign up form.'
 category: ''
-elements: "first_name:\n  '#title': 'First Name'\n  '#type': textfield\n  '#required': true\nlast_name:\n  '#title': 'Last Name'\n  '#type': textfield\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nemail:\n  '#title': 'Email Address'\n  '#type': email\n  '#required': true\n"
+elements: "first_name:\n  '#title': 'First Name'\n  '#type': textfield\n  '#required': true\nlast_name:\n  '#title': 'Last Name'\n  '#type': textfield\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nemail:\n  '#title': 'Email Address'\n  '#type': email\n  '#required': true\nexclusive_deals:\n  '#type': checkbox\n  '#title': 'I would like to receive exclusive deals from [site:name].'"
 css: ''
 javascript: ''
 settings:
