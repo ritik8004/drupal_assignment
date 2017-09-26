@@ -507,6 +507,14 @@
     }
   }
 
+  .show-detail {
+    .bullet-points-wrapper {
+      @include breakpoint($only-mobile) {
+        display: block !important;
+      }
+    }
+  }
+
   .show-less-link {
     font-family: $arial;
     font-size: 0.875rem;
