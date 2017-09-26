@@ -11,6 +11,10 @@
   li {
     display: inline-block;
     vertical-align: top;
+
+    &.active-trail a {
+      background-color: $white;
+    }
   }
 
   a {
@@ -34,7 +38,6 @@
       display: block;
     }
 
-    &.is-active,
     &:hover {
       background-color: $white;
     }
