@@ -20,8 +20,8 @@ function alshaya_acm_product_position_drush_command() {
       'position_type' => 'Name of the position type.',
     ],
     'examples' => [
-      'drush aaprs' => 'Sync product position based on category, by default "best_seller".',
-      'drush aaprs myargument' => 'Sync product position based on category, by "myargument".',
+      'drush aapps' => 'Sync product position based on category, by default "best_seller".',
+      'drush aapps myargument' => 'Sync product position based on category, by "myargument".',
     ],
   ];
 
