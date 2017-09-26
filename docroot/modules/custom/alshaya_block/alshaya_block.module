@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Functions around blocks.
+ */
+
+/**
+ * Copy the blocks placement from one theme to another.
+ *
+ * We need the blocks from whitelabel themes to be copied to specific themes
+ * when enabled but the default behavior from block_theme_initialize() is to
+ * not copy the blocks placement if there is already blocks placed.
+ *
+ * @see block_theme_initialize()
+ */
+function alshaya_block_copy_placement($target_theme, $source_theme = NULL) {
+  $source_theme = empty($source_theme) ? \Drupal::config('system.theme')->get('default') : $source_theme;
+
+  // Apply only to new theme's visible regions.
+  $regions = system_region_list($target_theme, REGIONS_VISIBLE);
+  $default_theme_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['theme' => $source_theme]);
+  foreach ($default_theme_blocks as $default_theme_block_id => $default_theme_block) {
+    if (strpos($default_theme_block_id, $source_theme . '_') === 0) {
+      $id = str_replace($source_theme, $target_theme, $default_theme_block_id);
+    }
+    else {
+      $id = $target_theme . '_' . $default_theme_block_id;
+    }
+    $block = $default_theme_block->createDuplicateBlock($id, $target_theme);
+    // If the region isn't supported by the theme, assign the block to the
+    // theme's default region.
+    if (!isset($regions[$block->getRegion()])) {
+      $block->setRegion(system_default_region($target_theme));
+    }
+    $block->save();
+  }
+}
+
+/**
+ * Utility function to delete blocks from a theme.
+ */
+function alshaya_block_delete_blocks($blocks, $theme = NULL) {
+  $theme = empty($theme) ? \Drupal::config('system.theme')->get('default') : $theme;
+
+  foreach ($blocks as $block_id) {
+    $block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => $theme]);
+    if (!empty($block)) {
+      $block = reset($block);
+      $block->delete();
+    }
+  }
+}
