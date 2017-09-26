@@ -54,11 +54,12 @@ function whitelabel_preprocess_block(&$variables) {
       break;
 
     case 'system_menu_block':
-      if ($variables['elements']['#id'] == 'vs_main_navigation_level2') {
+      // @TODO: Make it generic.
+      if ($variables['elements']['#id'] == 'victoria_secret_main_navigation_level2') {
         $variables['content']['#attributes']['class'][] = 'navigation__sub-menu';
         $variables['content']['#attached']['library'][] = 'whitelabel/menu-sub-navigation';
       }
-      elseif ($variables['elements']['#id'] == 'vs_main_navigation') {
+      elseif ($variables['elements']['#id'] == 'victoria_secret_main_navigation') {
         $variables['content']['#attributes']['class'][] = 'menu-logo-navigation';
         $variables['content']['#attached']['library'][] = 'whitelabel/menu-logo-navigation';
       }
