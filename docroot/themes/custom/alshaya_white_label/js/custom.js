@@ -101,4 +101,25 @@
     }
   };
 
+  Drupal.behaviors.stickyAddtobasketButton = {
+    attach: function (context, settings) {
+      // Only on mobile.
+      if ($(window).width() < 768) {
+        $(window, context).on('scroll', function () {
+          // Button top.
+          var button = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
+          var deliveryWrapper = $('.c-pdp .mobile-content-wrapper .delivery-options-wrapper');
+          var buttonTop = button.offset().top - 144;
+          var deliveryWrapperTop = deliveryWrapper.offset().top;
+          if (buttonTop >= deliveryWrapperTop) {
+            button.addClass('hide-button');
+          }
+          else {
+            button.removeClass('hide-button');
+          }
+        });
+      }
+    }
+  };
+
 })(jQuery, Drupal);
