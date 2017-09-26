@@ -74,7 +74,7 @@
           $('.click-collect-all-stores').toggleClass('desc-open', function () {
             // Scroll
             $('html,body').animate({
-              scrollTop: $('.click-collect-all-stores').offset().top
+              scrollTop: 0
             }, 'slow');
             $('#pdp-stores-container').accordion({
               active: false
@@ -82,7 +82,7 @@
           });
         }
         else {
-          $('.click-collect-all-stores').toggle('slow');
+          $('.click-collect-all-stores').slideToggle('slow');
         }
       });
 
