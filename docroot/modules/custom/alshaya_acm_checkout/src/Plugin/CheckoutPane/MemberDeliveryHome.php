@@ -69,6 +69,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#type' => 'container',
       '#attributes' => [
         'id' => 'address-book-form-wrapper',
+        'class' => ['hidden'],
       ],
       '#attached' => [
         'library' => [
