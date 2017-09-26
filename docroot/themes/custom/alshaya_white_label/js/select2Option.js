@@ -25,7 +25,7 @@ jQuery.fn.select2Option = function (options) {
         if (selectIndex === 0) {
           liHtml.hide();
           var defaultTitle = $(this).parent().attr('data-default-title');
-          if (typeof defaultTitle !== typeof undefined && defaultTitle !== false) {
+          if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
             labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
           }
           else {
