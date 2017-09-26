@@ -20,11 +20,5 @@ function alshaya_paragraphs_update_8301() {
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
   ];
 
-  foreach ($configs as $config) {
-    $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', 'alshaya_paragraphs') . '/config/install/' . $config . '.yml'));
-    \Drupal::configFactory()
-      ->getEditable($config)
-      ->setData($config_yaml)
-      ->save();
-  }
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 }
