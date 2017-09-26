@@ -25,7 +25,7 @@ function alshaya_vs_create_default_content() {
 function alshaya_vs_create_copyright_block_content() {
   // Create copyright block content.
   $block_content = BlockContent::create([
-    'uuid' => '6126accb-c99e-4c53-b8fe-5e97be281d53',
+    'uuid' => '340b823b-e16c-457a-bc03-4a096f8ae171',
     'info' => 'Copyright',
     'machine_name' => 'copyright',
     'body' => [

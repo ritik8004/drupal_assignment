@@ -9,6 +9,8 @@
  * Implements hook_install().
  */
 function alshaya_vs_install() {
+  // @TODO: Remove the default branding block.
+
   $join_the_club_body = "<div class=\"block-join-the-club__title-wrapper\">\r\n<h2 class=\"block-join-the-club__title\">Join the club</h2>\r\n<p class=\"block-join-the-club__title-link\">\r\n<a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a>\r\n</p>\r\n</div>\r\n<div class=\"block-join-the-club__list\">\r\n<p>\r\n<span class=\"icon-prize\"></span>\r\nWin exciting prizes\r\n</p>\r\n<p>\r\n<span class=\"icon-rewards\"></span>\r\nUnlock exclusive rewards\r\n</p>\r\n<p>\r\n<span class=\"icon-newsletter\"></span>\r\nBe the first to know\r\n</p>\r\n<a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a>\r\n</div>";
   // Set initial translation string for en language.
   // Array of language translation strings.
