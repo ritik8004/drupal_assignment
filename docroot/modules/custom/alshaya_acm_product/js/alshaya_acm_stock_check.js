@@ -182,6 +182,7 @@
       var is_modal_product = $(this).closest('#drupal-modal');
       var sku_id = $(this).siblings('input[name="sku_id"]').val();
       if (((is_mobile_only_sell.length > 0) || (is_modal_product.length > 0)) && (!$(this).hasClass('reattached-ajax'))) {
+        $(this).off();
         $(this).addClass('reattached-ajax');
         var addCartBase = 'edit-add-to-cart_mobile--only--sell--' + sku_id;
         Drupal.ajax[addCartBase] = new Drupal.Ajax(addCartBase, this, editCartElementSettings);

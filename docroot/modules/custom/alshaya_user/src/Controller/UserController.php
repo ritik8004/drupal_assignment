@@ -59,4 +59,16 @@ class UserController extends ControllerBase {
     return $build;
   }
 
+  /**
+   * Page callback for setting message after logout in change password.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirect to login page.
+   */
+  public function passwordChangedLogout() {
+    // Set the message now.
+    drupal_set_message(t('Your password has been changed.'));
+    return $this->redirect('user.login');
+  }
+
 }

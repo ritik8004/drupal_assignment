@@ -316,18 +316,20 @@ ul.item-list__checkbox,
       top: 2rem;
 
       &.lSNext {
-        right: -1.7rem;
+        #{$right}: -1.7rem;
+        #{$left}: auto;
 
-        @include icon(chevronright, after) {
+        @include icon(chevron#{$right}, after) {
           font-size: 2.125rem;
           color: $black;
         }
       }
 
       &.lSPrev {
-        left: -1.75rem;
+        #{$left}: -1.75rem;
+        #{$right}: auto;
 
-        @include icon(chevronleft, after) {
+        @include icon(chevron#{$left}, after) {
           font-size: 2.125rem;
           color: $black;
         }
