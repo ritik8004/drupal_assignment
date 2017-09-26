@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.collection
+  module:
+    - facets
+    - system
+  theme:
+    - whitelabel_transac
+id: collection
+theme: whitelabel_transac
+region: sidebar_first
+weight: -24
+provider: null
+plugin: 'facet_block:collection'
+settings:
+  id: 'facet_block:collection'
+  label: Collection
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /search
+    negate: false
+    context_mapping: {  }

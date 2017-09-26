@@ -12,7 +12,7 @@ regions:
 
 libraries:
   - whitelabel/reset
-  # - whitelabel/global
+  - whitelabel/global
 
 libraries-override:
   geolocation/geolocation.commonmap:
