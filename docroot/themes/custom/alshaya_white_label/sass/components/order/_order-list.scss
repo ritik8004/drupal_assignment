@@ -209,7 +209,7 @@
   border-spacing: 0;
 
   .order-summary-row:hover td {
-    background: $white-three;
+    background: $white-four;
   }
 
   @include breakpoint($desktop) {
@@ -559,7 +559,7 @@
 
       label {
         display: block;
-        background-color: $whisper-dark;
+        background-color: $white-five;
         border: 1px solid $whisper-dark;
         padding-#{$left}: 0.625rem;
         width: 100%;
