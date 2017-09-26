@@ -113,16 +113,5 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
  * Function to get sort options config.
  */
 function _alshaya_acm_product_position_get_config() {
-  $sort_options = \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
-
-  foreach ($sort_options as $key => $sort_option) {
-    if ($sort_option) {
-      $sort_options[$key] = 1;
-    }
-    else {
-      $sort_options[$key] = 0;
-    }
-  }
-
-  return empty(array_filter($sort_options)) ? FALSE : $sort_options;
+  return \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
 }
