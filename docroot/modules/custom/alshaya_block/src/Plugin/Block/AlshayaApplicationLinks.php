@@ -99,6 +99,11 @@ class AlshayaApplicationLinks extends BlockBase {
     return [
       '#theme' => 'item_list',
       '#items' => $apps,
+      '#attached' => [
+        'library' => [
+          'core/drupal.dialog.ajax',
+        ],
+      ],
     ];
   }
 
