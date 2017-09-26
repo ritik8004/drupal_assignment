@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_email_signup
+  theme:
+    - whitelabel_non_transac
+id: alshaya_email_signup_link
+theme: whitelabel_non_transac
+region: header_secondary
+weight: -5
+provider: null
+plugin: alshaya_email_signup_link
+settings:
+  id: alshaya_email_signup_link
+  label: 'email signup link'
+  provider: alshaya_email_signup
+  label_display: '0'
+visibility: {  }
