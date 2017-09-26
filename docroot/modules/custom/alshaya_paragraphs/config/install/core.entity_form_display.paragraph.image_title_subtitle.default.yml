@@ -3,12 +3,14 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.image_title_subtitle.field_banner
+    - field.field.paragraph.image_title_subtitle.field_link
     - field.field.paragraph.image_title_subtitle.field_sub_title
     - field.field.paragraph.image_title_subtitle.field_title
     - image.style.thumbnail
     - paragraphs.paragraphs_type.image_title_subtitle
   module:
     - image
+    - link
     - workbench_moderation
 id: paragraph.image_title_subtitle.default
 targetEntityType: paragraph
@@ -22,6 +24,14 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
     type: image_image
+    region: content
+  field_link:
+    weight: 9
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
     region: content
   field_sub_title:
     weight: 8
