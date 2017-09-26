@@ -45,3 +45,5 @@ component-libraries:
     paths:
       - components/_patterns/04-pages
 
+stylesheets-remove:
+  - core/assets/vendor/jquery.ui/themes/base/theme.css
