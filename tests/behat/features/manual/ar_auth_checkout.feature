@@ -6,7 +6,8 @@ Feature: As an authenticated user
   Background:
     Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    Given I am on a configurable product
+    Then I should see the link "My account"
+    Given I am on a simple product page
     And I wait for the page to load
     When I press "add to basket"
     And I wait for AJAX to finish
@@ -32,12 +33,12 @@ Feature: As an authenticated user
     When I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
 
   @hd @knet
   Scenario: As an authenticated user
-    I should be able to checkout using Home delivery
-    and pay by KNET on Arabic site
+  I should be able to checkout using Home delivery
+  and pay by KNET on Arabic site
     When I follow "خدمة التوصيل للمنزل"
     And I wait for AJAX to finish
     When I follow "توصيل إلى هذا العنوان"
@@ -59,12 +60,12 @@ Feature: As an authenticated user
     And I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
 
   @hd @cs
   Scenario: As an authenticated user
-    I should be able to checkout using Home delivery
-    and pay by Cybersource on Arabic site
+  I should be able to checkout using Home delivery
+  and pay by Cybersource on Arabic site
     When I follow "خدمة التوصيل للمنزل"
     And I wait for AJAX to finish
     When I follow "توصيل إلى هذا العنوان"
@@ -81,12 +82,12 @@ Feature: As an authenticated user
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
 
   @cc @knet
   Scenario: As an authenticated user
-    I should be able to checkout using Click and Collect
-    and pay by KNET on Arabic site
+  I should be able to checkout using Click and Collect
+  and pay by KNET on Arabic site
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
     When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
@@ -119,7 +120,7 @@ Feature: As an authenticated user
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
 
   @cc @cs
   Scenario: As an authenticated user
@@ -152,4 +153,4 @@ Feature: As an authenticated user
     When I wait 10 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
-    Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
+    Then I should see "رقم طلبيتك هو"
