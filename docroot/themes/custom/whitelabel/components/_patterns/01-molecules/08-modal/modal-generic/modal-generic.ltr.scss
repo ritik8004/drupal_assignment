@@ -1,0 +1,43 @@
+@import '../../../../sass/config/**/*.scss';
+
+.ui-widget-overlay {
+  background: $black;
+  opacity: 0.6;
+}
+
+.ui-dialog {
+  background: $white;
+  padding: 2.5rem 0 1.875rem 1.875rem;
+  top: 20rem !important;
+
+  h2 {
+    font-size: 0.875rem;
+  }
+
+  .ui-button-icon-only {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+    background: $gainsboro;
+    height: 1.9375rem;
+    width: 2.1875rem;
+  }
+}
+
+.ui-dialog-title {
+  font-size: 1.5rem;
+  color: $black-smoke;
+  border-bottom: 1px solid $gainsboro;
+  margin-bottom: 0.625rem;
+  padding-bottom: 0.625rem;
+  width: 100%;
+  display: inline-block;
+}
+
+.ui-state-default .ui-icon {
+  @include icon(close, after) {
+    font-size: 14px;
+    color: #333;
+  }
+}
