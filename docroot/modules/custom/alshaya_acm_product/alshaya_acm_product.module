@@ -621,6 +621,12 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
     $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);
+    $data['selector'] = $selector;
+
+    $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
+
+    $quantity_selector = '.quantity-' . $sku_identifier;
+    $response->addCommand(new ReplaceCommand($quantity_selector, $form['quantity']));
 
     // Get the data from BubbleMetaData.
     $bubbleable_metadata = BubbleableMetadata::createFromRenderArray($dynamic_parts);
@@ -628,21 +634,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // Retrieve the attachments from the $data.
     $attachments = $bubbleable_metadata->getAttachments();
 
-    // Generate the settings to be sent back with the ajax response.
-    $settings = '';
-    if (!empty($attachments['drupalSettings'])) {
-      $settings .= '<script type="text/javascript">jQuery.extend(drupalSettings, ';
-      $settings .= Json::encode($attachments['drupalSettings']);
-      $settings .= ');</script>';
-    }
-
-    $data['selector'] = $selector;
-    $data['replaceWith'] .= $settings;
-
-    $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
-
-    $selector = '.quantity-' . $sku_identifier;
-    $response->addCommand(new ReplaceCommand($selector, $form['quantity']));
+    // Send the updated settings in ajax response.
+    $response->addCommand(new SettingsCommand($attachments['drupalSettings'], TRUE));
 
     // Update the promotions for the product.
     $promotion_links = '';

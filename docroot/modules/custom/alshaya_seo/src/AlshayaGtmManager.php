@@ -775,6 +775,8 @@ class AlshayaGtmManager {
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
+      'userEmailID' => $order['email'],
+      'userName' => $order['firstname'] . ' ' . $order['lastname'],
     ];
 
     return [

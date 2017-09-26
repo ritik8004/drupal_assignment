@@ -123,13 +123,6 @@ function whitelabel_preprocess_node(&$variables) {
  */
 function whitelabel_theme_suggestions_block_alter(array &$suggestions, array $variables) {
   switch ($variables['elements']['#base_plugin_id']) {
-    // Copyright block.
-    case 'block_content':
-      if ($variables['elements']['#plugin_id'] == 'block_content:6126accb-c99e-4c53-b8fe-5e97be281d53') {
-        $suggestions[] = 'block__alshaya_copyright';
-      }
-      break;
-
     case 'alshaya_stores_finder':
       $block_region = Block::load($variables['elements']['#id'])->getRegion();
       if (strpos($block_region, 'header') !== FALSE) {
@@ -300,4 +293,41 @@ function whitelabel_preprocess_views_view_unformatted__store_list(&$variables) {
  */
 function whitelabel_preprocess_page_title(&$variables) {
   $variables['title_attributes']['class'] = 'page--title';
+}
+
+/**
+ * Implements hook_theme_preprocess_form_element().
+ */
+function whitelabel_preprocess_form_element(array &$variables) {
+  $element = $variables['element'];
+  $variables['is_default_form'] = FALSE;
+  if ($element['#type'] == 'checkbox') {
+    $variables['is_checkbox'] = TRUE;
+  }
+  else {
+    $variables['is_checkbox'] = FALSE;
+  }
+
+  // Remove generic input if form elements hidden.
+  $classes = $variables['element']['#attributes']['class'];
+  if (isset($classes)) {
+    foreach ($classes as $class) {
+      if (strpos($class, 'hidden') !== FALSE) {
+        $variables['is_default_form'] = TRUE;
+      }
+    }
+  }
+  // Remove generic input styles on the following form elements.
+  if ($variables['element']['#attributes']['id'] === 'edit-geolocation-geocoder-google-places-api') {
+    $variables['is_default_form'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function whitelabel_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'user_login_form' || $form_id == 'user_register_form') {
+    $form['actions']['submit']['#attributes']['class'][] = 'button--form-submit';
+  }
 }

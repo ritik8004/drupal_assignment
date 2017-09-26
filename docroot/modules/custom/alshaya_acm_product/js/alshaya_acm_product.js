@@ -33,6 +33,9 @@
     }
     else {
       $(data.selector).replaceWith(data.replaceWith);
+
+      // We trigger focus of cart button to avoid issue in iOS.
+      setTimeout('jQuery(".edit-add-to-cart").trigger("focus")', 50);
     }
   };
 

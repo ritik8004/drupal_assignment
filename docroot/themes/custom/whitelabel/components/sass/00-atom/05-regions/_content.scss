@@ -20,11 +20,8 @@
 .node-advanced-page {
   .region-content {
     max-width: 100%;
-
-    @include breakpoint($upto-palm) {
-      padding-left: 0;
-      padding-right: 0;
-    }
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .promo-container {

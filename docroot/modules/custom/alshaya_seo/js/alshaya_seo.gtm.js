@@ -330,13 +330,14 @@
       /** Remove Product from cart .**/
       // Add click handler to fire 'removeFromCart' event to GTM.
       removeCartSelector.once('js-event').each(function () {
-        $(this).on('click', function (e) {
-          // Get selector holding details around the product.
-          var removeItem = $(this).closest('td.quantity').siblings('td.name').find('[gtm-type="gtm-remove-cart-wrapper"]');
+        // Get selector holding details around the product.
+        var removeItem = $(this).closest('td.quantity').siblings('td.name').find('[gtm-type="gtm-remove-cart-wrapper"]');
+
+        removeItem.on('cart-item-removed', function () {
           var product = Drupal.alshaya_seo_gtm_get_product_values(removeItem);
 
           // Set product quantity to the number of items selected for quantity.
-          product.quantity = $(this).closest('td.quantity').find('select').val();
+          product.quantity = $(this).closest('tr').find('td.quantity select').val();
 
           // Set selected size as dimension1.
           product.dimension1 = removeItem.attr('gtm-size');
@@ -359,7 +360,7 @@
           };
 
           dataLayer.push(data);
-        });
+        })
       });
 
       /** Tracking New customers .**/

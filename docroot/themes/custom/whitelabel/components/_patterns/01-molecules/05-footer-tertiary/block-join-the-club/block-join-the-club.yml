@@ -4,7 +4,7 @@ content: '<div class="block-join-the-club__image-wrapper">
           </div>
           <div class="block-join-the-club__title-wrapper">
               <h2 class="block-join-the-club__title">Join the club</h2>
-              <p class="block-join-the-club__title-link is-hidden">
+              <p class="block-join-the-club__title-link">
                 <a class="final-pc-learn-more" href="http://hyperurl.co/PRIVILEGES" target="_blank">Learn more</a>
               </p>
           </div>
