@@ -2,15 +2,15 @@
 
 /**
  * @file
- * Installation and update functions for Alshaya ACM Product Position.
+ * Installation and update functions for SKU Position.
  */
 
 /**
  * Implements hook_schema().
  */
-function alshaya_acm_product_position_schema() {
-  $schema['alshaya_acm_product_position'] = [
-    'description' => 'Stores product position.',
+function acq_sku_position_schema() {
+  $schema['acq_sku_position'] = [
+    'description' => 'Stores sku product position.',
     'fields' => [
       'nid' => [
         'type' => 'int',
