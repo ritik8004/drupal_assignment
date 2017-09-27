@@ -55,7 +55,7 @@
   main {
     @include breakpoint($only-mobile) {
       #block-alshaya-white-label-page-title,
-      #block-alshaya-white-label-local-tasks,
+      #block-local-tasks,
       #block-userrecentorders,
       #block-myaccountneedhelp,
       article .subtitle,
