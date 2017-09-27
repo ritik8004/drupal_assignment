@@ -111,10 +111,15 @@ function whitelabel_preprocess_page(&$variables) {
  */
 function whitelabel_preprocess_node(&$variables) {
   $node_bundle = $variables['node']->bundle();
+  $view_mode = $variables['view_mode'];
   switch ($node_bundle) {
     case 'advanced_page':
       $variables['content']['field_promo_blocks']['#attributes']['class'][] = 'field-promo-block';
       break;
+  }
+
+  if ($node_bundle === 'product' && $view_mode === 'search_result') {
+    $variables['share_label'] = t('Share');
   }
 }
 

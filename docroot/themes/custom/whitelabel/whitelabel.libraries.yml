@@ -208,6 +208,8 @@ node-product-item:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/field-product-listing/node-product-item.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/06-content/field-product-listing/node-product-item.js: {}
 
 slick:
   css:
