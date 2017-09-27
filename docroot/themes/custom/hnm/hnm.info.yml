@@ -16,7 +16,9 @@ regions:
   footer_secondary: 'Footer Secondary'
 
 libraries:
+  - whitelabel/global
   - hnm/global
+  - hnm/fonts
 
 component-libraries:
   atoms:
