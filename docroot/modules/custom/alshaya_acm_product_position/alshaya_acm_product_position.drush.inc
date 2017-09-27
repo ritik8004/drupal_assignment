@@ -53,8 +53,7 @@ function drush_alshaya_acm_product_position_position_sync($position_type = 'posi
     }
 
     // Get product position for this category from Magento.
-    $response = \Drupal::service('alshaya_api.api')->invokeApi("categories/$commerce_id/products", [], 'GET');
-    $response = json_decode($response, TRUE);
+    $response = \Drupal::service('acq_commerce.api')->getProductPosition($commerce_id);
     if (!is_array($response)) {
       continue;
     }
