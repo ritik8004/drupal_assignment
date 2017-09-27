@@ -58,6 +58,7 @@ installed_extras:
   - memcached
   - xhprof
   - tideways
+  - varnish
 
 # Use PHP 5.6.
 php_version: "5.6"
@@ -137,3 +138,9 @@ mysql_users:
     host: "%"
     password: drupal
     priv: "drupal_alshaya.*:ALL/drupal_non_transac.*:ALL"
+
+varnish_version: "4.1"
+apache_listen_port: "81"
+varnish_listen_port: "80"
+varnish_default_backend_port: "81"
+varnish_default_vcl_template_path: "../../../../box/alshaya.vcl"
