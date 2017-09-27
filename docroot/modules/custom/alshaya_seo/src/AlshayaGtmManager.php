@@ -486,8 +486,6 @@ class AlshayaGtmManager {
     $processed_attributes['ecommerce']['currencyCode'] = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
 
     // Set dimension1 & 2 to empty until product added to cart.
-    $attributes['gtm-dimension1'] = '';
-    $attributes['gtm-dimension2'] = '';
     $attributes['gtm-dimension6'] = '';
     $attributes['gtm-dimension7'] = '';
     $attributes['gtm-product-sku'] = '';
@@ -539,7 +537,8 @@ class AlshayaGtmManager {
         // For CC we always use step 2.
         $attributes['step'] = 2;
       }
-      elseif (isset($address['extension'], $address['extension']['address_area_segment'])) {
+      elseif (isset($address['extension'], $address['extension']['address_area_segment']) &&
+        ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;
       }
