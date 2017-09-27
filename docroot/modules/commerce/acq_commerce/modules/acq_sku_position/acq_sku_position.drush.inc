@@ -10,18 +10,18 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_drush_command().
  */
-function alshaya_acm_product_position_drush_command() {
+function acq_sku_position_drush_command() {
   $commands = [];
 
   $commands['position-sync'] = [
-    'description' => 'Drush command to sync product position based on category.',
+    'description' => 'Drush command to sync sku product position based on category.',
     'aliases' => ['aapps'],
     'arguments'   => [
       'position_type' => 'Name of the position type.',
     ],
     'examples' => [
-      'drush aaprs' => 'Sync product position based on category, by default "best_seller".',
-      'drush aaprs myargument' => 'Sync product position based on category, by "myargument".',
+      'drush aapps' => 'Sync product position based on category, by default "position".',
+      'drush aapps myargument' => 'Sync product position based on category, by "myargument".',
     ],
   ];
 
@@ -31,7 +31,7 @@ function alshaya_acm_product_position_drush_command() {
 /**
  * Sync product position based on category.
  */
-function drush_alshaya_acm_product_position_position_sync($position_type = 'best_seller') {
+function drush_acq_sku_position_position_sync($position_type = 'position') {
   drush_print(dt('Product position sync in progress...'));
   // Get root category configuration.
   $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
@@ -53,8 +53,7 @@ function drush_alshaya_acm_product_position_position_sync($position_type = 'best
     }
 
     // Get product position for this category from Magento.
-    $response = \Drupal::service('alshaya_api.api')->invokeApi("categories/$commerce_id/products", [], 'GET');
-    $response = json_decode($response, TRUE);
+    $response = \Drupal::service('acq_commerce.api')->getProductPosition($commerce_id);
     if (!is_array($response)) {
       continue;
     }
@@ -76,7 +75,7 @@ function drush_alshaya_acm_product_position_position_sync($position_type = 'best
     ]));
 
     // Delete existing records of position for this category.
-    $database->delete('alshaya_acm_product_position')
+    $database->delete('acq_sku_position')
       ->condition('tid', $term->tid)
       ->condition('position_type', $position_type)
       ->execute();
@@ -99,7 +98,7 @@ function drush_alshaya_acm_product_position_position_sync($position_type = 'best
     }
 
     $is_data_available = FALSE;
-    $query = $database->insert('alshaya_acm_product_position')
+    $query = $database->insert('acq_sku_position')
       ->fields(['nid', 'tid', 'position', 'position_type']);
     foreach ($response as $product_position) {
       if (isset($nids[$product_position['sku']])) {
