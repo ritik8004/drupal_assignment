@@ -88,7 +88,7 @@
         });
       }
 
-      if (isRegistrationSuccessPage) {
+      if ((isRegistrationSuccessPage) && (context === document)) {
         Drupal.alshaya_seo_gtm_push_signin_type('registration success');
       }
 
