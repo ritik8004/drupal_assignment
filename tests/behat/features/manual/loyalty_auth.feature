@@ -174,21 +174,17 @@ Feature:
   Scenario: As an authenticated user on Arabic site
   privilege card number should not be displayed on order confirmation page
   when the field is empty in both my account section and basket page
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     And I fill in "edit-privilege-card-number" with ""
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
+    Then I should see "Contact details changes have been saved."
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    And I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     And I go to "/ar/cart"
     And I wait for the page to load
@@ -214,21 +210,17 @@ Feature:
   Scenario: As an authenticated user on Arabic site
   PC value from the basket should be displayed on Order confirmation page when my account is null
   and my account value should not get updated with the basket PC value
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     And I fill in "edit-privilege-card-number" with ""
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
+    Then I should see "Contact details changes have been saved."
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    And I press "أضف إلى سلة التسوق"
+    And I press "Add to basket"
     And I wait for AJAX to finish
     And I go to "/ar/cart"
     And I wait for the page to load
@@ -261,22 +253,18 @@ Feature:
   Scenario: As an authenticated user
   no PC number should be displayed on Order confirmation page
   when the basket value is edited to be null, but my account has a PC number
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     And I fill in "edit-privilege-card-number" with "000135844"
     When I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
+    Then I should see "Contact details changes have been saved."
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    And I press "أضف إلى سلة التسوق"
+    And I press "Add to basket"
     And I wait for AJAX to finish
     And I go to "/ar/cart"
     And I wait for the page to load
@@ -309,22 +297,18 @@ Feature:
   Scenario: As an authenticated user
   PC value from the basket should be displayed on order confirmation page
   and not from the my account section
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     And I fill in "edit-privilege-card-number" with "000135844"
     When I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
+    Then I should see "Contact details changes have been saved."
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    And I press "أضف إلى سلة التسوق"
+    And I press "Add to basket"
     And I wait for AJAX to finish
     And I go to "/ar/cart"
     And I wait for the page to load

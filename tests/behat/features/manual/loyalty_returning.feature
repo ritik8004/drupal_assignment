@@ -256,9 +256,7 @@ Feature: Test the privilege card functionality for returning customer
   when the PC number is null on basket
     Given I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -286,23 +284,19 @@ Feature: Test the privilege card functionality for returning customer
   and my account field for PC should remain null after placing order
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with ""
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -341,24 +335,20 @@ Feature: Test the privilege card functionality for returning customer
   and my account PC number is not null
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -391,24 +381,20 @@ Feature: Test the privilege card functionality for returning customer
   when user returns to basket page from any of the checkout pages
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -435,24 +421,20 @@ Feature: Test the privilege card functionality for returning customer
   even when user has different PC number in his account
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -486,24 +468,20 @@ Feature: Test the privilege card functionality for returning customer
   and user had a different value in my account section
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
