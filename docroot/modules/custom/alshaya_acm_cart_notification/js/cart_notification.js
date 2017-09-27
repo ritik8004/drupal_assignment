@@ -78,7 +78,7 @@
       $.fn.stopSpinner = function (data) {
         l.ladda('stop');
         if (data.message === 'success') {
-          $('.edit-add-to-cart', context).find('.ladda-label').html(Drupal.t('added'));
+          $('.edit-add-to-cart', $(data.sku_css_id).parent()).find('.ladda-label').html(Drupal.t('added'));
           var pdpAddCartButton = l;
           var addedProduct = pdpAddCartButton.closest('article[gtm-type="gtm-product-link"]');
           var quantity = parseInt(pdpAddCartButton.closest('.sku-base-form').find('.form-item-quantity select').val());
