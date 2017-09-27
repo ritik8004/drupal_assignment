@@ -1,6 +1,7 @@
 .labels-container {
   .label {
     position: absolute;
+    z-index: 4;
 
     &.top {
       &-left {
@@ -14,7 +15,7 @@
 
         @include breakpoint($desktop) {
           top: 1rem;
-          #{$left}: 1rem;
+          #{$left}: 2rem;
         }
       }
 
@@ -29,7 +30,7 @@
 
         @include breakpoint($desktop) {
           top: 1rem;
-          #{$right}: 1rem;
+          #{$right}: 2rem;
         }
       }
     }
@@ -46,7 +47,7 @@
 
         @include breakpoint($desktop) {
           bottom: 12.5rem;
-          #{$left}: 1rem;
+          #{$left}: 2rem;
         }
       }
 
@@ -61,7 +62,7 @@
 
         @include breakpoint($desktop) {
           bottom: 12.5rem;
-          #{$right}: 1rem;
+          #{$right}: 2rem;
         }
       }
     }
