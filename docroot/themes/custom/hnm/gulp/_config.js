@@ -13,7 +13,8 @@ module.exports = {
     options: {
       outputStyle: 'expanded',
       includePaths: [
-        './node_modules'
+        './node_modules',
+        './sass'
       ]
     },
     variables: {

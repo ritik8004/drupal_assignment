@@ -1,0 +1,10 @@
+// This file is used to include all the partial which is made seperatley because of file having problem to import directly global.scss file.
+
+@import 'breakpoints';
+@import 'colors';
+@import 'fonts';
+@import 'global';
+@import 'plugins';
+@import 'utils';
+@import 'variables';
+@import 'z-index';
