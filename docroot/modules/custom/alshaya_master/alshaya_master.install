@@ -766,6 +766,9 @@ function alshaya_master_install() {
     'Select Area' => [
       'ar' => 'يرجى اختيار المنطقة',
     ],
+    'Select @title' => [
+      'ar' => 'يرجى اختيار @title',
+    ],
     'The email address @email is already taken.' => [
       'ar' => 'عنوان البريد الإلكتروني @email مستعمل مسبقاً',
     ],
