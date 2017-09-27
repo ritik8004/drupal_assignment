@@ -49,6 +49,8 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
       // If no position found for product, set the default position.
       $db_query->addExpression('IFNULL(acq_sku_position.position, 99999999)', 'no_position');
       $db_query->orderBy('no_position', $order);
+      // Order by name if two products have same position (to avoid duplicity).
+      $db_query->orderBy('t.name_1', 'ASC');
     }
   }
 }
