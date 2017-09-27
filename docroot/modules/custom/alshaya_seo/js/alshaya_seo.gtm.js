@@ -507,7 +507,7 @@
             var highlights = $(this).find('.highlights [gtm-type="gtm-highlights"]');
 
             if (highlights.length > 0) {
-              Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
+              Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation', 'promotionImpression');
             }
           }
         });
@@ -518,7 +518,7 @@
       });
 
       if ($('.paragraph--type--promo-block').length > 0) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType);
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
       }
 
       // Tracking view of promotions.
