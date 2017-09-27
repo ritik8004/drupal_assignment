@@ -119,7 +119,7 @@ function whitelabel_preprocess_node(&$variables) {
   }
 
   if ($node_bundle === 'product' && $view_mode === 'search_result') {
-    $variables['share_label'] = 'Share +';
+    $variables['share_label'] = t('Share');
   }
 }
 

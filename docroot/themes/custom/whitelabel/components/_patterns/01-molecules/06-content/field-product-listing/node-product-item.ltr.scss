@@ -39,7 +39,7 @@
 
 .view-product-item__share--label {
   position: absolute;
-  right: 0;
+  #{direction(right)}: 0;
   bottom: 0;
   padding: 0.875rem;
   background: $medium-pink;
