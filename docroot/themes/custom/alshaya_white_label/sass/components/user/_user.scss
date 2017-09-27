@@ -554,7 +554,7 @@
   }
 }
 
-#block-alshaya-white-label-content {
+#block-content {
   .order-items {
     list-style: none;
     width: 100%;
@@ -833,7 +833,7 @@
     }
   }
 
-  #block-alshaya-white-label-content {
+  #block-content {
     padding-top: 1rem;
 
     @include breakpoint($only-tablet) {
