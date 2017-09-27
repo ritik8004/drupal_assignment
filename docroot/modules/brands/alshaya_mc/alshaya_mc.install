@@ -67,3 +67,33 @@ function alshaya_mc_install() {
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
 }
+
+/**
+ * Implements hook_update().
+ *
+ * Rename block IDs to generic ones.
+ */
+function alshaya_mc_update_8301() {
+  $blocks = [
+    'alshaya_white_label_branding' => 'branding',
+    'alshaya_white_label_content' => 'content',
+    'alshaya_white_label_account_menu' => 'account_menu',
+    'alshaya_white_label_breadcrumbs' => 'breadcrumbs',
+    'alshaya_white_label_help' => 'help',
+    'alshaya_white_label_local_actions' => 'local_actions',
+    'alshaya_white_label_local_tasks' => 'local_tasks',
+    'alshaya_white_label_messages' => 'messages',
+    'alshaya_white_label_page_title' => 'page_title',
+  ];
+
+  foreach ($blocks as $old_block_id => $new_block_id) {
+    $old_block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $old_block_id]);
+
+    if (!empty($old_block)) {
+      $old_block = reset($old_block);
+      $new_block = $old_block->createDuplicateBlock($new_block_id);
+      $old_block->delete();
+      $new_block->save();
+    }
+  }
+}
