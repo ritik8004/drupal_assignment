@@ -39,4 +39,28 @@
     }
   };
 
+  Drupal.behaviors.stickyAddtobasketButton = {
+    attach: function (context, settings) {
+      // Only on mobile.
+      if ($(window).width() < 768) {
+        $(window, context).on('scroll', function () {
+          // Button top.
+          var button = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
+          // This is the wrapper that holds delivery options.
+          var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper');
+          // Delivery options bottom.
+          var mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + 56;
+          // Screen scroll offset.
+          var windowBottom = $(window).scrollTop() + $(window).height();
+          // Hide button when we are below delivery wrapper.
+          if (windowBottom >= mobileCWBottom) {
+            button.addClass('hide-button');
+          }
+          else {
+            button.removeClass('hide-button');
+          }
+        });
+      }
+    }
+  };
 })(jQuery, Drupal);
