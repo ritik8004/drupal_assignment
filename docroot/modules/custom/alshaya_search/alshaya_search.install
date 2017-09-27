@@ -66,3 +66,19 @@ function alshaya_search_modules_installed($modules) {
   $search_view->set('display.default.display_options.pager.options.views_infinite_scroll.button_text', 'عرض المزيد');
   $search_view->save();
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_search_update_8301() {
+  // Update search index field.
+  $configs = [
+    'search_api.index.acquia_search_index',
+  ];
+  if (!isset($_ENV['AH_SITE_NAME'])) {
+    alshaya_config_install_configs($configs, 'alshaya_search_local_search');
+  }
+  else {
+    alshaya_config_install_configs($configs, 'alshaya_search_acquia_search', 'optional');
+  }
+}
