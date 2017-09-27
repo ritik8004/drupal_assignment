@@ -322,6 +322,9 @@ function alshaya_master_install() {
     'Postal code' => [
       'ar' => 'الرمز البريدي',
     ],
+    'Country' => [
+      'ar' => 'البلد',
+    ],
     'Telephone' => [
       'ar' => 'الهاتف',
     ],
@@ -1076,16 +1079,19 @@ function alshaya_master_install() {
       'ar' => 'المجموعة',
     ],
     'Style Code: @value' => [
-      'ar' => '@value :رمز المنتج',
+      'ar' => 'رمز المنتج: @value',
     ],
     'Season: @value' => [
-      'ar' => '@value :الموسم',
+      'ar' => 'الموسم: @value',
     ],
     'Product brand: @value' => [
-      'ar' => '@value :العلامة التجارية',
+      'ar' => 'العلامة التجارية: @value',
     ],
     'Color: @value' => [
-      'ar' => '@value :اللون',
+      'ar' => 'اللون: @value',
+    ],
+    "What's In The Box" => [
+      'ar' => 'ماذا يوجد في الصندوق؟',
     ],
     'Size' => [
       'ar' => 'المقاس',
