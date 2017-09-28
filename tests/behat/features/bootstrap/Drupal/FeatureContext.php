@@ -1225,4 +1225,139 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     }
   }
 
+  /**
+   * @Then /^it should display title, price and item code$/
+   */
+  public function itShouldDisplayTitlePriceAndItemCode() {
+    $page = $this->getSession()->getPage();
+    $parent = $page->find('css', '.content__title_wrapper');
+    $title = $parent->find('css', 'h1 > span');
+    if (NULL == $title) {
+      throw new \Exception('Title not displayed on PDP');
+    }
+    $price = $parent->find('css', '.price-block');
+    if (NULL == $price) {
+      throw new \Exception('Price not displayed on PDP');
+    }
+    $english = $parent->find('css', '.content--item-code > span.field__label')
+      ->find('named', ['content', 'Item Code:']);
+    $arabic = $parent->find('css', '.content--item-code > span.field__label')
+      ->find('named', ['content', 'رمز القطعة:']);
+    if (!($english or $arabic)) {
+      throw new \Exception('Item code not displayed on PDP');
+    }
+
+  }
+
+  /**
+   * @Then /^it should display quantity$/
+   */
+  public function itShouldDisplayQuantity() {
+    $page = $this->getSession()->getPage();
+    $eng_quantity = $page->find('css', '.form-item-quantity > .js-form-required.form-required ')
+      ->find('named', ['content', 'Quantity']);
+    $arb_quantity = $page->find('css', '.form-item-quantity > .js-form-required.form-required ')
+      ->find('named', ['content', 'الكمية']);
+    if (!($eng_quantity or $arb_quantity)) {
+      throw new \Exception('Quantity is not displayed on PDP');
+    }
+  }
+
+  /**
+   * @Then /^I should see the link for "([^"]*)"$/
+   */
+  public function iShouldSeeTheLinkFor($arg1) {
+    $link = $this->getSession()->getPage()->find('css', $arg1);
+    if (!$link) {
+      throw new \Exception($arg1 . ' link not found');
+    }
+  }
+
+  /**
+   * @Then /^I should see buttons for facebook, Twitter and Pinterest$/
+   */
+  public function iShouldSeeButtonsForFacebookTwitterAndPinterest() {
+    $page = $this->getSession()->getPage();
+    $facebook = $page->find('css', '.st_facebook_custom');
+    if (NULL == $facebook) {
+      throw new \Exception('Facebook button not displayed on PDP');
+    }
+    $twitter = $page->find('css', '.st_twitter_custom');
+    if (NULL == $twitter) {
+      throw new \Exception('Twitter button not displayed on PDP');
+    }
+    $pinterest = $page->find('css', '.st_pinterest_custom');
+    if (NULL == $pinterest) {
+      throw new \Exception('Pinterest button not displayed on PDP');
+    }
+  }
+
+  /**
+   * @Then /^I should see the inline modal for "([^"]*)"$/
+   */
+  public function iShouldSeeTheInlineModalFor($arg1) {
+    $modal = $this->getSession()->getPage()->find('css', $arg1);
+    if (!$modal) {
+      throw new \Exception('Inline modal did not get displayed');
+    }
+  }
+
+  /**
+   * @Given /^I scroll to x "([^"]*)" y "([^"]*)" coordinates of page$/
+   */
+  public function iScrollToXYCoordinatesOfPage($arg1, $arg2) {
+
+    try {
+      $this->getSession()
+        ->executeScript("(function(){window.scrollTo($arg1, $arg2);})();");
+    }
+
+    catch (\Exception $e) {
+      throw new \Exception("ScrollIntoView failed");
+    }
+  }
+
+  /**
+   * @Then /^I should not see the inline modal for "([^"]*)"$/
+   */
+  public function iShouldNotSeeTheInlineModalFor($arg1) {
+    $modal = $this->getSession()->getPage()->find('css', $arg1);
+    if ($modal) {
+      throw new \Exception('Inline modal did not get displayed');
+    }
+  }
+
+  /**
+   * @Given /^it should display size$/
+   */
+  public function itShouldDisplaySizeAndQuantity() {
+    $page = $this->getSession()->getPage();
+    $eng_size = $page->find('css', '#configurable_ajax > div > div.select2Option > h4.list-title')
+      ->find('named', ['content', 'Size : ']);
+    $arb_size = $page->find('css', '#configurable_ajax > div > div.select2Option > h4.list-title')
+      ->find('named', ['content', 'المقاس :']);
+    if (!($eng_size or $arb_size)) {
+      throw new \Exception('Size is not displayed on PDP');
+    }
+  }
+
+  /**
+   * @Then /^I should be directed to window having "([^"]*)"$/
+   */
+  public function iShouldBeDirectedToWindowHaving($text) {
+    $windowNames = $this->getSession()->getWindowNames();
+    if (count($windowNames) > 1) {
+      $this->getSession()->switchToWindow($windowNames[1]);
+    }
+    else {
+      throw new \Exception('Social media did not open in a new window');
+    }
+    $text = $this->getSession()->getPage()->find('named', ['content', $text]);
+    if (!$text) {
+      throw new \Exception($text . ' was not found anywhere on the new window');
+    }
+    $current_window = $this->getSession()->getWindowName();
+    $this->getSession()->stop($current_window);
+  }
+
 }
