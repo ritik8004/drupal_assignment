@@ -133,6 +133,11 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: nid
     type: integer
+  created:
+    label: 'Authored on'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
 datasource_settings:
   'entity:node':
     bundles:
