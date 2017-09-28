@@ -9,9 +9,24 @@
   background: $white;
   padding: 2.5rem 0 1.875rem 1.875rem;
   top: 20rem !important;
+  width: 100%;
+
+  @include breakpoint($lap) {
+    width: 45rem !important;
+    left: 13% !important;
+  }
+
+  @include breakpoint($desk) {
+    width: 54.5rem !important;
+    left: 19% !important;
+  }
 
   h2 {
     font-size: 0.875rem;
+  }
+
+  .ui-dialog-buttonpane {
+    float: left;
   }
 
   .ui-button-icon-only {
@@ -37,7 +52,16 @@
 
 .ui-state-default .ui-icon {
   @include icon(close, after) {
-    font-size: 14px;
-    color: #333;
+    font-size: 0.875rem;
+    color: $black-smoke;
   }
+}
+
+.ui-dialog-buttonset.form-actions {
+  border: 1px solid $medium-pink;
+  background: transparent;
+  color: $medium-pink;
+  width: 5.6875rem;
+  height: 2.1875rem;
+  float: left;
 }
