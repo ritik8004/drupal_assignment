@@ -13,6 +13,7 @@
 function alshaya_paragraphs_update_8301() {
 
   $configs = [
+    // Image + title + subtitle paragraph type.
     'paragraphs.paragraphs_type.image_title_subtitle',
     'field.field.paragraph.image_title_subtitle.field_banner',
     'field.field.paragraph.image_title_subtitle.field_sub_title',
@@ -21,7 +22,29 @@ function alshaya_paragraphs_update_8301() {
     'core.entity_form_display.paragraph.image_title_subtitle.default',
     'core.entity_view_display.paragraph.image_title_subtitle.default',
     'core.entity_view_display.paragraph.image_title_subtitle.326x288',
+    'language.content_settings.paragraph.image_title_subtitle',
+    'core.base_field_override.paragraph.image_title_subtitle.created',
+    'core.base_field_override.paragraph.image_title_subtitle.moderation_state',
+    'core.base_field_override.paragraph.image_title_subtitle.status',
+    'core.base_field_override.paragraph.image_title_subtitle.uid',
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    // Offers bordered paragraph type.
+    'paragraphs.paragraphs_type.offers_bordered',
+    'field.field.paragraph.offers_bordered.field_banner',
+    'field.field.paragraph.offers_bordered.field_heading',
+    'field.field.paragraph.offers_bordered.field_link',
+    'field.field.paragraph.offers_bordered.field_sub_title',
+    'field.field.paragraph.offers_bordered.field_title',
+    'field.storage.paragraph.field_heading',
+    'core.base_field_override.paragraph.offers_bordered.created',
+    'core.base_field_override.paragraph.offers_bordered.moderation_state',
+    'core.base_field_override.paragraph.offers_bordered.status',
+    'core.base_field_override.paragraph.offers_bordered.uid',
+    'core.entity_form_display.paragraph.offers_bordered.default',
+    'core.entity_view_display.paragraph.offers_bordered.326x288',
+    'core.entity_view_display.paragraph.offers_bordered.default',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    'language.content_settings.paragraph.offers_bordered',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
