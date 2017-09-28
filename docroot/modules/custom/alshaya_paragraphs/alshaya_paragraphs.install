@@ -45,6 +45,7 @@ function alshaya_paragraphs_update_8301() {
     'core.entity_view_display.paragraph.offers_bordered.default',
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
     'language.content_settings.paragraph.offers_bordered',
+    'field.field.paragraph.views_reference.field_title',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
