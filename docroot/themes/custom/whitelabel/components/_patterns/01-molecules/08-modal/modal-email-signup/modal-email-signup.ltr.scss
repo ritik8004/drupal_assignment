@@ -8,18 +8,25 @@
 
     @include breakpoint($desk) {
       display: block;
-      float: direction(left);
-      margin-top: -1.7rem;
+      float: direction(right);
       margin-right: 1rem;
     }
 
-    ul li {
+    ul {
+      padding-#{direction(left)}: 1.5rem;
+    }
+
+    li {
       font-size: 0.75rem;
     }
   }
 
   .form__form-fields {
     width: 25rem;
+
+    @include breakpoint($desk) {
+      float: direction(left);
+    }
 
     & > p {
       font-size: 0.75rem;

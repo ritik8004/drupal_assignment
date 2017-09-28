@@ -136,5 +136,7 @@ input:focus ~ .input__label label {
 }
 
 .input__container--half__wrapper {
+  @include u-clearfix;
+
   margin-top: 1rem;
 }

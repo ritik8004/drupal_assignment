@@ -17,10 +17,14 @@ function alshaya_email_signup_form_webform_submission_alshaya_email_signup_form_
   $form['elements']['exclusive_deals']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value') . '</div>';
 }
 
+/**
+ * Implements hook_form_Email_Signup_preprocess_element().
+ */
 function alshaya_email_signup_preprocess_form_element(&$form) {
   if ($form['name'] == 'first_name') {
     $form['attributes']['class'][] = 'input__container input__container--half';
-  } else if ($form['name'] == 'last_name') {
+  }
+  elseif ($form['name'] == 'last_name') {
     $form['attributes']['class'][] = 'input__container input__container--half';
   }
 }
