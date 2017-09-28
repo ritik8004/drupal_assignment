@@ -13,6 +13,7 @@
 function alshaya_paragraphs_update_8301() {
 
   $configs = [
+    // Image + title + subtitle paragraph type.
     'paragraphs.paragraphs_type.image_title_subtitle',
     'field.field.paragraph.image_title_subtitle.field_banner',
     'field.field.paragraph.image_title_subtitle.field_sub_title',
@@ -21,6 +22,11 @@ function alshaya_paragraphs_update_8301() {
     'core.entity_form_display.paragraph.image_title_subtitle.default',
     'core.entity_view_display.paragraph.image_title_subtitle.default',
     'core.entity_view_display.paragraph.image_title_subtitle.326x288',
+    'language.content_settings.paragraph.image_title_subtitle',
+    'core.base_field_override.paragraph.image_title_subtitle.created',
+    'core.base_field_override.paragraph.image_title_subtitle.moderation_state',
+    'core.base_field_override.paragraph.image_title_subtitle.status',
+    'core.base_field_override.paragraph.image_title_subtitle.uid',
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
     // Offers bordered paragraph type.
     'paragraphs.paragraphs_type.offers_bordered',
