@@ -5,19 +5,17 @@ dependencies:
     - alshaya_block
   theme:
     - victoria_secret
-id: vs_custom_site_logo
+id: alshaya_vs_application_links
 theme: victoria_secret
-region: header
+region: footer
 weight: -4
 provider: null
-plugin: custom_logo_block
+plugin: alshaya_application_links
 settings:
-  id: custom_logo_block
-  label: 'Custom Site Logo'
+  id: alshaya_application_links
+  label: 'Application Links'
   provider: alshaya_block
   label_display: '0'
-  use_site_logo: 1
-  use_menu_item_logo: 1
-  menu_option: main
-  logo_fallback: 1
+  app_android_link: ''
+  app_apple_link: ''
 visibility: {  }

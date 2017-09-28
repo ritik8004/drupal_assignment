@@ -32,7 +32,7 @@ function alshaya_vs_install() {
 
   // Disable some default blocks provided by whitelabel_non_transac that we
   // don't want on victoria_secret.
-  alshaya_block_delete_blocks(['victoria_secret_branding']);
+  alshaya_block_delete_blocks(['branding']);
 
   // Set default marker image for stores finder.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
