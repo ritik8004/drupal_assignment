@@ -586,7 +586,7 @@
   }
 }
 
-#block-alshaya-white-label-content .order-items li {
+#block-content .order-items li {
   .second-third .second .dark {
     @include breakpoint($tablet) {
       white-space: nowrap;

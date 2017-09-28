@@ -19,8 +19,8 @@
 
   Drupal.behaviors.joinusblock = {
     attach: function (context, settings) {
-      if ($('#block-alshaya-white-label-content div').hasClass('joinclub')) {
-        $('#block-alshaya-white-label-content article').addClass('joinclubblock');
+      if ($('#block-content div').hasClass('joinclub')) {
+        $('#block-content article').addClass('joinclubblock');
       }
 
       var mobileStickyHeaderHeight = $('.branding__menu').height();

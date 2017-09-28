@@ -116,6 +116,12 @@ class SKUFieldFormatter extends FormatterBase {
     $sku_id = reset($ids);
     $sku = SKU::load($sku_id);
 
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+    if ($sku->hasTranslation($langcode)) {
+      $sku = $sku->getTranslation($langcode);
+    }
+
     return $sku;
   }
 

@@ -43,12 +43,19 @@
         'search result page',
         'product listing page',
         'product detail page',
-        'department page',
+        'department page'
       ];
 
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === undefined) {
-        gtmPageType = 'not defined';
+        if (document.location.pathname.startsWith('/user')) {
+          var currPath = document.location.pathname;
+          var pagePath = currPath.replace('/user/', '');
+          gtmPageType = pagePath.split('/').join('-');
+        }
+        else {
+          gtmPageType = 'not defined';
+        }
       }
 
       // If we are on checkout page -- Click & collect method.
@@ -88,7 +95,7 @@
         });
       }
 
-      if (isRegistrationSuccessPage) {
+      if ((isRegistrationSuccessPage) && (context === document)) {
         Drupal.alshaya_seo_gtm_push_signin_type('registration success');
       }
 
@@ -160,20 +167,29 @@
 
       /** Track coupon code application. **/
       if (couponCode) {
-        var couponError = $('.form-item-coupon').find('.form-item--error-message').text();
-        var status = '';
-        if (couponError !== '') {
-          status = 'fail';
-        }
-        else {
-          status = 'pass';
-        }
+        var cart = $.cookie('Drupal.visitor.acq_cart_id');
+        var appliedCoupon = $.cookie('coupon_applied');
+        if (cart + '|' + couponCode !== appliedCoupon) {
+          var couponError = $('.form-item-coupon').find('.form-item--error-message').text();
+          var status = '';
+          if (couponError !== '') {
+            status = 'fail';
+          }
+          else {
+            status = 'pass';
+          }
 
-        dataLayer.push({
-          event: 'promoCode',
-          couponCode: couponCode,
-          couponStatus: status
-        });
+          dataLayer.push({
+            event: 'promoCode',
+            couponCode: couponCode,
+            couponStatus: status
+          });
+
+          $.cookie('coupon_applied', cart + '|' + couponCode);
+        }
+      }
+      else if (gtmPageType === 'cart page') {
+        $.removeCookie('coupon_applied');
       }
 
       /** Track store finder clicks. **/
@@ -295,17 +311,17 @@
           // Set updated product quantity.
           product.quantity = Math.abs(diffQty);
 
-          // Set item's size as dimension1.
-          product.dimension1 = cartItem.attr('gtm-size');
+          // Set item's size as dimension6.
+          product.dimension6 = cartItem.attr('gtm-size');
 
           // Remove product position: Not needed while updating item in cart.
           delete product.position;
 
-          product.metric1 = product.quantity * product.price;
+          product.metric2 = product.quantity * product.price;
 
           if (diffQty < 0) {
             event = 'removeFromCart';
-            product.metric1 = -1 * product.metric1;
+            product.metric2 = -1 * product.metric2;
           }
           else {
             event = 'addToCart';
@@ -339,13 +355,13 @@
           // Set product quantity to the number of items selected for quantity.
           product.quantity = $(this).closest('tr').find('td.quantity select').val();
 
-          // Set selected size as dimension1.
-          product.dimension1 = removeItem.attr('gtm-size');
+          // Set selected size as dimension6.
+          product.dimension6 = removeItem.attr('gtm-size');
 
           // Remove product position: Not needed while removing item from cart.
           delete product.position;
 
-          product.metric1 = -1 * product.quantity * product.price;
+          product.metric2 = -1 * product.quantity * product.price;
 
           var data = {
             event: 'removeFromCart',
@@ -360,7 +376,7 @@
           };
 
           dataLayer.push(data);
-        })
+        });
       });
 
       /** Tracking New customers .**/
@@ -470,6 +486,9 @@
           else if (that.closest('.horizontal-upell').length > 0) {
             subListName = listName + '-US';
           }
+          else if (that.closest('.horizontal-related').length > 0) {
+            subListName = listName + '-RELATED';
+          }
 
           // position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
           position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
@@ -495,7 +514,7 @@
             var highlights = $(this).find('.highlights [gtm-type="gtm-highlights"]');
 
             if (highlights.length > 0) {
-              Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation');
+              Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation', 'promotionImpression');
             }
           }
         });
@@ -506,7 +525,7 @@
       });
 
       if ($('.paragraph--type--promo-block').length > 0) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType);
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
       }
 
       // Tracking view of promotions.
@@ -578,14 +597,14 @@
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       position: 1,
-      dimension1: '',
-      dimension2: product.attr('gtm-dimension2'),
-      dimension3: product.attr('gtm-dimension3'),
+      dimension6: '',
+      dimension5: product.attr('gtm-dimension5'),
+      dimension1: product.attr('gtm-dimension1'),
       dimension4: mediaCount,
-      dimension5: product.attr('gtm-sku-type'),
-      dimension8: product.attr('gtm-dimension8'),
-      metric7: parseFloat(product.attr('gtm-metric7')),
-      metric1: product.attr('gtm-cart-value')
+      dimension2: product.attr('gtm-sku-type'),
+      dimension3: product.attr('gtm-dimension3'),
+      metric1: parseFloat(product.attr('gtm-metric1')),
+      metric2: product.attr('gtm-cart-value')
     };
 
     return productData;

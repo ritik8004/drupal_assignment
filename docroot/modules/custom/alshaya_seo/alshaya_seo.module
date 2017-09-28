@@ -365,7 +365,7 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
             $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
             $data_layer = array_merge($data_layer, $attributes['general']);
 
-            $data_layer['privilegeOrder'] = $attributes['previlegeOrder'];
+            $data_layer['privilegeOrder'] = $attributes['previlegeOrder'] ? 'order with privilege club' : 'order without privilege club';
 
             $data_layer['ecommerce'] = [
               'currencyCode' => $currency_code,

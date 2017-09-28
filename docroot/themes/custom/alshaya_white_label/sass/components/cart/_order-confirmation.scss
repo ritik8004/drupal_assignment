@@ -560,6 +560,15 @@
       padding: 0.625rem 2.0625rem;
     }
   }
+
+  .address--contact {
+    .no-direction {
+      html[lang=ar] & {
+        direction: ltr;
+        display: inline-block;
+      }
+    }
+  }
 }
 
 .order-confirmation .continue--shopping--mobile a,

@@ -92,7 +92,9 @@ class ProductCategoryTree {
 
         $data[$term->id()] = [
           'label' => $term->label(),
-          'description' => $term->getDescription(),
+          'description' => [
+            '#markup' => $term->getDescription(),
+          ],
           'id' => $term->id(),
           'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])
             ->toString(),

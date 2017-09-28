@@ -135,6 +135,8 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
     $element['locality']['#title'] = t('Block', [], ['context' => 'Address label']);
     $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
+    $element['address_line2']['#attributes']['class'][] = 'form-item-field-address-floor';
+    $element['address_line2']['#attached']['library'][] = 'alshaya_addressbook/alshaya_addressbook';
     $element['address_line2']['#title_display'] = 'before';
   }
 
