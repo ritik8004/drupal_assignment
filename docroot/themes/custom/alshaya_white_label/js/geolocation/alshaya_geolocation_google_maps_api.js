@@ -377,7 +377,7 @@
         };
         if (drupalSettings.path.currentLanguage === 'ar') {
           // If only single digit move them closer to the center.
-          if (markerSettings.label.length == 1) {
+          if (markerSettings.label.length === 1) {
             markerSettings.icon.labelOrigin = new google.maps.Point(12, 15);
           }
           else {
