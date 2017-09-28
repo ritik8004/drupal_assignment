@@ -108,16 +108,16 @@
             product.quantity = quantity;
 
             // Set product size to selected size.
-            if (product.dimension5 !== 'simple') {
+            if (product.dimension2 !== 'simple') {
               var currentLangCode = drupalSettings.path.currentLanguage;
               if (currentLangCode !== 'en') {
                 size = drupalSettings.alshaya_product_size_config[size];
               }
-              product.dimension1 = size;
+              product.dimension6 = size;
             }
 
             // Set product variant to the selected variant.
-            if (product.dimension5 !== 'simple') {
+            if (product.dimension2 !== 'simple') {
               product.variant = selectedVariant;
             }
             else {
@@ -125,7 +125,7 @@
             }
 
             // Calculate metric 1 value.
-            product.metric1 = product.price * product.quantity;
+            product.metric2 = product.price * product.quantity;
 
             var productData = {
               'event': 'addToCart',
