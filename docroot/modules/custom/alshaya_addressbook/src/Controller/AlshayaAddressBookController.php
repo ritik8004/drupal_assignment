@@ -4,6 +4,7 @@ namespace Drupal\alshaya_addressbook\Controller;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\profile\Controller\ProfileController;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -191,6 +192,7 @@ class AlshayaAddressBookController extends ProfileController {
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
     $response->addCommand(new RemoveCommand('.messages__wrapper'));
+    $response->addCommand(new InvokeCommand(NULL, 'correctFloorFieldLabel', []));
     return $response;
   }
 

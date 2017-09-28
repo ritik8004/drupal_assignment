@@ -165,8 +165,9 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
             // translation for $langcode.
             $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
             if ($node) {
-              $promotions[] = $node->get('field_acq_promotion_label')
-                ->getString();
+              $promotions[] = [
+                '#markup' => $node->get('field_acq_promotion_label')->getString(),
+              ];
             }
           }
         }
