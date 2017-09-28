@@ -176,6 +176,9 @@ class Configurable extends SKUPluginBase {
     if ($tree_pointer instanceof SKU) {
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
 
+      // Cart here can be empty only if APIs aren't working.
+      // Call above is to create cart if empty, we except a new or old cart here
+      // and it can be empty if server is not working or in maintenance mode.
       if (empty($cart)) {
         $e = new \Exception(acq_commerce_api_down_global_error_message(), 500);
 
