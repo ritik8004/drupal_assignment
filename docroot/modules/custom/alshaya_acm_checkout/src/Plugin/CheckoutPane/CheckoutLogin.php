@@ -8,7 +8,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\user\Entity\User;
-use Drupal\user\UserInterface;
 
 /**
  * Provides the login form pane.
@@ -50,14 +49,17 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
     // Display login form:
     $pane_form['name'] = [
       '#type' => 'email',
-      '#title' => $this->t('Username'),
+      '#title' => $this->t('Email address'),
       '#size' => 15,
-      '#maxlength' => UserInterface::USERNAME_MAX_LENGTH,
+      '#maxlength' => 256,
       '#required' => TRUE,
       '#attributes' => [
         'autocorrect' => 'none',
         'autocapitalize' => 'none',
         'spellcheck' => 'false',
+      ],
+      '#element_validate' => [
+        'alshaya_valid_email_address',
       ],
     ];
 
@@ -90,6 +92,8 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $pane_form['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
     $pane_form['request_password']['#weight'] = 101;
+
+    $complete_form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 
     return $pane_form;
   }

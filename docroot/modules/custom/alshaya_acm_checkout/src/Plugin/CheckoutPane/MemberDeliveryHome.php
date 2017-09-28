@@ -69,6 +69,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#type' => 'container',
       '#attributes' => [
         'id' => 'address-book-form-wrapper',
+        'class' => ['hidden'],
       ],
       '#attached' => [
         'library' => [
@@ -339,8 +340,9 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       $cart->setShipping($update);
     }
 
-    $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'hide'));
+    $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
+
     return $response;
   }
 

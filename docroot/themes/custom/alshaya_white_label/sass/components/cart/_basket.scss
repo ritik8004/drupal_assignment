@@ -503,7 +503,6 @@
 }
 
 .details-privilege-card-wrapper-inside {
-  border-top: 1px solid $white;
   margin-bottom: 1.5625rem;
 }
 
@@ -1244,10 +1243,6 @@ html[lang=ar] {
   font-weight: bold;
   padding-#{$left}: 1.5rem;
   padding-top: 1rem;
-
-  .alias--cart & {
-    border-top: 1px solid $white;
-  }
 }
 
 html[lang=ar] .path--cart h1.c-page-title::before {

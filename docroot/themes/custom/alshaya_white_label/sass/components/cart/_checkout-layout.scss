@@ -258,6 +258,13 @@
   .light {
     font-family: $alshaya-thin;
     color: $grey-ash;
+
+    &.no-direction {
+      html[lang=ar] & {
+        display: inline-block;
+        direction: ltr;
+      }
+    }
   }
 
   p:last-child {

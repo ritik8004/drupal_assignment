@@ -262,8 +262,14 @@ class AcqPromotionsManager {
     $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
 
     foreach ($promotions_labels as $promotion_label) {
-      $promtion_label_language = acq_commerce_get_langcode_from_store_id($promotion_label['store_id']);
-      $promotion_label_languages[$promtion_label_language] = $promotion_label['store_label'];
+      $promotion_label_language = acq_commerce_get_langcode_from_store_id($promotion_label['store_id']);
+
+      // Magento might have stores that what we don't support.
+      if (empty($promotion_label_language)) {
+        continue;
+      }
+
+      $promotion_label_languages[$promotion_label_language] = $promotion_label['store_label'];
     }
 
     $promotion_node->get('title')->setValue($promotion['name']);

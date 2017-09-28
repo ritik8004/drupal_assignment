@@ -4,6 +4,8 @@ namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
@@ -147,25 +149,34 @@ class ProductStockController extends ControllerBase {
       return new JsonResponse($build);
     }
     else {
-      $build['max_quantity'] = 0;
-      $build['html'] = '<span class="out-of-stock">' . $this->t('out of stock')->render() . '</span>';
+      // We process add to cart form if we have stock or request is POST.
+      // Stock might become zero after user has loaded the page.
+      // In such cases we just reload the page to show updated status.
+      if (\Drupal::request()->getMethod() == 'POST') {
+        $response = new AjaxResponse();
+        $response->addCommand(new RedirectCommand(\Drupal::request()->server->get('HTTP_REFERER')));
+        return $response;
+      }
+      else {
+        $build['max_quantity'] = 0;
+        $build['html'] = '<span class="out-of-stock">' . $this->t('out of stock')->render() . '</span>';
 
-      $response = new CacheableJsonResponse($build, 200);
-      $response->addCacheableDependency($sku_entity);
-      $response->addcacheabledependency(['url.path']);
+        $response = new CacheableJsonResponse($build, 200);
+        $response->addCacheableDependency($sku_entity);
+        $response->addcacheabledependency(['url.path']);
 
-      // Adding cacheability metadata, so whenever, cache invalidates, this
-      // url's cached response also gets invalidate.
-      $cacheMeta = new CacheableMetadata();
-      // Adding cache tags.
-      $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
-      // Adding max-age.
-      $expiration_time = _alshaya_acm_get_stock_expiration_time($sku_entity);
-      $max_age = $expiration_time - \Drupal::time()->getRequestTime();
-      $cacheMeta->setCacheMaxAge($max_age);
-      $response->addCacheableDependency($cacheMeta);
-
-      return $response;
+        // Adding cacheability metadata, so whenever, cache invalidates, this
+        // url's cached response also gets invalidate.
+        $cacheMeta = new CacheableMetadata();
+        // Adding cache tags.
+        $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
+        // Adding max-age.
+        $expiration_time = _alshaya_acm_get_stock_expiration_time($sku_entity);
+        $max_age = $expiration_time - \Drupal::time()->getRequestTime();
+        $cacheMeta->setCacheMaxAge($max_age);
+        $response->addCacheableDependency($cacheMeta);
+        return $response;
+      }
     }
   }
 

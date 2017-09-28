@@ -88,7 +88,9 @@ function alshaya_white_label_preprocess_page(&$variables) {
     }
   }
 
-  $variables['nojs_message'] = \Drupal::config('alshaya_master.settings')->get('js_disable_message');
+  $variables['nojs_message'] = [
+    '#markup' => \Drupal::config('alshaya_master.settings')->get('js_disable_message'),
+  ];
 
   $routmatch = \Drupal::routeMatch();
   // Attach the plp search js library to PLP page.
@@ -359,15 +361,15 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
           $suffix = $form['privilege_card_wrapper']['#suffix'];
           $prefix .= '<div class="privilege-card-wrapper">';
           $prefix .= '<div class="privilege-card-wrapper-title"><p class="title">';
-          $prefix .= t('Privilege card number (Optional)');
+          $prefix .= t('Have a PRIVILEGES CLUB card?');
           $prefix .= '</p><p class="sub-title">';
-          $prefix .= t('enter card details');
+          $prefix .= t('Enter card number');
           $prefix .= ' </p></div>';
           $form['privilege_card_wrapper']['#prefix'] = $prefix;
           $form['privilege_card_wrapper']['#suffix'] = '</div>' . $suffix;
           $form['privilege_card_wrapper']['#title'] = t('Enter card details');
-          $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('Privilege Card Number (optional)');
-          $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Re-enter Privilege Card Number');
+          $form['privilege_card_wrapper']['privilege_card_number']['#title'] = t('PRIVILEGES CLUB card number (optional)');
+          $form['privilege_card_wrapper']['privilege_card_number2']['#title'] = t('Re-enter PRIVILEGES CLUB card number');
         }
       }
       if ($form_id == 'user_register_form') {
@@ -603,14 +605,16 @@ function alshaya_white_label_preprocess_input(&$variables) {
   $element = $variables['element'];
   if (isset($element['#attributes']['data-twig-suggestion']) && $element['#attributes']['data-twig-suggestion'] == 'userregisterformpassword') {
     // Get password tooltip content from config.
-    $tooltip = \Drupal::config('alshaya_user.settings')
-      ->get('password_tooltip.value');
+    $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
+
     // Get a different tooltip for change password page.
     if (\Drupal::routeMatch()->getRouteName() == 'change_pwd_page.change_password_form') {
-      $tooltip = \Drupal::config('alshaya_user.settings')
-        ->get('password_tooltip_change_pwd.value');
+      $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip_change_pwd.value');
     }
-    $variables['password_tooltip'] = $tooltip;
+
+    $variables['password_tooltip'] = [
+      '#markup' => $tooltip,
+    ];
   }
 }
 
@@ -671,7 +675,9 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
   $config = \Drupal::config('alshaya_master.maintenanace_404_settings');
   $maintenance_text = $config->get('maintenance_mode_rich_message');
   $image = $config->get('maintenance_mode_image');
-  $variables['maintenance_text'] = $maintenance_text['value'];
+  $variables['maintenance_text'] = [
+    '#markup' => $maintenance_text['value'],
+  ];
   $variables['maintenance_image'] = '';
   if (!empty($image)) {
     if ($file = file_load($image)) {
@@ -688,7 +694,9 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
   $config = \Drupal::config('alshaya_master.maintenanace_404_settings');
   $text_404 = $config->get('404_message');
   $image = $config->get('404_image.' . $langcode);
-  $variables['message_404'] = $text_404['value'];
+  $variables['message_404'] = [
+    '#markup' => $text_404['value'],
+  ];
   $variables['image_404'] = '';
   if (!empty($image)) {
     if ($file = file_load($image)) {

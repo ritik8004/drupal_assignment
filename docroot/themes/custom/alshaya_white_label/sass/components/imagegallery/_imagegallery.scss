@@ -58,7 +58,7 @@
 #product-image-gallery {
   &.pager-no {
     .slick-track {
-      transform: initial !important;
+      transform: none !important;
     }
   }
 }

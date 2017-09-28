@@ -157,7 +157,7 @@
         $(listOrder).hide();
 
         $(parentOrder).click(function () {
-          var $ub = $(this).nextAll().stop(true, true).slideToggle();
+          var $ub = $(this).nextAll().stop(true, true).fadeToggle('slow');
           listOrder.not($ub).hide();
           $ub.parent().toggleClass('open--accordion');
           listOrder.not($ub).parent().removeClass('open--accordion');
@@ -203,6 +203,7 @@
   Drupal.alshayaAccordion = function (element) {
     $(element).siblings().slideToggle('slow');
     $(element).toggleClass('ui-state-active');
+    $(element).parent().toggleClass('facet-active');
   };
 
 })(jQuery, Drupal);

@@ -14,6 +14,14 @@ alshaya_user.user_register_complete:
   requirements:
     _user_is_logged_in: 'FALSE'
 
+alshaya_user.password_changed_logout:
+  path: '/user/password-changed'
+  defaults:
+    _controller: '\Drupal\alshaya_user\Controller\UserController::passwordChangedLogout'
+    _title: ''
+  requirements:
+    _user_is_logged_in: 'FALSE'
+
 alshaya_user.user_communication_preference:
   path: '/user/{user}/communication-preference'
   defaults:

@@ -208,7 +208,7 @@
         var position = $('.branding__menu').offset().top;
         var nav = $('.branding__menu');
 
-        $(window).scroll(function () {
+        $(window, context).once().scroll(function () {
           if ($(this).scrollTop() > position) {
             $('body').addClass('header--fixed');
             nav.addClass('navbar-fixed-top');

@@ -30,10 +30,10 @@
           languge_switcher.hide();
         }
 
-        // Hide the language slider after 5 seconds.
-        setTimeout(function () {
-          languge_switcher.hide();
-        }, 5000);
+        // Gradually Hide the language slider once user starts to scroll.
+        $(window, context).on('scroll', function () {
+          languge_switcher.fadeOut(2000);
+        });
 
         // Close the block when clicked on close button.
         languge_switcher_close.on('click', function () {

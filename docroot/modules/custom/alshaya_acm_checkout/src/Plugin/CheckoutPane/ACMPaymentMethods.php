@@ -127,6 +127,8 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // plugin form instead.
     $payment_options = [];
     $payment_has_descriptions = [];
+    $payment_translations = [];
+
     foreach ($payment_methods as $plugin_id) {
       if (!isset($plugins[$plugin_id])) {
         continue;
@@ -141,8 +143,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $current_language_id = \Drupal::languageManager()->getCurrentLanguage()->getId();
       $default_language_id = \Drupal::languageManager()->getDefaultLanguage()->getId();
-
-      $payment_translations = [];
 
       if ($current_language_id !== $default_language_id) {
         if ($payment_term->hasTranslation($default_language_id)) {

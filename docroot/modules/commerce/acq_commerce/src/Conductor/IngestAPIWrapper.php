@@ -29,6 +29,7 @@ class IngestAPIWrapper {
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->debug = $config_factory->get('acq_commerce.conductor')->get('debug');
     $this->debugDir = $config_factory->get('acq_commerce.conductor')->get('debug_dir');
+    $this->product_page_size = $config_factory->get('acq_commerce.conductor')->get('product_page_size');
   }
 
   /**
@@ -47,9 +48,15 @@ class IngestAPIWrapper {
         fclose($fp);
       }
 
+      $product_page_size = (int) $this->product_page_size;
+
       $endpoint = $this->apiVersion . '/ingest/product/sync';
 
-      $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus) {
+      $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus, $product_page_size) {
+        if ($product_page_size > 0) {
+          $opt['query']['page_size'] = $product_page_size;
+        }
+
         if (!empty($skus)) {
           $opt['query']['skus'] = $skus;
         }

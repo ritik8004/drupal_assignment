@@ -278,7 +278,7 @@
 
       $(window).once().on('scroll', function () {
         // Fix the block after a certain height.
-        if ($('body').scrollTop() > 122) {
+        if ($(window).scrollTop() > 122) {
           block.addClass('fix-block');
         }
         else {

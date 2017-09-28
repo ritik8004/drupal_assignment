@@ -128,6 +128,7 @@ class CheckoutController implements ContainerInjectionInterface {
     $response->addCommand(new InvokeCommand(NULL, 'editDeliveryAddress', [$address]));
     $response->addCommand(new InvokeCommand('#edit-member-delivery-home-addresses', 'hide', []));
     $response->addCommand(new InvokeCommand('#addresses-header', 'hide', []));
+    $response->addCommand(new InvokeCommand(NULL, 'correctFloorFieldLabel', []));
     return $response;
   }
 
