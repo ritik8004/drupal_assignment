@@ -99,12 +99,12 @@ Feature: Test the My account section for authenticated user
   by ID, name, SKU in combination with the Status of the order
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-    When I fill in "edit-search" with "شورت من قماش الجورسيه با…"
-#    When I fill in "edit-search" with "Horse Photographic تي- ش…"
+#    When I fill in "edit-search" with "شورت من قماش الجورسيه با…"
+    When I fill in "edit-search" with "Horse Photographic تي- ش…"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
-    Then I should see all "شورت من قماش الجورسيه با…" orders
-#    Then I should see all "Horse Photographic تي- ش…" orders
+#    Then I should see all "شورت من قماش الجورسيه با…" orders
+    Then I should see all "Horse Photographic تي- ش…" orders
     When I fill in "edit-search" with "MCKWRCE"
     And I wait 2 seconds
     When I click the label for "#edit-submit-orders"
@@ -117,7 +117,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I select Cancelled from the status dropdown
     And I wait for the page to load
-    Then I should see all "اعادة" orders listed on orders tab
+    Then I should see all "المعالجة" orders listed on orders tab
     When I select Dispatched from the status dropdown
     And I wait for the page to load
     Then I should see all "اعادة ايجاد" orders listed on orders tab
