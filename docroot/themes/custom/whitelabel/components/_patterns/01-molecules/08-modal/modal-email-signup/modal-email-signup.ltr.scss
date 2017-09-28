@@ -1,0 +1,42 @@
+@import '../../../../sass/config/**/*.scss';
+
+.modal-form-elements-wrapper {
+  .form--content {
+    @include breakpoint($lap) {
+      display: none;
+    }
+
+    @include breakpoint($desk) {
+      display: block;
+      float: direction(left);
+      margin-top: -1.7rem;
+      margin-right: 1rem;
+    }
+
+    ul li {
+      font-size: 0.75rem;
+    }
+  }
+
+  .form__form-fields {
+    width: 25rem;
+
+    & > p {
+      font-size: 0.75rem;
+      color: $brownish-grey;
+
+      @include breakpoint($lap) {
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  .country-select {
+    display: none;
+  }
+
+  .input--inner__container .option {
+    font-size: 0.75rem;
+    color: $brownish-grey;
+  }
+}

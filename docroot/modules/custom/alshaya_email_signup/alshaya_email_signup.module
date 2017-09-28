@@ -12,5 +12,15 @@ use Drupal\Core\Form\FormStateInterface;
  */
 function alshaya_email_signup_form_webform_submission_alshaya_email_signup_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Add terms and conditions suffix.
-  $form['elements']['exclusive_deals']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
+  $form['elements']['first_name']['#prefix'] = '<div class="form__form-fields"><div class="input__container--half__wrapper">';
+  $form['elements']['last_name']['#suffix'] = '</div>';
+  $form['elements']['exclusive_deals']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value') . '</div>';
+}
+
+function alshaya_email_signup_preprocess_form_element(&$form) {
+  if ($form['name'] == 'first_name') {
+    $form['attributes']['class'][] = 'input__container input__container--half';
+  } else if ($form['name'] == 'last_name') {
+    $form['attributes']['class'][] = 'input__container input__container--half';
+  }
 }
