@@ -13,10 +13,14 @@ bundle: views_reference
 label: 'views reference'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
+  handler: 'default:view'
+  handler_settings:
+    target_bundles: null
+    auto_create: 0
   plugin_types:
     block: block
   preselect_views: {  }
