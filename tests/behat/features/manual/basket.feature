@@ -30,8 +30,7 @@ Feature: Test basket page
     And I should see "(Before Delivery)"
     Then I should see the link "continue shopping" in ".edit-actions.form-actions.js-form-wrapper.form-wrapper" section
     And I should see "Add a promo code"
-    Then I should see "Enter a privilege card number"
-    And I should see "Horizontal Recommendations"
+    Then I should see "Enter PRIVILEGES CLUB card number"
     And I should be able to see the footer
     When I click the label for "#edit-continue-shopping-mobile"
     And I wait for the page to load
@@ -48,7 +47,6 @@ Feature: Test basket page
     When I follow "Remove"
     And I wait for the page to load
     Then I should see "The product has been removed from your basket."
-    And I should not see the link for simple product
 
   Scenario: As a Guest
   I should be able to see tooltips
@@ -72,7 +70,7 @@ Feature: Test basket page
     And I wait for AJAX to finish
     And I fill in "privilege_card_number2" with "0-0013-5845"
     And I wait for AJAX to finish
-    Then I should see "Specified Privilege card numbers do not match."
+    Then I should see "Specified PRIVILEGES CLUB card numbers do not match."
 
   @arabic
   Scenario: As a Guest on arabic site
@@ -94,8 +92,6 @@ Feature: Test basket page
     And I should see "(قبل التوصيل)"
     Then I should see the link "تابع التسوق" in ".edit-actions.form-actions.js-form-wrapper.form-wrapper" section
     And I should see "هل لديك رمز عرض ؟"
-    Then I should see "أدخل رقم بطاقة نادي الامتيازات"
-    And I should see "ما ننصح به"
     And I should be able to see the footer in Arabic
     When I click the label for "#edit-continue-shopping-mobile"
     And I wait for the page to load
