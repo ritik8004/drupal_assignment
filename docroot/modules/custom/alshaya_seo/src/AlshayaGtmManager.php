@@ -96,16 +96,16 @@ class AlshayaGtmManager {
     'brand' => 'gtm-brand',
     'category' => 'gtm-category',
     'variant' => 'gtm-product-sku',
-    'dimension1' => 'gtm-dimension1',
-    'dimension2' => 'gtm-dimension2',
-    'dimension3' => 'gtm-dimension3',
-    'dimension4' => 'gtm-dimension4',
-    'dimension5' => 'gtm-sku-type',
     'dimension6' => 'gtm-dimension6',
+    'dimension2' => 'gtm-sku-type',
+    'dimension1' => 'gtm-dimension1',
+    'dimension4' => 'gtm-dimension4',
+    'dimension5' => 'gtm-dimension5',
     'dimension7' => 'gtm-dimension7',
     'dimension8' => 'gtm-dimension8',
-    'metric7' => 'gtm-metric7',
-    'metric1' => '',
+    'dimension3' => 'gtm-dimension3',
+    'metric1' => 'gtm-metric1',
+    'metric2' => '',
   ];
 
   /**
@@ -295,25 +295,25 @@ class AlshayaGtmManager {
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
     $attributes['gtm-dimension1'] = $sku->get('attr_size')->getString();
-    $attributes['gtm-dimension2'] = $sku->get('attr_product_collection')->getString();
-    $attributes['gtm-dimension3'] = $sku->get('attribute_set')->getString();
+    $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
+    $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
     $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available';
 
     $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
 
     $attributes['gtm-price'] = (float) number_format((float) $final_price, 3, '.', '');
 
-    $attributes['gtm-metric7'] = 0;
+    $attributes['gtm-metric1'] = 0;
 
     if ($final_price
       && ($original_price !== $final_price)
       && ($final_price < $original_price)) {
 
       $product_type = 'Discounted Product';
-      $attributes['gtm-metric7'] = (float) $original_price - $final_price;
+      $attributes['gtm-metric1'] = (float) $original_price - $final_price;
     }
 
-    $attributes['gtm-dimension8'] = $product_type;
+    $attributes['gtm-dimension3'] = $product_type;
 
     // @TODO: This is supposed to stay blank here?
     $attributes['gtm-stock'] = '';
@@ -322,7 +322,7 @@ class AlshayaGtmManager {
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
       $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: $attributes['gtm-brand'];
-      $attributes['gtm-dimension2'] = $parent_sku->get('attr_product_collection')->getString();
+      $attributes['gtm-dimension5'] = $parent_sku->get('attr_product_collection')->getString();
     }
 
     return $attributes;
@@ -486,8 +486,6 @@ class AlshayaGtmManager {
     $processed_attributes['ecommerce']['currencyCode'] = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
 
     // Set dimension1 & 2 to empty until product added to cart.
-    $attributes['gtm-dimension1'] = '';
-    $attributes['gtm-dimension2'] = '';
     $attributes['gtm-dimension6'] = '';
     $attributes['gtm-dimension7'] = '';
     $attributes['gtm-product-sku'] = '';
@@ -528,8 +526,8 @@ class AlshayaGtmManager {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     if ($cart = $this->cartStorage->getCart(FALSE)) {
-      $dimension6 = '';
       $dimension7 = '';
+      $dimension8 = '';
 
       $cartItems = $cart->get('items');
 
@@ -539,7 +537,8 @@ class AlshayaGtmManager {
         // For CC we always use step 2.
         $attributes['step'] = 2;
       }
-      elseif (isset($address['extension'], $address['extension']['address_area_segment'])) {
+      elseif (isset($address['extension'], $address['extension']['address_area_segment']) &&
+        ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;
       }
@@ -551,8 +550,8 @@ class AlshayaGtmManager {
 
           // We should always have store but a sanity check.
           if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
-            $dimension6 = $store->label();
-            $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+            $dimension7 = $store->label();
+            $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
           }
         }
       }
@@ -570,8 +569,8 @@ class AlshayaGtmManager {
         $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
         $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
-        $attributes[$skuId]['gtm-dimension6'] = $dimension6;
         $attributes[$skuId]['gtm-dimension7'] = $dimension7;
+        $attributes[$skuId]['gtm-dimension8'] = $dimension8;
       }
 
       $attributes['privilegeOrder'] = !empty($cart->getExtension('loyalty_card')) ? 'order with privilege club' : 'order without privilege club';
@@ -714,8 +713,8 @@ class AlshayaGtmManager {
 
     $orderItems = $order['items'];
 
-    $dimension6 = '';
     $dimension7 = '';
+    $dimension8 = '';
 
     $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
 
@@ -731,8 +730,8 @@ class AlshayaGtmManager {
 
       $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
       if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
-        $dimension6 = $store->label();
-        $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+        $dimension7 = $store->label();
+        $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
       }
     }
 
@@ -745,8 +744,8 @@ class AlshayaGtmManager {
       $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $productExtras = [
         'quantity' => $item['ordered'],
-        'dimension6' => $dimension6,
         'dimension7' => $dimension7,
+        'dimension8' => $dimension8,
       ];
 
       $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
@@ -951,8 +950,8 @@ class AlshayaGtmManager {
         }
 
         $orderItems = $order['items'];
-        $dimension6 = '';
         $dimension7 = '';
+        $dimension8 = '';
         $productSKU = [];
         $productStyleCode = [];
 
@@ -962,8 +961,8 @@ class AlshayaGtmManager {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
           if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
-            $dimension6 = $store->label();
-            $dimension7 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+            $dimension7 = $store->label();
+            $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
           }
         }
 
@@ -980,8 +979,8 @@ class AlshayaGtmManager {
           'cartItemsCount' => count($orderItems),
           'cartItemsRR' => $this->formatCartRr($orderItems),
           'cartItemsFlocktory' => $this->formatCartFlocktory($orderItems),
-          'storeLocation' => $dimension6,
-          'storeAddress' => $dimension7,
+          'storeLocation' => $dimension7,
+          'storeAddress' => $dimension8,
         ];
         break;
     }

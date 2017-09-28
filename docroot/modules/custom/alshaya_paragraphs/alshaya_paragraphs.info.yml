@@ -3,8 +3,8 @@ type: module
 core: 8.x
 description: 'All the paragraphs and its fields and field settings.'
 dependencies:
-  - alshaya_image_styles
   - alshaya_config
+  - alshaya_image_styles
   - block
   - block_field
   - content_translation

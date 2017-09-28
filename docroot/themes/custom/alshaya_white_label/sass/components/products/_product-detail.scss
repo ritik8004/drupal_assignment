@@ -507,6 +507,14 @@
     }
   }
 
+  .show-detail {
+    .bullet-points-wrapper {
+      @include breakpoint($only-mobile) {
+        display: block !important;
+      }
+    }
+  }
+
   .show-less-link {
     font-family: $arial;
     font-size: 0.875rem;
@@ -1396,6 +1404,12 @@
         display: inline-block;
         height: 2.1875rem;
         line-height: 1;
+
+        @include breakpoint($only-mobile) {
+          &.hide-button {
+            display: none;
+          }
+        }
 
         @include breakpoint($only-mobile) {
           .basic-details-wrapper & {

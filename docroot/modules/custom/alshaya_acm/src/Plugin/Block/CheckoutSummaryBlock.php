@@ -172,7 +172,9 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $delivery['method_description'] = $this->t('Your order will be available in %duration', ['%duration' => $duration]);
           $delivery['address_label'] = $this->t('Collection Store');
 
-          $delivery['address'] = $store->get('field_store_address')->getString();
+          $delivery['address'] = [
+            '#markup' => $store->get('field_store_address')->getString(),
+          ];
         }
         else {
           $delivery = [];
@@ -209,11 +211,14 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $country_list = \Drupal::service('address.country_repository')->getList();
           $line3[] = $country_list[$shipping_address['country_code']];
 
-          $delivery['address'] = implode(',<br>', [
+          $delivery_address = implode(',<br>', [
             implode(' ', $line1),
             implode(' ', $line2),
             implode(' ', $line3),
           ]);
+          $delivery['address'] = [
+            '#markup' => $delivery_address,
+          ];
         }
       }
 

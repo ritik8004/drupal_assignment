@@ -2,8 +2,8 @@
 Feature: Test privilege card features for Guest
 
   Scenario: As a Guest
-    no PC number should be displayed on Order Confirmation page
-    when there is no value on basket page and loyalty block details should appear
+  no PC number should be displayed on Order Confirmation page
+  when there is no value on basket page and loyalty block details should appear
     Given I am on a simple product page
     And I wait for the page to load
     When I press "Add to basket"
@@ -32,7 +32,7 @@ Feature: Test privilege card features for Guest
     And I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    And I should not see text matching "Your Privileges Card Number is:"
+    And I should not see text matching "Your PRIVILEGES CLUB card number is:"
     Then I should see "Join the club"
     And I should see "Win exciting prizes"
     Then I should see "Unlock exclusive rewards"
@@ -40,7 +40,7 @@ Feature: Test privilege card features for Guest
     Then I should see the link "Learn more"
 
   Scenario: As a Guest
-    PC number from the basket should be displayed on Order confirmation page
+  PC number from the basket should be displayed on Order confirmation page
     Given I am on a simple product page
     And I wait for the page to load
     When I press "Add to basket"
@@ -73,17 +73,15 @@ Feature: Test privilege card features for Guest
     And I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 1511 - 8942"
+    Then I should see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 1511 - 8942"
 
   @arabic
   Scenario: As a Guest on Arabic site
   no PC number should be displayed on Order Confirmation page
   when there is no value on basket page and loyalty block details should appear
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     Then I go to "/ar/cart"
     And I wait for the page to load
@@ -91,8 +89,8 @@ Feature: Test privilege card features for Guest
     And I wait for the page to load
     When follow "إتمام عملية الشراء كزبون زائر"
     And I wait for the page to load
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
     When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
@@ -120,11 +118,9 @@ Feature: Test privilege card features for Guest
   @arabic
   Scenario: As a Guest
   PC number from the basket should be displayed on Order confirmation page
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     Then I go to "/ar/cart"
     And I wait for the page to load
@@ -136,8 +132,8 @@ Feature: Test privilege card features for Guest
     And I wait for the page to load
     When  I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for the page to load
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
     When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"

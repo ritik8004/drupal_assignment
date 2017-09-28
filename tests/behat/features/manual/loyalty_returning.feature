@@ -2,8 +2,8 @@
 Feature: Test the privilege card functionality for returning customer
 
   Scenario: As a returning customer
-    no PC number should be displayed on Order confirmation page
-    when the PC number is null on basket
+  no PC number should be displayed on Order confirmation page
+  when the PC number is null on basket
     Given I am on a simple product page
     And I wait for the page to load
     When I press "Add to basket"
@@ -12,7 +12,7 @@ Feature: Test the privilege card functionality for returning customer
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
+    Then I fill in "edit-checkout-login-name" with "shweta+2@axelerant.com"
     And I fill in "edit-checkout-login-pass" with "Alshaya123$"
     When I press "sign in"
     And I wait for the page to load
@@ -28,11 +28,11 @@ Feature: Test the privilege card functionality for returning customer
     When I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should not see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
+    Then I should not see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 0013 - 5844"
 
   Scenario: As a returning customer
-    PC number from the basket should be displayed on Order confirmation page when my account is null
-    and my account field for PC should remain null after placing order
+  PC number from the basket should be displayed on Order confirmation page when my account is null
+  and my account field for PC should remain null after placing order
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "edit account details"
@@ -73,7 +73,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
+    Then I should see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 0013 - 5844"
     When I am on homepage
     And I wait for the page to load
     When I follow "My account"
@@ -81,8 +81,8 @@ Feature: Test the privilege card functionality for returning customer
     Then I should not see "6362 - 5440 - 0013 - 5844"
 
   Scenario: As a returning customer
-    no PC number should be displayed on order confirmation page when basket PC number is null
-    and my account PC number is not null
+  no PC number should be displayed on order confirmation page when basket PC number is null
+  and my account PC number is not null
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "edit account details"
@@ -123,7 +123,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should not see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
+    Then I should not see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 0013 - 5844"
 
   Scenario: As a returning customer
   PC number on basket should get updated with My account number (basket = null)
@@ -164,10 +164,9 @@ Feature: Test the privilege card functionality for returning customer
     And I wait 2 seconds
     Then I should see value "6362-5440-0013-5844" for element "#edit-privilege-card-number"
 
-
   Scenario: As a returning customer
-    value from basket page should be displayed on Order confirmation page
-    even when user has different PC number in his account
+  value from basket page should be displayed on Order confirmation page
+  even when user has different PC number in his account
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "edit account details"
@@ -209,7 +208,7 @@ Feature: Test the privilege card functionality for returning customer
     And I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 1511 - 8942"
+    Then I should see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 1511 - 8942"
 
   Scenario: As a returning customer
   value on the basket should prevail when user returns to basket from checkout pages
@@ -257,9 +256,7 @@ Feature: Test the privilege card functionality for returning customer
   when the PC number is null on basket
     Given I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -287,23 +284,19 @@ Feature: Test the privilege card functionality for returning customer
   and my account field for PC should remain null after placing order
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with ""
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -342,24 +335,20 @@ Feature: Test the privilege card functionality for returning customer
   and my account PC number is not null
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -392,24 +381,20 @@ Feature: Test the privilege card functionality for returning customer
   when user returns to basket page from any of the checkout pages
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -436,24 +421,20 @@ Feature: Test the privilege card functionality for returning customer
   even when user has different PC number in his account
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
@@ -487,24 +468,20 @@ Feature: Test the privilege card functionality for returning customer
   and user had a different value in my account section
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I follow "تعديل معلومات الحساب"
+    When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
+    And I press "Save"
     When I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I follow "تسجيل الخروج"
+    Then I should see "Contact details changes have been saved."
+    When I follow "Sign out"
     And I wait for the page to load
     When I am on a simple product page
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I press "أضف إلى سلة التسوق"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
