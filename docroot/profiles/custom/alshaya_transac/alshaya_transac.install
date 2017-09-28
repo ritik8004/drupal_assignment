@@ -60,6 +60,19 @@ function alshaya_transac_install() {
   // Invoke a hook to let other modules know that profile installation is done.
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_transac', $modules]);
 
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    // Configure ShareThis defaults.
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    if (\Drupal::moduleHandler()->moduleExists('acq_sku')) {
+      // Enable share this for Product CT.
+      $configFactory->set('node_types.acq_product', 'acq_product');
+    }
+    // Set the option to use custom style for showing share images.
+    $configFactory->set('button_option', 'stbc_custom');
+    // Save the changes.
+    $configFactory->save();
+  }
+
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_transac', $modules);
 }

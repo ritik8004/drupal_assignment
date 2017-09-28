@@ -64,20 +64,6 @@ function alshaya_mc_install() {
     ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
     ->save();
 
-  // Configure ShareThis defaults.
-  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-
-  if (\Drupal::moduleHandler()->moduleExists('acq_sku')) {
-    // Enable share this for Product CT.
-    $configFactory->set('node_types.acq_product', 'acq_product');
-  }
-
-  // Set the option to use custom style for showing share images.
-  $configFactory->set('button_option', 'stbc_custom');
-
-  // Save the changes.
-  $configFactory->save();
-
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
 }
