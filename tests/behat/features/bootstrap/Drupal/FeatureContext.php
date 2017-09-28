@@ -197,16 +197,6 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
   }
 
   /**
-   * @Given /^I select a product$/
-   */
-  public function iSelectAProduct() {
-
-    $page = $this->getSession()->getPage();
-    $this->product = $page->find('css', 'h2.field--name-name')->getText();
-    $page->clickLink($this->product);
-  }
-
-  /**
    * @Then /^I should be able to view the product in the basket$/
    */
   public function iShouldBeAbleToViewTheProductInTheBasket() {
@@ -1358,6 +1348,146 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     }
     $current_window = $this->getSession()->getWindowName();
     $this->getSession()->stop($current_window);
+  }
+
+  /**
+   * @Then /^I should see results sorted in ascending order$/
+   */
+  public function iShouldSeeResultsSortedInAscendingOrder() {
+    $page = $this->getSession()->getPage();
+    $elements = $page->findAll('css', 'h2.field--name-name');
+    if ($elements == NULL) {
+      echo 'No search results found';
+    }
+    foreach ($elements as $element) {
+      if ($element !== NULL) {
+        $value = $element->find('css', 'a')->getText();
+        $actual_values[] = $value;
+      }
+      else {
+        throw new \Exception('Element is returning null');
+      }
+    }
+    if (!$this->is_array_ordered($actual_values, ORDER_ASC)) {
+      throw new \Exception('Search results list is not sorted in ascending order');
+    }
+  }
+
+  /**
+   * @Then /^I should see results sorted in descending order$/
+   */
+  public function iShouldSeeResultsSortedInDescendingOrder() {
+    $page = $this->getSession()->getPage();
+    $elements = $page->findAll('css', 'h2.field--name-name');
+    if ($elements == NULL) {
+      echo 'No search results found';
+    }
+    foreach ($elements as $element) {
+      if ($element !== NULL) {
+        $value = $element->find('css', 'a')->getText();
+        $actual_values[] = $value;
+      }
+      else {
+        throw new \Exception('Element is returning null');
+      }
+    }
+    if (!$this->is_array_ordered($actual_values, ORDER_DSC)) {
+      throw new \Exception('Search results list is not sorted in ascending order');
+    }
+  }
+
+  /**
+   * @Then /^I should see results sorted in descending price order$/
+   */
+  public function iShouldSeeResultsSortedInDescendingPriceOrder() {
+    $page = $this->getSession()->getPage();
+    $elements = $page->findAll('css', 'div.price-block');
+    if ($elements == NULL) {
+      echo 'No search results found';
+    }
+    foreach ($elements as $element) {
+      if ($element !== NULL) {
+        $value = NULL;
+        $special_price = $element->find('css', 'div.has--special--price');
+        if ($special_price) {
+          $value = $element->find('css', 'div.special--price span.price-amount')
+            ->getText();
+        }
+        else {
+          $valueExists = $element->find('css', 'div.price span.price-amount');
+          if ($valueExists) {
+            $value = $valueExists->getText();
+          }
+        }
+
+        if ($value !== NULL) {
+          $actual_values[] = $value;
+        }
+      }
+    }
+    if (!$this->is_array_ordered($actual_values, ORDER_DSC)) {
+      throw new \Exception('Search results list is not sorted in descending price order');
+    }
+  }
+
+  /**
+   * @Then /^I should see results sorted in ascending price order$/
+   */
+  public function iShouldSeeResultsSortedInAscendingPriceOrder() {
+    $page = $this->getSession()->getPage();
+    $elements = $page->findAll('css', 'div.price-block');
+    if ($elements == NULL) {
+      echo 'No search results found';
+    }
+    foreach ($elements as $element) {
+      if ($element !== NULL) {
+        $value = NULL;
+        $special_price = $element->find('css', 'div.has--special--price');
+        if ($special_price) {
+          $value = $element->find('css', 'div.special--price span.price-amount')
+            ->getText();
+        }
+        else {
+          $valueExists = $element->find('css', 'div.price span.price-amount');
+          if ($valueExists) {
+            $value = $valueExists->getText();
+          }
+        }
+
+        if ($value !== NULL) {
+          $actual_values[] = $value;
+        }
+      }
+    }
+    if (!$this->is_array_ordered($actual_values, ORDER_ASC)) {
+      throw new \Exception('Search results list is not sorted in ascending price order');
+    }
+  }
+
+  /**
+   * @Given /^I select a product in stock$/
+   */
+  public function iSelectAProductInStock() {
+    $page = $this->getSession()->getPage();
+    $all_products = $page->findById('block-alshaya-white-label-content')
+      ->findAll('css', '.c-products__item');
+    $total_products = count($all_products);
+    if ($total_products == 0) {
+      throw new \Exception('Search passed, but search results were empty');
+    }
+    foreach ($all_products as $item) {
+      $item_status = count($item->find('css', 'div.out-of-stock span'));
+      if ($item_status) {
+        $total_products--;
+        if (!$total_products) {
+          throw new \Exception('All products are out of stock');
+        }
+        continue;
+      }
+      $this->product = $item->find('css', 'h2.field--name-name')->getText();
+      $page->clickLink($this->product);
+      break;
+    }
   }
 
 }
