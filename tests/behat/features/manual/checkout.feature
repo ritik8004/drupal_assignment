@@ -145,7 +145,7 @@ Feature: Test Checkout feature
     And I press "Cancel"
     And I wait for the page to load
     Then I should see text matching "Sorry, we are unable to process your payment. Please contact our customer service team for assistance."
-    And I should not see "Your order number is "
+    And the url should match "/cart/checkout/payment"
 
   @hd @knet
   Scenario: As a Guest
@@ -439,6 +439,8 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
+    When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -476,6 +478,8 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
+    When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     And I wait 2 seconds
     Then I should see "Monday"
