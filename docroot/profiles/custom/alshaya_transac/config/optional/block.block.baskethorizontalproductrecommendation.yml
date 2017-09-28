@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  theme:
+    - whitelabel_transac
+id: baskethorizontalproductrecommendation
+theme: whitelabel_transac
+region: content
+weight: 1
+provider: null
+plugin: basket_horizontal_recommendation
+settings:
+  id: basket_horizontal_recommendation
+  label: 'Horizontal Recommendations'
+  provider: alshaya_acm_product
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /cart
+    negate: false
+    context_mapping: {  }

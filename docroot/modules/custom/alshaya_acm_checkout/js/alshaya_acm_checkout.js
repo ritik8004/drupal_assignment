@@ -181,7 +181,7 @@
 
       // Re-bind client side validations for billing address after form is updated.
       $('[data-drupal-selector="edit-billing-address-address-billing-given-name"]').once('bind-events').each(function () {
-        Drupal.behaviors.cvJqueryValidate.attach($('#block-alshaya-white-label-content'));
+        Drupal.behaviors.cvJqueryValidate.attach($('#block-content'));
       });
 
       // Show the form by default if user has no address saved in address book.
