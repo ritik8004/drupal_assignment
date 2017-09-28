@@ -71,6 +71,9 @@ function alshaya_search_modules_installed($modules) {
  * Implements hook_update_N().
  */
 function alshaya_search_update_8301() {
+  // Not using individual hook_update as during site-install
+  // (config is imported), the modules are not identified as "enabled" at the
+  // end so any hook implemented in these modules are not invoked.
   // Update search index field.
   $configs = [
     'search_api.index.acquia_search_index',
