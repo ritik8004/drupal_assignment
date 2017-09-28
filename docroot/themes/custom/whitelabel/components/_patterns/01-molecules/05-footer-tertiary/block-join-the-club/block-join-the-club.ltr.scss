@@ -77,6 +77,7 @@
 .block-join-the-club__title-link {
   display: none;
   font-size: 0.75rem;
+  font-family: $open-sans;
 
   @include breakpoint($desk) {
     margin-top: 0.5rem;
@@ -146,6 +147,7 @@
 .block-join-the-club__list-link {
   color: $black-smoke;
   font-weight: bold;
+  font-family: $open-sans;
 
   @include breakpoint($lap) {
     font-weight: normal;

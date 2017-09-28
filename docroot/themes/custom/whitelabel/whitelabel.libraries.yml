@@ -271,3 +271,9 @@ modal-generic:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/08-modal/modal-generic/modal-generic.ltr.css: {}
+
+paragraph-image-title-subtitle:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-image-title-subtitle/paragraph-image-title-subtitle.ltr.css: {}
