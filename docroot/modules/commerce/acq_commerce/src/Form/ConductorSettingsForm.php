@@ -107,7 +107,7 @@ class ConductorSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['page_size'] = [
+    $form['product_page_size'] = [
       '#type' => 'number',
       '#title' => $this->t('Conductor Product Synchronization Page Size'),
       '#default_value' => $config->get('product_page_size'),
