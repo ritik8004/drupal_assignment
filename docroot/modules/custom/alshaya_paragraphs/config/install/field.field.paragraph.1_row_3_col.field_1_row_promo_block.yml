@@ -5,6 +5,7 @@ dependencies:
     - field.storage.paragraph.field_1_row_promo_block
     - paragraphs.paragraphs_type.1_row_3_col
     - paragraphs.paragraphs_type.image_title_subtitle
+    - paragraphs.paragraphs_type.offers_bordered
     - paragraphs.paragraphs_type.promo_block
   module:
     - entity_reference_revisions
@@ -24,6 +25,7 @@ settings:
     target_bundles:
       promo_block: promo_block
       image_title_subtitle: image_title_subtitle
+      offers_bordered: offers_bordered
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         weight: 8
@@ -49,6 +51,9 @@ settings:
       image_title_subtitle:
         enabled: true
         weight: 19
+      offers_bordered:
+        enabled: true
+        weight: 20
       1_row_1_col_dept:
         weight: 21
         enabled: false
