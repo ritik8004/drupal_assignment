@@ -276,29 +276,31 @@
     attach: function (context, settings) {
       var block = $('.block-checkout-summary-block');
 
-      $(window).once().on('scroll', function () {
-        // Fix the block after a certain height.
-        if ($(window).scrollTop() > 122) {
-          block.addClass('fix-block');
-        }
-        else {
-          block.removeClass('fix-block');
-        }
-
-        var blockbottom = block.offset().top + block.height();
-        // 40 is the pixel offset above footer where we stop the fixed block.
-        var footertop = $('.c-post-content').offset().top - 40;
-        // Add class at this point to stop block going over footer.
-        if (blockbottom >= footertop) {
-          block.addClass('contain');
-        }
-        // Make the block sticky again when the top is visible.
-        if ($(document).scrollTop() <= block.offset().top) {
-          if (block.hasClass('contain')) {
-            block.removeClass('contain');
+      if (block.length > 0) {
+        $(window).once().on('scroll', function () {
+          // Fix the block after a certain height.
+          if ($(window).scrollTop() > 122) {
+            block.addClass('fix-block');
           }
-        }
-      });
+          else {
+            block.removeClass('fix-block');
+          }
+
+          var blockbottom = block.offset().top + block.height();
+          // 40 is the pixel offset above footer where we stop the fixed block.
+          var footertop = $('.c-post-content').offset().top - 40;
+          // Add class at this point to stop block going over footer.
+          if (blockbottom >= footertop) {
+            block.addClass('contain');
+          }
+          // Make the block sticky again when the top is visible.
+          if ($(document).scrollTop() <= block.offset().top) {
+            if (block.hasClass('contain')) {
+              block.removeClass('contain');
+            }
+          }
+        });
+      }
     }
   };
 
