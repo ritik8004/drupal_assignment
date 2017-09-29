@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c2e9cb253efdfc5508ccde5725b837a",
+    "content-hash": "ff34f9b58f7149399eae5389d06916ca",
     "packages": [
         {
             "name": "acquia/blt",
@@ -641,7 +641,7 @@
                 }
             ],
             "description": "Zone management library.",
-            "time": "2017-04-20 12:44:24"
+            "time": "2017-04-20T12:44:24+00:00"
         },
         {
             "name": "composer/installers",
@@ -2240,7 +2240,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1486736883"
+                    "datestamp": "1495109886"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2446,7 +2446,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-06-18 01:04:09"
+            "time": "2017-06-18T01:04:09+00:00"
         },
         {
             "name": "drupal/block_content_machine_name",
@@ -2707,7 +2707,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2017-09-01 18:16:38"
+            "time": "2017-09-01T18:16:38+00:00"
         },
         {
             "name": "drupal/coder",
@@ -4001,7 +4001,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.1",
-                    "datestamp": "1505808844",
+                    "datestamp": "1502200443",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4152,7 +4152,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1485790085"
+                    "datestamp": "1495814284"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4497,7 +4497,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/google_tag"
             },
-            "time": "2017-05-08 17:36:45"
+            "time": "2017-05-08T17:36:45+00:00"
         },
         {
             "name": "drupal/inline_entity_form",
@@ -4647,7 +4647,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.3",
-                    "datestamp": "1503310743",
+                    "datestamp": "1505097244",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -4762,7 +4762,7 @@
                 "issues": "http://drupal.org/project/issues/libraries",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-03-15 17:04:08"
+            "time": "2017-03-15T17:04:08+00:00"
         },
         {
             "name": "drupal/machine_name_widget",
@@ -5248,7 +5248,7 @@
                 "source": "http://cgit.drupalcode.org/memcache",
                 "issues": "https://www.drupal.org/project/issues/memcache"
             },
-            "time": "2017-04-12 19:23:14"
+            "time": "2017-04-12T19:23:14+00:00"
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -5457,7 +5457,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/mimemail"
             },
-            "time": "2017-03-12 09:43:32"
+            "time": "2017-03-12T09:43:32+00:00"
         },
         {
             "name": "drupal/mobile_number",
@@ -6287,7 +6287,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/r4032login"
             },
-            "time": "2017-02-08 04:20:19"
+            "time": "2017-02-08T04:20:19+00:00"
         },
         {
             "name": "drupal/recaptcha",
@@ -6715,6 +6715,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6947,7 +6950,7 @@
             "support": {
                 "issues": "http://drupal.org/"
             },
-            "time": "2017-03-02 15:34:04"
+            "time": "2017-03-02T15:34:04+00:00"
         },
         {
             "name": "drupal/seckit",
@@ -7048,7 +7051,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/security_review"
             },
-            "time": "2016-10-20 15:43:48"
+            "time": "2016-10-20T15:43:48+00:00"
         },
         {
             "name": "drupal/sharethis",
@@ -7185,8 +7188,16 @@
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
+                    "name": "badjava",
+                    "homepage": "https://www.drupal.org/user/83372"
+                },
+                {
                     "name": "chx",
                     "homepage": "https://www.drupal.org/user/9446"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "kalman.hosszu",
@@ -7304,7 +7315,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-08-28 13:57:41"
+            "time": "2017-08-28T13:57:41+00:00"
         },
         {
             "name": "drupal/taxonomy_access_fix",
@@ -7381,6 +7392,10 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
+                },
+                {
+                    "name": "miteshmap",
+                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -7388,7 +7403,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
             },
-            "time": "2017-02-10 12:17:57"
+            "time": "2017-02-10T12:17:57+00:00"
         },
         {
             "name": "drupal/token",
@@ -7480,7 +7495,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.8",
-                    "datestamp": "1495984083",
+                    "datestamp": "1505464444",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7659,7 +7674,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_block_filter_block"
             },
-            "time": "2017-05-25 11:05:23"
+            "time": "2017-05-25T11:05:23+00:00"
         },
         {
             "name": "drupal/views_field_view",
@@ -7795,7 +7810,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.0-beta12",
-                    "datestamp": "1492798443"
+                    "datestamp": "1496265842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -14105,7 +14120,7 @@
                 {
                     "name": "Anthon Pang",
                     "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork Maintainer"
+                    "role": "Fork maintainer"
                 }
             ],
             "description": "PHP WebDriver for Selenium 2",
