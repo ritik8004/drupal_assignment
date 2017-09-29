@@ -147,11 +147,10 @@ switch ($env) {
     $settings['alshaya_api.settings']['magento_host'] = 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud';
     break;
 
-
   case '01qa2':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
+    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-hm-test.eu-west-1.prod.acm.acquia.io/';
+    $settings['acq_commerce.conductor']['hmac_id'] = '0c1158d278c24ff586792de9bc01eaa7';
+    $settings['acq_commerce.conductor']['hmac_secret'] = 'NMGIo_W2s4VA66_6UKM2pQ';
     $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
     break;
 
