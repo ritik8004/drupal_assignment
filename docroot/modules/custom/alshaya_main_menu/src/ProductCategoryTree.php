@@ -15,12 +15,18 @@ use Drupal\Core\Language\LanguageManagerInterface;
  */
 class ProductCategoryTree {
 
+  const CACHE_BIN = 'alshaya';
+
+  const CACHE_ID = 'product_category_tree';
+
+  const VOCABULARY_ID = 'acq_product_category';
+
   /**
-   * Entity type manager.
+   * Term storage object.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\taxonomy\TermStorageInterface
    */
-  protected $entityTypeManager;
+  protected $termStorage;
 
   /**
    * Entity repository.
@@ -47,9 +53,32 @@ class ProductCategoryTree {
    *   Language manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, LanguageManagerInterface $language_manager) {
-    $this->entityTypeManager = $entity_type_manager;
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
+  }
+
+  /**
+   * Get the term tree for 'product_category' vocabulary from cache or fresh.
+   *
+   * @return array
+   *   Processed term data from cache if available or fresh.
+   */
+  public function getCategoryTreeCached() {
+    if ($term_data = \Drupal::cache(self::CACHE_BIN)->get(self::CACHE_ID)) {
+      return $term_data->data;
+    }
+
+    $term_data = $this->getCategoryTree();
+
+    $cache_tags = [
+      self::VOCABULARY_ID . '_list',
+      'node_type:department_page',
+    ];
+
+    \Drupal::cache(self::CACHE_BIN)->set(self::CACHE_ID, $term_data, Cache::PERMANENT, $cache_tags);
+
+    return $term_data;
   }
 
   /**
@@ -57,64 +86,57 @@ class ProductCategoryTree {
    *
    * @param int $parent_tid
    *   Parent term id.
-   * @param int $depth
-   *   Term depth.
-   * @param bool $highlight_image
-   *   If need to get highlight image or not.
    *
    * @return array
    *   Processed term data.
    */
-  public function getCategoryTree($parent_tid = 0, $depth = 1, $highlight_image = TRUE) {
+  protected function getCategoryTree($parent_tid = 0) {
     $data = [];
-    $cache_tags = [];
 
     /* @var \Drupal\taxonomy\TermInterface[] $terms */
-    $terms = $this->entityTypeManager->getStorage('taxonomy_term')
-      ->loadTree('acq_product_category', $parent_tid, $depth, TRUE);
-    if ($terms) {
-      $alshaya_department_pages = alshaya_department_page_get_pages();
-      foreach ($terms as $term) {
-        // For language specific data.
-        $term = $this->entityRepository->getTranslationFromContext($term);
+    $terms = $this->termStorage->loadTree(self::VOCABULARY_ID, $parent_tid, 1, TRUE);
 
-        // For cache tag bubbling up.
-        $cache_tags[] = 'taxonomy_term:' . $term->id();
+    if (empty($terms)) {
+      return [];
+    }
 
-        // Get value of boolean field which will decide if we show/hide this
-        // term and child terms in the menu.
-        $include_in_menu = $term->get('field_category_include_menu')->getValue();
+    // Get all the department pages.
+    $alshaya_department_pages = alshaya_department_page_get_pages();
 
-        // Hide the menu if there is a value in the field and it is FALSE.
-        if (!empty($include_in_menu) && !($include_in_menu[0]['value'])) {
-          continue;
-        }
+    foreach ($terms as $term) {
+      // For language specific data.
+      $term = $this->entityRepository->getTranslationFromContext($term);
 
-        $data[$term->id()] = [
-          'label' => $term->label(),
-          'description' => [
-            '#markup' => $term->getDescription(),
-          ],
-          'id' => $term->id(),
-          'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])
-            ->toString(),
-          'active_class' => '',
-        ];
+      // Get value of boolean field which will decide if we show/hide this
+      // term and child terms in the menu.
+      $include_in_menu = $term->get('field_category_include_menu')->getValue();
 
-        if ($highlight_image) {
-          $data[$term->id()] += ['highlight_image' => $this->getHighlightImage($term)];
-        }
-
-        // Check if there is a department page available for this term.
-        if (isset($alshaya_department_pages[$term->id()])) {
-          $nid = $alshaya_department_pages[$term->id()];
-          // Use the path of node instead of term path.
-          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])
-            ->toString();
-        }
-
-        $data[$term->id()]['child'] = $this->getCategoryTree($term->id());
+      // Hide the menu if there is a value in the field and it is FALSE.
+      if (!empty($include_in_menu) && !($include_in_menu[0]['value'])) {
+        continue;
       }
+
+      $data[$term->id()] = [
+        'label' => $term->label(),
+        'description' => [
+          '#markup' => $term->getDescription(),
+        ],
+        'id' => $term->id(),
+        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(),
+        'active_class' => '',
+      ];
+
+      $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
+
+      // Check if there is a department page available for this term.
+      if (isset($alshaya_department_pages[$term->id()])) {
+        $nid = $alshaya_department_pages[$term->id()];
+
+        // Use the path of node instead of term path.
+        $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+      }
+
+      $data[$term->id()]['child'] = $this->getCategoryTree($term->id());
     }
 
     return $data;
@@ -129,10 +151,10 @@ class ProductCategoryTree {
    * @return array
    *   Highlight image array.
    */
-  public function getHighlightImage(TermInterface $term) {
+  protected function getHighlightImage(TermInterface $term) {
     $highlight_images = [];
 
-    if ($highlight_image_cache = \Drupal::cache('alshaya')->get('highlights_' . $term->id())) {
+    if ($highlight_image_cache = \Drupal::cache(self::CACHE_BIN)->get('highlights_' . $term->id())) {
       return $highlight_image_cache->data;
     }
 
@@ -173,7 +195,7 @@ class ProductCategoryTree {
       }
     }
 
-    \Drupal::cache('alshaya')->set('highlights_' . $term->id(), $highlight_images, Cache::PERMANENT, ['taxonomy_term:' . $term->id()]);
+    \Drupal::cache(self::CACHE_BIN)->set('highlights_' . $term->id(), $highlight_images, Cache::PERMANENT, ['taxonomy_term:' . $term->id()]);
 
     return $highlight_images;
   }
