@@ -4,6 +4,7 @@
   margin: 0;
   padding-#{direction(left)}: 0;
   text-transform: uppercase;
+  font-size: 0;
 
   @include breakpoint($upto-palm) {
     margin-top: 0.4375rem;
@@ -11,16 +12,22 @@
 
   li {
     display: inline-block;
+
+    &:last-child a {
+      @include breakpoint($upto-palm) {
+        margin-#{direction(right)}: 0;
+      }
+    }
   }
 
   a {
-    color: $brownish-grey;
+    color: $black-smoke;
     display: block;
-    font-size: 0.875rem;
-    margin-#{direction(right)}: 0.2rem;
+    font-size: 0.9375rem;
     text-decoration: none;
-    padding: 0.7rem 1.2rem;
-    letter-spacing: 2px;
+    margin-#{direction(right)}: 0.6rem;
+    padding: 0.7rem 1rem;
+    letter-spacing: 1.5px;
     border-bottom: 2px solid transparent;
 
     @include breakpoint($lap) {
