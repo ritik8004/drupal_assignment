@@ -18,7 +18,7 @@
  * @param array $range
  *   Range to be used to generate display value.
  */
-function hook_alshaya_search_alter_range_granular_facet_display(&$displayValue, array $range) {
+function hook_alshaya_search_alter_range_granular_facet_display_alter(&$displayValue, array $range) {
 
 }
 
