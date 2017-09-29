@@ -140,13 +140,14 @@ switch ($env) {
   // R2 environments. While Conductor does not handle multiple Magento, all R2
   // environments are connected to the same Conductor and Magento.
   case '01dev2':
+  case '01dev3':
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = '139fbcb466984b39aea5fd200984a2af';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'oMSt6AXgn3TqlMVj5D8A3Q';
     $settings['alshaya_api.settings']['magento_host'] = 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud';
     break;
 
-  case '01dev3':
+
   case '01qa2':
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
