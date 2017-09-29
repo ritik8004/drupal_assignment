@@ -266,6 +266,9 @@ class ClickCollectController extends ControllerBase {
         $top_three['#theme'] = 'pdp_click_collect_top_stores';
         $top_three['#stores'] = array_slice($stores, 0, $limit);
         $top_three['#has_more'] = count($stores) > $limit ? t('Other stores nearby') : '';
+        $top_three['#available_at_title'] = $this->t('Available at @count stores near', [
+          '@count' => count($stores),
+        ]);
 
         if ($top_three['#has_more']) {
           $store_form = \Drupal::formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
@@ -275,6 +278,9 @@ class ClickCollectController extends ControllerBase {
           $all_stores['#stores'] = $stores;
           $all_stores['#title'] = $config->get('pdp_click_collect_title');
           $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
+          $all_stores['#available_at_title'] = $this->t('Available at @count stores near', [
+            '@count' => count($stores),
+          ]);
           $all_stores['#store_finder_form'] = render($store_form);
           $all_stores['#help_text'] = $config->get('pdp_click_collect_help_text.value');
         }
@@ -309,6 +315,7 @@ class ClickCollectController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'show'));
+      $response->addCommand(new HtmlCommand('.store-available-at-title', $data['top_three']['#available_at_title']));
       $response->addCommand(new InvokeCommand('.click-collect-form .available_store .change-location-link', 'show'));
       if (!empty($data['all_stores'])) {
         $settings['alshaya_click_collect']['pdp']['all_stores'] = TRUE;
