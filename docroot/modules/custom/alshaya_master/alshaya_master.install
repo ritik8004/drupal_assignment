@@ -461,6 +461,9 @@ function alshaya_master_install() {
     'Home Delivery' => [
       'ar' => 'خدمة التوصيل للمنزل',
     ],
+    'OR' => [
+      'ar' => 'أو',
+    ],
     'For orders over KWD99' => [
       'ar' => 'على الطلبيات التي تزيد على "99" د.ك.',
     ],
@@ -697,7 +700,11 @@ function alshaya_master_install() {
       'ar' => 'احفظ التفاصيل الخاصة بك لتسهيل تسوقك المرة القادمة',
     ],
     'save' => [
-      'ar' => 'وفر',
+      'ar' => 'حفظ',
+    ],
+    'save' => [
+      'ar' => 'حفظ',
+      'context' => 'button',
     ],
     'Back to top' => [
       'ar' => 'أعلى الصفحة',
@@ -865,8 +872,12 @@ function alshaya_master_install() {
     'Thank you for your subscription.' => [
       'ar' => 'شكراً لاشتراككم في نشرتنا الاخبارية',
     ],
-    'Save @discount' => [
-      'ar' => 'وفر @discount',
+    'Save @discount%' => [
+      'ar' => 'وفّر %@discount',
+    ],
+    'Save' => [
+      'ar' => 'وفّر',
+      'context' => 'discount',
     ],
     'Filter' => [
       'ar' => 'حدّد اختيارك',
@@ -903,10 +914,6 @@ function alshaya_master_install() {
     ],
     'error' => [
       'ar' => 'يوجد خطأ',
-    ],
-    'save' => [
-      'ar' => 'حفظ',
-      'context' => 'Checkout',
     ],
     'Order Print' => [
       'ar' => 'اطبع الطلبية',
