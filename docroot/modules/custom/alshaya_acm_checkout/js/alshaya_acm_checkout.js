@@ -112,6 +112,9 @@
 
         $('#add-address-button').on('click', function (event) {
           event.preventDefault();
+          $('#address-book-form-wrapper .form-item--error-message, #address-book-form-wrapper label.error').remove();
+          $('#address-book-form-wrapper .form-item--error').removeClass('form-item--error');
+
           // Reset the form values.
           $('[data-drupal-selector="edit-member-delivery-home-address-form-address-id"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-given-name"]').val('');
@@ -139,6 +142,8 @@
 
           // Update fieldset title to edit address.
           $('.delivery-address-form-title').html(Drupal.t('add new address'));
+
+          $('#addresses-header').show();
 
           // Hide the form.
           $('#address-book-form-wrapper').slideUp();
@@ -237,6 +242,9 @@
 
   // Ajax command to update search result header count.
   $.fn.editDeliveryAddress = function (data) {
+    $('#address-book-form-wrapper .form-item--error-message, #address-book-form-wrapper label.error').remove();
+    $('#address-book-form-wrapper .form-item--error').removeClass('form-item--error');
+
     // Set values in form.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-address-id"]').val(data.id);
 
