@@ -21,6 +21,8 @@ class ProductCategoryTree {
 
   const VOCABULARY_ID = 'acq_product_category';
 
+  const CACHE_TAG = 'acq_product_category_list';
+
   /**
    * Term storage object.
    *
@@ -72,7 +74,7 @@ class ProductCategoryTree {
     $term_data = $this->getCategoryTree();
 
     $cache_tags = [
-      self::VOCABULARY_ID . '_list',
+      self::CACHE_TAG,
       'node_type:department_page',
     ];
 

@@ -25,7 +25,7 @@ class AlshayaSeoController extends ControllerBase {
     ];
 
     // Discard cache for the page once a term gets updated.
-    $build['$cache']['tags'][] = ProductCategoryTree::VOCABULARY_ID . '_list';;
+    $build['$cache']['tags'][] = ProductCategoryTree::CACHE_TAG;
 
     return $build;
   }
