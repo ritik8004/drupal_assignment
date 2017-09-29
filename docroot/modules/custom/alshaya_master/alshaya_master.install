@@ -854,6 +854,9 @@ function alshaya_master_install() {
     'under @stop' => [
       'ar' => 'أقل من @stop د.ك.',
     ],
+    '@start - @stop' => [
+      'ar' => '@stop - @start',
+    ],
     'Features and benefits' => [
       'ar' => 'المزايا و الفوائد',
     ],

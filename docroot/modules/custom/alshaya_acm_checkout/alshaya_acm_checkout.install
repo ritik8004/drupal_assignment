@@ -14,34 +14,3 @@ function alshaya_acm_checkout_install() {
   $configFactory->set('checkout_flow_plugin', 'multistep_checkout');
   $configFactory->save();
 }
-
-/**
- * Implements hook_update().
- *
- * Add more translations.
- */
-function alshaya_acm_checkout_update_8001() {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_i18n')) {
-    $strings = [
-      'OR' => [
-        'ar' => 'أو',
-      ],
-      'Save @discount%' => [
-        'ar' => 'وفّر %@discount',
-      ],
-      'Save' => [
-        'ar' => 'وفّر',
-        'context' => 'discount',
-      ],
-      'save' => [
-        'ar' => 'حفظ',
-      ],
-      'save' => [
-        'ar' => 'حفظ',
-        'context' => 'button',
-      ],
-    ];
-
-    alshaya_i18n_save_translations($strings);
-  }
-}

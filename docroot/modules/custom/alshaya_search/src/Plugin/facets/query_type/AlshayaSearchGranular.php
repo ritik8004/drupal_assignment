@@ -32,11 +32,14 @@ class AlshayaSearchGranular extends SearchApiGranular {
 
     // If this is the first range, display, "under X".
     if ($range['start'] === 0) {
-      $displayValue = $this->t('under @stop', ['@stop' => $range['stop']]);
+      $displayValue = $this->t('under @stop', ['@stop' => $range['stop']])->render();
     }
     else {
       $displayValue = $range['start'] . ' - ' . $range['stop'];
     }
+
+    // Allow other modules to change display value.
+    \Drupal::moduleHandler()->alter('alshaya_search_alter_range_granular_facet_display', $displayValue, $range);
 
     return [
       'display' => $displayValue,
