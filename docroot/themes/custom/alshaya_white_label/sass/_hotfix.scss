@@ -408,3 +408,12 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
     }
   }
 }
+
+/**
+ * We always want price to be displayed from ltr.
+ */
+.price {
+  .price-amount {
+    direction: ltr;
+  }
+}
