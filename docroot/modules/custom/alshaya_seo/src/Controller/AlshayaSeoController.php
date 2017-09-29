@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo\Controller;
 
+use Drupal\alshaya_main_menu\ProductCategoryTree;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
@@ -15,12 +16,16 @@ class AlshayaSeoController extends ControllerBase {
   public function siteMap() {
     $data = [];
     if ($this->moduleHandler()->moduleExists('alshaya_main_menu')) {
-      $data = \Drupal::service('alshaya_main_menu.product_category_tree')->getCategoryTree();
+      $data = \Drupal::service('alshaya_main_menu.product_category_tree')->getCategoryTreeCached();
     }
+
     $build = [
       '#theme' => 'alshaya_sitemap',
       '#term_tree' => $data,
     ];
+
+    // Discard cache for the page once a term gets updated.
+    $build['$cache']['tags'][] = ProductCategoryTree::CACHE_TAG;
 
     return $build;
   }
