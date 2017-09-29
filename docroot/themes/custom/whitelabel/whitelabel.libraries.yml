@@ -272,6 +272,12 @@ modal-generic:
     theme:
       components/dist/css/_patterns/01-molecules/08-modal/modal-generic/modal-generic.ltr.css: {}
 
+modal-email-signup:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/08-modal/modal-email-signup/modal-email-signup.ltr.css: {}
+
 paragraph-image-title-subtitle:
   version: VERSION
   css:

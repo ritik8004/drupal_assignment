@@ -21,8 +21,13 @@
  * @ingroup themeable
  */
 #}
-<form{{ attributes }}>
-  {{ title_prefix }}
-  <div class="modal-form-elements-wrapper">{{ children }}</div>
-  {{ title_suffix }}
-</form>
+
+{{ attach_library("whitelabel/modal-email-signup") }}
+{% include "@molecules/08-modal/modal-email-signup/modal-email-signup.twig" with
+  {
+    attributes: attributes,
+    children: children,
+    title_prefix: title_prefix,
+    title_suffix: title_suffix
+  }
+%}

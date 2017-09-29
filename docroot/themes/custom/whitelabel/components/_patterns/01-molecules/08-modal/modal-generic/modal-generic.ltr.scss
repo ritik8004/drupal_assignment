@@ -7,18 +7,15 @@
 
 .ui-dialog {
   background: $white;
-  padding: 2.5rem 0 1.875rem 1.875rem;
-  top: 20rem !important;
+  padding: 2.5rem 0 1.875rem 1.5rem;
   width: 100%;
 
   @include breakpoint($lap) {
     width: 45rem !important;
-    left: 13% !important;
   }
 
   @include breakpoint($desk) {
     width: 54.5rem !important;
-    left: 19% !important;
   }
 
   h2 {
@@ -26,17 +23,24 @@
   }
 
   .ui-dialog-buttonpane {
-    float: left;
+    float: direction(left);
   }
 
   .ui-button-icon-only {
     position: absolute;
-    top: 0;
+    top: -1.95rem !important;
     right: 0;
     border: 0;
-    background: $gainsboro;
     height: 1.9375rem;
     width: 2.1875rem;
+
+    @include breakpoint($lap) {
+      background: $black;
+    }
+
+    @include breakpoint($desk) {
+      background: $gainsboro;
+    }
   }
 }
 
@@ -47,21 +51,36 @@
   margin-bottom: 0.625rem;
   padding-bottom: 0.625rem;
   width: 100%;
-  display: inline-block;
+  float: direction(left);
 }
 
 .ui-state-default .ui-icon {
-  @include icon(close, after) {
-    font-size: 0.875rem;
-    color: $black-smoke;
+  position: relative;
+  display: inline;
+
+  @include icon(close, before) {
+    font-size: 1.75rem;
+    right: 0.7rem;
+    position: relative;
+
+    @include breakpoint($lap) {
+      color: $white;
+    }
+
+    @include breakpoint($desk) {
+      color: $black-smoke;
+    }
   }
 }
 
 .ui-dialog-buttonset.form-actions {
-  border: 1px solid $medium-pink;
-  background: transparent;
   color: $medium-pink;
-  width: 5.6875rem;
-  height: 2.1875rem;
   float: left;
+
+  button {
+    width: 5.6875rem;
+    height: 2.1875rem;
+    border: 1px solid $medium-pink;
+    background: transparent;
+  }
 }
