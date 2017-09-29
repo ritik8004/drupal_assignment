@@ -854,21 +854,3 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   // Add remove link as suffix of quantity.
   $item['quantity']['#suffix'] .= '<div class="inline-stock-error" id="stock-error-' . str_replace(' ', '-', $sku_entity->getSku()) . '">' . $item_stock_error . '</div>';
 }
-
-/**
- * Implements hook_alshaya_search_alter_range_granular_facet_display().
- */
-function alshaya_acm_alshaya_search_alter_range_granular_facet_display_alter(&$displayValue, array $range) {
-  $t_options = [
-    '@start' => alshaya_acm_price_format($range['start']),
-    '@stop' => alshaya_acm_price_format($range['stop']),
-  ];
-
-  // If this is the first range, display, "under X".
-  if ($range['start'] === 0) {
-    $displayValue = t('under @stop', $t_options)->render();
-  }
-  else {
-    $displayValue = t('@start - @stop', $t_options)->render();
-  }
-}
