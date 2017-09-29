@@ -852,7 +852,7 @@ function alshaya_master_install() {
       'ar' => 'الخصم',
     ],
     'under @stop' => [
-      'ar' => 'أقل من @stop د.ك.',
+      'ar' => 'أقل من @stop',
     ],
     '@start - @stop' => [
       'ar' => '@stop - @start',
