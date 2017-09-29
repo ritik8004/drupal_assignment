@@ -143,6 +143,8 @@
           // Update fieldset title to edit address.
           $('.delivery-address-form-title').html(Drupal.t('add new address'));
 
+          $('#addresses-header').show();
+
           // Hide the form.
           $('#address-book-form-wrapper').slideUp();
 
