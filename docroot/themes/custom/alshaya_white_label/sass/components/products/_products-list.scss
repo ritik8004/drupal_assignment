@@ -847,3 +847,14 @@ body {
     }
   }
 }
+
+// Brands wont be translated.
+html[lang=ar] {
+  .block-facet-blockbrand {
+    .facet-item__value,
+    .facet-item__count {
+      direction: ltr;
+      display: inline-block;
+    }
+  }
+}
