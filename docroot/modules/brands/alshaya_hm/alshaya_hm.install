@@ -12,4 +12,9 @@ function alshaya_hm_install() {
   // Enable and set hnm as default theme.
   \Drupal::service('theme_handler')->install(['hnm'], TRUE);
   \Drupal::service('theme_handler')->setDefault('hnm');
+
+  // Translate store id in config.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
+    ->set('store_id', '2')
+    ->save();
 }
